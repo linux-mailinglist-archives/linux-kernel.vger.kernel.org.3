@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA83F4EB76A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2843C4EB76B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbiC3AWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 20:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S241437AbiC3AXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbiC3AWY (ORCPT
+        with ESMTP id S235006AbiC3AXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 20:22:24 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F9D14B87C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:20:40 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id v4so19054641pjh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:20:40 -0700 (PDT)
+        Tue, 29 Mar 2022 20:23:18 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69255171EF9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:21:34 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso498861pju.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:21:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4YqnuRfg2MHKNaL7P8O8O9EyyaSzDXcdnGupk1MjP6Q=;
-        b=FwBNuG0B2TUtJ7MsB9irvutbDXGMqfxx4ZVng27Iu1ZaBc9HMbFPOPY+2a9BcFGcqr
-         q/I6kj6SnLjFU5gXSHzSmcuUQPmVGZVmebcqp0EteR7JV5Bdmh0qmsQuE9pldf5/0aw8
-         d12+58TApk71ah/NZEctlSTaWz8ngGNL//7HTmS7FE3dv3yr0bGYGVYIuoX7JV6icmKf
-         oedwcKH23HbvMhZ0Ehz1kc/SJDrXOLe11c2hUg4Qe9kKwMiMOI6KwbRwmlUGFCJvFtRd
-         2VAmckMfgDbVjYzNe8Kg+c6/frjBlkeU3Y3uYvGfojmAS1xMiyMbIRCJfWEO4ItOGYhD
-         bjJQ==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7iLxch5y6RIgvR/T0zWqMEJ+cpUfEurleqixAHzR59g=;
+        b=d6l2S7X6ubR/3qtqSf1gEAmewrLprB360r1t8kyD8au6PP6Uw3qtG3LFOeEsaJuH0a
+         Uosk+2PV7kD+ZX41oUKqASL7vtobWwWbrZJvt2qsw6/kKgMSkxy7Lq84FNozbqUYHRO2
+         YT7MYq8O8bUwbqTIN42fVMirVmIwOvEoQttWZbrfSjMBhzCfXvgLFxOX3i4/k5Nw+6KK
+         rKsSsKvqZokfFUXKFzNJtCqZW7J1WLvA9xJaPpccQmHui9c8uOmKXzNTQKgFMa987eml
+         aZ6D+6PIJZayCZT3qTHhE0yfQFYCmZ2Z+gfvHJDE1AtWZQKN3bGIedg0RDDF8j4CozAR
+         cRjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4YqnuRfg2MHKNaL7P8O8O9EyyaSzDXcdnGupk1MjP6Q=;
-        b=lAQKyGVdkptT81hxwALrGzQvb1Bdow0y2XHMBAFGWVGzGN140FDEp09wZF6SxFESxz
-         l8+nS6H7SjsoA2mcEmBnka15WeBpJN7ct58CjSWJ45VEKe1S3e4YXcgCjjUlzV0MeacB
-         u9VXDF4N4u0+5OVaGMg0CxzejoCRrTmCdLSEe3FvAQxUItkO3idlNGiMnFdnyaYDUANL
-         QQoijUuMxae9jh7QA7j3ixdPZ3+Q69bQ3s6AyuFEc5J9g2ASohPMgK71KFW5kUW3IVZF
-         YiaOAQGHaP7n8OaJruCldR66Pg9XjPtOPYqpu82IxGjZ0Pg3g5JAgDKk0H84y66/YeRZ
-         QBKw==
-X-Gm-Message-State: AOAM531wVcdTnXHWz7GJwyZxBXE5k1M0J0gJvsJmyVOIW3ly07xptSQN
-        FjwN2ng5EU0bTGHRohn/UhkQug==
-X-Google-Smtp-Source: ABdhPJzKGF5NfLOT5f+svn56e+f7y8K9XwDPlhKkbMLmKNTt8SD9AQDoihMvJukzmSEU5jTPkJiRTQ==
-X-Received: by 2002:a17:90a:bc1:b0:1c6:cace:32de with SMTP id x1-20020a17090a0bc100b001c6cace32demr1858248pjd.62.1648599639475;
-        Tue, 29 Mar 2022 17:20:39 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090a859100b001bc20ddcc67sm3876619pjn.34.2022.03.29.17.20.38
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=7iLxch5y6RIgvR/T0zWqMEJ+cpUfEurleqixAHzR59g=;
+        b=yoMaXqyVmtLtHTgSDcDeMtfgku2/9wrxreFrZ54dXEoyt0RPo2F7U7kCz7+yUekcjS
+         d55KXLdtHRQ81ruO65DMFyxuCXRjNARPPUnGAv52k2wSUOFcwjWdgu5b6sPsQtoGyJzH
+         ldSN4Fb73WrAMXVQ4Mn/ss04Yi3jl6jQSSZyYAR8VnXSd3Je7Bi6PPV2giLa2E/F6WOG
+         Ko4gVT47fQhsJxRTI4WaFqlWJrE/Wt50CpWsWH3lKsbeIplgdfpLHlRLhZLLcgwieW0L
+         HlOI0MVozAm+zxcFVw+WyzNNES3g0fM50nDoXqbmvkTbVDMvCJCh7rxhgooEX7tLbXx4
+         WgyA==
+X-Gm-Message-State: AOAM531mtuM3idE0TynHUfXlZe4XcRt2HhsANF41iN8+k6lbSCqzg9I7
+        3dgM+NgL9ZLxG7b24iMwaARq1w==
+X-Google-Smtp-Source: ABdhPJxEvni5Sq3KIcfnKaN2LY52DfkeM+nZCKa8T5kJ161E/ZTfTMkikxIcAWzUNAuNKmyxa8oPgw==
+X-Received: by 2002:a17:902:7205:b0:156:1a0a:2c39 with SMTP id ba5-20020a170902720500b001561a0a2c39mr9686710plb.88.1648599693682;
+        Tue, 29 Mar 2022 17:21:33 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id p15-20020a056a000a0f00b004f7c63cba5asm21702403pfh.21.2022.03.29.17.21.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 17:20:38 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 00:20:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 8/8] KVM: x86: SVM: remove vgif_enabled()
-Message-ID: <YkOiU2TtxE32xhCu@google.com>
-References: <20220322172449.235575-1-mlevitsk@redhat.com>
- <20220322172449.235575-9-mlevitsk@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322172449.235575-9-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 17:21:32 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 17:21:32 -0700 (PDT)
+X-Google-Original-Date: Tue, 29 Mar 2022 14:36:59 PDT (-0700)
+Subject:     Re: [PATCH v2] riscv module: remove (NOLOAD)
+In-Reply-To: <20220322012617.3517297-1-maskray@google.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        maskray@google.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     maskray@google.com
+Message-ID: <mhng-891192a6-d537-444f-b092-5ae92620b233@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022, Maxim Levitsky wrote:
-> KVM always uses vgif when allowed, thus there is
-> no need to query current vmcb for it
-
-It'd be helpful to explicitly call out that KVM always takes V_GIF_ENABLE_MASK
-from vmcs01, otherwise this looks like it does unintentend things when KVM is
-runing vmcb02.
-
-> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+On Mon, 21 Mar 2022 18:26:17 PDT (-0700), maskray@google.com wrote:
+> On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+> inappropriate for .plt, .got, and .got.plt sections which are always
+> SHT_PROGBITS.
+>
+> In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+> and (NOLOAD) will be essentially ignored. In ld.lld, since
+> https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+> customize the output section type"), ld.lld will report a `section type
+> mismatch` error (later changed to a warning). Just remove (NOLOAD) to
+> fix the warning.
+>
+> [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+> section should be marked as not loadable" on
+> https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+> outdated for ELF.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1597
+> Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Fangrui Song <maskray@google.com>
 > ---
->  arch/x86/kvm/svm/svm.c | 12 ++++++------
->  arch/x86/kvm/svm/svm.h | 12 ++++--------
->  2 files changed, 10 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index acf04cf4ed2a..70fc5897f5f2 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -172,7 +172,7 @@ static int vls = true;
->  module_param(vls, int, 0444);
->  
->  /* enable/disable Virtual GIF */
-> -static int vgif = true;
-> +int vgif = true;
->  module_param(vgif, int, 0444);
-
-...
-
-> @@ -453,14 +454,9 @@ static inline bool svm_is_intercept(struct vcpu_svm *svm, int bit)
->  	return vmcb_is_intercept(&svm->vmcb->control, bit);
+>  arch/riscv/include/asm/module.lds.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/module.lds.h b/arch/riscv/include/asm/module.lds.h
+> index 4254ff2ff049..1075beae1ac6 100644
+> --- a/arch/riscv/include/asm/module.lds.h
+> +++ b/arch/riscv/include/asm/module.lds.h
+> @@ -2,8 +2,8 @@
+>  /* Copyright (C) 2017 Andes Technology Corporation */
+>  #ifdef CONFIG_MODULE_SECTIONS
+>  SECTIONS {
+> -	.plt (NOLOAD) : { BYTE(0) }
+> -	.got (NOLOAD) : { BYTE(0) }
+> -	.got.plt (NOLOAD) : { BYTE(0) }
+> +	.plt : { BYTE(0) }
+> +	.got : { BYTE(0) }
+> +	.got.plt : { BYTE(0) }
 >  }
->  
-> -static inline bool vgif_enabled(struct vcpu_svm *svm)
-> -{
-> -	return !!(svm->vmcb->control.int_ctl & V_GIF_ENABLE_MASK);
+>  #endif
+
+Thanks, this is on for-next (it'd be OK for fixes as well, but it's the 
+merge window so I'm just on one branch).

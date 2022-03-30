@@ -2,135 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7204ECB27
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534BE4ECB2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238190AbiC3R7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S1349603AbiC3SAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349650AbiC3R7H (ORCPT
+        with ESMTP id S245029AbiC3SAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:59:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC5E11DD01
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:57:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 566F460A53
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:57:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5FDEC340EC;
-        Wed, 30 Mar 2022 17:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648663039;
-        bh=gPR2JaMS3QMXFWDQQ4k8RKlJdE/tdHBh8RH4ESl7Qj4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=suiQkN2Cgjc968BO1mpWjFF17ln4m1zt7UAO7hNFUMcd4pOzO6o5nFWlrH45CHuNq
-         8aX1l0cFQCJ/l8IaJsWvC8AbuTtOQ8M5bEQdlKbdXGdJ5V2R8mKXSGGDUg04Ud5QiW
-         3o+SgT3yoMavtnZV2sX8HH8pNqjrFbtWcDYiT1YXGb3E2IdYbQY9dvEVAuBel3EwGY
-         HAuiJ/NrZpbJ0kVKifixQQe164heGDty5i8EMpYabbR4aw+s31bjYJ0hXaJe6NN5bB
-         TvM3/lJN7Rmqwe6BmLBEG8v2nzPu1CnkZ2Bmmg2y0MGzJfoWjeCy7LwRaCoo6SczWQ
-         YPuSacrB54Wjw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4D16C5C1289; Wed, 30 Mar 2022 10:57:19 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 10:57:19 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 2/4] rcu: No need to reset the poll request flag before
- completion
-Message-ID: <20220330175719.GH4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220316144255.336021-1-frederic@kernel.org>
- <20220316144255.336021-3-frederic@kernel.org>
- <20220330112752.GA1245830@lothringen>
+        Wed, 30 Mar 2022 14:00:34 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6CDEAC99
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:58:47 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id h19so18508262pfv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qRdDzcsR6tHaU83Zu+AB6iaBkt7tf4uVxesheVO+k04=;
+        b=fmINK1FWWmoLOoYP7UthQGhftrRGdNFBc+IlK+NV5/Ok9ERGA+qLeK6Qc2wTVLtgAA
+         9LQ/i0EUSMCyjEaFKyIhIb7cMmbwQz9Y8BcfXLRuoN6ajRH59AuxXHA3EMGdoKl2VTSg
+         p24YHpEbjdk+uT0CBOdjzzYlBeDTZ3F7gpj4hM7l1TBMoGnLiRy7iLYUHQWybuBMUn3o
+         +79Dbrk0SFPljaZd36P/MkFhRRizQhSn53CNrK2P1EbC2v9I9Kv5K+rfi43xESLumhbH
+         68CiFZAIDCb11Ijcxh9K1W3GQjeukR3sJTsN4+zlgHn1NYrxdXEcaVCJINP6zp/PmCKt
+         vRnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qRdDzcsR6tHaU83Zu+AB6iaBkt7tf4uVxesheVO+k04=;
+        b=zUcugLKmwZwD2rseqKO6VQiSt9E8D1UQSwBbqIcldTvwMZDAEx0atsPF9k94DcANjg
+         DwUPOSrNNXd9R8nO5YQ6rdQScDjFrlZeVU9Bu8GY9d2xqKtcc5/xEkPjFhTApZDZh0es
+         76YLVnB8RVdho8i8hNOndCJ13hxO78d0ERI/ingGVtYoZvJ/d0pN6f9D3X1Qvy5nuSYo
+         W+etZDd/yGkgTZNxEIJbwtWBe+CuG033pxozU7f/XY8uxaQIwrq09jWXCd2tDmWONB76
+         bofKjcqM89ap/r+FffvJx5f5UK0vRdYBEsM3A/SynLYsjW+tAklEd0ZhPvw4gwvMZLXe
+         6QUg==
+X-Gm-Message-State: AOAM532PLwhHaZZmjjKjfm0tiQXYhntuRxLi/bQcmKfqUGB0KaMaAL2y
+        fS0ytkBom/EPV4wTgF7fBjjBGQvpJX8P3Q==
+X-Google-Smtp-Source: ABdhPJw5RZDHzkmYWQnqaCR/pP7fkWu0K1pHE0zmJg/ZBWnJ2OplQYKLUcCZisuEeybmIa1wsGUd6g==
+X-Received: by 2002:a65:674b:0:b0:381:6565:26fc with SMTP id c11-20020a65674b000000b00381656526fcmr7064146pgu.618.1648663126803;
+        Wed, 30 Mar 2022 10:58:46 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090a8b0300b001c735089cc2sm6710778pjn.54.2022.03.30.10.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 10:58:45 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 17:58:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Steven Price <steven.price@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, maz@kernel.org,
+        will@kernel.org
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YkSaUQX89ZEojsQb@google.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <YjyS6A0o4JASQK+B@google.com>
+ <YkHspg+YzOsbUaCf@google.com>
+ <YkH32nx+YsJuUbmZ@google.com>
+ <YkIFW25WgV2WIQHb@google.com>
+ <YkM7eHCHEBe5NkNH@google.com>
+ <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
+ <YkQzfjgTQaDd2E2T@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330112752.GA1245830@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YkQzfjgTQaDd2E2T@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 01:27:52PM +0200, Frederic Weisbecker wrote:
-> On Wed, Mar 16, 2022 at 03:42:53PM +0100, Frederic Weisbecker wrote:
-> > The flag allowing to requeue the polling work is reset before the
-> > polling even starts. However there is no point in having two competing
-> > polling on the same grace period. Just reset the flag once we have
-> > completed the grace period only.
+On Wed, Mar 30, 2022, Quentin Perret wrote:
+> On Wednesday 30 Mar 2022 at 09:58:27 (+0100), Steven Price wrote:
+> > On 29/03/2022 18:01, Quentin Perret wrote:
+> > > Is implicit sharing a thing? E.g., if a guest makes a memory access in
+> > > the shared gpa range at an address that doesn't have a backing memslot,
+> > > will KVM check whether there is a corresponding private memslot at the
+> > > right offset with a hole punched and report a KVM_EXIT_MEMORY_ERROR? Or
+> > > would that just generate an MMIO exit as usual?
 > > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > ---
-> >  kernel/rcu/tree_exp.h | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-> > index b6fd857f34ba..763ec35546ed 100644
-> > --- a/kernel/rcu/tree_exp.h
-> > +++ b/kernel/rcu/tree_exp.h
-> > @@ -911,7 +911,6 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
-> >  
-> >  	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
-> >  	s = rnp->exp_seq_poll_rq;
-> > -	rnp->exp_seq_poll_rq |= 0x1;
+> > My understanding is that the guest needs some way of tagging whether a
+> > page is expected to be shared or private. On the architectures I'm aware
+> > of this is done by effectively stealing a bit from the IPA space and
+> > pretending it's a flag bit.
 > 
-> On a second (or actually twentieth) thought, this patch and all those following
-> make wrapping issues more likely:
+> Right, and that is in fact the main point of divergence we have I think.
+> While I understand this might be necessary for TDX and the likes, this
+> makes little sense for pKVM. This would effectively embed into the IPA a
+> purely software-defined non-architectural property/protocol although we
+> don't actually need to: we (pKVM) can reasonably expect the guest to
+> explicitly issue hypercalls to share pages in-place. So I'd be really
+> keen to avoid baking in assumptions about that model too deep in the
+> host mm bits if at all possible.
+
+There is no assumption about stealing PA bits baked into this API.  Even within
+x86 KVM, I consider it a hard requirement that the common flows not assume the
+private vs. shared information is communicated through the PA.
+
+> > > I'm overall inclined to think that while this abstraction works nicely
+> > > for TDX and the likes, it might not suit pKVM all that well in the
+> > > current form, but it's close.
+> > > 
+> > > What do you think of extending the model proposed here to also address
+> > > the needs of implementations that support in-place sharing? One option
+> > > would be to have KVM notify the private-fd backing store when a page is
+> > > shared back by a guest, which would then allow host userspace to mmap
+> > > that particular page in the private fd instead of punching a hole.
+> > > 
+> > > This should retain the main property you're after: private pages that
+> > > are actually mapped in the guest SPTE aren't mmap-able, but all the
+> > > others are fair game.
+> > > 
+> > > Thoughts?
+> > How do you propose this works if the page shared by the guest then needs
+> > to be made private again? If there's no hole punched then it's not
+> > possible to just repopulate the private-fd. I'm struggling to see how
+> > that could work.
 > 
-> * Before this patch, wrapping occuring *after* the 0x1 is set on the beginning
->   of the workqueue is fine. The last vulnerable wrapping scenario is when
->   the wrapping happens before we reach the beginning of the workqueue
->   execution that sets the 0x1, so the work may happen not to be queued.
+> Yes, some discussion might be required, but I was thinking about
+> something along those lines:
 > 
+>  - a guest requests a shared->private page conversion;
 > 
-> * After this patch, wrapping occuring *before* the GP completion in the
->   workqueue will be ignored and fail. Still unlikely, but less unlikely than
->   before this patch.
+>  - the conversion request is routed all the way back to the VMM;
 > 
-> So please revert this series. Only the first patch "rcu: Remove needless polling
-> work requeue for further waiter" still seem to make sense.
+>  - the VMM is expected to either decline the conversion (which may be
+>    fatal for the guest if it can't handle this), or to tear-down its
+>    mappings (via munmap()) of the shared page, and accept the
+>    conversion;
+> 
+>  - upon return from the VMM, KVM will be expected to check how many
+>    references to the shared page are still held (probably by asking the
+>    fd backing store) to check that userspace has indeed torn down its
+>    mappings. If all is fine, KVM will instruct the hypervisor to
+>    repopulate the private range of the guest, otherwise it'll return an
+>    error to the VMM;
+> 
+>  - if the conversion has been successful, the guest can resume its
+>    execution normally.
+> 
+> Note: this should still allow to use the hole-punching method just fine
+> on systems that require it. The invariant here is just that KVM (with
+> help from the backing store) is now responsible for refusing to
+> instruct the hypervisor (or TDX module, or RMM, or whatever) to map a
+> private page if there are existing mappings to it.
+> 
+> > Having said that; if we can work out a way to safely
+> > mmap() pages from the private-fd there's definitely some benefits to be
+> > had - e.g. it could be used to populate the initial memory before the
+> > guest is started.
+> 
+> Right, so assuming the approach proposed above isn't entirely bogus,
+> this might now become possible by having the VMM mmap the private-fd,
+> load the payload, and then unmap it all, and only then instruct the
+> hypervisor to use this as private memory.
 
-I know that twentieth-thought feeling!
+Hard "no" on mapping the private-fd.  Having the invariant tha the private-fd
+can never be mapped greatly simplifies the responsibilities of the backing store,
+as well as the interface between the private-fd and the in-kernel consumers of the
+memory (KVM in this case).
 
-I reverted the following commits, and will remove the original and the
-reversion of each on my next rebase:
+What is the use case for shared->private conversion?  x86, both TDX and SNP,
+effectively do have a flavor of shared->private conversion; SNP can definitely
+be in-place, and I think TDX too.  But the only use case in x86 is to populate
+the initial guest image, and due to other performance bottlenecks, it's strongly
+recommended to keep the initial image as small as possible.  Based on your previous
+response about the guest firmware loading the full guest image, my understanding is
+that pKVM will also utilize a minimal initial image.
 
-26632dde0c40 ("rcu: No need to reset the poll request flag before completion")
-b889e463d447 ("rcu: Perform early sequence fetch for polling locklessly")
-11eccc01200f ("rcu: Name internal polling flag")
+As a result, true in-place conversion to reduce the number of memcpy()s is low
+priority, i.e. not planned at this time.  Unless the use case expects to convert
+large swaths of memory, the simplest approach would be to have pKVM memcpy() between
+the private and shared backing pages during conversion.
 
-Would it make sense to apply rcu_seq_done_exact(), perhaps as follows?
-Or is there some reason this would cause problems?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index b6fd857f34ba..bd47fce0e08c 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -992,7 +992,7 @@ bool poll_state_synchronize_rcu_expedited(unsigned long oldstate)
- 	WARN_ON_ONCE(!(oldstate & RCU_GET_STATE_FROM_EXPEDITED));
- 	if (oldstate & RCU_GET_STATE_USE_NORMAL)
- 		return poll_state_synchronize_rcu(oldstate & ~RCU_GET_STATE_BAD_FOR_NORMAL);
--	if (!rcu_exp_gp_seq_done(oldstate & ~RCU_SEQ_STATE_MASK))
-+	if (!rcu_seq_done_exact(&rcu_state.expedited_sequence, oldstate & ~RCU_SEQ_STATE_MASK))
- 		return false;
- 	smp_mb(); /* Ensure GP ends before subsequent accesses. */
- 	return true;
+In-place conversion that preserves data needs to be a separate and/or additional
+hypercall, because "I want to map this page as private/shared" is very, very different
+than "I want to map this page as private/shared and consume/expose non-zero data".
+I.e. the host is guaranteed to get an explicit request to do the memcpy(), so there
+shouldn't be a need to implicitly allow this on any conversion.

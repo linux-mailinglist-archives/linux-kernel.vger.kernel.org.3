@@ -2,142 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C4E4EC516
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5304EC526
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345558AbiC3NCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S1345675AbiC3NGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345549AbiC3NCe (ORCPT
+        with ESMTP id S244903AbiC3NGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:02:34 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F06D15DABD
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:00:48 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id 85so16484542qkm.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JKBEI+rTrucdMmAykodBJnjRrK7pFFvDZ/jgsyxJpqM=;
-        b=ZdgvW8LjgNL6YoqgHEh9gCT/a5BIEEXhlqaP97vLxTw5UtMyWwZgMFoScg41CskVB5
-         tfMc3uKjFABrduUmfVVkRLPZMnDclwcFUEMNSYizSlVlLS4Cd1MArP6pc0/518t70bGn
-         bpXnOF4LwesYzcGZuUUFRmY5SJ04C+LezJNIr4BgOJ5Sczzn/GnzoKITfFSLprFCsTyx
-         zZO8/lzwF0pNVYBojwrJCtCG9mmLOAuLtcz+TfGA4ArRPEXMlYYFYPHJblLHUZqqQPNQ
-         oJKncFZRx8keTMZvVHfEluKg6hVvsYHpFxir/BDXwROVBfk7CLo3OHP5QpZ5nvfSqsXF
-         a5Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JKBEI+rTrucdMmAykodBJnjRrK7pFFvDZ/jgsyxJpqM=;
-        b=PtWnAoAKoEMTbumrg8QJf1D/bvUblrJboGmK+0x2Dk6Oa4P2q1t2pdM6NbZh6V95BQ
-         oDjEaKr0M+5mfzz7MsAXOEJx4EaRuJwbW4wtsifq5hC4nuNtbdSP9R4YZwehxgejuQBw
-         +hQe/fpUMp4Zkn5+E5eo0CRQKaMiwB25iSKbBddXxd27MoMMxOMDGwYCmN/pZU3d6Tj8
-         3NFcPgNsAf6VYggM2wSCA3Tg79C+Tkqv6I9NhjX0G+nUCjxajL3Uic/3rqqJY4dImFJZ
-         QtcKIkocpgXAi5xlZ7MAyPIjBD5DQlkj1iETuMIN5u11Ju6R1xH0Z3+P1g6u89+EeEhk
-         CPDw==
-X-Gm-Message-State: AOAM533QIKER0VRdhmhRZC82qwzCOp2m+YAw3GXMqmBaNqta3jvJJBtt
-        3l0HQD73DJx0YLq37N4mgHrqbw==
-X-Google-Smtp-Source: ABdhPJyv3AWwhtvS2UE867VEhAMipuhh9WVFgBcj0BauMpWiZotNv82wxTieALZfY6uEjLrGUXMVxw==
-X-Received: by 2002:a37:9d7:0:b0:67e:85d2:2417 with SMTP id 206-20020a3709d7000000b0067e85d22417mr23645632qkj.753.1648645247377;
-        Wed, 30 Mar 2022 06:00:47 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id b202-20020ae9ebd3000000b0067b11d53365sm10850997qkg.47.2022.03.30.06.00.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 06:00:46 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 09:00:46 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
- for file pages
-Message-ID: <YkRUfuT3jGcqSw1Q@cmpxchg.org>
-References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
- <YjiMsGoXoDU+FwsS@cmpxchg.org>
- <623938d1.1c69fb81.52716.030f@mx.google.com>
- <YjnO3p6vvAjeMCFC@cmpxchg.org>
- <20220323061058.GA2343452@cgel.zte@gmail.com>
- <62441603.1c69fb81.4b06b.5a29@mx.google.com>
+        Wed, 30 Mar 2022 09:06:02 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51619C38;
+        Wed, 30 Mar 2022 06:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cHMQ7
+        WoXLVIhypyQ8WPqd9becVvlyEmkctQb5Tr1eQI=; b=O4IaNn5MPK/T1jNqaCPNM
+        eaVN9jS9V+B2IAhGgbis5fIRI25CB4e/JpPhqGURryeaDRdsOnCXxR059vFzbjxp
+        Y21Np5mdm/Cbx/ns4aUCTpLkYpvBup8ZrkhfDh9u9P7axmJlHSSQwBwK2iyJrNP0
+        q19KKrvur7N2YRjnhm6GiM=
+Received: from localhost.localdomain (unknown [101.86.110.112])
+        by smtp8 (Coremail) with SMTP id DMCowAAH01QUVURi01bAAA--.22186S2;
+        Wed, 30 Mar 2022 21:03:17 +0800 (CST)
+From:   jackygam2001 <jacky_gam_2001@163.com>
+To:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ping.gan@dell.com, jackygam2001 <jacky_gam_2001@163.com>
+Subject: [PATCH] tcp: Add tracepoint for tcp_set_ca_state
+Date:   Wed, 30 Mar 2022 21:01:28 +0800
+Message-Id: <20220330130128.10256-1-jacky_gam_2001@163.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62441603.1c69fb81.4b06b.5a29@mx.google.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMCowAAH01QUVURi01bAAA--.22186S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAw4UXFWDCr47Zw13Xw1fWFg_yoWrAr15pF
+        1DAr1Sg3y5Jryagas3Jry8twnxW348ur1agry7Ww1ak3ZFqF1rtF1ktryjyayYvrWFy39x
+        Wa129r1rGa17Zr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE380ZUUUUU=
+X-Originating-IP: [101.86.110.112]
+X-CM-SenderInfo: 5mdfy55bjdzsisqqiqqrwthudrp/xS2BdBXTKVgi1YcKDwAAs2
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 08:34:08AM +0000, CGEL wrote:
-> On Wed, Mar 23, 2022 at 06:11:03AM +0000, CGEL wrote:
-> > On Tue, Mar 22, 2022 at 09:27:58AM -0400, Johannes Weiner wrote:
-> > > On Tue, Mar 22, 2022 at 02:47:42AM +0000, CGEL wrote:
-> > > > On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
-> > > > > On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
-> > > > > > From: Yang Yang <yang.yang29@zte.com.cn>
-> > > > > > 
-> > > > > > psi tracks the time spent on submitting the IO of refaulting file pages
-> > > > > > and anonymous pages[1]. But after we tracks refaulting anonymous pages
-> > > > > > in swap_readpage[2][3], there is no need to track refaulting anonymous
-> > > > > > pages in submit_bio.
-> > > > > > 
-> > > > > > So this patch can reduce redundant calling of psi_memstall_enter. And
-> > > > > > make it easier to track refaulting file pages and anonymous pages
-> > > > > > separately.
-> > > > > 
-> > > > > I don't think this is an improvement.
-> > > > > 
-> > > > > psi_memstall_enter() will check current->in_memstall once, detect the
-> > > > > nested call, and bail. Your patch checks PageSwapBacked for every page
-> > > > > being added. It's more branches for less robust code.
-> > > > 
-> > > > We are also working for a new patch to classify different reasons cause
-> > > > psi_memstall_enter(): reclaim, thrashing, compact, etc. This will help
-> > > > user to tuning sysctl, for example, if user see high compact delay, he
-> > > > may try do adjust THP sysctl to reduce the compact delay.
-> > > > 
-> > > > To support that, we should distinguish what's the reason cause psi in
-> > > > submit_io(), this patch does the job.
-> > > 
-> > > Please submit these patches together then. On its own, this patch
-> > > isn't desirable.
-> > I think this patch has it's independent value, I try to make a better
-> > explain.
+The congestion status of a tcp flow may be updated since there
+is congestion between tcp sender and receiver. It makes sense for
+adding tracepoint for congestion status update function to evaluate
+the performance of network and congestion algorithm.
 
-You missed the point about it complicating semantics.
+Link: https://github.com/iovisor/bcc/pull/3899
 
-Right now, the bio layer annotates stalls from queue contention. This
-is very simple. The swap code has relied on it in the past. It doesn't
-now, but that doesn't change what the concept is at the bio layer.
+Signed-off-by: jackygam2001 <jacky_gam_2001@163.com>
+---
+ include/net/tcp.h          | 12 +++---------
+ include/trace/events/tcp.h | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ net/ipv4/tcp_cong.c        | 12 ++++++++++++
+ 3 files changed, 60 insertions(+), 9 deletions(-)
 
-You patch explicitly codifies that the MM handles swap IOs, and the
-lower bio layer handles files. This asymmetry is ugly and error prone.
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 70ca4a5e330a..9a3786f33798 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1139,15 +1139,6 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
+ 	return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
+ }
+ 
+-static inline void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
+-{
+-	struct inet_connection_sock *icsk = inet_csk(sk);
+-
+-	if (icsk->icsk_ca_ops->set_state)
+-		icsk->icsk_ca_ops->set_state(sk, ca_state);
+-	icsk->icsk_ca_state = ca_state;
+-}
+-
+ static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
+ {
+ 	const struct inet_connection_sock *icsk = inet_csk(sk);
+@@ -1156,6 +1147,9 @@ static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
+ 		icsk->icsk_ca_ops->cwnd_event(sk, event);
+ }
+ 
++/* From tcp_cong.c */
++void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
++
+ /* From tcp_rate.c */
+ void tcp_rate_skb_sent(struct sock *sk, struct sk_buff *skb);
+ void tcp_rate_skb_delivered(struct sock *sk, struct sk_buff *skb,
+diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
+index 521059d8dc0a..69a68b01c1de 100644
+--- a/include/trace/events/tcp.h
++++ b/include/trace/events/tcp.h
+@@ -371,6 +371,51 @@ DEFINE_EVENT(tcp_event_skb, tcp_bad_csum,
+ 	TP_ARGS(skb)
+ );
+ 
++TRACE_EVENT(tcp_cong_state_set,
++
++	TP_PROTO(struct sock *sk, const u8 ca_state),
++
++	TP_ARGS(sk, ca_state),
++
++	TP_STRUCT__entry(
++		__field(const void *, skaddr)
++		__field(__u16, sport)
++		__field(__u16, dport)
++		__array(__u8, saddr, 4)
++		__array(__u8, daddr, 4)
++		__array(__u8, saddr_v6, 16)
++		__array(__u8, daddr_v6, 16)
++		__field(__u8, cong_state)
++	),
++
++	TP_fast_assign(
++		struct inet_sock *inet = inet_sk(sk);
++		__be32 *p32;
++
++		__entry->skaddr = sk;
++
++		__entry->sport = ntohs(inet->inet_sport);
++		__entry->dport = ntohs(inet->inet_dport);
++
++		p32 = (__be32 *) __entry->saddr;
++		*p32 = inet->inet_saddr;
++
++		p32 = (__be32 *) __entry->daddr;
++		*p32 =  inet->inet_daddr;
++
++		TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_daddr,
++			   sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
++
++		__entry->cong_state = ca_state;
++	),
++
++	TP_printk("sport=%hu dport=%hu saddr=%pI4 daddr=%pI4 saddrv6=%pI6c daddrv6=%pI6c cong_state=%u",
++		  __entry->sport, __entry->dport,
++		  __entry->saddr, __entry->daddr,
++		  __entry->saddr_v6, __entry->daddr_v6,
++		  __entry->cong_state)
++);
++
+ #endif /* _TRACE_TCP_H */
+ 
+ /* This part must be outside protection */
+diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+index dc95572163df..98b48bdb8be7 100644
+--- a/net/ipv4/tcp_cong.c
++++ b/net/ipv4/tcp_cong.c
+@@ -16,6 +16,7 @@
+ #include <linux/gfp.h>
+ #include <linux/jhash.h>
+ #include <net/tcp.h>
++#include <trace/events/tcp.h>
+ 
+ static DEFINE_SPINLOCK(tcp_cong_list_lock);
+ static LIST_HEAD(tcp_cong_list);
+@@ -33,6 +34,17 @@ struct tcp_congestion_ops *tcp_ca_find(const char *name)
+ 	return NULL;
+ }
+ 
++void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
++{
++	struct inet_connection_sock *icsk = inet_csk(sk);
++
++	trace_tcp_cong_state_set(sk, ca_state);
++
++	if (icsk->icsk_ca_ops->set_state)
++		icsk->icsk_ca_ops->set_state(sk, ca_state);
++	icsk->icsk_ca_state = ca_state;
++}
++
+ /* Must be called with rcu lock held */
+ static struct tcp_congestion_ops *tcp_ca_find_autoload(struct net *net,
+ 						       const char *name)
+-- 
+2.15.0
 
-If you want type distinction, we should move it all into MM code, like
-Christoph is saying. Were swap code handles anon refaults and the page
-cache code handles file refaults. This would be my preferred layering,
-and my original patch did that: https://lkml.org/lkml/2019/7/22/1070.
-
-But it was NAKed, and I had to agree with the argument. The page cache
-code is not very centralized, and the place where we deal with
-individual pages (and detect refaults) and where we submit bios (where
-the stalls occur) is spread out into multiple filesystems. There are
-180 submit_bio() calls in fs/; you'd have to audit which ones are for
-page cache submissions, and then add stall annotations or use a new
-submit_bio_cache() wrapper that handles it. Changes in the filesystem
-could easily miss this protocol and silently break pressure detection.
-
-I would prefer the annotations to be at this level, I just don't see
-how to do it cleanly/robustly. Maybe Christoph has an idea, he
-understands the fs side much better than I do.

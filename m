@@ -2,94 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266AC4EB79C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C0C4EB79F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241527AbiC3BC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 21:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S241538AbiC3BJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 21:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241466AbiC3BC4 (ORCPT
+        with ESMTP id S241265AbiC3BJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 21:02:56 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F70F1C7C34
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:01:11 -0700 (PDT)
-Received: from kwepemi500018.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KSp1G09jvzBrm9;
-        Wed, 30 Mar 2022 08:57:06 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500018.china.huawei.com (7.221.188.213) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 09:01:08 +0800
-Received: from [10.174.179.19] (10.174.179.19) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 09:01:08 +0800
-Message-ID: <710eaffd-411b-346a-7ce4-3d0697ecb8aa@huawei.com>
-Date:   Wed, 30 Mar 2022 09:01:07 +0800
+        Tue, 29 Mar 2022 21:09:16 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEFA24221E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648602452; x=1680138452;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8KIRnNLoi9wMoGub3g/iUrpxj6QpD9v0f1yJbTbQg3I=;
+  b=U49x3gm1ucypZwmWtJdMjEOSf1/WjOXeEjEsrwDA7hopGE4oDLSy9Yta
+   mh9WEjGF0s0rCE8B28nTkBgW+uxDijLluBgUFFrLYKUKKIKlUZurqIQyt
+   qP1mRqSm4WIqQmlGalWZy8L12LpmqQWMsOsLX/WtyEm/QhNxFKPUZA0Hw
+   ciRg6VBCqDL5ShESMUTLvVunQja6Er2C2E0+Gm8X/msUGyT8VOz8pB5Nk
+   sKbFzx7OTh8sIF+J1Igoy68yGpX9ghMgE/5QFO0HPVc2YC1s6HxzGJr6O
+   a6e5CCf5hPnbe0SA6nNwKNSrtWPL7BRmyZxgOJsn81G2iQbgXAR46N/HW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258246110"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="258246110"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 18:07:32 -0700
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="787817665"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 18:07:32 -0700
+Date:   Tue, 29 Mar 2022 18:09:56 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: r8188eu: fix suspect code indent for
+ conditional statements
+Message-ID: <20220330010956.GA1173030@alison-desk>
+References: <YkK7ABTVt0TCbd18@bertie>
+ <20220329161632.GA1169956@alison-desk>
+ <YkOowzOkAE5Fr1dW@bertie>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] hugetlb: Fix hugepages_setup when deal with pernode
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        <akpm@linux-foundation.org>, <yaozhenguo1@gmail.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <rdunlap@infradead.org>
-References: <20220324074037.2024608-1-liupeng256@huawei.com>
- <361111c6-921b-e129-edf3-367748f6497e@oracle.com>
- <ec312492-fea9-7130-8be4-1c362c2e84a6@huawei.com>
- <e94ea60f-9da7-98b7-7d47-1183c0fd2ddc@oracle.com>
- <d992f076-5eba-929b-e284-57bd5471cd85@huawei.com>
- <c33ab0c1-6b73-2489-efab-972c8d7fa80b@oracle.com>
-From:   "liupeng (DM)" <liupeng256@huawei.com>
-In-Reply-To: <c33ab0c1-6b73-2489-efab-972c8d7fa80b@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.19]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkOowzOkAE5Fr1dW@bertie>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 29, 2022 at 07:48:03PM -0500, Rebecca Mckeever wrote:
+> On Tue, Mar 29, 2022 at 09:16:32AM -0700, Alison Schofield wrote:
+> > On Tue, Mar 29, 2022 at 02:53:36AM -0500, Rebecca Mckeever wrote:
+> > > Align the if and else if branches of the conditional statement
+> > > to improve readability. Prevent bugs that could be introduced
+> > > if developers misread the code. Issue found by checkpatch.
+> > 
+> > Thanks for the patch Rebecca!
+> > 
+> > Lots of stuff done right - passes chkp, compiles, patch is sent to
+> > correct recipients, the commit message follows the format of the file.
+> > 
+> > Let's set a pattern here for all checkpatch related cleanups,
+> > for you and others that follow.(Thanks for being the first ;))
+> > 
+> > Commit msg says 'what'. Commit log says 'why'. Acknowledge that
+> > it was found using checkpatch in the commit log also. (In the future
+> > you may be acknowledging use of other tools like sparse, coccinelle.)
+> > 
+> > Note that the 'why' is never that a tool reported an error. The 'why'
+> > for these checkpatch reports is usually to follow the Linux Kernel
+> > Coding Style.
+> > 
+> > 'Fix' in the commit message is needlessly generic. Perhaps:
+> > [PATCH] staging: r8188eu: align both branches of a conditional statement
+> > 
+> > Commit log: (what you have is fine in the log)
+> > I usually paste in the checkpatch error explicitly so it can be grep'd
+> > for. Something like:
+> > 
+> > Issue found by checkpatch:
+> > WARNING: suspect code indent for conditional statements
+> 
+> There was a section of https://kernelnewbies.org/PatchPhilosophy that suggested
+> putting the warning message in the subject line. I thought it would be
+> redundant to also put it in the body. Is it a good practice to include the
+> warning message in both places?
+> 
+The commit msg should say what you did. If it happens to match the
+warning message, that's fine. Think of the commit msg as directives
+to a machine. 
 
-On 2022/3/30 1:43, Mike Kravetz wrote:
-> On 3/28/22 20:59, liupeng (DM) wrote:
->> On 2022/3/29 10:46, Mike Kravetz wrote:
->>> Yes, I agree that the change is needed and the current behavior is
->>> unacceptable.
->>>
->>> One remaining question is the change from returning '0' to '1' in the case
->>> of error.  I do understand this is to prevent the invalid parameter string
->>> from being passed to init.  It may not be correct/right, but in every other
->>> case where an invalid parameter in encountered in hugetlb command line
->>> processing we return "0".  Should we perhaps change all these other places
->>> to be consistent?  I honestly do not know what is the appropriate behavior
->>> in these situations.
->> Thank you for your carefulness and question.
->>
->> I have checked default_hugepagesz_setup and hugepages_setup will both print
->> some information before return '0', so there is no need to print again in
->> "Unknown kernel command line parameters".
->>
->> Should I send another patch to repair the rest "return 0" in hugetlb?
-> I would suggest two patches:
->
-> 1) Fix the issue with invalid nodes specified.  However, leave the "return 0"
->     behavior in hugepages_setup to be consistent with the rest of the code.
->     This patch can be sent to stable with "Fixes: b5389086ad7b" tag as it
->     addresses an existing issue.
-> 2) Clean up the places where we return 0 and it would be better to return 1.
->     No cc stable here and just let the changes target future releases.
+This patch has already been applied :)
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=20b4b3fb383b3a499b8b47daaf1d6325faa9cfe2
 
-Thanks, I will do it as your suggestions.
+You can view contents of staging-testing here:
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/log/?h=staging-testing
 
+> > 
+> > Thanks,
+> > Alison
+> > 
+> > > 
+> > > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> > > ---
+> > >  drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+> > > index 6eca30124ee8..ccc43c0ba433 100644
+> > > --- a/drivers/staging/r8188eu/core/rtw_cmd.c
+> > > +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+> > > @@ -1408,7 +1408,7 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
+> > >  		/* TODO: cancel timer and do timeout handler directly... */
+> > >  		/* need to make timeout handlerOS independent */
+> > >  		_set_timer(&pmlmepriv->scan_to_timer, 1);
+> > > -		} else if (pcmd->res != H2C_SUCCESS) {
+> > > +	} else if (pcmd->res != H2C_SUCCESS) {
+> > >  		_set_timer(&pmlmepriv->scan_to_timer, 1);
+> > >  	}
+> > >  
+> > > -- 
+> > > 2.32.0
+> > > 
+> > > 
+> > 
+> 
+> Thanks,
+> Rebecca

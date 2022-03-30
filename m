@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0865E4EC639
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32EA4EC625
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346627AbiC3OMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S1346561AbiC3OIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344124AbiC3OMx (ORCPT
+        with ESMTP id S1346534AbiC3OIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:12:53 -0400
-X-Greylist: delayed 916 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 07:11:07 PDT
-Received: from mickerik.phytec.de (mickerik.phytec.de [195.145.39.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A52811CF6A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1648648547; x=1651240547;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PdBqd/DBbSKFTM+e0wpYe4vp4KlWFxTw6lHBjS1gXmg=;
-        b=gMldqlETprNSg9ME83L3vRo9O44Z5nL0Zi1Zg1E/8PR/uwuv4AMzCAi9YIDAs9Oo
-        jllxlbD6H6A88TQN3jn+d+IvG8w7wFPjRkFfI48xg05saZNLOfWYwL7pd3kHAgkv
-        1HCD4aktlwb9NC60U36XMXZNEmuW6KQ991DfVntpDC0=;
-X-AuditID: c39127d2-9112070000002a63-03-62446162c7a9
-Received: from berlix.phytec.de (Berlix.phytec.de [172.16.0.117])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id E1.41.10851.26164426; Wed, 30 Mar 2022 15:55:47 +0200 (CEST)
-Received: from [172.16.5.104] (172.16.0.116) by Berlix.phytec.de
- (172.16.0.117) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 30 Mar
- 2022 15:55:46 +0200
-Message-ID: <73a4a16b-193a-3075-61e9-82bcf21fc7d2@phytec.de>
-Date:   Wed, 30 Mar 2022 15:55:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC] arm64: dts: ti: introduce a minimal am642 device tree
-Content-Language: en-US
-To:     Bryan Brattlof <bb@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Wed, 30 Mar 2022 10:08:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B2C6467;
+        Wed, 30 Mar 2022 07:06:31 -0700 (PDT)
+X-UUID: c19457e7bdc84f0b9a1d132d8b775dbe-20220330
+X-UUID: c19457e7bdc84f0b9a1d132d8b775dbe-20220330
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 780459524; Wed, 30 Mar 2022 22:06:26 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 30 Mar 2022 22:06:25 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 30 Mar 2022 22:06:24 +0800
+Message-ID: <61e9fb59448837cfc8e3ec862b711294bcb68872.camel@mediatek.com>
+Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        <robh+dt@kernel.org>, <tzungbi@google.com>,
+        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220321155417.13267-1-bb@ti.com>
-From:   Wadim Egorov <w.egorov@phytec.de>
-In-Reply-To: <20220321155417.13267-1-bb@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Date:   Wed, 30 Mar 2022 22:06:24 +0800
+In-Reply-To: <YkRNSoBKFvYYyZLu@sirena.org.uk>
+References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
+         <20220324064511.10665-3-jiaxin.yu@mediatek.com>
+         <20220329223002.uo7kiemopkh7ak4x@notapiano>
+         <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
+         <YkRNSoBKFvYYyZLu@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.0.116]
-X-ClientProxiedBy: Berlix.phytec.de (172.16.0.117) To Berlix.phytec.de
- (172.16.0.117)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42JZI8BQqpuc6JJkcGUXq8XcNwdYLeYfOcdq
-        sfzzbHaLl7PusVlsenyN1eLyrjlsFm9+nGWyaN17hN3i/9kP7A6cHptWdbJ5bF5S73H8xnYm
-        j8+b5AJYorhsUlJzMstSi/TtErgyPp9qYyt4x1Lx78taxgbGj8xdjJwcEgImEo8uvWXsYuTi
-        EBJYziTx5fIZJgjnAaNE6/tGVpAqXgEbibkX97KB2CwCqhIbfnWyQ8QFJU7OfMICYosKREgs
-        2zUVzBYW8JDoO98PVsMsIC5x68l8JhBbRKCFUeLXyRKQBcwCOxglTv1cBdYgJKAn8aylgRHE
-        ZhNQl7iz4RvYYk4BfYm7k98wQgyykFj85iDUUHmJ7W/nMEP0yku8uLScBeIdBYm5vydCvRYu
-        8fbUb+YJjMKzkNw6C8lNs5CMnYVk7AJGllWMQrmZydmpRZnZegUZlSWpyXopqZsYgbF0eKL6
-        pR2MfXM8DjEycTAeYpTgYFYS4f140DlJiDclsbIqtSg/vqg0J7X4EKM0B4uSOO/9HqZEIYH0
-        xJLU7NTUgtQimCwTB6dUA2OI/NK7k2MEGjOWzkqYsHrtT4a98a4GZ3YE/D1eMX39/R1ua5x/
-        7fi4/V3HLOPHvFKKNTfjT10p3G6y+9L6TxUn+kJWBy2VlmxqOrV7t1vx852nrKM8o566dp87
-        y5f08VXbmktWjHJa37+t+7aVe3l7VtOm/sSZ6TudCjk3Hs9r6pSsipGufCutxFKckWioxVxU
-        nAgAGLUOYZMCAAA=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bryan,
+On Wed, 2022-03-30 at 13:30 +0100, Mark Brown wrote:
+> On Wed, Mar 30, 2022 at 10:33:06AM +0800, Jiaxin Yu wrote:
+> 
+> > "(Although I think this would technicallybreak the ABI?)"
+> > ==> I can't understand this question, could you help explain it in
+> > more
+> > detail.
+> 
+> Making a previously optional property required means that systems
+> that
+> previously worked may stop working unless they update their DT, DTs
+> may
+> be distributed separately to the kernel and perhaps even baked into
+> firmware or similar.
 
-> +/* (optional) for console */
-> +&main_uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_uart0_pins_default>;
-> +};
-> +
-> +/* reserved for firmware */
-> +&main_uart1 {
-> +	status = "reserved";
-> +};
+Hi Mark,
 
-k3-image-gen says UART0 is used as a debug interface. See
+Thank you for your detailed answer. I should keep the driver's behavior
+consistent with the description of dt-bindings. The "mediatek,hdmi-
+codec" needs to be set as the required property. Is my understanding
+right?
 
- 
-https://git.ti.com/cgit/k3-image-gen/k3-image-gen/tree/soc/am64x/evm/board-cfg.c#n81
+Thanks,
+Jiaxin.Yu
 
-So it seems that you can enable uart1 here. But people may run into a 
-conflict with uart0 and k3-image-gen compiled with ENABLE_TRACE=1.
-
-If I am wrong, can you please clarify why you mark uart1 as reserved.
-
-Regards,
-Wadim

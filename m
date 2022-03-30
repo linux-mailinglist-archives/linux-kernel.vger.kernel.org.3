@@ -2,115 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6A74ECD81
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED514ECD89
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiC3TtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 15:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S245057AbiC3Tvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 15:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiC3TtX (ORCPT
+        with ESMTP id S243020AbiC3Tvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 15:49:23 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA9149FA5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 12:47:37 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so689829pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 12:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oOXYySrw0TmLydZhFaBm1sSWPMqWsbFjnghNvkA6FaM=;
-        b=gbpzu1Z2hU6QehteHeEJKFYONUPWrH2ePmFVq8fBFUmfdYtEiqsX50/mxXE6MurCVz
-         JXAqXdvNZvb7vA7qoEoc3FanAyDiRoKv7/syIKrdi6n09xaXb/qIZgA4k61JPaUcBbAY
-         SUfoMNlirJfv7ZV/HVRE0iKvnYT0V0CkAEz1G+3n17fFVaVBxVr3ZhxMjObOo6cbFX1W
-         lnCCzZ4T0f2CXnM+WbG/wctlV1md8NG+uBIWqM3+eDO3X31aMD3bFQEAU6e+drFhi8qj
-         xVoa+Awu1NON5/2ATU7EsXqpafSe/P2WYIYgWuGSTcu7yldqZkm0g6v6L3y/OhP50dsQ
-         Ln5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oOXYySrw0TmLydZhFaBm1sSWPMqWsbFjnghNvkA6FaM=;
-        b=ZwxNkjX9IbKvQQkssxxgvWfJ9yB+we+2cfBWRM2fUudCUga5Z9OUl7uhs0zf6iqmj3
-         hIbQsugEMj7gHUQlRe4q0bf+eovq8SqmVFh0R0KAmQNTgBUUyBZSKHYPNXR/rn1QVJ0X
-         YhhMIFJL82Nw095JHqZFcK02BPAuFd6w1POvhd73ysUrt/Qcr1ku4TPgB4eGkGXVtpVP
-         ntC7rJfBhHM7upgwi/U9qm4v8p2dUmKCOP3wXTFuohDBNyNnJqZ2Oo11B11DircfwS30
-         KX3hvq+mfUJYPXC0BXwGcWTcmomDXZLVICs0DoHnPYKVTNhG0Yj0Jd0qwQ5EXP+TLwL0
-         Q6Cg==
-X-Gm-Message-State: AOAM530Cz7iHCMGcbHgLxeYONZStZ2rEn46ymuzaJ3ZluSTNqcFFIZSf
-        9jsv9lv3czUeJltsniA3qRbcSw==
-X-Google-Smtp-Source: ABdhPJxk2VhMZr3qV/kmbltDEUGnT8rnmM3fOZ/vJPdGZY8jeavTdQllY8SLAsXjHwz5J/UF08rS1w==
-X-Received: by 2002:a17:90b:3846:b0:1c6:841b:7470 with SMTP id nl6-20020a17090b384600b001c6841b7470mr1252259pjb.193.1648669657261;
-        Wed, 30 Mar 2022 12:47:37 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ij17-20020a17090af81100b001c67c964d93sm8557230pjb.2.2022.03.30.12.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 12:47:36 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 19:47:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>,
-        Bharata B Rao <bharata@amd.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Mingwei Zhang <mizhang@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
-Message-ID: <YkSz1R3YuFszcZrY@google.com>
-References: <20220308043857.13652-1-nikunj@amd.com>
- <YkIh8zM7XfhsFN8L@google.com>
- <c4b33753-01d7-684e-23ac-1189bd217761@amd.com>
+        Wed, 30 Mar 2022 15:51:36 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E12CE2B;
+        Wed, 30 Mar 2022 12:49:50 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22UJnIgw086057;
+        Wed, 30 Mar 2022 14:49:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648669758;
+        bh=Wxy1IwTpIUIfVJGOAq2NOfEI+2cbw3VlSeZRH56rW8M=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=UoJPVuBNI8m/ixKDfQugawBpaOyrVQYZLFWOFD03gjpDJlBPH8cKwO37t+M19l5Yl
+         Gmw6vNhEwLZqW4oe0dd9YnxdBahdOAzLBgLXZP/Xak8DUjosIBS0Nskfe3kmxhzSgx
+         E7banJMetcx2zpdREZKEf30l5/Vzffhy9CIelmNE=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22UJnIw9062750
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 30 Mar 2022 14:49:18 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 30
+ Mar 2022 14:49:18 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 30 Mar 2022 14:49:17 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22UJnHrB010599;
+        Wed, 30 Mar 2022 14:49:17 -0500
+Date:   Thu, 31 Mar 2022 01:19:16 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Potin Lai <potin.lai@quantatw.com>
+Subject: Re: [PATCH v4 11/11] mtd: spi-nor: aspeed: set the decoding size to
+ at least 2MB for AST2600
+Message-ID: <20220330194916.olffkctxjhfqksvf@ti.com>
+References: <20220325100849.2019209-1-clg@kaod.org>
+ <20220325100849.2019209-12-clg@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <c4b33753-01d7-684e-23ac-1189bd217761@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220325100849.2019209-12-clg@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022, Nikunj A. Dadhania wrote:
-> On 3/29/2022 2:30 AM, Sean Christopherson wrote:
-> > Let me preface this by saying I generally like the idea and especially the
-> > performance, but...
-> > 
-> > I think we should abandon this approach in favor of committing all our resources
-> > to fd-based private memory[*], which (if done right) will provide on-demand pinning
-> > for "free".  
-> 
-> I will give this a try for SEV, was on my todo list.
-> 
-> > I would much rather get that support merged sooner than later, and use
-> > it as a carrot for legacy SEV to get users to move over to its new APIs, with a long
-> > term goal of deprecating and disallowing SEV/SEV-ES guests without fd-based private
-> > memory.  
-> 
-> > That would require guest kernel support to communicate private vs. shared,
-> 
-> Could you explain this in more detail? This is required for punching hole for shared pages?
 
-Unlike SEV-SNP, which enumerates private vs. shared in the error code, SEV and SEV-ES
-don't provide private vs. shared information to the host (KVM) on page fault.  And
-it's even more fundamental then that, as SEV/SEV-ES won't even fault if the guest
-accesses the "wrong" GPA variant, they'll silent consume/corrupt data.
+> Subject: [PATCH v4 11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB for AST2600
 
-That means KVM can't support implicit conversions for SEV/SEV-ES, and so an explicit
-hypercall is mandatory.  SEV doesn't even have a vendor-agnostic guest/host paravirt
-ABI, and IIRC SEV-ES doesn't provide a conversion/map hypercall in the GHCB spec, so
-running a SEV/SEV-ES guest under UPM would require the guest firmware+kernel to be
-properly enlightened beyond what is required architecturally.
+Nitpick: s/mtd: spi-nor: aspeed:/spi: aspeed:/
+
+On 25/03/22 11:08AM, Cédric Le Goater wrote:
+> From: Potin Lai <potin.lai@quantatw.com>
+> 
+> In AST2600, the unit of SPI CEx decoding range register is 1MB, and end
+> address offset is set to the acctual offset - 1MB. If the flash only has
+> 1MB, the end address will has same value as start address, which will
+> causing unexpected errors.
+> 
+> This patch set the decoding size to at least 2MB to avoid decoding errors.
+> 
+> Tested:
+> root@bletchley:~# dmesg | grep "aspeed-smc 1e631000.spi: CE0 window"
+> [   59.328134] aspeed-smc 1e631000.spi: CE0 window resized to 2MB (AST2600 Decoding)
+> [   59.343001] aspeed-smc 1e631000.spi: CE0 window [ 0x50000000 - 0x50200000 ] 2MB
+> root@bletchley:~# devmem 0x1e631030
+> 0x00100000
+> 
+> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+> [ clg : Ported on new spi-mem driver ]
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>  drivers/spi/spi-aspeed-smc.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+> index 660451667a39..227797e13997 100644
+> --- a/drivers/spi/spi-aspeed-smc.c
+> +++ b/drivers/spi/spi-aspeed-smc.c
+> @@ -466,6 +466,8 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi,
+>   *   is correct.
+>   */
+>  static const struct aspeed_spi_data ast2500_spi_data;
+> +static const struct aspeed_spi_data ast2600_spi_data;
+> +static const struct aspeed_spi_data ast2600_fmc_data;
+>  
+>  static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
+>  					 u32 local_offset, u32 size)
+> @@ -489,6 +491,17 @@ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
+>  			 chip->cs, size >> 20);
+>  	}
+>  
+> +	/*
+> +	 * The decoding size of AST2600 SPI controller should set at
+> +	 * least 2MB.
+> +	 */
+> +	if ((aspi->data == &ast2600_spi_data || aspi->data == &ast2600_fmc_data) &&
+> +	    size < SZ_2M) {
+> +		size = SZ_2M;
+> +		dev_info(aspi->dev, "CE%d window resized to %dMB (AST2600 Decoding)",
+> +			 chip->cs, size >> 20);
+> +	}
+> +
+>  	aspeed_spi_get_windows(aspi, windows);
+>  
+>  	/* Adjust this chip window */
+> -- 
+> 2.34.1
+> 
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

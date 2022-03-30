@@ -2,97 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8E94EBA14
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB454EBA16
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242987AbiC3FXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
+        id S242908AbiC3FYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243010AbiC3FXV (ORCPT
+        with ESMTP id S240660AbiC3FYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:23:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A59F1480E8;
-        Tue, 29 Mar 2022 22:21:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13A2F615D9;
-        Wed, 30 Mar 2022 05:21:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793BAC340EC;
-        Wed, 30 Mar 2022 05:21:23 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EWx80GcI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648617681;
+        Wed, 30 Mar 2022 01:24:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 084E715AAFC
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648617743;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9uzCxmb6i4Vo8+AFdyD/kL3n4v054lqayW48puql9H8=;
-        b=EWx80GcI7TD1DoS2Vm4HaYn+c5nAQrEiBRPse3R7LpWPaDc5V08VD/2P9H1JXT3PVH0BG9
-        CYOz+fLf7jLdsKcCWhHI7SLGw5hFIkr+xQagOlsN4r0iA1DXdqzFf+Rem09E786EtjukJO
-        jJ+vPNLgTJxTj2rdjk/88iGovmoCKzI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id df7ade0d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 30 Mar 2022 05:21:21 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 01:21:20 -0400
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
-Message-ID: <YkPo0N/CVHFDlB6v@zx2c4.com>
-References: <20220326114009.1690-1-aissur0002@gmail.com>
- <2698031.BEx9A2HvPv@fedor-zhuzhzhalka67>
- <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
- <4705670.GXAFRqVoOG@fedor-zhuzhzhalka67>
- <CAHk-=wiKhn+VsvK8CiNbC27+f+GsPWvxMVbf7QET+7PQVPadwA@mail.gmail.com>
- <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com>
+        bh=73+ha/vkBm7xxOmMxZvMhcq9V/8gU/hzN5hUEp6SUC0=;
+        b=VoLB9ziFvKUdp417MWWO2iPYNiBHo6d8/fYmpP1B8YlX9+sGPcxsoRVG/yQqkT6i0HWGSg
+        WL5ohowaFo15vQrfLYn+b08h+obSfX7N717LKeCIgZbCgDwg1AVL5vVtF/fW1aycqIvwMJ
+        wP0I1/5T5nDPo3zCocYSTiu1ldBF2n8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-379-kbb-X98yMzGY0u1yyNNUZA-1; Wed, 30 Mar 2022 01:22:21 -0400
+X-MC-Unique: kbb-X98yMzGY0u1yyNNUZA-1
+Received: by mail-wr1-f71.google.com with SMTP id e10-20020adf9bca000000b002059b6ffa18so4173704wrc.14
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:22:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=73+ha/vkBm7xxOmMxZvMhcq9V/8gU/hzN5hUEp6SUC0=;
+        b=YB4ouBU1b/HfFOZReV0wHOwfu7uuEWUjkNygZXvTNko4oSvvi3jgk5xOjBRTFHhswX
+         c5vZkogPd6vi42hBrTWx99VcEF19oTD+fB7gYKWpH1q6N1izf38M++O8cpSGMNBk1FrH
+         3fCHmOoSqzt5Fn6io315VXdn0+J9w3egY2CLvqrqL+N3tMhjTJvlzV2pWBTd9NnwQfNf
+         zsYAaiZm+ro8w/wJqdd62Jy0eeclXgE4vZTvVgPMi9dP8KJ9cx76DlBHrnzVzp8Zv1BF
+         vZNoeaMKNqs/BilVIiVnNwUa7eJ2oAx/C74cezj34IiCt7yze3lOWBS5zPS4RBWbLVIh
+         7MuA==
+X-Gm-Message-State: AOAM532Xt6DLfv1xqCP0CP2o59H9lRCqX0NqdRvswmtO3btasVdH2J9D
+        hwzNRP9gQyrtt9kcYtTnWcc6YXRcCMvVUJhlyqHj4UWA3WEHy245dqzd6mlkKU7OigKG21laYTm
+        vEJwNSeEDleA+E5dACyxbSyLx
+X-Received: by 2002:a05:600c:4ec9:b0:38b:f1fd:b6b9 with SMTP id g9-20020a05600c4ec900b0038bf1fdb6b9mr2613644wmq.7.1648617740386;
+        Tue, 29 Mar 2022 22:22:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwhZNA71rh4p3gznLJEzepRF8Cf0lFbyruap5Iy8lNQ71ai2JE9ehQlS8ISFWRukJV+gCHPgQ==
+X-Received: by 2002:a05:600c:4ec9:b0:38b:f1fd:b6b9 with SMTP id g9-20020a05600c4ec900b0038bf1fdb6b9mr2613631wmq.7.1648617740126;
+        Tue, 29 Mar 2022 22:22:20 -0700 (PDT)
+Received: from redhat.com ([2.52.9.207])
+        by smtp.gmail.com with ESMTPSA id m2-20020a1c2602000000b0038ca9ffac53sm3730095wmm.11.2022.03.29.22.22.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 22:22:19 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 01:22:15 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, keirf@google.com
+Subject: Re: [PATCH 1/3] virtio: use virtio_device_ready() in
+ virtio_device_restore()
+Message-ID: <20220330012204-mutt-send-email-mst@kernel.org>
+References: <20220324084004.14349-1-jasowang@redhat.com>
+ <20220324084004.14349-2-jasowang@redhat.com>
+ <20220324064205-mutt-send-email-mst@kernel.org>
+ <20220324110307.iizkdwuhc5c75noj@sgarzare-redhat>
+ <20220324070612-mutt-send-email-mst@kernel.org>
+ <20220324113126.f6f5hfabhqfyutix@sgarzare-redhat>
+ <81381018-9dcd-3fba-becf-183435a5bf6b@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <81381018-9dcd-3fba-becf-183435a5bf6b@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-On Tue, Mar 29, 2022 at 03:18:56PM -0700, Linus Torvalds wrote:
-> On Tue, Mar 29, 2022 at 2:02 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > I will apply that ALIGN() thing since Christian could confirm it fixes
-> > things, and try to add a few more comments about how bitmaps are
-> > fundamentally in chunks of BITS_PER_LONG.
+On Fri, Mar 25, 2022 at 11:05:22AM +0800, Jason Wang wrote:
 > 
-> Ok, applied as commit 1c24a186398f ("fs: fd tables have to be
-> multiples of BITS_PER_LONG").
+> 在 2022/3/24 下午7:31, Stefano Garzarella 写道:
+> > On Thu, Mar 24, 2022 at 07:07:09AM -0400, Michael S. Tsirkin wrote:
+> > > On Thu, Mar 24, 2022 at 12:03:07PM +0100, Stefano Garzarella wrote:
+> > > > On Thu, Mar 24, 2022 at 06:48:05AM -0400, Michael S. Tsirkin wrote:
+> > > > > On Thu, Mar 24, 2022 at 04:40:02PM +0800, Jason Wang wrote:
+> > > > > > From: Stefano Garzarella <sgarzare@redhat.com>
+> > > > > >
+> > > > > > This avoids setting DRIVER_OK twice for those drivers that call
+> > > > > > virtio_device_ready() in the .restore
+> > > > >
+> > > > > Is this trying to say it's faster?
+> > > > 
+> > > > Nope, I mean, when I wrote the original version, I meant to do the same
+> > > > things that we do in virtio_dev_probe() where we called
+> > > > virtio_device_ready() which not only set the state, but also called
+> > > > .enable_cbs callback.
+> > > > 
+> > > > Was this a side effect and maybe more compliant with the spec?
+> > > 
+> > > 
+> > > Sorry I don't understand the question. it says "avoids setting
+> > > DRIVER_OK twice" -
+> > > why is that advantageous and worth calling out in the commit log?
+> > 
+> > I just wanted to say that it seems strange to set DRIVER_OK twice if we
+> > read the spec. I don't think it's wrong, but weird.
+> > 
+> > Yes, maybe we should rewrite the commit message saying that we want to
+> > use virtio_device_ready() everywhere to complete the setup before
+> > setting DRIVER_OK so we can do all the necessary operations inside (like
+> > in patch 3 or call enable_cbs).
+> > 
+> > Jason rewrote the commit log, so I don't know if he agrees.
+> > 
+> > Thanks,
+> > Stefano
+> 
+> 
+> I agree, I will tweak the log in V2.
+> 
+> Thanks
 
-This broke the WireGuard test suite, <https://www.wireguard.com/build-status/>,
-on 32-bit archs with a line like:
+Still waiting for that v2.
 
-[+] NS1: wg set wg0 private-key /dev/fd/63 listen-port 1 peer xb6I3yo5N/A9PXGeqSVdMywrogPz82Ug5vWTdqQJRF8= preshared-key /dev/fd/62 allowed-ips 192.168.241.2/32,fd00::2/128
-fopen: No such file or directory
-
-Those /dev/fd/63 and /dev/fd/62 are coming from bash process
-redirection:
-
-n1 wg set wg0 private-key <(echo "$key1") peer "$pub2" preshared-key <(echo "$psk") allowed-ips 192.168.241.2/32 endpoint 127.0.0.1:2
-
-Peppering some printks, it looks like in `max_fds = ALIGN(max_fds,
-BITS_PER_LONG);`, max_fds is sometimes 4294967295 before the call, and
-that ALIGN winds up bringing it to 0.
-
-Jason

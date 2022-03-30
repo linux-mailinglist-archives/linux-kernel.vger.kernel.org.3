@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770A44EC32B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E31C4EC342
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244829AbiC3MJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S1345091AbiC3MJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344865AbiC3Lxn (ORCPT
+        with ESMTP id S1344872AbiC3Lxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Mar 2022 07:53:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8C627BC27;
-        Wed, 30 Mar 2022 04:49:50 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5595727CE17;
+        Wed, 30 Mar 2022 04:49:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 19493CE1D04;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47313615E2;
+        Wed, 30 Mar 2022 11:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD2AC36AE2;
         Wed, 30 Mar 2022 11:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B4EC34112;
-        Wed, 30 Mar 2022 11:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640986;
-        bh=ggnRzu8aJoUeHTT+3KPleG8rjSsvXE/6Q+QS76nVfVQ=;
+        s=k20201202; t=1648640989;
+        bh=zDnDnqnkUnkvRiU0Bpg3UFg6AFN8i60eOTOfhbTGywk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vQN6+uECvq8/RQhnfD19xQElYVELRYP/e7i4tcOaayKthi7VJR8xm6vQ7nXNJV3F8
-         YN9/B2FB1lz5C+AeJEMIFUamMgu1i1HEngXYQjpyAqJiR6qx6O9PZlVFghLqQ8jP6/
-         qbWxoMr+7vyB/pIxJSVp6aHTPG5DzYHWsbkiBCKx5RV+MVZnnT8/n8+APbiHZg7+SW
-         Riii+LwVri7+HGvdoz68qEqw42Jwn9sVMO4NJufjj0FCCuck96gVScUsF+85gZPtV1
-         eJQm8jwxJbuUAqJyuOP3PUdH81aw4cX4aLuKoSQvPZcr2pi/feGBIl+iHSgq5m0HIO
-         k7xkpga5oqOCw==
+        b=StZLP1NS1ZPxXBcVLgxIyWodPqWBcFODNbxver/3fxf4x2BotSHbP3oNyXFr8F1+a
+         o8vfawtoEmi7Dxuq4kSpl09PgpSmG76h4Mt+u7ZTzAzhVoPLmIlUWV5D+THDskhYdo
+         4U4JhXRdaPEJlr0uoe6kmNKQT3Vjg5CLbcuUni579QmQJDxEJZ/8LnLvvRt4pYN4je
+         wokCkw6AhFuZEGbqu5thsd80Kxolxs/NUrYz3UV9Zmd35WcwEQPsbXz3abnbnZOhgz
+         51w8zaJ+0AAInia+gju4qLkbojdWkpxuVeIsOZCzQgdwFA3wi1rQR2JG2VG9p/hxdz
+         V2NPsqe2b5PSQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 48/59] media: Revert "media: em28xx: add missing em28xx_close_extension"
-Date:   Wed, 30 Mar 2022 07:48:20 -0400
-Message-Id: <20220330114831.1670235-48-sashal@kernel.org>
+Cc:     Anthony I Gilea <i@cpp.in>, Rander Wang <rander.wang@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.16 50/59] ASoC: Intel: sof_sdw: fix quirks for 2022 HP Spectre x360 13"
+Date:   Wed, 30 Mar 2022 07:48:22 -0400
+Message-Id: <20220330114831.1670235-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,45 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Anthony I Gilea <i@cpp.in>
 
-[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
+[ Upstream commit ce73ef6ec67104d1fcc4c5911d77ce83288a0998 ]
 
-This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
+HP changed the DMI identification for 2022 devices:
+Product Name: HP Spectre x360 Conv 13-ap0001na
+Product Name: 8709
+This patch relaxes the DMI_MATCH criterion to work with all versions of this product.
 
-Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
-reported [1]. Since quick solution didn't come up let's just revert it
-to make this device work with upstream kernels.
-
-Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
-
-Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Anthony I Gilea <i@cpp.in>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220304204532.54675-4-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/soundwire/dmi-quirks.c   | 2 +-
+ sound/soc/intel/boards/sof_sdw.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index b451ce3cb169..4a46ef50baf9 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -4150,11 +4150,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
- 
- 	em28xx_close_extension(dev);
- 
--	if (dev->dev_next) {
--		em28xx_close_extension(dev->dev_next);
-+	if (dev->dev_next)
- 		em28xx_release_resources(dev->dev_next);
--	}
--
- 	em28xx_release_resources(dev);
- 
- 	if (dev->dev_next) {
+diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
+index 0ca2a3e3a02e..747983743a14 100644
+--- a/drivers/soundwire/dmi-quirks.c
++++ b/drivers/soundwire/dmi-quirks.c
+@@ -59,7 +59,7 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Convertible"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Conv"),
+ 		},
+ 		.driver_data = (void *)intel_tgl_bios,
+ 	},
+diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
+index 54eefaff62a7..182e23bc2f34 100644
+--- a/sound/soc/intel/boards/sof_sdw.c
++++ b/sound/soc/intel/boards/sof_sdw.c
+@@ -184,7 +184,7 @@ static const struct dmi_system_id sof_sdw_quirk_table[] = {
+ 		.callback = sof_sdw_quirk_cb,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Convertible"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Conv"),
+ 		},
+ 		.driver_data = (void *)(SOF_SDW_TGL_HDMI |
+ 					SOF_SDW_PCH_DMIC |
 -- 
 2.34.1
 

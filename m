@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27A4EC97B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AA14EC988
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348725AbiC3QTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S1348719AbiC3QUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348719AbiC3QTP (ORCPT
+        with ESMTP id S238269AbiC3QUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:19:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FECBC02;
-        Wed, 30 Mar 2022 09:17:29 -0700 (PDT)
+        Wed, 30 Mar 2022 12:20:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E872DE001;
+        Wed, 30 Mar 2022 09:18:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B909161773;
-        Wed, 30 Mar 2022 16:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E24C340EC;
-        Wed, 30 Mar 2022 16:17:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6608B81D6E;
+        Wed, 30 Mar 2022 16:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A51C340EC;
+        Wed, 30 Mar 2022 16:18:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648657048;
-        bh=Q+USGHsR1S1m9ZvzFcgjt7zp0ViNdGcvN3RiBCTFNSM=;
+        s=k20201202; t=1648657093;
+        bh=cjFQuqoRMfu2TXAsiXRv9EQjKvH+MdFIXY9uc5fhIeE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O8S0hjOfWVpcL2d8Ii4T6o+AuXfYtsfA5ix/uX/rPyjwS9bxhfO1i86FHjIdh+puv
-         I/W7n5WESGfHjS6nF6gp5uPbz0DSJdmTwsJmdaL3RDAl0eVJBdNT4exUa1F1pmWqy/
-         L5TsjMqr9tZXP8WmWGuRJBh+7CyOBurO/HruWy2Zqf2pbxXdUFXjOULx0WFZpkDRTD
-         QVfwF0fhifJNU26ElPMrsxlNMoMiEQy7tfASjXepRDVYCV/+WyR1iuE1rYjYLwRcTQ
-         3WMZtglRmT0m/phSC+R4aYQMOKh4xxVnG0cpZxbkZbFGBsB3JmOU/q0kciwlqmv+sV
-         2kaKH/mpSSGAA==
-Date:   Wed, 30 Mar 2022 17:17:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: Fix incomplete if/then/else schemas
-Message-ID: <YkSCj1wT8E/uAdbU@sirena.org.uk>
-References: <20220330145741.3044896-1-robh@kernel.org>
+        b=qL9r9Yws/hUGzKuvIFY+RbuwntrMSK4P43CyL2/dnXSTyynijAjGxTx5jk0MciJBS
+         ZU3K1UIDqMzxA88epboJ1p59x5irJJj2JLdT3IY0tPJYmpTuab09WoUfTrxDR16Dfq
+         r8N4tXQdQIaPnia1AslHnGmOplVqsKsaI34w3RLi6u1e7bfXjxM+6aYBDQb0MMyTSr
+         YPN+3zKng+bKVx0qXsPftkro+4iih8aIVgkJzS6owkJGyF1RHMzDG9okK9EYv0u6/k
+         DPUA6Xn7fDXsQPvseUvtae8Ads0cYctEDf9QDUz5BscGpr2wMHyw7xssUbm6ZRtK/f
+         ndefofeH+jTig==
+Date:   Wed, 30 Mar 2022 09:18:12 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        david <david@fromorbit.com>, Jane Chu <jane.chu@oracle.com>
+Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
+Message-ID: <20220330161812.GA27649@magnolia>
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
+ <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
+ <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
+ <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com>
+ <YkPtptNljNcJc1g/@infradead.org>
+ <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
+ <YkQtOO/Z3SZ2Pksg@infradead.org>
+ <4ed8baf7-7eb9-71e5-58ea-7c73b7e5bb73@fujitsu.com>
+ <YkR8CUdkScEjMte2@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TNgjpwjwvAc49yPZ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330145741.3044896-1-robh@kernel.org>
-X-Cookie: Two is company, three is an orgy.
+In-Reply-To: <YkR8CUdkScEjMte2@infradead.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,34 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 30, 2022 at 08:49:29AM -0700, Christoph Hellwig wrote:
+> On Wed, Mar 30, 2022 at 06:58:21PM +0800, Shiyang Ruan wrote:
+> > As the code I pasted before, pmem driver will subtract its ->data_offset,
+> > which is byte-based. And the filesystem who implements ->notify_failure()
+> > will calculate the offset in unit of byte again.
+> > 
+> > So, leave its function signature byte-based, to avoid repeated conversions.
+> 
+> I'm actually fine either way, so I'll wait for Dan to comment.
 
---TNgjpwjwvAc49yPZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+FWIW I'd convinced myself that the reason for using byte units is to
+make it possible to reduce the pmem failure blast radius to subpage
+units... but then I've also been distracted for months. :/
 
-On Wed, Mar 30, 2022 at 09:57:41AM -0500, Rob Herring wrote:
-> A recent review highlighted that the json-schema meta-schema allows any
-> combination of if/then/else schema keywords even though if, then or else
-> by themselves makes little sense. With an added meta-schema to only
-> allow valid combinations, there's a handful of schemas found which need
-> fixing in a variety of ways. Incorrect indentation is the most common
-> issue.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---TNgjpwjwvAc49yPZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJEgo4ACgkQJNaLcl1U
-h9CMwQf/f8YiUiMex+FwfC/kdvXglTNhRApaQRU6OtuSmz5UEnBb6O6YMmQLA4q4
-P3oQ1eCCQFXxr8+P7iqLuM+N4MRXPNabE1q82boC3jBah9e8mvDKJtNZJlz/kRXD
-QazSWyj0T9UQpnveVimQMjtE/So0MgZSI/KLiB/hjhG+5Be3Gq5Da9HfdMFwvtA1
-nrqW5IcduprA2fSUgucuUddybp9AoCJr+cvoFPx3Zw/1Nnjb/7xWP6TYeh2EpRCp
-4z1q0JIEFpwa0vCan+4S1IF9eUjHLTmhnUt3yWgERmRNK7t9GKrhobfSAuK8pmky
-vpPGzlJMA9MiagHlb4EugpvmhYzNuQ==
-=41nO
------END PGP SIGNATURE-----
-
---TNgjpwjwvAc49yPZ--
+--D

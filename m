@@ -2,132 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B6A4ECE59
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37DC4ECE7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351143AbiC3U60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S1351171AbiC3U64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351280AbiC3U6I (ORCPT
+        with ESMTP id S244409AbiC3U6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:58:08 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D33A709
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:56:22 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r23so25921739edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nrCvj7Yq7SSib6FwgrmdzFU7UXWII5P9ju8EtUscCW0=;
-        b=boNOk7s9MFWRe9Q5TIHyCBcLZAL3UIEBNmLOOWFhXw6emE+CwKKHdvhC0KffHeh0nF
-         M6pQueP4aCRuJFI7dDzsd8w7oMHmH5zQ1LRTPvQqJiDWbX35wE19ft4HqpfvXL9C1Got
-         NCX+Q7kxCou/I+IrAEJ9Str9SLE8Vpfu1F+nizveKZzqZBmp0ZbLt4163c8iNRc9oq8L
-         +OvcysVAV7F4grrtlsY0RpODotiBIJhRyklfusZBaq0zNt0ADmOlhrzyjpVkba5kg+sN
-         XtIoUFtjlMDxb5pCPzyxnwJLsJ9yaQfPKTqYXEV4ifVXSG43LsveuoFab9UFC5oCyEkr
-         VAUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nrCvj7Yq7SSib6FwgrmdzFU7UXWII5P9ju8EtUscCW0=;
-        b=qgsc/SeFmaOMySpje5zvrj62NLwOsr0ZrqAoulh38BKpkDVZtkPIj0VvBnGwU/YCQW
-         YfNlPUQssiufR7B0rQ2tTga6e3uLrYsRacw3NS3+KWFTrSFjX3NuJDUu/ZJm5+47JrlL
-         4a2v62PQLhsEhvB/AU4My+xQCo9OIbAE34pLZoSvNuY5bux6CzjrmeRtSTzuPBYLyR+Y
-         45MAaNGdwCsljOxfqjUrrgqS3EsekAVg4c7oA23oFqg2IsQ9rPXQs18MMCN6rN5a0/QR
-         Shcid5Am1IRH+Ahs6u7x4qOgrqugSS364pwK0nO9fY6Mg2eoG4a/856PaWbckPfKfNJM
-         GXBQ==
-X-Gm-Message-State: AOAM531C6bc9ucQyGjL5TOPzghn2UHDP46Tvqi3/95dmRuCfeix57pxv
-        4F2/dXf4DDjAq6oS/AxuBnnfUQWNVqfLddrmqyYtTg==
-X-Google-Smtp-Source: ABdhPJxrjw92bYCs2jMACCLJM4/KOh2wxHOU9997F7UwcQsMWyUFgKpYWFcmr9tg4GWCYtbl/45JU/IvvXHerOIfRxk=
-X-Received: by 2002:a05:6402:3452:b0:418:f963:42a3 with SMTP id
- l18-20020a056402345200b00418f96342a3mr13302952edc.12.1648673780493; Wed, 30
- Mar 2022 13:56:20 -0700 (PDT)
+        Wed, 30 Mar 2022 16:58:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791483AA7D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:57:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12CA161644
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A4EC340EC;
+        Wed, 30 Mar 2022 20:57:06 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 16:57:04 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [BUG] Crash on x86_32 for: mm: page_alloc: avoid merging
+ non-fallbackable pageblocks with others
+Message-ID: <20220330165704.730be2b5@gandalf.local.home>
+In-Reply-To: <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
+References: <20220330154208.71aca532@gandalf.local.home>
+        <CAHk-=whz_8tRNGCr09X59nMW3JBzFLE-g-F-brxd+AkK+RceCw@mail.gmail.com>
+        <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-3-tjmercier@google.com> <YkM6/57mVxoNfSvm@slm.duckdns.org>
-In-Reply-To: <YkM6/57mVxoNfSvm@slm.duckdns.org>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 30 Mar 2022 13:56:09 -0700
-Message-ID: <CABdmKX2Gxg35k7QiL2Vn4zWhmQ4UnM-Z8cnOXR0fwBWyJnZ+Ng@mail.gmail.com>
-Subject: Re: [RFC v4 2/8] cgroup: gpu: Add a cgroup controller for allocator
- attribution of GPU memory
-To:     Tejun Heo <tj@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 9:59 AM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
+On Wed, 30 Mar 2022 16:29:28 -0400
+Zi Yan <ziy@nvidia.com> wrote:
 
-I'm sorry for the delay Tejun, my test device stopped working and my
-attention has been occupied with that.
+> In the original code, it will jump back to continue_merging and still tries
+> to find the buddy. The crash means the found buddy is not valid, since its
+> pageblock migratetype is NULL. That seems to suggest the physical memory
+> range is not aligned to MAX_ORDER_NR_PAGES, which should not be the case.
+> But if (!page_is_buddy(page, buddy, order)) prevents further buddy merging.
+> I must be missing something.
 
->
-> On Mon, Mar 28, 2022 at 03:59:41AM +0000, T.J. Mercier wrote:
-> > The API/UAPI can be extended to set per-device/total allocation limits
-> > in the future.
->
-> This total thing kinda bothers me. Can you please provide some concrete
-> examples of how this and per-device limits would be used?
+Not sure if this matters or not, but my kernel command line has:
 
-The use case we have for accounting the total (separate from the
-individual devices) is to include the value as part of bugreports, for
-understanding the system-wide amount of dmabuf allocations. I'm not
-aware of an existing need to limit the total. Admittedly this is just
-the sum over the devices, but we currently maintain out of tree code
-to do this sort of thing today. [1]
+  crashkernel=256M
 
-The per-device limits would be used to restrict the amount of each
-type of allocation charged to an individual application to prevent
-hogging or to completely prevent access. This limitation is not
-something we have implemented today, but it is on our roadmap.
+Could that have caused this to break?
 
-[1] https://android-review.googlesource.com/c/kernel/common/+/1566704/3/drivers/dma-buf/dma-heap.c
-
->
-> Thanks.
->
-> --
-> tejun
+-- Steve

@@ -2,162 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E3D4ECF0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278464ECF16
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348397AbiC3VuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S1351366AbiC3Vu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351360AbiC3Vtz (ORCPT
+        with ESMTP id S236581AbiC3Vux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:49:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A23652E4A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:48:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DF36F218F8;
-        Wed, 30 Mar 2022 21:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648676887; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bWhCH76wJNOPUkyUEGjWSMW9zgCG+hN7ltEMYwIFxNA=;
-        b=0hGaA5oUgyBUmiCvjSMdMMYK2/vVDl0Paz7oDbnNAYjh4/os8TxHqDREx2rf9SuMr7F53f
-        PPiEMTg+AkY+dCF5urd4okHT3fXJY5I8uMymT7Dg2hlIxe0LuC7sCpets5jwYGXTrvgCFm
-        pTXzbFqNCftxSHTEqHt3TlfiEYtKrOM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648676887;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bWhCH76wJNOPUkyUEGjWSMW9zgCG+hN7ltEMYwIFxNA=;
-        b=GSR7mChVNeh+pGPYpRizx3j4jedxwMLSR2xHiSKZs5M7BkTT08RBLW4XLRH7B98bcZli3o
-        XAi0+gkLkZCBhDAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6B1613AF3;
-        Wed, 30 Mar 2022 21:48:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T5nBJxfQRGJxHgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 30 Mar 2022 21:48:07 +0000
-Message-ID: <2b84aba9-7435-0073-59f0-410fddb6df7d@suse.cz>
-Date:   Wed, 30 Mar 2022 23:48:07 +0200
+        Wed, 30 Mar 2022 17:50:53 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2791A3EB8D;
+        Wed, 30 Mar 2022 14:49:08 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id i7so9333432oie.7;
+        Wed, 30 Mar 2022 14:49:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=b0i0cluH/A4ssoKeXKqLMuzYYjVRshLdbvm0r5GSUI8=;
+        b=jHILTx22Yafv+bS1q6k9rCJzsp5MTUG7AYTq0FCpQbD9cS1T63FfImnVdVLI6S00Jg
+         bNRdOYt0SSnBvqjx0FBXpeHos8zXj6+4VfIG3a80MHJInuhfpUe1ehmKOlVcwvDbypwr
+         mRhMLRZwpMJzAT8C95oUgpj5PjYI33dzB3mkQOYyzxbUvzlpBCy8e4N442ES40mQvxRm
+         4Z6aE6aL2HogZ1MyVJPanoowLllmBjZ1KLYs83P1HBJn4LTMpk40kuR4/49/FyhrRquB
+         /Q7uYQwtH8XtW2LMNTTIhieHF9DfAJVkDEbkkoAt8hDO0K8Ww537sQcsGPgYeKn6AOsU
+         AShA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=b0i0cluH/A4ssoKeXKqLMuzYYjVRshLdbvm0r5GSUI8=;
+        b=oyYiwD8af+8508UO+AEJRN+uWTLxsNMqWa2kOZ7KkWBFN/vffR+7p6tUksIQMoiOFJ
+         XhGChtu1UvPHKsS2mNJfFiCzu7g/y7QzXNrdet53F1bIQ5i+j+eoatOjzMhFDU5u7nPJ
+         VBT9YjiRml5u3xrfaqZ2fjMCrzLdLXybLgFBdhB3c+tBG3ZIDyR2+m5/Dm5aC7sScV7L
+         CTTcYNeGcYKa//PWQ/T8lSB+iU3RZcpxnpr03ToBcpUKILm73OltWjR7ypTZakmsJE17
+         yYaA1NpTdF7SS+2CyOzyCTWERDXFprj26hPz5W8i5g8maQbjIK/KTRKmpOTZuw6aAeG3
+         55qg==
+X-Gm-Message-State: AOAM532O5Mq7dPq7r+X1adCqJMvnP2JLHRUicX6twj6pAFiD7Gns09ID
+        D/RzsDL8PLkwH56XmCZcKayL5WfxmBMBOA==
+X-Google-Smtp-Source: ABdhPJy3jQXpJ9gCB6/IK2LSmIYfR24mlHix7Sr0O1n/2dpJvWTwE7PqijX45a4zdov45Ef2TOxxdw==
+X-Received: by 2002:a05:6808:1513:b0:2ec:f606:2c9c with SMTP id u19-20020a056808151300b002ecf6062c9cmr1161024oiw.256.1648676947438;
+        Wed, 30 Mar 2022 14:49:07 -0700 (PDT)
+Received: from marsc.168.1.7 ([2804:30c:b6b:3900:e3fc:1545:cb91:17fb])
+        by smtp.gmail.com with ESMTPSA id bg39-20020a056820082700b00324c8eba341sm9680574oob.18.2022.03.30.14.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 14:49:06 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 18:49:02 -0300
+From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To:     corbet@lwn.net, mchehab+huawei@kernel.org, dlatypov@google.com,
+        davidgow@google.com
+Cc:     linux-doc@vger.kernel.org, linux-sparse@vger.kernel.org,
+        cocci@inria.fr, smatch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        dan.carpenter@oracle.com, julia.lawall@inria.fr
+Subject: [PATCH v3 0/2] Add a section for static analysis tools
+Message-ID: <cover.1648674305.git.marcelo.schmitt1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [BUG] Crash on x86_32 for: mm: page_alloc: avoid merging
- non-fallbackable pageblocks with others
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>, Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220330154208.71aca532@gandalf.local.home>
- <CAHk-=whz_8tRNGCr09X59nMW3JBzFLE-g-F-brxd+AkK+RceCw@mail.gmail.com>
- <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
- <20220330165337.7138810e@gandalf.local.home>
- <AF9D3EF9-B070-4ADE-A2D3-C466A4A2D125@nvidia.com>
- <733F211D-9717-46A7-A0A2-40353E12F65A@nvidia.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <733F211D-9717-46A7-A0A2-40353E12F65A@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 23:43, Zi Yan wrote:
-> On 30 Mar 2022, at 17:25, Zi Yan wrote:
-> 
->> On 30 Mar 2022, at 16:53, Steven Rostedt wrote:
->>
->>> On Wed, 30 Mar 2022 16:29:28 -0400
->>> Zi Yan <ziy@nvidia.com> wrote:
->>>
->>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>> index bdc8f60ae462..83a90e2973b7 100644
->>>> --- a/mm/page_alloc.c
->>>> +++ b/mm/page_alloc.c
->>>> @@ -1108,6 +1108,8 @@ static inline void __free_one_page(struct page *page,
->>>>
->>>>                 buddy_pfn = __find_buddy_pfn(pfn, order);
->>>>                 buddy = page + (buddy_pfn - pfn);
->>>> +               if (!page_is_buddy(page, buddy, order))
->>>> +                       goto done_merging;
->>>>                 buddy_mt = get_pageblock_migratetype(buddy);
->>>>
->>>>                 if (migratetype != buddy_mt
->>>>
->>>
->>> The above did not apply to Linus's tree, nor even the problem commit
->>> (before or after), but I found where the code is, and added it manually.
->>>
->>> It does appear to allow the machine to boot.
->>>
->> I just pulled Linus’s tree and grabbed the diff. Anyway, thanks.
->>
->> I would like to get more understanding of the issue before blindly sending
->> this as a fix.
->>
->> Merge the other thread:
->>>
->>> Not sure if this matters or not, but my kernel command line has:
->>>
->>>   crashkernel=256M
->>>
->>> Could that have caused this to break?
->>
->> Unlikely, 256MB is MAX_ORDER_NR_PAGES aligned (MAX_ORDER is 11 here).
->> __find_buddy_pfn() will not get any buddy_pfn from crashkernel memory
->> region, since that would cross MAX_ORDER_NR_PAGES boundary.
->>
->> page_is_buddy() checks page_is_guard(buddy), PageBuddy(buddy),
->> buddy_order(buddy), and page_zone_id(buddy), where page_is_guard(buddy)
->> is always false since CONFIG_DEBUG_PAGEALLOC is not set in your config.
->> So either PageBuddy(buddy) is false, buddy_order(buddy) != order,
->> or page_zone_id(buddy) is not the same as page_zone_id(page).
->>
->> Do you mind adding the following code right before my fix code above
->> and provide a complete boot log? I would like to understand what
->> went wrong. Thanks.
->>
->> pr_info("buddy_pfn: %lx, PageBuddy: %d, buddy_order: %d (vs %d), page_zone_id: %d (vs %d)\n",
->>         buddy_pfn, PageBuddy(buddy), buddy_order(buddy), order, page_zone_id(buddy),
->>         page_zone_id(page));
->>
->>
-> 
-> This seems to be a bug in the original code too.
-> But "if (unlikely(has_isolate_pageblock(zone)))" is too rare to trigger it.
-> I do not see how having isolated pageblocks in a zone could get us away
-> from checking page_is_buddy().
+Hi all,
 
-IIRC the assumption was that pageblock bitmaps would always exist
-withing MAX_ORDER blocks. But here we are still under mem_init() where
-has_isolate_pageblock() couldn't happen. And the assumption could have
-been silently broken by subsequent memory init changes.
+This is the third patch version in the direction of complementing the
+testing guide documentation page with information about static analysis
+tools.
 
-> --
-> Best Regards,
-> Yan, Zi
+Thank you for your suggestions and comments so far.
+These docs wouldn't get so helpful without them.
+
+Change log v2 -> v3:
+- Changed the paragraph about Sparse to make it sound better (hopefully)
+- Minor adjusts to make the considerations about Coccinelle sound better
+  and be precise
+
+Change log v1 -> v2:
+- New patch adding considerations on when to use each tool
+- Brought generic tool characteristics to the intro paragraph
+- Made explicit that these tools run at compile time
+- Added a note of caution about false positives
+- Updated Coccinelle info to make it sound better and be more skimmable
+
+
+Marcelo Schmitt (2):
+  Documentation: dev-tools: Add a section for static analysis tools
+  Documentation: dev-tools: Enhance static analysis section with
+    discussion
+
+ Documentation/dev-tools/testing-overview.rst | 63 ++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+
+-- 
+2.35.1
 

@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5D24EC1F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BD14EC260
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344668AbiC3L5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
+        id S1344550AbiC3L7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344441AbiC3LxK (ORCPT
+        with ESMTP id S1344583AbiC3LxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:10 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BB1262400;
-        Wed, 30 Mar 2022 04:48:56 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bh17so1480213ejb.8;
-        Wed, 30 Mar 2022 04:48:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=H5VTVLY2z6i13dvk5wtcwbzRR2pZJCvwJwdziJVAOMQ=;
-        b=HCuend+++KI5ObYAh+8oGZAuDnrsOdDn31plrdpo+Fo3t+SXVujiaqqqU0MKgsq87H
-         pHBc9cLbcal7y/FrS2eKcC3UJcA4YbCxtd1qqWKu/MxLiV09sKnz8GA6wy+zojN9+qdl
-         9X7RAOIWpv0KDT28qgzszlANqnPO8kyR1qWdms6+iiLhiP8r/fObG/zj079XptDkTJP6
-         uSHc1hiHqfiBWa9ICHDT8AvNYMlY2VeW2NE9M0IMexANL8oveZG0eeVHDK1VEsN2gPSv
-         WpSpcvLyl049ozh7gqbu9t5c8WbbAYqB+PnY2dktwzYB7a4/AqFp+dg8jizIbBrmhB+3
-         Jagg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=H5VTVLY2z6i13dvk5wtcwbzRR2pZJCvwJwdziJVAOMQ=;
-        b=syJkl0AUFQGlFbiKZw9d6y4ewrIjTTl3xBB0NoaqQpDmdoqzbfSo7XqksYnKbIe3QL
-         o1tcwzx/MH0uFrDVZzLLtAoaIMjFkazhKHv1BMMvfIDgDtR6xq/zborb8ZGJGxxBtvgk
-         VtatZ/rnycpWWegaBh7i1SZMEr3DaedjARkkiQpHLaZplnftTKuLezn7USyLj3OG9M/1
-         mwAmlkKp14rJR9AQHIapV8QrlhCHygedo+TqwFDVXfMo2uypS6vFMAOmpfLfY/Vsm5PT
-         AY742nGPvmFkS2UnN8sDRpGpYKbx7rBOWuHYpXMgjrHeVFmDjBN6FzwBLg8+E70lURVG
-         sZnQ==
-X-Gm-Message-State: AOAM531Ys+x5YwMQjh3zD0zgi7BGzAyiW3gezHhizk3mN70x+pIOtYow
-        MxWLrfwGz7OSigC3yQz1MXU=
-X-Google-Smtp-Source: ABdhPJw/Xl9g3IPsAOoM+4M6ZWl9RbIh1DIkd9VFUCU3+dZWBzlI38COLdIRHgd0iJ07HnsdsJadeg==
-X-Received: by 2002:a17:907:8690:b0:6da:8436:2b94 with SMTP id qa16-20020a170907869000b006da84362b94mr39851667ejc.33.1648640934543;
-        Wed, 30 Mar 2022 04:48:54 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm9934442edt.80.2022.03.30.04.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 04:48:54 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] ARM: dts: rockchip: add clocks property to cru node rk3036
-Date:   Wed, 30 Mar 2022 13:48:46 +0200
-Message-Id: <20220330114847.18633-2-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220330114847.18633-1-jbx6244@gmail.com>
-References: <20220330114847.18633-1-jbx6244@gmail.com>
+        Wed, 30 Mar 2022 07:53:18 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CF6264811
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:49:11 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KT4Rq6Qgxz6802Q;
+        Wed, 30 Mar 2022 19:47:35 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 30 Mar 2022 13:49:02 +0200
+Received: from [10.47.83.59] (10.47.83.59) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
+ 2022 12:49:02 +0100
+Message-ID: <fab277a2-3460-17d2-15ab-e12dea2d5b74@huawei.com>
+Date:   Wed, 30 Mar 2022 12:49:00 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: drivers/scsi/hisi_sas/hisi_sas_main.c:445 hisi_sas_task_deliver()
+ warn: inconsistent indenting
+To:     kernel test robot <lkp@intel.com>
+CC:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <202203301533.b4Hty4C7-lkp@intel.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <202203301533.b4Hty4C7-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.59]
+X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks and clock-names to the rk3036 cru node, because
-the device has to have at least one input clock.
+On 30/03/2022 08:23, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   1c24a186398f59c80adb9a967486b65c1423a59d
+> commit: 095478a6e5bf590f2bbf341569eb25173c9c5f32 scsi: hisi_sas: Use libsas internal abort support
+> date:   2 weeks ago
+> config: powerpc64-randconfig-m031-20220330 (https://download.01.org/0day-ci/archive/20220330/202203301533.b4Hty4C7-lkp@intel.com/config)
+> compiler: powerpc64-linux-gcc (GCC) 11.2.0
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> smatch warnings:
+> drivers/scsi/hisi_sas/hisi_sas_main.c:445 hisi_sas_task_deliver() warn: inconsistent indenting
+> 
+> vim +445 drivers/scsi/hisi_sas/hisi_sas_main.c
+> 
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm/boot/dts/rk3036.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+...
 
-diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
-index ba2b8891b..3894b8d2e 100644
---- a/arch/arm/boot/dts/rk3036.dtsi
-+++ b/arch/arm/boot/dts/rk3036.dtsi
-@@ -330,6 +330,8 @@
- 	cru: clock-controller@20000000 {
- 		compatible = "rockchip,rk3036-cru";
- 		reg = <0x20000000 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
--- 
-2.20.1
+> 42e7a69368a585 John Garry  2015-11-18  437  	case SAS_PROTOCOL_SATA:
+> 42e7a69368a585 John Garry  2015-11-18  438  	case SAS_PROTOCOL_STP:
+> 095478a6e5bf59 John Garry  2022-03-11  439  	case SAS_PROTOCOL_STP_ALL:
+> a2b3820bddfbff Xiang Chen  2018-05-09  440  		hisi_sas_task_prep_ata(hisi_hba, slot);
+> 6f2ff1a1311e61 John Garry  2016-01-26  441  		break;
+> 095478a6e5bf59 John Garry  2022-03-11  442  	case SAS_PROTOCOL_INTERNAL_ABORT:
+> 095478a6e5bf59 John Garry  2022-03-11  443  		hisi_sas_task_prep_abort(hisi_hba, slot);
+> dc313f6b125b09 John Garry  2021-12-15  444  		break;
+> dc313f6b125b09 John Garry  2021-12-15 @445  	fallthrough;
+
+This is already queued for removal.
+
+> 42e7a69368a585 John Garry  2015-11-18  446  	default:
+> 095478a6e5bf59 John Garry  2022-03-11  447  		return;
+> 42e7a69368a585 John Garry  2015-11-18  448  	}
+> 42e7a69368a585 John Garry  2015-11-18  449
+> 1c09b663168bb5 Xiaofei Tan 2018-07-18  450  	WRITE_ONCE(slot->ready, 1);
+> 42e7a69368a585 John Garry  2015-11-18  451
+> 0e4620856b8933 John Garry  2021-12-15  452  	spin_lock(&dq->lock);
+> 0e4620856b8933 John Garry  2021-12-15  453  	hisi_hba->hw->start_delivery(dq);
+> 0e4620856b8933 John Garry  2021-12-15  454  	spin_unlock(&dq->lock);
+> 42e7a69368a585 John Garry  2015-11-18  455  }
+> 42e7a69368a585 John Garry  2015-11-18  456
+> 
+> :::::: The code at line 445 was first introduced by commit
+> :::::: dc313f6b125b095d3d2683d94d5f69c8dc9bdc36 scsi: hisi_sas: Factor out task prep and delivery code
+> 
+> :::::: TO: John Garry <john.garry@huawei.com>
+> :::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+> 
 

@@ -2,135 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4632C4EBED4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230234EBEE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245407AbiC3KgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S245442AbiC3KiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240095AbiC3KgE (ORCPT
+        with ESMTP id S245435AbiC3KiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:36:04 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1098140CB;
-        Wed, 30 Mar 2022 03:34:17 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id p10so29132738lfa.12;
-        Wed, 30 Mar 2022 03:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ritvBZs9U6ISn6YJS3TdS3OdiygpXsWSun+eyo5dlJs=;
-        b=VOHFwiL3vwpxWUv+4jITr78r6hdvnNt85sn+GaZllBmAMnk91pGWUQW6PjQ1yh2Qlw
-         +DKQ4c4hCS1HJjBH89pG9L989eikW+9pP/nxqdlyI1KuFPo5gEBBRyZAno2GBKPXqdIZ
-         9RIbjxKGVIkLG+yikO+KaqvNtXYn0qYplXWBcmDi92itazIev7XGFXSBDRTNV3di3gOo
-         eY2VlXXux4IFEalO9lc6pUDR8KnpoyxnyIfOgA5twMO9HFCHC6bY/ZkPTeLjCR+5QF1T
-         KOFqv5oxoz62Xbc0I587pQSLXLuPgw58zoisNqjHlqKn4i3B+9XYRHVdm9lLVHgCCVNU
-         sVGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ritvBZs9U6ISn6YJS3TdS3OdiygpXsWSun+eyo5dlJs=;
-        b=8HUzAf1NpTQeOJuvcjRxn1s4wlj1pJNzLeoQf1eMlT9oL3NEy11z/BbP2lGoKN+C4B
-         NmWcQ+xzzj/6DqJQl2YerGRaeDT1UVdhYw1Sw8SuHDUb3ECixz2hlTJPuRIj39aw6k/e
-         93h+gvtsbq66E4/QossuvIU6q9A7CVNxpGza8WfiL2aplFJmDuGvjudC1a7ForOostVL
-         gE0WWAPawMiE8gyD21SYs6DkYYUT80b5k6ELunGyibSBJ45d+WckmJHVhIVd/W08kvw0
-         vr/OQbmpZLAz5LL/1z+z8WVjjcCYqeNcB44xJTjMXYmbAvrP8SfrQoKcTW2H44BPVnzG
-         2/Og==
-X-Gm-Message-State: AOAM533MH2Fe+kET02LpWmRjAGFrjHC5OXtvnqsX/BEO5BC0KxKtuCxG
-        gh+S3MmvxYwJyRZZvsWBQpo=
-X-Google-Smtp-Source: ABdhPJxL1bgQYWPDIg4rQk9Rs2U6xYYJ/5T68Dc6bqqyi7t+V8gHEI0u/fqO3kMgwwG5FGtFnPLPkw==
-X-Received: by 2002:a05:6512:3f04:b0:44a:8de0:15a5 with SMTP id y4-20020a0565123f0400b0044a8de015a5mr6382946lfa.278.1648636452963;
-        Wed, 30 Mar 2022 03:34:12 -0700 (PDT)
-Received: from [192.168.1.105] (235.132.246.94.ip4.artcom.pl. [94.246.132.235])
-        by smtp.gmail.com with ESMTPSA id a4-20020a19ca04000000b0044a97178a1esm982995lfg.201.2022.03.30.03.34.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 03:34:12 -0700 (PDT)
-Message-ID: <2ce6dc15-51a8-e59c-26ab-4380cdca6209@gmail.com>
-Date:   Wed, 30 Mar 2022 12:35:49 +0200
+        Wed, 30 Mar 2022 06:38:21 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4602BB23;
+        Wed, 30 Mar 2022 03:36:37 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 1464B1F41835
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648636590;
+        bh=yjx1kf6POnDpobtQKgZbaVsr1GNaW5K6KF98SWEVWiM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=STXGHTZaL+HoSt7mA/RAo1TnYAHbOJ6tBgq4FSPAg8mEBjbHhc06wB6W33kfd7urQ
+         gFg1Cqsu+u6hdBBSR1U6qOjnPacSYejBxGIYdQZL0osJPgS7lnJ5OZDdUFXwFeOuSG
+         qmQrV0CyrS67EOCOJM4B6YZvuGYnZchS/YNwSEjzYvJ/A7wB6eNCVrLqSr1KeZmmPP
+         VdG+modtas8Ru9tlRQSwabg0TpXkLAvn/TRy1iBWdtTCrRq0C0MKBHpsbmzVcExX6q
+         USaswk6D+YAWBg1kEJU/EfolPlM24QHndy0aPj8eUWd4XKm6Wa+G7x34K2we/+BAUT
+         lo8fLk1z2Hkfg==
+Message-ID: <bf851834-7812-13f1-a382-1f64078ff2a5@collabora.com>
+Date:   Wed, 30 Mar 2022 13:36:27 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: Bug 215726 - si2157.c: mention name of the missing firmware file
+Subject: Re: [Patch v5 2/4] memory: tegra: Add MC error logging on tegra186
+ onward
 Content-Language: en-US
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Robert Schlabbach <robert_s@gmx.net>
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
- <trinity-2ca61ae4-4f05-454d-94fd-d41e1afbec2f-1648581688394@3c-app-gmx-bs54>
- <1fc02de2-890e-e8e8-0ab6-aba62a333de5@leemhuis.info>
-From:   Piotr Chmura <chmooreck@gmail.com>
-In-Reply-To: <1fc02de2-890e-e8e8-0ab6-aba62a333de5@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ashish Mhetre <amhetre@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220316092525.4554-1-amhetre@nvidia.com>
+ <20220316092525.4554-3-amhetre@nvidia.com>
+ <9ab1a77c-82e6-39be-9b90-b394037fb574@gmail.com>
+ <a62bb479-fed4-ada0-ac61-fb67a663a998@nvidia.com>
+ <4ea801f4-7929-148d-4e69-d4126a9dfbf7@collabora.com>
+ <44235c65-160c-04c7-294d-16b13d25605c@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <44235c65-160c-04c7-294d-16b13d25605c@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/30/22 13:16, Ashish Mhetre wrote:
+> 
+> 
+> On 3/30/2022 5:31 AM, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 3/22/22 20:34, Ashish Mhetre wrote:
+>>>>> +     switch (status & mc->soc->int_channel_mask) {
+>>>>> +     case BIT(0):
+>>>>> +             *mc_channel = 0;
+>>>>> +             break;
+>>>>> +
+>>>>> +     case BIT(1):
+>>>>> +             *mc_channel = 1;
+>>>>> +             break;
+>>>>> +
+>>>>> +     case BIT(2):
+>>>>> +             *mc_channel = 2;
+>>>>> +             break;
+>>>>> +
+>>>>> +     case BIT(3):
+>>>>> +             *mc_channel = 3;
+>>>>> +             break;
+>>>>> +
+>>>>> +     case BIT(24):
+>>>>> +             *mc_channel = MC_BROADCAST_CHANNEL;
+>>>>> +             break;
+>>>>> +
+>>>>> +     default:
+>>>>> +             pr_err("Unknown interrupt source\n");
+>>>>
+>>>> dev_err_ratelimited("unknown interrupt channel 0x%08x\n", status) and
+>>>> should be moved to the common interrupt handler.
+>>>>
+>>> So return just error from default case and handle error in common
+>>> interrupt handler with this print, right? I'll update this in next
+>>> version.
+>>
+>> Yes, just move out the common print.
+>>
+>> Although, you could parameterize the shift per SoC and then have a
+>> common helper that does "status >> intmask_chan_shift", couldn't you?
+> 
+> Do you mean shift to get the channel, like
+> "channel = status >> intmask_chan_shift"?
+> So to get rid of this callback completely and adding a variable in
+> tegra_mc_soc for intmask_chan_shift, right? Or compute shift in this
+> callback and use it in common handler?
 
-W dniu 30.03.2022 o 11:55, Thorsten Leemhuis pisze:
-> On 29.03.22 21:21, Robert Schlabbach wrote:
->> the patch linked in the bugzilla ticket:
->> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->> should indeed fix the issue.
-> Ahh, the comment mentioning it was added shortly after I sent my mail.
-> #regzbot monitor:
-> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->
-> Adding Piotr, the patches' author to the CC, who also replied.
->
-> BTW: that patch is afaics missing a Fixes tag specifying the culprit and
-> a `Cc: stable@vger.kernel.org # 5.17.x` tag to make sure it's quickly
-> backported to the stable tree, as among others explained here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/handling-regressions.rst
-Sorry for my inconvenience. I just fixed my device and wanted to share 
-solution with the "world". I'm not familiar with all kernel development 
-convention (yet).
+Add variable to tegra_mc_soc.
 
->
->> The error was that the rom_id and required
->> fields were swapped in the table, so the non-zero rom_id was taken as a
->> "true" required boolean value, thus incorrectly evaluating that the
->> chip requires a firmware file to operate when in fact it does not.
->> I have tested the patch and found it worked for me. But I do not know
->> how to push this further along:
->> https://patchwork.linuxtv.org/project/linux-media/patch/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
-> Mauro, what's up here? The patch fixes a regression and thus afaics
-> should quickly find its way towards mainline to get it into the stable
-> tree, as explained in the (bran new) document linked above.
->
-> Ciao, Thorsten
->
->> Gesendet: Dienstag, 29. März 2022 um 10:33 Uhr
->> Von: "Thorsten Leemhuis" <regressions@leemhuis.info>
->> An: "Antti Palosaari" <crope@iki.fi>, "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>, "Robert Schlabbach" <robert_s@gmx.net>
->> Cc: "regressions@lists.linux.dev" <regressions@lists.linux.dev>, az0123456@gmx.de, "Linux Media Mailing List" <linux-media@vger.kernel.org>, "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
->> Betreff: Bug 215726 - si2157.c: mention name of the missing firmware file
->> Hi, this is your Linux kernel regression tracker.
->>
->> I noticed a regression report in bugzilla.kernel.org that afaics nobody
->> acted upon since it was reported about a week ago, that's why I decided
->> to forward it to the lists and all people that seemed to be relevant
->> here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215726 :
->>
->>> I get the following error messages when trying to use si2157.ko in linux 5.17:
->>> si2157 13-0060: found a 'Silicon Labs Si2157-A30 ROM 0x50'
->>> si2157 13-0060: Can't continue without a firmware
->>> I did work in linux 5.16.16 without a firmware file. Unfortunately the driver does not tell me the name of the missing firmware file.
->> Could somebody take a look into this? Or was this discussed somewhere
->> else already? Or even fixed?
->>
->>
+The intmask_chan_shift is a misnomer, perhaps something like
+status_reg_chan_shift will be a better name.
 
+> If we are to remove this callback then how to handle unknown interrupt
+> channel error?
+
+Create a common helper function that returns ID of the raised channel or
+errorno if not bits are set.
+
+> Also we want to handle interrupts on one channel at a time and then
+> clear it from status register. There can be interrupts on multiple
+> channel. So multiple bits from status will be set. Hence it will be
+> hard to parameterize shift such that it gives appropriate channel.
+> So I think current approach is fine. Please correct me if I am wrong
+> somewhere.
+
+You may do the following:
+
+1. find the first channel bit set in the status reg
+2. handle that channel
+3. clear only the handled status bit, don't clear the other bits
+4. return from interrupt
+
+If there are other bits set, then interrupt handler will fire again and
+next channel will be handled.

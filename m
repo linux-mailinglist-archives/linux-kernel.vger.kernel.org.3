@@ -2,175 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2434EC9BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB584EC9BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348850AbiC3QgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S1348860AbiC3Qgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348839AbiC3QgE (ORCPT
+        with ESMTP id S1348865AbiC3Qg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:36:04 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 870211D320;
-        Wed, 30 Mar 2022 09:34:18 -0700 (PDT)
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E7AF420B96D6;
-        Wed, 30 Mar 2022 09:34:17 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E7AF420B96D6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648658058;
-        bh=NE1Gzgfcu1RVAQTBcQFmkLsZA71WWxETeZdDl0NVbGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aPSThqM5IPvFG/nHKA0shVLzXfcjf3BuMxLCBELpv/wumVaQ/8A6ypVhJfck1YAat
-         0bd7iRH9n722EW/ZXFcqE/ULmpv1L/sqLZSiWJ9HfCB8E5L0b1Y1bICMux2PPMkDNv
-         YQZnbdhmN0xtdoPXKTDQMauOZ9yemyA8+fKPIOLs=
-Date:   Wed, 30 Mar 2022 09:34:11 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Song Liu <song@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-Message-ID: <20220330163411.GA1812@kbox>
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
- <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
- <20220329201057.GA2549@kbox>
- <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
- <20220329231137.GA3357@kbox>
- <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
+        Wed, 30 Mar 2022 12:36:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA8D193162
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:34:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E60DEB81D7D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:34:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECFFC3410F
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648658077;
+        bh=XxksR6VYfpVoCvd6RFZQQ4LAgDvEsQYSq1TNcOzLoUs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fu+2gLX21a8OwVa/+N7C35Y49yttDoosDiB88ncyF2EJRJq1Y1Lm1QmWZYUjYPDWB
+         LI4c3qy/o8BDQwI3IMF0/BgekvEW6O+eYkafiwwEwNZGYFVZBiuPTILQfhbXRDS4ZX
+         5bmSFzBTHiBsFIQmMsqNijGUYmQx12q0ACpwfkKpK7l1tgtZrxPfTCrnxg023PGp23
+         BV1vVlOtAX/+ZXz7Xo7iJqqUkB55ywTr1Fw6gTFtSaQ76Uu5Se9yVcLTVl9+AaV8tU
+         xuWb3/vi/i8li2xwKeGaIs7LcvMj3y579WIIl0FuBH6UmnJ82b9TeJQa1rgj8C0oVu
+         4q5yvWdb1fsIQ==
+Received: by mail-oi1-f173.google.com with SMTP id r8so22591668oib.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:34:37 -0700 (PDT)
+X-Gm-Message-State: AOAM532r8S5jdRptm38EHfnViLoyRaYpBTwxq1Dv2ZOux3Dm+jFDvTMG
+        2epZ7D6YXXBvED2Y6Ix3x1aG+BpglKkEu32i+ng=
+X-Google-Smtp-Source: ABdhPJwKJbONlsIybRQcq1GD0q/R2aFe3FxVy2bnvSOqPe2G9QX4krl3/ZC9ysACYk9ULdhpxmWojW5ClA/EpSLmp7o=
+X-Received: by 2002:aca:674c:0:b0:2d9:c460:707c with SMTP id
+ b12-20020aca674c000000b002d9c460707cmr291303oiy.126.1648658076649; Wed, 30
+ Mar 2022 09:34:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X> <2109354.irdbgypaU6@localhost.localdomain>
+ <YkSBJD0oA7zxHS+B@shell.armlinux.org.uk>
+In-Reply-To: <YkSBJD0oA7zxHS+B@shell.armlinux.org.uk>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 30 Mar 2022 18:34:25 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGLehBkaG7-t5PZqN+32MS-5BDX-QGOe6ftZnPuNDKicg@mail.gmail.com>
+Message-ID: <CAMj1kXGLehBkaG7-t5PZqN+32MS-5BDX-QGOe6ftZnPuNDKicg@mail.gmail.com>
+Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Christian Eggers <ceggers@arri.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 09:06:24AM -0700, Song Liu wrote:
-> On Tue, Mar 29, 2022 at 4:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+On Wed, 30 Mar 2022 at 18:12, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Tue, Mar 22, 2022 at 06:49:17PM +0100, Christian Eggers wrote:
+> > Hi Nathan, hi Russel,
 > >
-> > On Tue, Mar 29, 2022 at 03:31:31PM -0700, Alexei Starovoitov wrote:
-> > > On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > > >
-> > > > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
-> > > > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
-> > > > > <beaub@linux.microsoft.com> wrote:
-> > > > > >
-> > > > > > Send user_event data to attached eBPF programs for user_event based perf
-> > > > > > events.
-> > > > > >
-> > > > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
-> > > > > > eBPF programs if required.
-> > > > > >
-> > > > > > Update documentation to describe new flags and structures for eBPF
-> > > > > > integration.
-> > > > > >
-> > > > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > > > >
-> > > > > The commit describes _what_ it does, but says nothing about _why_.
-> > > > > At present I see no use out of bpf and user_events connection.
-> > > > > The whole user_events feature looks redundant to me.
-> > > > > We have uprobes and usdt. It doesn't look to me that
-> > > > > user_events provide anything new that wasn't available earlier.
-> > > >
-> > > > A lot of the why, in general, for user_events is covered in the first
-> > > > change in the series.
-> > > > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
-> > > >
-> > > > The why was also covered in Linux Plumbers Conference 2021 within the
-> > > > tracing microconference.
-> > > >
-> > > > An example of why we want user_events:
-> > > > Managed code running that emits data out via Open Telemetry.
-> > > > Since it's managed there isn't a stub location to patch, it moves.
-> > > > We watch the Open Telemetry spans in an eBPF program, when a span takes
-> > > > too long we collect stack data and perform other actions.
-> > > > With user_events and perf we can monitor the entire system from the root
-> > > > container without having to have relay agents within each
-> > > > cgroup/namespace taking up resources.
-> > > > We do not need to enter each cgroup mnt space and determine the correct
-> > > > patch location or the right version of each binary for processes that
-> > > > use user_events.
-> > > >
-> > > > An example of why we want eBPF integration:
-> > > > We also have scenarios where we are live decoding the data quickly.
-> > > > Having user_data fed directly to eBPF lets us cast the data coming in to
-> > > > a struct and decode very very quickly to determine if something is
-> > > > wrong.
-> > > > We can take that data quickly and put it into maps to perform further
-> > > > aggregation as required.
-> > > > We have scenarios that have "skid" problems, where we need to grab
-> > > > further data exactly when the process that had the problem was running.
-> > > > eBPF lets us do all of this that we cannot easily do otherwise.
-> > > >
-> > > > Another benefit from user_events is the tracing is much faster than
-> > > > uprobes or others using int 3 traps. This is critical to us to enable on
-> > > > production systems.
-> > >
-> > > None of it makes sense to me.
+> > I stumbled today over the same problem (no output on serial console
+> > with v5.15.28-rt36). During `git bisect`, I had also some commits
+> > where a few lines of output were visible.
 > >
-> > Sorry.
+> > At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
+> > sections"), the system boots up to here:
 > >
-> > > To take advantage of user_events user space has to be modified
-> > > and writev syscalls inserted.
+> > start_kernel()
+> > +--setup_arch()
+> >    +--paging_init()
+> >       +--devicemaps_init()
+> >          +--eary_trap_init(vectors_base = 0xC7FFE000)
+> >             +--copy_from_lma(vectors_base = 0xC7FFE000, __vectors_start=0x0, __vectors_end=0x20)
+> >                +--__memcpy()
 > >
-> > Yes, both user_events and lttng require user space modifications to do
-> > tracing correctly. The syscall overheads are real, and the cost depends
-> > on the mitigations around spectre/meltdown.
+> >                copy_template.S:113
+> >                ldr8w   r1, r3, r4, r5, r6, r7, r8, ip, lr, abort=20f
+> >                r1 = 0
 > >
-> > > This is not cheap and I cannot see a production system using this interface.
 > >
-> > But you are fine with uprobe costs? uprobes appear to be much more costly
-> > than a syscall approach on the hardware I've run on.
-> 
-> Can we achieve the same/similar performance with sys_bpf(BPF_PROG_RUN)?
-> 
+> > With the final v5.15.28-rt36 I found out that the system boots fine
+> > after disabling CONFIG_HARDEN_BRANCH_HISTORY.
+> >
+> > Is there anything else I could analyze? My SoC system is a NXP i.MX6LL
+> > with a ARMv7 core. I have access to a JTAG debugger.
+>
+> I think this is already fixed in mainline. Commit:
+>
+> 6c7cb60bff7a ("ARM: fix Thumb2 regression")
+>
 
-I think so, the tough part is how do you let the user-space know which
-program is attached to run? In the current code this is done by the BPF
-program attaching to the event via perf and we run the one there if
-any when data is emitted out via write calls.
-
-I would want to make sure that operators can decide where the user-space
-data goes (perf/ftrace/eBPF) after the code has been written. With the
-current code this is done via the tracepoint callbacks that perf/ftrace
-hook up when operators enable recording via perf, tracefs, libbpf, etc.
-
-We have managed code (C#/Java) where we cannot utilize stubs or traps
-easily due to code movement. So we are limited in how we can approach
-this problem. Having the interface be mmap/write has enabled this
-for us, since it's easy to interact with in most languages and gives us
-lifetime management of the trace objects between user-space and the
-kernel.
-
-> Thanks,
-> Song
-> 
-> >
-> > > All you did is a poor man version of lttng that doesn't rely
-> > > on such heavy instrumentation.
-> >
-> > Well I am a frugal person. :)
-> >
-> > This work has solved some critical issues we've been having, and I would
-> > appreciate a review of the code if possible.
-> >
-> > Thanks,
-> > -Beau
-
-Thanks,
--Beau
+It's still broken - I sent a couple of patches on Monday, among which
+one to fix the boot issue with loop8 on Thumb2. The problem is 'b . +
+4', which produces a narrow encoding, and so it skips the subsequent
+subs instruction and loops forever.

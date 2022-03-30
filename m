@@ -2,136 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECB14EB875
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482724EB87A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242104AbiC3Ct0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
+        id S242114AbiC3CuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbiC3CtZ (ORCPT
+        with ESMTP id S238284AbiC3CuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:49:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A565170DB1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648608461; x=1680144461;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Iiz9yNZ9QU41lXDiDYLYbnUSqX5P7jJcuLjuIlo+0OE=;
-  b=U7qM4V/MyfjZVca8FfnNQHNhY4OP3UObgm++iH8zO2gOalUr0GdN/olJ
-   wRjqLrGK2hmkmShyfuBAjhOmHh0/v5KZbP48Th62FAFeVEjwtwVnKiq5A
-   v6IPXLwIMGEjlSrGuxsfvdcMcFn8NYHTAdOtwIXitWfcKr9ohdnu7WhKB
-   1XC8o4opy/kxT5jXe/pQXOykci8YlifSk0ZbBe8Ud5+SCsQfudPuOxe2/
-   /JafcQqljmEHi/9uzKkIRaNLgeTiI36ApRHLiSN12n8kag8S5Z63oQqvg
-   6d94EqSakEZ5bUZ3RZPCl9EwjpdWi9L7zH6HWnXk94aUMX/hc4yHRgNzo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="284334992"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="284334992"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 19:47:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="653496983"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2022 19:47:38 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZOMz-0000vB-UH; Wed, 30 Mar 2022 02:47:37 +0000
-Date:   Wed, 30 Mar 2022 10:46:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 2786/5614] arch/arm64/kvm/arm.c:2011:46: error: 'smccc_trng_available'
- undeclared
-Message-ID: <202203301057.pfu4qQMj-lkp@intel.com>
+        Tue, 29 Mar 2022 22:50:10 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA00DE04
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:48:25 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id c7so724556wrd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EsX1yG2UY6dKQjdKv6REamOui6sEFEfZYszWn7TYwFQ=;
+        b=AeOcNN3TyAZRveUSpBoasKR41s2C51M7345EFMNl2cOgld40Kbjpp0y9767/7ryykU
+         UiI/f6e5L84/1Yc4BGm9y3RjPs480QrdIPdMdn1YAZ9Su/mAIvRjaGhWH2PUC9hsJH7X
+         Lu6OGequi3R4kpWmn9HtowHTzbUE9dpKnnyHCeXqPfgYzulVgybneHscpZU+xnh19Q6d
+         rVFV9WB9B4m/7hnOYczjD8x0x0JPg5F83UJNR28qdLBCFhzQDvrTNXU+dkDIIuJayEer
+         lh4Ls31qHB5Y3F/WF2vpNxefEQz1lsaKypoCl/584X2DxzwObkXtXPy9Z0pW4MUEHYH2
+         A5fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EsX1yG2UY6dKQjdKv6REamOui6sEFEfZYszWn7TYwFQ=;
+        b=gADwHcPBUPu4lAhE11zNw2ImBT4dGq284x1tegcAo3LxonHr3FMtk33LAT82RPjuC8
+         JhEqlOuhItbCBbmsuTGmHgLrxZHHmKMjfTs1c5bOVgXCFTWVyj8YCKX3eW3bJuM08149
+         hAEf6/Lr/Y/oeLWCt3D4xYmCtdREKeiomuCdsBXCtqqnQOujPCVKn0usKx5VSSJFSO2S
+         FPU3b2t+ZqWqAkyvWjxw+dG3nvR7CzXkF2uRKbgbWXm0kCRt+2DfoSDwRMATlu3EUWy3
+         AXDeue4m/9jvpW6LoLKibNm8Xmn4iY3t+6tWEZ52C4YBYXIYLQjmggzfxs2Jug+fKCSv
+         m6qg==
+X-Gm-Message-State: AOAM531gEVLPJ60mCr4F7Cl4r1H7139zf+RwNptWsLKohGz8kX85MnEl
+        MYDUBygug5TMoafOvk0nzhzkcEQ1dgLRApVglTTusQ==
+X-Google-Smtp-Source: ABdhPJyFsvJGvTTAK3+q9dyt4LqD1Wr9tAnEeGd6ZSRdSLYdDJeRdtffEwK9SI/OU0xdqE15FFti1TL4Zr9nxp+kExk=
+X-Received: by 2002:a5d:4537:0:b0:204:b35:fa8 with SMTP id j23-20020a5d4537000000b002040b350fa8mr36802985wra.430.1648608504388;
+ Tue, 29 Mar 2022 19:48:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1648593132.git.marcelo.schmitt1@gmail.com> <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
+In-Reply-To: <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 30 Mar 2022 10:48:13 +0800
+Message-ID: <CABVgOSkb5CpnXDF_m7iy=A7RmN+KmY0T38TeZ4hKbmkdQgt6Yw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Documentation: dev-tools: Enhance static analysis
+ section with discussion
+To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-sparse@vger.kernel.org, cocci@inria.fr,
+        smatch@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>, julia.lawall@inria.fr
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+On Wed, Mar 30, 2022 at 7:23 AM Marcelo Schmitt
+<marcelo.schmitt1@gmail.com> wrote:
+>
+> Enhance the static analysis tools section with a discussion on when to
+> use each of them.
+>
+> This was mainly taken from Dan Carpenter and Julia Lawall's comments on
+> the previous documentation patch for static analysis tools.
+>
+> Lore: https://lore.kernel.org/linux-doc/20220329090911.GX3293@kadam/T/#mb97770c8e938095aadc3ee08f4ac7fe32ae386e6
+>
+> Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Cc: Julia Lawall <julia.lawall@inria.fr>
+> ---
 
-FYI, the error/warning still remains.
+Thanks: this sort of "when to use which tool" information is really
+what the testing guide page needs.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   12972dd7bfa306aa07c92966c4efe7b1c0c5e043
-commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/5614] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
-config: arm64-randconfig-r013-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301057.pfu4qQMj-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+I'm not familiar enough with these tools that I can really review the
+details properly, but nothing stands out as obviously wrong to me.
+I've made a few comments below regardless, but feel free to ignore
+them if they're not quite right.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: David Gow <davidgow@google.com>
 
-All errors (new ones prefixed by >>):
+Cheers,
+-- David
 
-   arch/arm64/kvm/arm.c: In function 'kvm_hyp_init_protection':
->> arch/arm64/kvm/arm.c:2011:46: error: 'smccc_trng_available' undeclared (first use in this function)
-    2011 |         kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-         |                                              ^~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/arm.c:2011:46: note: each undeclared identifier is reported only once for each function it appears in
+>  Documentation/dev-tools/testing-overview.rst | 33 ++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>
+> diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
+> index b5e02dd3fd94..91e479045d3a 100644
+> --- a/Documentation/dev-tools/testing-overview.rst
+> +++ b/Documentation/dev-tools/testing-overview.rst
+> @@ -146,3 +146,36 @@ Documentation/dev-tools/coccinelle.rst documentation page for details.
+>
+>  Beware, though, that static analysis tools suffer from **false positives**.
+>  Errors and warns need to be evaluated carefully before attempting to fix them.
+> +
+> +When to use Sparse and Smatch
+> +-----------------------------
+> +
+> +Sparse is useful for type checking, detecting places that use ``__user``
+> +pointers improperly, or finding endianness bugs. Sparse runs much faster than
+> +Smatch.
 
+Given that the __user pointer and endianness stuff is found as a
+result of Sparse's type checking support, would rewording this as
+"Sparse does type checking, such as [detecting places...]" or similar
+be more clear?
 
-vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
+> +
+> +Smatch does flow analysis and, if allowed to build the function database, it
+> +also does cross function analysis. Smatch tries to answer questions like where
+> +is this buffer allocated? How big is it? Can this index be controlled by the
+> +user? Is this variable larger than that variable?
+> +
+> +It's generally easier to write checks in Smatch than it is to write checks in
+> +Sparse. Nevertheless, there are some overlaps between Sparse and Smatch checks
+> +because there is no reason for re-implementing Sparse's check in Smatch.
 
-  1997	
-  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
-  1999	{
-  2000		void *addr = phys_to_virt(hyp_mem_base);
-  2001		int ret;
-  2002	
-  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
-  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
-  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
-  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
-  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
-  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
-  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
-  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
-> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
-  2012	
-  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
-  2014		if (ret)
-  2015			return ret;
-  2016	
-  2017		ret = init_stage2_iommu();
-  2018		if (ret < 0)
-  2019			return ret;
-  2020	
-  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
-  2022		if (ret)
-  2023			return ret;
-  2024	
-  2025		free_hyp_pgds();
-  2026	
-  2027		return 0;
-  2028	}
-  2029	
+This last sentence isn't totally clear to me. Should this "because" be "so"?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +
+> +Strong points of Smatch and Coccinelle
+> +--------------------------------------
+> +
+> +Coccinelle is probably the easiest for writing checks. It works before the
+> +pre-compiler so it's easier to check for bugs in macros using Coccinelle.
+> +Coccinelle also writes patches fixes for you which no other tool does.
+> +
+> +With Coccinelle you can do a mass conversion from
+
+(Maybe start this with "For example," just to make it clear that this
+paragraph is mostly following on from how useful it is that Coccinelle
+produces fixes, not just warnings.)
+
+> +``kmalloc(x * size, GFP_KERNEL)`` to ``kmalloc_array(x, size, GFP_KERNEL)``, and
+> +that's really useful. If you just created a Smatch warning and try to push the
+> +work of converting on to the maintainers they would be annoyed. You'd have to
+> +argue about each warning if can really overflow or not.
+> +
+> +Coccinelle does no analysis of variable values, which is the strong point of
+> +Smatch. On the other hand, Coccinelle allows you to do simple things in a simple
+> +way.
+> --
+> 2.35.1
+>

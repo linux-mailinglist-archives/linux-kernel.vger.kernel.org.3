@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924944EBD7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E214EBD81
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244717AbiC3JUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S244721AbiC3JUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiC3JUK (ORCPT
+        with ESMTP id S244719AbiC3JUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:20:10 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F41A2AC5C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:18:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A11C2210DB;
-        Wed, 30 Mar 2022 09:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648631902; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s3dYNUh5AxjBX/yiYSOWfD7ksRWWq/GngWTGNlJcxhI=;
-        b=Mvew9YBEv/zDcFABus3iY6LxYrmlZALbjewnnCPibJBZFxCJzhCQyu5K2XdSWZivjSKJ0t
-        UfP4//CUPt+/sv0yrT4knmFshytaaoJTesjJkUHja85JGcx5u0HCLkPgwLe/RKPaON5K+n
-        kWfi0sGWlEu0Ua0KpjZ8Wwb3szO4+Qs=
-Received: from suse.cz (unknown [10.100.201.86])
+        Wed, 30 Mar 2022 05:20:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1822AC6E;
+        Wed, 30 Mar 2022 02:18:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A60D2A3B87;
-        Wed, 30 Mar 2022 09:18:21 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 11:18:17 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit
- and the oom_reaper
-Message-ID: <YkQgWcZ7w0zL1a7n@dhcp22.suse.cz>
-References: <20220318033621.626006-1-npache@redhat.com>
- <Yjg9ncgep58gFLiN@dhcp22.suse.cz>
- <20220322004231.rwmnbjpq4ms6fnbi@offworld>
- <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
- <20220322025724.j3japdo5qocwgchz@offworld>
- <YjmITBkkwsa2O4bg@dhcp22.suse.cz>
- <87bkxyaufi.ffs@tglx>
- <Yjn7FXoXtgGT977T@dhcp22.suse.cz>
- <87zglha9rt.ffs@tglx>
- <YjrlqAMyJg3GKZVs@dhcp22.suse.cz>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94042B81BB5;
+        Wed, 30 Mar 2022 09:18:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E681C340EE;
+        Wed, 30 Mar 2022 09:18:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648631927;
+        bh=aVrqvODcydDKmqfXUiGFmQmS2YYivT8aXnaV3vGqTVY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ETS+h89+1a8HgdOZdMoxpsku+eFq+yBSyCsyvVmdbSAgYUGwFhizqGvVCSdpBIjeG
+         uzx9TvwsjKuqwivNdQSrn+tEzUbSeIWMq3yMopHNYIeIEsUmjojFvTuL7oVOMImBnK
+         Gje3y/t6OKjlU4Qj7oCY1nk3vUK7FAQVooJxH8t0uGVDIMwSMLci6q35qSXgB4Yw4m
+         VZycCjHT+hb10tv615NNQsh8jMzNEYHSDGqNEw9+LIzlaBhXGr58gFcizpWeM1kUhX
+         q3hW249ou4U2YVMgtekpx3v2D1LkUzOoFWZMNhIkKSGuby4sHzTfAeg0DL7YXxsRz/
+         JHDL0faEzDBug==
+Date:   Wed, 30 Mar 2022 11:18:43 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: use i2c_match_id and simple i2c probe
+Message-ID: <YkQgc2rPbGYOcSBC@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220324165904.538861-1-steve@sk2.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Hozreqnn1jQnIoc+"
 Content-Disposition: inline
-In-Reply-To: <YjrlqAMyJg3GKZVs@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220324165904.538861-1-steve@sk2.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nico,
 
-On Wed 23-03-22 10:17:29, Michal Hocko wrote:
-> Let me skip over futex part which I need to digest and only focus on the
-> oom side of the things for clarification.
-> 
-> On Tue 22-03-22 23:43:18, Thomas Gleixner wrote:
-[...]
-> > You can easily validate that by doing:
-> > 
-> > wake_oom_reaper(task)
-> >    task->reap_time = jiffies + HZ;
-> >    queue_task(task);
-> >    wakeup(reaper);
-> > 
-> > and then:
-> > 
-> > oom_reap_task(task)
-> >     now = READ_ONCE(jiffies);
-> >     if (time_before(now, task->reap_time)
-> >         schedule_timeout_idle(task->reap_time - now);
-> > 
-> > before trying to actually reap the mm.
-> > 
-> > That will prevent the enforced race in most cases and allow the exiting
-> > and/or killed processes to cleanup themself. Not pretty, but it should
-> > reduce the chance of the reaper to win the race with the exiting and/or
-> > killed process significantly.
-> > 
-> > It's not going to work when the problem is combined with a heavy VM
-> > overload situation which keeps a guest (or one/some it's vCPUs) away
-> > from being scheduled. See below for a discussion of guarantees.
-> > 
-> > If it failed to do so when the sleep returns, then you still can reap
-> > it.
-> 
-> Yes, this is certainly an option. Please note that the oom_reaper is not
-> the only way to trigger this. process_mrelease syscall performs the same
-> operation from the userspace. Arguably process_mrelease could be used
-> sanely/correctly because the userspace oom killer can do pro-cleanup
-> steps before going to final SIGKILL & process_mrelease. One way would be
-> to send SIGTERM in the first step and allow the victim to perform its
-> cleanup.
+--Hozreqnn1jQnIoc+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-are you working on another version of the fix/workaround based on the
-discussion so far?
 
-I guess the most reasonable way forward is to rework
-oom_reaper processing to be delayed. This can be either done by a
-delayed wake up or as Thomas suggests above by postponing the
-processing. I think the delayed wakeup would be _slightly_ easier to
-handle because the queue can contain many tasks to be reaped.
+> +static const struct i2c_device_id cdce925_id[];
+> +
 
-More specifically something like delayed work but we cannot rely on
-the WQ here. I guess we do not have any delayed wait queue interface
-but the same trick with the timer should be applicable here as well.
-exit_mmap would then cancel the timer after __oom_reap_task_mm is done.
-Actually the timer could be canceled after mmu_notifier_release already
-but this shouldn't make much of a difference.
--- 
-Michal Hocko
-SUSE Labs
+Instead of this declaration, I think we should move the
+MODULE_DEVICE_TABLES up here.
+
+
+--Hozreqnn1jQnIoc+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJEIHMACgkQFA3kzBSg
+KbaAtw/+MbUtB2q/Iw3Bo0jpnt/Tscpb8p4CwVtnTWPAb49Pu2st/PvqGZ5wit92
+0Si9Qyc9Ro9i5/auGIlfk1RGs2rPZx04nRFQuKU3cUWb8V0mZUueiGn9XdixNTYE
+A2EVgoFtSYbTExLukYb3Cb0w7O2CUOiUutbDB2Tkzg+5TDQab8bn2J8Gbr0RZnIJ
+FBxyFeyGd8wJ/o5QXMU4z9QtEzWfivyb33pe4IJNABfYJn0b+iPC5hDWEOrKIK2Z
+tCPbDpc6yIk7yoPZqi0knaeDqticw7G2Tcx52pQChC7ahn9q/pNrxLeUdvaEJ6HL
+m5sjcGXlxx2Ag9kwm1/AdXSnWuY0kvj3Gc+jbeva+9E5uhItsm0X09zD5ScG91Vv
+aCcWPuoWcvhDB7p53PLuLXutjHwsuMAFMNHJ/8JTNb6oX5VSsk3juQtEWRaZ++lD
+aIh3JR7imZW9sJlm+SSDFp+pun6hV8kUknskbjO24dU4HHo28Rx23JHc7RPOlgzC
+yFNlUw4P7zxR90K2c880531IO/KFBRFZICQqjM3I6nUaE92nTGzKYNu6WxHfB0J9
+exgPBOnMfx20ex6yb4j6p/ukoV3EnSAJorEQpS8DiQEgr+/cl7EnEPY3Da7upkvU
+s7SWpOL5AVud+r/+ahqtSOqoy0xHwqxijQTkkJCCfOGgR7u7xgA=
+=0xij
+-----END PGP SIGNATURE-----
+
+--Hozreqnn1jQnIoc+--

@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602754EC331
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF0B4EC3E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346704AbiC3MSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
+        id S1346380AbiC3MQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344530AbiC3L4Q (ORCPT
+        with ESMTP id S1344889AbiC3L4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:56:16 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A922B250
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:54:07 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so14285028iox.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:54:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=7IAPIDGtmGB489oXMPL27ZU1v8uRIqGprJ9/altofEg=;
-        b=noOxfZt0+kF9+VuoRNWclse8/lRwXMzwrK4eG4r6lYD4zOzPvdKGAadLQBAOLtVU0l
-         HOdbeLhp4aIqRSneoO8pXpRFdRqpwBHu72/wnWb8WiVA3mV7Q9/p9IBbBloTeGYvn61p
-         kI7P9KHujH8DAxlLFT0xLK8p0F7E2ksVxwHmUBn3CSCG1SBOJN34wQfZop36mFqBlzS+
-         PQ4QENDKCRDs8kBdVi+aySlukN/wLejVd4dLETOYs2ERkN1Ucoec3gdNPFZDMr9V8eFD
-         tHNcRw1HD5UWYH4tjNPAgO8V9OOyGxUi731cUNCTEe54/twzvJXM4DBj8/DeWg5fmtH+
-         4iiQ==
-X-Gm-Message-State: AOAM531TPPn03rUNXFBf+lqcTUWTT9xezuKMM+Q61ZCSqbw4mnefqwrG
-        gxpgGC5K50rn2M18ui8D4WN5v7Fj1QQ7maJiWGk8INPGabbW
-X-Google-Smtp-Source: ABdhPJyzMtzg+RsVrfzALmOTVu+lxxuCEr7IxF5qsQRRcQz7yCrIwDU3BNAHfsCOWOmB9lRBRPKK6cG/dVi53OV154TR3Cp5IwNV
+        Wed, 30 Mar 2022 07:56:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A822BB0B;
+        Wed, 30 Mar 2022 04:54:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40A6DB81ACC;
+        Wed, 30 Mar 2022 11:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0326C340F2;
+        Wed, 30 Mar 2022 11:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648641276;
+        bh=N7VV4WU4ve5a9mkAhzkgXt2CymUm4Y3tFt0YFfoLEbo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DXdIoeDX0PfKBl0AOK4ma3bF3o7qHxhW+lnX9p9ERAJX5BLiQPSOtaMvrNdYethkB
+         j56COJp15mHwaxdIZwF+RQnIebXF/UkEFsoTJhYRZJvmEfz71qxkptjaq2LmJgfzi1
+         XBrhZoJrNeb9+7R+aRpj4AWNNKgx0twgHOntmIU3RUsVUVJjwQZx/dNEs3ebwPLdcU
+         IgCjbNryV8g3fF4DIQGvKtYre7pt11EqQknDSZIg7nEQBsU7J1MBQalmXB1l8w7vpC
+         Fiy8bQk4vaW6hOJ5BRZSANh/sCUnJFuqBT/Hd/Z0sqdZxemM5g4FWxEmSVsuZ4K7hg
+         WBboBKvFCeOXg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 4.9 17/17] ASoC: ak4642: Use of_device_get_match_data()
+Date:   Wed, 30 Mar 2022 07:54:06 -0400
+Message-Id: <20220330115407.1673214-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220330115407.1673214-1-sashal@kernel.org>
+References: <20220330115407.1673214-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3395:b0:323:8a00:7151 with SMTP id
- h21-20020a056638339500b003238a007151mr3829675jav.93.1648641246340; Wed, 30
- Mar 2022 04:54:06 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 04:54:06 -0700
-In-Reply-To: <20220330102644.4510-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9aea605db6e33b3@google.com>
-Subject: Re: [syzbot] INFO: task hung in rfcomm_process_sessions (2)
-From:   syzbot <syzbot+d761775dff24be3ad4be@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+[ Upstream commit 835ca59799f5c60b4b54bdc7aa785c99552f63e4 ]
 
-Reported-and-tested-by: syzbot+d761775dff24be3ad4be@syzkaller.appspotmail.com
+Use of_device_get_match_data() to simplify the code.
 
-Tested on:
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Link: https://lore.kernel.org/r/20220315023226.2118354-1-chi.minghao@zte.com.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/codecs/ak4613.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-commit:         cffb2b72 Merge tag 'kgdb-5.18-rc1' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=69c8957f4ac2dea6
-dashboard link: https://syzkaller.appspot.com/bug?extid=d761775dff24be3ad4be
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=121c55b9700000
+diff --git a/sound/soc/codecs/ak4613.c b/sound/soc/codecs/ak4613.c
+index e819dd8c82fd..b6b93c2b7593 100644
+--- a/sound/soc/codecs/ak4613.c
++++ b/sound/soc/codecs/ak4613.c
+@@ -500,15 +500,10 @@ static int ak4613_i2c_probe(struct i2c_client *i2c,
+ 	struct ak4613_priv *priv;
+ 
+ 	regmap_cfg = NULL;
+-	if (np) {
+-		const struct of_device_id *of_id;
+-
+-		of_id = of_match_device(ak4613_of_match, dev);
+-		if (of_id)
+-			regmap_cfg = of_id->data;
+-	} else {
++	if (np)
++		regmap_cfg = of_device_get_match_data(dev);
++	else
+ 		regmap_cfg = (const struct regmap_config *)id->driver_data;
+-	}
+ 
+ 	if (!regmap_cfg)
+ 		return -EINVAL;
+-- 
+2.34.1
 
-Note: testing is done by a robot and is best-effort only.

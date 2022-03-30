@@ -2,181 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5359B4EC7B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB524EC7BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347803AbiC3PGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S1347808AbiC3PG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347772AbiC3PGA (ORCPT
+        with ESMTP id S1347795AbiC3PGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:06:00 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C859C75219;
-        Wed, 30 Mar 2022 08:04:14 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so15083754otj.10;
-        Wed, 30 Mar 2022 08:04:14 -0700 (PDT)
+        Wed, 30 Mar 2022 11:06:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9943185BDC
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648652678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tw2K5gl/MCSB4/A/fbU1d6ws7c+ie+K5t32hD35xsYk=;
+        b=c6vpyXFSk5rqkJai2V17tt56byBC3Fzs8nWgZjP/ke5HZpC0TbTMb3XBc+uSqJ7PK0BxlP
+        WA38ziMdl4gh7CqPmzzDyHKXreR4Y7NPfjd5okNv2uYYB4vUVEeaWFte/9a+otrW7+di/q
+        6zKdqDnBwm+FGzAZPBWewWWJdfJj7uU=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-JuezJQbhMqmkqlRniSWVKw-1; Wed, 30 Mar 2022 11:04:37 -0400
+X-MC-Unique: JuezJQbhMqmkqlRniSWVKw-1
+Received: by mail-il1-f199.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so6604837ilj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:04:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a0Qx16jN1XmN4Y2BBIC8WZKR/lqJ3CCvy460j4hfpJU=;
-        b=3pZvNGKpXmGd8MmuIG0vUmJ/PY0eUewq4tpTqMN57oPl+XLuu9EREsOx00MblhFyur
-         MYwHUU7oXc4CvIE4iFOMTBW2HfkiiSBaSmX97Z3IGpzii9xZgHONscasPij5H5FeaeCF
-         CR3/XF+5P7OEXHeT+Bx/h2Z89flcEngbEth8aQFyrgy/SOmhn1F8gLPFHebGW0PvKvl9
-         YtTD1ttarUrqf3NjeCigziwmqQIqZWLsdY+OcADx08jxzTBzklAmidK1pZ22O2x4Rqfc
-         bKtl7BeDwADSdqwZEyYQP3BbkY9Jx0TNk3gdDOv9Wh4qK0edfAbvLez5umuCrL3w4zN3
-         jUgQ==
-X-Gm-Message-State: AOAM531l2A5rjo7mN5FjZDloEfI6OEINf2QrzJyzyacjuuJYw2IVr8FP
-        6GdrgaezKKbmMQYWAFLPuQ==
-X-Google-Smtp-Source: ABdhPJw4BtyiHMI8Rkn8KkRu0zRrS/KBtlV7cGVu+PN3sHJ9/fQoVaJv4gJd0mwesxt2MLGtea2lyA==
-X-Received: by 2002:a05:6830:2055:b0:5b2:5659:542f with SMTP id f21-20020a056830205500b005b25659542fmr3433041otp.189.1648652653992;
-        Wed, 30 Mar 2022 08:04:13 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u2-20020a056870304200b000ddb1828e3csm9878600oau.19.2022.03.30.08.04.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Tw2K5gl/MCSB4/A/fbU1d6ws7c+ie+K5t32hD35xsYk=;
+        b=DaTjVwAOfbjwW3S3HaoufRySzYYdURazwjzZtqqVSbrNOxoX1pb5JgN2IetvB6MRIw
+         8QNgizeBlPGCR7a8d/4nl3IIOaIXFU0OgGT0UbIsLxDpGxySU1pPzhRl31eQrOPJqqZ9
+         xmMQ3PI8Iq4T8hQPK5wgAXJNsG3/65ZbItW/YmFI4VoMFXskiPPjlVVEk/6BLPSDux1B
+         sumWEPOU8vlNJDksNCMKFNlptansYdiBKC90YeCuza5r4zylRfP3nTxp94rbXOlHIwJZ
+         p0ICObR2PJ9bxHcQV9wVzlo79zTjv3RM2wZAvAIlhx24nJ05GJq3l9/FgVg2yvjUw2vv
+         0oYA==
+X-Gm-Message-State: AOAM533ysvF/qDARTVujvutIkkp4E5Zt0mrgZUMSBYQ9UfegxNoipfAr
+        Iyac4X/D/izOxJEn72FZ9HnG/j3OQNhjh6EL60TOnkkrPqEdEBiDe+WBUNoi5hXGVxC1LrYGbBr
+        MBgETG7NXzOjvJznUSxrqTU/i
+X-Received: by 2002:a05:6638:191d:b0:321:3acb:ac8a with SMTP id p29-20020a056638191d00b003213acbac8amr28070jal.212.1648652676283;
+        Wed, 30 Mar 2022 08:04:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyfihFwMtBBStLXYs+CPqbLhTdE7s40ejm+m3PFDIPROzfPRQ4jcPPTcNt2jC4McnNSgGoDWg==
+X-Received: by 2002:a05:6638:191d:b0:321:3acb:ac8a with SMTP id p29-20020a056638191d00b003213acbac8amr28045jal.212.1648652675990;
+        Wed, 30 Mar 2022 08:04:35 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id h24-20020a6bfb18000000b006497692016bsm11938613iog.15.2022.03.30.08.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 08:04:12 -0700 (PDT)
-Received: (nullmailer pid 3056199 invoked by uid 1000);
-        Wed, 30 Mar 2022 15:04:11 -0000
-Date:   Wed, 30 Mar 2022 10:04:11 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
-        netdev@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: update Krzysztof Kozlowski's email
-Message-ID: <YkRxa1yweG7ace6r@robh.at.kernel.org>
-References: <20220330074016.12896-1-krzysztof.kozlowski@linaro.org>
- <20220330074016.12896-2-krzysztof.kozlowski@linaro.org>
+        Wed, 30 Mar 2022 08:04:35 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 09:04:34 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH RFC v2 02/11] iommu: Add
+ iommu_group_singleton_lockdown()
+Message-ID: <20220330090434.22224951.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB52766A3E3BC82EEF437258198C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+        <20220329053800.3049561-3-baolu.lu@linux.intel.com>
+        <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20220329114259.GB1716663@nvidia.com>
+        <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20220330115820.GE1716663@nvidia.com>
+        <BN9PR11MB52766A3E3BC82EEF437258198C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330074016.12896-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 09:40:15AM +0200, Krzysztof Kozlowski wrote:
-> From: Krzysztof Kozlowski <krzk@kernel.org>
+On Wed, 30 Mar 2022 14:18:47 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
+
+> +Alex
 > 
-> Krzysztof Kozlowski's @canonical.com email stopped working, so switch to
-> generic @kernel.org account for all Devicetree bindings.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  .../devicetree/bindings/clock/samsung,exynos-audss-clock.yaml   | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos-clock.yaml         | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos-ext-clock.yaml     | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos4412-isp-clock.yaml | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos5260-clock.yaml     | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos5410-clock.yaml     | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos5433-clock.yaml     | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos7-clock.yaml        | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos7885-clock.yaml     | 2 +-
->  .../devicetree/bindings/clock/samsung,exynos850-clock.yaml      | 2 +-
->  Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml    | 2 +-
->  .../devicetree/bindings/clock/samsung,s5pv210-audss-clock.yaml  | 2 +-
->  .../devicetree/bindings/clock/samsung,s5pv210-clock.yaml        | 2 +-
->  .../devicetree/bindings/devfreq/event/samsung,exynos-nocp.yaml  | 2 +-
->  .../devicetree/bindings/devfreq/event/samsung,exynos-ppmu.yaml  | 2 +-
->  .../bindings/display/samsung/samsung,exynos-hdmi-ddc.yaml       | 2 +-
->  .../bindings/display/samsung/samsung,exynos-hdmi.yaml           | 2 +-
->  .../bindings/display/samsung/samsung,exynos-mixer.yaml          | 2 +-
->  .../bindings/display/samsung/samsung,exynos5433-decon.yaml      | 2 +-
->  .../bindings/display/samsung/samsung,exynos5433-mic.yaml        | 2 +-
->  .../bindings/display/samsung/samsung,exynos7-decon.yaml         | 2 +-
->  .../devicetree/bindings/display/samsung/samsung,fimd.yaml       | 2 +-
->  Documentation/devicetree/bindings/extcon/maxim,max77843.yaml    | 2 +-
->  Documentation/devicetree/bindings/hwmon/lltc,ltc4151.yaml       | 2 +-
->  Documentation/devicetree/bindings/hwmon/microchip,mcp3021.yaml  | 2 +-
->  Documentation/devicetree/bindings/hwmon/sensirion,sht15.yaml    | 2 +-
->  Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml          | 2 +-
->  Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml          | 2 +-
->  Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml          | 2 +-
->  Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml  | 2 +-
->  .../interrupt-controller/samsung,exynos4210-combiner.yaml       | 2 +-
->  Documentation/devicetree/bindings/leds/maxim,max77693.yaml      | 2 +-
->  .../devicetree/bindings/memory-controllers/brcm,dpfe-cpu.yaml   | 2 +-
->  .../bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml   | 2 +-
->  .../bindings/memory-controllers/ddr/jedec,lpddr2.yaml           | 2 +-
->  .../bindings/memory-controllers/ddr/jedec,lpddr3-timings.yaml   | 2 +-
->  .../bindings/memory-controllers/ddr/jedec,lpddr3.yaml           | 2 +-
->  .../memory-controllers/marvell,mvebu-sdram-controller.yaml      | 2 +-
->  .../bindings/memory-controllers/qca,ath79-ddr-controller.yaml   | 2 +-
->  .../bindings/memory-controllers/renesas,h8300-bsc.yaml          | 2 +-
->  .../bindings/memory-controllers/samsung,exynos5422-dmc.yaml     | 2 +-
->  .../bindings/memory-controllers/synopsys,ddrc-ecc.yaml          | 2 +-
->  .../devicetree/bindings/memory-controllers/ti,da8xx-ddrctl.yaml | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max14577.yaml       | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max77686.yaml       | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max77693.yaml       | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max77802.yaml       | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max77843.yaml       | 2 +-
->  .../devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml       | 2 +-
->  Documentation/devicetree/bindings/mfd/samsung,s2mpa01.yaml      | 2 +-
->  Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml      | 2 +-
->  Documentation/devicetree/bindings/mfd/samsung,s5m8767.yaml      | 2 +-
->  Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml      | 2 +-
->  Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/nfc/nxp,pn532.yaml        | 2 +-
->  Documentation/devicetree/bindings/net/nfc/nxp,pn544.yaml        | 2 +-
->  Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml        | 2 +-
->  Documentation/devicetree/bindings/net/nfc/st,st21nfca.yaml      | 2 +-
->  Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml        | 2 +-
->  Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml      | 2 +-
->  Documentation/devicetree/bindings/phy/samsung,dp-video-phy.yaml | 2 +-
->  .../devicetree/bindings/phy/samsung,exynos-hdmi-phy.yaml        | 2 +-
->  .../devicetree/bindings/phy/samsung,exynos5250-sata-phy.yaml    | 2 +-
->  .../devicetree/bindings/phy/samsung,mipi-video-phy.yaml         | 2 +-
->  Documentation/devicetree/bindings/phy/samsung,usb2-phy.yaml     | 2 +-
->  Documentation/devicetree/bindings/phy/samsung,usb3-drd-phy.yaml | 2 +-
->  .../devicetree/bindings/pinctrl/samsung,pinctrl-gpio-bank.yaml  | 2 +-
->  .../devicetree/bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml   | 2 +-
->  .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 +-
->  Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml  | 2 +-
->  .../devicetree/bindings/power/supply/maxim,max14577.yaml        | 2 +-
->  .../devicetree/bindings/power/supply/maxim,max77693.yaml        | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max14577.yaml | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max77686.yaml | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max77693.yaml | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max77802.yaml | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max77843.yaml | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max8952.yaml  | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max8973.yaml  | 2 +-
->  Documentation/devicetree/bindings/regulator/maxim,max8997.yaml  | 2 +-
->  .../devicetree/bindings/regulator/samsung,s2mpa01.yaml          | 2 +-
->  .../devicetree/bindings/regulator/samsung,s2mps11.yaml          | 2 +-
->  .../devicetree/bindings/regulator/samsung,s2mps13.yaml          | 2 +-
->  .../devicetree/bindings/regulator/samsung,s2mps14.yaml          | 2 +-
->  .../devicetree/bindings/regulator/samsung,s2mps15.yaml          | 2 +-
->  .../devicetree/bindings/regulator/samsung,s2mpu02.yaml          | 2 +-
->  .../devicetree/bindings/regulator/samsung,s5m8767.yaml          | 2 +-
->  .../devicetree/bindings/rng/samsung,exynos5250-trng.yaml        | 2 +-
->  Documentation/devicetree/bindings/rng/timeriomem_rng.yaml       | 2 +-
->  Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml   | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,arndale.yaml    | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,smdk5250.yaml   | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,snow.yaml       | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,tm2.yaml        | 2 +-
->  .../devicetree/bindings/spi/samsung,spi-peripheral-props.yaml   | 2 +-
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml          | 2 +-
->  .../devicetree/bindings/thermal/samsung,exynos-thermal.yaml     | 2 +-
->  Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml  | 2 +-
->  Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml  | 2 +-
->  99 files changed, 99 insertions(+), 99 deletions(-)
+> > From: Tian, Kevin
+> > Sent: Wednesday, March 30, 2022 10:13 PM
+> >   
+> > > From: Jason Gunthorpe
+> > > Sent: Wednesday, March 30, 2022 7:58 PM
+> > >
+> > > On Wed, Mar 30, 2022 at 06:50:11AM +0000, Tian, Kevin wrote:
+> > >  
+> > > > One thing that I'm not very sure is about DMA alias. Even when physically
+> > > > there is only a single device within the group the aliasing could lead
+> > > > to multiple RIDs in the group making it non-singleton. But probably we
+> > > > don't need support SVA on such device until a real demand comes?  
+> > >
+> > > How can we have multiple RIDs in the same group and have only one
+> > > device in the group?  
+> > 
+> > Alex may help throw some insight here. Per what I read from the code
+> > looks like certain device can generate traffic with multiple RIDs.
 
-Acked-by: Rob Herring <robh@kernel.org>
+You only need to look so far as the dma alias quirks to find devices
+that use the wrong RID for DMA.  In general I don't think we have
+enough confidence to say that for all these devices the wrong RID is
+exclusively used versus some combination of both RIDs.  Also, the
+aliased RID is not always a physical device.  Thanks,
 
-Arnd suggested 5.19, but this one needs to be 5.18.
+Alex
 
-Rob

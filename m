@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A898E4ECF61
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89B44ECF64
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351480AbiC3WOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S1351486AbiC3WPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351475AbiC3WOl (ORCPT
+        with ESMTP id S241321AbiC3WPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:14:41 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A209427FD
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:12:55 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id AB3A23200D98;
-        Wed, 30 Mar 2022 18:12:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 30 Mar 2022 18:12:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=VafuHBoZUzeSxeYTXUmAINKRMraZTcsVMF+kik
-        9kRS8=; b=D48d5msTfHW2+sZdc2uTI4B2sz6GNQT1thu8W6z0+/qRf/SlHg/t7f
-        se1yGjjdHLGvpCRO1s00lt9/UtUODmENcVimzrg2oEbW8unmhZHbQga+UEQHtqKm
-        dOLFquqqulEpBA33ByjSKPL3JVGBTQ5dQqIiYxd1/ajWvxsC7WRMJk4Txc/Niv10
-        a0tKF0pV3tZrhailrjmg9NpOAho95yeCk8kuMZT0kBBxKLmxunehb/Zkd8s61w5c
-        YWNc+BhBaW7QrKLwmzzg2bUezDo1UUPJoQvh48CbDt68MjMsni5LRHz8Z3t4+Li4
-        NzmKf8GAM4xK7/xIB3QFgZia/TdzDxsA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:reply-to
-        :sender:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm3; bh=VafuHBoZUzeSxeYTXUmAINKRMraZT
-        csVMF+kik9kRS8=; b=i85FOJef4YHfcyIo37PzgfhHuMaNe1MmPiroCz/ADhnFI
-        gLsFQUpkOkaDwksKTYTMQv4BuGydKSbdPjH9hqp7pFIOKms1bxcC7oG6Qed+OeMZ
-        Tpqhlb4RLHIV6kEju2K+Ug7HK+wsxLvVbjLXmnTvqrD9Co2qoKCrSOvgTgvsPF7b
-        C4zpkhoCYq543FsB6lNDXsatm+cqJiil8xk+MJF5qYMLomgIiS/e9EWfdRdxs55q
-        nWksVR/Wli38Jq56r5aSeVEGPlGcQfBwKShCeqZIHuWqGSaKrN5uebTxuAcQjXgL
-        gULoKf3aTd3bII3Ya4OitzU4Ge7L5ay/+Y1x1hOyA==
-X-ME-Sender: <xms:49VEYqRZEwoCaI_LgfrfAOTGH5vkxDGqYbQgMyeutviG-0bOa0bWEw>
-    <xme:49VEYvye7M8kgMnJoA1nCF9jg2etPHFx2R18ybDqCjDqEpTAiUHkGFZq-s6MEmpoJ
-    oBo7fQuKHgDV3LEyQ>
-X-ME-Received: <xmr:49VEYn1xRi416aNxROum6HnuPLv52iuUpQBkrWFFJsUgZwh3fjH4Lujas15tg74l4nVzfV60TKhJr-hvJQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeifedgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkfforhgggfestdhqredtredttdenucfhrhhomhepkghiucgjrghn
-    uceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepleetvddtvd
-    dttdetffdvkeehffdtjefhkedtheffjeehvdejueektedukedufeffnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvghnth
-    drtghomh
-X-ME-Proxy: <xmx:49VEYmAMFEjFe6RLrzrvy7BWsgB2qOA2U882u2i-OUK0oIxUyn-JRA>
-    <xmx:49VEYjhJa5gpDVaNVbDuEkLohrI-M5rEV9VzIhBV7fQAcvUcgs3IqA>
-    <xmx:49VEYioZ_dkYmCH9RXwErcNFy1ugoWFcpVj8OOhgeSxD5Fd6HmdkxQ>
-    <xmx:5NVEYiMFxS2gJ3SH06l6hd6-Ze9Jj7vwwZvosmjDCiuD_dQGVxtLoA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Mar 2022 18:12:51 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH] mm: page_alloc: validate buddy before check its migratetype.
-Date:   Wed, 30 Mar 2022 18:12:38 -0400
-Message-Id: <20220330221238.396357-1-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Wed, 30 Mar 2022 18:15:50 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AF45F8B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:14:04 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id j2so39258793ybu.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ohUWdk6Jv4uJ7zckc+ZPE6o/UzyPHrqVidE3nB9Y/io=;
+        b=PogmDeYUl/eypsEXkLeet0WhRAoDMh6f38F2N76vij2zPAC8y90JL9MU4vcDEV9LjF
+         7ih2jUnRHHnGY3igDrZvZNMIQb6ywhQZO8ImF9am0UByH4BY+qudLWX6eBGZXg2bds1f
+         fSsvgqRHXHIa61wLRKQXVypCg7kUehZBDuoiRiutFmRQDkqlPty5aYaam5L+NKkLWSYx
+         Fu3345HdTsFJwz/LN3pO76LHXodqtrj0+ZNF9ss24Z+pcaLebrXVVZxaSBuMXYNdO9cL
+         BLeMQoXdPFjyGDPMlCXLQrlMWX4t8q7xcvfuAOox++5c/0xdx9gv+1KfFdQuXhb54SCd
+         L8BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ohUWdk6Jv4uJ7zckc+ZPE6o/UzyPHrqVidE3nB9Y/io=;
+        b=uuzy4SbJERFRApocANNA0dkjJosio8AXMYATVk5iiT1mBAC2F9YfscGL8aWn6banZq
+         L5OeK8NN970Jp4Ww3cPiGcP0BjkZtPQUPsW2F267N+ga0LN2GfJyHzzQw04GMQeeem56
+         XlCyUKVdtj08QRyN3uXMNsNkFSf1Y3+dZWLDD+RDW2b9pKXLRkcBT3Zt0IPqW7pmpXPA
+         AXXsycnsulYGojKXDvkc+SYkCxFTqEDgfVhi6D6DnCTlHcUeVPa0cX8aLS80VQ5i8/pI
+         0sNMN3q2rOCmVMTtcvoyk44fkyw572zt9AA8JgjtVk44L/B6vtZAnG2lhzWJKmYgucZ/
+         BJEQ==
+X-Gm-Message-State: AOAM5320NMIrS5XMYbRK9Qf4XxHZ+jKpVlctmtPzIxyuwei3Mz8T6xJj
+        kJ4POzVSN3YGptFmN6KPMIQg4g9U8kiCq/T3ondSGA==
+X-Google-Smtp-Source: ABdhPJyF7b99kJY78kD00gUjvcpr8Yge4gTbtMxUjw2qC+5vXXsI2OytH/lZhWGiymk5czKjtKawMEb+KwlUc7JzHks=
+X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
+ f9-20020a056902038900b0063331c1d0f7mr1766360ybs.543.1648678443446; Wed, 30
+ Mar 2022 15:14:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <202203301416.uykWxBeR-lkp@intel.com>
+In-Reply-To: <202203301416.uykWxBeR-lkp@intel.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 30 Mar 2022 15:13:52 -0700
+Message-ID: <CAJuCfpG_em1O+11oE0fC4htmKd11ygT_phF5hOjbyfxw68Xq1A@mail.gmail.com>
+Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5835/5872] mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
+To:     kernel test robot <lkp@intel.com>
+Cc:     Charan Teja Reddy <charante@codeaurora.org>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+On Tue, Mar 29, 2022 at 11:32 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+> head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+> commit: 8cd9aa93b7269460e8d5e4407738f21fe5d6e720 [5835/5872] ANDROID: implement wrapper for reverse migration
+> config: arm64-randconfig-r036-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301416.uykWxBeR-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/ammarfaizi2/linux-block/commit/8cd9aa93b7269460e8d5e4407738f21fe5d6e720
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+>         git checkout 8cd9aa93b7269460e8d5e4407738f21fe5d6e720
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+> >> mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
+>    unsigned long isolate_and_split_free_page(struct page *page,
+>                  ^
+>    include/linux/compaction.h:241:22: note: previous definition is here
+>    static unsigned long isolate_and_split_free_page(struct page *page,
+>                         ^
+>    1 error generated.
+>
 
-Whenever a buddy page is found, page_is_buddy() should be called to
-check its validity. Add the missing check during pageblock merge check.
+This issue has been fixed by
+https://android-review.googlesource.com/c/kernel/common/+/1685698
 
-Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable pagebl=
-ocks with others")
 
-Reported-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- mm/page_alloc.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index bdc8f60ae462..6c6af8658775 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1108,6 +1108,9 @@ static inline void __free_one_page(struct page *page,
-=20
- 		buddy_pfn =3D __find_buddy_pfn(pfn, order);
- 		buddy =3D page + (buddy_pfn - pfn);
-+
-+		if (!page_is_buddy(page, buddy, order))
-+			goto done_merging;
- 		buddy_mt =3D get_pageblock_migratetype(buddy);
-=20
- 		if (migratetype !=3D buddy_mt
---=20
-2.35.1
-
+>
+> vim +/isolate_and_split_free_page +766 mm/compaction.c
+>
+>    765
+>  > 766  unsigned long isolate_and_split_free_page(struct page *page,
+>    767                                                  struct list_head *list)
+>    768  {
+>    769          unsigned long isolated;
+>    770          unsigned int order;
+>    771
+>    772          if (!PageBuddy(page))
+>    773                  return 0;
+>    774
+>    775          order = buddy_order(page);
+>    776          isolated = __isolate_free_page(page, order);
+>    777          if (!isolated)
+>    778                  return 0;
+>    779
+>    780          set_page_private(page, order);
+>    781          list_add(&page->lru, list);
+>    782
+>    783          split_map_pages(list);
+>    784
+>    785          return isolated;
+>    786  }
+>    787  EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
+>    788
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

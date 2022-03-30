@@ -2,85 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CDD4EB757
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3054C4EB758
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241381AbiC3AIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 20:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
+        id S241408AbiC3AIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbiC3AIs (ORCPT
+        with ESMTP id S241383AbiC3AIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 20:08:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4B943483;
+        Tue, 29 Mar 2022 20:08:50 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F75643496
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:07:06 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id t2so17301980pfj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y2rRhw4flc97ksCHOd8D6zj8TKfoieAVBtd70rXcpQs=;
+        b=o9HHTHEYnmATJjpdZ+6at7qnwRTprPUxz44HrTkQVZVnCOrEgYVmZWSnp4gUPhisJv
+         Rmiu/9OTD/qceAnczy4elXmZYfqCtOJj96eJQMuVW9Lc1lYOGiX8XPbzl8WSTIsAt0FI
+         9afhf33i8d59GFe3+3rYaQygWjErHAhbVZIako5ZoRr5T0a8YW9Q16JqV/pxo4oBHHo/
+         UEXCoV5RfVH/960ntKzVVEko47A4lLAAUFSwvWxPfrN0Y8SkBw/e1ZrQUnG2NqnubIrO
+         RzIPQAd1lEWZL6FPCSVd745Vy6Zx7A2+ckbidrCyQzYqyMtumppulGgHbvCydajf90TS
+         nKtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y2rRhw4flc97ksCHOd8D6zj8TKfoieAVBtd70rXcpQs=;
+        b=MWrUjrnnUjMrDrtYUamRRCWW6eQy58tmqJSe76dZlyNiTafZdhBqX1tEm///pGvuv8
+         d05ByFflYEMgn7GH8kVuWzY8bjkIPLqjk50e8O74Q0kOc5K/bJzNMsnqbd/vPYLM+vaL
+         6twn/HrgnllvyRLVBzY7zdy6ejmsOQC5Nq0M3DFeTQx+E7rSLKN9JZSeYgu91CV+rWnQ
+         LPGbSwn1Ycn5IJo8LkI9aeTC+vM0+MrEnl86ccsjQpnIDfL0KrsmLcP+q/Cq6dU0n9Xv
+         z/hx2cGZhg43buQ+HPNnoIID/8p0LA+0cfDoUasJHsGcONkgzxWrsDawy7M3FqbDX9By
+         gz9g==
+X-Gm-Message-State: AOAM530WVYhgO40UrJ4rzVCZyZ+23F2evvH6q95oPAMSxUIE6pOSe79r
+        EamguYSBoFLJL6RMWzcr22e5irUEbiGuEQ==
+X-Google-Smtp-Source: ABdhPJxUppfMa3o7A5xAfew/ErKXOffjoVHzpxNp8qP8IaCknbYo1DmmtfVP+XIrltUTJl/gsv4W0g==
+X-Received: by 2002:a63:dd47:0:b0:381:2bb3:86ba with SMTP id g7-20020a63dd47000000b003812bb386bamr3899371pgj.381.1648598825402;
+        Tue, 29 Mar 2022 17:07:05 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f20-20020a056a00229400b004fb16860af6sm17208497pfe.195.2022.03.29.17.07.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 29 Mar 2022 17:07:04 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 970AC1F439F1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648598823;
-        bh=dRavRYMt4OXmhvAe8PF9ABx9qq8MFHZ3LSwNhkacwkE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hh+IQsoK7zvHgnfGfROXkPwo6+B/Do7vmAiYuC7Tr1odb20mC9vKiTdnvuUlO+ALx
-         Xy8vbDrdwHf3icILpszpILr+q/QJQOi1E2W8dKrhXZFypLtudxx6vda6dxU0Jemasu
-         uR67nsFC7NzvXkQk7sI9gWvCga9b1MJdTJ+tS0TEftojx4SO/scHMBfhtH7CRFbavU
-         I4ucJeC+hNVAU4R3ALFMNt4LeUuBPNH8dSjG+yT+1q9pi0j4r0bCZmfXKRjSSJu5UX
-         PSpow83MQP2LMDDEriKj7NWEhh6DlYy6uo4GmvajJtwHrtJEfYoJIdp7S+zAuyndWs
-         NRGBATme8EXeA==
-Message-ID: <04bb5ef2-15c3-d561-3572-76dc803275ef@collabora.com>
-Date:   Wed, 30 Mar 2022 03:06:59 +0300
+Date:   Wed, 30 Mar 2022 00:07:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wanpeng Li <kernellwp@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH RESEND 3/5] KVM: X86: Boost vCPU which is in critical
+ section
+Message-ID: <YkOfJeXm8MiMOEyh@google.com>
+References: <1648216709-44755-1-git-send-email-wanpengli@tencent.com>
+ <1648216709-44755-4-git-send-email-wanpengli@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v5 2/4] memory: tegra: Add MC error logging on tegra186
- onward
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, digetx@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-3-amhetre@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220316092525.4554-3-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1648216709-44755-4-git-send-email-wanpengli@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 12:25, Ashish Mhetre wrote:
-> Add new function 'get_int_channel' in tegra_mc_soc struture which is
-> implemented by tegra SOCs which support multiple MC channels. This
-> function returns the channel which should be used to get the information
-> of interrupts.
-> Remove static from tegra30_mc_handle_irq and use it as interrupt handler
-> for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
-> Add error specific MC status and address register bits and use them on
-> tegra186, tegra194 and tegra234.
-> Add error logging for generalized carveout interrupt on tegra186, tegra194
-> and tegra234.
-> Add error logging for route sanity interrupt on tegra194 an tegra234.
-> Add register for higher bits of error address which is available on
-> tegra194 and tegra234.
-> Add a boolean variable 'has_addr_hi_reg' in tegra_mc_soc struture which
-> will be true if soc has register for higher bits of memory controller
-> error address. Set it true for tegra194 and tegra234.
-> 
-> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+On Fri, Mar 25, 2022, Wanpeng Li wrote:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 425fd7f38fa9..6b300496bbd0 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10375,6 +10375,28 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+>  	return r;
+>  }
+>  
+> +static int kvm_vcpu_non_preemptable(struct kvm_vcpu *vcpu)
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+s/preemtable/preemptible
 
-Reported what? You should add this tag only if patch addresses reported
-problem. This patch doesn't address anything, hence the tag is
-inappropriate, you should remove it.
+And I'd recommend inverting the return, and also return a bool, i.e.
+
+static bool kvm_vcpu_is_preemptible(struct kvm_vcpu *vcpu)
+
+> +{
+> +	int count;
+> +
+> +	if (!vcpu->arch.pv_pc.preempt_count_enabled)
+> +		return 0;
+> +
+> +	if (!kvm_read_guest_cached(vcpu->kvm, &vcpu->arch.pv_pc.preempt_count_cache,
+> +	    &count, sizeof(int)))
+> +		return (count & ~PREEMPT_NEED_RESCHED);
+
+This cements PREEMPT_NEED_RESCHED into KVM's guest/host ABI.  I doubt the sched
+folks will be happy with that.
+
+> +
+> +	return 0;
+> +}
+> +

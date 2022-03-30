@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B654ECE72
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB094ECE78
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351178AbiC3VBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S1351197AbiC3VCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346753AbiC3VBU (ORCPT
+        with ESMTP id S1344477AbiC3VCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:01:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E021D24BD7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648673974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Sy8bkqtPJSZgcyuTbRCJfF/i6zL7BC/uXgP8JV+OWLU=;
-        b=W1hmkRBUfvu74FTDIpNenxTkMH0sELTQxDwr1ChfnqNv/T6X0ImF3UiLENX18zOxrLQEAv
-        jzJUyWUudHtLL2blvuHB+HuCpuyrTM6o2yafOn2Du4i0ToKEvfgpTRfpYBBfNK+BJC2Fp7
-        j1+wR5INhDda7GWRWSPwHAjCGVzCLRg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-ji24S9IEPZaTOciUVy2QlA-1; Wed, 30 Mar 2022 16:59:30 -0400
-X-MC-Unique: ji24S9IEPZaTOciUVy2QlA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F6B985A5BE;
-        Wed, 30 Mar 2022 20:59:30 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D18C140CF8E4;
-        Wed, 30 Mar 2022 20:59:29 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v3] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12 warning
-Date:   Wed, 30 Mar 2022 16:59:19 -0400
-Message-Id: <20220330205919.2713275-1-longman@redhat.com>
+        Wed, 30 Mar 2022 17:02:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303EB28E07;
+        Wed, 30 Mar 2022 14:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648674019; x=1680210019;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8FC2FPhKtM0mTtO05j8fjDdgfsYLuSdSZPWEuv5HJBk=;
+  b=G+p8rObvSJ/MT8DTmBGGNeA6XJ0SnBnB1uHGC/pN/siDQMKDYobBZMPm
+   pqgG505RlDRsuYdiWIVIDYiCataao4dXWxGX9WoqaoNDPgHGJmfvEXj4X
+   mOQz0KGxItlt3w64sw1b8aOrMqjVIpf5AQqOcsn85VYD7PBs+3I3lGbSN
+   RRBSGZrtY1vE2ebkOgiczAHywOhzfhxCyKQVXZqLc4vGKY/TzLH6wLEud
+   DpJUuApi8+QB9WJG/quWodMG6GW+teC7Dp9gq7RDQr+ACspeLRMeZm5bc
+   IRzs3znUnMOnjl5mvup1F5P8GMm9NmpZwm8HTkkB6ZEhxiaCxYvMND9W7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259618385"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="259618385"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:00:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="503460985"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 14:00:15 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZfQN-0000V2-4A;
+        Wed, 30 Mar 2022 21:00:15 +0000
+Date:   Thu, 31 Mar 2022 04:59:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6:
+ warning: no previous prototype for function
+ 'fimc_isp_video_device_unregister'
+Message-ID: <202203310447.czIadBgz-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The gcc 12 compiler reports a "'mem_section' will never be NULL"
-warning on the following code:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d888c83fcec75194a8a48ccd283953bdba7b2550
+commit: 238c84f71120f41c45301359902a912a19370f3d media: platform: rename exynos4-is/ to samsung/exynos4-is/
+date:   13 days ago
+config: riscv-randconfig-r003-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310447.czIadBgz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=238c84f71120f41c45301359902a912a19370f3d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 238c84f71120f41c45301359902a912a19370f3d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/
 
-    static inline struct mem_section *__nr_to_section(unsigned long nr)
-    {
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-        if (!mem_section)
-                return NULL;
-    #endif
-        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-                return NULL;
-       :
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It happens with CONFIG_SPARSEMEM_EXTREME off. The mem_section
-definition is
+All warnings (new ones prefixed by >>):
 
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-    extern struct mem_section **mem_section;
-    #else
-    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-    #endif
+   In file included from drivers/media/platform/samsung/exynos4-is/fimc-isp.c:25:
+>> drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no previous prototype for function 'fimc_isp_video_device_unregister' [-Wmissing-prototypes]
+   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+        ^
+   drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+   ^
+   static 
+   1 warning generated.
 
-In the !CONFIG_SPARSEMEM_EXTREME case, mem_section
-is a static 2-dimensional array and so the check
-"!mem_section[SECTION_NR_TO_ROOT(nr)]" doesn't make sense.
 
-Fix this warning by moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-check up inside the CONFIG_SPARSEMEM_EXTREME block.
+vim +/fimc_isp_video_device_unregister +35 drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
 
-Fixes: 3e347261a80b ("sparsemem extreme implementation")
-Reported-by: Justin Forbes <jforbes@redhat.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/linux/mmzone.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  34  
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20 @35  void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  36  				enum v4l2_buf_type type)
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  37  {
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  38  }
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  39  #endif /* !CONFIG_VIDEO_EXYNOS4_ISP_DMA_CAPTURE */
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  40  
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 962b14d403e8..8a89efe47571 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1398,11 +1398,9 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
- static inline struct mem_section *__nr_to_section(unsigned long nr)
- {
- #ifdef CONFIG_SPARSEMEM_EXTREME
--	if (!mem_section)
-+	if (!mem_section || !mem_section[SECTION_NR_TO_ROOT(nr)])
- 		return NULL;
- #endif
--	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
--		return NULL;
- 	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
- }
- extern size_t mem_section_usage_size(void);
+:::::: The code at line 35 was first introduced by commit
+:::::: 34947b8aebe3f2d4eceb65fceafa92bf8dc97d96 [media] exynos4-is: Add the FIMC-IS ISP capture DMA driver
+
+:::::: TO: Sylwester Nawrocki <s.nawrocki@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

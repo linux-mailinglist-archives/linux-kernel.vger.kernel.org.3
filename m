@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB3A4EBC56
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942594EBC52
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244094AbiC3IIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S244129AbiC3IIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244092AbiC3IIF (ORCPT
+        with ESMTP id S236650AbiC3IIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:08:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD61D2E6B8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:06:19 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7A9B221605;
-        Wed, 30 Mar 2022 08:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648627578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Um5MncWQPFK069jInV5QbM0hF4fayUXS1W56obOkrFk=;
-        b=gojrEkSRQEgWFK1XNxkCS3aNTUXaXPocr2R7tm2tGJZ9AYJ4wWLbcKFl9rl2BKHSSgcBp8
-        +RrlEZ/jEkqw3j2XXMdTPhVVwj7f4T+mJIawfsl7XKqgMUy5ZNW3PB28N/9/crLubb+OKm
-        kUQUTXQEcU5iVDguo8N3rp2jEDU99p0=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3F6BCA3B9B;
-        Wed, 30 Mar 2022 08:06:18 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 10:06:17 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, s.suk@samsung.com,
-        jaewon31.kim@gmail.com
-Subject: Re: [PATCH] zram_drv: add __GFP_NOWARN flag on call to zs_malloc
-Message-ID: <YkQPefdRc+hxIXEV@dhcp22.suse.cz>
-References: <CGME20220330052214epcas1p250cff6b3168a1c9c253e1fe70e68ca8b@epcas1p2.samsung.com>
- <20220330052502.26072-1-jaewon31.kim@samsung.com>
+        Wed, 30 Mar 2022 04:08:09 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAA12E9C6;
+        Wed, 30 Mar 2022 01:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Nm3/83BLfTxqbB3yVdH7/M2MnTWGa1QQjPe4ZcE+AfI=;
+  b=UX3JBE9liSJh7Y+T/Jw9kwqCp9Zx6vLskMGz+amWhPNDl5SlH6/MG1w+
+   ubDYAppUXDwZFxOqCUYh7tzVyr2ANH5ptq3/pI4teqGMfPTPDHO0jwxS+
+   pF63br6F2cX0DV7C4TTVldTld4Jk3GWrTjHystm+YZZEt6FYRe8hMAnZr
+   o=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,222,1643670000"; 
+   d="scan'208";a="29030020"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:06:22 +0200
+Date:   Wed, 30 Mar 2022 10:06:22 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: julia@hadrien
+To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+cc:     corbet@lwn.net, mchehab+huawei@kernel.org, dlatypov@google.com,
+        davidgow@google.com, linux-doc@vger.kernel.org,
+        linux-sparse@vger.kernel.org, cocci@inria.fr,
+        smatch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, dan.carpenter@oracle.com,
+        julia.lawall@inria.fr
+Subject: Re: [PATCH v2 2/2] Documentation: dev-tools: Enhance static analysis
+ section with discussion
+In-Reply-To: <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2203301005010.2592@hadrien>
+References: <cover.1648593132.git.marcelo.schmitt1@gmail.com> <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330052502.26072-1-jaewon31.kim@samsung.com>
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 30-03-22 14:25:02, Jaewon Kim wrote:
-> The page allocation with GFP_NOIO may fail. And zram can handle this
-> allocation failure. We do not need to print log for this.
+> +Strong points of Smatch and Coccinelle
+> +--------------------------------------
+> +
+> +Coccinelle is probably the easiest for writing checks. It works before the
+> +pre-compiler so it's easier to check for bugs in macros using Coccinelle.
 
-GFP_NOIO doesn't have any special meaning wrt to failures. zram
-allocates from the memory reclaim context which is a bad design IMHO.
-The failure you are seeing indicates that PF_MEMALLOC context (memory
-reclaim) which is allow to dip into memory reserves without any limit
-cannot find any memory! This is really bad and it is good to learn about
-that.
+pre-processor
 
-Your description doesn't really explain why we should be ignoring that
-situation. Is the memory allocation failure gracefully recoverable?
+> +Coccinelle also writes patches fixes for you which no other tool does.
 
--- 
-Michal Hocko
-SUSE Labs
+writes patches fixes -> creates patches
+
+> +
+> +With Coccinelle you can do a mass conversion from
+
+you can -> you can, for example,
+
+julia
+
+> +``kmalloc(x * size, GFP_KERNEL)`` to ``kmalloc_array(x, size, GFP_KERNEL)``, and
+> +that's really useful. If you just created a Smatch warning and try to push the
+> +work of converting on to the maintainers they would be annoyed. You'd have to
+> +argue about each warning if can really overflow or not.
+> +
+> +Coccinelle does no analysis of variable values, which is the strong point of
+> +Smatch. On the other hand, Coccinelle allows you to do simple things in a simple
+> +way.
+> --
+> 2.35.1
+>
+>

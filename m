@@ -2,211 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42604ECF12
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBA24ECF00
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351364AbiC3Vt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S1351349AbiC3Vtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348397AbiC3Vtw (ORCPT
+        with ESMTP id S1348397AbiC3Vtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:49:52 -0400
-X-Greylist: delayed 85333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 14:48:06 PDT
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57269517EF;
-        Wed, 30 Mar 2022 14:48:06 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id CE268C01F; Wed, 30 Mar 2022 23:48:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648676884; bh=JBKLv303K90QCwUMTooNfskYmIZP7k25TQ0ASMcQRSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZyDuY9EHxC6b3cGDP2eO51iv4iFDbwJIXPW0OiAiHDP3E8AJWLvulUcCrbd2aAagO
-         SdxLv88pAZKEi3cNsC09XHBPJguOTD36TRHJHbs6bCQlNmK0pgrREeTIaYWJEYfKon
-         n9m1EaODjoXeSmW0IO2yq4rDR4fNHV3RV6KB+ctyNuWroTw/8mdcxvQp6UXvODxLsa
-         w7UYDNoipv+bYpb9NMxEX+NNLYLlIwp1OFmF9Mm6bmYwXBbGO6wzKLG0/UMioVpeH9
-         sBN42Tq71Lvvca7RPtggzjQBSX3mTXrx3VdlAmWzbvgSImItPQX7bhmz7nDPUpmnIQ
-         QPxqovfxMjZzw==
+        Wed, 30 Mar 2022 17:49:41 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0469742EE3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:47:52 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 14:47:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648676870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u50nsqdeeBmYB/R6zpuCDe6/0f9hKHC+dYk7Osp22B8=;
+        b=esB9gPcXanFP8h8Jau49wEJcr2aePFSQXvdWM3ScOwueNHpuO9xw3L4Lc0I11tTH8YtN26
+        ikSsXB/CMvCjN8SwU72l1N8T9+ZB/y6UJSDV7LApG7gM5OxG93T/DUHdB+ZDlQ9aeWg55F
+        OW5fP/S3Wy/hhLyvjDSAQuV6Rn7f5qg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Mike Rapoport <rppt@linux.ibm.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     Roman Gushchin <guro@fb.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Minchan Kim <minchan@google.com>
+Subject: Re:
+ [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
+ reference from the function memblock_bottom_up() to the variable
+ .meminit.data:memblock
+Message-ID: <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
+References: <202203301412.MZ7wQvQz-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203301412.MZ7wQvQz-lkp@intel.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 1F6EAC009;
-        Wed, 30 Mar 2022 23:47:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648676883; bh=JBKLv303K90QCwUMTooNfskYmIZP7k25TQ0ASMcQRSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GIKyUZbIYuq5PoIeC4yUO63eTSwhcmASKxRBPNeHzfpNz5tN1WuQ4e3ooMhrhjpFd
-         bc+C1ya1dMT0Wp9gmjKiEsmT8lmem9rYf+hPuuRfq1HmNQ1wW1aVCfrHke2mxHYRn/
-         lutBfosOyCD1a++oHT4focbwJpEkMFVnLifT0vJrv8DxN2Tl3RGK4BXU4jXsZp01M7
-         noStU+yX+fmrzThCpFFrxLrbFdMZi2yR12iBst8eOVccrFgeweIB0O9G02nPTl2xDk
-         F6vKjNyKtX239KbthfMXLpobOTSHEIL6KvAPPN1e2OXxcoc/e9gnHwFY3Dwato5Ae7
-         jL1YX4yt5FqGQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id e5f1e8fa;
-        Wed, 30 Mar 2022 21:47:56 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 06:47:41 +0900
-From:   asmadeus@codewreck.org
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie
- detected)
-Message-ID: <YkTP/Talsy3KQBbf@codewreck.org>
-References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
- <2582025.XdajAv7fHn@silver>
- <Yj8WkjT+MsdFIfwr@codewreck.org>
- <3791738.ukkqOL8KQD@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3791738.ukkqOL8KQD@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Christian!
-
-Christian Schoenebeck wrote on Wed, Mar 30, 2022 at 02:21:16PM +0200:
-> Case  Linux kernel version           .config  msize    cache  duration  host cpu  errors/warnings
+On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
+> Hi Roman,
 > 
-> A)    5.17.0+[2] + msize patches[1]  debug    4186112  mmap   20m 40s   ~80%      none
-> B)    5.17.0+[2] + msize patches[1]  debug    4186112  loose  31m 28s   ~35%      several errors (compilation completed)
-> C)    5.17.0+[2] + msize patches[1]  debug    507904   mmap   20m 25s   ~84%      none
-> D)    5.17.0+[2] + msize patches[1]  debug    507904   loose  31m 2s    ~33%      several errors (compilation completed)
-> E)    5.17.0+[2]                     debug    512000   mmap   23m 45s   ~75%      none
-> F)    5.17.0+[2]                     debug    512000   loose  32m 6s    ~31%      several errors (compilation completed)
-> G)    5.17.0+[2]                     release  512000   mmap   23m 18s   ~76%      none
-> H)    5.17.0+[2]                     release  512000   loose  32m 33s   ~31%      several errors (compilation completed)
-> I)    5.17.0+[2] + msize patches[1]  release  4186112  mmap   20m 30s   ~83%      none
-> J)    5.17.0+[2] + msize patches[1]  release  4186112  loose  31m 21s   ~31%      several errors (compilation completed)
-> K)    5.10.84                        release  512000   mmap   39m 20s   ~80%      none
-> L)    5.10.84                        release  512000   loose  13m 40s   ~55%      none
-
-ow.
-
-> Disclaimer: I have not looked into the fs-cache sources yet, so I am not sure,
-> but my first impression is that probably something got broken with recent
-> fs-cache changes (see column errors, especially in comparison to case L) which
-> did not generate any errors)? And also note the huge build duration 
-> differences, especially in comparison to case L), so fs-cache (cache=loose)
-> also got significantly slower while cache=mmap OTOH became significantly
-> faster?
-
-Yes, that's a big regression; I didn't do any performance benchmark with
-the new patches as I didn't think it'd matter but I obviously should
-have.
-
-There is one thing I must check: I know new kernels will be writing in
-4k chunks and that is going to be very slow until the netfs write
-helpers are finished, but I thought the old code did the same.
-If the old code had bigger writes that performance will probably come
-back.
-Otherwise there's some other error like not reusing cached content we
-should use.
-
-
-> About the errors: I actually already see errors with cache=loose and recent
-> kernel version just when booting the guest OS. For these tests I chose some
-> sources which allowed me to complete the build to capture some benchmark as
-> well, I got some "soft" errors with those, but the build completed at least.
-> I had other sources OTOH which did not complete though and aborted with
-> certain invalid file descriptor errors, which I obviously could not use for
-> those benchmarks here.
-
-That's less surprising, the change was really huge. I'm annoyed because
-I did test part of a parallel linux kernel compilation with
-cache=fscache without noticing a problem :/
-
-I'll try to reproduce this weekend-ish.
-> > Christian Schoenebeck wrote on Sat, Mar 26, 2022 at 01:36:31PM +0100:
-> > hm, fscache code shouldn't be used for cache=mmap, I'm surprised you can
-> > hit this...
+> FYI, the error/warning still remains.
 > 
-> I assume that you mean that 9p driver does not explicitly ask for fs-cache
-> being used for mmap. I see that 9p uses the kernel's generalized mmap
-> implementation:
+> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+> head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+> commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
+> config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+>         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 > 
-> https://github.com/torvalds/linux/blob/d888c83fcec75194a8a48ccd283953bdba7b2550/fs/9p/vfs_file.c#L481
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> I haven't dived further into this, but the kernel has to use some kind of
-> filesystem cache anyway to provide the mmap functionality, so I guess it makes
-> sense that I got those warning messages from the FS-Cache subsystem?
-
-It uses the generic mmap which has vfs caching, but definitely not
-fs-cache.
-fs-cache adds more hooks for cachefilesd (writing file contents to disk
-for bigger cache) and things like that cache=loose/mmap shouldn't be
-caring about. cache=loose actually just disables some key parts so I'm
-not surprised it shares bugs with the new code, but cache=mmap is really
-independant and I need to trace where these come from...
-
-> With QEMU >= 5.2 you should see the following QEMU warning with your reproducer:
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
 > 
-> "
-> qemu-system-x86_64: warning: 9p: Multiple devices detected in same VirtFS
-> export, which might lead to file ID collisions and severe misbehaviours on
-> guest! You should either use a separate export for each device shared from
-> host or use virtfs option 'multidevs=remap'!
-> "
+> >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
+> The function memblock_bottom_up() references
+> the variable __meminitdata memblock.
+> This is often because memblock_bottom_up lacks a __meminitdata
+> annotation or the annotation of memblock is wrong.
 
-oh, I wasn't aware of the new option. Good job there!
+I guess this patch should fix it, however I fail to reproduce the original issue.
+Maybe it's up to the specific compiler version.
 
-It's the easiest way to reproduce but there are also harder to fix
-collisions, file systems only guarantee unicity for (fsid,inode
-number,version) which is usually bigger than 128 bits (although version
-is often 0), but version isn't exposed to userspace easily...
-What we'd want for unicity is handle from e.g. name_to_handle_at but
-that'd add overhead, wouldn't fit in qid path and not all fs are capable
-of providing one... The 9p protocol just doesn't want bigger handles
-than qid path.
+--
 
+From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
+From: Roman Gushchin <roman.gushchin@linux.dev>
+Date: Wed, 30 Mar 2022 14:42:12 -0700
+Subject: [PATCH] memblock: fix memblock_bottom_up() and
+ memblock_set_bottom_up() annotations
 
+memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
+annotations causing compiler warnings like:
+  WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
+  variable .meminit.data:memblock
 
-And, err, looking at the qemu code
+Fix it by adding the missing annotation and removing the wrong
+__meminit annotation.
 
-  qidp->version = stbuf->st_mtime ^ (stbuf->st_size << 8);
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+---
+ include/linux/memblock.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-so the qid is treated as "data version",
-but on kernel side we've treated it as inode version (i_version, see
-include/linux/iversion.h)
-
-(v9fs_test_inode_dotl checks the version is the same when comparing two
-inodes) so it will incorrectly identify two identical inodes as
-different.
-That will cause problems...
-Since you'll be faster than me could you try keeping it at 0 there?
-
-I see fscache also uses the qid version as 'auxilliary data', but I'm
-not sure what this is used for -- if it's a data version like thing then
-it will also at least invalidate the cache content all the time.
-
-
-Note there also is a data_version thing in the protocol in the response
-to getattr, which the protocol side of 9p in linux digilently fills in
-st_data_version, but we never use it that I can see.
-This is probably what 9p meant to fill, and fscache should rely on to
-detect file changes if that helps.
-
-
-I'm sorry I didn't see this sooner....
-
-> > If you have some kind of reproducer of invalid filedescriptor or similar
-> > errors I'd be happy to dig a bit more, I don't particularly like all
-> > aspect of our cache model but it's not good if it corrupts things.
-> 
-> Maybe you can reproduce this with the root fs setup [4] described above? As I
-> said, I immediately get errors when guest OS is booting. So I don't have to
-> run something fancy to get errors with cache=loose & recent kernel.
-
-Yes, this is much worse than I had first assumed when you first brought
-it up, I'll definitely set some time aside to investigate.
-
+diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+index 50ad19662a32..536bc2fc31e6 100644
+--- a/include/linux/memblock.h
++++ b/include/linux/memblock.h
+@@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
+ /*
+  * Set the allocation direction to bottom-up or top-down.
+  */
+-static inline __init_memblock void memblock_set_bottom_up(bool enable)
++static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
+ {
+ 	memblock.bottom_up = enable;
+ }
+@@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
+  * if this is true, that said, memblock will allocate memory
+  * in bottom-up direction.
+  */
+-static inline __init_memblock bool memblock_bottom_up(void)
++static inline __initdata_memblock bool memblock_bottom_up(void)
+ {
+ 	return memblock.bottom_up;
+ }
 -- 
-Dominique
+2.30.2
+

@@ -2,117 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FB34EBE3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F95C4EBE3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245083AbiC3KC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
+        id S245096AbiC3KD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238630AbiC3KCy (ORCPT
+        with ESMTP id S245084AbiC3KDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:02:54 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D77ABAB9E;
-        Wed, 30 Mar 2022 03:01:10 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id t19so17607294qtc.4;
-        Wed, 30 Mar 2022 03:01:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eWVEyP8xb0gTFVWSPikhwxNAnBSVX8r5lpCe0its8eQ=;
-        b=XBDxFUybSvvC1Okm5OVt9T10EOLnylyF9AIL+6sVVbVgcKiwFNiNc8HlYQpfCYM3Xg
-         OeMR9Hh7WZFiY4U8Zb9QJTCpzAidLpSYQGe5/oP+xwGePLI+ZMcXh5iIpJk6lIElMXlg
-         AEuMhs0X5NSui6VETZ1fjnmlFcxHPsgsgF2YvAPqFwB8jisJZvOH4WyIY34Peew7u08y
-         DCUi/hBu5LT96833QqdHPmD/8i7txHPPvqar/1/QotUijT/MrnPuk8HGkaR6UFbjT6zs
-         N9lHMjaElE7B2Lsm4117xKqrnhLW0rXh6ilafI/yuV60wwcsWZlNqQZhzJmfxYSH/BfD
-         5cnA==
-X-Gm-Message-State: AOAM531CKSlhy83d2UeOkpcPD5d63IYJ7MFtJCYHT1K9Vf5DyY3r6NEx
-        T2AzeSdYH8BDE6HboJE3td7gfdiR1hVaEw==
-X-Google-Smtp-Source: ABdhPJyggRKEAKdza6eL+xsqfl3Lbe2LC+bU1LHjQKBDxw9ljm7XGvdQnctaM7WhblVR7NEv7uhMAw==
-X-Received: by 2002:a05:622a:48e:b0:2e0:706f:1d4 with SMTP id p14-20020a05622a048e00b002e0706f01d4mr31845297qtx.326.1648634468538;
-        Wed, 30 Mar 2022 03:01:08 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm11279652qki.49.2022.03.30.03.01.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 03:01:07 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2e5757b57caso212260577b3.4;
-        Wed, 30 Mar 2022 03:01:06 -0700 (PDT)
-X-Received: by 2002:a25:aa0e:0:b0:633:7c3b:94a0 with SMTP id
- s14-20020a25aa0e000000b006337c3b94a0mr33028380ybi.546.1648634466403; Wed, 30
- Mar 2022 03:01:06 -0700 (PDT)
+        Wed, 30 Mar 2022 06:03:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952CEBAB9E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:01:40 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U8HXxo027709;
+        Wed, 30 Mar 2022 10:01:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=kQW9mPizhJGzxYMtGJ7PDAB33c2sE1FSIhgbNgA2hx8=;
+ b=PjS1EFIyw/zW70ClbaX5YxFi6Qb8vvcd1pf/M+F72PWXDA7AyjjhQhf7z67TRisE8uWY
+ BHwEaZKM+EzEWsAxA2QbG7B3sAWByiDJ1ztPREd7hLp6yFxMgagqTp/o7bCdNQ7RQRCV
+ 9pbeKKQVa9TLBRtVHut7OTKvxkMfK5XjYsG2+Zhel4z/5vc7rROBE7TVNr5cyjB2PlFR
+ QVyzMwWW6WrEDAxOQhCgOiS2D8/+qNhG81O+yYYeCIIu+7LGbrNMH5Zm6elfp16HLwCQ
+ yUSdi93Fftdpe+FgcJqlGwG4jiaY8vPpoPFvsbr72sv1nSC3xpzxPT1/L31JAY5xfHMc xg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f3yqmk3ku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 10:01:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22U9rPHN032506;
+        Wed, 30 Mar 2022 10:01:18 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3f3rs3k5w3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 10:01:18 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UA1GSc37683576
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 10:01:16 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3170AA405F;
+        Wed, 30 Mar 2022 10:01:16 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F3570A404D;
+        Wed, 30 Mar 2022 10:01:15 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 30 Mar 2022 10:01:15 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] entry: fix compile error in
+ dynamic_irqentry_exit_cond_resched()
+References: <20220330084328.1805665-1-svens@linux.ibm.com>
+        <YkQdMDlIt1iHWS3U@FVFF77S0Q05N> <yt9dilrvztno.fsf@linux.ibm.com>
+        <YkQog3+80izN1e1q@FVFF77S0Q05N>
+Date:   Wed, 30 Mar 2022 12:01:15 +0200
+In-Reply-To: <YkQog3+80izN1e1q@FVFF77S0Q05N> (Mark Rutland's message of "Wed,
+        30 Mar 2022 10:53:07 +0100")
+Message-ID: <yt9dee2jzrmc.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com> <20220329152926.50958-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220329152926.50958-2-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Mar 2022 12:00:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXhiLi8YxxG0f9hBfBkwds3LAdJNSOBSR9FYE4_z=RvcA@mail.gmail.com>
-Message-ID: <CAMuHMdXhiLi8YxxG0f9hBfBkwds3LAdJNSOBSR9FYE4_z=RvcA@mail.gmail.com>
-Subject: Re: [PATCH v2 01/13] gpiolib: Introduce for_each_gpiochip_node() loop helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Qianggui Song <qianggui.song@amlogic.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        openbmc@lists.ozlabs.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0C4c2wXXIdyfI4nJnqzU8vwqXEeISIRm
+X-Proofpoint-ORIG-GUID: 0C4c2wXXIdyfI4nJnqzU8vwqXEeISIRm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_03,2022-03-29_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=709 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203300049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> Introduce for_each_gpiochip_node() loop helper which iterates over
-> the GPIO controller child nodes of a given device.
+Mark Rutland <mark.rutland@arm.com> writes:
+
+>> I was wondering whether we can make dynamic_irqentry_exit_cond_resched()
+>> static, so it gets inlined. On s390 the compiler generates a branch to
+>> that function just to return immediately if the static key isn't enabled.
+>> With static it would get inlined, and therefore save one function call.
+>> What do you think?
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> I appreciate that it saves one call, but does that actually matter in practice,
+> given this is called only once per interrupt?
+>
+> I'm not fundamentally opposed to changing it, but doing so would make it
+> different from all the other dynamic_*() cases which need the check to be
+> out-of-line to avoid bloating the callers, and it's not clear to me that we'd
+> gain much by doing so.
+>
+> FWIW, on arm64 we had some additional conditions we have to check, so we roll
+> our own (out-of-line) implementation anyway. So doing something arch-specific
+> is also an option.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I didn't measure it, i just noticed it by looking at the generated code.
+Given your argument about consistency with the other functions i think
+we leave it that way.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks!
+Sven

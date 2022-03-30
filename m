@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784314EC96F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94734EC979
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348687AbiC3QRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S1348712AbiC3QTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiC3QRn (ORCPT
+        with ESMTP id S1348693AbiC3QS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:17:43 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4F9AE57
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:15:58 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-dee0378ce7so12169184fac.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:15:58 -0700 (PDT)
+        Wed, 30 Mar 2022 12:18:58 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2831FDEFF
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:17:13 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id d15-20020a9d72cf000000b005cda54187c3so15243510otk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=HmtpU+iKeqqs1Tum0ObqFls2q0zemhd+lsKd6q135Is=;
-        b=B8pkD9RwGTCaNZUS/K1UWK/0J7doiMqEmJFC5d3l4Rl8RXN4moZDl+LJbFyB5EjdEc
-         iI8g0b+BcU+hYJFqDnhJz+sZhp4Qj8OOypg73DDvJPfLwsX8l0IDHbgWCbGtJXjBSlMK
-         Epbl2nnRX9ZUusz8m40G2uMZSuihkDQ6YmJ2yAKyMxODf7MOl1e6YWypavlDkjgQMkRS
-         Qw/f2qi6USZyvIN1CsXTAn/6GsR3832CctlVvK+x2g/Fqs4OpE4AxFeHvleeg+Y4cG9Y
-         z2Lq6FM+DiPB9tHfo0+dXoK2Y338+e9CZULBQOHb9w61TjL/eic3frY8+j0G8JQ+ofEv
-         m6CQ==
+        bh=vuEnLJ19vsPpEYtmhA/N2c2iE3FXZJsfXS8pCpbwyeI=;
+        b=SVvmOryWc6YP1SQQ2Cc7u/n53zTpzKfv0zGLTzX0DPPxYurtAzkwMQYY0oSCbW9Oq8
+         payS0h5OWpfEZ5+g8dK0xmZc3Vlao1aj8hus9HyYx9/5t6oS+xgmZyl8jIn6oLLhbIUn
+         TZeHBnUfAZVXBAWLRzphGz7eA+oy5BXW+P+fHHUbctjgKxZsL3jhBcnaG6w3A7vQaFjv
+         2kPIgch506HGxpevQX/cvJ0I4YFmJjy307H1aFKYBmK+iW8vEnjIFnRk85XU4GE+KsNx
+         gWMHSBtiJxVMLxKr08bQeaU7dkqZq1dQss2L8eV0GpMI5ptvpZkQwPG5Rf/v2i6+rik0
+         OhIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=HmtpU+iKeqqs1Tum0ObqFls2q0zemhd+lsKd6q135Is=;
-        b=w8XK72XaQQ9HTGj487aBW6/a2/mHr3Tcw+13CJjUUC9wAZz0Ea8HF3bCvSyFgy+7Qu
-         w6hug5mDgUaGgsWNg6xR9oVNutPwOCJKMbEsM2fj2ayDm+V3QSdu899OF9/KvftHcwM6
-         ioCuV2J3UG6I+eUM+LIGWSj8yjzjMEFAdGGEHGvdVO9hZux8uxTh5PuTS2wNY8BS3nS+
-         2pj34I6lyOR+0ruGFq3wz5vFLOTsWLfAfuFqw/j7USpmlVifR6lgG1IYysZg26zFUNx0
-         Tu2GwvbvUKrOxvMqgaby+sGJUx3Rb5t1j8tco6FsfWkgSuVRHfA0YNsI/ol/wH6p2jfR
-         Lelw==
-X-Gm-Message-State: AOAM532Ri6L5HqVNHp0M/hmgs+yfaJBLwMt9LaD4+wsENi7aKcqHKdGo
-        NDuOZNbVp/RwQL1wjvvblhmj8qUYbxs=
-X-Google-Smtp-Source: ABdhPJygH8VYCLm/rZWowqvlG5Hkb9RuADdaf+ZZxHyhfhaWHkcOCEnFcKkUj9toCG7zGHjMkxAHYg==
-X-Received: by 2002:a05:6870:1496:b0:dd:fe5c:4bbc with SMTP id k22-20020a056870149600b000ddfe5c4bbcmr175101oab.166.1648656957653;
-        Wed, 30 Mar 2022 09:15:57 -0700 (PDT)
+        bh=vuEnLJ19vsPpEYtmhA/N2c2iE3FXZJsfXS8pCpbwyeI=;
+        b=JuAAwo10pUSTDq/KnGlTP3faoMuUAbomCy8iRrwPoULpDvsL27YArVttGLeKdlZ1Zb
+         8wv045buFNriVYPeTwtckooD25IE/rlQ5bJNINuSymKlx4MYtp8esuA5v5ZQTllw/tc9
+         dZT1uy4k5Bl4OCl0jutxNyTjR/AsXXQ2hgizdzt3PiXCUwNutcvhHIl7BknPuyPkgsJZ
+         g0Uggqn8gem7h1STGHMFw4hVZE4BoYTz3iwR9DEGNFNCwYmaXuPvfiUl551TS6B6PnVT
+         ClO14Cr8RtGZXeXLLou7dQAf5YIodKLtcM0Q64G6vL/JzRzVK8ZPLKXI5VZpJkBORAPw
+         xI7g==
+X-Gm-Message-State: AOAM531f0CQx32Wdu/n9RxM2tZVktIV5fu0FGOrzg+tLORMlSHow6lhz
+        T1hgBUODhUzV6YWlP9qNIN5Nw/czGpI=
+X-Google-Smtp-Source: ABdhPJyQT7UGu+atLDZeY+jfTEIPxsW25O3gOlcaWjwvDX6k0nbakXM6rZgkIMjFnKONnWTP7dK4aA==
+X-Received: by 2002:a9d:62d2:0:b0:5b2:4662:f466 with SMTP id z18-20020a9d62d2000000b005b24662f466mr3517433otk.304.1648657032411;
+        Wed, 30 Mar 2022 09:17:12 -0700 (PDT)
 Received: from quaco.ghostprotocols.net ([187.19.239.165])
-        by smtp.gmail.com with ESMTPSA id w8-20020aca3008000000b002ef7e3ad3b8sm10293103oiw.29.2022.03.30.09.15.56
+        by smtp.gmail.com with ESMTPSA id m15-20020a9d644f000000b005ce0a146bfcsm836404otl.59.2022.03.30.09.17.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 09:15:56 -0700 (PDT)
+        Wed, 30 Mar 2022 09:17:11 -0700 (PDT)
 From:   arnaldo.melo@gmail.com
 X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9F5D240407; Wed, 30 Mar 2022 13:15:53 -0300 (-03)
-Date:   Wed, 30 Mar 2022 13:15:53 -0300
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Oliver Upton <oupton@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
+        id 8D63A40407; Wed, 30 Mar 2022 13:17:08 -0300 (-03)
+Date:   Wed, 30 Mar 2022 13:17:08 -0300
+To:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH FYI] tools headers UAPI: Sync linux/kvm.h with the kernel
+Subject: [PATCH FYI] tools headers UAPI: Sync drm/i915_drm.h with the kernel
  sources
-Message-ID: <YkSCOWHQdir1lhdJ@kernel.org>
+Message-ID: <YkSChHqaOApscFQ0@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -79,75 +77,92 @@ Just FYI, I'm carrying this on the perf tools tree.
 
 ---
 
+To pick up the changes in:
 
-To pick the changes in:
+  caa574ffc4aaf4f2 ("drm/i915/uapi: document behaviour for DG2 64K support")
 
-  6d8491910fcd3324 ("KVM: x86: Introduce KVM_CAP_DISABLE_QUIRKS2")
-  ef11c9463ae00630 ("KVM: s390: Add vm IOCTL for key checked guest absolute memory access")
-  e9e9feebcbc14b17 ("KVM: s390: Add optional storage key checking to MEMOP IOCTL")
-
-That just rebuilds perf, as these patches don't add any new KVM ioctl to
-be harvested for the the 'perf trace' ioctl syscall argument
-beautifiers.
-
-This is also by now used by tools/testing/selftests/kvm/, a simple test
-build succeeded.
+That don't add any new ioctl, so no changes in tooling.
 
 This silences this perf build warning:
 
-  Warning: Kernel ABI header at 'tools/include/uapi/linux/kvm.h' differs from latest version at 'include/uapi/linux/kvm.h'
-  diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+  Warning: Kernel ABI header at 'tools/include/uapi/drm/i915_drm.h' differs from latest version at 'include/uapi/drm/i915_drm.h'
+  diff -u tools/include/uapi/drm/i915_drm.h include/uapi/drm/i915_drm.h
 
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc: Oliver Upton <oupton@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
 Link: http://lore.kernel.org/lkml/
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- tools/include/uapi/linux/kvm.h | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ tools/include/uapi/drm/i915_drm.h | 45 +++++++++++++++++++++++++++----
+ 1 file changed, 40 insertions(+), 5 deletions(-)
 
-diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-index bbc6b7c2dc1b3a54..91a6fe4e02c08c4b 100644
---- a/tools/include/uapi/linux/kvm.h
-+++ b/tools/include/uapi/linux/kvm.h
-@@ -562,9 +562,12 @@ struct kvm_s390_mem_op {
- 	__u32 op;		/* type of operation */
- 	__u64 buf;		/* buffer in userspace */
- 	union {
--		__u8 ar;	/* the access register number */
-+		struct {
-+			__u8 ar;	/* the access register number */
-+			__u8 key;	/* access key, ignored if flag unset */
-+		};
- 		__u32 sida_offset; /* offset into the sida */
--		__u8 reserved[32]; /* should be set to 0 */
-+		__u8 reserved[32]; /* ignored */
- 	};
- };
- /* types for kvm_s390_mem_op->op */
-@@ -572,9 +575,12 @@ struct kvm_s390_mem_op {
- #define KVM_S390_MEMOP_LOGICAL_WRITE	1
- #define KVM_S390_MEMOP_SIDA_READ	2
- #define KVM_S390_MEMOP_SIDA_WRITE	3
-+#define KVM_S390_MEMOP_ABSOLUTE_READ	4
-+#define KVM_S390_MEMOP_ABSOLUTE_WRITE	5
- /* flags for kvm_s390_mem_op->flags */
- #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
- #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
-+#define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
+diff --git a/tools/include/uapi/drm/i915_drm.h b/tools/include/uapi/drm/i915_drm.h
+index 914ebd9290e5192d..05c3642aaece4429 100644
+--- a/tools/include/uapi/drm/i915_drm.h
++++ b/tools/include/uapi/drm/i915_drm.h
+@@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
+ 	/**
+ 	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
+ 	 * the user with the GTT offset at which this object will be pinned.
++	 *
+ 	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
+ 	 * presumed_offset of the object.
++	 *
+ 	 * During execbuffer2 the kernel populates it with the value of the
+ 	 * current GTT offset of the object, for future presumed_offset writes.
++	 *
++	 * See struct drm_i915_gem_create_ext for the rules when dealing with
++	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
++	 * minimum page sizes, like DG2.
+ 	 */
+ 	__u64 offset;
  
- /* for KVM_INTERRUPT */
- struct kvm_interrupt {
-@@ -1137,6 +1143,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_PPC_AIL_MODE_3 210
- #define KVM_CAP_S390_MEM_OP_EXTENSION 211
- #define KVM_CAP_PMU_CAPABILITY 212
-+#define KVM_CAP_DISABLE_QUIRKS2 213
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
+@@ -3144,11 +3150,40 @@ struct drm_i915_gem_create_ext {
+ 	 *
+ 	 * The (page-aligned) allocated size for the object will be returned.
+ 	 *
+-	 * Note that for some devices we have might have further minimum
+-	 * page-size restrictions(larger than 4K), like for device local-memory.
+-	 * However in general the final size here should always reflect any
+-	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
+-	 * extension to place the object in device local-memory.
++	 *
++	 * DG2 64K min page size implications:
++	 *
++	 * On discrete platforms, starting from DG2, we have to contend with GTT
++	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
++	 * objects.  Specifically the hardware only supports 64K or larger GTT
++	 * page sizes for such memory. The kernel will already ensure that all
++	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
++	 * sizes underneath.
++	 *
++	 * Note that the returned size here will always reflect any required
++	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
++	 * such as DG2.
++	 *
++	 * Special DG2 GTT address alignment requirement:
++	 *
++	 * The GTT alignment will also need to be at least 2M for such objects.
++	 *
++	 * Note that due to how the hardware implements 64K GTT page support, we
++	 * have some further complications:
++	 *
++	 *   1) The entire PDE (which covers a 2MB virtual address range), must
++	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
++	 *   PDE is forbidden by the hardware.
++	 *
++	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
++	 *   objects.
++	 *
++	 * To keep things simple for userland, we mandate that any GTT mappings
++	 * must be aligned to and rounded up to 2MB. The kernel will internally
++	 * pad them out to the next 2MB boundary. As this only wastes virtual
++	 * address space and avoids userland having to copy any needlessly
++	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
++	 * is deemed to be a good compromise.
+ 	 */
+ 	__u64 size;
+ 	/**
 -- 
 2.35.1
 

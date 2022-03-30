@@ -2,321 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEE44EB898
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C3E4EB89C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 05:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242178AbiC3C7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S242196AbiC3DCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 23:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242171AbiC3C7U (ORCPT
+        with ESMTP id S239063AbiC3DCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:59:20 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AE6215913;
-        Tue, 29 Mar 2022 19:57:30 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id d7so27319067wrb.7;
-        Tue, 29 Mar 2022 19:57:30 -0700 (PDT)
+        Tue, 29 Mar 2022 23:02:41 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2031753BE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 20:00:57 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id j83so20879618oih.6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 20:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H5pCMOStN2vZePv5vrsJBjBFHU4dBOm5rohHS7DHSKo=;
-        b=kBgpUZR2OsU47SDSTrmD9GkEw9wITyiVoBxHSsURPq6BQ8AgErCOkYFC8XPBE3jii4
-         DQyVglEUjC8O3CF1UznGhIujoyTQEZwszTwas9yg486iyGToOcKeYzE4Z6H3sC4okbG2
-         GvB9uT7tJcQpDDc0ai15Jd0ngE9UsUYMow/hdVQL1VvGPWQCFjfilMztO9ikYPaK01ET
-         zKiGmhC6NAqV/ajXqqHoFsp1Sc8dcOHVJUauvNP845X6gEci1Mp2TAn1yTG0m+b8tkKt
-         li4p4fjmhUTp3rQ/POxMmFpCGT7mo3Lvw5i79+oHtTHEU7EQRty+uowHfJ/BUxo+HZL4
-         DGFw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uNFWdiLOQ2v9u23dgUqa15YJW6/w3bRd0yjEQLcdcr4=;
+        b=KEkWd1SMtZYZDEFRpUDIjVy5iCSaiD4jEmLknTJo/tvMItdGcgd0Seqk0fR1Yw38G/
+         Dw3MJ29cY/wVuByN0WIW0PWMYR2buO8lLko4eF6KrTXa1Gp6HqY4hQHeOU9NsFpH7Tg4
+         JemfCRPQDLNcAby/3LZYEjqxPjtx7hPgeTjX5xfAz7cdjxTOzU73tYloCDRDOgmgyvI7
+         b9HlSp+RHrx5O1uabDDg2FIVo2gKx6qagwbitjPmzaVbAkm/g2zWYVMP+cvrUykppZV8
+         f/QyIls07S6zJGF0vQROMbKcAOlaYgc4fCPQQ14Vp/ndyAgYp4NTw3a2C4Q2NeqW8So8
+         spcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H5pCMOStN2vZePv5vrsJBjBFHU4dBOm5rohHS7DHSKo=;
-        b=eJ+Og5i+dTMFj+TUDy5xBWCYuLWOLCPWkBh61MA2gUitbMKP53ygEuYLIkT4aZlvV4
-         ryLitn4eZsH9DLo9HIV28m8dDBLACu41acqF5I6VHKKsd2Kqeugx1QMXFYlLQqJkLChn
-         g6BowRutqacZ25c+QYK7r/LyYgrJXCmI5Eam0nyit4mXPcq2fKYW1nZkyR2hE+dLMRFs
-         OOKIfv7+TKx5FZH3ztxJyi9rW2oySwW5RRcOoylexC0xLNxF991FOX0ihKcXeGHvGphZ
-         8Brp3iblr8K+ploSF8sax1hxy6HunkM8eiX7tHRdhUVJABPGh3pqyOl5HWbNZB3MSVul
-         wisw==
-X-Gm-Message-State: AOAM5304ntB4fWnScYA7a68oUcCQ8Y4QQ9d0zro3KG49c5aZbK6W98NO
-        mYNiNUb/+PT4UfCtKJHFdpvw59rEQ+bim5TzfgRLWiAzIzw=
-X-Google-Smtp-Source: ABdhPJwQ7AO9z0QHc10X1FJLzOlUZRQ7ha5VxhV+IfN1ZH6G1jkeV1VAl2l4G6ttc5FDi0g+rWfQ4U6JljQjCbbhTYw=
-X-Received: by 2002:adf:f20f:0:b0:203:fc73:a9a0 with SMTP id
- p15-20020adff20f000000b00203fc73a9a0mr34859358wro.418.1648609049190; Tue, 29
- Mar 2022 19:57:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uNFWdiLOQ2v9u23dgUqa15YJW6/w3bRd0yjEQLcdcr4=;
+        b=RBfHAGv2PayYG+Ea9mygBeuTwD+/sJ/JH1yN/+Ce9IpUqV94ePmpPUwhk3+yHcGH1q
+         q7AYY7mKgovNdkfSQ9/tbd4W60m7zFWoEh5LFrU+fWHsnQqm53Dp9pB2ssiWsCLppnkn
+         XM1G582E5nErV7a0OkWnpCCLNA6tOShMmMVZmwOlHk3i3vlKkNPwK+MYSIt3J6dxmoLh
+         fvn48C+R43QTTeFyxcm5lquv0CoCS3a0pSrq0ERa/QcrcAxd33z5OxgTuzYgbzCSdWp3
+         PPg4f19P3XD7Qzy7/zzXYIrH6MaOq+RvJUws44GpxRzy64wYqbl11uC8aaTsfiXx0kbJ
+         PC/w==
+X-Gm-Message-State: AOAM533vcp6M0GsiPPTyrUV+8m/UOrfsR3j/hEWGF/dAxRJABCd3xhp7
+        hsqiyfN216FIot15gPZOYCNebw==
+X-Google-Smtp-Source: ABdhPJyr/FlTwpxm26nw7IcuV0f5gcGfjKVOLSrHhZyUlwa0t4kDYeyyLTyzHCnFy6Qk2nKNJJXStQ==
+X-Received: by 2002:a05:6808:23cc:b0:2d9:dc76:1f36 with SMTP id bq12-20020a05680823cc00b002d9dc761f36mr970242oib.292.1648609256406;
+        Tue, 29 Mar 2022 20:00:56 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id y3-20020a056870e50300b000d9be6436f1sm9002789oag.29.2022.03.29.20.00.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 20:00:55 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Suman Anna <s-anna@ti.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Rakesh Pillai <pillair@codeaurora.org>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>,
+        Alistair Delva <adelva@google.com>,
+        Puranjay Mohan <p-mohan@ti.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [GIT PULL] remoteproc updates for v5.18
+Date:   Tue, 29 Mar 2022 22:00:55 -0500
+Message-Id: <20220330030055.189960-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220329230105.601666-1-robdclark@gmail.com> <20220329230105.601666-10-robdclark@gmail.com>
- <CAA8EJpqHCfLLKHzA8jTmLhdJCne31eWYqKjXBtTDGko3CF1_Hg@mail.gmail.com>
-In-Reply-To: <CAA8EJpqHCfLLKHzA8jTmLhdJCne31eWYqKjXBtTDGko3CF1_Hg@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 29 Mar 2022 19:58:20 -0700
-Message-ID: <CAF6AEGtDfVHFArYHJ61sWK3ybV6xX-x9p=z=f-EP4NZBRLOPZg@mail.gmail.com>
-Subject: Re: [PATCH 9/9] drm/msm: Add a way for userspace to allocate GPU iova
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:42 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, 30 Mar 2022 at 02:00, Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > The motivation at this point is mainly native userspace mesa driver in a
-> > VM guest.  The one remaining synchronous "hotpath" is buffer allocation,
-> > because guest needs to wait to know the bo's iova before it can start
-> > emitting cmdstream/state that references the new bo.  By allocating the
-> > iova in the guest userspace, we no longer need to wait for a response
-> > from the host, but can just rely on the allocation request being
-> > processed before the cmdstream submission.  Allocation faulures (OoM,
->
-> failures
->
-> > etc) would just be treated as context-lost (ie. GL_GUILTY_CONTEXT_RESET)
-> > or subsequent allocations (or readpix, etc) can raise GL_OUT_OF_MEMORY.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
-> Minor nits (above and below).
->
-> > ---
-> >  drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 ++++++
-> >  drivers/gpu/drm/msm/msm_drv.c           | 21 +++++++++++
-> >  drivers/gpu/drm/msm/msm_gem.c           | 48 +++++++++++++++++++++++++
-> >  drivers/gpu/drm/msm/msm_gem.h           |  8 +++++
-> >  drivers/gpu/drm/msm/msm_gem_vma.c       |  2 ++
-> >  include/uapi/drm/msm_drm.h              |  3 ++
-> >  6 files changed, 92 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > index 6385ab06632f..4caae0229518 100644
-> > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > @@ -281,6 +281,16 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
-> >         case MSM_PARAM_SUSPENDS:
-> >                 *value = gpu->suspend_count;
-> >                 return 0;
-> > +       case MSM_PARAM_VA_START:
-> > +               if (ctx->aspace == gpu->aspace)
-> > +                       return -EINVAL;
-> > +               *value = ctx->aspace->va_start;
-> > +               return 0;
-> > +       case MSM_PARAM_VA_SIZE:
-> > +               if (ctx->aspace == gpu->aspace)
-> > +                       return -EINVAL;
-> > +               *value = ctx->aspace->va_size;
-> > +               return 0;
-> >         default:
-> >                 DBG("%s: invalid param: %u", gpu->name, param);
-> >                 return -EINVAL;
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> > index a5eed5738ac8..7394312cf075 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > @@ -719,6 +719,23 @@ static int msm_ioctl_gem_info_iova(struct drm_device *dev,
-> >         return msm_gem_get_iova(obj, ctx->aspace, iova);
-> >  }
-> >
-> > +static int msm_ioctl_gem_info_set_iova(struct drm_device *dev,
-> > +               struct drm_file *file, struct drm_gem_object *obj,
-> > +               uint64_t iova)
-> > +{
-> > +       struct msm_drm_private *priv = dev->dev_private;
-> > +       struct msm_file_private *ctx = file->driver_priv;
-> > +
-> > +       if (!priv->gpu)
-> > +               return -EINVAL;
-> > +
-> > +       /* Only supported if per-process address space is supported: */
-> > +       if (priv->gpu->aspace == ctx->aspace)
-> > +               return -EINVAL;
-> > +
-> > +       return msm_gem_set_iova(obj, ctx->aspace, iova);
-> > +}
-> > +
-> >  static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
-> >                 struct drm_file *file)
-> >  {
-> > @@ -733,6 +750,7 @@ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
-> >         switch (args->info) {
-> >         case MSM_INFO_GET_OFFSET:
-> >         case MSM_INFO_GET_IOVA:
-> > +       case MSM_INFO_SET_IOVA:
-> >                 /* value returned as immediate, not pointer, so len==0: */
-> >                 if (args->len)
-> >                         return -EINVAL;
-> > @@ -757,6 +775,9 @@ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
-> >         case MSM_INFO_GET_IOVA:
-> >                 ret = msm_ioctl_gem_info_iova(dev, file, obj, &args->value);
-> >                 break;
-> > +       case MSM_INFO_SET_IOVA:
-> > +               ret = msm_ioctl_gem_info_set_iova(dev, file, obj, args->value);
-> > +               break;
-> >         case MSM_INFO_SET_NAME:
-> >                 /* length check should leave room for terminating null: */
-> >                 if (args->len >= sizeof(msm_obj->name)) {
-> > diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-> > index bf4af17e2f1e..3122ba308f31 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem.c
-> > +++ b/drivers/gpu/drm/msm/msm_gem.c
-> > @@ -525,6 +525,54 @@ int msm_gem_get_iova(struct drm_gem_object *obj,
-> >         return ret;
-> >  }
-> >
-> > +static int clear_iova(struct drm_gem_object *obj,
-> > +                     struct msm_gem_address_space *aspace)
-> > +{
-> > +       struct msm_gem_vma *vma = lookup_vma(obj, aspace);
-> > +
-> > +       if (!vma)
-> > +               return 0;
-> > +
-> > +       if (vma->inuse)
->
-> msm_gem_vma_inuse() ?
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 
-Ahh, right, this was the exact motivation for msm_gem_vma_inuse() and
-ofc I miss it while rebasing ;-)
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
 
-And -EOPNOTSUPP elsewhere is a good idea.. I've fixed both locally,
-and the commit msg.  Thanks!
+are available in the Git repository at:
 
-BR,
--R
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v5.18
 
-> > +               return -EBUSY;
-> > +
-> > +       msm_gem_purge_vma(vma->aspace, vma);
-> > +       msm_gem_close_vma(vma->aspace, vma);
-> > +       del_vma(vma);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +/*
-> > + * Get the requested iova but don't pin it.  Fails if the requested iova is
-> > + * not available.  Doesn't need a put because iovas are currently valid for
-> > + * the life of the object.
-> > + *
-> > + * Setting an iova of zero will clear the vma.
-> > + */
-> > +int msm_gem_set_iova(struct drm_gem_object *obj,
-> > +                    struct msm_gem_address_space *aspace, uint64_t iova)
-> > +{
-> > +       int ret = 0;
-> > +
-> > +       msm_gem_lock(obj);
-> > +       if (!iova) {
-> > +               ret = clear_iova(obj, aspace);
-> > +       } else {
-> > +               struct msm_gem_vma *vma;
-> > +               vma = get_vma_locked(obj, aspace, iova, iova + obj->size);
-> > +               if (IS_ERR(vma)) {
-> > +                       ret = PTR_ERR(vma);
-> > +               } else if (GEM_WARN_ON(vma->iova != iova)) {
-> > +                       clear_iova(obj, aspace);
-> > +                       ret = -ENOSPC;
-> > +               }
-> > +       }
-> > +       msm_gem_unlock(obj);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> >  /*
-> >   * Unpin a iova by updating the reference counts. The memory isn't actually
-> >   * purged until something else (shrinker, mm_notifier, destroy, etc) decides
-> > diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-> > index 38d66e1248b1..efa2e5c19f1e 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem.h
-> > +++ b/drivers/gpu/drm/msm/msm_gem.h
-> > @@ -38,6 +38,12 @@ struct msm_gem_address_space {
-> >
-> >         /* @faults: the number of GPU hangs associated with this address space */
-> >         int faults;
-> > +
-> > +       /** @va_start: lowest possible address to allocate */
-> > +       uint64_t va_start;
-> > +
-> > +       /** @va_size: the size of the address space (in bytes) */
-> > +       uint64_t va_size;
-> >  };
-> >
-> >  struct msm_gem_address_space *
-> > @@ -144,6 +150,8 @@ struct msm_gem_vma *msm_gem_get_vma_locked(struct drm_gem_object *obj,
-> >                                            struct msm_gem_address_space *aspace);
-> >  int msm_gem_get_iova(struct drm_gem_object *obj,
-> >                 struct msm_gem_address_space *aspace, uint64_t *iova);
-> > +int msm_gem_set_iova(struct drm_gem_object *obj,
-> > +               struct msm_gem_address_space *aspace, uint64_t iova);
-> >  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
-> >                 struct msm_gem_address_space *aspace, uint64_t *iova,
-> >                 u64 range_start, u64 range_end);
-> > diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
-> > index 6f9a402450f9..354f91aff573 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem_vma.c
-> > +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
-> > @@ -182,6 +182,8 @@ msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
-> >         spin_lock_init(&aspace->lock);
-> >         aspace->name = name;
-> >         aspace->mmu = mmu;
-> > +       aspace->va_start = va_start;
-> > +       aspace->va_size  = size;
-> >
-> >         drm_mm_init(&aspace->mm, va_start, size);
-> >
-> > diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-> > index 794ad1948497..3c7b097c4e3d 100644
-> > --- a/include/uapi/drm/msm_drm.h
-> > +++ b/include/uapi/drm/msm_drm.h
-> > @@ -84,6 +84,8 @@ struct drm_msm_timespec {
-> >  #define MSM_PARAM_SYSPROF    0x0b  /* WO: 1 preserves perfcntrs, 2 also disables suspend */
-> >  #define MSM_PARAM_COMM       0x0c  /* WO: override for task->comm */
-> >  #define MSM_PARAM_CMDLINE    0x0d  /* WO: override for task cmdline */
-> > +#define MSM_PARAM_VA_START   0x0e  /* RO: start of valid GPU iova range */
-> > +#define MSM_PARAM_VA_SIZE    0x0f  /* RO: size of valid GPU iova range (bytes) */
-> >
-> >  /* For backwards compat.  The original support for preemption was based on
-> >   * a single ring per priority level so # of priority levels equals the #
-> > @@ -135,6 +137,7 @@ struct drm_msm_gem_new {
-> >  #define MSM_INFO_GET_IOVA      0x01   /* get iova, returned by value */
-> >  #define MSM_INFO_SET_NAME      0x02   /* set the debug name (by pointer) */
-> >  #define MSM_INFO_GET_NAME      0x03   /* get debug name, returned by pointer */
-> > +#define MSM_INFO_SET_IOVA      0x04   /* set the iova, passed by value */
-> >
-> >  struct drm_msm_gem_info {
-> >         __u32 handle;         /* in */
-> > --
-> > 2.35.1
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+for you to fetch changes up to 59983c74fc42eb2448df693113bf725abbda05f9:
+
+  remoteproc: qcom_q6v5_mss: Create platform device for BAM-DMUX (2022-03-11 20:21:56 -0600)
+
+----------------------------------------------------------------
+remoteproc updates for v5.18
+
+In the remoteproc core, it's now possible to mark the sysfs attributes
+read only on a per-instance basis, which is then used by the TI wkup M3
+driver. The rproc_shutdown() interface propagates errors to the caller
+and an array underflow is fixed in the debugfs interface. The
+rproc_da_to_va() API is moved to the public API to allow e.g. child
+rpmsg devices to acquire pointers to memory shared with the remote
+processor.
+
+The TI K3 R5F and DSP drivers gains support for attaching to instances
+already started by the bootloader, aka IPC-only mode.
+
+The Mediatek remoteproc driver gains support for the MT8186 SCP. The
+driver's probe function is reordered and moved to use the devres version
+of rproc_alloc() to save a few gotos. The driver's probe function is
+also transitioned to use dev_err_probe() to provide better debug
+support.
+
+Support for the Qualcomm SC7280 Wireless Subsystem (WPSS) is introduced.
+The Hexagon based remoteproc drivers gains support for voting for
+interconnect bandwidth during launch of the remote processor. The modem
+subsystem (MSS) driver gains support for probing the BAM-DMUX
+driver, which provides the network interface towards the modem on a set
+of older Qualcomm platforms.
+In addition a number a bug fixes are introduces in the Qualcomm drivers.
+
+Lastly Qualcomm ADSP DeviceTree binding is converted to YAML format, to
+allow validation of DeviceTree source files.
+
+----------------------------------------------------------------
+Alistair Delva (1):
+      remoteproc: Fix count check in rproc_coredump_write()
+
+Allen-KH Cheng (2):
+      dt-bindings: remoteproc: mediatek: Add binding for mt8186 scp
+      remoteproc: mediatek: Support mt8186 scp
+
+AngeloGioacchino Del Regno (3):
+      remoteproc: mtk_scp: Use devm variant of rproc_alloc()
+      remoteproc: mtk_scp: Reorder scp_probe() sequence
+      remoteproc: mtk_scp: Use dev_err_probe() where possible
+
+Bjorn Andersson (1):
+      remoteproc: qcom: q6v5: Add interconnect path proxy vote
+
+Miaoqian Lin (3):
+      remoteproc: qcom: Fix missing of_node_put in adsp_alloc_memory_region
+      remoteproc: qcom_wcnss: Add missing of_node_put() in wcnss_alloc_memory_region
+      remoteproc: qcom_q6v5_mss: Fix some leaks in q6v5_alloc_memory_region
+
+Puranjay Mohan (1):
+      remoteproc: Introduce sysfs_read_only flag
+
+Rakesh Pillai (3):
+      dt-bindings: remoteproc: qcom: adsp: Convert binding to YAML
+      dt-bindings: remoteproc: qcom: Add SC7280 WPSS support
+      remoteproc: qcom: q6v5_wpss: Add support for sc7280 WPSS
+
+Stephan Gerhold (1):
+      remoteproc: qcom_q6v5_mss: Create platform device for BAM-DMUX
+
+Suman Anna (7):
+      remoteproc: wkup_m3: Set sysfs_read_only flag
+      remoteproc: move rproc_da_to_va declaration to remoteproc.h
+      remoteproc: Change rproc_shutdown() to return a status
+      remoteproc: k3-r5: Refactor mbox request code in start
+      remoteproc: k3-r5: Add support for IPC-only mode for all R5Fs
+      remoteproc: k3-dsp: Refactor mbox request code in start
+      remoteproc: k3-dsp: Add support for IPC-only mode for all K3 DSPs
+
+ .../devicetree/bindings/remoteproc/mtk,scp.yaml    |   1 +
+ .../bindings/remoteproc/qcom,hexagon-v56.txt       | 140 ----------
+ .../bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml  | 161 ++++++++++++
+ .../bindings/remoteproc/qcom,sc7280-wpss-pil.yaml  | 219 ++++++++++++++++
+ .../bindings/remoteproc/qcom,sdm845-adsp-pil.yaml  | 160 ++++++++++++
+ Documentation/staging/remoteproc.rst               |   3 +-
+ drivers/remoteproc/mtk_common.h                    |   3 +
+ drivers/remoteproc/mtk_scp.c                       |  90 ++++---
+ drivers/remoteproc/qcom_q6v5.c                     |  21 +-
+ drivers/remoteproc/qcom_q6v5.h                     |   3 +
+ drivers/remoteproc/qcom_q6v5_adsp.c                | 228 ++++++++++++++--
+ drivers/remoteproc/qcom_q6v5_mss.c                 |  19 +-
+ drivers/remoteproc/qcom_wcnss.c                    |   1 +
+ drivers/remoteproc/remoteproc_cdev.c               |   2 +-
+ drivers/remoteproc/remoteproc_core.c               |   9 +-
+ drivers/remoteproc/remoteproc_debugfs.c            |   2 +-
+ drivers/remoteproc/remoteproc_internal.h           |   1 -
+ drivers/remoteproc/remoteproc_sysfs.c              |  21 +-
+ drivers/remoteproc/ti_k3_dsp_remoteproc.c          | 208 +++++++++++----
+ drivers/remoteproc/ti_k3_r5_remoteproc.c           | 287 ++++++++++++++++++---
+ drivers/remoteproc/wkup_m3_rproc.c                 |   1 +
+ include/linux/remoteproc.h                         |   5 +-
+ 22 files changed, 1305 insertions(+), 280 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,hexagon-v56.txt
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml

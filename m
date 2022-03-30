@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D90C4EBD9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9034EBDA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244803AbiC3J0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S244812AbiC3J2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240935AbiC3J0p (ORCPT
+        with ESMTP id S240935AbiC3J2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:26:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3872B269
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:24:59 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KT1Dh3wM3zDq9j;
-        Wed, 30 Mar 2022 17:22:44 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        Wed, 30 Mar 2022 05:28:06 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E9262D73
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:26:21 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KT1Gx3BzczgY8Q;
+        Wed, 30 Mar 2022 17:24:41 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 17:24:57 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 17:24:57 +0800
-Message-ID: <bff5ccf2-d748-6e72-79b7-9d211a9ad21e@huawei.com>
-Date:   Wed, 30 Mar 2022 17:24:56 +0800
+ 15.1.2308.21; Wed, 30 Mar 2022 17:26:19 +0800
+Subject: Re: [PATCH 1/8] mm/vmscan: remove redundant folio_test_swapbacked
+ check when folio is file lru
+To:     Muchun Song <songmuchun@bytedance.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220329132619.18689-1-linmiaohe@huawei.com>
+ <20220329132619.18689-2-linmiaohe@huawei.com>
+ <CAMZfGtUPQvgaxG_6A0n6HwD9VjqbQUbnF99Ei9WpMZbTbnz4zg@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ea6e1a59-3de8-5568-82e3-511fcac620ca@huawei.com>
+Date:   Wed, 30 Mar 2022 17:26:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 1/2] arm64: mm: Do not defer reserve_crashkernel() if only
- ZONE_DMA32
+In-Reply-To: <CAMZfGtUPQvgaxG_6A0n6HwD9VjqbQUbnF99Ei9WpMZbTbnz4zg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Vijay Balakrishna <vijayb@linux.microsoft.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-References: <20220325055315.25671-1-wangkefeng.wang@huawei.com>
- <9e8f32c4-1198-dca5-915f-0b31ce1436b4@linux.microsoft.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <9e8f32c4-1198-dca5-915f-0b31ce1436b4@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme706-chm.china.huawei.com (10.1.199.102) To
- dggpemm500001.china.huawei.com (7.185.36.107)
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -61,135 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/3/30 16:13, Muchun Song wrote:
+> On Tue, Mar 29, 2022 at 9:26 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> When folio is file lru, folio_test_swapbacked is guaranteed to be true. So
+>> it's unnecessary to check it here again. No functional change intended.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/vmscan.c | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> index 1678802e03e7..7c1a9713bfc9 100644
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -1434,8 +1434,7 @@ static void folio_check_dirty_writeback(struct folio *folio,
+>>          * Anonymous pages are not handled by flushers and must be written
+>>          * from reclaim context. Do not stall reclaim based on them
+>>          */
+>> -       if (!folio_is_file_lru(folio) ||
+>> -           (folio_test_anon(folio) && !folio_test_swapbacked(folio))) {
+>> +       if (!folio_is_file_lru(folio) || folio_test_anon(folio)) {
+> 
+> At least your login is no problem since folio_is_file_lru() is equal to
+> !folio_test_swapbacked().  But the new code is not clear to me.
+> The old code is easy to understand, e.g. folio_test_anon(folio) &&
+> !folio_test_swapbacked(folio) tells us that the anon pages which
+> do not need to be swapped should be skipped. So I'm neutral on
+> the patch.
 
-On 2022/3/30 6:29, Vijay Balakrishna wrote:
->
->
-> On 3/24/2022 10:53 PM, Kefeng Wang wrote:
->> The kernel could be benifit due to BLOCK_MAPPINGS, see commit
->> 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
->> platforms with no DMA memory zones"), if there is only with
->> ZONE_DMA32, we could set arm64_dma_phys_limit to max_zone_phys(32)
->> earlier in arm64_memblock_init(), then we will benifit too.
->
-> Thanks for noticing platforms with just ZONE_DMA32 config can also 
-> benefit BLOCK_MAPPINGS.  I assume you have access to one where you 
-> notice the difference with proposed changes and able to test.  I did 
-> test proposed changes on SoC we use with IOMMU (no ZONE_DMA configs 
-> enabled).
->
-> Nits --
-> - benifit -> benefit
-> - consider making commit message clear, "then we will.." seems you are 
-> referring to platforms with just ZONE_DMA32 config enabled
-> - to reflect new change consider updating comment added in commit 
-> 031495635b46
->
-One more question, could we add new cmdline(eg, dma_force_32bit) to let 
-the arm64 using
+Thanks for your comment. The previous one might look more common:
+folio_test_anon(folio) && !folio_test_swapbacked(folio) means folio
+is MADV_FREE and can be freed without swapping out. And I remove the
+unneeded !folio_test_swapbacked(folio) check at the expense of losing
+minor readability. If it is not worth doing this, I will drop this
+patch.
 
-32bit dma  by default?  I think most platforms are not with small DMA 
-bit(only found 20bit in Raspberry Pi 4?),
+Thanks.
 
-Here is a draft(based on this patch) to do it, if the kernel boot with 
-this cmdline and even ZONE_DMA
-
-is enabled, the kernel allows linear creation of block mapping, not sure 
-this is the right way, any suggestion? Thanks.
-
-diff --git a/arch/arm64/include/asm/processor.h 
-b/arch/arm64/include/asm/processor.h
-index 73e38d9a540c..8febed26aeed 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -100,6 +100,7 @@
-                                         base)
-  #endif /* CONFIG_ARM64_FORCE_52BIT */
-
-+extern bool arm64_dma_force_32bit;
-  extern phys_addr_t arm64_dma_phys_limit;
-  #define ARCH_LOW_ADDRESS_LIMIT (arm64_dma_phys_limit - 1)
-
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index d6f64819ef89..86aab5db735b 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -92,6 +92,16 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
-  phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
-  #endif
-
-+bool __ro_after_init arm64_dma_force_32bit;
-+static int __init arm64_dma_force_32bit_setup(char *p)
-+{
-+       arm64_dma_force_32bit = true;
-+       zone_dma_bits = 32;
-+
-+       return 0;
-+}
-+early_param("dma_force_32bit", arm64_dma_force_32bit_setup);
-+
-  /*
-   * reserve_crashkernel() - reserves memory for crash kernel
-   *
-@@ -165,10 +175,11 @@ static void __init zone_sizes_init(void)
-  #ifdef CONFIG_ZONE_DMA
-         unsigned int acpi_zone_dma_bits;
-         unsigned int dt_zone_dma_bits;
--
--       acpi_zone_dma_bits = fls64(acpi_iort_dma_get_max_cpu_address());
--       dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
--       zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits);
-+       if (!arm64_dma_force_32bit) {
-+               acpi_zone_dma_bits = 
-fls64(acpi_iort_dma_get_max_cpu_address());
-+               dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
-+               zone_dma_bits = min3(32U, dt_zone_dma_bits, 
-acpi_zone_dma_bits);
-+       }
-         arm64_dma_phys_limit = max_zone_phys(zone_dma_bits);
-         max_zone_pfns[ZONE_DMA] = PFN_DOWN(arm64_dma_phys_limit);
-  #endif
-@@ -336,7 +347,7 @@ void __init arm64_memblock_init(void)
-         early_init_fdt_scan_reserved_mem();
-
-         dma32_phys_limit = max_zone_phys(32);
--       if (!IS_ENABLED(CONFIG_ZONE_DMA)) {
-+       if (!IS_ENABLED(CONFIG_ZONE_DMA) || arm64_dma_force_32bit) {
-                 if (IS_ENABLED(CONFIG_ZONE_DMA32))
-                         arm64_dma_phys_limit = dma32_phys_limit;
-                 reserve_crashkernel();
-@@ -388,7 +399,7 @@ void __init bootmem_init(void)
-          * request_standard_resources() depends on crashkernel's memory 
-being
-          * reserved, so do it here.
-          */
--       if (IS_ENABLED(CONFIG_ZONE_DMA))
-+       if (IS_ENABLED(CONFIG_ZONE_DMA) && !arm64_dma_force_32bit)
-                 reserve_crashkernel();
-
-         memblock_dump_all();
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 23734481318a..9431ad581927 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -529,7 +529,7 @@ static void __init map_mem(pgd_t *pgdp)
-
-  #ifdef CONFIG_KEXEC_CORE
-         if (crash_mem_map) {
--               if (IS_ENABLED(CONFIG_ZONE_DMA))
-+               if (IS_ENABLED(CONFIG_ZONE_DMA) && !arm64_dma_force_32bit)
-                         flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-                 else if (crashk_res.end)
-                         memblock_mark_nomap(crashk_res.start,
-@@ -570,7 +570,7 @@ static void __init map_mem(pgd_t *pgdp)
-          * through /sys/kernel/kexec_crash_size interface.
-          */
-  #ifdef CONFIG_KEXEC_CORE
--       if (crash_mem_map && !IS_ENABLED(CONFIG_ZONE_DMA)) {
-+       if (crash_mem_map && (!IS_ENABLED(CONFIG_ZONE_DMA) || 
-arm64_dma_force_32bit)) {
-                 if (crashk_res.end) {
-                         __map_memblock(pgdp, crashk_res.start,
-                                        crashk_res.end + 1,
-
-
+> 
+> .
+> 

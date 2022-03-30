@@ -2,107 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E994EB84D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A324EB852
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241987AbiC3Cbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S242000AbiC3CfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiC3Cbq (ORCPT
+        with ESMTP id S229769AbiC3CfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:31:46 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5D747393;
-        Tue, 29 Mar 2022 19:30:00 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 63CE1C01F; Wed, 30 Mar 2022 04:29:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648607399; bh=bdKHDKIHNDK3SV6b1Pqh98L2dlKohpJZeeDW7bMGvYc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rQO/bvdjVLOA7rftxN9vzdFVsLwSNkr7SIkzfOznSn9FxrYdCKnIZJEib2mP09ZwV
-         ZpF3C4DvvKi+aPq2jH5g5/yigqttgPDkrjCXc4BnDa4g2H7TjeTMbYUPszNEhB0zAD
-         5Zv/+qox9cJBSTGcSzxHjl1VGUuV2JnYBrIuzFY+JhEMGhE4bRDITdazD05PHRXRcF
-         g0vwMYX9IEMxjlNcmOfcorfxSowWHb18B431AdW75hU9xcRVXSijw+MKsjdsSBK0gW
-         GQCPAf7EPSGZyLTvnIqvSl09INYyQEBIndBzz5Jv0bwtUlK61J7kfM6NDZAd1gkQyE
-         KHrBH4coLVk1Q==
+        Tue, 29 Mar 2022 22:35:04 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB00FFD03;
+        Tue, 29 Mar 2022 19:33:14 -0700 (PDT)
+X-UUID: 9bf5674a47b648fbabf9829f4a820b1c-20220330
+X-UUID: 9bf5674a47b648fbabf9829f4a820b1c-20220330
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1552206381; Wed, 30 Mar 2022 10:33:09 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 30 Mar 2022 10:33:08 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 30 Mar
+ 2022 10:33:07 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 30 Mar 2022 10:33:06 +0800
+Message-ID: <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
+Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     <broonie@kernel.org>, <robh+dt@kernel.org>, <tzungbi@google.com>,
+        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Date:   Wed, 30 Mar 2022 10:33:06 +0800
+In-Reply-To: <20220329223002.uo7kiemopkh7ak4x@notapiano>
+References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
+         <20220324064511.10665-3-jiaxin.yu@mediatek.com>
+         <20220329223002.uo7kiemopkh7ak4x@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 23616C009;
-        Wed, 30 Mar 2022 04:29:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648607398; bh=bdKHDKIHNDK3SV6b1Pqh98L2dlKohpJZeeDW7bMGvYc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RSbQrrphVo5YOvwmvw1ndEiSTropwRH61zuG6mSJHUhv/+R9vdtzhRkRZMgJWQtSU
-         hULss14sVow7TDWhUzdONGSe5Zk0q9qAvxTsygRBv/fhstgSOLg8KQGog/fgg9QcOg
-         Je++J73BfrLLbQ2/Z5qtAUwyMZUNc+MLZIT9tFAcKCbL6D+P/B5q8uLTElCC1+49bD
-         l4vctZxO3QZbPcFKBVJw2fgO/S0Kpcz3mxdTKfD5bs+QQUFn4XBzSzwCABpaEI1X9m
-         mI5ccEfg9qPbugaSw0TaFP9JGtXP6gSlJ67TvudVq1N8sjDXWC6aTtMqMUxYk90KND
-         AfAFDTWeI6cTA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 6c549303;
-        Wed, 30 Mar 2022 02:29:53 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 11:29:37 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     Andrew Perepechko <andrew.perepechko@hpe.com>,
-        Andreas Dilger <adilger@dilger.ca>,
-        Theodore Ts'o <tytso@mit.edu>,
-        syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>
-Subject: Re: [syzbot] possible deadlock in p9_write_work
-Message-ID: <YkPAkXVc4HZLUrGl@codewreck.org>
-References: <0000000000009523b605db620972@google.com>
- <385ce718-f965-4005-56b6-34922c4533b8@I-love.SAKURA.ne.jp>
- <YkObebLZMp5AyRpr@codewreck.org>
- <fb5d20c5-36a6-2c51-288a-7cc1e0a76d3e@I-love.SAKURA.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fb5d20c5-36a6-2c51-288a-7cc1e0a76d3e@I-love.SAKURA.ne.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tetsuo Handa wrote on Wed, Mar 30, 2022 at 10:57:15AM +0900:
-> >> Please don't use schedule_work() if you need to use flush_scheduled_work().
-> > 
-> > In this case we don't call flush_scheduled_work -- ext4 does.
+On Tue, 2022-03-29 at 18:30 -0400, Nícolas F. R. A. Prado wrote:
+> Hi Jiaxin,
 > 
-> Yes, that's why I changed recipients to ext4 people.
-
-Sorry, I hadn't noticed.
-9p is the one calling schedule_work, so ultimately it really is the
-combinaison of the two, and not just ext4 that's wrong here.
-
-> > The problem is mixing in the two subsystems when someone (e.g. syzbot)
-> > opens an ext4 file and passes that fd to 9p when mounting with e.g.
-> > mount -t 9p -o rfdno=<no>,wfdno=<no>
+> On Thu, Mar 24, 2022 at 02:45:09PM +0800, Jiaxin Yu wrote:
+> > MT8192 platform will use rt1015 or rt105p codec, so through the
+> > snd_soc_of_get_dai_link_codecs() to complete the configuration
+> > of dai_link's codecs.
 > > 
-> > Frankly that's just not something I consider useful, interacting through
-> > 9p to a local file doesn't make sense except for testing.
+> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> > ---
+> >  .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 108 ++++++++++--
+> > ------
+> >  1 file changed, 59 insertions(+), 49 deletions(-)
 > > 
-> > If that is a real problem, the simplest way out would be to just forbid
-> > non-socket FDs if it's something we can check.
+> > diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-
+> > rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+> > index ee91569c0911..837c2ccd5b3d 100644
+> > --- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+> > +++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+> > @@ -604,17 +604,9 @@ SND_SOC_DAILINK_DEFS(i2s2,
+> >  		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
+> >  		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
+> >  
+> > -SND_SOC_DAILINK_DEFS(i2s3_rt1015,
+> > +SND_SOC_DAILINK_DEFS(i2s3,
+> >  		     DAILINK_COMP_ARRAY(COMP_CPU("I2S3")),
+> > -		     DAILINK_COMP_ARRAY(COMP_CODEC(RT1015_DEV0_NAME,
+> > -						   RT1015_CODEC_DAI),
+> > -					COMP_CODEC(RT1015_DEV1_NAME,
+> > -						   RT1015_CODEC_DAI)),
+> > -		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
+> > -
+> > -SND_SOC_DAILINK_DEFS(i2s3_rt1015p,
+> > -		     DAILINK_COMP_ARRAY(COMP_CPU("I2S3")),
+> > -		     DAILINK_COMP_ARRAY(COMP_CODEC("rt1015p", "HiFi")),
+> > +		     DAILINK_COMP_ARRAY(COMP_EMPTY()),
+> >  		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
+> >  
+> >  SND_SOC_DAILINK_DEFS(i2s5,
+> > @@ -929,6 +921,7 @@ static struct snd_soc_dai_link
+> > mt8192_mt6359_dai_links[] = {
+> >  		.dpcm_playback = 1,
+> >  		.ignore_suspend = 1,
+> >  		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
+> > +		SND_SOC_DAILINK_REG(i2s3),
+> >  	},
+> >  	{
+> >  		.name = "I2S5",
+> > @@ -1100,55 +1093,64 @@ static struct snd_soc_card
+> > mt8192_mt6359_rt1015p_rt5682_card = {
+> >  	.num_dapm_routes =
+> > ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
+> >  };
+> >  
+> > +static int mt8192_mt6359_card_set_be_link(struct snd_soc_card
+> > *card,
+> > +					  struct snd_soc_dai_link
+> > *link,
+> > +					  struct device_node *node,
+> > +					  char *link_name)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (node && strcmp(link->name, link_name) == 0) {
+> > +		ret = snd_soc_of_get_dai_link_codecs(card->dev, node,
+> > link);
+> > +		if (ret < 0) {
+> > +			dev_err_probe(card->dev, ret, "get dai link
+> > codecs fail\n");
+> > +			return ret;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+> >  {
+> >  	struct snd_soc_card *card;
+> > -	struct device_node *platform_node, *hdmi_codec;
+> > +	struct device_node *platform_node, *hdmi_codec, *speaker_codec;
+> >  	int ret, i;
+> >  	struct snd_soc_dai_link *dai_link;
+> >  	struct mt8192_mt6359_priv *priv;
+> >  
+> > -	platform_node = of_parse_phandle(pdev->dev.of_node,
+> > -					 "mediatek,platform", 0);
+> > -	if (!platform_node) {
+> > -		dev_err(&pdev->dev, "Property 'platform' missing or
+> > invalid\n");
+> > +	card = (struct snd_soc_card *)of_device_get_match_data(&pdev-
+> > >dev);
+> > +	if (!card)
+> >  		return -EINVAL;
+> > +	card->dev = &pdev->dev;
+> > +
+> > +	platform_node = of_parse_phandle(pdev->dev.of_node,
+> > "mediatek,platform", 0);
+> > +	if (!platform_node) {
+> > +		ret = -EINVAL;
+> > +		dev_err_probe(&pdev->dev, ret, "Property 'platform'
+> > missing or invalid\n");
+> > +		goto err_platform_node;
+> >  	}
+> >  
+> > -	card = (struct snd_soc_card *)of_device_get_match_data(&pdev-
+> > >dev);
+> > -	if (!card) {
+> > +	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+> > "mediatek,hdmi-codec", 0);
+> > +	if (!hdmi_codec) {
+> >  		ret = -EINVAL;
+> > -		goto put_platform_node;
+> > +		dev_err_probe(&pdev->dev, ret, "Property 'hdmi-codec'
+> > missing or invalid\n");
+> > +		goto err_hdmi_codec;
 > 
-> Do you mean that p9_fd_open() in net/9p/trans_fd.c does not need to
-> accept non-socket file descriptors?
+> You're making hdmi-codec a required property, since now the driver
+> fails to
+> probe without it. Is it really required though? The driver code still
+> checks for
+> the presence of hdmi_codec before using it, so shouldn't it be fine
+> to let it be
+> optional?
+> 
+> If it is really required now though, then I guess at least the dt-
+> binding should
+> be updated accordingly. (Although I think this would technically
+> break the ABI?)
+> 
+> Thanks,
+> Nícolas
 
-Yes, I can't think of any valid usage that would involve non-socket fd
-there.
-It might be useful to leave as a test vector, but if it causes problems
-I think it's perfectly OK to just refuse these.
+Hi Nícolas,
 
-> Then, it's something you can check. You can use S_ISSOCK() like
-> e.g. netlink_getsockbyfilp() does
+Thanks for your comment. Indeed I made hdmi-codec a required property,
+because it is a must in this machine driver. I prefer to report errors
+during the registration rather than during the use.
 
-Thanks for the example
--- 
-Dominique
+So I'd like to take your second suggestion. I need to update dt-binding 
+that set hdmi-codec as required property.
+
+"(Although I think this would technicallybreak the ABI?)"
+==> I can't understand this question, could you help explain it in more
+detail.
+
+Thanks,
+Jiaxin.Yu
+
+> 
+>  	}
+> > -	card->dev = &pdev->dev;
+> >  
+> > -	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+> > -				      "mediatek,hdmi-codec", 0);
+> > +	speaker_codec = of_get_child_by_name(pdev->dev.of_node,
+> > "speaker-codecs");
+> > +	if (!speaker_codec) {
+> > +		ret = -EINVAL;
+> > +		dev_err_probe(&pdev->dev, ret, "Property 'speaker-
+> > codecs' missing or invalid\n");
+> > +		goto err_speaker_codec;
+> > +	}
+> >  
+> 
+snip...
+> >  
+> > -put_hdmi_codec:
+> > +err_probe:
+> > +	of_node_put(speaker_codec);
+> > +err_speaker_codec:
+> >  	of_node_put(hdmi_codec);
+> > -put_platform_node:
+> > +err_hdmi_codec:
+> >  	of_node_put(platform_node);
+> > +err_platform_node:
+> >  	return ret;
+> >  }
+> >  
+> > -- 
+> > 2.18.0
+> > 
+> > 
+

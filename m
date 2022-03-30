@@ -2,405 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C713C4EBA18
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8E94EBA14
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242963AbiC3FXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S242987AbiC3FXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242895AbiC3FWn (ORCPT
+        with ESMTP id S243010AbiC3FXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:22:43 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E104913A1DC;
-        Tue, 29 Mar 2022 22:20:58 -0700 (PDT)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 30 Mar 2022 14:20:58 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 846282058B50;
-        Wed, 30 Mar 2022 14:20:58 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 30 Mar 2022 14:20:58 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 2F914B62B7;
-        Wed, 30 Mar 2022 14:20:58 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v2 5/5] dt-bindings: phy: uniphier: Clean up clock-names and reset-names using compatible string
-Date:   Wed, 30 Mar 2022 14:20:51 +0900
-Message-Id: <1648617651-9004-6-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1648617651-9004-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1648617651-9004-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 30 Mar 2022 01:23:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A59F1480E8;
+        Tue, 29 Mar 2022 22:21:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13A2F615D9;
+        Wed, 30 Mar 2022 05:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793BAC340EC;
+        Wed, 30 Mar 2022 05:21:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EWx80GcI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1648617681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9uzCxmb6i4Vo8+AFdyD/kL3n4v054lqayW48puql9H8=;
+        b=EWx80GcI7TD1DoS2Vm4HaYn+c5nAQrEiBRPse3R7LpWPaDc5V08VD/2P9H1JXT3PVH0BG9
+        CYOz+fLf7jLdsKcCWhHI7SLGw5hFIkr+xQagOlsN4r0iA1DXdqzFf+Rem09E786EtjukJO
+        jJ+vPNLgTJxTj2rdjk/88iGovmoCKzI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id df7ade0d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 30 Mar 2022 05:21:21 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 01:21:20 -0400
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
+Message-ID: <YkPo0N/CVHFDlB6v@zx2c4.com>
+References: <20220326114009.1690-1-aissur0002@gmail.com>
+ <2698031.BEx9A2HvPv@fedor-zhuzhzhalka67>
+ <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
+ <4705670.GXAFRqVoOG@fedor-zhuzhzhalka67>
+ <CAHk-=wiKhn+VsvK8CiNbC27+f+GsPWvxMVbf7QET+7PQVPadwA@mail.gmail.com>
+ <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of "oneOf:" choices, use "allOf:" and "if:" to define clock-names
-and reset-names that can be taken by the compatible string.
+Hi Linus,
 
-The order of clock-names and reset-names doesn't change here.
+On Tue, Mar 29, 2022 at 03:18:56PM -0700, Linus Torvalds wrote:
+> On Tue, Mar 29, 2022 at 2:02 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > I will apply that ALIGN() thing since Christian could confirm it fixes
+> > things, and try to add a few more comments about how bitmaps are
+> > fundamentally in chunks of BITS_PER_LONG.
+> 
+> Ok, applied as commit 1c24a186398f ("fs: fd tables have to be
+> multiples of BITS_PER_LONG").
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- .../phy/socionext,uniphier-ahci-phy.yaml      | 73 ++++++++++++------
- .../phy/socionext,uniphier-pcie-phy.yaml      | 37 ++++++---
- .../phy/socionext,uniphier-usb3hs-phy.yaml    | 75 +++++++++++++-----
- .../phy/socionext,uniphier-usb3ss-phy.yaml    | 77 ++++++++++++++-----
- 4 files changed, 188 insertions(+), 74 deletions(-)
+This broke the WireGuard test suite, <https://www.wireguard.com/build-status/>,
+on 32-bit archs with a line like:
 
-diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
-index 14f7579e7daa..61d9306e1852 100644
---- a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
-@@ -30,33 +30,62 @@ properties:
-     minItems: 1
-     maxItems: 2
- 
--  clock-names:
--    oneOf:
--      - items:          # for PXs2
--          - const: link
--      - items:          # for Pro4
--          - const: link
--          - const: gio
--      - items:          # for others
--          - const: link
--          - const: phy
-+  clock-names: true
- 
-   resets:
-     minItems: 2
-     maxItems: 6
- 
--  reset-names:
--    oneOf:
--      - items:          # for Pro4
--          - const: link
--          - const: gio
--          - const: phy
--          - const: pm
--          - const: tx
--          - const: rx
--      - items:          # for others
--          - const: link
--          - const: phy
-+  reset-names: true
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: socionext,uniphier-pro4-ahci-phy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: link
-+            - const: gio
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: gio
-+            - const: phy
-+            - const: pm
-+            - const: tx
-+            - const: rx
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: socionext,uniphier-pxs2-ahci-phy
-+    then:
-+      properties:
-+        clock-names:
-+          const: link
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: phy
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: socionext,uniphier-pxs3-ahci-phy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: link
-+            - const: phy
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: phy
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-pcie-phy.yaml
-index fbb71d6dd531..e45489a9bf1a 100644
---- a/Documentation/devicetree/bindings/phy/socionext,uniphier-pcie-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-pcie-phy.yaml
-@@ -31,28 +31,41 @@ properties:
-     minItems: 1
-     maxItems: 2
- 
--  clock-names:
--    oneOf:
--      - items:            # for Pro5
--          - const: gio
--          - const: link
--      - const: link       # for others
-+  clock-names: true
- 
-   resets:
-     minItems: 1
-     maxItems: 2
- 
--  reset-names:
--    oneOf:
--      - items:            # for Pro5
--          - const: gio
--          - const: link
--      - const: link       # for others
-+  reset-names: true
- 
-   socionext,syscon:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: A phandle to system control to set configurations for phy
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: socionext,uniphier-pro5-pcie-phy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: gio
-+            - const: link
-+        reset-names:
-+          items:
-+            - const: gio
-+            - const: link
-+    else:
-+      properties:
-+        clock-names:
-+          const: link
-+        reset-names:
-+          const: link
-+
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-index 1bbd164f2527..a37205242dc1 100644
---- a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-@@ -34,30 +34,12 @@ properties:
-     minItems: 2
-     maxItems: 3
- 
--  clock-names:
--    oneOf:
--      - items:               # for Pro5
--          - const: gio
--          - const: link
--      - items:               # for PXs3 with phy-ext
--          - const: link
--          - const: phy
--          - const: phy-ext
--      - items:               # for others
--          - const: link
--          - const: phy
-+  clock-names: true
- 
-   resets:
-     maxItems: 2
- 
--  reset-names:
--    oneOf:
--      - items:               # for Pro5
--          - const: gio
--          - const: link
--      - items:               # for others
--          - const: link
--          - const: phy
-+  reset-names: true
- 
-   vbus-supply:
-     description: A phandle to the regulator for USB VBUS
-@@ -80,6 +62,59 @@ properties:
-       required for each port, if any one is omitted, the trimming data
-       of the port will not be set at all.
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: socionext,uniphier-pro5-usb3-hsphy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: gio
-+            - const: link
-+        reset-names:
-+          items:
-+            - const: gio
-+            - const: link
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - socionext,uniphier-pxs2-usb3-hsphy
-+              - socionext,uniphier-ld20-usb3-hsphy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: link
-+            - const: phy
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: phy
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - socionext,uniphier-pxs3-usb3-hsphy
-+              - socionext,uniphier-nx1-usb3-hsphy
-+    then:
-+      properties:
-+        clock-names:
-+          minItems: 2
-+          items:
-+            - const: link
-+            - const: phy
-+            - const: phy-ext
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: phy
-+
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
-index 06c957d52d23..dd6ebee6377f 100644
---- a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
-@@ -35,34 +35,71 @@ properties:
-     minItems: 2
-     maxItems: 3
- 
--  clock-names:
--    oneOf:
--      - items:             # for Pro4, Pro5
--          - const: gio
--          - const: link
--      - items:             # for PXs3 with phy-ext
--          - const: link
--          - const: phy
--          - const: phy-ext
--      - items:             # for others
--          - const: link
--          - const: phy
-+  clock-names: true
- 
-   resets:
-     maxItems: 2
- 
--  reset-names:
--    oneOf:
--      - items:              # for Pro4,Pro5
--          - const: gio
--          - const: link
--      - items:              # for others
--          - const: link
--          - const: phy
-+  reset-names: true
- 
-   vbus-supply:
-     description: A phandle to the regulator for USB VBUS, only for USB host
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - socionext,uniphier-pro4-usb3-ssphy
-+              - socionext,uniphier-pro5-usb3-ssphy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: gio
-+            - const: link
-+        reset-names:
-+          items:
-+            - const: gio
-+            - const: link
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - socionext,uniphier-pxs2-usb3-ssphy
-+              - socionext,uniphier-ld20-usb3-ssphy
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: link
-+            - const: phy
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: phy
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - socionext,uniphier-pxs3-usb3-ssphy
-+              - socionext,uniphier-nx1-usb3-ssphy
-+    then:
-+      properties:
-+        clock-names:
-+          minItems: 2
-+          items:
-+            - const: link
-+            - const: phy
-+            - const: phy-ext
-+        reset-names:
-+          items:
-+            - const: link
-+            - const: phy
-+
- required:
-   - compatible
-   - reg
--- 
-2.25.1
+[+] NS1: wg set wg0 private-key /dev/fd/63 listen-port 1 peer xb6I3yo5N/A9PXGeqSVdMywrogPz82Ug5vWTdqQJRF8= preshared-key /dev/fd/62 allowed-ips 192.168.241.2/32,fd00::2/128
+fopen: No such file or directory
 
+Those /dev/fd/63 and /dev/fd/62 are coming from bash process
+redirection:
+
+n1 wg set wg0 private-key <(echo "$key1") peer "$pub2" preshared-key <(echo "$psk") allowed-ips 192.168.241.2/32 endpoint 127.0.0.1:2
+
+Peppering some printks, it looks like in `max_fds = ALIGN(max_fds,
+BITS_PER_LONG);`, max_fds is sometimes 4294967295 before the call, and
+that ALIGN winds up bringing it to 0.
+
+Jason

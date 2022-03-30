@@ -2,287 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802E74ECEDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1944ECEE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351271AbiC3Vcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S233485AbiC3ViU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244993AbiC3Vcm (ORCPT
+        with ESMTP id S233375AbiC3ViQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:32:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE0A2E6A7;
-        Wed, 30 Mar 2022 14:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648675856; x=1680211856;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=M/5XCLqf46K3oHB+f5q6Qko6prYLCpGREegnvRMln1s=;
-  b=NK+JnqwpNzCzaeIE7HNK7YJXBAk5fGgmc6LMGXXShVfEaaaj1ZUFXa5M
-   GIXKIHw3YECxR0Vioew2yHo8aGVUQJlZQx6Id8WuDq2lLiimkDNWsZkaO
-   ys5qMrTVHpc7481kHPgKYshSIY6Wilcbg6NCHD7JX/ocxvbBCGKEHDLuO
-   +TKTiFkRkPd8FCErT1+BKh16+8BVKn5C442Lzrh8JIlR2+HT3vqXZLIb/
-   XQaXNaF+UDc429/Fd8Xf9tVRfo3Z3OZBOpKAx31E8115JQ90nm/Vlbo6e
-   v/RPJMmVrJbOUL9hefPjyT1XN594PJMtpRHAPB+mgtSZEkMXgaMZq6bgt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259835243"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="259835243"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:30:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="654125723"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 14:30:40 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 30 Mar 2022 14:30:40 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 30 Mar 2022 14:30:40 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.42) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 30 Mar 2022 14:30:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D9uS7BsKIFI9CTXTZnAwZGw1Vl/jRD+piVW5xEtgPGU+apkwE3Zg8cnqmsBijI4r6i5U++oNHm36pw9Vd88KGtPUOU+wV1vPtmV4A8r4LloDGksah2xJCXmo0S2YQ9opmgU6a2RQpC9RQoWbTqaRZn64IrgQYeRwrPYvIneAeIVqmZrcPDEqu2VEXWfZk1hKUgMyUrKzWQ42HoupSt54UbSHptFvvlPikL+E2PCrI7MFY2wUbcGvX0j7ZYEcyvb5CseS0xCxLv+4sn2yWdKoYkpTFlP24SNZnIjVFeiy/otjkvxRj6btqfz360lQa0uO4ZqWZu8d1vXdHl+8qwUqWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZNyEnPWOFDFEeXESDs4qNQIVUtAt16aro5TjBBszYYI=;
- b=kqqs+XMJHwoQQbE2BvTPjeJvGlUM26kikMhBmqxQ0tU+OCQcSeMhMhT6Z1bLn6V/V3x9SDunTRkJYtTXtrph3qH91cYyaWNK/QrZEBVeqJ+AuHWXDVkU2JcznHL1sjlNqfGKyZNzEjAOhtq0UvVpr+kmFSxLmbiOuaqCQsNDnTWulE+OTK3wbiiCeclAhF0tSYZ7PfSeaBIJPfRdm4jYAJuVO6AOpMnNaFYFkef02+qncnrDwpe4AAgemm1AJsO2nfYXXL9/6pC6rH/Cp6SnJz/V/nbvgViv/VWdylOwgeU303yIDfZUGlEoV1Ejsm7GGcB29s1Xj+7NIgf3KQGRqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB0062.namprd11.prod.outlook.com (2603:10b6:301:67::34)
- by DM6PR11MB3131.namprd11.prod.outlook.com (2603:10b6:5:6d::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Wed, 30 Mar
- 2022 21:30:35 +0000
-Received: from MWHPR11MB0062.namprd11.prod.outlook.com
- ([fe80::c3c:359:d9c4:3a54]) by MWHPR11MB0062.namprd11.prod.outlook.com
- ([fe80::c3c:359:d9c4:3a54%4]) with mapi id 15.20.5123.020; Wed, 30 Mar 2022
- 21:30:35 +0000
-From:   "Michael, Alice" <alice.michael@intel.com>
-To:     "Lobakin, Alexandr" <alexandr.lobakin@intel.com>
-CC:     ivecera <ivecera@redhat.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        poros <poros@redhat.com>, mschmidt <mschmidt@redhat.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Subject: RE: [PATCH net] ice: Fix logic of getting XSK pool associated with Tx
- queue
-Thread-Topic: [PATCH net] ice: Fix logic of getting XSK pool associated with
- Tx queue
-Thread-Index: AQHYQ1fKeNKey7PBdUWcO1Lt83Ut1qzWQlmAgABjSQCAAX0xkIAABeMAgABKi2A=
-Date:   Wed, 30 Mar 2022 21:30:35 +0000
-Message-ID: <MWHPR11MB0062E501377693B8E2E9FCDAE41F9@MWHPR11MB0062.namprd11.prod.outlook.com>
-References: <20220329102752.1481125-1-ivecera@redhat.com>
- <YkL0wfgyCq5s8vdu@boxer> <20220329195522.63d332fb@ceranb>
- <MWHPR11MB0062B06CAE27C58EEE54F162E41F9@MWHPR11MB0062.namprd11.prod.outlook.com>
- <20220330170046.3604787-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220330170046.3604787-1-alexandr.lobakin@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.401.20
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: aec65396-5f55-4c72-e582-08da12948706
-x-ms-traffictypediagnostic: DM6PR11MB3131:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <DM6PR11MB31310CE6D31DA5AB996C16D8E41F9@DM6PR11MB3131.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yItEtCIYvUD5GbldGUuzicQBrLV+DMwhYKYJbOF26q4IRZuhPEIO1GSsC9LlmezrXopx1i/1XFIz3+g57qXAtPEs3PehCItUbA95UBYBS4xouo4Ftou18x7NCZLZT+iSRNQQs6IWWcK7wNzDrgMK8K7UcAEqK7g22YzW2bikgcfAvjHpSrBPJzf2TkqreL8ZcDPTuOkDxlcwWywvq+X6EZOjaG7SMITlN9Bgf28WMUrJM5rAGcNwDwATeMhwvP7L69NxWgDeCAC/JdDnPISXomesEbjPLkuyFpIoEO8wNQfvUEiJrImoLHQJb23PQ6cf+syxSaQzavcKMUqNSYU4ioDyDHJdqoVq0EUAfBRC2qX0JQww0aOTMN+CzMx2CEEesO0NkkIiqww4o2jhyzWlUyIKIetnvlzWTiiy3AG19vpY0qpmDk2TilPrrAG3KGpGRgvZfINO323XHjHxx2r6jPQEkVxC8LwzqOAGh3/J4z5ruk9sccdQ9DAJpt/+yb0wMZ10LCkpGc3WbUAaDmvkWLT5ojGR34M1h+TdOrK90oz6hJw591oD+e7gBzyyhvruNE5QSJFhDFxsTH3yL8PgaGFyt0nffRa7q0ki240EIk0BxA2FT2Q/X4ruTIoA+4UTGn+yKqal3YEMLQT2v1XPSxr+bhi0mgAHlP0AdG7yhMhK/rPiDY2HHZvZfEZfO6hE/C3G5deS9H4sQIGGohBuxVyu0pwtm/taW0BIEV4mE6+M7/ikZKmDwlAOrfXHBqG2WZL63JF6arNAZDs/u/GjkIO74HnYgRDPEHuV+8jr2tApGP0/0V8a5yEnaq8IzwWRcmV04Xa+1lLxroN4oWbU9g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(2906002)(38100700002)(7696005)(5660300002)(86362001)(966005)(316002)(71200400001)(6862004)(76116006)(83380400001)(26005)(66946007)(186003)(122000001)(82960400001)(66556008)(66446008)(54906003)(33656002)(55016003)(52536014)(6506007)(6636002)(38070700005)(8676002)(4326008)(53546011)(8936002)(9686003)(66476007)(7416002)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LpOGTxPsC/iDEc5DUDK2XhoEN7TaIoA5CMCbJcPZFMu93XuUmisDfIywIRyZ?=
- =?us-ascii?Q?mofTHiFdgEVzyR/vfk4j0mkE4SLAKU+AwNFgs0opvF9+g10+OAqkW08O6jJV?=
- =?us-ascii?Q?0jIHalcewSxreY4pP99eZfhAIPQGg7xc1UfYE8lb2Tnnj20HP0u/9/QnxCBg?=
- =?us-ascii?Q?of4v+QlK9gN7gWflslKpy4yEhxOgBpoL3Jer/DcI5UhFUuTsAwwiFMm/BqQ6?=
- =?us-ascii?Q?+NK3TGH/TocZI9eEwaaGfsAb10s2Qwf/nvq7ef5Oa1foayuDSqxzQmhftiMZ?=
- =?us-ascii?Q?fG6jgMynWSwBTyOaOibvOpp6VUQW22NtY7WT2RBvyAC3dL0jbM/TuDdCkCZh?=
- =?us-ascii?Q?wfQwiyMZigBvm3LBYAwC3RT+Y/XBdWql+A4qz7OmqQpKIeknq7rKslRDwdZR?=
- =?us-ascii?Q?guZQtgfutJsLv4WtHzt+DUmhWtoTk70vviC3lHEICz2j3milVGDaFUwY0Nse?=
- =?us-ascii?Q?D+F0kX6myBHcwJB5f/WXfuXck76gDyBwOYfycDaWPISQDtPkR+ww/go46h4l?=
- =?us-ascii?Q?VDkK6ybksRqyXjGMH/kkpHKWLurI0tr5uCbc8Wl4ynuoKCp/HNA/FS42fu6+?=
- =?us-ascii?Q?uIKh6QisZmJ8ol+KTM4YNpycT5tuEK0Pxony6bFOawPwWDOu4vivwCIj1oLT?=
- =?us-ascii?Q?5KfKGnlAfZZka1sJnz6LUWfqc2qhSDku+yjx01VHGOjoQtNEhHkJUO+RgWnj?=
- =?us-ascii?Q?WjMkwWdFNliPYjZCB0QQn83uyrRfEC6T1mhq22m2t7Sch8ycpGCOISxhuq/R?=
- =?us-ascii?Q?oKDp2MSG4rTYAH0aBl7V33YK637rs5YFRCRXRx1qodoPjs2zsDgBJKZfIeK9?=
- =?us-ascii?Q?CfEDwx+1yHae0C5JkRSXVShMZk3CtEC8vC/EDABC1Dl2bBVX79B26NLK3P4z?=
- =?us-ascii?Q?TLTZdkbDOW1OCfLBhRKQZr7aMrpWfdR1XtmDnJdQKUw7kYINiUBDiR38vmDW?=
- =?us-ascii?Q?17QUNNGa9/XdiTES00Nhz3D4oCzz+SsHmxtxGgZ+2ibfWVi7Epl7bdgie5Oc?=
- =?us-ascii?Q?66j3/p4dfgyhI7wE2qATkkmEZmqJsmRxok8AaKNWL4SHYJoPdfr83Pb0B2TP?=
- =?us-ascii?Q?ON/28WmVs9JYnOCp62BlGC8HK7CpZ1KHy8GKe2kcn2ck/hX0C7UiLwKamtOa?=
- =?us-ascii?Q?w2PFHi34+PNVQBqp40P1wD1hA+rKE6/SawTvpsQ1Qe7vVjFcl8jFDPcNDtP2?=
- =?us-ascii?Q?mXAyqm3EUrPWzM3/lZ5KqyeRzf0CuXHU6cgRfAqkH6t9JbhgYVF5DSuVbfA1?=
- =?us-ascii?Q?FyCZS7ecap0mcstrq4V/ti5lKI/1FpE9K6aHAFGsBVHvTdst18oZAzWJk/Nk?=
- =?us-ascii?Q?GMhnvAb27uhTRVVNwGAHmbmzzbFcGcZEh8EPlFkSI0GQu8wkuz7h5CYvGoPZ?=
- =?us-ascii?Q?lAI29UKBYxsCk1LdK4QX9+jMKB+GYjUnhuatDf7biZ7kRB3dR1fxydocgIgM?=
- =?us-ascii?Q?N/YitEqLYTiqzyiG9G9t+KAmsAs/wbNJkc7oKg6mRACUigjnLA2mfgXOFBQO?=
- =?us-ascii?Q?uh7JY3RO7nXfYm++WcFryZR5YaK0d9fTkCD4YEcK0DYm1Wmavs9VWxb9CvrR?=
- =?us-ascii?Q?7WIZpwZJgl7OsApmNz/6HzQfiQy5aNSrDmiMXxyaHuZnE1WgL7qFAC/nO8Kp?=
- =?us-ascii?Q?bn4Z14JvEwd0WLLZPCDNkaLHAc6YqamgDFtmzfYf5ZBHFtZd0WiFlMBhEimH?=
- =?us-ascii?Q?0EetZOv2LLjaV/YKTTBx+bVc1kepwNAE8zsqigkFpybyOYDdabCXGNdYkWCF?=
- =?us-ascii?Q?KfKK2K22PA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 30 Mar 2022 17:38:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1BC34B43D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648676189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nq2QaWKmjRi7ediHTAyvB1XNhkWF7u/Z5LX0xWbEYz0=;
+        b=bE1zB25nwmW1HYn+Wc3iau2sZH1t3oAPOPTIP57BiHnZaEgf51r+GpUcmkwNJaEoSHdk59
+        XDDf9Ph2OIHBpP26Cuf0MQl83/jPMJ0sa/AqfGLZFSCEFVLsqwc01H8nNHfnS2uyehrTUq
+        TfpUcPF6nBvawckKvyP0dowRrUIaiBA=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-286-zi63WYE6PUiAttXTR99WnA-1; Wed, 30 Mar 2022 17:36:28 -0400
+X-MC-Unique: zi63WYE6PUiAttXTR99WnA-1
+Received: by mail-io1-f70.google.com with SMTP id z23-20020a6b0a17000000b00649f13ea3a7so13453687ioi.23
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:36:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=nq2QaWKmjRi7ediHTAyvB1XNhkWF7u/Z5LX0xWbEYz0=;
+        b=wYYwkO1mooI0McUrwY12ErOfXsCisDiJPWnbRnN+ogXRn6f5T7ndbQ2PpjYuRSncAq
+         bhgsaIoQPdGJy1x0nS1mYVkvz0C2NmMg8fWPRJ9xsd55BAPVRTnAiIzJLmwClrjrJuE0
+         szio/wrc4GcA9iJeRMs/4y3I/ImsVT4bY2HQeG+OYPfzdDSAHw78v7AtfFp2udD8biPj
+         U1r9N1gusU9UAhjBJPwpkKvj37MBmdtrHkoVMPLPBeZ+VgNcYU3fn2n3BTfTOohetdgF
+         KVlBOQs79kV7bgLn+S/GA+e9koIkee7/vxziHkOUquZdt8mf8nxU5hw7Jrnqp8rM30bd
+         HMBA==
+X-Gm-Message-State: AOAM530+KwMYk0eVssYbF4wk2z3mN+6f3nDJxL+ert9k00Z2xFEQPxBx
+        ta3Nkp5cUY8aylhtmd7yn3wUIsA+ZDUH89fu2h6PYqYtGo5BrWNFIJm2TWAFaD+1FuJBArduCC9
+        MZTmMFH0svAA19hNxRw6rd18Y
+X-Received: by 2002:a05:6638:d0c:b0:31a:5d8a:c013 with SMTP id q12-20020a0566380d0c00b0031a5d8ac013mr1095305jaj.132.1648676187677;
+        Wed, 30 Mar 2022 14:36:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxYtx5RIUIAL5R23SCsLiL/45ug3XfeCC3Y2ZFaEe+SFSXjnE7oqU9hxSRpEVlxEqP4tjYw4w==
+X-Received: by 2002:a05:6638:d0c:b0:31a:5d8a:c013 with SMTP id q12-20020a0566380d0c00b0031a5d8ac013mr1095294jaj.132.1648676187476;
+        Wed, 30 Mar 2022 14:36:27 -0700 (PDT)
+Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
+        by smtp.gmail.com with ESMTPSA id ay18-20020a5d9d92000000b0064c77f6aaecsm6121018iob.3.2022.03.30.14.36.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 14:36:27 -0700 (PDT)
+Message-ID: <0991b55e-3d69-a591-9bf4-26013b6ba843@redhat.com>
+Date:   Wed, 30 Mar 2022 15:36:25 -0600
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aec65396-5f55-4c72-e582-08da12948706
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 21:30:35.5244
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fGGeKFPg3aMXTYSm8c/g82+b6nT/nFtxFHQRCHJ+VwfkCYI3UmdAP1J1TF+2TbvUy8JH1cv0y9rcr5fnWPa/fA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3131
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit and
+ the oom_reaper
+Content-Language: en-US
+From:   Nico Pache <npache@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andre Almeida <andrealmeid@collabora.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220318033621.626006-1-npache@redhat.com>
+ <Yjg9ncgep58gFLiN@dhcp22.suse.cz> <20220322004231.rwmnbjpq4ms6fnbi@offworld>
+ <c8bb0b6d-981c-8591-d5b6-17414c934758@redhat.com>
+ <20220322025724.j3japdo5qocwgchz@offworld> <YjmITBkkwsa2O4bg@dhcp22.suse.cz>
+ <87bkxyaufi.ffs@tglx> <Yjn7FXoXtgGT977T@dhcp22.suse.cz> <87zglha9rt.ffs@tglx>
+ <YjrlqAMyJg3GKZVs@dhcp22.suse.cz> <YkQgWcZ7w0zL1a7n@dhcp22.suse.cz>
+ <bd61369c-ef50-2eb4-2cca-91422fbfa328@redhat.com>
+In-Reply-To: <bd61369c-ef50-2eb4-2cca-91422fbfa328@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Lobakin, Alexandr <alexandr.lobakin@intel.com>
-> Sent: Wednesday, March 30, 2022 10:01 AM
-> To: Michael, Alice <alice.michael@intel.com>
-> Cc: Lobakin, Alexandr <alexandr.lobakin@intel.com>; ivecera
-> <ivecera@redhat.com>; Fijalkowski, Maciej <maciej.fijalkowski@intel.com>;
-> netdev@vger.kernel.org; poros <poros@redhat.com>; mschmidt
-> <mschmidt@redhat.com>; Brandeburg, Jesse
-> <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
-> Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>;
-> Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann
-> <daniel@iogearbox.net>; Jesper Dangaard Brouer <hawk@kernel.org>; John
-> Fastabend <john.fastabend@gmail.com>; Andrii Nakryiko
-> <andrii@kernel.org>; Martin KaFai Lau <kafai@fb.com>; Song Liu
-> <songliubraving@fb.com>; Yonghong Song <yhs@fb.com>; KP Singh
-> <kpsingh@kernel.org>; moderated list:INTEL ETHERNET DRIVERS <intel-
-> wired-lan@lists.osuosl.org>; open list <linux-kernel@vger.kernel.org>; op=
-en
-> list:XDP (eXpress Data Path) <bpf@vger.kernel.org>
-> Subject: Re: [PATCH net] ice: Fix logic of getting XSK pool associated wi=
-th Tx
-> queue
->=20
-> From: Alice Michael <alice.michael@intel.com>
-> Date: Wed, 30 Mar 2022 16:47:18 +0000
->=20
-> > > -----Original Message-----
-> > > From: Ivan Vecera <ivecera@redhat.com>
-> > > Sent: Tuesday, March 29, 2022 10:55 AM
-> > > To: Fijalkowski, Maciej <maciej.fijalkowski@intel.com>
-> > > Cc: netdev@vger.kernel.org; poros <poros@redhat.com>; mschmidt
-> > > <mschmidt@redhat.com>; Brandeburg, Jesse
-> > > <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> > > <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
-> > > Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>;
-> > > Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann
-> > > <daniel@iogearbox.net>; Jesper Dangaard Brouer <hawk@kernel.org>;
-> > > John Fastabend <john.fastabend@gmail.com>; Andrii Nakryiko
-> > > <andrii@kernel.org>; Martin KaFai Lau <kafai@fb.com>; Song Liu
-> > > <songliubraving@fb.com>; Yonghong Song <yhs@fb.com>; KP Singh
-> > > <kpsingh@kernel.org>; Jeff Kirsher <jeffrey.t.kirsher@intel.com>;
-> > > Krzysztof Kazimierczak <krzysztof.kazimierczak@intel.com>; Lobakin,
-> > > Alexandr <alexandr.lobakin@intel.com>; moderated list:INTEL ETHERNET
-> > > DRIVERS <intel-wired-lan@lists.osuosl.org>; open list
-> > > <linux-kernel@vger.kernel.org>; open list:XDP (eXpress Data Path)
-> > > <bpf@vger.kernel.org>
-> > > Subject: Re: [PATCH net] ice: Fix logic of getting XSK pool
-> > > associated with Tx queue
-> > >
-> > > On Tue, 29 Mar 2022 14:00:01 +0200
-> > > Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
-> > >
-> > > > Thanks for this fix! I did exactly the same patch yesterday and
-> > > > it's already applied to bpf tree:
-> > > >
-> > > > https://lore.kernel.org/bpf/20220328142123.170157-5-maciej.fijalko
-> > > > wski
-> > > > @intel.com/T/#u
-> > > >
-> > > > Maciej
-> > >
-> > > Thanks for info... Nice human race condition ;-)
-> > >
-> > > I.
-> >
-> > I'm covering for Tony this week maintaining this tree.  He let me know =
-there
-> were a few patches you had to send Ivan and I was waiting on this one.  I=
-f
-> I'm following correctly, this one will be dropped and the other ones are =
-ready
-> to be sent now to net then?
->=20
-> Yes, this one is beaten and the net tree already contains it[0].
-> There are still 3 Ivan's fixes not applied yet:
->  * [1]
->  * [2]
->  * [3]
->=20
-> I'm wondering if it's worth to pass them through dev-queue since they're
-> urgent and have been tested already in 2 companies? They could go directl=
-y
-> to -net and make it into RC1.
->=20
-> >
-> > Alice.
->=20
-> [0]
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=
-=3D
-> 1ac2524de7b366633fc336db6c94062768d0ab03
-> [1] https://lore.kernel.org/netdev/20220322142554.3253428-1-
-> ivecera@redhat.com
-> [2] https://lore.kernel.org/netdev/20220325132524.1765342-1-
-> ivecera@redhat.com
-> [3] https://lore.kernel.org/netdev/20220325132819.1767050-1-
-> ivecera@redhat.com
->=20
-> Thanks,
-> Al
 
-Yes, if you read my original message, I said to net =3D) I am the
-one that takes it from here and sends to net.  I was asserting
-that his changes were done now and ready to be sent to net or
-if I was missing another patch he is working on before putting
-it up.
-Alice
+
+On 3/30/22 12:18, Nico Pache wrote:
+> 
+> 
+> On 3/30/22 03:18, Michal Hocko wrote:
+>> Nico,
+>>
+>> On Wed 23-03-22 10:17:29, Michal Hocko wrote:
+>>> Let me skip over futex part which I need to digest and only focus on the
+>>> oom side of the things for clarification.
+>>>
+>>> On Tue 22-03-22 23:43:18, Thomas Gleixner wrote:
+>> [...]
+>>>> You can easily validate that by doing:
+>>>>
+>>>> wake_oom_reaper(task)
+>>>>    task->reap_time = jiffies + HZ;
+>>>>    queue_task(task);
+>>>>    wakeup(reaper);
+>>>>
+>>>> and then:
+>>>>
+>>>> oom_reap_task(task)
+>>>>     now = READ_ONCE(jiffies);
+>>>>     if (time_before(now, task->reap_time)
+>>>>         schedule_timeout_idle(task->reap_time - now);
+>>>>
+>>>> before trying to actually reap the mm.
+>>>>
+>>>> That will prevent the enforced race in most cases and allow the exiting
+>>>> and/or killed processes to cleanup themself. Not pretty, but it should
+>>>> reduce the chance of the reaper to win the race with the exiting and/or
+>>>> killed process significantly.
+>>>>
+>>>> It's not going to work when the problem is combined with a heavy VM
+>>>> overload situation which keeps a guest (or one/some it's vCPUs) away
+>>>> from being scheduled. See below for a discussion of guarantees.
+>>>>
+>>>> If it failed to do so when the sleep returns, then you still can reap
+>>>> it.
+>>>
+>>> Yes, this is certainly an option. Please note that the oom_reaper is not
+>>> the only way to trigger this. process_mrelease syscall performs the same
+>>> operation from the userspace. Arguably process_mrelease could be used
+>>> sanely/correctly because the userspace oom killer can do pro-cleanup
+>>> steps before going to final SIGKILL & process_mrelease. One way would be
+>>> to send SIGTERM in the first step and allow the victim to perform its
+>>> cleanup.
+>>
+>> are you working on another version of the fix/workaround based on the
+>> discussion so far?
+> 
+> We are indeed! Sorry for the delay we've been taking the time to do our due
+> diligence on some of the claims made. We are also spending time rewriting the
+> reproducer to include more test cases that Thomas brought up.
+> 
+> Ill summarize here, and reply to the original emails in more detail....
+> 
+> Firstly, we have implemented & tested the VMA skipping... it does fix our case.
+> Thomas brought up a few good points about the robust list head and the potential
+> waiters being in different VMAs; however, I think its a moot point, given that
+> the locks will only be reaped if allocated as ((private|anon)|| !shared).
+
+Sorry... not completely moot.
+
+As Thomas pointed out, a robust list with the following structure will probably
+fail to recover its waiters:
+
+TLS (robust head, skip)* --> private lock (reaped) --> shared lock (not reaped)
+
+We are working on getting a test case with multiple locks and mixed mapping
+types to prove this.
+
+Skipping the robust list head VMA will be beneficial in cases were the robust
+list is full of shared locks:
+
+TLS (robust head, skip)* --> shared lock(not reaped) --> shared lock(not reaped)
+
+-- Nico
+

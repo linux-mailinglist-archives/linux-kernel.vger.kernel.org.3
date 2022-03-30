@@ -2,497 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA724EBCE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9384EBCE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244449AbiC3IsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S244451AbiC3ItM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244421AbiC3IsF (ORCPT
+        with ESMTP id S242167AbiC3ItE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:48:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB129D0FD
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648629978; x=1680165978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=30/8kd1bONEXiyWCF1rv+jDvk2QlrR+MfWbn18S32Fg=;
-  b=XfZ+swc8gBWXPSbzJJbyrRzjIGw1uLyEONE5JHrB+PeTOMqs2OgJwDJh
-   N/9n9aYQYLeAn0JGJdUtaPhVJxXHuECRz/NMGs8hDZswsNtAapIliJJfK
-   eDNmFHw6806AYF1rR5PE+lPycMVMd1kyR59KQXd53PmSBUZJ8hflvpF26
-   PvQ+QfnfXRkc7qlSM07D8qYx5ckNFCB2y60QYIVzcd2/E8SNtSiTSehZG
-   ZBRphMNRXbcRJHYZdxfTvxJhzg0WGXw/rDJ5tV+cxk6g+uDJ0cINO50zl
-   gLF/SBc7aOABsm3EiDSeb5PWg9sYPcwEtf2gx/di7vWMv18AvN+80Xn6W
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345923905"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="345923905"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 01:46:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="653727021"
-Received: from lkp-server02.sh.intel.com (HELO 7a008980c4ea) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 01:46:15 -0700
-Received: from kbuild by 7a008980c4ea with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZTy2-00009S-Vx; Wed, 30 Mar 2022 08:46:14 +0000
-Date:   Wed, 30 Mar 2022 16:45:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nemanja Rakovic <nemanja.rakovic@syrmia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: mips64-linux-ld: warning: orphan section `.ctors.65436' from
- `drivers/bus/mhi/core/init.o' being placed in section `.ctors.65436'
-Message-ID: <202203301633.rcdXizkM-lkp@intel.com>
+        Wed, 30 Mar 2022 04:49:04 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CB2AC07E;
+        Wed, 30 Mar 2022 01:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wPfcvGoaLqJ0U7znxncjuzYbekQGXK1v+c9yOMjO0Nc=; b=iQO/dpFuFZOMpAC6r3kZDkXiFD
+        gCOsI18AXPCMCis0vlOOS0XOvexSlJNElluMqSL7om/xPbOY+LWG6qGEg0v+BUDT1Reu8d73c0W3i
+        EUw7bTwnVOozHuDLYbKS8tNSAtt1xdoAa03reNvqw6V43sAVgQPv7eMmBVTScyS92r08O+w1LT3rF
+        EqOeJleHn+0orGRolOkd+dM4uURIKkJJynd1Z0i5zllZMm+yf8M8hUOMYOlsXhMVhhpSwlIxCLA43
+        cuCuY4Fv3onFkpXyYuzQvU/33VcxnOfRK8mWRqnh9V8XCYY0Hw4ootxLPAe9UTIhDO7kuqj39Uy77
+        UlDuZxFw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZTy5-006AXR-PI; Wed, 30 Mar 2022 08:46:18 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C0B01986215; Wed, 30 Mar 2022 10:46:15 +0200 (CEST)
+Date:   Wed, 30 Mar 2022 10:46:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 38/48] objtool: kmsan: list KMSAN API functions as
+ uaccess-safe
+Message-ID: <20220330084615.GH8939@worktop.programming.kicks-ass.net>
+References: <20220329124017.737571-1-glider@google.com>
+ <20220329124017.737571-39-glider@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220329124017.737571-39-glider@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   965181d7ef7e1a863477536dc328c23a7ebc8a1d
-commit: e0a8b93efa2382d370be44bf289157de7e5dacb4 mips: Enable KCSAN
-date:   7 weeks ago
-config: mips-randconfig-r033-20220329 (https://download.01.org/0day-ci/archive/20220330/202203301633.rcdXizkM-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0a8b93efa2382d370be44bf289157de7e5dacb4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e0a8b93efa2382d370be44bf289157de7e5dacb4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Tue, Mar 29, 2022 at 02:40:07PM +0200, Alexander Potapenko wrote:
+> KMSAN inserts API function calls in a lot of places (function entries
+> and exits, local variables, memory accesses), so they may get called
+> from the uaccess regions as well.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+That's insufficient. Explain how you did the right thing and made these
+functions actually safe to be called in this context.
 
-All warnings (new ones prefixed by >>):
-
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/tables.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/int1.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/int2.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/int4.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/int8.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/int16.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/raid6/int32.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/audit.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/notifier-error-inject.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/netdev-notifier-error-inject.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/syscall.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/dynamic_debug.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/nlattr.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/dynamic_queue_limits.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/glob.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/globtest.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-lshift.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-mul1.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-mul2.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-mul3.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-rshift.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-sub1.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/generic_mpih-add1.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/ec.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpicoder.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-add.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-bit.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-cmp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-sub-ui.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-div.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-inv.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-mod.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-mul.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpih-cmp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpih-div.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpih-mul.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpi-pow.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/mpi/mpiutil.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/dim/dim.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/dim/net_dim.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/dim/rdma_dim.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/net_utils.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/sg_pool.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/irq_poll.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/stackdepot.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/ref_tracker.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/interval_tree_test.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/asn1_decoder.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/oid_registry.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/sbitmap.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/ashldi3.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/ashrdi3.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/lshrdi3.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/cmpdi2.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `lib/ucmpdi2.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/iomap_copy.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/iomap-pci.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/dump_tlb.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/bswapsi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/bswapdi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/multi3.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/cp1emu.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/ieee754dp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/ieee754sp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/ieee754.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_div.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_mul.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_sub.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_add.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_fsp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_cmp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_simple.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_tint.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_fint.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_rint.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_maddf.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_2008class.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_fmin.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_fmax.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_div.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_mul.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_sub.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_add.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_fdp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_cmp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_simple.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_tint.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_fint.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_rint.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_maddf.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_2008class.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_fmin.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_fmax.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dsemul.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/me-debugfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/irqchip/irqchip.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/irqchip/irq-al-fic.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/irqchip/irq-mips-cpu.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/brcmstb_gisb.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/simple-pm-bus.o' being placed in section `.ctors.65436'
->> mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/mhi/core/init.o' being placed in section `.ctors.65436'
->> mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/mhi/core/main.o' being placed in section `.ctors.65436'
->> mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/mhi/core/pm.o' being placed in section `.ctors.65436'
->> mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/mhi/core/boot.o' being placed in section `.ctors.65436'
->> mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/bus/mhi/core/debugfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/phy-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/phy-can-transceiver.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/phy-pistachio-usb.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/broadcom/phy-bcm-kona-usb2.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/cadence/phy-cadence-torrent.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/cadence/phy-cadence-salvo.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/marvell/phy-mvebu-a3700-utmi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/marvell/phy-pxa-28nm-hsic.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/marvell/phy-pxa-28nm-usb2.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/microchip/lan966x_serdes.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/phy/mscc/phy-ocelot-serdes.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-utils.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinmux.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinconf.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinconf-generic.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/devicetree.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-axp209.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-da9062.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-ingenic.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-microchip-sgpio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-ocelot.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-pistachio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-rk805.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/pinctrl-single.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pinctrl/uniphier/pinctrl-uniphier-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpiolib.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpiolib-devres.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpiolib-legacy.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpiolib-of.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpiolib-cdev.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-mmio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-74xx-mmio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-adnp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-adp5588.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-altera.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-amd-fch.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-bd71828.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-bd9571mwv.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-bt8xx.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-cadence.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-gw-pld.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-logicvc.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-lp873x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-max7300.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-max730x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-mb86s7x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-menz127.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-mockup.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-pca9570.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-pcf857x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-pch.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-pcie-idio-24.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-pci-idio-16.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-rdc321x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-sama5d2-piobu.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-sim.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-syscon.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-tpic2810.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-tps65218.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-tps65912.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-twl4030.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-virtio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-wcd934x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-wm8350.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gpio/gpio-xilinx.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/access.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/bus.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/probe.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/host-bridge.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/remove.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/pci.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/pci-driver.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/search.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/pci-sysfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/rom.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/setup-res.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/vpd.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/setup-bus.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/vc.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/mmap.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/setup-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/msi/pcidev_msi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/msi/msi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/msi/irqdomain.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/msi/legacy.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/pcie/aspm.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/proc.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/slot.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/of.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/hotplug/pci_hotplug_core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/hotplug/cpci_hotplug_core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/hotplug/cpci_hotplug_pci.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/pci-stub.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/controller/cadence/pcie-cadence.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/controller/cadence/pcie-cadence-host.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/controller/cadence/pcie-cadence-plat.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/controller/cadence/pci-j721e.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/pci/controller/pcie-xilinx.o' being placed in section `.ctors.65436'
---
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/bus.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/dd.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/syscore.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/driver.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/class.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/platform.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/cpu.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/firmware.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/init.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/map.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/devres.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/attribute_container.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/transport_class.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/topology.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/container.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/property.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/cacheinfo.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/swnode.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/sysfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/generic_ops.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/common.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/qos.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/runtime.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/wakeirq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/main.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/wakeup.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/wakeup_stats.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/domain.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/domain_governor.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/power/clock_ops.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/firmware_loader/main.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/firmware_loader/builtin/main.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regcache.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regcache-rbtree.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regcache-flat.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap-debugfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap-slimbus.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap-spmi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap-mmio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/regmap/regmap-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/pinctrl.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/platform-msi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/base/trace.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ad525x_dpot.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ad525x_dpot-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/dummy-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ics932s401.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/tifm_core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/tifm_7xx1.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/phantom.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/bh1770glc.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/enclosure.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/kgdbts.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/apds9802als.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/isl29003.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/tsl2550.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ds1682.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/c2port/core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/hmc6352.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/eeprom/at24.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/eeprom/eeprom.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/eeprom/max6875.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/eeprom/eeprom_93cx6.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/eeprom/idt_89hpesx.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ti-st/st_core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ti-st/st_kim.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/ti-st/st_ll.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/lis3lv02d/lis3lv02d.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/lis3lv02d/lis3lv02d_i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/altera-stapl/altera-lpt.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/altera-stapl/altera-jtag.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/altera-stapl/altera-comp.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/altera-stapl/altera.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/dw-xdata-pcie.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/pci_endpoint_test.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/bcm-vk/bcm_vk_dev.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/bcm-vk/bcm_vk_msg.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/bcm-vk/bcm_vk_sg.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/cardreader/alcor_pci.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/pvpanic/pvpanic.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/pvpanic/pvpanic-pci.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/mmu/mmu.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/mmu/mmu_v1.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/pci/pci.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/habanalabs_drv.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/device.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/context.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/asid.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/habanalabs_ioctl.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/command_buffer.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/hw_queue.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/sysfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/hwmon.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/memory.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/command_submission.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/firmware_if.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/state_dump.o' being placed in section `.ctors.65436'
->> mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/hwmgr.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/goya/goya.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/goya/goya_security.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/goya/goya_hwmgr.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/goya/goya_coresight.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/gaudi/gaudi.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/gaudi/gaudi_security.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/gaudi/gaudi_coresight.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/habanalabs/common/debugfs.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/uacce/uacce.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/misc/hi6421v600-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/88pm860x-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/88pm860x-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/bcm590xx.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/bd9571mwv.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/gateworks-gsc.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/htc-pasic3.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/lp873x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/lp87565.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/ti_am335x_tscadc.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/sun6i-prcm.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tqmx86.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/arizona-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/arizona-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm5110-tables.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/cs47l24-tables.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/arizona-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wcd934x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8350-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8350-regmap.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8350-gpio.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8350-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8350-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8994-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8994-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wm8994-regmap.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps6105x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps65010.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps6507x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps65217.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps65218.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps65912-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps65912-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/twl-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/twl4030-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/twl6030-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/twl6040.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/mc13xxx-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/mc13xxx-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/mfd-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/axp20x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/axp20x-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/lp3943.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/da9062-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max14577.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max77686.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max77693.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max77843.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max8925-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max8925-i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max8998.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/max8998-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/mp2629.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/lpc_sch.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rdc321x-southbridge.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps6586x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/vx855.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/wl1273-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/tps65090.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/ntxec.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rk808.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/sec-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/sec-irq.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/syscon.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/lm3533-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/lm3533-ctrlbank.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/retu-mfd.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/iqs62x.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/hi6421-pmic-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rt5033.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/mt6360-core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rohm-bd71828.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rohm-bd9576.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/stmfx.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rsmu_core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mfd/rsmu_i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/pn544/pn544.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/pn544/i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/microread/microread.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/microread/i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/nfcsim.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/st21nfca/core.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/st21nfca/dep.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/st21nfca/se.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/st21nfca/vendor_cmds.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nfc/st21nfca/i2c.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/dma-buf/dma-buf.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/dma-buf/dma-fence.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/dma-buf/dma-fence-array.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/dma-buf/dma-fence-chain.o' being placed in section `.ctors.65436'
-   mips64-linux-ld: warning: orphan section `.ctors.65436' from `drivers/dma-buf/dma-resv.o' being placed in section `.ctors.65436'
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> Link: https://linux-review.googlesource.com/id/I242bc9816273fecad4ea3d977393784396bb3c35
+> ---
+>  tools/objtool/check.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 7c33ec67c4a95..8518eaf05bff0 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -943,6 +943,25 @@ static const char *uaccess_safe_builtin[] = {
+>  	"__sanitizer_cov_trace_cmp4",
+>  	"__sanitizer_cov_trace_cmp8",
+>  	"__sanitizer_cov_trace_switch",
+> +	/* KMSAN */
+> +	"kmsan_copy_to_user",
+> +	"kmsan_report",
+> +	"kmsan_unpoison_memory",
+> +	"__msan_chain_origin",
+> +	"__msan_get_context_state",
+> +	"__msan_instrument_asm_store",
+> +	"__msan_metadata_ptr_for_load_1",
+> +	"__msan_metadata_ptr_for_load_2",
+> +	"__msan_metadata_ptr_for_load_4",
+> +	"__msan_metadata_ptr_for_load_8",
+> +	"__msan_metadata_ptr_for_load_n",
+> +	"__msan_metadata_ptr_for_store_1",
+> +	"__msan_metadata_ptr_for_store_2",
+> +	"__msan_metadata_ptr_for_store_4",
+> +	"__msan_metadata_ptr_for_store_8",
+> +	"__msan_metadata_ptr_for_store_n",
+> +	"__msan_poison_alloca",
+> +	"__msan_warning",
+>  	/* UBSAN */
+>  	"ubsan_type_mismatch_common",
+>  	"__ubsan_handle_type_mismatch",
+> -- 
+> 2.35.1.1021.g381101b075-goog
+> 

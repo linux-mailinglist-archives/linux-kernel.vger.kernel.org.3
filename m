@@ -2,227 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EA24ECEE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6CC4ECED8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351277AbiC3Vgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S1351233AbiC3Vb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiC3Vgd (ORCPT
+        with ESMTP id S232691AbiC3VbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:36:33 -0400
-X-Greylist: delayed 407 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 14:34:45 PDT
-Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985F720F79
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:34:45 -0700 (PDT)
-Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
-        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 08B6122C771
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 21:27:59 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.64.219])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 6C0771C0081
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 21:27:57 +0000 (UTC)
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 3FC7C78008B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 21:27:57 +0000 (UTC)
-Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id B91DB13C2B0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:27:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com B91DB13C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1648675676;
-        bh=d86iQZjAMkl3I5xxyKZccQS/Dw6pHlshZk2WpxZaWrw=;
-        h=To:From:Subject:Date:From;
-        b=d5B444ntEO4GmiRsfAyh4CoZz3d636XX7VN5eHaQi8ILyum/l/BVbcWAvn00MkuW7
-         /UzV1j6DFA0DvpDU5Paiv1twul+kRZM5ZaAWy0IkApQjmajHxZzMIospq4FZj+gZTx
-         qSTDPb4ZJvrL8u832W/hNXzw64XhTj0kIbKvL0kA=
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Ben Greear <greearb@candelatech.com>
-Subject: Kernel panic - not syncing: Attempted to kill init!
- exitcode=0x00007f00 since 5.17
-Organization: Candela Technologies
-Message-ID: <bbf2d268-a93d-afdc-a836-0fdb878be10e@candelatech.com>
-Date:   Wed, 30 Mar 2022 14:27:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Wed, 30 Mar 2022 17:31:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3B1201AC;
+        Wed, 30 Mar 2022 14:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648675778; x=1680211778;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=9eYFznqP329R3Kgw/ih3RraO7g39ZoH9DBXq7MBwBJ8=;
+  b=LXouelV1WuKLXYuLCJ3uXAs8aTpByZcB1MyFRGRK6WT2eDYWab/+eIod
+   UzF3rpnv7f4RpFTHTHVnuvPYa8qBJVe1Dz/kkGiX3QvtKRZcHCdUa96Te
+   pCDhpUxb610WS06zKYc/KNUThDgR5+yuEGunUgXkJgDx/9Iu/lrfi4vgH
+   LKK8pCtue2sM7iv5Dy5bkcBFoU68Mnz0UbdmowCupKdMTDEyC3ajgdCCS
+   kHlJPpQyvvfFLP+SO+yDamKstb7zpjAHZqf1HRrzuK6FlfMZKTBvIv0FC
+   rl7L8yL0pyRoZsa9s8RogqYX8KHDMKyv0G3JV+FE4o3r8x8/SDK9QJ50b
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="239579753"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="239579753"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:29:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="838145278"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2022 14:29:26 -0700
+Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 30 Mar 2022 14:29:26 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 30 Mar 2022 14:29:26 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 30 Mar 2022 14:29:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oKL9MKpKAgy3kEKs5Ipn7QAHKR6Zk6vhvbZGF/pL7ZPRyKk3a44xTsWi9w2/gymH4IDKfQcX6pT5Ec2HNtbZjnD30Npz3cJdVXnpqIBnKB25qU6FFKEO6thYIHlaDnuF92pEpiuMfgXB991eKqtpgeF9Zrk8EY5e3sMBteqSn7cDZdQvMaVjArMDApReL6GtJ+FmhlGtySyj9LkdYR4AlIy33L36tNy94nHKgLA1PNVdJVdPaf2uQ/Uhzu+yHeUB7pQUefmY5Xu+2q8etucQqXX+pBH6dTF7ScH499FxxgW6/wIGhTqVpxbMcMr4fWJJ0EuiTRTV7MkAxZUArF4GZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BjKdwJud48zYKUwTIib9stjyWhn6+yIZFkMI4dO36fs=;
+ b=c2kXG1rWtl9Vq7HYwgwdpnf1cT7V20nxL49+8ykXNdsPI8nthwt53yN4rs+Hgqz3gURREFjr/jVdKYcyFtQQEOxg0ZlagkvlKQ0HO3U/lPrA8d7n4Mf2BEln6hzrYUfGBJ1qyzXKk1wYhAWI6Xc/xBK3NYyCB9v9mHrntbNyGgPwiwLH6yHbLx6amYFCgSNQHLFxBE0tU5dhHt8Iywko8QsX4CiW6FtATx7PE1BjVgaF7WCcGk5CBSx3JyLmXSsII5Q0xvS7Fm1LFDJsjTboDAvcmoTg+cEy5UbsDsFmR+N8UxxcqP0nG/BvJ5RhZJfKxuV/irYNROxZ+fFg7V9Akg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH0PR11MB5740.namprd11.prod.outlook.com (2603:10b6:610:101::7)
+ by CY4PR11MB1335.namprd11.prod.outlook.com (2603:10b6:903:26::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.17; Wed, 30 Mar
+ 2022 21:29:25 +0000
+Received: from CH0PR11MB5740.namprd11.prod.outlook.com
+ ([fe80::5ca:aece:f36:c53f]) by CH0PR11MB5740.namprd11.prod.outlook.com
+ ([fe80::5ca:aece:f36:c53f%3]) with mapi id 15.20.5123.019; Wed, 30 Mar 2022
+ 21:29:24 +0000
+Message-ID: <595369cd-b7d4-985c-a7e0-7110ffe9a606@intel.com>
+Date:   Wed, 30 Mar 2022 14:29:21 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
+ encl_stack
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-MDID: 1648675677-sQsZwQOrI0r5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+CC:     Shuah Khan <skhan@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220322074313.7444-1-jarkko@kernel.org>
+ <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com> <YkRvFkEO8Ic1VdQ8@iki.fi>
+ <0031a4f0-75f6-3104-1825-dcc2528f61b0@intel.com>
+ <f68d472877b7136c32d8770603a3de38de59c322.camel@kernel.org>
+ <ef991f0d-d0d2-f422-96d8-0951d593d2a5@intel.com>
+ <d44b3fc7ce9f053f978645dfe19018885d372d87.camel@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <d44b3fc7ce9f053f978645dfe19018885d372d87.camel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW3PR05CA0024.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::29) To CH0PR11MB5740.namprd11.prod.outlook.com
+ (2603:10b6:610:101::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d720817d-8dd6-4d4b-796f-08da12945c91
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1335:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR11MB133598665C31B9689C424885F81F9@CY4PR11MB1335.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UPmQCwsXoDwgjWt8Dkjn2swxEFNe8LZlVqTupUWL8M2de0OMoobZE1/VRTrxmqSzuq+NV7Tw9LqmwjUXDooAchJHisc4Ipher5m+UXB2AHnESmyFJ+KeHR9a7ayTGzc1odLtrOU8J9mQHzXNHNicLv/nvB5pJGHigVprapQA7DZ8fImrLhKxPg0JcyDPz2AkeLX6w9TDkkaPPD5HhvvvKUQDCQN4TkFSgmx46s7tvbLNU1LZ5U1MJSgSW1HYwkDqjNJTBE4ii9emVrt8Byd7athkc0g6MAZldVnBihtsWaiWPjiNzrvYFoOBB2pE5ZjOZr6xUQinu5OaxPMPZ1mNNPvsfeOW5tQZC6pvP2l5j0aLJMQ981sKOcqwnAghYCx3V++yeqC2L34aPOGQpuSiKyDnp++ZMHhKjkLYWYLPljcd45eVcMNiBdau1ng4NQgpSw8BLl9/1xHsrlMyJ/f54uBnNqAvZPHpb8E3/zkZzb06/CCGyOo1O/tqMZMnqEAwEsVGIuw1m7z3aCGHAGHgrZVrjJQdf2+gSPaz80luD188bNSxjdX4Mt6MFAf7DAp/XYtRP3vTx8Y2h1nHqyW/BH9INEerh//Vs3FXKc6hpI5SRBwL8zwnAIWsN3a+ted2YtDF8eTZ5Dy7Nnw9YhDLifHUXayF2TS63ZBAT7NZoiqO/i00+XMq4CVXj7g4D3VXXy+O6rV+P2AsWJBUP4D8GY0x/LJC8Ee7IZxF393U/OooIqhlFo7jYGBP7PlGJSuA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5740.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(186003)(26005)(53546011)(8676002)(6916009)(83380400001)(6506007)(6666004)(66946007)(8936002)(66556008)(66476007)(54906003)(4326008)(31696002)(86362001)(31686004)(6486002)(508600001)(82960400001)(5660300002)(38100700002)(6512007)(2906002)(44832011)(36756003)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjV5LzN3ZTZQdUtsR1JnOW5iNWRGWVJ1bUt6R2RTNDFYaHB1MktPOC90c2NL?=
+ =?utf-8?B?cFBTNGsyejNuemxsVjF1Q3BkQjNvSGZCQ0dPanZCMUttYzVyYTRoUEYwT0Ew?=
+ =?utf-8?B?OXpmME1YTC9pY3pFMlloTlRJaGtVb0VSOXdzTEJDTHhrUWtUS2xTb01rd3Mw?=
+ =?utf-8?B?aEdOL2NiZUhaNmRqSFM2Y3Z1UHE2YVVmcm5Ud0N1UUNKRlBkOWxYZ3RtdFdx?=
+ =?utf-8?B?ZEJueEdMR2orNkhBZkJIMGQzSG9aOVNGUGhoVnRBUU9xTG9MNWNyMEpVRHRo?=
+ =?utf-8?B?VUR4Ri8rNDRKbUpOaGJXbm5wUFprcVRYTm9vc0c3eS9xakZDMS8zSTZ5cGov?=
+ =?utf-8?B?UU5USUhDK0dzS0dsdEE3TGVYOXZtbG43WnNqRnNxRkpNSVRTcVlqbVR0NGpQ?=
+ =?utf-8?B?eGlxZ2dTZjJLa1hNeDZhdjNWRTY4eG1PbU5qMXJuRkFlSjJJUWtHWTAwR25R?=
+ =?utf-8?B?b0JZeUR0Z0J4N24ralJaOUxzbnIrU2w5OXkwc3JlRU84ZHF1Y3pIYkpuMUFM?=
+ =?utf-8?B?eFRzdXNCU2ZiMWQvTGUweDZlaU53TzFZMHlwQUUxZ21yRGppVEFGNzVFN3Fm?=
+ =?utf-8?B?NUxIYSthUU1HY1FYOTRKWjU2QmtzL0E0K0J5ejdRWjIxMzU1MlBCNzYrUU1G?=
+ =?utf-8?B?bFRGZGtpRHFlcnFiSW5KTEpaV09zcVkzRWltQ2VoVVlUOGh2a21NN3dOWFZS?=
+ =?utf-8?B?Z0RYYzBxMkpGVWdLdTd6WDduNS9nemdEejJpbmRPd1NvekN1K1lKS3NCU01r?=
+ =?utf-8?B?R2ZKZmpaRzdOUVpmSlY5dmkrNTVJY1dSZVR6dmtYck50aEZYc2JLaDVXTGRw?=
+ =?utf-8?B?UUNZZ0pKRkcxQzNJeWwrQTk3eG5JREJGR2NZTjk4eE9iWEJxZ2gxZzFYQXFW?=
+ =?utf-8?B?aCs4cDEwa0EvMHNIdzRyMzlselVBYTBSVmJ1bGs2L1dWUktHYytwTDdqeXdC?=
+ =?utf-8?B?ODdLZjZSR0NVZFJRbkxFSGlzOS9vK3NmSEhHM0ZqM042TVlpTzhkZm9VdWhS?=
+ =?utf-8?B?NjhDclJVNGczRnYzSURtOHBibkNaMnY0WW1TU09FK1U4c2NIclhOaWxGN2tF?=
+ =?utf-8?B?TVIyRlNkSkFKM0doUFQ0UG1Sa3NkTkFUb0pGY0V2ZGhRbTAyRXNQbjR2QUlq?=
+ =?utf-8?B?LzE1andtSDVSclZhMy9BYmtvSnRQYUVRU2xIWjdWcTFvNTNQOXJzR0x2ZU54?=
+ =?utf-8?B?WFAvQzdoaFlXUFArMHJaYmQvbHpGOTVVL3k2RlpaTERQS1ozaXpLUFpoVjN1?=
+ =?utf-8?B?Wno5SlFLZ2xHQ2FzeGRxaWd2VlZpamxOajY1WXBOS1FlZ3MwQURhSGFsWFRT?=
+ =?utf-8?B?NnhReVY5MHcyUVVXUXkvSWwveWhTUHlMMnA5dVdrS2Q3Nml0QXR0WDVZWEpB?=
+ =?utf-8?B?U2ZxWVBaWnZVKzk2Ti9Ga1pSRkw2bCswbWxRemJuWUhhanlNU01NMUc0Q1BO?=
+ =?utf-8?B?TEJVNnVBTWdYTHpDc1Z4TDc2dENBdS9DYTExZmtSeG9BZnFJeGtVdnVzOXlr?=
+ =?utf-8?B?Y01UNFlUazVXdUpiYzUrK3pPL055emZQeXJ5ZTlubXp2dy9qQnJKK1FoZHNx?=
+ =?utf-8?B?QU1iT3llNG41bkw5VlBUNnN0elJ4dW5JbnFUdFJKcDg4VHhhZ1hVUCtXT05Y?=
+ =?utf-8?B?clFpSUp5dlQzMzEyZy9wTm04TWxCQ0EzQi9VdTJTaVQ4anptMFBvcHlyWWNp?=
+ =?utf-8?B?cnJVdDBpbHRCMllzaEhNemZ1ZGN0TnlYRTVNZlBHTzdHMWU1aUtOSlY2VVM5?=
+ =?utf-8?B?Z2VlSnoxSHZtdnlKbFFTTGhBa001dm43bVpwdHg2VGdWMHpFN1dteWFheUR6?=
+ =?utf-8?B?L3ZaYy9ybS9lYVFVL0xnWXZMejhpWWJtR2FySVlTZ1g2ZW8wdjZrUVFablNi?=
+ =?utf-8?B?d0ZNcExEdWt2NzZoM3A5VW4xOGNyVkVNWmdtbC9CVVNTbXRNbXpYVEkxdFJM?=
+ =?utf-8?B?QlFrWndTSWFTV253elcyRCtSUS9sUEpLRTdhK2FTVTRxWjlGaWZyTnppNzN3?=
+ =?utf-8?B?YWo5K2NrM09mYjRvOS93Ui9ONFZCckhLa0FyNDhZWVRuaElPTis2RjFjWE5z?=
+ =?utf-8?B?U0JGS2RwSFdwLytEeXhmK0NXWDRMT1AyZlJ0WS84M0cwS0ZGY2kyQmhSb1pZ?=
+ =?utf-8?B?NEJ6TnNJRHE5QmUyTkpWK0plWnBGSnlGRU5EL1lrL2htQ3NBM1pXQ3A3WERF?=
+ =?utf-8?B?bEtmbEYyaTJqUFljUjltVUlhUzRpS1NOMkxiSUFyeWJ5SFdSaGhpZGJzVkxX?=
+ =?utf-8?B?aE9ZbGR6ZXhuWiswbk95cVp6N0oreDBDRC9MdXN6dXg5blVZVms3MHNiN2xF?=
+ =?utf-8?B?N0xESzRVdVRhZGp3cUtnbHc5UXB3QklmVno1YUpDMEhzNWtobTRSQlZuY2JH?=
+ =?utf-8?Q?huo2CSjKZLlGQ/Yg=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d720817d-8dd6-4d4b-796f-08da12945c91
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5740.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 21:29:24.6812
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6bXmlJeARyEIuKFEddNecqtAbBpYVQrI+SSm6PMfRi3y94RUIOkYHHAjcEVGKTkSAWDevUDLT9ia+kcjHcdaZ/Fdo6DtZgqhRJICO7CSvl8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1335
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Jarkko,
 
-After upgrading to 5.17 (plus our out-of-kernel patches),
-one of my test machines has been crashing on startup around 20% of the time.
-Here is one I just caught.  Looks like it cannot open a shared library
-file.  I did not see this on 5.16 or earlier kernels.  Also have not seen
-it on different machines, but also have not been doing any significant amounts
-of reboots on other systems usign 5.17 to date.
+On 3/30/2022 1:40 PM, Jarkko Sakkinen wrote:
+> On Wed, 2022-03-30 at 13:05 -0700, Reinette Chatre wrote:
+>>
+>>
+>> On 3/30/2022 12:03 PM, Jarkko Sakkinen wrote:
+>>> On Wed, 2022-03-30 at 10:40 -0700, Reinette Chatre wrote:
+>>>> Could you please elaborate how the compiler will fix it up?
+>>>
+>>> Sure.
+>>>
+>>> Here's the disassembly of the RBX version:
+>>>
+>>> [0x000021a9]> pi 1
+>>> lea rax, [rbx + loc.encl_stack]
+>>>
+>>> Here's the same with s/RBX/RIP/:
+>>>
+>>> [0x000021a9]> pi 5
+>>> lea rax, loc.encl_stack
+>>>
+>>> Compiler will substitute correct offset relative to the RIP,
+>>> well, because it can and it makes sense.
+>>
+>> It does not make sense to me because, as proven with my test,
+>> the two threads end up sharing the same stack memory.
+> 
+> I see, I need to correct my patch, thanks!
+> 
+> RBX gives correct results because of the binary organization,
+> i.e. TCS's are placed to zero offset and forward, and 
+> unrelocated symbol is just compiled in as an untranslated
+> offset.
+> 
+> RPI is given correct results but how the semantics work
+> right now is incompatible.
+> 
+> Still, even for kselftest, I would consider a switch
+> because that way:
+> 
+> 1. You can layout binary however you wan and things
+>    won't break.
+> 2. You can point to any symbol not just stack, if
+>    ever need.
+>    
+> I admit it works semantically but it just super
+> unrobust.
 
-hard power down, power up, and it boots fine.  So I think it is not initrd
-packaging problem...
+I do not think that we need an exceptionally flexible
+runtime as part of the SGX selftests but instead something
+that is easy(*) to understand while also sufficient to support
+the tests.
 
+Reinette
 
-Loading Candela Technologies 5.17.0+ COM1 115200 8n1 ...
-Loading initial ramdisk ...
-�00:02: ttyS0 at I/O 0x240 (irq = 4, base_baud = 115200) is a 16550A
-00:03: ttyS1 at I/O 0x248 (irq = 3, base_baud = 115200) is a 16550A
-00:04: ttyS2 at I/O 0x250 (irq = 6, base_baud = 115200) is a 16550A
-00:05: ttyS3 at I/O 0x258 (irq = 10, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-brd: module loaded
-loop: module loaded
-mei_me 0000:00:16.0: enabling device (0000 -> 0002)
-ahci 0000:00:17.0: AHCI 0001.0301 32 slots 2 ports 6 Gbps 0x3 impl SATA mode
-ahci 0000:00:17.0: flags: 64bit ncq sntf led clo only pio slum part ems deso sadm sds apst
-scsi host0: ahci
-scsi host1: ahci
-ata1: SATA max UDMA/133 abar m2048@0xdf32b000 port 0xdf32b100 irq 144
-ata2: SATA max UDMA/133 abar m2048@0xdf32b000 port 0xdf32b180 irq 144
-ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-ehci-pci: EHCI PCI platform driver
-ehci-platform: EHCI generic platform driver
-ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
-ohci-pci: OHCI PCI platform driver
-ohci-platform: OHCI generic platform driver
-uhci_hcd: USB Universal Host Controller Interface driver
-usbcore: registered new interface driver usbserial_generic
-usbserial: USB Serial support registered for generic
-i8042: PNP: No PS/2 controller found.
-i8042: Probing ports directly.
-i8042: No controller found
-mousedev: PS/2 mouse device common for all mice
-rtc_cmos 00:08: RTC can wake from S4
-rtc_cmos 00:08: registered as rtc0
-rtc_cmos 00:08: setting system clock to 2022-03-30T21:00:57 UTC (1648674057)
-rtc_cmos 00:08: alarms up to one month, y3k, 242 bytes nvram, hpet irqs
-device-mapper: uevent: version 1.0.3
-device-mapper: ioctl: 4.45.0-ioctl (2021-03-22) initialised: dm-devel@redhat.com
-platform eisa.0: Probing EISA bus 0
-platform eisa.0: EISA: Cannot allocate resource for mainboard
-intel_pstate: Intel P-state driver initializing
-intel_pstate: Disabling energy efficiency optimization
-intel_pstate: HWP enabled
-ledtrig-cpu: registered to indicate activity on CPUs
-hid: raw HID events driver (C) Jiri Kosina
-usbcore: registered new interface driver usbhid
-usbhid: USB HID core driver
-resource sanity check: requesting [mem 0xfdffe800-0xfe0007ff], which spans more than pnp 00:0b [mem 0xfdb00000-0xfdffffff]
-caller pmc_core_probe+0xa5/0x610 mapping multiple BARs
-intel_pmc_core INT33A1:00:  initialized
-Initializing XFRM netlink socket
-NET: Registered PF_INET6 protocol family
-Segment Routing with IPv6
-RPL Segment Routing with IPv6
-In-situ OAM (IOAM) with IPv6
-NET: Registered PF_PACKET protocol family
-Key type dns_resolver registered
-microcode: sig=0x906e9, pf=0x2, revision=0xca
-microcode: Microcode Update Driver: v2.2.
-IPI shorthand broadcast: enabled
-AVX2 version of gcm_enc/dec engaged.
-AES CTR mode by8 optimization enabled
-sched_clock: Marking stable (1516934985, 113449077)->(1680081859, -49697797)
-registered taskstats version 1
-Loading compiled-in X.509 certificates
-zswap: loaded using pool lzo/zbud
-Key type ._fscrypt registered
-Key type .fscrypt registered
-Key type fscrypt-provisioning registered
-Key type big_key registered
-Key type encrypted registered
-PM:   Magic number: 14:426:46
-event_source uprobe: hash matches
-RAS: Correctable Errors collector initialized.
-ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-ata1.00: ACPI cmd f5/00:00:00:00:00:00(SECURITY FREEZE LOCK) filtered out
-ata1.00: ACPI cmd b1/c1:00:00:00:00:00(DEVICE CONFIGURATION OVERLAY) filtered out
-ata2.00: ACPI cmd f5/00:00:00:00:00:00(SECURITY FREEZE LOCK) filtered out
-ata2.00: ACPI cmd b1/c1:00:00:00:00:00(DEVICE CONFIGURATION OVERLAY) filtered out
-ata1.00: ATA-10: INTEL SSDSC2KB240G8, XCV10120, max UDMA/133
-ata1.00: 468862128 sectors, multi 1: LBA48 NCQ (depth 32)
-ata2.00: ATA-10: INTEL SSDSC2KB240G8, XCV10120, max UDMA/133
-ata2.00: 468862128 sectors, multi 1: LBA48 NCQ (depth 32)
-ata1.00: ACPI cmd f5/00:00:00:00:00:00(SECURITY FREEZE LOCK) filtered out
-ata1.00: ACPI cmd b1/c1:00:00:00:00:00(DEVICE CONFIGURATION OVERLAY) filtered out
-ata2.00: ACPI cmd f5/00:00:00:00:00:00(SECURITY FREEZE LOCK) filtered out
-ata2.00: ACPI cmd b1/c1:00:00:00:00:00(DEVICE CONFIGURATION OVERLAY) filtered out
-ata1.00: configured for UDMA/133
-ata2.00: configured for UDMA/133
-scsi 0:0:0:0: Direct-Access     ATA      INTEL SSDSC2KB24 0120 PQ: 0 ANSI: 5
-sd 0:0:0:0: Attached scsi generic sg0 type 0
-ata1.00: Enabling discard_zeroes_data
-sd 0:0:0:0: [sda] 468862128 512-byte logical blocks: (240 GB/224 GiB)
-scsi 1:0:0:0: Direct-Access     ATA      INTEL SSDSC2KB24 0120 PQ: 0 ANSI: 5
-sd 0:0:0:0: [sda] 4096-byte physical blocks
-sd 0:0:0:0: [sda] Write Protect is off
-ata2.00: Enabling discard_zeroes_data
-sd 1:0:0:0: Attached scsi generic sg1 type 0
-sd 1:0:0:0: [sdb] 468862128 512-byte logical blocks: (240 GB/224 GiB)
-sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-sd 1:0:0:0: [sdb] 4096-byte physical blocks
-ata1.00: Enabling discard_zeroes_data
-sd 1:0:0:0: [sdb] Write Protect is off
-sd 1:0:0:0: [sdb] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-ata2.00: Enabling discard_zeroes_data
-  sda: sda1 sda2 sda3
-ata1.00: Enabling discard_zeroes_data
-  sdb: sdb1 sdb2 sdb3
-ata2.00: Enabling discard_zeroes_data
-sd 0:0:0:0: [sda] Attached SCSI disk
-sd 1:0:0:0: [sdb] Attached SCSI disk
-Freeing unused kernel image (initmem) memory: 1784K
-Write protecting the kernel read-only data: 24576k
-Freeing unused kernel image (text/rodata gap) memory: 2040K
-Freeing unused kernel image (rodata/data gap) memory: 712K
-Run /init as init process
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x00007f00
-/init: error whitsc: Refined TSC clocksource calibration: 2903.996 MHz
-le loading shareCPU: 2 PID: 1 Comm: init Not tainted 5.17.0+ #12
-d libraries: libclocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x29dc020bb13, max_idle_ns: 440795273180 ns
-rt.so.1: cannot Hardware name: Default string Default string/SKYBAY, BIOS 5.12 08/04/2020
-open shared objeCall Trace:
-ct file: No such <TASK>
-  file or directo dump_stack_lvl+0x47/0x5c
-ry
-  panic+0xf5/0x2af
-  do_exit.cold.47+0x15/0x15
-  do_group_exit+0x28/0x90
-  __x64_sys_exit_group+0xf/0x10
-  do_syscall_64+0x34/0xb0
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f1178fa539e
-Code: 89 fa 41 b8 e7 00 00 00 be 3c 00 00 00 eb 14 0f 1f 44 00 00 89 d7 89 f0 0f 05 48 3d 00 f0 ff ff 77 1a f4 89 d7 44 89 c0 05
-RSP: 002b:00007ffca09d1fc8 EFLAGS: 00000202 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f1178f859f0 RCX: 00007f1178fa539e
-RDX: 000000000000007f RSI: 000000000000003c RDI: 000000000000007f
-RBP: 00007ffca09d2990 R08: 00000000000000e7 R09: 00007ffca09d1ed8
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007f1178fae4b0
-R13: 0000000000000000 R14: 0000000000000003 R15: 00007f1178f85a20
-  </TASK>
-Kernel Offset: disabled
----[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00007f00 ]---
-
-CTRL-A Z for help | 115200 8N1 | NOR | Minicom 2.7.1 | VT102 | Online 1:45 | ttyUSB0
-
-Thanks,
-Ben
-
--- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
-
+* I do not actually consider the existing enclave test binary
+  easy to understand (this thread is proof) but keeping its
+  complexity to be minimal would benefit folks needing to
+  ramp up on SGX and/or debug kselftest failures.

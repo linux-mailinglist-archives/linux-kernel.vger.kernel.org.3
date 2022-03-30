@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C844ECE88
+	by mail.lfdr.de (Postfix) with ESMTP id AF9624ECE89
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351185AbiC3UuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
+        id S1351159AbiC3Uu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351162AbiC3Ut7 (ORCPT
+        with ESMTP id S1351170AbiC3Ut7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Mar 2022 16:49:59 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA5F473BB;
-        Wed, 30 Mar 2022 13:48:06 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id z16so19936898pfh.3;
-        Wed, 30 Mar 2022 13:48:06 -0700 (PDT)
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FD547AE8;
+        Wed, 30 Mar 2022 13:48:09 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so1325719pjk.4;
+        Wed, 30 Mar 2022 13:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fYDyepM1PAw2FFzhXN5YHyImg0OWJ25svdZsQDoslA8=;
-        b=ChVMQToydrt+7HGXPCiIPagn73alyXCDQwOewO9LNcXKaY3wJod0f1Wr9TxpzQ9908
-         AaQ3ngeH6Nf2g9WG5OSC6Y+BynUXNFF7Cpbp5d3513UQxhvfm/+BTRNktwebBqhIZih8
-         eiOPj5odKM3VYb+PEUkhPULpW3gvrwUAa5/dlmIGdZW/QnP0iPutXZfFsy2BJqvtjP7Q
-         nT17wtqZgqBndc+E4RkBblbSY8etJTlPwEcqkrpYVVfOgpWZFra2aqojUWV45NMxK5HC
-         Mn32p5oAEiZPqa9UubcKPZjJFCNkwrHFyxnYKkxRHAUQO6CNawkvn0IH+gBhU5nrOcWh
-         0dig==
+        bh=NOdxvPtlisUpSXyoJyoVKYjYLlL/fOVfmd/T3oP24MA=;
+        b=gnO1+Uz1zwVNZdc7ViqrJ2uXAA9XBhjgYTjmNeTFVVHzTuLqLA/dXsX3t6DteVlrB0
+         tnXmqffRqVAKy7rSeHJ503EGdIPkFFVp52VE2tW/X1q4lJs4NUlhupT88Wd+Gvrco9oI
+         IsTB2PDlAzkLvtGs78iW45C7AVmXdiWi8Xjvjww5xQlXZSdkQsc69TKko4ele8+3TZnX
+         c6KHXMpehwoJgBvxMJzZLnDMB5QhP6K9mWZovvcIBbkFHgl9PEwxh2oA/Oy/Ty2Y34Y1
+         L7Z86rVsjvKnA8yrhhNeidZ9O91DHv73CTYdsDmCoT+wstnBNmT241CsQL1EvgOm65iI
+         9OlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fYDyepM1PAw2FFzhXN5YHyImg0OWJ25svdZsQDoslA8=;
-        b=t6agZW2hsr5ZvIH6FeuZcYUpc5Bbgevq9sa/9NS/3aUmzueRBrE/4oJ8gU5HK0nJED
-         LcwNkaHKAAgAuuWEo7DK1DH1h3jSf7OyN6v35dz768KESYzjVNuRDoiwpDcjdutjlpb8
-         9hdUFJ/V7yOcO8TC8hQhDHlrpaoumJ2if8yzBX3jtiFQiWpgS74rnnOCEOI2tlAZ01m9
-         dtarj9TrBmELQO2Nc5K9ESnVmlfGDcWOh6JXUclKGPw+BGx2dKhcdN/4LAx58HlL3LU4
-         hga74QnSZXv2GPhK6iwAfiZRmg5lmBB7Om9cU8e4mCB08ZnTQfVjzFjbsdfvlnmwXWCx
-         TB/Q==
-X-Gm-Message-State: AOAM530SF+RlhhHMw8Cbtwsd+2pIk3v7p5RJOHbiWzCSbZNAXTCuGeqQ
-        7HixyFU6Z7mYjVj0uVKiUQo=
-X-Google-Smtp-Source: ABdhPJysrCW7T4xLr30Fk4k5Y9pqgTYVNJdHJPSmvaqNrmHMUh6eDCzdUrrBZBnkmHm6GQ5x+MtBKw==
-X-Received: by 2002:a65:530b:0:b0:382:b21d:82eb with SMTP id m11-20020a65530b000000b00382b21d82ebmr7766001pgq.215.1648673286092;
-        Wed, 30 Mar 2022 13:48:06 -0700 (PDT)
+        bh=NOdxvPtlisUpSXyoJyoVKYjYLlL/fOVfmd/T3oP24MA=;
+        b=DbnOyV/czZQ7hHKWLDPPYpMBd2/nKi58BRS7eEADwlCXR18T6aIZcPPhezQoKsa3DP
+         4VbbGabbni67vKJ9dDeuynClwHn2fPptaplzSjUG6FRUe41uvjCLzStKozyNjEE68Llo
+         L9TpoTAjPRZGMd8plhDDvSd37R7ED/M7pjtw2EwtL3exTftl/qbDtGoxxXw0dRGhTfG0
+         7IYjXSx2T0cIciE/0gLsxL5Qp7vYILmA3b50gMkfEWsln6Y44V4ymwT4ZDzRx2T29EJ/
+         /A3aj9BepF6dPx9BW76R9eak/6MjEZqbtMzQb5M17gM66KCuRs1o+dMM61ny6t+ciD8m
+         IO8w==
+X-Gm-Message-State: AOAM533M5Ve2g6JyD76bWVSFeR1pe/AXVAkItNJsrzdLovFz4yC1yP9o
+        AuC8EjojyDmY1RjZuEwrUFw=
+X-Google-Smtp-Source: ABdhPJxuJKHDkDYK605WbB4re1/4y+Ms0Jo9eQFbbKvEzPSoEMHXuspIEx1zRw/AmFt8H/Yz6mdMAw==
+X-Received: by 2002:a17:902:f70c:b0:14e:f1a4:d894 with SMTP id h12-20020a170902f70c00b0014ef1a4d894mr1609506plo.65.1648673288700;
+        Wed, 30 Mar 2022 13:48:08 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id f192-20020a636ac9000000b0039836edcf42sm11513218pgc.85.2022.03.30.13.48.04
+        by smtp.gmail.com with ESMTPSA id k20-20020aa788d4000000b004fb07f819c1sm20293768pff.50.2022.03.30.13.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 13:48:05 -0700 (PDT)
+        Wed, 30 Mar 2022 13:48:07 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -58,15 +58,10 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wang Qing <wangqing@vivo.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 05/10] drm/msm/gem: Drop PAGE_SHIFT for address space mm
-Date:   Wed, 30 Mar 2022 13:47:50 -0700
-Message-Id: <20220330204804.660819-6-robdclark@gmail.com>
+Subject: [PATCH v2 06/10] drm/msm: Drop msm_gem_iova()
+Date:   Wed, 30 Mar 2022 13:47:51 -0700
+Message-Id: <20220330204804.660819-7-robdclark@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220330204804.660819-1-robdclark@gmail.com>
 References: <20220330204804.660819-1-robdclark@gmail.com>
@@ -84,137 +79,108 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Get rid of all the unnecessary conversion between address/size and page
-offsets.  It just confuses things.
+There was only a single user, which could just as easily stash the iova
+when pinning.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c |  2 +-
- drivers/gpu/drm/msm/msm_gem.c         |  5 ++---
- drivers/gpu/drm/msm/msm_gem.h         |  4 ++--
- drivers/gpu/drm/msm/msm_gem_vma.c     | 16 ++++++++--------
- 4 files changed, 13 insertions(+), 14 deletions(-)
+ drivers/gpu/drm/msm/msm_fb.c  | 16 ++++++++++------
+ drivers/gpu/drm/msm/msm_gem.c | 16 ----------------
+ drivers/gpu/drm/msm/msm_gem.h |  2 --
+ 3 files changed, 10 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 3e325e2a2b1b..9f76f5b15759 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -1172,7 +1172,7 @@ static int a6xx_gmu_memory_alloc(struct a6xx_gmu *gmu, struct a6xx_gmu_bo *bo,
- 		return PTR_ERR(bo->obj);
+diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
+index 7137492fe78e..d4eef66e29dc 100644
+--- a/drivers/gpu/drm/msm/msm_fb.c
++++ b/drivers/gpu/drm/msm/msm_fb.c
+@@ -21,6 +21,9 @@ struct msm_framebuffer {
  
- 	ret = msm_gem_get_and_pin_iova_range(bo->obj, gmu->aspace, &bo->iova,
--		range_start >> PAGE_SHIFT, range_end >> PAGE_SHIFT);
-+					     range_start, range_end);
- 	if (ret) {
- 		drm_gem_object_put(bo->obj);
- 		return ret;
+ 	/* Count of # of attached planes which need dirtyfb: */
+ 	refcount_t dirtyfb;
++
++	/* Framebuffer per-plane address, if pinned, else zero: */
++	uint64_t iova[DRM_FORMAT_MAX_PLANES];
+ };
+ #define to_msm_framebuffer(x) container_of(x, struct msm_framebuffer, base)
+ 
+@@ -76,14 +79,14 @@ int msm_framebuffer_prepare(struct drm_framebuffer *fb,
+ {
+ 	struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
+ 	int ret, i, n = fb->format->num_planes;
+-	uint64_t iova;
+ 
+ 	if (needs_dirtyfb)
+ 		refcount_inc(&msm_fb->dirtyfb);
+ 
+ 	for (i = 0; i < n; i++) {
+-		ret = msm_gem_get_and_pin_iova(fb->obj[i], aspace, &iova);
+-		drm_dbg_state(fb->dev, "FB[%u]: iova[%d]: %08llx (%d)", fb->base.id, i, iova, ret);
++		ret = msm_gem_get_and_pin_iova(fb->obj[i], aspace, &msm_fb->iova[i]);
++		drm_dbg_state(fb->dev, "FB[%u]: iova[%d]: %08llx (%d)",
++			      fb->base.id, i, msm_fb->iova[i], ret);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -103,14 +106,15 @@ void msm_framebuffer_cleanup(struct drm_framebuffer *fb,
+ 
+ 	for (i = 0; i < n; i++)
+ 		msm_gem_unpin_iova(fb->obj[i], aspace);
++
++	memset(msm_fb->iova, 0, sizeof(msm_fb->iova));
+ }
+ 
+ uint32_t msm_framebuffer_iova(struct drm_framebuffer *fb,
+ 		struct msm_gem_address_space *aspace, int plane)
+ {
+-	if (!fb->obj[plane])
+-		return 0;
+-	return msm_gem_iova(fb->obj[plane], aspace) + fb->offsets[plane];
++	struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
++	return msm_fb->iova[plane];
+ }
+ 
+ struct drm_gem_object *msm_framebuffer_bo(struct drm_framebuffer *fb, int plane)
 diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index f96d1dc72021..f4b68bb28a4d 100644
+index f4b68bb28a4d..deafae6feaa8 100644
 --- a/drivers/gpu/drm/msm/msm_gem.c
 +++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -392,7 +392,7 @@ static int get_iova_locked(struct drm_gem_object *obj,
- 		if (IS_ERR(vma))
- 			return PTR_ERR(vma);
+@@ -509,22 +509,6 @@ int msm_gem_get_iova(struct drm_gem_object *obj,
+ 	return ret;
+ }
  
--		ret = msm_gem_init_vma(aspace, vma, obj->size >> PAGE_SHIFT,
-+		ret = msm_gem_init_vma(aspace, vma, obj->size,
- 			range_start, range_end);
- 		if (ret) {
- 			del_vma(vma);
-@@ -434,8 +434,7 @@ static int msm_gem_pin_iova(struct drm_gem_object *obj,
- 	if (IS_ERR(pages))
- 		return PTR_ERR(pages);
- 
--	ret = msm_gem_map_vma(aspace, vma, prot,
--			msm_obj->sgt, obj->size >> PAGE_SHIFT);
-+	ret = msm_gem_map_vma(aspace, vma, prot, msm_obj->sgt, obj->size);
- 
- 	if (!ret)
- 		msm_obj->pin_count++;
+-/* get iova without taking a reference, used in places where you have
+- * already done a 'msm_gem_get_and_pin_iova' or 'msm_gem_get_iova'
+- */
+-uint64_t msm_gem_iova(struct drm_gem_object *obj,
+-		struct msm_gem_address_space *aspace)
+-{
+-	struct msm_gem_vma *vma;
+-
+-	msm_gem_lock(obj);
+-	vma = lookup_vma(obj, aspace);
+-	msm_gem_unlock(obj);
+-	GEM_WARN_ON(!vma);
+-
+-	return vma ? vma->iova : 0;
+-}
+-
+ /*
+  * Locked variant of msm_gem_unpin_iova()
+  */
 diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-index 1b7f0f0b88bf..090c3b1a6d9a 100644
+index 090c3b1a6d9a..772de010a669 100644
 --- a/drivers/gpu/drm/msm/msm_gem.h
 +++ b/drivers/gpu/drm/msm/msm_gem.h
-@@ -59,7 +59,7 @@ struct msm_gem_vma {
- };
- 
- int msm_gem_init_vma(struct msm_gem_address_space *aspace,
--		struct msm_gem_vma *vma, int npages,
-+		struct msm_gem_vma *vma, int size,
- 		u64 range_start, u64 range_end);
- bool msm_gem_vma_inuse(struct msm_gem_vma *vma);
- void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
-@@ -68,7 +68,7 @@ void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma);
- int msm_gem_map_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma, int prot,
--		struct sg_table *sgt, int npages);
-+		struct sg_table *sgt, int size);
- void msm_gem_close_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma);
- 
-diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
-index dc2ae097805e..4949899f1fc7 100644
---- a/drivers/gpu/drm/msm/msm_gem_vma.c
-+++ b/drivers/gpu/drm/msm/msm_gem_vma.c
-@@ -46,7 +46,7 @@ bool msm_gem_vma_inuse(struct msm_gem_vma *vma)
- void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma)
- {
--	unsigned size = vma->node.size << PAGE_SHIFT;
-+	unsigned size = vma->node.size;
- 
- 	/* Print a message if we try to purge a vma in use */
- 	if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
-@@ -73,9 +73,8 @@ void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
- int
- msm_gem_map_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma, int prot,
--		struct sg_table *sgt, int npages)
-+		struct sg_table *sgt, int size)
- {
--	unsigned size = npages << PAGE_SHIFT;
- 	int ret = 0;
- 
- 	if (GEM_WARN_ON(!vma->iova))
-@@ -120,7 +119,7 @@ void msm_gem_close_vma(struct msm_gem_address_space *aspace,
- 
- /* Initialize a new vma and allocate an iova for it */
- int msm_gem_init_vma(struct msm_gem_address_space *aspace,
--		struct msm_gem_vma *vma, int npages,
-+		struct msm_gem_vma *vma, int size,
- 		u64 range_start, u64 range_end)
- {
- 	int ret;
-@@ -129,14 +128,15 @@ int msm_gem_init_vma(struct msm_gem_address_space *aspace,
- 		return -EBUSY;
- 
- 	spin_lock(&aspace->lock);
--	ret = drm_mm_insert_node_in_range(&aspace->mm, &vma->node, npages, 0,
--		0, range_start, range_end, 0);
-+	ret = drm_mm_insert_node_in_range(&aspace->mm, &vma->node,
-+					  size, PAGE_SIZE, 0,
-+					  range_start, range_end, 0);
- 	spin_unlock(&aspace->lock);
- 
- 	if (ret)
- 		return ret;
- 
--	vma->iova = vma->node.start << PAGE_SHIFT;
-+	vma->iova = vma->node.start;
- 	vma->mapped = false;
- 
- 	kref_get(&aspace->kref);
-@@ -161,7 +161,7 @@ msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
- 	aspace->name = name;
- 	aspace->mmu = mmu;
- 
--	drm_mm_init(&aspace->mm, va_start >> PAGE_SHIFT, size >> PAGE_SHIFT);
-+	drm_mm_init(&aspace->mm, va_start, size);
- 
- 	kref_init(&aspace->kref);
- 
+@@ -142,8 +142,6 @@ int msm_gem_get_and_pin_iova_locked(struct drm_gem_object *obj,
+ 		struct msm_gem_address_space *aspace, uint64_t *iova);
+ int msm_gem_get_and_pin_iova(struct drm_gem_object *obj,
+ 		struct msm_gem_address_space *aspace, uint64_t *iova);
+-uint64_t msm_gem_iova(struct drm_gem_object *obj,
+-		struct msm_gem_address_space *aspace);
+ void msm_gem_unpin_iova_locked(struct drm_gem_object *obj,
+ 		struct msm_gem_address_space *aspace);
+ void msm_gem_unpin_iova(struct drm_gem_object *obj,
 -- 
 2.35.1
 

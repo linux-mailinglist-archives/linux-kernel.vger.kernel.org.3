@@ -2,165 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279464EB89A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECB14EB875
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242191AbiC3C73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S242104AbiC3Ct0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239958AbiC3C71 (ORCPT
+        with ESMTP id S236386AbiC3CtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:59:27 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38D0215913
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:57:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=miTpEf3W+ZxAxaQb+giHcmz3vkNYevOUv0WJSa5Ds1U4iIGf/JRTF61oV+Rp/msvwngfyqJSYOE7Qc2oI+11Hv1jpHWjbxmyoKsGpe8AccKHaTWZIy0iWxfRBu9Nho8QBHVgbbaE7TL1dftCp+d7Vh9cdVVH2XkjLaWVS7qPVrEVa6zD2DZlFNat20d8xH3VoDAvv/J99/RAQAItk5VEa7uRiduA6S/aQWNcSw4z4UMKKorFZfXC0UQ2WXIdQQKhHCOgDo0J83aAbqJ9tbdQ9g0tR1wbHFFVa0ZynS1d+XmC+c8XFWYD2adOT5TGoc3btzsmp6PA/OANTMmPVd8ZGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZX2QGMXn6BXRiqgP0ftviduKlC+EYYUoU6sg0QLiVyA=;
- b=Io/ZpbAXq7Z5qWmq93gkI/OBGDy/8aswC6dVpcSIATFqpaAX5V61fJ4pokPReNqE8pxAgtfSRC/ptaTUVfUqz6jG7TLEC40+Eexyq2S+CRYInmNHPbRKz4DneE0FrLQnkHshXJ7eSzH9BkDVRVj9dzDIFUvI50jI0mNKZSn0w9+O+pmYiXAjnHXdUhPnEOsyRdZIwbbRm4alQmnQTgOQ+H0C0X6Fo7meXQ5L+e0UzkPtmOIcobXn3qxXrJyDozucbXlYf+Od6E2RK6LYvcEknRANL7pVaMbGLNC423yyHFBjLc+AXDU04F6NT6nLJxdKeCSLAiNBlYH3x1AnQDrYRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZX2QGMXn6BXRiqgP0ftviduKlC+EYYUoU6sg0QLiVyA=;
- b=zlKC8R7Jj8fc+voWLxfYFpEpxZ6wytZzrtppIPJxSYksJIkOZQVnAarAVt8b/dG6lRgSqHf6OMjWvX4Kd3MEChy0/ZDJQfcl/nBKXyHmnadAicuwBHVS3SbbG7Op6ivGspH1fSV90VVCEh08CLJrN81G8f3I/x/STULDgKOZdbU=
-Received: from DM3PR08CA0013.namprd08.prod.outlook.com (2603:10b6:0:52::23) by
- MWHPR12MB1438.namprd12.prod.outlook.com (2603:10b6:300:14::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.16; Wed, 30 Mar 2022 02:57:39 +0000
-Received: from DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:52:cafe::f9) by DM3PR08CA0013.outlook.office365.com
- (2603:10b6:0:52::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
- Transport; Wed, 30 Mar 2022 02:57:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT028.mail.protection.outlook.com (10.13.173.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 02:57:38 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 29 Mar
- 2022 21:57:38 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 29 Mar
- 2022 21:57:38 -0500
-Received: from Ryan-AMD.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Tue, 29 Mar 2022 21:57:33 -0500
-From:   Ryan Lin <tsung-hua.lin@amd.com>
-CC:     <leon.li@amd.com>, Ryan Lin <tsung-hua.lin@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>,
-        Mark Yacoub <markyacoub@google.com>,
-        Louis Li <ching-shih.li@amd.corp-partner.google.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Drew Davenport <ddavenport@chromium.org>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/amdgpu: fix that issue that the number of the crtc of the 3250c is not correct
-Date:   Wed, 30 Mar 2022 10:46:43 +0800
-Message-ID: <20220330024643.162230-1-tsung-hua.lin@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
-References: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
+        Tue, 29 Mar 2022 22:49:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A565170DB1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648608461; x=1680144461;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Iiz9yNZ9QU41lXDiDYLYbnUSqX5P7jJcuLjuIlo+0OE=;
+  b=U7qM4V/MyfjZVca8FfnNQHNhY4OP3UObgm++iH8zO2gOalUr0GdN/olJ
+   wRjqLrGK2hmkmShyfuBAjhOmHh0/v5KZbP48Th62FAFeVEjwtwVnKiq5A
+   v6IPXLwIMGEjlSrGuxsfvdcMcFn8NYHTAdOtwIXitWfcKr9ohdnu7WhKB
+   1XC8o4opy/kxT5jXe/pQXOykci8YlifSk0ZbBe8Ud5+SCsQfudPuOxe2/
+   /JafcQqljmEHi/9uzKkIRaNLgeTiI36ApRHLiSN12n8kag8S5Z63oQqvg
+   6d94EqSakEZ5bUZ3RZPCl9EwjpdWi9L7zH6HWnXk94aUMX/hc4yHRgNzo
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="284334992"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="284334992"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 19:47:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="653496983"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2022 19:47:38 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZOMz-0000vB-UH; Wed, 30 Mar 2022 02:47:37 +0000
+Date:   Wed, 30 Mar 2022 10:46:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 2786/5614] arch/arm64/kvm/arm.c:2011:46: error: 'smccc_trng_available'
+ undeclared
+Message-ID: <202203301057.pfu4qQMj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d4f523fd-7362-40ee-70dd-08da11f90d0e
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1438:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB143853811BDF58202E31344DB21F9@MWHPR12MB1438.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XoC17PVGN1L17z4s1LNO19xqr0rPrPQqZveNdaFBmlFRUJR0poB9fk2wVHm0LRkrbIQP0oYo/8JsOM/46PZ4OW3chQJDgTvGyEHrHSQU2IJK+nap/ycR1lQm/KkTf1vH5kIk/pxu5LlTbg5yjKb8ITRl9LgyCw1ohKI/4DuU9m96c4rog51Ek9ahGdMXnJ6iIP/wKErrCVaCMZF9dBDrdnM9JuoQBIMSsYXivLvqqyTSc6Ry8ICFr7eRplsU4OnEG8tNqwKPiXnfagGJ7ZOGu0pmRyVDrA0nj37xG2nhB1ohvcygwHSDo87SxyFpsH4gvO3ecAsz8zGCHzyn7CqHzK4x1rBbj7OGTukeBTRQhblYsiWoq7oK0NWjquo7b4YFtyU0f5RaXrTyGBb3dgWEtotj97+Jjtg14cedX49dOC2xATM9qDHuynZai971hzdLjW9dBupqya8AnUa07Viwm0KjCMYOd+EbRCmo5KlVxBAUTHVSXfJHHlOtDZcJv4bSIwagzzFLfxfYqwLtnUp9Fg1Q2Ezt9flUihWKlkiyIZ3qPyoCe1S89cVcCZLc5T7WZ99JHJaqiaw5Tjo8QkAf8ka8LiQLFOthAkYchzX18JbU+FeFboOnY4mj077MeXGHBr7hyrZUCKX8uiurl5BTzjLquMj9tNd+krStnqrcqEO+8I+yhMjdbOTQJ4CY77JaORNwLhbVF9F10vKU+7TdtHIoH0K2tYemeIxumJTL3As=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(6666004)(1076003)(8936002)(36756003)(426003)(26005)(7416002)(186003)(47076005)(2906002)(508600001)(36860700001)(336012)(316002)(70586007)(4326008)(8676002)(356005)(109986005)(5660300002)(7696005)(86362001)(83380400001)(2616005)(54906003)(70206006)(81166007)(40460700003)(82310400004)(266003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 02:57:38.8831
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4f523fd-7362-40ee-70dd-08da11f90d0e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1438
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Why]
-External displays take priority over internal display when there are fewer
-display controllers than displays.
+Hi Will,
 
-[How]
-The root cause is because of that number of the crtc is not correct.
-The number of the crtc on the 3250c is 3, but on the 3500c is 4.
-On the source code, we can see that number of the crtc has been fixed at 4.
-Needs to set the num_crtc to 3 for 3250c platform.
+FYI, the error/warning still remains.
 
-v2:
-   - remove unnecessary comments and Id
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   12972dd7bfa306aa07c92966c4efe7b1c0c5e043
+commit: 888643ea37b504cb32afdd6430698d1e92a79a71 [2786/5614] ANDROID: KVM: arm64: relay entropy requests from protected guests directly to secure
+config: arm64-randconfig-r013-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301057.pfu4qQMj-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/888643ea37b504cb32afdd6430698d1e92a79a71
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout 888643ea37b504cb32afdd6430698d1e92a79a71
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 40c91b448f7da..455a2c45e8cda 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -2738,9 +2738,15 @@ static int dm_early_init(void *handle)
- 		break;
- #if defined(CONFIG_DRM_AMD_DC_DCN1_0)
- 	case CHIP_RAVEN:
--		adev->mode_info.num_crtc = 4;
--		adev->mode_info.num_hpd = 4;
--		adev->mode_info.num_dig = 4;
-+		if (adev->rev_id >= 8) {
-+			adev->mode_info.num_crtc = 3;
-+			adev->mode_info.num_hpd = 3;
-+			adev->mode_info.num_dig = 3;
-+		} else {
-+			adev->mode_info.num_crtc = 4;
-+			adev->mode_info.num_hpd = 4;
-+			adev->mode_info.num_dig = 4;
-+		}
- 		break;
- #endif
- #if defined(CONFIG_DRM_AMD_DC_DCN2_0)
+   arch/arm64/kvm/arm.c: In function 'kvm_hyp_init_protection':
+>> arch/arm64/kvm/arm.c:2011:46: error: 'smccc_trng_available' undeclared (first use in this function)
+    2011 |         kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
+         |                                              ^~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/arm.c:2011:46: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/smccc_trng_available +2011 arch/arm64/kvm/arm.c
+
+  1997	
+  1998	static int kvm_hyp_init_protection(u32 hyp_va_bits)
+  1999	{
+  2000		void *addr = phys_to_virt(hyp_mem_base);
+  2001		int ret;
+  2002	
+  2003		kvm_nvhe_sym(id_aa64pfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+  2004		kvm_nvhe_sym(id_aa64pfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
+  2005		kvm_nvhe_sym(id_aa64isar0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR0_EL1);
+  2006		kvm_nvhe_sym(id_aa64isar1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64ISAR1_EL1);
+  2007		kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
+  2008		kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
+  2009		kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
+  2010		kvm_nvhe_sym(__icache_flags) = __icache_flags;
+> 2011		kvm_nvhe_sym(smccc_trng_available) = smccc_trng_available;
+  2012	
+  2013		ret = create_hyp_mappings(addr, addr + hyp_mem_size, PAGE_HYP);
+  2014		if (ret)
+  2015			return ret;
+  2016	
+  2017		ret = init_stage2_iommu();
+  2018		if (ret < 0)
+  2019			return ret;
+  2020	
+  2021		ret = do_pkvm_init(hyp_va_bits, (enum kvm_iommu_driver)ret);
+  2022		if (ret)
+  2023			return ret;
+  2024	
+  2025		free_hyp_pgds();
+  2026	
+  2027		return 0;
+  2028	}
+  2029	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

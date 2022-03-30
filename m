@@ -2,245 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA714ECC40
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6BF4ECC62
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350476AbiC3S3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S1350542AbiC3SiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350466AbiC3S3l (ORCPT
+        with ESMTP id S1349966AbiC3S0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:29:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97461DA5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648664787; x=1680200787;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GNwwe4gVp3OpPaPwuCW93ogK22+vVK5mATybqyOWT5c=;
-  b=ESHvs9T54Rs8znewnRDOqsShWHAzYlY8A0dqKHO8h1m33bmDffHZIEwa
-   zLcZlduShKFvy7pezx7dOZz21dhLReJ+wKRjvxUDwehhTO7Mg4SD8NSxl
-   9XxcgiEIlwMzTT329fd/QVN5B3KlHNV5x2EuLCM+K3oz1f2A1BszZpHOX
-   yaryOxnlNS9bmOGooqaZnWXm+6PLmipeavVVZLi5zinuE5wFCagWp8iQ0
-   bSa7EScTxStg4NbE3PLkJmWdFGYb/i4sj/iaJvMATejxnUG1uHSkLtcA/
-   s5O6+6O9LOuocGc6oRJJ7G/w9h44Kq4UtM/kR35gTwPu8a0qu7V4JUN7x
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322796626"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="322796626"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 11:26:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="639821962"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2022 11:26:24 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZd1U-0000Hl-3n;
-        Wed, 30 Mar 2022 18:26:24 +0000
-Date:   Thu, 31 Mar 2022 02:22:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.03.29a] BUILD SUCCESS
- 72ee6272c2a01687f3774f445574708452738302
-Message-ID: <6244a000.SmzmYoSnnquca2IG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 30 Mar 2022 14:26:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50EA4A3F6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qPLFDdi3cflTc5afisPgbeWEWhGSsYjDiLNJOrGcx9E=; b=fpwcblBTruVVe3EHRfYq6CHBlb
+        HKqEixQfOm+ogzU+N3lXf6YcxR/95c+ZJLfB3GCxX/lYy+LKJ585Cjh/noeLWG5Ymbzp0Rah7hTzA
+        ZF0pQ7753hp5Dp5hZxL8UobeXQBpL5gJ2v4dHY0Z9vacIZJcwSUKpB7XKdupLXWFA9hr/zke3QxUj
+        7rnAZlBOUhvdETwh4zywxwoF/CsVD88yu2Rw2IihHJtK0lQ2P8hD09KZsgNI1crJgWg7a7QUGcFKm
+        TxVqFe212JNZiPIt0qw7fustFtxpxRZuHAXWS+nsMpGooCEaYU2OUjIKUK1H3/Kv5QBbn97cKWydA
+        ll2nei2w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZcyg-001TT6-TB; Wed, 30 Mar 2022 18:23:30 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5336298695C; Wed, 30 Mar 2022 20:23:27 +0200 (CEST)
+Date:   Wed, 30 Mar 2022 20:23:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
+ with nohz_full
+Message-ID: <20220330182327.GO8939@worktop.programming.kicks-ass.net>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+ <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+ <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
+ <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
+ <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+ <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
+ <20220328124454.08ab6126@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220328124454.08ab6126@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.03.29a
-branch HEAD: 72ee6272c2a01687f3774f445574708452738302  rcu_sync: Fix comment to properly reflect rcu_sync_exit() behavior
+On Mon, Mar 28, 2022 at 12:44:54PM -0400, Steven Rostedt wrote:
+> On Mon, 28 Mar 2022 17:56:07 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > > echo $$ > test/cgroup.procs
+> > > taskset -c 1 bash -c "while true; do let i++; done"  --> will be throttled  
+> > 
+> > Ofcourse.. I'm arguing that bandiwdth control and NOHZ_FULL are somewhat
+> > mutually exclusive, use-case wise. So I really don't get why you'd want
+> > them both.
+> 
+> Is it?
+> 
+> One use case I can see for having both is for having a deadline task that
+> needs to get something done in a tight deadline. NOHZ_FULL means "do not
+> interrupt this task when it is the top priority task on the CPU and is
+> running in user space".
 
-elapsed time: 998m
+This is absolute batshit.. It means no such thing. We'll happily wake
+another task to this CPU and re-enable the tick any instant.
 
-configs tested: 160
-configs skipped: 4
+Worse; the use-case at hand pertains to cfs bandwidth control, which
+pretty much guarantees there *will* be an interrupt.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Why is it mutually exclusive to have a deadline task that does not want to
+> be interrupted by timer interrupts?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-mips                 randconfig-c004-20220330
-sh                          landisk_defconfig
-sh                        edosk7760_defconfig
-powerpc                     rainier_defconfig
-um                             i386_defconfig
-xtensa                    smp_lx200_defconfig
-arm                        mini2440_defconfig
-powerpc                    klondike_defconfig
-sparc                       sparc64_defconfig
-sh                          rsk7201_defconfig
-arm                        clps711x_defconfig
-arm                            xcep_defconfig
-arm                          badge4_defconfig
-m68k                       m5208evb_defconfig
-arc                 nsimosci_hs_smp_defconfig
-xtensa                          iss_defconfig
-arm                           tegra_defconfig
-powerpc                    sam440ep_defconfig
-mips                            ar7_defconfig
-arm                            hisi_defconfig
-ia64                            zx1_defconfig
-sh                         ecovec24_defconfig
-mips                  maltasmvp_eva_defconfig
-ia64                        generic_defconfig
-sh                           se7619_defconfig
-powerpc64                        alldefconfig
-arm                             pxa_defconfig
-arc                                 defconfig
-i386                                defconfig
-mips                           xway_defconfig
-xtensa                       common_defconfig
-sh                            hp6xx_defconfig
-h8300                       h8s-sim_defconfig
-parisc                           alldefconfig
-sh                     magicpanelr2_defconfig
-m68k                            q40_defconfig
-arm                        shmobile_defconfig
-powerpc                     sequoia_defconfig
-arm                      integrator_defconfig
-sh                          urquell_defconfig
-sh                          kfr2r09_defconfig
-mips                           ip32_defconfig
-sh                            migor_defconfig
-m68k                          hp300_defconfig
-arm                         axm55xx_defconfig
-sh                ecovec24-romimage_defconfig
-sh                   sh7724_generic_defconfig
-mips                         bigsur_defconfig
-sh                        sh7757lcr_defconfig
-arm                  randconfig-c002-20220330
-arm                  randconfig-c002-20220327
-arm                  randconfig-c002-20220329
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-i386                 randconfig-a001-20220328
-i386                 randconfig-a003-20220328
-i386                 randconfig-a006-20220328
-i386                 randconfig-a005-20220328
-i386                 randconfig-a004-20220328
-i386                 randconfig-a002-20220328
-x86_64               randconfig-a001-20220328
-x86_64               randconfig-a003-20220328
-x86_64               randconfig-a004-20220328
-x86_64               randconfig-a002-20220328
-x86_64               randconfig-a005-20220328
-x86_64               randconfig-a006-20220328
-riscv                randconfig-r042-20220330
-s390                 randconfig-r044-20220330
-arc                  randconfig-r043-20220330
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+This has absolutely nothing to do with deadline tasks, nada, noppes.
 
-clang tested configs:
-mips                 randconfig-c004-20220330
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220330
-riscv                randconfig-c006-20220330
-i386                          randconfig-c001
-arm                  randconfig-c002-20220330
-powerpc                      obs600_defconfig
-hexagon                          alldefconfig
-arm                         s5pv210_defconfig
-arm                     am200epdkit_defconfig
-powerpc                 mpc836x_rdk_defconfig
-mips                     loongson2k_defconfig
-mips                     loongson1c_defconfig
-powerpc                     mpc5200_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                     kilauea_defconfig
-mips                         tb0219_defconfig
-mips                      bmips_stb_defconfig
-mips                       lemote2f_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20220328
-hexagon              randconfig-r045-20220329
-hexagon              randconfig-r045-20220328
-hexagon              randconfig-r045-20220327
-hexagon              randconfig-r041-20220327
-hexagon              randconfig-r045-20220330
-hexagon              randconfig-r041-20220329
-hexagon              randconfig-r041-20220328
-hexagon              randconfig-r041-20220330
+> Just because the biggest pushers of NOHZ_FULL is for those that are running
+> RT tasks completely in user space and event want to fault if it ever goes
+> into the kernel, doesn't mean that's the only use case.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Because there's costs associated with the whole thing. system entry/exit
+get far more expensive. It just doesn't make much sense to use NOHZ_FULL
+if you're not absoultely limiting system entry.
+
+> Chengming brought up VMs. That's a case to want to control the bandwidth,
+> but also not interrupt them with timer interrupts when they are running as
+> the top priority task on a CPU.
+
+It's CFS, there is nothing top priority about that.

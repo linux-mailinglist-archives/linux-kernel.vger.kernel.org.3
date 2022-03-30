@@ -2,72 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC2F4EBA6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F834EBA6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243067AbiC3Ft6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S237931AbiC3FwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243073AbiC3Ftn (ORCPT
+        with ESMTP id S234571AbiC3Fv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:49:43 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC57B25B93E;
-        Tue, 29 Mar 2022 22:47:58 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so5154575pjf.1;
-        Tue, 29 Mar 2022 22:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=O8FHK49oyZWn74FeNySJBSL3ks9J8X4q4Z3RKKMnZzI=;
-        b=k13vAHoVoxSxlHzttCL1KuZ9viD6tLQxgxOHhzpsZDcl3vmxrwH0RWUiA3vlgQVDi2
-         KqGbP5HIRNO0O9vWOqdWNoaDh9twZc6W+SJWqhesc1sODe4ttxps4SATQjUefTW1e5SP
-         Mp2AHpBe/KxyhLQtzfOBR8TdptDsFA1vxjmBpRAdkQVHuVOariNO5kSYaLanYXPUBZvw
-         YeCENMQF0NzM7R53uBsisnOnNPDodjFYxPAsBxOLQdm77rTqeAwkZisfxxQbV7Pz65r5
-         LBf3T06fuVivYQ8PlTrDUUDjU+N6wTR3Ag+TIxucBWKI+IeVjo45yL9cg517++JT9zt1
-         NONg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O8FHK49oyZWn74FeNySJBSL3ks9J8X4q4Z3RKKMnZzI=;
-        b=bqumpsvUspD6ieYzMKAw/1clyiLCCttzky8JKnWFPrhNPWwz2woF5XCa6xGmXQDR5s
-         HcVnB+L1Pb6hqfqze4AZhYBq1YO8UHlvBzH07X3Cu16IAygt6oOyjEHxcxVA8+LFMXxS
-         uMZXq1GFYjse4xA/ra3e6I8EL9pt5AlFJw3JocFeh8JP2A+M62kEU+U3vxHccBdyt8tw
-         Y3TUmu6F5CO8DY3+KbcEMwCyxnKLBLOEpxi5ZZaCy6vWGwoU5j5Xa0fw9EVZVFOxWnVr
-         bK60xfiInpBC+dEbLfcypq+aOo9BO/lzC8uTip8i1kSxSiRjbAgi+chmHen4Y01Z+L1q
-         /VFg==
-X-Gm-Message-State: AOAM530sPOcwnDAJr94+bJBTJt0T/bekgnCxbJ1F0iivlqdjlwctm59z
-        4hKzWmXkYO2gmuDwg8Qc8zsHdsnSSFI=
-X-Google-Smtp-Source: ABdhPJxfJp755RdM5N/P9pxCWoNoYOupI8zgWEW3+VVcpmDWhoVFpCLGqCxG8IWg8HRqJv/SBVEKOg==
-X-Received: by 2002:a17:90b:3e82:b0:1c7:2920:7c54 with SMTP id rj2-20020a17090b3e8200b001c729207c54mr3167884pjb.2.1648619278168;
-        Tue, 29 Mar 2022 22:47:58 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id j22-20020a056a00235600b004faed937407sm21625451pfj.19.2022.03.29.22.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 22:47:57 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 11:17:51 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: qcom: update maintainers (drop Akash and
- Mukesh)
-Message-ID: <20220330054751.GA51248@9a2d8922b8f1>
-References: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
+        Wed, 30 Mar 2022 01:51:57 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2040.outbound.protection.outlook.com [40.107.96.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2312192BB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:50:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hZyRiG/M4JH+xx64KoGk3OhFyc3dWXiQe9eCCT3hLIW6/pgF7wz+lU4kVNumaKdOxyFbFfALd8WrKZHZRpuEsmXw2QDqUvO/7ac0Ddlea1cgBkwTIo/rRmvEv8IY9fCHxrgNSvJ8aPq5Asgo4QveAY7EIAv3/D2cxFvxGt428w1BAf0UUlfTs++DlzECZwpvRWCVRl37mEpaIxw874AZdIwgngA10t3JzsjmoK4CDASobPQw+RLaB4rtauap9X3Knb+SkdNqpNokElTmMK55y1ygWC+Krg4xf9Z5tWvVBr4DKPAw7VKHEoSbekY8Qsj0jYVHmNM4nvxuYrxfE7KIXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IylAr/Fhupo1eQoFcY3G/fkeblxXyQbBp8EiVekibu8=;
+ b=hGBqjbBjYUdsk7lrkRRXsXnGOMU9NQyCWgyXA31zEx8+lA9giazrsJRZ8b8GlimARrntWmnWAEYiZDVjmC/1AGT9anvITUj08UJLjV2Kj6n4UH0uJbqKZR+8kLMleiivPnIIoST+wtajSJZwMEOTlWr+4MIZgk9wvtbhnZ2WYHh7l4nHFiVOyIMncac82YOkt3GqodJAqFSYZ0dc1NKDDM50uq/LDNZn6GXOO91wy//4rL2KEBeU3xOdu1CZc7K6+ZnDi/wv2Kf96a8d/Gl6HLct1FzXyTVYL469zdYp3oUaVk8XvMHAcR4WiCXOcZ2QG6JdpZ1XYu04eOHHy+8CRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IylAr/Fhupo1eQoFcY3G/fkeblxXyQbBp8EiVekibu8=;
+ b=esxDVqSDiohISiTY90Ei3f7oR1sVv0LTD2Rxu3Bo/6HJqPan3INhjCA9D8i35CTbbC6/SQkqUTqcnjKXKNhvpwKqh9g832m1WICz29euh4GrJfZlmjczUtYpq/OqCT9XqzLbx3GJqUw0hzaKz0QQaa+gkT7AND5coKFTRU/VRf0=
+Received: from DM6PR12MB4417.namprd12.prod.outlook.com (2603:10b6:5:2a4::12)
+ by MWHPR1201MB0238.namprd12.prod.outlook.com (2603:10b6:301:57::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Wed, 30 Mar
+ 2022 05:50:10 +0000
+Received: from DM6PR12MB4417.namprd12.prod.outlook.com
+ ([fe80::b1c1:6413:66d7:b985]) by DM6PR12MB4417.namprd12.prod.outlook.com
+ ([fe80::b1c1:6413:66d7:b985%3]) with mapi id 15.20.5123.018; Wed, 30 Mar 2022
+ 05:50:10 +0000
+From:   "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>
+To:     "VURDIGERENATARAJ, CHANDAN" <CHANDAN.VURDIGERENATARAJ@amd.com>
+CC:     Drew Davenport <ddavenport@chromium.org>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Li, Leon" <Leon.Li@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Sean Paul <seanpaul@chromium.org>,
+        Louis Li <ching-shih.li@amd.corp-partner.google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        =?iso-8859-1?Q?St=E9phane_Marchesin?= <marcheu@chromium.org>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        Mark Yacoub <markyacoub@google.com>
+Subject: RE: [PATCH v2] drm/amdgpu: fix that issue that the number of the crtc
+ of the 3250c is not correct
+Thread-Topic: [PATCH v2] drm/amdgpu: fix that issue that the number of the
+ crtc of the 3250c is not correct
+Thread-Index: AQHYQ+HtHEdsDYy2xEGMPZ0gsUkubKzXVcQAgAASMzA=
+Date:   Wed, 30 Mar 2022 05:50:10 +0000
+Message-ID: <DM6PR12MB4417A890753BBCFECD5AC7B4B21F9@DM6PR12MB4417.namprd12.prod.outlook.com>
+References: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
+ <20220330024643.162230-1-tsung-hua.lin@amd.com>
+ <MW4PR12MB566833076458CCAC433C4187961F9@MW4PR12MB5668.namprd12.prod.outlook.com>
+In-Reply-To: <MW4PR12MB566833076458CCAC433C4187961F9@MW4PR12MB5668.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
+ MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2022-03-30T05:50:07Z;
+ MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
+ MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
+ Only-AIP 2.0;
+ MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=3505200b-c97c-49a4-99ae-99d82c69e360;
+ MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=1
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_enabled: true
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_setdate: 2022-03-30T05:50:07Z
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_method: Standard
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_name: AMD Official Use
+ Only-AIP 2.0
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_actionid: a96b8709-6d79-40e1-be54-965bbfe20d09
+msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 56ed2c85-96f1-43d7-2fb9-08da12112707
+x-ms-traffictypediagnostic: MWHPR1201MB0238:EE_
+x-microsoft-antispam-prvs: <MWHPR1201MB0238C49CD8C84C28EDCA100DB21F9@MWHPR1201MB0238.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: r8crS6F0PBoiOyOwgQXehF2Tz3C1zcrPBPVGLBlt/Pdfg+W/onddp4mB0DZ+MvcV+emV/4gsr5vADa+l5vyT8wCUnSyMS9QqBDLcOxLdnQfogMZsldVairUOstYlb9PfreyT+0AL33ZtTiWXaBb2H8mYePr1tyssL0M6O02OCWeQOFfJlzShrDUT6oXrJrBbChdidkx4tJFZD2P3ByiXQ7GX5trFYYRJINeecodp0R9GvRNADScf+GykQaa6k68MijZ++RQG0ygj0E84YcHW2Nd18JmzBZbBfuoW7q2MjuC7R1dx/VnBcruST56ObYCVZigtIdmVwwzfsVPbVFQ/8jSs3MWaJ5xhvnN6jNTm46FWxkc6BMY2K6i3alLUyKXDLEbORCC0KIkfwMH8WGjyt22rX+YRjy9Ugb4UHdOuP23U29YOKHT4/0JUDtbx5uJFHqe4X49AA21blhMb2TYqK6bHbbdsRYNfbXTHX4kMB6ozK8pKeZCP2/CkDZikIJ98u0VFWKLdTmiVcZ+FFWp2NNGTyg11eSi8vBgvGp4CJS3Z8qIMB40zKo/7F4tMeCGW11b3BNzVu10/iw9yyo0yFJU6CrU+OovROEgsEW4t6NwcfZ2bNKKfDf1+G7xt+CTeolp7bYiJh6cf4UvG4zGpcmmq0m+3tlAaqgusw6rYpdTKGrIl5vOZTFMznSdTyOcd5a8ybVVLTkd+1EX0dCFDyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4417.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(7416002)(8936002)(122000001)(38100700002)(2906002)(38070700005)(9686003)(26005)(53546011)(6636002)(54906003)(316002)(5660300002)(186003)(508600001)(6506007)(7696005)(8676002)(4326008)(64756008)(76116006)(71200400001)(66946007)(66446008)(6862004)(66476007)(83380400001)(55016003)(33656002)(86362001)(66556008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?scewt3/SX8qy6KyrUWWT3aeN924QFm3VGUck0Aaa+iqSpeLQrS4YBedd7g?=
+ =?iso-8859-1?Q?97tgh8FoY955/tccnxATwsm0XhP6PMBk+lwL5cgCrmbbLBcp/UdLKdnWol?=
+ =?iso-8859-1?Q?t3T6LkYlSRCR+orgJMyEprzn7+XvKdHR8OEWkaZARST1sWOx26X48V0Aqw?=
+ =?iso-8859-1?Q?IJfX//MA7JmRWfCv5kpWpvNWj9RsXiBOs1BLEnqzlRpGmxxNwR/QvkoQh3?=
+ =?iso-8859-1?Q?fsJ8X8b49O1OpfrSJPE+oErnWCoxNpkw0jx1auEDImu56Alh2CJT7bl8uh?=
+ =?iso-8859-1?Q?V+y3Nr77VsfmJi/PSnha9KktTH8YdXY+D4HCL+sJMww6ftJqKktYST2TMD?=
+ =?iso-8859-1?Q?UluxMT+LdI1F6kD5OcAgE5IblnzCXR1ZmCcMyx/OPxBESoAy7PFFwk3ZL0?=
+ =?iso-8859-1?Q?X7YZHkQkNYLoA+B7rF2dHoIr8Hz4iykr/yGyGI7tRGU/bzZZVzdqK8s1X/?=
+ =?iso-8859-1?Q?354uLWofTGtyd6CIoB0Mphe0sl7qj4P9AzAW+gXGRgoKoaXmk7hE9Ugnap?=
+ =?iso-8859-1?Q?sldbeugvwPyZzIg4ULN3SPWgBaLdPW7ApvFIM8ifJE4xiXHkqFINXoGos2?=
+ =?iso-8859-1?Q?mhl7NN4cztz/JRoPTdHOP94s6CVp7kid1m5tjN1NUK2qe0P/dGPXiDIsZP?=
+ =?iso-8859-1?Q?ncFcvH2FRElnDduoIqXyTHFZLIUroU56dhsm3ppjL0Flg5Ko5be6xLvf+x?=
+ =?iso-8859-1?Q?kLEP178Kpg1jPfCXZdpBQjzhR403XcQLcqvOb5CwP4VjIUquB+3MLYV5QC?=
+ =?iso-8859-1?Q?Vj5o2ji8/PWTmWEjjbgYsOHlqk4F59qk1HwsYuKRRd/uePuu6JZbhNlGKn?=
+ =?iso-8859-1?Q?Fx20CwY/87SZYElU0yDyDVGU7hVwtfN5aefea80pQV2TbE79vDXWC5BPsr?=
+ =?iso-8859-1?Q?dwPR8210kByXj0ix99VEjOWTHL2d8VFqOJVsXTykG3fqOktUF/3u/QiLkL?=
+ =?iso-8859-1?Q?RJ53DA9ntz9zGPHKIGwj9jqDvunouxo7Vl0lvbP/kVfTqova/lYPGO0C6F?=
+ =?iso-8859-1?Q?oUmtUnieStEDb+O57adj8hs9JF9HV5rDo8AhB6WUm/7LxWXNzRlsIYuBYd?=
+ =?iso-8859-1?Q?KACOMnRyW0x5+ZLcF+viOXFoZs0ZNo+a05/tPULUX81gAbdnrmcjhN9XMc?=
+ =?iso-8859-1?Q?OI0Vu9Q+844XVwoip04Uez/WTVdS/TolTzjUztcaRSEz+b74wFkm50J9Yz?=
+ =?iso-8859-1?Q?IpE4UaVqDdbQdnGOUPqYXWNmm2b7mroZQyOpUxGE7wtnR3GMy5RCfzHM+x?=
+ =?iso-8859-1?Q?j6igkYCVypkgfJiA44y6S3hJLnwNv36liHCn/uTvfx8UeJpqWl9yM/JaTf?=
+ =?iso-8859-1?Q?W9pb3hfIx4SgYxy6xmcK7UbBcN32/scCtGK0RV6amhUVf6TUBnN91Yy82T?=
+ =?iso-8859-1?Q?fwkJBzrUHqtXJpRHLvXIlXK1mpm9oHhBc/eXAi0mI8SnMPQf6JxLmne3lv?=
+ =?iso-8859-1?Q?dfsRxKSJAPuc8GjO+Gtm4grGf90tVHJJcg8wJFGyjABtX1/MTrFDnRefhc?=
+ =?iso-8859-1?Q?Dw0uL8swcw2n6TbeyW4HquFUuSdRnhnf8XLJNoj63AFtaTIe3Sgioc8ZWd?=
+ =?iso-8859-1?Q?RoVau5JQMUqUNXvB8JlyrPV3N/yVPIVk1qkgOcG/D97464CSAmrjmOnWjX?=
+ =?iso-8859-1?Q?xJ4MtqYRRNWaexVcxwzP5NgVCtbwSNE3FJrItrJrEcVwkRFO5wUyxti5zr?=
+ =?iso-8859-1?Q?t1IG/8FrXZ2fsq0t2gTu2T4hTm3mK4K5t3tb8zVh3srggx0LfL1ExEMybZ?=
+ =?iso-8859-1?Q?YIPamy8fYPeHbCVKmNT+v/V9Bfx9nSdsX8DkdVqJWQF7J9CWg90x4rN3PI?=
+ =?iso-8859-1?Q?uKec4I+Fvg=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4417.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56ed2c85-96f1-43d7-2fb9-08da12112707
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 05:50:10.3454
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nWiwvinkNcZfUlVjf30H0lWwBmOHB7jdpPlI02gAngAsiXcc0BR/rmdSz1kh5Wz6/aGsB0zjeKUZL0dM9Kq+qg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0238
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,14 +156,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 01:37:17PM +0200, Krzysztof Kozlowski wrote:
-> Emails to Akash Asthana and Mukesh Savaliya bounce (550: Recipient
-> address rejected: User unknown in virtual alias table), so switch
-> maintainers to Andy and Bjorn (as Qualcomm platform maintainers).
+[AMD Official Use Only]
 
-Thanks Krzysztof as it was really anonoying to hear bounce emails.
+Hi Chandan,
 
-One thing, I heard bounce from Akash only and not from Mukesh.
-Did you hear bounce from Mukesh as well?
+This issue we found on the Zork project which uses the kernel 5.4 on. So I =
+just implemented it on kernel 5.4.
+For finding out which is 3250c, I referenced the function which is implemen=
+ted from another function.
+Below is the part where I found it.
 
--Kuldeep
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c-
+	case CHIP_RAVEN:
+		if (adev->rev_id >=3D 8)
+			chip_name =3D "raven2";
+		else if (adev->pdev->device =3D=3D 0x15d8)
+			chip_name =3D "picasso";
+		else
+			chip_name =3D "raven";
+		break;
+
+BR,
+Ryan Lin.
+
+-----Original Message-----
+From: VURDIGERENATARAJ, CHANDAN <CHANDAN.VURDIGERENATARAJ@amd.com>=20
+Sent: Wednesday, March 30, 2022 12:30 PM
+To: Lin, Tsung-hua (Ryan) <Tsung-hua.Lin@amd.com>
+Cc: David (ChunMing) Zhou <David1.Zhou@amd.com>; Drew Davenport <ddavenport=
+@chromium.org>; Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Li, Leon <Leon.Li@=
+amd.com>; dri-devel@lists.freedesktop.org; Siqueira, Rodrigo <Rodrigo.Sique=
+ira@amd.com>; linux-kernel@vger.kernel.org; amd-gfx@lists.freedesktop.org; =
+Koenig, Christian <Christian.Koenig@amd.com>; David Airlie <airlied@linux.i=
+e>; Sean Paul <seanpaul@chromium.org>; Louis Li <ching-shih.li@amd.corp-par=
+tner.google.com>; Daniel Vetter <daniel@ffwll.ch>; Bas Nieuwenhuizen <bas@b=
+asnieuwenhuizen.nl>; Deucher, Alexander <Alexander.Deucher@amd.com>; St=E9p=
+hane Marchesin <marcheu@chromium.org>; Kazlauskas, Nicholas <Nicholas.Kazla=
+uskas@amd.com>; Wentland, Harry <Harry.Wentland@amd.com>; Lin, Tsung-hua (R=
+yan) <Tsung-hua.Lin@amd.com>; Mark Yacoub <markyacoub@google.com>
+Subject: RE: [PATCH v2] drm/amdgpu: fix that issue that the number of the c=
+rtc of the 3250c is not correct
+
+
+Hi Ryan,
+
+Is this change applicable on a specific kernel version?
+On latest I see IP DISCOVERY based impl for CHIP_RAVEN.
+
+>[Why]
+>External displays take priority over internal display when there are fewer=
+ display controllers than displays.
+>
+> [How]
+>The root cause is because of that number of the crtc is not correct.
+>The number of the crtc on the 3250c is 3, but on the 3500c is 4.
+>On the source code, we can see that number of the crtc has been fixed at 4=
+.
+>Needs to set the num_crtc to 3 for 3250c platform.
+>
+>v2:
+>   - remove unnecessary comments and Id
+>
+>Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+>
+>---
+> drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 +++++++++---
+> 1 file changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/g=
+pu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>index 40c91b448f7da..455a2c45e8cda 100644
+>--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>@@ -2738,9 +2738,15 @@ static int dm_early_init(void *handle)
+> 		break;
+> #if defined(CONFIG_DRM_AMD_DC_DCN1_0)
+> 	case CHIP_RAVEN:
+>-		adev->mode_info.num_crtc =3D 4;
+>-		adev->mode_info.num_hpd =3D 4;
+>-		adev->mode_info.num_dig =3D 4;
+>+		if (adev->rev_id >=3D 8) {
+
+May I know what this ">=3D8" indicate? Also, should it be external_rev_id i=
+f its based on old version?
+
+>+			adev->mode_info.num_crtc =3D 3;
+>+			adev->mode_info.num_hpd =3D 3;
+>+			adev->mode_info.num_dig =3D 3;
+>+		} else {
+>+			adev->mode_info.num_crtc =3D 4;
+>+			adev->mode_info.num_hpd =3D 4;
+>+			adev->mode_info.num_dig =3D 4;
+>+		}
+> 		break;
+> #endif
+> #if defined(CONFIG_DRM_AMD_DC_DCN2_0)
+>--
+>2.25.1
+>
+
+BR,
+Chandan V N

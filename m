@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8034EBDD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D384EBDD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244923AbiC3Jne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S244946AbiC3Jnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244905AbiC3Jn3 (ORCPT
+        with ESMTP id S244909AbiC3Jnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:43:29 -0400
+        Wed, 30 Mar 2022 05:43:35 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F06C2662D4;
-        Wed, 30 Mar 2022 02:41:43 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id D73AC5C0158;
-        Wed, 30 Mar 2022 05:41:42 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2801265E96;
+        Wed, 30 Mar 2022 02:41:50 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 41D895C0108;
+        Wed, 30 Mar 2022 05:41:50 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 30 Mar 2022 05:41:42 -0400
+  by compute5.internal (MEProxy); Wed, 30 Mar 2022 05:41:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=YWVHnruhGewAl+
-        Paza8ux9+8q9vmzM2dPPEB/fzt7c0=; b=E5C2HdR/FlAderKdoGOBPfDi/WNO5k
-        bIecBPJUWBRxl/8gNePkVhI3x9WtaHCzOyvaSBbj4Kr9yk8yj0wrCzMZNhIfVXRg
-        JOx7P4wYH0ej3J/sw6wq0LucDdU2OybphkF+xR9T47L9ittc1wOYNbVoOuB5bBVL
-        OwYqiTaWYu/VVGiHl4+PGN/NKYlI602Zc3eXRLPCdiyvVIYB0iru9Qxc5D4bW247
-        1up+y7BEHZ+oREmLE5GsdEF5xtrI8kCnCRwvWyfghC1F+yZpSpUmNzwlGzWVdK1l
-        sZGG8F0C3COinfnR7Wy75uGMfHdlwDRMK0k8gsAJLq45yA6ztRmqq3hA==
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=68UmTFqIO831cq
+        tqfLENUpFjsheRuDoRkQc2LFDMqM0=; b=rmivBDtuHpYnTGJBZhmD9ohnq0tblW
+        MkGOfEK3FYYd06MXq7WH+BSN1F+oik3dkV2nv0Jl3dkX20vSxOnBxCpfNeQltYZR
+        wdpLFmyMnUpS/kopxNncmkuY/7ERhraMcuftprvlOpIMiIl5TaYKgseKYYSV0/MV
+        oSZfnN84vDOzPNUOewbAP1WwJ0676my2llxhb95AjSX1yAXJNZT//HdNpF0Nywuo
+        FTBz8KmZNmWGBGvVCZqQx9cJvgj5nlVpakXE1xnIjc20B9ZhtQV6Ou0DVkG1l/Wr
+        0viYBTeGpxO7E5c/Cun0Lwmjdqa5kVBd4YwwKh2LYyz0+qQouAcSC3gA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=YWVHnr
-        uhGewAl+Paza8ux9+8q9vmzM2dPPEB/fzt7c0=; b=R6/9NKnVlmd/jk5uyPkt2m
-        0i26wa7RHZ/FhxMlhsJfOI3rcvI//wtbH/98vSeKmFOKp2j8H5MVnjnq/MURriBq
-        NzRuYDDYkFAOVCyRYGJ1q+6VKMTEI1Y3ssxocxh7rDyIKKhidKoo5aapQ7WUKxoO
-        C5fp7cfueY0vrot0V5uyiSWHtnqU/krFe5lw4gxjLwvVW1gcE+FmcyiItdtJ638L
-        8VLVKiuaIt2JLvzoKNXfj02tgiTAQVT0rJl6rmR1SI7kdV8yAZnR00wQdz/CK07Q
-        A17bMWkNPp/5u1SjS/Gqo/9Dx2NhnaUEo2+2O5OSOOQCr1j2PsqkLOHmZWQcNhOg
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=68UmTF
+        qIO831cqtqfLENUpFjsheRuDoRkQc2LFDMqM0=; b=k8KfsjJQfFTdg8BNwtKNhC
+        2uXDOgYkfnAZ6g1KFjQ+OiLrY0CCgBAUOj0wThWA99X3X1LloAIAh9PgSQSbzqnh
+        J7QzvjKq7AAwqB93hL+p1yicT6lCePpq6rPs4FI9z29UFqKMX89mUAhPeYGm+Q1o
+        fZkROmHZmFPE3Z0O0mld8rjMOQGXFPfCG1faOq3H09I8Ts0sFo63ODi2cJ/PzRZh
+        aiaNtglEZapEkd+WRv6lXhUVFCydjoL6ZJuJq6dJm7T4CjHZEH7jEUjg06IN8/Jd
+        KauvCKVmFhMHbHaXxzikpXL8xDo1RkeiDxtgc97wlURz6VtNlNwPZmZW9BFhqisw
         ==
-X-ME-Sender: <xms:1iVEYrtAPfWYnthrsc158fcZX6_LP3dmsCtUwdSrAmpkrYJtlofcZw>
-    <xme:1iVEYsetlpEk_8RGlw449b5rqfq0HGlxPfgusV1a1N_VE4lap7YJURiI_hhoLPPYH
-    uUF6PL_u510pXYT-zg>
-X-ME-Received: <xmr:1iVEYuwfHRoulwspFfBCnLxIwj8zudQHEiLgf36RCpQ3kRycbZqW1h9RpGGl3XRyUp8K9hLRFt8>
+X-ME-Sender: <xms:3SVEYvYb0O3f8smePeRuSWyCDy50-5B-EzY_XE2scf9zqPZgCYiOnA>
+    <xme:3SVEYuYHeZ1-HkL46YMLg7XQ3Mz_PiIMipEP4WZoXUCb5OSPeV10gbajkYHRYkzXJ
+    r-exBXpObtvL_kndTg>
+X-ME-Received: <xmr:3SVEYh9ZCX1I5-eLz_rmqaaCH0uIKzhn240DDGWFv7gGJ98VENupvuSM6UqC0i9dT94LyUGQI38>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeivddgudekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
@@ -54,12 +54,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeivddgudekucetufdoteggod
     eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
     ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
     hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:1iVEYqMLiKN4HGwn542S_D6JE-HwttETWy1cwc3x7zvYzGmozuwZ3w>
-    <xmx:1iVEYr8q6Sv2LZRuqeZP6Ws9imr_iP-ap9LtwGXCbi5DyACdA7aiAQ>
-    <xmx:1iVEYqVpqbmYaOxOJPQGnavlG8NESEGuJw2xJ4pI-SN8Utnz0qIFVQ>
-    <xmx:1iVEYu2INBFciDvhdTHwu472dKSFC1PTz-THH36C43Ysy1fLWROVoA>
+X-ME-Proxy: <xmx:3SVEYlo4hPLlN_Q-RQ-g_3GcCCEGi3-34dWAuI0CHGxqoE0CrQkCWQ>
+    <xmx:3SVEYqqeKEiUnxXG-EVR6cmqxKkIQ1KeZSCJyF3Df9i8rF09KCWPAQ>
+    <xmx:3SVEYrTmdmlJaStGhA8PxFbEIBB9svt4sJ1c06wOvNQFwlqphEMAXA>
+    <xmx:3iVEYviXGl8eBLHj0yav_4BP7lYukt2gPefRVCkiftu7KJ6lEyYmbA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Mar 2022 05:41:36 -0400 (EDT)
+ 30 Mar 2022 05:41:43 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     lgirdwood@gmail.com, robh+dt@kernel.org, kernel@pengutronix.de,
         lee.jones@linaro.org, broonie@kernel.org
@@ -70,9 +70,9 @@ Cc:     linux-hwmon@vger.kernel.org, geert@linux-m68k.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
         amitk@kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
-Date:   Wed, 30 Mar 2022 19:41:23 +1000
-Message-Id: <20220330094126.30252-2-alistair@alistair23.me>
+Subject: [PATCH v20 2/4] ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+Date:   Wed, 30 Mar 2022 19:41:24 +1000
+Message-Id: <20220330094126.30252-3-alistair@alistair23.me>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220330094126.30252-1-alistair@alistair23.me>
 References: <20220330094126.30252-1-alistair@alistair23.me>
@@ -88,73 +88,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a specific MFD_SY7636A config option.
-
-As part of this change we can use MFD_SY7636A as a dependency for all
-SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
-it no longer needs to be selectable.
+Enable the silergy,sy7636a and silergy,sy7636a-regulator for the
+reMarkable2.
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- drivers/hwmon/Kconfig     |  1 +
- drivers/mfd/Kconfig       | 12 +++++++++++-
- drivers/regulator/Kconfig |  1 +
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ arch/arm/configs/imx_v6_v7_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 68a8a27ab3b7..74b60d24e740 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
- 
- config SENSORS_SY7636A
- 	tristate "Silergy SY7636A"
-+	depends on MFD_SY7636A
- 	help
- 	  If you say yes here you get support for the thermistor readout of
- 	  the Silergy SY7636A PMIC.
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 3b59456f5545..c47cb755757b 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
- 	  Say M here if you want to include support for the SPMI PMIC
- 	  series as a module.  The module will be called "qcom-spmi-pmic".
- 
-+config MFD_SY7636A
-+	tristate "Silergy SY7636A voltage regulator"
-+	depends on I2C
-+	select MFD_SIMPLE_MFD_I2C
-+	help
-+	  Enable support for Silergy SY7636A voltage regulator.
-+
-+	  To enable support for building sub-devices as modules,
-+	  choose M here.
-+
- config MFD_RDC321X
- 	tristate "RDC R-321x southbridge"
- 	select MFD_CORE
-@@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
- 	  module will be called si476x-core.
- 
- config MFD_SIMPLE_MFD_I2C
--	tristate "Simple Multi-Functional Device support (I2C)"
-+	tristate
- 	depends on I2C
- 	select MFD_CORE
- 	select REGMAP_I2C
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 5ef2306fce04..c8ce6e5eea24 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
- 
- config REGULATOR_SY7636A
- 	tristate "Silergy SY7636A voltage regulator"
-+	depends on MFD_SY7636A
- 	help
- 	  This driver supports Silergy SY3686A voltage regulator.
- 
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index f7498df08dfe..81fe604bf4ec 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -223,6 +223,7 @@ CONFIG_RN5T618_POWER=m
+ CONFIG_SENSORS_MC13783_ADC=y
+ CONFIG_SENSORS_GPIO_FAN=y
+ CONFIG_SENSORS_IIO_HWMON=y
++CONFIG_SENSORS_SY7636A=y
+ CONFIG_THERMAL_STATISTICS=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+ CONFIG_CPU_THERMAL=y
+@@ -238,6 +239,7 @@ CONFIG_MFD_DA9062=y
+ CONFIG_MFD_DA9063=y
+ CONFIG_MFD_MC13XXX_SPI=y
+ CONFIG_MFD_MC13XXX_I2C=y
++CONFIG_MFD_SY7636A=y
+ CONFIG_MFD_RN5T618=y
+ CONFIG_MFD_STMPE=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+@@ -251,6 +253,7 @@ CONFIG_REGULATOR_MC13783=y
+ CONFIG_REGULATOR_MC13892=y
+ CONFIG_REGULATOR_PFUZE100=y
+ CONFIG_REGULATOR_RN5T618=y
++CONFIG_REGULATOR_SY7636A=y
+ CONFIG_RC_CORE=y
+ CONFIG_RC_DEVICES=y
+ CONFIG_IR_GPIO_CIR=y
 -- 
 2.35.1
 

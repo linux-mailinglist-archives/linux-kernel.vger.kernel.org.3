@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F54C4EC852
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EF44EC85A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348264AbiC3PfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S1348268AbiC3PfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244592AbiC3PfA (ORCPT
+        with ESMTP id S1348265AbiC3PfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:35:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB360F9
+        Wed, 30 Mar 2022 11:35:02 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666F041999
         for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648654395; x=1680190395;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=99A4Nmd7ECn/+N9elV+Nmgmh3RzNoBsfM0MSKCJINYE=;
-  b=REqoI5VVmkoFpeJ8pVAKNaaHmZ9uPBcnVVyMlMs5uaFOSwv4SnleLysd
-   VryXsM2bKujEQrCVBrikvL+4o3lEogN8Dvx3rMmXVt4oaauidqWdyN8Pf
-   vAMs+gMK6k693TdmrFyl8K4NPsO4RDCzQ9Wg5ya2g6JYTmFFHWt5oe2iT
-   lRhEVUtYYcUdjxMULwqlvOZTugfapwhDI8KoqKIqsrU9MXHgFfPGfHjpL
-   tnS79KaFyCPLGD3/+AoVKDgHS1PQVKEHj/mNGudJlOzMbO6FUcpAE91IG
-   PzVqMSpOKL314QXgpo+drLk/PUyuV1qjg09RkDM/0K+9GDFCWR7zOAhy/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259544443"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="259544443"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 08:33:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="519722996"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Mar 2022 08:33:13 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZaJs-00008C-Uy;
-        Wed, 30 Mar 2022 15:33:12 +0000
-Date:   Wed, 30 Mar 2022 23:33:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:arm64/linux/devel/kmalloc-minalign 10/11]
- arch/arm64/kernel/cacheinfo.c:101:14: warning: no previous prototype for
- 'arch_kmalloc_minalign'
-Message-ID: <202203302330.5gG68JEu-lkp@intel.com>
+Received: by mail-ej1-x62a.google.com with SMTP id bq8so28337596ejb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
+        b=ZvpGgO0rTRy4BxXcRwzsHHFuZRo4g3CARr5qe1cMD3fSVYBkhDQT6I2pcj7Wkus4vD
+         L/pV4kO5BVuN7x61TI7A+uMRtm6324yVDgXfaYOq8q+KMQ4/V+pPoRb3AiLc/FKSr3if
+         J+GN3sLdj4bXGUUPsxuj3SC4VikYaGpYroHXs5RMwPBZOrA1zUbc8rzoSnbIoyzl5VYP
+         89L+v9l7lH3QmK4n4TBz8AELmkTFCPVCwiqHn4OIwiNAuuOatlSMaRsSEJOknqnFEvhk
+         bDxbb6BqZPGpGeIOCUn9EPudkbn9Vuherq8IXnE6nukxV9ijFCla9WR35o8ITBwkLi59
+         jHgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
+        b=V1QpDZBKPL2z0PMF3xcWT/LYfE0A93Xg4LqUmu5L7pKP2t44a6BnGt4y04oPf2l2UZ
+         ev+4kVWLy8mHHgjEIfJZss8T8H5gD772KTDRrk60EnLvuDW9wOnvkfL2rviXOgz8+StG
+         DhanWanlwUtcWsmxRUr58M8cqgDKc7ktg3MJ4Eku7ssxSSd0yQivoQrPUt8XZh9k1QjK
+         4xIFKrU7Yq2lBB1JOXMg61KVcMFVQxaIRU1BgDHDzlzKSNBkTpzdklDZlF/1yFan8A4n
+         wTC8H08ISCPQE7UOd1b1z6I8lkGLpUIM4UNQ2EWb6b68eFHsk1r/N2CtMvy6Bq2AmPYq
+         F/HQ==
+X-Gm-Message-State: AOAM530KvCdKNdXQmhe/VCxakb8aPnqZ7m3gzOL3yE749WVh8ZYRiCoR
+        BaKNWN/7LiXdt2QRAUnTbevf1jAKut1r5qhYZ3c=
+X-Google-Smtp-Source: ABdhPJwqVo/RXrPoFsKPyisy5cThCgK4HiCNge6BTqyGlCrCBOuLxp78snnPGrCVRBmrldImsNzhfzIlFfVZyJBHyi0=
+X-Received: by 2002:a17:907:a42a:b0:6e4:973b:9d34 with SMTP id
+ sg42-20020a170907a42a00b006e4973b9d34mr102917ejc.24.1648654393947; Wed, 30
+ Mar 2022 08:33:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 30 Mar 2022 16:33:09 +0100
+Message-ID: <CAHpNFcPYBVg53gm_P7yh29n6ZyT=C=MsLXB5p9KyNMfZMjjMKQ@mail.gmail.com>
+Subject: On the subject of PSP processors : Arm features include NEON2! Why
+ not use this to our advantage? if safely potentiated! Every SiMD matters
+ after all! RS
+To:     submissions@vialicensing.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PLING_QUERY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/devel/kmalloc-minalign
-head:   2810d5be00a60d5996cd955c2485c17ef1e1e7af
-commit: 6c3838f40cf6a9b31bbb3d78059a81ca03fb2cfc [10/11] arm64: Enable dynamic kmalloc() minimum alignment
-config: arm64-randconfig-s032-20220330 (https://download.01.org/0day-ci/archive/20220330/202203302330.5gG68JEu-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/6c3838f40cf6a9b31bbb3d78059a81ca03fb2cfc
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block arm64/linux/devel/kmalloc-minalign
-        git checkout 6c3838f40cf6a9b31bbb3d78059a81ca03fb2cfc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On the subject of PSP processors : Arm features include NEON2!
+Why not use this to our advantage? if safely potentiated! Every SiMD
+matters after all,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Particularly preparing for the GPU & Audio output!
+As a driver specific the advantages are around 13% improved
+performance & 20% improved code flexibility on SiMD compatibility.
 
-All warnings (new ones prefixed by >>):
+We can also directly utilize for Automated Direct Reactive Secure DMA or ADRSDMA
 
->> arch/arm64/kernel/cacheinfo.c:101:14: warning: no previous prototype for 'arch_kmalloc_minalign' [-Wmissing-prototypes]
-     101 | unsigned int arch_kmalloc_minalign(void)
-         |              ^~~~~~~~~~~~~~~~~~~~~
+(signed RS)
 
+ARM Patches 3 arte enabled! https://lkml.org/lkml/2022/3/30/977
 
-vim +/arch_kmalloc_minalign +101 arch/arm64/kernel/cacheinfo.c
+*
 
-   100	
- > 101	unsigned int arch_kmalloc_minalign(void)
+GPRS for immediate use in all SFR SIM's & SFR Firmware & routers &
+boxes including ADSL & Fibre
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cloudflare Kernels & VM linux, I pretty obviously would like to be
+able to utilise cloudflare Kernel & Linux & cloudflare is very special
+to me
+
+Submissions for review
+
+RS
+
+https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
+
+https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/

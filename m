@@ -2,139 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00034EB86F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279464EB89A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242097AbiC3Cqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S242191AbiC3C73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239261AbiC3Cqa (ORCPT
+        with ESMTP id S239958AbiC3C71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:46:30 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFCB522DC;
-        Tue, 29 Mar 2022 19:44:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0AB755C00E9;
-        Tue, 29 Mar 2022 22:44:45 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Tue, 29 Mar 2022 22:44:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=pWGqz/nqqothglGzobmCKu7DG/1JSXSUyXe/q5
-        An9Zg=; b=QDpbEUH9w2Ecd0+KdNb9tLPfzPhaYPagfT4adhaVXXddbzLg79KxN7
-        GUa2fqs+x7His5EBPNdafnOj72BsMwx/DmxUveTtWnf7KwgVLULXu33TTgX7fKtO
-        BANpVt91XwpV4u+N5wRDzctEKp+TdI0GYVhPUoU3jrBArwYu9ZJMMsplG7xEDsAA
-        4InE2O0ulPiU1N39HhCelO2l9Oe1eDV1ZBnNXdqfAV7nipi166meViUAPORD1uw7
-        wRQ6SpurVUU2sUjtAxU9OeeZiQbVogCE/n9TfjM4lHmL1FJXQ73VMeZiZwZFkpNH
-        JtGTdPK2JgDcDH3GoYB+P2SnFO9snLRg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=pWGqz/nqqothglGzo
-        bmCKu7DG/1JSXSUyXe/q5An9Zg=; b=jW//zp40NLZ3YKumvewgmK+Vj7WIeziA7
-        sAyoGV78rGq46afqbqBeB6Xv+EtD/FAYWFWT/H+HlBNfNimq9eUGZ0TWOwPLAMsX
-        nu/yTpU7L0qZYWcpqHsMAIpz8d26uO4HMb1Kt4gBzbqI1VBsRUI3i5L3cNAr7BmU
-        w0BL/tY541uVGR2xwM9DwnGCtgxK8ZxJ4YOKZHT2cnP5LX71i6VXcy64S2Zn6NsO
-        uDezzzgcUsspl7xE+oEb7H4vOmaKED+e5Ry0zjmF3XooimU+9mCWih61M+aZSe31
-        c4k5Xwkt6qnulTKD+QoDvydEWi41pzfZPqEEL7h63JojCjo7vDH1Q==
-X-ME-Sender: <xms:HMRDYhzh0T1XezhrvifAHHQfwzdFYDhbBMKJI4WfOmpVCdeEoPFb7w>
-    <xme:HMRDYhQdYvhinWi7fGKXhohm43yBesFTCjzBefB_S-AFIvwsx4DMpm_kPSFN7XZ3z
-    uDpCqa2VpOgJIlKaw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiuddgiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
-    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
-    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:HMRDYrWxtgV-KcAQ8jnfMzUeVuhbjp7xH1-qtw8YBiJkXQhfPxSHag>
-    <xmx:HMRDYji0MaBmJToABMobp0w4ra_jbrBMqEPtH7QonZM7IoH65Qni8g>
-    <xmx:HMRDYjDQ98zUNkD_m-VF7CpB0qjZ2sfNBpi_72XrSH7w790m4AFiwg>
-    <xmx:HcRDYvtSfNYU-QqciXVTT8xfpuicNJ2cHHrYDo8MiwpQmMzKzyR8zg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 32214F6043F; Tue, 29 Mar 2022 22:44:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
-Mime-Version: 1.0
-Message-Id: <489d851e-be29-44a3-bf56-78be33d585f2@www.fastmail.com>
-In-Reply-To: <20220329161949.19762-1-potin.lai@quantatw.com>
-References: <20220329161949.19762-1-potin.lai@quantatw.com>
-Date:   Wed, 30 Mar 2022 13:14:22 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Potin Lai" <potin.lai@quantatw.com>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        "Heiner Kallweit" <hkallweit1@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "David Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>, "Joel Stanley" <joel@jms.id.au>
-Cc:     "Patrick Williams" <patrick@stwcx.xyz>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: mdio: aspeed: Add Clause 45 support
+        Tue, 29 Mar 2022 22:59:27 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38D0215913
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:57:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=miTpEf3W+ZxAxaQb+giHcmz3vkNYevOUv0WJSa5Ds1U4iIGf/JRTF61oV+Rp/msvwngfyqJSYOE7Qc2oI+11Hv1jpHWjbxmyoKsGpe8AccKHaTWZIy0iWxfRBu9Nho8QBHVgbbaE7TL1dftCp+d7Vh9cdVVH2XkjLaWVS7qPVrEVa6zD2DZlFNat20d8xH3VoDAvv/J99/RAQAItk5VEa7uRiduA6S/aQWNcSw4z4UMKKorFZfXC0UQ2WXIdQQKhHCOgDo0J83aAbqJ9tbdQ9g0tR1wbHFFVa0ZynS1d+XmC+c8XFWYD2adOT5TGoc3btzsmp6PA/OANTMmPVd8ZGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZX2QGMXn6BXRiqgP0ftviduKlC+EYYUoU6sg0QLiVyA=;
+ b=Io/ZpbAXq7Z5qWmq93gkI/OBGDy/8aswC6dVpcSIATFqpaAX5V61fJ4pokPReNqE8pxAgtfSRC/ptaTUVfUqz6jG7TLEC40+Eexyq2S+CRYInmNHPbRKz4DneE0FrLQnkHshXJ7eSzH9BkDVRVj9dzDIFUvI50jI0mNKZSn0w9+O+pmYiXAjnHXdUhPnEOsyRdZIwbbRm4alQmnQTgOQ+H0C0X6Fo7meXQ5L+e0UzkPtmOIcobXn3qxXrJyDozucbXlYf+Od6E2RK6LYvcEknRANL7pVaMbGLNC423yyHFBjLc+AXDU04F6NT6nLJxdKeCSLAiNBlYH3x1AnQDrYRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZX2QGMXn6BXRiqgP0ftviduKlC+EYYUoU6sg0QLiVyA=;
+ b=zlKC8R7Jj8fc+voWLxfYFpEpxZ6wytZzrtppIPJxSYksJIkOZQVnAarAVt8b/dG6lRgSqHf6OMjWvX4Kd3MEChy0/ZDJQfcl/nBKXyHmnadAicuwBHVS3SbbG7Op6ivGspH1fSV90VVCEh08CLJrN81G8f3I/x/STULDgKOZdbU=
+Received: from DM3PR08CA0013.namprd08.prod.outlook.com (2603:10b6:0:52::23) by
+ MWHPR12MB1438.namprd12.prod.outlook.com (2603:10b6:300:14::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.16; Wed, 30 Mar 2022 02:57:39 +0000
+Received: from DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:0:52:cafe::f9) by DM3PR08CA0013.outlook.office365.com
+ (2603:10b6:0:52::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
+ Transport; Wed, 30 Mar 2022 02:57:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT028.mail.protection.outlook.com (10.13.173.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 02:57:38 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 29 Mar
+ 2022 21:57:38 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 29 Mar
+ 2022 21:57:38 -0500
+Received: from Ryan-AMD.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Tue, 29 Mar 2022 21:57:33 -0500
+From:   Ryan Lin <tsung-hua.lin@amd.com>
+CC:     <leon.li@amd.com>, Ryan Lin <tsung-hua.lin@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sean Paul <seanpaul@chromium.org>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>,
+        Mark Yacoub <markyacoub@google.com>,
+        Louis Li <ching-shih.li@amd.corp-partner.google.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Drew Davenport <ddavenport@chromium.org>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/amdgpu: fix that issue that the number of the crtc of the 3250c is not correct
+Date:   Wed, 30 Mar 2022 10:46:43 +0800
+Message-ID: <20220330024643.162230-1-tsung-hua.lin@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
+References: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d4f523fd-7362-40ee-70dd-08da11f90d0e
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1438:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB143853811BDF58202E31344DB21F9@MWHPR12MB1438.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XoC17PVGN1L17z4s1LNO19xqr0rPrPQqZveNdaFBmlFRUJR0poB9fk2wVHm0LRkrbIQP0oYo/8JsOM/46PZ4OW3chQJDgTvGyEHrHSQU2IJK+nap/ycR1lQm/KkTf1vH5kIk/pxu5LlTbg5yjKb8ITRl9LgyCw1ohKI/4DuU9m96c4rog51Ek9ahGdMXnJ6iIP/wKErrCVaCMZF9dBDrdnM9JuoQBIMSsYXivLvqqyTSc6Ry8ICFr7eRplsU4OnEG8tNqwKPiXnfagGJ7ZOGu0pmRyVDrA0nj37xG2nhB1ohvcygwHSDo87SxyFpsH4gvO3ecAsz8zGCHzyn7CqHzK4x1rBbj7OGTukeBTRQhblYsiWoq7oK0NWjquo7b4YFtyU0f5RaXrTyGBb3dgWEtotj97+Jjtg14cedX49dOC2xATM9qDHuynZai971hzdLjW9dBupqya8AnUa07Viwm0KjCMYOd+EbRCmo5KlVxBAUTHVSXfJHHlOtDZcJv4bSIwagzzFLfxfYqwLtnUp9Fg1Q2Ezt9flUihWKlkiyIZ3qPyoCe1S89cVcCZLc5T7WZ99JHJaqiaw5Tjo8QkAf8ka8LiQLFOthAkYchzX18JbU+FeFboOnY4mj077MeXGHBr7hyrZUCKX8uiurl5BTzjLquMj9tNd+krStnqrcqEO+8I+yhMjdbOTQJ4CY77JaORNwLhbVF9F10vKU+7TdtHIoH0K2tYemeIxumJTL3As=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(6666004)(1076003)(8936002)(36756003)(426003)(26005)(7416002)(186003)(47076005)(2906002)(508600001)(36860700001)(336012)(316002)(70586007)(4326008)(8676002)(356005)(109986005)(5660300002)(7696005)(86362001)(83380400001)(2616005)(54906003)(70206006)(81166007)(40460700003)(82310400004)(266003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 02:57:38.8831
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4f523fd-7362-40ee-70dd-08da11f90d0e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1438
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Why]
+External displays take priority over internal display when there are fewer
+display controllers than displays.
 
+[How]
+The root cause is because of that number of the crtc is not correct.
+The number of the crtc on the 3250c is 3, but on the 3500c is 4.
+On the source code, we can see that number of the crtc has been fixed at 4.
+Needs to set the num_crtc to 3 for 3250c platform.
 
-On Wed, 30 Mar 2022, at 02:49, Potin Lai wrote:
-> Add Clause 45 support for Aspeed mdio driver.
->
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->  drivers/net/mdio/mdio-aspeed.c | 122 ++++++++++++++++++++++++---------
->  1 file changed, 88 insertions(+), 34 deletions(-)
->
-> diff --git a/drivers/net/mdio/mdio-aspeed.c b/drivers/net/mdio/mdio-aspeed.c
-> index e2273588c75b..aa2b678b2381 100644
-> --- a/drivers/net/mdio/mdio-aspeed.c
-> +++ b/drivers/net/mdio/mdio-aspeed.c
-> @@ -21,6 +21,10 @@
->  #define   ASPEED_MDIO_CTRL_OP		GENMASK(27, 26)
->  #define     MDIO_C22_OP_WRITE		0b01
->  #define     MDIO_C22_OP_READ		0b10
-> +#define     MDIO_C45_OP_ADDR		0b00
-> +#define     MDIO_C45_OP_WRITE		0b01
-> +#define     MDIO_C45_OP_PREAD		0b10
-> +#define     MDIO_C45_OP_READ		0b11
->  #define   ASPEED_MDIO_CTRL_PHYAD	GENMASK(25, 21)
->  #define   ASPEED_MDIO_CTRL_REGAD	GENMASK(20, 16)
->  #define   ASPEED_MDIO_CTRL_MIIWDATA	GENMASK(15, 0)
-> @@ -39,34 +43,35 @@ struct aspeed_mdio {
->  	void __iomem *base;
->  };
-> 
-> -static int aspeed_mdio_read(struct mii_bus *bus, int addr, int regnum)
-> +static int aspeed_mdio_ctrl_reg(struct mii_bus *bus, u8 st, u8 op, u8 phyad,
+v2:
+   - remove unnecessary comments and Id
 
-It's a bit of a nit-pick, but this function name talks about something
-it impacts rather than something it does. What do you think of
-`aspeed_mdio_op()`?
+Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
 
-Less of a nitpick, this patch does three things:
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-1. Distills the aspeed_mdio_ctrl_reg() function from from the
-   aspeed_mdio_{read,write}() functions
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 40c91b448f7da..455a2c45e8cda 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -2738,9 +2738,15 @@ static int dm_early_init(void *handle)
+ 		break;
+ #if defined(CONFIG_DRM_AMD_DC_DCN1_0)
+ 	case CHIP_RAVEN:
+-		adev->mode_info.num_crtc = 4;
+-		adev->mode_info.num_hpd = 4;
+-		adev->mode_info.num_dig = 4;
++		if (adev->rev_id >= 8) {
++			adev->mode_info.num_crtc = 3;
++			adev->mode_info.num_hpd = 3;
++			adev->mode_info.num_dig = 3;
++		} else {
++			adev->mode_info.num_crtc = 4;
++			adev->mode_info.num_hpd = 4;
++			adev->mode_info.num_dig = 4;
++		}
+ 		break;
+ #endif
+ #if defined(CONFIG_DRM_AMD_DC_DCN2_0)
+-- 
+2.25.1
 
-2. Introduces the additional function indirection for C22 vs C45 reads
-
-3. Adds the C45 support.
-
-I think it'd be easier to review if it was broken into three separate
-patches along the lines of the above. I'm finding the hunks hard to
-concentrate on as they are.
-
-Andrew

@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B163D4ECF96
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CFA4ECF98
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346200AbiC3WZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
+        id S1351566AbiC3WZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244671AbiC3WZb (ORCPT
+        with ESMTP id S1343856AbiC3WZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:25:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC2F48383
+        Wed, 30 Mar 2022 18:25:33 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D378D483BC
         for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1648679026; x=1680215026;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cdyV6ni5B0R2HoQiSpWxTiLJCHRmm/nefjUnGqeXvcU=;
-  b=JzVsoxFOPh/s09VZx0cblv+yocUTzv4hKesfgD/IGtwXgUCnbLyKmFzH
-   N+LEl/g9l45CuoJPF21Qczko5tYTzpgGMFVWYW4aA3qyuWoiMnaNl949C
-   YWXSUeodB0/64UruDTdY6LoxDzCU94dy/FM2Fr9vPWfoL3uLguF0AtDvA
-   XTwimLJUp5wVcA2lW7BEzkiGxRWwowD2n8UaiqwXkVBj77L+H7LiJk+6o
-   tqSVjo9z3YPjTpD9QRo0vnxeQMsTjHBc0xFG8+uydkwbS61pi2RKekDi3
-   qXC2YXJfjH79N/J4y7MrKcX+RMyvzOwR+K3q/qXPVNJBAdB5rqC8G5scM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259844109"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g6pU881YWAtrpzuqnzwzRx2JwUavPzlXZa030gwZJrE=;
+  b=K09XyWDnbh2kpH0p79OkxvafwqoSxEzcV3Eh4/wx9lQxvWuJo4NTdP62
+   iUWEEibUUOf9+JqB1bGPpb4pskkP37WNqBCFgnN7oQI+B5B9xTmQLdDKp
+   4cYlvh8DOKVfOUy/h6occGSuj0BKsDvnJTqrgFYkPtUQD379LGTIkDllR
+   XV2F2np84VBMEVZa1FO31bVZBvnJOC4HXnMJVLxgOj3l77RGG+kg2uDVS
+   jw80gxVlHAmKCw0tmAuQzS0Oo1GY31+0yvU23Y8Twrh7cTfCsnn21Hl1h
+   /yQ0RRE1Fhwt53TA/B5tQk5M7vttXBjZGkIdqqS8kiieuTyNFQ238FOtG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259633786"
 X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="259844109"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:23:45 -0700
+   d="scan'208";a="259633786"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:23:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="586168694"
+   d="scan'208";a="503483636"
 Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 30 Mar 2022 15:23:44 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 15:23:44 -0700
 Received: from kbuild by 56431612eabd with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nZgj9-0000Zo-LY;
+        id 1nZgj9-0000Zm-L8;
         Wed, 30 Mar 2022 22:23:43 +0000
-Date:   Thu, 31 Mar 2022 06:22:58 +0800
+Date:   Thu, 31 Mar 2022 06:23:07 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:rostedt/linux-trace/ftrace/core 1/5]
- include/trace/trace_custom_events.h:38:10: fatal error:
- 'stages/stage1_defines.h' file not found
-Message-ID: <202203310653.AMWJCqi6-lkp@intel.com>
+To:     Jean-Marc Eurin <jmeurin@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     kbuild-all@lists.01.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jean-Marc Eurin <jmeurin@google.com>
+Subject: Re: [PATCH v2 2/2] mtd: mtdoops: Create a header structure for the
+ saved mtdoops.
+Message-ID: <202203310648.it4f2xXD-lkp@intel.com>
+References: <20220330182816.1177341-4-jmeurin@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220330182816.1177341-4-jmeurin@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,47 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/ftrace/core
-head:   025833e54d2b7b031c44642a14df39a67a524b9a
-commit: 7ebdde13050a7d880ef7403fd10c30f5167b6f0b [1/5] tracing: Rename the staging files for trace_events
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220331/202203310653.AMWJCqi6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+Hi Jean-Marc,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on mtd/mtd/next]
+[also build test WARNING on mtd/mtd/fixes linux/master linus/master v5.17 next-20220330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jean-Marc-Eurin/mtd-mtdoops-Structure-the-header-of-the-dumped-oops/20220331-023808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220331/202203310648.it4f2xXD-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/7ebdde13050a7d880ef7403fd10c30f5167b6f0b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/ftrace/core
-        git checkout 7ebdde13050a7d880ef7403fd10c30f5167b6f0b
+        # https://github.com/intel-lab-lkp/linux/commit/0d39801219fd826554caf69402424346799810d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jean-Marc-Eurin/mtd-mtdoops-Structure-the-header-of-the-dumped-oops/20220331-023808
+        git checkout 0d39801219fd826554caf69402424346799810d5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/trace_events/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from samples/trace_events/trace_custom_sched.c:24:
-   In file included from samples/trace_events/./trace_custom_sched.h:96:
-   In file included from include/trace/define_custom_trace.h:55:
->> include/trace/trace_custom_events.h:38:10: fatal error: 'stages/stage1_defines.h' file not found
-   #include "stages/stage1_defines.h"
-            ^~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from include/linux/kernel.h:29,
+                    from drivers/mtd/mtdoops.c:10:
+   drivers/mtd/mtdoops.c: In function 'find_next_position':
+>> include/linux/kern_levels.h:5:18: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
+       5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+         |                  ^~~~~~
+   include/linux/printk.h:418:11: note: in definition of macro 'printk_index_wrap'
+     418 |   _p_func(_fmt, ##__VA_ARGS__);    \
+         |           ^~~~
+   drivers/mtd/mtdoops.c:243:4: note: in expansion of macro 'printk'
+     243 |    printk(KERN_ERR "mtdoops: read failure at %ld (%td of %d read), err %d\n",
+         |    ^~~~~~
+   include/linux/kern_levels.h:11:18: note: in expansion of macro 'KERN_SOH'
+      11 | #define KERN_ERR KERN_SOH "3" /* error conditions */
+         |                  ^~~~~~~~
+   drivers/mtd/mtdoops.c:243:11: note: in expansion of macro 'KERN_ERR'
+     243 |    printk(KERN_ERR "mtdoops: read failure at %ld (%td of %d read), err %d\n",
+         |           ^~~~~~~~
+   drivers/mtd/mtdoops.c:243:59: note: format string is defined here
+     243 |    printk(KERN_ERR "mtdoops: read failure at %ld (%td of %d read), err %d\n",
+         |                                                          ~^
+         |                                                           |
+         |                                                           int
+         |                                                          %ld
 
 
-vim +38 include/trace/trace_custom_events.h
+vim +5 include/linux/kern_levels.h
 
-3a73333fb370f7 Steven Rostedt (Google  2022-03-03  37) 
-3a73333fb370f7 Steven Rostedt (Google  2022-03-03 @38) #include "stages/stage1_defines.h"
-3a73333fb370f7 Steven Rostedt (Google  2022-03-03  39) 
-
-:::::: The code at line 38 was first introduced by commit
-:::::: 3a73333fb370f7b65de9d94c53df503642bda789 tracing: Add TRACE_CUSTOM_EVENT() macro
-
-:::::: TO: Steven Rostedt (Google) <rostedt@goodmis.org>
-:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
 
 -- 
 0-DAY CI Kernel Test Service

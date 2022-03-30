@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A314ECC4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69BD4ECC59
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350580AbiC3ScB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
+        id S1350430AbiC3ScT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350534AbiC3Sbf (ORCPT
+        with ESMTP id S1350125AbiC3Sbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:31:35 -0400
+        Wed, 30 Mar 2022 14:31:46 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4361E5BE42
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:25 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e68c93bb30so177293977b3.18
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A08F5BE65
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:30 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e5a3c1384cso176664827b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=69G4sVrTM6Oebk85axmgqm6tVz3OwOvgPCpKMqCiPco=;
-        b=KAkhCBn3gEwaVnHCrhjznheQGY1GcCBdnWrxtjIFYBR2rk4OJFJ31gVI8tVCx6sj8u
-         qH85S3m5RZXFjlMJBVo/mTONjglm5wXv+jTcfufhRlcZqejW8H7XgGLqfVP7AjC7n0eM
-         7HP9ssmEL+278QYUiKC/5WDRmyP8ixj8xgNdY32mOx/HXCVXCuVV9Pph2dXMjjR241g7
-         88UR6Tcb5NmhsduVZ3TtT9jvmrKJ8ZDTdhVTVRCgo9WleoyQZenniBdvfpVvf5VKcQQo
-         r3TTQuLFB3NO9NQ0VcFYFrU0Mu4m9p5k/wtYCBS20lw+TSK2QCq174JUxbx4rg6qxAxC
-         gR9A==
+        bh=ysfkn8590uSwiZlCj0dUf9b84jhm3+YPx7U6wcF1Lh4=;
+        b=Ec80YCYBr3+7x1dgVlMKktNo8EJlr6iPYG0vTk8LWgCyoQP+XN9M1gzNkurZEEaMcj
+         S78oygo+a/0db+2wSn3eVgplMSdrZG+n2X5aw7yL8YZzxgEqHqGDPyZThvThA2B6GoG2
+         ct0/Rt6/nROfnrFCDxmArktdywO+QKCq3JmmhVjDS4yT2e8CkY6xCGgSGHgb400XPAcC
+         t60jjmZCLi5eoGzVOvw5vbl+9zEXtLLQm/sMMj9uPIyBCgIuWLvWleTSpsgAYMZmNMe+
+         BSjgeGkNVpTq0p3Z8d+U8Dzr2nWFPF1uLCyCJgxjasTT7s9O6DB1Mb4G1xIU4Izfn1SL
+         7Iog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=69G4sVrTM6Oebk85axmgqm6tVz3OwOvgPCpKMqCiPco=;
-        b=ONZA3/87QodjSB6ut5pHbxg9I7X931v+jI3h0Obl78u+zW62yj+8DwGQbkuNv8dwA5
-         n2z8RZl1Ws2Piy4RFadP05GrPVSbjEWxH5HP2ZGpXwD1mJEJrcAvJR/7LsyPiIouAevL
-         S83WrYWUmWVWuL1y8NeRwv34m9losqp0XRNFCz/z8P/GW2FC+815MDhdmJDBOE7sbghW
-         10RkSM9iUxJZjyfj/tWBmvM5vU9TUS4uttaOMd1iYK9A1/CytLU8ESjtw8sgn8Lwn/ob
-         1b4qAvmww/BgF9f4eLsDK3yCgCbDlci2Tqu4mdLkIKCyxtTwarwH/7puThA471mzIu5U
-         a4uQ==
-X-Gm-Message-State: AOAM531VL0N04RlgDpUrAoaexAOFMwhZGGCdxmyjHI5N6iqCroZrpVkT
-        5Y+J4e7V5KCTjgFKPz7i3nHrygzODwhV
-X-Google-Smtp-Source: ABdhPJypHixg49BP/nRHIZXftzFoLrN29bvmk/CgxMF7bcwNtHjoOkCy1TnNXK6tDuqfVn+gOXleajOvms2h
+        bh=ysfkn8590uSwiZlCj0dUf9b84jhm3+YPx7U6wcF1Lh4=;
+        b=MI4ECmgP+aPj0fj+EJ33wNZPgRH7wOVj42M8vKNlCAYtN3x3VxmO/YyZ1EqDkrjJqB
+         kIMB0iOdX35E5rWvtKvbAQNS8bUQGAseARzRoeeFVdxgxunJzWwT+w50SvXJ6yTHpKmJ
+         ACEuWmhXrzaLknelznQhA2UK89ZOt6I/0PMadqP67zDqRsq9dldweRkeNXjkKPo5MRWv
+         n6lQOB8Ue8BxNAM+N8joMNSx3ZZQpZInyW+ZX61yrDT049ehRFhwy9f08DPsLbUchafq
+         5GfgJss5CQkyjrnQ8SfWKpK57zYk6RyXyFrftHo6JoAASddPVnG+5Oe/FeepdFqz9GsK
+         bAWQ==
+X-Gm-Message-State: AOAM533+rKckc1/MnUOkqJss9uJtf6AEwM5LI5bOr4RVp62GQjT3vcxF
+        vUA04cA3ZF6kM04Sc1Doqx7BNhZyz631
+X-Google-Smtp-Source: ABdhPJw0Duj6d5LABUuiiO1V+ipIt5z0acafBXL2Y3+v+mwd4Jvo8mt5MynPoHu41wYCZvlDqtw6v+bLefA/
 X-Received: from pigloo.svl.corp.google.com ([2620:15c:2c5:13:1db:3f32:3ad1:f38])
- (user=jmeurin job=sendgmr) by 2002:a81:af4c:0:b0:2e5:b051:6353 with SMTP id
- x12-20020a81af4c000000b002e5b0516353mr1068237ywj.518.1648664904545; Wed, 30
- Mar 2022 11:28:24 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 11:28:13 -0700
-In-Reply-To: <20220207163409.19c3bc4c@xps13>
-Message-Id: <20220330182816.1177341-1-jmeurin@google.com>
+ (user=jmeurin job=sendgmr) by 2002:a5b:7d1:0:b0:628:d9f7:c5b8 with SMTP id
+ t17-20020a5b07d1000000b00628d9f7c5b8mr990898ybq.347.1648664909434; Wed, 30
+ Mar 2022 11:28:29 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 11:28:14 -0700
+In-Reply-To: <20220330182816.1177341-1-jmeurin@google.com>
+Message-Id: <20220330182816.1177341-2-jmeurin@google.com>
 Mime-Version: 1.0
-References: <20220207163409.19c3bc4c@xps13>
+References: <20220207163409.19c3bc4c@xps13> <20220330182816.1177341-1-jmeurin@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH] Fix the size of the header read buffer.
+Subject: [PATCH v2 0/2] mtd: mtdoops: Structure the header of the dumped oops.
 From:   Jean-Marc Eurin <jmeurin@google.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -70,29 +70,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The read buffer size depends on the MTDOOPS_HEADER_SIZE.
+The current header consists of 2 32-bit values which makes it difficult
+and error prone to expand. This creates a structure for the header.
 
-Tested: Changed the header size, it doesn't panic, header is still
-read/written correctly.
+Changelog since v1:
+- Create a header structure to simplify code.
+- Patches in series.
+- Patch prefix.
 
-Signed-off-by: Jean-Marc Eurin <jmeurin@google.com>
----
- drivers/mtd/mtdoops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Jean-Marc Eurin (2):
+  mtd: mtdoops: Fix the size of the header read buffer.
+  mtd: mtdoops: Create a header structure for the saved mtdoops.
 
-diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
-index 227df24387df..09a26747f490 100644
---- a/drivers/mtd/mtdoops.c
-+++ b/drivers/mtd/mtdoops.c
-@@ -223,7 +223,7 @@ static void find_next_position(struct mtdoops_context *cxt)
- {
- 	struct mtd_info *mtd = cxt->mtd;
- 	int ret, page, maxpos = 0;
--	u32 count[2], maxcount = 0xffffffff;
-+	u32 count[MTDOOPS_HEADER_SIZE/sizeof(u32)], maxcount = 0xffffffff;
- 	size_t retlen;
- 
- 	for (page = 0; page < cxt->oops_pages; page++) {
+ drivers/mtd/mtdoops.c | 53 +++++++++++++++++++++++--------------------
+ 1 file changed, 29 insertions(+), 24 deletions(-)
+
 -- 
-2.35.0.rc2.247.g8bbb082509-goog
+2.35.1.1094.g7c7d902a7c-goog
 

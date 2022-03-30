@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4CA4EBEC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187B34EBECA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245387AbiC3Kcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S245389AbiC3KdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242585AbiC3Kcd (ORCPT
+        with ESMTP id S245438AbiC3KdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:32:33 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC69929C8B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:30:47 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1BEAB1EC0304;
-        Wed, 30 Mar 2022 12:30:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648636242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=98fI96XE73aivmk0QMDzyHxZATBVyf2sm2QP/E2rY9M=;
-        b=Xl8vt9eTE7Qhv6o7xLPM4NxloFsInikFk7mjc2xnt208zLZAuJkJn/lVhczpEljI2rO9LP
-        34/wITZuvJYCRPR8nMeJBuqt8tj0uODhxb24BGoW5SxI+mztn742AC4Jb3i+4U6NV2ZYN6
-        Dnpj5p/NDsi7JPdJRWoakgmLlfscb98=
-Date:   Wed, 30 Mar 2022 12:30:44 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: 9def39be4e96 ("x86: Support compiling out human-friendly processor
- feature names")
-Message-ID: <YkQxVM4PZMrLs9z1@zn.tnic>
+        Wed, 30 Mar 2022 06:33:05 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C8125E327
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:31:18 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 30 Mar
+ 2022 18:31:19 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 30 Mar
+ 2022 18:31:16 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] staging: r8188eu: Fix misspelling in comment "writting" -> "writing"
+Date:   Wed, 30 Mar 2022 18:31:15 +0800
+Message-ID: <1648636275-13558-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Josh,
+This patch fixes some spelling typo in error message reported by
+checkpatch.pl
 
-I'm assuming the commit in subject was part of the tinyconfig effort and
-I'm also assuming that effort is long gone now.
+WARNING: 'writting' may be misspelled - perhaps 'writing'?
 
-So, can I rip out that config item and get rid of a lot of ifdeffery
-we're sporting because of it?
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/staging/r8188eu/hal/usb_halinit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thx.
-
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index a927743..e334c9b 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -123,7 +123,7 @@ static void _InitQueueReservedPage(struct adapter *Adapter)
+ 		if (haldata->OutEpQueueSel & TX_SELE_LQ)
+ 			numLQ = 0x1C;
+ 
+-		/*  NOTE: This step shall be proceed before writting REG_RQPN. */
++		/*  NOTE: This step shall be proceed before writing REG_RQPN. */
+ 		if (haldata->OutEpQueueSel & TX_SELE_NQ)
+ 			numNQ = 0x1C;
+ 		value8 = (u8)_NPQ(numNQ);
 -- 
-Regards/Gruss,
-    Boris.
+2.7.4
 
-https://people.kernel.org/tglx/notes-about-netiquette

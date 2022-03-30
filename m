@@ -2,111 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1618F4EB7BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B8F4EB7BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241594AbiC3BUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 21:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S241608AbiC3BWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 21:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234408AbiC3BUe (ORCPT
+        with ESMTP id S241599AbiC3BWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 21:20:34 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C18847384;
-        Tue, 29 Mar 2022 18:18:50 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2e5e176e1b6so202247447b3.13;
-        Tue, 29 Mar 2022 18:18:50 -0700 (PDT)
+        Tue, 29 Mar 2022 21:22:22 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CF847394
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:20:37 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id l129so7744435pga.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SnZBSyZar3/cpU2H1RzHZf2a0uvetUDmC7HqxBo+h7A=;
-        b=dfr0ZWv4GAasLPKufTMYblXVd1edCvaJVrOyVpf1oXqqJ7o1OgHvvSnaz3BYt4Q429
-         iddtQlNar88/RztYNbULqaXccn7FvhGCSo1Zick3THkFdquBL2zCmLy864qplc4wtOka
-         4CXqvaXr5tilv9RWkpb6pyviGYxMBXijxdWPyrZ0+7fHn2dEwBjgf3lWPWQIOfUYpvCu
-         niRX668YjBFEonkVt6Ws4Exd6kH41c5qN6v4tDna/ysf6kELSBg3zLfuLeEA1TM5aCEz
-         vRDbSIU2Uh/i/F3I8OhimUhM0B7FJiICBWfS8aUHgEUc2nO36kNVwOVSfDXiszgY4Ync
-         ChBA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=x6rv08fpwpzLso4SC/yKscWicPs6HNkxCkCPxl5J16Q=;
+        b=XO9Kzh+W10rhwsTvM+KAuFjAIudNiX4KiGdCKDAfRXWGbemz7HiLQHdk3SPWpFVkAV
+         yrgFN66DdNUw3hlngalgpAnB0BhVJfBGFF/8bMUJrFuSytAsaQEb26AFoRegx8XzElJR
+         UMYg4lhP6KMmzu9ZU6L8WYn1ThUi4dlDpqzqHAyU0m+UAAC1kfpqTnnY9Rxc7WppVAUS
+         lLv6ft+V20F6U1hOCVkH8JmJu6u8T0Shm9zO9f6nuOm9YAnhHJqZkrgth1no4s6oBhfr
+         9CdrTfnwvo423WEDEt1G++JyYzeGPauED/SYVm7r27MhnxlF5KY71ZK1JT4nKwmIDCTK
+         F0fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SnZBSyZar3/cpU2H1RzHZf2a0uvetUDmC7HqxBo+h7A=;
-        b=l9Q5/egDumr1MovoPq3SLrKyVABX9cEznbgJxxZflib/Tn4oaweuJpZYZk2Hor7OXi
-         ZiaeV4CI8ayG4Y34yq8NsDCAmmF1G+IHmAgk1Tbbh9G7fxNH9XTOZvcdlE1ZHR2RrD2s
-         i2a46b4N0uQJoUPSq1KdwCBzizhRrWWVLAXTCf7MOImbpa1wSIfcfuV24SuwqfFoj3+u
-         UDrwO0dWPgkyEgWuL6KDbOeRmGGGEDJbvWHF0pleRwpuN3AZsqsphUEMhDjl5eITmZYm
-         1FG3BRl+GCD5Z8b0deHkY86Pu1Aw2uPlLuVZ3qIbT8tJjjf/4JF7Exg8EA1l46MXeka8
-         ujGQ==
-X-Gm-Message-State: AOAM5314aRIs5H7QqxP/DoI33eWG6+JnOq7oI3qwyBS5CK2Q4nfQvUBE
-        PrG+91cddeLIkQyk+s9ncWae44+y8Yi1nQ/h5yepbw8a
-X-Google-Smtp-Source: ABdhPJyqmuGbxulZVwamMCOfGf1zB8iFlPgQdWct/ZOfcEeEfhURZrR42hOqo7G4JAKbNvQn/Yj4I5Rh6VkVrMOu9sc=
-X-Received: by 2002:a81:1704:0:b0:2e5:d98b:e185 with SMTP id
- 4-20020a811704000000b002e5d98be185mr34019442ywx.354.1648603129650; Tue, 29
- Mar 2022 18:18:49 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x6rv08fpwpzLso4SC/yKscWicPs6HNkxCkCPxl5J16Q=;
+        b=DwVnREBPjF0TlV+ckE2kI4jOdVw15BvC6wGmBWuBeT/a4Y1BxRDkyO5OyJjw7E35f0
+         VuG/wUtgT5EGTon4bsLYCODU6VpnHassyw9mTZezH0xSYlbDEMEYE68VoJDrQQ3gonZn
+         x2N6SidwnrLZpegEhsjp917q1qQlTX4itTGRkoPKnpM17pS8xMi9EKxFcnNsCq6iT0VT
+         tWQsXBIIO51Eq+TCZztFcSqGfywj0r4YQRNK6ZivNHUDZ+M0dN4/Y1nmn/dAGorUT7zk
+         1komVTGhacjwndGpGv4Sb2XyyfdT/zKrxPLQDukcPQrhjWtOn07rWRcIwoUyXNyObts6
+         v5+w==
+X-Gm-Message-State: AOAM5312B5WGNsQ8oEmaPmiqe8p0gYdStESuKVcOPtkmPlf9F1mx3hu1
+        nJoFkErvroLnd0lyiAbAPYdU5g==
+X-Google-Smtp-Source: ABdhPJwoW1nC8CwsoiAcRDjUEwAq3FLPOf8WeO7J4R5TTOmsQ664cFp/eYXChsf5S/H73HJRyPqt9A==
+X-Received: by 2002:a63:35c1:0:b0:386:3620:3c80 with SMTP id c184-20020a6335c1000000b0038636203c80mr4063284pga.327.1648603236862;
+        Tue, 29 Mar 2022 18:20:36 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id a11-20020a63cd4b000000b00378b9167493sm17373638pgj.52.2022.03.29.18.20.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 18:20:36 -0700 (PDT)
+Message-ID: <5bafff4a-e3f8-82eb-f8e8-486c877518ad@kernel.dk>
+Date:   Tue, 29 Mar 2022 19:20:35 -0600
 MIME-Version: 1.0
-References: <1648216709-44755-1-git-send-email-wanpengli@tencent.com>
- <1648216709-44755-4-git-send-email-wanpengli@tencent.com> <YkOfJeXm8MiMOEyh@google.com>
-In-Reply-To: <YkOfJeXm8MiMOEyh@google.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Wed, 30 Mar 2022 09:18:38 +0800
-Message-ID: <CANRm+CxtyyGvBKMt2XpqvWwukAmZHvE7-SBKc7wLcYLR5D7v9g@mail.gmail.com>
-Subject: Re: [PATCH RESEND 3/5] KVM: X86: Boost vCPU which is in critical section
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next RFC 1/6] blk-mq: add a new flag
+ 'BLK_MQ_F_NO_TAG_PREEMPTION'
+Content-Language: en-US
+To:     "yukuai (C)" <yukuai3@huawei.com>,
+        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
+        ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220329094048.2107094-1-yukuai3@huawei.com>
+ <20220329094048.2107094-2-yukuai3@huawei.com>
+ <190625d8-ed84-f657-6058-2d151f6d4caa@kernel.dk>
+ <f83ea9d7-bc89-6855-f9a6-c42f4647d383@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <f83ea9d7-bc89-6855-f9a6-c42f4647d383@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 08:07, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Mar 25, 2022, Wanpeng Li wrote:
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 425fd7f38fa9..6b300496bbd0 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -10375,6 +10375,28 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
-> >       return r;
-> >  }
-> >
-> > +static int kvm_vcpu_non_preemptable(struct kvm_vcpu *vcpu)
->
-> s/preemtable/preemptible
->
-> And I'd recommend inverting the return, and also return a bool, i.e.
->
-> static bool kvm_vcpu_is_preemptible(struct kvm_vcpu *vcpu)
+On 3/29/22 7:18 PM, yukuai (C) wrote:
+> On 2022/03/29 20:44, Jens Axboe wrote:
+>> On 3/29/22 3:40 AM, Yu Kuai wrote:
+>>> Tag preemption is the default behaviour, specifically blk_mq_get_tag()
+>>> will try to get tag unconditionally, which means a new io can preempt tag
+>>> even if there are lots of ios that are waiting for tags.
+>>>
+>>> This patch introduce a new flag, prepare to disable such behaviour, in
+>>> order to optimize io performance for large random io for HHD.
+>>
+>> Not sure why we need a flag for this behavior. Does it ever make sense
+>> to allow preempting waiters, jumping the queue?
+>>
+> 
+> Hi,
+> 
+> I was thinking using the flag to control the new behavior, in order to
+> reduce the impact on general path.
+> 
+> If wake up path is handled properly, I think it's ok to disable
+> preempting tags.
 
-Good suggestion.
+If we hit tag starvation, we are by definition out of the fast path.
+That doesn't mean that scalability should drop to the floor, something
+that often happened before blk-mq and without the rolling wakeups. But
+it does mean that we can throw a bit more smarts at it, if it improves
+fairness/performance in that situation.
 
->
-> > +{
-> > +     int count;
-> > +
-> > +     if (!vcpu->arch.pv_pc.preempt_count_enabled)
-> > +             return 0;
-> > +
-> > +     if (!kvm_read_guest_cached(vcpu->kvm, &vcpu->arch.pv_pc.preempt_count_cache,
-> > +         &count, sizeof(int)))
-> > +             return (count & ~PREEMPT_NEED_RESCHED);
->
-> This cements PREEMPT_NEED_RESCHED into KVM's guest/host ABI.  I doubt the sched
-> folks will be happy with that.
->
-> > +
-> > +     return 0;
-> > +}
-> > +
+-- 
+Jens Axboe
+

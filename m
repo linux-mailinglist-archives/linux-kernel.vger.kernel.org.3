@@ -2,172 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD59B4ECAB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158E54ECAB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiC3Rez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S1349316AbiC3RfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiC3Rex (ORCPT
+        with ESMTP id S1349311AbiC3RfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:34:53 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60128.outbound.protection.outlook.com [40.107.6.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E957DABC
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:33:04 -0700 (PDT)
+        Wed, 30 Mar 2022 13:35:13 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4B162D8;
+        Wed, 30 Mar 2022 10:33:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G4pOkm6RdqURHOG87FwA1a7KAS8G3L11rd+ozrWehPxVWKvSoxqtSQLKl4DlRWCgd3aDKLZNiyYmRGVT/DN1NvoSkA4MO9kxiJHnhIsmaxsgjE5wqZzh6gpc1Lh5TShdUXuXY16+d8Qvxi3i0KnaJK+++dsqODSGKuDNZvmPS38Fc8Pyeqb4OpUHhqqzens77I3tCC/KlX3YXBKMT0oa7XSl72ucvbxdfc8al+P6CumkeH9+Vd2YiDDNfcEhjzMmEmB07USHGk4//FAvwM7MvFEoTahlRIjsWBy02ie3jG6gNKa/z+46k6fiFTG2EZn8hSLP5BLsab27rMxSEAKAAw==
+ b=O+OqmnNgzo39wGTAD3Px37xU4crtcq/+7X73VXFpLs6TWXuDPq1oDFLdbuhzPK1n0lsHnmUutoLcqCRZ7nY83USv2uPCFY1UFpgU82jrHHz2nI/IS5aCVIkZPXK3V5M8f8hHKeWiaSDQakaHkLUngEsb6Pwd2aKNU6yXrrWLqyUPms6+/zBecCtM3+8KZ+QB8LJf14x3j1R8GO79LY5oGAYfwAOw+cXve936oOwiOAM3On4xu4pC8aS0henBWEIQYZTMP/Aj2m+bYu3ol4yCbJDV7gvPwQSq9/X8Tfzh7BNG+CNnLQN/+Jl5f+OWSucv7G9U6bY2xUJpQn5lDOmrfA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qGHX6vCAwFYQZcpedUMNcNLq8rxXU4d7tMcUTPoTf+I=;
- b=OAf3BAKKota/UZfK2S1VnymDrOaWJ30h3E3pwrS+sVonq7GdwNHXQlfqynfivQIwhuTfA7dO+mLvSU7zFQ+iuIO+xgXIB30+l3XcPDSKuyM4oqGCMQXAk3ukBtTfgJ32ev9BKphq0lUyV0IE2DyycXL6+BDkPIWHmz38GRVU80OF2+YAGUB8GMLJzkmKbrBvJm/fis1dIlmy+sHoC/pTWrVmgOW0CeYJ3WrefwMUNL3Xmq61dI/sDKiSywb7MSPfw9Qz9IJV9XLkclfsmTagDMuBS9mJNgOlO0VjuK0uW+HBSCp+2AVbIvg1tB5EmxnGdpCscl1IOTCpsEyZqLuYog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=armlinux.org.uk smtp.mailfrom=arri.de;
- dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ bh=yNPo6km0DigoVON72TTyEvKUKhZm3OvmrALL6xn5Vok=;
+ b=Eh/SDoLoqZ2wds6FwaP9uFFiCG6yb1NRERPhMJQO8XV71VWl/wZsE49XUZu2qn8jkb1e33YIJitcMmYkl7H0TDpJ/R6aedUZSzdYUCPDnnDM/CtIbivjDSblvyVddnVQUEGbgtWuLf7y3JyDZrAz/YGdLUP1H3m1Ry9xoPwgShHeyBDVCz9Q+8kRnXvSdq0WkvEEQQYa0+FGxYOm97+S1x4gJ3aFzF/6Sj8dedq6e6eDq0EsrzaKpPoW0Oqk1yd9uazOGGRlGcskNWPVFVhKlxbRi+UBRqb4g1qG+AXoec2y36MWO60R39+LGV2HRHGtmdnr4R05+vcTShoo4KuGQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qGHX6vCAwFYQZcpedUMNcNLq8rxXU4d7tMcUTPoTf+I=;
- b=icfbFmrXC02Yw+mPwVIlFn7ocl02xKmVgIGFgYd5zKgnQCpmF5j0Q7WWHTbMu7e8wbkWWFpL7+fegxdVW/XMqBaJeq8y8SIoQo9A//i6gRUD7V+sppWTX3xCNd/uuDe5dz1VtnhmklTMweFBiDR7/qq1VFcRYyCzWlyAyJSRJ5U=
-Received: from AS9PR06CA0238.eurprd06.prod.outlook.com (2603:10a6:20b:45e::8)
- by DBBPR07MB7674.eurprd07.prod.outlook.com (2603:10a6:10:1e7::10) with
+ bh=yNPo6km0DigoVON72TTyEvKUKhZm3OvmrALL6xn5Vok=;
+ b=MFfKnJVVzazKw+wDlzHoOygN3jEMiYSkTFZyOlYeKjmKleNYd/QN2PNUmFaAHeIwHgVO9dDfESd7qqXGHQEp0/c/vHWG1htCeS5c4Nuc1ZsNaQCil8tL98+HqrYNMKeCK9EuPS0riAk1SLdP+5N2p3MfwTdhcPGNrJonJJCOJAO3xDl4fhELVj74c65DOJPaw4FL23YyfCtyjP36dfN80gTiDdwpdggEVIhPdOOXYKD3nGYuHXz2J1Xs7h2+YAD3jYWZ/mneUT9pI6gXcwlmAk/r10g7ENLtiyk8PzietcYQwIcvS8wWVrYgax1R2lV6deFadMaRneuOOZa/uR7eJg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CY4PR1201MB0216.namprd12.prod.outlook.com (2603:10b6:910:18::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.8; Wed, 30 Mar
- 2022 17:33:02 +0000
-Received: from HE1EUR02FT070.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:20b:45e:cafe::85) by AS9PR06CA0238.outlook.office365.com
- (2603:10a6:20b:45e::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
- Transport; Wed, 30 Mar 2022 17:33:01 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- HE1EUR02FT070.mail.protection.outlook.com (10.152.11.44) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 17:33:00 +0000
-Received: from localhost.localdomain (192.168.54.86) by mta.arri.de
- (10.10.18.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
- 2022 19:32:59 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>
-CC:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
-Date:   Wed, 30 Mar 2022 19:32:59 +0200
-Message-ID: <10062923.nUPlyArG6x@localhost.localdomain>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <CAMj1kXFcrG6TrSU+KcmXCVM7ZWZ2fMjiN8c_dtEwxBugJS_UAQ@mail.gmail.com>
-References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X> <YkSHJ65qGHO4bonJ@shell.armlinux.org.uk> <CAMj1kXFcrG6TrSU+KcmXCVM7ZWZ2fMjiN8c_dtEwxBugJS_UAQ@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.18; Wed, 30 Mar
+ 2022 17:33:24 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c%6]) with mapi id 15.20.5102.027; Wed, 30 Mar 2022
+ 17:33:24 +0000
+Date:   Wed, 30 Mar 2022 14:33:23 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, regressions@lists.linux.dev
+Subject: Re: [PATCH v4 8/9] iommu: Remove unused argument in
+ is_attach_deferred
+Message-ID: <20220330173323.GA2120790@nvidia.com>
+References: <20220216025249.3459465-1-baolu.lu@linux.intel.com>
+ <20220216025249.3459465-9-baolu.lu@linux.intel.com>
+ <YkRiawC2T9g+CHSJ@atomide.com>
+ <20220330142340.GA2111031@nvidia.com>
+ <YkSRKZcJO0q3v5WL@atomide.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkSRKZcJO0q3v5WL@atomide.com>
+X-ClientProxiedBy: BL0PR0102CA0027.prod.exchangelabs.com
+ (2603:10b6:207:18::40) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.86]
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 78b0a886-6fcf-4450-881f-08da127356a5
-X-MS-TrafficTypeDiagnostic: DBBPR07MB7674:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR07MB76741F3C6829D01268E3CD82BF1F9@DBBPR07MB7674.eurprd07.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 16ad6700-2475-4ab4-2cfd-08da12736478
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB0216:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB0216EF9A6113E2B1B0B502A5C21F9@CY4PR1201MB0216.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KIKGMjoRLEmM9nTABNE0z1CEPGNyYZp+CoENQijv748xAhPn7flI/cbHPIE7dqm4oRR2emUJyslmBwe7BzBqzJpuS70c3nkMVxc7/+1rcarMac0vRZAEDbZaaniQ9jUNffC5mAdm2Vn3OJ3ecb351DjoWMim98J+jaTDlHsm7gtFJbHevV2SQtVqH9+zQsVUW3upNVTGEjyaYssa71rIF+h52iJwxGTEtvkUquOKNyExtU+S5MzhNtLeLZ4Qo629MZGJlThgv1lHVQ82aGS5uuXFMUkelq8B+YENaeKwLfgpJBwFNbRX0LwoFQANGpMmwfUoV4DiDZuMwjBDv5/Nx37RtNPUhaHZLg5UyRiB02zVhO2R8HNsoWEJ0AiirFMK6gtR52pJl585JJsQUKG90crWlgcREboC7h8d9WbZC8ula6Ry46Yz9uwteOpROpmB092PEbEUgHZx5GTZeGUdSMod33uCfxbtArJfqd3QvMXKZa4h42P0Get7xcgtIRngqAF8uWPNAYcXghF70KRko6FK7+UsJHKUJuY/3Af7EqL9mKjWxvwSv0CJ4dAo5hNjLzzrT5a0S9a4fwV701LBDLmwW/AEHojthn8LK81q8SLT4H6+tZ/OUec+fgLHpmrBIlvmc9DgllBzVDVz5g43oL6aG7zEGXQNYxSLvJaJwcXe1ViGQVanifKMZPTSJFucD3Q25V2OTboSKHXTxvcTufrg6CuRAJEnOEbvjcHR4AhnbW40cw4Dxi9lfQjDyYMH8cs3F7asUCVs/IKhG1naveBNFK+ptY3yZLgFIPV++Wax7teQuWzNQ5mHow2TSPLk
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(36916002)(81166007)(966005)(508600001)(356005)(86362001)(54906003)(110136005)(5660300002)(47076005)(316002)(82310400004)(4326008)(8676002)(186003)(16526019)(83380400001)(7696005)(40460700003)(8936002)(70586007)(36860700001)(70206006)(336012)(55016003)(9686003)(426003)(26005)(2906002)(39026012)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 17:33:00.9793
+X-Microsoft-Antispam-Message-Info: 1eEfL35KrYQia38PSqmVcarySsiGNqYj+GHPhyQ8FseOo3IoBH0Gm5MFpxyYH5I2MHy7kkAhFBtILnPMbpKWTBeRIHAGxO6EFqJ9xI7lGT4YO/l4lvtOPVcjIH4ofHMw41Mn9CHV/PRcD8Ad/VARCvALxdxITB20O4BJdrd0EKHLTbol2J8D830F03EuofmYo+JrCJcMpx2JFfM1IaE68ovfpDyPc+nuJH5nrPyyNMDWIxR33ss2pagic9p4GsDiUjcVeOMSvaIV8uD+LGciTHrDVvdRqBD069FuChTMYS6edbywVtoEr76Sk5kwX7sdwhhbp8NPnMZY1kYYndxYtto7oBYPulW6EdJvCgngtSc6/sPRW5nm/8CXPr1AAXbyrQyp6N/IY2Vk6IEzVm4nUn00ZcH80dJ/qPk8D7JJ4pRr/NB57WeNXHIIozD3oNH6Y5ADQ/+1js/K3n5/MtspMWKrpw6BrRpGQUYAGaeOBRj4ACslY0dwcThW8r9kdA4kH7gFA+sZDtGOVEFbej58AOo1Bm7oUJFIGhl//GF4kvAisHk2GAWtxC1uCnWrrR7P0sy3YjEEmbc7igfDt+baM+mFcCdR1DxX4fiGMisHGPZh0iFCqmvsBZ6mwLYit5ZQWgfV3K90pT245IQnLOT2ew==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(66556008)(66476007)(6512007)(33656002)(83380400001)(86362001)(38100700002)(508600001)(2616005)(36756003)(5660300002)(316002)(7416002)(6916009)(54906003)(4326008)(8676002)(8936002)(186003)(26005)(6506007)(6486002)(1076003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?az5X5R4FdEXABSTFo6AnFfnD17ARTwkvatL4FG1XSkUHGltiKA9COg9rwx4h?=
+ =?us-ascii?Q?KkFDL6kWlm8qH+ZxhO+ezS5EhaJUFIUGzCn+2LMJwF1+ILtLCQdk7wywlw+9?=
+ =?us-ascii?Q?3wkpHol1HjvnyZePUur2vpQcaT1jCuEdCl3AjtLyZTwfXhaW5lPxXJ5aYS4n?=
+ =?us-ascii?Q?psADcy2O4Y+BeootJo00UdXaS0JpXOn7MJbHgtXpTc7buhP6UZOoBO6hZgRH?=
+ =?us-ascii?Q?R+kBrbAajePWhykRJmG+jEgNVk21odW28r6jd1hU3y49dCeJI6yngaRRRJ13?=
+ =?us-ascii?Q?pC03p5Hk8jgA5A8jGHrMyo3xzg/aFcIPYSCplU5lAo66jgWYx6SlOIm+IzII?=
+ =?us-ascii?Q?twvlOBLd4aISbtP9ok81kSODwYrujfPxtApBmn585e+3OzzHqIkygpF8XWLK?=
+ =?us-ascii?Q?7Z1UtB4159xYFe3aI/97HxYHjOUcGvibWSTHphXxMUXYixb6leeUh+KVi9Qu?=
+ =?us-ascii?Q?ht+k9OnOKeAjErWN1v+GntdjMtG9be8i7R6q7NmoonTNtxkvgZDAJonXK1YJ?=
+ =?us-ascii?Q?O73q3bXJ2WBFkekwAchjBJjZxUnYmMtdSy8AiUd6+HYHPkzrz0nCVX4Jcrb0?=
+ =?us-ascii?Q?SKxxzqW3/SX0lcgvHfKQCCahDS/TlTqg7BrqVG3rWLI0jAuDHoT9433NCAIs?=
+ =?us-ascii?Q?34aei4n0rijMAQgto6iM58jwO0//E/SWfWyykAsnP5F381gY7T7vOy/Gnmh5?=
+ =?us-ascii?Q?p8NMa0zdPw6R3+k3Xi8A57j3aIsExaD0oYM8gDV/62qf9lvT7C1F7qfHGxBr?=
+ =?us-ascii?Q?K/ZeN6k0IVQhL5y1fFESg/r3DKu/pOXbhILKV0YjQrHY7U33fUXRFVTfT48f?=
+ =?us-ascii?Q?oEC7UMnTvXXh5e+qW2Err+1NBezP4AbGYW4OZSi0XBT9aWCOLrtr0cL90MD0?=
+ =?us-ascii?Q?V67bkWpGXBb7gw2hi6Ja023DjOXz18CUIF1pfNbmRg98LMONDw/3WIX0GByd?=
+ =?us-ascii?Q?nnvcD42uaUTpT9UwDolD1q9AkpfAw2wWiyijbjMVRla1UWLagJ+yn8F/PaQL?=
+ =?us-ascii?Q?0hKT1OgDUUi8t6yq0rAzDCqUXeNefC+XbVqcbcwd9Dxy5Pk/gD1lpKhprZhc?=
+ =?us-ascii?Q?g9ESR5K4v6EHnluWJHxRNSNxBxZ1U3nZzWY1KBALOBHqzcXSygkntFlgfdRw?=
+ =?us-ascii?Q?eUUmnV2k+tDRYyfMKEgU+1Tw7Qj3w2njUmMxW4P+XznCPr0JrX1XapJ2eq6A?=
+ =?us-ascii?Q?z2+N31Xpfr9FeIXZ5J9nvhQdXaEZlSAD+diMGtXq3/YNc7IMAwM3yYvbKfjr?=
+ =?us-ascii?Q?rsQwfiXIqRBppzbXzKq830plKWu5dnZtgGltoU5pNMW6n0NCzCf+XY+q2c6m?=
+ =?us-ascii?Q?hz/1VLKpHT7DZ3ZB7rrdyqSnthddpr0H8yQRfoTNxuzYQ0guFZI1L6hHMp/R?=
+ =?us-ascii?Q?FQD43ZrbSAIr53gOQU9xiv0WANxYub/SmX1CpDPpGrGMLbHdv4etRWfVLseU?=
+ =?us-ascii?Q?jiQnaJUrto6U35lxK02RA13Q+es93vNrhCxi3bQ2aL8LVA/oX9C2N8nHFIZr?=
+ =?us-ascii?Q?bT6+Z7AGhi69VOGIWUmGy5dQJvCL7i+vyAyafqz7YEHl2DcADeqU9i4dMqNk?=
+ =?us-ascii?Q?dcEC40s15QagEadaGLI23SkWNVjc3II8g4G9hPr0KK6beASew62Uhg3heuje?=
+ =?us-ascii?Q?4wR/3NBLmuIwo039s79Q84Q9AIGayxI5qi8xyDTcdagyddWfLhoo6spJO9qo?=
+ =?us-ascii?Q?PPi4TyMZRpy4FgsCti7iXb3fDEDjNGjSCFGGU22ZUX4NxeXdav7Hg36oPIz2?=
+ =?us-ascii?Q?Vbv83lZaVQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16ad6700-2475-4ab4-2cfd-08da12736478
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 17:33:24.4045
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78b0a886-6fcf-4450-881f-08da127356a5
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR02FT070.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR07MB7674
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Jh+n73HOsf38Ri9qNKi5M4p7vShHqO+Gg8MkwNPuhqe9+dJ+9/TdOSjLEtgmbZOh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0216
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, 30 March 2022, 18:45:18 CEST, Ard Biesheuvel wrote:
-> On Wed, 30 Mar 2022 at 18:37, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Wed, Mar 30, 2022 at 06:34:25PM +0200, Ard Biesheuvel wrote:
-> > > On Wed, 30 Mar 2022 at 18:12, Russell King (Oracle)
-> > > <linux@armlinux.org.uk> wrote:
-> > > >
-> > > > On Tue, Mar 22, 2022 at 06:49:17PM +0100, Christian Eggers wrote:
-> > > > > Hi Nathan, hi Russel,
-> > > > >
-> > > > > I stumbled today over the same problem (no output on serial console
-> > > > > with v5.15.28-rt36). During `git bisect`, I had also some commits
-> > > > > where a few lines of output were visible.
-> > > > >
-> > > > > At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
-> > > > > sections"), the system boots up to here:
-> > > > >
-> > > > > start_kernel()
-> > > > > +--setup_arch()
-> > > > >    +--paging_init()
-> > > > >       +--devicemaps_init()
-> > > > >          +--eary_trap_init(vectors_base = 0xC7FFE000)
-> > > > >             +--copy_from_lma(vectors_base = 0xC7FFE000, __vectors_start=0x0, __vectors_end=0x20)
-> > > > >                +--__memcpy()
-> > > > >
-> > > > >                copy_template.S:113
-> > > > >                ldr8w   r1, r3, r4, r5, r6, r7, r8, ip, lr, abort=20f
-> > > > >                r1 = 0
-> > > > >
-> > > > >
-> > > > > With the final v5.15.28-rt36 I found out that the system boots fine
-> > > > > after disabling CONFIG_HARDEN_BRANCH_HISTORY.
-> > > > >
-> > > > > Is there anything else I could analyze? My SoC system is a NXP i.MX6LL
-> > > > > with a ARMv7 core. I have access to a JTAG debugger.
-> > > >
-> > > > I think this is already fixed in mainline. Commit:
-> > > >
-> > > > 6c7cb60bff7a ("ARM: fix Thumb2 regression")
-> > > >
-> > >
-> > > It's still broken - I sent a couple of patches on Monday, among which
-> > > one to fix the boot issue with loop8 on Thumb2. The problem is 'b . +
-> > > 4', which produces a narrow encoding, and so it skips the subsequent
-> > > subs instruction and loops forever.
-> >
-> > And what's the current status? Sorry, I've way too much email from the
-> > last 2.5 weeks to find it myself.
-> >
+On Wed, Mar 30, 2022 at 08:19:37PM +0300, Tony Lindgren wrote:
+
+> > > __iommu_probe_device from probe_iommu_group+0x2c/0x38
+> > > probe_iommu_group from bus_for_each_dev+0x74/0xbc
+> > > bus_for_each_dev from bus_iommu_probe+0x34/0x2e8
+> > > bus_iommu_probe from bus_set_iommu+0x80/0xc8
+> > > bus_set_iommu from omap_iommu_init+0x88/0xcc
+> > > omap_iommu_init from do_one_initcall+0x44/0x24c
+> > > 
+> > > Any ideas for a fix?
+> > > 
+> > > It would be good to fix this quickly so we don't end up with a broken
+> > > v5.18-rc1..
+> > > 
+> > > For reference, this is mainline commit 41bb23e70b50 ("iommu: Remove unused
+> > > argument in is_attach_deferred").
+> > 
+> > Are you confident in the bisection? I don't see how that commit could
+> > NULL deref..
 > 
-> https://lore.kernel.org/linux-arm-kernel/20220328134714.205342-1-ardb@kernel.org/
+> Oops sorry you're right, the breaking commit is a different patch, it's
+> 3f6634d997db ("iommu: Use right way to retrieve iommu_ops") instead. I must
+> have picked the wrong commit while testing.
+
+That makes alot more sense
+ 
+> > Can you find the code that is the NULL deref?
 > 
-> Nobody bothered to respond yet, I can drop the first two in the patch
-> tracker if you like.
+> I can debug a bit more tomorrow.
 
-I just switched to v5.15.31-rt38 which already includes
-6c7cb60bff7a ("ARM: fix Thumb2 regression")
+Looks like omap's omap_iommu_probe_device() is buggy, it returns 0 on
+error paths:
 
-This kernel boots fine now, even with CONFIG_HARDEN_BRANCH_HISTORY=y. After
-applying the patch series from Ard, the system still boots fine. 
+	num_iommus = of_property_count_elems_of_size(dev->of_node, "iommus",
+						     sizeof(phandle));
+	if (num_iommus < 0)
+		return 0;
 
-I haven't any understanding what these patches do. Is there anything I shall
-test?
+This function needs to return an errno -ENODEV
 
-regards
-Christian
+Otherwise it causes a NULL dev->iommu->iommu_dev and dev_iommu_ops() will
+crash.
 
-
-
+Jason

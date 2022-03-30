@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85ED24ECDD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E344ECDE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiC3UNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S231887AbiC3UNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiC3UNJ (ORCPT
+        with ESMTP id S231563AbiC3UNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:13:09 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37196542A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:11:22 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h11so29217087ljb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z8saFLymfeqO/ogmUMlEcK3Es6y2VVG88mitspUFOL0=;
-        b=fW/r78NFN8nLdN2Yn9/tT4J6HHaIA3laHKcmPnBiSbR+xbXf2DDZcpOaIZ1eD/xeUq
-         /RUVpPnGrAH0cI8RRCDFwy7W1jCSqOUAvCRhmZuROQMWd1xuY2mU4fXx+A/+WW78kSyX
-         hbJOii15jmOrWx+SFEZCQ1qlr1b0FXs6FBG3o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z8saFLymfeqO/ogmUMlEcK3Es6y2VVG88mitspUFOL0=;
-        b=6QmZ0ftlnq7LfoUwrKj4soLxgFDPLKQ/AS+71LVmjJbe2M5VVsBxp8srKa9YAvgpSo
-         al/SoKednibkxaf8VFoCRHTevi2WxL1a0oQjjCC66DpHjxEOiiEv8FeZRcDDdOzhFxg3
-         s1u7Qc7GwALoDfFmoT0pUlynfYBbss+elRsh/bqUdYmBuA1r2eHHYZ7m9KrZRE8MpJnv
-         YaIY/T/1Bo+W1kA8nvmXnQJPwVV7HYbBT+a4/i6WQktYh3ZivzHo5ejQKGCl2UkY56xx
-         4d9a1jTHl3IzSD1p3hxXGqEaXody+Dqr1EYnh2pIxrl+lmUnXaFyojCSUbdJ2B0gdH50
-         zX3A==
-X-Gm-Message-State: AOAM530adVFcwpjj/7uIVU+at0KsJ8JhhIW7gU9Yx2Oqvl6kgb4AffCT
-        10p1YQAT/orlyf7nKa2xzpOG4CO8LO0YBQAp
-X-Google-Smtp-Source: ABdhPJwJg4GeFw/UCN0zp7rgxNeKOXam0TWnrif2C8alrDR+EGyiXrzyFjprjrmZQEY7w2pcljohTQ==
-X-Received: by 2002:a2e:87d2:0:b0:249:829c:c63f with SMTP id v18-20020a2e87d2000000b00249829cc63fmr8045351ljj.429.1648671079486;
-        Wed, 30 Mar 2022 13:11:19 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id q4-20020a2eb4a4000000b0024985ed51cdsm2513636ljm.114.2022.03.30.13.11.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 13:11:18 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id k21so37779588lfe.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:11:18 -0700 (PDT)
-X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
- b21-20020a056512305500b0044a39146603mr8145958lfb.435.1648671078307; Wed, 30
- Mar 2022 13:11:18 -0700 (PDT)
+        Wed, 30 Mar 2022 16:13:12 -0400
+Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDA06542E;
+        Wed, 30 Mar 2022 13:11:26 -0700 (PDT)
+Received: from authenticated-user (box.fidei.email [71.19.144.250])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.fidei.email (Postfix) with ESMTPSA id 64E53804E2;
+        Wed, 30 Mar 2022 16:11:26 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
+        t=1648671086; bh=n0wWn1phLt+ulqPA8UStyX7a3bb5zuBWc1xXikWnhUc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qzv8escIqyeYmf/blTE/TtUim9RqDN8gCUGYdfE7oD190++EzK8c3D7bFGmCSIhZN
+         fX1m+JyUlb2Lz2/yWKH1/pzuulnXc9W2wsOSKAbl4posVkEEjVKjOMfjEkNnhMqg7k
+         rydwolY7jdbyfDQenhTGOgpI6PPwOzXTYTzDeIJmHb4VvU4P6wumS9P66DZi26PEdO
+         dYY5GPZ9jr0otmB33Cddel/LL5qKEaB+UPKXd2Gdw31SG72IgG6FrULJFNQlil5Q1U
+         8QzrmrxW6H7KyDjgY6g1A5ZGJcJPFdPWuOU+vi8kS5fESgOwbZnKpJfMrsKKKJI4K1
+         1FY2RBqOVxlxg==
+From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, kernel-team@fb.com
+Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Subject: [PATCH v3 0/2] btrfs: allocate page arrays more efficiently
+Date:   Wed, 30 Mar 2022 16:11:21 -0400
+Message-Id: <cover.1648669832.git.sweettea-kernel@dorminy.me>
 MIME-Version: 1.0
-References: <7b0576d8d49bbd358767620218c1966e8fe9a883.camel@hammerspace.com>
- <CAHk-=wh-hs_q-sL6PNptfVmNm7tWrt24o4-YR74Fxo+fdKsmxA@mail.gmail.com> <c5401981cb21674bdd3ffd9cc4fac9fe48fb8265.camel@hammerspace.com>
-In-Reply-To: <c5401981cb21674bdd3ffd9cc4fac9fe48fb8265.camel@hammerspace.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 30 Mar 2022 13:11:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgqo0xdOXQSj2uX7Zkdn9jYvn=vapmt4XGaSP6B=ZAmqw@mail.gmail.com>
-Message-ID: <CAHk-=wgqo0xdOXQSj2uX7Zkdn9jYvn=vapmt4XGaSP6B=ZAmqw@mail.gmail.com>
-Subject: Re: [GIT PULL] Please pull NFS client changes for Linux 5.18
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 1:02 PM Trond Myklebust <trondmy@hammerspace.com> wrote:
->
-> My main worry was that hash_64() would have too many collisions.
+In several places, btrfs allocates an array of pages, one at a time.  In
+addition to duplicating code, the mm subsystem provides a helper to
+allocate multiple pages at once into an array which is suited for our
+usecase. In the fast path, the batching can result in better allocation
+decisions and less locking. This changeset first adjusts the users to
+call a common array-of-pages allocation function, then adjusts that
+common function to use the batch page allocator.
 
-So as you found out, hash_64() is actually a fairly good hash despite
-being very simple.
+v3:
+ - fixed up the other style comments from kdave's v1 comments
+v2:
+ - moved new helper to extent_io.[ch]; fixed title format
+ - https://lore.kernel.org/linux-btrfs/cover.1648658235.git.sweettea-kernel@dorminy.me/ 
+v1:
+ - https://lore.kernel.org/linux-btrfs/cover.1648496453.git.sweettea-kernel@dorminy.me/
 
-In fact, with an input of just one word, it's generally hard to do
-much better. I'm obviously not claiming it's a _cryptographic_ hash,
-but compared to the usual "xor and shift a few times", it really
-shouldn't be too bad.
+Sweet Tea Dorminy (2):
+  btrfs: factor out allocating an array of pages
+  btrfs: allocate page arrays using bulk page allocator
 
-And that's really what xxhash() does anyway.
+ fs/btrfs/check-integrity.c |  8 ++---
+ fs/btrfs/compression.c     | 39 +++++++++------------
+ fs/btrfs/extent_io.c       | 71 +++++++++++++++++++++++++++++---------
+ fs/btrfs/extent_io.h       |  2 ++
+ fs/btrfs/inode.c           | 10 +++---
+ fs/btrfs/raid56.c          | 30 +++-------------
+ 6 files changed, 85 insertions(+), 75 deletions(-)
 
-I think the reason to use xxhash() would be if you have a noticeably
-bigger input, or some truly special cases.
+-- 
+2.35.1
 
-But for a single word, and then not even using very many of the
-resulting bits, our regular family of 'hash()' routines really should
-generally be perfectly fine. It should spread and mix the input bits
-competently.
-
-            Linus

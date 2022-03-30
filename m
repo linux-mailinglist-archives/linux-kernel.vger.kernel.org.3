@@ -2,273 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D55B4EBE01
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B904EBE15
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245021AbiC3JtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S241224AbiC3JxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241019AbiC3Js7 (ORCPT
+        with ESMTP id S238458AbiC3JxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:48:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1172675B7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:47:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 490731F38C;
-        Wed, 30 Mar 2022 09:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648633629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=r3Sjn37oF7DqPiLc6iHgx5Yr2yGAhC+cwpP1k5ApyE0=;
-        b=dD9z5OmXmE5y5F9WjsuJnHls2nDFA7BR+D5GLh5A7mjxKaG8a6MWfjiRtHLydS3DeEMIrs
-        rcYkRNRzIYnq0FKRYjf05iyv6G4p/AAjnoHSLArjSy1xLalmLOqcHofBOP5EuqCgOGdbtY
-        Px2u9fXMKFASSfBtGo03VPCzO4ReEls=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648633629;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=r3Sjn37oF7DqPiLc6iHgx5Yr2yGAhC+cwpP1k5ApyE0=;
-        b=cw+c/VKcBvex/u40GFnSYWfafh9XWXoovgXseKpSPa2iKUAj4uHLvS7a0tDPA+TAv2v/9b
-        ycMBgaLf2Y3M8TCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E8CB813A60;
-        Wed, 30 Mar 2022 09:47:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ejfgNhwnRGJjZQAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 30 Mar 2022 09:47:08 +0000
-From:   Petr Vorel <pvorel@suse.cz>
-To:     linux-kernel@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>,
-        Christian Brauner <christian@brauner.io>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 1/1] ns: Rename MAX_PID_NS_LEVEL to MAX_NS_LEVEL, move
-Date:   Wed, 30 Mar 2022 11:47:03 +0200
-Message-Id: <20220330094703.26075-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.35.1
+        Wed, 30 Mar 2022 05:53:19 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A81C3BBC0;
+        Wed, 30 Mar 2022 02:51:32 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id gh15so16426782qvb.8;
+        Wed, 30 Mar 2022 02:51:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e6Qd1JdMt3NwzWK7NAVAPGEjLMWhB8qclJNlYrQ8idw=;
+        b=EKnrNHAMeA1X+dMlPr6fefrf1ornReBzgw+UFvXRIkOjaXTtq5XvgIv3VhER/bIM42
+         RJW+SQm/0J0Cyu1hlEh+1RILbUUbL3Mq4VjkTtMvPtSJ5JtSpBLDUeoZF6f89ckOxXHR
+         hepLay/97LXQGCBb/OId5laxHXOmlD9BzhsX4mcHb5SuVM4pFEW1LJa72DLmCpIbI4yE
+         s3xGM73sj7oWhV2SlRcKTURJqyg+jl/iq4rdl+dBkQZDHYLhheqfI1SpzjiOcExiej8y
+         A4ai/OppzfezzaCJGsP3jb7Rc2mrmCsnKK0Q2UN3wtnww4dKqUwXKoB7+2cqlVJgqhad
+         gusg==
+X-Gm-Message-State: AOAM531UNUOFwAJZ+L8FsHnPWGTewzL2OQp+51ZFQZVUem4xR1RQyOXC
+        UcG8XnyXLjb0CTjBRAWqhSuzAc9Z/fc/UQ==
+X-Google-Smtp-Source: ABdhPJxL7t74eeJaRcq1jmZDN1SAUAM/kucneLUPvtemPzCU+PidNJuDdcjObQOqqxoy/jf7CPRQGA==
+X-Received: by 2002:a05:6214:4016:b0:441:28be:7c45 with SMTP id kd22-20020a056214401600b0044128be7c45mr31024352qvb.80.1648633891525;
+        Wed, 30 Mar 2022 02:51:31 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id bm21-20020a05620a199500b0067d5e6c7bd8sm10798220qkb.56.2022.03.30.02.51.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 02:51:31 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2e64a6b20eeso211858937b3.3;
+        Wed, 30 Mar 2022 02:51:30 -0700 (PDT)
+X-Received: by 2002:a81:c703:0:b0:2d0:cc6b:3092 with SMTP id
+ m3-20020a81c703000000b002d0cc6b3092mr34863152ywi.449.1648633890723; Wed, 30
+ Mar 2022 02:51:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com> <20220329152926.50958-7-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220329152926.50958-7-andriy.shevchenko@linux.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Mar 2022 11:51:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVSBh7Tnf5pnCfzf7=h5sttX2qH5j4kOkvvcuCMydmeYw@mail.gmail.com>
+Message-ID: <CAMuHMdVSBh7Tnf5pnCfzf7=h5sttX2qH5j4kOkvvcuCMydmeYw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/13] pinctrl: renesas: rza1: Replace custom code by
+ gpiochip_node_count() call
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        openbmc@lists.ozlabs.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename MAX_PID_NS_LEVEL to MAX_NS_LEVEL, move it ns_common.h and reuse
-it in check in user_namespace.c.
+On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> Since we have generic function to count GPIO controller nodes
+> under a given device, there is no need to open code it. Replace
+> custom code by gpiochip_node_count() call.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-changes v1->v2:
-instead of reusing MAX_PID_NS_LEVEL for user_namespace.c create general
-constant MAX_NS_LEVEL used in both (Christian)
-That leaded to changes on more places.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-As value 32 is likely to be used for any namespace it makes sense to
-have this general variable instead of keeping MAX_PID_NS_LEVEL and
-creating MAX_USER_NS_LEVEL.
+Gr{oetje,eeting}s,
 
-Kind regards,
-Petr
+                        Geert
 
- include/linux/ns_common.h                     |  3 ++
- include/linux/pid_namespace.h                 |  3 --
- kernel/fork.c                                 |  4 +--
- kernel/pid_namespace.c                        |  4 +--
- kernel/user_namespace.c                       |  2 +-
- .../clone3/clone3_cap_checkpoint_restore.c    |  4 +--
- .../testing/selftests/clone3/clone3_set_tid.c | 30 +++++++++----------
- 7 files changed, 25 insertions(+), 25 deletions(-)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-diff --git a/include/linux/ns_common.h b/include/linux/ns_common.h
-index 0f1d024bd958..a84bc9d947a2 100644
---- a/include/linux/ns_common.h
-+++ b/include/linux/ns_common.h
-@@ -4,6 +4,9 @@
- 
- #include <linux/refcount.h>
- 
-+/* MAX_NS_LEVEL is needed for limiting size of 'struct pid' */
-+#define MAX_NS_LEVEL 32
-+
- struct proc_ns_operations;
- 
- struct ns_common {
-diff --git a/include/linux/pid_namespace.h b/include/linux/pid_namespace.h
-index 07481bb87d4e..f814068012d0 100644
---- a/include/linux/pid_namespace.h
-+++ b/include/linux/pid_namespace.h
-@@ -11,9 +11,6 @@
- #include <linux/ns_common.h>
- #include <linux/idr.h>
- 
--/* MAX_PID_NS_LEVEL is needed for limiting size of 'struct pid' */
--#define MAX_PID_NS_LEVEL 32
--
- struct fs_pin;
- 
- struct pid_namespace {
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9796897560ab..4965bc7f512e 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2784,7 +2784,7 @@ noinline static int copy_clone_args_from_user(struct kernel_clone_args *kargs,
- 	if (err)
- 		return err;
- 
--	if (unlikely(args.set_tid_size > MAX_PID_NS_LEVEL))
-+	if (unlikely(args.set_tid_size > MAX_NS_LEVEL))
- 		return -EINVAL;
- 
- 	if (unlikely(!args.set_tid && args.set_tid_size > 0))
-@@ -2900,7 +2900,7 @@ SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
- 	int err;
- 
- 	struct kernel_clone_args kargs;
--	pid_t set_tid[MAX_PID_NS_LEVEL];
-+	pid_t set_tid[MAX_NS_LEVEL];
- 
- 	kargs.set_tid = set_tid;
- 
-diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-index a46a3723bc66..bf2856cc80df 100644
---- a/kernel/pid_namespace.c
-+++ b/kernel/pid_namespace.c
-@@ -27,7 +27,7 @@
- static DEFINE_MUTEX(pid_caches_mutex);
- static struct kmem_cache *pid_ns_cachep;
- /* Write once array, filled from the beginning. */
--static struct kmem_cache *pid_cache[MAX_PID_NS_LEVEL];
-+static struct kmem_cache *pid_cache[MAX_NS_LEVEL];
- 
- /*
-  * creates the kmem cache to allocate pids from.
-@@ -81,7 +81,7 @@ static struct pid_namespace *create_pid_namespace(struct user_namespace *user_ns
- 		goto out;
- 
- 	err = -ENOSPC;
--	if (level > MAX_PID_NS_LEVEL)
-+	if (level > MAX_NS_LEVEL)
- 		goto out;
- 	ucounts = inc_pid_namespaces(user_ns);
- 	if (!ucounts)
-diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index 5481ba44a8d6..a50d7ee2cc1b 100644
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -87,7 +87,7 @@ int create_user_ns(struct cred *new)
- 	int ret, i;
- 
- 	ret = -ENOSPC;
--	if (parent_ns->level > 32)
-+	if (parent_ns->level > MAX_NS_LEVEL)
- 		goto fail;
- 
- 	ucounts = inc_user_namespaces(parent_ns, owner);
-diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-index 52d3f0364bda..05c75a61752b 100644
---- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-+++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-@@ -27,8 +27,8 @@
- #include "../kselftest_harness.h"
- #include "clone3_selftests.h"
- 
--#ifndef MAX_PID_NS_LEVEL
--#define MAX_PID_NS_LEVEL 32
-+#ifndef MAX_NS_LEVEL
-+#define MAX_NS_LEVEL 32
- #endif
- 
- static void child_exit(int ret)
-diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
-index 0229e9ebb995..39e0f9ddf8cb 100644
---- a/tools/testing/selftests/clone3/clone3_set_tid.c
-+++ b/tools/testing/selftests/clone3/clone3_set_tid.c
-@@ -23,8 +23,8 @@
- #include "../kselftest.h"
- #include "clone3_selftests.h"
- 
--#ifndef MAX_PID_NS_LEVEL
--#define MAX_PID_NS_LEVEL 32
-+#ifndef MAX_NS_LEVEL
-+#define MAX_NS_LEVEL 32
- #endif
- 
- static int pipe_1[2];
-@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
- 	uid_t uid = getuid();
- 	char proc_path[100] = {0};
- 	pid_t pid, ns1, ns2, ns3, ns_pid;
--	pid_t set_tid[MAX_PID_NS_LEVEL * 2];
-+	pid_t set_tid[MAX_NS_LEVEL * 2];
- 
- 	ksft_print_header();
- 	ksft_set_plan(29);
-@@ -174,36 +174,36 @@ int main(int argc, char *argv[])
- 
- 	/* Try invalid settings */
- 	memset(&set_tid, 0, sizeof(set_tid));
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL + 1, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL + 1, 0, -EINVAL, 0, 0);
- 
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL * 2, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL * 2, 0, -EINVAL, 0, 0);
- 
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL * 2 + 1, 0,
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL * 2 + 1, 0,
- 			-EINVAL, 0, 0);
- 
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL * 42, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL * 42, 0, -EINVAL, 0, 0);
- 
- 	/*
--	 * This can actually work if this test running in a MAX_PID_NS_LEVEL - 1
-+	 * This can actually work if this test running in a MAX_NS_LEVEL - 1
- 	 * nested PID namespace.
- 	 */
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL - 1, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL - 1, 0, -EINVAL, 0, 0);
- 
- 	memset(&set_tid, 0xff, sizeof(set_tid));
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL + 1, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL + 1, 0, -EINVAL, 0, 0);
- 
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL * 2, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL * 2, 0, -EINVAL, 0, 0);
- 
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL * 2 + 1, 0,
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL * 2 + 1, 0,
- 			-EINVAL, 0, 0);
- 
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL * 42, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL * 42, 0, -EINVAL, 0, 0);
- 
- 	/*
--	 * This can actually work if this test running in a MAX_PID_NS_LEVEL - 1
-+	 * This can actually work if this test running in a MAX_NS_LEVEL - 1
- 	 * nested PID namespace.
- 	 */
--	test_clone3_set_tid(set_tid, MAX_PID_NS_LEVEL - 1, 0, -EINVAL, 0, 0);
-+	test_clone3_set_tid(set_tid, MAX_NS_LEVEL - 1, 0, -EINVAL, 0, 0);
- 
- 	memset(&set_tid, 0, sizeof(set_tid));
- 	/* Try with an invalid PID */
--- 
-2.35.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

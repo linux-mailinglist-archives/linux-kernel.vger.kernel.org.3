@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BC84EBE52
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D134EBE56
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245152AbiC3KHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S245162AbiC3KHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245150AbiC3KHG (ORCPT
+        with ESMTP id S245156AbiC3KHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:07:06 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332A0E542C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:20 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w21so23939635wra.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:20 -0700 (PDT)
+        Wed, 30 Mar 2022 06:07:15 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87D5E9C93
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:27 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h23so28494422wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RmWlTRAAbGJbrPtoirJxNyXFgPG9ShUU4hqz7EbJJqY=;
-        b=uX9thH517i+xzTFy71NIXJUZwZd0cgA6KTdHu/XW1XxN8d4QUEEenoKjN2+wFYFV7y
-         rClBxhK0AUZdf96vfOG3fbiVRkVDnXYgldOIIx9huxeYgIVTIgZsfcANxSxQnVLIf0D4
-         0wFzDNpHFzoRDz/C24LW3rtwps1feUjFYPLMteGYxspkaMcvPyb0VxRYpex/yi8D0amu
-         NFL2IrKEE0I39qBhOFydXw75EFCWni7lJUaWUpoUfvB+/I7OtLD+ghzJa84Kn6pOMPcQ
-         q/5TZSzUbu4Mr1hCVG7aDBXc/DCEs3lraDgQCt+tcZyBVm63VyUa0GSHGqLFsMnCllTf
-         w6ZA==
+        bh=WBMBrrF+3DeGd5Qv19hdc8TZo5LddleFrKa225rKdeY=;
+        b=mQlCez5JnZKNz0wqCAAtkzZdUJtSvOkWuyUhdkhH3ZoqzhXka/V6KZDHleJgUuFsZT
+         tLAJAedTqt7JnGPLUaJhmOOQnUHuzvJrKdsfGYQzKfPCJjqv+3wsPeM/0lEdN1SDAUL9
+         WlQtg2zTY2//rMGjzj70TwcyGfhmUSHITRgrZGeIcEOaK7IFhLTvqkl/PsUEKkV6NueH
+         1YqhIDmkjlTCuWDNH2xUixdyYkANmCcMK7SereHazGu7nfni25VYT2iB7dY1IEGTT4IE
+         krtJPvL3H5G1sucwglNi5rEhbGbM5gVRe1q8yoNi7fTpJk+I4jiLTI7kM4HNURGWsdwO
+         fwWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RmWlTRAAbGJbrPtoirJxNyXFgPG9ShUU4hqz7EbJJqY=;
-        b=7ey3+ueoD87OmuDihWYuvRM5CMhkiqoIr1otZieha5xz02a/rhyUqGKgcJVsC45pMS
-         nyKgqhcdabRv0sjHdagzz9ZEFxnBaKj99hv3doP4aYTdqTgKVhLe6mFw+WC8YXJHbG1I
-         ZipL8JlMQSJ3mt2Rpt2CITZCmaAbcAiQZc5XLZYIWq/FqBlYWT0AOuJvmvw+rVivqxdq
-         9uwKiJwNyM7P355g0QH8UE2+ijFlzerUupSuqfsjNNKkXhuvg2lMQZq2L7DQWuO5dCE8
-         sg8uJGFYg43b6wIkfbojlLo3u94zbf3wZrq/6zNhWZxhjPxwgy+GFEg271R7jCOQaQPn
-         Y+Yg==
-X-Gm-Message-State: AOAM530v1/I800FzkB3bc5GesjGlHP5TbJlxQnFVMLfIzuvyVozDGX1O
-        eprZccAILujhhijSOxCvzw6Q0A==
-X-Google-Smtp-Source: ABdhPJxYvO4npAxP3BEy1xMp6RRkcTDJEcgzOaqYpnTT+dnoX4hD0MGGt36gQrt/p5X7tP9SmFpGaA==
-X-Received: by 2002:a05:6000:1862:b0:204:e417:9cf8 with SMTP id d2-20020a056000186200b00204e4179cf8mr36413657wri.593.1648634718516;
-        Wed, 30 Mar 2022 03:05:18 -0700 (PDT)
+        bh=WBMBrrF+3DeGd5Qv19hdc8TZo5LddleFrKa225rKdeY=;
+        b=VTRuiHjmhF1r4ytvhHqj7cHlb2r6Gxz2o6UhrxIdtjf1Bvxs1S7jzNuGI6x8vj8qVN
+         YLMCWIz1Zm9TL1egoYubfDNZ7GCF0nXQRd9KVRglQ143mauKI+6PpYSZgzplA6bRqBoQ
+         6pUOilOSzMdZ8Dxxud6nTNOrJWlAMq8suagtBZJw21nvC59O97gf22/xmpUhPGGnkrv8
+         LqZ1HmwGRazJ99gSmMKxywDRSRG05EC6zBh2n2HyXpkVoOzPxoPCWnoYaxtt2a5QlGj1
+         E/HhrwGCcgub0ISwk6U2DbyqpWXINxxwR51voTKMIbeGQmnZB5oujEvweNf2B7ic464q
+         rWuA==
+X-Gm-Message-State: AOAM530f/OUF63sQ6Ko41tMHz7D5Y9QM8C4b3H5DPQ5gq/yW0S/f7s2X
+        qRqTf9HzeOJgJ4epnlpPNng21Q==
+X-Google-Smtp-Source: ABdhPJyeI927hDXDpa2Qe0RhXe/0azmG0//95pcqn7RkyA9gtZCxFqPGOz2F6G9xEYUzdmklZ0P0YQ==
+X-Received: by 2002:a5d:588c:0:b0:205:7f17:3901 with SMTP id n12-20020a5d588c000000b002057f173901mr35321202wrf.359.1648634726103;
+        Wed, 30 Mar 2022 03:05:26 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8])
-        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm16542743wrt.115.2022.03.30.03.05.17
+        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm16542743wrt.115.2022.03.30.03.05.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 03:05:17 -0700 (PDT)
+        Wed, 30 Mar 2022 03:05:25 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 2/4] tools/thermal: Add util library
-Date:   Wed, 30 Mar 2022 12:04:42 +0200
-Message-Id: <20220330100444.3846661-3-daniel.lezcano@linaro.org>
+        Zhang Rui <rui.zhang@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v2 3/4] tools/thermal: A temperature capture tool
+Date:   Wed, 30 Mar 2022 12:04:43 +0200
+Message-Id: <20220330100444.3846661-4-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
 References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,62 +75,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The next changes will provide a couple of tools using some common
-functions provided by this library.
+The 'thermometer' tool allows to capture the temperature of a set of
+thermal zones defined in a configuration file at a specified rate.
 
-It provides basic wrappers for:
-
- - mainloop
- - logging
- - timestamp
+It is designed to have the lowest possible overhead. It will write the
+captured temperature per thermal zone per file so making easier to
+write a gnuplot script.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- tools/thermal/lib/Build                       |   3 +
- tools/thermal/lib/Makefile                    | 158 ++++++++++++++++++
- .../thermal/lib/libthermal_tools.pc.template  |  12 ++
- tools/thermal/lib/log.c                       |  77 +++++++++
- tools/thermal/lib/log.h                       |  31 ++++
- tools/thermal/lib/mainloop.c                  | 120 +++++++++++++
- tools/thermal/lib/mainloop.h                  |  15 ++
- tools/thermal/lib/thermal-tools.h             |  10 ++
- tools/thermal/lib/uptimeofday.c               |  40 +++++
- tools/thermal/lib/uptimeofday.h               |  12 ++
- 10 files changed, 478 insertions(+)
- create mode 100644 tools/thermal/lib/Build
- create mode 100644 tools/thermal/lib/Makefile
- create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
- create mode 100644 tools/thermal/lib/log.c
- create mode 100644 tools/thermal/lib/log.h
- create mode 100644 tools/thermal/lib/mainloop.c
- create mode 100644 tools/thermal/lib/mainloop.h
- create mode 100644 tools/thermal/lib/thermal-tools.h
- create mode 100644 tools/thermal/lib/uptimeofday.c
- create mode 100644 tools/thermal/lib/uptimeofday.h
+ tools/Makefile                             |  16 +-
+ tools/thermal/thermometer/Build            |   2 +
+ tools/thermal/thermometer/Makefile         |  26 +
+ tools/thermal/thermometer/thermometer.8    |  93 ++++
+ tools/thermal/thermometer/thermometer.c    | 558 +++++++++++++++++++++
+ tools/thermal/thermometer/thermometer.conf |   5 +
+ 6 files changed, 697 insertions(+), 3 deletions(-)
+ create mode 100644 tools/thermal/thermometer/Build
+ create mode 100644 tools/thermal/thermometer/Makefile
+ create mode 100644 tools/thermal/thermometer/thermometer.8
+ create mode 100644 tools/thermal/thermometer/thermometer.c
+ create mode 100644 tools/thermal/thermometer/thermometer.conf
 
-diff --git a/tools/thermal/lib/Build b/tools/thermal/lib/Build
-new file mode 100644
-index 000000000000..06f22760a272
---- /dev/null
-+++ b/tools/thermal/lib/Build
-@@ -0,0 +1,3 @@
-+libthermal_tools-y += mainloop.o
-+libthermal_tools-y += log.o
-+libthermal_tools-y += uptimeofday.o
-diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
-new file mode 100644
-index 000000000000..82db451935c5
---- /dev/null
-+++ b/tools/thermal/lib/Makefile
-@@ -0,0 +1,158 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Most of this file is copied from tools/lib/perf/Makefile
+diff --git a/tools/Makefile b/tools/Makefile
+index c253cbd27c06..78615f8cb463 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -31,6 +31,7 @@ help:
+ 	@echo '  bootconfig             - boot config tool'
+ 	@echo '  spi                    - spi tools'
+ 	@echo '  tmon                   - thermal monitoring and tuning tool'
++	@echo '  thermometer            - temperature capture tool'
+ 	@echo '  thermal                - thermal library'
+ 	@echo '  tracing                - misc tracing tools'
+ 	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
+@@ -95,6 +96,9 @@ turbostat x86_energy_perf_policy intel-speed-select: FORCE
+ tmon: FORCE
+ 	$(call descend,thermal/$@)
+ 
++thermometer: FORCE
++	$(call descend,thermal/$@)
 +
-+LIBTHERMAL_TOOLS_VERSION = 0
-+LIBTHERMAL_TOOLS_PATCHLEVEL = 0
-+LIBTHERMAL_TOOLS_EXTRAVERSION = 1
+ freefall: FORCE
+ 	$(call descend,laptop/$@)
+ 
+@@ -105,7 +109,7 @@ all: acpi cgroup counter cpupower gpio hv firewire \
+ 		perf selftests bootconfig spi turbostat usb \
+ 		virtio vm bpf x86_energy_perf_policy \
+ 		tmon freefall iio objtool kvm_stat wmi \
+-		pci debugging tracing thermal
++		pci debugging tracing thermal thermometer
+ 
+ acpi_install:
+ 	$(call descend,power/$(@:_install=),install)
+@@ -128,6 +132,9 @@ turbostat_install x86_energy_perf_policy_install intel-speed-select_install:
+ tmon_install:
+ 	$(call descend,thermal/$(@:_install=),install)
+ 
++thermometer_install:
++	$(call descend,thermal/$(@:_install=),install)
 +
-+MAKEFLAGS += --no-print-directory
+ freefall_install:
+ 	$(call descend,laptop/$(@:_install=),install)
+ 
+@@ -140,7 +147,7 @@ install: acpi_install cgroup_install counter_install cpupower_install gpio_insta
+ 		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
+ 		tmon_install freefall_install objtool_install kvm_stat_install \
+ 		wmi_install pci_install debugging_install intel-speed-select_install \
+-		tracing_install
++		tracing_install thermometer_install
+ 
+ acpi_clean:
+ 	$(call descend,power/acpi,clean)
+@@ -173,6 +180,9 @@ thermal_clean:
+ turbostat_clean x86_energy_perf_policy_clean intel-speed-select_clean:
+ 	$(call descend,power/x86/$(@:_clean=),clean)
+ 
++thermometer_clean:
++	$(call descend,thermal/thermometer,clean)
++
+ tmon_clean:
+ 	$(call descend,thermal/tmon,clean)
+ 
+@@ -187,6 +197,6 @@ clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_cl
+ 		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
+ 		freefall_clean build_clean libbpf_clean libsubcmd_clean \
+ 		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
+-		intel-speed-select_clean tracing_clean thermal_clean
++		intel-speed-select_clean tracing_clean thermal_clean thermometer_clean
+ 
+ .PHONY: FORCE
+diff --git a/tools/thermal/thermometer/Build b/tools/thermal/thermometer/Build
+new file mode 100644
+index 000000000000..2531dda4acdd
+--- /dev/null
++++ b/tools/thermal/thermometer/Build
+@@ -0,0 +1,2 @@
++thermometer-y += thermometer.o
++
+diff --git a/tools/thermal/thermometer/Makefile b/tools/thermal/thermometer/Makefile
+new file mode 100644
+index 000000000000..d8f8bc82fe3b
+--- /dev/null
++++ b/tools/thermal/thermometer/Makefile
+@@ -0,0 +1,26 @@
++# SPDX-License-Identifier: GPL-2.0
++# Makefile for cgroup tools
 +
 +ifeq ($(srctree),)
 +srctree := $(patsubst %/,%,$(dir $(CURDIR)))
@@ -135,513 +189,696 @@ index 000000000000..82db451935c5
 +# $(info Determined 'srctree' to be $(srctree))
 +endif
 +
-+INSTALL = install
++CFLAGS = -Wall -Wextra
++CFLAGS += -I$(srctree)/tools/thermal/lib
 +
-+# Use DESTDIR for installing into a different root directory.
-+# This is useful for building a package. The program will be
-+# installed in this directory as if it was the root directory.
-+# Then the build tool can move it later.
-+DESTDIR ?=
-+DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
++LDFLAGS = -L$(srctree)/tools/thermal/lib
++LDFLAGS += -lthermal_tools
++LDFLAGS += -lconfig
 +
-+include $(srctree)/tools/scripts/Makefile.include
-+include $(srctree)/tools/scripts/Makefile.arch
++VERSION = 0.0.1
++TARGET=thermometer
 +
-+ifeq ($(LP64), 1)
-+  libdir_relative = lib64
-+else
-+  libdir_relative = lib
-+endif
-+
-+prefix ?=
-+libdir = $(prefix)/$(libdir_relative)
-+
-+# Shell quotes
-+libdir_SQ = $(subst ','\'',$(libdir))
-+libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
-+
-+ifeq ("$(origin V)", "command line")
-+  VERBOSE = $(V)
-+endif
-+ifndef VERBOSE
-+  VERBOSE = 0
-+endif
-+
-+ifeq ($(VERBOSE),1)
-+  Q =
-+else
-+  Q = @
-+endif
-+
-+# Set compile option CFLAGS
-+ifdef EXTRA_CFLAGS
-+  CFLAGS := $(EXTRA_CFLAGS)
-+else
-+  CFLAGS := -g -Wall
-+endif
-+
-+INCLUDES = \
-+-I/usr/include/libnl3 \
-+-I$(srctree)/tools/lib/thermal/include \
-+-I$(srctree)/tools/lib/ \
-+-I$(srctree)/tools/include \
-+-I$(srctree)/tools/arch/$(SRCARCH)/include/ \
-+-I$(srctree)/tools/arch/$(SRCARCH)/include/uapi \
-+-I$(srctree)/tools/include/uapi
-+
-+# Append required CFLAGS
-+override CFLAGS += $(EXTRA_WARNINGS)
-+override CFLAGS += -Werror -Wall
-+override CFLAGS += -fPIC
-+override CFLAGS += $(INCLUDES)
-+override CFGLAS += -Wl,-L.
-+override CFGLAS += -Wl,-lthermal
-+
-+all:
-+
-+export srctree OUTPUT CC LD CFLAGS V
-+export DESTDIR DESTDIR_SQ
-+
-+include $(srctree)/tools/build/Makefile.include
-+
-+PATCHLEVEL    = $(LIBTHERMAL_TOOLS_PATCHLEVEL)
-+EXTRAVERSION  = $(LIBTHERMAL_TOOLS_EXTRAVERSION)
-+VERSION       = $(LIBTHERMAL_TOOLS_VERSION).$(LIBTHERMAL_TOOLS_PATCHLEVEL).$(LIBTHERMAL_TOOLS_EXTRAVERSION)
-+
-+LIBTHERMAL_TOOLS_SO := $(OUTPUT)libthermal_tools.so.$(VERSION)
-+LIBTHERMAL_TOOLS_A  := $(OUTPUT)libthermal_tools.a
-+LIBTHERMAL_TOOLS_IN := $(OUTPUT)libthermal_tools-in.o
-+LIBTHERMAL_TOOLS_PC := $(OUTPUT)libthermal_tools.pc
-+
-+LIBTHERMAL_TOOLS_ALL := $(LIBTHERMAL_TOOLS_A) $(OUTPUT)libthermal_tools.so*
-+
-+$(LIBTHERMAL_TOOLS_IN): FORCE
-+	$(Q)$(MAKE) $(build)=libthermal_tools
-+
-+$(LIBTHERMAL_TOOLS_A): $(LIBTHERMAL_TOOLS_IN)
-+	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(LIBTHERMAL_TOOLS_IN)
-+
-+$(LIBTHERMAL_TOOLS_SO): $(LIBTHERMAL_TOOLS_IN)
-+	$(QUIET_LINK)$(CC) --shared -Wl,-soname,libthermal_tools.so $^ -o $@
-+	@ln -sf $(@F) $(OUTPUT)libthermal_tools.so
-+	@ln -sf $(@F) $(OUTPUT)libthermal_tools.so.$(LIBTHERMAL_TOOLS_VERSION)
-+
-+
-+libs: $(LIBTHERMAL_TOOLS_A) $(LIBTHERMAL_TOOLS_SO) $(LIBTHERMAL_TOOLS_PC)
-+
-+all: fixdep
-+	$(Q)$(MAKE) libs
++all: $(TARGET)
++%: %.c
++	$(CC) $(CFLAGS) -D VERSION=\"$(VERSION)\" -o $@ $^ $(LDFLAGS)
 +
 +clean:
-+	$(call QUIET_CLEAN, libthermal_tools) $(RM) $(LIBTHERMAL_TOOLS_A) \
-+                *.o *~ *.a *.so *.so.$(VERSION) *.so.$(LIBTHERMAL_TOOLS_VERSION) .*.d .*.cmd LIBTHERMAL_TOOLS-CFLAGS $(LIBTHERMAL_TOOLS_PC)
-+
-+$(LIBTHERMAL_TOOLS_PC):
-+	$(QUIET_GEN)sed -e "s|@PREFIX@|$(prefix)|" \
-+		-e "s|@LIBDIR@|$(libdir_SQ)|" \
-+		-e "s|@VERSION@|$(VERSION)|" \
-+		< libthermal_tools.pc.template > $@
-+
-+define do_install_mkdir
-+	if [ ! -d '$(DESTDIR_SQ)$1' ]; then             \
-+		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$1'; \
-+	fi
-+endef
-+
-+define do_install
-+	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-+		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-+	fi;                                             \
-+	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-+endef
-+
-+install_lib: libs
-+	$(call QUIET_INSTALL, $(LIBTHERMAL_TOOLS_ALL)) \
-+		$(call do_install_mkdir,$(libdir_SQ)); \
-+		cp -fpR $(LIBTHERMAL_TOOLS_ALL) $(DESTDIR)$(libdir_SQ)
-+
-+install_headers:
-+	$(call QUIET_INSTALL, headers) \
-+		$(call do_install,include/thermal.h,$(prefix)/include/thermal,644); \
-+
-+install_pkgconfig: $(LIBTHERMAL_TOOLS_PC)
-+	$(call QUIET_INSTALL, $(LIBTHERMAL_TOOLS_PC)) \
-+		$(call do_install,$(LIBTHERMAL_TOOLS_PC),$(libdir_SQ)/pkgconfig,644)
-+
-+install_doc:
-+	$(Q)$(MAKE) -C Documentation install-man install-html install-examples
-+
-+#install: install_lib install_headers install_pkgconfig install_doc
-+install: install_lib install_headers install_pkgconfig
-+
-+FORCE:
-+
-+.PHONY: all install clean FORCE
-diff --git a/tools/thermal/lib/libthermal_tools.pc.template b/tools/thermal/lib/libthermal_tools.pc.template
++	$(RM) $(TARGET)
+diff --git a/tools/thermal/thermometer/thermometer.8 b/tools/thermal/thermometer/thermometer.8
 new file mode 100644
-index 000000000000..6f3769731b59
+index 000000000000..5242220c12be
 --- /dev/null
-+++ b/tools/thermal/lib/libthermal_tools.pc.template
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++++ b/tools/thermal/thermometer/thermometer.8
+@@ -0,0 +1,93 @@
++.TH THERMOMETER 8
++# SPDX-License-Identifier: GPL-2.0
++.SH NAME
++\fBthermometer\fP - A thermal profiling tool
 +
-+prefix=@PREFIX@
-+libdir=@LIBDIR@
-+includedir=${prefix}/include
++.SH SYNOPSIS
++.ft B
++.B thermometer
++.RB [ options ]
++.RB [ command ]
++.br
++.SH DESCRIPTION
++\fBthermometer \fP captures the thermal zones temperature at a
++specified sampling period. It is optimized to reduce as much as
++possible the overhead while doing the temperature acquisition in order
++to prevent disrupting the running application we may want to profile.
 +
-+Name: libthermal
-+Description: thermal library
-+Requires: libnl-3.0 libnl-genl-3.0
-+Version: @VERSION@
-+Libs: -L${libdir} -lnl-genl-3 -lnl-3
-+Cflags: -I${includedir} -I{include}/libnl3
-diff --git a/tools/thermal/lib/log.c b/tools/thermal/lib/log.c
++This low overhead also allows a high rate sampling for the temperature
++which could be necessary to spot overshots and undershots.
++
++If no configuration file is specified, then all the thermal zones will
++be monitored at 4Hz, so every 250ms. A configuration file specifies
++the thermal zone names and the desired sampling period. A thermal zone
++name can be a regular expression to specify a group of thermal zone.
++
++The sampling of the different thermal zones will be written into
++separate files with the thermal zone name. It is possible to specify a
++postfix to identify them for example for a specific scenario. The
++output directory can be specified in addition.
++
++Without any parameters, \fBthermometer \fP captures all the thermal
++zone temperatures every 250ms and write to the current directory the
++captured files postfixed with the current date.
++
++If a running \fBduration\fP is specified or a \fBcommand\fP, the
++capture ends at the end of the duration if the command did not
++finished before. The \fBduration\fP can be specified alone as well as
++the \fBcommand\fP. If none is specified, the capture will continue
++indefinitively until interrupted by \fBSIGINT\fP or \fBSIGQUIT\fP.
++.PP
++
++.SS Options
++.PP
++The \fB-h, --help\fP option shows a short usage help
++.PP
++The \fB-o <dir>, --output <dir>\fP option defines the output directory to put the
++sampling files
++.PP
++The \fB-c <config>, --config <config>\fP option specifies the configuration file to use
++.PP
++The \fB-d <seconds>, --duration <seconds>\fP option specifies the duration of the capture
++.PP
++The \fB-l <loglevel>, --loglevel <loglevel>\fP option sets the loglevel [DEBUG,INFO,NOTICE,WARN,ERROR]
++.PP
++The \fB-p <string>, --postfix <string>\fP option appends \fBstring\fP at the end of the capture filenames
++.PP
++The \fB-s, --syslog\fP option sets the output to syslog, default is \fBstdout\fP
++.PP
++The \fB-w, --overwrite\fP overwrites the output files if they exist
++.PP
++
++.PP
++
++.SS "Exit status:"
++.TP
++0
++if OK,
++.TP
++1
++Error with the options specified as parameters
++.TP
++2
++Error when configuring the logging facility
++.TP
++3
++Error when configuring the time
++.TP
++4
++Error in the initialization routine
++.TP
++5
++Error during the runtime
++
++.SH Capture file format
++
++Every file contains two columns. The first one is the uptime timestamp
++in order to find a point in time since the system started up if there
++is any thermal event. The second one is the temperature in milli
++degree. The first line contains the label of each column.
++
++.SH AUTHOR
++Daniel Lezcano <daniel.lezcano@kernel.org>
++
+diff --git a/tools/thermal/thermometer/thermometer.c b/tools/thermal/thermometer/thermometer.c
 new file mode 100644
-index 000000000000..597d6e7f7858
+index 000000000000..cb30a4a039cb
 --- /dev/null
-+++ b/tools/thermal/lib/log.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: LGPL-2.1+
++++ b/tools/thermal/thermometer/thermometer.c
+@@ -0,0 +1,558 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +// Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org>
-+#include <stdarg.h>
++#define _GNU_SOURCE
++#include <dirent.h>
++#include <fcntl.h>
++#include <getopt.h>
++#include <regex.h>
++#include <signal.h>
 +#include <stdio.h>
++#include <stdlib.h>
 +#include <string.h>
-+#include <syslog.h>
-+#include "log.h"
++#include <sys/stat.h>
++#include <sys/signalfd.h>
++#include <sys/timerfd.h>
++#include <sys/types.h>
++#include <time.h>
++#include <unistd.h>
++#include <linux/thermal.h>
 +
-+static const char *__ident = "unknown";
-+static int __options;
++#include <libconfig.h>
++#include "thermal-tools.h"
 +
-+static const char * const loglvl[] = {
-+	[LOG_DEBUG]	= "DEBUG",
-+	[LOG_INFO]	= "INFO",
-+	[LOG_NOTICE]	= "NOTICE",
-+	[LOG_WARNING]	= "WARN",
-+	[LOG_ERR]	= "ERROR",
-+	[LOG_CRIT]	= "CRITICAL",
-+	[LOG_ALERT]	= "ALERT",
-+	[LOG_EMERG]	= "EMERG",
++#define CLASS_THERMAL "/sys/class/thermal"
++
++enum {
++	THERMOMETER_SUCCESS = 0,
++	THERMOMETER_OPTION_ERROR,
++	THERMOMETER_LOG_ERROR,
++	THERMOMETER_CONFIG_ERROR,
++	THERMOMETER_TIME_ERROR,
++	THERMOMETER_INIT_ERROR,
++	THERMOMETER_RUNTIME_ERROR
 +};
 +
-+int log_str2level(const char *lvl)
++struct options {
++	int loglvl;
++	int logopt;
++	int overwrite;
++	int duration;
++	const char *config;
++	char postfix[PATH_MAX];
++	char output[PATH_MAX];
++};
++
++struct tz_regex {
++	regex_t regex;
++	int polling;
++};
++
++struct configuration {
++	struct tz_regex *tz_regex;
++	int nr_tz_regex;
++
++};
++
++struct tz {
++	FILE *file_out;
++	int fd_temp;
++	int fd_timer;
++	int polling;
++	const char *name;
++};
++
++struct thermometer {
++	struct tz *tz;
++	int nr_tz;
++};
++
++static struct tz_regex *configuration_tz_match(const char *expr,
++					       struct configuration *config)
 +{
 +	int i;
 +
-+	for (i = 0; i < sizeof(loglvl) / sizeof(loglvl[LOG_DEBUG]); i++)
-+		if (!strcmp(lvl, loglvl[i]))
-+			return i;
++	for (i = 0; i < config->nr_tz_regex; i++) {
 +
-+	return LOG_DEBUG;
++		if (!regexec(&config->tz_regex[i].regex, expr, 0, NULL, 0))
++			return &config->tz_regex[i];
++	}
++
++	return NULL;
 +}
 +
-+extern void logit(int level, const char *format, ...)
++static int configuration_default_init(struct configuration *config)
 +{
-+	va_list args;
++	config->tz_regex = realloc(config->tz_regex, sizeof(*config->tz_regex) *
++				   (config->nr_tz_regex + 1));
 +
-+	va_start(args, format);
++	if (regcomp(&config->tz_regex[config->nr_tz_regex].regex, ".*",
++		    REG_NOSUB | REG_EXTENDED)) {
++		ERROR("Invalid regular expression\n");
++		return -1;
++	}
 +
-+	if (__options & TO_SYSLOG)
-+		vsyslog(level, format, args);
++	config->tz_regex[config->nr_tz_regex].polling = 250;
++	config->nr_tz_regex = 1;
 +
-+	if (__options & TO_STDERR)
-+		vfprintf(stderr, format, args);
-+
-+	if (__options & TO_STDOUT)
-+		vfprintf(stdout, format, args);
-+
-+	va_end(args);
++	return 0;
 +}
 +
-+int log_init(int level, const char *ident, int options)
++static int configuration_init(const char *path, struct configuration *config)
 +{
-+	if (!options)
++	config_t cfg;
++
++	config_setting_t *tz;
++	int i, length;
++
++	if (path && access(path, F_OK)) {
++		ERROR("'%s' is not accessible\n", path);
 +		return -1;
++	}
 +
-+	if (level > LOG_DEBUG)
++	if (!path && !config->nr_tz_regex) {
++		INFO("No thermal zones configured, using wildcard for all of them\n");
++		return configuration_default_init(config);
++	}
++
++	config_init(&cfg);
++
++	if (!config_read_file(&cfg, path)) {
++		ERROR("Failed to parse %s:%d - %s\n", config_error_file(&cfg),
++		      config_error_line(&cfg), config_error_text(&cfg));
++
 +		return -1;
++	}
 +
-+	if (!ident)
++	tz = config_lookup(&cfg, "thermal-zones");
++	if (!tz) {
++		ERROR("No thermal zone configured to be monitored\n");
 +		return -1;
++	}
 +
-+	__ident = ident;
-+	__options = options;
++	length = config_setting_length(tz);
 +
-+	if (options & TO_SYSLOG) {
-+		openlog(__ident, options | LOG_NDELAY, LOG_USER);
-+		setlogmask(LOG_UPTO(level));
++	INFO("Found %d thermal zone(s) regular expression\n", length);
++
++	for (i = 0; i < length; i++) {
++
++		config_setting_t *node;
++		const char *name;
++		int polling;
++
++		node = config_setting_get_elem(tz, i);
++		if (!node) {
++			ERROR("Missing node name '%d'\n", i);
++			return -1;
++		};
++
++		if (!config_setting_lookup_string(node, "name", &name)) {
++			ERROR("Thermal zone name not found\n");
++			return -1;
++		}
++
++		if (!config_setting_lookup_int(node, "polling", &polling)) {
++			ERROR("Polling value not found");
++			return -1;
++		}
++
++		config->tz_regex = realloc(config->tz_regex, sizeof(*config->tz_regex) *
++					(config->nr_tz_regex + 1));
++
++		if (regcomp(&config->tz_regex[config->nr_tz_regex].regex, name,
++			    REG_NOSUB | REG_EXTENDED)) {
++			ERROR("Invalid regular expression '%s'\n", name);
++			continue;
++		}
++
++		config->tz_regex[config->nr_tz_regex].polling = polling;
++		config->nr_tz_regex++;
++
++		INFO("Thermal zone regular expression '%s' with polling %d\n",
++		     name, polling);
 +	}
 +
 +	return 0;
 +}
 +
-+void log_exit(void)
++static void help(const char *cmd)
 +{
-+	closelog();
++	printf("%s Version: %s\n", cmd, VERSION);
++	printf("Usage: %s [options]\n", cmd);
++	printf("\t-h, --help\t\tthis help\n");
++	printf("\t-o, --output <dir>\toutput directory for temperature capture\n");
++	printf("\t-c, --config <file>\tconfiguration file\n");
++	printf("\t-d, --duration <seconds>\tcapture duration\n");
++	printf("\t-l, --loglevel <level>\tlog level: ");
++	printf("DEBUG, INFO, NOTICE, WARN, ERROR\n");
++	printf("\t-p, --postfix <string>\tpostfix to be happened at the end of the files\n");
++	printf("\t-s, --syslog\t\toutput to syslog\n");
++	printf("\t-w, --overwrite\t\toverwrite the temperature capture files if they exist\n");
++	printf("\n");
++	exit(0);
 +}
-diff --git a/tools/thermal/lib/log.h b/tools/thermal/lib/log.h
-new file mode 100644
-index 000000000000..be8ab5144938
---- /dev/null
-+++ b/tools/thermal/lib/log.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: LGPL-2.1+ */
-+/* Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org> */
-+#ifndef __THERMAL_TOOLS_LOG_H
-+#define __THERMAL_TOOLS_LOG_H
 +
-+#include <syslog.h>
++static int options_init(int argc, char *argv[], struct options *options)
++{
++	int opt;
++	time_t now = time(NULL);
 +
-+#ifndef __maybe_unused
-+#define __maybe_unused		__attribute__((__unused__))
-+#endif
++	struct option long_options[] = {
++		{ "help",	no_argument, NULL, 'h' },
++		{ "config",	required_argument, NULL, 'c' },
++		{ "duration",	required_argument, NULL, 'd' },
++		{ "loglevel",	required_argument, NULL, 'l' },
++		{ "postfix",	required_argument, NULL, 'p' },
++		{ "output",	required_argument, NULL, 'o' },
++		{ "syslog",	required_argument, NULL, 's' },
++		{ "overwrite",	no_argument, NULL, 'w' },
++		{ 0, 0, 0, 0 }
++	};
 +
-+#define TO_SYSLOG 0x1
-+#define TO_STDOUT 0x2
-+#define TO_STDERR 0x4
++	strftime(options->postfix, sizeof(options->postfix),
++		 "-%Y-%m-%d_%H:%M:%S", gmtime(&now));
 +
-+extern void logit(int level, const char *format, ...);
++	while (1) {
 +
-+#define DEBUG(fmt, ...)		logit(LOG_DEBUG, "%s:%d: " fmt, __func__, __LINE__, ##__VA_ARGS__)
-+#define INFO(fmt, ...)		logit(LOG_INFO, fmt, ##__VA_ARGS__)
-+#define NOTICE(fmt, ...)	logit(LOG_NOTICE, fmt, ##__VA_ARGS__)
-+#define WARN(fmt, ...)		logit(LOG_WARNING, fmt, ##__VA_ARGS__)
-+#define ERROR(fmt, ...)		logit(LOG_ERR, fmt, ##__VA_ARGS__)
-+#define CRITICAL(fmt, ...)	logit(LOG_CRIT, fmt, ##__VA_ARGS__)
-+#define ALERT(fmt, ...)		logit(LOG_ALERT, fmt, ##__VA_ARGS__)
-+#define EMERG(fmt, ...)		logit(LOG_EMERG, fmt, ##__VA_ARGS__)
++		int optindex = 0;
 +
-+int log_init(int level, const char *ident, int options);
-+int log_str2level(const char *lvl);
-+void log_exit(void);
++		opt = getopt_long(argc, argv, "ho:c:d:l:p:sw", long_options, &optindex);
++		if (opt == -1)
++			break;
 +
-+#endif
-diff --git a/tools/thermal/lib/mainloop.c b/tools/thermal/lib/mainloop.c
-new file mode 100644
-index 000000000000..94cbbcbd1c14
---- /dev/null
-+++ b/tools/thermal/lib/mainloop.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: LGPL-2.1+
-+// Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org>
-+#include <stdlib.h>
-+#include <errno.h>
-+#include <unistd.h>
-+#include <signal.h>
-+#include <sys/epoll.h>
-+#include "mainloop.h"
-+#include "log.h"
++		switch (opt) {
++		case 'c':
++			options->config = optarg;
++			break;
++		case 'd':
++			options->duration = atoi(optarg) * 1000;
++			break;
++		case 'l':
++			options->loglvl = log_str2level(optarg);
++			break;
++		case 'h':
++			help(basename(argv[0]));
++			break;
++		case 'p':
++			strcpy(options->postfix, optarg);
++			break;
++		case 'o':
++			strcpy(options->output, optarg);
++			break;
++		case 's':
++			options->logopt = TO_SYSLOG;
++			break;
++		case 'w':
++			options->overwrite = 1;
++			break;
++		default: /* '?' */
++			ERROR("Usage: %s --help\n", argv[0]);
++			return -1;
++		}
++	}
 +
-+static int epfd = -1;
-+static unsigned short nrhandler;
-+static sig_atomic_t exit_mainloop;
++	return 0;
++}
 +
-+struct mainloop_data {
-+	mainloop_callback_t cb;
-+	void *data;
++static int thermometer_add_tz(const char *path, const char *name, int polling,
++			      struct thermometer *thermometer)
++{
 +	int fd;
-+};
++	char tz_path[PATH_MAX];
 +
-+static struct mainloop_data **mds;
++	sprintf(tz_path, CLASS_THERMAL"/%s/temp", path);
 +
-+#define MAX_EVENTS 10
-+
-+int mainloop(unsigned int timeout)
-+{
-+	int i, nfds;
-+	struct epoll_event events[MAX_EVENTS];
-+	struct mainloop_data *md;
-+
-+	if (epfd < 0)
++	fd = open(tz_path, O_RDONLY);
++	if (fd < 0) {
++		ERROR("Failed to open '%s': %m\n", tz_path);
 +		return -1;
++	}
 +
-+	for (;;) {
++	thermometer->tz = realloc(thermometer->tz,
++				  sizeof(*thermometer->tz) * (thermometer->nr_tz + 1));
++	if (!thermometer->tz) {
++		ERROR("Failed to allocate thermometer->tz\n");
++		return -1;
++	}
 +
-+		nfds = epoll_wait(epfd, events, MAX_EVENTS, timeout);
++	thermometer->tz[thermometer->nr_tz].fd_temp = fd;
++	thermometer->tz[thermometer->nr_tz].name = strdup(name);
++	thermometer->tz[thermometer->nr_tz].polling = polling;
++	thermometer->nr_tz++;
 +
-+		if (exit_mainloop || !nfds)
-+			return 0;
++	INFO("Added thermal zone '%s->%s (polling:%d)'\n", path, name, polling);
 +
-+		if (nfds < 0) {
-+			if (errno == EINTR)
-+				continue;
++	return 0;
++}
++
++static int thermometer_init(struct configuration *config,
++			    struct thermometer *thermometer)
++{
++	DIR *dir;
++	struct dirent *dirent;
++	struct tz_regex *tz_regex;
++	const char *tz_dirname = "thermal_zone";
++
++	if (mainloop_init()) {
++		ERROR("Failed to start mainloop\n");
++		return -1;
++	}
++
++	dir = opendir(CLASS_THERMAL);
++	if (!dir) {
++		ERROR("failed to open '%s'\n", CLASS_THERMAL);
++		return -1;
++	}
++
++	while ((dirent = readdir(dir))) {
++		char tz_type[THERMAL_NAME_LENGTH];
++		char tz_path[PATH_MAX];
++		FILE *tz_file;
++
++		if (strncmp(dirent->d_name, tz_dirname, strlen(tz_dirname)))
++			continue;
++
++		sprintf(tz_path, CLASS_THERMAL"/%s/type", dirent->d_name);
++
++		tz_file = fopen(tz_path, "r");
++		if (!tz_file) {
++			ERROR("Failed to open '%s': %m", tz_path);
++			continue;
++		}
++
++		fscanf(tz_file, "%s", tz_type);
++
++		fclose(tz_file);
++
++		tz_regex = configuration_tz_match(tz_type, config);
++		if (!tz_regex)
++			continue;
++
++		if (thermometer_add_tz(dirent->d_name, tz_type,
++				       tz_regex->polling, thermometer))
++			continue;
++	}
++
++	closedir(dir);
++
++	return 0;
++}
++
++static int timer_temperature_callback(int fd, void *arg)
++{
++	struct tz *tz = arg;
++	char buf[16] = { 0 };
++
++	pread(tz->fd_temp, buf, sizeof(buf), 0);
++
++	fprintf(tz->file_out, "%ld %s", getuptimeofday_ms(), buf);
++
++	read(fd, buf, sizeof(buf));
++
++	return 0;
++}
++
++static int thermometer_start(struct thermometer *thermometer,
++			     struct options *options)
++{
++	struct itimerspec timer_it = { 0 };
++	char *path;
++	FILE *f;
++	int i;
++
++	INFO("Capturing %d thermal zone(s) temperature...\n", thermometer->nr_tz);
++
++	if (access(options->output, F_OK) && mkdir(options->output, 0700)) {
++		ERROR("Failed to create directory '%s'\n", options->output);
++		return -1;
++	}
++
++	for (i = 0; i < thermometer->nr_tz; i++) {
++
++		asprintf(&path, "%s/%s%s", options->output,
++			 thermometer->tz[i].name, options->postfix);
++
++		if (!options->overwrite && !access(path, F_OK)) {
++			ERROR("'%s' already exists\n", path);
 +			return -1;
 +		}
 +
-+		for (i = 0; i < nfds; i++) {
-+			md = events[i].data.ptr;
++		f = fopen(path, "w");
++		if (!f) {
++			ERROR("Failed to create '%s':%m\n", path);
++			return -1;
++		}
 +
-+			if (md->cb(md->fd, md->data) > 0)
-+				return 0;
++		fprintf(f, "timestamp(ms) %s(°mC)\n", thermometer->tz[i].name);
++
++		thermometer->tz[i].file_out = f;
++
++		DEBUG("Created '%s' file for thermal zone '%s'\n", path, thermometer->tz[i].name);
++
++		/*
++		 * Create polling timer
++		 */
++		thermometer->tz[i].fd_timer = timerfd_create(CLOCK_MONOTONIC, 0);
++		if (thermometer->tz[i].fd_timer < 0) {
++			ERROR("Failed to create timer for '%s': %m\n",
++			      thermometer->tz[i].name);
++			return -1;
++		}
++
++		DEBUG("Watching '%s' every %d ms\n",
++		      thermometer->tz[i].name, thermometer->tz[i].polling);
++
++		timer_it.it_interval = timer_it.it_value =
++			msec_to_timespec(thermometer->tz[i].polling);
++
++		if (timerfd_settime(thermometer->tz[i].fd_timer, 0,
++				    &timer_it, NULL) < 0)
++			return -1;
++
++		if (mainloop_add(thermometer->tz[i].fd_timer,
++				 timer_temperature_callback,
++				 &thermometer->tz[i]))
++			return -1;
++	}
++
++	return 0;
++}
++
++static int thermometer_execute(int argc, char *argv[], char *const envp[])
++{
++	pid_t pid;
++
++	if (!argc)
++		return 0;
++
++	pid = fork();
++	if (pid < 0) {
++		ERROR("Failed to fork process: %m");
++		return -1;
++	}
++
++	if (!pid) {
++		execvpe(argv[0], argv, envp);
++		exit(1);
++	}
++
++	return 0;
++}
++
++static int exit_mainloop(__maybe_unused int fd, __maybe_unused void *arg)
++{
++	mainloop_exit();
++
++	return 0;
++}
++
++static int thermometer_wait(struct options *options)
++{
++	int fd;
++	sigset_t mask;
++
++	/*
++	 * If there is a duration specified, we will exit the mainloop
++	 * and gracefully close all the files which will flush the
++	 * file system cache
++	 */
++	if (options->duration) {
++		struct itimerspec timer_it = { 0 };
++
++		timer_it.it_value = msec_to_timespec(options->duration);
++
++		fd = timerfd_create(CLOCK_MONOTONIC, 0);
++		if (fd < 0) {
++			ERROR("Failed to create duration timer: %m\n");
++			return -1;
++		}
++
++		if (timerfd_settime(fd, 0, &timer_it, NULL)) {
++			ERROR("Failed to set timer time: %m\n");
++			return -1;
++		}
++
++		if (mainloop_add(fd, exit_mainloop, NULL)) {
++			ERROR("Failed to set timer exit mainloop callback\n");
++			return -1;
 +		}
 +	}
-+}
 +
-+int mainloop_add(int fd, mainloop_callback_t cb, void *data)
-+{
-+	struct epoll_event ev = {
-+		.events = EPOLLIN,
-+	};
++	/*
++	 * We want to catch any keyboard interrupt, as well as child
++	 * signals if any in order to exit properly
++	 */
++	sigemptyset(&mask);
++	sigaddset(&mask, SIGINT);
++	sigaddset(&mask, SIGQUIT);
++	sigaddset(&mask, SIGCHLD);
 +
-+	struct mainloop_data *md;
-+
-+	if (fd >= nrhandler) {
-+		mds = realloc(mds, sizeof(*mds) * (fd + 1));
-+		if (!mds)
-+			return -1;
-+		nrhandler = fd + 1;
-+	}
-+
-+	md = malloc(sizeof(*md));
-+	if (!md)
-+		return -1;
-+
-+	md->data = data;
-+	md->cb = cb;
-+	md->fd = fd;
-+
-+	mds[fd] = md;
-+	ev.data.ptr = md;
-+
-+	if (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev) < 0) {
-+		free(md);
++	if (sigprocmask(SIG_BLOCK, &mask, NULL)) {
++		ERROR("Failed to set sigprocmask: %m\n");
 +		return -1;
 +	}
 +
-+	return 0;
-+}
-+
-+int mainloop_del(int fd)
-+{
-+	if (fd >= nrhandler)
++	fd = signalfd(-1, &mask, 0);
++	if (fd < 0) {
++		ERROR("Failed to set the signalfd: %m\n");
 +		return -1;
++	}
 +
-+	if (epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL) < 0)
++	if (mainloop_add(fd, exit_mainloop, NULL)) {
++		ERROR("Failed to set timer exit mainloop callback\n");
 +		return -1;
++	}
 +
-+	free(mds[fd]);
-+
-+	return 0;
++	return mainloop(-1);
 +}
 +
-+int mainloop_init(void)
++static int thermometer_stop(struct thermometer *thermometer)
 +{
-+	epfd = epoll_create(2);
-+	if (epfd < 0)
-+		return -1;
++	int i;
 +
-+	return 0;
-+}
++	INFO("Closing/flushing output files\n");
 +
-+void mainloop_exit(void)
-+{
-+	exit_mainloop = 1;
-+}
-+
-+void mainloop_fini(void)
-+{
-+	close(epfd);
-+}
-diff --git a/tools/thermal/lib/mainloop.h b/tools/thermal/lib/mainloop.h
-new file mode 100644
-index 000000000000..89b61e89d905
---- /dev/null
-+++ b/tools/thermal/lib/mainloop.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: LGPL-2.1+ */
-+/* Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org> */
-+#ifndef __THERMAL_TOOLS_MAINLOOP_H
-+#define __THERMAL_TOOLS_MAINLOOP_H
-+
-+typedef int (*mainloop_callback_t)(int fd, void *data);
-+
-+extern int mainloop(unsigned int timeout);
-+extern int mainloop_add(int fd, mainloop_callback_t cb, void *data);
-+extern int mainloop_del(int fd);
-+extern void mainloop_exit(void);
-+extern int mainloop_init(void);
-+extern void mainloop_fini(void);
-+
-+#endif
-diff --git a/tools/thermal/lib/thermal-tools.h b/tools/thermal/lib/thermal-tools.h
-new file mode 100644
-index 000000000000..f43939a468a3
---- /dev/null
-+++ b/tools/thermal/lib/thermal-tools.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: LGPL-2.1+ */
-+/* Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org> */
-+#ifndef __THERMAL_TOOLS
-+#define __THERMAL_TOOLS
-+
-+#include "log.h"
-+#include "mainloop.h"
-+#include "uptimeofday.h"
-+
-+#endif
-diff --git a/tools/thermal/lib/uptimeofday.c b/tools/thermal/lib/uptimeofday.c
-new file mode 100644
-index 000000000000..dacb02956a68
---- /dev/null
-+++ b/tools/thermal/lib/uptimeofday.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: LGPL-2.1+
-+// Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org>
-+#include <stdio.h>
-+#include <sys/time.h>
-+#include <linux/sysinfo.h>
-+#include "thermal-tools.h"
-+
-+static unsigned long __offset;
-+static struct timeval __tv;
-+
-+int uptimeofday_init(void)
-+{
-+	struct sysinfo info;
-+
-+	if (sysinfo(&info))
-+		return -1;
-+
-+	gettimeofday(&__tv, NULL);
-+
-+	__offset = __tv.tv_sec - info.uptime;
++	for (i = 0; i < thermometer->nr_tz; i++)
++		fclose(thermometer->tz[i].file_out);
 +
 +	return 0;
 +}
 +
-+unsigned long getuptimeofday_ms(void)
++int main(int argc, char *argv[], char *const envp[])
 +{
-+	gettimeofday(&__tv, NULL);
-+
-+	return ((__tv.tv_sec - __offset) * 1000) + (__tv.tv_usec / 1000);
-+}
-+
-+struct timespec msec_to_timespec(int msec)
-+{
-+	struct timespec tv = {
-+		.tv_sec = (msec / 1000),
-+		.tv_nsec = (msec % 1000) * 1000000,
++	struct options options = {
++		.loglvl = LOG_DEBUG,
++		.logopt = TO_STDOUT,
++		.output = ".",
 +	};
++	struct configuration config = { 0 };
++	struct thermometer thermometer = { 0 };
 +
-+	return tv;
++	if (options_init(argc, argv, &options))
++		return THERMOMETER_OPTION_ERROR;
++
++	if (log_init(options.loglvl, argv[0], options.logopt))
++		return THERMOMETER_LOG_ERROR;
++
++	if (configuration_init(options.config, &config))
++		return THERMOMETER_CONFIG_ERROR;
++
++	if (uptimeofday_init())
++		return THERMOMETER_TIME_ERROR;
++
++	if (thermometer_init(&config, &thermometer))
++		return THERMOMETER_INIT_ERROR;
++
++	if (thermometer_start(&thermometer, &options))
++		return THERMOMETER_RUNTIME_ERROR;
++
++	if (thermometer_execute(argc - optind, &argv[optind], envp))
++		return THERMOMETER_RUNTIME_ERROR;
++
++	if (thermometer_wait(&options))
++		return THERMOMETER_RUNTIME_ERROR;
++
++	if (thermometer_stop(&thermometer))
++		return THERMOMETER_RUNTIME_ERROR;
++
++	return THERMOMETER_SUCCESS;
 +}
-diff --git a/tools/thermal/lib/uptimeofday.h b/tools/thermal/lib/uptimeofday.h
+diff --git a/tools/thermal/thermometer/thermometer.conf b/tools/thermal/thermometer/thermometer.conf
 new file mode 100644
-index 000000000000..c0da5de41325
+index 000000000000..456aa269c1b7
 --- /dev/null
-+++ b/tools/thermal/lib/uptimeofday.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: LGPL-2.1+ */
-+/* Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org> */
-+#ifndef __THERMAL_TOOLS_UPTIMEOFDAY_H
-+#define __THERMAL_TOOLS_UPTIMEOFDAY_H
-+#include <sys/sysinfo.h>
-+#include <sys/time.h>
++++ b/tools/thermal/thermometer/thermometer.conf
+@@ -0,0 +1,5 @@
 +
-+int uptimeofday_init(void);
-+unsigned long getuptimeofday_ms(void);
-+struct timespec msec_to_timespec(int msec);
-+
-+#endif
++thermal-zones = (
++	      {	name = "cluster1-thermal";
++	      	polling = 100; }
++      )
 -- 
 2.25.1
 

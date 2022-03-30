@@ -2,87 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8E64EC4C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFD04EC4C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345018AbiC3Mpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
+        id S244973AbiC3Mqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345617AbiC3Mp3 (ORCPT
+        with ESMTP id S1345385AbiC3MqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:45:29 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CDDDE09E;
-        Wed, 30 Mar 2022 05:39:31 -0700 (PDT)
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N7QM9-1o5ovQ2itB-017lGA; Wed, 30 Mar 2022 14:39:17 +0200
-Received: by mail-wr1-f52.google.com with SMTP id u3so29132293wrg.3;
-        Wed, 30 Mar 2022 05:39:17 -0700 (PDT)
-X-Gm-Message-State: AOAM531sPV1KzqPCMshJxghwfovqDHM0NHU7gxPLY+1i2/ebjvrZpNni
-        npNOE7s4ARcxXfstJQYY8ZL6j/s0BuO9+u4ltbs=
-X-Google-Smtp-Source: ABdhPJxd37z3iG058b579CB0d3NUHesbaO46TxDB9z29hKBcw+jTvNoOe7ONXZ919cmcCM5Yjl3fkFPpxL4e20NcvX8=
-X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
- x5-20020a5d6505000000b002059a98e184mr31849599wru.317.1648643957284; Wed, 30
- Mar 2022 05:39:17 -0700 (PDT)
+        Wed, 30 Mar 2022 08:46:20 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FCC6C4A5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:41:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jF/EcriJwmokhNoNvm7djuBQWKCctUkt0DnaOfpERv3B9hpY8QXqdd1iXry5aJ+RfYrxFzKiyh+Rj1+7l65YhU3haDRlixfcsMvvtKheZmhyAV47N9yARaiAynlHv/z9zEdL64twH4ou9FLQo2/gMCzmL6jsklA7i6RUkOCq3Xs0llkth2WsxGUx6nJX34M+Vm7wIeQqKA0jWmnA97TastPRDwmcl5d5Zpd+TKct0j5/iPlta+cwEd0sS7fS0MWfHFLiqB/gb3WbjGU6rgRaZcKD+fKWyAR6oXQDIrS0x5972c9LgmojCrx9nTidSzvTQQl9lH2f+J4qt/xLQeBhUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IuHE/jQ5KYbXtgnBzaeatm7IF6rJJY3imhuJY2HUU5s=;
+ b=AXsoeR4p6BrvkOV+YtlOOLNO32xIrC2HxlbCSvSobYSIct7hYbaSIVJSqVjUuDkya+qNn8N8P2rHelKObgSTuPFhVJQYEJ7dzqB5+gaBNJs3HBonwa7IL9j84bnxF1RY9clISgvtbgBYP6D9w2s3zG8ZdmmafzwGr7mLzh3ouZVgg7j37HEstVFTnaTFALXwUCroAxkRbbBxv9teccZJ9+6/Z7Sohi/z4J1mx0oix53XZ2KtTSBz0+zf61weLNym4GMIb6dC9t6tgMFl93Qj7XD72bK4KcQpVHlLjl5pRwT7FwXduZKg2JylyjhxkrLlIrC5cYatb7u8kk2mmcqIVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IuHE/jQ5KYbXtgnBzaeatm7IF6rJJY3imhuJY2HUU5s=;
+ b=y6weZuuoL1WSrcqATyzwUa4WokULiou7y+sFAovRV8U3NiZdUAAQfHTnzsjPdIEnSWT5O2ZFVH601u+yQxaa+Bjruv+oXqNEOi36QuYleNk1aQ820pbd9M/52S7dE5Z3UQnUwOCul3CCqZlb1kOwpCDZjYZjOYbYTSc41YECTBE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2896.namprd12.prod.outlook.com (2603:10b6:208:ab::22)
+ by CH2PR12MB4295.namprd12.prod.outlook.com (2603:10b6:610:a7::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Wed, 30 Mar
+ 2022 12:41:33 +0000
+Received: from MN2PR12MB2896.namprd12.prod.outlook.com
+ ([fe80::84a2:64f8:f2ec:fc08]) by MN2PR12MB2896.namprd12.prod.outlook.com
+ ([fe80::84a2:64f8:f2ec:fc08%4]) with mapi id 15.20.5102.022; Wed, 30 Mar 2022
+ 12:41:33 +0000
+Message-ID: <1721b4cb-adab-4e5b-070f-c26d0e2c6bbf@amd.com>
+Date:   Wed, 30 Mar 2022 08:41:30 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/2] remove DC_FP_* wrappers in dml files
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>, amd-gfx@lists.freedesktop.org,
+        airlied@linux.ie, alexander.deucher@amd.com,
+        christian.koenig@amd.com, daniel@ffwll.ch, harry.wentland@amd.com,
+        Rodrigo.Siqueira@amd.com, sunpeng.li@amd.com, Xinhui.Pan@amd.com
+Cc:     Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Jasdeep Dhillon <jdhillon@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220326202448.2046077-1-mwen@igalia.com>
+From:   Rodrigo Siqueira Jordao <rjordrigo@amd.com>
+In-Reply-To: <20220326202448.2046077-1-mwen@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR0102CA0043.prod.exchangelabs.com
+ (2603:10b6:208:25::20) To MN2PR12MB2896.namprd12.prod.outlook.com
+ (2603:10b6:208:ab::22)
 MIME-Version: 1.0
-References: <20220330074016.12896-1-krzysztof.kozlowski@linaro.org> <20220330074016.12896-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330074016.12896-3-krzysztof.kozlowski@linaro.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 30 Mar 2022 14:39:01 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3a4CqYgKzvusHW4ZXF7dmTjOdzq1-RoXqpnvicH1hxmw@mail.gmail.com>
-Message-ID: <CAK8P3a3a4CqYgKzvusHW4ZXF7dmTjOdzq1-RoXqpnvicH1hxmw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] MAINTAINERS: update Krzysztof Kozlowski's email to Linaro
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nfc@lists.01.org, Networking <netdev@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:g7bW1TlYfy/Va9UPxcKRLWPMu9Pu4pj+gdgaactc3MYU8lzYpwX
- DTJEJVlNwiCr+CXbE6zLapXE191Zg8nfhY93tyiQfAY6gN0SgbDtwKc5r1b04LBXW6C8Djg
- 2TcifUip3IATzFlLdUdCdxPxnHNAWWI9FXjGYrzBRB8zPRNW5jYEOfy+qgBr3pfmMIFLo+b
- vFdJbqDEQw8P+pGa25IsQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LGBTjLORL3c=:wSs/A9iws+khjz1N14El4I
- ZzDdQz5th9S/3m7grUPqDsbFONCNMBjy+9agHUE62PDNVLLemLUWgiwJD8mDwN4m+OmcGvYtt
- AxbZoq2FifLZXr/MUNBcw7WsyB+XJcta4IL2AC9EYRzuEYl3u9exsBk914VoFKy5q76BtgbRF
- JQq9oyo4SJFlMZJisQzl4ZcvkqyS4rVK4kXTpPads6rU2Ru2j2icO5thmWo7PP6phTuLtBOvC
- uQyd0YKi/E3lz5rYyQbORlDCVc6S2UrMzD+r/ylJJ6rNM/36eMV7EENon3efBBhWc4bxZ/wrT
- 8ZZUfxxi2CsyPz4Y/gNKO0yCrS5BVUxrZeZjmibcvHjLfYRGk+n+8fOzhe8ti7QMV/oV0Vzq0
- pp3YvOmf5GdRj2osglCfdp5zbaz0UiexJwwq2mjkAzHBryepMego6eWUD/2ywYG52tKbr20gQ
- 8Vq9oHHcipAJmK/NUc86ukBy8Hk4vyGzdLE+ws5LRx4bRcKKlrXrzkfqNXA/lvVkVRCAcy9+c
- Di92Xpj7mgYwIy2mXthtGTM0sFmY9BSvWAtwZPrZibf0D6Z1eZ2GXPgaA9bKdT82E0W/jaH1C
- 1EnIweybyd07nSHQuLtK6urxyvDx94Pa/qWgU0lNw+Vudyh6btEPw/WcDEiPqyL2iJFAJC++J
- +C8F0rivv3p4P/H8Qv6rwP30BnmBfpk03eY8LI8pCWxG0coTIo9T6EcGZdeCAstOL5xlvdVPh
- EcRXu4b2e0az0nkFTAhNHJgoEWQOqK9vDSBO6UguYGjhNu2R25ZgBXIJRUUHFhIevzJ/MuNSU
- ed+3SJk7/o/ubqri9plJobPUi0Ehh+C8WiiTr0HvFsdb4Akjp8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a0874440-2785-4e6d-f08c-08da124a9ecc
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4295:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB4295CE97744050252E4AE24C981F9@CH2PR12MB4295.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SSp04O2wvZMCR5mG5UiflbcP5xpjpAqyXWRpaGNbWMzt5ZQ9A85gaYBPfjjWZy7fZJ4XVU8TBUQfxIVkIlXPCaKs6YdlGWo9BA0ASWFnH63RA4mXnCkfsS3dkUoxP3D33nzUwct0Sas/ITLGe6PIHhVCA6qS/oDbvL9J4rURv2RsxH5dnyq2N1mYQ5kaxjQbzWzauiGsfgiQgnbuokcGRvsioxWSH/8/RfEnjtKT1z7u6gD243U30FoYJu6dQsHj6/4ntl7ceZRl3WrBG2lc6hwPROVHDCyoUsibR2ToVgycm9cI0nvIftxValPdPtwH8QCpzxaJKs/rgNaPlkbm+HAKrEUiO7Hp6+ZL6X4DpovX+TEN0l3JEy34zliDSDmhFuiRLvmdXzvmPEUsnnPA0UrEVT5FV3lxL3q3UQ/xj8kD5TtqnGOD+eh3JijqJL+mT/XMQmxHT/n+AoCQiHbmGbZvu0KwnHHwhjxL1AFhJxmMf32/nuehtHSuj0q90s4JPAuot0CXmSBsp6uMMT/ohWecV+sXqSi+EtfcEWwOur46WY5OITSEze1XUlgNdGSoan/g9zRLZCNvGONGOxWoFsoSXNWswLIZ1sL5u78RkJiFEfH2DE+teJy2hgvRXv3l+jdFq3nH5bHrJy7H37kdrCWFohzCq6fX6u3TH6pEEDJDvel4FZunMw4HcXVcLo0y9az5s9+cGEcNyWNB+sxXfV5lWHsVsuepqnmoE9POWToUTeSNCqrkhKRR7f4m7+f38+E7nWzDmVGvvOynwdTq4g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2896.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(921005)(8936002)(38100700002)(5660300002)(2616005)(186003)(316002)(6512007)(508600001)(6486002)(6636002)(54906003)(53546011)(4326008)(8676002)(83380400001)(6506007)(66556008)(66946007)(66476007)(31686004)(2906002)(36756003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGovTC80Tlk4QlZLeHVRNnQ4TEFYcUczekFlUm1xTGd3YVRFTnc5dmlyU3F1?=
+ =?utf-8?B?YU1BQVBXdzVwck9MQmtuTHhHZ0dxeGp3bE05RHhjUkpjS1JOZE1jVzYrcXdx?=
+ =?utf-8?B?b0o5UDNxaFAvcGVLbXhQaXlIYWlpcDJzMk1qYWRCbnVGYndWR0V3SlZHZVhJ?=
+ =?utf-8?B?c0QxSDZSMjd3blNqbDJLRk1CVEw1dmtQT1Z1YkMzamtBaldYVzdUUjlrVlhk?=
+ =?utf-8?B?QzRUczhQTHdkemZVYnE5RlVsdW1XZWU4am84TDBuMkYydUc0WnlYOWZ0aE0w?=
+ =?utf-8?B?djZFNGJPeFFkMCticksrWWU3cFhTQmNDM1RUejErSzJCc25ad3Y2V2k2MXlE?=
+ =?utf-8?B?eXZtTDI3OVRManRCUHJERndRRFVaUFpCL0pBdTBmRmZzV0Nlc2lxQWpLa0xL?=
+ =?utf-8?B?L1ZuYVFPekdWQnBJMW52OUpUSmowYWd1RXlPdis1MFN3WWlGM3hYbHVhcDdz?=
+ =?utf-8?B?QzRmeDZQVTF2QVVNUmo1Z1pFUW04VC9NODZHODB6QjR0b050YjBIc2RUUTBK?=
+ =?utf-8?B?ajFzTXRaMGMrQ0dVVWZFSHZlZEI4RGc2MkR0THc4MW1ES084SmtGa3g3clZX?=
+ =?utf-8?B?MGV0MjJoZkhBelE1SDhxY0RVNTBpb0xxRzVMVnNKb256LytzclNoWUJSbGNm?=
+ =?utf-8?B?WDc0RUEyQVBWTHVGRWxHMWxHLzdDdXFsWlFMTi9hbThOaDRHQVh1dWFSaEdl?=
+ =?utf-8?B?L09yZWJmRFpRdjNsT1F4L3JiaS9OUWVRRWtiaW5reVREa3FGRjFISzRqR1ho?=
+ =?utf-8?B?WFVXbjhxdFJ1Y1J2RFFmbmRhT0dDTXBuMTZBN1ArS2JzbnVBTHNjQmQvd0pu?=
+ =?utf-8?B?L3hQNWlqK1c0alZYUE9JV1kzYUFKMWl1MnJpUlIrOThxc05ueVRQSFB3L09x?=
+ =?utf-8?B?V0pFdHN5aEZxZU8zQlVPczZFcWhNYVRCU1hDTDlubmlwUnNjOGVCUTZhTElF?=
+ =?utf-8?B?dWo0Tit5ZzVHVFNxREhUQXRjTUg4TTYrNG9sTDlFSFZ4UGtzUzg0MFFHSEdK?=
+ =?utf-8?B?azJGUFArWlVRS1VBVHg0bElDZDVVR0NtUFdWVkU0V29YQ09lQnp1cHhrMElT?=
+ =?utf-8?B?VVo5cU85WGowQ1lWemRPYzBPK00xYzZiTU1EejBQL3FHWnYxSmgyQ04wRUJY?=
+ =?utf-8?B?NVd5a1lNcXYzb2NEb1ZEN3VvNHNiaDNvWHBnMWt5dzk0Z21rZVVwQWRHN0Rv?=
+ =?utf-8?B?L28rOCs4MTg2Sk9nTGJWTHBuWSs5emNJcFFHQWJDRUlVT1VFMDZYbHBmaVZR?=
+ =?utf-8?B?R21uK2s1T1UyaHMrdDV3RmFrL2FRSVMyNXV6QlVieWJzYVpObTNrSXc3c0dM?=
+ =?utf-8?B?RnM3cWdNTi9xUEFyYkM5d1B5TENEajd3TUZFdFR2N1I3R1crbWE3bGpkWHdF?=
+ =?utf-8?B?S0J6ZTdoU3ZMeHVjSEZnTXZYMzAyTEF4N3BlbDdMQlczQ3J1d2owNkdERC95?=
+ =?utf-8?B?WTdvUmZmbTlwekRlZ3NxTGYzZmZXa3gvMHBvaHNESDI5TlFmODRQd3BEa2U5?=
+ =?utf-8?B?SkRzZEpJdDV3bmJWWVVoWTUvL1VxcmtiVGx3R1BBakFtdENHR1ZDLytoL2ln?=
+ =?utf-8?B?U0c5bFBxam5kTFBEd2pyaVNpbjAzOXhPaDBxcW95OWhqMDJTdGRvSlh1RWto?=
+ =?utf-8?B?WlR5Y2E5a3pVaXQ5YzloUG4zZFRtcXBxVDF3Y3NaYk4vbVRteExlQ0VQOWJD?=
+ =?utf-8?B?Nzc0VDBTNXdyT0pwMEs5c21kY0xuY0luRjBUS0JTcUkxNm00OWY0bWpJRmV0?=
+ =?utf-8?B?cDF6a05kNlhUOG5xRkt4SENBTnQyVFo2UUJaQkRVd0tNM09oaXlaQkpPTzJl?=
+ =?utf-8?B?T2dCTEdIVGJvVFg1Z0Y1bEVDalhPRnVGM2FmQWNaQ2g0UlB3SVdLUVJ5UXJY?=
+ =?utf-8?B?VUNaVysxVGkxMGRUUzFscis0b0E0Sy9QMTdGY2Iyb05DQXdQVmlRRUZpOXc1?=
+ =?utf-8?B?Ukl1OEdHK1RTNTQrQjVyOEdieHBRS2o4OEJ2MVBGL1ZnRlZWa1QzOWlrUGMv?=
+ =?utf-8?B?dFJLdDI0K3hYWVVld3JqY2xZMjJ3TktnYS9hVDlFcGNjWkxncER6WU9od3Bz?=
+ =?utf-8?B?ZEk4Uzh4aERTL2Zidkl0dFZ5MTlpYnZBczRFTXVGbnJGR2hkY2NLNGdQakQy?=
+ =?utf-8?B?TEpFaFNnTWZKN1o4TmNQMUFBclNCVTF6TVY1TWVDOFNOSnREQytMMmJQa1Mv?=
+ =?utf-8?B?VDZnZEd4b3l0RTJjRXNXTUY1ZkJsU09XRnhzUUV6Tmcvc3kzWEw0ZHhuMm03?=
+ =?utf-8?B?cS80Q0ljYTRSQlYyaFhkSURDQWdtTUR2VU5uUTA3QVZ6U0tFUHc2T2ZaVUVs?=
+ =?utf-8?B?RUZ0MlRHMTcwRzcyU0wvRXZkRHpRUHNaOUhVN2VLdXJ0alNkU3BiMXRGUkVT?=
+ =?utf-8?Q?RCzYV2XW0nTFkdnqSeivk28p2ilq23u6gIgY+Hr8Msvbt?=
+X-MS-Exchange-AntiSpam-MessageData-1: s9Q+llemLqZKPw==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0874440-2785-4e6d-f08c-08da124a9ecc
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2896.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 12:41:32.8863
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ksTA+OsywiJjjJxzNS6EFtcIqjSPUwTageuWwkPrArkqg0gzB9qv2TVR5h3LCwvePs7gIdFIj+dZcUwNgL0CLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4295
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 9:40 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> From: Krzysztof Kozlowski <krzk@kernel.org>
->
-> Use Krzysztof Kozlowski's @linaro.org account in maintainer entries.
->
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-I usually merge maintainer file changes as bugfixes to avoid losing emails.
-In this case, I suppose it's not urgent though because both emails keep
-working, so I'd suggest putting this one in your normal 'soc' branch for 5.19.
+On 2022-03-26 16:24, Melissa Wen wrote:
+>  From FPU documentation, developers must not use DC_FP_START/END in dml
+> files, but invoke it when calling FPU-associated functions (isolated in
+> dml folder). Therefore, the first patch renames dcn10_validate_bandwidth
+> in dml/calcs to dcn_ for generalization, declares dcn10_validate_bandwidth
+> in dcn10 - that calls dcn_validate_bandwidth and wraps with DC_FP_*
+> accordingly. The second patch removes invocations of DC_FP_* from dml
+> files and properly wraps FPU functions in dc code outside dml folder.
+> 
+> Melissa Wen (2):
+>    drm/amd/display: detach fpu operations from dcn10_validate_bandwidth
+>      in calcs
+>    drm/amd/display: remove DC_FP_* wrapper from dml folder
+> 
+>   .../amd/display/dc/dcn10/dcn10_hw_sequencer.c | 10 ++++++++--
+>   .../drm/amd/display/dc/dcn10/dcn10_resource.c | 16 ++++++++++++++++
+>   .../drm/amd/display/dc/dml/calcs/dcn_calcs.c  | 19 +------------------
+>   .../drm/amd/display/dc/dml/dcn20/dcn20_fpu.c  |  2 --
+>   .../gpu/drm/amd/display/dc/inc/dcn_calcs.h    |  2 +-
+>   5 files changed, 26 insertions(+), 23 deletions(-)
+> 
 
-      Arnd
+
+Hi,
+
+Thanks a lot for your patch!
+
+I reviewed and tested this series and lgtm. Applied to amd-staging-drm-next.
+
+Btw, I agree with Christian. Can you try to find a way to add a 
+compilation error or warning if the developer tries to add DC_FP_* 
+inside DML?
+
+Also, about the question of recursive calling to DC_FP_*, it should be 
+safe if using DC_FP_*.
+
+Thanks
+Siqueira

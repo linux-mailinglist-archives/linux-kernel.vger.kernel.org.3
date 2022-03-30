@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7442F4ECAF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34DB4ECB04
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbiC3Rsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S1349513AbiC3Rsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349647AbiC3Rs1 (ORCPT
+        with ESMTP id S1349672AbiC3Rsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:48:27 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30527136
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:42 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id x5-20020a637c05000000b003817f40e072so10740407pgc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:42 -0700 (PDT)
+        Wed, 30 Mar 2022 13:48:30 -0400
+Received: from mail-oo1-xc49.google.com (mail-oo1-xc49.google.com [IPv6:2607:f8b0:4864:20::c49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C06AEA
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:44 -0700 (PDT)
+Received: by mail-oo1-xc49.google.com with SMTP id t2-20020a4a7442000000b003245b0660afso13310407ooe.10
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=VmPQQ5qQRDJuN908c46gqwAcHrIvR56W695qYYb4WZ0=;
-        b=eZx1PTFQ157sGCuxD63cANe5vicE0qFLAPgD8Ad4kvelr8kcbHMCFwljdSp6Ya9b/1
-         DbYdaUhlwowo2PI3X6rONBP46+ADfyculpJWVsHL3nEPftS188D8isVXiaamQGZ3gyHt
-         r6BZQOGnLt80ixQktHvtRysdejx5xOQSxuThnCwhvWWJmB5fdv0UHn2JnOIcdG7dKEJQ
-         Ip7BrhUzb/2+JnpZbWvU/buHYY5p9hiRGXVMLAnrG69l311h/fbV+PwpEpZ2IB4KJrS1
-         gdoR6vSIsKU1Y+6kNl3BQJ92QCnKC3Gamw1yHaxj6lBwFz8/9gHB3L2tDa/ViOpaHvGi
-         aUaw==
+        bh=2dUY3PgVjHooqkko5l4dkxAWtd/xyNFDozbG/aHxTaw=;
+        b=gf5iDsAmK9ljVSjZDoF+cz+eyO8gggNes5Ws3RRtbNgH0eu/dpFquT4YJB+Y1qNDg8
+         o4I2zi5iJQNAx46MTkU45AAXbVXInsgWLJQoOTXf2Pl14/CpbTYodytjoxh0j2qy13XY
+         ooH5FBm37hWsKVAbBx0nEwJwbLa+T/4DCZmWXhV6shgzFuHVmJR97mDjfdKVxWBaOYAL
+         EfpE/IcOKgBKxGZVdHKBZbkG/Ip/e2afO9BjwkXM50tZ3LQy+FREuemUQ6jHkE9JIDCJ
+         B1gpzRUoN0/gFaxehpWksxSwo4HmI7Q8lpHMJZQrs4X4GYK8Hp70Eyw6NZ+aepM/6zl5
+         In5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=VmPQQ5qQRDJuN908c46gqwAcHrIvR56W695qYYb4WZ0=;
-        b=fKnipDrsST3RGDJ21pv7TpCz29bAT/oLWpo0zJ7V3xFjELULeccryEoZPr0RuIRu/t
-         V7cn67axzbegS5sZk7Z5Ebdjnw+sbh4Qyz4mp3yUVADKZjMkl3SA5GR56WxdktEgdGqX
-         kjHNd55LF9Y/GwIy7JsPMNUFfPOpmkKrULGx3GCSekNRUjkHz5s89IKHs5svApNZMFUO
-         ZfOZT/VwA2SqW3j8MT8EKbIcnyrR7uPY25A0yra9QLce22hunILOvCGb+rppL+Cr7/KR
-         JGNrtUq2BwAPhwOLtguAimt05w67s1oAX3ddkFYiSktwOF80uZgmSqeJsVKSTLAjCSLI
-         zlbw==
-X-Gm-Message-State: AOAM533f5zkTwoB6BRz6XyyMj0eonxoI4NAdc+9pYTuXx3XXXTjfOete
-        yeYxqSb+GlTQ8Qd1FH4dplLdANblDFe/O3P19bpAOJ93WJ20xZ4WNoSdSi1+7To0XisGkIzjtMZ
-        PvA8XS3gLWYQjxrMN2BHG3CSoazd4wxV+jw5c6hwmjUqD3ij8xYajyrBDAvmR2On/KgvEUIxX
-X-Google-Smtp-Source: ABdhPJwkLd7//Mr/gFPfAdxB/1wpgBdgJZ+JRViex5/PmaODPC9an8QVWtSwKE47VgeT01+28r2KX3BSP4Gx
+        bh=2dUY3PgVjHooqkko5l4dkxAWtd/xyNFDozbG/aHxTaw=;
+        b=d56bXTVqM9O6nQNYQ8KnMo04WWyzcFTmpmtFXGVOqo+/cug0zWDLPzowSlabga4l9d
+         PAr1bKKKBlmH9ZIPbzii1tv/2C9N+jXMDauvYuWKAAWbMqXi0elgtt06oQv835IJ+DGG
+         ai9bQkSP1B6zfFC0TbUnuX8hJVPBgew3S1fXvB0p15edXE9F2f44DTDiGoTN4qE+hYse
+         64RASd7MlsuBFe1r8XiDLojnwbwrpRWS7c8zoYtM0Co5doYZ8UpupW3o/A1Bk0EA8UqU
+         Bmqf03Q1521eEddHVQ4JXF00QD1csXVujK4tLMo0J4scm5acU7NCvZYJ2nBT7fp3Vn5k
+         +TFQ==
+X-Gm-Message-State: AOAM531BMFViv7DAJGgrqXevNZPpGZt3HC7e5GUveoEW1TFJ9m0VqBun
+        nnpFE5Z3FuxSvL1pRx1oYKBlMNDajcuj34sK4udMJno0Q9jXp25QE4Mk2KKaLdPcVirV5pmbyPX
+        6vosjpWgun/xtkQ8RN4PFaZH+MZeNgiNyznJz/26VTBPVijjvPPdWsoJDei8WDT+S0vyVT2gG
+X-Google-Smtp-Source: ABdhPJwItbVmkOlpOw+0i6B+kBdUV77Gp4sKPuBDJnSqIt5d6VC/YxajnwWOaaMSdWFD6AGJZ2stS6YMFVDq
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:7c53:ec2f:bd26:b69c])
- (user=bgardon job=sendgmr) by 2002:a17:90a:858b:b0:1c6:5bc8:781a with SMTP id
- m11-20020a17090a858b00b001c65bc8781amr110185pjn.0.1648662401123; Wed, 30 Mar
- 2022 10:46:41 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 10:46:18 -0700
+ (user=bgardon job=sendgmr) by 2002:a05:6808:179d:b0:2ef:88be:74f5 with SMTP
+ id bg29-20020a056808179d00b002ef88be74f5mr518446oib.96.1648662403217; Wed, 30
+ Mar 2022 10:46:43 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 10:46:19 -0700
 In-Reply-To: <20220330174621.1567317-1-bgardon@google.com>
-Message-Id: <20220330174621.1567317-9-bgardon@google.com>
+Message-Id: <20220330174621.1567317-10-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220330174621.1567317-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v3 08/11] KVM: x86/MMU: Allow NX huge pages to be disabled on
- a per-vm basis
+Subject: [PATCH v3 09/11] KVM: x86: Fix errant brace in KVM capability handling
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -76,198 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, the NX hugepage mitigation for iTLB multihit is not
-needed for all guests on a host. Allow disabling the mitigation on a
-per-VM basis to avoid the performance hit of NX hugepages on trusted
-workloads.
+The braces around the KVM_CAP_XSAVE2 block also surround the
+KVM_CAP_PMU_CAPABILITY block, likely the result of a merge issue. Simply
+move the curly brace back to where it belongs.
 
+Fixes: ba7bb663f5547 ("KVM: x86: Provide per VM capability for disabling PMU virtualization")
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- Documentation/virt/kvm/api.rst  | 11 +++++++++++
- arch/x86/include/asm/kvm_host.h |  2 ++
- arch/x86/kvm/mmu.h              | 10 ++++++----
- arch/x86/kvm/mmu/mmu.c          |  2 +-
- arch/x86/kvm/mmu/spte.c         |  7 ++++---
- arch/x86/kvm/mmu/spte.h         |  3 ++-
- arch/x86/kvm/mmu/tdp_mmu.c      |  3 ++-
- arch/x86/kvm/x86.c              |  6 ++++++
- include/uapi/linux/kvm.h        |  1 +
- 9 files changed, 35 insertions(+), 10 deletions(-)
+ arch/x86/kvm/x86.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index b102ba7cf903..b40c3113b14b 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -7844,6 +7844,17 @@ At this time, KVM_PMU_CAP_DISABLE is the only capability.  Setting
- this capability will disable PMU virtualization for that VM.  Usermode
- should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
- 
-+8.36 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
-+---------------------------
-+
-+:Capability KVM_CAP_PMU_CAPABILITY
-+:Architectures: x86
-+:Type: vm
-+
-+This capability disables the NX huge pages mitigation for iTLB MULTIHIT.
-+
-+The capability has no effect if the nx_huge_pages module parameter is not set.
-+
- 9. Known KVM API problems
- =========================
- 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 676705ad1e23..dcff7709444d 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1246,6 +1246,8 @@ struct kvm_arch {
- 	hpa_t	hv_root_tdp;
- 	spinlock_t hv_root_tdp_lock;
- #endif
-+
-+	bool disable_nx_huge_pages;
- };
- 
- struct kvm_vm_stat {
-diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-index e6cae6f22683..69cffc86b888 100644
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -173,10 +173,12 @@ struct kvm_page_fault {
- int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
- 
- extern int nx_huge_pages;
--static inline bool is_nx_huge_page_enabled(void)
-+static inline bool is_nx_huge_page_enabled(struct kvm *kvm)
- {
--	return READ_ONCE(nx_huge_pages);
-+	return READ_ONCE(nx_huge_pages) &&
-+	       !kvm->arch.disable_nx_huge_pages;
- }
-+void kvm_update_nx_huge_pages(struct kvm *kvm);
- 
- static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 					u32 err, bool prefetch)
-@@ -191,8 +193,8 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 		.user = err & PFERR_USER_MASK,
- 		.prefetch = prefetch,
- 		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
--		.nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(),
--
-+		.nx_huge_page_workaround_enabled =
-+			is_nx_huge_page_enabled(vcpu->kvm),
- 		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
- 		.req_level = PG_LEVEL_4K,
- 		.goal_level = PG_LEVEL_4K,
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index af428cb65b3f..eb7b935d3caa 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6202,7 +6202,7 @@ static void __set_nx_huge_pages(bool val)
- 	nx_huge_pages = itlb_multihit_kvm_mitigation = val;
- }
- 
--static void kvm_update_nx_huge_pages(struct kvm *kvm)
-+void kvm_update_nx_huge_pages(struct kvm *kvm)
- {
- 	mutex_lock(&kvm->slots_lock);
- 	kvm_mmu_zap_all_fast(kvm);
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index 4739b53c9734..877ad30bc7ad 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -116,7 +116,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 		spte |= spte_shadow_accessed_mask(spte);
- 
- 	if (level > PG_LEVEL_4K && (pte_access & ACC_EXEC_MASK) &&
--	    is_nx_huge_page_enabled()) {
-+	    is_nx_huge_page_enabled(vcpu->kvm)) {
- 		pte_access &= ~ACC_EXEC_MASK;
- 	}
- 
-@@ -215,7 +215,8 @@ static u64 make_spte_executable(u64 spte)
-  * This is used during huge page splitting to build the SPTEs that make up the
-  * new page table.
-  */
--u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
-+u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte, int huge_level,
-+			      int index)
- {
- 	u64 child_spte;
- 	int child_level;
-@@ -243,7 +244,7 @@ u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
- 		 * When splitting to a 4K page, mark the page executable as the
- 		 * NX hugepage mitigation no longer applies.
- 		 */
--		if (is_nx_huge_page_enabled())
-+		if (is_nx_huge_page_enabled(kvm))
- 			child_spte = make_spte_executable(child_spte);
- 	}
- 
-diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-index 73f12615416f..e4142caff4b1 100644
---- a/arch/x86/kvm/mmu/spte.h
-+++ b/arch/x86/kvm/mmu/spte.h
-@@ -415,7 +415,8 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
- 	       u64 old_spte, bool prefetch, bool can_unsync,
- 	       bool host_writable, u64 *new_spte);
--u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index);
-+u64 make_huge_page_split_spte(struct kvm *kvm, u64 huge_spte, int huge_level,
-+			      int index);
- u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
- u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
- u64 mark_spte_for_access_track(u64 spte);
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index a2f9a34a0168..5d82a54924e6 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1469,7 +1469,8 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
- 	 * not been linked in yet and thus is not reachable from any other CPU.
- 	 */
- 	for (i = 0; i < PT64_ENT_PER_PAGE; i++)
--		sp->spt[i] = make_huge_page_split_spte(huge_spte, level, i);
-+		sp->spt[i] = make_huge_page_split_spte(kvm, huge_spte,
-+						       level, i);
- 
- 	/*
- 	 * Replace the huge spte with a pointer to the populated lower level
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7a066cf92692..ea1d620b35df 100644
+index ea1d620b35df..e00dcf19f826 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -4268,6 +4268,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_SYS_ATTRIBUTES:
- 	case KVM_CAP_VAPIC:
- 	case KVM_CAP_ENABLE_CAP:
-+	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
- 		r = 1;
+@@ -4365,10 +4365,10 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 		if (r < sizeof(struct kvm_xsave))
+ 			r = sizeof(struct kvm_xsave);
  		break;
- 	case KVM_CAP_EXIT_HYPERCALL:
-@@ -6061,6 +6062,11 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 		}
- 		mutex_unlock(&kvm->lock);
++	}
+ 	case KVM_CAP_PMU_CAPABILITY:
+ 		r = enable_pmu ? KVM_CAP_PMU_VALID_MASK : 0;
  		break;
-+	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-+		kvm->arch.disable_nx_huge_pages = true;
-+		kvm_update_nx_huge_pages(kvm);
-+		r = 0;
-+		break;
- 	default:
- 		r = -EINVAL;
+-	}
+ 	case KVM_CAP_DISABLE_QUIRKS2:
+ 		r = KVM_X86_VALID_QUIRKS;
  		break;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 8616af85dc5d..12399c969b42 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1145,6 +1145,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_PMU_CAPABILITY 212
- #define KVM_CAP_DISABLE_QUIRKS2 213
- #define KVM_CAP_VM_TSC_CONTROL 214
-+#define KVM_CAP_VM_DISABLE_NX_HUGE_PAGES 215
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
 -- 
 2.35.1.1021.g381101b075-goog
 

@@ -2,171 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0230E4EC8BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD3C4EC8B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348396AbiC3Puu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
+        id S1348385AbiC3PuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348355AbiC3Pus (ORCPT
+        with ESMTP id S1344628AbiC3PuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:50:48 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286A33EAC;
-        Wed, 30 Mar 2022 08:49:00 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id g24so28242413lja.7;
-        Wed, 30 Mar 2022 08:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dq8xdoLIR4aRi6FkMb+20PWNHqW1rgCenoTdxXhapeQ=;
-        b=iEUFe0ObPg8qK8j1JvE8RRHyMghNpiQQxXbwvFtCunM0DqR7JYxOXqAOFS1X8FIvbv
-         Q0jwBAhjoA+FCfJRj/ifJ6BIzHZ5UKMGa5lStV8/Zlix0V2PFNBYjg2ne7WOoN5gp7pR
-         zW54GurfJQHFF3EeUxPZaHLDciSPnu7ij6ScQ2e7MSDo1eHy5ZYxLMnhZk3+NHmNirmq
-         l4Aa3/++C8AC6ykYazwoLvj//FQqUoBJmaC/STCqoAeYw7rXRXOg0MO49PZAPbxM0bff
-         kUnbDar1asklrk1T3evqldCGliH96rQ105mc2qE4KOaRpWY9I5BsWY6miPMwsqPfLgvt
-         DIlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dq8xdoLIR4aRi6FkMb+20PWNHqW1rgCenoTdxXhapeQ=;
-        b=RmiRzmoCQ4jOrNSX1R/BWE9vsg078XaGlyp4FA5UJNBx34OflGbqrgv+VsNDlDXNZg
-         KttzKwRTHU/3k8DdlfVGLfxsS4498wz2cWIyexMsVboOLh7GBRvyzia90wcEzs+vMdZ7
-         FBVU4hSnkThLNsDGfT1lzVr7gv2Lkg8Yw023wzNZP10O2UUWbke+1nmnHDT51QmsxSfD
-         Nb++GeWFFgOaRWG0pL9zzp4s1AXlf80MFHCOoewr705z3TKcXQ8NFiBl6HWeE4aLoAlf
-         cXOJwxrEhoEgro9+Jy2q0ijlqfRPiOnYLD5HMuzoOPY9gMDojx7xEFJZeL0m2fA8DCVE
-         yYGg==
-X-Gm-Message-State: AOAM531Wr01gm87+GzcCPNw4C/Tjpi/LvBzkUNiTUzuLoXSnLthhHnN8
-        I/GhzV5Dd/VSF9+4R0zVQyM=
-X-Google-Smtp-Source: ABdhPJyUOGgz9ZqjEOkltDEfzpulzR5+n7lOLWprzDlNwq2ielugYc/3nwzAT2zYEJY6zDunh4PM6Q==
-X-Received: by 2002:a05:651c:204:b0:249:832a:12b with SMTP id y4-20020a05651c020400b00249832a012bmr7201978ljn.473.1648655332642;
-        Wed, 30 Mar 2022 08:48:52 -0700 (PDT)
-Received: from [192.168.1.2] (235.132.246.94.ip4.artcom.pl. [94.246.132.235])
-        by smtp.googlemail.com with ESMTPSA id w22-20020a2e9996000000b00249824260f8sm2413038lji.25.2022.03.30.08.48.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 08:48:52 -0700 (PDT)
-Message-ID: <ae3864ac-b4f0-01a6-b3ed-75fa53ab3b95@gmail.com>
-Date:   Wed, 30 Mar 2022 17:47:55 +0200
+        Wed, 30 Mar 2022 11:50:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA07920E942;
+        Wed, 30 Mar 2022 08:48:10 -0700 (PDT)
+X-UUID: 3b656cbffa5f4f99900f5d676e1ba9e7-20220330
+X-UUID: 3b656cbffa5f4f99900f5d676e1ba9e7-20220330
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1049488280; Wed, 30 Mar 2022 23:48:03 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 30 Mar 2022 23:48:02 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 30 Mar 2022 23:48:01 +0800
+Message-ID: <734fbf254c64668856e987aafe9d7dfd3ec86941.camel@mediatek.com>
+Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        <robh+dt@kernel.org>, <tzungbi@google.com>,
+        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Date:   Wed, 30 Mar 2022 23:48:01 +0800
+In-Reply-To: <YkRoC30JLDMeVi1B@sirena.org.uk>
+References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
+         <20220324064511.10665-3-jiaxin.yu@mediatek.com>
+         <20220329223002.uo7kiemopkh7ak4x@notapiano>
+         <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
+         <YkRNSoBKFvYYyZLu@sirena.org.uk>
+         <61e9fb59448837cfc8e3ec862b711294bcb68872.camel@mediatek.com>
+         <YkRoC30JLDMeVi1B@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Bug 215726 - si2157.c: mention name of the missing firmware file
-Content-Language: pl-PL
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Robert Schlabbach <robert_s@gmx.net>
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
- <trinity-2ca61ae4-4f05-454d-94fd-d41e1afbec2f-1648581688394@3c-app-gmx-bs54>
- <1fc02de2-890e-e8e8-0ab6-aba62a333de5@leemhuis.info>
- <2ce6dc15-51a8-e59c-26ab-4380cdca6209@gmail.com>
- <703ad976-a504-eded-41b6-cd4f9f74e8df@leemhuis.info>
-From:   Piotr Chmura <chmooreck@gmail.com>
-In-Reply-To: <703ad976-a504-eded-41b6-cd4f9f74e8df@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 30.03.2022 o 12:44, Thorsten Leemhuis pisze:
-> On 30.03.22 12:35, Piotr Chmura wrote:
->> W dniu 30.03.2022 o 11:55, Thorsten Leemhuis pisze:
->>> On 29.03.22 21:21, Robert Schlabbach wrote:
->>>> the patch linked in the bugzilla ticket:
->>>> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->>>>
->>>> should indeed fix the issue.
->>> Ahh, the comment mentioning it was added shortly after I sent my mail.
->>> #regzbot monitor:
->>> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->>>
->>>
->>> Adding Piotr, the patches' author to the CC, who also replied.
->>>
->>> BTW: that patch is afaics missing a Fixes tag specifying the culprit and
->>> a `Cc: stable@vger.kernel.org # 5.17.x` tag to make sure it's quickly
->>> backported to the stable tree, as among others explained here:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/handling-regressions.rst
->>>
->> Sorry for my inconvenience.
-> Don't worry, everything fine. In a case like...
->
->> I just fixed my device and wanted to share
->> solution with the "world". I'm not familiar with all kernel development
->> convention (yet).
-> ...this someone else should point such details out to the submitter
-> and/or add these tags when applying the patch.
->
-> @Robert: Do you know which commit causes this regression and could tell
-> us for a proper Fixes: tag?
-Fixes: 1c35ba3bf97213538b82067acc0f23f18e652226
+On Wed, 2022-03-30 at 15:24 +0100, Mark Brown wrote:
+> On Wed, Mar 30, 2022 at 10:06:24PM +0800, Jiaxin Yu wrote:
+> > On Wed, 2022-03-30 at 13:30 +0100, Mark Brown wrote:
+> > > Making a previously optional property required means that systems
+> > > that
+> > > previously worked may stop working unless they update their DT,
+> > > DTs
+> > > may
+> > > be distributed separately to the kernel and perhaps even baked
+> > > into
+> > > firmware or similar.
+> > Thank you for your detailed answer. I should keep the driver's
+> > behavior
+> > consistent with the description of dt-bindings. The "mediatek,hdmi-
+> > codec" needs to be set as the required property. Is my
+> > understanding
+> > right?
+> 
+> The binding document and code should match so if one is changed the
+> other needs to be changed too.
+> 
+> In theory we should never change a previously optional property to
+> required which would mean that the code should be updated to reflect
+> the
+> binding document, however sometimes the DT isn't actually used as a
+> stable intereface by anything for a given property or device type so
+> we
+> can get away with changing things.
 
-Cheers,
-Piotr Chmura
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->
-> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-> reports on my table. I can only look briefly into most of them and lack
-> knowledge about most of the areas they concern. I thus unfortunately
-> will sometimes get things wrong or miss something important. I hope
-> that's not the case here; if you think it is, don't hesitate to tell me
-> in a public reply, it's in everyone's interest to set the public record
-> straight.
->
->
->>>> The error was that the rom_id and required
->>>> fields were swapped in the table, so the non-zero rom_id was taken as a
->>>> "true" required boolean value, thus incorrectly evaluating that the
->>>> chip requires a firmware file to operate when in fact it does not.
->>>> I have tested the patch and found it worked for me. But I do not know
->>>> how to push this further along:
->>>> https://patchwork.linuxtv.org/project/linux-media/patch/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->>>>
->>> Mauro, what's up here? The patch fixes a regression and thus afaics
->>> should quickly find its way towards mainline to get it into the stable
->>> tree, as explained in the (bran new) document linked above.
->>>
->>> Ciao, Thorsten
->>>
->>>> Gesendet: Dienstag, 29. März 2022 um 10:33 Uhr
->>>> Von: "Thorsten Leemhuis" <regressions@leemhuis.info>
->>>> An: "Antti Palosaari" <crope@iki.fi>, "Mauro Carvalho Chehab"
->>>> <mchehab+huawei@kernel.org>, "Robert Schlabbach" <robert_s@gmx.net>
->>>> Cc: "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
->>>> az0123456@gmx.de, "Linux Media Mailing List"
->>>> <linux-media@vger.kernel.org>, "Linux Kernel Mailing List"
->>>> <linux-kernel@vger.kernel.org>
->>>> Betreff: Bug 215726 - si2157.c: mention name of the missing firmware
->>>> file
->>>> Hi, this is your Linux kernel regression tracker.
->>>>
->>>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
->>>> acted upon since it was reported about a week ago, that's why I decided
->>>> to forward it to the lists and all people that seemed to be relevant
->>>> here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215726 :
->>>>
->>>>> I get the following error messages when trying to use si2157.ko in
->>>>> linux 5.17:
->>>>> si2157 13-0060: found a 'Silicon Labs Si2157-A30 ROM 0x50'
->>>>> si2157 13-0060: Can't continue without a firmware
->>>>> I did work in linux 5.16.16 without a firmware file. Unfortunately
->>>>> the driver does not tell me the name of the missing firmware file.
->>>> Could somebody take a look into this? Or was this discussed somewhere
->>>> else already? Or even fixed?
->>>>
->>>>
->>
+"however sometimes the DT isn't actually used as a stable intereface by
+anything for a given property or device type so we can get away with
+changing things."
+
+Sorry, I don't understand the real idea of this description. Does it
+mean that dt-bindings in this series don't need to be updated, but the
+driver?
 

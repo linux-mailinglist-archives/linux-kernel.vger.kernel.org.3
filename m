@@ -2,162 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BA94EC3AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31F44EC382
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241856AbiC3MVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S238729AbiC3MT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345758AbiC3MEQ (ORCPT
+        with ESMTP id S1345834AbiC3MEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:04:16 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2063.outbound.protection.outlook.com [40.107.102.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D5CBCAE
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:58:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HlVyuW+2ATgriJEeokoQhmsKOIUdYGNddqspXKyZ3JI9lux3EiLTde8N3Lmi/C3l7gLfmLJnEfX2gMhPpLWjVrWNXJyxp49krXjLwzMwA9GXOWX7doH8jhZ9BWi4p4YjyikksZxA+DAxDAGkjRqLrb+4br7C+O7JRlKuGZdnNH25ZCMdcx1zC5sBXwjD2JuVQ4Ra1ZigMVA6hid9PZHAdIizjWHEcOTx7/XiPlGWn9WcEBOJUzw1ahD4Pnkne8JQQrWpGUfRsrU3eUyEmoLRqEyfUsFPgMyu2gKyIbAdq2wxxdHvLtiDBj0qHdTRW/77Jo9sl5DxFHu2x49BuKnIFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ND3rsjl1rzAIzwmN/rdQLHCsGBUnILNHQvNxwpCWXNg=;
- b=lV9FeC/kBP1Vd+KuqHH4dLU8c9/oMcaqoKtnmZ3kJRErTwoFvETQobeMXf46i/wI6j6PBrdUBfnd9GLEMgSCe+WRG+Szoc6ibRJYdj75ZXFmXPrnVK7mjaIchAqWrcVzHECrl8ELz34cf37s1JhNtwJn0ix2/+fslg/CQE8+Xi2Ar2UdMNzHQf6tHJVpLoVxDFn2IOcJ6teIKna/uhCg8UK9q4J1LyP/tTGpnIYZVKVoy/Z4OgnFg+fRjFjQ6V0t7XmTQZ0jWs6/4GzscUTdoQEUqu0bdhefZHNnu6VbVPNXtS8H6HsROFlSm6CDCTKK2/olxks+nihacbrGCGCUmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ND3rsjl1rzAIzwmN/rdQLHCsGBUnILNHQvNxwpCWXNg=;
- b=F3dRLHgFcVgknQFY5txi+Zq+GB+9Jp5cKa2TC9NjzayIuKH1p2bdAVVuxXpSyFHL+TGZKkwytEBRx7lcOhXWYydC94yKeB7MIasCHWB9+1l/t6zKrq4sNy4anT6TxfgWA6K1W4Zcyol96b9iPJjRVW81W1IuIyv3sgEjAe5Z9g8Rck41Kbl9Ctfmonyj4Sf8Od0KiNlcFUzTKnfPxnESsSNARM3tJ1ftg5jKAZ5hFs3nH9qZ4TB8q8GZNpLNhcTHzT1Sep9E9b5qs4GFnszyPKuWin6TBuEiK5zb68JwCyIOEf6U4JVB1qo6GOXw227JqylBwr++152zRbbi91cEzw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by PH7PR12MB5999.namprd12.prod.outlook.com (2603:10b6:510:1db::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Wed, 30 Mar
- 2022 11:58:22 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c%6]) with mapi id 15.20.5102.023; Wed, 30 Mar 2022
- 11:58:21 +0000
-Date:   Wed, 30 Mar 2022 08:58:20 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 02/11] iommu: Add iommu_group_singleton_lockdown()
-Message-ID: <20220330115820.GE1716663@nvidia.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-3-baolu.lu@linux.intel.com>
- <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220329114259.GB1716663@nvidia.com>
- <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1P221CA0009.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::24) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 30 Mar 2022 08:04:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26DB39178;
+        Wed, 30 Mar 2022 04:58:46 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UBh5va027506;
+        Wed, 30 Mar 2022 11:58:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=18A9OJUgNmDoRYrIS4z3SJ5vMTgikgfdJTnRRrRgqtQ=;
+ b=ZVNQv62NARKYgeO5ScWI0JkDQRJR6Oc0uESH4TmiPRKhRrhxeNiegfgwTP5qyUFBW3LO
+ iKLTMlzg6RKvWDMuTHKxLuIPe+JjlI1lexMH20h7xIwNbx1i37/+rSjSD8s+xay0OSQ/
+ 5qUy+a4Mg6xaXT1ziLMBqiMN2QBtqlbGS4qRtzbdZ3NihIuVQn88V1O2P/llJ8e5bQ7A
+ X+dUyYBUUAl2ItBk/xAuFVW30WCpuum7Z0cJEozkb6kEj+TO7DMF73pdlK3qP2Ibioap
+ wAi92b0L4+QJ+R093OeArPTiBEZHzfwzCwBGpsFD9u3JOh/zwAmXpvt8tORobXswCcsw kQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40q23us8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 11:58:37 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22UBvw7x003222;
+        Wed, 30 Mar 2022 11:58:36 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40q23urn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 11:58:36 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22UBvVHJ024119;
+        Wed, 30 Mar 2022 11:58:34 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9gg3g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 11:58:34 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UBkW6q47645070
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 11:46:32 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1CFAA405C;
+        Wed, 30 Mar 2022 11:58:31 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C60CA4054;
+        Wed, 30 Mar 2022 11:58:31 +0000 (GMT)
+Received: from [9.145.166.215] (unknown [9.145.166.215])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Mar 2022 11:58:31 +0000 (GMT)
+Message-ID: <85b16843-5477-21b4-7d62-4fc39e48b5cf@linux.ibm.com>
+Date:   Wed, 30 Mar 2022 13:58:31 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c86bdc98-a12d-4f4a-65ba-08da1244966e
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5999:EE_
-X-Microsoft-Antispam-PRVS: <PH7PR12MB59997ADFADE3D2A11A4C5268C21F9@PH7PR12MB5999.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t03wYRcFoXCNx+GS4icUW4/TVDyniq33w+gWYkBhxjjGFnoAbLDDlqrlSofwTOrO7XXe3FgaHsNZxMfmBwUiiKUEFrAGTdhX6X9HPYhXAyhqVewF/zT9yY/RgJlvd/m3AN0+DcBi2cM6PXe88zlQXsFDfsv85MV0QLH6GFvkQ+zFqLETL14GM38+dekFpbqHfK9vADS71QoGBa+3elnn0OJfaheNuu9nFJW5YQ7kY+Nb+ntSkpTfZuSl/824dKLtzJUhjNBOfxUAlviA6VqIc1KDudluD/xEvaDyQCMaNT3hpm+wJjSLxtzvDpvdnrA7qOQk8ke/BIO9SBry4JX8EkWlhZOYqhtUQSHesEH4Z8MtbHoxATvqbNZ1Pl2POARYY1V+LXU8qt6OyrSv5VVSG3sXCCJx8ia72KTqyO7ftl5aAVBREBXwuDknMXYHzVgSlTVIfFtnaH6LmcaBct7x2+2cMA5bDxYYR3AbIwapjGuGHetG691kL0drBhVJRAoMaCD3l0T6GttnzRFd16wJCZZQLvgVW4p/uC0duxSD0R+IG/Sh48KwYYTTUSJKvwp7Lgc+HzYDEYCFZznjieynvP6a6iWg0wUavck3SkC4wdee+ivjeCGro/4gs+xlB3UdmgwMaVRl9Td8AxULbSPBxQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(5660300002)(6916009)(2906002)(1076003)(6486002)(2616005)(186003)(508600001)(54906003)(4326008)(316002)(36756003)(8676002)(38100700002)(66946007)(66476007)(6506007)(33656002)(66556008)(6512007)(26005)(8936002)(86362001)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r7O6E4YY/k+p7ohcdSsxtPVZQbV0Ar7U3aA6c1aAESf8K2PlbsfTf1MhtP1Z?=
- =?us-ascii?Q?uLzouvtF0grbcKFAmpMrk/sqNdCq29BaCp4DXR8Nr1mGlpxRvM8px79uyYFw?=
- =?us-ascii?Q?hevy1HGXrsh5C5kNnDsLFBfb59rrQ8z0T8bgxPH/YtIfbUXWBhN7CwwQG7s8?=
- =?us-ascii?Q?fvOHcS5gxjoW/2LHxziO0LcduQAoXaYaeoItP4AJFN+mGa2ex//GW1sID4hm?=
- =?us-ascii?Q?25P8BcZpg6NQ10oh4cqOl3M4K7MhdU/Sbp++8Q6o9LBSXMnkAsHINtSKl1BT?=
- =?us-ascii?Q?hIeQncH96/3OplgOfYJ/jVhxLtiYxMQvZcHTR8JTJMgZKjYF8a3nek0Mrenw?=
- =?us-ascii?Q?TJYRU7A2ArrMHp9/NiL+fO65RRHzRcqO83qnzdR3SLAl6Z3JbEjqn0BE/e+f?=
- =?us-ascii?Q?9DTXHyovw3wcHelbaxp0EGka5Yxfe5PtT78OUA526O/2DApmlqfvqqxUSkO8?=
- =?us-ascii?Q?Lg5YanhDLe+nigv1T1TAVZS3SSLqz3lH1C5vi6ZFy+8foA4DS7EhPQRNKUh5?=
- =?us-ascii?Q?Lc+YVEgbwAz1DAUiFgsiIzuw2O9kflbNIvHFvQLqr+M4k6toUsK1UeffiZhS?=
- =?us-ascii?Q?E4LTTVjYz/IGpc+AQ5uetqe+IlFPYxcdMtBn0GKTsusuv37lOoLLRZwrN4q1?=
- =?us-ascii?Q?v6tEMt0SMJrLKnu7rv6rnAbV+B9EI0mlDEeVOkXJANBQ3pM6ESubKB0kmUCy?=
- =?us-ascii?Q?28v+oc72jxVv3rFlpCcLQPj1TpyOmuh4YIq7HTmCjQk0E593GRTGMMUwuhN7?=
- =?us-ascii?Q?y1gkL1Zf2uYvPVFxWjWs6+bH3P3Rn+XshbDJQRiNK78ndkZ0xkST2aJ2vceu?=
- =?us-ascii?Q?PjSOEMGlzNm5uyRNcuV1U25lhX2DVhtErZkqnbRQt4n67FmiFSh9GqQ00jm7?=
- =?us-ascii?Q?/El1qqRwDtMY6i6kG7U1DactZboInMAA3KBZZWo7HKjY2EIIi8vGKJMBcOxr?=
- =?us-ascii?Q?YaukDb7+DbpfqJ7HNBxvVii3daTf1TEFcKmoC1dUSZ39rwHX8jCYEhGkr8ch?=
- =?us-ascii?Q?+CHxh8Ed0YJkCOW4829m36V+ggU54joNz/P4nt2x5DLXG3ATAli0ypb9GYnp?=
- =?us-ascii?Q?EkYGTmmPJ1i38HCHWxRSeDS3vp3r3xb6e1QdqjL9+3BHesfhxlbkoEJ1YIPM?=
- =?us-ascii?Q?726ST46V3VGzZIEBxQguMQbpaSVTN9uVBrcLhCkagKINyR0RFwW6vIdqzDUf?=
- =?us-ascii?Q?3YBUiFTRWxCW0AkBQe7TP10OpUGlR2t6hNGo6dEaFFRQ7oIqowGw1nbsnVbC?=
- =?us-ascii?Q?ffHz5K6YiXx0iiuI2qe6hlQevWgDRxrF7bhqoOidLrV2ozCEAkWHH5a6GvmK?=
- =?us-ascii?Q?piDi5hOYuDpF/zhtKd2ssN6vNqLTOuUXs02j1D5p4JTgocoPrm0TZdcbUphc?=
- =?us-ascii?Q?bF+W5BcvvALGE05WBThNTT4LnvCF9sJAfa12cP0E6FJCQneZAAYtslLqZHEz?=
- =?us-ascii?Q?ij+OdIVAFDolhfTC3yG6CSrARC4izzlrJSonaR9y2IQbNHOPF7/7KXEs2t8Z?=
- =?us-ascii?Q?q/adgbVu9gqbLmMwZu8ioo57lbW6zHbvmjyU0hMY4HQMk8V5R0elMtGeoLV3?=
- =?us-ascii?Q?hCDHefYp0gbhcLj7tI300hiIkDKLo3Km8e4PUTaOPiU2zE0rPT3XZ5hnXWf6?=
- =?us-ascii?Q?pXpmiRwyK5hH79OPyt5Enxllls1nUDjLDYYFahRUbXH61/N0XbU0DgnT9tvZ?=
- =?us-ascii?Q?SYvec17Efcfw+KPSkjccEExaeIk2uhlH6fXHnni3ZkCOtnTK4FI8Fe8meKr/?=
- =?us-ascii?Q?u581rGqCtA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c86bdc98-a12d-4f4a-65ba-08da1244966e
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 11:58:21.9114
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ehex+o+OTAQSRQuAVRzX+DdLwMkivL8diGf8yJr/kf10p/i4tmYMuGjgJwlDGrbp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5999
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+Subject: Re: [PATCH] powerpc/rtas: Keep MSR RI set when calling RTAS
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org
+References: <20220317110601.86917-1-ldufour@linux.ibm.com>
+ <1648542633.wzscjm967w.astroid@bobo.none>
+ <8e3175ff-afba-e2a2-4fe6-0f964da0fa4b@linux.ibm.com>
+ <87pmm5f1tp.fsf@mpe.ellerman.id.au>
+Content-Language: en-US
+In-Reply-To: <87pmm5f1tp.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aK2pxcuXYIuzjA7Wl-2CWAQyF6gO3eio
+X-Proofpoint-ORIG-GUID: 12WylFQJ-5L4q4Qofr2vd2eGFFIf4CtS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_03,2022-03-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1015 impostorscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203300061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 06:50:11AM +0000, Tian, Kevin wrote:
-
-> One thing that I'm not very sure is about DMA alias. Even when physically
-> there is only a single device within the group the aliasing could lead
-> to multiple RIDs in the group making it non-singleton. But probably we
-> don't need support SVA on such device until a real demand comes?
-
-How can we have multiple RIDs in the same group and have only one
-device in the group?
- 
-> > ie if we have a singleton group that doesn't have ACS and someone
-> > hotplugs in another device on a bridge, then our SVA is completely
-> > broken and we get data corruption.
+On 29/03/2022, 13:14:10, Michael Ellerman wrote:
+> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> On 29/03/2022, 10:31:33, Nicholas Piggin wrote:
+>>> Excerpts from Laurent Dufour's message of March 17, 2022 9:06 pm:
+>>>> RTAS runs in real mode (MSR[DR] and MSR[IR] unset) and in 32bits
+>>>> mode (MSR[SF] unset).
+>>>>
+>>>> The change in MSR is done in enter_rtas() in a relatively complex way,
+>>>> since the MSR value could be hardcoded.
+>>>>
+>>>> Furthermore, a panic has been reported when hitting the watchdog interrupt
+>>>> while running in RTAS, this leads to the following stack trace:
+>>>>
+>>>> [69244.027433][   C24] watchdog: CPU 24 Hard LOCKUP
+>>>> [69244.027442][   C24] watchdog: CPU 24 TB:997512652051031, last heartbeat TB:997504470175378 (15980ms ago)
+>>>> [69244.027451][   C24] Modules linked in: chacha_generic(E) libchacha(E) xxhash_generic(E) wp512(E) sha3_generic(E) rmd160(E) poly1305_generic(E) libpoly1305(E) michael_mic(E) md4(E) crc32_generic(E) cmac(E) ccm(E) algif_rng(E) twofish_generic(E) twofish_common(E) serpent_generic(E) fcrypt(E) des_generic(E) libdes(E) cast6_generic(E) cast5_generic(E) cast_common(E) camellia_generic(E) blowfish_generic(E) blowfish_common(E) algif_skcipher(E) algif_hash(E) gcm(E) algif_aead(E) af_alg(E) tun(E) rpcsec_gss_krb5(E) auth_rpcgss(E)
+>>>> nfsv4(E) dns_resolver(E) rpadlpar_io(EX) rpaphp(EX) xsk_diag(E) tcp_diag(E) udp_diag(E) raw_diag(E) inet_diag(E) unix_diag(E) af_packet_diag(E) netlink_diag(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sunrpc(E) fscache(E) netfs(E) af_packet(E) rfkill(E) bonding(E) tls(E) ibmveth(EX) crct10dif_vpmsum(E) rtc_generic(E) drm(E) drm_panel_orientation_quirks(E) fuse(E) configfs(E) backlight(E) ip_tables(E) x_tables(E) dm_service_time(E) sd_mod(E) t10_pi(E)
+>>>> [69244.027555][   C24]  ibmvfc(EX) scsi_transport_fc(E) vmx_crypto(E) gf128mul(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_vpmsum(E) xor(E) raid6_pq(E) dm_mirror(E) dm_region_hash(E) dm_log(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) scsi_mod(E)
+>>>> [69244.027587][   C24] Supported: No, Unreleased kernel
+>>>> [69244.027600][   C24] CPU: 24 PID: 87504 Comm: drmgr Kdump: loaded Tainted: G            E  X    5.14.21-150400.71.1.bz196362_2-default #1 SLE15-SP4 (unreleased) 0d821077ef4faa8dfaf370efb5fdca1fa35f4e2c
+>>>> [69244.027609][   C24] NIP:  000000001fb41050 LR: 000000001fb4104c CTR: 0000000000000000
+>>>> [69244.027612][   C24] REGS: c00000000fc33d60 TRAP: 0100   Tainted: G            E  X     (5.14.21-150400.71.1.bz196362_2-default)
+>>>> [69244.027615][   C24] MSR:  8000000002981000 <SF,VEC,VSX,ME>  CR: 48800002  XER: 20040020
+>>>> [69244.027625][   C24] CFAR: 000000000000011c IRQMASK: 1
+>>>> [69244.027625][   C24] GPR00: 0000000000000003 ffffffffffffffff 0000000000000001 00000000000050dc
+>>>> [69244.027625][   C24] GPR04: 000000001ffb6100 0000000000000020 0000000000000001 000000001fb09010
+>>>> [69244.027625][   C24] GPR08: 0000000020000000 0000000000000000 0000000000000000 0000000000000000
+>>>> [69244.027625][   C24] GPR12: 80040000072a40a8 c00000000ff8b680 0000000000000007 0000000000000034
+>>>> [69244.027625][   C24] GPR16: 000000001fbf6e94 000000001fbf6d84 000000001fbd1db0 000000001fb3f008
+>>>> [69244.027625][   C24] GPR20: 000000001fb41018 ffffffffffffffff 000000000000017f fffffffffffff68f
+>>>> [69244.027625][   C24] GPR24: 000000001fb18fe8 000000001fb3e000 000000001fb1adc0 000000001fb1cf40
+>>>> [69244.027625][   C24] GPR28: 000000001fb26000 000000001fb460f0 000000001fb17f18 000000001fb17000
+>>>> [69244.027663][   C24] NIP [000000001fb41050] 0x1fb41050
+>>>> [69244.027696][   C24] LR [000000001fb4104c] 0x1fb4104c
+>>>> [69244.027699][   C24] Call Trace:
+>>>> [69244.027701][   C24] Instruction dump:
+>>>> [69244.027723][   C24] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>>>> [69244.027728][   C24] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>>>> [69244.027762][T87504] Oops: Unrecoverable System Reset, sig: 6 [#1]
+>>>> [69244.028044][T87504] LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+>>>> [69244.028089][T87504] Modules linked in: chacha_generic(E) libchacha(E) xxhash_generic(E) wp512(E) sha3_generic(E) rmd160(E) poly1305_generic(E) libpoly1305(E) michael_mic(E) md4(E) crc32_generic(E) cmac(E) ccm(E) algif_rng(E) twofish_generic(E) twofish_common(E) serpent_generic(E) fcrypt(E) des_generic(E) libdes(E) cast6_generic(E) cast5_generic(E) cast_common(E) camellia_generic(E) blowfish_generic(E) blowfish_common(E) algif_skcipher(E) algif_hash(E) gcm(E) algif_aead(E) af_alg(E) tun(E) rpcsec_gss_krb5(E) auth_rpcgss(E)
+>>>> nfsv4(E) dns_resolver(E) rpadlpar_io(EX) rpaphp(EX) xsk_diag(E) tcp_diag(E) udp_diag(E) raw_diag(E) inet_diag(E) unix_diag(E) af_packet_diag(E) netlink_diag(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sunrpc(E) fscache(E) netfs(E) af_packet(E) rfkill(E) bonding(E) tls(E) ibmveth(EX) crct10dif_vpmsum(E) rtc_generic(E) drm(E) drm_panel_orientation_quirks(E) fuse(E) configfs(E) backlight(E) ip_tables(E) x_tables(E) dm_service_time(E) sd_mod(E) t10_pi(E)
+>>>> [69244.028171][T87504]  ibmvfc(EX) scsi_transport_fc(E) vmx_crypto(E) gf128mul(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_vpmsum(E) xor(E) raid6_pq(E) dm_mirror(E) dm_region_hash(E) dm_log(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) scsi_mod(E)
+>>>> [69244.028307][T87504] Supported: No, Unreleased kernel
+>>>> [69244.028385][T87504] CPU: 24 PID: 87504 Comm: drmgr Kdump: loaded Tainted: G            E  X    5.14.21-150400.71.1.bz196362_2-default #1 SLE15-SP4 (unreleased) 0d821077ef4faa8dfaf370efb5fdca1fa35f4e2c
+>>>> [69244.028408][T87504] NIP:  000000001fb41050 LR: 000000001fb4104c CTR: 0000000000000000
+>>>> [69244.028418][T87504] REGS: c00000000fc33d60 TRAP: 0100   Tainted: G            E  X     (5.14.21-150400.71.1.bz196362_2-default)
+>>>> [69244.028429][T87504] MSR:  8000000002981000 <SF,VEC,VSX,ME>  CR: 48800002  XER: 20040020
+>>>> [69244.028444][T87504] CFAR: 000000000000011c IRQMASK: 1
+>>>> [69244.028444][T87504] GPR00: 0000000000000003 ffffffffffffffff 0000000000000001 00000000000050dc
+>>>> [69244.028444][T87504] GPR04: 000000001ffb6100 0000000000000020 0000000000000001 000000001fb09010
+>>>> [69244.028444][T87504] GPR08: 0000000020000000 0000000000000000 0000000000000000 0000000000000000
+>>>> [69244.028444][T87504] GPR12: 80040000072a40a8 c00000000ff8b680 0000000000000007 0000000000000034
+>>>> [69244.028444][T87504] GPR16: 000000001fbf6e94 000000001fbf6d84 000000001fbd1db0 000000001fb3f008
+>>>> [69244.028444][T87504] GPR20: 000000001fb41018 ffffffffffffffff 000000000000017f fffffffffffff68f
+>>>> [69244.028444][T87504] GPR24: 000000001fb18fe8 000000001fb3e000 000000001fb1adc0 000000001fb1cf40
+>>>> [69244.028444][T87504] GPR28: 000000001fb26000 000000001fb460f0 000000001fb17f18 000000001fb17000
+>>>> [69244.028534][T87504] NIP [000000001fb41050] 0x1fb41050
+>>>> [69244.028543][T87504] LR [000000001fb4104c] 0x1fb4104c
+>>>> [69244.028549][T87504] Call Trace:
+>>>> [69244.028554][T87504] Instruction dump:
+>>>> [69244.028561][T87504] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>>>> [69244.028575][T87504] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>>>> [69244.028607][T87504] ---[ end trace 3ddec07f638c34a2 ]---
+>>>>
+>>>> This happens because MSR[RI] is unset when entering RTAS but there is no
+>>>> valid reason to not set it here.
+>>>>
+>>>> Fixing this by reviewing the way MSR is compute before calling RTAS. Now a
+>>>> hardcoded value meaning real mode, 32 bits and Recoverable Interrupt is
+>>>> loaded.
+>>>>
+>>>> In addition a check is added in do_enter_rtas() to detect calls made with
+>>>> MSR[RI] unset, as we are forcing it on later.
+>>>
+>>> This looks okay to me, I would just adjust the comment about watchdog
+>>> irq. It's more like NMI (SRESET or MCE), watchdog irq could be confusing 
+>>> for the soft-NMI timer.
+>>>
+>>> Otherwise I think it's okay.
+>>>
+>>> Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+>>
+>> Thanks Nick,
+>>
+>> I agree about comment watchdog irq.
+>> Michael, could you fix that comment below when applying?
 > 
-> Can we capture that in iommu_probe_device() when identifying
-> the group which the probed device will be added to has already been
-> locked down for SVA? i.e. make iommu_group_singleton_lockdown()
-> in this patch to lock down the fact of singleton group instead of
-> the fact of singleton driver...
+> I can.
 
-No, that is backwards
+Thanks, Michael
 
-> > Testing the group size is inherently the wrong test to make.
 > 
-> What is your suggestion then?
+> But the changelog also needs to mention that what we're doing is legal
+> per PAPR, and reference the relevant sections.
+> 
+> I think that's section "7.2.1 Machine State", in particular:
+> 
+>   R1–7.2.1–9. If called with MSR[RI]equal to 1, then RTAS must protect
+>   its own critical regions from recursion by setting the MSR[RI] bit to
+>   0 when in the critical regions.
+> 
+> That language appears to go back to PAPR+ Version 1.0, so that should
+> cover all PAPR systems.
 
-Add a flag to the group that positively indicates the group can never
-have more than one member, even after hot plug. eg because it is
-impossible due to ACS, or lack of bridges, and so on.
+I agree, referencing this section would be good, I don't have the complete
+PAPR+ series, the oldest one I've access to is 2.7, and it is already
+mentioning this.
 
-Jason
+> 
+> We also had RTAS on pre-PAPR systems, but I don't think we support any
+> of those anymore (on 64-bit).
+
+Unfortunately, I have no knowledge on these systems, neither I'm aware of
+such a system I have access to. Do you have any pointer?
+
+> Would also be good to know what machines you've tested this on.
+
+Tests have been done on various systems:
+Power KVM Guest
+  P8 S822L (host Ubuntu kernel 5.11.0-49-generic)
+PowerVM LPAR
+  P8 9119-MME (FW860.A1)
+  p9 9008-22L (FW950.00)
+  P10 9080-HEX (FW1010.00)
+
+Should I send a new version with the commit description updated, and the
+comment fixed in the code?
+
+Thanks,
+Laurent.

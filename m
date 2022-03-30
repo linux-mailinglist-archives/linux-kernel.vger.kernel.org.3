@@ -2,153 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B834ECA9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D1D4ECAA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349274AbiC3R2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S1349285AbiC3RaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245162AbiC3R2r (ORCPT
+        with ESMTP id S230222AbiC3RaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:28:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF810201A4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648661220;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=J0Zkf1FnfxfcI2nPQ4sDNYlJ/HJW/82S+akVEvMwcw0=;
-        b=AkzOVe1hC0UxuJ4tpcYQS1AD3dHDWoVQNUuVdhYkM31jx/TZtlKTYSkOmGOeQI2oIqAAVG
-        2YYuoINF37s4RFv+lU8ZEJ1QAhIW95kODKMnbu0IXuCT9456w6ZzJGqU4pMcFnBHevixas
-        p0fcBUk3m6gRpV97R2WPD72Ta4x5JDE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-384-0ohhkZM3PR-RGzimURPoBQ-1; Wed, 30 Mar 2022 13:26:54 -0400
-X-MC-Unique: 0ohhkZM3PR-RGzimURPoBQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F835803CB8;
-        Wed, 30 Mar 2022 17:26:54 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 463BD401E3A;
-        Wed, 30 Mar 2022 17:26:54 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] mm/list_lru: Fix possible race in memcg_reparent_list_lru_node()
-Date:   Wed, 30 Mar 2022 13:26:46 -0400
-Message-Id: <20220330172646.2687555-1-longman@redhat.com>
+        Wed, 30 Mar 2022 13:30:08 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7CF12776
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:28:23 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id qa43so42906286ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZsXgBTrCuEUxC1QZQ0H2Ukv1GeSn41ah9SOqQNdPE7M=;
+        b=oJLD1USfQGNXmh8umJRilraVZc9jthngKtOn/GdB9lcFP3jbqhtVZWPFPC0D62l3hw
+         vLWXTeE6XRN6+SovH0Z9z2ecTReOxQ4+G8nEGQQDVSoaVNW//uuDDPw+neLNdqvj9pwe
+         6beKe54sSMzYbbv5rc71eNK7uysO8puaSwRrK9QEL9I3lX+Eisv56ALY3v/+Iyqn3lJg
+         ot4ahZJCAB4UBAj3+qjybA0iEGDuNmb58m2Fblw/umLLrf55Doi0thEfBiCOQH4VEcKO
+         c0X+dTBxUWqw3dr2RC0ezjxvmiWGzUmIO+VB+D+om6vZ6KqzNECf95GYg56DgCpihm0S
+         n2xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZsXgBTrCuEUxC1QZQ0H2Ukv1GeSn41ah9SOqQNdPE7M=;
+        b=TWphm1JJN4nWu8O6N7AhhJyS5XyaUub5dDFRtmoRHHQBnymw05peOXg0ekXccWMbP4
+         VtKNNBqdDTIgPZJeA28msKt9pqRYapO16Vs9AMsb1Ng4C43HEECUcMFSO2RPGMAaKwPc
+         aZEJ5JMEFpV21wva54XtEP6lF9cYjcO7qJgcOIcv1Xon4C+Ur9Scab6BJrp/QvnRZ7yt
+         JK1HiECiC8NwcIDxFOCfi7vgeWkQNCkAHdLOe7CvvYJHPUp968K8T1dOtyUFdrNnvRoy
+         FIMetFKOMUQ+yOT5KKbn+kVJTLkEkLDwNLMb6dBcsc0Q4Ba4WeRFlweI9txKC0k9TzAx
+         2jfQ==
+X-Gm-Message-State: AOAM530D1CD/Iul8zBUlzVrhIteho4OSxnL17mhn/DCqiVlXhRfTf3Id
+        x2QLko3Zo6e0EF4skWXRG9OQiQ==
+X-Google-Smtp-Source: ABdhPJwAF/kWlcbyw+AnOhkeZyWbHk5sSJiKV2D52eeGBittR1aJjyH4YGKCBAWEytDCQ4+LdVuN6Q==
+X-Received: by 2002:a17:906:9c8e:b0:6df:f6bf:7902 with SMTP id fj14-20020a1709069c8e00b006dff6bf7902mr631908ejc.191.1648661301916;
+        Wed, 30 Mar 2022 10:28:21 -0700 (PDT)
+Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id ky5-20020a170907778500b006d1b2dd8d4csm8521852ejc.99.2022.03.30.10.28.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 10:28:21 -0700 (PDT)
+Message-ID: <faee52b3-6d43-dfe0-500d-2fae70fe2fd9@linaro.org>
+Date:   Wed, 30 Mar 2022 19:28:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: clock: convert
+ rockchip,rk3036-cru.txt to YAML
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de,
+        zhangqing@rock-chips.com
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220330114847.18633-1-jbx6244@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220330114847.18633-1-jbx6244@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Muchun Song found out there could be a race between list_lru_add()
-and memcg_reparent_list_lru_node() causing the later function to miss
-reparenting of a lru entry as shown below:
+On 30/03/2022 13:48, Johan Jonker wrote:
+> Convert rockchip,rk3036-cru.txt to YAML.
+> 
+> Changes against original bindings:
+>   Add clocks and clock-names because the device has to have
+>   at least one input clock.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../bindings/clock/rockchip,rk3036-cru.txt    | 56 ---------------
+>  .../bindings/clock/rockchip,rk3036-cru.yaml   | 72 +++++++++++++++++++
+>  2 files changed, 72 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.yaml
+> 
 
-CPU0:                           CPU1:
-list_lru_add()
-    spin_lock(&nlru->lock)
-    l = list_lru_from_kmem(memcg)
-                                memcg_reparent_objcgs(memcg)
-                                memcg_reparent_list_lrus(memcg)
-                                    memcg_reparent_list_lru()
-                                        memcg_reparent_list_lru_node()
-                                            if (!READ_ONCE(nlru->nr_items))
-                                                // Miss reparenting
-                                                return
-    // Assume 0->1
-    l->nr_items++
-    // Assume 0->1
-    nlru->nr_items++
 
-Though it is not likely that a list_lru_node that has 0 item suddenly
-has a newly added lru entry at the end of its life. The race is still
-theoretically possible.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-With the lock/unlock pair used within the percpu_ref_kill() which is
-the last function call of memcg_reparent_objcgs(), any read issued
-in memcg_reparent_list_lru_node() will not be reordered before the
-reparenting of objcgs.
 
-Adding a !spin_is_locked()/smp_rmb()/!READ_ONCE(nlru->nr_items) check
-to ensure that either the reading of nr_items is valid or the racing
-list_lru_add() will see the reparented objcg.
-
-Fixes: 405cc51fc104 ("mm/list_lru: optimize memcg_reparent_list_lru_node()")
-Reported-by: Muchun Song <songmuchun@bytedance.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- mm/list_lru.c | 31 +++++++++++++++++++++++++++----
- 1 file changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/mm/list_lru.c b/mm/list_lru.c
-index c669d87001a6..08ff54ffabd6 100644
---- a/mm/list_lru.c
-+++ b/mm/list_lru.c
-@@ -395,10 +395,33 @@ static void memcg_reparent_list_lru_node(struct list_lru *lru, int nid,
- 	struct list_lru_one *src, *dst;
- 
- 	/*
--	 * If there is no lru entry in this nlru, we can skip it immediately.
-+	 * With the lock/unlock pair used within the percpu_ref_kill()
-+	 * which is the last function call of memcg_reparent_objcgs(), any
-+	 * read issued here will not be reordered before the reparenting
-+	 * of objcgs.
-+	 *
-+	 * Assuming a racing list_lru_add():
-+	 * list_lru_add()
-+	 *				<- memcg_reparent_list_lru_node()
-+	 *   spin_lock(&nlru->lock)
-+	 *   l = list_lru_from_kmem(memcg)
-+	 *   nlru->nr_items++
-+	 *   spin_unlock(&nlru->lock)
-+	 *				<- memcg_reparent_list_lru_node()
-+	 *
-+	 * The !spin_is_locked(&nlru->lock) check is true means it is
-+	 * either before the spin_lock() or after the spin_unlock(). In the
-+	 * former case, list_lru_add() will see the reparented objcg and so
-+	 * won't touch the lru to be reparented. In the later case, it will
-+	 * see the updated nr_items. So we can use the optimization that if
-+	 * there is no lru entry in this nlru, skip it immediately.
- 	 */
--	if (!READ_ONCE(nlru->nr_items))
--		return;
-+	if (!spin_is_locked(&nlru->lock)) {
-+		/* nr_items read must be ordered after nlru->lock */
-+		smp_rmb();
-+		if (!READ_ONCE(nlru->nr_items))
-+			return;
-+	}
- 
- 	/*
- 	 * Since list_lru_{add,del} may be called under an IRQ-safe lock,
-@@ -407,7 +430,7 @@ static void memcg_reparent_list_lru_node(struct list_lru *lru, int nid,
- 	spin_lock_irq(&nlru->lock);
- 
- 	src = list_lru_from_memcg_idx(lru, nid, src_idx);
--	if (!src)
-+	if (!src || !src->nr_items)
- 		goto out;
- 	dst = list_lru_from_memcg_idx(lru, nid, dst_idx);
- 
--- 
-2.27.0
-
+Best regards,
+Krzysztof

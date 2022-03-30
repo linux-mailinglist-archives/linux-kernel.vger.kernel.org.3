@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37DC4ECE7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B654ECE72
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351171AbiC3U64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S1351178AbiC3VBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244409AbiC3U6y (ORCPT
+        with ESMTP id S1346753AbiC3VBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:58:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791483AA7D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:57:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 30 Mar 2022 17:01:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E021D24BD7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648673974;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sy8bkqtPJSZgcyuTbRCJfF/i6zL7BC/uXgP8JV+OWLU=;
+        b=W1hmkRBUfvu74FTDIpNenxTkMH0sELTQxDwr1ChfnqNv/T6X0ImF3UiLENX18zOxrLQEAv
+        jzJUyWUudHtLL2blvuHB+HuCpuyrTM6o2yafOn2Du4i0ToKEvfgpTRfpYBBfNK+BJC2Fp7
+        j1+wR5INhDda7GWRWSPwHAjCGVzCLRg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-ji24S9IEPZaTOciUVy2QlA-1; Wed, 30 Mar 2022 16:59:30 -0400
+X-MC-Unique: ji24S9IEPZaTOciUVy2QlA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12CA161644
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:57:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A4EC340EC;
-        Wed, 30 Mar 2022 20:57:06 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 16:57:04 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [BUG] Crash on x86_32 for: mm: page_alloc: avoid merging
- non-fallbackable pageblocks with others
-Message-ID: <20220330165704.730be2b5@gandalf.local.home>
-In-Reply-To: <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
-References: <20220330154208.71aca532@gandalf.local.home>
-        <CAHk-=whz_8tRNGCr09X59nMW3JBzFLE-g-F-brxd+AkK+RceCw@mail.gmail.com>
-        <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F6B985A5BE;
+        Wed, 30 Mar 2022 20:59:30 +0000 (UTC)
+Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D18C140CF8E4;
+        Wed, 30 Mar 2022 20:59:29 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Justin Forbes <jforbes@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v3] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12 warning
+Date:   Wed, 30 Mar 2022 16:59:19 -0400
+Message-Id: <20220330205919.2713275-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,20 +61,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 16:29:28 -0400
-Zi Yan <ziy@nvidia.com> wrote:
+The gcc 12 compiler reports a "'mem_section' will never be NULL"
+warning on the following code:
 
-> In the original code, it will jump back to continue_merging and still tries
-> to find the buddy. The crash means the found buddy is not valid, since its
-> pageblock migratetype is NULL. That seems to suggest the physical memory
-> range is not aligned to MAX_ORDER_NR_PAGES, which should not be the case.
-> But if (!page_is_buddy(page, buddy, order)) prevents further buddy merging.
-> I must be missing something.
+    static inline struct mem_section *__nr_to_section(unsigned long nr)
+    {
+    #ifdef CONFIG_SPARSEMEM_EXTREME
+        if (!mem_section)
+                return NULL;
+    #endif
+        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+                return NULL;
+       :
 
-Not sure if this matters or not, but my kernel command line has:
+It happens with CONFIG_SPARSEMEM_EXTREME off. The mem_section
+definition is
 
-  crashkernel=256M
+    #ifdef CONFIG_SPARSEMEM_EXTREME
+    extern struct mem_section **mem_section;
+    #else
+    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+    #endif
 
-Could that have caused this to break?
+In the !CONFIG_SPARSEMEM_EXTREME case, mem_section
+is a static 2-dimensional array and so the check
+"!mem_section[SECTION_NR_TO_ROOT(nr)]" doesn't make sense.
 
--- Steve
+Fix this warning by moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
+check up inside the CONFIG_SPARSEMEM_EXTREME block.
+
+Fixes: 3e347261a80b ("sparsemem extreme implementation")
+Reported-by: Justin Forbes <jforbes@redhat.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/mmzone.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 962b14d403e8..8a89efe47571 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -1398,11 +1398,9 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
+ static inline struct mem_section *__nr_to_section(unsigned long nr)
+ {
+ #ifdef CONFIG_SPARSEMEM_EXTREME
+-	if (!mem_section)
++	if (!mem_section || !mem_section[SECTION_NR_TO_ROOT(nr)])
+ 		return NULL;
+ #endif
+-	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+-		return NULL;
+ 	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
+ }
+ extern size_t mem_section_usage_size(void);
+-- 
+2.27.0
+

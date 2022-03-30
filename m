@@ -2,201 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3E54ECAB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD59B4ECAB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiC3Rdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S231255AbiC3Rez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349441AbiC3Rd3 (ORCPT
+        with ESMTP id S229911AbiC3Rex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:33:29 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F974C400;
-        Wed, 30 Mar 2022 10:31:42 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h23so30301646wrb.8;
-        Wed, 30 Mar 2022 10:31:42 -0700 (PDT)
+        Wed, 30 Mar 2022 13:34:53 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60128.outbound.protection.outlook.com [40.107.6.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E957DABC
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:33:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G4pOkm6RdqURHOG87FwA1a7KAS8G3L11rd+ozrWehPxVWKvSoxqtSQLKl4DlRWCgd3aDKLZNiyYmRGVT/DN1NvoSkA4MO9kxiJHnhIsmaxsgjE5wqZzh6gpc1Lh5TShdUXuXY16+d8Qvxi3i0KnaJK+++dsqODSGKuDNZvmPS38Fc8Pyeqb4OpUHhqqzens77I3tCC/KlX3YXBKMT0oa7XSl72ucvbxdfc8al+P6CumkeH9+Vd2YiDDNfcEhjzMmEmB07USHGk4//FAvwM7MvFEoTahlRIjsWBy02ie3jG6gNKa/z+46k6fiFTG2EZn8hSLP5BLsab27rMxSEAKAAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qGHX6vCAwFYQZcpedUMNcNLq8rxXU4d7tMcUTPoTf+I=;
+ b=OAf3BAKKota/UZfK2S1VnymDrOaWJ30h3E3pwrS+sVonq7GdwNHXQlfqynfivQIwhuTfA7dO+mLvSU7zFQ+iuIO+xgXIB30+l3XcPDSKuyM4oqGCMQXAk3ukBtTfgJ32ev9BKphq0lUyV0IE2DyycXL6+BDkPIWHmz38GRVU80OF2+YAGUB8GMLJzkmKbrBvJm/fis1dIlmy+sHoC/pTWrVmgOW0CeYJ3WrefwMUNL3Xmq61dI/sDKiSywb7MSPfw9Qz9IJV9XLkclfsmTagDMuBS9mJNgOlO0VjuK0uW+HBSCp+2AVbIvg1tB5EmxnGdpCscl1IOTCpsEyZqLuYog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.7) smtp.rcpttodomain=armlinux.org.uk smtp.mailfrom=arri.de;
+ dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
+ arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MzOHSa1wGev7C61xNe7AlpnL6176z6/FaTx3bV4mjuY=;
-        b=VpSVi2g7tol4ZEtmFAbrEKl2ClldYYPOqDfvuzHFwzN1r2GBUOmp+X5qC2sTOGTv+q
-         VasI8bOaDB17Wj5zf6L3Vi7yNqMM+GuCL205yQjNT6GPsOlj6+OlpQwqpEvjuRUsNZfE
-         C/azEpBsaT8HORk1sROgRQ8Th4grMWoEvzorWWrPiI6ky8S1auDWu6UaZz9+3BJNOaa2
-         yIrpyzcehU9u17ygGvZ6BJqsxzCVWFm8+RxbW29xvfyBYaZdDrZR3pEfnJXPGdQA3bYd
-         eXnmrSEzBgpFA3JOZZEKy205JvU1lvDbhL30Ri3r8WDUcg6vb5+6MrByecZVrsy7dMNX
-         549g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MzOHSa1wGev7C61xNe7AlpnL6176z6/FaTx3bV4mjuY=;
-        b=X+I3Wx6tOZs9MexdqhRaiq/7xMEyjvrl9HPcc8R7vU95G/MQ2fiTbA0eiSOPMwCFIb
-         OclIAe4P0oWrmds0NzJINCvwKsdcMm2d0Gsa6hrZLETHCjaMm7N/a3j9ss7luoBV0KDy
-         sd9GuRKyMCIx7i1wklb+aZWY9RILQ5PN4GzMRmJjZt7++bfVTA/iV+hGTP8I2gmARe9T
-         SOMetij1IRgMlnFfFWOgFT/JUUMR1+pP4818NDBQFBVEU8wNC0xf/rkeAtNHgj042H4F
-         oDwLnJ3D3w+ULxDhmXbLFBE87qufiFizoVWNH85XF60tfGus93XlDoN45CLdPBn2+9pF
-         YE9g==
-X-Gm-Message-State: AOAM533McLqTishdK/wlN8q8YG8822QQKRKxuNT8s9uwUa+YtCC4HzjP
-        Mv/pZzNQT3g26o0q0aewnRqw40bej9jJb5ZrpX4=
-X-Google-Smtp-Source: ABdhPJxzLtFOHA8j1KP7060UxbMN89W0F5SOw0/ZWrSMMqfII6hCIzYI4qnQ5sVFdKPvpVEKavi+htl4y4KW0PBzBc0=
-X-Received: by 2002:adf:dd4d:0:b0:203:f178:b78b with SMTP id
- u13-20020adfdd4d000000b00203f178b78bmr622734wrm.93.1648661500674; Wed, 30 Mar
- 2022 10:31:40 -0700 (PDT)
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qGHX6vCAwFYQZcpedUMNcNLq8rxXU4d7tMcUTPoTf+I=;
+ b=icfbFmrXC02Yw+mPwVIlFn7ocl02xKmVgIGFgYd5zKgnQCpmF5j0Q7WWHTbMu7e8wbkWWFpL7+fegxdVW/XMqBaJeq8y8SIoQo9A//i6gRUD7V+sppWTX3xCNd/uuDe5dz1VtnhmklTMweFBiDR7/qq1VFcRYyCzWlyAyJSRJ5U=
+Received: from AS9PR06CA0238.eurprd06.prod.outlook.com (2603:10a6:20b:45e::8)
+ by DBBPR07MB7674.eurprd07.prod.outlook.com (2603:10a6:10:1e7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.8; Wed, 30 Mar
+ 2022 17:33:02 +0000
+Received: from HE1EUR02FT070.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:20b:45e:cafe::85) by AS9PR06CA0238.outlook.office365.com
+ (2603:10a6:20b:45e::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
+ Transport; Wed, 30 Mar 2022 17:33:01 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.7; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.7) by
+ HE1EUR02FT070.mail.protection.outlook.com (10.152.11.44) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 17:33:00 +0000
+Received: from localhost.localdomain (192.168.54.86) by mta.arri.de
+ (10.10.18.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
+ 2022 19:32:59 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>
+CC:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
+Date:   Wed, 30 Mar 2022 19:32:59 +0200
+Message-ID: <10062923.nUPlyArG6x@localhost.localdomain>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <CAMj1kXFcrG6TrSU+KcmXCVM7ZWZ2fMjiN8c_dtEwxBugJS_UAQ@mail.gmail.com>
+References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X> <YkSHJ65qGHO4bonJ@shell.armlinux.org.uk> <CAMj1kXFcrG6TrSU+KcmXCVM7ZWZ2fMjiN8c_dtEwxBugJS_UAQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220329230105.601666-1-robdclark@gmail.com> <20220329230105.601666-4-robdclark@gmail.com>
- <CAA8EJpqAaW0Q-QeQObonUqAhdWaw8mPPvChmboH88ttTx+2XGg@mail.gmail.com>
-In-Reply-To: <CAA8EJpqAaW0Q-QeQObonUqAhdWaw8mPPvChmboH88ttTx+2XGg@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 30 Mar 2022 10:32:32 -0700
-Message-ID: <CAF6AEGtkpF5MLza0LY_AJsC4vu1nAzXZ5xv4Eusz+Bpp6GFXRA@mail.gmail.com>
-Subject: Re: [PATCH 3/9] drm/msm/gem: Split out inuse helper
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [192.168.54.86]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 78b0a886-6fcf-4450-881f-08da127356a5
+X-MS-TrafficTypeDiagnostic: DBBPR07MB7674:EE_
+X-Microsoft-Antispam-PRVS: <DBBPR07MB76741F3C6829D01268E3CD82BF1F9@DBBPR07MB7674.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KIKGMjoRLEmM9nTABNE0z1CEPGNyYZp+CoENQijv748xAhPn7flI/cbHPIE7dqm4oRR2emUJyslmBwe7BzBqzJpuS70c3nkMVxc7/+1rcarMac0vRZAEDbZaaniQ9jUNffC5mAdm2Vn3OJ3ecb351DjoWMim98J+jaTDlHsm7gtFJbHevV2SQtVqH9+zQsVUW3upNVTGEjyaYssa71rIF+h52iJwxGTEtvkUquOKNyExtU+S5MzhNtLeLZ4Qo629MZGJlThgv1lHVQ82aGS5uuXFMUkelq8B+YENaeKwLfgpJBwFNbRX0LwoFQANGpMmwfUoV4DiDZuMwjBDv5/Nx37RtNPUhaHZLg5UyRiB02zVhO2R8HNsoWEJ0AiirFMK6gtR52pJl585JJsQUKG90crWlgcREboC7h8d9WbZC8ula6Ry46Yz9uwteOpROpmB092PEbEUgHZx5GTZeGUdSMod33uCfxbtArJfqd3QvMXKZa4h42P0Get7xcgtIRngqAF8uWPNAYcXghF70KRko6FK7+UsJHKUJuY/3Af7EqL9mKjWxvwSv0CJ4dAo5hNjLzzrT5a0S9a4fwV701LBDLmwW/AEHojthn8LK81q8SLT4H6+tZ/OUec+fgLHpmrBIlvmc9DgllBzVDVz5g43oL6aG7zEGXQNYxSLvJaJwcXe1ViGQVanifKMZPTSJFucD3Q25V2OTboSKHXTxvcTufrg6CuRAJEnOEbvjcHR4AhnbW40cw4Dxi9lfQjDyYMH8cs3F7asUCVs/IKhG1naveBNFK+ptY3yZLgFIPV++Wax7teQuWzNQ5mHow2TSPLk
+X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(36916002)(81166007)(966005)(508600001)(356005)(86362001)(54906003)(110136005)(5660300002)(47076005)(316002)(82310400004)(4326008)(8676002)(186003)(16526019)(83380400001)(7696005)(40460700003)(8936002)(70586007)(36860700001)(70206006)(336012)(55016003)(9686003)(426003)(26005)(2906002)(39026012)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 17:33:00.9793
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78b0a886-6fcf-4450-881f-08da127356a5
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR02FT070.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR07MB7674
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 4:32 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, 30 Mar 2022 at 02:00, Rob Clark <robdclark@gmail.com> wrote:
+On Wednesday, 30 March 2022, 18:45:18 CEST, Ard Biesheuvel wrote:
+> On Wed, 30 Mar 2022 at 18:37, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
 > >
-> > From: Rob Clark <robdclark@chromium.org>
+> > On Wed, Mar 30, 2022 at 06:34:25PM +0200, Ard Biesheuvel wrote:
+> > > On Wed, 30 Mar 2022 at 18:12, Russell King (Oracle)
+> > > <linux@armlinux.org.uk> wrote:
+> > > >
+> > > > On Tue, Mar 22, 2022 at 06:49:17PM +0100, Christian Eggers wrote:
+> > > > > Hi Nathan, hi Russel,
+> > > > >
+> > > > > I stumbled today over the same problem (no output on serial console
+> > > > > with v5.15.28-rt36). During `git bisect`, I had also some commits
+> > > > > where a few lines of output were visible.
+> > > > >
+> > > > > At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
+> > > > > sections"), the system boots up to here:
+> > > > >
+> > > > > start_kernel()
+> > > > > +--setup_arch()
+> > > > >    +--paging_init()
+> > > > >       +--devicemaps_init()
+> > > > >          +--eary_trap_init(vectors_base = 0xC7FFE000)
+> > > > >             +--copy_from_lma(vectors_base = 0xC7FFE000, __vectors_start=0x0, __vectors_end=0x20)
+> > > > >                +--__memcpy()
+> > > > >
+> > > > >                copy_template.S:113
+> > > > >                ldr8w   r1, r3, r4, r5, r6, r7, r8, ip, lr, abort=20f
+> > > > >                r1 = 0
+> > > > >
+> > > > >
+> > > > > With the final v5.15.28-rt36 I found out that the system boots fine
+> > > > > after disabling CONFIG_HARDEN_BRANCH_HISTORY.
+> > > > >
+> > > > > Is there anything else I could analyze? My SoC system is a NXP i.MX6LL
+> > > > > with a ARMv7 core. I have access to a JTAG debugger.
+> > > >
+> > > > I think this is already fixed in mainline. Commit:
+> > > >
+> > > > 6c7cb60bff7a ("ARM: fix Thumb2 regression")
+> > > >
+> > >
+> > > It's still broken - I sent a couple of patches on Monday, among which
+> > > one to fix the boot issue with loop8 on Thumb2. The problem is 'b . +
+> > > 4', which produces a narrow encoding, and so it skips the subsequent
+> > > subs instruction and loops forever.
 > >
-> > Prep for a following patch.  While we are at it, convert a few remaining
-> > WARN_ON()s to GEM_WARN_ON().
->
-> Well... GEM_WARN_ON doesn't really look like a 'while we are at it'.
-> It might be better to split it into a separate commit.
+> > And what's the current status? Sorry, I've way too much email from the
+> > last 2.5 weeks to find it myself.
+> >
+> 
+> https://lore.kernel.org/linux-arm-kernel/20220328134714.205342-1-ardb@kernel.org/
+> 
+> Nobody bothered to respond yet, I can drop the first two in the patch
+> tracker if you like.
 
-it was a bit lazy.. I'll split it out
+I just switched to v5.15.31-rt38 which already includes
+6c7cb60bff7a ("ARM: fix Thumb2 regression")
 
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >  drivers/gpu/drm/msm/msm_gem.c     |  2 +-
-> >  drivers/gpu/drm/msm/msm_gem.h     |  1 +
-> >  drivers/gpu/drm/msm/msm_gem_vma.c | 15 ++++++++++-----
-> >  3 files changed, 12 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-> > index a4f61972667b..f96d1dc72021 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem.c
-> > +++ b/drivers/gpu/drm/msm/msm_gem.c
-> > @@ -938,7 +938,7 @@ void msm_gem_describe(struct drm_gem_object *obj, struct seq_file *m,
-> >                                 name, comm ? ":" : "", comm ? comm : "",
-> >                                 vma->aspace, vma->iova,
-> >                                 vma->mapped ? "mapped" : "unmapped",
-> > -                               vma->inuse);
-> > +                               msm_gem_vma_inuse(vma));
-> >                         kfree(comm);
-> >                 }
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-> > index 947ff7d9b471..1b7f0f0b88bf 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem.h
-> > +++ b/drivers/gpu/drm/msm/msm_gem.h
-> > @@ -61,6 +61,7 @@ struct msm_gem_vma {
-> >  int msm_gem_init_vma(struct msm_gem_address_space *aspace,
-> >                 struct msm_gem_vma *vma, int npages,
-> >                 u64 range_start, u64 range_end);
-> > +bool msm_gem_vma_inuse(struct msm_gem_vma *vma);
-> >  void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
-> >                 struct msm_gem_vma *vma);
-> >  void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
-> > diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
-> > index f914ddbaea89..dc2ae097805e 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem_vma.c
-> > +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
-> > @@ -37,6 +37,11 @@ msm_gem_address_space_get(struct msm_gem_address_space *aspace)
-> >         return aspace;
-> >  }
-> >
-> > +bool msm_gem_vma_inuse(struct msm_gem_vma *vma)
-> > +{
-> > +       return !!vma->inuse;
-> > +}
->
-> It almost  asks to be a static inline. The patch 04 makes it complex,
-> so it's probably not that important.
+This kernel boots fine now, even with CONFIG_HARDEN_BRANCH_HISTORY=y. After
+applying the patch series from Ard, the system still boots fine. 
 
-yeah, that is the reason I didn't make it static inline
+I haven't any understanding what these patches do. Is there anything I shall
+test?
 
-BR,
--R
+regards
+Christian
 
-> > +
-> >  /* Actually unmap memory for the vma */
-> >  void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
-> >                 struct msm_gem_vma *vma)
-> > @@ -44,7 +49,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
-> >         unsigned size = vma->node.size << PAGE_SHIFT;
-> >
-> >         /* Print a message if we try to purge a vma in use */
-> > -       if (WARN_ON(vma->inuse > 0))
-> > +       if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
-> >                 return;
-> >
-> >         /* Don't do anything if the memory isn't mapped */
-> > @@ -61,7 +66,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
-> >  void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
-> >                 struct msm_gem_vma *vma)
-> >  {
-> > -       if (!WARN_ON(!vma->iova))
-> > +       if (!GEM_WARN_ON(!vma->iova))
-> >                 vma->inuse--;
-> >  }
-> >
-> > @@ -73,7 +78,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
-> >         unsigned size = npages << PAGE_SHIFT;
-> >         int ret = 0;
-> >
-> > -       if (WARN_ON(!vma->iova))
-> > +       if (GEM_WARN_ON(!vma->iova))
-> >                 return -EINVAL;
-> >
-> >         /* Increase the usage counter */
-> > @@ -100,7 +105,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
-> >  void msm_gem_close_vma(struct msm_gem_address_space *aspace,
-> >                 struct msm_gem_vma *vma)
-> >  {
-> > -       if (WARN_ON(vma->inuse > 0 || vma->mapped))
-> > +       if (GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped))
-> >                 return;
-> >
-> >         spin_lock(&aspace->lock);
-> > @@ -120,7 +125,7 @@ int msm_gem_init_vma(struct msm_gem_address_space *aspace,
-> >  {
-> >         int ret;
-> >
-> > -       if (WARN_ON(vma->iova))
-> > +       if (GEM_WARN_ON(vma->iova))
-> >                 return -EBUSY;
-> >
-> >         spin_lock(&aspace->lock);
-> > --
-> > 2.35.1
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+
+

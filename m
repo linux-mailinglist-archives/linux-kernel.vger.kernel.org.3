@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFB14EC5EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E5B4EC5F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbiC3NsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S1346335AbiC3Nut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243622AbiC3NsQ (ORCPT
+        with ESMTP id S243622AbiC3Nur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:48:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 954C5A27E3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:46:29 -0700 (PDT)
+        Wed, 30 Mar 2022 09:50:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17A07C625B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648647988;
+        s=mimecast20190719; t=1648648141;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=eLaIWlVraYrzqJO20OFbs4aqtDs0LbbZo1X56L7veGw=;
-        b=VN7BmB8UpzzktEljPsAxZVUjXLJocd+CuyPskIKsqYE1+/b25wIN1MMxmQL2HJ2erPhEX5
-        pEGMOTognU+ttcbcZNw9B5PXyFXnqYeaxKhE0nwZ/lbRFQJTmL4RLJnexOaeRvAdCimmNG
-        3Tg6I7zwfOcK5AIxtdnte0AhiSKida4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Q+NBE/hTdM81w8Dvz+19s18J//AsPztVXsL/1M4A+3M=;
+        b=CW0LDq+xEFaQGQZFCH4wMsx0HDoDHXYOixkA8kHa4hWzVozGsbdZjzw2Yp2u38hga5OIjI
+        BiErsbbmoIDjlT023uE5j/zQr1rHTK8ieWMvFmT1wHhojs8XFh308z/HzWbCaCHsTkXWKV
+        xdAx8U8JH7nZJrAlYvh8Lp/QCZaUsPU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-2T3Qx1DnN82LillCUsWVqA-1; Wed, 30 Mar 2022 09:46:27 -0400
-X-MC-Unique: 2T3Qx1DnN82LillCUsWVqA-1
-Received: by mail-ej1-f72.google.com with SMTP id hz15-20020a1709072cef00b006dfeceff2d1so9848660ejc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:46:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=eLaIWlVraYrzqJO20OFbs4aqtDs0LbbZo1X56L7veGw=;
-        b=xkMQX2L5e/zOlIufzlBgJTjDlsZM4KSrJSWDdHSgFlbZsRyUi7JTPBOWz42EtekiJx
-         oGDcba2rjoTxi14DDL/NKgDkNMXgnSCh49H0cYI2oJjWYjnI5zz5ZzSS2s4mBOj/DYN4
-         5ubGjap62rLbkmvz1lyo926JzTqaP8QiIbuMo3tR6DR25lHAeb07r6YKYtvXB30S4Uo4
-         ZPGek/jqojOFzkKRW0Fw74lhYHDRyNagcC/6vXq+e1Fb04mX555nTyoXJWBHf6IjMqOS
-         TS6TBjWt4+EhYMLMQwCwzBGOPpdDHygX7ICIsAsKmgc70fMbHzTflqWoSSGyPXCpTT8B
-         ITCw==
-X-Gm-Message-State: AOAM533ugY0gcwHI2k5YKWqWowv0/1ea9Ob9y3RufzcHhQ3slzvW8RKv
-        7XYC/LPH1GMJS3iWMPydRyJ6drJpMjXkP+whwf8g/gHvHsaPhGI6i/cj19nFR37q3TjcNkGJ4Z+
-        CzsL2MPAdOSTf/EAP+35HRYI9
-X-Received: by 2002:a17:907:3e94:b0:6d1:d64e:3141 with SMTP id hs20-20020a1709073e9400b006d1d64e3141mr38837465ejc.213.1648647983273;
-        Wed, 30 Mar 2022 06:46:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzwZ63UhP/cjX55N9lQpIVsi+7QnOIup8W+4kphWmkl+wmSx/opVSXEvOLQomDj9Q5DThyhIw==
-X-Received: by 2002:a17:907:3e94:b0:6d1:d64e:3141 with SMTP id hs20-20020a1709073e9400b006d1d64e3141mr38837371ejc.213.1648647982108;
-        Wed, 30 Mar 2022 06:46:22 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id jg22-20020a170907971600b006df9ff416ccsm8073801ejc.137.2022.03.30.06.46.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 06:46:21 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E1D9A240E87; Wed, 30 Mar 2022 15:46:20 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        'Linux Kernel' <linux-kernel@vger.kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Kurt Cancemi <kurt@x64architecture.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: UBSAN: invalid-load in net/mac80211/status.c:1164:21
-In-Reply-To: <892635fbacdc171baba2cba1b501f30b6a4faeca.camel@sipsolutions.net>
-References: <395d9e22-8b28-087a-5c5d-61a43db527ac@gmail.com>
- <892635fbacdc171baba2cba1b501f30b6a4faeca.camel@sipsolutions.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 30 Mar 2022 15:46:20 +0200
-Message-ID: <87bkxn4kpf.fsf@toke.dk>
+ us-mta-20-ypCrzs0fOZusgdauwxujjQ-1; Wed, 30 Mar 2022 09:48:55 -0400
+X-MC-Unique: ypCrzs0fOZusgdauwxujjQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B87C180D2A2;
+        Wed, 30 Mar 2022 13:48:48 +0000 (UTC)
+Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EAB5457B60A;
+        Wed, 30 Mar 2022 13:48:36 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 21:48:30 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     John Garry <john.garry@huawei.com>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Martin Wilck <martin.wilck@suse.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: filesystem corruption with "scsi: core: Reallocate device's
+ budget map on queue depth change"
+Message-ID: <YkRfrjgNpD+S2WpN@T590>
+References: <YkQsumJ3lgGsagd2@arighi-desktop>
+ <f7bacce8-b5e5-3ef1-e116-584c01533f69@huawei.com>
+ <YkQ9KoKb+VK06zXi@arighi-desktop>
+ <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
+ <263108383b1c01cf9237ff2fcd2e97a482eff83e.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <263108383b1c01cf9237ff2fcd2e97a482eff83e.camel@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Johannes Berg <johannes@sipsolutions.net> writes:
+On Wed, Mar 30, 2022 at 09:31:35AM -0400, James Bottomley wrote:
+> On Wed, 2022-03-30 at 13:59 +0100, John Garry wrote:
+> > On 30/03/2022 12:21, Andrea Righi wrote:
+> > > On Wed, Mar 30, 2022 at 11:38:02AM +0100, John Garry wrote:
+> > > > On 30/03/2022 11:11, Andrea Righi wrote:
+> > > > > Hello,
+> > > > > 
+> > > > > after this commit I'm experiencing some filesystem corruptions
+> > > > > at boot on a power9 box with an aacraid controller.
+> > > > > 
+> > > > > At the moment I'm running a 5.15.30 kernel; when the filesystem
+> > > > > is mounted at boot I see the following errors in the console:
+> > 
+> > About "scsi: core: Reallocate device's budget map on queue depth
+> > change" being added to a stable kernel, I am not sure if this was
+> > really a fix  or just a memory optimisation.
+> 
+> I can see how it becomes the problem: it frees and allocates a new
+> bitmap across a queue freeze, but bits in the old one might still be in
+> use.  This isn't a problem except when they return and we now possibly
+> see a tag greater than we think we can allocate coming back. 
+> Presumably we don't check this and we end up doing a write to
+> unallocated memory.
+> 
+> I think if you want to reallocate on queue depth reduction, you might
+> have to drain the queue as well as freeze it.
 
-> On Wed, 2022-03-30 at 18:49 +0700, Bagas Sanjaya wrote:
->> 
->> [ 1152.928312] UBSAN: invalid-load in net/mac80211/status.c:1164:21
->> [ 1152.928318] load of value 255 is not a valid value for type '_Bool'
->
->
-> That's loading status->is_valid_ack_signal, it seems.
->
-> Note how that's in a union, shadowed by the 0x00ff0000'00000000 byte of
-> the control.vif pointer (if I'm counting bytes correctly). That's kind
-> of expected to be 0xff.
->
->> [ 1152.928323] CPU: 1 PID: 857 Comm: rs:main Q:Reg Not tainted 5.17.1-kernelorg-stable-generic #1
->> [ 1152.928329] Hardware name: Acer Aspire E5-571/EA50_HB   , BIOS V1.04 05/06/2014
->> [ 1152.928331] Call Trace:
->> [ 1152.928334]  <TASK>
->> [ 1152.928338]  dump_stack_lvl+0x4c/0x63
->> [ 1152.928350]  dump_stack+0x10/0x12
->> [ 1152.928354]  ubsan_epilogue+0x9/0x45
->> [ 1152.928359]  __ubsan_handle_load_invalid_value.cold+0x44/0x49
->> [ 1152.928365]  ieee80211_tx_status_ext.cold+0xa3/0xb8 [mac80211]
->> [ 1152.928467]  ieee80211_tx_status+0x7d/0xa0 [mac80211]
->> [ 1152.928535]  ath_txq_unlock_complete+0x15c/0x170 [ath9k]
->> [ 1152.928553]  ath_tx_edma_tasklet+0xe5/0x4c0 [ath9k]
->> [ 1152.928567]  ath9k_tasklet+0x14e/0x280 [ath9k]
->
-> Which sort of means that ath9k isn't setting up the status area
-> correctly?
+After queue is frozen, there can't be any in-flight request/scsi
+command, so the sbitmap is zeroed at that time, and safe to reallocate.
 
-Yeah, it seems to be only setting fields individually, so AFAICT it's
-skipping 'antenna' and 'flags' in info->status.
+The problem is aacraid specific, since the driver has hard limit
+of 256 queue depth, see aac_change_queue_depth().
 
->> The bisection process, starting from v5.17 (the first tag with the warning),
->> found first 'oops' commit at 837d9e49402eaf (net: phy: marvell: Fix invalid
->> comparison in the resume and suspend functions, 2022-03-12). However, since
->> the commit didn't touch net/mac80211/status.c, it wasn't the root cause
->> commit.
->
-> Well you'd look for something in ath9k, I guess. But you didn't limit
-> the bisect, so not sure why it went off into the weeds. Maybe you got
-> one of them wrong.
->
->> The latest commit that touch the file in question is commit
->> ea5907db2a9ccf (mac80211: fix struct ieee80211_tx_info size, 2022-02-02).
->
-> That's after 5.17 though, and it replaced the bool by just a flag.
->
->
-> Seems to me ath9k should use something like
-> ieee80211_tx_info_clear_status() or do the memset by itself? This bug
-> would now not be reported, but it might report the flag erroneously.
 
-So something like the below, maybe?
-
--Toke
-
-diff --git a/drivers/net/wireless/ath/ath9k/xmit.c b/drivers/net/wireless/ath/ath9k/xmit.c
-index d0caf1de2bde..425fe0df7d62 100644
---- a/drivers/net/wireless/ath/ath9k/xmit.c
-+++ b/drivers/net/wireless/ath/ath9k/xmit.c
-@@ -2553,6 +2553,8 @@ static void ath_tx_rc_status(struct ath_softc *sc, struct ath_buf *bf,
-        struct ath_hw *ah = sc->sc_ah;
-        u8 i, tx_rateindex;
- 
-+       ieee80211_tx_info_clear_status(tx_info);
-+
-        if (txok)
-                tx_info->status.ack_signal = ts->ts_rssi;
- 
+Thanks,
+Ming
 

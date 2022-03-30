@@ -2,38 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E61C4EC4EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF6F4EC4FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344406AbiC3MwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S245099AbiC3MzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245099AbiC3MwK (ORCPT
+        with ESMTP id S244567AbiC3MzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:52:10 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4379316CE5D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:50:24 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C455A92009C; Wed, 30 Mar 2022 14:50:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id BD59792009B;
-        Wed, 30 Mar 2022 13:50:21 +0100 (BST)
-Date:   Wed, 30 Mar 2022 13:50:21 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jean Delvare <jdelvare@suse.com>
-cc:     linux-kernel@vger.kernel.org
-Subject: [PING^4][PATCH 0/2] firmware: dmi: Avoid (some) empty names in kernel
- log
-In-Reply-To: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2203301348410.22465@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 30 Mar 2022 08:55:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4183975622
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648644812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UxAUy7q/bwbjnZH+uuAP6NaBEIgbf127Gn+Ruta26qg=;
+        b=gFvbxoCjGhgUsQ8B5aFM6UzkVYl2xJwcsbeMZa/CbgHN0vVuhIfFaWsl5XVUnfbTc1WlV7
+        YWwLwn+cqjVkh/l1U2KCCku2F0XghGQCAbFNMWfrPb04wx7SUYuSPd/iZrKXzitvl9SwO9
+        AnnsjfQtO5uUbCUUx3TGcnYYAKsX0fo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-399-6MnJVqZzM5iPCIFFO_AhoQ-1; Wed, 30 Mar 2022 08:53:29 -0400
+X-MC-Unique: 6MnJVqZzM5iPCIFFO_AhoQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA7172800F6E;
+        Wed, 30 Mar 2022 12:53:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4341EC202C6;
+        Wed, 30 Mar 2022 12:53:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220322111323.542184-2-mic@digikod.net>
+References: <20220322111323.542184-2-mic@digikod.net> <20220322111323.542184-1-mic@digikod.net>
+To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
+         =?us-ascii?Q?=3D?= <mic@digikod.net>
+Cc:     dhowells@redhat.com, Jarkko Sakkinen <jarkko@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
+         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
+        <mic@linux.microsoft.com>
+Subject: Re: [PATCH v2 1/1] certs: Explain the rationale to call panic()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 30 Mar 2022 13:53:26 +0100
+Message-ID: <2933967.1648644806@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,12 +76,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2 Jan 2022, Maciej W. Rozycki wrote:
+Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
 
->  Resending as this has gone into void.  Original patches still apply in 
-> their original form at the same respective lines.
+> The blacklist_init() function calls panic() for memory allocation
+> errors.  This change documents the reason why we don't return -ENODEV.
 
- Ping for:
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk/>.
+Why, though?
 
-  Maciej
+This is only called whilst the kernel is booting.  If you hit ENOMEM, you
+aren't likely to get much further with the boot process.
+
+David
+

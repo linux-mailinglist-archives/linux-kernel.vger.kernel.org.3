@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665674EBFCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DAE4EBFD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343657AbiC3Le1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S1343665AbiC3Lf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234578AbiC3LeZ (ORCPT
+        with ESMTP id S235330AbiC3LfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:34:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BE31C1EF5;
-        Wed, 30 Mar 2022 04:32:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 30 Mar 2022 07:35:23 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DD912AA6;
+        Wed, 30 Mar 2022 04:33:38 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E906615B0;
-        Wed, 30 Mar 2022 11:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB42C340EC;
-        Wed, 30 Mar 2022 11:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648639959;
-        bh=nnKpOyhM+7idtYv8+C2ZPU5PLOKBWThMklpXgW1TOUs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RqMZkYEvI+TAFtd17Qi1GCzN6XYAxo8+2bZ24y5ARSasp1rVFhHwKmTqtPFBbJ+XQ
-         PeUDUxDQZsFO1i1Msu7kH4+YNIntYxsmEOkpg9vKZRwKEOtRGU9WGLohQe0gWt1LCD
-         9ax3tHt8ApEnJw4a4yAxVIA+KdzpcWuQFrnBiJNnlfYRiOyZonCr2xLI090whhKhgP
-         Aqr+AJjrfi3DKPThqTm1o4/6jf9G4fxIKlwcCFau/RScBOBgYhFc5QUOe42GMMSroT
-         dIsA8I96IYVyX9GtQ96rYlfkQ1WdfS1ktacbk0W9fFazAPNOVJ8ld+gl7mDu6sr9SH
-         28m6D03jpLtHA==
-Date:   Wed, 30 Mar 2022 14:32:35 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haakon Bugge <haakon.bugge@oracle.com>
-Cc:     Guo Zhengkui <guozhengkui@vivo.com>,
-        Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        OFED mailing list <linux-rdma@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "zhengkui_guo@outlook.com" <zhengkui_guo@outlook.com>
-Subject: Re: [PATCH linux-next] RDMA: simplify if-if to if-else
-Message-ID: <YkQ/092IYsQxU9bi@unreal>
-References: <20220328130900.8539-1-guozhengkui@vivo.com>
- <YkQ43f9pFnU+BnC7@unreal>
- <76AE36BF-01F9-420B-B7BF-A7C9F523A45C@oracle.com>
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 774BE2223B;
+        Wed, 30 Mar 2022 13:33:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648640016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VsecLKMJ23DcPDvyv9r6OEmkMjx2OTnETouEGlm5Tm0=;
+        b=Uy9QprrSkIP0z3KiMZZ4KQPu+srXJ91o+O/FJTOKyTD2KyutF3fNV6TumTaKNwWHH+2wio
+        /IARoslpaB4rpFPv12Cms944VBkRtZeWDk27ayCOVPeYTwmdREBJM5luLKRw+WPr/HBVmV
+        gY2YgJjESCedin5Mz3DlsIynqPrTRUA=
+From:   Michael Walle <michael@walle.cc>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH] arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by default
+Date:   Wed, 30 Mar 2022 13:33:29 +0200
+Message-Id: <20220330113329.3402438-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <76AE36BF-01F9-420B-B7BF-A7C9F523A45C@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:06:03AM +0000, Haakon Bugge wrote:
-> 
-> 
-> > On 30 Mar 2022, at 13:02, Leon Romanovsky <leon@kernel.org> wrote:
-> > 
-> > On Mon, Mar 28, 2022 at 09:08:59PM +0800, Guo Zhengkui wrote:
-> >> `if (!ret)` can be replaced with `else` for simplification.
-> >> 
-> >> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> >> ---
-> >> drivers/infiniband/hw/irdma/puda.c | 4 ++--
-> >> drivers/infiniband/hw/mlx4/mcg.c   | 3 +--
-> >> 2 files changed, 3 insertions(+), 4 deletions(-)
-> >> 
-> > 
-> > Thanks,
-> > Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-> 
-> Fix the unbalanced curly brackets at the same time?
+Enable the ocelot-8021q tagger by default which supports ethernet flow
+control.
 
-I think that it is ok to have if () ... else { ... } code.
+The new default is set in the common board dtsi. The actual switch
+node is enabled on a per board variant basis. Because of this we
+set the new tagger default for both internal ports and a particular
+variant is free to choose among the two port.
 
-There is one place that needs an indentation fix, in mlx4, but it is
-faster to fix when applying the patch instead of asking to resubmit.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ .../arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-thanks
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+index 7ef47b80e343..68d11a9c67f3 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+@@ -328,6 +328,14 @@ &lpuart1 {
+ 	status = "okay";
+ };
+ 
++&mscc_felix_port4 {
++	dsa-tag-protocol = "ocelot-8021q";
++};
++
++&mscc_felix_port5 {
++	dsa-tag-protocol = "ocelot-8021q";
++};
++
+ &usb0 {
+ 	status = "okay";
+ };
+-- 
+2.30.2
 
-> 
-> 
-> Thxs, Håkon
-> 
-> 

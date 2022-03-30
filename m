@@ -2,179 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A1B4ECEEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA7A4ECEEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbiC3VnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S233522AbiC3Vni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiC3VnR (ORCPT
+        with ESMTP id S233498AbiC3Vng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:43:17 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0C46429
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:41:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 17so29526158lji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dNE+K6aDu2enlAqgj6GeTztEPSnohzO8AyYtemy/F9c=;
-        b=pSATyB9fxJRjKEikBn3WvyikYkXymXibarl1mN1dcFTbIN27zwEc8vevuL1nXX5js/
-         JEVZc18MRnPscESjwF5tO70CzTtuHdRPAEynfwS5gn3CTeB4tyFmqGXwbOXrdosLxdcB
-         N2NgQLm/c3DwyDo29EhcupwYnqsY1ZBy1PeUVlDLbwlGTgSqAm0yyME+u2jNIWP+TzmZ
-         ctlZs/Hj4OxKDL2dvwLkEWSt96TnrGxK7hGcGOceNhWrGj5zf8MTjelH7GjQN+PXw1Ef
-         ZUgcF2UJtVMYLC1nQafns3G1V5JP6gYGijv3kVWHFpjJRGqxGVVnCwQPjpfENyd5J+lx
-         Fdlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dNE+K6aDu2enlAqgj6GeTztEPSnohzO8AyYtemy/F9c=;
-        b=7yuDWzwK/4OEFjcmJkGCWb7CbAbv8QsB7awcoNUEVQet2Zc8Gppo4s/noSGZKYFCAu
-         BZfAnAA1WEsmdJFkNoWHLgIMtsxHsUU/WwDR7tdKlZryDYsHt7W+BOzmrLuZxREIokxQ
-         hQkIF5MBhLMt4u15Q1YjBmgXc8xWjeDfAwhD/ekuZ1vmKcERRJbNBuU0VsYzC1ebiRqE
-         2VCW2opIfKQuveU8gbhHr+CrrGcEpNI+wZ2+fYrfp0/1tvb27BtkQnwdxBNFCprI1xUx
-         ABU5AHvAJbBak59r8iZuDtv6KwryLI23v4AbKVGtjBwHkR6+hfJdmfJXSRKjV7+f5vQx
-         OC2A==
-X-Gm-Message-State: AOAM531CDa558IXzErK/dNPB7PZ7DVuffU7ZwBqWa/OBMfVVpzZZPZtD
-        2xtmYHdta+q0JlSbiZjoJ2M=
-X-Google-Smtp-Source: ABdhPJzxAu3iSmYC4lOB6RR/z8J9giVm1Jjfve0X5UL3Btez7hAHjHPm4Vf0c4LB2bYx4DniHHCcTw==
-X-Received: by 2002:a05:651c:887:b0:247:f630:d069 with SMTP id d7-20020a05651c088700b00247f630d069mr8334582ljq.514.1648676489693;
-        Wed, 30 Mar 2022 14:41:29 -0700 (PDT)
-Received: from localhost.localdomain (h-82-196-111-188.NA.cust.bahnhof.se. [82.196.111.188])
-        by smtp.gmail.com with ESMTPSA id h22-20020a0565123c9600b0044a3b2549c1sm2460848lfv.165.2022.03.30.14.41.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 14:41:29 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH] regmap: Constify static regmap_bus structs
-Date:   Wed, 30 Mar 2022 23:41:10 +0200
-Message-Id: <20220330214110.36337-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 30 Mar 2022 17:43:36 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C17A517D6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648676511; x=1680212511;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f5s+xzgDBJONZVtRIXVk5+pVqalThtgSX+lwS4QrAhg=;
+  b=ZlYaIlYcXiLA0eafeLb51+jFZzp26yZmt+vs/ihSohUkuaJ4tgyq1nSP
+   3GoekUPzUboHXWwJwuYzJGUWk1Z9kii3EAEiq13VoBnBuJHwCah43jJNf
+   iv5QMrQWVs177segDnSxkeiAmXBZwZByDOBgFERFhMhWzkibhhivLowIl
+   TU4Y10nU6zoTB2fJo48S8HwOJacxqrmCq9wgd6TVnQ5PmZ38ccacAa8aC
+   exb3Kt++TBLR4qCc0hEu2P6CxCxPIadPJpIhZADmoGT6Tp8HPtPHcBlJ2
+   OEkJnIF+sPdIeSnqqWfgcCxSuEEIQBFrbefIgCEhmtpf33/BPL4hDb8+B
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="320349195"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="320349195"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:41:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="654131417"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 14:41:49 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZg4a-0000Wm-8A;
+        Wed, 30 Mar 2022 21:41:48 +0000
+Date:   Thu, 31 Mar 2022 05:41:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for
+ function 'iop_enable_cp6'
+Message-ID: <202203310512.uBfXEXYW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only usage of these is to pass their address to __regmap_init() or
-__devm_regmap_init(), both which takes pointers to const struct
-regmap_bus. Make them const to allow the compiler to put them in
-read-only memory.
+Hi Arnd,
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/base/regmap/regmap-i3c.c     | 2 +-
- drivers/base/regmap/regmap-sccb.c    | 2 +-
- drivers/base/regmap/regmap-sdw-mbq.c | 2 +-
- drivers/base/regmap/regmap-sdw.c     | 2 +-
- drivers/base/regmap/regmap-slimbus.c | 2 +-
- drivers/base/regmap/regmap-w1.c      | 6 +++---
- 6 files changed, 8 insertions(+), 8 deletions(-)
+FYI, the error/warning still remains.
 
-diff --git a/drivers/base/regmap/regmap-i3c.c b/drivers/base/regmap/regmap-i3c.c
-index 1578fb506683..0328b0b34284 100644
---- a/drivers/base/regmap/regmap-i3c.c
-+++ b/drivers/base/regmap/regmap-i3c.c
-@@ -40,7 +40,7 @@ static int regmap_i3c_read(void *context,
- 	return i3c_device_do_priv_xfers(i3c, xfers, 2);
- }
- 
--static struct regmap_bus regmap_i3c = {
-+static const struct regmap_bus regmap_i3c = {
- 	.write = regmap_i3c_write,
- 	.read = regmap_i3c_read,
- };
-diff --git a/drivers/base/regmap/regmap-sccb.c b/drivers/base/regmap/regmap-sccb.c
-index 597042e2d009..986af26d88c2 100644
---- a/drivers/base/regmap/regmap-sccb.c
-+++ b/drivers/base/regmap/regmap-sccb.c
-@@ -80,7 +80,7 @@ static int regmap_sccb_write(void *context, unsigned int reg, unsigned int val)
- 	return i2c_smbus_write_byte_data(i2c, reg, val);
- }
- 
--static struct regmap_bus regmap_sccb_bus = {
-+static const struct regmap_bus regmap_sccb_bus = {
- 	.reg_write = regmap_sccb_write,
- 	.reg_read = regmap_sccb_read,
- };
-diff --git a/drivers/base/regmap/regmap-sdw-mbq.c b/drivers/base/regmap/regmap-sdw-mbq.c
-index fe3ac26b66ad..388c3a087bd9 100644
---- a/drivers/base/regmap/regmap-sdw-mbq.c
-+++ b/drivers/base/regmap/regmap-sdw-mbq.c
-@@ -42,7 +42,7 @@ static int regmap_sdw_mbq_read(void *context, unsigned int reg, unsigned int *va
- 	return 0;
- }
- 
--static struct regmap_bus regmap_sdw_mbq = {
-+static const struct regmap_bus regmap_sdw_mbq = {
- 	.reg_read = regmap_sdw_mbq_read,
- 	.reg_write = regmap_sdw_mbq_write,
- 	.reg_format_endian_default = REGMAP_ENDIAN_LITTLE,
-diff --git a/drivers/base/regmap/regmap-sdw.c b/drivers/base/regmap/regmap-sdw.c
-index 966de8a136d9..81b0327f719d 100644
---- a/drivers/base/regmap/regmap-sdw.c
-+++ b/drivers/base/regmap/regmap-sdw.c
-@@ -30,7 +30,7 @@ static int regmap_sdw_read(void *context, unsigned int reg, unsigned int *val)
- 	return 0;
- }
- 
--static struct regmap_bus regmap_sdw = {
-+static const struct regmap_bus regmap_sdw = {
- 	.reg_read = regmap_sdw_read,
- 	.reg_write = regmap_sdw_write,
- 	.reg_format_endian_default = REGMAP_ENDIAN_LITTLE,
-diff --git a/drivers/base/regmap/regmap-slimbus.c b/drivers/base/regmap/regmap-slimbus.c
-index 0968059f1ef5..8075db788b39 100644
---- a/drivers/base/regmap/regmap-slimbus.c
-+++ b/drivers/base/regmap/regmap-slimbus.c
-@@ -22,7 +22,7 @@ static int regmap_slimbus_read(void *context, const void *reg, size_t reg_size,
- 	return slim_read(sdev, *(u16 *)reg, val_size, val);
- }
- 
--static struct regmap_bus regmap_slimbus_bus = {
-+static const struct regmap_bus regmap_slimbus_bus = {
- 	.write = regmap_slimbus_write,
- 	.read = regmap_slimbus_read,
- 	.reg_format_endian_default = REGMAP_ENDIAN_LITTLE,
-diff --git a/drivers/base/regmap/regmap-w1.c b/drivers/base/regmap/regmap-w1.c
-index 1fbaaad71ca5..3a8b402db852 100644
---- a/drivers/base/regmap/regmap-w1.c
-+++ b/drivers/base/regmap/regmap-w1.c
-@@ -172,17 +172,17 @@ static int w1_reg_a16_v16_write(void *context, unsigned int reg,
-  * Various types of supported bus addressing
-  */
- 
--static struct regmap_bus regmap_w1_bus_a8_v8 = {
-+static const struct regmap_bus regmap_w1_bus_a8_v8 = {
- 	.reg_read = w1_reg_a8_v8_read,
- 	.reg_write = w1_reg_a8_v8_write,
- };
- 
--static struct regmap_bus regmap_w1_bus_a8_v16 = {
-+static const struct regmap_bus regmap_w1_bus_a8_v16 = {
- 	.reg_read = w1_reg_a8_v16_read,
- 	.reg_write = w1_reg_a8_v16_write,
- };
- 
--static struct regmap_bus regmap_w1_bus_a16_v16 = {
-+static const struct regmap_bus regmap_w1_bus_a16_v16 = {
- 	.reg_read = w1_reg_a16_v16_read,
- 	.reg_write = w1_reg_a16_v16_write,
- };
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d888c83fcec75194a8a48ccd283953bdba7b2550
+commit: 6f5d248d05db9c4991366154f1a657a630faa583 ARM: iop32x: use GENERIC_IRQ_MULTI_HANDLER
+date:   4 months ago
+config: arm-randconfig-r024-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310512.uBfXEXYW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f5d248d05db9c4991366154f1a657a630faa583
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6f5d248d05db9c4991366154f1a657a630faa583
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for function 'iop_enable_cp6' [-Wmissing-prototypes]
+   void iop_enable_cp6(void)
+        ^
+   arch/arm/mach-iop32x/cp6.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void iop_enable_cp6(void)
+   ^
+   static 
+   arch/arm/mach-iop32x/cp6.c:43:13: warning: no previous prototype for function 'iop_init_cp6_handler' [-Wmissing-prototypes]
+   void __init iop_init_cp6_handler(void)
+               ^
+   arch/arm/mach-iop32x/cp6.c:43:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init iop_init_cp6_handler(void)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/iop_enable_cp6 +10 arch/arm/mach-iop32x/cp6.c
+
+     9	
+  > 10	void iop_enable_cp6(void)
+    11	{
+    12		u32 temp;
+    13	
+    14	        /* enable cp6 access */
+    15	        asm volatile (
+    16			"mrc	p15, 0, %0, c15, c1, 0\n\t"
+    17			"orr	%0, %0, #(1 << 6)\n\t"
+    18			"mcr	p15, 0, %0, c15, c1, 0\n\t"
+    19			"mrc	p15, 0, %0, c15, c1, 0\n\t"
+    20			"mov	%0, %0\n\t"
+    21			"sub	pc, pc, #4  @ cp_wait\n\t"
+    22			: "=r"(temp));
+    23	}
+    24	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

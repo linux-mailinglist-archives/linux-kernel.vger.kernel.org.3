@@ -2,242 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC1F4ECA91
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C78C4ECA9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349299AbiC3R0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S1346580AbiC3R1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349263AbiC3R0a (ORCPT
+        with ESMTP id S1349268AbiC3R1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:26:30 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926336372
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:24:42 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id o10so42959345ejd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=U2xWSUScXkI45pg1q8y4+hkage1RhlH6yEvmueXn3YA=;
-        b=U1+9v6UYmACR6tG0ba8bax6lpwCM+0gFM73DcjFnnBUKKZ6ecJn7HohHHzjH4gRGua
-         xtxoH4tbtAnpg8s5JSKuVLnOu3Y029LYQVs9mGMmHpaXlRtTim0MpIfTvdtoIHCQ6dhE
-         r1fnFct6dyh/RWm92vEWmdaVe8bCAAr/+X2Ge1OmXJb4PBgSRBHdKt+d7F58rWu8hNjq
-         208/X0VJHLhHfst3I/fyUWOPIKvkTyLKn9EiMedPcEn/Y+NX9R/NeLkK70eoG0bNsMlG
-         t/paI8k6ju/sw8L/aX6XfZbyoxJWmK+wNiXFRRRPxgptYqSEnApy26aApv0e3sAqXCSJ
-         5auQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=U2xWSUScXkI45pg1q8y4+hkage1RhlH6yEvmueXn3YA=;
-        b=M5ZqwQ1e6VKX6FzoHoXkgszW5AEuTS+3a0Yd32INiz7luBFTNrI9+8sN9tKTuOpH6N
-         fQecxvTt39S5g0Lu6wI4eDvxNs+RH4ZMxpCoQyJ9STLScbffF/1OkEt1IhRWgxQ3mJNU
-         pOuy+FXLgtjw0moNdeFU7tVQddQylFjvaWaVExqe/nyKGKVccY3miF8A5ecnqWRUH8wI
-         NNxxkluByokSGtW7+bhQdoDiZX5SwpSsmeNlO+O1wYY1v4HJpyMR7Xw8EZO13DfpQyxF
-         PPe05Vc4IHhRRM35pzdmyDPm0vm4QxmbwDSSCrRv2XzDRnookDHS7iOJQJcYUz+Xtd1E
-         vleQ==
-X-Gm-Message-State: AOAM533P5p6o2coH30w4fkW3Xvsdc8QlmHaPKcLKPMIey6npzbGAFjum
-        cI9L//fclmN1VQaCbKtcr0cqAxz4OqKvdqSvE2k=
-X-Google-Smtp-Source: ABdhPJyzsFWhLPEX8HB6dHjAkg3i8edNoqOYrP11QZF1eMMeG53s1ocWdC5Hagxsn+744gQnKuXt8jzsbbxr7yCGDGc=
-X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
- cr21-20020a170906d55500b006db148e05ccmr614989ejc.63.1648661080924; Wed, 30
- Mar 2022 10:24:40 -0700 (PDT)
+        Wed, 30 Mar 2022 13:27:32 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE0E9C81;
+        Wed, 30 Mar 2022 10:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648661146; x=1680197146;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2wbT9qjviMFXOJP9BA2NPmRzRlvFL8bjYWi5aL+brNc=;
+  b=RGEA791UnlqAkNs3XqxFFoWLX7yJMqxTbqugDsBFvbzs0hXtNzJmgk3w
+   s4P1WUFnv9eg5Tj0f2zDn16uwIzBkhvLz0tVv/Jtwjg+Ig6dqL3igMyw4
+   3Xhi0tHige82a0G2mQgDzkGCW+GN1tSQlZmfxpM6NZAB2xzCFt3o2mLA2
+   UuuOUVHQchQgUMmZCKgwWyV7oaGVDlPaGZHpO8qeP0l5a4XOXQxNd7wcn
+   l5iLrgKRm6URt+KnYvowp2Nn2rjBbz9HILF5LmI/bV52IXV5xGgskY5Mm
+   Vyy8sZUcwrVmNtOLBQELgbGOqMVjxD6kQufhf/PWXUb0VU5XzU8YR/qn1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322783551"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="322783551"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="618607535"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Mar 2022 10:25:23 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZc4Q-0000EO-UL;
+        Wed, 30 Mar 2022 17:25:22 +0000
+Date:   Thu, 31 Mar 2022 01:25:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     kbuild-all@lists.01.org, Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [PATCH v3 05/13] pinctrl: samsung: Switch to use
+ for_each_gpiochip_node() helper
+Message-ID: <202203310151.Iu2JvLIF-lkp@intel.com>
+References: <20220330145030.1562-6-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 30 Mar 2022 18:24:36 +0100
-Message-ID: <CAHpNFcNkhGE2yE9ttiPVd_8be3b_V2r2D==OJCS9Z=xYNy9hxA@mail.gmail.com>
-Subject: Matrix processors & how to use them, Both Mac, Intel, AMD & NV Want
- to make heavy use of , But how to utilize them : RS https://www.phoronix.com/vr.php?view=31014
-To:     submissions@vialicensing.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330145030.1562-6-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matrix processors & how to use them, Both Mac, Intel, AMD & NV Want to
-make heavy use of , But how to utilize them : RS
-https://www.phoronix.com/vr.php?view=31014
-
-Multi Operation Maths - CPU,GPU Computation (c)RS
-
-Kind of an F16 operation & Integer 16 or Int8 if you need it, With
-careful management and special libraries ..
-Capable of speeding up PC,Mac & Consoles :HPC:
-Requires specially compiled libraries so compiled codes can be managed
-& roll ops assessed.
-
-Performing multiple 4,8,16,32 operations on a 64Bit integer core (The example)
-
-
-Rules:
-
-All operations need to be by the same multiplication
-
-Rolls usable to convert value for example Mul & Division
-
-For example :
-
-451 722 551 834 x 6
-
-In the case of non base factor roll numbers
-
-We have to fraction the difference between the value and our base roll number,
-
-10 for example and 6, So the maths is convoluted & may not be worth it,
-
-Could do 6 + rolls & then -Rolls
-
-On a 10 processor the first factor would be 10x because we could
-compensate by placement
-
-But we still need space to expand the result to the right or left
-
-0451072205510834 x 10 =
-
-4510722055108340
-
-or 4510 roll -12
-7220 roll -8
-5510 roll -4
-8340 no roll
-
-Converting base 10 to & from hex may make sense
-
-Depending on the cost of roll; This operation may be worth it!
-
-This operation is in Base 10 & 8Bit makes more sense mostly for common
-operations in hex..
-
-But 8 is not a very big number for larger maths & 16Bit makes more
-sense; Because it has a larger number.
-
-Performing numeric expansion:
-consoles in particular and FPU where expansion is required for
-emergence mathematics
-
-Performing numeric expansion for circumstances where we require larger
-numbers for example:
-
-To fill the 187 FPU buffer..
-
-To do that we will roll to the left & expand the number, although we
-may need multiple operations..
-
-Like i say : Roll + or Roll -
-
-1447000
--Roll 3 = 1447
-or
-+Roll 3 = 1447000000
-
-That way we can potentially exceed the Bit Depth 32Bit for example.
-
-Rupert S https://science.n-helix.com
-
-https://science.n-helix.com/2021/02/multi-operation-maths.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
-
-*****
-
-Packed F16C & F16 Values in use on CPU & GPU - RS.txt
-
-F16C & F16 : lower precision values that are usable to optimise GPU &
-CPU operation that involve; Less Detailed values like Hashes or game
-data Metadata or Machine Learning : RS
-
-Firstly the F16C is the FX 8320E supported instruction so the CPU can
-potentially use packed F16 Float instructions directly from the CPU,
-As quoted F16 carefully managed produces a pipeline that is 100% F16..
-
-Packed F16 instructions use 2 data sets per 32Bit storage register...
-
-Data is converted if the array of instructions includes F32 & commonly
-all F16 should be present first; Before group conversion or
-alternatively...
-
-Allocating an additional 16Bits of data for example 0000x4 or subtle
-variance data that allows unique renders... Such as a chaos key or
-Entropy / RNG Random data...
-
-Potentially allocating a static key in the form of AES Output from
-base pair F16c Value...
-
-The additional data make potentially each game player render unique!
-
-Fast Conversion Proposals include:
-
-Unique per player additional data (AES Key conversion for example, Or
-DES; DES Produces smaller faster values)
-
-Static key, Sorted by data type (Base on player profile or Game map)
-
-Dynamic Key
-
-0000 or empty buffer hash
-
-Side by Side : Wide format texture = 2xF16 Value on same 32Bit Value
-Top & Bottom : F16 Double layered format texture = 2xF16 Value on same
-32Bit Value
-
-Yes transparency for alien skin can use : Top & Bottom F16 layered texture
-Machines also; Or even 4 layers for a truly special effect.
-
-Combine both methodology and crypto hash with one or more layer of
-BumpMap RayTracing SiMD
-
-SiMD is also 16Bit compatible so no conversion required.
-
-Weather & clouds are examples perfect for light fast loads over
-massive GPU Arrays.
-
-F16 are also theoretically ideal for 16Bit audio if using SiMD..
-
-In the case of AVX probably worth using dynamic key conversion..
-A Dynamic Remainder key that allows lower bits to interpolate Sound data.
-
-Other object sources such as render can potentially use the F16 system to..
-Interpolate or Tessellate bits on shift from F16 to F32 on final plane
-write to frame buffer..
-The memory required would be the buffer & not the source process..
-
-An example is to replace the bits missing from F16 in F32/F64 with
-tessellation shaping and sharpening code; Dynamically relative to
-performance of the GPU/CPU...
-F16 values obviously transfer from GPU to CPU fast & CPU to GPU..
-
-Image enhancement is also possible with a bitshift stack buffer that
-passes additional data to the missing bits..
-For example pre processed micro BumpMapping or Compute shading
-process; That will pull the bits in.. Under the F16 data
-453000.172000 > 453545.172711 bit swap.. could be complex!
-Done with a cache? Entirely possible with united cache L3
-
-DLSS & Dynamic sharpen & Smooth/Filter enhanced virtual resolution ..
-Can significantly enhance the process..
-Of dynamic buffer pipelining to render path. (on requirement benefit)
-
-(c)Rupert S https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://gpuopen.com/learn/first-steps-implementing-fp16/
-
-*****
-
-Submissions for review
-
-RS
-
-https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
-
-https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/
-
-https://www.phoronix.com/scan.php?page=news_item&px=AMD-PSP-Sysfs-Expose
-
-https://lkml.org/lkml/2022/3/30/1005
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpiolib-Two-new-helpers-and-way-toward-fwnode/20220330-225341
+base:   a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57
+config: riscv-buildonly-randconfig-r006-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310151.Iu2JvLIF-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3539d23dd289ca77a85d66fe8721e4febfc50ea4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/gpiolib-Two-new-helpers-and-way-toward-fwnode/20220330-225341
+        git checkout 3539d23dd289ca77a85d66fe8721e4febfc50ea4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/pinctrl/samsung/pinctrl-s3c64xx.c: In function 's3c64xx_eint_gpio_init':
+>> drivers/pinctrl/samsung/pinctrl-s3c64xx.c:474:64: error: 'struct samsung_pin_bank' has no member named 'of_node'; did you mean 'fwnode'?
+     474 |                 bank->irq_domain = irq_domain_add_linear(bank->of_node,
+         |                                                                ^~~~~~~
+         |                                                                fwnode
+   drivers/pinctrl/samsung/pinctrl-s3c64xx.c: In function 's3c64xx_eint_eint0_init':
+   drivers/pinctrl/samsung/pinctrl-s3c64xx.c:746:64: error: 'struct samsung_pin_bank' has no member named 'of_node'; did you mean 'fwnode'?
+     746 |                 bank->irq_domain = irq_domain_add_linear(bank->of_node,
+         |                                                                ^~~~~~~
+         |                                                                fwnode
+
+
+vim +474 drivers/pinctrl/samsung/pinctrl-s3c64xx.c
+
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  444  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  445  /**
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  446   * s3c64xx_eint_gpio_init() - setup handling of external gpio interrupts.
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  447   * @d: driver data of samsung pinctrl driver.
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  448   */
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  449  static int s3c64xx_eint_gpio_init(struct samsung_pinctrl_drv_data *d)
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  450  {
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  451  	struct s3c64xx_eint_gpio_data *data;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  452  	struct samsung_pin_bank *bank;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  453  	struct device *dev = d->dev;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  454  	unsigned int nr_domains;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  455  	unsigned int i;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  456  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  457  	if (!d->irq) {
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  458  		dev_err(dev, "irq number not available\n");
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  459  		return -EINVAL;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  460  	}
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  461  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  462  	nr_domains = 0;
+1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  463  	bank = d->pin_banks;
+1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  464  	for (i = 0; i < d->nr_banks; ++i, ++bank) {
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  465  		unsigned int nr_eints;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  466  		unsigned int mask;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  467  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  468  		if (bank->eint_type != EINT_TYPE_GPIO)
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  469  			continue;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  470  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  471  		mask = bank->eint_mask;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  472  		nr_eints = fls(mask);
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  473  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18 @474  		bank->irq_domain = irq_domain_add_linear(bank->of_node,
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  475  					nr_eints, &s3c64xx_gpio_irqd_ops, bank);
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  476  		if (!bank->irq_domain) {
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  477  			dev_err(dev, "gpio irq domain add failed\n");
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  478  			return -ENXIO;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  479  		}
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  480  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  481  		++nr_domains;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  482  	}
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  483  
+0ed2dd03b94b7b drivers/pinctrl/samsung/pinctrl-s3c64xx.c Kees Cook        2018-05-08  484  	data = devm_kzalloc(dev, struct_size(data, domains, nr_domains),
+0ed2dd03b94b7b drivers/pinctrl/samsung/pinctrl-s3c64xx.c Kees Cook        2018-05-08  485  			    GFP_KERNEL);
+fa5c0f46e2b9a1 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Marek Szyprowski 2017-01-19  486  	if (!data)
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  487  		return -ENOMEM;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  488  	data->drvdata = d;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  489  
+1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  490  	bank = d->pin_banks;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  491  	nr_domains = 0;
+1bf00d7a6dbff0 drivers/pinctrl/samsung/pinctrl-s3c64xx.c Tomasz Figa      2014-09-23  492  	for (i = 0; i < d->nr_banks; ++i, ++bank) {
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  493  		if (bank->eint_type != EINT_TYPE_GPIO)
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  494  			continue;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  495  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  496  		data->domains[nr_domains++] = bank->irq_domain;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  497  	}
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  498  
+623a650ebc886f drivers/pinctrl/samsung/pinctrl-s3c64xx.c Thomas Gleixner  2015-06-21  499  	irq_set_chained_handler_and_data(d->irq, s3c64xx_eint_gpio_irq, data);
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  500  
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  501  	return 0;
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  502  }
+61dd7261317770 drivers/pinctrl/pinctrl-s3c64xx.c         Tomasz Figa      2013-03-18  503  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,68 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5154ECB37
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9694ECB39
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349638AbiC3SDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S1349645AbiC3SEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349592AbiC3SDO (ORCPT
+        with ESMTP id S1349634AbiC3SD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:03:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C772195
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8sQ6SQCM7+eekKWwRavWR33/gb8wY09eRtrYpsnuNfQ=; b=yUXTtYD7LDJ8eYXzNSyyQftYQp
-        S3O3C63uKLospuC5Mh4AL7JUStHkfwaRMljYo1yNjIR4OiIFD0WCK6jyi4GeT6zDxpQJ1+vdcHAMr
-        Q9GQ8fNuoqDTs+qyoLgpt5fZSxYSIBkGtonuYlUG6ikqvFlpI2GChXbsKYHjI4IF/xYbqm+ndyIMd
-        ZT3PM5Bm0h4mo51aGi0q6qMUxCjahNmfVAewOXBnIkSgPBXAUY3oAv4hW8yl+qZwlGs/YmUtbLjqG
-        wX+ok7SDr/YclbDU4s+KHcUp+FpF2CmEH5tEZs9x1mHwaVvFaNUhDxmbduA7BR2uyfpRiyCw7IYfk
-        eQNcXaFA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nZcdJ-00H3zL-To; Wed, 30 Mar 2022 18:01:25 +0000
-Date:   Wed, 30 Mar 2022 11:01:25 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Cc:     Christoph Hellwig <hch@infradead.org>, regressions@lists.linux.dev,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: Re: "dma-mapping: remove CONFIG_DMA_REMAP" causes AMD SME boot fail
-Message-ID: <YkSa9d3JOExAiBXU@infradead.org>
-References: <1648659326.eabkokyuym.none.ref@localhost>
- <1648659326.eabkokyuym.none@localhost>
+        Wed, 30 Mar 2022 14:03:59 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D785103BBC
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:02:12 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id bx5so21461153pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1t7ZTcfgKbtCrh+Z8QzaoA6bXs0GJ9EG7KZ7T9mNkyo=;
+        b=Qnc0FbV8QW9nWNUOQwd6/VL3i7W1mRJNkjUHl2lrMu1esd+LZ8H5X7HdBuqE7iT02e
+         BbcHWea0WsPYpgJZd1t1tLzqf8zAvoF3JrXkRfv9Qf3rD2plPb0pqBL5YozYI77OG0Jm
+         inbNIW+pd/UC9m0MMRX5dl4x1tcS3hmOwxrJ4YkrTT5Aj+AxPnQqC/Y5C7rMYG2TDUit
+         X54n5lQR9HCBt53ElkMeirueeHikr967anl32qZ9taBIT/irIR0uxCOODF/WHJq42sSz
+         x0r6FrOV5tSe3kvftlYtWDC2qhaSyLTsI12TACUxUfsVxe9ZR6dOZi4IqSXRpqQc9wCD
+         IQpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1t7ZTcfgKbtCrh+Z8QzaoA6bXs0GJ9EG7KZ7T9mNkyo=;
+        b=WHqMqu/DmVhuH5qT1udM260biPdfViaPaims0hB7I9+Xax4Z3U4NY0MPys+zvOg3Q4
+         wu+4jPLN3T5rSPFgtk4LMKoefyg6GE/ccbPtskXc4pXI8U46aoAEduEXx6c3cbqHHv2t
+         S6QM2YNF50jqMtGCFXj2FK9NNQkVuQkZUNHOIjMH3++J262TsrXX2MfUoEF3z7vafKaH
+         bNMKmH3SJSUaG1Cqmr3dQrb/E5py7RGL8bZRLC//M3sN7gwz31LDu+R4pwFz8UaOYHFz
+         KmaL9kVp9Et7ZlkaBUb5VjiXKTjKVYUH1Rm7LWmWX3WvKsR0Fmryvm97vA+evEcNzjlw
+         UmwA==
+X-Gm-Message-State: AOAM532K9MEsTyomKvqcavKnJLxS3jtms7oFViWmatUzJaiA/Mq40/AO
+        s++ifNP4tyAoeYz9fgBRenoZxw==
+X-Google-Smtp-Source: ABdhPJzh0mo9Te1Jek3HXgFffthHCfqhTf4wEFIFy/INCb3Ksp0Y0whGDEpzp1MDM0LMhP07MuB7fA==
+X-Received: by 2002:a17:902:7c0d:b0:155:d507:3cf0 with SMTP id x13-20020a1709027c0d00b00155d5073cf0mr501879pll.103.1648663331634;
+        Wed, 30 Mar 2022 11:02:11 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id be11-20020a056a001f0b00b004fb29215dd9sm14648311pfb.30.2022.03.30.11.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 11:02:11 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 18:02:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v3 10/11] KVM: x86/MMU: Require reboot permission to
+ disable NX hugepages
+Message-ID: <YkSbH3XR0YFzrZik@google.com>
+References: <20220330174621.1567317-1-bgardon@google.com>
+ <20220330174621.1567317-11-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1648659326.eabkokyuym.none@localhost>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220330174621.1567317-11-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can you try this patch, which is a bit of a hack?
+On Wed, Mar 30, 2022, Ben Gardon wrote:
+> Ensure that the userspace actor attempting to disable NX hugepages has
+> permission to reboot the system. Since disabling NX hugepages would
+> allow a guest to crash the system, it is similar to reboot permissions.
 
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index 50d209939c66c..61997c2ee0a17 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -28,7 +28,8 @@ bool force_dma_unencrypted(struct device *dev)
- 	 * device does not support DMA to addresses that include the
- 	 * encryption mask.
- 	 */
--	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {
-+	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT) &&
-+	    !get_dma_ops(dev)) {
- 		u64 dma_enc_mask = DMA_BIT_MASK(__ffs64(sme_me_mask));
- 		u64 dma_dev_mask = min_not_zero(dev->coherent_dma_mask,
- 						dev->bus_dma_limit);
+This patch needs to be squashed with the patch that introduces the capability,
+otherwise you're introdcuing a bug and then fixing it in the same series.

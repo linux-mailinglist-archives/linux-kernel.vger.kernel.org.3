@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF6F4EC4FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8204EC4FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245099AbiC3MzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        id S1345333AbiC3Mze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244567AbiC3MzU (ORCPT
+        with ESMTP id S244567AbiC3Mz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:55:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4183975622
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648644812;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UxAUy7q/bwbjnZH+uuAP6NaBEIgbf127Gn+Ruta26qg=;
-        b=gFvbxoCjGhgUsQ8B5aFM6UzkVYl2xJwcsbeMZa/CbgHN0vVuhIfFaWsl5XVUnfbTc1WlV7
-        YWwLwn+cqjVkh/l1U2KCCku2F0XghGQCAbFNMWfrPb04wx7SUYuSPd/iZrKXzitvl9SwO9
-        AnnsjfQtO5uUbCUUx3TGcnYYAKsX0fo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399-6MnJVqZzM5iPCIFFO_AhoQ-1; Wed, 30 Mar 2022 08:53:29 -0400
-X-MC-Unique: 6MnJVqZzM5iPCIFFO_AhoQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 30 Mar 2022 08:55:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4A3B7C43;
+        Wed, 30 Mar 2022 05:53:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA7172800F6E;
-        Wed, 30 Mar 2022 12:53:28 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4341EC202C6;
-        Wed, 30 Mar 2022 12:53:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220322111323.542184-2-mic@digikod.net>
-References: <20220322111323.542184-2-mic@digikod.net> <20220322111323.542184-1-mic@digikod.net>
-To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
-         =?us-ascii?Q?=3D?= <mic@digikod.net>
-Cc:     dhowells@redhat.com, Jarkko Sakkinen <jarkko@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
-         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
-        <mic@linux.microsoft.com>
-Subject: Re: [PATCH v2 1/1] certs: Explain the rationale to call panic()
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA4A260DBD;
+        Wed, 30 Mar 2022 12:53:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDD6C340EC;
+        Wed, 30 Mar 2022 12:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648644822;
+        bh=9Lzjr4C0o5+FuexRlUqn1UHUEVXyAWYqGNh6uZkxC+I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i0VxgskMCgRM4kAySGl45svHARNH1Vsj2v4R1/c+RIJI29ku2csDF2j3rFwiOxL00
+         zD2NzTqJ05g61MQJsfxU7IWLVUzO67+jusGwUN7Ec+u/DUUrd4Ju5Dm+kk8RSCBRWA
+         faaoHHtIrNOmx3wSdMKj6qn+zcSk448lrazNpC5ZGzKfsUNbAV4vYXJix1bo9o2L3C
+         XcOf/yEZedo1xCjlWd/zOjgKFWufBA3obKORa12PHQCz3XG2ooiekq+HITSjrD5deT
+         1Qv6/iU6hRN0GHDG8gLS6O2oJcOrPfBquBwY3f7BHTbu7Sx1P0Ahf2oXtpWwenYOt7
+         NOGodGQ697QUA==
+Date:   Wed, 30 Mar 2022 15:53:38 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     bharat@chelsio.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, roland@purestorage.com,
+        stable@vger.kernel.org, vipul@chelsio.com
+Subject: Re: [PATCH] cxgb4: cm: fix a incorrect NULL check on list iterator
+Message-ID: <YkRS0sImiTd+mhd3@unreal>
+References: <YkCTB/F4jc3DWRo8@unreal>
+ <20220330123027.25897-1-xiam0nd.tong@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 30 Mar 2022 13:53:26 +0100
-Message-ID: <2933967.1648644806@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330123027.25897-1-xiam0nd.tong@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
+On Wed, Mar 30, 2022 at 08:30:27PM +0800, Xiaomeng Tong wrote:
+> On Sun, 27 Mar 2022 19:38:31 +0300, Leon Romanovsky wrote:
+> > 
+> > On Sun, Mar 27, 2022 at 03:35:42PM +0800, Xiaomeng Tong wrote:
+> > > The bug is here:
+> > > 	if (!pdev) {
+> > > 
+> > > The list iterator value 'pdev' will *always* be set and non-NULL
+> > > by for_each_netdev(), so it is incorrect to assume that the
+> > > iterator value will be NULL if the list is empty or no element
+> > > found (in this case, the check 'if (!pdev)' can be bypassed as
+> > > it always be false unexpectly).
+> > > 
+> > > To fix the bug, use a new variable 'iter' as the list iterator,
+> > > while use the original variable 'pdev' as a dedicated pointer to
+> > > point to the found element.
+> > 
+> > I don't think that the description is correct.
+> > We are talking about loopback interface which received packet, the pdev will always exist.
+> 
+> Do the both conditions impossible?
+> 1. the list is empty or
+> 2. we can not found a pdev due to this check
+> 	if (ipv6_chk_addr(&init_net,
+>   			  (struct in6_addr *)peer_ip,
+> 			  pdev, 1))
+> 			  iter, 1))
 
-> The blacklist_init() function calls panic() for memory allocation
-> errors.  This change documents the reason why we don't return -ENODEV.
+Yes, both are impossible.
 
-Why, though?
+Thanks
 
-This is only called whilst the kernel is booting.  If you hit ENOMEM, you
-aren't likely to get much further with the boot process.
-
-David
-
+> 
+> > Most likely. the check of "if (!pdev)" is to catch impossible situation where IPV6 packet
+> > was sent over loopback, but IPV6 is not enabled.
+> 
+> --
+> Xiaomeng Tong

@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496C64EBEE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD524EBEE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245469AbiC3Kil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S245471AbiC3KjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245444AbiC3Kij (ORCPT
+        with ESMTP id S245472AbiC3Ki6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:38:39 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0756C2C127;
-        Wed, 30 Mar 2022 03:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648636614; x=1680172614;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=AXCYTWaniDbWfm4aIh5x4nUzNPwz+GK53Urwx7FShis=;
-  b=FxT15oesqYwPPfV3vfjlOsDDsKmRO4G4fwWcE4cClIvMySYKzopNcmi3
-   TQGxNmQQk4ql14MpZd9wcknWqpXjTE5oeu7p/+1aCE6eZhf+eBnWsyI0N
-   SBPat+HhCRk6Jimod0E9oivKks0bOCwM7o8uTInhjkAf8Kt1h5F7N/IKD
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Mar 2022 03:36:53 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 03:36:53 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 30 Mar 2022 03:36:52 -0700
-Received: from [10.216.27.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 30 Mar
- 2022 03:36:48 -0700
-Subject: Re: [PATCH V8 6/7] arm64: dts: qcom: pm8008-regulators: Add base dts
- file for pm8008 regulators
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1648209491-30165-1-git-send-email-quic_c_skakit@quicinc.com>
- <1648209491-30165-7-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n50ApgiYbxHbU072s5-QLAmEppjDH9brKbfHja7hiue4xA@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <812d47d1-fd81-b635-67d6-58bdb0dbe79b@quicinc.com>
-Date:   Wed, 30 Mar 2022 16:06:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 30 Mar 2022 06:38:58 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7E12C108;
+        Wed, 30 Mar 2022 03:37:09 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22U97xdG012932;
+        Wed, 30 Mar 2022 12:36:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=d4JOb+YHVgrwP+08iqsQrB5MreHyNjkxKYaMVDOBz7o=;
+ b=Qr1MR95AWC0XJrGwqmSl7B6W+eMtKVYe2AWGbrrubN0anGR3FrbdKKOXkaFrFGMXjxdE
+ NBX+MA1BKZjwVg5hMlJAT0iHHZ4b0ue4FVNReguLmDI0e+bcTgrghPFancPtk3qT62SZ
+ hNQP/Y4ySqceRZ2qRAzTVscehZrUJ2jFgM/RU/OrQ69mDdYGQTe6MeZEWAdvNLJO8zYN
+ mQOFow6eulzujjBb9feE3Ta0HRBCC/yEgCmDaze1rdvo0X5Xm1gCdHuo4OPoo4tCNQux
+ zaeV4L2xg478vju+Cc2oBplClP5oc1sv5j0vMtcRzrgUUZy6lQYL1fVX71R5WJvURl/H uA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f1s4pe9n1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 12:36:47 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 87C1710002A;
+        Wed, 30 Mar 2022 12:36:46 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7F7A521BF5E;
+        Wed, 30 Mar 2022 12:36:46 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 30 Mar 2022 12:36:46
+ +0200
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH] dmaengine: stm32-mdma: check the channel availability (secure or not)
+Date:   Wed, 30 Mar 2022 12:36:45 +0200
+Message-ID: <20220330103645.99969-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n50ApgiYbxHbU072s5-QLAmEppjDH9brKbfHja7hiue4xA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_03,2022-03-30_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+STM32_MDMA_CCR bit[8] is used to enable Secure Mode (SM). If this bit is
+set, it means that all the channel registers are write-protected. So the
+channel is not available for Linux use.
 
-On 3/25/2022 11:13 PM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-03-25 04:58:10)
->> Add base DTS file for pm8008 regulators with 7 ldo nodes.
->>
->> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
->> ---
->> Changes in V8:
->>   - Previously added pm8008 dtsi file is split into 2 files, one for infra
->>     and other for regulators.
-> Does pm8008 come in one package that gets soldered down on the board? If
-> so, this should be one file instead of two, i.e. pm8008.dtsi. We don't
-> make a -regulators dtsi file for other pmics.
+Add stm32_mdma_filter_fn() callback filter and give it to
+__dma_request_chan (instead of dma_get_any_slave_channel()), to exclude the
+channel if it is marked Secure.
 
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+Already sent few weeks ago. No change since
+https://lore.kernel.org/lkml/20220117100300.14150-1-amelie.delaunay@foss.st.com/
+---
+ drivers/dma/stm32-mdma.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-Yes, pm8008 is a single chip.
-
-You're right I should add only one pm8008.dtsi (including regulators)
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index 6f57ff0e7b37..95e5831e490a 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -73,6 +73,7 @@
+ #define STM32_MDMA_CCR_WEX		BIT(14)
+ #define STM32_MDMA_CCR_HEX		BIT(13)
+ #define STM32_MDMA_CCR_BEX		BIT(12)
++#define STM32_MDMA_CCR_SM		BIT(8)
+ #define STM32_MDMA_CCR_PL_MASK		GENMASK(7, 6)
+ #define STM32_MDMA_CCR_PL(n)		FIELD_PREP(STM32_MDMA_CCR_PL_MASK, (n))
+ #define STM32_MDMA_CCR_TCIE		BIT(5)
+@@ -248,6 +249,7 @@ struct stm32_mdma_device {
+ 	u32 nr_channels;
+ 	u32 nr_requests;
+ 	u32 nr_ahb_addr_masks;
++	u32 chan_reserved;
+ 	struct stm32_mdma_chan chan[STM32_MDMA_MAX_CHANNELS];
+ 	u32 ahb_addr_masks[];
+ };
+@@ -1456,10 +1458,23 @@ static void stm32_mdma_free_chan_resources(struct dma_chan *c)
+ 	chan->desc_pool = NULL;
+ }
+ 
++static bool stm32_mdma_filter_fn(struct dma_chan *c, void *fn_param)
++{
++	struct stm32_mdma_chan *chan = to_stm32_mdma_chan(c);
++	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
++
++	/* Check if chan is marked Secure */
++	if (dmadev->chan_reserved & BIT(chan->id))
++		return false;
++
++	return true;
++}
++
+ static struct dma_chan *stm32_mdma_of_xlate(struct of_phandle_args *dma_spec,
+ 					    struct of_dma *ofdma)
+ {
+ 	struct stm32_mdma_device *dmadev = ofdma->of_dma_data;
++	dma_cap_mask_t mask = dmadev->ddev.cap_mask;
+ 	struct stm32_mdma_chan *chan;
+ 	struct dma_chan *c;
+ 	struct stm32_mdma_chan_config config;
+@@ -1485,7 +1500,7 @@ static struct dma_chan *stm32_mdma_of_xlate(struct of_phandle_args *dma_spec,
+ 		return NULL;
+ 	}
+ 
+-	c = dma_get_any_slave_channel(&dmadev->ddev);
++	c = __dma_request_channel(&mask, stm32_mdma_filter_fn, &config, ofdma->of_node);
+ 	if (!c) {
+ 		dev_err(mdma2dev(dmadev), "No more channels available\n");
+ 		return NULL;
+@@ -1615,6 +1630,10 @@ static int stm32_mdma_probe(struct platform_device *pdev)
+ 	for (i = 0; i < dmadev->nr_channels; i++) {
+ 		chan = &dmadev->chan[i];
+ 		chan->id = i;
++
++		if (stm32_mdma_read(dmadev, STM32_MDMA_CCR(i)) & STM32_MDMA_CCR_SM)
++			dmadev->chan_reserved |= BIT(i);
++
+ 		chan->vchan.desc_free = stm32_mdma_desc_free;
+ 		vchan_init(&chan->vchan, dd);
+ 	}
+-- 
+2.25.1
 

@@ -2,59 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0CF4EBAB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29914EBAB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243257AbiC3GYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S243251AbiC3GYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238147AbiC3GY2 (ORCPT
+        with ESMTP id S238147AbiC3GYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:24:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3F351322
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648621363; x=1680157363;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eIFlnXBVJctgeKMmtQQok9y37HYyNjDZKtPkoodIbwA=;
-  b=KHn5CijYCEgcHZI4V1Me/GUPBxTAMLY9bxqS1lsIkn0Fl9YIaNTsUVx5
-   +5Qqdcaz1qPwB/tMP1NQqYhDiZmk5bIarM0CuyrvllSpz/t1dFGT7TUSN
-   wLkBlbPDQ7DYopxrJLJfgnDSh+Xlb8cGAIne4L3xYeMMF+xgqx8IF2sRz
-   VJxfGvRHLKJtTiwTrKaH+c9Keel5gO/iNG/xQyfvVzSZk/sSF9U1nLmk4
-   zOknYzf+/ESw5/3xU/HX/9JB3FhIPlpHcQ8jMPWZPKyjEnYT6xD4+wyWJ
-   YgxnBwVgLqc03cIrr0tK1Ka++n662RaqZBjcAvUl6n7Ni5A9SESBM17me
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258287275"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="258287275"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:22:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="719847229"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2022 23:22:42 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZRj7-000139-Jq; Wed, 30 Mar 2022 06:22:41 +0000
-Date:   Wed, 30 Mar 2022 14:21:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h:484:1: warning: 'inline' is
- not at beginning of declaration
-Message-ID: <202203301438.ye1Y6gf5-lkp@intel.com>
+        Wed, 30 Mar 2022 02:24:20 -0400
+X-Greylist: delayed 12263 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Mar 2022 23:22:33 PDT
+Received: from uriel.iewc.co.za (uriel.iewc.co.za [IPv6:2c0f:f720:0:3:d6ae:52ff:feb8:f27b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC2C51322;
+        Tue, 29 Mar 2022 23:22:33 -0700 (PDT)
+Received: from [2c0f:f720:fe16:c400::1] (helo=tauri.local.uls.co.za)
+        by uriel.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1nZRiw-0002Oj-CB; Wed, 30 Mar 2022 08:22:30 +0200
+Received: from [192.168.42.207]
+        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1nZRiv-0003gx-AZ; Wed, 30 Mar 2022 08:22:29 +0200
+Message-ID: <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
+Date:   Wed, 30 Mar 2022 08:22:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
+ connections
+Content-Language: en-GB
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Neal Cardwell <ncardwell@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+References: <E1nZMdl-0006nG-0J@plastiekpoot>
+ <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za>
+ <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+From:   Jaco Kroon <jaco@uls.co.za>
+Organization: Ultimate Linux Solutions (Pty) Ltd
+In-Reply-To: <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,54 +56,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c24a186398f59c80adb9a967486b65c1423a59d
-commit: 04e6fedb18f6899453e59a748fb95be56ef73836 iio: imu: st_lsm6dsx: add mount matrix support
-date:   2 years, 2 months ago
-config: x86_64-randconfig-a003-20220328 (https://download.01.org/0day-ci/archive/20220330/202203301438.ye1Y6gf5-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04e6fedb18f6899453e59a748fb95be56ef73836
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 04e6fedb18f6899453e59a748fb95be56ef73836
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi Eric,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 2022/03/30 05:48, Eric Dumazet wrote:
+> On Tue, Mar 29, 2022 at 7:58 PM Jaco Kroon <jaco@uls.co.za> wrote:
+>
+> I do not think this commit is related to the issue you have.
+>
+> I guess you could try a revert ?
+>
+> Then, if you think old linux versions were ok, start a bisection ?
+That'll be interesting, will see if I can reproduce on a non-production
+host.
+>
+> Thank you.
+>
+> (I do not see why a successful TFO would lead to a freeze after ~70 KB
+> of data has been sent)
 
-All warnings (new ones prefixed by >>):
+I do actually agree with this in that it makes no sense, but disabling
+TFO definitely resolved the issue for us.
 
-   In file included from drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:63:
->> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h:484:1: warning: 'inline' is not at beginning of declaration [-Wold-style-declaration]
-     484 | static const inline struct iio_mount_matrix *
-         | ^~~~~~
---
-   In file included from drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_buffer.c:41:
->> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h:484:1: warning: 'inline' is not at beginning of declaration [-Wold-style-declaration]
-     484 | static const inline struct iio_mount_matrix *
-         | ^~~~~~
-   drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h:494:44: warning: 'st_lsm6dsx_accel_ext_info' defined but not used [-Wunused-const-variable=]
-     494 | static const struct iio_chan_spec_ext_info st_lsm6dsx_accel_ext_info[] = {
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~
+Kind Regards,
+Jaco
 
-
-vim +/inline +484 drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-
-   483	
- > 484	static const inline struct iio_mount_matrix *
-   485	st_lsm6dsx_get_mount_matrix(const struct iio_dev *iio_dev,
-   486				    const struct iio_chan_spec *chan)
-   487	{
-   488		struct st_lsm6dsx_sensor *sensor = iio_priv(iio_dev);
-   489		struct st_lsm6dsx_hw *hw = sensor->hw;
-   490	
-   491		return &hw->orientation;
-   492	}
-   493	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

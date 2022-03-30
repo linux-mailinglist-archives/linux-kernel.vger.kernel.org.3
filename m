@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29514EBD05
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1ED4EBD0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244486AbiC3I6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S244506AbiC3JBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241961AbiC3I6C (ORCPT
+        with ESMTP id S236683AbiC3JBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:58:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8603C133DBB
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648630578; x=1680166578;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SDwP7+t69WD6530TWyZPeK6zEBoSkgsHq+ayCPYFfyM=;
-  b=RNiBH1gKZS1lTIH4phI3yWjjhqAlOWO9EvnlH6NXv1rEMiwsA4n/DG6V
-   /U8LkZ5SofdI8kkzpfQqO1Iyhu3sGysnSt6i+8rjdubLxT24Ws7x5gO/5
-   tGyr6qY3CqDa4Rz0wN8FKGQNwOFh4qiDa16QVyJkZwTIqBjedqVYhE4nK
-   ByrrnqR1YjhyK802y3YE0Z5Oca0DTUSyZ/zj+2T2IWlt894waJK6BWMHM
-   TEJkniL30zmUTScsmXQnEJupGCx/TRUeOcVOGrOlUKSecBMPnAqoqJmxG
-   HQC3dK6l0qnEVtb7q9easgna4StahJ0rZ6uO66+kIYUJEDDNUaS2d1pDd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="240084419"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="240084419"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 01:56:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="503237336"
-Received: from lkp-server02.sh.intel.com (HELO 7a008980c4ea) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 01:56:16 -0700
-Received: from kbuild by 7a008980c4ea with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZU7j-0000AH-TI; Wed, 30 Mar 2022 08:56:15 +0000
-Date:   Wed, 30 Mar 2022 16:55:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matthew Maurer <mmaurer@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 5854/5872] ERROR: modpost: "trusty_dma_buf_get_ffa_tag"
- [drivers/trusty/trusty-ipc.ko] undefined!
-Message-ID: <202203301644.1prdbsrp-lkp@intel.com>
+        Wed, 30 Mar 2022 05:01:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B01D64EC;
+        Wed, 30 Mar 2022 01:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rrlsacueYKCfzaUaloBnav4G/jBuo1DGcsGefNV2qt0=; b=NfqWE2Z5UXlCJ89Ijz/iWnWo9f
+        7Da3DL2TfLBAAhz0L4j9t/f7uqaL+IiQaeEIBKdEKBomlnah3r91Y02aA5An7+SF33uJ/llUlS/wp
+        2TCIiM8ohNNfgVpnQTbc7WHgjBmEBTTb8IivVqTbtF4ubq6Kjo8rYKTdul2EwbKRXNhQpQ8jQJEu1
+        3ZMR4+zvlkP4jSwsfMyFFtwhcUS0N5V7wjXwinGW5Wsyc93PsIPuXq+gYMd7rhHvB6vI9i2WgBQ4c
+        UzN4pKPL9neldfp/W3UyqyE26IMVDvE4qHSFrL3QJNVKznq1/gnPqBeycX437rFDztAtSNtvRkMVh
+        mr0yGnPA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZU9s-0015Xh-Of; Wed, 30 Mar 2022 08:58:28 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 52200986215; Wed, 30 Mar 2022 10:58:26 +0200 (CEST)
+Date:   Wed, 30 Mar 2022 10:58:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ryabinin.a.a@gmail.com
+Subject: Re: [PATCH v2 13/48] kmsan: add KMSAN runtime core
+Message-ID: <20220330085826.GI8939@worktop.programming.kicks-ass.net>
+References: <20220329124017.737571-1-glider@google.com>
+ <20220329124017.737571-14-glider@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220329124017.737571-14-glider@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
+On Tue, Mar 29, 2022 at 02:39:42PM +0200, Alexander Potapenko wrote:
+> +/* Handle llvm.memmove intrinsic. */
+> +void *__msan_memmove(void *dst, const void *src, uintptr_t n)
+> +{
+> +	void *result;
+> +
+> +	result = __memmove(dst, src, n);
+> +	if (!n)
+> +		/* Some people call memmove() with zero length. */
+> +		return result;
+> +	if (!kmsan_enabled || kmsan_in_runtime())
+> +		return result;
+> +
+> +	kmsan_internal_memmove_metadata(dst, (void *)src, n);
+> +
+> +	return result;
+> +}
+> +EXPORT_SYMBOL(__msan_memmove);
+> +
+> +/* Handle llvm.memcpy intrinsic. */
+> +void *__msan_memcpy(void *dst, const void *src, uintptr_t n)
+> +{
+> +	void *result;
+> +
+> +	result = __memcpy(dst, src, n);
+> +	if (!n)
+> +		/* Some people call memcpy() with zero length. */
+> +		return result;
+> +
+> +	if (!kmsan_enabled || kmsan_in_runtime())
+> +		return result;
+> +
+> +	/* Using memmove instead of memcpy doesn't affect correctness. */
+> +	kmsan_internal_memmove_metadata(dst, (void *)src, n);
+> +
+> +	return result;
+> +}
+> +EXPORT_SYMBOL(__msan_memcpy);
+> +
+> +/* Handle llvm.memset intrinsic. */
+> +void *__msan_memset(void *dst, int c, uintptr_t n)
+> +{
+> +	void *result;
+> +
+> +	result = __memset(dst, c, n);
+> +	if (!kmsan_enabled || kmsan_in_runtime())
+> +		return result;
+> +
+> +	kmsan_enter_runtime();
+> +	/*
+> +	 * Clang doesn't pass parameter metadata here, so it is impossible to
+> +	 * use shadow of @c to set up the shadow for @dst.
+> +	 */
+> +	kmsan_internal_unpoison_memory(dst, n, /*checked*/ false);
+> +	kmsan_leave_runtime();
+> +
+> +	return result;
+> +}
+> +EXPORT_SYMBOL(__msan_memset);
 
-FYI, the error/warning still remains.
+This, we need this same for KASAN. KASAN must be changed to have the
+mem*() intrinsics emit __asan_mem*(), such that we can have
+uninstrumented base functions.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-commit: 988b52b392a13c1b710e9ffdc5de9f933de77551 [5854/5872] ANDROID: trusty: Support setting FF-A Tag
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220330/202203301644.1prdbsrp-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/988b52b392a13c1b710e9ffdc5de9f933de77551
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-        git checkout 988b52b392a13c1b710e9ffdc5de9f933de77551
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+Currently we seem to have the problem that when a noinstr function trips
+one of those instrinsics it'll emit a call to an instrumented function,
+which is a complete no-no.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Also see:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+  https://lore.kernel.org/all/YjxTt3pFIcV3lt8I@zn.tnic/T/#m2049a14be400d4ae2b54a1f7da3ede28b7fd7564
 
->> ERROR: modpost: "trusty_dma_buf_get_ffa_tag" [drivers/trusty/trusty-ipc.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Given the helpful feedback there, Mark and me are going to unilaterally
+break Kasan by deleting the existing wrappers.

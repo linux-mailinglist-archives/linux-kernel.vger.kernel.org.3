@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EF54EBBFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6C24EBC0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243937AbiC3HpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S243958AbiC3Hqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243959AbiC3Ho5 (ORCPT
+        with ESMTP id S234304AbiC3Hqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:44:57 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B5B4B1DF;
-        Wed, 30 Mar 2022 00:42:56 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:d:7e3f:91e1:4be5:4001:fd80])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9D4621F44389;
-        Wed, 30 Mar 2022 08:42:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648626174;
-        bh=pIoevYhcg4lXfHAB+gBSklOntW3daq2OPWaaIDxIW6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Iq4UZjhSaV+ZYTcSkGHAm9xbaJifda92sZT/0xu0mlaErqEDx8q3PQxXGnLazpxux
-         cYxJ0F5vFVwS0NTOWzswdqbTz5Xcg0uUJTgsI1CLRwaXKZ567UbHDi9cVdgKM375nf
-         0LkAlezqhGvsdXF+y6a6XwurlLaHoBzC+bADyP00qoc4ba6ZNP4O9S0ctMldo/tEeS
-         TDodJrL12LoM5I1OFg4jb3a/mVQ5a9MbM4EBID2itedr3abZRzrpiaVDkeGqGUD3dO
-         Z9xhsyqcA0f+fvtn+L2xGODoKGBsgMpFJFhWgnDvM76lUM06dyCOEtxJw4BS4sGmvO
-         Pz4S9HYRbGMpw==
-Date:   Wed, 30 Mar 2022 09:42:50 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 21/24] media: hantro: Stop using H.264 parameter
- pic_num
-Message-ID: <20220330074250.jqyljbr53fgeci6q@basti-XPS-13-9310>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
- <20220328195936.82552-22-nicolas.dufresne@collabora.com>
+        Wed, 30 Mar 2022 03:46:31 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6D7E62;
+        Wed, 30 Mar 2022 00:44:45 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KSz1R04W5z67gYW;
+        Wed, 30 Mar 2022 15:42:51 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 30 Mar 2022 09:44:43 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 30 Mar 2022 09:44:43 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Linux Doc Mailing List" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 05/18] bpf-preload: Generate static variables
+Thread-Topic: [PATCH 05/18] bpf-preload: Generate static variables
+Thread-Index: AQHYQsyWLcVpB05sakWRWVPVfsSzdqzW6LQAgACiZ4A=
+Date:   Wed, 30 Mar 2022 07:44:43 +0000
+Message-ID: <4621def6171f4ca5948a59a7e714d25f@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220328175033.2437312-6-roberto.sassu@huawei.com>
+ <CAEf4BzY9d0pUP2TFkOY41dbjyYrsr5S+sNCpynPtg_9XZHFb-Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzY9d0pUP2TFkOY41dbjyYrsr5S+sNCpynPtg_9XZHFb-Q@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.209.190]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220328195936.82552-22-nicolas.dufresne@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,66 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Nicolas,
-
-The term pic_num is now only present in the following files:
-```
-❯ rg 'pic_num'
-staging/media/rkvdec/rkvdec-h264.c
-766:	 * Assign an invalid pic_num if DPB entry at that position is inactive.
-768:	 * reference picture with pic_num 0, triggering output picture
-
-media/platform/amphion/vpu_windsor.c
-485:	u32 pic_num;
-
-media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-97:	unsigned short pic_num;
-346:		dst_entry->pic_num = src_entry->pic_num;
-
-media/v4l2-core/v4l2-h264.c
-143:	 * but with frame_num (wrapped). As for frame the pic_num and frame_num
-306:		/* this is pic_num for frame and frame_num (wrapped) for field,
-307:		 * but for frame pic_num is equal to frame_num (wrapped).
-```
-
-In v4l2-h264 and rkvdec-h264 it is only present as comment and the term
-is not part of the specification.
-In vpu_windsor it is actually never used.
-And for the mediatek driver the same might apply.
-It might be worth it to get rid of that term all together while you are
-at it.
-
-On 28.03.2022 15:59, Nicolas Dufresne wrote:
->The hardware expects FrameNumWrap or long_term_frame_idx. Picture
->numbers are per field, and are mostly used during the memory
->management process, which is done in userland. This fixes two
->ITU conformance tests:
->
->  - MR6_BT_B
->  - MR8_BT_B
->
->Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-
-Greetings,
-Sebastian
->---
-> drivers/staging/media/hantro/hantro_h264.c | 2 --
-> 1 file changed, 2 deletions(-)
->
->diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
->index 0b4d2491be3b..228629fb3cdf 100644
->--- a/drivers/staging/media/hantro/hantro_h264.c
->+++ b/drivers/staging/media/hantro/hantro_h264.c
->@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
->
-> 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
-> 		return 0;
->-	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
->-		return dpb->pic_num;
-> 	return dpb->frame_num;
-> }
->
->-- 
->2.34.1
->
+PiBGcm9tOiBBbmRyaWkgTmFrcnlpa28gW21haWx0bzphbmRyaWkubmFrcnlpa29AZ21haWwuY29t
+XQ0KPiBTZW50OiBXZWRuZXNkYXksIE1hcmNoIDMwLCAyMDIyIDE6NTIgQU0NCj4gT24gTW9uLCBN
+YXIgMjgsIDIwMjIgYXQgMTA6NTIgQU0gUm9iZXJ0byBTYXNzdQ0KPiA8cm9iZXJ0by5zYXNzdUBo
+dWF3ZWkuY29tPiB3cm90ZToNCj4gPg0KPiA+IFRoZSBmaXJzdCBwYXJ0IG9mIHRoZSBwcmVsb2Fk
+IGNvZGUgZ2VuZXJhdGlvbiBjb25zaXN0cyBpbiBnZW5lcmF0aW5nIHRoZQ0KPiA+IHN0YXRpYyB2
+YXJpYWJsZXMgdG8gYmUgdXNlZCBieSB0aGUgY29kZSBpdHNlbGY6IHRoZSBsaW5rcyBhbmQgbWFw
+cyB0byBiZQ0KPiA+IHBpbm5lZCwgYW5kIHRoZSBza2VsZXRvbi4gR2VuZXJhdGlvbiBvZiB0aGUg
+cHJlbG9hZCB2YXJpYWJsZXMgYW5kDQo+IG1ldGhvZHMNCj4gPiBpcyBlbmFibGVkIHdpdGggdGhl
+IG9wdGlvbiAtUCBhZGRlZCB0byAnYnBmdG9vbCBnZW4gc2tlbGV0b24nLg0KPiA+DQo+ID4gVGhl
+IGV4aXN0aW5nIHZhcmlhYmxlcyBtYXBzX2xpbmsgYW5kIHByb2dzX2xpbmtzIGluIGJwZl9wcmVs
+b2FkX2tlcm4uYw0KPiBoYXZlDQo+ID4gYmVlbiByZW5hbWVkIHJlc3BlY3RpdmVseSB0byBkdW1w
+X2JwZl9tYXBfbGluayBhbmQNCj4gZHVtcF9icGZfcHJvZ19saW5rLCB0bw0KPiA+IG1hdGNoIHRo
+ZSBuYW1lIG9mIHRoZSB2YXJpYWJsZXMgaW4gdGhlIG1haW4gc3RydWN0dXJlIG9mIHRoZSBsaWdo
+dA0KPiA+IHNrZWxldG9uLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8
+cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiA+IC0tLQ0KPiA+ICBrZXJuZWwvYnBmL3ByZWxv
+YWQvYnBmX3ByZWxvYWRfa2Vybi5jICAgICAgICAgfCAgMzUgKy0NCj4gPiAga2VybmVsL2JwZi9w
+cmVsb2FkL2l0ZXJhdG9ycy9NYWtlZmlsZSAgICAgICAgIHwgICAyICstDQo+ID4gIC4uLi9icGYv
+cHJlbG9hZC9pdGVyYXRvcnMvaXRlcmF0b3JzLmxza2VsLmggICB8IDM3OCArKysrKysrKystLS0t
+LS0tLS0NCj4gPiAgLi4uL2JwZi9icGZ0b29sL0RvY3VtZW50YXRpb24vYnBmdG9vbC1nZW4ucnN0
+IHwgICA1ICsNCj4gPiAgdG9vbHMvYnBmL2JwZnRvb2wvYmFzaC1jb21wbGV0aW9uL2JwZnRvb2wg
+ICAgIHwgICAyICstDQo+ID4gIHRvb2xzL2JwZi9icGZ0b29sL2dlbi5jICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAyNyArKw0KPiA+ICB0b29scy9icGYvYnBmdG9vbC9tYWluLmMgICAgICAgICAg
+ICAgICAgICAgICAgfCAgIDcgKy0NCj4gPiAgdG9vbHMvYnBmL2JwZnRvb2wvbWFpbi5oICAgICAg
+ICAgICAgICAgICAgICAgIHwgICAxICsNCj4gPiAgOCBmaWxlcyBjaGFuZ2VkLCAyNTQgaW5zZXJ0
+aW9ucygrKSwgMjAzIGRlbGV0aW9ucygtKQ0KPiA+DQo+IA0KPiBbLi4uXQ0KPiANCj4gPiArX19h
+dHRyaWJ1dGVfXygodW51c2VkKSkgc3RhdGljIHZvaWQNCj4gPiAraXRlcmF0b3JzX2JwZl9fYXNz
+ZXJ0KHN0cnVjdCBpdGVyYXRvcnNfYnBmICpzKQ0KPiA+ICt7DQo+ID4gKyNpZmRlZiBfX2NwbHVz
+cGx1cw0KPiA+ICsjZGVmaW5lIF9TdGF0aWNfYXNzZXJ0IHN0YXRpY19hc3NlcnQNCj4gPiArI2Vu
+ZGlmDQo+ID4gKyNpZmRlZiBfX2NwbHVzcGx1cw0KPiA+ICsjdW5kZWYgX1N0YXRpY19hc3NlcnQN
+Cj4gPiArI2VuZGlmDQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3QgYnBmX2xpbmsg
+KmR1bXBfYnBmX21hcF9saW5rOw0KPiA+ICtzdGF0aWMgc3RydWN0IGJwZl9saW5rICpkdW1wX2Jw
+Zl9wcm9nX2xpbms7DQo+ID4gK3N0YXRpYyBzdHJ1Y3QgaXRlcmF0b3JzX2JwZiAqc2tlbDsNCj4g
+DQo+IEkgZG9uJ3QgdW5kZXJzdGFuZCB3aGF0IGlzIHRoaXMgYW5kIHdoYXQgZm9yPyBZb3UgYXJl
+IG1ha2luZyBhbg0KPiBhc3N1bXB0aW9uIHRoYXQgbGlnaHQgc2tlbGV0b24gY2FuIGJlIGluc3Rh
+bnRpYXRlZCBqdXN0IG9uY2UsIHdoeT8gQW5kDQo+IGFkZGluZyBleHRyYSBicGZ0b29sIG9wdGlv
+biB0byBsaWdodCBza2VsZXRvbiBjb2RlZ2VuIGp1c3QgdG8gc2F2ZSBhDQo+IGJpdCBvZiB0eXBp
+bmcgYXQgdGhlIHBsYWNlIHdoZXJlIGxpZ2h0IHNrZWxldG9uIGlzIGFjdHVhbGx5DQo+IGluc3Rh
+bnRpYXRlZCBhbmQgdXNlZCBkb2Vzbid0IHNlZW1zIGxpa2UgYSByaWdodCBhcHByb2FjaC4NCg0K
+VHJ1ZSwgaXRlcmF0b3JfYnBmIGlzIHNpbXBsZS4gV3JpdGluZyB0aGUgcHJlbG9hZGluZyBjb2Rl
+DQpmb3IgaXQgaXMgc2ltcGxlLiBCdXQsIHdoYXQgaWYgeW91IHdhbnRlZCB0byBwcmVsb2FkIGFu
+IExTTQ0Kd2l0aCAxMCBob29rcyBvciBtb3JlPw0KDQpPaywgcmVnYXJkaW5nIHdoZXJlIHRoZSBw
+cmVsb2FkaW5nIGNvZGUgc2hvdWxkIGJlLCBJIHdpbGwNCnRyeSB0byBtb3ZlIHRoZSBnZW5lcmF0
+ZWQgY29kZSB0byB0aGUga2VybmVsIG1vZHVsZSBpbnN0ZWFkDQpvZiB0aGUgbGlnaHQgc2tlbGV0
+b24uDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRv
+cmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgWmhvbmcgUm9u
+Z2h1YQ0KDQo+IEZ1cnRoZXIsIGV2ZW4gaWYgdGhpcyBpcyB0aGUgd2F5IHRvIGdvLCBwbGVhc2Ug
+c3BsaXQgb3V0IGJwZnRvb2wNCj4gY2hhbmdlcyBmcm9tIGtlcm5lbCBjaGFuZ2VzLiBUaGVyZSBp
+cyBub3RoaW5nIHJlcXVpcmluZyB0aGVtIHRvIGJlDQo+IGNvdXBsZWQgdG9nZXRoZXIuDQo+IA0K
+PiBbLi4uXQ0K

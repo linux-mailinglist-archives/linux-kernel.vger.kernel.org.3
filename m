@@ -2,98 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A9D4EC8CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D574EC8D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348424AbiC3Pxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S1348433AbiC3PyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348415AbiC3Pxs (ORCPT
+        with ESMTP id S1348425AbiC3PyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:53:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD85E15A3C;
-        Wed, 30 Mar 2022 08:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648655522; x=1680191522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aHOCvdmEcRy5ZvBUbTf9zFkDOMo9CAy71FTo/IenFRo=;
-  b=L1+XjfbPxJ0kzgV7LL2sAqCWSdraTfNgzM6bnfGb40Jq8TBJqwvitsCC
-   uo3pOiHpuItE7fsiALkf8yZEmQm3g0yF2G6dK3OUGxxpMWQU8166fszug
-   kJu16kOpLkFzts1EXqlnFZWSpiad8XQiVuBjZ0N10KjZv5iLeZeSPAG6E
-   rkM2h4w39gNynO2whfHEcO2Az6bJp9D7/S801+mztsCzKtG2PXD8h1/AK
-   dtEgpEXRmvlTaMnfPyd78Np8KoivIWgu3MBORSybpcIwo4G1q80LpTK7t
-   c/rPyArFw3RvOYa9l/czQ4nVwqfLvN8GxGjfdR3mrBPcNBYU8bDJBZwA5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257154356"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="257154356"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 08:52:02 -0700
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="788049544"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 08:51:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nZabQ-009UCS-Cy;
-        Wed, 30 Mar 2022 18:51:20 +0300
-Date:   Wed, 30 Mar 2022 18:51:20 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Qianggui Song <qianggui.song@amlogic.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        openbmc@lists.ozlabs.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2 09/13] pinctrl: meson: Rename REG_* to MREG_*
-Message-ID: <YkR8eDT6fS8uRpOT@smile.fi.intel.com>
-References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
- <20220329152926.50958-10-andriy.shevchenko@linux.intel.com>
- <94e888fe-d8fc-5379-302f-66d64f2ae10b@baylibre.com>
- <YkM22GwhxV+YKl8l@smile.fi.intel.com>
- <CAMuHMdWVA834tkeag=WOnHFGuhwZ93PkrgO24OV69Fye1hruLw@mail.gmail.com>
- <1b0bc704-a740-ea15-1e90-166905be27d0@baylibre.com>
- <YkQgfwUs8KbhF/b/@smile.fi.intel.com>
- <6812bb31-5d2b-4737-c2ad-8727d105847d@baylibre.com>
+        Wed, 30 Mar 2022 11:54:07 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3ACF05;
+        Wed, 30 Mar 2022 08:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BW4xB1E0Wz9zQM2RhY0W9y2eD+oHCvNkoCEgXM+QgRg=; b=cKQgGbj3Q5DyGXPpUah3X4jqQ/
+        E4zT/CCDEFDmGH6GZFsioH1Rzvzp/Qv7GNxXSV1AzJU/lwoR8DWgL1Py5fzwRRa0OKiqWi544F4iL
+        jAsfiaqCuYvKVBk0mJNe1FXjiajtDG+SDTjeeqneFCZ/qD+zgTc9hDT7uL7rDPacPdxpZVbbYTYGu
+        AB55ncNM+WLF1lw375xOZvn4r0ONt6GXBt3Bo8QvUPJ8EgW4ZHakxLUCOzDEPHcuuRAq8FPbltqaz
+        JlGOY1qTwnKEEFLiRxBWNyDUQ2RV8DIJeYed2YbbLfN1p1MdhrEVlveSg2gloIlAdEQpZoKmoRoIb
+        4QbqS9Dw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZacP-00GfjC-Rv; Wed, 30 Mar 2022 15:52:21 +0000
+Date:   Wed, 30 Mar 2022 08:52:21 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, jane.chu@oracle.com
+Subject: Re: [PATCH v11 7/8] xfs: Implement ->notify_failure() for XFS
+Message-ID: <YkR8tfSn+M51fbff@infradead.org>
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
+ <20220227120747.711169-8-ruansy.fnst@fujitsu.com>
+ <YkPyBQer+KRiregd@infradead.org>
+ <894ed00b-b174-6a10-ee45-320007957ea4@fujitsu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6812bb31-5d2b-4737-c2ad-8727d105847d@baylibre.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <894ed00b-b174-6a10-ee45-320007957ea4@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,54 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 05:22:56PM +0200, Neil Armstrong wrote:
-> On 30/03/2022 11:18, Andy Shevchenko wrote:
-
-...
-
-> > > > > > What error do you hit ?
-> > > > > 
-> > > > > arch/x86/include/asm/arch_hweight.h:9:17: error: expected identifier before string constant
-> > > > > 9 | #define REG_OUT "a"
-> > > > >     |                 ^~~
-> > > > 
-> > > > Perhaps REG_{OUT,IN} in arch/x86/include/asm/arch_hweight.h should be
-> > > > renamed instead, as this is a generic header file that can be included
-> > > > anywhere, while the REG_{OUT,IN} definitions are only used locally,
-> > > > in the header file?
-> > > 
-> > > Even better, those REG_OUT/REG_IN should be undefined at the end of the header since only
-> > > used in the headers inline functions:
-> > > ==============><==================================
-> > > diff --git a/arch/x86/include/asm/arch_hweight.h b/arch/x86/include/asm/arch_hweight.h
-> > > index ba88edd0d58b..139a4b0a2a14 100644
-> > > --- a/arch/x86/include/asm/arch_hweight.h
-> > > +++ b/arch/x86/include/asm/arch_hweight.h
-> > > @@ -52,4 +52,7 @@ static __always_inline unsigned long __arch_hweight64(__u64 w)
-> > >   }
-> > >   #endif /* CONFIG_X86_32 */
-> > > 
-> > > +#undef REG_IN
-> > > +#undef REG_OUT
-> > > +
-> > >   #endif
-> > > ==============><==================================
+On Wed, Mar 30, 2022 at 11:16:10PM +0800, Shiyang Ruan wrote:
+> > > +#if IS_ENABLED(CONFIG_MEMORY_FAILURE) && IS_ENABLED(CONFIG_FS_DAX)
 > > 
-> > Can you submit a formal patch, please?
+> > No real need for the IS_ENABLED.  Also any reason to even build this
+> > file if the options are not set?  It seems like
+> > xfs_dax_holder_operations should just be defined to NULL and the
+> > whole file not supported if we can't support the functionality.
 > 
-> I'll submit it separately
+> Got it.  These two CONFIG seem not related for now.  So, I think I should
+> wrap these code with #ifdef CONFIG_MEMORY_FAILURE here, and add
+> `xfs-$(CONFIG_FS_DAX) += xfs_notify_failure.o` in the makefile.
 
-Sure!
+I'd do
 
-> > And I think it would be good to have my patch as well, so we do not depend on
-> > the fate of the other one.
+ifeq ($(CONFIG_MEMORY_FAILURE),y)
+xfs-$(CONFIG_FS_DAX) += xfs_notify_failure.o
+endif
+
+in the makefile and keep it out of the actual source file entirely.
+
+> > > +
+> > > +	/* Ignore the range out of filesystem area */
+> > > +	if ((offset + len) < ddev_start)
+> > 
+> > No need for the inner braces.
+> > 
+> > > +	if ((offset + len) > ddev_end)
+> > 
+> > No need for the braces either.
 > 
-> Yes sure
+> Really no need?  It is to make sure the range to be handled won't out of the
+> filesystem area.  And make sure the @offset and @len are valid and correct
+> after subtract the bbdev_start.
 
-Thanks for acknowledging and review!
+Yes, but there is no need for the braces per the precedence rules in
+C.  So these could be:
 
--- 
-With Best Regards,
-Andy Shevchenko
+	if (offset + len < ddev_start)
 
+and
 
+	if (offset + len > ddev_end)

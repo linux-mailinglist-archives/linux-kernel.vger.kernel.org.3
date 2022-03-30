@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9F04EBC66
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DE14EBC71
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244146AbiC3IMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        id S244155AbiC3IPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiC3IMV (ORCPT
+        with ESMTP id S244160AbiC3IP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:12:21 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894B71C5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:10:35 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id p15so39844649ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:10:35 -0700 (PDT)
+        Wed, 30 Mar 2022 04:15:29 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D3BD98
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:13:42 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e5e176e1b6so209279877b3.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2Bx33AfU/HrMdmUVrutEhCI4XtzN6zsWPn96wMBqWfQ=;
-        b=tB9ZV4xNkTjWB+JfChV1RXPd3jTDRvTlqgUVZYBP73R087rphFaYQlaPGbG10bTd8R
-         pIKQ6ekTnt11peeMgweBaV6uj4ndWFbf3VcF/DGmbU5F2D/yOES7wCXZSPPwwCFD5xsb
-         fCgioai7oet8z9ESFfxsTNgmSyNvezi0kmrxk1ygD6fHzUwhh4fj9ZC/l/7SUKlSu0bH
-         F8rOagD4youDcBgNXFC23Iqu4mLEld97nRv1ev2JFw0htFR0QzgyGSbsmbYOWhyeV2F0
-         F/kpEbXStSTMndFlA0o7wctslBAJLaldhLL9AU6MxBflZum8YWO/WNhG0+IUoCJo2RNJ
-         UJxg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+K2owB2t+DyQbJlqnNOc4HsIBOKgjIwr1F8eYT47SAY=;
+        b=L96kVudZpRgDc4Yt/oIj1RBcCzRw1KG7XKih3MPhLDooTQIKsvMLOgba9DqIS7VT07
+         i4R0x5C4/4WgR3f+71vyARmUNbV1X8MrQwH7vZDAbuiOkJ58nn8sJWMh+pjzrSi1fETb
+         fgEnPXL3fulDjgZZTsMToe2KPEYW61H2nE8khMJCRkOAaoxo6JWffKcRkzGh9v8vAbo1
+         jGWK/HQ6Pin99Av4aobNB/qcyVS4zArGtL632WFz+l7f4QBuofP/hlL7Nn0s2gPZnAey
+         g96bM2S+sEcj5HkPkUXv28NMphmtAFYK/X1mfGGdRibmJetHul+LW3fefsdAOjGYwcdv
+         bb4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2Bx33AfU/HrMdmUVrutEhCI4XtzN6zsWPn96wMBqWfQ=;
-        b=jRLeW5P2O+gOUTfFYIXJSo5lo38eEXEdsopjfv2oeVxkA7bsoE0+rFH+4s2EeA4yhv
-         0ueBQ47iVma1XINKue6QE899UABEf32KuselJU0zg4AEB/pm2eKbvHLLVG2P45+Sp3we
-         E7IbKRtY8Tp0NSEpu5NgT3tqcxCDGyqy0pdaCZlYfCMVVPGVQPke+k+YtXIbnUJ3U/Lj
-         qP6BbyFYZxoOE3qy1QZdFpSEEqql9zFNP2AI5x8SYZpBlqhPUWcK4beMbofHT9ExKJ4O
-         2JbjqnDl13broS9wCT9IbVNzIcW8euxS2ssUBVMg+hOwaROk5E9c6wrwhVA9dKlK8Ewe
-         s9+w==
-X-Gm-Message-State: AOAM5336acnfbG/tjAEypO3Lc3KH7VoLLroGHPW1QRsZWOaes7gttQMU
-        p90/7Q2vrMGn9YDFMDmdNAyExw==
-X-Google-Smtp-Source: ABdhPJyr3a3ngbzY3rpCE8sm/h/E4CpGMIzRZRj13oMVUUOM4QcQjBwxtlOdEeguU+Me2VirmtUfNA==
-X-Received: by 2002:a17:907:86a3:b0:6da:870c:af44 with SMTP id qa35-20020a17090786a300b006da870caf44mr38389614ejc.445.1648627834085;
-        Wed, 30 Mar 2022 01:10:34 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id b17-20020aa7dc11000000b00412ae7fda95sm1129147edu.44.2022.03.30.01.10.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 01:10:33 -0700 (PDT)
-Message-ID: <20a7dc75-93d9-dcb1-9f2a-b962a1f84d31@linaro.org>
-Date:   Wed, 30 Mar 2022 10:10:32 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+K2owB2t+DyQbJlqnNOc4HsIBOKgjIwr1F8eYT47SAY=;
+        b=NxGYjRVSlXqUyfrc0y/DKAvxPt8QcYb7hlvKe3VcQP35KuiLPu8Yn0k8jcmKlLP/aP
+         PrzaBkb7hs2fUZXpK08/VuX7VFhmw57onbhrXKsgyCCNpFbrfuQTRUotH9UotT6E6/IW
+         1IOy0URt2jfniblYCqfgBVZmqvQ/hfe0a72QrttAEEFp1t7RvH7w/fkSTR5J56H02dlp
+         pv6IQ2n1yEVjIR773GmD8DB244e/jkFCdw8k8ZSz9Ydn5wV1c9P899sq8dtI8zBPKVo0
+         SjY3BmfltM+1agRbGJYpT6g+Dm9Z4tGcX2YhXHQDwBcMjD2t252bBH5yNFPjCRILlnsM
+         OUMA==
+X-Gm-Message-State: AOAM532HaCd/6kz75Bu5TEIltoGCAY6KieBiwbnGW486Ngaw5hxhZ+0j
+        E4GgeXXjTEufrQrOmh894ekyX+twl5av3pEABdft0ynRERU2OA==
+X-Google-Smtp-Source: ABdhPJyiJphZ0B4bNrtTJ592K7nKM80aJvrFgk7oeKtVKWMl4n3G2wQRnpMTonCi/3gEv7I+n3WHJrN2/z+CI9JQTU8=
+X-Received: by 2002:a81:897:0:b0:2e5:f3b2:f6de with SMTP id
+ 145-20020a810897000000b002e5f3b2f6demr35424504ywi.141.1648628022097; Wed, 30
+ Mar 2022 01:13:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 4/5] dt-bindings: phy: uniphier-usb3hs: Fix incorrect
- clock-names and reset-names
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648617651-9004-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648617651-9004-5-git-send-email-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1648617651-9004-5-git-send-email-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220329132619.18689-1-linmiaohe@huawei.com> <20220329132619.18689-2-linmiaohe@huawei.com>
+In-Reply-To: <20220329132619.18689-2-linmiaohe@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 30 Mar 2022 16:13:06 +0800
+Message-ID: <CAMZfGtUPQvgaxG_6A0n6HwD9VjqbQUbnF99Ei9WpMZbTbnz4zg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] mm/vmscan: remove redundant folio_test_swapbacked
+ check when folio is file lru
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2022 07:20, Kunihiko Hayashi wrote:
-> There is no clock-names and reset-names for Pro5 SoC, that should have two
-> properties, "gio" and "link" like usb3-ssphy.
-> 
-> And according to the existing PXs2 devicetree, the clock-names for PXs2 SoC
-> should have "link" and "phy", and minItems of clocks should be 2.
-> 
-> Fixes: 134ab2845acb ("dt-bindings: phy: Convert UniPhier USB3-PHY conroller to json-schema")
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+On Tue, Mar 29, 2022 at 9:26 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> When folio is file lru, folio_test_swapbacked is guaranteed to be true. So
+> it's unnecessary to check it here again. No functional change intended.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->  .../phy/socionext,uniphier-usb3hs-phy.yaml       | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-> index 33946efcac5e..1bbd164f2527 100644
-> --- a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-> @@ -31,12 +31,14 @@ properties:
->      const: 0
->  
->    clocks:
-> -    minItems: 1
-> +    minItems: 2
->      maxItems: 3
->  
->    clock-names:
->      oneOf:
-> -      - const: link          # for PXs2
-> +      - items:               # for Pro5
-> +          - const: gio
-> +          - const: link
->        - items:               # for PXs3 with phy-ext
+>  mm/vmscan.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 1678802e03e7..7c1a9713bfc9 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1434,8 +1434,7 @@ static void folio_check_dirty_writeback(struct folio *folio,
+>          * Anonymous pages are not handled by flushers and must be written
+>          * from reclaim context. Do not stall reclaim based on them
+>          */
+> -       if (!folio_is_file_lru(folio) ||
+> -           (folio_test_anon(folio) && !folio_test_swapbacked(folio))) {
+> +       if (!folio_is_file_lru(folio) || folio_test_anon(folio)) {
 
-Similarly to our other discussion, it would be good to convert it to
-allOf:if:then: constraining it per compatible. The change itself is ok:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+At least your login is no problem since folio_is_file_lru() is equal to
+!folio_test_swapbacked().  But the new code is not clear to me.
+The old code is easy to understand, e.g. folio_test_anon(folio) &&
+!folio_test_swapbacked(folio) tells us that the anon pages which
+do not need to be swapped should be skipped. So I'm neutral on
+the patch.

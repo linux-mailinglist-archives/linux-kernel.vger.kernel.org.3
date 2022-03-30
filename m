@@ -2,91 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A664C4EBF79
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B7D4EBF82
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245746AbiC3LER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S245754AbiC3LFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245723AbiC3LED (ORCPT
+        with ESMTP id S234487AbiC3LFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:04:03 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59005C5584;
-        Wed, 30 Mar 2022 04:02:18 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id DCD822223B;
-        Wed, 30 Mar 2022 13:02:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648638136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aLnrtpnRAiL6v+cP9y7rKdCDomkZu1ScIOGwNkz3rpE=;
-        b=e83Xv7idZD4OnNsV+VrMu6XrTQuf5d3s1LWZQAj6+tGeCCObB8yIO+5KJrUlrfkpi0yXtj
-        LN63YG92vbxwjwG6je2p84wy6hPi7DTSmkcpNZsD5gw8m9kRr4J40YAbO0KUI2cousBH+P
-        5EWhEx5xvgguXDL6kJzbrmnhqoUYA5Y=
-From:   Michael Walle <michael@walle.cc>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH RFC net-next] net: lan966x: make PHY reset support optional
-Date:   Wed, 30 Mar 2022 13:02:10 +0200
-Message-Id: <20220330110210.3374165-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Wed, 30 Mar 2022 07:05:35 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6D16151
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=BMy5MpLHZ2eMrjRM9df3zSOhU3qkqVEIGDXRzBANghc=;
+        b=XBmKv2nW3trthDQKLf382mrokcjes4sje8ugGFHNjU4gZ1LMrIF4weACqqnW4uzK03HdU8uyMjor5
+         XOofRYLj0o1aXlqJKUCYl/rVjEyyVHJzslsXD/zha9wdCjveH+MfiMzRcNySySYJzw6srr/xawqZFV
+         wPlx9qXuc//wrIot7RApk45blI+S71BdJsA0LlDIVL4a/uGSAVyroer+qRrsUYktdDj5G9mmif0v/4
+         iblF7KDuSv4oNUmcOr9tqcHjZn25UH3fhDQ3hOg5gfkc9nVRjz+EAUY088yXfbPdxGOuz3Xbf0ys7F
+         /5Zb0lkxbHgwyVKmKHs084js04bij8A==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000008,0.005704)], BW: [Enabled, t: (0.000017,0.000001)], RTDA: [Enabled, t: (0.083100), Hit: No, Details: v2.31.0; Id: 15.52k0as.1fvd7s32n.dt73; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 30 Mar 2022 14:02:45 +0300
+Date:   Wed, 30 Mar 2022 14:02:29 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bus: imx-weim: fix pdev is NULL but dereferenced
+Message-ID: <20220330110229.xczp74pd6o4xvfws@h-e2.ddg>
+References: <1648635500-12631-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1648635500-12631-1-git-send-email-baihaowen@meizu.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PHY subsystem as well as the MIIM mdio driver (in case of the
-integrated PHYs) will already take care of the resets of any external
-and internal PHY. There is no need for this reset anymore, so mark it
-optionally to be backwards compatible.
+Hi!
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
+On Wed, Mar 30, 2022 at 06:18:20PM +0800, Haowen Bai wrote:
+> pdev is NULL，so we can't dereference it dev_err(&pdev->dev
+> 
+> Fixes: e6cb540 ("bus: imx-weim: add DT overlay support for WEIM bus")
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  drivers/bus/imx-weim.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 60fbd42..31a2213 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -352,9 +352,8 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>  
+>  		pdev = of_find_device_by_node(rd->dn);
+>  		if (!pdev) {
+> -			dev_err(&pdev->dev,
+> -				"Could not find platform device for '%pOF'\n",
+> -				rd->dn);
+> +			pr_err("%s: Could not find platform device for '%pOF'\n",
+> +				__func__, rd->dn);
+>  
+>  			ret = notifier_from_errno(-EINVAL);
+>  		} else {
+> -- 
+> 2.7.4
+> 
 
-Horatiu, what do you think, should it be removed altogether? There is
-no user for that in mainline and I don't know about downstream but the
-reset driver doesn't really work (as it also resets the GPIO/SGPIO)
-and conceptionally the property is on the wrong DT node. All of the
-drawbacks should have been addressed by my patches for the miim [1]
-and the pinctrl driver [2].
+This is a solid bug, but there is a fix already.
 
-[1] https://lore.kernel.org/netdev/20220318201324.1647416-1-michael@walle.cc/
-[2] https://lore.kernel.org/linux-gpio/20220313154640.63813-1-michael@walle.cc/
+  https://lore.kernel.org/all/20220223035146.412499-1-wanjiabing@vivo.com/
 
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 1f8c67f0261b..0765064d2845 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -916,7 +916,7 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
- 		return dev_err_probe(lan966x->dev, PTR_ERR(switch_reset),
- 				     "Could not obtain switch reset");
- 
--	phy_reset = devm_reset_control_get_shared(lan966x->dev, "phy");
-+	phy_reset = devm_reset_control_get_optional_shared(lan966x->dev, "phy");
- 	if (IS_ERR(phy_reset))
- 		return dev_err_probe(lan966x->dev, PTR_ERR(phy_reset),
- 				     "Could not obtain phy reset\n");
--- 
-2.30.2
+For some reason it was not applied yet.
 

@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8A74EBE62
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FDA4EBE44
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245207AbiC3KKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S245116AbiC3KE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239182AbiC3KKe (ORCPT
+        with ESMTP id S238742AbiC3KE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:10:34 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A366154062;
-        Wed, 30 Mar 2022 03:08:49 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id w127so21570785oig.10;
-        Wed, 30 Mar 2022 03:08:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xxF35tmxxnkPH4ZK5NEAQj60FJRzpVvnSJO5oaHeufw=;
-        b=bXL1LDJiE/6ieyVsC90DLDVyC8H1dKobB4kHzTlDE9Z2547r/IDGGYH8DiJWkVUBCT
-         pcE0oGhb4L3WhvncB8ozlqungtkvBf5GVYwEpQ6SX2DfMxrwp4rf4rFJf7JrCmg0saQr
-         N5EbzB/Q8YEcgJJAhP9TvJd6pjohubjrImmANwNIc6jF24Td6iBKumJfDLugJ5m18XYW
-         zFwfC8S6P9sxJ/wRI2EemqttjWVcdNBGJR/7M4S83h5tJ4vIL6SgkSS9ks43kwRP4fQ2
-         Jo5gHaJK0POdLwt1JSqdkc86Cb9CwGN/qZjTGYWzZ2DjgTPms//ZXQWRYXt4Var6TG1Y
-         D+8w==
-X-Gm-Message-State: AOAM530mMYtjo8iU5txLYS28mh4DSIAH/CRL2AH3Fc0v/tte+wMVZGH6
-        ClGDDcdv8kOcVw41F/R8oCdrFL6vGp6TSQ==
-X-Google-Smtp-Source: ABdhPJymrMim6GuwgG9rkn34Y1quZ1IiNIC4NOmV1OZ5Z5iCKb5JvPXw5xtEE+GYbr53q5P+yRUSMA==
-X-Received: by 2002:a05:6808:f07:b0:2da:4916:578e with SMTP id m7-20020a0568080f0700b002da4916578emr1377280oiw.271.1648634928459;
-        Wed, 30 Mar 2022 03:08:48 -0700 (PDT)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056870d59700b000de821ba7cbsm9454429oao.15.2022.03.30.03.08.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 03:08:48 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso14578539otf.12;
-        Wed, 30 Mar 2022 03:08:48 -0700 (PDT)
-X-Received: by 2002:a0d:ccd6:0:b0:2e7:98e2:a5a2 with SMTP id
- o205-20020a0dccd6000000b002e798e2a5a2mr28100571ywd.479.1648634538529; Wed, 30
- Mar 2022 03:02:18 -0700 (PDT)
+        Wed, 30 Mar 2022 06:04:57 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67C1EBABA2;
+        Wed, 30 Mar 2022 03:03:09 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="123090685"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 30 Mar 2022 18:03:08 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 70C084D16FF2;
+        Wed, 30 Mar 2022 18:03:02 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 30 Mar 2022 18:03:02 +0800
+Received: from [10.167.201.8] (10.167.201.8) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 30 Mar 2022 18:03:01 +0800
+Message-ID: <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
+Date:   Wed, 30 Mar 2022 18:03:01 +0800
 MIME-Version: 1.0
-References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com> <20220329152926.50958-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220329152926.50958-3-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Mar 2022 12:02:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWFENTrXsYq3PKRFBqUL570-pPMG43Vct62=U9cyyF0yQ@mail.gmail.com>
-Message-ID: <CAMuHMdWFENTrXsYq3PKRFBqUL570-pPMG43Vct62=U9cyyF0yQ@mail.gmail.com>
-Subject: Re: [PATCH v2 02/13] gpiolib: Introduce gpiochip_node_count() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Qianggui Song <qianggui.song@amlogic.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     Dan Williams <dan.j.williams@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        openbmc@lists.ozlabs.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Jane Chu <jane.chu@oracle.com>
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
+ <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
+ <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
+ <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com>
+ <YkPtptNljNcJc1g/@infradead.org>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <YkPtptNljNcJc1g/@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: 70C084D16FF2.A0C25
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
 
-On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> The gpiochip_node_count() helper iterates over the device child nodes that
-> have the "gpio-controller" property set. It returns the number of such nodes
-> under a given device.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks for your patch!
+在 2022/3/30 13:41, Christoph Hellwig 写道:
+> On Wed, Mar 16, 2022 at 09:46:07PM +0800, Shiyang Ruan wrote:
+>>> Forgive me if this has been discussed before, but since dax_operations
+>>> are in terms of pgoff and nr pages and memory_failure() is in terms of
+>>> pfns what was the rationale for making the function signature byte
+>>> based?
+>>
+>> Maybe I didn't describe it clearly...  The @offset and @len here are
+>> byte-based.  And so is ->memory_failure().
+> 
+> Yes, but is there a good reason for that when the rest of the DAX code
+> tends to work in page chunks?
 
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -755,4 +755,16 @@ static inline void gpiochip_unlock_as_irq(struct gpio_chip *gc,
->         device_for_each_child_node(dev, child)                                  \
->                 if (!fwnode_property_present(child, "gpio-controller")) {} else
->
-> +static inline unsigned int gpiochip_node_count(struct device *dev)
-> +{
-> +       struct fwnode_handle *child;
-> +       unsigned int count;
+Because I am not sure if the offset between each layer is page aligned. 
+  For example, when pmem dirver handles ->memory_failure(), it should 
+subtract its ->data_offset when it calls dax_holder_notify_failure().
 
-Preinitialize to zero?
+The implementation of ->memory_failure() by pmem driver:
++static int pmem_pagemap_memory_failure(struct dev_pagemap *pgmap,
++		phys_addr_t addr, u64 len, int mf_flags)
++{
++	struct pmem_device *pmem =
++			container_of(pgmap, struct pmem_device, pgmap);
++	u64 offset = addr - pmem->phys_addr - pmem->data_offset;
++
++	return dax_holder_notify_failure(pmem->dax_dev, offset, len, mf_flags);
++}
 
-> +
-> +       count = 0;
-> +       for_each_gpiochip_node(dev, child)
-> +               count++;
-> +
-> +       return count;
-> +}
-> +
->  #endif /* __LINUX_GPIO_DRIVER_H */
+So, I choose u64 as the type of @len.  And for consistency, the @addr is 
+using byte-based type as well.
 
-Regardless:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+ > memory_failure()
+ > |* fsdax case
+ > |------------
+ > |pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
+ > | dax_holder_notify_failure()      =>
 
-Gr{oetje,eeting}s,
+the offset from 'pmem driver' to 'dax holder'
 
-                        Geert
+ > |  dax_device->holder_ops->notify_failure() =>
+ > |                                     - xfs_dax_notify_failure()
+ > |  |* xfs_dax_notify_failure()
+ > |  |--------------------------
+ > |  |   xfs_rmap_query_range()
+ > |  |    xfs_dax_failure_fn()
+ > |  |    * corrupted on metadata
+ > |  |       try to recover data, call xfs_force_shutdown()
+ > |  |    * corrupted on file data
+ > |  |       try to recover data, call mf_dax_kill_procs()
+ > |* normal case
+ > |-------------
+ > |mf_generic_kill_procs()
+
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thanks,
+Ruan.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+

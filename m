@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F4C4ECA45
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2347C4ECA43
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349179AbiC3RHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S1349172AbiC3RHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243512AbiC3RHK (ORCPT
+        with ESMTP id S232675AbiC3RHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:07:10 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8892FDFB1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:05:24 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2e6650cde1bso225761147b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:05:24 -0700 (PDT)
+        Wed, 30 Mar 2022 13:07:31 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F280212AD5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:05:45 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bg10so42816467ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AnsMD3FeYrTSlZn/a95b13cN6i0RSdBp2eSDDvoNOW0=;
-        b=m55c1Vo4NWO0XDeAhLWxHXUHuwrAsIGj84rayCYgL6T0n1akynub8GAmHZSisi9osc
-         PPTJ3l+EEy5cwXW1L6B6dBQWmIKry6b825eb1HSbDaPVq3gsJKj9pIFTrSWD26JXY5zf
-         lUMszNHBX65MANiU/Js2C8PbuB5ZFme/bUMfH+D2qaaO/J+2FHXjb8MmlO1qPq+Cl1gZ
-         NCqcrCgG4jooxaNWO3iEkYNP0TUO335EFU7W5pTqyKXCtlfS+Onm4iDnvAJTnFrH7epu
-         192bba5ezqTQh4FkbVBy1bOOgyPItROWRnKxaIFgDnCo4MgS2Dp9qNDdysOo77ttlCM7
-         Ztug==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Tj0NXhVhm7PGyEw1T3IIPx7yGFLG3tjmHr4oUiu0aBM=;
+        b=A+SD9/FO0TL/gKjMkQJKNe7U2AmbJ+03I9pf5OplDO3o62aL9aZB0bfmXop0Cwyu9Q
+         uB9gqqAdy/pD1ii7JGHUBIvJuFx+gqsctjIVWkFEfuCG64xYlijvuKUkYx41BTLSzLS/
+         WH4IeaKte2epTvfA26x5YO5mQp06UhGRO3jWlgKWCdgg+gHcKMNR+lV+C9pRXcYMeyHx
+         MNrr2Y2DSvIJmhRyh9JwrO/29C7nyQfnGno6cclU8yFoyH7/OnISb6YY88EEuh3i0YA3
+         7WjUh4c0QIx3Gn7uIKF4QlCL8WNfrJd2ZpkaiZEtfbhsXyfqaOhds0BQUddYwosZb+wQ
+         2b8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AnsMD3FeYrTSlZn/a95b13cN6i0RSdBp2eSDDvoNOW0=;
-        b=huMkR5mpL5ZDzxAJHI1LlRWgdzT+DYVtYDK+HOTOCpaj7uut7Duw9rVM8l42sX0jpp
-         LWbnVnR+8KiAwMrlOZqCvrY08WUtueVVwQf2Kytfjzt0T/7A4ETfVx4bX3mhi5U9Dss3
-         8QPorTM//GSiZ1K02g1UdYkQL+Quljk18X6fCnyIxuHvucju3HgN+LiAJWstHwMJ5pIQ
-         EI9BbbhEBzDhEyVwwC+KMlHVNfqozkjRDMBi/KwMFtVrKxkWLJ6CvN6YoDDSUwLFff9r
-         ynEKRaD6TQ6uWscEIPDkSgVdaySWRIxu73jDaOUObZkL1EqTbu181QnkIUG35NO8UY0c
-         y8yA==
-X-Gm-Message-State: AOAM532OhqTF6n3yfwi0+YlT+xYvR5IV/LM2OYm7Yq8z/qmHTqaJugUQ
-        65CM/V4RcS5wuHyzJq+sMh80zYsBw7PRpdqN3I2U6g==
-X-Google-Smtp-Source: ABdhPJz32aJueOZgkKLfvPFmTlmVPA1/UHHHoFUDQWBSedXE1xVeQq6hAhVxGzYPOXM9ST+h1IUfbxPABosm4dr9p0o=
-X-Received: by 2002:a81:1693:0:b0:2e5:874a:c060 with SMTP id
- 141-20020a811693000000b002e5874ac060mr593477yww.489.1648659923411; Wed, 30
- Mar 2022 10:05:23 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Tj0NXhVhm7PGyEw1T3IIPx7yGFLG3tjmHr4oUiu0aBM=;
+        b=Y1pzkGBxxtMAWw4BDVBCaWf4D2E1LxVpBkWw5ovZ5ECcmZxL2ZOwhVZtis9ienq9iI
+         0+/OVzUS6q9/QwcgLkDYoeM74hyHKt27GshAAB1nGLtR1+Gzg/8CJpbJMwZqRE/3eGK2
+         XlIJiVrYUafdin4FGW9InPViRX0g4d/NXpr+btHNcsZb7oK6MVncT8rAulT1of3kxgdT
+         MRkIa8DEdG5bTiLxKd3UV6MREdh6s/CrK021t46JXmyjS3+LWbMcLDUkKELfck/oP4ua
+         KyVrj4ibXCIztAghK7rcoJK1kSeaS+ap9HMy2gif6+QnHJkITINJLUVjraeuQ8c55G2j
+         p22A==
+X-Gm-Message-State: AOAM532Y2iQTDtXDUuxzboEBtw5unWfGhk9x70Y9HdvSoxSlxFXwZLdd
+        hJC2XHDtE3Y0bTiCEs2q6sH64w==
+X-Google-Smtp-Source: ABdhPJxDV3+M/9S6hZfXffPzQU3d3SBZw2wRZGcJOtZhc39pkVomwUVA9HxLnJdaS0KeGuJt/LS/6w==
+X-Received: by 2002:a17:907:6d96:b0:6df:f199:6a7c with SMTP id sb22-20020a1709076d9600b006dff1996a7cmr552529ejc.137.1648659944508;
+        Wed, 30 Mar 2022 10:05:44 -0700 (PDT)
+Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id t19-20020a056402525300b0041952a1a764sm10233880edd.33.2022.03.30.10.05.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 10:05:43 -0700 (PDT)
+Message-ID: <da21cafc-4e5e-cb5f-e7e5-ac9f223616a6@linaro.org>
+Date:   Wed, 30 Mar 2022 19:05:42 +0200
 MIME-Version: 1.0
-References: <20220311011715.2440601-1-eric.dumazet@gmail.com>
- <87ee2jo2je.ffs@tglx> <CANn89i+aCnUQj+UkRQBQ+mkL3xeFCmSkgeCYx+hmMNmko+EZ4Q@mail.gmail.com>
- <87bkxnnzkj.ffs@tglx>
-In-Reply-To: <87bkxnnzkj.ffs@tglx>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 30 Mar 2022 10:05:12 -0700
-Message-ID: <CANn89iKnyG=3MbKzYKsE92p8Qu0QHie_UmQUxJx9YmHGUhKrQA@mail.gmail.com>
-Subject: Re: [PATCH] x86/cpu: use smp_call_function_many() in arch_freq_prepare_all()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] thermal: exynos: fix masking value for artpec7 temp_error
+Content-Language: en-US
+To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220330093905.191315-1-hypmean.kim@samsung.com>
+ <CGME20220330093842epcas2p11a4e220245298c5729e4a37d1484d4d5@epcms2p3>
+ <20220330094328epcms2p35a3346066ae7b3e8a489e2c81d44f8c9@epcms2p3>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220330094328epcms2p35a3346066ae7b3e8a489e2c81d44f8c9@epcms2p3>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:02 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Wed, Mar 30 2022 at 09:51, Eric Dumazet wrote:
-> > On Wed, Mar 30, 2022 at 8:58 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >> which I hate with a passion because that allows *unpriviledged* user
-> >> space to inject systemwide IPIs every 10ms just to read these counters
-> >> which are providing not more than some estimate and are of no value for
-> >> the only sane use case of /proc/cpuinfo, i.e. #1 above.
-> >
-> > You do realize that before my patch, this is already happening ?
-> >
-> > My "optimization" simply replace an open loop of individual IPI with
-> > use of the broadcast IPI capability.
-> >
-> > Are you saying we should remove IPI broadcast and use loops
-> > of IPI, one cpu at a time ?
->
-> I rather have no IPIs at all...
+On 30/03/2022 11:43, Sang Min Kim wrote:
+> This patch is a modification related to masking of the temp_error value
+> in the sanitize_temp_error() function.
 
-Can you send an actual patch, with a changelog then ?
+Don't use "This patch" please.
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-I saw kind of a rant about my patch, which was fine IMO.
+>  
+> For SOC_ARCH_EXYNOS7, the temp_error1, 2 value should be masked as
+> EXYNOS7_TMU_TEMP_MASK(0x1ff).
+> The current code masks temp_error2 with EXYNOS_TMU_TEMP_MASK(0xff)
+> value even in the case of EXYNOS7.
+> In addition, when entering the if statement, both temp_error1 and 2
+> are masked with EXYNOS_TMU_TEMP_MASK(0xff).
+>  
+> By modifying to use the previously declared local variable tmu_temp_mask,
+> the mask value suitable for the SOC can be applied.
+>  
+> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
 
-Sorry.
+Fixes tag?
+
+Code looks itself good, so with changes above:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

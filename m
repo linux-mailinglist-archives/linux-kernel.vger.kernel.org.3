@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFA84EBEBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4304EBEC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245358AbiC3K2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S245375AbiC3Kat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242937AbiC3K2I (ORCPT
+        with ESMTP id S245374AbiC3Kar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:28:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFD4325FD6F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:26:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648635982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c4bIFt9jVSIGZ2yyObkamPZtqAyQFwbbDREVYsapdgo=;
-        b=RuKi+ydRw2XhV9P9CQXnY1QRYeKwf8+E1GJTuYTAH3OP3qtAmD1CP5fCuCPF3xhj9pMNh+
-        Br9/tNzm14tLwqP7XrHwFLauuDJLjS3aaXxEOiWpe6SfFMoZhoW/1e5j1k7ZT+u0MKc+9c
-        n2fme0lih426h1drodtBg8HZXEtbots=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-WOcvhNmsOFG4j7yI-KFN_A-1; Wed, 30 Mar 2022 06:26:19 -0400
-X-MC-Unique: WOcvhNmsOFG4j7yI-KFN_A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DACA1801387;
-        Wed, 30 Mar 2022 10:26:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B99540CF8F8;
-        Wed, 30 Mar 2022 10:26:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <164859751830.29473.5309689752169286816.stgit@noble.brown>
-References: <164859751830.29473.5309689752169286816.stgit@noble.brown>
-To:     NeilBrown <neilb@suse.de>
-Cc:     dhowells@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-nfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] MM changes to improve swap-over-NFS support
+        Wed, 30 Mar 2022 06:30:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ED80260C5B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:29:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-235-odnfOeKaNFm2zEKx4yvXug-1; Wed, 30 Mar 2022 11:28:59 +0100
+X-MC-Unique: odnfOeKaNFm2zEKx4yvXug-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 11:28:57 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 30 Mar 2022 11:28:57 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Artem Savkov' <asavkov@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Josh Poimboeuf" <jpoimboe@redhat.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 0/2] Upper bound kernel timers
+Thread-Topic: [PATCH v3 0/2] Upper bound kernel timers
+Thread-Index: AQHYRA8gGsbmhEkh50e1T/PVRZXMJqzXtvmg
+Date:   Wed, 30 Mar 2022 10:28:57 +0000
+Message-ID: <4975eaf09eae43dc964f879f343e5a2b@AcuMS.aculab.com>
+References: <87zglcfmcv.ffs@tglx>
+ <20220330082046.3512424-1-asavkov@redhat.com>
+In-Reply-To: <20220330082046.3512424-1-asavkov@redhat.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2923576.1648635976.1@warthog.procyon.org.uk>
-Date:   Wed, 30 Mar 2022 11:26:16 +0100
-Message-ID: <2923577.1648635976@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do you have a branch with your patches on?
-
-David
+RnJvbTogQXJ0ZW0gU2F2a292DQo+IFNlbnQ6IDMwIE1hcmNoIDIwMjIgMDk6MjENCj4gDQo+IEFz
+IHByZXZpb3VzbHkgZGlzY3Vzc2VkIFsxXSB3ZSBoYWQgYSByZXBvcnQgb2YgYSByZWdyZXNzaW9u
+IGluIFRDUCBrZWVwYWxpdmUNCj4gdGltZXIgd2hlcmUgdGltZXJzIHdlcmUgdXAgdG8gNCBtaW51
+dGVzIGxhdGUgcmVzdWx0aW5nIGluIGRpc2Nvbm5lY3RzLg0KPiANCj4gVGhpcyBwYXRjaHNldCB0
+cmllcyB0byBmaXggdGhlIHByb2JsZW0gYnkgaW50cm9kdWNpbmcgdXBwZXIgYm91bmQga2VybmVs
+IHRpbWVycw0KPiBhbmQgbWFraW5nIHRjcCBrZWVwYWxpdmUgdGltZXIgdXNlIHRob3NlLg0KDQpX
+aHkgbm90IGp1c3QgZml4IHRoZSB0aW1lciBjb2RlIHRvIHdvcmsgcHJvcGVybHkgKGFzIGl0IHVz
+ZWQgdG8pIHNvIHRoYXQgdGhlDQp0aW1lcnMgZXhwaXJlIHdpdGhpbiBhIHNob3J0IHRpbWUgb2Yg
+dGhlIHJlcXVlc3RlZCBpbnRlcnZhbC4NCg0KVGhpcyBqdXN0IHJlcXVpcmVzIHRoYXQgZXhwaXJp
+bmcgJ2xvbmcnIHRpbWVycyBnZXQgbW92ZWQgaW50byB0aGUNCmhpZ2hlciBwcmVjaXNpb24gJ3do
+ZWVscycgKG9yIHdoYXRldmVyKSBiZWZvcmUgdGhleSBhY3R1YWxseSBleHBpcmUuDQoNClRoZSBi
+dXJkZW4gZm9yIHRoaXMgaXMgbWluaW1hbCAtIGl0IG9ubHkgYWZmZWN0cyBsb25nIGR1cmF0aW9u
+IHRpbWVycw0KdGhhdCBhY3R1YWxseSBleHBpcmUsIGFuZCBlYWNoIHRpbWVyIG9ubHkgZ2V0cyBt
+b3ZlZCBvbmNlIGZvciBlYWNoDQpsZXZlbCBvZiB0aW1lciBwcmVjaXNpb24uDQoNClBlcmhhcHMg
+eW91IG9ubHkgbmVlZCB0byBtb3ZlIHRoZW0gdHdvIG9yIHRocmVlIHRpbWVzIGluIG9yZGVyIHRv
+DQpnZXQgYSByZWFzb25hYmxlIGFjY3VyYWN5Lg0KTm8gb25lIGlzIGdvaW5nIHRvIG1pbmQgaWYg
+YSA1IG1pbnV0ZSB0aW1lciBpcyBhIHNlY29uZCBsYXRlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
+ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
+ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 

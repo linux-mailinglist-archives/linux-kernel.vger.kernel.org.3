@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7488A4EC31A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6314EC31D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345748AbiC3MV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S1345769AbiC3MWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344862AbiC3MMh (ORCPT
+        with ESMTP id S1345300AbiC3MNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:12:37 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE4249CB8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:07:12 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id kc20so16663730qvb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=DIU0qW0oqokq5sgo17jUrrfi/pfNulAd15d8nAXYtvg=;
-        b=ZqJOSLg2+c6hbYSTjjh6gJ7f7m6Rm4W0tjpkI/8E2fgAwA5tS14me47hbpGLg4N3kQ
-         ViyiyDpcJcRM83Y+nGiF++wtaqA1QxlkFNWoVgzegGr+G22eCdsEikLvW49mqUkhWa0P
-         ArkPaFTLLL6AoRCGuy2DbAQ0YrVZGSSmHXaHXN0g6dtNpdojPnWzx9j8CxONmy0npfw4
-         0gbk3lvrbqPIpFWr7s6EYoTDvEXbcMjhuDCOaT2OsJPZjTTXowkzYtQb86dwkGANPK1T
-         g4dlfsABmofCqjnHBEwHMElk/UfRvP2F9Yk1NU1uYeP+lJI+ODmJqgiLWTxQNlGzdDM8
-         hGmw==
+        Wed, 30 Mar 2022 08:13:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B61D649F88
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648642039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p4IaRvBma0W1UBcawEsDhyvvua/6JtF1rikRuXR/v3o=;
+        b=UDcjrvDDA2M6JJCbmKRAOORM4sC1G7oRuzEzy9UrOgvf5Fa8t+2Zl82yiAuNjJS64+T0NE
+        jjrLrz6n/HjZjwQX5IeaE0Fx/GPZku+xOdvNOPeuoN/N0kyZ6CUotbcfeBKhI+6xg31y3R
+        cjpQwPFNEOPkvDAzO5yzKvh15nQe4b0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-208-we63gjnkPYGBi9CXAT6kJg-1; Wed, 30 Mar 2022 08:07:17 -0400
+X-MC-Unique: we63gjnkPYGBi9CXAT6kJg-1
+Received: by mail-ed1-f72.google.com with SMTP id u17-20020a05640207d100b00418f00014f8so7586450edy.18
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:07:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=DIU0qW0oqokq5sgo17jUrrfi/pfNulAd15d8nAXYtvg=;
-        b=P8nL/dVGKhY4a1Da18TfBKzoZhbFuqUFaJuKtzzR0w9FlPzejqdK+0bM5/3Fg2unvj
-         2lBQgvgfbRkFofag9Ztbeg+T70uwxZtwZzzMNs94v2HgfVW4l1VDqMlpOzN9GXtsVh1m
-         SGKfBSTdp0yEFAzXITOiru1PAS5y17yHhByv4oRgKDmycgxpdnWGq356eH2bvbBrXWxZ
-         uBJ3Puyqni/HXTBRRNnkQg4MwAAtjsgqUzBTDgtd+/bcXIZxSQ8SC/a1VRLLRCLD3tPG
-         XcxK5ApXdlMS2jvFOva+CjYv3p5cE8s3GhrAermuNBdhibaMRo4js38CHL+p5i9AqQev
-         fy+Q==
-X-Gm-Message-State: AOAM532nJIWGXQHHI/O8Lvqkay1rvunQhviiDJIq4ABRhUDSey3M0vw9
-        0gkTC0CaoGG5pRqKzXo4Tw7HwZpcA6lxaeg8
-X-Google-Smtp-Source: ABdhPJyqWifpcmkHCB3u6Bu2U3ChnYAdVLJmBQKdlcYppxlxcqXuYSsghw2laEWpXEQA2k+jt6ABfw==
-X-Received: by 2002:a05:6214:2305:b0:432:f1d4:6177 with SMTP id gc5-20020a056214230500b00432f1d46177mr31091513qvb.107.1648642031640;
-        Wed, 30 Mar 2022 05:07:11 -0700 (PDT)
-Received: from euclid ([71.58.109.160])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac85948000000b002e1cd3fa142sm17790827qtz.92.2022.03.30.05.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 05:07:10 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 08:07:09 -0400
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8723bs: place constants on the right side of
- tests
-Message-ID: <20220330120709.GA339788@euclid>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=p4IaRvBma0W1UBcawEsDhyvvua/6JtF1rikRuXR/v3o=;
+        b=ru23hg43jrYJxouk+o77QTnJuLtvg9lxyhx2lrfhbvSnNlBJ7J9q5t1PU+DcaqO0/R
+         2TyxIHHvr4C9goKpqJu3u2wNcs/jOLdetghMxTlUXENfHhqrgl4SV0bNrs9tTz6G2rin
+         B7bE750wBOwfqciokJtCvZm8dJ9zmyXAkAmGaIbgIiyeAUCPmugo2OhDSncyMJD2ZfxW
+         sHbJVf1LYZjfza4s9gVbCtILCTuqhIsM86sQZYmcUzNaG7BM1CPJw19S0tPJ43+Y5UxH
+         bA0N+eBQnK7RbmXk0gtasAGGlI3eWtp9m9L8O8pSrtG5w/kWA3Hzj/CTnj2wWd/g/1Mj
+         pPQA==
+X-Gm-Message-State: AOAM530d/md83md/TRbeZCaXoVckLNOp0qt0Kqv7N2t2r1C/r+8Z6cAI
+        sacryWHWw8md2w45Sv8EGzgLAS+im1/umy56qbY6zxFgTjuwuaV3eXh/6kW9IPJy9moAARTXNEH
+        vOlCCqzo0t+ovRSPkSf0S0q9R
+X-Received: by 2002:a17:907:629a:b0:6d7:b33e:43f4 with SMTP id nd26-20020a170907629a00b006d7b33e43f4mr40595894ejc.149.1648642034594;
+        Wed, 30 Mar 2022 05:07:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzStAnN2iHa+Rqbu8eIJhXelGfz14EyM1yta1FQP72irc8UflbROtPx9mfIOIWwkGT4QHJKyw==
+X-Received: by 2002:a17:907:629a:b0:6d7:b33e:43f4 with SMTP id nd26-20020a170907629a00b006d7b33e43f4mr40595860ejc.149.1648642034371;
+        Wed, 30 Mar 2022 05:07:14 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:8ca6:a836:a237:fed1? ([2001:b07:6468:f312:8ca6:a836:a237:fed1])
+        by smtp.googlemail.com with ESMTPSA id v2-20020a17090606c200b006a728f4a9bcsm8235476ejb.148.2022.03.30.05.07.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 05:07:13 -0700 (PDT)
+Message-ID: <27670a35-c67e-726f-f03f-9cf2eae83523@redhat.com>
+Date:   Wed, 30 Mar 2022 14:07:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/8] KVM: x86: avoid loading a vCPU after .vm_destroy was
+ called
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org
+References: <20220322172449.235575-1-mlevitsk@redhat.com>
+ <20220322172449.235575-2-mlevitsk@redhat.com> <YkOkCwUgMD1SVfaD@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YkOkCwUgMD1SVfaD@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style.
+On 3/30/22 02:27, Sean Christopherson wrote:
+> Rather than split kvm_free_vcpus(), can we instead move the call to svm_vm_destroy()
+> by adding a second hook, .vm_teardown(), which is needed for TDX?  I.e. keep VMX
+> where it is by using vm_teardown, but effectively move SVM?
+> 
+> https://lore.kernel.org/all/1fa2d0db387a99352d44247728c5b8ae5f5cab4d.1637799475.git.isaku.yamahata@intel.com
 
-Reported by checkpatch:
+I'd rather do that only for the TDX patches.
 
-WARNING: Comparisons should place the constant on the right side of the test
-
-Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_mlme.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-index ed2d3b7d44d9..d5bb3a5bd2fb 100644
---- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-@@ -792,7 +792,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
- 			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
- 			pmlmepriv->to_join = false;
- 			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
--			if (_SUCCESS == s_ret) {
-+			if (s_ret == _SUCCESS) {
- 			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
- 			} else if (s_ret == 2) {/* there is no need to wait for join */
- 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-@@ -1554,7 +1554,7 @@ void _rtw_join_timeout_handler(struct timer_list *t)
- 				int do_join_r;
- 
- 				do_join_r = rtw_do_join(adapter);
--				if (_SUCCESS != do_join_r) {
-+				if (do_join_r != _SUCCESS) {
- 					continue;
- 				}
- 				break;
-@@ -2558,7 +2558,7 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
- 		issued = (phtpriv->agg_enable_bitmap>>priority)&0x1;
- 		issued |= (phtpriv->candidate_tid_bitmap>>priority)&0x1;
- 
--		if (0 == issued) {
-+		if (issued == 0) {
- 			psta->htpriv.candidate_tid_bitmap |= BIT((u8)priority);
- 			rtw_addbareq_cmd(padapter, (u8) priority, pattrib->ra);
- 		}
-@@ -2610,14 +2610,14 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
- 	struct wlan_network *cur_network = &pmlmepriv->cur_network;
- 	int do_join_r;
- 
--	if (0 < rtw_to_roam(padapter)) {
-+	if (rtw_to_roam(padapter) > 0) {
- 		memcpy(&pmlmepriv->assoc_ssid, &cur_network->network.ssid, sizeof(struct ndis_802_11_ssid));
- 
- 		pmlmepriv->assoc_by_bssid = false;
- 
- 		while (1) {
- 			do_join_r = rtw_do_join(padapter);
--			if (_SUCCESS == do_join_r) {
-+			if (do_join_r == _SUCCESS) {
- 				break;
- 			} else {
- 				rtw_dec_to_roam(padapter);
--- 
-2.25.1
+Paolo
 

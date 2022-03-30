@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72394EC797
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DAE4EC790
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347682AbiC3O7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S1347627AbiC3O7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347217AbiC3O7m (ORCPT
+        with ESMTP id S1346654AbiC3O7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:59:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F466406;
-        Wed, 30 Mar 2022 07:57:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C719615E7;
-        Wed, 30 Mar 2022 14:57:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F800C340EC;
-        Wed, 30 Mar 2022 14:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648652272;
-        bh=0ohAXybc8U6+eIxqZN8sbhR7Ie+atDMwd4Z+q/8cZrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qOdNWakpz/tB38GgP8O5A5OkgxV+edpaqvyeXZJRKovfi9gcnM/Sfq2ktTdITpTa/
-         AQKIdOXnQZW1SDESCygsZIEf86+xzsvfPN8GyAV5xPw70T1r8bTccgC2f9coijHJKr
-         ZxvejzJKpznFwR+YPK/1Z24OvNTjZR1AAqsTfG2iQTTqt9Wzgyj5PP8Be4NbcSwGS4
-         yNqunFW8MvG9dFtpXpe3TY1IurDIV78e9EL5ULfPbAGGyWRRCfHgJrZf9KWVqDUgCf
-         7gVgHwd/LiXwi8gQsKHP+d8hePHK9ZAiDZpMcG/c5+8QZTqh/DT6QKd8PtNU6/H3tY
-         jqHyp9RIRiEbg==
-Date:   Wed, 30 Mar 2022 17:56:51 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
- encl_stack
-Message-ID: <YkRvs34K7yNt4Nz6@iki.fi>
-References: <20220322074313.7444-1-jarkko@kernel.org>
- <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com>
- <YkRvFkEO8Ic1VdQ8@iki.fi>
+        Wed, 30 Mar 2022 10:59:22 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9CF103C;
+        Wed, 30 Mar 2022 07:57:37 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 0C4131F44F77
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648652255;
+        bh=5PBzAKoMPAOoiJnmRA3I7RiNV9us3YDOcHeaI9Zs+UY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LIPZwiS3U6pUt3CwlLS3jPGJUerj1P2lWe3qmgg2LJsC2xxVUcaXeAe9F5fWgMMcG
+         ebciEwOgIFCjY9AFADzXsMCmRLDa+uoSQC6f8soi+eDPxCe4Q9Cyju4C/HpTKKbMq3
+         fvtamndKQOTZAMEhzsFqkRuHbfAPoz3CxDwaQjK03Va4r3ho1sdMsPME3RazTfBznM
+         fIkuSJwTpAVtYXv2257OCBgfJ71E5uG9lIHTT0ohsNljN9bSO8jpop8NbfFQMpHM9h
+         yzogCHUM4S269h2ezt/WMHcKbbdZMwERF6ArkM/yjCNfKAMVl5yZhObzTl69W5Nbn7
+         k+4ptWmN+x0Cw==
+Message-ID: <1d005ca1b58d9ec0882926e7148363b41f69cd31.camel@collabora.com>
+Subject: Re: [PATCH v1 09/24] media: v4l2-mem2mem: Fix typo in trace message
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 30 Mar 2022 10:57:24 -0400
+In-Reply-To: <20220329135704.t32g4ksojxrjggov@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+         <20220328195936.82552-10-nicolas.dufresne@collabora.com>
+         <20220329135704.t32g4ksojxrjggov@basti-XPS-13-9310>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkRvFkEO8Ic1VdQ8@iki.fi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,60 +53,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 05:54:18PM +0300, Jarkko Sakkinen wrote:
-> On Mon, Mar 28, 2022 at 02:49:04PM -0700, Reinette Chatre wrote:
-> > Hi Jarkko,
-> > 
-> > On 3/22/2022 12:43 AM, Jarkko Sakkinen wrote:
-> > > Simplify the test_encl_bootstrap.S flow by using rip-relative addressing.
-> > > Compiler does the right thing here, and this removes dependency on where
-> > > TCS entries need to be located in the binary, i.e. allows the binary layout
-> > > changed freely in the future.
-> > > 
-> > > Cc: Reinette Chatre <reinette.chatre@intel.com>
-> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > ---
-> > >  tools/testing/selftests/sgx/test_encl_bootstrap.S | 6 +-----
-> > >  1 file changed, 1 insertion(+), 5 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
-> > > index 82fb0dfcbd23..1c1b5c6c4ffe 100644
-> > > --- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
-> > > +++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
-> > > @@ -40,11 +40,7 @@
-> > >  	.text
-> > >  
-> > >  encl_entry:
-> > > -	# RBX contains the base address for TCS, which is the first address
-> > > -	# inside the enclave for TCS #1 and one page into the enclave for
-> > > -	# TCS #2. By adding the value of encl_stack to it, we get
-> > > -	# the absolute address for the stack.
-> > > -	lea	(encl_stack)(%rbx), %rax
-> > > +	lea	(encl_stack)(%rip), %rax
-> > >  	xchg	%rsp, %rax
-> > >  	push	%rax
-> > >  
-> > 
-> > The goal of the above snippet is to set RSP to ensure that each thread has its own stack.
-> > 
-> > Since EENTER computes RIP as EnclaveBase + TCS.OENTRY, by using offset from RIP this
-> > would result in all TCS with OENTRY of encl_entry to use the same stack, no?
-> > 
-> > Could you please consider the following as an alternative:
-> > https://lore.kernel.org/lkml/65c137c875bd4da675eaba35316ff43d7cfd52f8.1644274683.git.reinette.chatre@intel.com/
-> > 
-> > The idea in that patch is that a new TCS would always need to be accompanied by a
-> > dedicated stack so, at least for testing purposes, the TCS and stack can be dynamically
-> > allocated together with the TCS page following its stack.  This seems much simpler
-> > to me and also makes the following patch unnecessary.
-> 
-> There's no better alternative than use rip. Compiler will fix it up.
-> 
-> So, no, I won't consider that. This a dead obvious change.
+Le mardi 29 mars 2022 =C3=A0 15:57 +0200, Sebastian Fricke a =C3=A9crit=C2=
+=A0:
+> Hey Nicolas,
+>=20
+> On 28.03.2022 15:59, Nicolas Dufresne wrote:
+> > On -> One
+>=20
+> Hmmmm the message "One job queue already" doesn't sound correct. I think
+> the message wants to say that the buffer is already on the queue.
+>=20
+> We could maybe enhance the message like:
+> "Buffer already found on the job queue\n"
 
-How you organize TCS and stack is completely unrelated topic.
-
-BR, Jarkko
-
+I think I read queue -> queued. The new message would be inaccurate with th=
+is
+suggestion. I'll just drop that patch in V2, the fact that this message was
+miss-leading to me is irrelevant to the patchset.
+>=20
+> But this is not a typo from my POV.
+>=20
+> Greetings,
+> Sebastian
+>=20
+> >=20
+> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > ---
+> > drivers/media/v4l2-core/v4l2-mem2mem.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l=
+2-core/v4l2-mem2mem.c
+> > index 675e22895ebe..53c2332d5cbd 100644
+> > --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> > +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> > @@ -316,7 +316,7 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_de=
+v *m2m_dev,
+> > 	}
+> >=20
+> > 	if (m2m_ctx->job_flags & TRANS_QUEUED) {
+> > -		dprintk("On job queue already\n");
+> > +		dprintk("One job queue already\n");
+> > 		goto job_unlock;
+> > 	}
+> >=20
+> > --=20
+> > 2.34.1
+> >=20
 

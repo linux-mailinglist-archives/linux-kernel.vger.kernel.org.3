@@ -2,123 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9234EC584
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362FA4EC581
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345996AbiC3NXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S1345934AbiC3NXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345887AbiC3NXN (ORCPT
+        with ESMTP id S1345921AbiC3NWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:23:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41026488AB
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:21:27 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KT6Wn3vdXz4x7X;
-        Thu, 31 Mar 2022 00:21:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1648646482;
-        bh=dk4FOANK6JU7pzkzEVjtS+8Y7BNzj7t8GPyYaZ3tiZ4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=d336lr51US2buYm52hHjZsIp2WTAUmi+yu3MvJUFrqnyldISO5BRrnYobpSqhx0PQ
-         8yfwsltno3nwnEw/PJOBwAegBV1cbvbUeDkDUS3w24PHjUwiKBFqf5+qrqkIq7ROOw
-         d8TeUIpAFLdXmmvcXguwpwcHoJnqc2BJVi2AcmrdNNvcsg/px6dSwtFqg+RLRRGp27
-         yyDKgDJSrMEea/UfpVAD8imQqf6+e0z2gAsylP1O3hhRJ1OefYqfa6Xji+lwchhGtH
-         dk/B2u/YsHeoaLKBrsveIYi2YZR5pwkiuUNSvxgVVqM2FuMeToLDKNa7qIYj0TNZgf
-         TcSZmFqMojg7Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Michal =?utf-8?Q?Such=C3=A1nek?= <msuchanek@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        wangborong@cdjrlc.com, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>, jniethe5@gmail.com,
-        psampat@linux.ibm.com, Miroslav Benes <mbenes@suse.cz>,
-        hbh25y@gmail.com, mikey@neuling.org,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, danielhb413@gmail.com,
-        haren@linux.ibm.com, Thierry Reding <treding@nvidia.com>,
-        ganeshgr@linux.ibm.com, Corentin Labbe <clabbe@baylibre.com>,
-        mamatha4@linux.vnet.ibm.com,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        kernel.noureddine@gmail.com, nathanl@linux.ibm.com,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, guozhengkui@vivo.com,
-        kjain@linux.ibm.com, chenjingwen6@huawei.com,
-        Nick Piggin <npiggin@gmail.com>, oss@buserror.net,
-        rmclure@linux.ibm.com, maddy@linux.ibm.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakob Koschel <jakobkoschel@gmail.com>, sachinp@linux.ibm.com,
-        bigunclemax@gmail.com, ldufour@linux.ibm.com,
-        hbathini@linux.ibm.com,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        farosas@linux.ibm.com, Geoff Levand <geoff@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        sourabhjain@linux.ibm.com, Julia Lawall <Julia.Lawall@inria.fr>,
-        Ritesh Harjani <riteshh@linux.ibm.com>, cgel.zte@gmail.com,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        tobias@waldekranz.com
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-1 tag
-In-Reply-To: <20220330112733.GG163591@kunlun.suse.cz>
-References: <87zglefhxd.fsf@mpe.ellerman.id.au>
- <CAHk-=whk4jihDM+zkhZPYRyNO0-YA1_-K9_NyC3EDsX+gkxC-w@mail.gmail.com>
- <87wngefnsu.fsf@mpe.ellerman.id.au>
- <20220330112733.GG163591@kunlun.suse.cz>
-Date:   Thu, 31 Mar 2022 00:21:03 +1100
-Message-ID: <87k0cbfuf4.fsf@mpe.ellerman.id.au>
+        Wed, 30 Mar 2022 09:22:55 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF234924F;
+        Wed, 30 Mar 2022 06:21:08 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso2114014pjb.0;
+        Wed, 30 Mar 2022 06:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OPJfz4CL4CTD8umiB0QsWWK1NVmdwE13zEumGoQ0BuI=;
+        b=RdznN1wmQ7YkABgZinX6FM9J7ZRfZrnPXFREURoNQM/325oFnFddsMhY+7l5bzmw6T
+         S5TziyTyhp+HilrOWzp65Rr2HBmeRO6z84JIgqyZFd3FTYYlVfaQucjbqRD9eyVkH6iM
+         va+ELz1AoQ5xCOX2BdLgZ3zOGSsEoTrX30hTtMQXpsb7jMZiiGbLuPSfd/GzHzQ6BWiG
+         etoIlN4Hr1PLahVVgbyB7lzpIYciImI8CcxRj7mQYI+rfRacvEjDPrfTstu+eb00mKWQ
+         W78SxhWBokJI15m32Ijc1p2JE+SbZBBxc35I6l4SFbiRaSKzUmrKFKm6fRrrge/kQsZQ
+         7+QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OPJfz4CL4CTD8umiB0QsWWK1NVmdwE13zEumGoQ0BuI=;
+        b=SrgJAIVZVx9OYYqj35yB2HoW2BAo/QG7UGKDrS8/2Xw469moMUinx8Wo6OtW0hd+jI
+         /hDRiMHkcFnVTrNHcln5PGdRaHg57ts4teF50Hfs4KQMECe4pNPUagRosCSxrU1YuzVI
+         rAbWmSNGvWWqtH3xdBU++KCcoyr4T/hqrCFfmFuBlVa/pinm4aZhcQjRC1+G9MuCayby
+         5EtjfILjTREraEdTD98iyRw3TvPVhQ68WZAcnWE0fTquQNjyQfGrejJ2X/4RfT+9ZGqC
+         dQIHs+H11pexQwBUzGtNC4V/Szx5GOSE+Ea5Vn4jiRClzDP/+/WG6TN7xSr8OALtfdJl
+         UCag==
+X-Gm-Message-State: AOAM533z9WaXyEQpzgVyB8LNkZyXFwnb9dluAqEHtBe6zxU7S3BJWZyO
+        IaGq6mwqmChtpAuPK9z9EndOTM3bzs8=
+X-Google-Smtp-Source: ABdhPJy8sCfixj5+rlePqk9kImJ3wC4G6RlmXO/xOHhD5a3zdm82DdY6eBXESJVS6LTln7jAqjcJ7Q==
+X-Received: by 2002:a17:902:bf4a:b0:151:7d37:2943 with SMTP id u10-20020a170902bf4a00b001517d372943mr35075780pls.131.1648646467456;
+        Wed, 30 Mar 2022 06:21:07 -0700 (PDT)
+Received: from localhost ([198.11.178.15])
+        by smtp.gmail.com with ESMTPSA id f66-20020a62db45000000b004fa8a7b8ad3sm23004668pfg.77.2022.03.30.06.21.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Mar 2022 06:21:07 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [RFC PATCH V3 0/4] KVM: X86: Add and use shadow page with level expanded or acting as pae_root
+Date:   Wed, 30 Mar 2022 21:21:48 +0800
+Message-Id: <20220330132152.4568-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Such=C3=A1nek <msuchanek@suse.de> writes:
-> On Mon, Mar 28, 2022 at 08:07:13PM +1100, Michael Ellerman wrote:
->> Linus Torvalds <torvalds@linux-foundation.org> writes:
->> > On Fri, Mar 25, 2022 at 3:25 AM Michael Ellerman <mpe@ellerman.id.au> =
-wrote:
->>=20
->> > That said:
->> >
->> >> There's a series of commits cleaning up function descriptor handling,
->> >
->> > For some reason I also thought that powerpc had actually moved away
->> > from function descriptors, so I'm clearly not keeping up with the
->> > times.
->>=20
->> No you're right, we have moved away from them, but not entirely.
->>=20
->> Functions descriptors are still used for 64-bit big endian, but they're
->> not used for 64-bit little endian, or 32-bit.
->
-> There was a patch to use ABIv2 for ppc64 big endian. I suppose that
-> would rid usof the gunction descriptors for good.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-It would be nice.
+(Request For Help for testing on AMD machine with 32 bit L1 hypervisor,
+see information below)
 
-The hesitation in the past was that the GNU toolchain developers don't
-officially support BE+ELFv2, though it is in use so it does work.
+KVM handles root pages specially for these cases:
 
-> Maybe it's worth resurrecting?
+direct mmu (nonpaping for 32 bit guest):
+	gCR0_PG=0
+shadow mmu (shadow paping for 32 bit guest):
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1
+direct mmu (NPT for 32bit host):
+	hEFER_LMA=0
+shadow nested NPT (for 32bit L1 hypervisor):
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0,hEFER_LMA=0
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1,hEFER_LMA=0
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE={0|1},hEFER_LMA=1,hCR4_LA57={0|1}
+Shadow nested NPT for 64bit L1 hypervisor:
+	gEFER_LMA=1,gCR4_LA57=0,hEFER_LMA=1,hCR4_LA57=1
 
-Yeah maybe we should think about it again. If it builds with clang/lld
-that would be a real plus.
+They are either using special roots or matched the condition 
+((mmu->shadow_root_level > mmu->root_level) && !mm->direct_map)
+(refered as level expansion) or both.
 
-cheers
+All the cases are using special roots except the last one.
+Many cases are doing level expansion including the last one.
+
+When special roots are used, the root page will not be backed by
+kvm_mmu_page.  So they must be treated specially, but not all places
+is considering this problem, and Sean is adding some code to check
+this special roots.
+
+When level expansion, the kvm treats them silently always.
+
+These treaments incur problems or complication, see the changelog
+of every patch.
+
+These patches were made when I reviewed all the usage of shadow_root_level
+and root_level.  Many root level patches are sent and accepted.
+
+These patches has not been tested with shadow NPT cases listed above.
+Because I don't have guest images can act as 32 bit L1 hypervisor, nor
+I can access to AMD machine with 5 level paging.  I'm a bit reluctant
+to ask for the resource, so I send the patches and wish someone test
+them and modify them.  At least, it provides some thinking and reveals
+problems of the existing code and of the AMD cases.
+( *Request For Help* here.)
+
+These patches have been tested with the all cases except the shadow-NPT
+cases, the code coverage is believed to be more than 95% (hundreds of
+code related to shadow-NPT are shoved, and be replaced with common
+role.pae_root and role.glevel code with only 8 line of code is
+added for shadow-NPT, only 2 line of code is not covered in my tests).
+
+Cleanup patches (such as use role.glevel instead of !role.direct) will
+be sent after this patchset is queued.
+
+[V2]: https://lore.kernel.org/lkml/20220329153604.507475-1-jiangshanlai@gmail.com/
+[V1]: https://lore.kernel.org/lkml/20211210092508.7185-1-jiangshanlai@gmail.com/
+
+Changed from V2:
+	Instroduce role.glevel instead of role.passthrough
+
+Changed from V1:
+	Apply Sean's comments and suggestion. (Too much to list. Thanks!)
+	Add some comments.
+	Change changelog for role.pae_root patch.
+
+Lai Jiangshan (4):
+  KVM: X86: Add arguement gfn and role to kvm_mmu_alloc_page()
+  KVM: X86: Introduce role.glevel for level expanded pagetable
+  KVM: X86: Alloc role.pae_root shadow page
+  KVM: X86: Use passthrough and pae_root shadow page for 32bit guests
+
+ Documentation/virt/kvm/mmu.rst  |   9 +
+ arch/x86/include/asm/kvm_host.h |  16 +-
+ arch/x86/kvm/mmu/mmu.c          | 399 +++++++++-----------------------
+ arch/x86/kvm/mmu/paging_tmpl.h  |  15 +-
+ 4 files changed, 138 insertions(+), 301 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
+

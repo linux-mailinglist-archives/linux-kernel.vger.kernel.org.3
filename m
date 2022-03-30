@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0AF4EC3D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02AC4EC31B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244856AbiC3MTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S1345565AbiC3MVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344293AbiC3MAd (ORCPT
+        with ESMTP id S1345359AbiC3MDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:00:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4F9340E9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:55:28 -0700 (PDT)
+        Wed, 30 Mar 2022 08:03:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F9F288A9A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:57:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADCC8B81C25
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:55:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF547C340EE;
-        Wed, 30 Mar 2022 11:55:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 026AF61729
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D86C340EE;
+        Wed, 30 Mar 2022 11:57:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641319;
-        bh=1HPyfRo5DHhp9R70XYYumzCEapXTyvDbHoQuEdQvgE8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=Jl094britH6ONTd25NFMz9UnjM6d2m3/9NnfHo46z3Um8fGDWUcOui/GLBWC38RRA
-         xdE6zLhqI6xQgQ2ZJgjbF3yoRsb7ht61yQaMVgXHfKp79I2dGR8JnZa2KUY3DGVHC7
-         Jp+gUYYD3n/3EEpx7/3BztsEaTT5caTyvoW60YurT+x3gYc1bV50tKoekAHRvDxLx2
-         Qn/ugnd6Z2FxOrF8T8+ZfHbQfAofOwn9qYza0QbhfeHznqAkPiVuHV+xUctk/M9Xno
-         UAkVENvrobHHp5JLTjRooFbFs2hb1AtvPzz18PhHorKwvs8Ql9qGbEFbJLp7tJEwa0
-         Kg4JC23/KGPhQ==
-From:   sj@kernel.org
-To:     Jonghyeon Kim <tome01@ajou.ac.kr>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon: prevent activated scheme from sleeping by deactivated schemes
-Date:   Wed, 30 Mar 2022 11:55:16 +0000
-Message-Id: <20220330115516.32126-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220330105302.32114-1-tome01@ajou.ac.kr>
+        s=k20201202; t=1648641456;
+        bh=QQWsSLY6ur47t03mOAu3XMgDUScZQZIYUq4HZYvZhxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T7E74smq2J23y9R7TXuqYsUGVkqrhjYE+v64dzmCUu4pdpDkBI1f5wF7M5q10xr4F
+         sQBfP3tMblvllWl1fhnz4kdJzR1h+wjrnumCkEY0f4prA1wDeUsETAjSGZrGJNC6G3
+         0TkRcJpqU+xzTjo920tdLuGcOVJiIgxq5GkILKLUgtXtVx8jOVE4NBdFp9IC2CA9On
+         M8AhlWRqGNNTWCgc5g/e+KLb9HOMsV8GfOVall0go8Pv2dshlZMYc6gF6Dm1nv4+o4
+         ViA46D3p2hAMIsgUuTLtbIxQazCiM2pb3eGDCxn9UF2hkBlmkn1HvLKB7sJPaxRTOR
+         1Aj1b6jSZAHcA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator fixes for v5.18
+Date:   Wed, 30 Mar 2022 12:57:21 +0100
+Message-Id: <20220330115736.03D86C340EE@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,60 +49,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonghyeon,
+The following changes since commit 5999f85ddeb436b4007878f251a30ccc8b9c638b:
 
-On Wed, 30 Mar 2022 19:53:02 +0900 Jonghyeon Kim <tome01@ajou.ac.kr> wrote:
+  regulator: qcom-rpmh: Add support for SDX65 (2022-03-18 16:05:06 +0000)
 
-> In the DAMON, the minimum wait time of the schemes decides whether the
-> kernel wakes up 'kdamon_fn()'. But since the minimum wait time is
-> initialized to zero, there are corner cases against the original objective.
-> 
-> For example, if we have several schemes for one target, and if the wait
-> time of the first scheme is zero, the minimum wait time will set zero,
-> which means 'kdamond_fn()' should wake up to apply this scheme. However,
-> in the following scheme, wait time can be set to non-zero. Thus, the
-> mininum wait time will be set to non-zero, which can cause sleeping this
-> interval for 'kdamon_fn()' due to one deactivated last scheme.
+are available in the Git repository at:
 
-Good catch, thanks!
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.18
 
-> 
-> This commit prevents making DAMON monitoring inactive state due to other
-> deactivated schemes.
-> 
-> Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
+for you to fetch changes up to aefe5fc3000a24869edbf7bb657adf28372ec158:
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+  regulator: rt4831: Add active_discharge_on to fix discharge API (2022-03-25 16:09:31 +0000)
 
+----------------------------------------------------------------
+regulator: Fixes for v5.18
 
-Thanks,
-SJ
+A couple of fixes for the rt4831 driver which fix features that didn't
+work due to incomplete description of the register configuration.
 
-> ---
->  mm/damon/core.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/damon/core.c b/mm/damon/core.c
-> index c1e0fed4e877..5ce8d7c867f0 100644
-> --- a/mm/damon/core.c
-> +++ b/mm/damon/core.c
-> @@ -1019,12 +1019,15 @@ static int kdamond_wait_activation(struct damon_ctx *ctx)
->  	struct damos *s;
->  	unsigned long wait_time;
->  	unsigned long min_wait_time = 0;
-> +	bool init_wait_time = false;
->  
->  	while (!kdamond_need_stop(ctx)) {
->  		damon_for_each_scheme(s, ctx) {
->  			wait_time = damos_wmark_wait_us(s);
-> -			if (!min_wait_time || wait_time < min_wait_time)
-> +			if (!init_wait_time || wait_time < min_wait_time) {
-> +				init_wait_time = true;
->  				min_wait_time = wait_time;
-> +			}
->  		}
->  		if (!min_wait_time)
->  			return 0;
-> -- 
-> 2.17.1
-> 
+----------------------------------------------------------------
+ChiYuan Huang (2):
+      regulator: rt4831: Add bypass mask to fix set_bypass API work
+      regulator: rt4831: Add active_discharge_on to fix discharge API
+
+ drivers/regulator/rt4831-regulator.c | 3 +++
+ 1 file changed, 3 insertions(+)

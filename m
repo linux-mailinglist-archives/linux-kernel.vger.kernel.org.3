@@ -2,237 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAFC4EC665
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961584EC669
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346739AbiC3OX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S1346770AbiC3OYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346104AbiC3OXz (ORCPT
+        with ESMTP id S1346753AbiC3OYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:23:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF4A19B07E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648650130; x=1680186130;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K3BHM//KxN/L/Kk8e1wzynNcmkq/HH5ezJ9aW6BKd3I=;
-  b=MzBbMLuv4ZehPipUb9U7NbXa+QyOh6IkPkodoGhDhqTgMwM8ZZf728kG
-   rvNsuvZxsDYB9uOJg2Ym2t6X9IUp15KQRfcDg4MTqkl84uQ0BRgLSk2Kh
-   nKutDa/Ci7USJnibaveUKBxEGfvgGYFKUmq1v9l0tFCXSMdCfCL6X9Y01
-   5M82CS04RN/jDq/KMcZDKlbkPAWUgSfYQycW41Dm02gHvIp5EicmFoBlF
-   R4AnjCOP91VW6GA7hQNESJTP24jGBO5YRkB0lD32l0chHWKnQn+uCjc1M
-   PEXGaguiNT6sVuP9gc61KjMbgsoVpD2ECLILedZ3CkTWrTnhSlXvFO9CK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241709706"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="241709706"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 07:22:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="503330779"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 07:22:08 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZZD5-00004E-FY;
-        Wed, 30 Mar 2022 14:22:07 +0000
-Date:   Wed, 30 Mar 2022 22:21:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <willdeacon@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Wed, 30 Mar 2022 10:24:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D04205950
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648650144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=V8lwe1nJ277ErLzO2JvOAl8qLHlH5LlGzwKHRcvdCBU=;
+        b=aBP1RazWPdzzHAztzePZ1V1geEEmSJgZ3FIxoN16uR6LW5SVOYNBxvuIWxE8LR9pDY9asd
+        U9ZY4jypCkCddOnGQwg1/ZcQMmGcjapTg+P7VtvKmFrTIWjXj9Bzq6/I/+zcGqvezay+PO
+        iSF28+cr7Owh3MSqEuQMHJ5zDPxyu4E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-100-5Y00R3zkPfq4RQIRR8_cwg-1; Wed, 30 Mar 2022 10:22:21 -0400
+X-MC-Unique: 5Y00R3zkPfq4RQIRR8_cwg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 919DA381749F;
+        Wed, 30 Mar 2022 14:22:20 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 77553C1D38B;
+        Wed, 30 Mar 2022 14:22:17 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net] rxrpc: fix some null-ptr-deref bugs in server_key.c
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Xiaolong Huang <butterflyhuangxx@gmail.com>,
+        Xiaolong Huang <butterflyhuangxx@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 5600/5615] arch/arm64/kvm/hyp/nvhe/psci-relay.c:249:6: warning: no previous
- prototype for function 'psci_mem_protect_inc'
-Message-ID: <202203302232.NQaL6oOJ-lkp@intel.com>
+Date:   Wed, 30 Mar 2022 15:22:14 +0100
+Message-ID: <164865013439.2941502.8966285221215590921.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   73a2a894a9b4d0fe1ba09039e381e658c1f62593
-commit: 4347917056dadaf7856cce8312eb1c55e1372a2a [5600/5615] ANDROID: KVM: arm64: Use PSCI MEM_PROTECT to zap guest pages on reset
-config: arm64-randconfig-r036-20220330 (https://download.01.org/0day-ci/archive/20220330/202203302232.NQaL6oOJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/4347917056dadaf7856cce8312eb1c55e1372a2a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout 4347917056dadaf7856cce8312eb1c55e1372a2a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+From: Xiaolong Huang <butterflyhuangxx@gmail.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Some function calls are not implemented in rxrpc_no_security, there are
+preparse_server_key, free_preparse_server_key and destroy_server_key.
+When rxrpc security type is rxrpc_no_security, user can easily trigger a
+null-ptr-deref bug via ioctl. So judgment should be added to prevent it
 
-All warnings (new ones prefixed by >>):
+The crash log:
+user@syzkaller:~$ ./rxrpc_preparse_s
+[   37.956878][T15626] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[   37.957645][T15626] #PF: supervisor instruction fetch in kernel mode
+[   37.958229][T15626] #PF: error_code(0x0010) - not-present page
+[   37.958762][T15626] PGD 4aadf067 P4D 4aadf067 PUD 4aade067 PMD 0
+[   37.959321][T15626] Oops: 0010 [#1] PREEMPT SMP
+[   37.959739][T15626] CPU: 0 PID: 15626 Comm: rxrpc_preparse_ Not tainted 5.17.0-01442-gb47d5a4f6b8d #43
+[   37.960588][T15626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
+[   37.961474][T15626] RIP: 0010:0x0
+[   37.961787][T15626] Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+[   37.962480][T15626] RSP: 0018:ffffc9000d9abdc0 EFLAGS: 00010286
+[   37.963018][T15626] RAX: ffffffff84335200 RBX: ffff888012a1ce80 RCX: 0000000000000000
+[   37.963727][T15626] RDX: 0000000000000000 RSI: ffffffff84a736dc RDI: ffffc9000d9abe48
+[   37.964425][T15626] RBP: ffffc9000d9abe48 R08: 0000000000000000 R09: 0000000000000002
+[   37.965118][T15626] R10: 000000000000000a R11: f000000000000000 R12: ffff888013145680
+[   37.965836][T15626] R13: 0000000000000000 R14: ffffffffffffffec R15: ffff8880432aba80
+[   37.966441][T15626] FS:  00007f2177907700(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
+[   37.966979][T15626] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   37.967384][T15626] CR2: ffffffffffffffd6 CR3: 000000004aaf1000 CR4: 00000000000006f0
+[   37.967864][T15626] Call Trace:
+[   37.968062][T15626]  <TASK>
+[   37.968240][T15626]  rxrpc_preparse_s+0x59/0x90
+[   37.968541][T15626]  key_create_or_update+0x174/0x510
+[   37.968863][T15626]  __x64_sys_add_key+0x139/0x1d0
+[   37.969165][T15626]  do_syscall_64+0x35/0xb0
+[   37.969451][T15626]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   37.969824][T15626] RIP: 0033:0x43a1f9
 
-   arch/arm64/kvm/hyp/nvhe/psci-relay.c:204:28: warning: no previous prototype for function 'kvm_host_psci_cpu_entry' [-Wmissing-prototypes]
-   asmlinkage void __noreturn kvm_host_psci_cpu_entry(bool is_cpu_on)
-                              ^
-   arch/arm64/kvm/hyp/nvhe/psci-relay.c:204:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void __noreturn kvm_host_psci_cpu_entry(bool is_cpu_on)
-              ^
-              static 
->> arch/arm64/kvm/hyp/nvhe/psci-relay.c:249:6: warning: no previous prototype for function 'psci_mem_protect_inc' [-Wmissing-prototypes]
-   void psci_mem_protect_inc(void)
-        ^
-   arch/arm64/kvm/hyp/nvhe/psci-relay.c:249:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void psci_mem_protect_inc(void)
-   ^
-   static 
->> arch/arm64/kvm/hyp/nvhe/psci-relay.c:256:6: warning: no previous prototype for function 'psci_mem_protect_dec' [-Wmissing-prototypes]
-   void psci_mem_protect_dec(void)
-        ^
-   arch/arm64/kvm/hyp/nvhe/psci-relay.c:256:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void psci_mem_protect_dec(void)
-   ^
-   static 
-   3 warnings generated.
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Tested-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Acked-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lists.infradead.org/pipermail/linux-afs/2022-March/005069.html
+---
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for USB_PHY
-   Depends on USB_SUPPORT
-   Selected by
-   - GKI_HIDDEN_USB_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_PCM_ELD
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for WEXT_PROC
-   Depends on NET && WIRELESS && PROC_FS && WEXT_CORE
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for WEXT_PRIV
-   Depends on NET && WIRELESS
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for PAGE_POOL
-   Depends on NET
-   Selected by
-   - GKI_HIDDEN_NET_CONFIGS
-   WARNING: unmet direct dependencies detected for WEXT_SPY
-   Depends on NET && WIRELESS
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for PHYLINK
-   Depends on NETDEVICES
-   Selected by
-   - GKI_HIDDEN_ETHERNET_CONFIGS
-   WARNING: unmet direct dependencies detected for WIRELESS_EXT
-   Depends on NET && WIRELESS
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for WEXT_CORE
-   Depends on NET && WIRELESS && (CFG80211_WEXT || WIRELESS_EXT
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for NET_PTP_CLASSIFY
-   Depends on NET
-   Selected by
-   - GKI_HIDDEN_NET_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_JACK
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_VMASTER
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_SOC_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_JACK_INPUT_DEV
-   Depends on SOUND && !UML && SND && SND_JACK
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
+ net/rxrpc/server_key.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/net/rxrpc/server_key.c b/net/rxrpc/server_key.c
+index ead3471307ee..ee269e0e6ee8 100644
+--- a/net/rxrpc/server_key.c
++++ b/net/rxrpc/server_key.c
+@@ -84,6 +84,9 @@ static int rxrpc_preparse_s(struct key_preparsed_payload *prep)
+ 
+ 	prep->payload.data[1] = (struct rxrpc_security *)sec;
+ 
++	if (!sec->preparse_server_key)
++		return -EINVAL;
++
+ 	return sec->preparse_server_key(prep);
+ }
+ 
+@@ -91,7 +94,7 @@ static void rxrpc_free_preparse_s(struct key_preparsed_payload *prep)
+ {
+ 	const struct rxrpc_security *sec = prep->payload.data[1];
+ 
+-	if (sec)
++	if (sec && sec->free_preparse_server_key)
+ 		sec->free_preparse_server_key(prep);
+ }
+ 
+@@ -99,7 +102,7 @@ static void rxrpc_destroy_s(struct key *key)
+ {
+ 	const struct rxrpc_security *sec = key->payload.data[1];
+ 
+-	if (sec)
++	if (sec && sec->destroy_server_key)
+ 		sec->destroy_server_key(key);
+ }
+ 
 
 
-vim +/psci_mem_protect_inc +249 arch/arm64/kvm/hyp/nvhe/psci-relay.c
-
-   203	
- > 204	asmlinkage void __noreturn kvm_host_psci_cpu_entry(bool is_cpu_on)
-   205	{
-   206		struct psci_boot_args *boot_args;
-   207		struct kvm_cpu_context *host_ctxt;
-   208	
-   209		host_ctxt = &this_cpu_ptr(&kvm_host_data)->host_ctxt;
-   210	
-   211		if (is_cpu_on)
-   212			boot_args = this_cpu_ptr(&cpu_on_args);
-   213		else
-   214			boot_args = this_cpu_ptr(&suspend_args);
-   215	
-   216		cpu_reg(host_ctxt, 0) = boot_args->r0;
-   217		write_sysreg_el2(boot_args->pc, SYS_ELR);
-   218	
-   219		if (is_cpu_on)
-   220			release_boot_args(boot_args);
-   221	
-   222		__host_enter(host_ctxt);
-   223	}
-   224	
-   225	static DEFINE_HYP_SPINLOCK(mem_protect_lock);
-   226	
-   227	static u64 psci_mem_protect(s64 offset)
-   228	{
-   229		static u64 cnt;
-   230		u64 new = cnt + offset;
-   231	
-   232		hyp_assert_lock_held(&mem_protect_lock);
-   233	
-   234		if (!offset || kvm_host_psci_config.version < PSCI_VERSION(1, 1))
-   235			return cnt;
-   236	
-   237		if (!cnt || !new)
-   238			psci_call(PSCI_1_1_FN64_MEM_PROTECT, offset < 0 ? 0 : 1, 0, 0);
-   239	
-   240		cnt = new;
-   241		return cnt;
-   242	}
-   243	
-   244	static bool psci_mem_protect_active(void)
-   245	{
-   246		return psci_mem_protect(0);
-   247	}
-   248	
- > 249	void psci_mem_protect_inc(void)
-   250	{
-   251		hyp_spin_lock(&mem_protect_lock);
-   252		psci_mem_protect(1);
-   253		hyp_spin_unlock(&mem_protect_lock);
-   254	}
-   255	
- > 256	void psci_mem_protect_dec(void)
-   257	{
-   258		hyp_spin_lock(&mem_protect_lock);
-   259		psci_mem_protect(-1);
-   260		hyp_spin_unlock(&mem_protect_lock);
-   261	}
-   262	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

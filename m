@@ -2,123 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D95B4ED04B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3744ED04D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351849AbiC3Xpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 19:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S1351852AbiC3Xp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 19:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351842AbiC3Xp3 (ORCPT
+        with ESMTP id S1344742AbiC3Xp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 19:45:29 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80029DFD2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:43:39 -0700 (PDT)
-Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22UNhb9r030571;
-        Thu, 31 Mar 2022 08:43:37 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
- Thu, 31 Mar 2022 08:43:37 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22UNhbP8030567
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 31 Mar 2022 08:43:37 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <688b3c92-e9aa-f506-a288-646c5477f6df@I-love.SAKURA.ne.jp>
-Date:   Thu, 31 Mar 2022 08:43:32 +0900
+        Wed, 30 Mar 2022 19:45:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F905167C0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648683850; x=1680219850;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=3lqC2A8Q2GM/5G4MmdDtAAAEsrPpKTG9OIXicflGVWo=;
+  b=GtYf2UOEdmlgfiYq2K6luiohHVt/yTsWDlTdAphiqdUAvKXuSWBkkRY0
+   UJw/tKTrqirj5P0kQoSDjdu+I6i/fJdo7rxrUVICHTXyKKFCi8NHkLCTs
+   MQuLbuvKloXvRR1h5kLtsSbUTPXHntuPa6ZuBuuMRp76ixZIxsTNlBWYj
+   WRolRBLg/TqMgS/QrFn6869tcDXdDpyM7PXV3Fk+z7h4wKuLQDJXRfHmH
+   1sinaIlo8dUNPJdXDt5NrJGhcUf2of08EhVmq2SH9VCsiol+EhvoFb+p6
+   ed9ZYLYU3Fd/f27TwZmwr9/Eg6iUxsFuTjFZHMFuDWLwggQ58FlNYnP9I
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247172339"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="247172339"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 16:44:10 -0700
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="654202760"
+Received: from rbaile3x-mobl.amr.corp.intel.com (HELO [10.209.48.111]) ([10.209.48.111])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 16:44:09 -0700
+Message-ID: <9e84cdea-754c-1864-4c54-66beeba7f921@intel.com>
+Date:   Wed, 30 Mar 2022 16:44:13 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] possible deadlock in p9_write_work
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Content-Language: en-US
-To:     "Perepechko, Andrew" <andrew.perepechko@hpe.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Andreas Dilger <adilger@dilger.ca>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>
-References: <0000000000009523b605db620972@google.com>
- <385ce718-f965-4005-56b6-34922c4533b8@I-love.SAKURA.ne.jp>
- <YkObebLZMp5AyRpr@codewreck.org>
- <fb5d20c5-36a6-2c51-288a-7cc1e0a76d3e@I-love.SAKURA.ne.jp>
- <YkPAkXVc4HZLUrGl@codewreck.org>
- <f593d3ac-b28e-3593-3cd8-8983b27e47a7@I-love.SAKURA.ne.jp>
- <PH7PR84MB167995181252E4B7E4541B64F51F9@PH7PR84MB1679.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <PH7PR84MB167995181252E4B7E4541B64F51F9@PH7PR84MB1679.NAMPRD84.PROD.OUTLOOK.COM>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20220318153048.51177-1-kirill.shutemov@linux.intel.com>
+ <20220318153048.51177-22-kirill.shutemov@linux.intel.com>
+ <2847763c-6202-9e2a-54c5-44c761b59a63@intel.com>
+ <20220324152415.grt6xvhblmd4uccu@black.fi.intel.com>
+ <4c0c05a8-08f2-7d5d-6746-a92d0d3c5ef0@intel.com>
+ <20220330231609.ymxekzgdp2pd7gfy@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv7 21/30] x86/acpi, x86/boot: Add multiprocessor wake-up
+ support
+In-Reply-To: <20220330231609.ymxekzgdp2pd7gfy@black.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On 3/30/22 16:16, Kirill A. Shutemov wrote:
+> On Mon, Mar 28, 2022 at 12:17:35PM -0700, Dave Hansen wrote:
+>> Is there anything in the trampoline code or start_secondary() that would
+>> cause damage if it got run later than the kernel expects?
+> 
+> I didn't find anything specific.
+> 
+> But I tried to simulate similar scenario by returning -EIO just after
+> writing wake up command in acpi_wakeup_cpu(). System booted, but there is
+> a warning in the dmesg:
+> 
+> WARNING: CPU: 0 PID: 1 at kernel/irq/chip.c:210 irq_startup+0x2a3/0x2b0
+> 
+> System seems recovered fine, but I'm not sure what will happen if
+> wake up is delayed by VMM.
 
-Since "ext4: truncate during setxattr leads to kernel panic" did not choose
-per-superblock WQ, ext4_put_super() for some ext4 superblock currently waits
-for completion of iput() from delayed_iput_fn() from delayed_iput() from
-ext4_xattr_set_entry() from all ext4 superblocks (in addition to other tasks
-scheduled by unrelated subsystems).
+That shouldn't be too hard to simulate.  Just add a spin loop at the
+beginning of start_secondary() that can spin for grotesque amounts of
+time and have it get more grotesque with each CPU that boots.
 
-If ext4_put_super() for some superblock wants to wait for only works from that
-superblock, please use per-superblock WQ. Creating per-superblock WQ via
-alloc_workqueue() without WQ_MEM_RECLAIM flag will not consume much resource.
+If you're still booting CPUs when userspace comes up, you've done as
+much damage as possible.
 
-If ext4_put_super() for some superblock can afford waiting for iput() from
-other ext4 superblocks, you can use per-filesystem WQ.
+But, I do think there are two relatively discrete problems here:
+1. How long do we wait for a secondary CPU to actually ack the MADT
+   wakeup?  (the answer might be "don't wait").
+2. How do we verify that a woken-up CPU actually booted all the way?
 
-On 2022/03/31 1:56, Perepechko, Andrew wrote:
-> Hello Tetsuo!
-> 
-> Thank you for your report.
-> 
-> I wonder if I can fix this issue by creating a separate per-superblock workqueue.
-> 
-> I may not fully understand the lockdep magic in process_one_work() so any advice is appreciated.
-> 
-> As I see it, if there's no shared locking between different workqueues, unmount should be able to flush only its own scheduled tasks (which should not conflict with any p9 tasks) and unblock the locking chain under similar conditions.
-> 
-> Thank you,
-> Andrew
-> ________________________________
-> From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Sent: 30 March 2022 05:49
-> To: Dominique Martinet <asmadeus@codewreck.org>
-> Cc: Perepechko, Andrew <andrew.perepechko@hpe.com>; Andreas Dilger <adilger@dilger.ca>; Theodore Ts'o <tytso@mit.edu>; syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; syzkaller-bugs@googlegroups.com <syzkaller-bugs@googlegroups.com>; v9fs-developer@lists.sourceforge.net <v9fs-developer@lists.sourceforge.net>; open list:EXT4 FILE SYSTEM <linux-ext4@vger.kernel.org>
-> Subject: Re: [syzbot] possible deadlock in p9_write_work
-> 
-> On 2022/03/30 11:29, Dominique Martinet wrote:
->> Tetsuo Handa wrote on Wed, Mar 30, 2022 at 10:57:15AM +0900:
->>>>> Please don't use schedule_work() if you need to use flush_scheduled_work().
->>>>
->>>> In this case we don't call flush_scheduled_work -- ext4 does.
+Even if #1 is a loooooong time, it might get stalled before it fully boots.
+
+So, for this patch, let's just remove the timeout.  If the boot CPU
+hangs (spins forever) because the VMM is being naughty, I'm OK with it.
+ It's hard to do too much damage when you're spinning.
+
+#2 seems like a separate issue to tackle.  Maybe it's as simple as
+waiting for the secondary CPU to mark itself as online.
+
+The only question is whether #2 is a big enough deal that it has to be
+tackled before starting to merge the TDX guest support.
+
+>>> Patch below drops timeout handling completely. Any opinions?
 >>>
->>> Yes, that's why I changed recipients to ext4 people.
+>>> Other option would be to check in the trampoline code that initiated wake
+>>> up is legitimate. But it should only be untrue if VMM acting weird (or
+>>> virtual BIOS is buggy). I don't think it's right side to deal with the
+>>> problem.
 >>
->> Sorry, I hadn't noticed.
->> 9p is the one calling schedule_work, so ultimately it really is the
->> combinaison of the two, and not just ext4 that's wrong here.
+>> Yeah, that would just be a band-aid.  If we are worried about the
+>> secondary CPU doing some damage at a random time, the host can just wait
+>> until *after* the wakeup check.
 > 
-> Calling schedule_work() itself does not cause troubles (unless there are
-> too many pending works to make progress). Calling flush_scheduled_work()
-> causes troubles because it waits for completion of all works even if
-> some of works cannot be completed due to locks held by the caller of
-> flush_scheduled_work(). 9p is innocent for this report.
-> 
-> 
+> VMM cannot wake up secondary CPU on its own. Guest has to initiate it by
+> writing into the mailbox. Reader of the mailbox command is also within
+> trust boundary -- it loops inside virtual BIOS code. But VMM can
+> *postpone* reacting to the command by not scheduling the secondary.
 
+Right.  I was just pointing out that if we add a check early in the boot
+code, the VMM can postpone its naughtiness until after the check.
+
+>>>>>         /*
+>>>>>          * If the CPU wakeup process is successful, store the
+>>>>>          * status in apic_id_wakemap to prevent re-wakeup
+>>>>>          * requests.
+>>>>>          */
+>>>>>         physid_set(apicid, apic_id_wakemap);
+>>>>>
+>>>>>         return 0;
+>>>>> }
+>>>>
+>>>> If this goes wrong, won't the new wakeup just timeout?  Do we really
+>>>> need a dedicated mechanism to stop re-wakeups?  How much of a problem is
+>>>> this going to be?
+>>>
+>>> Well, it can provide a proper diagnostics and a distinct error code. If
+>>> you think it is unneeded we can drop it.
+>>
+>> It looks like debugging that you add when you're bringing something up.
+>>  I'm not sure of its utility going forward.  I'd just zap it for now and
+>> bring it back later if it's really needed.
+> 
+> Sathya pointed out that this protection was added based on request[1] by
+> Rafael.
+> 
+> TDX should be safe from re-wakeups as we forbid offlining CPUs, but the
+> wake up method suppose to be generic, not limited to TDX.
+> 
+> [1] https://lore.kernel.org/all/CAJZ5v0jonk2Pb2HUHMoe69vnCV4+EV9XZpo2LwKrnYPF3CxD_A@mail.gmail.com/
+
+Fair enough.  Please just add that reasoning somewhere.

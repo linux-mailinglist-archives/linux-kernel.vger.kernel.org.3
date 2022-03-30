@@ -2,133 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D8F4EC62D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4944C4EC636
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346617AbiC3OKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S1346599AbiC3OLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344087AbiC3OKS (ORCPT
+        with ESMTP id S1346659AbiC3OK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:10:18 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69E7197FAE;
-        Wed, 30 Mar 2022 07:08:31 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id b19so29445448wrh.11;
-        Wed, 30 Mar 2022 07:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qMb8I9yb8zXna+ph82rtTSaTfX9Wmxw5201Wn2H77RE=;
-        b=j2XmH+NydNmOeH96zyWRc8tcCxM54QYx85qeir6RyQS/AJ9/ROnsaB/AjQKjZd8lfA
-         x4ggAK3oLlX38GeDfLZR+ovA6iyoYHN3NOm7aWgoERCEoAbG1fx1jfV/yVt7fDEoJKPI
-         mciVIjPyTcyrxV5kV+EBxIEIpnlb02WGlr7KgDf8thIx/xDM+sfe7dkQyaSZrqSJ3Lcu
-         SKUZmc6/Q2iOHo030H5/bUKxsjjZYRp4JuKHQC+4lZJ+Jd6Y9+UqV3QC1fbuDOfldgi4
-         yRhP4w8q6GXtTOu+1iA/vQJLpNfyd4bFf28j8NfM3HaJYnNrT3UzBPurd2TwK0f5URKp
-         /pyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=qMb8I9yb8zXna+ph82rtTSaTfX9Wmxw5201Wn2H77RE=;
-        b=Ki1SrBlrUFAGwrL22N4J7mHNzOVkQhKnE5nka+0DcQYYpDCVWyBn1rarWihOXV1PLp
-         rr3SwcfWN+Whi3sIspEOscMigmet+DyqXURM7oVtKcto5/9OfEQKSSStAnD/48tXLX/6
-         HgyqdUczkOV49FHycwFLD4t6++SiVzDVHQW0hrRm1srTtgmPASrmjwIkmDir9vMi/cmf
-         PXzQ9FnNe3cBGY2MQcl0sCg5RCbab6TlRUzDLYo/2z20lw/3eMsNsqJYOZd8HozjqrHp
-         KeY7BiTkptL+f9Skh2dX7lNq3wS24ge2uj2jNrQLhJHeErMO0fNigqht7ZoRW9XCRA5x
-         QyKQ==
-X-Gm-Message-State: AOAM532wzX487ixF6iTUE4hxSRD8gyOUhz1SasKra1vufk0Fx99CHLQk
-        UmgoLxTpVTmcSLsjR5R+QCyY/sHMjMNHZg==
-X-Google-Smtp-Source: ABdhPJzxinf0tXRpnGQ8FeOLnI56RGRfyhOPiP5IL4JxY0Sj2ZHKcj3xgYZqU0qf+zxt28BK3bt6Pg==
-X-Received: by 2002:a5d:59a3:0:b0:203:d9fa:6968 with SMTP id p3-20020a5d59a3000000b00203d9fa6968mr36695096wrr.585.1648649309992;
-        Wed, 30 Mar 2022 07:08:29 -0700 (PDT)
-Received: from Dev-shlomop.pliops.ent (bzq-219-32-62.isdn.bezeqint.net. [62.219.32.62])
-        by smtp.googlemail.com with ESMTPSA id 14-20020a056000154e00b00203f8adde0csm22272782wry.32.2022.03.30.07.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 07:08:29 -0700 (PDT)
-From:   Shlomo Pongratz <shlomopongratz@gmail.com>
-X-Google-Original-From: Shlomo Pongratz <shlomop@pliops.com>
-To:     linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, andrew.maier@eideticom.com,
-        logang@deltatee.com, bhelgaas@google.com, jgg@nvidia.com,
-        helgaas@kernel.org, Shlomo Pongratz <shlomop@pliops.com>
-Subject: [PATCH V4 1/1] Intel Sky Lake-E host root ports check.
-Date:   Wed, 30 Mar 2022 17:08:23 +0300
-Message-Id: <20220330140823.28826-2-shlomop@pliops.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220330140823.28826-1-shlomop@pliops.com>
-References: <20220330140823.28826-1-shlomop@pliops.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 10:10:57 -0400
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.46.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21931B255C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:09:12 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 12773400FEFA3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:09:12 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZZ0Znb9lJHnotZZ0anStVD; Wed, 30 Mar 2022 09:09:12 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Xz8yh43Ee8bsOdPZexT5kTM/Pf85kWOgS2F3siy5ElI=; b=aZfwJyVTrvxuIj2Xy5lLmW9lGF
+        oSbJ8KcTuJsaxOQvWhts64PnQAC89U8Gm9zFnwM8evUriD5z5Cv+wbLGuYDBu1aCikJidQ+ghmxBb
+        /GRbW61Vkvuyt1tSJobZs8U56+9uoNo85akwQN0cPKvr/TiYVpEnBqkZ6hQsJRozECHvERv6AScBd
+        puMg6xlrzorqgKqo0XrkuYf9QR1khL+y3l79icnm8F2ZgcU4K8kZmuOxPME38nrUPNtdTi8UOcti1
+        UT7j238IcDi2/nfcxwoZnDz78w+55EYoq341m3EPo97yrL90SJf0L6C/7vk+bg45o1t06Hp5ZK3rG
+        L4SNGJtw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54564)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZZ0Z-002Dzr-K2; Wed, 30 Mar 2022 14:09:11 +0000
+Message-ID: <679dfcda-a0b4-b420-b45b-2ccdc21a579d@roeck-us.net>
+Date:   Wed, 30 Mar 2022 07:09:10 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-2-eugene.shalygin@gmail.com>
+ <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
+ <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
+ <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
+ <CAB95QAQGWRT=UsXPn65oiiwBRa1RKj61sg7wq9d7VntnFWzaOg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
+ struct for board data
+In-Reply-To: <CAB95QAQGWRT=UsXPn65oiiwBRa1RKj61sg7wq9d7VntnFWzaOg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZZ0Z-002Dzr-K2
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54564
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C, D to
-the whitelist")
-Andrew Maier added the Sky Lake-E additional devices
-2031, 2032 and 2033 root ports to the already existing 2030 device.
+On 3/30/22 00:51, Eugene Shalygin wrote:
+> On Tue, 29 Mar 2022 at 22:28, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 3/29/22 12:22, Eugene Shalygin wrote:
+>>> On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>>
+>>>>>     struct ec_sensors_data {
+>>>>> -     unsigned long board_sensors;
+>>>>> +     struct ec_board_info board_info;
+>>>>
+>>>> Please explain why this needs to be the entire structure and not
+>>>> just a pointer to it.
+>>>
+>>> I marked the board_info array as __initconst assuming that this large
+>>> array will be unloaded from memory after the init phase, while we keep
+>>> only a single element. Is that assumption incorrect?
+>>>
+>>
+>> What happens if you build the driver into the kernel and then instantiate
+>> and de-instantiate it multiple times ?
+> 
+> Sorry, I have no idea because I don't know how to load a built-in
+> driver multiple times. But since this driver is attached to a
+> motherboard device, which is persistent and always single, do I need
+> to consider such a scenario?
+> 
 
-The Intel devices 2030, 2031, 2032 and 2033 which are root ports A, B, C and D,
-respectively and if all exist they will occupy slots 0 till 3 in that order.
+Drivers have "unbind" and "bind" attributes, which can be used to unbind/bind
+the driver mutliple times. That is quite useful for testing, including for
+built-in drivers. As long as the attributes exists, they have to be supported.
+This is not about having to consider a scenario, it is about preventing crashes
+if existing functionality is used.
 
-The original code handled only the case where the devices in the whiltlist are
-host bridges and assumed that they will be found on slot 0.
+Having said that, I notice that the probe function is marked __init. I guess
+I didn't pay attention. It may be interesting to build the driver into the
+kernel, unbind/bind it, and see what happens.
 
-This assumption doesn't hold for root ports so an explicit test was added to
-cover this case.
-
-Signed-off-by: Shlomo Pongratz <shlomop@pliops.com>
----
- drivers/pci/p2pdma.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-index 30b1df3c9d2f..107905dfa229 100644
---- a/drivers/pci/p2pdma.c
-+++ b/drivers/pci/p2pdma.c
-@@ -327,15 +327,18 @@ static const struct pci_p2pdma_whitelist_entry {
- 
- /*
-  * This lookup function tries to find the PCI device corresponding to a given
-- * host bridge.
-+ * host bridge or a root port.
-  *
-  * It assumes the host bridge device is the first PCI device in the
-- * bus->devices list and that the devfn is 00.0. These assumptions should hold
-- * for all the devices in the whitelist above.
-+ * bus->devices list and that the devfn is 00.0. The first assumption should
-+ * hold for all the devices in the whitelist above, however the second one
-+ * doesn't always holds for root ports, for example Intel SkyLake-E devices
-+ * 2030, 2031, 2032 and 2033 which are root ports (A, B, C and D respectively).
-+ * So being a root port is checked explicitly.
-  *
-- * This function is equivalent to pci_get_slot(host->bus, 0), however it does
-- * not take the pci_bus_sem lock seeing __host_bridge_whitelist() must not
-- * sleep.
-+ * This function is equivalent to pci_get_slot(host->bus, 0) (except for
-+ * the root port test), however it does not take the pci_bus_sem lock seeing
-+ * __host_bridge_whitelist() must not sleep.
-  *
-  * For this to be safe, the caller should hold a reference to a device on the
-  * bridge, which should ensure the host_bridge device will not be freed
-@@ -350,7 +353,10 @@ static struct pci_dev *pci_host_bridge_dev(struct pci_host_bridge *host)
- 
- 	if (!root)
- 		return NULL;
--	if (root->devfn != PCI_DEVFN(0, 0))
-+
-+	/* Is it a host bridge or a root port? */
-+	if (root->devfn != PCI_DEVFN(0, 0) &&
-+		pci_pcie_type(root) != PCI_EXP_TYPE_ROOT_PORT)
- 		return NULL;
- 
- 	return root;
--- 
-2.17.1
-
+Guenter

@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518F24ECC04
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AAB4ECC26
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244617AbiC3S0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S1345088AbiC3S07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350185AbiC3S0M (ORCPT
+        with ESMTP id S236276AbiC3S0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:26:12 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEFD4830F;
-        Wed, 30 Mar 2022 11:23:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id u3so30534615wrg.3;
-        Wed, 30 Mar 2022 11:23:36 -0700 (PDT)
+        Wed, 30 Mar 2022 14:26:33 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66C249FBD
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-de48295467so22926449fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=RMOT7aYy2mupTnOfFbZePA5/uVx944n/I4VvlKi6Lsw=;
-        b=piHloS7GD3Le8mJ10k+LyWzNL68x+zwpYI6oKRQCXUjqk2EzocHm9C9FcFUWtP4BhS
-         j/KJWtun+svPjWuebaagI/ywruUnOfd9bK3XMXF5iCAGu8LbHxhU13xoTC0nsH6JDTfm
-         vx7x+b0ltsc3wZFHzGfKS+N0gwN3OeEiE+qbtgipA6z6q0JSbcIGCyxIJzanU7NmGXcH
-         NK/cjmMpSygRPw0gbbVzO/n9kNad0nfkLmVs3c1+EbItZBj6xwvBMxIvA0PT858UaYLK
-         ZdgZjVTVAPyImF96l/2YPsWoiI62SIGDpF4Ch6rYohd3DKXZI0aBa0GYgCfqL2+cEGIz
-         WCXA==
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RMOT7aYy2mupTnOfFbZePA5/uVx944n/I4VvlKi6Lsw=;
-        b=21T90oPBv6qQxGRHAWBpB5hSskCiA0W5nSnCYNcfZbFI7bsgA16feuw4DyRKtG6QLL
-         S2BKmtZ/zZYfQ+n3hI+pfBeadQaDQeYeZfbtE4Wcd1G4NlklW6s5nGfQv/qwZizGIer8
-         MLqfDJbNp+Qjb3FSDzFjB8NAJjkOfFEqsGFAJF9p9uruRHR4s944J4dW7zLfibtsffYY
-         KT3q0KYCnw79I8EEBXgzmiedJ7yDNHu++QEZtRULRrG3zjHqpgWh0+5GwElWGxEgYw6i
-         QoMTHKHyMqBDrqRT8A98yTn7trMPvE/kuMTkeicMFu4HwLWcUG92gCIfin3VAEwB35rI
-         BX9Q==
-X-Gm-Message-State: AOAM530XlFxX6GbmxGAnwmSEh4hWhaq1DLDETMB+a+ZO2co3k3UjTsbx
-        tqnFJSDbD46KcOvglp3/WYeSqu6mZhS16A==
-X-Google-Smtp-Source: ABdhPJzNRvC2PQ8Ee8kumcS/8iR5Bsnssmxd575QnVljTaDgTB55DFoBO+sG8qV4rBVdPqt8+JdNng==
-X-Received: by 2002:adf:e486:0:b0:204:ba5:adcd with SMTP id i6-20020adfe486000000b002040ba5adcdmr863091wrm.16.1648664614844;
-        Wed, 30 Mar 2022 11:23:34 -0700 (PDT)
-Received: from Francescos-Air.fritz.box (host-79-3-210-6.business.telecomitalia.it. [79.3.210.6])
-        by smtp.googlemail.com with ESMTPSA id m4-20020a7bcb84000000b00389efb7a5b4sm5291193wmi.17.2022.03.30.11.23.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 30 Mar 2022 11:23:34 -0700 (PDT)
-From:   FraSharp <f.duca00@gmail.com>
-X-Google-Original-From: FraSharp <s23265@iisve.it>
-Cc:     f.duca00@gmail.com, Francesco Duca <s23265@iisve.it>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: use hostname -s along uname to obtain LINUX_COMPILE_HOST
-Date:   Wed, 30 Mar 2022 20:23:29 +0200
-Message-Id: <20220330182329.52310-1-s23265@iisve.it>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=IPPbiXd9/25wZgPaZM8tq5xfsHddRuK9BEhyPezKN0dWxYs7uU+Rw60ffK9rzyZQie
+         +qtmCJNAfWSG66kkWxUvWx/7Tw607j5iapWbEaOH4+AknlcQkr9+6FclvEeKsbvQjQa0
+         w3et3IXdYgRjKEz26lCo9N87cbhv98gZ24YbO+chwHLGhXFASD6T0gZTd42GNzkhX2Ge
+         DXvkLmwdWuAKQj45b187fskGxvnOstFKj3pFdpxLsADVs18eAoP0Z9jepTdWsdCXyWWe
+         mFjN71OMLz43GQSaSAk7kFfGzec2pW7v2L86Ac+poG8HFWQgrAuEeOIr3/Wgdg0riI3K
+         3e9A==
+X-Gm-Message-State: AOAM531ODxnpSQCne6FqMusKyfOD2p6qNpzFkigEfFgWA5vZmtwTo9QC
+        Uen7NEoYVNpUuSomTF/pZKOZw0JBEylV9v5NeebVl7irLo5u
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Duca <s23265@iisve.it>
-
-* On some systems (e.g. macOS), using commands like 'uname -n' or
-  'hostname' will print something similar to "hostname.domain"
-  ("Francescos-Air.fritz.box" for example), which is very annoying.
-  What works instead is 'hostname -s', which will only write hostname
-  without the domain ("Francescos-Air" for example),
-  but also keep 'uname -n', as some systems as Arch Linux does not have
-  'hostname' as command.
-
-* This commit is complementary to
-  1e66d50ad3a1dbf0169b14d502be59a4b1213149
-  ("kbuild: Use uname for LINUX_COMPILE_HOST detection")
-
-Signed-off-by: Francesco Duca <s23265@iisve.it>
----
- scripts/mkcompile_h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
-index ca40a5258..6054e3eee 100755
---- a/scripts/mkcompile_h
-+++ b/scripts/mkcompile_h
-@@ -34,7 +34,7 @@ else
- 	LINUX_COMPILE_BY=$KBUILD_BUILD_USER
- fi
- if test -z "$KBUILD_BUILD_HOST"; then
--	LINUX_COMPILE_HOST=`uname -n`
-+	LINUX_COMPILE_HOST=$(hostname -s || uname -n)
- else
- 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
- fi
--- 
-2.32.0 (Apple Git-132)
-
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==

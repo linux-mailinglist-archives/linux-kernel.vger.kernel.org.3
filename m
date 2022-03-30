@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AE54EC74D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FF24EC738
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347275AbiC3OwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
+        id S1347387AbiC3Ow0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347268AbiC3Ovz (ORCPT
+        with ESMTP id S1347276AbiC3OwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:51:55 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1893B48328
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:50:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-136-sIRC0DlJN0S4pc-bPv8wSQ-1; Wed, 30 Mar 2022 15:50:04 +0100
-X-MC-Unique: sIRC0DlJN0S4pc-bPv8wSQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 15:50:02 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 30 Mar 2022 15:50:02 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guenter Roeck' <linux@roeck-us.net>,
-        Michael Walle <michael@walle.cc>,
-        "Xu Yilun" <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Thread-Topic: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Thread-Index: AQHYREG1rIB0cQMH/kajVzJ0H3I8wazYAMOg
-Date:   Wed, 30 Mar 2022 14:50:02 +0000
-Message-ID: <02545bf1c21b45f78eba5e8b37951748@AcuMS.aculab.com>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
-In-Reply-To: <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 30 Mar 2022 10:52:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9115D1C10B;
+        Wed, 30 Mar 2022 07:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648651822; x=1680187822;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zrZUa4zHyRrv/b7a2GsU0Ksg+xmTjt4NnPen2PLSXh8=;
+  b=k3/UqaOoQeqVRo4XT3xGqZv+nuvmYGcyi3zCOxaKuV/vrfnIl4weIiJJ
+   aRRCc6rM8O9Lax7iwSpr6BwG74K76CTyCXESN2PxncvfP8qzFs5WuV8/R
+   2EA95ami0tfWcmPSjbLK/BY70O16oGwe4RwVLFp4oEsSbraXSsZ/NPyPS
+   dBOdO8WJzhuAeoWeXUHlfEPQsn3IlSg2iSHBpranBfN7ymeyoofAMHRYI
+   BJo002iLXoL+HfVRWTBzG3hKQYBNX351Ro4GdoqreEAbPkhRe03UTOWMT
+   GeJbfTdkMC+fIQzZtfQY0Fcsr0rpt8fRpb2RuhKHBhoWyEKsxiL29WEOu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="257139570"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="257139570"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 07:50:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="618556020"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Mar 2022 07:50:11 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 18849144; Wed, 30 Mar 2022 17:50:33 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Qianggui Song <qianggui.song@amlogic.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH v3 00/13] gpiolib: Two new helpers and way toward fwnode
+Date:   Wed, 30 Mar 2022 17:50:17 +0300
+Message-Id: <20220330145030.1562-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +88,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAzMCBNYXJjaCAyMDIyIDE1OjIzDQo+IE9uIDMv
-MjkvMjIgMDk6MDcsIE1pY2hhZWwgV2FsbGUgd3JvdGU6DQo+ID4gTW9yZSBhbmQgbW9yZSBkcml2
-ZXJzIHdpbGwgY2hlY2sgZm9yIGJhZCBjaGFyYWN0ZXJzIGluIHRoZSBod21vbiBuYW1lDQo+ID4g
-YW5kIGFsbCBhcmUgdXNpbmcgdGhlIHNhbWUgY29kZSBzbmlwcGV0LiBDb25zb2xpZGF0ZSB0aGF0
-IGNvZGUgYnkgYWRkaW5nDQo+ID4gYSBuZXcgaHdtb25fc2FuaXRpemVfbmFtZSgpIGZ1bmN0aW9u
-Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBXYWxsZSA8bWljaGFlbEB3YWxsZS5j
-Yz4NCj4gPiAtLS0NCj4gPiAgIERvY3VtZW50YXRpb24vaHdtb24vaHdtb24ta2VybmVsLWFwaS5y
-c3QgfCAgOSArKysrLQ0KPiA+ICAgZHJpdmVycy9od21vbi9od21vbi5jICAgICAgICAgICAgICAg
-ICAgICB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgaW5jbHVkZS9saW51eC9o
-d21vbi5oICAgICAgICAgICAgICAgICAgICB8ICAzICsrDQo+ID4gICAzIGZpbGVzIGNoYW5nZWQs
-IDYwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9E
-b2N1bWVudGF0aW9uL2h3bW9uL2h3bW9uLWtlcm5lbC1hcGkucnN0IGIvRG9jdW1lbnRhdGlvbi9o
-d21vbi9od21vbi1rZXJuZWwtYXBpLnJzdA0KPiA+IGluZGV4IGM0MWViNjEwODEwMy4uMTJmNGE5
-YmNlZjA0IDEwMDY0NA0KPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vaHdtb24vaHdtb24ta2VybmVs
-LWFwaS5yc3QNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2h3bW9uL2h3bW9uLWtlcm5lbC1hcGku
-cnN0DQo+ID4gQEAgLTUwLDYgKzUwLDEwIEBAIHJlZ2lzdGVyL3VucmVnaXN0ZXIgZnVuY3Rpb25z
-OjoNCj4gPg0KPiA+ICAgICB2b2lkIGRldm1faHdtb25fZGV2aWNlX3VucmVnaXN0ZXIoc3RydWN0
-IGRldmljZSAqZGV2KTsNCj4gPg0KPiA+ICsgIGNoYXIgKmh3bW9uX3Nhbml0aXplX25hbWUoY29u
-c3QgY2hhciAqbmFtZSk7DQo+ID4gKw0KPiA+ICsgIGNoYXIgKmRldm1faHdtb25fc2FuaXRpemVf
-bmFtZShzdHJ1Y3QgZGV2aWNlICpkZXYsIGNvbnN0IGNoYXIgKm5hbWUpOw0KPiA+ICsNCj4gPiAg
-IGh3bW9uX2RldmljZV9yZWdpc3Rlcl93aXRoX2dyb3VwcyByZWdpc3RlcnMgYSBoYXJkd2FyZSBt
-b25pdG9yaW5nIGRldmljZS4NCj4gPiAgIFRoZSBmaXJzdCBwYXJhbWV0ZXIgb2YgdGhpcyBmdW5j
-dGlvbiBpcyBhIHBvaW50ZXIgdG8gdGhlIHBhcmVudCBkZXZpY2UuDQo+ID4gICBUaGUgbmFtZSBw
-YXJhbWV0ZXIgaXMgYSBwb2ludGVyIHRvIHRoZSBod21vbiBkZXZpY2UgbmFtZS4gVGhlIHJlZ2lz
-dHJhdGlvbg0KPiA+IEBAIC05Myw3ICs5NywxMCBAQCByZW1vdmFsIHdvdWxkIGJlIHRvbyBsYXRl
-Lg0KPiA+DQo+ID4gICBBbGwgc3VwcG9ydGVkIGh3bW9uIGRldmljZSByZWdpc3RyYXRpb24gZnVu
-Y3Rpb25zIG9ubHkgYWNjZXB0IHZhbGlkIGRldmljZQ0KPiA+ICAgbmFtZXMuIERldmljZSBuYW1l
-cyBpbmNsdWRpbmcgaW52YWxpZCBjaGFyYWN0ZXJzICh3aGl0ZXNwYWNlLCAnKicsIG9yICctJykN
-Cj4gPiAtd2lsbCBiZSByZWplY3RlZC4gVGhlICduYW1lJyBwYXJhbWV0ZXIgaXMgbWFuZGF0b3J5
-Lg0KPiA+ICt3aWxsIGJlIHJlamVjdGVkLiBUaGUgJ25hbWUnIHBhcmFtZXRlciBpcyBtYW5kYXRv
-cnkuIEJlZm9yZSBjYWxsaW5nIGENCj4gPiArcmVnaXN0ZXIgZnVuY3Rpb24geW91IHNob3VsZCBl
-aXRoZXIgdXNlIGh3bW9uX3Nhbml0aXplX25hbWUgb3INCj4gPiArZGV2bV9od21vbl9zYW5pdGl6
-ZV9uYW1lIHRvIHJlcGxhY2UgYW55IGludmFsaWQgY2hhcmFjdGVycyB3aXRoIGFuDQo+ID4gK3Vu
-ZGVyc2NvcmUuDQo+IA0KPiBUaGF0IG5lZWRzIG1vcmUgZGV0YWlscyBhbmQgZGVzZXJ2ZXMgaXRz
-IG93biBwYXJhZ3JhcGguIENhbGxpbmcgb25lIG9mDQo+IHRoZSBmdW5jdGlvbnMgaXMgb25seSBu
-ZWNlc3NhcnkgaWYgdGhlIG9yaWdpbmFsIG5hbWUgZG9lcyBvciBjYW4gaW5jbHVkZQ0KPiB1bnN1
-cHBvcnRlZCBjaGFyYWN0ZXJzOyBhbiB1bmNvbmRpdGlvbmFsICJzaG91bGQiIGlzIHRoZXJlZm9y
-ZSBhIGJpdA0KPiBzdHJvbmcuIEFsc28sIGl0IGlzIGltcG9ydGFudCB0byBtZW50aW9uIHRoYXQg
-dGhlIGZ1bmN0aW9uIGR1cGxpY2F0ZXMNCj4gdGhlIG5hbWUsIGFuZCB0aGF0IGl0IGlzIHRoZSBy
-ZXNwb25zaWJpbGl0eSBvZiB0aGUgY2FsbGVyIHRvIHJlbGVhc2UNCj4gdGhlIG5hbWUgaWYgaHdt
-b25fc2FuaXRpemVfbmFtZSgpIHdhcyBjYWxsZWQgYW5kIHRoZSBkZXZpY2UgaXMgcmVtb3ZlZC4N
-Cg0KTW9yZSB3b3JyeWluZywgYW5kIG5vdCBkb2N1bWVudGVkLCBpcyB0aGF0IHRoZSBidWZmZXIg
-J25hbWUnIHBvaW50cw0KdG8gbXVzdCBwZXJzaXN0Lg0KDQpJU1RNIHRoYXQgdGhlIGttYWxsb2Mo
-KSBpbiBfX2h3bW9uX2RldmljZV9yZWdpc3RlcigpIHNob3VsZCBpbmNsdWRlDQpzcGFjZSBmb3Ig
-YSBjb3B5IG9mIHRoZSBuYW1lLg0KSXQgY2FuIHRoZW4gZG8gd2hhdCBpdCB3aWxsIHdpdGggd2hh
-dGV2ZXIgaXMgcGFzc2VkIGluLg0KDQpPaCB5ZXMsIGl0IGhhcyBteSAnZmF2b3VyaXRlIGNvbnN0
-cnVjdCc6ICBpZiAoIXN0cmxlbihuYW1lKSkgLi4uDQood2VsbCBzdHJbc3RybGVuKHN0cildID0g
-MCBhbHNvIGhhcHBlbnMhKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
-aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
-DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+This is a spin-off of the previous work of switching GPIO library
+to use fwnode instead of of_node. Here we introduce a couple of
+a new macro helpers, which allows to switch some of the drivers
+to use fwnode and partially fwnode APIs.
+
+Bart, Linus, I can take it thru my tree with an immutable branch if
+it's the way you prefer, otherwise please suggest on how to proceed.
+
+Changelog v3:
+- moved count initialization to the definition in patch 2 (Geert)
+- replaced of_args by args, used %pfwP in patch 7 (Geert)
+- fixed kernel doc warning in patch 7
+- added tags to patches 1, 2, 6, and 7 (Geert)
+- added tag to patch 4 (Fabien)
+- renamed MREG to MESON_REG in patch 9 (Neil)
+- added tag to patch 10 (Neil)
+- used --base for cover-letter
+
+Changelog v2:
+- properly based, so kbuild bot may test it (LKP)
+- fixed typo in the macro (Geert)
+- split to two macro helpers and rename the gpiochip_count()
+- tagged one of stm32 and one of meson patches (Fabien, Neil)
+- unified previously standalone armada patch
+- due to above rewrote the armada patch from v1 completely (Sergey)
+- added a lot of a new patches
+- compile tested all of them on x86
+
+Andy Shevchenko (13):
+  gpiolib: Introduce for_each_gpiochip_node() loop helper
+  gpiolib: Introduce gpiochip_node_count() helper
+  pinctrl: stm32: Replace custom code by gpiochip_node_count() call
+  pinctrl: stm32: Switch to use for_each_gpiochip_node() helper
+  pinctrl: samsung: Switch to use for_each_gpiochip_node() helper
+  pinctrl: renesas: rza1: Replace custom code by gpiochip_node_count()
+    call
+  pinctrl: renesas: rza1: Switch to use for_each_gpiochip_node() helper
+  pinctrl: npcm7xx: Switch to use for_each_gpiochip_node() helper
+  pinctrl: meson: Rename REG_* to MESON_REG_*
+  pinctrl: meson: Enable COMPILE_TEST
+  pinctrl: meson: Replace custom code by gpiochip_node_count() call
+  pinctrl: armada-37xx: Switch to use fwnode instead of of_node
+  pinctrl: armada-37xx: Reuse GPIO fwnode in
+    armada_37xx_irqchip_register()
+
+ drivers/pinctrl/meson/Kconfig               |   2 +-
+ drivers/pinctrl/meson/pinctrl-meson.c       |  52 ++++---
+ drivers/pinctrl/meson/pinctrl-meson.h       |  24 ++--
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c |  34 ++---
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c   | 142 +++++++++-----------
+ drivers/pinctrl/renesas/pinctrl-rza1.c      |  47 ++-----
+ drivers/pinctrl/samsung/pinctrl-samsung.c   |  30 ++---
+ drivers/pinctrl/samsung/pinctrl-samsung.h   |   2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32.c       |  80 +++++------
+ include/linux/gpio/driver.h                 |  18 ++-
+ 10 files changed, 191 insertions(+), 240 deletions(-)
+
+
+base-commit: a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57
+-- 
+2.35.1
 

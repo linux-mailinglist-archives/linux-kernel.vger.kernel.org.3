@@ -2,97 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52A34EC5B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97764EC5B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346102AbiC3Ndt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S245004AbiC3Nfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346402AbiC3Ndn (ORCPT
+        with ESMTP id S237223AbiC3Nfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:33:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE5639815;
-        Wed, 30 Mar 2022 06:31:57 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UBvZZ8000482;
-        Wed, 30 Mar 2022 13:31:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=g1QikRaT51sf2bD8gHaes+NTudAH6B1jPft7JhQdytM=;
- b=VC5lMyyIeeLHgdRqyRIjUX3ZZZVd4Zfa5KgTsmrxk2qjfJ0HWi72WGZbwtuv5lJMCFLH
- W8lV8OI/HZKEkAymJlYJj2uM8ettZJj1bcFJS9Vvuwr1KSQfObAT/3FBnvHDedbhI18E
- k/eXnE3/3fCwiKGABdXNmd9COIlms2Tj65i177Ovk/H9kHfADEy95Sdy/9cgNJ4mJDOo
- /YpYvHqDms6q8Key1nblogoaC/x4yuFSuqlO+x5rIKQrtOZlgEisrdj+DXL5dhXwfVn9
- AFPvVKHm4LMmMHu47gMYRrlFztZL6DO3pmY7skwprKOWMZ/Evz4FaktCepMsWTcaFJ2t eQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4psu23vp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 13:31:39 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22UDNaVk002385;
-        Wed, 30 Mar 2022 13:31:39 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4psu23vd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 13:31:39 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22UD9cQZ011208;
-        Wed, 30 Mar 2022 13:31:38 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 3f1tfa4qba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 13:31:38 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UDVbYp15925550
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 13:31:37 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FBD27806E;
-        Wed, 30 Mar 2022 13:31:37 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 57E077805E;
-        Wed, 30 Mar 2022 13:31:36 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.163.9.79])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 30 Mar 2022 13:31:36 +0000 (GMT)
-Message-ID: <263108383b1c01cf9237ff2fcd2e97a482eff83e.camel@linux.ibm.com>
-Subject: Re: filesystem corruption with "scsi: core: Reallocate device's
- budget map on queue depth change"
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     John Garry <john.garry@huawei.com>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Ming Lei <ming.lei@redhat.com>
-Cc:     Martin Wilck <martin.wilck@suse.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 30 Mar 2022 09:31:35 -0400
-In-Reply-To: <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
-References: <YkQsumJ3lgGsagd2@arighi-desktop>
-         <f7bacce8-b5e5-3ef1-e116-584c01533f69@huawei.com>
-         <YkQ9KoKb+VK06zXi@arighi-desktop>
-         <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Wed, 30 Mar 2022 09:35:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5732612ABF;
+        Wed, 30 Mar 2022 06:33:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1316A21603;
+        Wed, 30 Mar 2022 13:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648647234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZ7etbOkud23rePgYHX93VM2Npayks8E311gepaCXY8=;
+        b=WpI/P3lwWz2bV3KFAUbTx0kz/vfwAV0U3f6iBQK1XjHMl8LXl4vOQYhPUvrL8MrCzkfgD7
+        MEQWIsGbyrQaHo8iX5NkpvPZHn4rXD89G6gSTIfbJLGtt8yC106/LGheJT0WpM/TEgjyZj
+        yu2ij34aoVAdBsVxonQlWow8zrQ2Btw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648647234;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZ7etbOkud23rePgYHX93VM2Npayks8E311gepaCXY8=;
+        b=Dj4Od0Ng8MqvY192E61SBMgtpwD6sjqpn+eheGNsS/vwgu8+LIwt970QapimTNpxsw82xp
+        mCASVJH5OkqnCrBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 561EE13AF3;
+        Wed, 30 Mar 2022 13:33:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id o57tEUFcRGK1WQAAMHmgww
+        (envelope-from <dkirjanov@suse.de>); Wed, 30 Mar 2022 13:33:53 +0000
+Message-ID: <9f7a92f5-5674-5c9f-e5ec-4a68ec8cb0d1@suse.de>
+Date:   Wed, 30 Mar 2022 16:33:48 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mEDWZFt0bAoXSjZLHiUoRKNU1jH2t8BS
-X-Proofpoint-GUID: AoMbdsKTo_B0dgPgfYNQkNM4N52Fqu_t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-30_04,2022-03-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 impostorscore=0 mlxlogscore=882
- malwarescore=0 clxscore=1011 suspectscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203300066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] tcp: Add tracepoint for tcp_set_ca_state
+Content-Language: ru
+To:     jackygam2001 <jacky_gam_2001@163.com>, edumazet@google.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        rostedt@goodmis.org, mingo@redhat.com, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ping.gan@dell.com
+References: <20220330130128.10256-1-jacky_gam_2001@163.com>
+From:   Denis Kirjanov <dkirjanov@suse.de>
+In-Reply-To: <20220330130128.10256-1-jacky_gam_2001@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,32 +77,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-30 at 13:59 +0100, John Garry wrote:
-> On 30/03/2022 12:21, Andrea Righi wrote:
-> > On Wed, Mar 30, 2022 at 11:38:02AM +0100, John Garry wrote:
-> > > On 30/03/2022 11:11, Andrea Righi wrote:
-> > > > Hello,
-> > > > 
-> > > > after this commit I'm experiencing some filesystem corruptions
-> > > > at boot on a power9 box with an aacraid controller.
-> > > > 
-> > > > At the moment I'm running a 5.15.30 kernel; when the filesystem
-> > > > is mounted at boot I see the following errors in the console:
+
+
+3/30/22 16:01, jackygam2001 пишет:
+> The congestion status of a tcp flow may be updated since there
+> is congestion between tcp sender and receiver. It makes sense for
+> adding tracepoint for congestion status update function to evaluate
+> the performance of network and congestion algorithm.
 > 
-> About "scsi: core: Reallocate device's budget map on queue depth
-> change" being added to a stable kernel, I am not sure if this was
-> really a fix  or just a memory optimisation.
+> Link: https://github.com/iovisor/bcc/pull/3899
+> 
+> Signed-off-by: jackygam2001 <jacky_gam_2001@163.com>
+Please use net-next prefix and use your real name in SOB
 
-I can see how it becomes the problem: it frees and allocates a new
-bitmap across a queue freeze, but bits in the old one might still be in
-use.  This isn't a problem except when they return and we now possibly
-see a tag greater than we think we can allocate coming back. 
-Presumably we don't check this and we end up doing a write to
-unallocated memory.
-
-I think if you want to reallocate on queue depth reduction, you might
-have to drain the queue as well as freeze it.
-
-James
-
-
+> ---
+>   include/net/tcp.h          | 12 +++---------
+>   include/trace/events/tcp.h | 45 +++++++++++++++++++++++++++++++++++++++++++++
+>   net/ipv4/tcp_cong.c        | 12 ++++++++++++
+>   3 files changed, 60 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 70ca4a5e330a..9a3786f33798 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -1139,15 +1139,6 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
+>   	return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
+>   }
+>   
+> -static inline void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
+> -{
+> -	struct inet_connection_sock *icsk = inet_csk(sk);
+> -
+> -	if (icsk->icsk_ca_ops->set_state)
+> -		icsk->icsk_ca_ops->set_state(sk, ca_state);
+> -	icsk->icsk_ca_state = ca_state;
+> -}
+> -
+>   static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
+>   {
+>   	const struct inet_connection_sock *icsk = inet_csk(sk);
+> @@ -1156,6 +1147,9 @@ static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
+>   		icsk->icsk_ca_ops->cwnd_event(sk, event);
+>   }
+>   
+> +/* From tcp_cong.c */
+> +void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
+> +
+>   /* From tcp_rate.c */
+>   void tcp_rate_skb_sent(struct sock *sk, struct sk_buff *skb);
+>   void tcp_rate_skb_delivered(struct sock *sk, struct sk_buff *skb,
+> diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
+> index 521059d8dc0a..69a68b01c1de 100644
+> --- a/include/trace/events/tcp.h
+> +++ b/include/trace/events/tcp.h
+> @@ -371,6 +371,51 @@ DEFINE_EVENT(tcp_event_skb, tcp_bad_csum,
+>   	TP_ARGS(skb)
+>   );
+>   
+> +TRACE_EVENT(tcp_cong_state_set,
+> +
+> +	TP_PROTO(struct sock *sk, const u8 ca_state),
+> +
+> +	TP_ARGS(sk, ca_state),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(const void *, skaddr)
+> +		__field(__u16, sport)
+> +		__field(__u16, dport)
+> +		__array(__u8, saddr, 4)
+> +		__array(__u8, daddr, 4)
+> +		__array(__u8, saddr_v6, 16)
+> +		__array(__u8, daddr_v6, 16)
+> +		__field(__u8, cong_state)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		struct inet_sock *inet = inet_sk(sk);
+> +		__be32 *p32;
+> +
+> +		__entry->skaddr = sk;
+> +
+> +		__entry->sport = ntohs(inet->inet_sport);
+> +		__entry->dport = ntohs(inet->inet_dport);
+> +
+> +		p32 = (__be32 *) __entry->saddr;
+> +		*p32 = inet->inet_saddr;
+> +
+> +		p32 = (__be32 *) __entry->daddr;
+> +		*p32 =  inet->inet_daddr;
+> +
+> +		TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_daddr,
+> +			   sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
+> +
+> +		__entry->cong_state = ca_state;
+> +	),
+> +
+> +	TP_printk("sport=%hu dport=%hu saddr=%pI4 daddr=%pI4 saddrv6=%pI6c daddrv6=%pI6c cong_state=%u",
+> +		  __entry->sport, __entry->dport,
+> +		  __entry->saddr, __entry->daddr,
+> +		  __entry->saddr_v6, __entry->daddr_v6,
+> +		  __entry->cong_state)
+> +);
+> +
+>   #endif /* _TRACE_TCP_H */
+>   
+>   /* This part must be outside protection */
+> diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+> index dc95572163df..98b48bdb8be7 100644
+> --- a/net/ipv4/tcp_cong.c
+> +++ b/net/ipv4/tcp_cong.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/gfp.h>
+>   #include <linux/jhash.h>
+>   #include <net/tcp.h>
+> +#include <trace/events/tcp.h>
+>   
+>   static DEFINE_SPINLOCK(tcp_cong_list_lock);
+>   static LIST_HEAD(tcp_cong_list);
+> @@ -33,6 +34,17 @@ struct tcp_congestion_ops *tcp_ca_find(const char *name)
+>   	return NULL;
+>   }
+>   
+> +void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
+> +{
+> +	struct inet_connection_sock *icsk = inet_csk(sk);
+> +
+> +	trace_tcp_cong_state_set(sk, ca_state);
+> +
+> +	if (icsk->icsk_ca_ops->set_state)
+> +		icsk->icsk_ca_ops->set_state(sk, ca_state);
+> +	icsk->icsk_ca_state = ca_state;
+> +}
+> +
+>   /* Must be called with rcu lock held */
+>   static struct tcp_congestion_ops *tcp_ca_find_autoload(struct net *net,
+>   						       const char *name)

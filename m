@@ -2,188 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5384EBFC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3844EBFC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343625AbiC3L3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S1343616AbiC3L3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237302AbiC3L31 (ORCPT
+        with ESMTP id S237302AbiC3L3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:29:27 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0832715AAE5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:27:43 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id hu11so16574852qvb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y/SsoG+PpKWZDfvPklFn/XSUiKVJSokW9Px0KF4dxFU=;
-        b=TV8CO7mCsyY6rTwKULNk8AfGXiRuAD4fGxo59BLPKmCtSfDXZvxW+xYeEpyDsglta9
-         VDZnSq8YJ6vq0bYLyG+g2ssJhSCd3a2TnzT3pNGfVekmcxdCqB2NEd89yuYfax/LVui2
-         Adc1or8+g5aoNaVN9drL6wS0ov4T2gSddo4xlKagieGhP3WmFuBWv6PRrXJovbfh85q/
-         C0HiIbZ13bM+1ya302EspQp/kTo3KNkATsar+r/gTtohvx+Oe7tBp1Tq+gd+whdrgqR4
-         BHS8PR2/zSPrc6uir7hjx+KqchfemvvnGYQ1iI0zhxU9vGpVH2jFrsKPvokr1Hmq3suT
-         P+Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y/SsoG+PpKWZDfvPklFn/XSUiKVJSokW9Px0KF4dxFU=;
-        b=dbMrKi3qAnnFVwIbwW5p1SIA4gkAYecEndXv45u500I+hJ9O3FunD9UlIFlOV6DqFX
-         laXRfIrQR8fAvrpPmStwNMAfmWT4VhY7X81DcuA0ffWiHXET6TxUBWbKvGS75rJ6lJ9a
-         lg15uoeQ9irPvol82XHecGrtaoO+DBpViEPDGr0jOyBU7nwa8JpQMxl8rEQJPBxgAvVx
-         WKAj+43nQw3QAmXT0TGlManXg1pd1S/6CF3rHa9HnaSVqIYmoHz4ehJj3/oTHzWoCAMY
-         kIJbCM/w8npgj3ZKWOCKgP9dKcEf5KiuZkXbK0svH6uy65loG8sR0UVgSPJgGuTGfoMv
-         cA+g==
-X-Gm-Message-State: AOAM530CH5NtMcIrpK+09Q6+c9FB1M1KUNaLk2GoOf/o+0klAt66kc1a
-        hqzn43lj2IyQlwBdrRjzk9EtfKd1a33RJcSBBf3sIw==
-X-Google-Smtp-Source: ABdhPJzTEEZV6fvobIkqTMfmaHzhQtUGKCaL+0AzoovinKm6qsrtL+/TFRCKNZBGyqYJ8Lv2uyCxtK2GjxqQhWDJ+qQ=
-X-Received: by 2002:a05:6214:27ec:b0:443:9153:23d0 with SMTP id
- jt12-20020a05621427ec00b00443915323d0mr720525qvb.122.1648639662175; Wed, 30
- Mar 2022 04:27:42 -0700 (PDT)
+        Wed, 30 Mar 2022 07:29:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641BB15AAD8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:27:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9CD351F38C;
+        Wed, 30 Mar 2022 11:27:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648639657; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SEh9q825X4XJd27vocQTJ0Ah1yjY4ISz2lUFtaIbslU=;
+        b=hiwZ/rnvHAmRUVLDkeV0iDDn9/HCy6oQYGW6bL56T6trX/3UQvFHGHqqxoka2uz3zs8/wb
+        r/VkjjjMzfK23RBhwMlEeTMfIK5G9jl5HjCp3aZG/XPLMdAn67JiQHUEtykG1MbG6miwNc
+        zlLIXqKQeOTzFgoVXbrfWlURUsIiH6E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648639657;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SEh9q825X4XJd27vocQTJ0Ah1yjY4ISz2lUFtaIbslU=;
+        b=RFrnMZzzPrRfgPVjY76VRPQm6Ut2g6BailUUqf2UDnkBtTaTTv7Da+SS6IBUe/XEfaINgD
+        MGotLDXCyBbVx8DQ==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A5927A3B88;
+        Wed, 30 Mar 2022 11:27:34 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 13:27:33 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        wangborong@cdjrlc.com, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>, jniethe5@gmail.com,
+        psampat@linux.ibm.com, Miroslav Benes <mbenes@suse.cz>,
+        hbh25y@gmail.com, mikey@neuling.org,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, danielhb413@gmail.com,
+        haren@linux.ibm.com, Thierry Reding <treding@nvidia.com>,
+        ganeshgr@linux.ibm.com, Corentin Labbe <clabbe@baylibre.com>,
+        mamatha4@linux.vnet.ibm.com,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        kernel.noureddine@gmail.com, nathanl@linux.ibm.com,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, guozhengkui@vivo.com,
+        kjain@linux.ibm.com, chenjingwen6@huawei.com,
+        Nick Piggin <npiggin@gmail.com>, oss@buserror.net,
+        rmclure@linux.ibm.com, maddy@linux.ibm.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>, sachinp@linux.ibm.com,
+        bigunclemax@gmail.com, ldufour@linux.ibm.com,
+        hbathini@linux.ibm.com,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        farosas@linux.ibm.com, Geoff Levand <geoff@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        sourabhjain@linux.ibm.com, Julia Lawall <Julia.Lawall@inria.fr>,
+        Ritesh Harjani <riteshh@linux.ibm.com>, cgel.zte@gmail.com,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        tobias@waldekranz.com
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-1 tag
+Message-ID: <20220330112733.GG163591@kunlun.suse.cz>
+References: <87zglefhxd.fsf@mpe.ellerman.id.au>
+ <CAHk-=whk4jihDM+zkhZPYRyNO0-YA1_-K9_NyC3EDsX+gkxC-w@mail.gmail.com>
+ <87wngefnsu.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220329230105.601666-1-robdclark@gmail.com> <20220329230105.601666-6-robdclark@gmail.com>
-In-Reply-To: <20220329230105.601666-6-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 30 Mar 2022 14:27:31 +0300
-Message-ID: <CAA8EJprKZip_3W6OJZoFs2Zewtp4hqWyADfqG8ZPXcD8FCgXbQ@mail.gmail.com>
-Subject: Re: [PATCH 5/9] drm/msm: Drop msm_gem_iova()
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wngefnsu.fsf@mpe.ellerman.id.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 02:00, Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> There was only a single user, which could just as easily stash the iova
-> when pinning.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+On Mon, Mar 28, 2022 at 08:07:13PM +1100, Michael Ellerman wrote:
+> Linus Torvalds <torvalds@linux-foundation.org> writes:
+> > On Fri, Mar 25, 2022 at 3:25 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> > That said:
+> >
+> >> There's a series of commits cleaning up function descriptor handling,
+> >
+> > For some reason I also thought that powerpc had actually moved away
+> > from function descriptors, so I'm clearly not keeping up with the
+> > times.
+> 
+> No you're right, we have moved away from them, but not entirely.
+> 
+> Functions descriptors are still used for 64-bit big endian, but they're
+> not used for 64-bit little endian, or 32-bit.
 
-> ---
->  drivers/gpu/drm/msm/msm_fb.c  | 16 ++++++++++------
->  drivers/gpu/drm/msm/msm_gem.c | 16 ----------------
->  drivers/gpu/drm/msm/msm_gem.h |  2 --
->  3 files changed, 10 insertions(+), 24 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
-> index 7137492fe78e..d4eef66e29dc 100644
-> --- a/drivers/gpu/drm/msm/msm_fb.c
-> +++ b/drivers/gpu/drm/msm/msm_fb.c
-> @@ -21,6 +21,9 @@ struct msm_framebuffer {
->
->         /* Count of # of attached planes which need dirtyfb: */
->         refcount_t dirtyfb;
-> +
-> +       /* Framebuffer per-plane address, if pinned, else zero: */
-> +       uint64_t iova[DRM_FORMAT_MAX_PLANES];
->  };
->  #define to_msm_framebuffer(x) container_of(x, struct msm_framebuffer, base)
->
-> @@ -76,14 +79,14 @@ int msm_framebuffer_prepare(struct drm_framebuffer *fb,
->  {
->         struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
->         int ret, i, n = fb->format->num_planes;
-> -       uint64_t iova;
->
->         if (needs_dirtyfb)
->                 refcount_inc(&msm_fb->dirtyfb);
->
->         for (i = 0; i < n; i++) {
-> -               ret = msm_gem_get_and_pin_iova(fb->obj[i], aspace, &iova);
-> -               drm_dbg_state(fb->dev, "FB[%u]: iova[%d]: %08llx (%d)", fb->base.id, i, iova, ret);
-> +               ret = msm_gem_get_and_pin_iova(fb->obj[i], aspace, &msm_fb->iova[i]);
-> +               drm_dbg_state(fb->dev, "FB[%u]: iova[%d]: %08llx (%d)",
-> +                             fb->base.id, i, msm_fb->iova[i], ret);
->                 if (ret)
->                         return ret;
->         }
-> @@ -103,14 +106,15 @@ void msm_framebuffer_cleanup(struct drm_framebuffer *fb,
->
->         for (i = 0; i < n; i++)
->                 msm_gem_unpin_iova(fb->obj[i], aspace);
-> +
-> +       memset(msm_fb->iova, 0, sizeof(msm_fb->iova));
->  }
->
->  uint32_t msm_framebuffer_iova(struct drm_framebuffer *fb,
->                 struct msm_gem_address_space *aspace, int plane)
->  {
-> -       if (!fb->obj[plane])
-> -               return 0;
-> -       return msm_gem_iova(fb->obj[plane], aspace) + fb->offsets[plane];
-> +       struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
-> +       return msm_fb->iova[plane];
->  }
->
->  struct drm_gem_object *msm_framebuffer_bo(struct drm_framebuffer *fb, int plane)
-> diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-> index f4b68bb28a4d..deafae6feaa8 100644
-> --- a/drivers/gpu/drm/msm/msm_gem.c
-> +++ b/drivers/gpu/drm/msm/msm_gem.c
-> @@ -509,22 +509,6 @@ int msm_gem_get_iova(struct drm_gem_object *obj,
->         return ret;
->  }
->
-> -/* get iova without taking a reference, used in places where you have
-> - * already done a 'msm_gem_get_and_pin_iova' or 'msm_gem_get_iova'
-> - */
-> -uint64_t msm_gem_iova(struct drm_gem_object *obj,
-> -               struct msm_gem_address_space *aspace)
-> -{
-> -       struct msm_gem_vma *vma;
-> -
-> -       msm_gem_lock(obj);
-> -       vma = lookup_vma(obj, aspace);
-> -       msm_gem_unlock(obj);
-> -       GEM_WARN_ON(!vma);
-> -
-> -       return vma ? vma->iova : 0;
-> -}
-> -
->  /*
->   * Locked variant of msm_gem_unpin_iova()
->   */
-> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-> index 090c3b1a6d9a..772de010a669 100644
-> --- a/drivers/gpu/drm/msm/msm_gem.h
-> +++ b/drivers/gpu/drm/msm/msm_gem.h
-> @@ -142,8 +142,6 @@ int msm_gem_get_and_pin_iova_locked(struct drm_gem_object *obj,
->                 struct msm_gem_address_space *aspace, uint64_t *iova);
->  int msm_gem_get_and_pin_iova(struct drm_gem_object *obj,
->                 struct msm_gem_address_space *aspace, uint64_t *iova);
-> -uint64_t msm_gem_iova(struct drm_gem_object *obj,
-> -               struct msm_gem_address_space *aspace);
->  void msm_gem_unpin_iova_locked(struct drm_gem_object *obj,
->                 struct msm_gem_address_space *aspace);
->  void msm_gem_unpin_iova(struct drm_gem_object *obj,
-> --
-> 2.35.1
->
+There was a patch to use ABIv2 for ppc64 big endian. I suppose that
+would rid usof the gunction descriptors for good.
 
+Somehow the discussion of that change tralied off without any results.
 
--- 
-With best wishes
-Dmitry
+Maybe it's worth resurrecting?
+
+Thanks
+
+Michal

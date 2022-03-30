@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E946F4EC3A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2AA4EC35B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345838AbiC3MIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S1345928AbiC3MIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344506AbiC3LxN (ORCPT
+        with ESMTP id S1344483AbiC3LxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE908262D61;
-        Wed, 30 Mar 2022 04:49:05 -0700 (PDT)
+        Wed, 30 Mar 2022 07:53:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2003326364A;
+        Wed, 30 Mar 2022 04:49:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23976B81C37;
-        Wed, 30 Mar 2022 11:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02475C340EE;
-        Wed, 30 Mar 2022 11:48:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2E316162F;
+        Wed, 30 Mar 2022 11:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55AF6C34113;
+        Wed, 30 Mar 2022 11:49:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640939;
-        bh=TfW7T4LLiZbMAJKWnDbyoXtY7mFp1MuFCsVtbGpkdmo=;
+        s=k20201202; t=1648640945;
+        bh=FeVBirWUDsSNdHRMTaN1D2cMhlAoxiuriyc5vJocNC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fsVrAEtzLVHc1mSEhj93pKXCPmhUujXAgU2Bb9hzUm2hFXu1Xo0pcnpzA/i+LcooI
-         1Pqf51bQrIHGlNgmpB4RyNFbbdIPkvu7AWSoZJgsN8D41dobSY/rRRNztmnDe/ytkS
-         BwTQH8DXvBkvTsLVsZkZw0seIpNik/e4kfvqPF5aFbsBZb8R7eYkN5DH9u6L9uLWN+
-         r4GtvXv6dB5yAamjBg0X0YFIL/yJW128WJph+qmRlKe/U6/AM7b76Dc1odmVik1Pal
-         2wgkQwYYROA8yUP1udL1i0aP/ioJNm674jm6j4J0KRlZ7obb9xm7F7NEEuOqA3u3DA
-         9Ji2Phnbq1iQw==
+        b=lokuT5NroYXJWdWxvIFiM76UQwyaVWs+Eya8ee2sLEZxT69/i6165aaFj9JOG76ax
+         73vKzvjQv6u02sX7663/mWhPVtzJzWk0oohz23caSHy1Bks6paTplDhcJFjHkU5dFB
+         OuPWBFd7LPERX1kwzCcQy/YBLAFKvDYrIDXUQn5twlv96HC3jOiff0DGSUjNRC4pBz
+         zXfrVQpLGZn+f3NjbGyuOFVdrcsxpISXNKWRiyfzcBhrSxbEzLv13bUPqC3z8an25G
+         tIrIFpv6PMCtknMAKvnKjxBIqWMIKNa/som1WGItr0a6pVyJMi2pU7THm+7hDrBSjs
+         V5RkoVC+x5jMw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>, tomi.valkeinen@ti.com,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 17/59] video: fbdev: omapfb: acx565akm: replace snprintf with sysfs_emit
-Date:   Wed, 30 Mar 2022 07:47:49 -0400
-Message-Id: <20220330114831.1670235-17-sashal@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.16 20/59] ASoC: madera: Add dependencies on MFD
+Date:   Wed, 30 Mar 2022 07:47:52 -0400
+Message-Id: <20220330114831.1670235-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
@@ -58,37 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit 24565bc4115961db7ee64fcc7ad2a7437c0d0a49 ]
+[ Upstream commit ec29170c724ca30305fc3a19ba2ee73ecac65509 ]
 
-coccinelle report:
-./drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c:
-479:9-17: WARNING: use scnprintf or sprintf
+The Madera CODECs use regmap_irq functions but nothing ensures that
+regmap_irq is built into the kernel. Add dependencies on the ASoC
+symbols for the relevant MFD component. There is no point in building
+the ASoC driver if the MFD doesn't support it and the MFD part contains
+the necessary dependencies to ensure everything is built into the
+kernel.
 
-Use sysfs_emit instead of scnprintf or sprintf makes more sense.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220203115025.16464-1-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/Kconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-index 8d8b5ff7d43c..3696eb09b69b 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-@@ -476,7 +476,7 @@ static ssize_t show_cabc_available_modes(struct device *dev,
- 	int i;
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 3a610ba183ff..0d4e1fb9befc 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -707,6 +707,7 @@ config SND_SOC_CS4349
  
- 	if (!ddata->has_cabc)
--		return snprintf(buf, PAGE_SIZE, "%s\n", cabc_modes[0]);
-+		return sysfs_emit(buf, "%s\n", cabc_modes[0]);
+ config SND_SOC_CS47L15
+ 	tristate
++	depends on MFD_CS47L15
  
- 	for (i = 0, len = 0;
- 	     len < PAGE_SIZE && i < ARRAY_SIZE(cabc_modes); i++)
+ config SND_SOC_CS47L24
+ 	tristate
+@@ -714,15 +715,19 @@ config SND_SOC_CS47L24
+ 
+ config SND_SOC_CS47L35
+ 	tristate
++	depends on MFD_CS47L35
+ 
+ config SND_SOC_CS47L85
+ 	tristate
++	depends on MFD_CS47L85
+ 
+ config SND_SOC_CS47L90
+ 	tristate
++	depends on MFD_CS47L90
+ 
+ config SND_SOC_CS47L92
+ 	tristate
++	depends on MFD_CS47L92
+ 
+ # Cirrus Logic Quad-Channel ADC
+ config SND_SOC_CS53L30
 -- 
 2.34.1
 

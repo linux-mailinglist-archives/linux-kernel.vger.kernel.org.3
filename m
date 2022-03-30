@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F1D4ECC4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7CE4ECC7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350507AbiC3ScG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S1350170AbiC3SjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350465AbiC3Sb5 (ORCPT
+        with ESMTP id S1351282AbiC3Sd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:31:57 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ACF4830F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:37 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e6d04210b3so146313987b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:37 -0700 (PDT)
+        Wed, 30 Mar 2022 14:33:26 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22B34DF4C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:30:45 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id u3so28930543ljd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KfcUkaTckWUYUZ9aQp31D6YQqt9tokDiP9MkQHNDrEc=;
-        b=VSSiIRlHk2quuVAOW2Z7xaW09hmCV7pBg92ysUgXNZLEpHs6ywnJe6abK25mO88cKI
-         uGMeD+NghlCFc2FQ2UyirjrfptH5lqUqkfttIjjo/XEk5HdoRjAVn9mGT+vtJU64foFA
-         AagKpYgaYlnQsEPPae2J+Qj9FYKaiwtXUwQxjOASYZPXEpFrvpNWZlVqea6yRtDvOWBK
-         gU8K8hSAFTa5oQe1ktSSt4SDxa/bR0yJPED+Msz4++moo2HSBwbK3agZjzjq2ItMOBBo
-         2LwQI3d/+SY+I15NSNX3M0fbtVT25xP1JmhNuOI0JY0XnxLZ7HVqlbNutYS3k1Csj0QZ
-         4aKg==
+        bh=KXz4jX/1RvaOeW5K5aku8Xx+S8uCJJg7lNaIyrndCYc=;
+        b=frqv9Lra3sJ1hmBQk1xcR/thRy/JxxiQUadtvz+DMIkXvKrJabZbpPUhpx+Ve91aKc
+         fLtY+UckqqT5YbdQA6Bky2RLFbQGh3k/vghn4LAPKw2vzDDLZU8Djq3wr+waC5oPb6L1
+         OmcgLSd750msUztwjdciWczDq24pauhcEFfzo8gsEcqI3INuIwXc8ZKgtbeeROpqBcea
+         TWj8QVrS7lwjkJ/gwXL55djUOd1ZT2y0CjXJB2SaDuaaaaenT5X+byGZTDIlcyjz0gxd
+         tZKQNwA4kvDKzqYqykOxvB1FCoKLfdgKaUrBgUw1JjNJ9dp679PQP6+DUBuAvPampRj8
+         TsfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=KfcUkaTckWUYUZ9aQp31D6YQqt9tokDiP9MkQHNDrEc=;
-        b=u9pgKiBv//AWFwu250w9xt2ZnftYvvbuPNRDLYjFx38aV1axgesJ5l1he4TA3Rhp+q
-         iHiD+AS3XqfbXUiD0GXoC+MgYbDrnXiQ0aH/hlcaXhgsBwoW2GlPnrEBaVGsmI2uYi2X
-         I0xMnM2acYfqXSRi14BGzNbeReRYPLzAEKxQopLbX1Mx1Hz1HRUePDdhJJDKr3EywOw5
-         3CkO/6OWc/4QJS8YGNcXtSqT9tslbCXF/KMOzdU4aYfj8MuuOJc40kPn7Ze/o7GKGenk
-         vzgE/FZYgRfs6bfOFxIAMXGNYAih/djndwTcorU1W32UaTXXxypXwA2sCuQ13x3V+s8x
-         chlA==
-X-Gm-Message-State: AOAM533eSOqvnksjoSC0GoMKp6Eiqkm8FmurA8pBIdM7IblvMYUlwPXd
-        YBj4ewhqqT9C9NxAU3IajfDvneX/m5w/
-X-Google-Smtp-Source: ABdhPJyVW2ytMhj6Q4XtA6yzFixRhf4Yh+fFRBPhl1KuBAdL+CRox9+LHBCljq0H/ihZ7kDSEcGZrww7dP8Q
-X-Received: from pigloo.svl.corp.google.com ([2620:15c:2c5:13:1db:3f32:3ad1:f38])
- (user=jmeurin job=sendgmr) by 2002:a25:dd87:0:b0:628:e822:bd with SMTP id
- u129-20020a25dd87000000b00628e82200bdmr888447ybg.505.1648664916670; Wed, 30
- Mar 2022 11:28:36 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 11:28:16 -0700
-In-Reply-To: <20220330182816.1177341-1-jmeurin@google.com>
-Message-Id: <20220330182816.1177341-4-jmeurin@google.com>
-Mime-Version: 1.0
-References: <20220207163409.19c3bc4c@xps13> <20220330182816.1177341-1-jmeurin@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v2 2/2] mtd: mtdoops: Create a header structure for the saved mtdoops.
-From:   Jean-Marc Eurin <jmeurin@google.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jean-Marc Eurin <jmeurin@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KXz4jX/1RvaOeW5K5aku8Xx+S8uCJJg7lNaIyrndCYc=;
+        b=tJjgWctKdaYO8Wi5vcgO8PtHNTruibXCsJsdakjWUEVIEzsbI+e4lp/zFQTWhFlA48
+         wQO7dQJUoJGCluegGYWo0mlWYzODMQPCSsH6Y3fCET4APHObS3t4yLAeB4Wn/AX/6sJ5
+         Dz3lJzcVDp4Om3gvsdFKKdeQfcrV6z2vIeuEA5rPmbBmm2bTPq5aYtb7dk2wk7Q61gZq
+         dfLbU4p0KMX/xw/G6izU2Ex5QxTZyCUQIRokGS3a163ahwFOVO/i8x/bGGYPwtVyErwW
+         gdUTewEHjcIwNU1804Ng+T3tGm3lGwL6dmDLwp1Sid2v/NaUWCo0M4RZMvMs5S8pwp+C
+         /4dA==
+X-Gm-Message-State: AOAM532F7WHRCGFNEmXD3LKdG6YqoB9/d8aRNgNjUNBhjENxp9Q0b/fX
+        DpUtF5P2fka4lJQvRBssaDCFkFeJoWU5qJn/pGhQ8Q==
+X-Google-Smtp-Source: ABdhPJxkJ9NLcGGxc1sMNi6f38U3o2OW0nZw+JbR7XSZZ4ykgVP08KAUGWyfphqVLg8WNP0f2n2s2VFEsZJtak2cP9w=
+X-Received: by 2002:a2e:988e:0:b0:24a:cf5d:24cf with SMTP id
+ b14-20020a2e988e000000b0024acf5d24cfmr7486340ljj.282.1648665039455; Wed, 30
+ Mar 2022 11:30:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220325152758.335626-1-pgonda@google.com> <d0366a14-6492-d2b9-215e-2ee310d9f8ae@redhat.com>
+ <CAMkAt6rACYqFXA_6pa9JUnx0=3vyM6PeaNkq-Yih4KM6saf6PQ@mail.gmail.com> <632d3601-ecf4-12f3-4f3b-408c35f028f6@redhat.com>
+In-Reply-To: <632d3601-ecf4-12f3-4f3b-408c35f028f6@redhat.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Wed, 30 Mar 2022 12:30:28 -0600
+Message-ID: <CAMkAt6q-wTxiQnFXhiw3gR_8ktfz9pLp3gZS3EFakGcBgxUJ2A@mail.gmail.com>
+Subject: Re: [PATCH v2] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm list <kvm@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,132 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a dump header to enable the addition of fields without having
-to modify the rest of the code.
+On Fri, Mar 25, 2022 at 10:53 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 3/25/22 16:31, Peter Gonda wrote:
+> > On Fri, Mar 25, 2022 at 9:29 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >>
+> >> On 3/25/22 16:27, Peter Gonda wrote:
+> >>> SEV-ES guests can request termination using the GHCB's MSR protocol. See
+> >>> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
+> >>> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
+> >>> return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
+> >>> struct the userspace VMM can clear see the guest has requested a SEV-ES
+> >>> termination including the termination reason code set and reason code.
+> >>>
+> >>> Signed-off-by: Peter Gonda <pgonda@google.com>
+> >>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> >>> Cc: Borislav Petkov <bp@alien8.de>
+> >>> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> >>> Cc: Brijesh Singh <brijesh.singh@amd.com>
+> >>> Cc: Joerg Roedel <jroedel@suse.de>
+> >>> Cc: Marc Orr <marcorr@google.com>
+> >>> Cc: Sean Christopherson <seanjc@google.com>
+> >>> Cc: kvm@vger.kernel.org
+> >>> Cc: linux-kernel@vger.kernel.org
+> >>
+> >> This is missing an update to Documentation/.
+> >>
+> >
+> > My mistake. I'll send another revision. Is the behavior of
+> > KVM_CAP_EXIT_SHUTDOWN_REASON OK? Or should we only return 1 for SEV-ES
+> > guests?
+>
+> No, you can return 1 unconditionally, but you should also set reason and
+> clear ndata in the other cases that return KVM_EXIT_SHUTDOWN.
 
-Signed-off-by: Jean-Marc Eurin <jmeurin@google.com>
----
- drivers/mtd/mtdoops.c | 53 +++++++++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
-index 09a26747f490..9ca82c2dbf60 100644
---- a/drivers/mtd/mtdoops.c
-+++ b/drivers/mtd/mtdoops.c
-@@ -22,9 +22,6 @@
- /* Maximum MTD partition size */
- #define MTDOOPS_MAX_MTD_SIZE (8 * 1024 * 1024)
- 
--#define MTDOOPS_KERNMSG_MAGIC 0x5d005d00
--#define MTDOOPS_HEADER_SIZE   8
--
- static unsigned long record_size = 4096;
- module_param(record_size, ulong, 0400);
- MODULE_PARM_DESC(record_size,
-@@ -40,6 +37,13 @@ module_param(dump_oops, int, 0600);
- MODULE_PARM_DESC(dump_oops,
- 		"set to 1 to dump oopses, 0 to only dump panics (default 1)");
- 
-+#define MTDOOPS_KERNMSG_MAGIC 0x5d005d00
-+
-+struct mtdoops_hdr {
-+	u32 seq;
-+	u32 magic;
-+} __packed;
-+
- static struct mtdoops_context {
- 	struct kmsg_dumper dump;
- 
-@@ -178,16 +182,16 @@ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
- {
- 	struct mtd_info *mtd = cxt->mtd;
- 	size_t retlen;
--	u32 *hdr;
-+	struct mtdoops_hdr *hdr;
- 	int ret;
- 
- 	if (test_and_set_bit(0, &cxt->oops_buf_busy))
- 		return;
- 
- 	/* Add mtdoops header to the buffer */
--	hdr = cxt->oops_buf;
--	hdr[0] = cxt->nextcount;
--	hdr[1] = MTDOOPS_KERNMSG_MAGIC;
-+	hdr = (struct mtdoops_hdr *)cxt->oops_buf;
-+	hdr->seq = cxt->nextcount;
-+	hdr->magic = MTDOOPS_KERNMSG_MAGIC;
- 
- 	if (panic) {
- 		ret = mtd_panic_write(mtd, cxt->nextpage * record_size,
-@@ -222,8 +226,9 @@ static void mtdoops_workfunc_write(struct work_struct *work)
- static void find_next_position(struct mtdoops_context *cxt)
- {
- 	struct mtd_info *mtd = cxt->mtd;
-+	struct mtdoops_hdr hdr;
- 	int ret, page, maxpos = 0;
--	u32 count[MTDOOPS_HEADER_SIZE/sizeof(u32)], maxcount = 0xffffffff;
-+	u32 maxcount = 0xffffffff;
- 	size_t retlen;
- 
- 	for (page = 0; page < cxt->oops_pages; page++) {
-@@ -231,32 +236,31 @@ static void find_next_position(struct mtdoops_context *cxt)
- 			continue;
- 		/* Assume the page is used */
- 		mark_page_used(cxt, page);
--		ret = mtd_read(mtd, page * record_size, MTDOOPS_HEADER_SIZE,
--			       &retlen, (u_char *)&count[0]);
--		if (retlen != MTDOOPS_HEADER_SIZE ||
-+		ret = mtd_read(mtd, page * record_size, sizeof(hdr),
-+			       &retlen, (u_char *)&hdr);
-+		if (retlen != sizeof(hdr) ||
- 				(ret < 0 && !mtd_is_bitflip(ret))) {
- 			printk(KERN_ERR "mtdoops: read failure at %ld (%td of %d read), err %d\n",
--			       page * record_size, retlen,
--			       MTDOOPS_HEADER_SIZE, ret);
-+			       page * record_size, retlen, sizeof(hdr), ret);
- 			continue;
- 		}
- 
--		if (count[0] == 0xffffffff && count[1] == 0xffffffff)
-+		if (hdr.seq == 0xffffffff && hdr.magic == 0xffffffff)
- 			mark_page_unused(cxt, page);
--		if (count[0] == 0xffffffff || count[1] != MTDOOPS_KERNMSG_MAGIC)
-+		if (hdr.seq == 0xffffffff || hdr.magic != MTDOOPS_KERNMSG_MAGIC)
- 			continue;
- 		if (maxcount == 0xffffffff) {
--			maxcount = count[0];
-+			maxcount = hdr.seq;
- 			maxpos = page;
--		} else if (count[0] < 0x40000000 && maxcount > 0xc0000000) {
--			maxcount = count[0];
-+		} else if (hdr.seq < 0x40000000 && maxcount > 0xc0000000) {
-+			maxcount = hdr.seq;
- 			maxpos = page;
--		} else if (count[0] > maxcount && count[0] < 0xc0000000) {
--			maxcount = count[0];
-+		} else if (hdr.seq > maxcount && hdr.seq < 0xc0000000) {
-+			maxcount = hdr.seq;
- 			maxpos = page;
--		} else if (count[0] > maxcount && count[0] > 0xc0000000
-+		} else if (hdr.seq > maxcount && hdr.seq > 0xc0000000
- 					&& maxcount > 0x80000000) {
--			maxcount = count[0];
-+			maxcount = hdr.seq;
- 			maxpos = page;
- 		}
- 	}
-@@ -287,8 +291,9 @@ static void mtdoops_do_dump(struct kmsg_dumper *dumper,
- 
- 	if (test_and_set_bit(0, &cxt->oops_buf_busy))
- 		return;
--	kmsg_dump_get_buffer(&iter, true, cxt->oops_buf + MTDOOPS_HEADER_SIZE,
--			     record_size - MTDOOPS_HEADER_SIZE, NULL);
-+	kmsg_dump_get_buffer(&iter, true,
-+			     cxt->oops_buf + sizeof(struct mtdoops_hdr),
-+			     record_size - sizeof(struct mtdoops_hdr), NULL);
- 	clear_bit(0, &cxt->oops_buf_busy);
- 
- 	if (reason != KMSG_DUMP_OOPS) {
--- 
-2.35.1.1094.g7c7d902a7c-goog
-
+Sounds good! Done in V3, thanks

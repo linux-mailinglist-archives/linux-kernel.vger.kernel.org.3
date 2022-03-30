@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7915A4EBB6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81C94EBB6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243602AbiC3HGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S243634AbiC3HHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238606AbiC3HGh (ORCPT
+        with ESMTP id S239173AbiC3HHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:06:37 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D8CE1240
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:04:51 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id a17so23266782edm.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PxRWqm3rnpFLGrWU5JqDAPNolxFCPocPImxQoA5xqOc=;
-        b=O1QpS3M8gBG8es3mcBM6JlyFWmfyi+XsiLthiu82vHSqL+/CACsmDsKasu4AiaSeSG
-         TikQdM1udFooOOoQpH9elhb9hg6JEtCT2yDpGYWtoVOTjduHZrtgrIidONthTvV5LW6a
-         61m259KGZr0SI4xr3H6Es/pX0WEzlAAoFZLLlvjC/h7ZL0UlXKp+FjI/Sx89ylkRNEdZ
-         6XGtmAVHiO9c4V+qXE6VmsD+SEzT7MZVxVAmkz4dKpnFSwKFRR0x6mk5lN41/gSDrCi1
-         7/D9hHLs5CxAbQV5DzK/QL9RJLEDlmZQ/LYBzZ2Wze0/AYuEi91rcWobS3ZNrAifrmyk
-         iBeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PxRWqm3rnpFLGrWU5JqDAPNolxFCPocPImxQoA5xqOc=;
-        b=BoTOyvwl6vZ4ZBSdSFuYw+RpZ7PzotVxx57Ywy+H+CRYtnwNtqNM+Edrh4mmklJFG+
-         SFOoPlo/sP8bgqyb44fJHtNXaDQDiaszZI0Hp7ImdyxKpmsU49QSWsxMeoVqvi4aHUeD
-         ar2fO/xUiD9jo+qWCBymfMledIIZY2mwvckq5QGLwBtaP9P+OJ5KoF3yWa5LHkXRfOsQ
-         pPEsPyo45i0RQUFNMwaoOnD4OOhTURWSxfYi5ektyfdA9b2KP+J5imOAa9P7qcVn2qIm
-         ZdJ8Q/Hgp/8NGtpvXq26RFQrzOZAPfvl4t+qjd8ZOELwgAlNxwWQLDRe8cawDb1er1WJ
-         iy2Q==
-X-Gm-Message-State: AOAM533sXF9zMJPC12bh+cZ62K4ppVi7+cFZ9peYgB+c7MA3BFApmOpb
-        69LAaY4Z+tiV2iemBji49PYa1w==
-X-Google-Smtp-Source: ABdhPJwIXfShLJZQUrVg5NGV9VAbyRRwy3qoOYtRWClHR3idou8IMC8yKvq2rn4dWNEp/IWpHxXayw==
-X-Received: by 2002:a05:6402:2318:b0:413:7645:fa51 with SMTP id l24-20020a056402231800b004137645fa51mr9199019eda.201.1648623890308;
-        Wed, 30 Mar 2022 00:04:50 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id u26-20020a05640207da00b00419a14928e5sm7395555edy.28.2022.03.30.00.04.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 00:04:49 -0700 (PDT)
-Message-ID: <32c99412-3b65-c52b-8417-efae9245ffb8@linaro.org>
-Date:   Wed, 30 Mar 2022 09:04:48 +0200
+        Wed, 30 Mar 2022 03:07:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1E2E389F;
+        Wed, 30 Mar 2022 00:05:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 293B46174C;
+        Wed, 30 Mar 2022 07:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFC4C340EC;
+        Wed, 30 Mar 2022 07:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648623916;
+        bh=VWuNt9MMq30h518JglbsrFsfm2iHhJHX8QEEqDJ+oME=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=EEQYNvd7HoxsnIJuJj4H9DDPPJw2JEsCNS6GFlZEn9LkdTPgiyZ7ihwosYWPXjeS1
+         fWpWJ9CiJPKAesSLVuH/qdtaVNtyj7xBUrUahqcPowCDnHWLVhR2NK89uEGQ6llA+P
+         S+QHC30b4jEj3+hTDge/rbUlVzoIdrWi2z91MEyUM5MnuDwU4UIpEpAWHbbwlyKEXB
+         bHMOw6HV1twNGFX9HPwBTneXccWdQ8fjmRYNzP9vqIMUbkfpUY1MdpIxRMY4FS2g5m
+         hLrtTFB80UJiiPhWyexHSnv+NXqQZhwHAcVf/2uCiyOjPRUu42vBXm5ft5afiiT2zV
+         gsKxmRlY2gxXA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc:     Benjamin =?utf-8?Q?St=C3=BCrz?= <benni@stuerz.xyz>,
+        <loic.poulain@linaro.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 19/22 v2] wcn36xx: Improve readability of wcn36xx_caps_name
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+        <20220326165909.506926-19-benni@stuerz.xyz>
+        <f0ebc901-051a-c7fe-ca5a-bc798e7c31e7@quicinc.com>
+        <720e4d68-683a-f729-f452-4a9e52a3c6fa@stuerz.xyz>
+        <ff1ecd47-d42a-fa91-5c5c-e23ac183f525@quicinc.com>
+Date:   Wed, 30 Mar 2022 10:05:10 +0300
+In-Reply-To: <ff1ecd47-d42a-fa91-5c5c-e23ac183f525@quicinc.com> (Jeff
+        Johnson's message of "Mon, 28 Mar 2022 13:23:06 -0700")
+Message-ID: <87y20rx6mx.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] dt-bindings: gpio: uniphier: Add hogs parsing
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <1648617423-8739-1-git-send-email-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1648617423-8739-1-git-send-email-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,28 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2022 07:17, Kunihiko Hayashi wrote:
-> Allow parsing GPIO controller children nodes with GPIO hogs to fix the
-> following warning:
-> 
->   uniphier-ld11-ref.dtb: gpio@55000000: 'xirq0-hog' does not match any of the regexes: 'pinctrl-[0-9]+'
->       From schema: Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
-> 
-> Changes since v1:
-> - Remove outer brackets from a pattern string
-> - Add valid properties to patternProperties
-> - Add gpios to "required:"
-> 
->  .../bindings/gpio/socionext,uniphier-gpio.yaml  | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
+Jeff Johnson <quic_jjohnson@quicinc.com> writes:
 
+> (apologies for top-posting)
+> When you submit new patches you should not do so as a reply, but
+> instead as a new thread with a new version number.
+>
+> And since multiple folks have suggested that you submit on a
+> per-subsystem basis I suggest that you re-send this as a singleton
+> just to wcn36xx@lists.infradead.org and linux-wireless@vger.kernel.org
+> along with the associated maintainers.
+>
+> So I believe [PATCH v3] wcn36xx:... would be the correct subject, but
+> I'm sure Kalle will let us know otherwise
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+You are correct. Also I strongly recommend using git send-email instead
+of Mozilla. Patch handling is automated using patchwork and git, so
+submitting patches manually is error prone. See our wiki for more:
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#format_issues
 
-Best regards,
-Krzysztof
+Also I recommend reading the whole wiki page in detail, that way common
+errors can be avoided and we all can save time :)
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

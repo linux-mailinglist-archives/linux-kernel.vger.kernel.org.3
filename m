@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E8E4EBC2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEC54EBC34
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbiC3H4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S244024AbiC3H6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244000AbiC3H41 (ORCPT
+        with ESMTP id S239731AbiC3H6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:56:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84C3CD8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:54:42 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nZT9t-0006Qu-Jg; Wed, 30 Mar 2022 09:54:25 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-5314-bece-822a-622d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5314:bece:822a:622d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BC4C956C76;
-        Wed, 30 Mar 2022 07:54:22 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 09:54:22 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Ondrej Ille <ondrej.ille@gmail.com>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-Message-ID: <20220330075422.4kxnayrdcxz7o5lo@pengutronix.de>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
- <202203220918.33033.pisa@cmp.felk.cvut.cz>
- <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
- <202203221419.23089.pisa@cmp.felk.cvut.cz>
- <CAA7ZjpZbppBy_C+NyN4LWQF2-a-ktfjYeNELTzwsz4B-fBiTpw@mail.gmail.com>
+        Wed, 30 Mar 2022 03:58:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6068DB39
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648627010; x=1680163010;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QwwXpU5i2/ZnjurXHD4hkkWhEcts0d2cgS8JfDuixaQ=;
+  b=U0YUIk6FFHTfJB2gaXhZheWV2lEeSOAWaSCBKsuv/ANGKWkEhn3Oj8CG
+   jXYq7F8kZ6vMbt8MXW/Wo1WkMVOmb89qDN7sGs/4eTI6wCFME0Of9R4X0
+   KT1g8HliScbovAMJrc3O711DIVgBXqX0vDahWxNnOrUk2kMJnKjr2yikX
+   40R8GpBvzycCxIhMR79N1Bf7ZL22islgmhaTnI17dWaRC7C3vtvVrihrr
+   hVawHdnoLz3wJoBvX/FFiIQLy+WaQErFc1XGwSlmsthqlZtX0weGPYsgn
+   LICsuPzGsl+DhoW0yIIwmGiHHUvwAqWJgSWhnaZQjKqIZC7D2MZWnUJN/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="322658819"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="322658819"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 00:56:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="653692953"
+Received: from louislifei-optiplex-7050.sh.intel.com (HELO louislifei-OptiPlex-7050) ([10.239.81.43])
+  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 00:56:47 -0700
+Date:   Wed, 30 Mar 2022 15:57:42 +0800
+From:   Li Fei1 <fei1.li@intel.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, rppt@kernel.org,
+        bjohannesmeyer@gmail.com, c.giuffrida@vu.nl, h.j.bos@vu.nl,
+        fei1.li@intel.com
+Subject: Re: [PATCH] virt: acrn: fix invalid check past list iterator
+Message-ID: <20220330075742.GA22544@louislifei-OptiPlex-7050>
+References: <20220319203819.2559993-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cn4afc3s4rdrhxit"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA7ZjpZbppBy_C+NyN4LWQF2-a-ktfjYeNELTzwsz4B-fBiTpw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220319203819.2559993-1-jakobkoschel@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 19, 2022 at 09:38:19PM +0100, Jakob Koschel wrote:
+> The condition retry == 0 is theoretically possible even if 'client'
+> does not point to a valid element because no break was hit.
+> 
+> To only execute the dev_warn if actually a break within the loop was
+> hit, a separate variable is used that is only set if it is ensured to
+> point to a valid client struct.
+> 
+Hi Koschel
 
---cn4afc3s4rdrhxit
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for you to help us to try to improve the code. Maybe you don't get the point.
+The dev_warn should only been called when has_pending = true && retry == 0
 
-On 30.03.2022 09:46:08, Ondrej Ille wrote:
-> sorry for the late reply, my work duties are keeping me very busy.
+If retry > 0 and has_pending is true,  we would call schedule_timeout_interruptible
+to schedule out to wait all the pending I/O requests would been completed.
 
-Known problem :)
+Thanks.
 
-> Let me just quickly comment on topics discussed in the emails above.
->=20
-> *1. Separation of PROP and TSEG1*
->=20
-> IMHO there is no real benefit. The reason why CTU CAN FD has this
-> split is legacy. First implementation back in 2015 had this split
-> since I wanted to follow the standard. In HW, the first thing done in
-> bit timing logic (prescaler module), these two numbers are added, and
-> all further resynchronization/hard-synchronization is done with TSEG1
-> value...
-
-Thanks for the insight. It's not easy to get in touch with the
-developers of the proprietary IP cores :)
-
-Never the less, there's another IP core which has different sizes for
-the prop and tseg1 register. So an update of the bit timing constant
-would help both.
-
-> *2. Number of TXT Buffers and RX Buffer size:*
->=20
-> Pavel already replied with TXTB_INFO. The same role has the RX_MEM_INFO
-> register, when it comes to RX side.
-
-Thanks for the clarification.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---cn4afc3s4rdrhxit
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJEDKsACgkQrX5LkNig
-011BUgf+NqPIJ6CCygkw/buy31ULqwkYdG2fEk72GHxm3xFCjGQ7hVGBD5VKA03s
-t4Phc2iZYEmQhKIOtHRVV73LGLW7lTQoJoMfbrMZNSxZy0JVS+4W5a82U3f5+2BL
-QW0OHSJ70ChwrMpprbA0Ziko/ij7eSYhliD5gJ5JN4xXNzx4QjGuxKe6s8n4FhUg
-NA0uZueotu5rWScNkquy9GsE1Va1Nnrc0/a298V3ycjiSKTrWDJ9UXmBNHKyGohr
-bJNUutzmGSdI9eLQHj/LbvGjPjnPV71maQKG2eGNgr4YNq2dA+cKGxnfoTFFmJOv
-DjDdy0Mke7BS8jWrTnSpZWOnXXCirw==
-=g9uh
------END PGP SIGNATURE-----
-
---cn4afc3s4rdrhxit--
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+>  drivers/virt/acrn/ioreq.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/virt/acrn/ioreq.c b/drivers/virt/acrn/ioreq.c
+> index 5ff1c53740c0..bdf7cedce926 100644
+> --- a/drivers/virt/acrn/ioreq.c
+> +++ b/drivers/virt/acrn/ioreq.c
+> @@ -211,7 +211,7 @@ static int ioreq_task(void *data)
+>   */
+>  void acrn_ioreq_request_clear(struct acrn_vm *vm)
+>  {
+> -	struct acrn_ioreq_client *client;
+> +	struct acrn_ioreq_client *client, *iter;
+>  	bool has_pending = false;
+>  	unsigned long vcpu;
+>  	int retry = 10;
+> @@ -228,17 +228,20 @@ void acrn_ioreq_request_clear(struct acrn_vm *vm)
+>  	 */
+>  	do {
+>  		spin_lock_bh(&vm->ioreq_clients_lock);
+> -		list_for_each_entry(client, &vm->ioreq_clients, list) {
+> -			has_pending = has_pending_request(client);
+> -			if (has_pending)
+> +		client = NULL;
+> +		list_for_each_entry(iter, &vm->ioreq_clients, list) {
+> +			has_pending = has_pending_request(iter);
+> +			if (has_pending) {
+> +				client = iter;
+>  				break;
+> +			}
+>  		}
+>  		spin_unlock_bh(&vm->ioreq_clients_lock);
+> 
+>  		if (has_pending)
+>  			schedule_timeout_interruptible(HZ / 100);
+>  	} while (has_pending && --retry > 0);
+> -	if (retry == 0)
+> +	if (client)
+>  		dev_warn(acrn_dev.this_device,
+>  			 "%s cannot flush pending request!\n", client->name);
+> 
+> 
+> base-commit: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+> --
+> 2.25.1
+> 

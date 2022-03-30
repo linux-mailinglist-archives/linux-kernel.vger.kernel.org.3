@@ -2,127 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54374EBE70
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBAF4EBE75
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245240AbiC3KNf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Mar 2022 06:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
+        id S245249AbiC3KPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245228AbiC3KNa (ORCPT
+        with ESMTP id S245234AbiC3KPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:13:30 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CA5A165B9F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:11:44 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-304-oB4kqtPMMA6uQJEujX6CkA-1; Wed, 30 Mar 2022 11:11:41 +0100
-X-MC-Unique: oB4kqtPMMA6uQJEujX6CkA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 11:11:39 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 30 Mar 2022 11:11:39 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Xu Yilun' <yilun.xu@intel.com>, Michael Walle <michael@walle.cc>
-CC:     Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Thread-Topic: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Thread-Index: AQHYRAJ8rIB0cQMH/kajVzJ0H3I8wazXtB2w
-Date:   Wed, 30 Mar 2022 10:11:39 +0000
-Message-ID: <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
-In-Reply-To: <20220330065047.GA212503@yilunxu-OptiPlex-7050>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 30 Mar 2022 06:15:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1842C3A5C4;
+        Wed, 30 Mar 2022 03:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Agj8zzqvWDpZMOBEEasMzSNfdr1gbrYwMIOAO4LamnI=; b=J1iPv3ZhgUKOquThe2zFhWa0mI
+        llIxIKvuAlGogtQY7vnhQNxlFPGw5+bJmgRTsvhvVY9mEsgccHsSxCgxG/KEfmJce7AOCxD4K8Exj
+        6kuuBQG9Vmd677+eRtKWzL7lxsm/BUAVy5TLvhjgNUwWD/OJJwZsSVkVkvtreQb502vp/EEi1s2M6
+        NFxa5560Tf7Px3KaBClsWI3kzPxxI8mg6BfUY4KMZtYDC1WqQWZChQE1IU3L621fCEbnmNusYLn6O
+        ic2aNhKBzSwNA/vY+vElPib2Cj9VgGe3HRjtK6gSH2MAiVwbn6OoSbXgapUMIKTkkBDQssa/py8Dd
+        3C47CEBg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZVKC-00F9X8-Rh; Wed, 30 Mar 2022 10:13:12 +0000
+Date:   Wed, 30 Mar 2022 03:13:12 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Jane Chu <jane.chu@oracle.com>
+Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
+Message-ID: <YkQtOO/Z3SZ2Pksg@infradead.org>
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
+ <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
+ <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
+ <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com>
+ <YkPtptNljNcJc1g/@infradead.org>
+ <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Yilun
-> Sent: 30 March 2022 07:51
+On Wed, Mar 30, 2022 at 06:03:01PM +0800, Shiyang Ruan wrote:
 > 
-> On Tue, Mar 29, 2022 at 06:07:26PM +0200, Michael Walle wrote:
-> > More and more drivers will check for bad characters in the hwmon name
-> > and all are using the same code snippet. Consolidate that code by adding
-> > a new hwmon_sanitize_name() function.
-> >
-> > Signed-off-by: Michael Walle <michael@walle.cc>
-> > ---
-> >  Documentation/hwmon/hwmon-kernel-api.rst |  9 ++++-
-> >  drivers/hwmon/hwmon.c                    | 49 ++++++++++++++++++++++++
-> >  include/linux/hwmon.h                    |  3 ++
-> >  3 files changed, 60 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> > index c41eb6108103..12f4a9bcef04 100644
-> > --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> > +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> > @@ -50,6 +50,10 @@ register/unregister functions::
-> >
-> >    void devm_hwmon_device_unregister(struct device *dev);
-> >
-> > +  char *hwmon_sanitize_name(const char *name);
-> > +
-> > +  char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
-> > +
-> >  hwmon_device_register_with_groups registers a hardware monitoring device.
-> >  The first parameter of this function is a pointer to the parent device.
-> >  The name parameter is a pointer to the hwmon device name. The registration
-> > @@ -93,7 +97,10 @@ removal would be too late.
-> >
-> >  All supported hwmon device registration functions only accept valid device
-> >  names. Device names including invalid characters (whitespace, '*', or '-')
-> > -will be rejected. The 'name' parameter is mandatory.
-> > +will be rejected. The 'name' parameter is mandatory. Before calling a
-> > +register function you should either use hwmon_sanitize_name or
-> > +devm_hwmon_sanitize_name to replace any invalid characters with an
-> 
-> I suggest                   to duplicate the name and replace ...
+> Because I am not sure if the offset between each layer is page aligned.  For
+> example, when pmem dirver handles ->memory_failure(), it should subtract its
+> ->data_offset when it calls dax_holder_notify_failure().
 
-You are now going to get code that passed in NULL when the kmalloc() fails.
-If 'sanitizing' the name is the correct thing to do then sanitize it
-when the copy is made into the allocated structure.
-(I'm assuming that the 'const char *name' parameter doesn't have to
-be persistent - that would be another bug just waiting to happen.)
-
-Seems really pointless to be do a kmalloc() just to pass a string
-into a function.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+If they aren't, none of the DAX machinery would work.

@@ -2,165 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CF84EC94A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CAA4EC94C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348631AbiC3QI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S1348582AbiC3QJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348701AbiC3QIX (ORCPT
+        with ESMTP id S234878AbiC3QJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:08:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1829C23D76F;
-        Wed, 30 Mar 2022 09:06:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 30 Mar 2022 12:09:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D56723D760
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648656480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NI8QrfZLscN2JjuLOs2lOv/NiQshgCTnf9s4dBqvuvY=;
+        b=QFFIA+CWMAqFy9S0zTCOPr7UmFZ+NbHt4TOKoMeS+PYJ9rWdhi2RAWR3G6CPcLi4puK2qn
+        Bcu0Os4AbXzdJH+KOG9gP1E/QN9CcGQ3Kpx1eLQQSpybl0u1h9d3OANGVyBbJW/XQeNShC
+        UNczGlqYB66LXx0e23UvgEVAPw3gGzg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-477-oWzPjiWbMviNabh8l__c2A-1; Wed, 30 Mar 2022 12:07:55 -0400
+X-MC-Unique: oWzPjiWbMviNabh8l__c2A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8F096179B;
-        Wed, 30 Mar 2022 16:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0998EC340F2;
-        Wed, 30 Mar 2022 16:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648656397;
-        bh=BL5gp9g+4lOt7MP6OWX+etUWh+Qufqk3KhmvfKjHLxk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Zfn2Non3kSBEOnWTt9QLvhBkXdnDzBo9T2WjnFMkn+SdwNlxjoQZnB9KhDABI5xVw
-         vzWkoSatYmuHh/Du7CZbHr5rzuMBCF9e6Z9y/jOuAUfQ8pAzRT1h4CCt/omVnCs1Tg
-         15E224Sw//26e/uTpGetvwFxid8Oav+ifLLxZsEyi/abUc6j+sDASk1ScVmVTJBr52
-         PIOBRoWVz9f3IwdQLebvwdgLW8bXZ/KJF/CbzHpCeMUkmrdSRW+SZMmUDMZ+T3CmZU
-         Cq9C9E7iDyEvwWFFlCJJCVAcxzFJk1G3MUrYhqRpP3/XRhTTQrLqtxKdI3iUcQCMgX
-         Hf4ww8yfhcFhQ==
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2e5827a76f4so224484207b3.6;
-        Wed, 30 Mar 2022 09:06:36 -0700 (PDT)
-X-Gm-Message-State: AOAM533ap4cN1WUXYknJTU8UMmrHmHY+MlkA5ArGC/VrAfM4lSPhenGO
-        RcC4CTj9m9vCGMBU9HRMElNBr8h9e+0QLZj7474=
-X-Google-Smtp-Source: ABdhPJy5KgTK+8wsBvhFLFAPMB5Ayg3DaKACrUkQv9LgK9deowojuaZwPLhTmK6zbZsaPVCnURBd8T1vtv61DqwtabA=
-X-Received: by 2002:a81:13c4:0:b0:2e6:bdb4:6d9f with SMTP id
- 187-20020a8113c4000000b002e6bdb46d9fmr333573ywt.211.1648656396060; Wed, 30
- Mar 2022 09:06:36 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5EA2680352D;
+        Wed, 30 Mar 2022 16:07:55 +0000 (UTC)
+Received: from pauld.bos.csb (dhcp-17-51.bos.redhat.com [10.18.17.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2BB39C202CA;
+        Wed, 30 Mar 2022 16:07:55 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 12:07:53 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arch/arm64: Fix topology initialization for core
+ scheduling
+Message-ID: <20220330160753.GA17246@pauld.bos.csb>
+References: <20220322160304.26229-1-pauld@redhat.com>
+ <1a546197-872b-7762-68ac-d5e6bb6d19aa@arm.com>
+ <YkMjqfBSyT3NOrWB@lorien.usersys.redhat.com>
+ <5a5381cd-813d-7cef-9948-01c3e5e910ef@arm.com>
+ <YkNjGOtG6eb4N8mI@lorien.usersys.redhat.com>
+ <5dc3a40e-f071-3ac8-4bf0-f555b9d94ff1@arm.com>
 MIME-Version: 1.0
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
- <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
- <20220329201057.GA2549@kbox> <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
- <20220329231137.GA3357@kbox>
-In-Reply-To: <20220329231137.GA3357@kbox>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 30 Mar 2022 09:06:24 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
-Message-ID: <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5dc3a40e-f071-3ac8-4bf0-f555b9d94ff1@arm.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
->
-> On Tue, Mar 29, 2022 at 03:31:31PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > >
-> > > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
-> > > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
-> > > > <beaub@linux.microsoft.com> wrote:
-> > > > >
-> > > > > Send user_event data to attached eBPF programs for user_event based perf
-> > > > > events.
-> > > > >
-> > > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
-> > > > > eBPF programs if required.
-> > > > >
-> > > > > Update documentation to describe new flags and structures for eBPF
-> > > > > integration.
-> > > > >
-> > > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > > >
-> > > > The commit describes _what_ it does, but says nothing about _why_.
-> > > > At present I see no use out of bpf and user_events connection.
-> > > > The whole user_events feature looks redundant to me.
-> > > > We have uprobes and usdt. It doesn't look to me that
-> > > > user_events provide anything new that wasn't available earlier.
-> > >
-> > > A lot of the why, in general, for user_events is covered in the first
-> > > change in the series.
-> > > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
-> > >
-> > > The why was also covered in Linux Plumbers Conference 2021 within the
-> > > tracing microconference.
-> > >
-> > > An example of why we want user_events:
-> > > Managed code running that emits data out via Open Telemetry.
-> > > Since it's managed there isn't a stub location to patch, it moves.
-> > > We watch the Open Telemetry spans in an eBPF program, when a span takes
-> > > too long we collect stack data and perform other actions.
-> > > With user_events and perf we can monitor the entire system from the root
-> > > container without having to have relay agents within each
-> > > cgroup/namespace taking up resources.
-> > > We do not need to enter each cgroup mnt space and determine the correct
-> > > patch location or the right version of each binary for processes that
-> > > use user_events.
-> > >
-> > > An example of why we want eBPF integration:
-> > > We also have scenarios where we are live decoding the data quickly.
-> > > Having user_data fed directly to eBPF lets us cast the data coming in to
-> > > a struct and decode very very quickly to determine if something is
-> > > wrong.
-> > > We can take that data quickly and put it into maps to perform further
-> > > aggregation as required.
-> > > We have scenarios that have "skid" problems, where we need to grab
-> > > further data exactly when the process that had the problem was running.
-> > > eBPF lets us do all of this that we cannot easily do otherwise.
-> > >
-> > > Another benefit from user_events is the tracing is much faster than
-> > > uprobes or others using int 3 traps. This is critical to us to enable on
-> > > production systems.
-> >
-> > None of it makes sense to me.
->
-> Sorry.
->
-> > To take advantage of user_events user space has to be modified
-> > and writev syscalls inserted.
->
-> Yes, both user_events and lttng require user space modifications to do
-> tracing correctly. The syscall overheads are real, and the cost depends
-> on the mitigations around spectre/meltdown.
->
-> > This is not cheap and I cannot see a production system using this interface.
->
-> But you are fine with uprobe costs? uprobes appear to be much more costly
-> than a syscall approach on the hardware I've run on.
+On Wed, Mar 30, 2022 at 05:48:34PM +0200 Dietmar Eggemann wrote:
+> On 29/03/2022 21:50, Phil Auld wrote:
+> > On Tue, Mar 29, 2022 at 08:55:08PM +0200 Dietmar Eggemann wrote:
+> >> On 29/03/2022 17:20, Phil Auld wrote:
+> >>> On Tue, Mar 29, 2022 at 04:02:22PM +0200 Dietmar Eggemann wrote:
+> >>>> On 22/03/2022 17:03, Phil Auld wrote:
+> 
+> [...]
+> 
+> >>> This instance is an HPE Apollo 70 set to smt-4.  I believe it's ThunderX2
+> >>> chips.
+> >>>
+> >>> ARM (CN9980-2200LG4077-Y21-G) 
+> >> I'm using the same processor just with ACPI/PPTT.
+> >>
+> > 
+> > Maybe I'm misinformed about these systems having no PPTT...  
+> > 
+> > I'm reclaiming the system. Is there a way I can tell from userspace?
+> 
+> # cat /sys/firmware/acpi/tables/PPTT > pptt.dat
+> # iasl -d pptt.dat
+> # vim pptt.dsl
+> 
 
-Can we achieve the same/similar performance with sys_bpf(BPF_PROG_RUN)?
+I don't have iasl but 
 
-Thanks,
-Song
+# strings pptt.dat 
+PPTT
+ServerCL
+ CAVM
 
->
-> > All you did is a poor man version of lttng that doesn't rely
-> > on such heavy instrumentation.
->
-> Well I am a frugal person. :)
->
-> This work has solved some critical issues we've been having, and I would
-> appreciate a review of the code if possible.
->
-> Thanks,
-> -Beau
+
+So that looks like it has a PPTT entry.  
+
+
+Cheers,
+Phil
+
+
+> [...]
+> 
+> >> so no SMT sched domain. The MPIDR-based topology fallback code in
+> >> store_cpu_topology() forces `cpuid_topo->thread_id  = -1`.
+> > 
+> > Right. So since I'm getting SMT it must not have package_id == -1.
+> > In which case you should be able to reproduce it because it must
+> > be that the call the update_siblings_masks() is required.  That
+> > appears to only be called from store_cpu_topology() which is
+> > after the scheduler has already setup the core pointers.
+> > 
+> > The fix could be the same but I should reword the commit message
+> > since it should effect all SMT arm systems I'd think.
+> > 
+> > Or maybe the ACPI topology code should call update_sibling_masks(). 
+> >>
+> >> IMHO this is why on my machine I don't see this issue while running:
+> >>
+> >> root@oss-apollo7007:~# stress-ng --prctl 256 -t 60
+> >> stress-ng: info:  [2388042] dispatching hogs: 256 prctl
+> >>
+> >> Is there something I miss in my setup to provoke this issue?
+> >>
+> > 
+> > Make sure you have a stress-ng that is new enough and built against
+> > headers that have the CORE_SCHED prctls defined.
+> 
+> Ah, I was using a pretty old version 0.11.07. Now I switched to 0.13.12
+> which includes:
+> 
+>   9038e442b92d - stress-prctl: add Linux 5.14 PR_SCHED_CORE prctl
+> 
+> To get SCHED_CORE activated in stress-prctl.c, as a quick hack, I had to
+> add the definitions of PR_SCHED_CORE, PR_SCHED_CORE_GET, etc. to this file.
+> 
+> Now the issue you described triggers on this machine immediately.
+> 
+
+-- 
+

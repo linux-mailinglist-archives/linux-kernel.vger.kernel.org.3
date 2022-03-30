@@ -2,111 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B8F4EB7BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854D24EB7CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241608AbiC3BWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 21:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S241638AbiC3Ba5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 21:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241599AbiC3BWW (ORCPT
+        with ESMTP id S239352AbiC3Baz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 21:22:22 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CF847394
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:20:37 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id l129so7744435pga.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x6rv08fpwpzLso4SC/yKscWicPs6HNkxCkCPxl5J16Q=;
-        b=XO9Kzh+W10rhwsTvM+KAuFjAIudNiX4KiGdCKDAfRXWGbemz7HiLQHdk3SPWpFVkAV
-         yrgFN66DdNUw3hlngalgpAnB0BhVJfBGFF/8bMUJrFuSytAsaQEb26AFoRegx8XzElJR
-         UMYg4lhP6KMmzu9ZU6L8WYn1ThUi4dlDpqzqHAyU0m+UAAC1kfpqTnnY9Rxc7WppVAUS
-         lLv6ft+V20F6U1hOCVkH8JmJu6u8T0Shm9zO9f6nuOm9YAnhHJqZkrgth1no4s6oBhfr
-         9CdrTfnwvo423WEDEt1G++JyYzeGPauED/SYVm7r27MhnxlF5KY71ZK1JT4nKwmIDCTK
-         F0fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x6rv08fpwpzLso4SC/yKscWicPs6HNkxCkCPxl5J16Q=;
-        b=DwVnREBPjF0TlV+ckE2kI4jOdVw15BvC6wGmBWuBeT/a4Y1BxRDkyO5OyJjw7E35f0
-         VuG/wUtgT5EGTon4bsLYCODU6VpnHassyw9mTZezH0xSYlbDEMEYE68VoJDrQQ3gonZn
-         x2N6SidwnrLZpegEhsjp917q1qQlTX4itTGRkoPKnpM17pS8xMi9EKxFcnNsCq6iT0VT
-         tWQsXBIIO51Eq+TCZztFcSqGfywj0r4YQRNK6ZivNHUDZ+M0dN4/Y1nmn/dAGorUT7zk
-         1komVTGhacjwndGpGv4Sb2XyyfdT/zKrxPLQDukcPQrhjWtOn07rWRcIwoUyXNyObts6
-         v5+w==
-X-Gm-Message-State: AOAM5312B5WGNsQ8oEmaPmiqe8p0gYdStESuKVcOPtkmPlf9F1mx3hu1
-        nJoFkErvroLnd0lyiAbAPYdU5g==
-X-Google-Smtp-Source: ABdhPJwoW1nC8CwsoiAcRDjUEwAq3FLPOf8WeO7J4R5TTOmsQ664cFp/eYXChsf5S/H73HJRyPqt9A==
-X-Received: by 2002:a63:35c1:0:b0:386:3620:3c80 with SMTP id c184-20020a6335c1000000b0038636203c80mr4063284pga.327.1648603236862;
-        Tue, 29 Mar 2022 18:20:36 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id a11-20020a63cd4b000000b00378b9167493sm17373638pgj.52.2022.03.29.18.20.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 18:20:36 -0700 (PDT)
-Message-ID: <5bafff4a-e3f8-82eb-f8e8-486c877518ad@kernel.dk>
-Date:   Tue, 29 Mar 2022 19:20:35 -0600
+        Tue, 29 Mar 2022 21:30:55 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3530B1A9F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:29:10 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 30 Mar
+ 2022 09:29:03 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 30 Mar
+ 2022 09:29:01 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V4] staging: r8188eu: Directly return _SUCCESS instead of using local ret variable
+Date:   Wed, 30 Mar 2022 09:28:59 +0800
+Message-ID: <1648603740-14760-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <ce82792a-9e9e-f324-641e-d1fbcb26b1a0@meizu.com>
+References: <ce82792a-9e9e-f324-641e-d1fbcb26b1a0@meizu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next RFC 1/6] blk-mq: add a new flag
- 'BLK_MQ_F_NO_TAG_PREEMPTION'
-Content-Language: en-US
-To:     "yukuai (C)" <yukuai3@huawei.com>,
-        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
-        ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <20220329094048.2107094-1-yukuai3@huawei.com>
- <20220329094048.2107094-2-yukuai3@huawei.com>
- <190625d8-ed84-f657-6058-2d151f6d4caa@kernel.dk>
- <f83ea9d7-bc89-6855-f9a6-c42f4647d383@huawei.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f83ea9d7-bc89-6855-f9a6-c42f4647d383@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 7:18 PM, yukuai (C) wrote:
-> On 2022/03/29 20:44, Jens Axboe wrote:
->> On 3/29/22 3:40 AM, Yu Kuai wrote:
->>> Tag preemption is the default behaviour, specifically blk_mq_get_tag()
->>> will try to get tag unconditionally, which means a new io can preempt tag
->>> even if there are lots of ios that are waiting for tags.
->>>
->>> This patch introduce a new flag, prepare to disable such behaviour, in
->>> order to optimize io performance for large random io for HHD.
->>
->> Not sure why we need a flag for this behavior. Does it ever make sense
->> to allow preempting waiters, jumping the queue?
->>
-> 
-> Hi,
-> 
-> I was thinking using the flag to control the new behavior, in order to
-> reduce the impact on general path.
-> 
-> If wake up path is handled properly, I think it's ok to disable
-> preempting tags.
+As init_mlme_ext_priv function always returns SUCCESS , We can change
+return type from int to void.
 
-If we hit tag starvation, we are by definition out of the fast path.
-That doesn't mean that scalability should drop to the floor, something
-that often happened before blk-mq and without the rolling wakeups. But
-it does mean that we can throw a bit more smarts at it, if it improves
-fairness/performance in that situation.
+fixes coccinelle warning:
+./drivers/staging/r8188eu/core/rtw_mlme_ext.c:357:5-8: Unneeded variable: "res".
+ Return "_SUCCESS" on line 380
 
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+V1->V2: split into two patches.
+V2->V3: change return type from int to void.
+V3->V4: just delete the unused label but don't delete the free function.
+
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c    | 5 +----
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h | 2 +-
+ drivers/staging/r8188eu/os_dep/os_intfs.c      | 6 +-----
+ 3 files changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index 10d5f12..ff48293 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -352,9 +352,8 @@ static u8 init_channel_set(struct adapter *padapter, u8 ChannelPlan, struct rt_c
+ 	return chanset_size;
+ }
+ 
+-int	init_mlme_ext_priv(struct adapter *padapter)
++void init_mlme_ext_priv(struct adapter *padapter)
+ {
+-	int	res = _SUCCESS;
+ 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
+ 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+ 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+@@ -376,8 +375,6 @@ int	init_mlme_ext_priv(struct adapter *padapter)
+ 	pmlmeext->mlmeext_init = true;
+ 
+ 	pmlmeext->active_keep_alive_check = true;
+-
+-	return res;
+ }
+ 
+ void free_mlme_ext_priv(struct mlme_ext_priv *pmlmeext)
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index 0c555ea..827ac6c 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -419,7 +419,7 @@ struct mlme_ext_priv {
+ 	u8 active_keep_alive_check;
+ };
+ 
+-int init_mlme_ext_priv(struct adapter *adapter);
++void init_mlme_ext_priv(struct adapter *adapter);
+ int init_hw_mlme_ext(struct adapter *padapter);
+ void free_mlme_ext_priv (struct mlme_ext_priv *pmlmeext);
+ extern void init_mlme_ext_timer(struct adapter *padapter);
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index 550721e..c531504 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -490,10 +490,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
+ 	reset_global_wifidirect_info(padapter);
+ 
+-	if (init_mlme_ext_priv(padapter) == _FAIL) {
+-		dev_err(dvobj_to_dev(padapter->dvobj), "init_mlme_ext_priv failed\n");
+-		goto free_mlme_priv;
+-	}
++	init_mlme_ext_priv(padapter);
+ 
+ 	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
+ 		dev_err(dvobj_to_dev(padapter->dvobj), "_rtw_init_xmit_priv failed\n");
+@@ -534,7 +531,6 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ free_mlme_ext:
+ 	free_mlme_ext_priv(&padapter->mlmeextpriv);
+ 
+-free_mlme_priv:
+ 	rtw_free_mlme_priv(&padapter->mlmepriv);
+ 
+ free_evt_priv:
 -- 
-Jens Axboe
+2.7.4
 

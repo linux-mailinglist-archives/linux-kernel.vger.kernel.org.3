@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00F14ED056
+	by mail.lfdr.de (Postfix) with ESMTP id 24CD54ED055
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351865AbiC3XsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 19:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S1351877AbiC3XsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 19:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351881AbiC3Xrx (ORCPT
+        with ESMTP id S1351885AbiC3Xry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 19:47:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCB962A38;
-        Wed, 30 Mar 2022 16:46:07 -0700 (PDT)
+        Wed, 30 Mar 2022 19:47:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE5126AF1;
+        Wed, 30 Mar 2022 16:46:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E703C61835;
-        Wed, 30 Mar 2022 23:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30F2C340EC;
-        Wed, 30 Mar 2022 23:46:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB6161835;
+        Wed, 30 Mar 2022 23:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90909C340F3;
+        Wed, 30 Mar 2022 23:46:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648683966;
-        bh=uKYOWCNiJwOEjCoRKb6g6YV42LmzgDRTIg6qPpnEHkY=;
+        s=k20201202; t=1648683968;
+        bh=GgLh9GaXBFfzZFvigI/FoQkf3w02HRSkun2SLU+RGKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I3vHdiBi0jcpYheTDatiqR+gw+80pR/T/bIjzUWsbIFZfntE99R4wqw+EEkey6SLh
-         eS/Rv6beB7qtmqyZIspDp/SaXLgZCKWuK5U48fuhITXQtARsGCjfOzfkfl9V2wIIp8
-         fFROFTaPbz6m/pZaall+y5vz3kKlCc+OIDYFgxUtKmqyHlLW1XwEFNaM44q698VXVe
-         nkXFaIqTJnmoNavy1ooUs/oXG899cpFcrn0Mei8mT8QUknWX0zA8lXW4y5DK242prO
-         ZmVQVzyaeugF0wsxdMn9DCVfqvGl0mPOpA9iC8j6NT5nawL3yr2zMU5ytyml7l0P8B
-         ItO1C8b5uu5yA==
+        b=VOLS35aUbOhsV8s0ZpKxFUrs8U+D1Hh4dgnhfk3eufxMR5GOnL0m8sNkoUExtfZpZ
+         QXKOyJGaa0Ni2jFx6uH/hDmbzujyhPdi7CSZ5rc3X55EuMXIitMZDo9eELAvYbw7v5
+         ItxhzHRnWaEB4TjILQhK/bBc1AuuUq6OU53og5uQ52cjVlb31tO2pvr0DIQNplJSz2
+         xMihUHpU9ldtX7V91wFu9BqLYGjEJ+8uiTyigeix4zPJ+FQ4PUsqPDn/4GqWi3QOfk
+         f3iLZXjvlrD3MYFVlCHjUUJDL45Z+1vGc5N3UIUTs7iLVWMFFtZ/9C6v2pJ8KZtTx+
+         zpaY4C11rSbuw==
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -42,9 +42,9 @@ To:     Masahiro Yamada <masahiroy@kernel.org>,
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-um@lists.infradead.org, llvm@lists.linux.dev,
         patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 1/2] kbuild: Remove '-mno-global-merge'
-Date:   Wed, 30 Mar 2022 16:45:27 -0700
-Message-Id: <20220330234528.1426991-2-nathan@kernel.org>
+Subject: [PATCH 2/2] Revert "um: clang: Strip out -mno-global-merge from USER_CFLAGS"
+Date:   Wed, 30 Mar 2022 16:45:28 -0700
+Message-Id: <20220330234528.1426991-3-nathan@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220330234528.1426991-1-nathan@kernel.org>
 References: <20220330234528.1426991-1-nathan@kernel.org>
@@ -60,44 +60,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This flag is specific to clang, where it is only used by the 32-bit and
-64-bit ARM backends. In certain situations, the presence of this flag
-will cause a warning, as shown by commit 6580c5c18fb3 ("um: clang: Strip
-out -mno-global-merge from USER_CFLAGS").
+This reverts commit 6580c5c18fb3df2b11c5e0452372f815deeff895.
 
-Since commit 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for
-building kernel with Clang") that added this flag back in 2014, there
-have been quite a few changes to the GlobalMerge pass in LLVM. Building
-several different ARCH=arm and ARCH=arm64 configurations with LLVM 11
-(minimum) and 15 (current main version) with this flag removed (i.e.,
-with the default of '-mglobal-merge') reveals no modpost warnings, so it
-is likely that the issue noted in the comment is no longer relevant due
-to changes in LLVM or modpost, meaning this flag can be removed.
+This patch is buggy, as noted in the patch linked below. The root cause
+has been solved by removing '-mno-global-merge' for the entire kernel.
 
-If any new warnings show up that are a result of the removal of this
-flag, it can be added back under arch/arm{,64}/Makefile to avoid
-warnings on other architectures.
-
+Link: https://lore.kernel.org/r/20220322173547.677760-1-nathan@kernel.org/
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- Makefile | 4 ----
+ arch/um/Makefile | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index daeb5c88b50b..f2723d9bfca4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -784,10 +784,6 @@ ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
- # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
- KBUILD_CFLAGS += -Wno-gnu
--# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
--# source of a reference will be _MergedGlobals and not on of the whitelisted names.
--# See modpost pattern 2
--KBUILD_CFLAGS += -mno-global-merge
- else
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index 320b09cd513c..f2fe63bfd819 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -75,10 +75,6 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+ 		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+ 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
  
- # gcc inanely warns about local variables called 'main'
+-ifdef CONFIG_CC_IS_CLANG
+-USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
+-endif
+-
+ #This will adjust *FLAGS accordingly to the platform.
+ include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+ 
 -- 
 2.35.1
 

@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD954EC2DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530194EC2DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244776AbiC3MCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
+        id S1344681AbiC3MCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344868AbiC3Lxn (ORCPT
+        with ESMTP id S1344885AbiC3Lxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA51B27CE11;
-        Wed, 30 Mar 2022 04:49:51 -0700 (PDT)
+        Wed, 30 Mar 2022 07:53:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A726F926;
+        Wed, 30 Mar 2022 04:49:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 89FADCE1D41;
-        Wed, 30 Mar 2022 11:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E2AC340EE;
-        Wed, 30 Mar 2022 11:49:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19FAD615E7;
+        Wed, 30 Mar 2022 11:49:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EF7C36AE2;
+        Wed, 30 Mar 2022 11:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640988;
-        bh=GsAv312AdYmmt1e+wMqZIwMIBSqRjZ1+lgs4z1QfSXo=;
+        s=k20201202; t=1648640993;
+        bh=o7G5zI7MNaBY1ywbLUsSUnTGxhdeWJI4/+wNTDy21Fc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X9xu+y6VWuXV9ZmcN3M3V4VJtZI/9kjMYAUi6cMZz2Ul8zjNiG6YkPt2uncKWD7iX
-         K7If6I6HZZ0XnSvPVzjnveLkMZUGt46xa3rZlR+AdYPguXuFhVgW5Ji0fEG5s7VoN0
-         epeR9srQQO7oMAZqsYF6QcYFcTufVySGQLzblFZmUKCiIFIAYbZMN+0MjR5MnejRfW
-         2Py/WBb2KUueOpGtWHB5c3rbcerhfeZpWtskRC3kEPDV3f4GEY1/eztHKXPMKQA+JE
-         kL6VWBwc1s4ax0u1pLH2ipD4q5A+fKoT5oriBzpa42z5/ez0RX0XoEICmCCSrv3UzF
-         D0bK2igOwKrnA==
+        b=l50mm/shwsZzQ5pD+XTkLPO0B39DI+Ta4rgx5yc/Eep3dmx+19MHJE74mZv3NBKIh
+         Etj4zATjOfJYpaw5K+2fgqLXKKgLWLQufA3Shk+e7/RM4mbO4Q72siPxvLod/hRV0Z
+         FDq0VHqkCuax5c7ZGYTaveaZ78VQaVbpmbVX7McB/zyhJZC0TvsZfjaJd+tYYSK3oF
+         2LIBDrspiSw8VHro1AVgy70a/HNgXC6aH9TftSPtB2CyO+SdstTKYstTfoIJIJXAdK
+         icGQ842OK1wy0h/T6E4T2+7mnJSX0Dx6Y19AtkIYYo8JXWhOLXaudHlEiiBXiFmfa0
+         lwOHrpWFH2Ubw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 49/59] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
-Date:   Wed, 30 Mar 2022 07:48:21 -0400
-Message-Id: <20220330114831.1670235-49-sashal@kernel.org>
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.16 52/59] ASoC: Intel: Revert "ASoC: Intel: sof_es8336: add quirk for Huawei D15 2021"
+Date:   Wed, 30 Mar 2022 07:48:24 -0400
+Message-Id: <20220330114831.1670235-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,59 +62,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
+[ Upstream commit 1b5283483a782f6560999d8d5965b1874d104812 ]
 
-hdpvr_register_videodev is responsible to initialize a worker in
-hdpvr_device. However, the worker is only initialized at
-hdpvr_start_streaming other than hdpvr_register_videodev.
-When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
-will encounter one WARN in flush_work.The stack trace is as follows:
+This reverts commit ce6a70bfce21bb4edb7c0f29ecfb0522fa34ab71.
 
- hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
- usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
- __device_release_driver drivers/base/dd.c:1206 [inline]
- device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
- bus_remove_device+0x108/0x160 drivers/base/bus.c:529
- device_del+0x1fe/0x510 drivers/base/core.c:3592
- usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
- usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
+The next patch will add run-time detection of the required SSP and
+this hard-coded quirk is not needed.
 
-Fix this by moving the initialization of dev->worker to the starting of
-hdpvr_register_videodev
-
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Link: https://lore.kernel.org/r/20220308192610.392950-14-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/soc/intel/boards/sof_es8336.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index 563128d11731..60e57e0f1927 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -308,7 +308,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
+diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
+index e6d599f0cd26..20d577eaab6d 100644
+--- a/sound/soc/intel/boards/sof_es8336.c
++++ b/sound/soc/intel/boards/sof_es8336.c
+@@ -247,14 +247,6 @@ static const struct dmi_system_id sof_es8336_quirk_table[] = {
+ 					SOF_ES8336_TGL_GPIO_QUIRK |
+ 					SOF_ES8336_ENABLE_DMIC)
+ 	},
+-	{
+-		.callback = sof_es8336_quirk_cb,
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "HUAWEI"),
+-			DMI_MATCH(DMI_BOARD_NAME, "BOHB-WAX9-PCB-B2"),
+-		},
+-		.driver_data = (void *)SOF_ES8336_SSP_CODEC(0)
+-	},
+ 	{}
+ };
  
- 	dev->status = STATUS_STREAMING;
- 
--	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
- 	schedule_work(&dev->worker);
- 
- 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
-@@ -1165,6 +1164,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
- 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
- 	int res;
- 
-+	// initialize dev->worker
-+	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
-+
- 	dev->cur_std = V4L2_STD_525_60;
- 	dev->width = 720;
- 	dev->height = 480;
 -- 
 2.34.1
 

@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F11F4EC87B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DDA4EC892
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344020AbiC3PmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S1348340AbiC3PoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240274AbiC3PmR (ORCPT
+        with ESMTP id S239041AbiC3PoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:42:17 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5DA933E0A;
-        Wed, 30 Mar 2022 08:40:31 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,223,1643641200"; 
-   d="scan'208";a="115200171"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 31 Mar 2022 00:40:31 +0900
-Received: from localhost.localdomain (unknown [10.226.92.121])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 031EB4009A89;
-        Thu, 31 Mar 2022 00:40:27 +0900 (JST)
-From:   Phil Edworthy <phil.edworthy@renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/14] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M EVK support
-Date:   Wed, 30 Mar 2022 16:40:11 +0100
-Message-Id: <20220330154024.112270-1-phil.edworthy@renesas.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 30 Mar 2022 11:44:02 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40C033E0A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:42:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mj2UbADx+YNRvo7oIcDQ5Z38Xm8WJ83fqDWbmjvlOwc=; b=LLGIXOeTCMzAUOivLAjaHxROvf
+        kHk0MPMJ/17SNeJ/VV1+/HzYJuDE05PN7FyyRqwGn4zlvEnhH57Earji9YvrD9CBBJPAgJnauQ31y
+        VIxGlDhrbdaLT1IO0F9ei6vMLUdoK1taK7RbKFVhg0csbcP3GpP/63bW1vYKJgFkS/0WvbEXBbAzS
+        fYNVHpHpHBBQaVPUE9i0CUwgMYyAR35GKE0AgEi4a3ABY6BxI8n7HJiZkLtCqmrSx5VE1/QB25ilA
+        APtj9UBd9761+s+wG3uf6Tg8sXcYaYwWt86EQpQKBd1RiELy+w/qPO9n1tI5FFLkhfUmFdU1XwrUx
+        1Oe+AhZg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZaSf-00GbcO-2U; Wed, 30 Mar 2022 15:42:17 +0000
+Date:   Wed, 30 Mar 2022 08:42:17 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] fs: sysv: check sbi->s_firstdatazone in
+ complete_read_super
+Message-ID: <YkR6WdjLJyF0PMcd@infradead.org>
+References: <20220330104215.530223-1-liushixin2@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330104215.530223-1-liushixin2@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,41 +50,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 30, 2022 at 06:42:15PM +0800, Liu Shixin wrote:
+> sbi->s_firstinodezone is initialized to 2 and sbi->s_firstdatazone is read
+> from sbd. There's no guarantee that sbi->s_firstdatazone must bigger than
+> sbi->s_firstinodezone. If sbi->s_firstdatazone less than 2, the filesystem
+> can still be mounted unexpetly. At this point, sbi->s_ninodes flip to very
+> large value and this filesystem is broken. We can observe this by
+> executing 'df' command. When we execute, we will get an error message:
+> 	"sysv_count_free_inodes: unable to read inode table"
 
-RZ/V2M has a dual-core Cortex-A53 (1.0 GHz) CPU and built-in AI
-accelerator "DRP-AI" for vision, which is Renesas' original technology.
-It also has a 32-bit LPDDR4 interface and video codec (H.264).
-
-The RZ/V2M is used with ISP firmware that runs on one of the Cortex-A53
-cores. The firmware is an integral part of the SoC such that the HW
-User's Manual documents which of the peripheral modules are used by the
-firmware.
-
-Initial patches enables minimal peripherals on Renesas RZ/V2M EVK board
-and booted via nfs. Ethernet is broadly compatible with the
-etheravb-rcar-gen3 driver, but interrupts need some work so it's not
-been included in this patch set.
-
-Below blocks are enabled on Renesas RZ/V2M EVK board:
-- memory
-- External input clock
-- CPG
-- UART
-
-Links for SoC and EVK:
-[*] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-cortex-a-mpus/rzv2m-dual-cortex-a53-lpddr4x32bit-ai-accelerator-isp-4k-video-codec-4k-camera-input-fhd-display-output
-
-
-Sorry for cross posting the patches to multiple subsystems, as these are
-just the dt-binding patches included as part of initial bringup patches.
-
-v2:
- * Removed SYS dt-bindings patch and corresponding SoC identification
-   as we only used the LSI version register. This can be dealt with
-   later on.
- * Fixed em-uart dt-bindings.
- * Included reviewed-by tags.
-
-Thanks
-Phil
+This looks fine.  Just curious: which variant of the sysv fs do you
+use and what is the use case?

@@ -2,242 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2256B4ECDB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27084ECDB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349955AbiC3UB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S1350836AbiC3UD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiC3UBv (ORCPT
+        with ESMTP id S1350822AbiC3UDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:01:51 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8665F2A253
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:00:04 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 299E632069
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:00:01 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZeU5nQRTgb6UBZeU5nTrdm; Wed, 30 Mar 2022 15:00:01 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eXKZchLq+5LAGT1CxaeWrPz836JWwoNXNHtPmYfC0Zo=; b=JCyTECsdx3bl2Vioe5IuGnejLk
-        plknHaucGbgrqi0zPkmebDyQwB8l8dJzO9Aji68ic99WsSsg7lV8X6KeQQQAIPgVxqzn7WBO5XtuC
-        ZfEPqFdPCKYYnUoezIDXs/ZbAtCZhSOvX9m+oqI63Wu0kQycj0Xh2EDsNn/HiE/2OFiShGkJQfhuc
-        yC6q807BIaNz4sGTsq6w2ymycnwtW3D8jWRRF6o9UDPoAZLLLOv6vqNXRrNdfegvwlHKjDrnRIvvz
-        Zz7xAfZGh264XVDuPE7Y5YTZsVoQpfkuLP2ksDisqi1EmAEonQZPE+dmcSIrskVdJ9iOuOuk82rnj
-        WmYj9CzQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54580)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZeU4-001VGm-VT; Wed, 30 Mar 2022 20:00:01 +0000
-Message-ID: <2fbefb5f-a53c-ea68-0a1d-90c60f90d667@roeck-us.net>
-Date:   Wed, 30 Mar 2022 12:59:59 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] hwmon: (bt1-pvt) use generic polynomial functions
+        Wed, 30 Mar 2022 16:03:51 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2127.outbound.protection.outlook.com [40.107.244.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E15C3D1E8;
+        Wed, 30 Mar 2022 13:02:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nJVq6EYwvR5ZNvdV/r/gTfevAUX3E6S2hqEqg7Hb2idiow5aSaYEdLveAPD1geFxBj823mglfixifTqe78u91IkOGcixaqi4HN6qAZ3YYwze4XJbGYdlzxYOhi/5r5pCd9ojIz9adC7+WSBfczfgB738XrCyrWyZLbcTS4pgiW1MmwHY7ngfoDGlICv4aeug4oDdqZBAnUynRjyHc5rSDCIMwKfKTRC4/qRWlvOpVu+BQUoWnKOpg1y4tJXmssM121sZem2gdcuKO6Y6lwOMMBDtICO1CxfBdyXpympJPOhRzJdidlrjgdE73EfOCt0L7iwqweYMjtOowYZwedENUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q3oWPdz1wBr/9i7hmhX+HUuOs3mvHyAsJOXG6F14ugM=;
+ b=KD5ZG2vIWoWS7rFyz3m4J/a3iBcML8vIT+oG4yIllcphT6/lU6zXiFLQGpsbNSXWOHYGf/XuXDqbmHxU+L+N2U9n9asD/Euy7Vx6lvCb6sXPj0eMQd8AIwLsIzDvUnes51R/t8Rt9Ft+rqFnPfLVe0l2D/q2p3zObDW4ENJvZDqzysGP6UnFGvD0PR5EqWqFgz7SlvGn6qeIbofbnH2vad844G72CLQmot6hZGIic1Ox2/kBTA6DIGW0VLXNxrq+UVsVR7g9iEdHgJDmaP/8/df8pl+Z/TWWVUawkKX+T1qQyWkha9Q4b5fGv1aQkQtwHiYczRXTOaGydbYwYn+/5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hammerspace.com; dmarc=pass action=none
+ header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q3oWPdz1wBr/9i7hmhX+HUuOs3mvHyAsJOXG6F14ugM=;
+ b=aRoOEhwAkgEjUdXl4pOsJXATCTt9CtPuxFsz1cQ0Bs/lecUzSrCPfMYH6muHWPfHW4o5sKN1Dt5l6K7Wek4IK+1P0nHfw6VKCKO293sDYxs0kMBdsnqGQv5PIgRpX+WVgFUx1Qc83QcwyAaGDSuvgtRa9mImJvFFp2VybuTyKSE=
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
+ by BL3PR13MB5228.namprd13.prod.outlook.com (2603:10b6:208:347::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.8; Wed, 30 Mar
+ 2022 20:01:48 +0000
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::c0b:4fda:5713:9006]) by CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::c0b:4fda:5713:9006%7]) with mapi id 15.20.5123.021; Wed, 30 Mar 2022
+ 20:01:48 +0000
+From:   Trond Myklebust <trondmy@hammerspace.com>
+To:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Please pull NFS client changes for Linux 5.18
+Thread-Topic: [GIT PULL] Please pull NFS client changes for Linux 5.18
+Thread-Index: AQHYQ6Q4oVl0Qpju8kuE1WA18VVEPazYPZGAgAAdHgA=
+Date:   Wed, 30 Mar 2022 20:01:47 +0000
+Message-ID: <c5401981cb21674bdd3ffd9cc4fac9fe48fb8265.camel@hammerspace.com>
+References: <7b0576d8d49bbd358767620218c1966e8fe9a883.camel@hammerspace.com>
+         <CAHk-=wh-hs_q-sL6PNptfVmNm7tWrt24o4-YR74Fxo+fdKsmxA@mail.gmail.com>
+In-Reply-To: <CAHk-=wh-hs_q-sL6PNptfVmNm7tWrt24o4-YR74Fxo+fdKsmxA@mail.gmail.com>
+Accept-Language: en-US, en-GB
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220328112505.3025374-1-michael@walle.cc>
- <20220328112505.3025374-3-michael@walle.cc>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220328112505.3025374-3-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZeU4-001VGm-VT
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54580
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hammerspace.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b84a160c-80e7-4aaa-6a94-08da12881f8b
+x-ms-traffictypediagnostic: BL3PR13MB5228:EE_
+x-microsoft-antispam-prvs: <BL3PR13MB52286675B020E0F5E5163EACB81F9@BL3PR13MB5228.namprd13.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tF55mx3XGCZVsaE2weQKLDcvu0E2zCSaHyMTsF30YEOgtytilGO3D5MAjaCP3vSy07XN5u2AaRyiymQZy2onRUxyDWeO3R7jGCeZy5x7ifx1lV0adCW46mObhvVyUwPPYaTBcwJmWHNrLB4850qL8ax6zfx/jruVvTfQ8h2GEnorjWwIxKMn1+2saBKWNCxd4PyFFTcI4s5o9ZkGukMXwK3V/3Xd3jq0A/UB9Z3lu7eJuga4FarqIG53y28LVlTci8oYll4+TuPdKbnqOVr+smqf0gWtBrJlBSbLuz/9XyWVC8eymRULsBkildtLC8KNu+F22li2GVqF1I2wXplCIkFurG/ovZmnprwLYBN7ykXT+8jJUJhmL60FCp14o9+1XiVL3TOavycvvotO6a/BfLv2VDvatWUNLQbz6ZyuHqZIKaktl+TbDMEJihqoSGYts1lDiHvb7JbWFXktfCX2nMoteYQcu9y9mwpGh3lcgxHHR0QOmSywen7nDCi6p+MeGcKc06eKBJC+lZ7I4kgyKWCDMcgvxuc27Dj+3cqv5zL+1ejLDolozVK5AyLccZUpEsaZizk8Zu6vYQPX4h5PS2gxDnRAt2wIwHTc+4Du83nOu3bwtRL8rZYLub4ho+ToapbuxVOd0QkSYmOX1PZZGjLqy8OfcFpyx1pgrdzdYdO2vwvqpqT+9XLjeARjbzGxDgP9tH3XrtmEIyKfIhtdfQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(508600001)(53546011)(86362001)(2616005)(83380400001)(36756003)(6506007)(6486002)(26005)(6512007)(64756008)(2906002)(66556008)(66946007)(71200400001)(66476007)(8936002)(8676002)(4326008)(66446008)(122000001)(76116006)(54906003)(6916009)(5660300002)(38100700002)(316002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bGRtN0dOdWREOXhKa1dxZ0pmTklQRC9TOGo1SG5xTE1PeDdQS3YvdFpNR3lp?=
+ =?utf-8?B?SEdvMHlESWRsTVZ1OWFzWitnT0FLaHFGdGhFV0x4Ni9JNTlMbjZzRkIzckFH?=
+ =?utf-8?B?dEZVUFQ4RzlpaGlYdWRadFNCTlRNN2hLTXl3dzdFTDl0QTRXOW9aelJ1N3kv?=
+ =?utf-8?B?SElWdzkrOXk2SitKcDlwK0dLUUgzV3JnMldzQklwYVcxODczTVB3cjVvK3Jy?=
+ =?utf-8?B?RlRtR3NRSWx1OHJrTTY0WlQwNzJCRUNEMkt5Q2QzM0pUenFrUU0zTVgxeGtG?=
+ =?utf-8?B?V3R0WFp1ODBtNVBhOGg3akZWSGZLc0xmTnNRK3FTV3hTT3BVdXRTT096Y2ZO?=
+ =?utf-8?B?dkVDV0RJSExnaUNFaGxWSUoyTWM0bDgrT215eGFuWk9DUnc5THZGSUdMeS9N?=
+ =?utf-8?B?aUVOTVdCNHNZamt6bTRLbTI1bXltMmkwa3kwMWVMY0JRd20zNkFyMDM2WHpv?=
+ =?utf-8?B?VDhUMS92WXJwYzZmM3dpcWhuQzZsWW5LSm9pcWx1REgwWGNhbXRpRGRNYmtJ?=
+ =?utf-8?B?UkFDRWtUUTQyQUlOZGZRRE10VkRhZUY1dDBtTXJwd2dqTDlyemtrOVhyZmt6?=
+ =?utf-8?B?MUdNcGkramtpLzJEd29VWERzbUFUVEN3OGh5RXgzTlVwWksyVzc4NDNlVUFH?=
+ =?utf-8?B?cVhiZ1NaOHFqb3Y4MDBadEx2Q0duTU1MakhSSzNodlMyZG9kRHpvUDJ5VTFw?=
+ =?utf-8?B?R1lBRlEyZzNSTkZWMXRoekVyc290dkRxVXFMUlk2TFhYNXRWRkxyWU1ZRHl4?=
+ =?utf-8?B?Y29KUC9RNXgxTHhwL1k1SjhTRk5LT3ltbFR6c1E1RjBnMi90clNtVDdlNVV1?=
+ =?utf-8?B?MC8rSmNNaU9IV0MzR3d2QkVhSHN5T0xpYjkyaHBXRTNDdXdvM2NKaFZoQ0RL?=
+ =?utf-8?B?R2d6ZlJZVnp2WjNoYStKeHdJd0hKbllDeWZTMzF4VmFjaXFETDBuZFNRMHdB?=
+ =?utf-8?B?TldLZ2Q1d1JEUkhhd1BQVzlWSlNaL0wzWG8wdXNjb3pDMTErSjYrS0wyRzJu?=
+ =?utf-8?B?MFhBOTFDVjduQ3haRmo3cWJPY2g1YmlTd1lObXJUL0w4dk9vZEc0V3JlVXE2?=
+ =?utf-8?B?d0RlWFJMYVJVaGFFdTFMQzdsVzkzZ1hmS2VLUk1hRWFtZnhhZGpDMEhJVTNh?=
+ =?utf-8?B?VjhVSm9nOTZDUzFEMHVDeG9QbUdPQUgwNjI1QzFyMUR3dnV1SE1HZWp1dkh5?=
+ =?utf-8?B?VlhUZ2x1YjhGYzNSY29lbkhNc0dWL1pmRmMzUzVSUm1BeEtkOUlianN6NUVW?=
+ =?utf-8?B?QWVDMGl4VGgvNnhOUVJxYlo0N3Qwc1RSQTBCRTBLaGxJSnBqTWZ0SWQ3MSto?=
+ =?utf-8?B?cUhaQjRVbVprY2FMK1RHaWFtd2hLUVNVQU53SWVnenN0OUNyTlpEekY5OUxJ?=
+ =?utf-8?B?TVMyQXVNaC9DTDQxNWFlUlZPTGFjWmFwdE9TMjJzOTFiMzhxSEVpdlVCTlMz?=
+ =?utf-8?B?Q3g1akVFQ0ZKdUloWE82d0Rnb1FLTUw2anExb3Zxa2tqdDlVcVU2ZjBRZEd1?=
+ =?utf-8?B?TWN3alBJR0hsTXFLd1hGdDVoeEhkTnpMdVRkdFBNWFk5SWowUkpWRVpWQjJj?=
+ =?utf-8?B?QVgrNGxqQnM1RXlFUjV3dDMxUVMrVzVNSU5jc3ZtVXE4K0lZcy9vRi9RVFg2?=
+ =?utf-8?B?VHV4ODZnYUhYYXVaZUFJOTlBWEJvZjF5Z0VhMXRTeEI1cHBYZWE5T3lSRi9Q?=
+ =?utf-8?B?enRJOGVSVUtlQ2x6Z2pQUE5qZ2NBU3ZCS2x3QUlRVkxJa0wxQkNrVU1VUDdx?=
+ =?utf-8?B?M3VWQWJRaGFSM1NmbnF3bGpueUxoQmFFYys5aGI0bHd4RXd2aXNoNDFLU3lH?=
+ =?utf-8?B?cXhMUlJJQjhnQUhsUXBSY2xZUDR6Szh3ajQ2UG81bHA1WHgvQWV2eWtxYkIw?=
+ =?utf-8?B?UGNvaGM4UkNtRmtDTEZheXJJaWFCTHhSVG82UWxCd1FUaUN0KzNidkx0Vlp4?=
+ =?utf-8?B?Ync5cWF5RDJUYzV2UnFXdGhMU0ZGd0djSENsdWVjQk16Z1ExcVJOMCtsTWxZ?=
+ =?utf-8?B?dUtLcTdzcTUvbmgzQU5ONDlBa0VxZ0FUZGpIZnE3cnFUZURYa3JLWEhYNjBH?=
+ =?utf-8?B?eHUyY2xrTzhHa2hmUzQzR1NKSmd5WTBESUFzdlc0U2VZanJaNCtiTkkzTTRB?=
+ =?utf-8?B?SW5pSi8weFBlL3h2d3MyUE8wMHMyWWFQOUtrQVlwaEovY01vNmttT0tyRFFL?=
+ =?utf-8?B?UU5HUFpDRHZDcW9FZzNCQWIxcHRHK09zTVdoOHlkelZXNGh3Q3BpNmRXMXlk?=
+ =?utf-8?B?bzZYS1Ezc1Nvc01VdWdJR0hHWG5IRjhUWnJIMEhDZFIvQW1iUGZ2aDltZWZ2?=
+ =?utf-8?B?ekZhZytuQTdCQ3RaMmpQWGtpaURyVHZpK2ZINFhhU2NLWGcyUFZsemdzMU01?=
+ =?utf-8?Q?CHqhtFPkS51FBmhM=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C899393520DDC1448E6B6F4339CC13F8@namprd13.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: hammerspace.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b84a160c-80e7-4aaa-6a94-08da12881f8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 20:01:47.9648
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CG65jm8FjoZ3EDbdO8WbWoASlX4nK1FQsogT600/ugL7sqaE2mCHaHiaJXns8T89xhQdi8emJnNLaKmCLKKSiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5228
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 04:25, Michael Walle wrote:
-> The polynomial calculation function was moved into lib/ to be able to
-> reuse it. Move over to this one.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/hwmon/Kconfig   |  1 +
->   drivers/hwmon/bt1-pvt.c | 50 +++++++++++------------------------------
->   2 files changed, 14 insertions(+), 37 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 68a8a27ab3b7..be9773270e53 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -415,6 +415,7 @@ config SENSORS_ATXP1
->   config SENSORS_BT1_PVT
->   	tristate "Baikal-T1 Process, Voltage, Temperature sensor driver"
->   	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-> +	select POLYNOMIAL
->   	help
->   	  If you say yes here you get support for Baikal-T1 PVT sensor
->   	  embedded into the SoC.
-> diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-> index 74ce5211eb75..21ab172774ec 100644
-> --- a/drivers/hwmon/bt1-pvt.c
-> +++ b/drivers/hwmon/bt1-pvt.c
-> @@ -26,6 +26,7 @@
->   #include <linux/mutex.h>
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
-> +#include <linux/polynomial.h>
->   #include <linux/seqlock.h>
->   #include <linux/sysfs.h>
->   #include <linux/types.h>
-> @@ -65,7 +66,7 @@ static const struct pvt_sensor_info pvt_info[] = {
->    *     48380,
->    * where T = [-48380, 147438] mC and N = [0, 1023].
->    */
-> -static const struct pvt_poly __maybe_unused poly_temp_to_N = {
-> +static const struct polynomial __maybe_unused poly_temp_to_N = {
->   	.total_divider = 10000,
->   	.terms = {
->   		{4, 18322, 10000, 10000},
-> @@ -76,7 +77,7 @@ static const struct pvt_poly __maybe_unused poly_temp_to_N = {
->   	}
->   };
->   
-> -static const struct pvt_poly poly_N_to_temp = {
-> +static const struct polynomial poly_N_to_temp = {
->   	.total_divider = 1,
->   	.terms = {
->   		{4, -16743, 1000, 1},
-> @@ -97,7 +98,7 @@ static const struct pvt_poly poly_N_to_temp = {
->    * N = (18658e-3*V - 11572) / 10,
->    * V = N * 10^5 / 18658 + 11572 * 10^4 / 18658.
->    */
-> -static const struct pvt_poly __maybe_unused poly_volt_to_N = {
-> +static const struct polynomial __maybe_unused poly_volt_to_N = {
->   	.total_divider = 10,
->   	.terms = {
->   		{1, 18658, 1000, 1},
-> @@ -105,7 +106,7 @@ static const struct pvt_poly __maybe_unused poly_volt_to_N = {
->   	}
->   };
->   
-> -static const struct pvt_poly poly_N_to_volt = {
-> +static const struct polynomial poly_N_to_volt = {
->   	.total_divider = 10,
->   	.terms = {
->   		{1, 100000, 18658, 1},
-> @@ -113,31 +114,6 @@ static const struct pvt_poly poly_N_to_volt = {
->   	}
->   };
->   
-> -/*
-> - * Here is the polynomial calculation function, which performs the
-> - * redistributed terms calculations. It's pretty straightforward. We walk
-> - * over each degree term up to the free one, and perform the redistributed
-> - * multiplication of the term coefficient, its divider (as for the rationale
-> - * fraction representation), data power and the rational fraction divider
-> - * leftover. Then all of this is collected in a total sum variable, which
-> - * value is normalized by the total divider before being returned.
-> - */
-> -static long pvt_calc_poly(const struct pvt_poly *poly, long data)
-> -{
-> -	const struct pvt_poly_term *term = poly->terms;
-> -	long tmp, ret = 0;
-> -	int deg;
-> -
-> -	do {
-> -		tmp = term->coef;
-> -		for (deg = 0; deg < term->deg; ++deg)
-> -			tmp = mult_frac(tmp, data, term->divider);
-> -		ret += tmp / term->divider_leftover;
-> -	} while ((term++)->deg);
-> -
-> -	return ret / poly->total_divider;
-> -}
-> -
->   static inline u32 pvt_update(void __iomem *reg, u32 mask, u32 data)
->   {
->   	u32 old;
-> @@ -324,9 +300,9 @@ static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   	} while (read_seqretry(&cache->data_seqlock, seq));
->   
->   	if (type == PVT_TEMP)
-> -		*val = pvt_calc_poly(&poly_N_to_temp, data);
-> +		*val = polynomial_calc(&poly_N_to_temp, data);
->   	else
-> -		*val = pvt_calc_poly(&poly_N_to_volt, data);
-> +		*val = polynomial_calc(&poly_N_to_volt, data);
->   
->   	return 0;
->   }
-> @@ -345,9 +321,9 @@ static int pvt_read_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   		data = FIELD_GET(PVT_THRES_HI_MASK, data);
->   
->   	if (type == PVT_TEMP)
-> -		*val = pvt_calc_poly(&poly_N_to_temp, data);
-> +		*val = polynomial_calc(&poly_N_to_temp, data);
->   	else
-> -		*val = pvt_calc_poly(&poly_N_to_volt, data);
-> +		*val = polynomial_calc(&poly_N_to_volt, data);
->   
->   	return 0;
->   }
-> @@ -360,10 +336,10 @@ static int pvt_write_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   
->   	if (type == PVT_TEMP) {
->   		val = clamp(val, PVT_TEMP_MIN, PVT_TEMP_MAX);
-> -		data = pvt_calc_poly(&poly_temp_to_N, val);
-> +		data = polynomial_calc(&poly_temp_to_N, val);
->   	} else {
->   		val = clamp(val, PVT_VOLT_MIN, PVT_VOLT_MAX);
-> -		data = pvt_calc_poly(&poly_volt_to_N, val);
-> +		data = polynomial_calc(&poly_volt_to_N, val);
->   	}
->   
->   	/* Serialize limit update, since a part of the register is changed. */
-> @@ -522,9 +498,9 @@ static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
->   		return -ETIMEDOUT;
->   
->   	if (type == PVT_TEMP)
-> -		*val = pvt_calc_poly(&poly_N_to_temp, data);
-> +		*val = polynomial_calc(&poly_N_to_temp, data);
->   	else
-> -		*val = pvt_calc_poly(&poly_N_to_volt, data);
-> +		*val = polynomial_calc(&poly_N_to_volt, data);
->   
->   	return 0;
->   }
-
+T24gV2VkLCAyMDIyLTAzLTMwIGF0IDExOjE3IC0wNzAwLCBMaW51cyBUb3J2YWxkcyB3cm90ZToN
+Cj4gT24gVHVlLCBNYXIgMjksIDIwMjIgYXQgMTI6MzYgUE0gVHJvbmQgTXlrbGVidXN0DQo+IDx0
+cm9uZG15QGhhbW1lcnNwYWNlLmNvbT4gd3JvdGU6DQo+ID4gDQo+ID4gLSBSZWFkZGlyIGZpeGVz
+IHRvIGltcHJvdmUgY2FjaGVhYmlsaXR5IG9mIGxhcmdlIGRpcmVjdG9yaWVzIHdoZW4NCj4gPiB0
+aGVyZQ0KPiA+IMKgIGFyZSBtdWx0aXBsZSByZWFkZXJzIGFuZCB3cml0ZXJzLg0KPiANCj4gU28g
+SSBvbmx5IHRvb2sgYSBsb29rIGF0IHRoaXMgcGFydCBub3cuIEkndmUgb2J2aW91c2x5IGFscmVh
+ZHkgcHVsbGVkDQo+IGl0LCBidXQgdGhhdCB1c2Ugb2YgJ3h4aGFzaCgpJyBqdXN0IG1hZGUgbWUg
+Z28gIldoYWFhPyINCj4gDQo+IEl0J3MgY2xhaW1lZCB0aGF0IGl0J3MgdXNlZCBiZWNhdXNlIG9m
+IGl0cyBleHRyZW1lIHBlcmZvcm1hbmNlLCBidXQNCj4gdGhlIHBlcmZvcm1hbmNlIG51bWJlcnMg
+Y29tZSBmcm9tIHVzaW5nIGl0IGFzIGEgYmxvY2sgaGFzaC4NCj4gDQo+IFRoYXQncyBub3Qgd2hh
+dCBuZnMgZG9lcy4NCj4gDQo+IFRoZSBuZnMgY29kZSBqdXN0IGRvZXMNCj4gDQo+IMKgwqDCoCB4
+eGhhc2goJmNvb2tpZSwgc2l6ZW9mKGNvb2tpZSksIDApICYgTkZTX1JFQURESVJfQ09PS0lFX01B
+U0s7DQo+IA0KPiB3aGVyZSB0aGF0ICJjb29raWUiIGlzIGp1c3QgYSA2NC1iaXQgZW50aXR5LiBB
+bmQgdGhlbiBpdCBtYXNrcyBvZmYNCj4gZXZlcnl0aGluZyBidXQgMTggYml0cy4NCj4gDQo+IElz
+IHRoYXQgKnJlYWxseSogYXBwcm9wcmlhdGUgdXNlIG9mIGEgbmV3IGhhc2ggZnVuY3Rpb24/DQo+
+IA0KPiBXaHkgaXMgdGhpcyBub3QganVzdCBkb2luZw0KPiANCj4gwqAgI2luY2x1ZGUgPGhhc2gu
+aD4NCj4gDQo+IMKgIGhhc2hfNjQoY29va2llLCAxOCk7DQo+IA0KPiB3aGljaCBpcyBhIGxvdCBt
+b3JlIG9idmlvdXMgdGhhbiB4eGhhc2goKS4NCj4gDQo+IElmIHRoZXJlIHJlYWxseSBhcmUgc29t
+ZSBzZXJpb3VzIHByb2JsZW1zIHdpdGggdGhlIHBlcmZlY3RseSBzdGFuZGFyZA0KPiBoYXNoKCkg
+ZnVuY3Rpb25hbGl0eSwgSSB0aGluayB5b3Ugc2hvdWxkIGRvY3VtZW50IHRoZW0uDQo+IA0KPiBC
+ZWNhdXNlIGp1c3QgcmFuZG9tbHkgcGlja2luZyB4eGhhc2goKSB3aXRob3V0IGV4cGxhaW5pbmcg
+X3doeV8geW91DQo+IGNhbid0IGp1c3QgdXNlIHRoZSBzYW1lIHNpbXBsZSB0aGluZyB3ZSB1c2Ug
+ZWxzZXdoZXJlIGlzIHZlcnkgb2RkLg0KPiANCj4gT3IgcmF0aGVyLCB3aGVuIHRoZSBvbmx5IGRv
+Y3VtZW50YXRpb24gaXMgInBlcmZvcm1hbmNlIiwgdGhlbiBJIHRoaW5rDQo+IHRoZSByZWd1bGFy
+ICJoYXNoXzY0KCkiIGlzIHRoZSBvYnZpb3VzIGFuZCB0cml2aWFsIGNob2ljZS4NCj4gDQo+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTGludXMNCg0KTXkgbWFpbiB3b3JyeSB3
+YXMgdGhhdCBoYXNoXzY0KCkgd291bGQgaGF2ZSB0b28gbWFueSBjb2xsaXNpb25zLiBTaW5jZQ0K
+dGhpcyBpcyB1c2luZyBjdWNrb28gbmVzdGluZywgdGhhdCB3b3VsZCBiZSBhIHByb2JsZW0uDQoN
+CkkgZGlkIHNvbWUgcXVpY2sgc3R1ZGllcyBhZnRlciBJIGdvdCB5b3VyIGVtYWlsLCBhbmQgaXQg
+c2VlbXMgYXMgaWYgbXkNCmNvbmNlcm5zIHdlcmUgdW5mb3VuZGVkLiBJJ3ZlIHRlc3RlZCBib3Ro
+IGEgbGluZWFyIGluZGV4IGFuZCBhIHNhbXBsZQ0Kb2YgZXh0NCBnZXRkZW50cyBvZmZzZXRzLg0K
+V2hpbGUgdGhlIHNhbXBsZSBvZiBleHQ0IG9mZnNldHMgZGlkIHNob3cgYSBsYXJnZXIgbnVtYmVy
+IG9mIGNvbGxpc2lvbnMNCnRoYW4gYSBzaW1wbGUgbGluZWFyIGluZGV4LCBpdCB3YXNuJ3QgdG9v
+IHRlcnJpYmxlICgzIGNvbGxpc2lvbnMgaW4gYQ0Kc2FtcGxlIG9mIDkwMDAgZW50cmllcykuDQpU
+aGUgbGluZWFyIGluZGV4IHNob3dlZCBubyBjb2xsaXNpb25zIHVwIHRvIGFib3V0IDEwMDAwMCBl
+bnRyaWVzLg0KDQpTbywgSSdkIGJlIE9LIHdpdGggY2hhbmdpbmcgdG8gaGFzaF82NCgpIGFuZCB3
+aWxsIHF1ZXVlIHVwIGEgYnVnZml4IGZvcg0KaXQuIEkgc2hvdWxkIGhhdmUgZG9uZSB0aGlzIHN0
+dWR5IGVhcmxpZXIuLi4NCg0KLS0gDQpUcm9uZCBNeWtsZWJ1c3QNCkxpbnV4IE5GUyBjbGllbnQg
+bWFpbnRhaW5lciwgSGFtbWVyc3BhY2UNCnRyb25kLm15a2xlYnVzdEBoYW1tZXJzcGFjZS5jb20N
+Cg0KDQo=

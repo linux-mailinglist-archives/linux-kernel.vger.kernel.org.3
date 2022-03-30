@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230234EBEE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496C64EBEE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245442AbiC3KiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S245469AbiC3Kil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245435AbiC3KiV (ORCPT
+        with ESMTP id S245444AbiC3Kij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:38:21 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4602BB23;
-        Wed, 30 Mar 2022 03:36:37 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 1464B1F41835
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648636590;
-        bh=yjx1kf6POnDpobtQKgZbaVsr1GNaW5K6KF98SWEVWiM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=STXGHTZaL+HoSt7mA/RAo1TnYAHbOJ6tBgq4FSPAg8mEBjbHhc06wB6W33kfd7urQ
-         gFg1Cqsu+u6hdBBSR1U6qOjnPacSYejBxGIYdQZL0osJPgS7lnJ5OZDdUFXwFeOuSG
-         qmQrV0CyrS67EOCOJM4B6YZvuGYnZchS/YNwSEjzYvJ/A7wB6eNCVrLqSr1KeZmmPP
-         VdG+modtas8Ru9tlRQSwabg0TpXkLAvn/TRy1iBWdtTCrRq0C0MKBHpsbmzVcExX6q
-         USaswk6D+YAWBg1kEJU/EfolPlM24QHndy0aPj8eUWd4XKm6Wa+G7x34K2we/+BAUT
-         lo8fLk1z2Hkfg==
-Message-ID: <bf851834-7812-13f1-a382-1f64078ff2a5@collabora.com>
-Date:   Wed, 30 Mar 2022 13:36:27 +0300
+        Wed, 30 Mar 2022 06:38:39 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0756C2C127;
+        Wed, 30 Mar 2022 03:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648636614; x=1680172614;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=AXCYTWaniDbWfm4aIh5x4nUzNPwz+GK53Urwx7FShis=;
+  b=FxT15oesqYwPPfV3vfjlOsDDsKmRO4G4fwWcE4cClIvMySYKzopNcmi3
+   TQGxNmQQk4ql14MpZd9wcknWqpXjTE5oeu7p/+1aCE6eZhf+eBnWsyI0N
+   SBPat+HhCRk6Jimod0E9oivKks0bOCwM7o8uTInhjkAf8Kt1h5F7N/IKD
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Mar 2022 03:36:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 03:36:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 30 Mar 2022 03:36:52 -0700
+Received: from [10.216.27.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 30 Mar
+ 2022 03:36:48 -0700
+Subject: Re: [PATCH V8 6/7] arm64: dts: qcom: pm8008-regulators: Add base dts
+ file for pm8008 regulators
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1648209491-30165-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1648209491-30165-7-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n50ApgiYbxHbU072s5-QLAmEppjDH9brKbfHja7hiue4xA@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <812d47d1-fd81-b635-67d6-58bdb0dbe79b@quicinc.com>
+Date:   Wed, 30 Mar 2022 16:06:44 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v5 2/4] memory: tegra: Add MC error logging on tegra186
- onward
+In-Reply-To: <CAE-0n50ApgiYbxHbU072s5-QLAmEppjDH9brKbfHja7hiue4xA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-3-amhetre@nvidia.com>
- <9ab1a77c-82e6-39be-9b90-b394037fb574@gmail.com>
- <a62bb479-fed4-ada0-ac61-fb67a663a998@nvidia.com>
- <4ea801f4-7929-148d-4e69-d4126a9dfbf7@collabora.com>
- <44235c65-160c-04c7-294d-16b13d25605c@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <44235c65-160c-04c7-294d-16b13d25605c@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,80 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 13:16, Ashish Mhetre wrote:
-> 
-> 
-> On 3/30/2022 5:31 AM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
+
+On 3/25/2022 11:13 PM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-03-25 04:58:10)
+>> Add base DTS file for pm8008 regulators with 7 ldo nodes.
 >>
->>
->> On 3/22/22 20:34, Ashish Mhetre wrote:
->>>>> +     switch (status & mc->soc->int_channel_mask) {
->>>>> +     case BIT(0):
->>>>> +             *mc_channel = 0;
->>>>> +             break;
->>>>> +
->>>>> +     case BIT(1):
->>>>> +             *mc_channel = 1;
->>>>> +             break;
->>>>> +
->>>>> +     case BIT(2):
->>>>> +             *mc_channel = 2;
->>>>> +             break;
->>>>> +
->>>>> +     case BIT(3):
->>>>> +             *mc_channel = 3;
->>>>> +             break;
->>>>> +
->>>>> +     case BIT(24):
->>>>> +             *mc_channel = MC_BROADCAST_CHANNEL;
->>>>> +             break;
->>>>> +
->>>>> +     default:
->>>>> +             pr_err("Unknown interrupt source\n");
->>>>
->>>> dev_err_ratelimited("unknown interrupt channel 0x%08x\n", status) and
->>>> should be moved to the common interrupt handler.
->>>>
->>> So return just error from default case and handle error in common
->>> interrupt handler with this print, right? I'll update this in next
->>> version.
->>
->> Yes, just move out the common print.
->>
->> Although, you could parameterize the shift per SoC and then have a
->> common helper that does "status >> intmask_chan_shift", couldn't you?
-> 
-> Do you mean shift to get the channel, like
-> "channel = status >> intmask_chan_shift"?
-> So to get rid of this callback completely and adding a variable in
-> tegra_mc_soc for intmask_chan_shift, right? Or compute shift in this
-> callback and use it in common handler?
+>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>> ---
+>> Changes in V8:
+>>   - Previously added pm8008 dtsi file is split into 2 files, one for infra
+>>     and other for regulators.
+> Does pm8008 come in one package that gets soldered down on the board? If
+> so, this should be one file instead of two, i.e. pm8008.dtsi. We don't
+> make a -regulators dtsi file for other pmics.
 
-Add variable to tegra_mc_soc.
 
-The intmask_chan_shift is a misnomer, perhaps something like
-status_reg_chan_shift will be a better name.
+Yes, pm8008 is a single chip.
 
-> If we are to remove this callback then how to handle unknown interrupt
-> channel error?
+You're right I should add only one pm8008.dtsi (including regulators)
 
-Create a common helper function that returns ID of the raised channel or
-errorno if not bits are set.
-
-> Also we want to handle interrupts on one channel at a time and then
-> clear it from status register. There can be interrupts on multiple
-> channel. So multiple bits from status will be set. Hence it will be
-> hard to parameterize shift such that it gives appropriate channel.
-> So I think current approach is fine. Please correct me if I am wrong
-> somewhere.
-
-You may do the following:
-
-1. find the first channel bit set in the status reg
-2. handle that channel
-3. clear only the handled status bit, don't clear the other bits
-4. return from interrupt
-
-If there are other bits set, then interrupt handler will fire again and
-next channel will be handled.

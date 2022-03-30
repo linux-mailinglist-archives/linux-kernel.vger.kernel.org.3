@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD384ECA68
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3444ECA6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348238AbiC3RRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S1349214AbiC3RSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241641AbiC3RRK (ORCPT
+        with ESMTP id S1344623AbiC3RSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:17:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9072D2FE7A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648660524; x=1680196524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LOllQDeH3/BqjzN7xPXL9ZdN1+34m8QFdYvpxzw/BXM=;
-  b=QFUa0crEkZggiLbXovCzDc9EIb6iG7RNQvn1hwsRIVo36zc1edcn0FBU
-   gRmdHj5GwB7I8QnUSZDKZYtyTDgvrDL1882GhSfy4mY36ACjgNv1plmdE
-   6USSwzLC/1b88vgF8iq1r8Eo1M/ceZfvdzWXf4S8lKP10bO39+tcvtOni
-   y+PIN/EY0kYL9O4raCtG+wNWGUqxrzcQnskHqD5s7Ggrldh6HFu6KMUu6
-   jnCH74GjSsr0C5LF4qCFn9Ym3lrICqdi8wIWz8N8rrg1cSMZ2lD16q3E0
-   cJoiElGOmcPhLmRIeiZPI01MEUP6kGc5PUZpxc1GsVjaYWQseqxcOiyKs
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259782233"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="259782233"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:15:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="788080026"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2022 10:15:22 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZbuk-0000E3-78;
-        Wed, 30 Mar 2022 17:15:22 +0000
-Date:   Thu, 31 Mar 2022 01:14:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Garry <john.garry@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: drivers/scsi/hisi_sas/hisi_sas_main.c:445 hisi_sas_task_deliver()
- warn: inconsistent indenting
-Message-ID: <202203310159.dWb4ZUaK-lkp@intel.com>
+        Wed, 30 Mar 2022 13:18:08 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FE76CA57
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:16:22 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c23so21100875plo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cp6lFLTphQ3Deq4H0+a0uRQ+P8BapY6dZKm1M1RzBpk=;
+        b=BF7YAqQUmzdmP/sXeEGABfOEXWbxtX6tKcEXAZjjmEWZFTkJIBPIitHJTcjm7l5nFC
+         6XqNYe9QdQ1+w4ebzz9Usy1Xg3NCAsdpCKZDyvQpqrIToxGHADAzyFtdDv0mLAptTylA
+         pud92Bg7hiZMLJVI0rCd29OivOvHVr+a13gKg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cp6lFLTphQ3Deq4H0+a0uRQ+P8BapY6dZKm1M1RzBpk=;
+        b=r50Tz+V8tIzgAm7ZYmHcYnBXHTC4yKh7T6ifaSkYoUbZx/qsZEsnlSt7SJfWpFnuNc
+         PqP6Rk6N0j2Pv40Nf3PQHh2bfV9n9OMkYmUQD8vD8V4bLApFUexDdMn48u/OCOWa8O09
+         4rrMwaqbsDqwhHoFRrXApJvv3Wq67lbmmUSYPp91p+3pmrQnu2y+c/MEjRoahPH7Ibf8
+         N06FVLatVr2Zy8pHN//rvqpF20RxCT+YsNJOVmPBc5gxaSVkCFVZn+BATRfz0MrgQPaM
+         ukiYNp4f5SnePpxkJdVbVZ/AKBy5A+OkfY+1exHwiSCfTyQIOb2Er5OKqUarKzDZhWHA
+         x/Lw==
+X-Gm-Message-State: AOAM530DTmA99/7WOPdt8HxcnCJBC35wvH5I+pnEGXZnouYvjxUPWjKi
+        QPNsB2HOk2NuJnY9tGvjg5Gihw==
+X-Google-Smtp-Source: ABdhPJxqKrJtMh6jDf1VRoyl3BE9nogtzaH0F2a5nx8LdUyh6+nNVTBmTTzf1r+/xO5gfOIAOQdkBg==
+X-Received: by 2002:a17:903:248:b0:155:e8c6:8770 with SMTP id j8-20020a170903024800b00155e8c68770mr23714396plh.129.1648660581408;
+        Wed, 30 Mar 2022 10:16:21 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d50d:daac:acf3:cda6])
+        by smtp.gmail.com with UTF8SMTPSA id s3-20020a056a00194300b004f6da3a1a3bsm24881569pfk.8.2022.03.30.10.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 10:16:20 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 10:16:19 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>
+Cc:     agross@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
+Message-ID: <YkSQY5NSYcov21Ig@google.com>
+References: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,92 +70,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d888c83fcec75194a8a48ccd283953bdba7b2550
-commit: 095478a6e5bf590f2bbf341569eb25173c9c5f32 scsi: hisi_sas: Use libsas internal abort support
-date:   2 weeks ago
-config: powerpc64-randconfig-m031-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310159.dWb4ZUaK-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
+On Wed, Mar 30, 2022 at 05:09:46PM +0800, Mars Chen wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Subject: CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
 
-smatch warnings:
-drivers/scsi/hisi_sas/hisi_sas_main.c:445 hisi_sas_task_deliver() warn: inconsistent indenting
+No CHROMIUM tag for upstream posts.
 
-vim +445 drivers/scsi/hisi_sas/hisi_sas_main.c
+> Initial attempt at Gelarshie device tree.
 
-b3cce125cb1e2e Xiang Chen  2019-02-06  393  
-dc313f6b125b09 John Garry  2021-12-15  394  static
-dc313f6b125b09 John Garry  2021-12-15  395  void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
-dc313f6b125b09 John Garry  2021-12-15  396  			   struct hisi_sas_slot *slot,
-dc313f6b125b09 John Garry  2021-12-15  397  			   struct hisi_sas_dq *dq,
-095478a6e5bf59 John Garry  2022-03-11  398  			   struct hisi_sas_device *sas_dev)
-42e7a69368a585 John Garry  2015-11-18  399  {
-42e7a69368a585 John Garry  2015-11-18  400  	struct hisi_sas_cmd_hdr *cmd_hdr_base;
-dc313f6b125b09 John Garry  2021-12-15  401  	int dlvry_queue_slot, dlvry_queue;
-dc313f6b125b09 John Garry  2021-12-15  402  	struct sas_task *task = slot->task;
-fa222db0b03689 Xiang Chen  2018-05-09  403  	int wr_q_index;
-42e7a69368a585 John Garry  2015-11-18  404  
-e9dc5e11c97ee9 Xiang Chen  2020-01-20  405  	spin_lock(&dq->lock);
-897cc769bcc092 John Garry  2019-08-05  406  	wr_q_index = dq->wr_point;
-897cc769bcc092 John Garry  2019-08-05  407  	dq->wr_point = (dq->wr_point + 1) % HISI_SAS_QUEUE_SLOTS;
-fa222db0b03689 Xiang Chen  2018-05-09  408  	list_add_tail(&slot->delivery, &dq->list);
-e9dc5e11c97ee9 Xiang Chen  2020-01-20  409  	spin_unlock(&dq->lock);
-e9dc5e11c97ee9 Xiang Chen  2020-01-20  410  	spin_lock(&sas_dev->lock);
-4fefe5bbf599d6 Xiang Chen  2019-02-06  411  	list_add_tail(&slot->entry, &sas_dev->list);
-e9dc5e11c97ee9 Xiang Chen  2020-01-20  412  	spin_unlock(&sas_dev->lock);
-42e7a69368a585 John Garry  2015-11-18  413  
-b1a49412f0aed7 Xiang Chen  2017-06-14  414  	dlvry_queue = dq->id;
-fa222db0b03689 Xiang Chen  2018-05-09  415  	dlvry_queue_slot = wr_q_index;
-42e7a69368a585 John Garry  2015-11-18  416  
-4fefe5bbf599d6 Xiang Chen  2019-02-06  417  	slot->device_id = sas_dev->device_id;
-42e7a69368a585 John Garry  2015-11-18  418  	slot->dlvry_queue = dlvry_queue;
-42e7a69368a585 John Garry  2015-11-18  419  	slot->dlvry_queue_slot = dlvry_queue_slot;
-42e7a69368a585 John Garry  2015-11-18  420  	cmd_hdr_base = hisi_hba->cmd_hdr[dlvry_queue];
-42e7a69368a585 John Garry  2015-11-18  421  	slot->cmd_hdr = &cmd_hdr_base[dlvry_queue_slot];
-dc313f6b125b09 John Garry  2021-12-15  422  
-42e7a69368a585 John Garry  2015-11-18  423  	task->lldd_task = slot;
-42e7a69368a585 John Garry  2015-11-18  424  
-42e7a69368a585 John Garry  2015-11-18  425  	memset(slot->cmd_hdr, 0, sizeof(struct hisi_sas_cmd_hdr));
-f557e32c0023ea Xiaofei Tan 2017-06-29  426  	memset(hisi_sas_cmd_hdr_addr_mem(slot), 0, HISI_SAS_COMMAND_TABLE_SZ);
-d380f55503ed28 Xiang Chen  2019-08-05  427  	memset(hisi_sas_status_buf_addr_mem(slot), 0,
-d380f55503ed28 Xiang Chen  2019-08-05  428  	       sizeof(struct hisi_sas_err_record));
-42e7a69368a585 John Garry  2015-11-18  429  
-42e7a69368a585 John Garry  2015-11-18  430  	switch (task->task_proto) {
-66ee999b4e43e1 John Garry  2015-11-18  431  	case SAS_PROTOCOL_SMP:
-a2b3820bddfbff Xiang Chen  2018-05-09  432  		hisi_sas_task_prep_smp(hisi_hba, slot);
-66ee999b4e43e1 John Garry  2015-11-18  433  		break;
-42e7a69368a585 John Garry  2015-11-18  434  	case SAS_PROTOCOL_SSP:
-78bd2b4f6e7c05 Xiaofei Tan 2018-05-21  435  		hisi_sas_task_prep_ssp(hisi_hba, slot);
-42e7a69368a585 John Garry  2015-11-18  436  		break;
-42e7a69368a585 John Garry  2015-11-18  437  	case SAS_PROTOCOL_SATA:
-42e7a69368a585 John Garry  2015-11-18  438  	case SAS_PROTOCOL_STP:
-095478a6e5bf59 John Garry  2022-03-11  439  	case SAS_PROTOCOL_STP_ALL:
-a2b3820bddfbff Xiang Chen  2018-05-09  440  		hisi_sas_task_prep_ata(hisi_hba, slot);
-6f2ff1a1311e61 John Garry  2016-01-26  441  		break;
-095478a6e5bf59 John Garry  2022-03-11  442  	case SAS_PROTOCOL_INTERNAL_ABORT:
-095478a6e5bf59 John Garry  2022-03-11  443  		hisi_sas_task_prep_abort(hisi_hba, slot);
-dc313f6b125b09 John Garry  2021-12-15  444  		break;
-dc313f6b125b09 John Garry  2021-12-15 @445  	fallthrough;
-42e7a69368a585 John Garry  2015-11-18  446  	default:
-095478a6e5bf59 John Garry  2022-03-11  447  		return;
-42e7a69368a585 John Garry  2015-11-18  448  	}
-42e7a69368a585 John Garry  2015-11-18  449  
-1c09b663168bb5 Xiaofei Tan 2018-07-18  450  	WRITE_ONCE(slot->ready, 1);
-42e7a69368a585 John Garry  2015-11-18  451  
-0e4620856b8933 John Garry  2021-12-15  452  	spin_lock(&dq->lock);
-0e4620856b8933 John Garry  2021-12-15  453  	hisi_hba->hw->start_delivery(dq);
-0e4620856b8933 John Garry  2021-12-15  454  	spin_unlock(&dq->lock);
-42e7a69368a585 John Garry  2015-11-18  455  }
-42e7a69368a585 John Garry  2015-11-18  456  
+This is not very useful. If you don't want to reveal much information
+about an unreleased device you could say something generic like
+"Add device tree for Gelarshie, a trogdor variant".
 
-:::::: The code at line 445 was first introduced by commit
-:::::: dc313f6b125b095d3d2683d94d5f69c8dc9bdc36 scsi: hisi_sas: Factor out task prep and delivery code
+> BUG=b:225756600
+> TEST=emerge-strongbad chromeos-kernel-5_4
 
-:::::: TO: John Garry <john.garry@huawei.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+drop these
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../dts/qcom/sc7180-trogdor-gelarshie-r0.dts  |  15 +
+>  .../dts/qcom/sc7180-trogdor-gelarshie.dtsi    | 304 ++++++++++++++++++
+>  3 files changed, 320 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index f9e6343acd03..cf8f88b065c3 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -57,6 +57,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3-lte.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-gelarshie-r0.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r4.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
+> new file mode 100644
+> index 000000000000..027d6d563a5f
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Gelarshie board device tree source
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "sc7180-trogdor-gelarshie.dtsi"
+> +
+> +/ {
+> +	model = "Google Gelarshie (rev0+)";
+> +	compatible = "google,gelarshie", "qcom,sc7180";
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
+> new file mode 100644
+> index 000000000000..842f6cac6c27
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
+> @@ -0,0 +1,304 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Gelarshie board device tree source
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+> +
+> +#include "sc7180.dtsi"
+> +#include "sc7180-trogdor-mipi-camera.dtsi"
+
+drop the mipi camera include, it is not upstream
+
+> +
+> +ap_ec_spi: &spi6 {};
+> +ap_h1_spi: &spi0 {};
+> +
+> +#include "sc7180-trogdor.dtsi"
+> +#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
+> +
+> +/* Deleted nodes from trogdor.dtsi */
+> +
+> +/delete-node/ &alc5682;
+> +/delete-node/ &pp3300_codec;
+> +
+> +/ {
+> +	/* BOARD-SPECIFIC TOP LEVEL NODES */
+> +
+> +	adau7002: audio-codec-1 {
+> +		compatible = "adi,adau7002";
+> +		IOVDD-supply = <&pp1800_l15a>;
+> +		wakeup-delay-ms = <80>;
+> +		#sound-dai-cells = <0>;
+> +	};
+> +};
+> +
+> +&backlight {
+> +	pwms = <&cros_ec_pwm 0>;
+> +};
+> +
+> +&camcc {
+> +	status = "okay";
+> +};
+> +
+> +&cros_ec {
+> +	cros_ec_proximity: proximity {
+> +		compatible = "google,cros-ec-mkbp-proximity";
+> +		label = "proximity-wifi";
+> +	};
+> +};
+> +
+> +ap_ts_pen_1v8: &i2c4 {
+> +	status = "okay";
+> +	clock-frequency = <400000>;
+> +
+> +	ap_ts: touchscreen@5d {
+> +		compatible = "goodix,gt7375p";
+> +		reg = <0x5d>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
+> +
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
+> +
+> +		vdd-supply = <&pp3300_ts>;
+> +	};
+> +};
+> +
+> +&i2c7 {
+> +	status = "disabled";
+> +};
+> +
+> +&i2c9 {
+> +	status = "disabled";
+> +};
+> +
+> +&mdp {
+> +	chromium-enable-overlays;
+> +};
+
+I can't find documentation for 'chromium-enable-overlays', what is this
+supposed to do?
+
+> +
+> +&panel {
+> +	compatible = "edp-panel";
+> +};
+> +
+> +&pm6150_adc {
+> +	skin-temp-thermistor@4e {
+> +		reg = <ADC5_AMUX_THM2_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time = <200>;
+> +	};
+> +};
+> +
+> +&pm6150_adc_tm {
+> +	status = "okay";
+> +
+> +	skin-temp-thermistor@1 {
+> +		reg = <1>;
+> +		io-channels = <&pm6150_adc ADC5_AMUX_THM2_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time-us = <200>;
+> +	};
+> +};
+
+The thermistor is currently unused, drop it and add it later when you
+add the corresponding thermal zone.
+
+> +
+> +&pp1800_uf_cam {
+> +	status = "okay";
+> +};
+> +
+> +&pp1800_wf_cam {
+> +	status = "okay";
+> +};
+> +
+> +&pp2800_uf_cam {
+> +	status = "okay";
+> +};
+> +
+> +&pp2800_wf_cam {
+> +	status = "okay";
+> +};
+> +
+> +&pp3300_dx_edp {
+> +	gpio = <&tlmm 67 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&sdhc_2 {
+> +	status = "okay";
+> +};
+> +
+> +&sn65dsi86_out {
+> +	data-lanes = <0 1 2 3>;
+> +};
+> +
+> +&sound {
+> +	compatible = "google,sc7180-coachz";
+
+Is 'sc7180-coachz' intended because the config is the same as for
+coachz or should this be 'sc7180-gelarshie'?

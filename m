@@ -2,150 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA404EB9A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99CC4EB9AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242541AbiC3E2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 00:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        id S242552AbiC3Ebb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 00:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbiC3E2n (ORCPT
+        with ESMTP id S233751AbiC3Eb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 00:28:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F748DF58
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648614416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nKA9pWHMxnbapsXj7AFZXsdri/J+aqlfWUZEkrFaXOs=;
-        b=iGJDsWQ/xobzWIE0YWfo60CRuBoGTpKYLMumoqW5OW4K95DNTaO/hvgY7rud2LScJ2Qcxi
-        QQwlIJOFy+FaPMs0nM5H0taFjHUVyHsaqeBM4D5ot2+jxHFcMg2yhwdKuKLP3HI3/s9wnC
-        SY6HCkDBwsKDcyJLgV4J+A/n81StKW0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-351-_GHxSGqaMuqgXZd0IZLNYg-1; Wed, 30 Mar 2022 00:26:54 -0400
-X-MC-Unique: _GHxSGqaMuqgXZd0IZLNYg-1
-Received: by mail-qt1-f200.google.com with SMTP id h11-20020a05622a170b00b002e0769b9018so16485650qtk.14
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:26:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nKA9pWHMxnbapsXj7AFZXsdri/J+aqlfWUZEkrFaXOs=;
-        b=S3FmJ8Z3MCkhpQWCBQYQLX03oUgYsJHkuwajNps5hdH+rC3QEz783IkshYGDM3OuBH
-         b53/h56cUOa1CGRMlZ19NewZmoA9YsLznzFT7sqNFWF5ADAWELgXyanpbE7hDYXu81cH
-         BOTId3N1bL/5nlmP+KlH88FLtt5K9p1xYkN9rMqJ1PLxuEEbR7YTck3TkT/MwQpa9K15
-         nis+5vadKyRmMAzo44nhaIYjlUx2k2GkWC2f3v1aZWFCvv5vU76lPPa7HDt24u+kgnA5
-         mm3XS0ei00osjjgT7LNIStc8Li4zt6DA4Ixh7Nmay9mvW3gIe0mj7SycNl9JM5N5N7R+
-         ztLA==
-X-Gm-Message-State: AOAM530MmALFpy6IOk41hEu+0TLxgNacKuvN71Y2auZP1mSnRDmj28is
-        XepCZ758GJzYokR5DtBTOGxoU+6dFjfXsI7E9LwpBf5ePaHIHBLbvfwICudZFnQ5YNy2hESsr5Z
-        R1sUYp7NlT11Y++vuEKnF7UDb
-X-Received: by 2002:a05:6214:230a:b0:435:4f89:3c0e with SMTP id gc10-20020a056214230a00b004354f893c0emr29007847qvb.92.1648614414344;
-        Tue, 29 Mar 2022 21:26:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwDTTnL5kXiRn6YJo7R0KGe6AX6xPcJu4FBJYFEXOnIiaFh60A0fM3hMylzfAQAXg6eHu8dUQ==
-X-Received: by 2002:a05:6214:230a:b0:435:4f89:3c0e with SMTP id gc10-20020a056214230a00b004354f893c0emr29007830qvb.92.1648614413978;
-        Tue, 29 Mar 2022 21:26:53 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm17321177qtx.58.2022.03.29.21.26.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 21:26:53 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 21:26:49 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Wed, 30 Mar 2022 00:31:29 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E22186CB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:29:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gXBr0NwKlfbrBJ/jAzL2Cc+INCkuQa8dQ6GM/EKpRWYGdIANBbKTNUdXzvlzUM7s4W5XMU5vP0p6x04S3eOwTBpOn0wnJ881oznCix+7xb402HXUspkCgf8mMhf0RYidNX157lLQNmEnG7QbeRFLqXYfdEXHULiGycwAbqvjQdD2yplQXe3tLY+Y4+OPxqmjhXT0Ae3JwanCF2YPVl32Fl2E4m1e20vR6oFAy2ChwQkE40jNqxyL8/39yXYMLQrEqhp5bsJe0V8nodbzaiKCGi7+JtJSKAQgiW/ry5P+9YijC/Xub6K+2FVzpF33hl2Pz1rmX6uwXewW1pwiBywCyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0RruNfurWyES/3W8FL72ZJZYFwmAHkM0FpnqLlgsCEQ=;
+ b=Peze90Q/88aUAF7bzOPOpp5DxcAcAhcAGPAgu5/nxMkVnAE1jt3RWE9eP75EZyoOWrO7DbOptFaWdBxecjBw8ddEu5pyGCI/lheF5/vqp3qL+3gR+xtbT2NQk+2W92l6erwR7eT/AWZufDYugC711C9otwNEuQSicvDFfsk6/vJBwuM24imgdyald6rOGOpGDKA71hCg03ktA6VmLmZj/wjGAlPR4UJMC5fJ34yLNq33hjzHM8YHEAwTmHvI0O4fdmzl4wBAJOeBDCnKU8gVa64XD67wkI8L0uWR2KVscph5eNueE+EQm/Ck2Ss0N9oHrDGSr1lx3XP+ESFWmB/2EA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0RruNfurWyES/3W8FL72ZJZYFwmAHkM0FpnqLlgsCEQ=;
+ b=RtoQ3EdTetboY1vtkp9BOXUHdaL4MhjqLitoBF9Ogwx7TSnnzFpkT2XNreGS+hl5F0FalnbCoJ2bInCptUoQ8v9KQUoMpsKcyPg7nHMf1hFrnCDydpqywIEDncRjkuKuuygjERQ7e9oAEOGX5S+f97Gej2iHF0Ol+tsPxtl2NJA=
+Received: from MW4PR12MB5668.namprd12.prod.outlook.com (2603:10b6:303:16b::13)
+ by BY5PR12MB4323.namprd12.prod.outlook.com (2603:10b6:a03:211::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Wed, 30 Mar
+ 2022 04:29:38 +0000
+Received: from MW4PR12MB5668.namprd12.prod.outlook.com
+ ([fe80::5d27:53d9:5dbe:49fd]) by MW4PR12MB5668.namprd12.prod.outlook.com
+ ([fe80::5d27:53d9:5dbe:49fd%3]) with mapi id 15.20.5102.022; Wed, 30 Mar 2022
+ 04:29:38 +0000
+From:   "VURDIGERENATARAJ, CHANDAN" <CHANDAN.VURDIGERENATARAJ@amd.com>
+To:     "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>
+CC:     "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
+        Drew Davenport <ddavenport@chromium.org>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Li, Leon" <Leon.Li@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Message-ID: <20220330042649.fj43vxtpxmyxtbnd@treble>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
- <20220318105140.43914-4-sv@linux.ibm.com>
- <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
- <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
- <20220328195920.dqlfra3lcardko6r@treble>
- <87mth9ezml.fsf@mpe.ellerman.id.au>
- <af262c28-0d73-7ae6-3dd5-2977c9a41f7d@csgroup.eu>
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Sean Paul <seanpaul@chromium.org>,
+        Louis Li <ching-shih.li@amd.corp-partner.google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        =?iso-8859-1?Q?St=E9phane_Marchesin?= <marcheu@chromium.org>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>,
+        Mark Yacoub <markyacoub@google.com>
+Subject: RE: [PATCH v2] drm/amdgpu: fix that issue that the number of the crtc
+ of the 3250c is not correct
+Thread-Topic: [PATCH v2] drm/amdgpu: fix that issue that the number of the
+ crtc of the 3250c is not correct
+Thread-Index: AQHYQ+Hv6rbl9hCEq0aViheFKo1J4qzXTxsA
+Date:   Wed, 30 Mar 2022 04:29:38 +0000
+Message-ID: <MW4PR12MB566833076458CCAC433C4187961F9@MW4PR12MB5668.namprd12.prod.outlook.com>
+References: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
+ <20220330024643.162230-1-tsung-hua.lin@amd.com>
+In-Reply-To: <20220330024643.162230-1-tsung-hua.lin@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0580cd3b-6e72-4f79-b316-08da1205e712
+x-ms-traffictypediagnostic: BY5PR12MB4323:EE_
+x-microsoft-antispam-prvs: <BY5PR12MB432345471498FEFAE49FCF35961F9@BY5PR12MB4323.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BptSHKWzOhzaHNP7v3sMALt9dqrFbeKZ6ZUknvEYGC/srXTpHLjonn+hmEtHENuquwvg+1wDwpfvlWvc6gb6wnqwpIvOfYvdGSPuZRZczOiKHO6YF60CTT0m5uw5R0bC9PsydAb0WbDUBF34ASYKJtFUMtxwWD/P+ZaPQ50RblNairpIOCS3ARGgV5XfrxBIiGZAVRK7UL2iar4ajj55B8N/9STmndk4upYwIVvySeHdGKGWrLQTLq9ulbL9f60hIIAQJLuCce6PwhaRwM7nnnC30RlbPADhAmFewtaxaBfqdU2ww92rVsg0kbuT3Z32+Q84PVj6aR4HfJS2/nEsGWCpVZO4uIAvLk+bydBE/gs10GgDy6XM8t3x5yMZDmoG3qqx4TX1ZtPyVbeueQuQGbBKpzyi6oq7Q7CjjQJxyHja1b16Hrzz7RO16fzwa8FJPX28SMzfngxo/R8Cub9R0eT/8xiq73Ti4F4QyIav/lrkcrW0BPRrQSpM9gK3txtH2P0iGbgNn2JBZ7R4w6H9Uf6qXmcFOIegF+t1tzViN5NAD3k7B3SkwTS5dIvK0Nc/DeuFnyZW5Eakuf0sK5K2O8FRL36CBZwM162z42C6RdleAYrYufkG1XCPLzLNuCuAwgHw3BnbPmbAYbJPjLKTr8LT0kRp0ddCDM9V6MbYN+dyZOlfqzRQnx/3FS7fsIpvxjWIP4NFD+1Eb/rpR99cAQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB5668.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(508600001)(122000001)(186003)(26005)(38070700005)(71200400001)(8936002)(7416002)(55016003)(2906002)(4326008)(66556008)(6862004)(86362001)(9686003)(33656002)(8676002)(7696005)(38100700002)(54906003)(316002)(76116006)(83380400001)(66946007)(66476007)(64756008)(66446008)(6506007)(6636002)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?qchmbPmBGeiVeuuPBTdJvcsXCzRYIwxV3jLdIzTheCbVsjvIrillVvgE7u?=
+ =?iso-8859-1?Q?jvHoRl6NKEUL1c2tHTS0tgUfwnv+DAdfblNiSCH6FWEWzg+YowdgzP2G4X?=
+ =?iso-8859-1?Q?R+ukrV34f+RkMFNSZAoqHgj2R+gsrt1YbiBtNFpI+ytz1gM2YmaQPO0aDK?=
+ =?iso-8859-1?Q?FzMRIcXZgERLxAcmnsi4S0Q64nkhlujj2YiZWgQSo3KIskQSFrL+YCQJP2?=
+ =?iso-8859-1?Q?wNRI69wbrGd4ovmorL56jNcoOFu5bdMVpA0RhUAO3nvCuA/cjnlw6Qd8bN?=
+ =?iso-8859-1?Q?gGBsxrAe2AlOEklR1svUJ4mB7mPAOdvq5e+sAu2L2TtyMeW9tobueMtTNO?=
+ =?iso-8859-1?Q?+S3VHA/8gN2bqIC8/OYTvWMF3ZFT8O/w5BSSxEGPhFrTOluOG+MDWb8UVR?=
+ =?iso-8859-1?Q?h2atpyhpP11LPQ+6d0hD2A3B2UvXCv5mH5r2RIcJfge5fIc2XfGaVFvXAq?=
+ =?iso-8859-1?Q?PQQMrFLUzoFoCmMjOuqiPHqTpx/Xm4Pv2/SKDHZ8zuNbl5gr3w6mm8jMzN?=
+ =?iso-8859-1?Q?p2UD/RxgmKhiUliGT6KpBiTeWCSmuywf0HZgE2PjoHgGK3J0g/KSQ63kOi?=
+ =?iso-8859-1?Q?TBz7vVBvthipZDW2d349YF9jqtzCGywXFEyZcs/cd7QIeJAKUhgrWCfDFL?=
+ =?iso-8859-1?Q?CPBK/31HannxOl2UPM1z0QLlFfsBq8lA4zDmzCv7NYJ1lwdVusuFG7JYKO?=
+ =?iso-8859-1?Q?JU6uVbfBEVkDixrj/TTWNogtrB0xvo17wUgzNUIbDg+SwinegcADSNCpkb?=
+ =?iso-8859-1?Q?Fg3KccAz9sYDp9VCfhbFPpNKUm9+RXJoJotmUUDLAl++q+wx2GUqN14BEb?=
+ =?iso-8859-1?Q?0O/JIN0QJTFi+P0EHOJzMs8JwYRiqUUip+G9xnmHMww5kabpEJyUYSMaqS?=
+ =?iso-8859-1?Q?PGeH+nnmQAq5NwtdpMlx2iaLo7pqRVrwXg5jQ7DfIhJcsmbPqBvoTgCSEc?=
+ =?iso-8859-1?Q?JZjV70I21DmubAJe5R0ghT2qSPKX8xocB8rDyZgC6zqwvgF8xfjQue5emA?=
+ =?iso-8859-1?Q?LNw5lX8sI0F/+URv0OJGSffCWBgg+LP0mJ/8uOG+aSq9Y1AWzziqo1XcUb?=
+ =?iso-8859-1?Q?D/rBWFwBNxJL0v17HWC8jx1b7rgknXYoVkpjigRv7YzTElDnunwDLRHb8J?=
+ =?iso-8859-1?Q?AxFsQ+Gv3uaV2ek6kZqkqo8N5/iaWjjMFh8eMyOu0Ge0JtnjEneZZ58YE5?=
+ =?iso-8859-1?Q?Rytia/HJU3JxrWuuJHi2NORZ21diRjKNX1XrOGcT27lUnT3968Kl4yLJBb?=
+ =?iso-8859-1?Q?SbM+Q5KeYWE9hjZH+qMEzNocOJk1KVl0xIOyTMaU2GUBpf944FbpPpw9Ua?=
+ =?iso-8859-1?Q?lyXRoq8VypU8tFA4S6IBOHEruJ3W4R+mYK2A/URG6VD4kHYAzs+zZvrNPk?=
+ =?iso-8859-1?Q?yh0l07cIaA043uesAGVVawo97yOlR77A64qfneRYzFGbxu7/tJk5QGLtLO?=
+ =?iso-8859-1?Q?FSFBx/BdkqTKMexXEfUfPpWlSOy5KVMKdeYVVwUr9DbRjOHAphKBdBaFJz?=
+ =?iso-8859-1?Q?EASvIJ2qxdHe9UcORJcz9pEmbiXmkZqdesXFDOQ343qyOsMnH91W/elJbo?=
+ =?iso-8859-1?Q?Qv8td9m97+O/wu5k70MVvtTSPXvl0YrDlw8RxUoHxLxZMVLXj2ttWFWn9o?=
+ =?iso-8859-1?Q?YmAk9y4FoISc76XN7BsPS4RxNm7WaRLt+z8WiksGalneDRz8gCjagZhxqF?=
+ =?iso-8859-1?Q?coj7V9X1TAKr2nahrKyEptUPs6m7Gx/WtAniLBhKLPyA991IzbWHQil+qZ?=
+ =?iso-8859-1?Q?jl/0ylEs0BjUTdVHchcdqt6yUKn3/ssSSWpKYw4ik8dP3juWsS7ALlt4+5?=
+ =?iso-8859-1?Q?JRSjL6kSaA=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <af262c28-0d73-7ae6-3dd5-2977c9a41f7d@csgroup.eu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB5668.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0580cd3b-6e72-4f79-b316-08da1205e712
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 04:29:38.5058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eXKlIFfHmJ5UoNbv/dIhUaSEe0apWap/WfSg3T6WEHNn2q3PQKiDJMcavDCQLakvuEXIzJJffvODYU0uIvGw9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4323
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 05:32:18PM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 29/03/2022 à 14:01, Michael Ellerman a écrit :
-> > Josh Poimboeuf <jpoimboe@redhat.com> writes:
-> >> On Sun, Mar 27, 2022 at 09:09:20AM +0000, Christophe Leroy wrote:
-> >>> Second point is the endianess and 32/64 selection, especially when
-> >>> crossbuilding. There is already some stuff regarding endianess based on
-> >>> bswap_if_needed() but that's based on constant selection at build time
-> >>> and I couldn't find an easy way to set it conditionaly based on the
-> >>> target being built.
-> >>>
-> >>> Regarding 32/64 selection, there is almost nothing, it's based on using
-> >>> type 'long' which means that at the time being the target and the build
-> >>> platform must both be 32 bits or 64 bits.
-> >>>
-> >>> For both cases (endianess and 32/64) I think the solution should
-> >>> probably be to start with the fileformat of the object file being
-> >>> reworked by objtool.
-> >>
-> >> Do we really need to detect the endianness/bitness at runtime?  Objtool
-> >> is built with the kernel, why not just build-in the same target
-> >> assumptions as the kernel itself?
-> > 
-> > I don't think we need runtime detection. But it will need to support
-> > basically most combinations of objtool running as 32-bit/64-bit LE/BE
-> > while the kernel it's analysing is 32-bit/64-bit LE/BE.
-> 
-> Exactly, the way it is done today with a constant in 
-> objtool/endianness.h is too simple, we need to be able to select it 
-> based on kernel's config. Is there a way to get the CONFIG_ macros from 
-> the kernel ? If yes then we could use CONFIG_64BIT and 
-> CONFIG_CPU_LITTLE_ENDIAN to select the correct options in objtool.
 
-As of now, there's no good way to get CONFIG options from the kernel.
-That's pretty much by design, since objtool is meant to be a standalone
-tool.  In fact there are people who've used objtool for other projects.
+Hi Ryan,
 
-The objtool Makefile does at least have access to HOSTARCH/SRCARCH, but
-I guess that doesn't help here.  We could maybe export the endian/bit
-details in env variables to the objtool build somehow.
+Is this change applicable on a specific kernel version?
+On latest I see IP DISCOVERY based impl for CHIP_RAVEN.
 
-But, I managed to forget that objtool can already be cross-compiled for
-a x86-64 target, from a 32-bit x86 LE host or a 64-bit powerpc BE host.
-There are some people out there doing x86 kernel builds on such systems
-who reported bugs, which were since fixed.  And the fixes were pretty
-trivial, IIRC.
+>[Why]
+>External displays take priority over internal display when there are fewer=
+ display controllers than displays.
+>
+> [How]
+>The root cause is because of that number of the crtc is not correct.
+>The number of the crtc on the 3250c is 3, but on the 3500c is 4.
+>On the source code, we can see that number of the crtc has been fixed at 4=
+.
+>Needs to set the num_crtc to 3 for 3250c platform.
+>
+>v2:
+>   - remove unnecessary comments and Id
+>
+>Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+>
+>---
+> drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 +++++++++---
+> 1 file changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/g=
+pu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>index 40c91b448f7da..455a2c45e8cda 100644
+>--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>@@ -2738,9 +2738,15 @@ static int dm_early_init(void *handle)
+> 		break;
+> #if defined(CONFIG_DRM_AMD_DC_DCN1_0)
+> 	case CHIP_RAVEN:
+>-		adev->mode_info.num_crtc =3D 4;
+>-		adev->mode_info.num_hpd =3D 4;
+>-		adev->mode_info.num_dig =3D 4;
+>+		if (adev->rev_id >=3D 8) {
 
-Libelf actually does a decent job of abstracting those details from
-objtool.  So, forget what I said, it might be ok to just detect
-endian/bit (and possibly even arch) at runtime like you originally
-suggested.
+May I know what this ">=3D8" indicate? Also, should it be external_rev_id i=
+f its based on old version?
 
-For example bswap_if_needed() could be reworked to be a runtime check.
+>+			adev->mode_info.num_crtc =3D 3;
+>+			adev->mode_info.num_hpd =3D 3;
+>+			adev->mode_info.num_dig =3D 3;
+>+		} else {
+>+			adev->mode_info.num_crtc =3D 4;
+>+			adev->mode_info.num_hpd =3D 4;
+>+			adev->mode_info.num_dig =3D 4;
+>+		}
+> 		break;
+> #endif
+> #if defined(CONFIG_DRM_AMD_DC_DCN2_0)
+>--
+>2.25.1
+>
 
--- 
-Josh
-
+BR,
+Chandan V N

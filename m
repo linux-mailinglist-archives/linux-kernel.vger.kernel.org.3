@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8B64EB80B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 907094EB811
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241769AbiC3B73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 21:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S241788AbiC3CAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238077AbiC3B72 (ORCPT
+        with ESMTP id S241774AbiC3CAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 21:59:28 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2752B181790
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:57:44 -0700 (PDT)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22U1vI3B079229;
-        Wed, 30 Mar 2022 10:57:18 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Wed, 30 Mar 2022 10:57:18 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22U1vIWs079191
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 30 Mar 2022 10:57:18 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <fb5d20c5-36a6-2c51-288a-7cc1e0a76d3e@I-love.SAKURA.ne.jp>
-Date:   Wed, 30 Mar 2022 10:57:15 +0900
+        Tue, 29 Mar 2022 22:00:04 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94C6209
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:58:19 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so10596363ilt.21
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:58:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=IseIOXkjbiVc9FdIOxRiy+s/BeCwVlVVfBMa+vQ5dYY=;
+        b=NCGoo06H2QQHBvmlQdg6KNrInkg2yAfrT0l6w4mCNuno/Mh5+y+9lnyD41Rq6fB3RV
+         dFQP3C8XgNsL9fFKvaN7wEcZMC2j3ThoqczPD2Xj5op4/rSezqYZl1FzYMHqSzCptNMV
+         YP+FVJhh2o9/oZ36NkUQoIfmtJRcE/bnJe8pMfab6gEIJ1hH9qgxmBRefdV0FUoEw8GP
+         Rh/h7t7WZqTs6Ja7o3rZl7YmHmzaK7kjT2JfWvlR1hqFcv6L9H+1OunHGFy1MP30xheC
+         CD9MD/41jjb3LcoMyajG9jXMsZGF8AzAqe1NJ9Rl4sOf1uDwb6pjHVphl3HZkShCfivC
+         W/dA==
+X-Gm-Message-State: AOAM531NQ6XR3dgJIi7XZCTQ4i3w13QtCPnl3bX2r7J6S4tsI7O094s9
+        QqVBnJ6X1fjqawlan1nuZK1ZrtJvovrGuS9cHA250sv6IK2a
+X-Google-Smtp-Source: ABdhPJzZsTbs5V+jGlGVIPmp5OJTNAz4szJdfUPGD5BTq859VgJKGagheZr0km8YyX41O8llp18wpjR3unLlE2QdRCrpcxbY+eVR
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] possible deadlock in p9_write_work
-Content-Language: en-US
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Andrew Perepechko <andrew.perepechko@hpe.com>,
-        Andreas Dilger <adilger@dilger.ca>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>
-References: <0000000000009523b605db620972@google.com>
- <385ce718-f965-4005-56b6-34922c4533b8@I-love.SAKURA.ne.jp>
- <YkObebLZMp5AyRpr@codewreck.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YkObebLZMp5AyRpr@codewreck.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6638:2101:b0:319:d53e:5663 with SMTP id
+ n1-20020a056638210100b00319d53e5663mr18244887jaj.115.1648605498964; Tue, 29
+ Mar 2022 18:58:18 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 18:58:18 -0700
+In-Reply-To: <PH0PR11MB5880D90EDFAA0A190D927914DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000024006a05db65e1e4@google.com>
+Subject: Re: [syzbot] memory leak in gs_usb_probe
+From:   syzbot <syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, pabeni@redhat.com, pfink@christ-es.de,
+        qiang1.zhang@intel.com, syzkaller-bugs@googlegroups.com,
+        wg@grandegger.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +58,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/03/30 8:51, Dominique Martinet wrote:
-> Tetsuo Handa wrote on Wed, Mar 30, 2022 at 07:35:47AM +0900:
->> This seems to be an example of
->> https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp
->> introduced by "ext4: truncate during setxattr leads to kernel panic".
-> 
-> Thanks for the pointer
-> 
->> Please don't use schedule_work() if you need to use flush_scheduled_work().
-> 
-> In this case we don't call flush_scheduled_work -- ext4 does.
+Hello,
 
-Yes, that's why I changed recipients to ext4 people.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-> The problem is mixing in the two subsystems when someone (e.g. syzbot)
-> opens an ext4 file and passes that fd to 9p when mounting with e.g.
-> mount -t 9p -o rfdno=<no>,wfdno=<no>
-> 
-> Frankly that's just not something I consider useful, interacting through
-> 9p to a local file doesn't make sense except for testing.
-> 
-> If that is a real problem, the simplest way out would be to just forbid
-> non-socket FDs if it's something we can check.
+failed to apply patch:
+checking file drivers/net/can/usb/gs_usb.c
+patch: **** unexpected end of file in patch
 
-Do you mean that p9_fd_open() in net/9p/trans_fd.c does not need to accept non-socket file descriptors?
-Then, it's something you can check. You can use S_ISSOCK() like e.g. netlink_getsockbyfilp() does.
+
+
+Tested on:
+
+commit:         c2528a0c Add linux-next specific files for 20220329
+git tree:       linux-next
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d0ae90a195b269f102d
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=163e219b700000
+

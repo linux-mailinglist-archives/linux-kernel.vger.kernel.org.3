@@ -2,124 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7764EBAC3
+	by mail.lfdr.de (Postfix) with ESMTP id 619104EBAC2
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243282AbiC3G0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S243303AbiC3G0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243298AbiC3GZa (ORCPT
+        with ESMTP id S243274AbiC3GZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:25:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70828517EC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648621425;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N5XfMGd9jclB7Y89wnX07DRxpXe9qfoOyLMTpktP1Go=;
-        b=Gi8K4WCETdl8pIDajVVRy6au5cgbiiuqf28czJGBHarStW2BUa0uAWmD3xYxEtEzpQsWl6
-        ly2j/Mg8cxwFGZESnj/4ClHNpyK5i33YLhuGgahRLRJOrXMusBquD5H2fGm7kGixwqCZ6T
-        QB0EYQiCUDEP7Pp/4SF10/04k08Y994=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-3VHKqq7qPiWWoF-SBseq0A-1; Wed, 30 Mar 2022 02:23:34 -0400
-X-MC-Unique: 3VHKqq7qPiWWoF-SBseq0A-1
-Received: by mail-wm1-f69.google.com with SMTP id v2-20020a05600c214200b0038c7c02deceso2167275wml.8
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:23:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N5XfMGd9jclB7Y89wnX07DRxpXe9qfoOyLMTpktP1Go=;
-        b=r3wGNwMJWLN2KdMzHZW5QzIYpcvOq+DzycultjRnmeVxj5J8oBGNw5jf1KhbY02En3
-         IgBD0plKjyW/8mgQb0Cf8g29RTLncYxZLbD0Mcfs3XT/z8U/Lod1r4s761IBC16+PY08
-         S9TBsPSHOfhODkJ0fTYJektpt53QudCAw2x/W0WgsydHm92rVUhqlwZR/IMYkpQ1DrYk
-         J5ePcior1u93oPWkzA/gUY0e4S5WRfw1PglaT4lbCmuYlYBla68X7TZT3NRq84w5ZiDh
-         TyFA2xRojNBAxIiT5KN2etjuoF2f4kty+nPWS+ocgYzQd5h1GQLvDTgzpA4zyIL0/a6t
-         VdPQ==
-X-Gm-Message-State: AOAM533Hjnzjo5uqXo19gyw3Vfl1UWuGB6jJR4BfU2oFQ0S2uj7ckW/y
-        IKhjqg3hwTX/wFgTUZUP+X7VDjR2WukYCX3qUgY1jHADSD3gms3tnC6zAvONyrJtIDMhfosnWqh
-        XUu1g3ZmNhubevclDOIUvXoyrr5T2EpSIE6lzhw23kceqtWh9VJId4NqORrSv6C73KnWkNA==
-X-Received: by 2002:a05:6000:38e:b0:204:101a:b2bf with SMTP id u14-20020a056000038e00b00204101ab2bfmr35760768wrf.308.1648621413163;
-        Tue, 29 Mar 2022 23:23:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzISs0u26955cnW/k6f0wGfHnfWVmb1Bxl8fBIKYFV5DYAcUY7i7AIUsaUgjsvbX0suwvm3DA==
-X-Received: by 2002:a05:6000:38e:b0:204:101a:b2bf with SMTP id u14-20020a056000038e00b00204101ab2bfmr35760748wrf.308.1648621412840;
-        Tue, 29 Mar 2022 23:23:32 -0700 (PDT)
-Received: from redhat.com ([2.52.9.207])
-        by smtp.gmail.com with ESMTPSA id k5-20020a5d66c5000000b00203fd25f4ecsm15756665wrw.16.2022.03.29.23.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 23:23:32 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 02:23:30 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH 2/2] Revert "virtio_config: introduce a new .enable_cbs
- method"
-Message-ID: <20220330062315.125924-2-mst@redhat.com>
-References: <20220330062315.125924-1-mst@redhat.com>
+        Wed, 30 Mar 2022 02:25:31 -0400
+Received: from mail.meizu.com (edge01.meizu.com [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A995522D5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:23:38 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 30 Mar
+ 2022 14:23:37 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 30 Mar
+ 2022 14:23:36 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] staging: r8188eu: Fix misspelling in comment
+Date:   Wed, 30 Mar 2022 14:23:33 +0800
+Message-ID: <1648621413-1263-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330062315.125924-1-mst@redhat.com>
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit d50497eb4e554e1f0351e1836ee7241c059592e6.
+This patch fixes some spelling typo in error message reported by checkpatch.pl
 
-The new callback ended up not being used, and it's asymmetrical:
-just enable, no disable.
+WARNING: 'cacluated' may be misspelled - perhaps 'calculated'?
+WARNING: 'cacluated' may be misspelled - perhaps 'calculated'?
+WARNING: 'writting' may be misspelled - perhaps 'writing'?
+WARNING: 'defualt' may be misspelled - perhaps 'default'?
+WARNING: 'Caculate' may be misspelled - perhaps 'Calculate'?
+WARNING: 'accordign' may be misspelled - perhaps 'according'?
+WARNING: 'regster' may be misspelled - perhaps 'register'?
+WARNING: 'Wirte' may be misspelled - perhaps 'Write'?
+WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
+WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
+WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
+WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 ---
- include/linux/virtio_config.h | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/staging/r8188eu/hal/HalPhyRf_8188e.c    |  2 +-
+ drivers/staging/r8188eu/hal/odm_HWConfig.c      |  4 ++--
+ drivers/staging/r8188eu/hal/odm_RTL8188E.c      |  2 +-
+ drivers/staging/r8188eu/hal/rtl8188e_hal_init.c |  2 +-
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c   | 12 ++++++------
+ drivers/staging/r8188eu/hal/usb_halinit.c       |  2 +-
+ 6 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-index dafdc7f48c01..b341dd62aa4d 100644
---- a/include/linux/virtio_config.h
-+++ b/include/linux/virtio_config.h
-@@ -23,8 +23,6 @@ struct virtio_shm_region {
-  *       any of @get/@set, @get_status/@set_status, or @get_features/
-  *       @finalize_features are NOT safe to be called from an atomic
-  *       context.
-- * @enable_cbs: enable the callbacks
-- *      vdev: the virtio_device
-  * @get: read the value of a configuration field
-  *	vdev: the virtio_device
-  *	offset: the offset of the configuration field
-@@ -78,7 +76,6 @@ struct virtio_shm_region {
-  */
- typedef void vq_callback_t(struct virtqueue *);
- struct virtio_config_ops {
--	void (*enable_cbs)(struct virtio_device *vdev);
- 	void (*get)(struct virtio_device *vdev, unsigned offset,
- 		    void *buf, unsigned len);
- 	void (*set)(struct virtio_device *vdev, unsigned offset,
-@@ -233,9 +230,6 @@ void virtio_device_ready(struct virtio_device *dev)
- {
- 	unsigned status = dev->config->get_status(dev);
+diff --git a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
+index b944c80..310b6f5 100644
+--- a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
++++ b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
+@@ -69,7 +69,7 @@ void ODM_TxPwrTrackAdjust88E(struct odm_dm_struct *dm_odm, u8 Type,/*  0 = OFDM,
+ /*-----------------------------------------------------------------------------
+  * Function:	odm_TxPwrTrackSetPwr88E()
+  *
+- * Overview:	88E change all channel tx power accordign to flag.
++ * Overview:	88E change all channel tx power according to flag.
+  *				OFDM & CCK are all different.
+  *
+  * Input:		NONE
+diff --git a/drivers/staging/r8188eu/hal/odm_HWConfig.c b/drivers/staging/r8188eu/hal/odm_HWConfig.c
+index 87e9a52..1183e4a 100644
+--- a/drivers/staging/r8188eu/hal/odm_HWConfig.c
++++ b/drivers/staging/r8188eu/hal/odm_HWConfig.c
+@@ -71,7 +71,7 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
+ 		u8 cck_agc_rpt;
  
--	if (dev->config->enable_cbs)
--                  dev->config->enable_cbs(dev);
--
- 	BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
- 	dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+ 		/*  (1)Hardware does not provide RSSI for CCK */
+-		/*  (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive) */
++		/*  (2)PWDB, Average PWDB calculated by hardware (for rate adaptive) */
+ 
+ 		cck_highpwr = dm_odm->bCckHighPower;
+ 
+@@ -170,7 +170,7 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
+ 			/* Get Rx snr value in DB */
+ 			dm_odm->PhyDbgInfo.RxSNRdB[i] = (s32)(pPhyStaRpt->path_rxsnr[i] / 2);
+ 		}
+-		/*  (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive) */
++		/*  (2)PWDB, Average PWDB calculated by hardware (for rate adaptive) */
+ 		rx_pwr_all = (((pPhyStaRpt->cck_sig_qual_ofdm_pwdb_all) >> 1) & 0x7f) - 110;
+ 
+ 		PWDB_ALL = odm_QueryRxPwrPercentage(rx_pwr_all);
+diff --git a/drivers/staging/r8188eu/hal/odm_RTL8188E.c b/drivers/staging/r8188eu/hal/odm_RTL8188E.c
+index c8a3c52..dd9c829 100644
+--- a/drivers/staging/r8188eu/hal/odm_RTL8188E.c
++++ b/drivers/staging/r8188eu/hal/odm_RTL8188E.c
+@@ -194,7 +194,7 @@ static void odm_HWAntDiv(struct odm_dm_struct *dm_odm)
+ 	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
+ 		pEntry = dm_odm->pODM_StaInfo[i];
+ 		if (IS_STA_VALID(pEntry)) {
+-			/* 2 Caculate RSSI per Antenna */
++			/* 2 Calculate RSSI per Antenna */
+ 			Main_RSSI = (dm_fat_tbl->MainAnt_Cnt[i] != 0) ? (dm_fat_tbl->MainAnt_Sum[i] / dm_fat_tbl->MainAnt_Cnt[i]) : 0;
+ 			Aux_RSSI = (dm_fat_tbl->AuxAnt_Cnt[i] != 0) ? (dm_fat_tbl->AuxAnt_Sum[i] / dm_fat_tbl->AuxAnt_Cnt[i]) : 0;
+ 			TargetAnt = (Main_RSSI >= Aux_RSSI) ? MAIN_ANT : AUX_ANT;
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+index 6811be9..2658bac 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+@@ -327,7 +327,7 @@ void rtl8188e_EfusePowerSwitch(struct adapter *pAdapter, u8 PwrState)
+ 	if (PwrState) {
+ 		rtw_write8(pAdapter, REG_EFUSE_ACCESS, EFUSE_ACCESS_ON);
+ 
+-		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid */
++		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), default valid */
+ 		tmpV16 = rtw_read16(pAdapter, REG_SYS_ISO_CTRL);
+ 		if (!(tmpV16 & PWC_EV12V)) {
+ 			tmpV16 |= PWC_EV12V;
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+index ea75ff1..3a7437c 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+@@ -100,7 +100,7 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
+ /**
+ * Function:	phy_RFSerialRead
+ *
+-* OverView:	Read regster from RF chips
++* OverView:	Read register from RF chips
+ *
+ * Input:
+ *			struct adapter *Adapter,
+@@ -369,7 +369,7 @@ phy_InitBBRFRegisterDefinition(
+ 	/*  RF Interface (Output and)  Enable */
+ 	pHalData->PHYRegDef.rfintfe = rFPGA0_XA_RFInterfaceOE; /*  16 MSBs if read 32-bit from 0x860 (16-bit for 0x862) */
+ 
+-	/* Addr of LSSI. Wirte RF register by driver */
++	/* Addr of LSSI. Write RF register by driver */
+ 	pHalData->PHYRegDef.rf3wireOffset = rFPGA0_XA_LSSIParameter; /* LSSI Parameter */
+ 
+ 	/*  RF parameter */
+@@ -378,10 +378,10 @@ phy_InitBBRFRegisterDefinition(
+ 	/*  Tx AGC Gain Stage (same for all path. Should we remove this?) */
+ 	pHalData->PHYRegDef.rfTxGainStage = rFPGA0_TxGainStage; /* Tx gain stage */
+ 
+-	/*  Tranceiver A~D HSSI Parameter-1 */
++	/*  Transceiver A~D HSSI Parameter-1 */
+ 	pHalData->PHYRegDef.rfHSSIPara1 = rFPGA0_XA_HSSIParameter1;  /* wire control parameter1 */
+ 
+-	/*  Tranceiver A~D HSSI Parameter-2 */
++	/*  Transceiver A~D HSSI Parameter-2 */
+ 	pHalData->PHYRegDef.rfHSSIPara2 = rFPGA0_XA_HSSIParameter2;  /* wire control parameter2 */
+ 
+ 	/*  RF switch Control */
+@@ -405,10 +405,10 @@ phy_InitBBRFRegisterDefinition(
+ 	/*  Tx AFE control 2 */
+ 	pHalData->PHYRegDef.rfTxAFE = rOFDM0_XATxAFE;
+ 
+-	/*  Tranceiver LSSI Readback SI mode */
++	/*  Transceiver LSSI Readback SI mode */
+ 	pHalData->PHYRegDef.rfLSSIReadBack = rFPGA0_XA_LSSIReadBack;
+ 
+-	/*  Tranceiver LSSI Readback PI mode */
++	/*  Transceiver LSSI Readback PI mode */
+ 	pHalData->PHYRegDef.rfLSSIReadBackPi = TransceiverA_HSPI_Readback;
  }
+ 
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index a927743..e334c9b 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -123,7 +123,7 @@ static void _InitQueueReservedPage(struct adapter *Adapter)
+ 		if (haldata->OutEpQueueSel & TX_SELE_LQ)
+ 			numLQ = 0x1C;
+ 
+-		/*  NOTE: This step shall be proceed before writting REG_RQPN. */
++		/*  NOTE: This step shall be proceed before writing REG_RQPN. */
+ 		if (haldata->OutEpQueueSel & TX_SELE_NQ)
+ 			numNQ = 0x1C;
+ 		value8 = (u8)_NPQ(numNQ);
 -- 
-MST
+2.7.4
 

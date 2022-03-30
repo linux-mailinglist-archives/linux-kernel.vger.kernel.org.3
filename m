@@ -2,263 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E288C4EC812
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725F04EC81C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348122AbiC3PWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S1348128AbiC3PYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348103AbiC3PWW (ORCPT
+        with ESMTP id S242570AbiC3PYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:22:22 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07BD192367;
-        Wed, 30 Mar 2022 08:20:36 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 112231F45044
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648653635;
-        bh=62VOmuT6t0x2pqTpy3t9E42OjHWjGuZ/ZV9Yo+IzaOQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dw1SxPbk+AGfAp47BCkrkLPByFHQ0a5eeUwM5pxBFtLh/cUDa98YhrETr8hDjVNU+
-         OwIqaSyxottFSq7HlSZbfNmN6j9YP26sIvygcl7t1Ch005K41XymeHYhNcRBQuGkeB
-         X+V2UOdoj1Y9M2NusjzWJ8qyfI325cEkv+fgg4oR+wExH1OPn6fPy68+HRxnRBUmZA
-         HK+TgH0Fjcy1Z04U351GLD5OqfPqokDCmj0WLck8JzdE4aefM2+gDDj0ATAsYwrDkL
-         UJp5mPrOgtge7jmP2Fy+L9pBgUVMIofsLwHzgM47GBilcBA9KQTi7JAx+hRDW6O0oF
-         UzEWkoXAAV6LQ==
-Date:   Wed, 30 Mar 2022 11:20:26 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, tzungbi@google.com,
-        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
- speaker
-Message-ID: <20220330152026.6nuigsldx46lue44@notapiano>
-References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
- <20220324064511.10665-3-jiaxin.yu@mediatek.com>
- <20220329223002.uo7kiemopkh7ak4x@notapiano>
- <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
+        Wed, 30 Mar 2022 11:24:11 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C5019258D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:22:24 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so121095wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=VsktZd1lrpgrX+V/L1u1pkl3lthFyT18R1StRVOqeME=;
+        b=BDBQTdTSUt24gLYrTuCs4gNhSDd1O1k0+jDSX4hWVEL3W35F5nbZjZ6EqJkh/9u0En
+         erGGuiv2FmAgVkcHi3VHqY60MlgY9g8+jqhXktkdqhLkJlVMaGZhOJyBjUe3L/1I82Ir
+         Ob5u3nAXtykeHInVc7gS8LV7ZCpdCIwQtC5JvG+lHvtkLf+hSTiJMi4N9X9O/5hl+NnC
+         megWRTGELbcngkgNBzf9ZN0TE5dxEAtG8ySyHl9SWDbvG3MwcHB/dIloYWBD+IqWSWLT
+         W8Gu5aWG9ktI2GAUpgQY8fZsYV7fj+mxmarBzBgzTQ8ToduTMTrGAhhDySSzxO536S9N
+         x58w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=VsktZd1lrpgrX+V/L1u1pkl3lthFyT18R1StRVOqeME=;
+        b=5XdN9yLZB2mWvb9KigQHuUj3LJgkDM5vIyfqaSSiQZn2qp7HC/lm91izMOEBzpyIYy
+         f0P9TKEr4nE0iHJTV29fsCWAMj0D2vAtjZVdCsIY84gryBp4FRFO0GNXNZclZcwktHJi
+         Ii+M6rH4yxmt5OGyVBr3tnL6q5A/heLfhaNfEFmhEb6KBIyCN81gOA+eedzbcgepYtTZ
+         b/dEvLyBeS0mxTN1Vrw4pZ8NUNxTpGtWl6Ce5/n9FOPcs6Y01nBZzX4AfGpKcXSJfHdL
+         dAE+trZHDT7twqCLFJbEWAWlgtFfN4ASdzGXFrTfS3/b+upiYnvuFfsFS8xAP2ilGwyw
+         fd2Q==
+X-Gm-Message-State: AOAM530DJy2pNPJWtCWvT0IE7nQUI9fhmtGpSL2hlm55zRsAlXKPT2Rj
+        mfy/DnW+BeQEcHV6SyhJJ+NCYA==
+X-Google-Smtp-Source: ABdhPJzQnHg7FADFhfDN5WNwL6d7L/J0cN4GJJs3uwA9AeUV9+yD7d8e2R/SvmrTa8scE2MOsp2T/A==
+X-Received: by 2002:a1c:f607:0:b0:381:1db:d767 with SMTP id w7-20020a1cf607000000b0038101dbd767mr4793481wmc.165.1648653742795;
+        Wed, 30 Mar 2022 08:22:22 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:e47f:3cdb:5811:cee8? ([2001:861:44c0:66c0:e47f:3cdb:5811:cee8])
+        by smtp.gmail.com with ESMTPSA id c5-20020a5d63c5000000b002040822b680sm25478862wrw.81.2022.03.30.08.22.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 08:22:22 -0700 (PDT)
+Message-ID: <357c0ae6-7910-dfe5-eefa-1a7820e7e46b@baylibre.com>
+Date:   Wed, 30 Mar 2022 17:22:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 09/13] pinctrl: meson: Rename REG_* to MESON_REG_*
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220330145030.1562-1-andriy.shevchenko@linux.intel.com>
+ <20220330145030.1562-10-andriy.shevchenko@linux.intel.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220330145030.1562-10-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:33:06AM +0800, Jiaxin Yu wrote:
-> On Tue, 2022-03-29 at 18:30 -0400, Nícolas F. R. A. Prado wrote:
-> > Hi Jiaxin,
-> > 
-> > On Thu, Mar 24, 2022 at 02:45:09PM +0800, Jiaxin Yu wrote:
-> > > MT8192 platform will use rt1015 or rt105p codec, so through the
-> > > snd_soc_of_get_dai_link_codecs() to complete the configuration
-> > > of dai_link's codecs.
-> > > 
-> > > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> > > ---
-> > >  .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 108 ++++++++++--
-> > > ------
-> > >  1 file changed, 59 insertions(+), 49 deletions(-)
-> > > 
-> > > diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-
-> > > rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-> > > index ee91569c0911..837c2ccd5b3d 100644
-> > > --- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-> > > +++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-> > > @@ -604,17 +604,9 @@ SND_SOC_DAILINK_DEFS(i2s2,
-> > >  		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
-> > >  		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
-> > >  
-> > > -SND_SOC_DAILINK_DEFS(i2s3_rt1015,
-> > > +SND_SOC_DAILINK_DEFS(i2s3,
-> > >  		     DAILINK_COMP_ARRAY(COMP_CPU("I2S3")),
-> > > -		     DAILINK_COMP_ARRAY(COMP_CODEC(RT1015_DEV0_NAME,
-> > > -						   RT1015_CODEC_DAI),
-> > > -					COMP_CODEC(RT1015_DEV1_NAME,
-> > > -						   RT1015_CODEC_DAI)),
-> > > -		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
-> > > -
-> > > -SND_SOC_DAILINK_DEFS(i2s3_rt1015p,
-> > > -		     DAILINK_COMP_ARRAY(COMP_CPU("I2S3")),
-> > > -		     DAILINK_COMP_ARRAY(COMP_CODEC("rt1015p", "HiFi")),
-> > > +		     DAILINK_COMP_ARRAY(COMP_EMPTY()),
-> > >  		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
-> > >  
-> > >  SND_SOC_DAILINK_DEFS(i2s5,
-> > > @@ -929,6 +921,7 @@ static struct snd_soc_dai_link
-> > > mt8192_mt6359_dai_links[] = {
-> > >  		.dpcm_playback = 1,
-> > >  		.ignore_suspend = 1,
-> > >  		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
-> > > +		SND_SOC_DAILINK_REG(i2s3),
-> > >  	},
-> > >  	{
-> > >  		.name = "I2S5",
-> > > @@ -1100,55 +1093,64 @@ static struct snd_soc_card
-> > > mt8192_mt6359_rt1015p_rt5682_card = {
-> > >  	.num_dapm_routes =
-> > > ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
-> > >  };
-> > >  
-> > > +static int mt8192_mt6359_card_set_be_link(struct snd_soc_card
-> > > *card,
-> > > +					  struct snd_soc_dai_link
-> > > *link,
-> > > +					  struct device_node *node,
-> > > +					  char *link_name)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	if (node && strcmp(link->name, link_name) == 0) {
-> > > +		ret = snd_soc_of_get_dai_link_codecs(card->dev, node,
-> > > link);
-> > > +		if (ret < 0) {
-> > > +			dev_err_probe(card->dev, ret, "get dai link
-> > > codecs fail\n");
-> > > +			return ret;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >  static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
-> > >  {
-> > >  	struct snd_soc_card *card;
-> > > -	struct device_node *platform_node, *hdmi_codec;
-> > > +	struct device_node *platform_node, *hdmi_codec, *speaker_codec;
-> > >  	int ret, i;
-> > >  	struct snd_soc_dai_link *dai_link;
-> > >  	struct mt8192_mt6359_priv *priv;
-> > >  
-> > > -	platform_node = of_parse_phandle(pdev->dev.of_node,
-> > > -					 "mediatek,platform", 0);
-> > > -	if (!platform_node) {
-> > > -		dev_err(&pdev->dev, "Property 'platform' missing or
-> > > invalid\n");
-> > > +	card = (struct snd_soc_card *)of_device_get_match_data(&pdev-
-> > > >dev);
-> > > +	if (!card)
-> > >  		return -EINVAL;
-> > > +	card->dev = &pdev->dev;
-> > > +
-> > > +	platform_node = of_parse_phandle(pdev->dev.of_node,
-> > > "mediatek,platform", 0);
-> > > +	if (!platform_node) {
-> > > +		ret = -EINVAL;
-> > > +		dev_err_probe(&pdev->dev, ret, "Property 'platform'
-> > > missing or invalid\n");
-> > > +		goto err_platform_node;
-> > >  	}
-> > >  
-> > > -	card = (struct snd_soc_card *)of_device_get_match_data(&pdev-
-> > > >dev);
-> > > -	if (!card) {
-> > > +	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
-> > > "mediatek,hdmi-codec", 0);
-> > > +	if (!hdmi_codec) {
-> > >  		ret = -EINVAL;
-> > > -		goto put_platform_node;
-> > > +		dev_err_probe(&pdev->dev, ret, "Property 'hdmi-codec'
-> > > missing or invalid\n");
-> > > +		goto err_hdmi_codec;
-> > 
-> > You're making hdmi-codec a required property, since now the driver
-> > fails to
-> > probe without it. Is it really required though? The driver code still
-> > checks for
-> > the presence of hdmi_codec before using it, so shouldn't it be fine
-> > to let it be
-> > optional?
-> > 
-> > If it is really required now though, then I guess at least the dt-
-> > binding should
-> > be updated accordingly. (Although I think this would technically
-> > break the ABI?)
-> > 
-> > Thanks,
-> > Nícolas
+On 30/03/2022 16:50, Andy Shevchenko wrote:
+> Rename REG_* to MESON_REG_* as a prerequisite for enabling COMPILE_TEST.
 > 
-> Hi Nícolas,
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/pinctrl/meson/pinctrl-meson.c | 24 ++++++++++++------------
+>   drivers/pinctrl/meson/pinctrl-meson.h | 24 ++++++++++++------------
+>   2 files changed, 24 insertions(+), 24 deletions(-)
 > 
-> Thanks for your comment. Indeed I made hdmi-codec a required property,
-> because it is a must in this machine driver. I prefer to report errors
-> during the registration rather than during the use.
+> diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
+> index 49851444a6e3..5b46a0979db7 100644
+> --- a/drivers/pinctrl/meson/pinctrl-meson.c
+> +++ b/drivers/pinctrl/meson/pinctrl-meson.c
+> @@ -218,13 +218,13 @@ static int meson_pinconf_set_output(struct meson_pinctrl *pc,
+>   				    unsigned int pin,
+>   				    bool out)
+>   {
+> -	return meson_pinconf_set_gpio_bit(pc, pin, REG_DIR, !out);
+> +	return meson_pinconf_set_gpio_bit(pc, pin, MESON_REG_DIR, !out);
+>   }
+>   
+>   static int meson_pinconf_get_output(struct meson_pinctrl *pc,
+>   				    unsigned int pin)
+>   {
+> -	int ret = meson_pinconf_get_gpio_bit(pc, pin, REG_DIR);
+> +	int ret = meson_pinconf_get_gpio_bit(pc, pin, MESON_REG_DIR);
+>   
+>   	if (ret < 0)
+>   		return ret;
+> @@ -236,13 +236,13 @@ static int meson_pinconf_set_drive(struct meson_pinctrl *pc,
+>   				   unsigned int pin,
+>   				   bool high)
+>   {
+> -	return meson_pinconf_set_gpio_bit(pc, pin, REG_OUT, high);
+> +	return meson_pinconf_set_gpio_bit(pc, pin, MESON_REG_OUT, high);
+>   }
+>   
+>   static int meson_pinconf_get_drive(struct meson_pinctrl *pc,
+>   				   unsigned int pin)
+>   {
+> -	return meson_pinconf_get_gpio_bit(pc, pin, REG_OUT);
+> +	return meson_pinconf_get_gpio_bit(pc, pin, MESON_REG_OUT);
+>   }
+>   
+>   static int meson_pinconf_set_output_drive(struct meson_pinctrl *pc,
+> @@ -269,7 +269,7 @@ static int meson_pinconf_disable_bias(struct meson_pinctrl *pc,
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, pin, REG_PULLEN, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULLEN, &reg, &bit);
+>   	ret = regmap_update_bits(pc->reg_pullen, reg, BIT(bit), 0);
+>   	if (ret)
+>   		return ret;
+> @@ -288,7 +288,7 @@ static int meson_pinconf_enable_bias(struct meson_pinctrl *pc, unsigned int pin,
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, pin, REG_PULL, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULL, &reg, &bit);
+>   	if (pull_up)
+>   		val = BIT(bit);
+>   
+> @@ -296,7 +296,7 @@ static int meson_pinconf_enable_bias(struct meson_pinctrl *pc, unsigned int pin,
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, pin, REG_PULLEN, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULLEN, &reg, &bit);
+>   	ret = regmap_update_bits(pc->reg_pullen, reg, BIT(bit),	BIT(bit));
+>   	if (ret)
+>   		return ret;
+> @@ -321,7 +321,7 @@ static int meson_pinconf_set_drive_strength(struct meson_pinctrl *pc,
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, pin, REG_DS, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, pin, MESON_REG_DS, &reg, &bit);
+>   
+>   	if (drive_strength_ua <= 500) {
+>   		ds_val = MESON_PINCONF_DRV_500UA;
+> @@ -407,7 +407,7 @@ static int meson_pinconf_get_pull(struct meson_pinctrl *pc, unsigned int pin)
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, pin, REG_PULLEN, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULLEN, &reg, &bit);
+>   
+>   	ret = regmap_read(pc->reg_pullen, reg, &val);
+>   	if (ret)
+> @@ -416,7 +416,7 @@ static int meson_pinconf_get_pull(struct meson_pinctrl *pc, unsigned int pin)
+>   	if (!(val & BIT(bit))) {
+>   		conf = PIN_CONFIG_BIAS_DISABLE;
+>   	} else {
+> -		meson_calc_reg_and_bit(bank, pin, REG_PULL, &reg, &bit);
+> +		meson_calc_reg_and_bit(bank, pin, MESON_REG_PULL, &reg, &bit);
+>   
+>   		ret = regmap_read(pc->reg_pull, reg, &val);
+>   		if (ret)
+> @@ -447,7 +447,7 @@ static int meson_pinconf_get_drive_strength(struct meson_pinctrl *pc,
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, pin, REG_DS, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, pin, MESON_REG_DS, &reg, &bit);
+>   
+>   	ret = regmap_read(pc->reg_ds, reg, &val);
+>   	if (ret)
+> @@ -595,7 +595,7 @@ static int meson_gpio_get(struct gpio_chip *chip, unsigned gpio)
+>   	if (ret)
+>   		return ret;
+>   
+> -	meson_calc_reg_and_bit(bank, gpio, REG_IN, &reg, &bit);
+> +	meson_calc_reg_and_bit(bank, gpio, MESON_REG_IN, &reg, &bit);
+>   	regmap_read(pc->reg_gpio, reg, &val);
+>   
+>   	return !!(val & BIT(bit));
+> diff --git a/drivers/pinctrl/meson/pinctrl-meson.h b/drivers/pinctrl/meson/pinctrl-meson.h
+> index ff5372e0a475..fa042cd6a7ff 100644
+> --- a/drivers/pinctrl/meson/pinctrl-meson.h
+> +++ b/drivers/pinctrl/meson/pinctrl-meson.h
+> @@ -63,12 +63,12 @@ struct meson_reg_desc {
+>    * enum meson_reg_type - type of registers encoded in @meson_reg_desc
+>    */
+>   enum meson_reg_type {
+> -	REG_PULLEN,
+> -	REG_PULL,
+> -	REG_DIR,
+> -	REG_OUT,
+> -	REG_IN,
+> -	REG_DS,
+> +	MESON_REG_PULLEN,
+> +	MESON_REG_PULL,
+> +	MESON_REG_DIR,
+> +	MESON_REG_OUT,
+> +	MESON_REG_IN,
+> +	MESON_REG_DS,
+>   	NUM_REG,
+>   };
+>   
+> @@ -150,12 +150,12 @@ struct meson_pinctrl {
+>   		.irq_first	= fi,					\
+>   		.irq_last	= li,					\
+>   		.regs = {						\
+> -			[REG_PULLEN]	= { per, peb },			\
+> -			[REG_PULL]	= { pr, pb },			\
+> -			[REG_DIR]	= { dr, db },			\
+> -			[REG_OUT]	= { or, ob },			\
+> -			[REG_IN]	= { ir, ib },			\
+> -			[REG_DS]	= { dsr, dsb },			\
+> +			[MESON_REG_PULLEN]	= { per, peb },		\
+> +			[MESON_REG_PULL]	= { pr, pb },		\
+> +			[MESON_REG_DIR]		= { dr, db },		\
+> +			[MESON_REG_OUT]		= { or, ob },		\
+> +			[MESON_REG_IN]		= { ir, ib },		\
+> +			[MESON_REG_DS]		= { dsr, dsb },		\
+>   		},							\
+>   	 }
+>   
 
-But what do you mean that it is required in this machine driver? The code checks
-for presence of hdmi_codec and ignores it if it's not set, so it does really
-seem optional to me. Also, I have tested this driver on mt8192-asurada-spherion
-without hdmi-codec set in the DT and the speaker and headphone sound works just
-fine.
-
-Besides, there might be machines using this driver that don't support HDMI, and
-requiring an hdmi-codec in the DT for them would not make any sense. So keeping
-hdmi-codec as optional seems like the most sensible solution to me, really.
-
-Thanks,
-Nícolas
-
-> 
-> So I'd like to take your second suggestion. I need to update dt-binding 
-> that set hdmi-codec as required property.
-> 
-> "(Although I think this would technicallybreak the ABI?)"
-> ==> I can't understand this question, could you help explain it in more
-> detail.
-> 
-> Thanks,
-> Jiaxin.Yu
-> 
-> > 
-> >  	}
-> > > -	card->dev = &pdev->dev;
-> > >  
-> > > -	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
-> > > -				      "mediatek,hdmi-codec", 0);
-> > > +	speaker_codec = of_get_child_by_name(pdev->dev.of_node,
-> > > "speaker-codecs");
-> > > +	if (!speaker_codec) {
-> > > +		ret = -EINVAL;
-> > > +		dev_err_probe(&pdev->dev, ret, "Property 'speaker-
-> > > codecs' missing or invalid\n");
-> > > +		goto err_speaker_codec;
-> > > +	}
-> > >  
-> > 
-> snip...
-> > >  
-> > > -put_hdmi_codec:
-> > > +err_probe:
-> > > +	of_node_put(speaker_codec);
-> > > +err_speaker_codec:
-> > >  	of_node_put(hdmi_codec);
-> > > -put_platform_node:
-> > > +err_hdmi_codec:
-> > >  	of_node_put(platform_node);
-> > > +err_platform_node:
-> > >  	return ret;
-> > >  }
-> > >  
-> > > -- 
-> > > 2.18.0
-> > > 
-> > > 
-> 
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

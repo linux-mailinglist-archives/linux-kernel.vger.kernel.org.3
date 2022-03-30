@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FB24EC3B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602754EC331
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346405AbiC3MQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S1346704AbiC3MSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344875AbiC3L4j (ORCPT
+        with ESMTP id S1344530AbiC3L4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:56:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906572F019;
-        Wed, 30 Mar 2022 04:54:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03CC36137A;
-        Wed, 30 Mar 2022 11:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C01C34111;
-        Wed, 30 Mar 2022 11:54:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641274;
-        bh=TqU5EmJu4m0utOcnrYUkdqj+QyURN3AhnZAL6wOyBec=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ilc0Y0dX2Mv+wP+9wvcyElveeHuRATXW5Tqr8L3tA3LAkC+8tvaELAhSTnNLltgFC
-         EcMgrvL+AgNF0BgFawqFSizNz35VeeKsymZ1eUl2uxQYG+uB9eMvkYP4EBjBQ+el4q
-         qOqvY246kQSzvnzNiBCXHAX6mi5TVRBT3NOeCAUJ6yoEe2gZnmLn303e624y0WAAu8
-         5Njgj/vOlXJszYAqAEKV/9xOQUhwOzmQQXarPisIi+bTwymYQtSqMErrvOaHNl1IOF
-         a0wUPOsmfZAMZL0OUiPkKau5rmbfLC2MAefLveNprlkx35yQyxwhaK44BagqEy6Fzz
-         nCT/OeG9+WvWw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-mmc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 16/17] mmc: host: Return an error when ->enable_sdio_irq() ops is missing
-Date:   Wed, 30 Mar 2022 07:54:05 -0400
-Message-Id: <20220330115407.1673214-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115407.1673214-1-sashal@kernel.org>
-References: <20220330115407.1673214-1-sashal@kernel.org>
+        Wed, 30 Mar 2022 07:56:16 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A922B250
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:54:07 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so14285028iox.1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:54:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7IAPIDGtmGB489oXMPL27ZU1v8uRIqGprJ9/altofEg=;
+        b=noOxfZt0+kF9+VuoRNWclse8/lRwXMzwrK4eG4r6lYD4zOzPvdKGAadLQBAOLtVU0l
+         HOdbeLhp4aIqRSneoO8pXpRFdRqpwBHu72/wnWb8WiVA3mV7Q9/p9IBbBloTeGYvn61p
+         kI7P9KHujH8DAxlLFT0xLK8p0F7E2ksVxwHmUBn3CSCG1SBOJN34wQfZop36mFqBlzS+
+         PQ4QENDKCRDs8kBdVi+aySlukN/wLejVd4dLETOYs2ERkN1Ucoec3gdNPFZDMr9V8eFD
+         tHNcRw1HD5UWYH4tjNPAgO8V9OOyGxUi731cUNCTEe54/twzvJXM4DBj8/DeWg5fmtH+
+         4iiQ==
+X-Gm-Message-State: AOAM531TPPn03rUNXFBf+lqcTUWTT9xezuKMM+Q61ZCSqbw4mnefqwrG
+        gxpgGC5K50rn2M18ui8D4WN5v7Fj1QQ7maJiWGk8INPGabbW
+X-Google-Smtp-Source: ABdhPJyzMtzg+RsVrfzALmOTVu+lxxuCEr7IxF5qsQRRcQz7yCrIwDU3BNAHfsCOWOmB9lRBRPKK6cG/dVi53OV154TR3Cp5IwNV
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:3395:b0:323:8a00:7151 with SMTP id
+ h21-20020a056638339500b003238a007151mr3829675jav.93.1648641246340; Wed, 30
+ Mar 2022 04:54:06 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 04:54:06 -0700
+In-Reply-To: <20220330102644.4510-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d9aea605db6e33b3@google.com>
+Subject: Re: [syzbot] INFO: task hung in rfcomm_process_sessions (2)
+From:   syzbot <syzbot+d761775dff24be3ad4be@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,58 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+Hello,
 
-[ Upstream commit d6c9219ca1139b74541b2a98cee47a3426d754a9 ]
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Even if the current WARN() notifies the user that something is severely
-wrong, we can still end up in a PANIC() when trying to invoke the missing
-->enable_sdio_irq() ops. Therefore, let's also return an error code and
-prevent the host from being added.
+Reported-and-tested-by: syzbot+d761775dff24be3ad4be@syzkaller.appspotmail.com
 
-While at it, move the code into a separate function to prepare for
-subsequent changes and for further host caps validations.
+Tested on:
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20220303165142.129745-1-ulf.hansson@linaro.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/mmc/core/host.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+commit:         cffb2b72 Merge tag 'kgdb-5.18-rc1' of git://git.kernel..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=69c8957f4ac2dea6
+dashboard link: https://syzkaller.appspot.com/bug?extid=d761775dff24be3ad4be
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=121c55b9700000
 
-diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-index 848b3453517e..60c2ca58dec3 100644
---- a/drivers/mmc/core/host.c
-+++ b/drivers/mmc/core/host.c
-@@ -403,6 +403,16 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
- 
- EXPORT_SYMBOL(mmc_alloc_host);
- 
-+static int mmc_validate_host_caps(struct mmc_host *host)
-+{
-+	if (host->caps & MMC_CAP_SDIO_IRQ && !host->ops->enable_sdio_irq) {
-+		dev_warn(host->parent, "missing ->enable_sdio_irq() ops\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  *	mmc_add_host - initialise host hardware
-  *	@host: mmc host
-@@ -415,8 +425,9 @@ int mmc_add_host(struct mmc_host *host)
- {
- 	int err;
- 
--	WARN_ON((host->caps & MMC_CAP_SDIO_IRQ) &&
--		!host->ops->enable_sdio_irq);
-+	err = mmc_validate_host_caps(host);
-+	if (err)
-+		return err;
- 
- 	err = device_add(&host->class_dev);
- 	if (err)
--- 
-2.34.1
-
+Note: testing is done by a robot and is best-effort only.

@@ -2,247 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAB84ED06C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220734ED07E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbiC3XxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 19:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S1350209AbiCaABM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351930AbiC3Xw6 (ORCPT
+        with ESMTP id S229665AbiCaABL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 19:52:58 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEA53DDCF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:51:12 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id bo5so834799pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8sYtBs4j48qpjJK702ZGcP6bcn8eUKCCXRTri6o8Pm0=;
-        b=O0pU+YpCgQB3W1ICDgli4uhU2wBOxv3AyO2hjo7v7Ln2MHIOJQOD+iWvGQVxfWcYX6
-         pX5TGnm9+UkWGkds48cXksPhnSnho1o8MZ+CVmHNlhqx0gocCC790es+n0LUQ8PUZH7B
-         Q/6B9AAYG/IsFN055oNLYFU/S7i1EdZnkvlXpLR/h5vVSSxH/sSGV0DT2ThB0Z7+rtlr
-         uTx32GZ2A1L+qKCFkeanySC76+0r96inQWECJ8w7ib/Xgo6eWN+AV/r5P5p82ouk09HV
-         0jHTVbTO1LqNWrm2YwpccI2cw6EaY6UrlkP4VSC7bZt6G8Arn6sHxW9hEmGYcTEPNcrl
-         2lRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8sYtBs4j48qpjJK702ZGcP6bcn8eUKCCXRTri6o8Pm0=;
-        b=3cZ7jJ77683mOaS/Ygu9MCcH/wt9HdADEoqilSmMHftM9IICw3FN7jfsrzgz1ws7J4
-         aAJz1BRkNfCRyxWn5SZMd+UAm+4vNxo7b32+D8Q5qolm/6T2/R9wFRyml+rDmDekph3J
-         Qpsl9QDXpVytWaCIVRez5V19zfp+BvX/5HtvheoJaTNL8Kd2Bt1A7ZbfFv+B7rE0Q1Bo
-         kNp38MuswoN+CWhH7F4PlE5gCILEblIC8yTEIoxWhOTGndE8DWLwmHyXczaZca4MUJza
-         as7AQbKlV/9q9f86WTBNXYcW5W7aeEEXdnDqULOXwqOPw60jT8aIELnGTHfIwR4eC+r6
-         gjSg==
-X-Gm-Message-State: AOAM531f5J4EnfghCMRZRgc/f4I2P6PciKJUgxOBRWE/5JvOwWHv3aWV
-        BqQwlGYiqBZi/CNnqdLDBkqHwg==
-X-Google-Smtp-Source: ABdhPJwJTvi89nfmVhC07A9+LmxZYpEnMumd75LEvSF1f0s6Hewqqk/2D/NG+Qh7koCts18gV9UF+g==
-X-Received: by 2002:a63:368f:0:b0:398:1bfe:bdab with SMTP id d137-20020a63368f000000b003981bfebdabmr8221748pga.29.1648684271549;
-        Wed, 30 Mar 2022 16:51:11 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004e03b051040sm26642967pfj.112.2022.03.30.16.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 16:51:04 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 23:51:00 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] KVM: MMU: propagate alloc_workqueue failure
-Message-ID: <YkTs5BU24zrw30hK@google.com>
-References: <20220330165510.213111-1-pbonzini@redhat.com>
+        Wed, 30 Mar 2022 20:01:11 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D1C5F4D7;
+        Wed, 30 Mar 2022 16:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648684764; x=1680220764;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V2WIDgWsJXUeuNruqz7+LMh+cA+dSKdTlm1h1XJUL7g=;
+  b=UyRB2rrUJbDoTPeqNsotGU9DD+H3XGbFpVDGFpgskPaSR4QWdDe5ilr3
+   3cLR1PRof56u8CWZYzp8F/lHGleK/WMNqTFG7HCjwm7ocdKnx0lADTgjL
+   n4KJYQCu4M6XySoCo7prsBD6xPJEPrqF64D1CJk7Y1gWUhJ1iWRX4S/JF
+   DkFFXXvwR+K5rUiPa5ecE5vs8qoZ8Bko0LfOVd7d8k4URNMYWYdVKvnh9
+   0wTpprw1P+DLgK5MxgKFoIFUgaO/0cA/LBo+sAOktkL0s+Pt9oDOZgiWK
+   EHqyGHR1KJgnZbJaISr/s/K0ur1xll6I40VwFkkJ85LJoy8rMiV58fnlM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322855237"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="322855237"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 16:59:24 -0700
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="639910408"
+Received: from npeper-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.16.15])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 16:59:24 -0700
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH V7 00/10] CXL: Read CDAT and DSMAS data from the device
+Date:   Wed, 30 Mar 2022 16:59:10 -0700
+Message-Id: <20220330235920.2800929-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330165510.213111-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 12:55:10PM -0400, Paolo Bonzini wrote:
-> If kvm->arch.tdp_mmu_zap_wq cannot be created, the failure has
-> to be propagated up to kvm_mmu_init_vm and kvm_arch_init_vm.
-> kvm_arch_init_vm also has to undo all the initialization, so
-> group all the MMU initialization code at the beginning and
-> handle cleaning up of kvm_page_track_init.
-> 
+From: Ira Weiny <ira.weiny@intel.com>
 
-Fixes: 22b94c4b63eb ("KVM: x86/mmu: Zap invalidated roots via asynchronous worker")
 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  2 +-
->  arch/x86/kvm/mmu/mmu.c          | 11 +++++++++--
->  arch/x86/kvm/mmu/tdp_mmu.c      | 17 ++++++++++-------
->  arch/x86/kvm/mmu/tdp_mmu.h      |  4 ++--
->  arch/x86/kvm/x86.c              | 15 ++++++++++-----
->  5 files changed, 32 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 0ddc2e67a731..469c7702fad9 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1584,7 +1584,7 @@ void kvm_mmu_module_exit(void);
->  
->  void kvm_mmu_destroy(struct kvm_vcpu *vcpu);
->  int kvm_mmu_create(struct kvm_vcpu *vcpu);
-> -void kvm_mmu_init_vm(struct kvm *kvm);
-> +int kvm_mmu_init_vm(struct kvm *kvm);
->  void kvm_mmu_uninit_vm(struct kvm *kvm);
->  
->  void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu);
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 51671cb34fb6..857ba93b5c92 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5768,17 +5768,24 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
->  	kvm_mmu_zap_all_fast(kvm);
->  }
->  
-> -void kvm_mmu_init_vm(struct kvm *kvm)
-> +int kvm_mmu_init_vm(struct kvm *kvm)
->  {
->  	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
-> +	int r;
->  
-> +	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
-> +	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
-> +	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
+Changes from V6:[3]
+	The big change is the removal of the auxiliary bus code from the PCI
+	layer.  The auxiliary bus usage is now in the CXL layer.  The PCI layer
+	provides helpers for subsystems to utilize DOE mailboxes by creating a
+	pci_doe_mb object which controls a state machine for that mailbox
+	capability.  The CXL layer wraps this object in an auxiliary device and
+	driver which can then be used to determine if the kernel is controlling
+	the capability or it is available to be used by user space.  Reads from
+	user space via lspci are allowed.  Writes are allowed but flagged via a
+	tainting the kernel.
 
-I agree with moving these but that should probably be done in a separate
-commit.
+	Feedback from Bjorn, Jonathan, and Dan
+		Details in each patch
 
->  	spin_lock_init(&kvm->arch.mmu_unsync_pages_lock);
->  
-> -	kvm_mmu_init_tdp_mmu(kvm);
-> +	r = kvm_mmu_init_tdp_mmu(kvm);
-> +	if (r < 0)
-> +		return r;
->  
->  	node->track_write = kvm_mmu_pte_write;
->  	node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
->  	kvm_page_track_register_notifier(kvm, node);
-> +	return 0;
->  }
->  
->  void kvm_mmu_uninit_vm(struct kvm *kvm)
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index e7e7876251b3..d7c112a29fe9 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -14,21 +14,24 @@ static bool __read_mostly tdp_mmu_enabled = true;
->  module_param_named(tdp_mmu, tdp_mmu_enabled, bool, 0644);
->  
->  /* Initializes the TDP MMU for the VM, if enabled. */
-> -bool kvm_mmu_init_tdp_mmu(struct kvm *kvm)
-> +int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
->  {
-> +	struct workqueue_struct *wq;
-> +
->  	if (!tdp_enabled || !READ_ONCE(tdp_mmu_enabled))
-> -		return false;
-> +		return 0;
-> +
-> +	wq = alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
-> +	if (IS_ERR(wq))
-> +		return PTR_ERR(wq);
->  
->  	/* This should not be changed for the lifetime of the VM. */
->  	kvm->arch.tdp_mmu_enabled = true;
-> -
->  	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_roots);
->  	spin_lock_init(&kvm->arch.tdp_mmu_pages_lock);
->  	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_pages);
-> -	kvm->arch.tdp_mmu_zap_wq =
-> -		alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
-> -
-> -	return true;
-> +	kvm->arch.tdp_mmu_zap_wq = wq;
+Changes from V5:[0]
 
-Suggest moving this to just after checking the return value of
-alloc_workqueue().
+	Rework the patch set to split PCI vs CXL changes
+		Also make each change a bit more stand alone for easier review
+	Add cxl_cdat structure
+	Put CDAT related data structures in cdat.h
+	Clarify some device lifetimes with comments
+	Incorporate feedback from Jonathan, Bjorn and Dan
+		The bigest change is placing the DOE scanning code into the
+			pci_doe driver (part of the PCI codre).
+		Validate the CDAT when it is read rather than before DSMAS
+			parsing
+		Do not report DSMAS failure as an error, report a warning and
+			keep going.
+		Retry reading the table 1 time.
+	Update commit messages and this cover letter
 
-> +	return 1;
 
-Perhaps return 0 until we have a reason to differentiate the 2 cases.
 
->  }
->  
->  /* Arbitrarily returns true so that this may be used in if statements. */
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
-> index 5e5ef2576c81..647926541e38 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.h
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.h
-> @@ -72,7 +72,7 @@ u64 *kvm_tdp_mmu_fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, u64 addr,
->  					u64 *spte);
->  
->  #ifdef CONFIG_X86_64
-> -bool kvm_mmu_init_tdp_mmu(struct kvm *kvm);
-> +int kvm_mmu_init_tdp_mmu(struct kvm *kvm);
->  void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm);
->  static inline bool is_tdp_mmu_page(struct kvm_mmu_page *sp) { return sp->tdp_mmu_page; }
->  
-> @@ -93,7 +93,7 @@ static inline bool is_tdp_mmu(struct kvm_mmu *mmu)
->  	return sp && is_tdp_mmu_page(sp) && sp->root_count;
->  }
->  #else
-> -static inline bool kvm_mmu_init_tdp_mmu(struct kvm *kvm) { return false; }
-> +static inline int kvm_mmu_init_tdp_mmu(struct kvm *kvm) { return 0; }
->  static inline void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm) {}
->  static inline bool is_tdp_mmu_page(struct kvm_mmu_page *sp) { return false; }
->  static inline bool is_tdp_mmu(struct kvm_mmu *mmu) { return false; }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index fe2171b11441..89b6efb7f504 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11629,12 +11629,13 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->  
->  	ret = kvm_page_track_init(kvm);
->  	if (ret)
-> -		return ret;
-> +		goto out;
+CXL drivers need various data which are provided through generic DOE mailboxes
+as defined in the PCIe 6.0 spec.[1]
 
-nit: This goto is unnecessary.
+One such data is the Coherent Device Atribute Table (CDAT).  CDAT data provides
+coherent information about the various devices in the system.  It was developed
+because systems no longer have a priori knowledge of all coherent devices
+within a system.  CDAT describes the coherent characteristics of the
+components on the CXL bus separate from system configurations.  The OS can
+then, for example, use this information to form correct interleave sets.
 
-> +
-> +	ret = kvm_mmu_init_vm(kvm);
-> +	if (ret)
-> +		goto out_page_track;
->  
->  	INIT_HLIST_HEAD(&kvm->arch.mask_notifier_list);
-> -	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
-> -	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
-> -	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
->  	INIT_LIST_HEAD(&kvm->arch.assigned_dev_head);
->  	atomic_set(&kvm->arch.noncoherent_dma_count, 0);
->  
-> @@ -11666,10 +11667,14 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->  
->  	kvm_apicv_init(kvm);
->  	kvm_hv_init_vm(kvm);
-> -	kvm_mmu_init_vm(kvm);
->  	kvm_xen_init_vm(kvm);
->  
->  	return static_call(kvm_x86_vm_init)(kvm);
-> +
-> +out_page_track:
-> +	kvm_page_track_cleanup(kvm);
-> +out:
-> +	return ret;
->  }
->  
->  int kvm_arch_post_init_vm(struct kvm *kvm)
-> -- 
-> 2.31.1
-> 
+To begin reading the CDAT the OS must have support to access the DOE mailboxes
+provided by the CXL devices.
+
+Because DOE is not specific to DOE but is provided within the PCI spec, the
+series adds PCI DOE capability library functions.  These functions allow for
+the iteration of the DOE capabilities on a device as well as creating
+pci_doe_mb structures which can control the operation of the DOE state machine.
+
+CXL iterates the DOE capabilities creates auxiliary bus devices.  These devices
+are driven by a CXL DOE auxiliary driver which calls into the PCI DOE library
+functions as appropriate.
+
+The auxiliary bus architecture allows for root users to control which DOE
+mailboxes are controlled by the kernel and which should be allowed for
+unrestricted access by user space.  One such use case is to allow for CXL
+Compliance Testing (CXL 2.0 14.16.4 Compliance Mode DOE).  By default the
+kernel controls all mailboxes found.
+
+After the devices are created and the driver attaches, CDAT data is read from
+the device and DSMAS information parsed from that CDAT blob for use later.
+
+This work was tested using qemu with additional patches.
+
+
+[0] https://lore.kernel.org/linux-cxl/20211105235056.3711389-1-ira.weiny@intel.com/
+[1] https://pcisig.com/specifications
+[2] https://lore.kernel.org/qemu-devel/20210202005948.241655-1-ben.widawsky@intel.com/
+[3] https://lore.kernel.org/linux-cxl/20220201071952.900068-1-ira.weiny@intel.com/
+
+
+Ira Weiny (7):
+PCI: Replace magic constant for PCI Sig Vendor ID
+cxl/pci: Create auxiliary devices for each DOE mailbox
+cxl/pci: Create DOE auxiliary driver
+cxl/pci: Find the DOE mailbox which supports CDAT
+cxl/cdat: Introduce cxl_cdat_valid()
+cxl/mem: Retry reading CDAT on failure
+cxl/port: Parse out DSMAS data from CDAT table
+
+Jonathan Cameron (3):
+PCI: Add vendor ID for the PCI SIG
+PCI: Create PCI library functions in support of DOE mailboxes.
+cxl/mem: Read CDAT table
+
+drivers/cxl/Kconfig | 13 +
+drivers/cxl/Makefile | 2 +
+drivers/cxl/cdat.h | 116 +++++++
+drivers/cxl/core/memdev.c | 38 +++
+drivers/cxl/cxl.h | 8 +
+drivers/cxl/cxlmem.h | 28 ++
+drivers/cxl/cxlpci.h | 35 ++
+drivers/cxl/doe.c | 90 +++++
+drivers/cxl/pci.c | 423 ++++++++++++++++++++++++
+drivers/cxl/port.c | 65 ++++
+drivers/pci/Makefile | 3 +-
+drivers/pci/pci-doe.c | 603 ++++++++++++++++++++++++++++++++++
+drivers/pci/probe.c | 2 +-
+include/linux/pci-doe.h | 119 +++++++
+include/linux/pci_ids.h | 1 +
+include/uapi/linux/pci_regs.h | 30 +-
+16 files changed, 1573 insertions(+), 3 deletions(-)
+create mode 100644 drivers/cxl/cdat.h
+create mode 100644 drivers/cxl/doe.c
+create mode 100644 drivers/pci/pci-doe.c
+create mode 100644 include/linux/pci-doe.h
+
+--
+2.35.1
+

@@ -2,93 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD834EC34C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7488A4EC31A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345665AbiC3MVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S1345748AbiC3MV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347625AbiC3MHS (ORCPT
+        with ESMTP id S1344862AbiC3MMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:07:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BEDFF3;
-        Wed, 30 Mar 2022 05:05:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C06A61798;
-        Wed, 30 Mar 2022 12:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB921C340EE;
-        Wed, 30 Mar 2022 12:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641931;
-        bh=jc8kMXIBKp9TnaxWPUYRTe23rEECejIQK8a9f9YdQnA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RAnlztVwfzZCrWDFKdF8tDhpUxQDMrM3Iiw0gMAkNSBiQOQwLLFefTUDutqw5Zj3a
-         bGWmZkL4LZMnAADSfWa/4D7if6k7yymEgKiiT15aNqIGBl6agGOVLtuLASGqI06zQ5
-         FZ86jW0b0h9LBIU1vCDc15PYyVWz0nRMbjBf5kRrk0IDwpBip8L2U5KrgAjpz/plwt
-         ofap8qFZfYN2uFjeSXwI8Rc3NRdhD2WSJY1Vr0QHA5Mt5hl7g9XU2ipNOyJD6VPm/4
-         Cpf5RV4jn5f6pcvqImdzg2WbGiSMc7YHAWJBLN2O10h0+D4UaacOZJVRkT6cCApJmS
-         tIgJBF+RM/U9A==
-Date:   Wed, 30 Mar 2022 13:05:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: Re: [PATCH AUTOSEL 5.17 64/66] ASoC: ak4642: Use
- of_device_get_match_data()
-Message-ID: <YkRHhksDIqDpHoCz@sirena.org.uk>
-References: <20220330114646.1669334-1-sashal@kernel.org>
- <20220330114646.1669334-64-sashal@kernel.org>
+        Wed, 30 Mar 2022 08:12:37 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE4249CB8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:07:12 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id kc20so16663730qvb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=DIU0qW0oqokq5sgo17jUrrfi/pfNulAd15d8nAXYtvg=;
+        b=ZqJOSLg2+c6hbYSTjjh6gJ7f7m6Rm4W0tjpkI/8E2fgAwA5tS14me47hbpGLg4N3kQ
+         ViyiyDpcJcRM83Y+nGiF++wtaqA1QxlkFNWoVgzegGr+G22eCdsEikLvW49mqUkhWa0P
+         ArkPaFTLLL6AoRCGuy2DbAQ0YrVZGSSmHXaHXN0g6dtNpdojPnWzx9j8CxONmy0npfw4
+         0gbk3lvrbqPIpFWr7s6EYoTDvEXbcMjhuDCOaT2OsJPZjTTXowkzYtQb86dwkGANPK1T
+         g4dlfsABmofCqjnHBEwHMElk/UfRvP2F9Yk1NU1uYeP+lJI+ODmJqgiLWTxQNlGzdDM8
+         hGmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=DIU0qW0oqokq5sgo17jUrrfi/pfNulAd15d8nAXYtvg=;
+        b=P8nL/dVGKhY4a1Da18TfBKzoZhbFuqUFaJuKtzzR0w9FlPzejqdK+0bM5/3Fg2unvj
+         2lBQgvgfbRkFofag9Ztbeg+T70uwxZtwZzzMNs94v2HgfVW4l1VDqMlpOzN9GXtsVh1m
+         SGKfBSTdp0yEFAzXITOiru1PAS5y17yHhByv4oRgKDmycgxpdnWGq356eH2bvbBrXWxZ
+         uBJ3Puyqni/HXTBRRNnkQg4MwAAtjsgqUzBTDgtd+/bcXIZxSQ8SC/a1VRLLRCLD3tPG
+         XcxK5ApXdlMS2jvFOva+CjYv3p5cE8s3GhrAermuNBdhibaMRo4js38CHL+p5i9AqQev
+         fy+Q==
+X-Gm-Message-State: AOAM532nJIWGXQHHI/O8Lvqkay1rvunQhviiDJIq4ABRhUDSey3M0vw9
+        0gkTC0CaoGG5pRqKzXo4Tw7HwZpcA6lxaeg8
+X-Google-Smtp-Source: ABdhPJyqWifpcmkHCB3u6Bu2U3ChnYAdVLJmBQKdlcYppxlxcqXuYSsghw2laEWpXEQA2k+jt6ABfw==
+X-Received: by 2002:a05:6214:2305:b0:432:f1d4:6177 with SMTP id gc5-20020a056214230500b00432f1d46177mr31091513qvb.107.1648642031640;
+        Wed, 30 Mar 2022 05:07:11 -0700 (PDT)
+Received: from euclid ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id 8-20020ac85948000000b002e1cd3fa142sm17790827qtz.92.2022.03.30.05.07.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 05:07:10 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 08:07:09 -0400
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: rtl8723bs: place constants on the right side of
+ tests
+Message-ID: <20220330120709.GA339788@euclid>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wY49DEhnV+VGZ3C0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330114646.1669334-64-sashal@kernel.org>
-X-Cookie: Two is company, three is an orgy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adhere to Linux kernel coding style.
 
---wY49DEhnV+VGZ3C0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reported by checkpatch:
 
-On Wed, Mar 30, 2022 at 07:46:43AM -0400, Sasha Levin wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> [ Upstream commit 835ca59799f5c60b4b54bdc7aa785c99552f63e4 ]
->=20
-> Use of_device_get_match_data() to simplify the code.
+WARNING: Comparisons should place the constant on the right side of the test
 
-This is just a random code style improvement, I can't see why we'd
-backport it to stable?
+Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+---
+ drivers/staging/rtl8723bs/core/rtw_mlme.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---wY49DEhnV+VGZ3C0
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+index ed2d3b7d44d9..d5bb3a5bd2fb 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
++++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+@@ -792,7 +792,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
+ 			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
+ 			pmlmepriv->to_join = false;
+ 			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
+-			if (_SUCCESS == s_ret) {
++			if (s_ret == _SUCCESS) {
+ 			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
+ 			} else if (s_ret == 2) {/* there is no need to wait for join */
+ 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
+@@ -1554,7 +1554,7 @@ void _rtw_join_timeout_handler(struct timer_list *t)
+ 				int do_join_r;
+ 
+ 				do_join_r = rtw_do_join(adapter);
+-				if (_SUCCESS != do_join_r) {
++				if (do_join_r != _SUCCESS) {
+ 					continue;
+ 				}
+ 				break;
+@@ -2558,7 +2558,7 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
+ 		issued = (phtpriv->agg_enable_bitmap>>priority)&0x1;
+ 		issued |= (phtpriv->candidate_tid_bitmap>>priority)&0x1;
+ 
+-		if (0 == issued) {
++		if (issued == 0) {
+ 			psta->htpriv.candidate_tid_bitmap |= BIT((u8)priority);
+ 			rtw_addbareq_cmd(padapter, (u8) priority, pattrib->ra);
+ 		}
+@@ -2610,14 +2610,14 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
+ 	struct wlan_network *cur_network = &pmlmepriv->cur_network;
+ 	int do_join_r;
+ 
+-	if (0 < rtw_to_roam(padapter)) {
++	if (rtw_to_roam(padapter) > 0) {
+ 		memcpy(&pmlmepriv->assoc_ssid, &cur_network->network.ssid, sizeof(struct ndis_802_11_ssid));
+ 
+ 		pmlmepriv->assoc_by_bssid = false;
+ 
+ 		while (1) {
+ 			do_join_r = rtw_do_join(padapter);
+-			if (_SUCCESS == do_join_r) {
++			if (do_join_r == _SUCCESS) {
+ 				break;
+ 			} else {
+ 				rtw_dec_to_roam(padapter);
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJER4UACgkQJNaLcl1U
-h9DEKQf/UkrC0gTTDsQeNN8/3QnuRX6+/uuqssECa7EsnrhZO6vGmSimjxhC+YVU
-5ycvzD3REZCYQN0dVxku+ecC1u8LM761uY6UJLlPkEZM3lPy8LXhk7zxxFNxJt3X
-7jtYlsj1f29ouXj22xjCGYIc91srPZUApnb5xYqZUEo4XIX0/JNQwlnVO1bNGSzv
-qREppIDOzV2gSTS9RrjrIZF5+GjxHHD+0j1xti13tzcfikT0+hTNgqhCVfgqhtmG
-1/MUncVvmL6W/NNgWNPtPGlId6Db5xMgKA+r4p8IjSACCX6P2lXXSQuTfHf+U1+X
-nyh+U7Dr/rm2ZkrKuI2AuU4pIP8CUA==
-=NIEe
------END PGP SIGNATURE-----
-
---wY49DEhnV+VGZ3C0--

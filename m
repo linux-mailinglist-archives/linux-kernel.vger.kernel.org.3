@@ -2,303 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82764EC6E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D40D4EC6D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347103AbiC3Opi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S1347033AbiC3OpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347038AbiC3OpZ (ORCPT
+        with ESMTP id S239909AbiC3OpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:45:25 -0400
-Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D8925BE67;
-        Wed, 30 Mar 2022 07:43:36 -0700 (PDT)
-Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 48DAD16C0;
-        Wed, 30 Mar 2022 17:43:39 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 48DAD16C0
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 30 Mar 2022 17:43:35 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH v2 4/4] clk: baikal-t1: Add DDR/PCIe directly controlled resets support
-Date:   Wed, 30 Mar 2022 17:43:20 +0300
-Message-ID: <20220330144320.27039-5-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru>
+        Wed, 30 Mar 2022 10:45:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED9505AEE0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:43:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6256B23A;
+        Wed, 30 Mar 2022 07:43:30 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7DF843F73B;
+        Wed, 30 Mar 2022 07:43:29 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 15:43:27 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, souvik.chakravarty@arm.com,
+        nicola.mazzucato@arm.com
+Subject: Re: [RFC PATCH 0/2] Sensor readings fixes
+Message-ID: <YkRsj1v/PWbebDzo@e120937-lin>
+References: <20211220174155.40239-1-cristian.marussi@arm.com>
+ <Yj2qTMcW9sfMyvAc@e120937-lin>
+ <faf91200-4790-1210-7ba5-7892c98fcb5e@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <faf91200-4790-1210-7ba5-7892c98fcb5e@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aside with a set of the trigger-like resets Baikal-T1 CCU provides two
-additional blocks with directly controlled reset signals. In particular it
-concerns DDR full and initial resets and various PCIe sub-domains resets.
-Let's add the direct reset assertion/de-assertion of the corresponding
-flags support into the Baikal-T1 CCU driver then. It will be required at
-least for the PCIe platform driver. Obviously the DDR controller isn't
-supposed to be fully reset in the kernel, so the corresponding controls
-are added just for the sake of the interface implementation completeness.
+On Fri, Mar 25, 2022 at 02:38:06PM -0700, Florian Fainelli wrote:
+> On 3/25/22 04:41, Cristian Marussi wrote:
+> > On Mon, Dec 20, 2021 at 05:41:53PM +0000, Cristian Marussi wrote:
+> > > Hi,
+> > > 
+> > > this was supposed to be an easy fix on how sensor readings are handled
+> > > across different FW versions while maintaining backward compatibility,
+> > > but the solution raised for me more questions than the issue itself...
+> > > ...so I posted as an RFC.
+> > > 
+> > > In a nutshell, since SCMI FWv3.0 spec, sensors SCMI_READING_GET command
+> > > can report axis and timestamps too, beside readings, so a brand new
+> > > scmi_reading_get_timestamped protocol operation was exposed (used by IIO)
+> > > while the old scmi_reading_get was kept as it was, already used by HWMON
+> > > subsystem for other classes of sensors.
+> > > 
+> > > Unfortunately, also the flavour of reported values changed from unsigned
+> > > to signed with v3.0, so if you end-up on a system running against an SCMI
+> > > v3.0 FW platform you could end up reading a negative value and interpreting
+> > > it as a big positive since scmi_reading_get reports only u64.
+> > > 
+> > > 01/02 simply takes care, when a FW >= 3.0 is detected, to return an error
+> > > to any scmi_reading_get request if that would result in tryinh to carry
+> > > a negative value into an u64.
+> > > 
+> > > So this should rectify the API exposed by SCMI sensor and make it
+> > > consistent in general, in such a way that a user calling it won't risk to
+> > > receive a false big-positive which was indeed a 2-complement negative from
+> > > the perpective of the SCMI fw.
+> > > 	
+> > > So far so good...sort of...since, to make things more dire, the HWMON
+> > > interface, which is the only current upstream user of scmi_reading_get
+> > > DOES allow indeed to report to the HWMON core negative values, so it was
+> > > just that we were silently interpreting u64 as s64 :P ...
+> > > 
+> > > ...as a consequence the fix above to the SCMI API will potentially break
+> > > this undocumented behaviour of our only scmi_reading_get user.
+> > > 
+> > > Additionally, while looking at this, I realized that for similar reasons
+> > > even on systems running the current SCMI stack API and an old FW <=2.0
+> > > the current HWMON read is potentially broken, since when the FW reports
+> > > a very big and real positive number we'll report it as a signed long to
+> > > the HWMON core, so turning it wrongly into a negative report: for this
+> > > reason 02/02 adds a check inside scmi-hwmon to filter out, reporting
+> > > errors, any result reported by scmi_reading_get so big as to be considered
+> > > a negative in 2-complement...
+> > > 
+> > > ...and this will probably break even more the undocumented behaviours...
+> > > 
+> > > Any feedback welcome !
+> > 
+> > Hi,
+> > 
+> > any feedback on this ? (...before I forgot again :D)
+> 
+> Sorry for the lag, I threw these into a build and the first thing that
+> popped is the following warning on a 32-bit ARM build:
+> 
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/clk/baikal-t1/ccu-rst.c     | 117 +++++++++++++++++++++++++++-
- drivers/clk/baikal-t1/ccu-rst.h     |   4 +
- include/dt-bindings/reset/bt1-ccu.h |   9 +++
- 3 files changed, 129 insertions(+), 1 deletion(-)
+Hi Florian,
 
-diff --git a/drivers/clk/baikal-t1/ccu-rst.c b/drivers/clk/baikal-t1/ccu-rst.c
-index 5e33c3ce962a..186a1491a7d9 100644
---- a/drivers/clk/baikal-t1/ccu-rst.c
-+++ b/drivers/clk/baikal-t1/ccu-rst.c
-@@ -25,17 +25,33 @@
- #include "ccu-div.h"
- #include "ccu-rst.h"
- 
-+#define CCU_SYS_DDR_BASE		0x02c
-+#define CCU_SYS_PCIE_BASE		0x144
-+
- #define CCU_RST_MAP(_rst_id, _clk_id)		\
- 	{					\
- 		.rst_id = _rst_id,		\
- 		.clk_id = _clk_id,		\
- 	}
- 
-+#define CCU_RST_DIR(_rst_id, _base, _ofs)	\
-+	{					\
-+		.rst_id = _rst_id,		\
-+		.base = _base,			\
-+		.ofs = _ofs			\
-+	}
-+
- struct ccu_rst_map {
- 	unsigned int rst_id;
- 	unsigned int clk_id;
- };
- 
-+struct ccu_rst_dir {
-+	unsigned int rst_id;
-+	unsigned int base;
-+	unsigned int ofs;
-+};
-+
- struct ccu_rst_data {
- 	struct device_node *np;
- 	struct regmap *sys_regs;
-@@ -46,6 +62,9 @@ struct ccu_rst_data {
- 	unsigned int rsts_map_num;
- 	const struct ccu_rst_map *rsts_map;
- 
-+	unsigned int rsts_dir_num;
-+	const struct ccu_rst_dir *rsts_dir;
-+
- 	unsigned int divs_num;
- 	struct ccu_div **divs;
- 
-@@ -81,6 +100,23 @@ static const struct ccu_rst_map sys_rst_map[] = {
- 	CCU_RST_MAP(CCU_SYS_APB_RST, CCU_SYS_APB_CLK),
- };
- 
-+/*
-+ * DDR and PCIe sub-domains can be reset with directly controlled reset
-+ * signals. I wouldn't suggest to reset the DDR controller though at least
-+ * while the Linux kernel is working.
-+ */
-+static const struct ccu_rst_dir sys_rst_dir[] = {
-+	CCU_RST_DIR(CCU_SYS_DDR_FULL_RST, CCU_SYS_DDR_BASE, 1),
-+	CCU_RST_DIR(CCU_SYS_DDR_INIT_RST, CCU_SYS_DDR_BASE, 2),
-+	CCU_RST_DIR(CCU_SYS_PCIE_PCS_PHY_RST, CCU_SYS_PCIE_BASE, 0),
-+	CCU_RST_DIR(CCU_SYS_PCIE_PIPE0_RST, CCU_SYS_PCIE_BASE, 4),
-+	CCU_RST_DIR(CCU_SYS_PCIE_CORE_RST, CCU_SYS_PCIE_BASE, 8),
-+	CCU_RST_DIR(CCU_SYS_PCIE_PWR_RST, CCU_SYS_PCIE_BASE, 9),
-+	CCU_RST_DIR(CCU_SYS_PCIE_STICKY_RST, CCU_SYS_PCIE_BASE, 10),
-+	CCU_RST_DIR(CCU_SYS_PCIE_NSTICKY_RST, CCU_SYS_PCIE_BASE, 11),
-+	CCU_RST_DIR(CCU_SYS_PCIE_HOT_RST, CCU_SYS_PCIE_BASE, 12),
-+};
-+
- static int ccu_rst_reset(struct reset_controller_dev *rcdev,
- 			 unsigned long idx)
- {
-@@ -92,12 +128,81 @@ static int ccu_rst_reset(struct reset_controller_dev *rcdev,
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * No CCU divider descriptor means having directly handled reset control,
-+	 * which is mapped into the CCU Divider registers.
-+	 */
- 	rst = &data->rsts[idx];
-+	if (!rst->div)
-+		return -EOPNOTSUPP;
-+
- 	return ccu_div_reset_domain(rst->div);
- }
- 
-+static int ccu_rst_set(struct ccu_rst_data *data,
-+		       unsigned long idx, bool high)
-+{
-+	struct ccu_rst *rst;
-+
-+	if (idx >= data->rsts_num) {
-+		pr_err("Invalid reset ID %lu specified\n", idx);
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Having CCU divider descriptor means trigger-like reset control so
-+	 * direct assertion/de-assertion is unsupported.
-+	 */
-+	rst = &data->rsts[idx];
-+	if (rst->div)
-+		return high ? -EOPNOTSUPP : 0;
-+
-+	return regmap_update_bits(data->sys_regs, rst->reg_ctl,
-+				  rst->mask, high ? rst->mask : 0);
-+}
-+
-+static int ccu_rst_assert(struct reset_controller_dev *rcdev,
-+			  unsigned long idx)
-+{
-+	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
-+
-+	return ccu_rst_set(data, idx, true);
-+}
-+
-+static int ccu_rst_deassert(struct reset_controller_dev *rcdev,
-+			    unsigned long idx)
-+{
-+	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
-+
-+	return ccu_rst_set(data, idx, false);
-+}
-+
-+static int ccu_rst_status(struct reset_controller_dev *rcdev,
-+			  unsigned long idx)
-+{
-+	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
-+	struct ccu_rst *rst;
-+	u32 val;
-+
-+	if (idx >= data->rsts_num) {
-+		pr_err("Invalid reset ID %lu specified\n", idx);
-+		return -EINVAL;
-+	}
-+
-+	rst = &data->rsts[idx];
-+	if (rst->div)
-+		return -EOPNOTSUPP;
-+
-+	regmap_read(data->sys_regs, rst->reg_ctl, &val);
-+
-+	return !!(val & rst->mask);
-+}
-+
- static const struct reset_control_ops ccu_rst_ops = {
- 	.reset = ccu_rst_reset,
-+	.assert = ccu_rst_assert,
-+	.deassert = ccu_rst_deassert,
-+	.status = ccu_rst_status,
- };
- 
- static int ccu_rst_of_idx_get(struct reset_controller_dev *rcdev,
-@@ -153,6 +258,8 @@ static struct ccu_rst_data *ccu_rst_create_data(const struct ccu_rst_init_data *
- 	} else if (of_device_is_compatible(data->np, "baikal,bt1-ccu-sys")) {
- 		data->rsts_map_num = ARRAY_SIZE(sys_rst_map);
- 		data->rsts_map = sys_rst_map;
-+		data->rsts_dir_num = ARRAY_SIZE(sys_rst_dir);
-+		data->rsts_dir = sys_rst_dir;
- 	} else {
- 		pr_err("Incompatible DT node '%s' specified\n",
- 			of_node_full_name(data->np));
-@@ -160,7 +267,7 @@ static struct ccu_rst_data *ccu_rst_create_data(const struct ccu_rst_init_data *
- 		goto err_kfree_data;
- 	}
- 
--	data->rsts_num = data->rsts_map_num;
-+	data->rsts_num = data->rsts_map_num + data->rsts_dir_num;
- 	data->rsts = kcalloc(data->rsts_num, sizeof(*data->rsts), GFP_KERNEL);
- 	if (!data->rsts) {
- 		ret = -ENOMEM;
-@@ -198,6 +305,14 @@ static int ccu_rst_init_desc(struct ccu_rst_data *data)
- 		}
- 	}
- 
-+	for (idx = 0; idx < data->rsts_dir_num; ++idx, ++rst) {
-+		const struct ccu_rst_dir *dir = &data->rsts_dir[idx];
-+
-+		rst->id = dir->rst_id;
-+		rst->reg_ctl = dir->base;
-+		rst->mask = BIT(dir->ofs);
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/clk/baikal-t1/ccu-rst.h b/drivers/clk/baikal-t1/ccu-rst.h
-index 2ef82899dba8..58347dc8a504 100644
---- a/drivers/clk/baikal-t1/ccu-rst.h
-+++ b/drivers/clk/baikal-t1/ccu-rst.h
-@@ -33,10 +33,14 @@ struct ccu_rst_init_data {
-  * struct ccu_div - CCU Reset descriptor
-  * @id: Reset identifier.
-  * @div: Pointer to the CCU Divider descriptor (can be NULL).
-+ * @reg_ctl: reset control register base address.
-+ * @mask: reset flag within the control register.
-  */
- struct ccu_rst {
- 	unsigned int id;
- 	struct ccu_div *div;
-+	unsigned int reg_ctl;
-+	unsigned int mask;
- };
- 
- #ifdef CONFIG_CLK_BT1_CCU_RST
-diff --git a/include/dt-bindings/reset/bt1-ccu.h b/include/dt-bindings/reset/bt1-ccu.h
-index 3578e83026bc..c691efaa678f 100644
---- a/include/dt-bindings/reset/bt1-ccu.h
-+++ b/include/dt-bindings/reset/bt1-ccu.h
-@@ -21,5 +21,14 @@
- 
- #define CCU_SYS_SATA_REF_RST		0
- #define CCU_SYS_APB_RST			1
-+#define CCU_SYS_DDR_FULL_RST		2
-+#define CCU_SYS_DDR_INIT_RST		3
-+#define CCU_SYS_PCIE_PCS_PHY_RST	4
-+#define CCU_SYS_PCIE_PIPE0_RST		5
-+#define CCU_SYS_PCIE_CORE_RST		6
-+#define CCU_SYS_PCIE_PWR_RST		7
-+#define CCU_SYS_PCIE_STICKY_RST		8
-+#define CCU_SYS_PCIE_NSTICKY_RST	9
-+#define CCU_SYS_PCIE_HOT_RST		10
- 
- #endif /* __DT_BINDINGS_RESET_BT1_CCU_H */
--- 
-2.35.1
+thanks for the feedback first of all...
+
+> In file included from ./include/linux/bits.h:6,
+>                  from ./include/linux/bitops.h:6,
+>                  from ./include/linux/hwmon.h:15,
+>                  from drivers/hwmon/scmi-hwmon.c:9:
+> drivers/hwmon/scmi-hwmon.c: In function 'scmi_hwmon_read':
+> ./include/vdso/bits.h:7:26: warning: left shift count >= width of type
+> [-Wshift-count-overflow]
+>  #define BIT(nr)   (UL(1) << (nr))
+>                           ^~
+> drivers/hwmon/scmi-hwmon.c:88:14: note: in expansion of macro 'BIT'
+>   if (value & BIT(63)) {
+>               ^~~
+> 
+
+..and sorry that the series does not seem in good shape...
+
+> Now, in terms of functional testing it did seems to work as intended for
+> 32-bit kernels not for 64-bit kernels where I got:
+> 
+> # sensors
+> scmi_sensors-virtual-0
+> Adapter: Virtual device
+> [   16.413590] hwmon hwmon0: Reported unsigned value too big.
+> ERROR: Can't get value of subfeature temp1_input: I/O error
+> avs_pvt_temp:         N/A
+> pmic_die_temp:    +53.4 C
+> 
+
+So this is my patch apparently breaking things....which was what I wanted
+to verify really :P ... the thing is that up till SCMI v2.0 (Sensor Vers
+<= 0x10000) the SENSOR_READING_GET command returned a single u32
+reading-value by the spec, after that, starting with SCMIv3.0, the
+SENSOR_READING_GET returned also a timestamp and per-axis reading-values
+BUT these readings are now signed s32 !
+
+So I kept the old SCMI interface as it was (used by HWMON):
+
+int (*reading_get)(const struct scmi_protocol_handle *ph, u32 sensor_id,
+                           u64 *value);
+
+and introduced a new one for timestamped/per-axis values provided by newer
+FW (used by SCMI IIO driver):
+
+int (*reading_get_timestamped)(const struct scmi_protocol_handle *ph,
+                               u32 sensor_id, u8 count,
+                               struct scmi_sensor_reading *readings);
+
+(which conveys timestamps and s32 values inside the *readings)
+
+The old interface pass back unsigned values only, in theory, BUT its only
+user HWMON hanldes also negatives, so, it sort of makes sense if the FW
+conveyed signed values inside an unsigned variable in the context of HWMON,
+(breaking the spec) since it cannot convey negatives in any other way...
+
+The whole point of this (broken) series was to try to see if I could sort
+of sanitizing the results depending on the backend FW version detected
+while maintaining backward compatibility...but the current approach of this
+series is deadly broken (as you had seen :<) since makes impossible really
+at the end for the FW to convey negative values as a whole...
+
+I'll have a thought about it but I think I'll drop this series as it is...
+
+> whereas 32-bit would return the following:
+> 
+> # sensors
+> scmi_sensors-virtual-0
+> Adapter: Virtual device
+> avs_pvt_temp:      -6.7 C
+> pmic_die_temp:    +52.3 C
+> 
+> The firmware is version 1:
+> 
+> [    0.044969] arm-scmi brcm_scmi@0: SCMI Protocol v1.0 'brcm-scmi:'
+> Firmware version 0x1
+> 
+ I think this works because my patch is flaky :P ... but as said I'll drop
+this as it is now.
+
+Thanks and sorry for the noise,
+Cristian
 

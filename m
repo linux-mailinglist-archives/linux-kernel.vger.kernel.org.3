@@ -2,149 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C914EBF14
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB244EBF19
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245537AbiC3Kp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S245551AbiC3KqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245524AbiC3Kp5 (ORCPT
+        with ESMTP id S245546AbiC3KqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:45:57 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A576562;
-        Wed, 30 Mar 2022 03:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648637050; x=1680173050;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=1ALKljcPIWRTbJOCCZdSlHSchaW8/tgIbdkkM8LZY/g=;
-  b=oImNDtfOXKBBXBj2uBQxpRW8hp4pmpmR5Uqrjb4b2EPspoVPnTJ7SADQ
-   qjryFws/ZTZIZEn3nH0My0DESJtak2nf9Gdtdsu/utQfPQkemYCBzhRqI
-   1FVdoqrx1bYkAYLbBY0PSk/xR2Xg/gesp2ve4/MifD4D9PIL881FKGpO2
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Mar 2022 03:44:10 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 03:44:10 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 30 Mar 2022 03:44:10 -0700
-Received: from [10.216.27.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 30 Mar
- 2022 03:44:04 -0700
-Subject: Re: [PATCH V8 7/7] arm64: dts: qcom: sc7280: Add pm8008 support for
- sc7280-idp
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1648209491-30165-1-git-send-email-quic_c_skakit@quicinc.com>
- <1648209491-30165-8-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n511eQTnJHqt0B=uiiSjigy-RHZ52YuYz4kfEpX1x6CMfw@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <094d8faa-c42b-be1b-cf92-04232d618a3e@quicinc.com>
-Date:   Wed, 30 Mar 2022 16:14:01 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 30 Mar 2022 06:46:16 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44426DEB8;
+        Wed, 30 Mar 2022 03:44:30 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id b18so17640083qtk.13;
+        Wed, 30 Mar 2022 03:44:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5AR9u+pkgZAvJ0f4YWG7QhXL5v6/FitjOX/6TTdYJWU=;
+        b=Ebs9GThq/OoMRcfcmYwIEjuPSuGf6c2iOQWfOHZuAWXeM695DWV2T40/a/tujDYvyu
+         wqGOBQeJofA5yHV8EE8gaYI14HNO5/V7Qtl9bD0Y5hpLPkx+we/TTdiMYeDgqI1jCO6W
+         EXvfghGmozeR0LT8V3VW07z5tjmtvv8flCHgMdJ3xDyXIQm5ToEBqoowlyXRo2WEOzGh
+         ZiUucSUubkJe4USI5X2CNpS3H3X12VLAu8jjlrSrqwmQa3OIwHyaQKQuKTP5CymXvdhp
+         CJ49D3dGFgsllX6sDn1REQMTOBfIAdGzSk6eP5X4S5dCGt9KFQw6E83BYFJI++O/UEWu
+         aSeQ==
+X-Gm-Message-State: AOAM531Rt2wR4HbpPnQx7nMxPYL09U8Qg7mcn7mQ5gA5/DlGNo+Po+uW
+        iifFHKgecfNst78LGZ9fEiHZgtMUn5P9gw==
+X-Google-Smtp-Source: ABdhPJzlPWC3Rzu98McfeEXB5vlOOYlUhACctwFeQPt2K0C+pn/AaLsQtFg32iltLEjqYUhXVXf3pw==
+X-Received: by 2002:a05:622a:1013:b0:2e1:c9c0:9831 with SMTP id d19-20020a05622a101300b002e1c9c09831mr31821152qte.245.1648637068908;
+        Wed, 30 Mar 2022 03:44:28 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id de26-20020a05620a371a00b0067dc7923b14sm10673823qkb.132.2022.03.30.03.44.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 03:44:28 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id f38so36118078ybi.3;
+        Wed, 30 Mar 2022 03:44:28 -0700 (PDT)
+X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr32711003yba.393.1648637068193;
+ Wed, 30 Mar 2022 03:44:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n511eQTnJHqt0B=uiiSjigy-RHZ52YuYz4kfEpX1x6CMfw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211001130249.80405-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211001130249.80405-1-krzysztof.kozlowski@canonical.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Mar 2022 12:44:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU10FL8-F1y8rrO4dUtKJ_NvenxcBD3VWB7=5rf-vf-yg@mail.gmail.com>
+Message-ID: <CAMuHMdU10FL8-F1y8rrO4dUtKJ_NvenxcBD3VWB7=5rf-vf-yg@mail.gmail.com>
+Subject: Re: [PATCH] regulator: dt-bindings: maxim,max8997: convert to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-On 3/25/2022 11:18 PM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-03-25 04:58:11)
->> Add pm8008_infra and pm8008_regulators support for sc7280 idp.
->>
->> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
->> ---
->> Changes in V6:
->>   - No changes.
->>
->> Changes in V7:
->>   - No Changes.
->>
->> Changes in V8:
->>   - Add an extra phandle "pm8008_bus" and then include pm8008 dtsi files inside it.
->>   - Remove output-high from pm8008_active node.
->>
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 70 ++++++++++++++++++++++++++++++++
->>   1 file changed, 70 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index ecbf2b8..0843e92 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -263,6 +263,67 @@
->>          };
->>   };
->>
->> +pm8008_bus: &i2c1 {
->> +       #address-cells = <1>;
->> +       #size-cells = <0>;
-> These two properties should already be in the i2c1 node. Can you remove
-> them?
-
-
-Okay.
-
-
->> +       status = "okay";
->> +};
->> +
->> +&pm8008_bus {
->> +       #include "pm8008-infra.dtsi"
->> +       #include "pm8008-regulators.dtsi"
->> +};
-> I was thinking more of like
+On Fri, Oct 1, 2021 at 3:18 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+> Convert the Maxim MAX8997 PMIC bindings to DT schema format.  Extend the
+> examples with additional one copied from kernel's exynos4210-origen.dts.
+> Also the binding descriptions are copied from old file, so license
+> entire work under GPL-2.0.
 >
-> 	&pm8008_bus: &i2c1 {
-> 		status = "okay";
-> 	};
+> This also adds previously undocumented 32 kHz clock output modelled as
+> regulators.
 >
-> 	#include "pm8008.dtsi"
->
-> and then the nodes below.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+Thanks for your patch, which is now commit 1d2104f21618a4ce
+("regulator: dt-bindings: maxim,max8997: convert to dtschema").
 
-You mean
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
 
-pm8008_bus: &i2c1 {
+> +if:
+> +  anyOf:
+> +    - required:
+> +        - max8997,pmic-buck1-uses-gpio-dvs
+> +    - required:
+> +        - max8997,pmic-buck2-uses-gpio-dvs
+> +    - required:
+> +        - max8997,pmic-buck5-uses-gpio-dvs
+> +then:
+> +  properties:
+> +    max8997,pmic-buck1-dvs-voltage:
+> +      minItems: 8
+> +      maxItems: 8
+> +    max8997,pmic-buck2-dvs-voltage:
+> +      minItems: 8
+> +      maxItems: 8
+> +    max8997,pmic-buck5-dvs-voltage:
+> +      minItems: 8
+> +      maxItems: 8
 
-         status = "okay";
+The above doesn't seem to work as expected...
 
-};
+> +        pmic@66 {
+> +            compatible = "maxim,max8997-pmic";
+> +            reg = <0x66>;
+> +
+> +            interrupts-extended = <&gpx0 7 IRQ_TYPE_LEVEL_LOW>,
+> +                                  <&gpx2 3 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +            max8997,pmic-buck1-uses-gpio-dvs;
+> +            max8997,pmic-buck2-uses-gpio-dvs;
+> +            max8997,pmic-buck5-uses-gpio-dvs;
+> +
+> +            max8997,pmic-ignore-gpiodvs-side-effect;
+> +            max8997,pmic-buck125-default-dvs-idx = <0>;
+> +
+> +            max8997,pmic-buck125-dvs-gpios = <&gpx0 5 GPIO_ACTIVE_HIGH>,
+> +                                             <&gpx0 6 GPIO_ACTIVE_HIGH>,
+> +                                             <&gpl0 0 GPIO_ACTIVE_HIGH>;
+> +
+> +            max8997,pmic-buck1-dvs-voltage = <1350000>, <1300000>,
+> +                                             <1250000>, <1200000>,
+> +                                             <1150000>, <1100000>,
+> +                                             <1000000>, <950000>;
+> +
+> +            max8997,pmic-buck2-dvs-voltage = <1100000>, <1000000>,
+> +                                             <950000>,  <900000>,
+> +                                             <1100000>, <1000000>,
+> +                                             <950000>,  <900000>;
+> +
+> +            max8997,pmic-buck5-dvs-voltage = <1200000>, <1200000>,
+> +                                             <1200000>, <1200000>,
+> +                                             <1200000>, <1200000>,
+> +                                             <1200000>, <1200000>;
 
-&pm8008_bus {
+Documentation/devicetree/bindings/regulator/maxim,max8997.example.dtb:
+pmic@66: max8997,pmic-buck1-dvs-voltage: [[1350000, 1300000, 1250000,
+1200000, 1150000, 1100000, 1000000, 950000]] is too short
+From schema: Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+Documentation/devicetree/bindings/regulator/maxim,max8997.example.dtb:
+pmic@66: max8997,pmic-buck2-dvs-voltage: [[1100000, 1000000, 950000,
+900000, 1100000, 1000000, 950000, 900000]] is too short
+From schema: Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+Documentation/devicetree/bindings/regulator/maxim,max8997.example.dtb:
+pmic@66: max8997,pmic-buck5-dvs-voltage: [[1200000, 1200000, 1200000,
+1200000, 1200000, 1200000, 1200000, 1200000]] is too short
+From schema: Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
 
-     #include "pm8008.dtsi"
+Gr{oetje,eeting}s,
 
-};
+                        Geert
 
-and remaining nodes, right?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

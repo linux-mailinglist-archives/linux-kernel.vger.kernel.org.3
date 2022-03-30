@@ -2,140 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E1A4EC4E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7749A4EC4EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344867AbiC3MtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S1345165AbiC3MvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345942AbiC3Msc (ORCPT
+        with ESMTP id S1344806AbiC3MvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:48:32 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766ACDE0BF;
-        Wed, 30 Mar 2022 05:46:46 -0700 (PDT)
+        Wed, 30 Mar 2022 08:51:12 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A747015E8BF
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1648644405;
-        bh=KAfrZgKEul9aSsbZ36kPU6Tj18oRXB0dM4HC3xvmmXw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=nn8AAgM02CcbhIpBEc+LRzvcURan3/dQ3hkEigyO4ktwhNb3MknZmgEA8v2ISWf66
-         eMqota5PANQaFP/P2ctxTAmBUX9sLJc1dq/gRo/1HQUgIMF279FtC6TlvXRsw0DFby
-         WoqCIRieFcgtb4AgBtxbYQp5x+DKFfwU8NjJNOfI=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 55C651288359;
-        Wed, 30 Mar 2022 08:46:45 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nDP9QrI8rjHM; Wed, 30 Mar 2022 08:46:45 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1648644405;
-        bh=KAfrZgKEul9aSsbZ36kPU6Tj18oRXB0dM4HC3xvmmXw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=nn8AAgM02CcbhIpBEc+LRzvcURan3/dQ3hkEigyO4ktwhNb3MknZmgEA8v2ISWf66
-         eMqota5PANQaFP/P2ctxTAmBUX9sLJc1dq/gRo/1HQUgIMF279FtC6TlvXRsw0DFby
-         WoqCIRieFcgtb4AgBtxbYQp5x+DKFfwU8NjJNOfI=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id A54551288358;
-        Wed, 30 Mar 2022 08:46:43 -0400 (EDT)
-Message-ID: <41521e8ecd2876327cd8dd929b32aa3b7e9daca8.camel@HansenPartnership.com>
-Subject: Re: Linux DRTM on UEFI platforms
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "dpsmith@apertussolutions.com" <dpsmith@apertussolutions.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        The development of GNU GRUB <grub-devel@gnu.org>,
-        Kees Cook <keescook@chromium.org>
-Date:   Wed, 30 Mar 2022 08:46:41 -0400
-In-Reply-To: <CAMj1kXHJxmdLie1JE=k3O4zne8tHED7g63rj42q-sL_JQUpvNw@mail.gmail.com>
-References: <20220329174057.GA17778@srcf.ucam.org>
-         <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
-         <20220330071103.GA809@srcf.ucam.org>
-         <CAMj1kXE9WrBOUG6MRQ90cMH_NvvCw_jVCar5Dsj+gkZr1AA0MQ@mail.gmail.com>
-         <20220330071859.GA992@srcf.ucam.org>
-         <CAMj1kXHfw75GphiewQzbA-swsMD3AGunyhc9HSue_xqrHt9GhQ@mail.gmail.com>
-         <20220330072755.GA1169@srcf.ucam.org>
-         <CAMj1kXHJxmdLie1JE=k3O4zne8tHED7g63rj42q-sL_JQUpvNw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648644566; x=1680180566;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GKh3TB5IeP3GVL0TdmWg6yllvBDir0N5PLH7xzCm6AQ=;
+  b=OTvd2e+lYKTrgc+tuC3+iOUH4Dy8Zoqy5CB3iY2uaPDeZx8FUyu46RpM
+   El4/0hCi9WuEybFNgvG1bcRKGxIr2xst8HzhNdEgtqR92damWcY0Wl4Ry
+   4IcRANkIFfsXu4wmhhmJho51nmnxvglQnnWtXOsJMBh66e+Hxq+TxG5qZ
+   G5MheMC8pgxWL61al6CoHEgJACSRm+fdhj9RUvS1Gv8B1WJPSu1xAvNvn
+   7I0edGgch0WN6DXkycZWy7r4Sq8tbrM4cdPPJfa7rpjHh9x3LliaWJNIk
+   FyNylz115iRCex5Xz4WfySFL5EoYWvv6snLxIlwjXtWm9IzyIK9H78ap2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258364183"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="258364183"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 05:49:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="565522397"
+Received: from lkp-server02.sh.intel.com (HELO 1905232cd9fb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2022 05:49:24 -0700
+Received: from kbuild by 1905232cd9fb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZXlL-00002K-PS;
+        Wed, 30 Mar 2022 12:49:23 +0000
+Date:   Wed, 30 Mar 2022 20:49:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tri Vo <trong@google.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5870/5872] aarch64-linux-ld: trusty-ipc.c:undefined reference to
+ `trusty_dma_buf_get_shared_mem_id'
+Message-ID: <202203302026.RQKx7sLs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-30 at 09:39 +0200, Ard Biesheuvel wrote:
-> On Wed, 30 Mar 2022 at 09:27, Matthew Garrett <mjg59@srcf.ucam.org>
-> wrote:
-> > On Wed, Mar 30, 2022 at 09:23:17AM +0200, Ard Biesheuvel wrote:
-> > > On Wed, 30 Mar 2022 at 09:19, Matthew Garrett <
-> > > mjg59@srcf.ucam.org> wrote:
-> > > > From a conceptual perspective we've thought of the EFI stub as
-> > > > being logically part of the bootloader rather than the early
-> > > > kernel, and the bootloader is a point where the line is drawn.
-> > > > My guy feeling is that jumping into the secure kernel
-> > > > environment before EBS has been called is likely to end badly.
-> > > 
-> > > If you jump back into the system firmware, sure.
-> > > 
-> > > But the point I was trying to make is that you can replace that
-> > > with your own minimal implementation of EFI that just exposes a
-> > > memory map and some protocols and nothing else, and then the
-> > > secure launch kernel would be entirely in charge of the execution
-> > > environment.
-> > 
-> > We can't just replace system firmware with an imitation of the same
-> > - for instance, configuring the cold boot prevention memory
-> > overwrite requires us to pass a variable through to the real
-> > firmware, and that's something that we do in the stub.
-> > 
-> 
-> But these are exactly the kinds of things the secure launch kernel
-> wants to be made aware of, no? The secure launch kernel could just
-> MITM the calls that it chooses to allow, and serve other calls
-> itself.
+Hi Tri,
 
-The problem would become that the MITM firmware has to be evolved in
-lockstep with the boot stub.  The problem isn't really a point in time,
-figure out what config the boot stub extracts from EFI now and measure
-it, it's an ongoing one: given an evolving kernel and UEFI subsystem
-means that over time what configuration the kernel extracts from EFI
-changes, how do we make sure it's all correctly measured before secure
-launch?
+FYI, the error/warning still remains.
 
-If the MITM doesn't support a capability a newer kernel acquires, that
-MITM must fail secure launch ... which becomes a nightmare for the
-user.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+commit: 629a4d3318cc1234675f62b69fba8791592e8a83 [5870/5872] ANDROID: trusty: Support setting trusty_shared_mem_id_t
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220330/202203302026.RQKx7sLs-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/629a4d3318cc1234675f62b69fba8791592e8a83
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 629a4d3318cc1234675f62b69fba8791592e8a83
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-One possibility might be that the MITM actually does nothing at all
-except record Boot Service requests and responses up to exit boot
-services (EBS).  We could call that record the boot configuration and
-measure it, plus we could then intercept EBS, and do the DRTM secure
-launch to the return point.  It's conceptually similar Matthew's idea
-of a callback except it won't require modification of the boot
-parameters.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-James
+All errors (new ones prefixed by >>):
 
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: drivers/trusty/trusty-ipc.o: in function `dn_share_fd':
+   trusty-ipc.c:(.text+0x337c): undefined reference to `trusty_dma_buf_get_ffa_tag'
+>> aarch64-linux-ld: trusty-ipc.c:(.text+0x3398): undefined reference to `trusty_dma_buf_get_shared_mem_id'
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

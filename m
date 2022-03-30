@@ -2,149 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4C84EB935
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E184EB939
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242459AbiC3EJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 00:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S242474AbiC3EKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 00:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiC3EJb (ORCPT
+        with ESMTP id S240417AbiC3EK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 00:09:31 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B382F1704F5;
-        Tue, 29 Mar 2022 21:07:46 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U33vba016596;
-        Wed, 30 Mar 2022 04:07:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=sWMR3t4Mi1TPIvLvq7e9gjBlOUT+THkXovonMPIAqbY=;
- b=suUDADsf9GwvfRRWSxp/89meQYTIIzzp+thm1Zg0fPitxc0c55GXNNquyLYS92FUr0OQ
- IVVsoCRL4cQFq48y9da5syKqtXr3aX3NXT/aWcI+3+fvGmDmCkvTkt+6qIufyimySgTW
- cIMJy75SFkKwHmB6E6fhRsmIoA9+QS0iu6Zn6dqira+3OptvyAWfEXO6bxNE7ABXYKZJ
- dyBUoQymkgISAUZoGAGtocOvoqHhYHgV+OCXsSGUkLoj905yQO1/XUyBhOnXFQnEmrqd
- jefF/DbcSzv8dP/1pgWzCOn0R8AQofEMDn8Wzck9aq3N1RsoG2v9KaiLSWUqyrANk38U 7Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f1uctre2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 04:07:42 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22U46lWo158258;
-        Wed, 30 Mar 2022 04:07:42 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by aserp3020.oracle.com with ESMTP id 3f1tmynent-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 04:07:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iggKEb2ujmhLc8BnP50wbrYZsw3eaN7P567IHA5gFgz5F9kXzcl6I/r8MDaGWfuhSDzWFckpmD5EFHZeTPpYO+KbateaXLTsMbCCptWOEiD9IdJllpbyQ+VUgunQxlqn36NMvTf374AO1ccAQUCnhQ9n//q5CKM3KDkuJOEkufRB2YpAR5j2rVAvwodlCmwagBr8Nk89x2kswON1Ge7A4x0So3+uuI2tnYsIzY6RKuUZ1OENg4H8/2t9yS5ATvVPVsqh91lG5tK/pp0mH9653CcI9fZWU21HknCxMlURJHj4qD7g/Npc8LtJJMUoj1AZBf/aBIAbmae9zXaAX60cIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sWMR3t4Mi1TPIvLvq7e9gjBlOUT+THkXovonMPIAqbY=;
- b=BZ6T0CMbP5+EndKpiBqqLnGUnAr99mZHwucdruQSdqKhVDtM/vrowbSpDzuYz+sUTdFMA5mtvzCsXqVAbCfS5eNbmxUVioPlherIK52WPyZYazpCgrEMcasrmv2hRVKB176zZk468OXB5wstjJpSkWdWRJQK3poVtwgYApUW4X5ZKxbmNNOFWAxfQ38skj2wJjJzudK1r6wRDG3vAWiiOZs7XBgB0rlA7dUhty3dg5A/Yz5/gnQ3RmIHPnV+h9j411cVFIUeeodsninq/7tOGdLn9b02EInnOjPdN+F7FGX5RB0LylMDNE8x2z1vwGyxON7N33YSqj4ndu0a5A0rIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sWMR3t4Mi1TPIvLvq7e9gjBlOUT+THkXovonMPIAqbY=;
- b=fuG0Be7pRHLedRVPW8w9DQXPiST0YQ9JNQ/PAZD4R/1ofdIzwOBkVaQ9sqZ+/iEgec6NDdIU30ceLcb2A4NZluTKMbNkNfOX9dIoefFGy2wOqpzyu7IRIUmU2FjpA6b9x/LMCOEjdgx245DCaINBMSVuyOjY3LtR5RQ6F0C2NEY=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DM5PR10MB1802.namprd10.prod.outlook.com (2603:10b6:3:10d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Wed, 30 Mar
- 2022 04:07:40 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::48e3:d153:6df4:fbed]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::48e3:d153:6df4:fbed%4]) with mapi id 15.20.5102.023; Wed, 30 Mar 2022
- 04:07:40 +0000
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: bnx2i: Fix spelling mistake "mis-match" ->
- "mismatch"
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1tubgrsl7.fsf@ca-mkp.ca.oracle.com>
-References: <20220319231445.21696-1-colin.i.king@gmail.com>
-Date:   Wed, 30 Mar 2022 00:07:38 -0400
-In-Reply-To: <20220319231445.21696-1-colin.i.king@gmail.com> (Colin Ian King's
-        message of "Sat, 19 Mar 2022 23:14:45 +0000")
-Content-Type: text/plain
-X-ClientProxiedBy: SN7PR04CA0209.namprd04.prod.outlook.com
- (2603:10b6:806:126::34) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Wed, 30 Mar 2022 00:10:29 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560BA20F4D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648613324; x=1680149324;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GXMtXoRhyhPbV4s+mUDid7WXBQliaTM5lEr+uqSFXdA=;
+  b=ODe7FuQZE1JwZ3TrTbfo5ptjOpJV8C0lF3HXkt4hB6tT5WUqxrTHq+G4
+   qEnN3H3wt4D555xCcuzGRBJPoXfHS0G9S6th+MW43x8s3yxJ2jBtYLLB+
+   nj7MAnmfWaasYPu8dGsVNcuSthVqOlWnVs8qEZZBh4qwZ/5YQpwnqnC9O
+   4oAgcv4tTKm69C91Pk5GtmlrxiCT8eP5fHIWLA4G0BYi9m2/wElCQMW2a
+   QNuWou0mvzU8nxACSSJJCsQPnaOI6uyD0CDxaqieP+uewFz+vPvghIkNb
+   eFj1fsdLmcLf/fCS0t+ER2uVWzcwJCHlZWrCOaISHNfVVllmXRqVNf8yy
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="246939561"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="246939561"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:08:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="719816605"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2022 21:08:40 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZPdP-0000yW-Ex; Wed, 30 Mar 2022 04:08:39 +0000
+Date:   Wed, 30 Mar 2022 12:08:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/kspp-stringop-overflow 7/7]
+ arch/m68k/amiga/config.c:453:56: warning: writing 1 byte into a region of
+ size 0
+Message-ID: <202203301238.Yblbl2iM-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0e660ca5-ae78-4552-2f41-08da1202d513
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1802:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB1802BCEC6F28F8F56189B2558E1F9@DM5PR10MB1802.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vnVyD4zEyhAdwcfePANEbC32rdIzobHvsE+yZN0HwepMc96AScp176LkTGOfc5rFmEsnR7TQRbTdhG8kZ9Um8ufYSfGBuJJ2DEy898ZKKWSLiZjXGEvSHnp97fOyfvntzI7akXGlnjLOmXkbX+V5mVbYtd3/z5V6/ERP4BNNewXf4+NvSqp2NfxwrsjDx1lLj+xV//IuOkx8hOekwDgABZeHeDV+ubYrsCaJB/v1DxYq5jxUjKj8X7AQZxKxWv3cBUFk7iaoiq85fHTRwfve3HgguU3f2Cb2OUvKu00QQ0lrSrjscG9WgkgJIznmfhrwputYxmb5TIGMkIRTUfmITzNTFMOUBOrgSpVKhtxowP5w342jS7UvYa5KQt2Zg10Y+T7LgeDHVbLjMAklgC2YIYkbIBSQiBYKes4YZkKWx8MdD9TUX9wf32GKC6/g37r1/ydUSN648OIdd3/yE48g93/mc8IpaJDlyDHAh/aUTPdFbLER3IWRqaOqxA7lJsCQz5E+tGvLJf40ZuaglggNekDN6dwIBRZ5JMHruB6lcEWcVXiPhu0hi7WTTCb6twiaLohjuVaTGEdX/jsh/hKfuDS/McSvYcPW1+3mK1jzL3/UI4nNrtoSLV4ocZ5nwVEBktmt7NuqFWLxS0SXLtOVd5demaWDjO1vy9X7j0eriyo5zF67iNJ/9G0Yr/rEiAJmvXjS3FALBn8DlGk2G88k5g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(86362001)(38350700002)(66556008)(66476007)(36916002)(6506007)(316002)(6916009)(6512007)(66946007)(5660300002)(52116002)(558084003)(2906002)(8676002)(6486002)(26005)(508600001)(186003)(83380400001)(54906003)(4326008)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oP/yWWFVzI+ep6ZSQny+BQqK5uwu+uQoNVi5Si8wzaGngeP3EjRU4XGf2ypc?=
- =?us-ascii?Q?QqJCPyGLLfrg4TI6N25ONa/0WJjuHjCdaoUBFebQUtQpTEuAmC7cBCrxx2fJ?=
- =?us-ascii?Q?vfH59wStFFtK/N6Tk+hD0TD55Tjhtt4Bt+vkEibOwKNXLbezDTAMVexSkQYi?=
- =?us-ascii?Q?fgZ5tZ9qC0B53MK2z0F/YhZ50G3Q4hxQXs2KLAoulsbFEo803nmibRiQC9tf?=
- =?us-ascii?Q?pz6R35NKCfEmqSr+wHzBG+DUsk+cRsJ9RT/afWEijPChtJLfvRWyLY16rVuI?=
- =?us-ascii?Q?fyU0GoUwLotTXOvpvBXygpKEUzsGU19b8AOz3gVf/0r0ICdWEQZLj1QQQabF?=
- =?us-ascii?Q?wJotZlCPOOcTqekBIjSTmNz9KiTfTtIUSUjy6Bdq12jCXg2Stn+E0jlKdX4y?=
- =?us-ascii?Q?G+UxJ/gqIJEDK0UadZoYdpcEbizRN1XeOpDXiAsDCwDZYvNnZ3aVxhcRqfNK?=
- =?us-ascii?Q?gVX0VO77QuKBqAd/JAofVDMthJ5tpF7HKyEVy8gun2gcklkywPAH4kncF4KA?=
- =?us-ascii?Q?VkT6CAD9M7pf/AbNC0SiduvflUX4taXCewLIHQE2f5b8uQirFYvfE/N1+eJq?=
- =?us-ascii?Q?GhsOR4Q4xjAeyyPAbLICct5+G2ew30pztqLgA5pJ29RSkCSqjXP+oMf1A/6a?=
- =?us-ascii?Q?Uzq/0vPnjMYKbUKt4bu73VMwuYQ7y+WZQ1d8Efl2tpixbpwQG6fXL8cCWQww?=
- =?us-ascii?Q?Kgkqx9Q7ZNsfXADJ2FX4HUUOO3zw/iMw0VMhC1GQ9lhrWY6F842/dLrloMEf?=
- =?us-ascii?Q?qurkGts1r8HiRR/nGLlbqVjQG3zEb7qAeREIzIyctKfZKkLkptumWRVrowZH?=
- =?us-ascii?Q?vACkOUaKgSry6+/7MTpm7IlaeAx5B3o00iXoZOwD+sQqsMhZKVxk2XOBPSZ+?=
- =?us-ascii?Q?EoIprDOHkFS6fHwD7S4zZtXIjkS2aCtcF4mLsouFd5rovnBHLC4ZgWMvBlZI?=
- =?us-ascii?Q?hKn+b4iqymtBzIynZPPkVAzT4LKEYQ5X2xA6JnXdGGQ2OpPe5wKSoTD9QRU6?=
- =?us-ascii?Q?5Euxl5U9n4KJHXJvpFZQenkN0M0WLIWumuqITDbAHANiYt6Ik/+bWFgNRbL2?=
- =?us-ascii?Q?5gKBxM7npZO1zLINrWgWnEvtmfpqA6iONlgm6N+zZnbPyQidEywsWRhxtwsT?=
- =?us-ascii?Q?LFA9s105bwotxby8UKevOxUd+UC+psW4rswjiQNQRjiJyElUJ4OePLCKn54g?=
- =?us-ascii?Q?vxyonhWiUcrFYxvBq62tNPsbi4zSzdi32qEX7nHKcUD46rpGyCqgUJJ1t46+?=
- =?us-ascii?Q?B1uHK1yZy4/px21yL5n8m8mf1LEcfhoMcIw9uUepXVGwXJck2XhNZEVTLDPR?=
- =?us-ascii?Q?yi873bUu6LQ2fXDjXNTwmOqVohZ6zh4hS2b9xVXwN0r7+eEc8OpmjSfXszk0?=
- =?us-ascii?Q?fAwqb0Utl/DvNOrnwFK0yaIlGs5iFWtbFFCeR/VrRTsGIUey3DV4D5vPSwxS?=
- =?us-ascii?Q?pPIkfdFd/g8ksx0tQk66NBjxURwLsLJ/oLsmtK2rRmauz2XrdAL2UTYC3Q1G?=
- =?us-ascii?Q?0x2m44ocwZmc1/emk2jrq6XRktFtXujsoxNEqWJL3Q6+v4yjhuf7fJFQmAwW?=
- =?us-ascii?Q?PKcNLgYWpRbm1LePKSrHGXDLDq5zaS2fxUC8ngAVEyEzGnoVJFDHWBn+oYb8?=
- =?us-ascii?Q?5LMys7YdIN+XVqff2kuKj6KzjWcRZStwXGx3LHMnXjFamAPi+Y1pSyD9cfbW?=
- =?us-ascii?Q?968BoSI/J1nTfkkIdFs5qHreh+h1kVIMQ3zkjou3V3pla+XOz3d6h/VsqJcI?=
- =?us-ascii?Q?aOO0uCWoSj81F1919CqOlYeLGDFGPG0=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e660ca5-ae78-4552-2f41-08da1202d513
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 04:07:40.1490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HKKAny0SORqoEKm+b7MGbV/JLobh1mHOLKlsMK9SpiBWvpDaU7Fk/TOvbd1S3Z8Uh0r8cSiA3jQPvAmvtN4A4WJ/3PJLUwevWxN/6jT2NhE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1802
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10301 signatures=695566
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- phishscore=0 adultscore=0 mlxlogscore=819 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203300019
-X-Proofpoint-ORIG-GUID: Q9cajmuULXdHHjrNCjd6Eum-egF1uhFb
-X-Proofpoint-GUID: Q9cajmuULXdHHjrNCjd6Eum-egF1uhFb
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,12 +64,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/kspp-stringop-overflow
+head:   3801f720ebf09ec3589982fba4138e83b4177fe1
+commit: 3801f720ebf09ec3589982fba4138e83b4177fe1 [7/7] Makefile: Enable -Wstringop-overflow globally
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220330/202203301238.Yblbl2iM-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=3801f720ebf09ec3589982fba4138e83b4177fe1
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/kspp-stringop-overflow
+        git checkout 3801f720ebf09ec3589982fba4138e83b4177fe1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/amiga/ arch/m68k/q40/ drivers/staging/r8188eu/ sound/oss/dmasound/
 
-Colin,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> There are a few spelling mistakes in some error messages. Fix them.
+All warnings (new ones prefixed by >>):
 
-Applied to 5.18/scsi-staging, thanks!
+   arch/m68k/amiga/config.c: In function 'config_amiga':
+>> arch/m68k/amiga/config.c:453:56: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     453 |                 *(unsigned char *)ZTWO_VADDR(0xde0002) |= 0x80;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+--
+   arch/m68k/q40/q40ints.c:84:13: warning: no previous prototype for 'q40_init_IRQ' [-Wmissing-prototypes]
+      84 | void __init q40_init_IRQ(void)
+         |             ^~~~~~~~~~~~
+   arch/m68k/q40/q40ints.c:112:6: warning: no previous prototype for 'q40_mksound' [-Wmissing-prototypes]
+     112 | void q40_mksound(unsigned int hz, unsigned int ticks)
+         |      ^~~~~~~~~~~
+   arch/m68k/q40/q40ints.c:152:6: warning: no previous prototype for 'q40_sched_init' [-Wmissing-prototypes]
+     152 | void q40_sched_init (void)
+         |      ^~~~~~~~~~~~~~
+   arch/m68k/q40/q40ints.c: In function 'q40_timer_int':
+>> arch/m68k/q40/q40ints.c:137:26: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     137 |                 *DAC_LEFT=sval;
+         |                 ~~~~~~~~~^~~~~
+   arch/m68k/q40/q40ints.c:138:27: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     138 |                 *DAC_RIGHT=sval;
+         |                 ~~~~~~~~~~^~~~~
+   arch/m68k/q40/q40ints.c: In function 'q40_mksound':
+   arch/m68k/q40/q40ints.c:120:27: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     120 |                 *DAC_LEFT = 128;
+         |                 ~~~~~~~~~~^~~~~
+   arch/m68k/q40/q40ints.c:121:28: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     121 |                 *DAC_RIGHT = 128;
+         |                 ~~~~~~~~~~~^~~~~
+--
+   In file included from include/linux/string.h:20,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/rcupdate.h:29,
+                    from include/linux/rculist.h:11,
+                    from include/linux/sched/signal.h:5,
+                    from drivers/staging/r8188eu/core/../include/osdep_service.h:7,
+                    from drivers/staging/r8188eu/core/rtw_recv.c:6:
+   drivers/staging/r8188eu/core/rtw_recv.c: In function 'wlanhdr_to_ethhdr':
+>> arch/m68k/include/asm/string.h:72:25: warning: '__builtin_memcpy' writing 6 bytes into a region of size 0 overflows the destination [-Wstringop-overflow=]
+      72 | #define memcpy(d, s, n) __builtin_memcpy(d, s, n)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/r8188eu/core/rtw_recv.c:1233:9: note: in expansion of macro 'memcpy'
+    1233 |         memcpy(ptr + ETH_ALEN, pattrib->src, ETH_ALEN);
+         |         ^~~~~~
+>> arch/m68k/include/asm/string.h:72:25: warning: '__builtin_memcpy' writing 6 bytes into a region of size 0 overflows the destination [-Wstringop-overflow=]
+      72 | #define memcpy(d, s, n) __builtin_memcpy(d, s, n)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/r8188eu/core/rtw_recv.c:1233:9: note: in expansion of macro 'memcpy'
+    1233 |         memcpy(ptr + ETH_ALEN, pattrib->src, ETH_ALEN);
+         |         ^~~~~~
+--
+   sound/oss/dmasound/dmasound_q40.c: In function 'Q40Silence':
+>> sound/oss/dmasound/dmasound_q40.c:395:29: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     395 |         *DAC_LEFT=*DAC_RIGHT=127;
+         |                   ~~~~~~~~~~^~~~
+   sound/oss/dmasound/dmasound_q40.c:395:18: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     395 |         *DAC_LEFT=*DAC_RIGHT=127;
+         |         ~~~~~~~~~^~~~~~~~~~~~~~~
+   In function 'Q40Silence',
+       inlined from 'Q40Init' at sound/oss/dmasound/dmasound_q40.c:530:2:
+>> sound/oss/dmasound/dmasound_q40.c:395:29: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     395 |         *DAC_LEFT=*DAC_RIGHT=127;
+         |                   ~~~~~~~~~~^~~~
+   sound/oss/dmasound/dmasound_q40.c:395:18: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     395 |         *DAC_LEFT=*DAC_RIGHT=127;
+         |         ~~~~~~~~~^~~~~~~~~~~~~~~
+   sound/oss/dmasound/dmasound_q40.c: In function 'Q40Interrupt':
+   sound/oss/dmasound/dmasound_q40.c:499:37: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     499 |                 *DAC_LEFT=*DAC_RIGHT=127;
+         |                           ~~~~~~~~~~^~~~
+   sound/oss/dmasound/dmasound_q40.c:499:26: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+     499 |                 *DAC_LEFT=*DAC_RIGHT=127;
+         |                 ~~~~~~~~~^~~~~~~~~~~~~~~
+
+
+vim +453 arch/m68k/amiga/config.c
+
+^1da177e4c3f41 Linus Torvalds     2005-04-16  395  
+50190edb2a56bb Geert Uytterhoeven 2013-10-18  396  	mach_random_get_entropy = amiga_random_get_entropy;
+50190edb2a56bb Geert Uytterhoeven 2013-10-18  397  
+0795dbcc4c4c93 Adrian Bunk        2008-07-17  398  	/* Fill in the clock value (based on the 700 kHz E-Clock) */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  399  	amiga_colorclock = 5*amiga_eclock;	/* 3.5 MHz */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  400  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  401  	/* clear all DMA bits */
+b4290a23cfa904 Al Viro            2006-01-12  402  	amiga_custom.dmacon = DMAF_ALL;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  403  	/* ensure that the DMA master bit is set */
+b4290a23cfa904 Al Viro            2006-01-12  404  	amiga_custom.dmacon = DMAF_SETCLR | DMAF_MASTER;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  405  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  406  	/* don't use Z2 RAM as system memory on Z3 capable machines */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  407  	if (AMIGAHW_PRESENT(ZORRO3)) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  408  		int i, j;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  409  		u32 disabled_z2mem = 0;
+6ff5801acbb643 Roman Zippel       2007-05-01  410  
+6ff5801acbb643 Roman Zippel       2007-05-01  411  		for (i = 0; i < m68k_num_memory; i++) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  412  			if (m68k_memory[i].addr < 16*1024*1024) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  413  				if (i == 0) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  414  					/* don't cut off the branch we're sitting on */
+f296401b04a6eb Fabian Frederick   2014-05-10  415  					pr_warn("Warning: kernel runs in Zorro II memory\n");
+^1da177e4c3f41 Linus Torvalds     2005-04-16  416  					continue;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  417  				}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  418  				disabled_z2mem += m68k_memory[i].size;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  419  				m68k_num_memory--;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  420  				for (j = i; j < m68k_num_memory; j++)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  421  					m68k_memory[j] = m68k_memory[j+1];
+^1da177e4c3f41 Linus Torvalds     2005-04-16  422  				i--;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  423  			}
+6ff5801acbb643 Roman Zippel       2007-05-01  424  		}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  425  		if (disabled_z2mem)
+f296401b04a6eb Fabian Frederick   2014-05-10  426  			pr_info("%dK of Zorro II memory will not be used as system memory\n",
+^1da177e4c3f41 Linus Torvalds     2005-04-16  427  				disabled_z2mem>>10);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  428  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  429  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  430  	/* request all RAM */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  431  	for (i = 0; i < m68k_num_memory; i++) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  432  		ram_resource[i].name =
+^1da177e4c3f41 Linus Torvalds     2005-04-16  433  			(m68k_memory[i].addr >= 0x01000000) ? "32-bit Fast RAM" :
+^1da177e4c3f41 Linus Torvalds     2005-04-16  434  			(m68k_memory[i].addr < 0x00c00000) ? "16-bit Fast RAM" :
+^1da177e4c3f41 Linus Torvalds     2005-04-16  435  			"16-bit Slow RAM";
+^1da177e4c3f41 Linus Torvalds     2005-04-16  436  		ram_resource[i].start = m68k_memory[i].addr;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  437  		ram_resource[i].end = m68k_memory[i].addr+m68k_memory[i].size-1;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  438  		request_resource(&iomem_resource, &ram_resource[i]);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  439  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  440  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  441  	/* initialize chipram allocator */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  442  	amiga_chip_init();
+^1da177e4c3f41 Linus Torvalds     2005-04-16  443  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  444  	/* our beloved beeper */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  445  	if (AMIGAHW_PRESENT(AMI_AUDIO))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  446  		amiga_init_sound();
+^1da177e4c3f41 Linus Torvalds     2005-04-16  447  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  448  	/*
+^1da177e4c3f41 Linus Torvalds     2005-04-16  449  	 * if it is an A3000, set the magic bit that forces
+^1da177e4c3f41 Linus Torvalds     2005-04-16  450  	 * a hard rekick
+^1da177e4c3f41 Linus Torvalds     2005-04-16  451  	 */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  452  	if (AMIGAHW_PRESENT(MAGIC_REKICK))
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @453  		*(unsigned char *)ZTWO_VADDR(0xde0002) |= 0x80;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  454  }
+^1da177e4c3f41 Linus Torvalds     2005-04-16  455  
+
+:::::: The code at line 453 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://01.org/lkp

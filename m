@@ -2,115 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE5E4EC702
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303E54EC70A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347176AbiC3OuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S1347201AbiC3Ouf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243105AbiC3OuL (ORCPT
+        with ESMTP id S1347179AbiC3Oud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:50:11 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3EA27AD67
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:48:25 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y10so24691462edv.7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=skpWGuoRsn4zMngiALQtMeLWmhDG0oiVtHfiE27Pg1w=;
-        b=p2lUG7YqGZv9FiSN4GaUHzyUJPq7MJAmitalRVTI8MoRD3rAWmvZZK0XyO1W7ndvXC
-         EDN5nSMouDCTBFAsRR24B7f0RiVxAXea2PmG/6AbTE3AtnzvMu7TRx022Iw75OxsEgmh
-         Qp1yFZ+uU4GWr82we4J0tu6LUoWAHNep1BJCjbP/v8Ch3nVx0CqYzq2KV++0rG86TE1o
-         Pr/QcQcaUFhXs0SEsXTlFsWlxCpoIi8fz9vniK9wuAhy0zoREwevoWLKoqY93P+zqRmY
-         YeDe71W10a9ed2HivKy+Gg7dJAbhMzpD0FJq6+d/7rPNGuvUMU7VRS8EOYFTWMZyDt+S
-         Jdcw==
+        Wed, 30 Mar 2022 10:50:33 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFEA28789F;
+        Wed, 30 Mar 2022 07:48:46 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-dee0378ce7so11912453fac.4;
+        Wed, 30 Mar 2022 07:48:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=skpWGuoRsn4zMngiALQtMeLWmhDG0oiVtHfiE27Pg1w=;
-        b=cRJCSf6Yl8OZ1QZYQ9L5zLbfwkcBmPlYoV4ddoUCJtocZQ+2fWNB1PvectaWjet5Vx
-         mGSbm4H8a4yk1byx8d9LclQVqzwYyRl3+JfjLtad5sADA1T0eZqaEBBT6Y/EhqSIDENG
-         yGv1/O6ux6OViu23IvXgRTQW8n5wSq0ssZyvjutpC1CSDftp1ErVBf7tYNXEjRTflfWd
-         iN8AXvQyWBu3j+kM5L+ZFFW2xaPFLH++i5uMLCYSD8nysqfiD5H2uuwQYYxWb8wyl/7m
-         ZiNXsO5pNZI2wAYoL1+R9s3tQgVBD5k3BzxV9qhVNgT7xBNYLWxHp6VV/sQu7H2EvZP1
-         6lfw==
-X-Gm-Message-State: AOAM530lmFtbohoEEcvxHaqM4zPbK/44Jzzi14Cp+63hr/koHOR+s0cg
-        Qli0fa0marS4NFlL9hcf1Co9n889Re3agDegsLF8S1V9YA==
-X-Google-Smtp-Source: ABdhPJwykt5VjJKxTRmsrS2i2h+Iha+y6OyT1gjlYhXzWfLUBu1liGouA3aDoW1NcYW8z29RQzmqGDxmRlsCG3hJD3g=
-X-Received: by 2002:a05:6402:350d:b0:419:547f:134a with SMTP id
- b13-20020a056402350d00b00419547f134amr11254035edd.405.1648651703736; Wed, 30
- Mar 2022 07:48:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=skMSCIAgLPl78nzvZXYE2JT7zIrztjobvz7dNziQYsE=;
+        b=YOLKtBaxxUSDjvtn8tEoN4QvogVSwfN4xVEiBqCaxzmZNE+eBzWJpPkgZVliBB79XY
+         xAvqy+3UJx0kvJlVUh5wjTVVHWuNjJmkEZfufEq+Lgen6UE1Yta1o/JVozzA278Pb4Ha
+         ZpWwX5boiLEiZM11qF70OJXN/vFiM/sFigtI29BAjyfOhdwUHdMiT4uLq7oRQ/SU8n9z
+         hLg/PUA2eIgx0p9zkhjUc71q1bRH418A49HBES0c4MVVq0u7EkAlzyPlW2Vnl7YCvb9S
+         fxigA5WRlKIm42AFOa3Zy0iVwUO2whKg0ifZ6CijM3MB7PQITIxphqAtrddKcedftlSi
+         xENw==
+X-Gm-Message-State: AOAM532FqYma72fGHAnA4X6VGf0YzNLnFqY0vc4jwGhULIZgAFLEvacb
+        s2cy5wWANFonS6BPV2FtYg==
+X-Google-Smtp-Source: ABdhPJxHdqfLBB2pgsxMf+I94z/WzW9slneVMU6+szkaMjJonYmkhtJIm3/o7LP/h/LoYE1YrqgzLw==
+X-Received: by 2002:a05:6870:ec92:b0:dd:b5b5:75d5 with SMTP id eo18-20020a056870ec9200b000ddb5b575d5mr2330636oab.61.1648651725568;
+        Wed, 30 Mar 2022 07:48:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t11-20020a4ae40b000000b0031cc933b418sm10019954oov.40.2022.03.30.07.48.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 07:48:45 -0700 (PDT)
+Received: (nullmailer pid 3029818 invoked by uid 1000);
+        Wed, 30 Mar 2022 14:48:44 -0000
+Date:   Wed, 30 Mar 2022 09:48:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        smangipudi@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        warthog618@gmail.com, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 04/11] dt-bindings: Add HTE bindings
+Message-ID: <YkRtzJjHQvmYNlK8@robh.at.kernel.org>
+References: <20220329054521.14420-1-dipenp@nvidia.com>
+ <20220329054521.14420-5-dipenp@nvidia.com>
+ <YkOVgRBtXX0k9zr1@robh.at.kernel.org>
+ <3b0f3430-bc1c-26df-c93f-517ba395d9e3@nvidia.com>
 MIME-Version: 1.0
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
- <202203270449.WBYQF9X3-lkp@intel.com> <62426553.1c69fb81.bb808.345c@mx.google.com>
- <CAHC9VhRNuoPH6AySUbe6h2D6kghhezyVQtTAvm-t-fTpXH6XwQ@mail.gmail.com>
- <62427b5c.1c69fb81.fc2a7.d1af@mx.google.com> <CAHC9VhTLTQmHaka9tTyuu=rQOzpsn_K2NxfJ==7-6FSY3KnuFg@mail.gmail.com>
- <6243f1d7.1c69fb81.b19c7.7ec1@mx.google.com>
-In-Reply-To: <6243f1d7.1c69fb81.b19c7.7ec1@mx.google.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 30 Mar 2022 10:48:12 -0400
-Message-ID: <CAHC9VhTxACMG=V_J1OYy_7VjM3LjuNJcwJSf6om1eO8esCDAbg@mail.gmail.com>
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        eparis@redhat.com, linux-audit@redhat.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b0f3430-bc1c-26df-c93f-517ba395d9e3@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 1:59 AM CGEL <cgel.zte@gmail.com> wrote:
-> On Tue, Mar 29, 2022 at 09:11:19AM -0400, Paul Moore wrote:
-> > On Mon, Mar 28, 2022 at 11:22 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > On Mon, Mar 28, 2022 at 11:06:12PM -0400, Paul Moore wrote:
-> > > > On Mon, Mar 28, 2022 at 9:48 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > > > Sorry could anybody give a hand to solve this? It works well on x86_64 and arm64.
-> > > > > I have no alpha environment and not familiar to this arch, much thanks!
-> > > >
-> > > > Regardless of if this is fixed, I'm not convinced this is something we
-> > > > want to merge.  After all, a process executed a syscall and we should
-> > > > process it like any other; just because it happens to be an
-> > > > unrecognized syscall on a particular kernel build doesn't mean it
-> > > > isn't security relevant (probing for specific syscall numbers may be a
-> > > > useful attack fingerprint).
-> > >
-> > > Thanks for your reply.
-> > >
-> > > But syscall number less than 0 is even invalid for auditctl. So we
-> > > will never hit this kind of audit rule. And invalid syscall number
-> > > will always cause failure early in syscall handle.
-> > >
-> > > sh-4.2# auditctl -a always,exit -F arch=b64 -S -1
-> > > Syscall name unknown: -1
-> >
-> > You can add an audit filter without explicitly specifying a syscall:
-> >
-> > % auditctl -a exit,always -F auid=1000
-> > % auditctl -l
-> > -a always,exit -S all -F auid=1000
-> >
-> I have tried this, and execute program which call syscall number is -1,
-> audit still didn't record it. It supports that there's no need for audit
-> to handle syscall number less than 0.
->
-> sh-4.2# auditctl -a exit,always
-> sh-4.2# auditctl -l
-> -a always,exit -S all
+On Tue, Mar 29, 2022 at 05:19:10PM -0700, Dipen Patel wrote:
+> Hi,
+> 
+> On 3/29/22 4:25 PM, Rob Herring wrote:
+> > On Mon, Mar 28, 2022 at 10:45:14PM -0700, Dipen Patel wrote:
+> >> Introduces HTE devicetree binding details for the HTE subsystem. It
+> >> includes examples for the consumers, binding details for the providers
+> >> and specific binding details for the Tegra194 based HTE providers.
+> >>
+> >> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> >> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> >> ---
+> >> Changes in v2:
+> >> - Replace hte with hardware-timestamp for property names
+> >> - Renamed file
+> >> - Removed example from the common dt binding file.
+> >>
+> >> Changes in v3:
+> >> - Addressed grammatical errors.
+> >> - Removed double plural from the respective properties.
+> >> - Added dual license.
+> >> - Prefixed "nvidia" in nvidia specific properties.
+> >>
+> >> Changes in v4:
+> >> - Corrected make dt_binding_check error.
+> >>
+> >> Changes in v5:
+> >> - Addressed review comments.
+> >>
+> >>  .../hte/hardware-timestamps-common.yaml       | 29 +++++++
+> >>  .../devicetree/bindings/hte/hte-consumer.yaml | 43 ++++++++++
+> >>  .../bindings/hte/nvidia,tegra194-hte.yaml     | 82 +++++++++++++++++++
+> >>  3 files changed, 154 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+> >>  create mode 100644 Documentation/devicetree/bindings/hte/hte-consumer.yaml
+> >>  create mode 100644 Documentation/devicetree/bindings/hte/nvidia,tegra194-hte.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml b/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+> >> new file mode 100644
+> >> index 000000000000..e8a69ceccd56
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+> >> @@ -0,0 +1,29 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fhte%2Fhardware-timestamps-common.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C5793b3be05fd48a97ad108da11db79a7%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637841931589163420%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=oyeG06oNMukYew%2Bkji%2FlXsDyGwIIrIvwxLHKxaiFBto%3D&amp;reserved=0
+> >> +$schema: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C5793b3be05fd48a97ad108da11db79a7%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637841931589163420%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=JOY3MmZlMo6Mopr5dwjUky%2BaQX4b0QSiDt8zo3mSu1k%3D&amp;reserved=0
+> >> +
+> >> +title: Hardware timestamp providers
+> >> +
+> >> +maintainers:
+> >> +  - Dipen Patel <dipenp@nvidia.com>
+> >> +
+> >> +description:
+> >> +  Some devices/SoCs have hardware time stamping engines which can use hardware
+> >> +  means to timestamp entity in realtime. The entity could be anything from
+> >> +  GPIOs, IRQs, Bus and so on. The hardware timestamp engine (HTE) present
+> >> +  itself as a provider with the bindings described in this document.
+> >> +
+> >> +properties:
+> >> +  $nodename:
+> >> +    pattern: "^hardware-timestamp(@.*|-[0-9a-f])?$"
+> >> +
+> >> +  "#hardware-timestamp-cells":
+> >> +    description:
+> >> +      Number of cells in a HTE specifier.
+> >> +
+> >> +required:
+> >> +  - "#hardware-timestamp-cells"
+> >> +
+> >> +additionalProperties: true
+> >> diff --git a/Documentation/devicetree/bindings/hte/hte-consumer.yaml b/Documentation/devicetree/bindings/hte/hte-consumer.yaml
+> >> new file mode 100644
+> >> index 000000000000..be69f63aa8c3
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/hte/hte-consumer.yaml
+> >> @@ -0,0 +1,43 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fhte%2Fhte-consumer.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C5793b3be05fd48a97ad108da11db79a7%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637841931589319655%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=0f1FFB1IotZESaxDlXX5mo9YyMN25BlFAyq%2FOQJtVoE%3D&amp;reserved=0
+> >> +$schema: https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cdipenp%40nvidia.com%7C5793b3be05fd48a97ad108da11db79a7%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637841931589319655%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=B%2FvVGGwp9JghUpT33cGk0EZHDRlaOAzCbtv93Z%2Fa9YY%3D&amp;reserved=0
+> >> +
+> >> +title: HTE Consumer Device Tree Bindings
+> >> +
+> >> +maintainers:
+> >> +  - Dipen Patel <dipenp@nvidia.com>
+> >> +
+> >> +select: true
+> >> +
+> >> +description:
+> >> +  HTE properties should be named "hardware-timestamps". The exact meaning of
+> >> +  each hardware-timestamps property must be documented in the device tree
+> > The meaning of the cells needs to be documented. You are documenting the 
+> > meaning of 'hardware-timestamps' here.
+> 
+> This is for the consumer side, meaning of the cells will be documented in the provider
+> 
+> binding document.
 
-If audit is not generating SYSCALL records, even for invalid/ENOSYS
-syscalls, I would consider that a bug which should be fixed.
+Right cells are opaque to the consumer. What bothered me is 
+hardware-timestamps already has an 'exact meaning'. You need to me more 
+exact as to what should be documented. We don't want what 
+'hardware-timestamps' is described again. What needs to be documented is 
+how many entries, what each entry is (for the consumer), and the order.
 
--- 
-paul-moore.com
+
+> >> +  binding for each device. An optional property "hardware-timestamp-names" may
+> >> +  contain a list of strings to label each of the HTE devices listed in the
+> >> +  "hardware-timestamps" property.
+> >> +
+> >> +properties:
+> >> +  hardware-timestamps:
+> > I'm wondering if we should just drop 'hardware'. What other kind of 
+> > timestamps are we going to have in DT? software-timestamps? No.
+> 
+> I believe this makes it explicit and leaves no room for second guess. If
+> 
+> only timestamps, ambiguity then will be which timestamp it is i.e. through hardware
+> 
+> engine, pps, ptp and so on...
+
+Those aren't hardware timestamps, too? If those needed a similar 
+binding, couldn't they use this binding? PTP at least is sometimes an 
+separate, external chip IIRC.
+
+Rob

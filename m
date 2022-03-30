@@ -2,102 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987FD4EBE20
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B7C4EBE34
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245065AbiC3J5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S245076AbiC3KCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245057AbiC3J5M (ORCPT
+        with ESMTP id S238630AbiC3KC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:57:12 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4984986E3C;
-        Wed, 30 Mar 2022 02:55:27 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nZV2y-0006by-KS; Wed, 30 Mar 2022 11:55:24 +0200
-Message-ID: <1fc02de2-890e-e8e8-0ab6-aba62a333de5@leemhuis.info>
-Date:   Wed, 30 Mar 2022 11:55:23 +0200
+        Wed, 30 Mar 2022 06:02:28 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBFABAB9A;
+        Wed, 30 Mar 2022 03:00:42 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id 10so17584228qtz.11;
+        Wed, 30 Mar 2022 03:00:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hBxbmNoSIF+gD71y4kkXlaJNmYHsVeI/sGoRnpdFxrc=;
+        b=Tw/T7hD/xqazoecxtGArtYWbJK0bKqlAqYOq07ZxlLFHGD7nZtcVh1A92GXdyxOL/o
+         2IpfjjBu13ZQ5e+O8LnEhEeix1ay6ZAClDj3XICpdl80LEw732DN7IL9aO5KSAAZUrqt
+         OUwcoV8r+fUysn0A1e0gqRr82rS+1FNkndEVcLb190Ym/kuWRhirxws4KR41CgHx33DD
+         WhofpQg0wJIcyVOgTrhjX9iEqYE5itOaB+UgUPKNpm4nXPvDMucKuQ2cpz3WvrtDyY+y
+         0m6DVpucN0urbVGfQGqvO1DHDIinFn70TAIq4xlkvjVqGDd1KgwxajUN+lbOZOJxbFSo
+         iwYQ==
+X-Gm-Message-State: AOAM532x4Yaxfwksyr4aW7JU6zGSqGwtByPhqZcjuRmSQROvtYQ0aSyW
+        xBpU0f9WWVCxUSz+SNfaZyG8sXf4Y6tq3A==
+X-Google-Smtp-Source: ABdhPJykkKwS1AM+4JmK68uzouh1cZZ4tz9/SBFM42vfU6NeX+KAeJ3On0LSR4dJOTi+UR47bCm3kA==
+X-Received: by 2002:a05:622a:110:b0:2e1:f084:d855 with SMTP id u16-20020a05622a011000b002e1f084d855mr32019303qtw.198.1648634440904;
+        Wed, 30 Mar 2022 03:00:40 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id a9-20020ac85b89000000b002e2072c9dedsm17938796qta.67.2022.03.30.03.00.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 03:00:39 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2e6ceb45174so172514517b3.8;
+        Wed, 30 Mar 2022 03:00:38 -0700 (PDT)
+X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr32596280yba.393.1648634438344;
+ Wed, 30 Mar 2022 03:00:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Bug 215726 - si2157.c: mention name of the missing firmware file
-Content-Language: en-US
-To:     Robert Schlabbach <robert_s@gmx.net>
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com> <20220329152926.50958-8-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220329152926.50958-8-andriy.shevchenko@linux.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Mar 2022 12:00:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWs+OuxV0cO=XGYvOOJ0Mctwu6fKV5HnkdRBXNKkLE3uQ@mail.gmail.com>
+Message-ID: <CAMuHMdWs+OuxV0cO=XGYvOOJ0Mctwu6fKV5HnkdRBXNKkLE3uQ@mail.gmail.com>
+Subject: Re: [PATCH v2 07/13] pinctrl: renesas: rza1: Switch to use
+ for_each_gpiochip_node() helper
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        chmooreck@gmail.com
-References: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
- <trinity-2ca61ae4-4f05-454d-94fd-d41e1afbec2f-1648581688394@3c-app-gmx-bs54>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <trinity-2ca61ae4-4f05-454d-94fd-d41e1afbec2f-1648581688394@3c-app-gmx-bs54>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648634127;7f8e3be1;
-X-HE-SMSGID: 1nZV2y-0006by-KS
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        openbmc@lists.ozlabs.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.03.22 21:21, Robert Schlabbach wrote:
-> 
-> the patch linked in the bugzilla ticket:
-> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
-> should indeed fix the issue.
+Hi Andy,
 
-Ahh, the comment mentioning it was added shortly after I sent my mail.
-#regzbot monitor:
-https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
+On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> Switch the code to use for_each_gpiochip_node() helper.
+>
+> While at it, in order to avoid additional churn in the future,
+> switch to fwnode APIs where it makes sense.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Adding Piotr, the patches' author to the CC, who also replied.
+Thanks for your patch!
 
-BTW: that patch is afaics missing a Fixes tag specifying the culprit and
-a `Cc: stable@vger.kernel.org # 5.17.x` tag to make sure it's quickly
-backported to the stable tree, as among others explained here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/handling-regressions.rst
+> --- a/drivers/pinctrl/renesas/pinctrl-rza1.c
+> +++ b/drivers/pinctrl/renesas/pinctrl-rza1.c
 
-> The error was that the rom_id and required
-> fields were swapped in the table, so the non-zero rom_id was taken as a
-> "true" required boolean value, thus incorrectly evaluating that the
-> chip requires a firmware file to operate when in fact it does not.
+> @@ -1166,17 +1167,17 @@ static const struct pinmux_ops rza1_pinmux_ops = {
+>   * @range: pin range to register to pinctrl core
+>   */
+>  static int rza1_parse_gpiochip(struct rza1_pinctrl *rza1_pctl,
+> -                              struct device_node *np,
+> +                              struct fwnode_handle *fwnode,
+>                                struct gpio_chip *chip,
+>                                struct pinctrl_gpio_range *range)
+>  {
+>         const char *list_name = "gpio-ranges";
+> -       struct of_phandle_args of_args;
+> +       struct fwnode_reference_args of_args;
 
-> I have tested the patch and found it worked for me. But I do not know
-> how to push this further along:
-> https://patchwork.linuxtv.org/project/linux-media/patch/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
+fw_args?
 
-Mauro, what's up here? The patch fixes a regression and thus afaics
-should quickly find its way towards mainline to get it into the stable
-tree, as explained in the (bran new) document linked above.
+>         unsigned int gpioport;
+>         u32 pinctrl_base;
+>         int ret;
+>
+> -       ret = of_parse_phandle_with_fixed_args(np, list_name, 3, 0, &of_args);
+> +       ret = fwnode_property_get_reference_args(fwnode, list_name, NULL, 3, 0, &of_args);
+>         if (ret) {
+>                 dev_err(rza1_pctl->dev, "Unable to parse %s list property\n",
+>                         list_name);
+> @@ -1197,13 +1198,12 @@ static int rza1_parse_gpiochip(struct rza1_pinctrl *rza1_pctl,
+>
+>         *chip           = rza1_gpiochip_template;
+>         chip->base      = -1;
+> -       chip->label     = devm_kasprintf(rza1_pctl->dev, GFP_KERNEL, "%pOFn",
+> -                                        np);
+> +       chip->label     = devm_kasprintf(rza1_pctl->dev, GFP_KERNEL, "%pfw", fwnode);
 
-Ciao, Thorsten
+This changes the label from e.g. "/soc/pinctrl@fcfe3000/gpio-11" to "gpio-11".
 
-> Gesendet: Dienstag, 29. März 2022 um 10:33 Uhr
-> Von: "Thorsten Leemhuis" <regressions@leemhuis.info>
-> An: "Antti Palosaari" <crope@iki.fi>, "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>, "Robert Schlabbach" <robert_s@gmx.net>
-> Cc: "regressions@lists.linux.dev" <regressions@lists.linux.dev>, az0123456@gmx.de, "Linux Media Mailing List" <linux-media@vger.kernel.org>, "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-> Betreff: Bug 215726 - si2157.c: mention name of the missing firmware file
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org that afaics nobody
-> acted upon since it was reported about a week ago, that's why I decided
-> to forward it to the lists and all people that seemed to be relevant
-> here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215726 :
-> 
->> I get the following error messages when trying to use si2157.ko in linux 5.17:
->> si2157 13-0060: found a 'Silicon Labs Si2157-A30 ROM 0x50'
->> si2157 13-0060: Can't continue without a firmware
->> I did work in linux 5.16.16 without a firmware file. Unfortunately the driver does not tell me the name of the missing firmware file.
-> 
-> Could somebody take a look into this? Or was this discussed somewhere
-> else already? Or even fixed?
-> 
-> 
+%pfwP?
+
+>         if (!chip->label)
+>                 return -ENOMEM;
+>
+>         chip->ngpio     = of_args.args[2];
+> -       chip->of_node   = np;
+> +       chip->fwnode    = fwnode;
+>         chip->parent    = rza1_pctl->dev;
+>
+>         range->id       = gpioport;
+
+With the above fixed:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

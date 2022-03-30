@@ -2,114 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E503A4EBC4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB3A4EBC56
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244088AbiC3IGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S244094AbiC3IIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244083AbiC3IGl (ORCPT
+        with ESMTP id S244092AbiC3IIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:06:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A8B2E9CD;
-        Wed, 30 Mar 2022 01:04:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 30 Mar 2022 04:08:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD61D2E6B8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:06:19 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7A9B221605;
+        Wed, 30 Mar 2022 08:06:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648627578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Um5MncWQPFK069jInV5QbM0hF4fayUXS1W56obOkrFk=;
+        b=gojrEkSRQEgWFK1XNxkCS3aNTUXaXPocr2R7tm2tGJZ9AYJ4wWLbcKFl9rl2BKHSSgcBp8
+        +RrlEZ/jEkqw3j2XXMdTPhVVwj7f4T+mJIawfsl7XKqgMUy5ZNW3PB28N/9/crLubb+OKm
+        kUQUTXQEcU5iVDguo8N3rp2jEDU99p0=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99850617A1;
-        Wed, 30 Mar 2022 08:04:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84A9C340EC;
-        Wed, 30 Mar 2022 08:04:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648627496;
-        bh=X2bDIF4+6RoRWE7V+BZ5WnKiuW2qsYmv5VPe4pG97RQ=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=k0NUmR6IxSwYvdeVTcqOAAdN72x6x3B6QaDWf+PPeUPMoeX2bMpcRkNgse6S9FO37
-         6cgcTO8hQZ40B95bdMI5np+rp37HjpVDhpDXc8OJtiszoid04W9zR/qD5/jLt8Bo7s
-         vdxxlUs5bkplk7s1q7N6UvdNksXBGsdrFFWo1OcGAHb3Y1cFMvRCFHgY3PQJCPbUiR
-         N8cdPZBdijt1tPQoq3gvIkNgpnUeNDcix3M4pPVheOEvBxZ71nafAc9IM89nt/0Som
-         q0YBn1+uy+MLZE/0NzUWcztqMmyGb+gKDELTArBfeTQQzBHkz9K3wgxlKHh74lYTJu
-         7dhSFqRQSSEJg==
-Content-Type: text/plain; charset="utf-8"
+        by relay2.suse.de (Postfix) with ESMTPS id 3F6BCA3B9B;
+        Wed, 30 Mar 2022 08:06:18 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 10:06:17 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, s.suk@samsung.com,
+        jaewon31.kim@gmail.com
+Subject: Re: [PATCH] zram_drv: add __GFP_NOWARN flag on call to zs_malloc
+Message-ID: <YkQPefdRc+hxIXEV@dhcp22.suse.cz>
+References: <CGME20220330052214epcas1p250cff6b3168a1c9c253e1fe70e68ca8b@epcas1p2.samsung.com>
+ <20220330052502.26072-1-jaewon31.kim@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v4] wcn36xx: Implement tx_rate reporting
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220325224212.159690-1-egagnon@squareup.com>
-References: <20220325224212.159690-1-egagnon@squareup.com>
-To:     Edmond Gagnon <egagnon@squareup.com>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        Edmond Gagnon <egagnon@squareup.com>,
-        Benjamin Li <benl@squareup.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164862749156.10264.5966997435195917442.kvalo@kernel.org>
-Date:   Wed, 30 Mar 2022 08:04:53 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330052502.26072-1-jaewon31.kim@samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Edmond Gagnon <egagnon@squareup.com> wrote:
+On Wed 30-03-22 14:25:02, Jaewon Kim wrote:
+> The page allocation with GFP_NOIO may fail. And zram can handle this
+> allocation failure. We do not need to print log for this.
 
-> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
-> rate:
-> 
-> root@linaro-developer:~# iw wlan0 link
-> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
->         SSID: SQ-DEVICETEST
->         freq: 5200
->         RX: 4141 bytes (32 packets)
->         TX: 2082 bytes (15 packets)
->         signal: -77 dBm
->         rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->         tx bitrate: 6.0 MBit/s
-> 
->         bss flags:      short-slot-time
->         dtim period:    1
->         beacon int:     100
-> 
-> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
-> firmware message and reports it via ieee80211_ops::sta_statistics.
-> 
-> root@linaro-developer:~# iw wlan0 link
-> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
->         SSID: SQ-DEVICETEST
->         freq: 5700
->         RX: 26788094 bytes (19859 packets)
->         TX: 1101376 bytes (12119 packets)
->         signal: -75 dBm
->         rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->         tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
-> 
->         bss flags:      short-slot-time
->         dtim period:    1
->         beacon int:     100
-> 
-> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
-> and verified by sniffing frames over the air with Wireshark to ensure the
-> MCS indices match.
-> 
-> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
-> Reviewed-by: Benjamin Li <benl@squareup.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+GFP_NOIO doesn't have any special meaning wrt to failures. zram
+allocates from the memory reclaim context which is a bad design IMHO.
+The failure you are seeing indicates that PF_MEMALLOC context (memory
+reclaim) which is allow to dip into memory reserves without any limit
+cannot find any memory! This is really bad and it is good to learn about
+that.
 
-Patch applied to ath-next branch of ath.git, thanks.
-
-1216c4d30723 wcn36xx: Implement tx_rate reporting
+Your description doesn't really explain why we should be ignoring that
+situation. Is the memory allocation failure gracefully recoverable?
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220325224212.159690-1-egagnon@squareup.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Michal Hocko
+SUSE Labs

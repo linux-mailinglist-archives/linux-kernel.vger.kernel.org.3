@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4AE4ECEFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1F04ECEFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351284AbiC3Vo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        id S1351294AbiC3VpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbiC3Voz (ORCPT
+        with ESMTP id S1351302AbiC3VpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:44:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBEC6A419
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:43:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1798F1F869;
-        Wed, 30 Mar 2022 21:43:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648676588; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CUt1tOpM1tvjVQbAHVKSiWMh6OyKILyACsC9XxuklHM=;
-        b=x+/CnsSHUCSoN/1QswMy7TtD1tGhGvFxPkHu0RS4Vnc5FHLWFUZv/JhuY5ckgPBQvlNX16
-        sgHP/9HwgjoNEsvndyHe75w6rSp3xStPXyi8lsyJqwCNR5eos2A7O+3XqV7KLMdY/PTcbM
-        odPBuqlKLYCrB0wOhAdgIoqTYV46BFM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648676588;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CUt1tOpM1tvjVQbAHVKSiWMh6OyKILyACsC9XxuklHM=;
-        b=EWEgVUbIVKUG+Y/E53ILq82LnkEL9Y2nB4SMYPysmXdnVQjt1lox+Ivkv2CoK3dQ7WNV15
-        XqiHgyegL/SiMUAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8EDB13AF3;
-        Wed, 30 Mar 2022 21:43:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YRmbM+vORGKXHQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 30 Mar 2022 21:43:07 +0000
-Message-ID: <27ff69f9-60c5-9e59-feb2-295250077551@suse.cz>
-Date:   Wed, 30 Mar 2022 23:43:07 +0200
+        Wed, 30 Mar 2022 17:45:18 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F0A6A42B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:43:27 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id l129so9980941pga.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=3P2ZbSJZ9rgiHSYYO2m+2nx9BByc630ioHG/IwLoqJE=;
+        b=PjUfutm1lwuZaM1pE8wgcTpIk9hG3LkKam3kBHUB2ZUJS03trhR+Q11c7jyPX0kRlw
+         WUSUUF0BakNGVgLGhV6Rmk5ubdoZL3PdnInLnWzcwz7dXKNBpsSLcHbQUEZ25E663cxN
+         iSHaORzhGnqOpItkX1nzwI1xILdSFE//tB+94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=3P2ZbSJZ9rgiHSYYO2m+2nx9BByc630ioHG/IwLoqJE=;
+        b=tsZu0c5tVzJ/kATIosF+qT7swgxX65eYZvy59pClc05lwuIF2+rvx5NBAM9sEWa2XN
+         EJ1a/uM0rVsCwl/5bEv07LN9jzQdsBLXJz1QguqXP9Q+hXLKYehqW+9gLENDhxcETeN7
+         Pr//K9pzgHHhAHWHWh0VvF2ff3DkX9tCwBTQMCgA+DBSowhVxLhSIfMvwmQTzsd2Q7Hw
+         dXoziXHMmqa/idsnN3umPuIU4Dc1DOCacO5OfQOBTw1Ugg0nEJlPR5UGQtz3ooV65k47
+         M43TfQRa10UuVkYaQ5aYSabLIJEqEBvVCLouxaz64xhyZ5nyA23pmIyKeeiE0sH+pW8Y
+         ZvWg==
+X-Gm-Message-State: AOAM532kLKvh21wkcCgZyHf1NJVfmrX8tjWe2z5hCuWpXB27Pi7x4qGX
+        mTy0mqB4kr1UNcvUzSy4utzG/w==
+X-Google-Smtp-Source: ABdhPJw+oIZ8Zdq1D8w87isFRTzwrCPJdubT8myP52JAOXHEOY4AG29Q15HtDYJmZ5irVYhIv9Qklg==
+X-Received: by 2002:a63:340b:0:b0:398:dad:c396 with SMTP id b11-20020a63340b000000b003980dadc396mr7709875pga.574.1648676606992;
+        Wed, 30 Mar 2022 14:43:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v189-20020a622fc6000000b004fb72e95806sm10161274pfv.48.2022.03.30.14.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 14:43:26 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 14:43:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] lib: zstd: Fix Wstringop-overflow warning
+Message-ID: <202203301416.568595B87@keescook>
+References: <20220330193352.GA119296@embeddedor>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [BUG] Crash on x86_32 for: mm: page_alloc: avoid merging
- non-fallbackable pageblocks with others
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220330154208.71aca532@gandalf.local.home>
- <CAHk-=whz_8tRNGCr09X59nMW3JBzFLE-g-F-brxd+AkK+RceCw@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAHk-=whz_8tRNGCr09X59nMW3JBzFLE-g-F-brxd+AkK+RceCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220330193352.GA119296@embeddedor>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,90 +69,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 22:05, Linus Torvalds wrote:
-> On Wed, Mar 30, 2022 at 12:42 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->>
->> I started testing new patches and it crashed when doing the x86-32 test on
->> boot up.
->>
->> Initializing HighMem for node 0 (000375fe:0021ee00)
->> BUG: kernel NULL pointer dereference, address: 00000878
->> #PF: supervisor read access in kernel mode
->> #PF: error_code(0x0000) - not-present page
->> *pdpt = 0000000000000000 *pde = f0000000f000eef3
->> Oops: 0000 [#1] PREEMPT SMP PTI
->> CPU: 0 PID: 0 Comm: swapper Not tainted 5.17.0-test+ #469
->> Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
->> EIP: get_pfnblock_flags_mask+0x2c/0x36
->> Code: 6d ea ff 55 89 e5 56 89 ce 53 8b 18 89 d8 c1 eb 1e e8 f7 fb ff ff 69 db c0 02 00 00 89 c1 89 c2 c1 ea 05 8b 83 7c d7 79 c1 5b <8b> 04 90 d3 e8 21 f0 5e 5d c3 55 89 e5 57 56 89 d6 53 89 c3 64 a1
+On Wed, Mar 30, 2022 at 02:33:52PM -0500, Gustavo A. R. Silva wrote:
+> Fix the following -Wstringop-overflow warning when building with GCC-11:
 > 
-> The whole function is in that Code: thing, and it decodes to:
-> 
->    0: 55                    push   %ebp
->    1: 89 e5                mov    %esp,%ebp
->    3: 56                    push   %esi
->    4: 89 ce                mov    %ecx,%esi
->    6: 53                    push   %ebx
->    7: 8b 18                mov    (%eax),%ebx
->    9: 89 d8                mov    %ebx,%eax
->    b: c1 eb 1e              shr    $0x1e,%ebx
->    e: e8 f7 fb ff ff        call   0xfffffc0a
->   13: 69 db c0 02 00 00    imul   $0x2c0,%ebx,%ebx
->   19: 89 c1                mov    %eax,%ecx
->   1b: 89 c2                mov    %eax,%edx
->   1d: c1 ea 05              shr    $0x5,%edx
->   20: 8b 83 7c d7 79 c1    mov    -0x3e862884(%ebx),%eax
->   26: 5b                    pop    %ebx
->   27:* 8b 04 90              mov    (%eax,%edx,4),%eax <-- trapping instruction
->   2a: d3 e8                shr    %cl,%eax
->   2c: 21 f0                and    %esi,%eax
->   2e: 5e                    pop    %esi
->   2f: 5d                    pop    %ebp
->   30: c3                    ret
-> 
-> with '%eax' being NULL, and %edx being 0x21e.
-> 
-> (The call seems to be to 'pfn_to_bitidx().isra.0' if my compiler does
-> similar code generation, so it's out-of-lined part of pfn_to_bitidx()
-> despite being marked inline)
-> 
-> So that oops is that
-> 
->         word = bitmap[word_bitidx];
-> 
-> line, with 'bitmap' being NULL (and %edx contains 'word_bitidx').
-> 
-> Looking around, your 'config-bad' doesn't even have
-> CONFIG_MEMORY_ISOLATION enabled, and so I suspect the culprit is this
-> part of the change:
-> 
-> -               if (unlikely(has_isolate_pageblock(zone))) {
-> 
-> which used to always be false for that config, and now the code is
-> suddenly enabled.
+> lib/zstd/decompress/huf_decompress.c: In function ‘HUF_readDTableX2_wksp’:
+> lib/zstd/decompress/huf_decompress.c:700:5: warning: ‘HUF_fillDTableX2.constprop’ accessing 624 bytes in a region of size 52 [-Wstringop-overflow=]
+>   700 |     HUF_fillDTableX2(dt, maxTableLog,
+>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   701 |                    wksp->sortedSymbol, sizeOfSort,
+>       |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   702 |                    wksp->rankStart0, wksp->rankVal, maxW,
+>       |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   703 |                    tableLog+1,
+>       |                    ~~~~~~~~~~~
+>   704 |                    wksp->calleeWksp, sizeof(wksp->calleeWksp) / sizeof(U32));
+>       |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> lib/zstd/decompress/huf_decompress.c:700:5: note: referencing argument 6 of type ‘U32 (*)[13]’ {aka ‘unsigned int (*)[13]’}
+> lib/zstd/decompress/huf_decompress.c:571:13: note: in a call to function ‘HUF_fillDTableX2.constprop’
+>   571 | static void HUF_fillDTableX2(HUF_DEltX2* DTable, const U32 targetLog,
+>       |             ^~~~~~~~~~~~~~~~
 
-If CONFIG_MEMORY_ISOLATION was enabled then the zone layout would be the
-same, so I think it's not simply that. I think it's the timing -
-has_isolate_pageblock(zone) would only be possible to become true later
-in runtime when some isolation is ongoing, but here it seems we are
-still in the early boot. Probably at a boundary of highmem with another
-zone that doesn't have the pageblock bitmap yet initialized? While later
-it would have, and all would be fine.
+Reviewing this changes would be easier if the reason for the warning
+could be explained. i.e. why has GCC decided that the region is 52
+bytes, and how did it calculate the 624 bytes?
 
-As Zi Yan said, the usual merging code will, through page_is_buddy()
-find safely enough the buddy is not applicable, so I agree with his
-patch direction. Seems this also shows the code tried to become too
-smart and for the next merge window we should try just move the
-migratetype checks into the main while loop (under something like "if
-(order >= max_order)") and simplify the function a lot, hopefully with
-negligible perf impact.
+rankVal_t is HUF_TABLELOG_MAX-many rankValCol_t, which itself is
+HUF_TABLELOG_MAX + 1 many U32s. So, basically:
 
-> Alternatively, that code just can't deal with highmem properly.
-> 
-> But I didn't really analyze things, I'm mainly doing pattern matching here.
-> 
-> Zi Yan - and all the people who ack'ed and reviewed this - please take
-> a deeper look..
-> 
->                 Linus
+U32 array[HUF_TABLELOG_MAX + 1][HUF_TABLELOG_MAX]
 
+sizeof(rankValCol_t) == 52
+sizeof(rankVal_t) == 624
+
+> 
+> by using pointer notation instead of array notation.
+> 
+> This helps with the ongoing efforts to globally enable
+> -Wstringop-overflow.
+> 
+> Link: https://github.com/KSPP/linux/issues/181
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  lib/zstd/decompress/huf_decompress.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/lib/zstd/decompress/huf_decompress.c b/lib/zstd/decompress/huf_decompress.c
+> index 5105e59ac04a..0ea34621253a 100644
+> --- a/lib/zstd/decompress/huf_decompress.c
+> +++ b/lib/zstd/decompress/huf_decompress.c
+> @@ -570,7 +570,7 @@ static void HUF_fillDTableX2Level2(HUF_DEltX2* DTable, U32 sizeLog, const U32 co
+>  
+>  static void HUF_fillDTableX2(HUF_DEltX2* DTable, const U32 targetLog,
+>                             const sortedSymbol_t* sortedList, const U32 sortedListSize,
+> -                           const U32* rankStart, rankVal_t rankValOrigin, const U32 maxWeight,
+> +                           const U32* rankStart, const U32* rankValOrigin, const U32 maxWeight,
+>                             const U32 nbBitsBaseline, U32* wksp, size_t wkspSize)
+
+This really feels like we're papering over the warning. This removes the
+type information and makes it a U32 * instead, and then later makes a
+cast?
+
+Can this be fixed in a way that retains the type information?
+
+On the other hand, all the arguments are also U32 *.
+
+I see stuff like:
+
+    ZSTD_memcpy(rankVal, rankValOrigin, sizeof(U32) * (HUF_TABLELOG_MAX + 1));
+
+That looks like it's ignoring type information as well. i.e. why isn't
+this sizeof(rankValOrigin)? (The length above is 52 bytes.)
+
+I'm especially curious here since rankValOrigin is rankVal_t, which is
+624 bytes, not 52 bytes (i.e. the above is copying a single rankValCol_t
+from rankValOrigin. I'd expect this to be:
+
+    ZSTD_memcpy(rankVal, &rankValOrigin[0], sizeof(rankValOrigin[0]));
+
+
+>  {
+>      U32* rankVal = wksp;
+> @@ -598,7 +598,7 @@ static void HUF_fillDTableX2(HUF_DEltX2* DTable, const U32 targetLog,
+>              if (minWeight < 1) minWeight = 1;
+>              sortedRank = rankStart[minWeight];
+>              HUF_fillDTableX2Level2(DTable+start, targetLog-nbBits, nbBits,
+> -                           rankValOrigin[nbBits], minWeight,
+> +                           rankValOrigin + nbBits, minWeight,
+
+And here I'd expect to pass	&rankValOrigin[nbBits]
+since HUF_fillDTableX2Level2 is doing another rankValCol_t-sized copy:
+
+    ZSTD_memcpy(rankVal, rankValOrigin, sizeof(U32) * (HUF_TABLELOG_MAX + 1));
+
+
+>                             sortedList+sortedRank, sortedListSize-sortedRank,
+>                             nbBitsBaseline, symbol, wksp, wkspSize);
+>          } else {
+> @@ -699,7 +699,7 @@ size_t HUF_readDTableX2_wksp(HUF_DTable* DTable,
+>  
+>      HUF_fillDTableX2(dt, maxTableLog,
+>                     wksp->sortedSymbol, sizeOfSort,
+> -                   wksp->rankStart0, wksp->rankVal, maxW,
+> +                   wksp->rankStart0, (U32 *)wksp->rankVal, maxW,
+
+It's possible the problem is with this structure:
+
+typedef struct {
+    rankValCol_t rankVal[HUF_TABLELOG_MAX];
+    U32 rankStats[HUF_TABLELOG_MAX + 1];
+    U32 rankStart0[HUF_TABLELOG_MAX + 2];
+    sortedSymbol_t sortedSymbol[HUF_SYMBOLVALUE_MAX + 1];
+    BYTE weightList[HUF_SYMBOLVALUE_MAX + 1];
+    U32 calleeWksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
+} HUF_ReadDTableX2_Workspace;
+
+it's not using the rankVal_t type for rankVal for some reason?
+
+i.e. what's passed to HUF_fillDTableX2 is a rankValCol_t (52 bytes), but then it
+gets passed against later as rankVal_t (624 bytes).
+
+Does changing the type definition above solve this more cleanly?
+
+-Kees
+
+>                     tableLog+1,
+>                     wksp->calleeWksp, sizeof(wksp->calleeWksp) / sizeof(U32));
+>  
+> -- 
+> 2.27.0
+> 
+
+-- 
+Kees Cook

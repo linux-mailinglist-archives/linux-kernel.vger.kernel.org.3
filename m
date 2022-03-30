@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5454EC3BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20264EC3DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346170AbiC3MQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S1345304AbiC3MNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345909AbiC3LzL (ORCPT
+        with ESMTP id S1345910AbiC3LzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Mar 2022 07:55:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BAF266B6C;
-        Wed, 30 Mar 2022 04:52:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D301D914D;
+        Wed, 30 Mar 2022 04:52:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E9A61703;
-        Wed, 30 Mar 2022 11:52:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20545C36AE3;
-        Wed, 30 Mar 2022 11:52:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3159B6137A;
+        Wed, 30 Mar 2022 11:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C6EC340EE;
+        Wed, 30 Mar 2022 11:52:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641144;
-        bh=BcA92V2ojBSNfXM65Q3xXu5tkigqU+hfjma6OoeF744=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VF+H3DvjuLzH6cVPp0x8WM5P8T6YMd1OyqGOz/shydiceU9IJUjQSU7KAzuZsioOi
-         EyntQ2mlSijf6y08w6SJai1hz56p0nHr251vJVwghauxRnF3SJvogTYd5i4CyE9La+
-         ZERjHNVi9ELgiEcgysOx39X6xnuctYHM371vvqfEmSd7ZPnmtngjwvCG2C/YdUscFp
-         ii/pcgAw8HnGfzzK4TSKdgzZ5Y2ms4rwIqKEKMWu/29V9YiyVth1484E5hguAqYIsu
-         3kzBFqul4YPUjkgPlV/+Lu1cfM50x8UjVzmf67WUue2lEFl9i6EvoU9eRlFzdgyGiQ
-         C5p9z5AAESIdg==
+        s=k20201202; t=1648641148;
+        bh=brd6ags1GWY6KG3dTlkk05PFjXPLuL+jL4DgbrU1MxM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I8w5mYZuV7j3h8i9TpDynWcRxNWnF3eAk3PbngXusDyvOoYAf/czNTXXEjCPs2J8N
+         h7x5EjEvqp63T127Cef/FORfk4p3/eYoq1AlJAR13DFTgygvod6l+b/Z+DJwavSQhO
+         t6duw+JqHn2qT7xHh85XdEnO7xukPZkMBswRd8IXYQiM6I2o+CfEbv3uYaQB/71iMz
+         97T5qxbNIuQjE68JztxbnuFjAjyPF49CZcOyLKwXu7uZWCXVbmKFKMvVDeHAdySfyI
+         uwheRTsqMiSMJJcpdaPy3KJ14hyYc8IEoRvNUQ7qK28Ml9TrqqoVPBDaq7t3gzHOdB
+         vWGRyNjl82p1Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Matt Kramer <mccleetus@gmail.com>, Takashi Iwai <tiwai@suse.de>,
-        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
-        tiwai@suse.com, corbet@lwn.net, gregkh@linuxfoundation.org,
-        sudipm.mukherjee@gmail.com, sylee@canonical.com,
-        hui.wang@canonical.com, alsa-devel@alsa-project.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 37/37] ALSA: hda/realtek: Add alc256-samsung-headphone fixup
-Date:   Wed, 30 Mar 2022 07:51:22 -0400
-Message-Id: <20220330115122.1671763-37-sashal@kernel.org>
+Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.4 01/25] ASoC: SOF: Intel: hda: Remove link assignment limitation
+Date:   Wed, 30 Mar 2022 07:52:01 -0400
+Message-Id: <20220330115225.1672278-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115122.1671763-1-sashal@kernel.org>
-References: <20220330115122.1671763-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,83 +60,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Kramer <mccleetus@gmail.com>
+From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 
-[ Upstream commit ef248d9bd616b04df8be25539a4dc5db4b6c56f4 ]
+[ Upstream commit 2ce0d008dcc59f9c01f43277b9f9743af7b01dad ]
 
-This fixes the near-silence of the headphone jack on the ALC256-based
-Samsung Galaxy Book Flex Alpha (NP730QCJ). The magic verbs were found
-through trial and error, using known ALC298 hacks as inspiration. The
-fixup is auto-enabled only when the NP730QCJ is detected. It can be
-manually enabled using model=alc256-samsung-headphone.
+The limitation to assign a link DMA channel for a BE iff the
+corresponding host DMA channel is assigned to a connected FE is only
+applicable if the PROCEN_FMT_QUIRK is set. So, remove it for platforms
+that do not enable the quirk.
 
-Signed-off-by: Matt Kramer <mccleetus@gmail.com>
-Link: https://lore.kernel.org/r/3168355.aeNJFYEL58@linus
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Complements: a792bfc1c2bc ("ASoC: SOF: Intel: hda-stream: limit PROCEN workaround")
+Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Link: https://lore.kernel.org/r/20220128130017.28508-1-peter.ujfalusi@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/sound/hd-audio/models.rst |  4 ++++
- sound/pci/hda/patch_realtek.c           | 11 +++++++++++
- 2 files changed, 15 insertions(+)
+ sound/soc/sof/intel/hda-dai.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/sound/hd-audio/models.rst b/Documentation/sound/hd-audio/models.rst
-index d25335993e55..9b52f50a6854 100644
---- a/Documentation/sound/hd-audio/models.rst
-+++ b/Documentation/sound/hd-audio/models.rst
-@@ -261,6 +261,10 @@ alc-sense-combo
- huawei-mbx-stereo
-     Enable initialization verbs for Huawei MBX stereo speakers;
-     might be risky, try this at your own risk
-+alc298-samsung-headphone
-+    Samsung laptops with ALC298
-+alc256-samsung-headphone
-+    Samsung laptops with ALC256
+diff --git a/sound/soc/sof/intel/hda-dai.c b/sound/soc/sof/intel/hda-dai.c
+index b3cdd10c83ae..80e3a02e629f 100644
+--- a/sound/soc/sof/intel/hda-dai.c
++++ b/sound/soc/sof/intel/hda-dai.c
+@@ -57,6 +57,8 @@ static struct hdac_ext_stream *
+ {
+ 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+ 	struct sof_intel_hda_stream *hda_stream;
++	const struct sof_intel_dsp_desc *chip;
++	struct snd_sof_dev *sdev;
+ 	struct hdac_ext_stream *res = NULL;
+ 	struct hdac_stream *stream = NULL;
  
- ALC66x/67x/892
- ==============
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 3bd37c02ce0e..fadf4f32877e 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6762,6 +6762,7 @@ enum {
- 	ALC236_FIXUP_HP_MUTE_LED,
- 	ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
- 	ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
-+	ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
- 	ALC295_FIXUP_ASUS_MIC_NO_PRESENCE,
- 	ALC269VC_FIXUP_ACER_VCOPPERBOX_PINS,
- 	ALC269VC_FIXUP_ACER_HEADSET_MIC,
-@@ -8083,6 +8084,14 @@ static const struct hda_fixup alc269_fixups[] = {
- 			{ }
- 		},
- 	},
-+	[ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET] = {
-+		.type = HDA_FIXUP_VERBS,
-+		.v.verbs = (const struct hda_verb[]) {
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x08},
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x2fcf},
-+			{ }
-+		},
-+	},
- 	[ALC295_FIXUP_ASUS_MIC_NO_PRESENCE] = {
- 		.type = HDA_FIXUP_PINS,
- 		.v.pins = (const struct hda_pintbl[]) {
-@@ -8835,6 +8844,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x144d, 0xc740, "Samsung Ativ book 8 (NP870Z5G)", ALC269_FIXUP_ATIV_BOOK_8),
- 	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
- 	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
-+	SND_PCI_QUIRK(0x144d, 0xc832, "Samsung Galaxy Book Flex Alpha (NP730QCJ)", ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
- 	SND_PCI_QUIRK(0x1458, 0xfa53, "Gigabyte BXBT-2807", ALC283_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1462, 0xb120, "MSI Cubi MS-B120", ALC283_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1462, 0xb171, "Cubi N 8GL (MS-B171)", ALC283_FIXUP_HEADSET_MIC),
-@@ -9177,6 +9187,7 @@ static const struct hda_model_fixup alc269_fixup_models[] = {
- 	{.id = ALC298_FIXUP_HUAWEI_MBX_STEREO, .name = "huawei-mbx-stereo"},
- 	{.id = ALC256_FIXUP_MEDION_HEADSET_NO_PRESENCE, .name = "alc256-medion-headset"},
- 	{.id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc298-samsung-headphone"},
-+	{.id = ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc256-samsung-headphone"},
- 	{.id = ALC255_FIXUP_XIAOMI_HEADSET_MIC, .name = "alc255-xiaomi-headset"},
- 	{.id = ALC274_FIXUP_HP_MIC, .name = "alc274-hp-mic-detect"},
- 	{.id = ALC245_FIXUP_HP_X360_AMP, .name = "alc245-hp-x360-amp"},
+@@ -75,9 +77,20 @@ static struct hdac_ext_stream *
+ 			continue;
+ 
+ 		hda_stream = hstream_to_sof_hda_stream(hstream);
++		sdev = hda_stream->sdev;
++		chip = get_chip_info(sdev->pdata);
+ 
+ 		/* check if link is available */
+ 		if (!hstream->link_locked) {
++			/*
++			 * choose the first available link for platforms that do not have the
++			 * PROCEN_FMT_QUIRK set.
++			 */
++			if (!(chip->quirks & SOF_INTEL_PROCEN_FMT_QUIRK)) {
++				res = hstream;
++				break;
++			}
++
+ 			if (stream->opened) {
+ 				/*
+ 				 * check if the stream tag matches the stream
 -- 
 2.34.1
 

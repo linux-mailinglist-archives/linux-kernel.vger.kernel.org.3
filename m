@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE024EB9EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8164EBA17
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242820AbiC3FOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S242923AbiC3FXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242795AbiC3FOO (ORCPT
+        with ESMTP id S238534AbiC3FWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:14:14 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37C29BAED;
-        Tue, 29 Mar 2022 22:12:28 -0700 (PDT)
-X-UUID: c788adcedbfb4701b48689ef8bb3e588-20220330
-X-UUID: c788adcedbfb4701b48689ef8bb3e588-20220330
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 838381258; Wed, 30 Mar 2022 13:12:19 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 30 Mar 2022 13:12:17 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 30 Mar 2022 13:12:17 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <granquet@baylibre.com>
-CC:     <airlied@linux.ie>, <angelogioacchino.delregno@collabora.com>,
-        <chunfeng.yun@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <ck.hu@mediatek.com>, <daniel@ffwll.ch>, <deller@gmx.de>,
-        <devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <jitao.shi@mediatek.com>, <kishon@ti.com>, <krzk+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>,
-        <maarten.lankhorst@linux.intel.com>, <markyacoub@google.com>,
-        <matthias.bgg@gmail.com>, <mripard@kernel.org>,
-        <p.zabel@pengutronix.de>, <robh+dt@kernel.org>,
-        <tzimmermann@suse.de>, <vkoul@kernel.org>
-Subject: Re: [PATCH v9 03/22] dt-bindings: mediatek,dp_phy: Add Display Port PHY binding
-Date:   Wed, 30 Mar 2022 13:12:17 +0800
-Message-ID: <20220330051217.19789-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220327223927.20848-4-granquet@baylibre.com>
-References: <20220327223927.20848-4-granquet@baylibre.com>
+        Wed, 30 Mar 2022 01:22:45 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED26113CEC8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:21:00 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id b17so6434852qvf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=r2CZrBGtbL0Pl7Rh/IEQ3HT4fnj/n9fRqx3pUJSK67E=;
+        b=AhpL+aqMBVHNNGN2Gw40yA1FkX4Ei3hlJY50qSZ6SJqCfDg513lSWIvWXf0dyk8dqf
+         4x7v1i+JgWt+XWAcaY472vjaSlrQtQNzCzv1qfI15nFlCcbCYo5ks/eMpeQlLedvEdOs
+         dw50KUDtL0GkulAfnFMeKmzYkQRUXFc+MDvbIipjLkG1BX0XC0KGqIuJ1UKiOlmO4PPh
+         pIqXL/OaSKDRX2qrTJEx3gDjzBis5FNu3ctuXM2tq7UCee+jUOdo/jlt6vlU38n+Cp3j
+         DcsGvu2S3fAnegI+pN+Z1Q29OdcKD96dYonCsi9tjlEJqfo2xHj2spOm8vBc+MHnNefn
+         7mCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=r2CZrBGtbL0Pl7Rh/IEQ3HT4fnj/n9fRqx3pUJSK67E=;
+        b=KnCzws0nsGAxqj2I14tFwIUmv/WZEkvlqVY56LecJj6Xdxw2og+D8kIqGYnkMiocCR
+         YmWF7TLrUyouVnQa1YzbKnSIoE2yt+5hj/EP5PfjH4VyIq1gMxE7gZuAoO8RxDAkQ6eS
+         RjZ5Oe6qYHLxqjPgqX8pC8eM5N/CA+U1hpYsV/Jm96/hg4+dIUX9huayGG881LTcGc4R
+         XB9lizcMabkYnWJ147fPxbjFoF566gtc9VIP93nBOxkwZ0hZIyjckTaA+vgYWuH13NaM
+         7eCpfzW7cVftls2nsFLE8fC3ZozhnWpuItVox9L27UaV+nRAHTvUtDVj+OkY2EMpDZnQ
+         uSuA==
+X-Gm-Message-State: AOAM530XN4Iz86+gBkFU4kfnD0zdmeCJtwdUNjNBZWaAhttlVo9J9LVW
+        WXEPv9uN2WsBhLB+Ex/M2cNqFcVUTfNOzYEu9ezrBtguM4I=
+X-Google-Smtp-Source: ABdhPJx1LTAItEEalfTaOyheaiJYvi7bHV+3KJUClGJDCJ5nufiEdee9GVh4Mg0zhzpDlOgeVj83n8oBmhUMHCyj+/k=
+X-Received: by 2002:a05:6214:52:b0:440:f824:a7f3 with SMTP id
+ c18-20020a056214005200b00440f824a7f3mr29124189qvr.125.1648617160892; Tue, 29
+ Mar 2022 22:12:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ad4:5d4c:0:0:0:0:0 with HTTP; Tue, 29 Mar 2022 22:12:40
+ -0700 (PDT)
+Reply-To: rgicompanyltd1@gmail.com
+From:   RGI COMPANY LTD <antonioman6060@gmail.com>
+Date:   Wed, 30 Mar 2022 13:12:40 +0800
+Message-ID: <CAHVKXceFN2t1hE7gWcx2wqKpn+8KprPqJrnMKAN--t2P4d_wSA@mail.gmail.com>
+Subject: Greetings from Netherlands
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f2d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [antonioman6060[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rgicompanyltd1[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [antonioman6060[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->This phy controller is embedded in the Display Port Controller on mt8195 SoCs.
->
->Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->---
-> .../bindings/phy/mediatek,dp-phy.yaml         | 43 +++++++++++++++++++
-> 1 file changed, 43 insertions(+)
-> create mode 100644 Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
->
->diff --git a/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
->new file mode 100644
->index 000000000000..1f5ffca4e140
->--- /dev/null
->+++ b/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
->@@ -0,0 +1,43 @@
->+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->+# Copyright (c) 2022 MediaTek
->+%YAML 1.2
->+---
->+$id: http://devicetree.org/schemas/phy/mediatek,dp-phy.yaml#
->+$schema: http://devicetree.org/meta-schemas/core.yaml#
->+
->+title: MediaTek Display Port PHY
->+
->+maintainers:
->+  - CK Hu <ck.hu@mediatek.com>
->+  - Jitao shi <jitao.shi@mediatek.com>
->+
->+description: |
->+  Device tree bindings for the Mediatek (embedded) Display Port PHY
+-- 
+From: RGI Company Ltd
+Address, Netherlands
 
-s/Mediatek/MediaTek/
+Greetings from Netherlands
 
->+  present on some Mediatek SoCs.
+RGI Genealogical Investigators particularize in probate research to reveal
+missing capital, inherited estate around the globe. We can also help you
+find wills, retrieve/secure copies of certificates.
 
-s/Mediatek/MediaTek/
+Recently a woman from the Rothschild family, one of the famous families
+contacted our firm that we should contact a business minded person who is
+capable of establishing her capital in a lucrative sector.
 
->+
->+properties:
->+  compatible:
->+    enum:
->+      - mediatek,mt8195-dp-phy
->+
->+  mediatek,dp-syscon:
->+    $ref: /schemas/types.yaml#/definitions/phandle
->+    description: Phandle to the Display Port node.
->+
->+  "#phy-cells":
->+    const: 0
->+
->+required:
->+  - compatible
->+  - mediatek,dp-syscon
->+  - "#phy-cells"
->+
->+additionalProperties: false
->+
->+examples:
->+  - |
->+    dp_phy: dp-phy {
->+      compatible = "mediatek,mt8195-dp-phy";
->+      mediatek,dp-syscon = <&dp_tx>;
->+      #phy-cells = <0>;
->+    };
->-- 
->2.34.1
->
->
+Our professional co-operation is 2% of the capital and we will be settled
+after you receive the capital. The capital transfer process should take
+just a matter of days as we have the mechanism and expertise to get this
+done quickly.
+
+Please if you find this letter offensive ignore it and accept our apologies
+
+Warmest Regards,
+
+Dr.TJ. Wood, CEO
+RGI Genealogical.

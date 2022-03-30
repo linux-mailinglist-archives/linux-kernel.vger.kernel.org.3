@@ -2,114 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AAB4ECC26
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9334ECC1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345088AbiC3S07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S1350035AbiC3S3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiC3S0d (ORCPT
+        with ESMTP id S1351086AbiC3S2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:26:33 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66C249FBD
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-de48295467so22926449fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
+        Wed, 30 Mar 2022 14:28:25 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E5947071
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:24:48 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id z10so2080508iln.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
-         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
-         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
-         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
-         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
-         ou5A==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JFFSehnkNeo1K8L02V2cW9CThdS75MCRvOKla3KLkAw=;
+        b=BFTCzD4aFvt9JrLiEz1bvzh6geIg6IptVTdj6IDiPuICAE203wQz9TEb+4sd+GuDm8
+         7hfsvwiWBq0a8G/L8JH1EJb4H5BgYFm066eNM++IJprdbaiP/K/RQcVNoIdok+4Buz0n
+         VPAQxsddsYW6lxBAvrCd3pw/AsU0VWg+XQ9+f+uSiaJkninfGHo8tQFy0F2WQL/CkiPX
+         978UdPWCEqFU5zNcqpfpYI+hbpzYnlekkvQ4l365jJLsdpHWW1qs4vwF10T/u8GEeEZH
+         VfPeDuk7IqzhfjQL+dK96hTc4fToK+0EsQR50pC8XTuJ0494LDj5KpiHUMlEIVaBIuzm
+         wOwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=IPPbiXd9/25wZgPaZM8tq5xfsHddRuK9BEhyPezKN0dWxYs7uU+Rw60ffK9rzyZQie
-         +qtmCJNAfWSG66kkWxUvWx/7Tw607j5iapWbEaOH4+AknlcQkr9+6FclvEeKsbvQjQa0
-         w3et3IXdYgRjKEz26lCo9N87cbhv98gZ24YbO+chwHLGhXFASD6T0gZTd42GNzkhX2Ge
-         DXvkLmwdWuAKQj45b187fskGxvnOstFKj3pFdpxLsADVs18eAoP0Z9jepTdWsdCXyWWe
-         mFjN71OMLz43GQSaSAk7kFfGzec2pW7v2L86Ac+poG8HFWQgrAuEeOIr3/Wgdg0riI3K
-         3e9A==
-X-Gm-Message-State: AOAM531ODxnpSQCne6FqMusKyfOD2p6qNpzFkigEfFgWA5vZmtwTo9QC
-        Uen7NEoYVNpUuSomTF/pZKOZw0JBEylV9v5NeebVl7irLo5u
-X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
-X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
- ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
- Mar 2022 11:23:38 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JFFSehnkNeo1K8L02V2cW9CThdS75MCRvOKla3KLkAw=;
+        b=7tsXD3eTLcqZwsGmUJUsDV9P3/KlAmDUCZgVlvw0G2ejkB5RNOc/OjtKkOK4w9Xn/f
+         yaeQIo+/quQzSXFTQ7Zo1VEwZXstmshZ+rMzr3NIkPvAG7pYTIxuaYtURd7sJ3ifkSkY
+         BG7ZTyAbfJqCGFZcTh1YAPB63B7gvHmO3p2r7LbkcJUspqxxopYlMxXZXC3ImSoQrYuJ
+         aTjdjdo2n40veAXIyH5EOG+CGt2M7Xm3SYbKdi+gcl3/XiM3YwKwPQ5Cs+ggzODFN9qj
+         TaU5wYsOtoDxblYKR8xjpUuq8HhcaB8g5VCeZo0FTWYQUBwYjCsEToMfmx5naU4Jf2wy
+         9zZA==
+X-Gm-Message-State: AOAM533RIRW0g87ghwiZluK/n4z07rSh7ZVDx0m0OfkOvc2rkEGinf0j
+        PuPjICz5kXvcJNF3gZEoHqEx5w==
+X-Google-Smtp-Source: ABdhPJwUvZiBYV6AGjovRlQg5dfR2IK8vL/m8lnPjq8KMhvUK1WpCP4kEeYA48hTsQvWDg7IrHos5Q==
+X-Received: by 2002:a92:cbc3:0:b0:2c6:78fa:41e9 with SMTP id s3-20020a92cbc3000000b002c678fa41e9mr11278289ilq.112.1648664688212;
+        Wed, 30 Mar 2022 11:24:48 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id i81-20020a6bb854000000b00649c1b67a6csm11564038iof.28.2022.03.30.11.24.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 11:24:47 -0700 (PDT)
+Message-ID: <0dc208a9-22f2-6758-e776-752ff81e2b19@kernel.dk>
+Date:   Wed, 30 Mar 2022 12:24:46 -0600
 MIME-Version: 1.0
-Reply-To: isabellasayouba0@gmail.com
-Sender: 040stherchurch@gmail.com
-Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
- 11:23:37 -0700 (PDT)
-From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
-Date:   Wed, 30 Mar 2022 18:23:37 +0000
-X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
-Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
-Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: state of drbd in mainline
+Content-Language: en-US
+To:     Philipp Reisner <philipp.reisner@linbit.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220329070618.GA20396@lst.de>
+ <CADGDV=UgjZAbmAN-2bO1nyDvA=XCC9Lf2dxWHZ0BwxF12nnztQ@mail.gmail.com>
+ <20220329073254.GA20691@lst.de>
+ <CADGDV=U5jwe0CZ12174cMahfD_h-GsBswWaA1VOJbHaC1nsrUw@mail.gmail.com>
+ <f9d89282-3a67-ad97-149f-52325e23607c@kernel.dk>
+ <CADGDV=WN2TFR6dO7ZdiQ2ijPjs+7HSsvk0ZCHsHj6ZG5t-oEdA@mail.gmail.com>
+ <3c42b1ed-7c03-64e6-409e-e92247288cac@kernel.dk>
+ <CADGDV=WcTSSC70yG61dazo-WyoLOzp3r+nOk-Eg2x_Ncx=3nRg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CADGDV=WcTSSC70yG61dazo-WyoLOzp3r+nOk-Eg2x_Ncx=3nRg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
-kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
-jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
-kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
-leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
-quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
-seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
-ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
-grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
-tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
-gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
-5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
-44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
-44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
-DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
-44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
-44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
-44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
-5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
-geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
-qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
-gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
-sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
-gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
-uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
-gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
-gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
-vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
-puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
-6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
-44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
-44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
-44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
-6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
-56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
-44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
-iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
-guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
-vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
-uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
-jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
-puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
-gonjgIINCg==
+On 3/30/22 9:23 AM, Philipp Reisner wrote:
+>>> Jens, my intention is to keep it in-tree, and at some point update it.
+>>> Regarding your questions:
+>>
+>> That'd be great, but it's been years since there was any significant
+>> updates to the in-kernel drbd... I would strongly suggest that the
+>> in-kernel be brought closer to what people are mostly running, as it
+>> stands it's basically unmaintained.
+> 
+> The changes we worked on over many Years in the more recent drbd-9.x
+> branches are just too fundamental to do them in small chunks, we could
+> upstream bit by bit.  We need to get that reviewed in a big series.  If I
+
+Your development model is fundamentally broken. You've allowed your 9.x
+branch to totally drift from mainline, which just helps underline my
+earlier point on that in-kernel drbd is effectively abandoned and
+unmaintained.
+
+> started to dump them on linux-block right away, nobody would look at it
+> seriously, since it would be too much.  I intend to get people from red
+> hat/suse assigned to do such a review. Then we will do that on linux-block,
+> so that everyone who cares sees what happens.
+
+You're just doing it totally wrong. Upstream kernel should match your
+9.x branch, and it should have been developed in sync. What you appear
+to have done is to ignore mainline, while it would've been correct and
+much easier in the long run to ensure that development is regularly
+synced to the mainline kernel. You know, like EVERY other driver that is
+maintained does.
+
+Now you've got a giant pile of patches, which probably don't adhere to
+how we would've done the mainline commits in the first place, and it'll
+cause a huge pain for not just you but upstream reviewers. I don't care
+about the former, but I do care a lot about the latter. That's a giant
+waste of the time of the folks involved on the block side, and
+definitely not what a responsible kernel maintainer would do.
+
+From your reply here and earlier ones, seems to me that you don't grasp
+the gravity of the situation, which is also worrying.
+
+>> The main discrepancy here is that there are apparently huge numbers of
+>> in-tree users, yet no fixes or patches at all making it to mainline.
+>> Either drbd is bug free and doesn't require any fixes at all, which I
+>> very much would doubt, or fixes aren't being sent upstream.
+> 
+> It is the broad consent among the users of the drbd-8.4 branch (that is what
+> is in-tree), is that it works for its purpose. It is for sure not bug-free,
+> but people are not running into bugs anymore. So, call it free of relevant
+> bugs, if you want.  No new features go into that branch, on purpose. To keep
+> it that way.
+> 
+> Have a look at that one real bug-fix that was identified in the last Year.
+> https://patchwork.kernel.org/project/linux-block/patch/20210426163032.3454129-1-christoph.boehmwalder@linbit.com/
+> 
+> When do you want to have that reposted to you?
+> right now? Just before the next merge window opens?
+
+That can go in anytime, so please do submit it.
+
+-- 
+Jens Axboe
+

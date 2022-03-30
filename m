@@ -2,269 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968E24EC6CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A054EC6C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347013AbiC3Olp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S1347011AbiC3OlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237914AbiC3Olm (ORCPT
+        with ESMTP id S237914AbiC3OlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:41:42 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F81F53B54;
-        Wed, 30 Mar 2022 07:39:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cVuNKVccDao4KKLJj81mcJnOZEknM6xw0xcWblWc7FENj/jBs64mHEf/dbYKEOGzcmvYJwz1erYMlcGyENCtlS4+5XDuOjlUeaOGPYpx9qxchanHMFkhlTVr4vxbawp0aNORkdWhJrKMlrbAdWgeUFo3SKnzml3qgJdCFeTj6pyiCwFKpm1ncay6+ZiIky8KDqGPPnnKDtMQgBHFOkssSM6/MED4ReDkyYP/gSmUSbG5jKJp1wM6XA51tQPoSiJI5ra83Hl/Ve0YNblKulEDRN7LH+TO59x1HkO19w425FOIQ5JVsNsGzfLNqaou8w8/fBAwY2Ad7FUmFJKMQGmfBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qc4iAL8TXxvbp7/DyB/nsLSUrz912sWCvcI8+//F0VU=;
- b=leViL+OzNtprXi9TISdZl2a8p1rEk6aC0KZIxnuUvctQhMSXMJtG3YPOD+5S6j6eRezjci1m6fgOAC/2jVDuBcIkK5RQ/oSwEDX8pH6LzDUOtkK6iddUFGAqLlhHMp4Mtb7EMS5FFRG88vQ/F/Pk5BAVIeljAD9WovqjROzCetyWYBi221G6RHhn+EpeARF50p4kR2mWpPljT5ygv783BXyaxg0Z9/9NBhdnw1STR9uba+jUzxn8iHWeC/onkta5vZOPS7SMdnleHr4tvbbOMdnfPgqNjWbVI8pgVmlgZpdvRdD+lFiAFcZY5dGa8J0Sho3AGtQnzZagm/jaHxgtlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qc4iAL8TXxvbp7/DyB/nsLSUrz912sWCvcI8+//F0VU=;
- b=s7hIqWY8NC2tHLWA88xkdeqosAamlZewdNV3jrElNnCrUN1pRK6YpHKt/K2uze0wcy0TrR2yiCmUsqPb6DFJ76OO0uWlDWh3i8jOMXg2mHVxnwzOZGGARUSUnPDu0yVtm8cY6m/rFUdRydYTUrLOuDvGJwOmZz2vLZNDXT5qGp+9DR5l3Z6+kRA4uESFztapo7hgZqvjj4gA4RI3uR4u1FImNWzgoCTJqTLbFc4l7a3yX0h0ZlHQIxVB2FdXfb6foKifjtV75xCk/kwV2x4I9/AP7yRXuDJm9BEhubEeCA85pNbOre3P3IEi176Wzl5SExtTMy8Ds+A/azFgbBrQTA==
-Received: from DS7PR03CA0297.namprd03.prod.outlook.com (2603:10b6:5:3ad::32)
- by BL0PR12MB2481.namprd12.prod.outlook.com (2603:10b6:207:40::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 30 Mar
- 2022 14:38:55 +0000
-Received: from DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ad:cafe::35) by DS7PR03CA0297.outlook.office365.com
- (2603:10b6:5:3ad::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
- Transport; Wed, 30 Mar 2022 14:38:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT047.mail.protection.outlook.com (10.13.172.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 14:38:54 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 30 Mar
- 2022 14:38:54 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 30 Mar
- 2022 07:38:53 -0700
-Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Wed, 30 Mar 2022 07:38:49 -0700
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <treding@nvidia.com>,
-        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
-        <sumitg@nvidia.com>
-Subject: [Patch v2 4/4] cpufreq: tegra194: Add support for Tegra234
-Date:   Wed, 30 Mar 2022 20:08:19 +0530
-Message-ID: <20220330143819.27476-5-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220330143819.27476-1-sumitg@nvidia.com>
-References: <20220330143819.27476-1-sumitg@nvidia.com>
-X-NVConfidentiality: public
+        Wed, 30 Mar 2022 10:41:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 780125468D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648651160;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=D0g41ZMuah7XSiZntnTcbfGmejku/xY2IgpccjE/IAM=;
+        b=aMO+Ty6hw3zwtcvrOaxdl8ED6wKlAfmGr3EhL22gmlk3WBCl47+9eAh/BXla38TVDGtJm6
+        dXdLtN+BEzuOp4jN1hvTNS/HRuAB651XPwQY1ozR00+jlUCdMOWss7ihGVmCG8j33tXLZv
+        Mi2/mK1gAzC769x6Aze5YFVErhb5Hbw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-g7nNry4TN460ypjpPJHy5g-1; Wed, 30 Mar 2022 10:39:18 -0400
+X-MC-Unique: g7nNry4TN460ypjpPJHy5g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 785B23C163E8;
+        Wed, 30 Mar 2022 14:39:18 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A32CA401472;
+        Wed, 30 Mar 2022 14:39:17 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net] rxrpc: Fix call timer start racing with call destruction
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 30 Mar 2022 15:39:16 +0100
+Message-ID: <164865115696.2943015.11097991776647323586.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7ee475d2-38b3-462b-7e52-08da125b044e
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2481:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB2481DDAC2768C257EFA439C7B91F9@BL0PR12MB2481.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nBUaeK0jUv42I0674uzDX/aXQZw2ksn2sTwr1xOA8tJMo/dMsr06d7izQTV+LoEXUAgJ+49KFFu+8+qDpYbfkrjitEUIezi4Bk/ByVbmsWy0jaQ4VYL80IHMhsRhA6omKtklFDCHt6eeeQK/oTYTmU+kQyuj/4FbmoZShfnxeK0M/jwNWIvpxnRQ8RDEClJpxz9TuUa4HCsaWyBOUyUeN8L5gItNejdXa2y/mo8rjQA2tUqn+3VJ3AYxgKp1zgj45ESxb5QDXlCuwH10doczrRNjIitNq0BLgyj1+voa03HPe6cuUZXWOBsq9u3cRcvfaetRYw6LQJcA+qTqV7zlxhslb1R9AIWNSUgoc560xngd3tktbXRRcBCnoFG8vLEiM0QH2e8DvJ8E8N6x0TC+NrKpkd+jedzBFydYQDoKD13TJdxIgD3jilGLKJLlx7WXjTlIr/RkFSLF9+wifHYuZz9lDP/7nK9rIDb7FNxo2NQDCesYJqkQ/OUVrJaHbaRRlKB6KhyCM9O2HB9y0WQbXaWYIJmgHJoJw2Cq893SuMF7kEnR3lKRWp4+6gt8OPDaTL+DpuuG1zJ75pfJpaDIvnhAuZ1bAWJwVQ1wefcYnng4GgQq5troUpuo7K0XN/QK96tDxEuqi14vPngQ5+cDoQ96zd0pcLuvBiPqhbuvqOyBKHK51OWhNGzx1/dR10B2hFqFHdYEkJnsq0112YzyXYPTTr7xD6GI7CiY+F5Sm5I=
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(508600001)(70206006)(2616005)(921005)(107886003)(82310400004)(70586007)(356005)(8676002)(1076003)(47076005)(6666004)(81166007)(7696005)(4326008)(2906002)(83380400001)(40460700003)(110136005)(186003)(316002)(36756003)(26005)(336012)(86362001)(5660300002)(54906003)(36860700001)(426003)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 14:38:54.8673
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ee475d2-38b3-462b-7e52-08da125b044e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2481
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds driver support for Tegra234 cpufreq.
-Tegra234 has per core MMIO registers instead of system registers for
-cpu frequency requests and to read the counters for re-constructing
-the cpu frequency. Also, MPIDR affinity info in Tegra234 is different
-from Tegra194.
-Added ops hooks  and soc data for Tegra234. This will help to easily
-add variants of Tegra234 and future SoC's which use similar logic to
-{get|set} the cpu frequency.
+The rxrpc_call struct has a timer used to handle various timed events
+relating to a call.  This timer can get started from the packet input
+routines that are run in softirq mode with just the RCU read lock held.
+Unfortunately, because only the RCU read lock is held - and neither ref or
+other lock is taken - the call can start getting destroyed at the same time
+a packet comes in addressed to that call.  This causes the timer - which
+was already stopped - to get restarted.  Later, the timer dispatch code may
+then oops if the timer got deallocated first.
 
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+Fix this by trying to take a ref on the rxrpc_call struct and, if
+successful, passing that ref along to the timer.  If the timer was already
+running, the ref is discarded.
+
+The timer completion routine can then pass the ref along to the call's work
+item when it queues it.  If the timer or work item where already
+queued/running, the extra ref is discarded.
+
+Fixes: a158bdd3247b ("rxrpc: Fix call timeouts")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lists.infradead.org/pipermail/linux-afs/2022-March/005073.html
 ---
- drivers/cpufreq/tegra194-cpufreq.c | 104 +++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index 2d59b2bd0e1d..2a6a98764a8c 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -24,6 +24,17 @@
- #define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
- #define MAX_CNT                 ~0U
+ include/trace/events/rxrpc.h |    8 +++++++-
+ net/rxrpc/ar-internal.h      |   15 +++++++--------
+ net/rxrpc/call_event.c       |    2 +-
+ net/rxrpc/call_object.c      |   40 +++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 50 insertions(+), 15 deletions(-)
+
+diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
+index e70c90116eda..4a3ab0ed6e06 100644
+--- a/include/trace/events/rxrpc.h
++++ b/include/trace/events/rxrpc.h
+@@ -83,12 +83,15 @@ enum rxrpc_call_trace {
+ 	rxrpc_call_error,
+ 	rxrpc_call_got,
+ 	rxrpc_call_got_kernel,
++	rxrpc_call_got_timer,
+ 	rxrpc_call_got_userid,
+ 	rxrpc_call_new_client,
+ 	rxrpc_call_new_service,
+ 	rxrpc_call_put,
+ 	rxrpc_call_put_kernel,
+ 	rxrpc_call_put_noqueue,
++	rxrpc_call_put_notimer,
++	rxrpc_call_put_timer,
+ 	rxrpc_call_put_userid,
+ 	rxrpc_call_queued,
+ 	rxrpc_call_queued_ref,
+@@ -278,12 +281,15 @@ enum rxrpc_tx_point {
+ 	EM(rxrpc_call_error,			"*E*") \
+ 	EM(rxrpc_call_got,			"GOT") \
+ 	EM(rxrpc_call_got_kernel,		"Gke") \
++	EM(rxrpc_call_got_timer,		"GTM") \
+ 	EM(rxrpc_call_got_userid,		"Gus") \
+ 	EM(rxrpc_call_new_client,		"NWc") \
+ 	EM(rxrpc_call_new_service,		"NWs") \
+ 	EM(rxrpc_call_put,			"PUT") \
+ 	EM(rxrpc_call_put_kernel,		"Pke") \
+-	EM(rxrpc_call_put_noqueue,		"PNQ") \
++	EM(rxrpc_call_put_noqueue,		"PnQ") \
++	EM(rxrpc_call_put_notimer,		"PnT") \
++	EM(rxrpc_call_put_timer,		"PTM") \
+ 	EM(rxrpc_call_put_userid,		"Pus") \
+ 	EM(rxrpc_call_queued,			"QUE") \
+ 	EM(rxrpc_call_queued_ref,		"QUR") \
+diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
+index 7bd6f8a66a3e..969e532f77a9 100644
+--- a/net/rxrpc/ar-internal.h
++++ b/net/rxrpc/ar-internal.h
+@@ -777,14 +777,12 @@ void rxrpc_propose_ACK(struct rxrpc_call *, u8, u32, bool, bool,
+ 		       enum rxrpc_propose_ack_trace);
+ void rxrpc_process_call(struct work_struct *);
  
-+#define NDIV_MASK              0x1FF
+-static inline void rxrpc_reduce_call_timer(struct rxrpc_call *call,
+-					   unsigned long expire_at,
+-					   unsigned long now,
+-					   enum rxrpc_timer_trace why)
+-{
+-	trace_rxrpc_timer(call, why, now);
+-	timer_reduce(&call->timer, expire_at);
+-}
++void rxrpc_reduce_call_timer(struct rxrpc_call *call,
++			     unsigned long expire_at,
++			     unsigned long now,
++			     enum rxrpc_timer_trace why);
 +
-+#define CORE_OFFSET(cpu)			(cpu * 8)
-+#define CMU_CLKS_BASE				0x2000
-+#define SCRATCH_FREQ_CORE_REG(data, cpu)	(data->regs + CMU_CLKS_BASE + CORE_OFFSET(cpu))
-+
-+#define MMCRAB_CLUSTER_BASE(cl)			(0x30000 + (cl * 0x10000))
-+#define CLUSTER_ACTMON_BASE(data, cl) \
-+			(data->regs + (MMCRAB_CLUSTER_BASE(cl) + data->soc->actmon_cntr_base))
-+#define CORE_ACTMON_CNTR_REG(data, cl, cpu)	(CLUSTER_ACTMON_BASE(data, cl) + CORE_OFFSET(cpu))
-+
- /* cpufreq transisition latency */
- #define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
++void rxrpc_delete_call_timer(struct rxrpc_call *call);
  
-@@ -56,6 +67,7 @@ struct tegra_cpufreq_ops {
- struct tegra_cpufreq_soc {
- 	struct tegra_cpufreq_ops *ops;
- 	int maxcpus_per_cluster;
-+	phys_addr_t actmon_cntr_base;
- };
+ /*
+  * call_object.c
+@@ -808,6 +806,7 @@ void rxrpc_release_calls_on_socket(struct rxrpc_sock *);
+ bool __rxrpc_queue_call(struct rxrpc_call *);
+ bool rxrpc_queue_call(struct rxrpc_call *);
+ void rxrpc_see_call(struct rxrpc_call *);
++bool rxrpc_try_get_call(struct rxrpc_call *call, enum rxrpc_call_trace op);
+ void rxrpc_get_call(struct rxrpc_call *, enum rxrpc_call_trace);
+ void rxrpc_put_call(struct rxrpc_call *, enum rxrpc_call_trace);
+ void rxrpc_cleanup_call(struct rxrpc_call *);
+diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
+index df864e692267..22e05de5d1ca 100644
+--- a/net/rxrpc/call_event.c
++++ b/net/rxrpc/call_event.c
+@@ -310,7 +310,7 @@ void rxrpc_process_call(struct work_struct *work)
+ 	}
  
- struct tegra194_cpufreq_data {
-@@ -72,6 +84,90 @@ static void tegra_get_cpu_mpidr(void *mpidr)
- 	*((u64 *)mpidr) = read_cpuid_mpidr() & MPIDR_HWID_BITMASK;
+ 	if (call->state == RXRPC_CALL_COMPLETE) {
+-		del_timer_sync(&call->timer);
++		rxrpc_delete_call_timer(call);
+ 		goto out_put;
+ 	}
+ 
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index 4eb91d958a48..043508fd8d8a 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -53,10 +53,30 @@ static void rxrpc_call_timer_expired(struct timer_list *t)
+ 
+ 	if (call->state < RXRPC_CALL_COMPLETE) {
+ 		trace_rxrpc_timer(call, rxrpc_timer_expired, jiffies);
+-		rxrpc_queue_call(call);
++		__rxrpc_queue_call(call);
++	} else {
++		rxrpc_put_call(call, rxrpc_call_put);
++	}
++}
++
++void rxrpc_reduce_call_timer(struct rxrpc_call *call,
++			     unsigned long expire_at,
++			     unsigned long now,
++			     enum rxrpc_timer_trace why)
++{
++	if (rxrpc_try_get_call(call, rxrpc_call_got_timer)) {
++		trace_rxrpc_timer(call, why, now);
++		if (timer_reduce(&call->timer, expire_at))
++			rxrpc_put_call(call, rxrpc_call_put_notimer);
+ 	}
  }
  
-+static void tegra234_get_cpu_cluster_id(u32 cpu, u32 *cpuid, u32 *clusterid)
++void rxrpc_delete_call_timer(struct rxrpc_call *call)
 +{
-+	u64 mpidr;
-+
-+	smp_call_function_single(cpu, tegra_get_cpu_mpidr, &mpidr, true);
-+
-+	if (cpuid)
-+		*cpuid = MPIDR_AFFINITY_LEVEL(mpidr, 1);
-+	if (clusterid)
-+		*clusterid = MPIDR_AFFINITY_LEVEL(mpidr, 2);
++	if (del_timer_sync(&call->timer))
++		rxrpc_put_call(call, rxrpc_call_put_timer);
 +}
 +
-+static int tegra234_get_cpu_ndiv(u32 cpu, u32 cpuid, u32 clusterid, u64 *ndiv)
+ static struct lock_class_key rxrpc_call_user_mutex_lock_class_key;
+ 
+ /*
+@@ -463,6 +483,17 @@ void rxrpc_see_call(struct rxrpc_call *call)
+ 	}
+ }
+ 
++bool rxrpc_try_get_call(struct rxrpc_call *call, enum rxrpc_call_trace op)
 +{
-+	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
-+	void __iomem *freq_core_reg;
-+	u64 mpidr_id;
++	const void *here = __builtin_return_address(0);
++	int n = atomic_fetch_add_unless(&call->usage, 1, 0);
 +
-+	/* use physical id to get address of per core frequency register */
-+	mpidr_id = (clusterid * data->soc->maxcpus_per_cluster) + cpuid;
-+	freq_core_reg = SCRATCH_FREQ_CORE_REG(data, mpidr_id);
-+
-+	*ndiv = readl(freq_core_reg) & NDIV_MASK;
-+
-+	return 0;
++	if (n == 0)
++		return false;
++	trace_rxrpc_call(call->debug_id, op, n, here, NULL);
++	return true;
 +}
 +
-+static void tegra234_set_cpu_ndiv(struct cpufreq_policy *policy, u64 ndiv)
-+{
-+	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
-+	void __iomem *freq_core_reg;
-+	u32 cpu, cpuid, clusterid;
-+	u64 mpidr_id;
-+
-+	for_each_cpu_and(cpu, policy->cpus, cpu_online_mask) {
-+		data->soc->ops->get_cpu_cluster_id(cpu, &cpuid, &clusterid);
-+
-+		/* use physical id to get address of per core frequency register */
-+		mpidr_id = (clusterid * data->soc->maxcpus_per_cluster) + cpuid;
-+		freq_core_reg = SCRATCH_FREQ_CORE_REG(data, mpidr_id);
-+
-+		writel(ndiv, freq_core_reg);
-+	}
-+}
-+
-+/*
-+ * This register provides access to two counter values with a single
-+ * 64-bit read. The counter values are used to determine the average
-+ * actual frequency a core has run at over a period of time.
-+ *     [63:32] PLLP counter: Counts at fixed frequency (408 MHz)
-+ *     [31:0] Core clock counter: Counts on every core clock cycle
-+ */
-+static void tegra234_read_counters(struct tegra_cpu_ctr *c)
-+{
-+	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
-+	void __iomem *actmon_reg;
-+	u32 cpuid, clusterid;
-+	u64 val;
-+
-+	data->soc->ops->get_cpu_cluster_id(c->cpu, &cpuid, &clusterid);
-+	actmon_reg = CORE_ACTMON_CNTR_REG(data, clusterid, cpuid);
-+
-+	val = readq(actmon_reg);
-+	c->last_refclk_cnt = upper_32_bits(val);
-+	c->last_coreclk_cnt = lower_32_bits(val);
-+	udelay(US_DELAY);
-+	val = readq(actmon_reg);
-+	c->refclk_cnt = upper_32_bits(val);
-+	c->coreclk_cnt = lower_32_bits(val);
-+}
-+
-+static struct tegra_cpufreq_ops tegra234_cpufreq_ops = {
-+	.read_counters = tegra234_read_counters,
-+	.get_cpu_cluster_id = tegra234_get_cpu_cluster_id,
-+	.get_cpu_ndiv = tegra234_get_cpu_ndiv,
-+	.set_cpu_ndiv = tegra234_set_cpu_ndiv,
-+};
-+
-+const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
-+	.ops = &tegra234_cpufreq_ops,
-+	.actmon_cntr_base = 0x9000,
-+	.maxcpus_per_cluster = 4,
-+};
-+
- static void tegra194_get_cpu_cluster_id(u32 cpu, u32 *cpuid, u32 *clusterid)
- {
- 	u64 mpidr;
-@@ -442,6 +538,13 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
- 	if (!data->tables)
- 		return -ENOMEM;
+ /*
+  * Note the addition of a ref on a call.
+  */
+@@ -510,8 +541,7 @@ void rxrpc_release_call(struct rxrpc_sock *rx, struct rxrpc_call *call)
+ 	spin_unlock_bh(&call->lock);
  
-+	if (soc->actmon_cntr_base) {
-+		/* mmio registers are used for frequency request and re-construction */
-+		data->regs = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(data->regs))
-+			return PTR_ERR(data->regs);
-+	}
+ 	rxrpc_put_call_slot(call);
+-
+-	del_timer_sync(&call->timer);
++	rxrpc_delete_call_timer(call);
+ 
+ 	/* Make sure we don't get any more notifications */
+ 	write_lock_bh(&rx->recvmsg_lock);
+@@ -618,6 +648,8 @@ static void rxrpc_destroy_call(struct work_struct *work)
+ 	struct rxrpc_call *call = container_of(work, struct rxrpc_call, processor);
+ 	struct rxrpc_net *rxnet = call->rxnet;
+ 
++	rxrpc_delete_call_timer(call);
 +
- 	platform_set_drvdata(pdev, data);
+ 	rxrpc_put_connection(call->conn);
+ 	rxrpc_put_peer(call->peer);
+ 	kfree(call->rxtx_buffer);
+@@ -652,8 +684,6 @@ void rxrpc_cleanup_call(struct rxrpc_call *call)
  
- 	bpmp = tegra_bpmp_get(&pdev->dev);
-@@ -486,6 +589,7 @@ static int tegra194_cpufreq_remove(struct platform_device *pdev)
+ 	memset(&call->sock_node, 0xcd, sizeof(call->sock_node));
  
- static const struct of_device_id tegra194_cpufreq_of_match[] = {
- 	{ .compatible = "nvidia,tegra194-ccplex", .data = &tegra194_cpufreq_soc },
-+	{ .compatible = "nvidia,tegra234-ccplex-cluster", .data = &tegra234_cpufreq_soc },
- 	{ /* sentinel */ }
- };
+-	del_timer_sync(&call->timer);
+-
+ 	ASSERTCMP(call->state, ==, RXRPC_CALL_COMPLETE);
+ 	ASSERT(test_bit(RXRPC_CALL_RELEASED, &call->flags));
  
--- 
-2.17.1
+
 

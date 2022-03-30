@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311CF4EC80B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E7B4EC7EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348093AbiC3PT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S1348019AbiC3POt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240658AbiC3PT6 (ORCPT
+        with ESMTP id S1346432AbiC3POo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:19:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00679559B;
-        Wed, 30 Mar 2022 08:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648653493; x=1680189493;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=caZ836i7qELf2LoMLC34//yQfP4NzaUfxpHNmcCyr3Y=;
-  b=nGs7Tk/z8JdsO2vJ+Siq6MOLTiVY/jSIoFEvdOPIw/N+Gr3qOjxg9H7Y
-   69OcxFmFejmqld1odCGUYR3Pj+wfQVITMI8NlaIWMrSZVHU3zkp74Py+P
-   plgxEdEDFhjGdkQD/BYmfbwYbL4VUcthCh/iOvFn54CPupzTIb29Kym8x
-   01nc3UMXkJqiteT+b61ajBVlI08BJ7UIoMA755n5MJzWsODHnHdoqAyKH
-   u4bWyJqtkFn4CBHvGZ5K/f1M8waTcO7C53OyLAdW1M/8uiV8HYzGOOauD
-   vrWk0adE2SC8FQImIxB0DAVjVYsNZiuy7SxSUkN98+y1wjQdKFjdEKsw8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247069334"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="247069334"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 08:18:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="565582039"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2022 08:17:59 -0700
-Date:   Wed, 30 Mar 2022 23:10:45 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        conor.dooley@microchip.com, robh+dt@kernel.org, system@metrotek.ru,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v8 0/2] Microchip Polarfire FPGA manager
-Message-ID: <20220330151045.GB214615@yilunxu-OptiPlex-7050>
-References: <20220322191552.13156-1-i.bornyakov@metrotek.ru>
+        Wed, 30 Mar 2022 11:14:44 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEDA10663B;
+        Wed, 30 Mar 2022 08:12:58 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KT8z54Vvqz67yhs;
+        Wed, 30 Mar 2022 23:11:29 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 30 Mar 2022 17:12:57 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 30 Mar 2022 17:12:57 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Linux Doc Mailing List" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 05/18] bpf-preload: Generate static variables
+Thread-Topic: [PATCH 05/18] bpf-preload: Generate static variables
+Thread-Index: AQHYQsyWLcVpB05sakWRWVPVfsSzdqzW6LQAgACiZ4CAAH9p4A==
+Date:   Wed, 30 Mar 2022 15:12:57 +0000
+Message-ID: <af5e27aeef544581804b578032fc1b4e@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220328175033.2437312-6-roberto.sassu@huawei.com>
+ <CAEf4BzY9d0pUP2TFkOY41dbjyYrsr5S+sNCpynPtg_9XZHFb-Q@mail.gmail.com> 
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.211.106]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322191552.13156-1-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,65 +74,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:15:50PM +0300, Ivan Bornyakov wrote:
-> Add support to the FPGA manager for programming Microchip Polarfire
-> FPGAs over slave SPI interface with .dat formatted bitsream image.
-> 
-> Changelog:
->   v1 -> v2: fix printk formating
->   v2 -> v3:
->    * replace "microsemi" with "microchip"
->    * replace prefix "microsemi_fpga_" with "mpf_"
->    * more sensible .compatible and .name strings
->    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
->   v3 -> v4: fix unused variable warning
->     Put 'mpf_of_ids' definition under conditional compilation, so it
->     would not hang unused if CONFIG_OF is not enabled.
->   v4 -> v5:
->    * prefix defines with MPF_
->    * mdelay() -> usleep_range()
->    * formatting fixes
->    * add DT bindings doc
->    * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
->      We can't parse image header in write_init() because image header
->      size is not known beforehand. Thus parsing need to be done in
->      fpga_manager_ops.write() callback, but fpga_manager_ops.write()
->      also need to be reenterable. On the other hand,
->      fpga_manager_ops.write_sg() is called once. Thus, rework usage of
->      write() callback to write_sg().
-
-Sorry for late reply.
-
-write_sg is for hardwares capable of handling sg buffers in batches. It
-does not make sense we must implement write_sg() if the image header is
-not fixed. They are not related.
-
-The real problem is we lack the support for variable image header. So
-maybe add the support in fpga manager core.
-
-Thanks,
-Yilun
-
-
->   v5 -> v6: fix patch applying
->      I forgot to clean up unrelated local changes which lead to error on
->      patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
->      applying on vanilla kernel.
->   v6 -> v7: fix binding doc to pass dt_binding_check
->   v7 -> v8: another fix for dt_binding_check warning
-> 
-> Ivan Bornyakov (2):
->   fpga: microchip-spi: add Microchip MPF FPGA manager
->   dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-> 
->  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
->  drivers/fpga/Kconfig                          |  10 +
->  drivers/fpga/Makefile                         |   1 +
->  drivers/fpga/microchip-spi.c                  | 448 ++++++++++++++++++
->  4 files changed, 503 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
->  create mode 100644 drivers/fpga/microchip-spi.c
-> 
-> -- 
-> 2.34.1
-> 
+PiBGcm9tOiBSb2JlcnRvIFNhc3N1DQo+IFNlbnQ6IFdlZG5lc2RheSwgTWFyY2ggMzAsIDIwMjIg
+OTo0NSBBTQ0KPiA+IEZyb206IEFuZHJpaSBOYWtyeWlrbyBbbWFpbHRvOmFuZHJpaS5uYWtyeWlr
+b0BnbWFpbC5jb21dDQo+ID4gU2VudDogV2VkbmVzZGF5LCBNYXJjaCAzMCwgMjAyMiAxOjUyIEFN
+DQo+ID4gT24gTW9uLCBNYXIgMjgsIDIwMjIgYXQgMTA6NTIgQU0gUm9iZXJ0byBTYXNzdQ0KPiA+
+IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+IHdyb3RlOg0KPiA+ID4NCj4gPiA+IFRoZSBmaXJz
+dCBwYXJ0IG9mIHRoZSBwcmVsb2FkIGNvZGUgZ2VuZXJhdGlvbiBjb25zaXN0cyBpbiBnZW5lcmF0
+aW5nIHRoZQ0KPiA+ID4gc3RhdGljIHZhcmlhYmxlcyB0byBiZSB1c2VkIGJ5IHRoZSBjb2RlIGl0
+c2VsZjogdGhlIGxpbmtzIGFuZCBtYXBzIHRvIGJlDQo+ID4gPiBwaW5uZWQsIGFuZCB0aGUgc2tl
+bGV0b24uIEdlbmVyYXRpb24gb2YgdGhlIHByZWxvYWQgdmFyaWFibGVzIGFuZA0KPiA+IG1ldGhv
+ZHMNCj4gPiA+IGlzIGVuYWJsZWQgd2l0aCB0aGUgb3B0aW9uIC1QIGFkZGVkIHRvICdicGZ0b29s
+IGdlbiBza2VsZXRvbicuDQo+ID4gPg0KPiA+ID4gVGhlIGV4aXN0aW5nIHZhcmlhYmxlcyBtYXBz
+X2xpbmsgYW5kIHByb2dzX2xpbmtzIGluIGJwZl9wcmVsb2FkX2tlcm4uYw0KPiA+IGhhdmUNCj4g
+PiA+IGJlZW4gcmVuYW1lZCByZXNwZWN0aXZlbHkgdG8gZHVtcF9icGZfbWFwX2xpbmsgYW5kDQo+
+ID4gZHVtcF9icGZfcHJvZ19saW5rLCB0bw0KPiA+ID4gbWF0Y2ggdGhlIG5hbWUgb2YgdGhlIHZh
+cmlhYmxlcyBpbiB0aGUgbWFpbiBzdHJ1Y3R1cmUgb2YgdGhlIGxpZ2h0DQo+ID4gPiBza2VsZXRv
+bi4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNh
+c3N1QGh1YXdlaS5jb20+DQo+ID4gPiAtLS0NCj4gPiA+ICBrZXJuZWwvYnBmL3ByZWxvYWQvYnBm
+X3ByZWxvYWRfa2Vybi5jICAgICAgICAgfCAgMzUgKy0NCj4gPiA+ICBrZXJuZWwvYnBmL3ByZWxv
+YWQvaXRlcmF0b3JzL01ha2VmaWxlICAgICAgICAgfCAgIDIgKy0NCj4gPiA+ICAuLi4vYnBmL3By
+ZWxvYWQvaXRlcmF0b3JzL2l0ZXJhdG9ycy5sc2tlbC5oICAgfCAzNzggKysrKysrKysrLS0tLS0t
+LS0tDQo+ID4gPiAgLi4uL2JwZi9icGZ0b29sL0RvY3VtZW50YXRpb24vYnBmdG9vbC1nZW4ucnN0
+IHwgICA1ICsNCj4gPiA+ICB0b29scy9icGYvYnBmdG9vbC9iYXNoLWNvbXBsZXRpb24vYnBmdG9v
+bCAgICAgfCAgIDIgKy0NCj4gPiA+ICB0b29scy9icGYvYnBmdG9vbC9nZW4uYyAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgMjcgKysNCj4gPiA+ICB0b29scy9icGYvYnBmdG9vbC9tYWluLmMgICAg
+ICAgICAgICAgICAgICAgICAgfCAgIDcgKy0NCj4gPiA+ICB0b29scy9icGYvYnBmdG9vbC9tYWlu
+LmggICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiA+ID4gIDggZmlsZXMgY2hhbmdlZCwg
+MjU0IGluc2VydGlvbnMoKyksIDIwMyBkZWxldGlvbnMoLSkNCj4gPiA+DQo+ID4NCj4gPiBbLi4u
+XQ0KPiA+DQo+ID4gPiArX19hdHRyaWJ1dGVfXygodW51c2VkKSkgc3RhdGljIHZvaWQNCj4gPiA+
+ICtpdGVyYXRvcnNfYnBmX19hc3NlcnQoc3RydWN0IGl0ZXJhdG9yc19icGYgKnMpDQo+ID4gPiAr
+ew0KPiA+ID4gKyNpZmRlZiBfX2NwbHVzcGx1cw0KPiA+ID4gKyNkZWZpbmUgX1N0YXRpY19hc3Nl
+cnQgc3RhdGljX2Fzc2VydA0KPiA+ID4gKyNlbmRpZg0KPiA+ID4gKyNpZmRlZiBfX2NwbHVzcGx1
+cw0KPiA+ID4gKyN1bmRlZiBfU3RhdGljX2Fzc2VydA0KPiA+ID4gKyNlbmRpZg0KPiA+ID4gK30N
+Cj4gPiA+ICsNCj4gPiA+ICtzdGF0aWMgc3RydWN0IGJwZl9saW5rICpkdW1wX2JwZl9tYXBfbGlu
+azsNCj4gPiA+ICtzdGF0aWMgc3RydWN0IGJwZl9saW5rICpkdW1wX2JwZl9wcm9nX2xpbms7DQo+
+ID4gPiArc3RhdGljIHN0cnVjdCBpdGVyYXRvcnNfYnBmICpza2VsOw0KPiA+DQo+ID4gSSBkb24n
+dCB1bmRlcnN0YW5kIHdoYXQgaXMgdGhpcyBhbmQgd2hhdCBmb3I/IFlvdSBhcmUgbWFraW5nIGFu
+DQo+ID4gYXNzdW1wdGlvbiB0aGF0IGxpZ2h0IHNrZWxldG9uIGNhbiBiZSBpbnN0YW50aWF0ZWQg
+anVzdCBvbmNlLCB3aHk/IEFuZA0KPiA+IGFkZGluZyBleHRyYSBicGZ0b29sIG9wdGlvbiB0byBs
+aWdodCBza2VsZXRvbiBjb2RlZ2VuIGp1c3QgdG8gc2F2ZSBhDQo+ID4gYml0IG9mIHR5cGluZyBh
+dCB0aGUgcGxhY2Ugd2hlcmUgbGlnaHQgc2tlbGV0b24gaXMgYWN0dWFsbHkNCj4gPiBpbnN0YW50
+aWF0ZWQgYW5kIHVzZWQgZG9lc24ndCBzZWVtcyBsaWtlIGEgcmlnaHQgYXBwcm9hY2guDQo+IA0K
+PiBUcnVlLCBpdGVyYXRvcl9icGYgaXMgc2ltcGxlLiBXcml0aW5nIHRoZSBwcmVsb2FkaW5nIGNv
+ZGUNCj4gZm9yIGl0IGlzIHNpbXBsZS4gQnV0LCB3aGF0IGlmIHlvdSB3YW50ZWQgdG8gcHJlbG9h
+ZCBhbiBMU00NCj4gd2l0aCAxMCBob29rcyBvciBtb3JlPw0KPiANCj4gT2ssIHJlZ2FyZGluZyB3
+aGVyZSB0aGUgcHJlbG9hZGluZyBjb2RlIHNob3VsZCBiZSwgSSB3aWxsDQo+IHRyeSB0byBtb3Zl
+IHRoZSBnZW5lcmF0ZWQgY29kZSB0byB0aGUga2VybmVsIG1vZHVsZSBpbnN0ZWFkDQo+IG9mIHRo
+ZSBsaWdodCBza2VsZXRvbi4NCg0KRG9uZS4gSSBtb3ZlZCBldmVyeXRoaW5nIGZyb20gdGhlIGxp
+Z2h0IHNrZWxldG9uIHRvIHRoZSBrZXJuZWwNCm1vZHVsZS4gVGhlIGNoYW5nZXMgbm93IGFyZSBh
+bHNvIHdlbGwgc2VwYXJhdGVkLCBhbmQNCnJlZ2VuZXJhdGlvbiBvZiB0aGUga2VybmVsIG1vZHVs
+ZSBvY2N1cnMgb25seSBhZnRlciBhbGwgdGhlDQpnZW5lcmF0aW9uIGNvZGUgaXMgYWRkZWQgdG8g
+YnBmdG9vbC4NCg0KSSBwdXNoZWQgYSBuZXcgYnJhbmNoOg0KDQpodHRwczovL2dpdGh1Yi5jb20v
+cm9iZXJ0b3Nhc3N1L2xpbnV4L2NvbW1pdHMvYnBmLXByZWxvYWQtdjItZGV2ZWwtdjINCg0KUm9i
+ZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0K
+TWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFpob25nIFJvbmdodWENCg==

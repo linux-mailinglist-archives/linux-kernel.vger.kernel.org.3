@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9E84EBA83
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3DB4EBA88
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiC3GBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S243139AbiC3GCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243112AbiC3GBi (ORCPT
+        with ESMTP id S243134AbiC3GCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:01:38 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867141CFCD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:59:53 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id kd21so13211578qvb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:59:53 -0700 (PDT)
+        Wed, 30 Mar 2022 02:02:31 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F213A1D0CA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:00:42 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id m67so35259181ybm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fii15z5BdqeKVdyRrQjR89UzGkIpNccPLX9tr8s7gIA=;
-        b=iCWRSqk7ZZDcLY7AA0TWbvoaXCD5tIK4K0pYqtP3XYWJ++OAYC87CxlQVCTeWn7H4c
-         s0DzUM66DR2NQboRA7PMOl4KLRskQGe6Hw04doFvF0qp2AEx6iFf7SN1HssCa2D2rw7u
-         GKIzcGWapWdM+T/2qrpCtcIm7Au62A9I3zjDzYhac0QAavc1ji1iNm5ToVOlZulxcODB
-         kBkBEvJIIGVo3F8AxVtPnQOuvAmB3lFcHq8Xu0LsJBg4oMdsp3VV0c9p/cBsA/WZJ+kk
-         lxZu+92fP9sa+tXUrHWpFHquEOQP2Y2MdSqbFI4aCY2kxWdfpH3xsyflCCGknadk1lmD
-         uYbw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l4H/jXM2Rm5a65oviYgvwa+04XGLXLD2DF5i6wOLQLk=;
+        b=Vuks7XErLEhcNi2ye01c54I5fu+jCmDSOakCCznT+E5592ZGQeCDVgDLAC1Oe1j8Hc
+         arjQm/015wC9O7r8EUYvWo1JdfnwHgit9pya3K0qKVHC8n1PrzsjO/1ililAl1IjhfQk
+         hleVis9Kr1Qyf0mw+RYN0MImDkC2drk+l5C4qAnRAQdi2lixVi0nJFGc7a2kn+A8U/dS
+         zFaSQ9GlIpLuif/J2hksClNYZAcORcG79/LOxU/aqKbHvarX2eDKn9oon1LeDe7mq9S6
+         r9U7iAxmkiKOU586S5VakC690uQgl7swxVVhVIBZJflz9IirG0tQWmocB2Fd88MovWNQ
+         j5sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fii15z5BdqeKVdyRrQjR89UzGkIpNccPLX9tr8s7gIA=;
-        b=YNmbYQuCe580B1Ez0DUoxYyqVDlweHT9jl8kE0DHxRdD1mJV4tIZY4zxuSgsWKGuwe
-         ICWe1fw1O1eY9I+VRzKYqNYy9IS+9Pe+jCsXX/6ZAHRC/bHwmPImNysnp/p84W55+mhT
-         IOjRZvVFGHmT9Is5gH4jbCntnD1RiviPad7CHTvAuaqBru5VEiaPXP3a5sJjlLSmlhho
-         SPsgB+t/yJj5A7PqZcvh62E1O+IyXQacg+eGUSjiGoe3ni0PMXCCiVtdlnaIDshp+NVT
-         qCGlCZfr42nzkXkRyKGT3lA84dVo1vcZrv7Vu4SnAsingJ/1jwQYs/bcY3QzR/dRnSKM
-         Llfg==
-X-Gm-Message-State: AOAM530iUvQ/rko7CeZDMfr1xsvRkFvtlcHiFm7ssfmFy6FhkDjxfhmw
-        NVcmHAVTb6sr4HY0e8xA7v4=
-X-Google-Smtp-Source: ABdhPJy7JhQnst3fNKGP6qDDp0NbdUv+svIp+Ze3jCARpjEflPmrl1E9FEk9a+xm0onCdHJQkFWRJQ==
-X-Received: by 2002:a05:6214:20e4:b0:441:7bed:5ccd with SMTP id 4-20020a05621420e400b004417bed5ccdmr25606284qvk.119.1648619992562;
-        Tue, 29 Mar 2022 22:59:52 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z19-20020a05622a029300b002e1a763dac1sm16867557qtw.9.2022.03.29.22.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 22:59:51 -0700 (PDT)
-Message-ID: <6243f1d7.1c69fb81.b19c7.7ec1@mx.google.com>
-X-Google-Original-Message-ID: <20220330055949.GA2378119@cgel.zte@gmail.com>
-Date:   Wed, 30 Mar 2022 05:59:49 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        eparis@redhat.com, linux-audit@redhat.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
- <202203270449.WBYQF9X3-lkp@intel.com>
- <62426553.1c69fb81.bb808.345c@mx.google.com>
- <CAHC9VhRNuoPH6AySUbe6h2D6kghhezyVQtTAvm-t-fTpXH6XwQ@mail.gmail.com>
- <62427b5c.1c69fb81.fc2a7.d1af@mx.google.com>
- <CAHC9VhTLTQmHaka9tTyuu=rQOzpsn_K2NxfJ==7-6FSY3KnuFg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l4H/jXM2Rm5a65oviYgvwa+04XGLXLD2DF5i6wOLQLk=;
+        b=62+FnxRI4RfjPcaZtmgvsjk3NdfmsdK890j5DGYFI03qYogsRn2jjqUs38UbxwSK7h
+         e8+2qxLlLCxuAfvPDMgLHdKJl3cmYvUNwZdaUs44pBLAdCs9o5FioFzcoN8KoWE+XAgt
+         ZeX+QPm24a6YXTtHXr0UmM5BgEMzGJUjGKsAnS+WONCZeebnpJ5SQxwb+P6OERUdW/ZI
+         N+wd3dBUPu6jMj6CS3lG+cHRHR11E60s9ub2dAkwzD9jt6CCQnOPnvWUAdlY732mm12I
+         5tm39P0JhsBa4kEqDGZG2j48jghWWy8tEh70CXEzGz9u519PI3a8mpYW4gPcdHrbEQAT
+         BMgg==
+X-Gm-Message-State: AOAM531/4SmqtjCIeaPXr8ERDX8Yc9wv8rTcYwcDFxvp5tv16oRuotPk
+        pLS+Usl37XveTShuDoJCf3PU3d6f8H9V9JSEVsU1cQ==
+X-Google-Smtp-Source: ABdhPJz5J5Vu63dqmmJtsEsyg5gp4hpxm11sB9Wij7Lc+9+3maHYDp7YZQF7jyhRhcglPFanYfN+0YeuhYyzXVsUg9Q=
+X-Received: by 2002:a25:8251:0:b0:63d:662:4fcf with SMTP id
+ d17-20020a258251000000b0063d06624fcfmr2942147ybn.533.1648620041949; Tue, 29
+ Mar 2022 23:00:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTLTQmHaka9tTyuu=rQOzpsn_K2NxfJ==7-6FSY3KnuFg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220329124017.737571-1-glider@google.com> <20220329124017.737571-13-glider@google.com>
+In-Reply-To: <20220329124017.737571-13-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 30 Mar 2022 08:00:00 +0200
+Message-ID: <CANpmjNP7BG5OwV53UUZ8HZ0OwAk-Ownn44jiF2TwhAD-mu2YbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 12/48] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,43 +93,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 09:11:19AM -0400, Paul Moore wrote:
-> On Mon, Mar 28, 2022 at 11:22 PM CGEL <cgel.zte@gmail.com> wrote:
-> > On Mon, Mar 28, 2022 at 11:06:12PM -0400, Paul Moore wrote:
-> > > On Mon, Mar 28, 2022 at 9:48 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > > Sorry could anybody give a hand to solve this? It works well on x86_64 and arm64.
-> > > > I have no alpha environment and not familiar to this arch, much thanks!
-> > >
-> > > Regardless of if this is fixed, I'm not convinced this is something we
-> > > want to merge.  After all, a process executed a syscall and we should
-> > > process it like any other; just because it happens to be an
-> > > unrecognized syscall on a particular kernel build doesn't mean it
-> > > isn't security relevant (probing for specific syscall numbers may be a
-> > > useful attack fingerprint).
-> >
-> > Thanks for your reply.
-> >
-> > But syscall number less than 0 is even invalid for auditctl. So we
-> > will never hit this kind of audit rule. And invalid syscall number
-> > will always cause failure early in syscall handle.
-> >
-> > sh-4.2# auditctl -a always,exit -F arch=b64 -S -1
-> > Syscall name unknown: -1
-> 
-> You can add an audit filter without explicitly specifying a syscall:
-> 
-> % auditctl -a exit,always -F auid=1000
-> % auditctl -l
-> -a always,exit -S all -F auid=1000
+On Tue, 29 Mar 2022 at 14:41, Alexander Potapenko <glider@google.com> wrote:
 >
-I have tried this, and execute program which call syscall number is -1,
-audit still didn't record it. It supports that there's no need for audit
-to handle syscall number less than 0.
+> kcov used to be broken prior to Clang 11, but right now that version is
+> already the minimum required to build with KCSAN, because no prior
+> compiler has "-tsan-distinguish-volatile=1".
+>
+> Therefore KCSAN_KCOV_BROKEN is not needed anymore.
+>
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-sh-4.2# auditctl -a exit,always
-sh-4.2# auditctl -l
--a always,exit -S all
+FYI, this is superseded by
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b027471adaf955efde6153d67f391fe1604b7292
 
-
-> -- 
-> paul-moore.com
+> ---
+> Link: https://linux-review.googlesource.com/id/Ida287421577f37de337139b5b5b9e977e4a6fee2
+> ---
+>  lib/Kconfig.kcsan | 11 -----------
+>  1 file changed, 11 deletions(-)
+>
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index 63b70b8c55519..de022445fbba5 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
+>           For the list of compilers that support KCSAN, please see
+>           <file:Documentation/dev-tools/kcsan.rst>.
+>
+> -config KCSAN_KCOV_BROKEN
+> -       def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+> -       depends on CC_IS_CLANG
+> -       depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
+> -       help
+> -         Some versions of clang support either KCSAN and KCOV but not the
+> -         combination of the two.
+> -         See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+> -         in newer releases.
+> -
+>  menuconfig KCSAN
+>         bool "KCSAN: dynamic data race detector"
+>         depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+>         depends on DEBUG_KERNEL && !KASAN
+> -       depends on !KCSAN_KCOV_BROKEN
+>         select STACKTRACE
+>         help
+>           The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+> --
+> 2.35.1.1021.g381101b075-goog
+>

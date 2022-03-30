@@ -2,179 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1E54ECC3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5A44ECC49
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350090AbiC3S3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S1350452AbiC3Sbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243787AbiC3S3l (ORCPT
+        with ESMTP id S237396AbiC3SbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:29:41 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D28713E0B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:26:30 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id a1so30487926wrh.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:26:29 -0700 (PDT)
+        Wed, 30 Mar 2022 14:31:22 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2127.outbound.protection.outlook.com [40.107.20.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC352DD57
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bocV2xOGoH4EnZzzOYYH/1tsTO2upJ8nqYchRUByD6m37T8fc0yQDrge+r6aSAq/9vqk0L8edURb10VlBJWSuDshCfc4pQGexfF+Ek+tk0c3SXduUlFiakQ5qKODMwNkGMYvGEcH9d1+fpl76Oqpm2kEg4LZ2p7d+k368a8HWgADackK9drJ8WF14bxB/dnYl67FZx6zbd8vW3bumfHQvgFG0vto/vVKec4VRJCl5k/G3XXBSIKmYs7AeLGZ2GOVRcdo3QWCuRxULQ/gQm2CP5ABorRJPji1SaER9FYrC04yNKcpN493Q37pdLIPrb2OJiqzpc3dEEaAcV7ASjYpog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EUpdsr84ucuMox3wVndBbJQM+nA+hcmPNi5xzqj9rMI=;
+ b=SNwaISwRok4LtrPvb5auz7UCxqJp4lTZJnC/bHK/5fPNmTJPRUQ+NlTVVFi/8uMl7RHP887LZQEpJZQ/WuK4ratBRGpWMkC0Uz+gn5zvvcfZcA9XEIDP7VmpnptcCjfdrpDyDNsUn3SphSBUggoDg70SD4GeLiHjem6V2W7SjrCMrhhUK6vP1cAqxIXB7H4FBB7doV3Mjfdu+Bh6Nux6TFJLUbhp43stLAe6Z1d5Tyurhb5Kqgyf/HrhZQuWN6nn9M2lX5qiEyI1JtVmYgZzrKT5P9KPN6z/veP6QDHpOLhTtcDndFlOYL0jdK6CId+LNtsNepHqVScK+I2BceaEfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.7) smtp.rcpttodomain=kernel.org smtp.mailfrom=arri.de; dmarc=none
+ action=none header.from=arri.de; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yrVy6mGFfTezARgPXoahkDtUgtA05SdD0ISAtqjQGmo=;
-        b=jeqXOpWvuvTFAZ5ufyJ6gMquwMoLSR57f2nzBHCjKg89AFDu8SChd/gG11luYWyf/D
-         2CzAPJvMu3VE37HnTb9n1joxjZ8rZDv/jLDDQxoVM13w9/HSGar33+yelws0I0RzDXuD
-         x2FC6sCuQ9+sVj/AU5EaPqcneuIHFnQREQK/aMTMnhAMlvN3cHdfJ8kvton6FPr1ui7l
-         TyizdoluHflvQQylTJfOXWxZfJrf+Q445FSF/JpxF90ldhCvP4quYkT1gFYAnZIwXKwy
-         TrGMEBsTo5N+WAfY46pjgOj3zGDxRdC25j6ZfW1QRM2FQ67tj18/9FH5vik6eMeh2Euq
-         8AWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yrVy6mGFfTezARgPXoahkDtUgtA05SdD0ISAtqjQGmo=;
-        b=q/VfPE/W3Uhljsjs1elpS5t13i2XOiphbz+F4SpZDqYTZGmmCjnNhKAaw7ZzM4Z8QQ
-         RFyLLzKZPcrx2bXLDErpocn4lfCjG/Y9RMcm0mrQn9+Ps7wy+QNQK49ZLP8iNHRqRxRV
-         /kTWh5mzcy10Sjj9DALTqUVLgbm2tlH/NLOunct2xbJsWC9TeojFsWX0kwJlmKvc7GdI
-         q/HrhbtnwXRHmM9XxFGjTCHUsJmdZ6BMcMUGmhoAg0dPbMgYuhny9whsXV7bMQ62Rk1C
-         yjDt3+cjdJYkssr5vUc0mvZx+dMPppaGy8C0+QvIBF8O1ElWZXPGjEYD67lAMfoQs2tq
-         uqTQ==
-X-Gm-Message-State: AOAM530lURLKRkQWPjxfwa5G4zvi5Vr5vnsUYcwvBDZfeiK8K0OQZjK/
-        uigfz+Vbce2gAsKs+Z+cYTr+aLosD+e2GJeHs1gunQ==
-X-Google-Smtp-Source: ABdhPJyHXpZ33Cgj5l28R7EnxJQfhSJzEztJTVsFHQXl/nJtwWID/KYZkpjVOJJC80I9hdIvxXiGJ1M1XbFYufMG0uk=
-X-Received: by 2002:a5d:68ce:0:b0:204:1a8c:749a with SMTP id
- p14-20020a5d68ce000000b002041a8c749amr821161wrw.392.1648664788452; Wed, 30
- Mar 2022 11:26:28 -0700 (PDT)
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EUpdsr84ucuMox3wVndBbJQM+nA+hcmPNi5xzqj9rMI=;
+ b=OlUbXMZfpiDlV+J65EL30rWyMLPxk60mjTtYV3q/I9MPPa2IGX/SyB+HNZbU+lcsucvtx7fWytLmRN9tN3kU9NXmMVpVSz6xdE6cs9nedJ6DqQGh1aDYw64Ej7kljM00VfKeVUDcRDMrsdbB5KXtQiSZi1NBdMLZwy/YvwrW4Is=
+Received: from AM5PR0202CA0005.eurprd02.prod.outlook.com
+ (2603:10a6:203:69::15) by AS8PR07MB7399.eurprd07.prod.outlook.com
+ (2603:10a6:20b:2a3::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.20; Wed, 30 Mar
+ 2022 18:27:58 +0000
+Received: from VE1EUR02FT011.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:203:69:cafe::52) by AM5PR0202CA0005.outlook.office365.com
+ (2603:10a6:203:69::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
+ Transport; Wed, 30 Mar 2022 18:27:58 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.7; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.7) by
+ VE1EUR02FT011.mail.protection.outlook.com (10.152.12.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 18:27:57 +0000
+Received: from localhost.localdomain (192.168.54.86) by mta.arri.de
+ (10.10.18.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
+ 2022 20:27:56 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
+Date:   Wed, 30 Mar 2022 20:27:56 +0200
+Message-ID: <1896453.PYKUYFuaPT@localhost.localdomain>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <CAMj1kXGbNtJPEowha8=vFgjdv_m2viHJ2Q7AqtJeqOPLa8-1Sg@mail.gmail.com>
+References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X> <10062923.nUPlyArG6x@localhost.localdomain> <CAMj1kXGbNtJPEowha8=vFgjdv_m2viHJ2Q7AqtJeqOPLa8-1Sg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
- <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
- <20220329093753.26wc3noelqrwlrcj@apollo.legion> <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
- <20220329232956.gbsr65jdbe4lw2m6@ast-mbp> <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
- <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com>
-In-Reply-To: <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 30 Mar 2022 11:26:17 -0700
-Message-ID: <CA+khW7iqiKTLi75oSPe+ibV8afR_SPgtg7Q+nEswmMOFZaAebA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [192.168.54.86]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c1d615a3-8e94-4cfb-f55a-08da127b03a5
+X-MS-TrafficTypeDiagnostic: AS8PR07MB7399:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR07MB7399C9CAFD62CD45107452CFBF1F9@AS8PR07MB7399.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GfTqCbK9Fvw0Hq4l0yF4PkTlnYGHGLPW/bOAplUO9+KS4va+x0n4ydjV4ALynKIyad3FGx9Q8Pfesxi2ToA7oVPh2rpPnZRjhpTsznrYVjq9M/biQYwbcFX8KRnreEPQNV0i8ndYA8/ljHYl+NsStsM1ValuBfMX7mB8bgdzlKNA6jBBxha+nd87Y8SJGWDiIgWK1LRI5XoPP7P2SYL1xDv0hY83gEqL6gP/q5jesoId1v+bEmshvKt33DfuRCTgaM2PLnUTWbdpr1ucOBWvs//c1xR62RpCV6fLNqKGlYrBmlBO/uVi+E1FTuXdRebYCLQkvcw07Fy4OAeJQ69FywPyRyooK35Ww3tOvOFxnWFMe5OfHXw5aCVsqh0S9TuDxYCIIJHhDPZTsDD4YEVqf+I6T2y4n4fxGgF9nCE7hHhVNVu4VujltN5eJrKbu6KrmEj5EGvSoLOV85+BdsAevqtqXi9cqI8F/lKVAggk7yjw0qbgQ5J+Y4dIu+jDnU+AH0y6AHlS1oqZ9rNBM6ZFP2om6G3290AJ4ixpeSdNJ1KIdv5aGOLuMO/Cs5Ds7NPIC1o+hLh+MDrWE4FqUJz7GNJ5zUWinJkqmVsp4sj91uHSxpg9cdN5at2IkuD//t6Ica65mCp9pecx0kmqbnFm/wy+bSMVxWwxYf3rla5KFQZ4ps7R6ZQvhZ+ROphmesQ9lWGSA+kHHfu1RlUCPNaM+w==
+X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(82310400004)(70586007)(70206006)(4326008)(8676002)(316002)(336012)(6862004)(426003)(16526019)(186003)(7696005)(26005)(40460700003)(8936002)(4744005)(36916002)(81166007)(356005)(5660300002)(9686003)(83380400001)(86362001)(2906002)(508600001)(47076005)(55016003)(54906003)(36860700001)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 18:27:57.7363
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1d615a3-8e94-4cfb-f55a-08da127b03a5
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT011.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7399
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:16 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Mar 30, 2022 at 11:06 AM Hao Luo <haoluo@google.com> wrote:
+On Wednesday, 30 March 2022, 19:42:31 CEST, Ard Biesheuvel wrote:
+> On Wed, 30 Mar 2022 at 19:33, Christian Eggers <ceggers@arri.de> wrote:
 > >
-> > On Tue, Mar 29, 2022 at 4:30 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
-> > > > On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
-> > > > <memxor@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
-> > > > > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
-> > > > > > >
-> > > > > > > Hi Yonghong,
-> > > > > > >
-> > > > > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > > > >
-> > > > > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > > > > > > > Some map types support mmap operation, which allows userspace to
-> > > > > > > > > communicate with BPF programs directly. Currently only arraymap
-> > > > > > > > > and ringbuf have mmap implemented.
-> > > > > > > > >
-> > > > > > > > > However, in some use cases, when multiple program instances can
-> > > > > > > > > run concurrently, global mmapable memory can cause race. In that
-> > > > > > > > > case, userspace needs to provide necessary synchronizations to
-> > > > > > > > > coordinate the usage of mapped global data. This can be a source
-> > > > > > > > > of bottleneck.
-> > > > > > > >
-> > > > > > > > I can see your use case here. Each calling process can get the
-> > > > > > > > corresponding bpf program task local storage data through
-> > > > > > > > mmap interface. As you mentioned, there is a tradeoff
-> > > > > > > > between more memory vs. non-global synchronization.
-> > > > > > > >
-> > > > > > > > I am thinking that another bpf_iter approach can retrieve
-> > > > > > > > the similar result. We could implement a bpf_iter
-> > > > > > > > for task local storage map, optionally it can provide
-> > > > > > > > a tid to retrieve the data for that particular tid.
-> > > > > > > > This way, user space needs an explicit syscall, but
-> > > > > > > > does not need to allocate more memory than necessary.
-> > > > > > > >
-> > > > > > > > WDYT?
-> > > > > > > >
-> > > > > > >
-> > > > > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
-> > > > > > >
-> > > > > > > - mmap prevents the calling task from reading other task's value.
-> > > > > > > Using bpf_iter, one can pass other task's tid to get their values. I
-> > > > > > > assume there are two potential ways of passing tid to bpf_iter: one is
-> > > > > > > to use global data in bpf prog, the other is adding tid parameterized
-> > > > > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
-> > > > > > > the second, we need to create one iter_link object for each interested
-> > > > > > > tid. It may not be easy to use either.
-> > > > > > >
-> > > > > > > - Regarding adding an explicit syscall. I thought about adding
-> > > > > > > write/read syscalls for task local storage maps, just like reading
-> > > > > > > values from iter_link. Writing or reading task local storage map
-> > > > > > > updates/reads the current task's value. I think this could achieve the
-> > > > > > > same effect as mmap.
-> > > > > > >
-> > > > > >
-> > > > > > Actually, my use case of using mmap on task local storage is to allow
-> > > > > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
-> > > > > > need to take an FD as parameter and the bpf progs can run
-> > > > > > concurrently, thus using global data is racy. Mmapable task local
-> > > > > > storage is the best solution I can find for this purpose.
-> > > > > >
-> > > > > > Song also mentioned to me offline, that mmapable task local storage
-> > > > > > may be useful for his use case.
-> > > > > >
-> > > > > > I am actually open to other proposals.
-> > > > > >
-> > > > >
-> > > > > You could also use a syscall prog, and use bpf_prog_test_run to update local
-> > > > > storage for current. Data can be passed for that specific prog invocation using
-> > > > > ctx. You might have to enable bpf_task_storage helpers in it though, since they
-> > > > > are not allowed to be called right now.
-> > > > >
-> > > >
-> > > > The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
-> > > > thinking of allowing any thread including unpriv ones to be able to
-> > > > pass data to the prog and update their own storage.
-> > >
-> > > If I understand the use case correctly all of this mmap-ing is only to
-> > > allow unpriv userspace to access a priv map via unpriv mmap() syscall.
-> > > But the map can be accessed as unpriv already.
-> > > Pin it with the world read creds and do map_lookup sys_bpf cmd on it.
+> > I just switched to v5.15.31-rt38 which already includes
+> > 6c7cb60bff7a ("ARM: fix Thumb2 regression")
 > >
-> > Right, but, if I understand correctly, with
-> > sysctl_unprivileged_bpf_disabled, unpriv tasks are not able to make
-> > use of __sys_bpf(). Is there anything I missed?
->
-> That sysctl is a heavy hammer. Let's fix it instead.
-> map lookup/update/delete can be allowed for unpriv for certain map types.
-> There are permissions checks in corresponding lookup/update calls already.
+> > This kernel boots fine now, even with CONFIG_HARDEN_BRANCH_HISTORY=y. After
+> > applying the patch series from Ard, the system still boots fine.
+> >
+> > I haven't any understanding what these patches do. Is there anything I shall
+> > test?
+> >
+> 
+> Thanks for confirming. The first fix affects all Thumb2
+> configurations, my patch only affects Thumb2 configurations that
+> actually enable the loop8 mitigation for Spectre-BHB.
+> 
+> What type of CPU are you booting on?
+> 
 
-This sounds great. If we can allow basic map operations for some map
-types, it will change many use cases I'm looking at. Let me take a
-look and report back.
+NXP i.MX6ULL (ARM Cortex-A7).
+
+
+

@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069A94EB9D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5CF4EB9C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242706AbiC3FGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
+        id S242649AbiC3Ev2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 00:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234045AbiC3FGn (ORCPT
+        with ESMTP id S236198AbiC3Ev1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:06:43 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Mar 2022 22:04:57 PDT
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C30865D19
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:04:57 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="55896281"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643641200"; 
-   d="scan'208";a="55896281"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 30 Mar 2022 14:03:51 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id EFFDDC68A5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:03:50 +0900 (JST)
-Received: from m3002.s.css.fujitsu.com (msm3.b.css.fujitsu.com [10.128.233.104])
-        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id CC64CFD51C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:03:49 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.125.5.220])
-        by m3002.s.css.fujitsu.com (Postfix) with ESMTP id 5703E2026105;
-        Wed, 30 Mar 2022 14:03:49 +0900 (JST)
-From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, ming.lei@redhat.com,
-        yamamoto.rei@jp.fujitsu.com
-Subject: Re: [PATCH v3] irq: consider cpus on nodes are unbalanced
-Date:   Wed, 30 Mar 2022 13:42:54 +0900
-Message-Id: <20220330044254.15712-1-yamamoto.rei@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <YgSQKvv7rL6MFPRr@T590>
-References: <YgSQKvv7rL6MFPRr@T590>
+        Wed, 30 Mar 2022 00:51:27 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E6C21E08
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648615782; x=1680151782;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QkOzsmCZKcLJNDErhXd1TS7XNjyQSLSieo/gpsxySE4=;
+  b=Nt0NWBdxtJ8JyiwdnpXmhNODO72/PlDo7zQhxwUDequQeXs6a4V4B+oi
+   qGJMNVr6IHO8q3Qpu1qRecOE5rIsaJDNEOJO4J0k/CJpUu3faeRR6iM1p
+   bHKCueA5MqMbjQFvhMdWU1nC1dMc+QHRz9N5Bs7dzzfln3r2rzryCTlce
+   aqQb52flGPaWslmpJnBS9v29vk8mOEiDcKz1ZjJKfn+zhLQjMGndYKiZi
+   67rOVIw8NX87x9e9TzPD7eMp85RFgmgCom1xkF7mwYk4PIWU4Z+2CEEio
+   0LxfXmgu+IrSBih2iWOr8rb3nhN6w5oiCoMRfupaR22wmNxbKgGFZaCZu
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="322627125"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="322627125"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:49:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="719825054"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2022 21:49:40 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZQH6-0000zk-02; Wed, 30 Mar 2022 04:49:40 +0000
+Date:   Wed, 30 Mar 2022 12:49:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baisong Zhong <zhongbaisong@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [mcgrof:sysctl-next 6/18] core.c:undefined reference to
+ `sched_rt_can_attach'
+Message-ID: <202203301258.O8GJygB7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,46 +62,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 12:10:18PM +0800, Ming Lei wrote:
-> On Thu, Feb 10, 2022 at 12:10:53PM +0900, Rei Yamamoto wrote:
->> If cpus on a node are offline at boot time, there are
->> difference in the number of nodes between when building affinity
->> masks for present cpus and when building affinity masks for possible
->> cpus. This patch fixes a problem caused by the difference of the
->> number of nodes:
->> 
->>  - The routine of "numvecs <= nodes" condition can overwrite bits of
->>    masks for present cpus in building masks for possible cpus. Fix this
->>    problem by making CPU bits, which is not target, not changing.
->> 
->> Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
->> Reviewed-by: Ming Lei <ming.lei@redhat.com>
->> ---
->>  kernel/irq/affinity.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
->> index f7ff8919dc9b..d2d01565d2ec 100644
->> --- a/kernel/irq/affinity.c
->> +++ b/kernel/irq/affinity.c
->> @@ -269,8 +269,9 @@ static int __irq_build_affinity_masks(unsigned int startvec,
->>  	 */
->>  	if (numvecs <= nodes) {
->>  		for_each_node_mask(n, nodemsk) {
->> +			cpumask_and(nmsk, cpu_mask, node_to_cpumask[n]);
->>  			cpumask_or(&masks[curvec].mask, &masks[curvec].mask,
->> -				   node_to_cpumask[n]);
->> +				   nmsk);
->>  			if (++curvec == last_affv)
->>  				curvec = firstvec;
->>  		}
->> -- 
->> 2.27.0
->>
-> -- 
-> Ming
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
+head:   84053cc7ef2f2f86caeea6a8c0944b2f0b3f33ca
+commit: d82a599294a1c50168a2177d49fe0a9a791275c3 [6/18] sched/rt: fix build error when CONFIG_SYSCTL is disable
+config: arm64-randconfig-r023-20220329 (https://download.01.org/0day-ci/archive/20220330/202203301258.O8GJygB7-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=d82a599294a1c50168a2177d49fe0a9a791275c3
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof sysctl-next
+        git checkout d82a599294a1c50168a2177d49fe0a9a791275c3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Could you pick this patch up?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Rei
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: kernel/sched/core.o: in function `cpu_cgroup_can_attach':
+>> core.c:(.text+0x28c4): undefined reference to `sched_rt_can_attach'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

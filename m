@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154894EC69C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6114EC6A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346912AbiC3Of1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S1346921AbiC3OgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346893AbiC3OfY (ORCPT
+        with ESMTP id S244899AbiC3OgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:35:24 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71724161D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:33:37 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dr20so41889633ejc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:33:37 -0700 (PDT)
+        Wed, 30 Mar 2022 10:36:23 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79A641F87;
+        Wed, 30 Mar 2022 07:34:36 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id kd21so14038839qvb.6;
+        Wed, 30 Mar 2022 07:34:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PYeSRhL4EJ9kSjRef+3ZDgUv5eRzmfmbrcZOn+mT5cQ=;
-        b=ByVj0awv3/ZKRFds4TIlXaEjOC213gnC/dsMTaTQtZw+cwLgR1OMv4LtfQ26nkhV/n
-         L62vIfDajYdNXaNr2oHb9LUPwLg32m7+HnZLmdcRd4o7JLE6+ijC8SPd1UQ3bYJYPh93
-         KgKm+iijnBLydGJgg9AclIlxR1Ikhoy9GcaGwqup0FwT6At4zii4UapWKJ3VUIVZe73M
-         8RGmv6XGmszVo0X1oyUWpdCApg5JAmZbRd0O1CgaKPdTG9BvLkDm86irEMrrNIBrl3aP
-         8o8kBwBz2ByYhnvtzrB3QN5BhEmjzNfCevBW9hcYZb3rXXKpH2fcD9xd5vE+vfZMIfWe
-         DVZg==
+        h=message-id:date:mime-version:user-agent:from:subject:to
+         :content-language;
+        bh=+lg9JnSYDKfs8RkjbzmPWemG+ehaocfcpwkWEPttL1Y=;
+        b=Xi7ED40WCZZM57sQoCmOcrfcy5V+dWCMP5Y1btyV3QlE3hekvLO6635KtKM730FOsc
+         s+MKoDk8y49qKePca7iED4ybfBH7v0+Qed+2LVH2H5GNXbtO+vt0FJN3L9PcZLnjMgRU
+         v+YTjNzAFS5JOwV6taikosttbLfLJXCSt4pB36Uueed02JoASgYeRL/VbHCTAfyCjSpg
+         ITli02fpVsDUAcf/cDLn+GibUa23I98ncq1hJWRIwoX2l8HIMojdCOgPI7nLnXwdGT+B
+         ok3dprIRyLaEObHWDOL1LI1FfUT/r5LhxPRwSOKCqmIbIhfWTrqZIUTh5P978IbED4IJ
+         I7ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PYeSRhL4EJ9kSjRef+3ZDgUv5eRzmfmbrcZOn+mT5cQ=;
-        b=mkDsRDrFM8Mj83ui+hKkfqU19FHTstfFFWd7oPvDb1pYQn62wQHV5rwVa2aAII2+cN
-         HaGwWKXHW4nblozW5GIsMTdef3l9PDnHPe9HD1CYHegNkyzAZtWeTyB72A3DN4kfnsLp
-         uvtf7NmkgS2R5FC8EiWKVFHlJnZzIsqg3Viqowx+dP9xZjGDYzilUiH3J62/89qvRH/p
-         y+DiQe/hBD1SW/M5N0nrdScvrInIww6X1iz6Hq0x1a3rA9s81lJrfpiG5WYSD0kgT394
-         mdDWfqso62XTR00Twl41bgMjNh+hdNnxdK40EE8Zk0QtDF6HIblRv9IUZdMtkBXxpDXa
-         8SWQ==
-X-Gm-Message-State: AOAM533+oDeNn3/fizFJ+5BirkMuMzrLSxh8lOytek0BXcukns6hkQyh
-        Qo0cpQ4zrsyEeTV7fz5HBbc=
-X-Google-Smtp-Source: ABdhPJwgs/G9LRh561o9F93/Of7ZKFv9d4D65V/c+PfKjEaQdtjtvqaZ2eEvROGfRAYDtVOvsttR1w==
-X-Received: by 2002:a17:907:6da6:b0:6e0:bb24:f731 with SMTP id sb38-20020a1709076da600b006e0bb24f731mr29818767ejc.25.1648650816253;
-        Wed, 30 Mar 2022 07:33:36 -0700 (PDT)
-Received: from localhost.localdomain (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id z2-20020a17090674c200b006e13403964asm2069249ejl.77.2022.03.30.07.33.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 07:33:35 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Philip <benjamin.philip495@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Colin Ian King <colin.king@intel.com>,
-        =?UTF-8?q?Samuel=20Sj=C3=B6berg?= <info@samuelsjoberg.se>,
-        Charlie Sands <sandsch@northvilleschools.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>, ira.weiny@intel.com,
-        outreachy@lists.linux.dev
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH v4] staging: rts5208: Convert kmap() to kmap_local_page()
-Date:   Wed, 30 Mar 2022 16:33:31 +0200
-Message-Id: <20220330143331.8306-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:content-language;
+        bh=+lg9JnSYDKfs8RkjbzmPWemG+ehaocfcpwkWEPttL1Y=;
+        b=2KLc5+x7DtiFLTJr/qY7W5aM6k4IrIFTy0+TmD4loejcy5CwInLiJ0lJ5hiMc5RyBd
+         N4mO66gyUk+WwsxsFlx6LxSGjKiUlkgpFPq0uyxCqzni96NxoV7VC0GfNfAPPltsakZu
+         M02BvmKEkaI6iiK7wIgvbn0jDnxfHej38MKDmr2za0YuqrzRGs7m4uotCAhHbSyfp2bv
+         y0McOnDbCRolPlQO1ks415n8o9b0URRw5Ns1xcdqJcIHrDR+veDu+/fuQS+hgH7tQDo/
+         +ZNcTvTJncuppPqEMZ/r75KTMsiz7fddOK4rd46bZKr7oIjRTUBuuXQJD6kVL+VWhi1g
+         eF3A==
+X-Gm-Message-State: AOAM5322rGoQWLlUGQbXFjhPq77TyKA8F9ytrKml0BvB7AzFT8q3uPv4
+        bK2Er7oEu4SyZZF8K+EKbP2QPnOhMpm6bAZA
+X-Google-Smtp-Source: ABdhPJyXH2hATliNrToMa3h7CAXz4q1HIaXy50CvB1yU7t+X6ZOY97mDeYMVnBsbp2TwLvpz3ISNrw==
+X-Received: by 2002:a05:6214:765:b0:443:5e47:4573 with SMTP id f5-20020a056214076500b004435e474573mr12959979qvz.79.1648650875702;
+        Wed, 30 Mar 2022 07:34:35 -0700 (PDT)
+Received: from [192.168.1.115] (cable-217-24.sssnet.com. [24.140.217.24])
+        by smtp.gmail.com with ESMTPSA id s131-20020a37a989000000b0067d2e3c51e8sm10930810qke.58.2022.03.30.07.34.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 07:34:34 -0700 (PDT)
+Message-ID: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
+Date:   Wed, 30 Mar 2022 10:34:32 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Ben Westover <kwestover.kw@gmail.com>
+Subject: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
+To:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com
+Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------yHQiUDFiOFXls9MQsNFl0kie"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,68 +72,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page()
-where it is feasible.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------yHQiUDFiOFXls9MQsNFl0kie
+Content-Type: multipart/mixed; boundary="------------MZ7I7miqorRcsG55Xl7s3q92";
+ protected-headers="v1"
+From: Ben Westover <kwestover.kw@gmail.com>
+To: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ masahiroy@kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com
+Message-ID: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
+Subject: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
 
-With kmap_local_page(), the mapping is per thread, CPU local and not
-globally visible. Therefore rtsx_stor_access_xfer_buf() is a function
-where the use of kmap_local_page() in place of kmap() is correctly
-suited.
+--------------MZ7I7miqorRcsG55Xl7s3q92
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Convert to kmap_local_page() but, instead of open coding it, use the
-helpers memcpy_to_page() and memcpy_from_page().
+When riscv64 or riscv32 are used as the value for ARCH during compilation=
+, like
+in tools that get the ARCH value from uname, set SRCARCH to riscv instead=
+ of
+failing because the riscv64 and riscv32 targets don't exist.
 
-Make a minor change to a comment related to scatter-gather.
-
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Signed-off-by: Ben Westover <kwestover.kw@gmail.com>
 ---
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-v1 -> v2: Rework the commit message and use the appropriate helpers
-instead of open coding the use of kmap_local_page()/kunmap_local_page().
-(Thanks to Ira Weiny <ira.weiny@intel.com>).
+diff --git a/Makefile b/Makefile
+index c28c5d91e5c8..315c364bf2ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -408,6 +408,14 @@ ifeq ($(ARCH),parisc64)
+        SRCARCH :=3D parisc
+ endif
 
-v2 -> v3: Use memcpy_{to,from}_page() arguments correctly.
-(Thanks to Dan Carpenter <dan.carpenter@oracle.com>).
++# Additional ARCH settings for riscv
++ifeq ($(ARCH),riscv32)
++       SRCARCH :=3D riscv
++endif
++ifeq ($(ARCH),riscv64)
++       SRCARCH :=3D riscv
++endif
++
+ export cross_compiling :=3D
+ ifneq ($(SRCARCH),$(SUBARCH))
+ cross_compiling :=3D 1
+--=20
+2.35.1
 
-v3 -> v4: According to a suggestion by Ira Weiny, change the test
-of a comment related to the use of scatter-gather.
 
- drivers/staging/rts5208/rtsx_transport.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+--------------MZ7I7miqorRcsG55Xl7s3q92--
 
-diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
-index 805dc18fac0a..d5ad49de4c56 100644
---- a/drivers/staging/rts5208/rtsx_transport.c
-+++ b/drivers/staging/rts5208/rtsx_transport.c
-@@ -55,9 +55,9 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
- 		*offset += cnt;
- 
- 	/*
--	 * Using scatter-gather.  We have to go through the list one entry
--	 * at a time.  Each s-g entry contains some number of pages, and
--	 * each page has to be kmap()'ed separately.
-+	 * Using scatter-gather. We have to go through the list one entry
-+	 * at a time. Each s-g entry contains some number of pages which
-+	 * have to be copied one at a time.
- 	 */
- 	} else {
- 		struct scatterlist *sg =
-@@ -92,13 +92,11 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
- 			while (sglen > 0) {
- 				unsigned int plen = min(sglen, (unsigned int)
- 						PAGE_SIZE - poff);
--				unsigned char *ptr = kmap(page);
- 
- 				if (dir == TO_XFER_BUF)
--					memcpy(ptr + poff, buffer + cnt, plen);
-+					memcpy_to_page(page, poff, buffer + cnt, plen);
- 				else
--					memcpy(buffer + cnt, ptr + poff, plen);
--				kunmap(page);
-+					memcpy_from_page(buffer + cnt, page, poff, plen);
- 
- 				/* Start at the beginning of the next page */
- 				poff = 0;
--- 
-2.34.1
+--------------yHQiUDFiOFXls9MQsNFl0kie
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEEOGnacqRhdU6eNmtFwxHF9U6JtpgFAmJEangFAwAAAAAACgkQwxHF9U6JtpgZ
+4xAAn/q/ybWe+TLW4f/X3/SsAbr+KytS59VHXMsE0cavhd6KvWYA9KKc1jjxbaQAbSHYZcCo5tAB
+sFLAB0gJyLyyev75/FTITMbfCW1ayPwk+HsmRyx9D7yQk8Pi1aGXnF/SAqneITYU10KnjYQP0OA2
+K16o2E+DYLQ66vp0U5BA2gU/NAcN50BXKz+oSZbBZ4CEnvhl+Kpb20ZPhIG/1tmhPYgQLMWJl/F1
+Em7CF3SLj6m1FFt4Z+qJzP3AfXBr6Z9JmqqmFZXxHQeyI0CTywsdQ8C9XLK1CiypNB0ubeT2WXbg
+1qXm5/VWmG9YQh7oVqgtDwbV0NkAWrcYhWGT5CoxkDZnAavfx8wpo7l3EodfekuHt0s2Uei9MP0E
+k6fQEW6a9Cu4fNGY2kmPaUsDVIJHQrUzVz5ltRvdLnkSOQ87S+kxFlGUreSsHb38tnTvfN3gn4uf
+2S41M9o3vwaI/jJ0X5Y5HmB5YYS1kUBB4JYwQMSeKubouc/mrkmlnqhlgl5i8O6/yHbcYbQHIoNk
+HdxpxSsM5WucZj7Opr3SGx+tTXzQXOkeorPPnM+zIy6LR+AvOQDwF4tetX9leOGIOHL382vwaJT8
+xloVcn6ex3qrEHhyaBL0LV3QLN98UKtXTYPWISMlIFpSGvL+6X3ubkhLMrJLcBN9VNc2Cdq4NhLq
+8d4=
+=MkCD
+-----END PGP SIGNATURE-----
+
+--------------yHQiUDFiOFXls9MQsNFl0kie--

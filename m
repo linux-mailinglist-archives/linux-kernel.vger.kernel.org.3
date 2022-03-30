@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE404EBB5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB09B4EBB32
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243536AbiC3HCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S243455AbiC3Gzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241845AbiC3HB5 (ORCPT
+        with ESMTP id S237404AbiC3Gzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:01:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A6DF484;
-        Wed, 30 Mar 2022 00:00:12 -0700 (PDT)
+        Wed, 30 Mar 2022 02:55:32 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD8DBB08A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:53:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648623612; x=1680159612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a/yS06E/f5TlhFE99MfmA8gjZt8NoZmWScc2/+Gac5Y=;
-  b=Kab4Gj2KqZ/uTuU+hBH93dJhAMs2RwDVp19DAwGfPHOgldPZoDcDP7/r
-   ZXzW9UC84qQuHAJFU5Wkzvgn6oxO4chjZb83ZEhLEusb5nStVN2KtmnG+
-   DetFxe2EBcvyKxOL5iQZtGHGuMwEaZuGdAmDlELJ8cjAH5N/iPxLR3FgC
-   NfVNaI46e5pKfPGBpU8Gk29YeJZEsZRFId505tw9oMEpsUgu3GfAJ51Ch
-   Q+2yqNW7E/AveLwBlkdzJtpeP3SSZsJIbc+v2+8CLZJNp/VCGfm6FPYkj
-   5BckXYOoDj5xnhxZ9H7ktKwmjRikcszTCeZD+ZQm2DdaIuT8spfvKIL4+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258293974"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="258293974"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 00:00:08 -0700
+  t=1648623225; x=1680159225;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cm7zalOPVoseD2/NZNf63+7ZwazgOQ0XcSWIJMqTgps=;
+  b=CxZgxK6KpvEpx887b2kY117VzxNSLU3aCcdT8Efd5pU/+kF/7HXEhaso
+   Z0QroMuJLJ/7OJShV05H4Zyhlwv5IRqe+DiuIUIrqjN34hnUSBB4bCCBL
+   +23goAPkTfzyfgOurkqImZn3mG+RMKO14MiETOxUBhWjjFikgQ00f7g6O
+   hvUeMIK+auGVJZDHQ6ORSwbCGoL2NbI1TnSL1b/ndyruV9EhVLLIweHi+
+   +nBlNZxPBbIbHjxup8jCY4QCbFmSUDJswYXeoJQndkgv3ZQ/y3BwxK7HT
+   eFHVtBEJak5V903zPE2bArxW9is2M+FdUjqi4B/DkUJQ55RrjSq6O3WlS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="320161301"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="320161301"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:53:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="565346120"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2022 00:00:05 -0700
-Date:   Wed, 30 Mar 2022 14:52:51 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] hwmon: intel-m10-bmc-hwmon: use
- devm_hwmon_sanitize_name()
-Message-ID: <20220330065251.GB212503@yilunxu-OptiPlex-7050>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-3-michael@walle.cc>
+   d="scan'208";a="503198264"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 Mar 2022 23:53:43 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZSD8-000150-GS; Wed, 30 Mar 2022 06:53:42 +0000
+Date:   Wed, 30 Mar 2022 14:53:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Roman Gushchin <guro@fb.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Minchan Kim <minchan@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
+ reference from the function memblock_bottom_up() to the variable
+ .meminit.data:memblock
+Message-ID: <202203301412.MZ7wQvQz-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220329160730.3265481-3-michael@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,45 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 06:07:27PM +0200, Michael Walle wrote:
-> Instead of open-coding the bad characters replacement in the hwmon name,
-> use the new devm_hwmon_sanitize_name().
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+Hi Roman,
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+FYI, the error/warning still remains.
 
-> ---
->  drivers/hwmon/intel-m10-bmc-hwmon.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 7a08e4c44a4b..29370108fa1c 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->  	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
->  	struct device *hwmon_dev, *dev = &pdev->dev;
->  	struct m10bmc_hwmon *hw;
-> -	int i;
->  
->  	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
->  	if (!hw)
-> @@ -528,14 +527,10 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->  	hw->chip.info = hw->bdata->hinfo;
->  	hw->chip.ops = &m10bmc_hwmon_ops;
->  
-> -	hw->hw_name = devm_kstrdup(dev, id->name, GFP_KERNEL);
-> +	hw->hw_name = devm_hwmon_sanitize_name(dev, id->name);
->  	if (!hw->hw_name)
->  		return -ENOMEM;
->  
-> -	for (i = 0; hw->hw_name[i]; i++)
-> -		if (hwmon_is_bad_char(hw->hw_name[i]))
-> -			hw->hw_name[i] = '_';
-> -
->  	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
->  							 hw, &hw->chip, NULL);
->  	return PTR_ERR_OR_ZERO(hwmon_dev);
-> -- 
-> 2.30.2
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
+The function memblock_bottom_up() references
+the variable __meminitdata memblock.
+This is often because memblock_bottom_up lacks a __meminitdata
+annotation or the annotation of memblock is wrong.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

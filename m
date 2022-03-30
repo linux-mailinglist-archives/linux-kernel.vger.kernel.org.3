@@ -2,92 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5534ECFAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C30C4ECFB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351616AbiC3WbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S1351644AbiC3WdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiC3WbH (ORCPT
+        with ESMTP id S1351698AbiC3Wc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:31:07 -0400
+        Wed, 30 Mar 2022 18:32:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2318C5BD10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:29:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A955BD27;
+        Wed, 30 Mar 2022 15:31:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD61A617C1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F106AC3410F;
-        Wed, 30 Mar 2022 22:29:19 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 18:29:18 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Zi Yan <zi.yan@sent.com>
-Cc:     Zi Yan <ziy@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: page_alloc: validate buddy before check its
- migratetype.
-Message-ID: <20220330182918.38276a89@gandalf.local.home>
-In-Reply-To: <20220330221238.396357-1-zi.yan@sent.com>
-References: <20220330221238.396357-1-zi.yan@sent.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0443F617C8;
+        Wed, 30 Mar 2022 22:31:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F358C340EE;
+        Wed, 30 Mar 2022 22:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648679469;
+        bh=Vk0IrcuxiTSc8yFnQkIRJPR2GhpeV1CL0DQ4Hb/fETQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=usMyz6pz1sAuO70HtBJNE4C7ik1N2XSzCrRDTw0FE9RsNoDSxBBTfXMQx7fx3fI3Q
+         ThRP0iJgodfkDyW+nXeWRcSM6dwiiMWmRXE8Lxj8IYPutVDeMGCpZdAYseUUy4hkRq
+         nCofQQkeW1+Npua4PygZoGL1U5Ec3iuDgZRfH5VJT7R7GPHiH4gcItGo7/T6Nt32B4
+         55q+heL0EJNklGnBTLk8BujIbIg7h4qxSH2Nn2EvTqjD1QpAixV2r9144aK43PyCi+
+         c1jSvOTYNE+V8UghKKDBk8ESpwM8NCQ1YB/J2Zw5PSKPf8cMBvm7iEyvvr95Fk00gk
+         yBKByQoBXLXwg==
+Message-ID: <cc2c191065c489eb22bb15bf3dd2e3cddc822543.camel@kernel.org>
+Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
+ encl_stack
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 31 Mar 2022 01:30:08 +0300
+In-Reply-To: <595369cd-b7d4-985c-a7e0-7110ffe9a606@intel.com>
+References: <20220322074313.7444-1-jarkko@kernel.org>
+         <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com> <YkRvFkEO8Ic1VdQ8@iki.fi>
+         <0031a4f0-75f6-3104-1825-dcc2528f61b0@intel.com>
+         <f68d472877b7136c32d8770603a3de38de59c322.camel@kernel.org>
+         <ef991f0d-d0d2-f422-96d8-0951d593d2a5@intel.com>
+         <d44b3fc7ce9f053f978645dfe19018885d372d87.camel@kernel.org>
+         <595369cd-b7d4-985c-a7e0-7110ffe9a606@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 18:12:38 -0400
-Zi Yan <zi.yan@sent.com> wrote:
+On Wed, 2022-03-30 at 14:29 -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+>=20
+> On 3/30/2022 1:40 PM, Jarkko Sakkinen wrote:
+> > On Wed, 2022-03-30 at 13:05 -0700, Reinette Chatre wrote:
+> > >=20
+> > >=20
+> > > On 3/30/2022 12:03 PM, Jarkko Sakkinen wrote:
+> > > > On Wed, 2022-03-30 at 10:40 -0700, Reinette Chatre wrote:
+> > > > > Could you please elaborate how the compiler will fix it up?
+> > > >=20
+> > > > Sure.
+> > > >=20
+> > > > Here's the disassembly of the RBX version:
+> > > >=20
+> > > > [0x000021a9]> pi 1
+> > > > lea rax, [rbx + loc.encl_stack]
+> > > >=20
+> > > > Here's the same with s/RBX/RIP/:
+> > > >=20
+> > > > [0x000021a9]> pi 5
+> > > > lea rax, loc.encl_stack
+> > > >=20
+> > > > Compiler will substitute correct offset relative to the RIP,
+> > > > well, because it can and it makes sense.
+> > >=20
+> > > It does not make sense to me because, as proven with my test,
+> > > the two threads end up sharing the same stack memory.
+> >=20
+> > I see, I need to correct my patch, thanks!
+> >=20
+> > RBX gives correct results because of the binary organization,
+> > i.e. TCS's are placed to zero offset and forward, and=20
+> > unrelocated symbol is just compiled in as an untranslated
+> > offset.
+> >=20
+> > RPI is given correct results but how the semantics work
+> > right now is incompatible.
+> >=20
+> > Still, even for kselftest, I would consider a switch
+> > because that way:
+> >=20
+> > 1. You can layout binary however you wan and things
+> > =C2=A0=C2=A0 won't break.
+> > 2. You can point to any symbol not just stack, if
+> > =C2=A0=C2=A0 ever need.
+> > =C2=A0=C2=A0=20
+> > I admit it works semantically but it just super
+> > unrobust.
+>=20
+> I do not think that we need an exceptionally flexible
+> runtime as part of the SGX selftests but instead something
+> that is easy(*) to understand while also sufficient to support
+> the tests.
+>=20
+> Reinette
+>=20
+> * I do not actually consider the existing enclave test binary
+> =C2=A0 easy to understand (this thread is proof) but keeping its
+> =C2=A0 complexity to be minimal would benefit folks needing to
+> =C2=A0 ramp up on SGX and/or debug kselftest failures.
 
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Whenever a buddy page is found, page_is_buddy() should be called to
-> check its validity. Add the missing check during pageblock merge check.
-> 
-> Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable pageblocks with others")
+Based on you feedback I refined the patch:
 
-Link: https://lore.kernel.org/all/20220330154208.71aca532@gandalf.local.home/
+https://lore.kernel.org/linux-sgx/20220330222834.139769-1-jarkko@kernel.org=
+/T/#u
 
-> 
-> Reported-by: Steven Rostedt <rostedt@goodmis.org>
+BR, Jarkko
 
-Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
--- Steve
 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->  mm/page_alloc.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index bdc8f60ae462..6c6af8658775 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1108,6 +1108,9 @@ static inline void __free_one_page(struct page *page,
->  
->  		buddy_pfn = __find_buddy_pfn(pfn, order);
->  		buddy = page + (buddy_pfn - pfn);
-> +
-> +		if (!page_is_buddy(page, buddy, order))
-> +			goto done_merging;
->  		buddy_mt = get_pageblock_migratetype(buddy);
->  
->  		if (migratetype != buddy_mt
+=09
+=09
 
+
+
+
+BR, Jarkko

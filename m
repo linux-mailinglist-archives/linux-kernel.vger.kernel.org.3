@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275A74EC3A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E9F4EC389
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345017AbiC3MIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1347940AbiC3MI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344501AbiC3LxN (ORCPT
+        with ESMTP id S1344480AbiC3LxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBFF262D69;
-        Wed, 30 Mar 2022 04:49:05 -0700 (PDT)
+        Wed, 30 Mar 2022 07:53:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242AB26242A;
+        Wed, 30 Mar 2022 04:49:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01201B81C38;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C32F3B81C23;
+        Wed, 30 Mar 2022 11:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C58BC3410F;
         Wed, 30 Mar 2022 11:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AB9C36AE2;
-        Wed, 30 Mar 2022 11:48:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640935;
-        bh=qW1x31HnZxqlWv9yLK7leVGiHSRFHxjgpFRqN+3ePM4=;
+        s=k20201202; t=1648640938;
+        bh=xuNZMXifvmTGhpPgK2BkPkaKp82sCR/h9SV2ylyFzog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PxKxUdLdo+N1VBpnDbqseQVPv33pJ+1pX09PlodQnZwLU5OCv8fwC4+gFao1DpAZ9
-         tzBgTNQTrkyeS2QjMnVg3VUSTw5KmfVcxsbOQlyuzLTtXDrL9/Qi/DsT5eFHHrqqvC
-         GWsa28wYXdl7L/gcrSCdmj9DVpB3fL87ahJxCL94WZK+mbol1ry9EJ1g4y6DNIuS8Q
-         AvHeyA67H6Mni6ZcOQqVhRjHJVheOguvDUNgpoi+ZXf6WBdgSyBiVV/0mJOCRf/nAp
-         oTUbpgL4ciUNp7A22zXgg4X5AzcwYdF+Mv06PVxIy+uMcOz8gTmTPcyRuQeO/HKC0x
-         hx9aQ+MFl13AQ==
+        b=V1CzbiX94X8okQBVm/cClxTSxBpu1OoXuA2A+YBLsE+rJNxVVWq8tNiFPeIYZioUS
+         snNMU32ZTUcHeLClDHHSZBpyxuYJ37HU9heEpV33mH0kgtOR20YPBeJHQZHGWRzX4P
+         dih65CsmknuDSyJTe0QdsOXlFusM7areYImmoK+qE1UWjaeOkREb9fgcps+8bXld0W
+         9bmzvaVyTq+37s5a6gUF6kdlyKUUnwCXwspu7CJqoqBBZT6stIPxUbZL7RHCQWm3++
+         k81JbpkAFCcqK41S5xIvqiB8PWDuAqSDv0WNYSg38AvIJimgZCdvqRBA0sGq8uOObb
+         rSDHPKxGc8/Vg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tim Gardner <tim.gardner@canonical.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        tomi.valkeinen@ti.com
-Subject: [PATCH AUTOSEL 5.16 14/59] video: fbdev: nvidiafb: Use strscpy() to prevent buffer overflow
-Date:   Wed, 30 Mar 2022 07:47:46 -0400
-Message-Id: <20220330114831.1670235-14-sashal@kernel.org>
+        tomi.valkeinen@ti.com, linux-fbdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 16/59] video: fbdev: cirrusfb: check pixclock to avoid divide by zero
+Date:   Wed, 30 Mar 2022 07:47:48 -0400
+Message-Id: <20220330114831.1670235-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
@@ -59,49 +58,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Gardner <tim.gardner@canonical.com>
+From: George Kennedy <george.kennedy@oracle.com>
 
-[ Upstream commit 37a1a2e6eeeb101285cd34e12e48a881524701aa ]
+[ Upstream commit 5c6f402bdcf9e7239c6bc7087eda71ac99b31379 ]
 
-Coverity complains of a possible buffer overflow. However,
-given the 'static' scope of nvidia_setup_i2c_bus() it looks
-like that can't happen after examiniing the call sites.
+Do a sanity check on pixclock value to avoid divide by zero.
 
-CID 19036 (#1 of 1): Copy into fixed size buffer (STRING_OVERFLOW)
-1. fixed_size_dest: You might overrun the 48-character fixed-size string
-  chan->adapter.name by copying name without checking the length.
-2. parameter_as_source: Note: This defect has an elevated risk because the
-  source argument is a parameter of the current function.
- 89        strcpy(chan->adapter.name, name);
+If the pixclock value is zero, the cirrusfb driver will round up
+pixclock to get the derived frequency as close to maxclock as
+possible.
 
-Fix this warning by using strscpy() which will silence the warning and
-prevent any future buffer overflows should the names used to identify the
-channel become much longer.
+Syzkaller reported a divide error in cirrusfb_check_pixclock.
 
-Cc: Antonino Daplas <adaplas@gmail.com>
-Cc: linux-fbdev@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Tim Gardner <tim.gardner@canonical.com>
+divide error: 0000 [#1] SMP KASAN PTI
+CPU: 0 PID: 14938 Comm: cirrusfb_test Not tainted 5.15.0-rc6 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2
+RIP: 0010:cirrusfb_check_var+0x6f1/0x1260
+
+Call Trace:
+ fb_set_var+0x398/0xf90
+ do_fb_ioctl+0x4b8/0x6f0
+ fb_ioctl+0xeb/0x130
+ __x64_sys_ioctl+0x19d/0x220
+ do_syscall_64+0x3a/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/nvidia/nv_i2c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/cirrusfb.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/video/fbdev/nvidia/nv_i2c.c b/drivers/video/fbdev/nvidia/nv_i2c.c
-index d7994a173245..0b48965a6420 100644
---- a/drivers/video/fbdev/nvidia/nv_i2c.c
-+++ b/drivers/video/fbdev/nvidia/nv_i2c.c
-@@ -86,7 +86,7 @@ static int nvidia_setup_i2c_bus(struct nvidia_i2c_chan *chan, const char *name,
- {
- 	int rc;
+diff --git a/drivers/video/fbdev/cirrusfb.c b/drivers/video/fbdev/cirrusfb.c
+index 93802abbbc72..3d47c347b897 100644
+--- a/drivers/video/fbdev/cirrusfb.c
++++ b/drivers/video/fbdev/cirrusfb.c
+@@ -469,7 +469,7 @@ static int cirrusfb_check_mclk(struct fb_info *info, long freq)
+ 	return 0;
+ }
  
--	strcpy(chan->adapter.name, name);
-+	strscpy(chan->adapter.name, name, sizeof(chan->adapter.name));
- 	chan->adapter.owner = THIS_MODULE;
- 	chan->adapter.class = i2c_class;
- 	chan->adapter.algo_data = &chan->algo;
+-static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
++static int cirrusfb_check_pixclock(struct fb_var_screeninfo *var,
+ 				   struct fb_info *info)
+ {
+ 	long freq;
+@@ -478,9 +478,7 @@ static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
+ 	unsigned maxclockidx = var->bits_per_pixel >> 3;
+ 
+ 	/* convert from ps to kHz */
+-	freq = PICOS2KHZ(var->pixclock);
+-
+-	dev_dbg(info->device, "desired pixclock: %ld kHz\n", freq);
++	freq = PICOS2KHZ(var->pixclock ? : 1);
+ 
+ 	maxclock = cirrusfb_board_info[cinfo->btype].maxclock[maxclockidx];
+ 	cinfo->multiplexing = 0;
+@@ -488,11 +486,13 @@ static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
+ 	/* If the frequency is greater than we can support, we might be able
+ 	 * to use multiplexing for the video mode */
+ 	if (freq > maxclock) {
+-		dev_err(info->device,
+-			"Frequency greater than maxclock (%ld kHz)\n",
+-			maxclock);
+-		return -EINVAL;
++		var->pixclock = KHZ2PICOS(maxclock);
++
++		while ((freq = PICOS2KHZ(var->pixclock)) > maxclock)
++			var->pixclock++;
+ 	}
++	dev_dbg(info->device, "desired pixclock: %ld kHz\n", freq);
++
+ 	/*
+ 	 * Additional constraint: 8bpp uses DAC clock doubling to allow maximum
+ 	 * pixel clock
 -- 
 2.34.1
 

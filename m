@@ -2,140 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE164EC9CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA394EC9D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348882AbiC3QlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S1348894AbiC3QpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348880AbiC3QlQ (ORCPT
+        with ESMTP id S233326AbiC3Qo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:41:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7847A5574F;
-        Wed, 30 Mar 2022 09:39:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20947B81D6E;
-        Wed, 30 Mar 2022 16:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6689DC340EC;
-        Wed, 30 Mar 2022 16:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648658366;
-        bh=BeSm0k0eIvg+IdQoJLQTmbtEwddZsmDSoeDqhzoge1o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PRsZkNn4eZcZKLrY55cFovgREtH2qxrBKTXbhobYJuWiAc/gX6Wku763F4obQ9BAz
-         w8tnshA8dU+NYkSdF63PQBg7Q6aytF/YkGYnWAvAzH/L09r1ZlQ9Tlj62RCl0zyNbH
-         4xNQ2+KvMJywLq1Td6X27rdYf59pjfY1mnXpDgpiS7mhHF1uUwSgp48cWTjgyigEXf
-         FWFat3wxCXVH5Gb4GzIzPixKEauJRwx4We3AsUld48xgk5ixjujLmk0X1MZxp1+FBl
-         InmEQ9e9GzgJdeMHpnLaYOXPtaqtqhPlO6zYdQnWO25GXrsK3R/pnWvBqnFLNJcr3M
-         evHN2pF54ShNA==
-Date:   Wed, 30 Mar 2022 09:39:25 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     <borisp@nvidia.com>, <john.fastabend@gmail.com>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <vakul.garg@nxp.com>,
-        <davejwatson@fb.com>, <linux-kernel@vger.kernel.org>,
-        Vadim Fedorenko <vfedorenko@novek.ru>
-Subject: Re: [PATCH net] net/tls: fix slab-out-of-bounds bug in
- decrypt_internal
-Message-ID: <20220330093925.2d8ee6ca@kernel.org>
-In-Reply-To: <20220330085009.1011614-1-william.xuanziyang@huawei.com>
-References: <20220330085009.1011614-1-william.xuanziyang@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 12:44:56 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44641BE4CF
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:43:10 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id x186-20020a627cc3000000b004fa939658c5so12299383pfc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=5nXtXrVSYraXOswJ0un7Hm7h4MEowJ6UqwfZSK0k/Ho=;
+        b=KeiIrhzTnbxNfQgZB940dzCguVNEiqsc5GU+Ia3dHTg9v3MLhmKmLclbWTPEPhRjQc
+         Yw6Nhb7RjuYwA3ku+Zn6mwKzTJcgxXWnoytSqvgaXKw9zytgardjMdoiv99jWNUI6Kew
+         oelbriE/+VtiBlvubit/TXo9yVqGra5BJR9qTpDpASIrEfFBRFRf+wWzAmMt16cIn2zR
+         Ds4qpj7JKOIq9+hhwoMoGw5gh3ucoS3YqrWjbj3EP7IbYMB4WdHEAj3JAF5xKbCBcfRf
+         k78SJvN9EH5cE4tDT1w75vjwrCa1R4oU0BAUrl6C6sKNem5qu2Dm5uBdwyilOwo6ifNp
+         uDqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=5nXtXrVSYraXOswJ0un7Hm7h4MEowJ6UqwfZSK0k/Ho=;
+        b=LW4fRDe7QF0It27/prgv3160w/6hJ16fZSG7kgfcQE12cXiTdEdcipNhpJnAgYmyBx
+         PQJnvyIldZCH+XaMG5Iq/74hFbHTCjoWtuWVDRCFCjCyyK1fPdk+4hAu0dj+P0dNYlyd
+         O35lXuB1LCmHtajt9Bu5mlrO/aYYpKTgbA+2stwPlrZuz4g7sxfBWhf9n9SE/jdSANk8
+         FxJcMVjMWCF2HRpaxWLrLIJ1a3JLbtxnElAdpL7LfbiUtWJCV7T+DkBXx/Xjx0rH+Gjq
+         z5G/Fi7PqKvLWtzwvkFBi9xTqdbABp4E5daBm8cwBXuU1qOGaJe8rFL15Q73GxM3K01r
+         NtQQ==
+X-Gm-Message-State: AOAM533y5abGdHNOGtF7IbiKbcdYBJq4CKq0xbprBuAT2OcONwbeA6Sp
+        dB6G/uts9aJk8dsogiDs/PFO8JKKP/E=
+X-Google-Smtp-Source: ABdhPJwcTlkloq4QtJPS4G/HHgbttrIqnocT95vp1xV2O3KKx7i5gdZX29AMHSrnOU+jzj+SLb5cPdIUXUo=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:94cc:eed1:3c93:b600])
+ (user=pgonda job=sendgmr) by 2002:a17:902:c2d8:b0:154:b384:917b with SMTP id
+ c24-20020a170902c2d800b00154b384917bmr216875pla.58.1648658590332; Wed, 30 Mar
+ 2022 09:43:10 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 09:43:06 -0700
+Message-Id: <20220330164306.2376085-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH] KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 16:50:09 +0800 Ziyang Xuan wrote:
-> The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
-> tls_set_sw_offload(). The return value of crypto_aead_ivsize()
-> for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
-> memory space will trigger slab-out-of-bounds bug as following:
-> 
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
-> Read of size 16 at addr ffff888114e84e60 by task tls/10911
-> 
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x34/0x44
->  print_report.cold+0x5e/0x5db
->  ? decrypt_internal+0x385/0xc40 [tls]
->  kasan_report+0xab/0x120
->  ? decrypt_internal+0x385/0xc40 [tls]
->  kasan_check_range+0xf9/0x1e0
->  memcpy+0x20/0x60
->  decrypt_internal+0x385/0xc40 [tls]
->  ? tls_get_rec+0x2e0/0x2e0 [tls]
->  ? process_rx_list+0x1a5/0x420 [tls]
->  ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
->  decrypt_skb_update+0x9d/0x400 [tls]
->  tls_sw_recvmsg+0x3c8/0xb50 [tls]
-> 
-> Allocated by task 10911:
->  kasan_save_stack+0x1e/0x40
->  __kasan_kmalloc+0x81/0xa0
->  tls_set_sw_offload+0x2eb/0xa20 [tls]
->  tls_setsockopt+0x68c/0x700 [tls]
->  __sys_setsockopt+0xfe/0x1b0
+Add resched to avoid warning from sev_clflush_pages() with large number
+of pages.
 
-Interesting, are you running on non-x86 platform or with some crypto
-accelerator? I wonder why we're not hitting it with KASAN and the
-selftest we have.
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> Reserve MAX_IV_SIZE memory space for iv to be compatible with all
-> ciphers. And do iv and salt copy like done in tls_do_encryption().
-> 
-> Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
->  net/tls/tls_sw.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index 0024a692f0f8..6b858f995b23 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
-> @@ -1456,7 +1456,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
->  	aead_size = sizeof(*aead_req) + crypto_aead_reqsize(ctx->aead_recv);
->  	mem_size = aead_size + (nsg * sizeof(struct scatterlist));
->  	mem_size = mem_size + prot->aad_size;
-> -	mem_size = mem_size + crypto_aead_ivsize(ctx->aead_recv);
-> +	mem_size = mem_size + MAX_IV_SIZE;
+---
+Here is a warning similar to what I've seen many times running large SEV
+VMs:
+[  357.714051] CPU 15: need_resched set for > 52000222 ns (52 ticks) withou=
+t schedule
+[  357.721623] WARNING: CPU: 15 PID: 35848 at kernel/sched/core.c:3733 sche=
+duler_tick+0x2f9/0x3f0
+[  357.730222] Modules linked in: kvm_amd uhaul vfat fat hdi2_standard_ftl =
+hdi2_megablocks hdi2_pmc hdi2_pmc_eeprom hdi2 stg elephant_dev_num ccp i2c_=
+mux_ltc4306 i2c_mux i2c_via_ipmi i2c_piix4 google_bmc_usb google_bmc_gpioi2=
+c_mb_common google_bmc_mailbox cdc_acm xhci_pci xhci_hcd sha3_generic gq nv=
+_p2p_glue accel_class
+[  357.758261] CPU: 15 PID: 35848 Comm: switchto-defaul Not tainted 4.15.0-=
+smp-DEV #11
+[  357.765912] Hardware name: Google, Inc.                                 =
+                      Arcadia_IT_80/Arcadia_IT_80, BIOS 30.20.2-gce 11/05/2=
+021
+[  357.779372] RIP: 0010:scheduler_tick+0x2f9/0x3f0
+[  357.783988] RSP: 0018:ffff98558d1c3dd8 EFLAGS: 00010046
+[  357.789207] RAX: 741f23206aa8dc00 RBX: 0000005349236a42 RCX: 00000000000=
+00007
+[  357.796339] RDX: 0000000000000006 RSI: 0000000000000002 RDI: ffff98558d1=
+d5a98
+[  357.803463] RBP: ffff98558d1c3ea0 R08: 0000000000100ceb R09: 00000000000=
+00000
+[  357.810597] R10: ffff98558c958c00 R11: ffffffff94850740 R12: 00000000031=
+975de
+[  357.817729] R13: 0000000000000000 R14: ffff98558d1e2640 R15: ffff9852573=
+9ea40
+[  357.824862] FS:  00007f87503eb700(0000) GS:ffff98558d1c0000(0000) knlGS:=
+0000000000000000
+[  357.832948] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  357.838695] CR2: 00005572fe74b080 CR3: 0000007bea706006 CR4: 00000000003=
+60ef0
+[  357.845828] Call Trace:
+[  357.848277]  <IRQ>
+[  357.850294]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
+[  357.856818]  [<ffffffff943ed60d>] ? rcu_sched_clock_irq+0x6ed/0x850
+[  357.863084]  [<ffffffff943fdf02>] ? __run_timers+0x42/0x260
+[  357.868654]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
+[  357.875182]  [<ffffffff943fd35b>] update_process_times+0x7b/0x90
+[  357.881188]  [<ffffffff944114a2>] tick_sched_timer+0x82/0xd0
+[  357.886845]  [<ffffffff94400671>] __run_hrtimer+0x81/0x200
+[  357.892331]  [<ffffffff943ff222>] hrtimer_interrupt+0x192/0x450
+[  357.898252]  [<ffffffff950002fa>] ? __do_softirq+0x2fa/0x33e
+[  357.903911]  [<ffffffff94e02edc>] smp_apic_timer_interrupt+0xac/0x1d0
+[  357.910349]  [<ffffffff94e01ef6>] apic_timer_interrupt+0x86/0x90
+[  357.916347]  </IRQ>
+[  357.918452] RIP: 0010:clflush_cache_range+0x3f/0x50
+[  357.923324] RSP: 0018:ffff98529af89cc0 EFLAGS: 00000246 ORIG_RAX: ffffff=
+ffffffff12
+[  357.930889] RAX: 0000000000000040 RBX: 0000000000038135 RCX: ffff985233d=
+36000
+[  357.938013] RDX: ffff985233d36000 RSI: 0000000000001000 RDI: ffff985233d=
+35000
+[  357.945145] RBP: ffff98529af89cc0 R08: 0000000000000001 R09: ffffb5753fb=
+23000
+[  357.952271] R10: 000000000003fe00 R11: 0000000000000008 R12: 00000000000=
+40000
+[  357.959401] R13: ffff98525739ea40 R14: ffffb5753fb22000 R15: ffff98532a5=
+8dd80
+[  357.966536]  [<ffffffffc07afd41>] svm_register_enc_region+0xd1/0x170 [kv=
+m_amd]
+[  357.973758]  [<ffffffff94246e8c>] kvm_arch_vm_ioctl+0x84c/0xb00
+[  357.979677]  [<ffffffff9455980f>] ? handle_mm_fault+0x6ff/0x1370
+[  357.985683]  [<ffffffff9423412b>] kvm_vm_ioctl+0x69b/0x720
+[  357.991167]  [<ffffffff945dfd9d>] do_vfs_ioctl+0x47d/0x680
+[  357.996654]  [<ffffffff945e0188>] SyS_ioctl+0x68/0x90
+[  358.001706]  [<ffffffff942066f1>] do_syscall_64+0x71/0x110
+[  358.007192]  [<ffffffff94e00081>] entry_SYSCALL_64_after_hwframe+0x3d/0x=
+a2
 
-This change is not strictly required for the patch, right?
-Can we drop it, and perhaps send as an optimization separately later?
+Tested by running a large 256gib SEV VM several times, saw no warnings.
+Without the change warnings are seen.
 
->  	/* Allocate a single block of memory which contains
->  	 * aead_req || sgin[] || sgout[] || aad || iv.
-> @@ -1493,12 +1493,8 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
->  		kfree(mem);
->  		return err;
->  	}
-> -	if (prot->version == TLS_1_3_VERSION ||
-> -	    prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
-> -		memcpy(iv + iv_offset, tls_ctx->rx.iv,
-> -		       crypto_aead_ivsize(ctx->aead_recv));
-> -	else
-> -		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
-> +	memcpy(iv + iv_offset, tls_ctx->rx.iv,
-> +	       prot->iv_size + prot->salt_size);
+---
+ arch/x86/kvm/svm/sev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-If the IV really is 16B then we're passing 4 bytes of uninitialized
-data at the end of the buffer, right?
-
->  	xor_iv_with_seq(prot, iv + iv_offset, tls_ctx->rx.rec_seq);
->  
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 75fa6dd268f0..c2fe89ecdb2d 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], uns=
+igned long npages)
+ 		page_virtual =3D kmap_atomic(pages[i]);
+ 		clflush_cache_range(page_virtual, PAGE_SIZE);
+ 		kunmap_atomic(page_virtual);
++		cond_resched();
+ 	}
+ }
+=20
+--=20
+2.35.1.1094.g7c7d902a7c-goog
 

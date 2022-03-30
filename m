@@ -2,190 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27384EBB51
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FE74EBB26
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243550AbiC3HAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        id S243432AbiC3GyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243545AbiC3G77 (ORCPT
+        with ESMTP id S241807AbiC3GyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:59:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364D3DEBA8;
-        Tue, 29 Mar 2022 23:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648623486; x=1680159486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SIp0h30VMDvBIVSGXrWFtTthjxzLWvye/g+v5SbbOFY=;
-  b=H6NuMmduSjL5ovNPAVlnUgNpw/MRoYZqG6ws9IyE4YBDUPjZo1mwfxQP
-   qh6JYRND4CdevJqN7YEeqne+d9FnuWUPci3dDJMTwebS0233VlCvPlTEk
-   xeUbDFPwrw+BwMG3PYAufwYmUCtUqq142iuRkc5GpKKGvm5bfXnIyVTcZ
-   Bue3YYctIqhIS1uFa2jyrxaO3FyOxyZlcm2C9CF9b0QBZpVOR8n+E3Vyh
-   6SZMznUA3w3qF2efiv7PoUSDgStf80w5GO1RDo4eTT12EtcCrU7jNa/MI
-   geC39aTEdN7mdgeRcJFd5FaH61Wgt7BnextYFnu5OnsANjV//KtDoZXPM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="322644251"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="322644251"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:58:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="546730778"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2022 23:58:00 -0700
-Date:   Wed, 30 Mar 2022 14:50:47 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Message-ID: <20220330065047.GA212503@yilunxu-OptiPlex-7050>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
+        Wed, 30 Mar 2022 02:54:04 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2061.outbound.protection.outlook.com [40.107.236.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AC1B2463
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:52:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CMOptLhZERyND42ZavEOAtSMH/Gl2mMMsxctHLxeTDwzborFVdi4an+V9QcMdVSE3z+dbFbcDtGXupaNPYzmOfGZBFmJT9m46tzyyalsu8QDpyiqgWkWxqVsK+v338dJjYXHfrG/7VMNEtIbfzUEOf7Ua78wUWQLN5yCoTFBE4ekVQwnOAY/FCXR1/GUjO155kzXZvR3s1gWbxFKiT9+l/Os2MUJRF7/8ihPzKihPR9aUK28egOhIiiTxioGK2ok7EPGBzbJp9DqgCFBK6JrBTjIcHYkdWz/yrmZXBHd3ccmUI00Bj24hVp6IyypO3plugB0i8JeK+zcZn9jwuOiGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QWLdO0xScF9kASCt76Ry54r40vcPsHj663uZUBBcx/E=;
+ b=WSk6A4OVjurGTmyUCT3tvLUFqEpVnCpt1qUuWjQ+vHSx+5X11CRWQSx8ypdlWVA+dicEJgDc2RJxgBY7NXPqUyhtO0sRe5dQ3F6QLFuLV7u7Ybpv83XJjyMkXHBiI3Ox/5WhnvyjDs9jX82PQLtcz5pdv7KuENViXF49RCha9M4hoSPoY6VWhu7KXcu3FV+jE+uWCQKQpcpVBjLveSOvPyarmlmCU++6dR6EiP6F0CoVL0FZtxm2bFZ8GS8gGZHlTxdwdfqgTD2V/BY5ChWWQBh2eA2QFxG6t/8EIR62B3L7ht2t66Tgq7jR5WAazhgfcVOuUZk89/C44NCv136M8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QWLdO0xScF9kASCt76Ry54r40vcPsHj663uZUBBcx/E=;
+ b=qjhTVaO7I87nxKaDbK9SS9V1aju49js7AYFsCplHG8AvMMjo3agg6Eqd6GH1xUm5Mk6myypYVWjx2ARnfSX0jwoxA6nEJCwjfJHE4xbz0duXAYzoJ8I5cJ9PhnGRuv73p74TJTNWVK9B39kWZ3KRDEEoPY9RI/N+pzHuSIFzFwks+YpSNfu7o+I/WhLkegvdjLSxtvWk6KOvHnpOy23pZShkS2szWOGt7NFm+A/tgXT6+I3h3OOukGdC7RNpWzbvsvewbROctpC4mb/WPjBOf6nAzYot5NYEXyKo6yPI8jKbZ4MSN1G4c5zcG6lNmJ5fHuSoD8c9Ybl+Eqspzvuj9w==
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
+ BN6PR1201MB0035.namprd12.prod.outlook.com (2603:10b6:405:4d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Wed, 30 Mar
+ 2022 06:52:12 +0000
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::f0ca:466a:6886:bb42]) by DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::f0ca:466a:6886:bb42%7]) with mapi id 15.20.5123.019; Wed, 30 Mar 2022
+ 06:52:12 +0000
+From:   Eli Cohen <elic@nvidia.com>
+To:     Jason Wang <jasowang@redhat.com>, "mst@redhat.com" <mst@redhat.com>
+CC:     "hdanton@sina.com" <hdanton@sina.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH RESEND V2 2/3] vdpa: mlx5: synchronize driver status with
+ CVQ
+Thread-Topic: [PATCH RESEND V2 2/3] vdpa: mlx5: synchronize driver status with
+ CVQ
+Thread-Index: AQHYQyR0zKsgbTiUe0iTU8OkeFJURqzXfu3g
+Date:   Wed, 30 Mar 2022 06:52:12 +0000
+Message-ID: <DM8PR12MB54001E9C39450E33CE7CAFACAB1F9@DM8PR12MB5400.namprd12.prod.outlook.com>
+References: <20220329042109.4029-1-jasowang@redhat.com>
+ <20220329042109.4029-2-jasowang@redhat.com>
+In-Reply-To: <20220329042109.4029-2-jasowang@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: af2afa9f-8d95-49e6-73a8-08da1219d178
+x-ms-traffictypediagnostic: BN6PR1201MB0035:EE_
+x-microsoft-antispam-prvs: <BN6PR1201MB0035CDC6AB2CFDCE167BB937AB1F9@BN6PR1201MB0035.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EeT+cw7HBx8s6EsXFC92tgpEF8qLLqOg5yHIWo8JRiU0siAnkxJeLOCLNLqOO3otkIVt+qG1iKjjubF98rDjlHw1tvMZQXqdzvGRMdEEMaLUkvfbfCMFeQ6qCeMgaNaV41Ha8uFKooT1Z9LK+GChxcdfuY6Ve/i77LlQokeXwZAPq5bTKUxVsC8WFs/WgPoUKMOPmN9k/pTOGoA3uGguP+xh23sO2APp64wtElVVaTECwEG+TIGID8yt0cIzbvxZDGfe6Y8rlShvLI1crz6VH+f40ojv5ne0p9GJB3ADsLxFqUFAjY3ZzhrLRADTCsM08iJGLnUlJ12aoy0uF3dN3VcJoSdIdh3O9ZzkzyrYRGrNeYB2c1MLQNLYQNnebsil4iPdQwAwTHabCOlGTIQEfEv24GAhXe/zcqkBZnxrOLFX8j5SwOPSNJq2XZ4kTB+2OOyDNjCiMi94eQe+pEkZy0n71BsreWAl9RbBbZ7slRx56H5aZLnxSAUCfgxv9j+q0Flr5LwP3CmbG0r0h3Ak6Br7xUGVsSk58u24w3LEbkOMb2rKvdx7ZbVkf1quuIaJEWmWuhFRcN+j+WnTtXmr/pjyCXqgSkz5zbPG9a1dYq1WX67LlQvxUMUoJjpEKl+EAYfAcF5aYisGwCt9UH1GcLajkTgF5GPJxflyzwYuxXYaJu706kY9BxuyZYnt4OBKzWVVLjGzjdEEzJY0CIo1MA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(86362001)(38100700002)(9686003)(38070700005)(186003)(26005)(7696005)(6506007)(122000001)(83380400001)(52536014)(316002)(508600001)(64756008)(4326008)(8676002)(66476007)(66556008)(55016003)(2906002)(66946007)(8936002)(54906003)(33656002)(5660300002)(76116006)(66446008)(110136005)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rtzuO6QMG/C9I2MmujPxkkGx+RGl+FO39h/GSdltbizqv2pEhvtjdge11N+v?=
+ =?us-ascii?Q?a+DdpjLYj/kR1SbEhwVhDEZn93GKAfO1bK7NJe5sFUwcIx7TVg0MMiycjtyn?=
+ =?us-ascii?Q?BSTVVehurD+wudb09aLPidU3d8TtfeuQoXN1oQYZJPABjaoYUOV/w0L4QoIO?=
+ =?us-ascii?Q?av7zl3xRXSZ509+iyaZV9bXbvJVwRs620A5/kw6O64zEeuSxpVkYAtrfA2Yh?=
+ =?us-ascii?Q?yTpcz92YfhvdB61u5J3bqCp4ApTpsYgaE4ACfM7ydvNDl/k0xNKH2MCVw9/X?=
+ =?us-ascii?Q?cE0nCa1VHJig+sdYPlbHmbekEtxekds4WSF5WZsfc8/gJqvwwW/EnBD86G/3?=
+ =?us-ascii?Q?DzquYy0HywTY+0Nzje84ERCwTj0IX0YlCM0hUGap+PKLlIDOl7svoIJX42IF?=
+ =?us-ascii?Q?FDPZY2jkU1G4Nex+M5haPZwgR8tX9GhW2Cez61RTwsr5tjEnJA1ffNm93oFs?=
+ =?us-ascii?Q?kBIwAtC0F1SOKJN2jBOfFLQR2Aqz2TUckdwexCIde7FYFH+NURFO1xY+QHmO?=
+ =?us-ascii?Q?Opk6owoHdLYgvfKAaEybgAbxYnE7nxgcWiQthz0K4edYAsyNxhG1s2AOdH1a?=
+ =?us-ascii?Q?JDqLE15xRyX+z4c+siAdx72JHrLA97KqyIl8qBdGMX0zeBGOEftvVnQq/8Ml?=
+ =?us-ascii?Q?2TxYxjDY3DxNypTkmrll5XcSld4u2K21nftuRxRGhh3upkCPiBr7iDNmwzWb?=
+ =?us-ascii?Q?gNy+waUkswbLUNFzMMbHL9e9IXYKumTZMSNQHuOecocQ4ZBDx5mBR4vv7CRx?=
+ =?us-ascii?Q?WiKa1MuA4WOuKTP8V+AXOF348MeXj+T92G1FUshNSz7cIlR6pHxWjFc5SNGE?=
+ =?us-ascii?Q?WBSrjhmStJq7UhoNfawPPbHRgOOBCK4aGVf0H2UghTYKFZw5jwm1uuabdub9?=
+ =?us-ascii?Q?+L4k/9uxyb+rrodIVwk8nPZIudH5qyM5O5RGMfWrL10m3B5l88p0vssN3fMC?=
+ =?us-ascii?Q?IMxAQtp1h/fQClx0ZXDM5k/A2qPu7n2CqAjjsm5fd5V9B9lfXlLz15+ZQMMG?=
+ =?us-ascii?Q?23DGT3m6bUf1iGlIV1cFK/MxFbkuVPHBeXXOVcQiCn7Bsm4xtFZVp16k+DIZ?=
+ =?us-ascii?Q?0gBp4+E3zKjaBpjnrsw3vyzBpUwo6rGZGFlMZvEfEeiqRyTiCuiRdNMQfOAz?=
+ =?us-ascii?Q?XfENz+046xB6+l9uGZCs0foaPimqmdYNGlcm/XCN5Sqen0To6Noou9J/eVMl?=
+ =?us-ascii?Q?OW334/ufZLz2Xvwc5Urhbo5T4o8x7ost3RNAsrkXhBHzTGTXSQJdB/OMezFx?=
+ =?us-ascii?Q?zJOftBAwQBX7u7zj9fFpi+FbJaRV0fCsJPCAiYCcfOcj05MwF0nOr+hfCv+q?=
+ =?us-ascii?Q?KePvqbPW1EptELBwcjjUH0/uvHSv9f/OO2o7YOsprxyHjQ1bcNqdkB6/y5OI?=
+ =?us-ascii?Q?af23KZZmopI7857uWtQacnTnrR/MXbJqNTj2Pep8+RTzXOZWsqI4U4Ke0P/f?=
+ =?us-ascii?Q?tJ++s3otxQGxN19Mq8FLMZtzdg+V+2/kND5rRA6fUaLqzrbCNF5JiHXKYsNj?=
+ =?us-ascii?Q?Dx0Cj3IAJllJkkMmDWD40sEekc7rgQK0BnBrphEZcVS0WgKWb9ilfY6TGcRl?=
+ =?us-ascii?Q?VWPaCBS7LbBuEG7ittU2nWuajc7ZLXhANlK+omPyqwCKXS5fYznAoTQgaN17?=
+ =?us-ascii?Q?weEdqarvdTi84MY7CC/HJdL5JLGNwt0p/EoFMaPxeoUb1RcrfuGL6/hO6+lT?=
+ =?us-ascii?Q?mSFj1iOuU2qi11/QJ9Lwb+1N9jkbO5AnyU2O/UZ8KLLm1KeA?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329160730.3265481-2-michael@walle.cc>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af2afa9f-8d95-49e6-73a8-08da1219d178
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 06:52:12.3536
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: y949ky/vy5LX0LtqC4uDRIREkYyj1ZIla+tHmlLrmp0cpWK+vsiNrt46YROEz/n7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0035
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 06:07:26PM +0200, Michael Walle wrote:
-> More and more drivers will check for bad characters in the hwmon name
-> and all are using the same code snippet. Consolidate that code by adding
-> a new hwmon_sanitize_name() function.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> From: Jason Wang <jasowang@redhat.com>
+> Sent: Tuesday, March 29, 2022 7:21 AM
+> To: jasowang@redhat.com; mst@redhat.com
+> Cc: Eli Cohen <elic@nvidia.com>; hdanton@sina.com; virtualization@lists.l=
+inux-foundation.org; linux-kernel@vger.kernel.org
+> Subject: [PATCH RESEND V2 2/3] vdpa: mlx5: synchronize driver status with=
+ CVQ
+>=20
+> Currently, CVQ doesn't have any synchronization with the driver
+> status. Then CVQ emulation code run in the middle of:
+>=20
+> 1) device reset
+> 2) device status changed
+> 3) map updating
+>=20
+> The will lead several unexpected issue like trying to execute CVQ
+> command after the driver has been teared down.
+>=20
+> Fixing this by using reslock to synchronize CVQ emulation code with
+> the driver status changing:
+>=20
+> - protect the whole device reset, status changing and set_map()
+>   updating with reslock
+> - protect the CVQ handler with the reslock and check
+>   VIRTIO_CONFIG_S_DRIVER_OK in the CVQ handler
+>=20
+> This will guarantee that:
+>=20
+> 1) CVQ handler won't work if VIRTIO_CONFIG_S_DRIVER_OK is not set
+> 2) CVQ handler will see a consistent state of the driver instead of
+>    the partial one when it is running in the middle of the
+>    teardown_driver() or setup_driver().
+>=20
+> Cc: 5262912ef3cfc ("vdpa/mlx5: Add support for control VQ and MAC setting=
+")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+
+Acked-by: Eli Cohen <elic@nvidia.com>
+
 > ---
->  Documentation/hwmon/hwmon-kernel-api.rst |  9 ++++-
->  drivers/hwmon/hwmon.c                    | 49 ++++++++++++++++++++++++
->  include/linux/hwmon.h                    |  3 ++
->  3 files changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> index c41eb6108103..12f4a9bcef04 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> @@ -50,6 +50,10 @@ register/unregister functions::
->  
->    void devm_hwmon_device_unregister(struct device *dev);
->  
-> +  char *hwmon_sanitize_name(const char *name);
+> Changes since V1:
+> - document the lock requirement
+> - protect the whole .set_map()
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 51 ++++++++++++++++++++++---------
+>  1 file changed, 37 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
+x5_vnet.c
+> index b2afd2b6fbca..53b8c1a68f90 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -1616,11 +1616,17 @@ static void mlx5_cvq_kick_handler(struct work_str=
+uct *work)
+>  	mvdev =3D wqent->mvdev;
+>  	ndev =3D to_mlx5_vdpa_ndev(mvdev);
+>  	cvq =3D &mvdev->cvq;
 > +
-> +  char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+> +	mutex_lock(&ndev->reslock);
 > +
->  hwmon_device_register_with_groups registers a hardware monitoring device.
->  The first parameter of this function is a pointer to the parent device.
->  The name parameter is a pointer to the hwmon device name. The registration
-> @@ -93,7 +97,10 @@ removal would be too late.
->  
->  All supported hwmon device registration functions only accept valid device
->  names. Device names including invalid characters (whitespace, '*', or '-')
-> -will be rejected. The 'name' parameter is mandatory.
-> +will be rejected. The 'name' parameter is mandatory. Before calling a
-> +register function you should either use hwmon_sanitize_name or
-> +devm_hwmon_sanitize_name to replace any invalid characters with an
-
-I suggest                   to duplicate the name and replace ...
-
-Thanks,
-Yilun
-
-> +underscore.
->  
->  Using devm_hwmon_device_register_with_info()
->  --------------------------------------------
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 989e2c8496dd..619ef9f9a16e 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -1057,6 +1057,55 @@ void devm_hwmon_device_unregister(struct device *dev)
+> +	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> +		goto out;
+> +
+>  	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
+> -		return;
+> +		goto out;
+>=20
+>  	if (!cvq->ready)
+> -		return;
+> +		goto out;
+>=20
+>  	while (true) {
+>  		err =3D vringh_getdesc_iotlb(&cvq->vring, &cvq->riov, &cvq->wiov, &cvq=
+->head,
+> @@ -1658,6 +1664,9 @@ static void mlx5_cvq_kick_handler(struct work_struc=
+t *work)
+>  		queue_work(mvdev->wq, &wqent->work);
+>  		break;
+>  	}
+> +
+> +out:
+> +	mutex_unlock(&ndev->reslock);
 >  }
->  EXPORT_SYMBOL_GPL(devm_hwmon_device_unregister);
->  
-> +static char *__hwmon_sanitize_name(struct device *dev, const char *old_name)
-> +{
-> +	char *name, *p;
-> +
-> +	if (dev)
-> +		name = devm_kstrdup(dev, old_name, GFP_KERNEL);
-> +	else
-> +		name = kstrdup(old_name, GFP_KERNEL);
-> +	if (!name)
-> +		return NULL;
-> +
-> +	for (p = name; *p; p++)
-> +		if (hwmon_is_bad_char(*p))
-> +			*p = '_';
-> +
-> +	return name;
-> +}
-> +
-> +/**
-> + * hwmon_sanitize_name - Replaces invalid characters in a hwmon name
-> + * @name: NUL-terminated name
-> + *
-> + * Allocates a new string where any invalid characters will be replaced
-> + * by an underscore.
-> + *
-> + * Returns newly allocated name or %NULL in case of error.
-> + */
-> +char *hwmon_sanitize_name(const char *name)
-> +{
-> +	return __hwmon_sanitize_name(NULL, name);
-> +}
-> +EXPORT_SYMBOL_GPL(hwmon_sanitize_name);
-> +
-> +/**
-> + * devm_hwmon_sanitize_name - resource managed hwmon_sanitize_name()
-> + * @dev: device to allocate memory for
-> + * @name: NUL-terminated name
-> + *
-> + * Allocates a new string where any invalid characters will be replaced
-> + * by an underscore.
-> + *
-> + * Returns newly allocated name or %NULL in case of error.
-> + */
-> +char *devm_hwmon_sanitize_name(struct device *dev, const char *name)
-> +{
-> +	return __hwmon_sanitize_name(dev, name);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_hwmon_sanitize_name);
-> +
->  static void __init hwmon_pci_quirks(void)
+>=20
+>  static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+> @@ -2132,7 +2141,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_de=
+v *mvdev, struct vhost_iotlb
+>  		goto err_mr;
+>=20
+>  	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> -		return 0;
+> +		goto err_mr;
+>=20
+>  	restore_channels_info(ndev);
+>  	err =3D setup_driver(mvdev);
+> @@ -2147,12 +2156,14 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_=
+dev *mvdev, struct vhost_iotlb
+>  	return err;
+>  }
+>=20
+> +/* reslock must be held for this function */
+>  static int setup_driver(struct mlx5_vdpa_dev *mvdev)
 >  {
->  #if defined CONFIG_X86 && defined CONFIG_PCI
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index eba380b76d15..4efaf06fd2b8 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -461,6 +461,9 @@ void devm_hwmon_device_unregister(struct device *dev);
->  int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
->  		       u32 attr, int channel);
->  
-> +char *hwmon_sanitize_name(const char *name);
-> +char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+>  	struct mlx5_vdpa_net *ndev =3D to_mlx5_vdpa_ndev(mvdev);
+>  	int err;
+>=20
+> -	mutex_lock(&ndev->reslock);
+> +	WARN_ON(!mutex_is_locked(&ndev->reslock));
 > +
->  /**
->   * hwmon_is_bad_char - Is the char invalid in a hwmon name
->   * @ch: the char to be considered
-> -- 
-> 2.30.2
+>  	if (ndev->setup) {
+>  		mlx5_vdpa_warn(mvdev, "setup driver called for already setup driver\n"=
+);
+>  		err =3D 0;
+> @@ -2182,7 +2193,6 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev=
+)
+>  		goto err_fwd;
+>  	}
+>  	ndev->setup =3D true;
+> -	mutex_unlock(&ndev->reslock);
+>=20
+>  	return 0;
+>=20
+> @@ -2193,23 +2203,23 @@ static int setup_driver(struct mlx5_vdpa_dev *mvd=
+ev)
+>  err_rqt:
+>  	teardown_virtqueues(ndev);
+>  out:
+> -	mutex_unlock(&ndev->reslock);
+>  	return err;
+>  }
+>=20
+> +/* reslock must be held for this function */
+>  static void teardown_driver(struct mlx5_vdpa_net *ndev)
+>  {
+> -	mutex_lock(&ndev->reslock);
+> +
+> +	WARN_ON(!mutex_is_locked(&ndev->reslock));
+> +
+>  	if (!ndev->setup)
+> -		goto out;
+> +		return;
+>=20
+>  	remove_fwd_to_tir(ndev);
+>  	destroy_tir(ndev);
+>  	destroy_rqt(ndev);
+>  	teardown_virtqueues(ndev);
+>  	ndev->setup =3D false;
+> -out:
+> -	mutex_unlock(&ndev->reslock);
+>  }
+>=20
+>  static void clear_vqs_ready(struct mlx5_vdpa_net *ndev)
+> @@ -2230,6 +2240,8 @@ static void mlx5_vdpa_set_status(struct vdpa_device=
+ *vdev, u8 status)
+>=20
+>  	print_status(mvdev, status, true);
+>=20
+> +	mutex_lock(&ndev->reslock);
+> +
+>  	if ((status ^ ndev->mvdev.status) & VIRTIO_CONFIG_S_DRIVER_OK) {
+>  		if (status & VIRTIO_CONFIG_S_DRIVER_OK) {
+>  			err =3D setup_driver(mvdev);
+> @@ -2239,16 +2251,19 @@ static void mlx5_vdpa_set_status(struct vdpa_devi=
+ce *vdev, u8 status)
+>  			}
+>  		} else {
+>  			mlx5_vdpa_warn(mvdev, "did not expect DRIVER_OK to be cleared\n");
+> -			return;
+> +			goto err_clear;
+>  		}
+>  	}
+>=20
+>  	ndev->mvdev.status =3D status;
+> +	mutex_unlock(&ndev->reslock);
+>  	return;
+>=20
+>  err_setup:
+>  	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+>  	ndev->mvdev.status |=3D VIRTIO_CONFIG_S_FAILED;
+> +err_clear:
+> +	mutex_unlock(&ndev->reslock);
+>  }
+>=20
+>  static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+> @@ -2258,6 +2273,8 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev=
+)
+>=20
+>  	print_status(mvdev, 0, true);
+>  	mlx5_vdpa_info(mvdev, "performing device reset\n");
+> +
+> +	mutex_lock(&ndev->reslock);
+>  	teardown_driver(ndev);
+>  	clear_vqs_ready(ndev);
+>  	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+> @@ -2270,6 +2287,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev=
+)
+>  		if (mlx5_vdpa_create_mr(mvdev, NULL))
+>  			mlx5_vdpa_warn(mvdev, "create MR failed\n");
+>  	}
+> +	mutex_unlock(&ndev->reslock);
+>=20
+>  	return 0;
+>  }
+> @@ -2305,19 +2323,24 @@ static u32 mlx5_vdpa_get_generation(struct vdpa_d=
+evice *vdev)
+>  static int mlx5_vdpa_set_map(struct vdpa_device *vdev, struct vhost_iotl=
+b *iotlb)
+>  {
+>  	struct mlx5_vdpa_dev *mvdev =3D to_mvdev(vdev);
+> +	struct mlx5_vdpa_net *ndev =3D to_mlx5_vdpa_ndev(mvdev);
+>  	bool change_map;
+>  	int err;
+>=20
+> +	mutex_lock(&ndev->reslock);
+> +
+>  	err =3D mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map);
+>  	if (err) {
+>  		mlx5_vdpa_warn(mvdev, "set map failed(%d)\n", err);
+> -		return err;
+> +		goto err;
+>  	}
+>=20
+>  	if (change_map)
+> -		return mlx5_vdpa_change_map(mvdev, iotlb);
+> +		err =3D mlx5_vdpa_change_map(mvdev, iotlb);
+>=20
+> -	return 0;
+> +err:
+> +	mutex_unlock(&ndev->reslock);
+> +	return err;
+>  }
+>=20
+>  static void mlx5_vdpa_free(struct vdpa_device *vdev)
+> --
+> 2.18.1
+

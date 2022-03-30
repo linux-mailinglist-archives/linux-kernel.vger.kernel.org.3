@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9694EC5B1
+	by mail.lfdr.de (Postfix) with ESMTP id E52A34EC5B2
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344233AbiC3Ndq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S1346102AbiC3Ndt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbiC3NdU (ORCPT
+        with ESMTP id S1346402AbiC3Ndn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:33:20 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A6C39815
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:31:35 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id j21so18029730qta.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sleTbU3o2LpxIYiBmlX/kKYFsR/lkVlTPZZsTo+MWCM=;
-        b=S11wbdv1fZMuKBFRCOo0G8y41Hc56Qh5/q7m5rprd9dpQVKyucpMvT5wMtAebrJBLY
-         vDmTjmtE5Q2fCE18kywy1GtidztsePxM5Owt5Lok+ghb4Z3eb7xFEZyYYk6Cd8Q7xrPo
-         Uq8d4U6Exn0adT+R+j7qzLOGTKaol8mVhBzJI/3RMmkbaCKWgLZM4LWt8M83brUKJfFf
-         rv3oAcaPGVycMfhF7gBYRtuXGCXNUUCm0yXGluEWv20o6ziUMQhlcNvJ3gN8jNP6aM5F
-         2EfuGYilPS8PisNifJGl/z/S8oms75Wv1XwIJUYMeeMDmDPBXFzDPbdshCDJG7bQTf1C
-         JjoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=sleTbU3o2LpxIYiBmlX/kKYFsR/lkVlTPZZsTo+MWCM=;
-        b=HMBo+oG5GiQcQvr1jNBBLQoEmQEoifqaKMQhSxlO5Z/HNdqtyIRBahC58nBL0vre5/
-         AV4MWnZmQRB223nGWDTrlnjxsKNYHzv6c6W9uykQANHlVd0D/GW7F7dCPvzeDytlvygL
-         eUbuvCc80S7dTXImftDY1SV8zYobPrVjlI8rkEDXz5Ca2zyOHOs3bPrsBefapESvPR1w
-         yeoKWU6A/deUkqhYDThDYSVH7nHaMw+c5q61TJy9m/87hq2VjoVj6hpZMJyuFvu+vwqS
-         flDnI3xDWlVl4SV/bTtorsnkCSQBhNczAPgIO3pdnPKWYyLxXEpRvhZyL4dFa0JS08WS
-         7O3Q==
-X-Gm-Message-State: AOAM533hF30iseOz24W2w2JdLAIvJ3mWvdkaD78Nm33CuPPNFfSq6FjN
-        kJjS4TZQ9NmYTNUzPBsTrw==
-X-Google-Smtp-Source: ABdhPJx9eZ5FPr2dLUqGAaQrb8udGsxnJKIokkzHWbt9HfdNcc31DVVKZV6LDvtNnJIin4EZXPl8Tw==
-X-Received: by 2002:a05:622a:653:b0:2e1:c046:4825 with SMTP id a19-20020a05622a065300b002e1c0464825mr33430655qtb.430.1648647094638;
-        Wed, 30 Mar 2022 06:31:34 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.144.75])
-        by smtp.gmail.com with ESMTPSA id a7-20020a05622a064700b002e238d6db02sm17611593qtb.54.2022.03.30.06.31.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 06:31:34 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:dcc2:ca6d:a437:b3e0])
-        by serve.minyard.net (Postfix) with ESMTPSA id B33D91800BB;
-        Wed, 30 Mar 2022 13:31:32 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 08:31:31 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipmi: use simple i2c probe function
-Message-ID: <20220330133131.GU3457@minyard.net>
-Reply-To: minyard@acm.org
-References: <20220324171159.544565-1-steve@sk2.org>
- <YkQi6EIhknRJgv3i@shikoro>
+        Wed, 30 Mar 2022 09:33:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE5639815;
+        Wed, 30 Mar 2022 06:31:57 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UBvZZ8000482;
+        Wed, 30 Mar 2022 13:31:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=g1QikRaT51sf2bD8gHaes+NTudAH6B1jPft7JhQdytM=;
+ b=VC5lMyyIeeLHgdRqyRIjUX3ZZZVd4Zfa5KgTsmrxk2qjfJ0HWi72WGZbwtuv5lJMCFLH
+ W8lV8OI/HZKEkAymJlYJj2uM8ettZJj1bcFJS9Vvuwr1KSQfObAT/3FBnvHDedbhI18E
+ k/eXnE3/3fCwiKGABdXNmd9COIlms2Tj65i177Ovk/H9kHfADEy95Sdy/9cgNJ4mJDOo
+ /YpYvHqDms6q8Key1nblogoaC/x4yuFSuqlO+x5rIKQrtOZlgEisrdj+DXL5dhXwfVn9
+ AFPvVKHm4LMmMHu47gMYRrlFztZL6DO3pmY7skwprKOWMZ/Evz4FaktCepMsWTcaFJ2t eQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4psu23vp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 13:31:39 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22UDNaVk002385;
+        Wed, 30 Mar 2022 13:31:39 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4psu23vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 13:31:39 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22UD9cQZ011208;
+        Wed, 30 Mar 2022 13:31:38 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma04dal.us.ibm.com with ESMTP id 3f1tfa4qba-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 13:31:38 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UDVbYp15925550
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 13:31:37 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FBD27806E;
+        Wed, 30 Mar 2022 13:31:37 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57E077805E;
+        Wed, 30 Mar 2022 13:31:36 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.163.9.79])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Mar 2022 13:31:36 +0000 (GMT)
+Message-ID: <263108383b1c01cf9237ff2fcd2e97a482eff83e.camel@linux.ibm.com>
+Subject: Re: filesystem corruption with "scsi: core: Reallocate device's
+ budget map on queue depth change"
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     John Garry <john.garry@huawei.com>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     Martin Wilck <martin.wilck@suse.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 30 Mar 2022 09:31:35 -0400
+In-Reply-To: <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
+References: <YkQsumJ3lgGsagd2@arighi-desktop>
+         <f7bacce8-b5e5-3ef1-e116-584c01533f69@huawei.com>
+         <YkQ9KoKb+VK06zXi@arighi-desktop>
+         <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkQi6EIhknRJgv3i@shikoro>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mEDWZFt0bAoXSjZLHiUoRKNU1jH2t8BS
+X-Proofpoint-GUID: AoMbdsKTo_B0dgPgfYNQkNM4N52Fqu_t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_04,2022-03-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxscore=0 adultscore=0 impostorscore=0 mlxlogscore=882
+ malwarescore=0 clxscore=1011 suspectscore=0 bulkscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203300066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:29:12AM +0200, Wolfram Sang wrote:
-> On Thu, Mar 24, 2022 at 06:11:59PM +0100, Stephen Kitt wrote:
-> > The i2c probe functions here don't use the id information provided in
-> > their second argument, so the single-parameter i2c probe function
-> > ("probe_new") can be used instead.
-> > 
-> > This avoids scanning the identifier tables during probes.
-> > 
-> > Signed-off-by: Stephen Kitt <steve@sk2.org>
+On Wed, 2022-03-30 at 13:59 +0100, John Garry wrote:
+> On 30/03/2022 12:21, Andrea Righi wrote:
+> > On Wed, Mar 30, 2022 at 11:38:02AM +0100, John Garry wrote:
+> > > On 30/03/2022 11:11, Andrea Righi wrote:
+> > > > Hello,
+> > > > 
+> > > > after this commit I'm experiencing some filesystem corruptions
+> > > > at boot on a power9 box with an aacraid controller.
+> > > > 
+> > > > At the moment I'm running a 5.15.30 kernel; when the filesystem
+> > > > is mounted at boot I see the following errors in the console:
 > 
-> Looks good and builds fine:
-> 
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> 
+> About "scsi: core: Reallocate device's budget map on queue depth
+> change" being added to a stable kernel, I am not sure if this was
+> really a fix  or just a memory optimisation.
+
+I can see how it becomes the problem: it frees and allocates a new
+bitmap across a queue freeze, but bits in the old one might still be in
+use.  This isn't a problem except when they return and we now possibly
+see a tag greater than we think we can allocate coming back. 
+Presumably we don't check this and we end up doing a write to
+unallocated memory.
+
+I think if you want to reallocate on queue depth reduction, you might
+have to drain the queue as well as freeze it.
+
+James
 
 
-Thanks, I have this queued and I've added the review.
-
-I'm just waiting for the merge window to close before I put it into the
-next tree.
-
--corey

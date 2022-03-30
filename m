@@ -2,158 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABC74EB794
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B704EB798
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241518AbiC3A5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 20:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S241524AbiC3A6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiC3A5X (ORCPT
+        with ESMTP id S231459AbiC3A6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 20:57:23 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101CB11984C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648601738; x=1680137738;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HDV7VFPkUhKwSQYjYrd20kf+zz/evDqcuJJjr93UfLc=;
-  b=XwQBk9f6C89zEU/kxVV+1UKqeysdGaGIKiJAp/ojTd/mh4/pS9xtwZOi
-   fOPVPoar0QI7LAu0jbhUweMN1S/+jmVraQYdmX+d2q6eCajCGcmhX4TMz
-   aPuXQ9OYrA2X2yZR3Ltm5x5pxg6AiXI9qXQ94ofkr2WzH0HcUmEebAJyb
-   i+gf8qNAhlKqeqq3ScvhQ3FAJfWXUtySYdIEmPtljh5xjsbHB8/7TfRP3
-   4BVeo6h6vIV2t5VjtniveCnNF6XURGLcccKbjlqZVbiqdb/SsH5Ux3RWV
-   fldnR44z9nxmGrHeCZB/HyWZsVqlbggBpR415Un/tkUdW3B7BybEeY05S
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="246912833"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="246912833"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 17:55:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="836062906"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Mar 2022 17:55:35 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZMcZ-0000pX-Bw; Wed, 30 Mar 2022 00:55:35 +0000
-Date:   Wed, 30 Mar 2022 08:54:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Georgi Djakov <quic_c_gdjako@quicinc.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 5839/5872] kernel/sched/psi.c:538:3: error: implicit declaration of function
- 'trace_android_vh_psi_event'
-Message-ID: <202203300858.6jwQlHhH-lkp@intel.com>
+        Tue, 29 Mar 2022 20:58:09 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC91A19B0B5;
+        Tue, 29 Mar 2022 17:56:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KSp0L1YL1z4xXS;
+        Wed, 30 Mar 2022 11:56:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648601780;
+        bh=q9ispVHQZsP/kWZG11ABn0H1jP7mArtgDdqW0V4HNqk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TZCNrKq0WJSwTw++aIdVCIVQDmpCewCy8v3eGY6z7d+lmOG1D1z3q369Xrkl1gApL
+         2dpdJyH/sGsDKa93Qmo9Mj+ulSBObt/m22NqJ+/qEBea7rYbkzfKmQI26XEwq5xbws
+         3MUJ96TzW3tLj03mQHV2vmqkXywLQJc4V2SDSIulN6KVtp7PMVBcwFRpQOBIfemLcJ
+         JvBigAS/+bNUSNUQcYWi7FWPYHSr2vMLRa/O1gY6O2xTaXyUpchi2gexGahfODJTRW
+         c7fcCY5IrLRRZPm++iZgAxex+Ml9tftOG+MyHOvGy4TBlxjf3SFYgNrM30WVzCGzgf
+         vM+USRJaGJjaA==
+Date:   Wed, 30 Mar 2022 11:56:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Wei Xiao <xiaowei66@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sysctl tree
+Message-ID: <20220330115617.4d694d11@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/utDjZbC=jwOONQinnZoZiXR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Georgi,
+--Sig_/utDjZbC=jwOONQinnZoZiXR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FYI, the error/warning still remains.
+Hi all,
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-head:   b60d55f33484d855a546f7cfc59a28a5771e8bee
-commit: b79d1815c400c3929bb78a209b6e51a38d6ffcb2 [5839/5872] ANDROID: psi: Add vendor hooks for PSI tracing
-config: i386-randconfig-s001-20220328 (https://download.01.org/0day-ci/archive/20220330/202203300858.6jwQlHhH-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/b79d1815c400c3929bb78a209b6e51a38d6ffcb2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-        git checkout b79d1815c400c3929bb78a209b6e51a38d6ffcb2
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+After merging the sysctl tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+kernel/sysctl.c:1776:36: error: 'C_A_D' undeclared here (not in a function)
+ 1776 |                 .data           =3D &C_A_D,
+      |                                    ^~~~~
 
-All errors (new ones prefixed by >>):
+Caused by commit
 
-   kernel/sched/psi.c: In function 'update_triggers':
->> kernel/sched/psi.c:538:3: error: implicit declaration of function 'trace_android_vh_psi_event' [-Werror=implicit-function-declaration]
-     538 |   trace_android_vh_psi_event(t);
-         |   ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/sched/psi.c:546:2: error: implicit declaration of function 'trace_android_vh_psi_group' [-Werror=implicit-function-declaration]
-     546 |  trace_android_vh_psi_group(group);
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+  84053cc7ef2f ("ftrace: move sysctl_ftrace_enabled to ftrace.c")
 
+I can't imagine how that happened (though I do note that the whole branch
+has been rebased and not tested :-( ).
 
-vim +/trace_android_vh_psi_event +538 kernel/sched/psi.c
+I have used the sysctl tree from next-20220329 for today.
 
-   503	
-   504	static u64 update_triggers(struct psi_group *group, u64 now)
-   505	{
-   506		struct psi_trigger *t;
-   507		bool new_stall = false;
-   508		u64 *total = group->total[PSI_POLL];
-   509	
-   510		/*
-   511		 * On subsequent updates, calculate growth deltas and let
-   512		 * watchers know when their specified thresholds are exceeded.
-   513		 */
-   514		list_for_each_entry(t, &group->triggers, node) {
-   515			u64 growth;
-   516	
-   517			/* Check for stall activity */
-   518			if (group->polling_total[t->state] == total[t->state])
-   519				continue;
-   520	
-   521			/*
-   522			 * Multiple triggers might be looking at the same state,
-   523			 * remember to update group->polling_total[] once we've
-   524			 * been through all of them. Also remember to extend the
-   525			 * polling time if we see new stall activity.
-   526			 */
-   527			new_stall = true;
-   528	
-   529			/* Calculate growth since last update */
-   530			growth = window_update(&t->win, now, total[t->state]);
-   531			if (growth < t->threshold)
-   532				continue;
-   533	
-   534			/* Limit event signaling to once per window */
-   535			if (now < t->last_event_time + t->win.size)
-   536				continue;
-   537	
- > 538			trace_android_vh_psi_event(t);
-   539	
-   540			/* Generate an event */
-   541			if (cmpxchg(&t->event, 0, 1) == 0)
-   542				wake_up_interruptible(&t->event_wait);
-   543			t->last_event_time = now;
-   544		}
-   545	
- > 546		trace_android_vh_psi_group(group);
-   547	
-   548		if (new_stall)
-   549			memcpy(group->polling_total, total,
-   550					sizeof(group->polling_total));
-   551	
-   552		return now + group->poll_min_period;
-   553	}
-   554	
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--Sig_/utDjZbC=jwOONQinnZoZiXR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJDqrEACgkQAVBC80lX
+0Gw70gf+N0DGEz2TeLx060lK9dFhP15qdUGpnTc5wCbJX9QRNYK93zx+Ehxcn0KM
+RZAvbq3RsSv38WHbjKhkNi4zZaS9L92RVJsz61CXKOJ7n/qTgZRjfaqFY4srsPGb
+paZdgf/u6ijZPBcVBQ9S04EPFVyfgOwP2BQk0udpPSEgW9/Fc4rpYyEbdBQmnGPh
+zz/s2t28HVla3NjnlIkcxHp1KCSGdKRTY+kl1h/BGYCmGAopIFWebY6N9U0/dTOg
+0vDz418Lm2muskzzxPUBTX4G5rWqWAgJRTRaen1WvvvDUrW+6zJ5q907CurSYQWl
+gLveRZeaFsgb9X0pP6BI/3poZDCb4A==
+=fTKK
+-----END PGP SIGNATURE-----
+
+--Sig_/utDjZbC=jwOONQinnZoZiXR--

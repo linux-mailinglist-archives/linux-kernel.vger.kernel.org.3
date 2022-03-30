@@ -2,80 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F514EC8E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7511D4EC8E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348453AbiC3P4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S1348480AbiC3P5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348446AbiC3Pz6 (ORCPT
+        with ESMTP id S1348471AbiC3P5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:55:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD311DB4;
-        Wed, 30 Mar 2022 08:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zgJahthblrjKbqaY7f2PuA88vk8rig69ldhivBAreas=; b=4GNWGeDvRNOgUTWNDjnzWyeY/C
-        YwODcIN5h+qUhp1m4jVbN8ySsDErdMwols/Kz38AjysIcoNHH+/UCxxURTetyyS3dI8dv2Q2XMugV
-        ylkqjMnWWFUK4H9FGxm4v3Ov4ff9qL6E+adAPbh1Pp+vtAsq30tRUizl0xvcqjzs66+fiEh65mqSS
-        1YFP8u/dF/MYgtTi3H865KS5PxSAhh4860vBW3u9vGXLB3Bj9m/wh52kbzEeUdDFCKIsvMB1JeyhI
-        g05xaMJ1h8ZQwFoEFMsMp1JMp5pcETAY/14w3iokNjK9Fx/muRe6T93w8zcxB/LAKvOkwfyqjLR5a
-        6rwBWldQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nZae9-00GgSX-PK; Wed, 30 Mar 2022 15:54:09 +0000
-Date:   Wed, 30 Mar 2022 08:54:09 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Christoph Hellwig <hch@infradead.org>, CGEL <cgel.zte@gmail.com>,
-        axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
- for file pages
-Message-ID: <YkR9IW1scr2EDBpa@infradead.org>
-References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
- <YjiMsGoXoDU+FwsS@cmpxchg.org>
- <623938d1.1c69fb81.52716.030f@mx.google.com>
- <YjnO3p6vvAjeMCFC@cmpxchg.org>
- <20220323061058.GA2343452@cgel.zte@gmail.com>
- <62441603.1c69fb81.4b06b.5a29@mx.google.com>
- <YkRUfuT3jGcqSw1Q@cmpxchg.org>
- <YkRVSIG6QKfDK/ES@infradead.org>
- <YkR7NPFIQ9h2AK9h@cmpxchg.org>
+        Wed, 30 Mar 2022 11:57:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3341E032
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:55:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648655728; x=1680191728;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=imgBikfhZr82zU3PBkryKfey7V06+8mpRuA1SfZVnbs=;
+  b=KoNoPzdZP8OeR08rNH4Q95uSgvH3Xaa4xjLp3qVhFXQqV3Xm0p/07/0j
+   EnO0hbhx5wlGqiwOdSrwZaq+pn0iVil0+X3KQ+YaXT8/I6IOiG4ISc+FA
+   wElR5I6gDCaAELFsSXfm1Y6fVNUeAoATjNfrmOtQkGDvPd9IHjjq4GhKL
+   b0apBGJ/+WhFznAyQlfok5ixqAWc3fA63QoLA9vrvpU4mkoIKojbbE2rG
+   jMi8hmtGQG8YtC94SXhADRD+ff+1vTPTg4la+VRDQV7xrwkTaHfx8cUSh
+   MW2JWQ7gq/6ygpbg//l29TuCD2u8e1Dgg06YE/lkjhsfq3t6mWaLkOGRn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247077479"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="247077479"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 08:55:28 -0700
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="565603486"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 08:55:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nZaeq-009UHk-By;
+        Wed, 30 Mar 2022 18:54:52 +0300
+Date:   Wed, 30 Mar 2022 18:54:52 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: undef REG_IN/REG_OUT to avoid define collisions
+Message-ID: <YkR9TD4+9LzH1N6b@smile.fi.intel.com>
+References: <20220330152808.1461758-1-narmstrong@baylibre.com>
+ <c54c8c77-d35f-49b0-ff2f-21eb597f41f0@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YkR7NPFIQ9h2AK9h@cmpxchg.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c54c8c77-d35f-49b0-ff2f-21eb597f41f0@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:45:56AM -0400, Johannes Weiner wrote:
-> > FYI, I started redoing that version and I think with all the cleanups
-> > to filemap.c and the readahead code this can be done fairly nicely now:
+On Wed, Mar 30, 2022 at 08:33:26AM -0700, Dave Hansen wrote:
+> On 3/30/22 08:28, Neil Armstrong wrote:
+> > These defines are only used in the inline functions declared
+> > in the arch_hweight.h file, and collides with internal defines
+> > of the Amlogic Mes pinctrl driver when COMPILE_TEST is enabled:
 > > 
-> > http://git.infradead.org/users/hch/block.git/commitdiff/666abb29c6db870d3941acc5ac19e83fbc72cfd4
-> 
-> Yes, it's definitely much nicer now with the MM instantiating the
-> pages for ->readpage(s).
-> 
-> But AFAICS this breaks compressed btrfs (and erofs?) because those
-> still do additional add_to_page_cache_lru() and bio submissions.
+> > arch/x86/include/asm/arch_hweight.h:9:17: error: expected identifier before string constant
+> > 9 | #define REG_OUT "a"
+> >   |                 ^~~
+> > drivers/pinctrl/meson/pinctrl-meson.h:69:9: note: in expansion of macro ‘REG_OUT’
+> > 69 |         REG_OUT,
 
-In btrfs, add_ra_bio_pages only passed freshly allocated pages to
-add_to_page_cache_lru.  These can't really have PageWorkingSet set,
-can they?  In erofs they can also come from a local page pool, but
-I think otherwise the same applies.
+Thanks for the patch!
+
+> > Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> > ---
+> >  arch/x86/include/asm/arch_hweight.h | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/arch/x86/include/asm/arch_hweight.h b/arch/x86/include/asm/arch_hweight.h
+> > index ba88edd0d58b..139a4b0a2a14 100644
+> > --- a/arch/x86/include/asm/arch_hweight.h
+> > +++ b/arch/x86/include/asm/arch_hweight.h
+> > @@ -52,4 +52,7 @@ static __always_inline unsigned long __arch_hweight64(__u64 w)
+> >  }
+> >  #endif /* CONFIG_X86_32 */
+> >  
+> > +#undef REG_IN
+> > +#undef REG_OUT
+> 
+> Wouldn't it be a bit less hackish to give these a more qualified name
+> like HWEIGHT_REG_IN?
+
+Either way, would it be good to undef them here anyway?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

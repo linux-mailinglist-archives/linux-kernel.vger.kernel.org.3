@@ -2,218 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3B24EBD47
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF3E4EBD4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244613AbiC3JLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S244616AbiC3JLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244608AbiC3JLU (ORCPT
+        with ESMTP id S243778AbiC3JLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:11:20 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94A51D8331
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:09:34 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id c10so21751027ejs.13
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:09:34 -0700 (PDT)
+        Wed, 30 Mar 2022 05:11:44 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CDF1D914D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:09:59 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id cm17so44558pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2B7F41ws4olLWAaIXnAdGV8fIlHulrUokTuiMGzfmnw=;
-        b=FzR/KbCmNwWMlmFy0d61cIFF+xES/VqpAoijU7PVL0MLqCr1pxhjRNBHkzDXqLFPmg
-         +1QNSshW5SfY2XhlByHFG0ssVgSe6NrL6oTVRg+bPuyio9MRaa2zvcRXmWWJCP0O/UUQ
-         tdsEbVr2VVNavvm+lFcBGmAP5N0ZJo6v35B/Rb9rjHvZ428TE55cxXdysaG6B9t3dzqc
-         RlBCsc3o/ermfPND5HrwBtKVCX6eu7/nWynDLaMAaLmTT3JboNjgENtMxlsPYNxIcfpz
-         jO3q5VKHK+dFj/7MJnys7XgwnxgGU/qaBGjjP2L9FVWFPHIGCLqrVttfx+AbckPIbeKX
-         u/jQ==
+        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X//uwV8uPz2XnrC/CM7T1N2y6zAgnXQo1iH9qrSe+Pk=;
+        b=MqzoU8gKEB3BfGWgORll3R+xR8GKm5c7+dMnyWMQYjnvct6o+0o0Lgz7F0LnuoJkyg
+         mwHayXbIdiZY2e9hKx6FR09jI/+eL5ojr6nBXoFzNruYTMESFHzVhYzNJPOGPjL4Ox5K
+         IUColEi36xJk44tTR025AawfntB/wvfqi04Xakwz9eUPb0OopCDjb6mJfh7CoO8jrrB5
+         TL28b5qGKREIfX0yyrydBbBiIwb4HGa216xV2Um0e5TNJFw1Gy4hFmEiBRbvFoPRNF2p
+         qW4C34dCX3xQ5xILJzrbIthNOsBN/gNKybCIaHf1rQ/Qiq3UIHomd804DwevNyH7CY50
+         WdFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2B7F41ws4olLWAaIXnAdGV8fIlHulrUokTuiMGzfmnw=;
-        b=qp3t5E/eKMr/zYoDjn4fWyZas90SA2mNElWapnjEzOJ9isSih/AHhgsxjP1CdlejgP
-         SNF8tIbDN3Kzs5NQA1BfaCc/5yB7X2iA21Rk6uOiyzx7ASEAeYGzcCitgK6YkHc4Z+q5
-         99b/IvpV+4nV0+ieKN3xYn0SAf5z0gSq0ACttVwCZR95koyz5MfTuysvOSZMc9tNgW9+
-         fPJIZa9vX9H8Hg3mPvd2tJ9lpUpBJNX5YV5QeGz8RmFnMWvUGcnMIu5YqVqJTYXX0MqE
-         EY/665uBJSLNClf2VEdXhKhtSB4ThAfEdhHb5kkVYXiHbjrqLeAY28hW1Xx7npvggSUk
-         exWQ==
-X-Gm-Message-State: AOAM5336PSHt4XV36Ii+MtT9vk962CFhjUaPyoSjDpZ5463lUTczoRK5
-        kvo+DzbFDH6M8GwI3BPDgPJu8IHDkeXKA71dWs8=
-X-Google-Smtp-Source: ABdhPJzOqkMoif51zT1EA5s03BklIZ8II21tK0zwJ6ibs0HOvImhSlTORDyrO6i0FZkvJUebj2vqYqjnZf2rBRTbh50=
-X-Received: by 2002:a17:907:94d5:b0:6e0:2924:bd54 with SMTP id
- dn21-20020a17090794d500b006e02924bd54mr37982877ejc.170.1648631373078; Wed, 30
- Mar 2022 02:09:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X//uwV8uPz2XnrC/CM7T1N2y6zAgnXQo1iH9qrSe+Pk=;
+        b=VVdqSgOXjcmFEhzbwS/iME+oPwORkggtdWBHeRXioqDlMWzdOtJBaG7UamX6lzKWkT
+         xRLlTV6nZyjZ0EG0dugpVkuHsVA4eOzidFE+SGlxGJxgJr+nUv153+UymDlrMDnTutHm
+         Ectq0brzZ6z/uiCyJFKMKpb6wzlM7qHYmgDA2ZR78A21aMFGxrfyU3unI19xcX8eaqN9
+         xd3mFrmDHr0AevSyg7wbnQNIxr9tVWbYKAcs97yypjeulDMjmmmcX2P+Z04RHNZtS3cD
+         N2RKiRPZxHzU67ee5t5hcdOfGAMRJrFaXzl0mR1d+oHcgdSfJJBfgCnmsEtp+mMxCyfs
+         zEVg==
+X-Gm-Message-State: AOAM5313XtJAhB5gRuplSDaSHYXchRNjOKcdc0OR3r/5mfr302VWpNd4
+        jKXg1OpGzxuEe8ytUZoDB4QC7g==
+X-Google-Smtp-Source: ABdhPJw1bXHKrcS4u2eTGB013KNNZp9qsCL3YWdB0Cad42B35Sc6wkHyQqmK/+5Vdt1uIqp9NxYShQ==
+X-Received: by 2002:a17:903:110f:b0:154:c7a4:9371 with SMTP id n15-20020a170903110f00b00154c7a49371mr32264199plh.75.1648631398515;
+        Wed, 30 Mar 2022 02:09:58 -0700 (PDT)
+Received: from localhost.localdomain (2001-b400-e484-8494-10d3-c3e6-ad02-32e8.emome-ip6.hinet.net. [2001:b400:e484:8494:10d3:c3e6:ad02:32e8])
+        by smtp.gmail.com with ESMTPSA id f30-20020a63755e000000b00381f6b7ef30sm18473385pgn.54.2022.03.30.02.09.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 02:09:58 -0700 (PDT)
+From:   Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>
+To:     agross@kernel.org
+Cc:     Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
+Date:   Wed, 30 Mar 2022 17:09:46 +0800
+Message-Id: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220329045535.45641-1-songmuchun@bytedance.com>
- <CAGsJ_4w0N9GiKfZe6t+XxVUHvBOoF2Fk8tfuy5gD6Lg2s_q5iw@mail.gmail.com> <CAMZfGtVOXx+tuGCtHzjnT+EXkswy1hzqwxe=W+pxZaHC5CrbmQ@mail.gmail.com>
-In-Reply-To: <CAMZfGtVOXx+tuGCtHzjnT+EXkswy1hzqwxe=W+pxZaHC5CrbmQ@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Wed, 30 Mar 2022 22:09:21 +1300
-Message-ID: <CAGsJ_4zBJDCPEFA9TOSFBfOFYmohiJo5cJZ3=9e+5OZjnZ0eWg@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND] arm64: mm: hugetlb: add support for free
- vmemmap pages of HugeTLB
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Bodeddula, Balasubramaniam" <bodeddub@amazon.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 7:53 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Tue, Mar 29, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
-> >
-> > On Tue, Mar 29, 2022 at 5:57 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> > >
-> > > The feature of minimizing overhead of struct page associated with each
-> > > HugeTLB page aims to free its vmemmap pages (used as struct page) to
-> > > save memory, where is ~14GB/16GB per 1TB HugeTLB pages (2MB/1GB type).
-> > > In short, when a HugeTLB page is allocated or freed, the vmemmap array
-> > > representing the range associated with the page will need to be remapped.
-> > > When a page is allocated, vmemmap pages are freed after remapping.
-> > > When a page is freed, previously discarded vmemmap pages must be
-> > > allocated before remapping.  More implementations and details can be
-> > > found here [1].
-> > >
-> > > The preparation of freeing vmemmap pages associated with each HugeTLB
-> > > page is ready, so we can support this feature for arm64 now.  The
-> > > flush_dcache_page() need to be adapted to operate on the head page's
-> > > flags since the tail vmemmap pages are mapped with read-only after
-> > > the feature is enabled (clear operation is not permitted).
-> > >
-> > > There was some discussions about this in the thread [2], but there was
-> > > no conclusion in the end.  And I copied the concern proposed by Anshuman
-> > > to here.
-> > >
-> > > 1st concern:
-> > > '''
-> > > But what happens when a hot remove section's vmemmap area (which is
-> > > being teared down) is nearby another vmemmap area which is either created
-> > > or being destroyed for HugeTLB alloc/free purpose. As you mentioned
-> > > HugeTLB pages inside the hot remove section might be safe. But what about
-> > > other HugeTLB areas whose vmemmap area shares page table entries with
-> > > vmemmap entries for a section being hot removed ? Massive HugeTLB alloc
-> > > /use/free test cycle using memory just adjacent to a memory hotplug area,
-> > > which is always added and removed periodically, should be able to expose
-> > > this problem.
-> > > '''
-> > >
-> > > Answer: At the time memory is removed, all HugeTLB pages either have been
-> > > migrated away or dissolved.  So there is no race between memory hot remove
-> > > and free_huge_page_vmemmap().  Therefore, HugeTLB pages inside the hot
-> > > remove section is safe.  Let's talk your question "what about other
-> > > HugeTLB areas whose vmemmap area shares page table entries with vmemmap
-> > > entries for a section being hot removed ?", the question is not
-> > > established.  The minimal granularity size of hotplug memory 128MB (on
-> > > arm64, 4k base page), any HugeTLB smaller than 128MB is within a section,
-> > > then, there is no share PTE page tables between HugeTLB in this section
-> > > and ones in other sections and a HugeTLB page could not cross two
-> > > sections.  In this case, the section cannot be freed.  Any HugeTLB bigger
-> > > than 128MB (section size) whose vmemmap pages is an integer multiple of
-> > > 2MB (PMD-mapped).  As long as:
-> > >
-> > >   1) HugeTLBs are naturally aligned, power-of-two sizes
-> > >   2) The HugeTLB size >= the section size
-> > >   3) The HugeTLB size >= the vmemmap leaf mapping size
-> > >
-> > > Then a HugeTLB will not share any leaf page table entries with *anything
-> > > else*, but will share intermediate entries.  In this case, at the time memory
-> > > is removed, all HugeTLB pages either have been migrated away or dissolved.
-> > > So there is also no race between memory hot remove and
-> > > free_huge_page_vmemmap().
-> > >
-> > > 2nd concern:
-> > > '''
-> > > differently, not sure if ptdump would require any synchronization.
-> > >
-> > > Dumping an wrong value is probably okay but crashing because a page table
-> > > entry is being freed after ptdump acquired the pointer is bad. On arm64,
-> > > ptdump() is protected against hotremove via [get|put]_online_mems().
-> > > '''
-> > >
-> > > Answer: The ptdump should be fine since vmemmap_remap_free() only exchanges
-> > > PTEs or split the PMD entry (which means allocating a PTE page table).  Both
-> > > operations do not free any page tables (PTE), so ptdump cannot run into a
-> > > UAF on any page tables.  The wrost case is just dumping an wrong value.
-> > >
-> > > [1] https://lore.kernel.org/all/20210510030027.56044-1-songmuchun@bytedance.com/
-> > > [2] https://lore.kernel.org/all/20210518091826.36937-1-songmuchun@bytedance.com/
-> > >
-> > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > > ---
-> > > Changes in v2:
-> > >  - Update commit message (Mark Rutland).
-> > >  - Fix flush_dcache_page().
-> > >
-> > >  arch/arm64/mm/flush.c | 14 ++++++++++++++
-> > >  fs/Kconfig            |  2 +-
-> > >  2 files changed, 15 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
-> > > index a06c6ac770d4..705484a9b9df 100644
-> > > --- a/arch/arm64/mm/flush.c
-> > > +++ b/arch/arm64/mm/flush.c
-> > > @@ -75,6 +75,20 @@ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
-> > >   */
-> > >  void flush_dcache_page(struct page *page)
-> > >  {
-> > > +#ifdef CONFIG_HUGETLB_PAGE_FREE_VMEMMAP
-> > > +       /*
-> > > +        * Only the head page's flags of HugeTLB can be cleared since the tail
-> > > +        * vmemmap pages associated with each HugeTLB page are mapped with
-> > > +        * read-only when CONFIG_HUGETLB_PAGE_FREE_VMEMMAP is enabled (more
-> > > +        * details can refer to vmemmap_remap_pte()).  Although
-> > > +        * __sync_icache_dcache() only set PG_dcache_clean flag on the head
-> > > +        * page struct, some tail page structs still can see the flag since
-> > > +        * the head vmemmap page frame is reused (more details can refer to
-> > > +        * the comments above page_fixed_fake_head()).
-> >
-> > Is this still true if hugetlb_free_vmemmap_enabled() is false?
->
-> No.  Do you think it is better to add hugetlb_free_vmemmap_enabled()
-> into the if block? Something like the following?
+Initial attempt at Gelarshie device tree.
 
-yep, with if (hugetlb_free_vmemmap_enabled() && PageHuge(page)), i guess
-we won't need the "ifdef" any more?
+BUG=b:225756600
+TEST=emerge-strongbad chromeos-kernel-5_4
 
->
-> +       if (hugetlb_free_vmemmap_enabled() && PageHuge(page))
-> +               page = compound_head(page);
->
-> >
-> > btw, the subject is a bit confusing as it seems it is not bringing up
-> > HUGETLB_PAGE_FREE_VMEMMAP and it seems the feature
-> > has been already there, but we are lacking some fixes for some
-> > functions to make it work.
->
-> Right.
->
-> > could we explain this clear in commit
-> > log? maybe we need a better subject for the commit as well.
->
-> Will do.
+Signed-off-by: Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>
+---
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../dts/qcom/sc7180-trogdor-gelarshie-r0.dts  |  15 +
+ .../dts/qcom/sc7180-trogdor-gelarshie.dtsi    | 304 ++++++++++++++++++
+ 3 files changed, 320 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
 
-Thanks
-Barry
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index f9e6343acd03..cf8f88b065c3 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -57,6 +57,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3-lte.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-gelarshie-r0.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r4.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
+new file mode 100644
+index 000000000000..027d6d563a5f
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie-r0.dts
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Gelarshie board device tree source
++ *
++ * Copyright 2022 Google LLC.
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-gelarshie.dtsi"
++
++/ {
++	model = "Google Gelarshie (rev0+)";
++	compatible = "google,gelarshie", "qcom,sc7180";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
+new file mode 100644
+index 000000000000..842f6cac6c27
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-gelarshie.dtsi
+@@ -0,0 +1,304 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Gelarshie board device tree source
++ *
++ * Copyright 2022 Google LLC.
++ */
++
++#include "sc7180.dtsi"
++#include "sc7180-trogdor-mipi-camera.dtsi"
++
++ap_ec_spi: &spi6 {};
++ap_h1_spi: &spi0 {};
++
++#include "sc7180-trogdor.dtsi"
++#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
++
++/* Deleted nodes from trogdor.dtsi */
++
++/delete-node/ &alc5682;
++/delete-node/ &pp3300_codec;
++
++/ {
++	/* BOARD-SPECIFIC TOP LEVEL NODES */
++
++	adau7002: audio-codec-1 {
++		compatible = "adi,adau7002";
++		IOVDD-supply = <&pp1800_l15a>;
++		wakeup-delay-ms = <80>;
++		#sound-dai-cells = <0>;
++	};
++};
++
++&backlight {
++	pwms = <&cros_ec_pwm 0>;
++};
++
++&camcc {
++	status = "okay";
++};
++
++&cros_ec {
++	cros_ec_proximity: proximity {
++		compatible = "google,cros-ec-mkbp-proximity";
++		label = "proximity-wifi";
++	};
++};
++
++ap_ts_pen_1v8: &i2c4 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	ap_ts: touchscreen@5d {
++		compatible = "goodix,gt7375p";
++		reg = <0x5d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++
++		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
++
++		vdd-supply = <&pp3300_ts>;
++	};
++};
++
++&i2c7 {
++	status = "disabled";
++};
++
++&i2c9 {
++	status = "disabled";
++};
++
++&mdp {
++	chromium-enable-overlays;
++};
++
++&panel {
++	compatible = "edp-panel";
++};
++
++&pm6150_adc {
++	skin-temp-thermistor@4e {
++		reg = <ADC5_AMUX_THM2_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time = <200>;
++	};
++};
++
++&pm6150_adc_tm {
++	status = "okay";
++
++	skin-temp-thermistor@1 {
++		reg = <1>;
++		io-channels = <&pm6150_adc ADC5_AMUX_THM2_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++};
++
++&pp1800_uf_cam {
++	status = "okay";
++};
++
++&pp1800_wf_cam {
++	status = "okay";
++};
++
++&pp2800_uf_cam {
++	status = "okay";
++};
++
++&pp2800_wf_cam {
++	status = "okay";
++};
++
++&pp3300_dx_edp {
++	gpio = <&tlmm 67 GPIO_ACTIVE_HIGH>;
++};
++
++&sdhc_2 {
++	status = "okay";
++};
++
++&sn65dsi86_out {
++	data-lanes = <0 1 2 3>;
++};
++
++&sound {
++	compatible = "google,sc7180-coachz";
++	model = "sc7180-adau7002-max98357a";
++	audio-routing = "PDM_DAT", "DMIC";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&dmic_clk_en>;
++};
++
++&sound_multimedia0_codec {
++	sound-dai = <&adau7002>;
++};
++
++/* PINCTRL - modifications to sc7180-trogdor.dtsi */
++
++&en_pp3300_dx_edp {
++	pinmux  {
++		pins = "gpio67";
++	};
++
++	pinconf {
++		pins = "gpio67";
++	};
++};
++
++&ts_reset_l {
++	pinconf {
++		/*
++		 * We want reset state by default and it will be up to the
++		 * driver to disable this when it's ready.
++		 */
++		output-low;
++	};
++};
++
++/* PINCTRL - board-specific pinctrl */
++
++&tlmm {
++	gpio-line-names = "HUB_RST_L",
++			  "AP_RAM_ID0",
++			  "AP_SKU_ID2",
++			  "AP_RAM_ID1",
++			  "WF_CAM_EN2",
++			  "AP_RAM_ID2",
++			  "UF_CAM_EN",
++			  "WF_CAM_EN",
++			  "TS_RESET_L",
++			  "TS_INT_L",
++			  "",
++			  "EDP_BRIJ_IRQ",
++			  "AP_EDP_BKLTEN",
++			  "UF_CAM_MCLK",
++			  "WF_CAM_MCLK",
++			  "EDP_BRIJ_I2C_SDA",
++			  "EDP_BRIJ_I2C_SCL",
++			  "UF_CAM_SDA",
++			  "UF_CAM_SCL",
++			  "WF_CAM_SDA",
++			  "WF_CAM_SCL",
++			  "",
++			  "",
++			  "AMP_EN",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "WF_CAM_RST_L",
++			  "UF_CAM_RST_L",
++			  "AP_BRD_ID2",
++			  "BRIJ_SUSPEND",
++			  "AP_BRD_ID0",
++			  "AP_H1_SPI_MISO",
++			  "AP_H1_SPI_MOSI",
++			  "AP_H1_SPI_CLK",
++			  "AP_H1_SPI_CS_L",
++			  "BT_UART_CTS",
++			  "BT_UART_RTS",
++			  "BT_UART_TXD",
++			  "BT_UART_RXD",
++			  "H1_AP_INT_ODL",
++			  "",
++			  "UART_AP_TX_DBG_RX",
++			  "UART_DBG_TX_AP_RX",
++			  "",
++			  "",
++			  "FORCED_USB_BOOT",
++			  "AMP_BCLK",
++			  "AMP_LRCLK",
++			  "AMP_DIN",
++			  "",
++			  "HP_BCLK",
++			  "HP_LRCLK",
++			  "HP_DOUT",
++			  "",
++			  "",
++			  "AP_SKU_ID0",
++			  "AP_EC_SPI_MISO",
++			  "AP_EC_SPI_MOSI",
++			  "AP_EC_SPI_CLK",
++			  "AP_EC_SPI_CS_L",
++			  "AP_SPI_CLK",
++			  "AP_SPI_MOSI",
++			  "AP_SPI_MISO",
++			  /*
++			   * AP_FLASH_WP_L is crossystem ABI. Schematics
++			   * call it BIOS_FLASH_WP_L.
++			   */
++			  "AP_FLASH_WP_L",
++			  "EN_PP3300_DX_EDP",
++			  "AP_SPI_CS0_L",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "WLAN_SW_CTRL",
++			  "BOOT_CONFIG_0",
++			  "REPORT_SWITCH",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "DMIC_CLK_EN",
++			  "HUB_EN",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "AP_SKU_ID1",
++			  "AP_RST_REQ",
++			  "",
++			  "AP_BRD_ID1",
++			  "AP_EC_INT_L",
++			  "BOOT_CONFIG_1",
++			  "",
++			  "",
++			  "BOOT_CONFIG_4",
++			  "BOOT_CONFIG_2",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "EDP_BRIJ_EN",
++			  "",
++			  "",
++			  "BOOT_CONFIG_3",
++			  "WCI2_LTE_COEX_TXD",
++			  "WCI2_LTE_COEX_RXD",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "FORCED_USB_BOOT_POL",
++			  "AP_TS_PEN_I2C_SDA",
++			  "AP_TS_PEN_I2C_SCL",
++			  "DP_HOT_PLUG_DET",
++			  "EC_IN_RW_ODL";
++
++	dmic_clk_en: dmic_clk_en {
++		pinmux {
++			pins = "gpio83";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio83";
++			drive-strength = <8>;
++			bias-pull-up;
++		};
++	};
++};
+-- 
+2.31.0
+

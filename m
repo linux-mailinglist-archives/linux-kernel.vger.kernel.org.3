@@ -2,158 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36374EBAA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA95D4EBAA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243211AbiC3GOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S243218AbiC3GQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241944AbiC3GOP (ORCPT
+        with ESMTP id S241944AbiC3GQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:14:15 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E42344C7;
-        Tue, 29 Mar 2022 23:12:30 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U4uadu035415;
-        Wed, 30 Mar 2022 06:12:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2p+VfMA5uwCNYrlHBOCjlIzvMpTMcxZ4c82raGuzbWE=;
- b=COYcBlOBPQtNJt9mJEpxPIghjADJKZ7w4oYjykadGnc86iKz2McfzFzmrWy9brCAbJkb
- 0VJjhwEBRF4QYni4Z2TM7KTF/BVxCOf6MNRhkXfIRdfOaN2AicyIFzkYvEvBl1glOirs
- FTJvLf7aVnfv2AnaDi+PNtOHBNstDA+nk8bg2qLb+WQS1A45RM3UkmeND4VYYlOl13rr
- GTtensacYaGi5N16kMe6Rv+TQyvhRilcVuCqZmE0zlQqOCRckMGnJsrfzJaey4CBJgcR
- cLJrLdsJpg26PptyUNuoyNOgyMQsmx8/UrbBzWim+AMKvoqKt5bulqHDImE66X5oS3TL Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40c8x594-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 06:12:02 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22U65l7I007664;
-        Wed, 30 Mar 2022 06:12:01 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40c8x58v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 06:12:01 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22U69LdH032360;
-        Wed, 30 Mar 2022 06:12:00 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma05wdc.us.ibm.com with ESMTP id 3f1tfa31mh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 06:12:00 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22U6Bxf022741458
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 06:11:59 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5220112062;
-        Wed, 30 Mar 2022 06:11:59 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 703DE112067;
-        Wed, 30 Mar 2022 06:11:55 +0000 (GMT)
-Received: from [9.160.79.229] (unknown [9.160.79.229])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 30 Mar 2022 06:11:55 +0000 (GMT)
-Message-ID: <247080bd-fef5-c892-7753-f9b7cf650166@linux.ibm.com>
-Date:   Wed, 30 Mar 2022 09:11:54 +0300
+        Wed, 30 Mar 2022 02:16:13 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD4A42A09
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:14:27 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 1779F3F622;
+        Wed, 30 Mar 2022 06:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1648620865;
+        bh=NUWrxgCHzurIsqxuvbtWFPBwSW5wtoM8Kr1QQ/VeCxE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Y+HnX3fTIop0uCPSVesQeDxtk/RzuUTlrW74fYMDYPs55uEly6ZxXzfnhplRGO6Hl
+         x432Vp3mg/uZna4woUy74o5PLqJKUhqCGvRpaZswhds2OH1WJR4fSRRjg0pcT/4T1R
+         AjpQQhTz1rcSoOodC1YSIoF3PYCbKIOoHuJFpgncKBAnryGaRyLYSGvnqVepmf3AUz
+         yxSKKTutecfTm3Xy5cw4qnSlvwTAodqZQKidxNCO578twleVqLmYBRdA9TUx82Bf7w
+         YhSmhHPBhM4PQk9RQyyAgSNF/1HD92JxI/cBNP6ZF3H0oqLuRMTWGGCIsnhEIikFLF
+         /yGSQnuPaSC5g==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     tiwai@suse.com
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ALSA: hda/realtek: Fix audio regression on Mi Notebook Pro 2020
+Date:   Wed, 30 Mar 2022 14:13:33 +0800
+Message-Id: <20220330061335.1015533-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v8 0/4] Allow guest access to EFI confidential computing
- secret area
-Content-Language: en-US
-To:     Borislav Petkov <bp@suse.de>
-Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
-References: <20220228114254.1099945-1-dovmurik@linux.ibm.com>
- <YjydSNnG6EJ1KWx0@zn.tnic>
- <f2fb7553-0313-6393-c93c-2bb6619086dc@linux.ibm.com>
- <YkNQNzNa02Sndu+q@zn.tnic>
- <7696ba46-91c7-7119-bd68-b3521459cf37@linux.ibm.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <7696ba46-91c7-7119-bd68-b3521459cf37@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hwm7FFhPyN3fkPL7ktrNEzWHOT8Cvb0b
-X-Proofpoint-GUID: YrtY1ADfDzcA_fuzCXaHOyAuxmCX6GwG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-30_02,2022-03-29_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxscore=0 spamscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0
- adultscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203300028
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 5aec98913095 ("ALSA: hda/realtek - ALC236 headset MIC recording
+issue") is to solve recording issue met on AL236, by matching codec
+variant ALC269_TYPE_ALC257 and ALC269_TYPE_ALC256.
 
+This match can be too broad and Mi Notebook Pro 2020 is broken by the
+patch.
 
-On 29/03/2022 23:28, Dov Murik wrote:
-> 
-> 
-> On 29/03/2022 21:30, Borislav Petkov wrote:
-> 
->>
->> So now that I think of it, it would be even nicer if the fact whether
->> guest debugging is allowed, were available to the guest *very early*
->> during boot. Because I think the most important cases where you'd want
->> to singlestep a SEV* guest with the qemu gdbstub is early guest kernel
->> boot code. So it would be cool if we'd have access to the debugging
->> setting that early.
->>
->> Lemme have a look at your patches in detail to get an idea what's
->> happening there.
-> 
+Instead, use codec ID to be narrow down the scope, in order to make
+ALC256 unaffected.
 
-After a night's sleep I figured out that an SEV guest cannot tell if a
-value it's reading was (a) encrypted by the host using
-KVM_SEV_LAUNCH_UPDATE_DATA, or (b) added using secret injection using
-KVM_SEV_LAUNCH_SECRET.
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215484
+Fixes: 5aec98913095 ("ALSA: hda/realtek - ALC236 headset MIC recording issue")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ Fix wrong comparison, || -> &&
 
-The only difference is that if the host is using
-KVM_SEV_LAUNCH_UPDATE_DATA, then it changes the measurement.  But maybe
-for debugging scenarios we (= Guest Owner) don't care about the
-measurement being correct.
+ sound/pci/hda/patch_realtek.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If that's the case, we don't need a secure channel and secret injection.
-You can use a simple "sev=debug" (or whatever) in the kernel
-command-line to indicate your needs.
-
-
-Did I miss something?
-
-
--Dov
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 4c33cb57963db..aace474a899de 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -3617,8 +3617,8 @@ static void alc256_shutup(struct hda_codec *codec)
+ 	/* If disable 3k pulldown control for alc257, the Mic detection will not work correctly
+ 	 * when booting with headset plugged. So skip setting it for the codec alc257
+ 	 */
+-	if (spec->codec_variant != ALC269_TYPE_ALC257 &&
+-	    spec->codec_variant != ALC269_TYPE_ALC256)
++	if (codec->core.vendor_id != 0x10ec0236 &&
++	    codec->core.vendor_id != 0x10ec0257)
+ 		alc_update_coef_idx(codec, 0x46, 0, 3 << 12);
+ 
+ 	if (!spec->no_shutup_pins)
+-- 
+2.34.1
 

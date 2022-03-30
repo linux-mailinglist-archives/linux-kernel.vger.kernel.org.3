@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AA84ECAEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E95E4ECAEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349420AbiC3RoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S1349434AbiC3RoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbiC3RoO (ORCPT
+        with ESMTP id S1343849AbiC3RoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Mar 2022 13:44:14 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34B4F4613
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:42:28 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id f10-20020a056e020c6a00b002c9ef5c9df4so882728ilj.22
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:42:28 -0700 (PDT)
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5DCF47D9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:42:29 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id f10-20020a056e020c6a00b002c9ef5c9df4so882731ilj.22
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:42:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=U40YE8MyDVJ6rCvboVaEPduii3oIujdQd6D7pF2XnG4=;
-        b=2WHvJZtndWWo5TZme00Jhi3XPU7dqCl6DkbwUikBr9Yebxnk3M/Gv80r9Skp7QqGAr
-         Gx7d4EOgs2+u5osVJPiuwkCMO+blE5FH9epkqysobnMiB/04/CsWjMQNK3FA877eWfvx
-         M6TrUwblZA0DAbdJF4gfWvzk78qTFmScHqQRabfvgWBYsUcHpEk0VxsYtuQyZz7ww3vj
-         nsY3chNyMKZHDS/eGmSp5jDhvMRhg+5/zq+WoHDWqlBfHEX+Fj/Fg37QTwqipFd46/wD
-         S1INnmwkkxSp+EtY3b5P1KUZmnu/dt9qTHIsVPoxh4fu1JGt++Q4R8hcrkw5VWVsHfa8
-         yHCg==
-X-Gm-Message-State: AOAM530lcyMH12R1pVIVAQcMAp68inC2NwcGojeZDoG4KrgWhag2dEzF
-        bSGb49jCpgwgxPBI+r4vmUrAIkROJyLrK4qBi3yvB/gL+0v7
-X-Google-Smtp-Source: ABdhPJz0aMYNE/tm9tWFc8+jYPzCR0q1siLpnbYfRae8zUyRaU42AyiRzuKiSJYAxCtwEG2IAQgJq+Q7TK5gcm8BGUcdR69RCB87
+        bh=v89tVw8ySyr98HqbPOA8KhBHppRaKTd45nWoytVaQ0U=;
+        b=mzm5T1PYPlZc1tz5c49rXxPE0mcEypVoVfZC5zPzvqX8Aq/Se7wAfjRAwryMMIQvzZ
+         mSInzwmTWQ+X/h0SIgBIAZkZSGk6Iz2OpyTq4sSbsoWJrReOF5cLePsP63jdUJy4OADc
+         mqnd6SVArDsP8qRmBFuScx9fWBbZghsPFCL++CGU7SbD+e5cCVe7RFDCBTjozUqGfW2l
+         BdH5adU8UAZBp/ls7wzOzCsIXrBb1HEl+G3Tru6UvgkiwRXwex/QMTJ8LQavq9rRd5Gz
+         anL40aGvmEOhZit/U0V4Iy/hc84W++L4mrduLvBx6KARmGE8DWpE30s3xxPZmO/8s5YN
+         G1ZA==
+X-Gm-Message-State: AOAM530yvrytkfaqDCqtGkPsJCrr0ctcKQfwzRrOEak8xdGeXWoVnWxn
+        CoX/QavNPKtEwNa2iGnL8L50wFTx2WLWsYHGdx13JgJDECH6
+X-Google-Smtp-Source: ABdhPJyiz50nZ2RWpGYPBTvfpWsTpAwBWqsfVFFK+b/4bOJNNcHpmERV4SikYJ2bYt+Yp6SYDg/ejepWPdxLAKCPQ7gkC/gl80c6
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:34a9:b0:323:600c:e42c with SMTP id
- t41-20020a05663834a900b00323600ce42cmr496343jal.75.1648662148315; Wed, 30 Mar
- 2022 10:42:28 -0700 (PDT)
+X-Received: by 2002:a05:6638:1453:b0:319:c928:5ccd with SMTP id
+ l19-20020a056638145300b00319c9285ccdmr543819jad.136.1648662148565; Wed, 30
+ Mar 2022 10:42:28 -0700 (PDT)
 Date:   Wed, 30 Mar 2022 10:42:28 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b4802405db731170@google.com>
-Subject: [syzbot] BUG: scheduling while atomic: syz-fuzzer/NUM/ADDR
-From:   syzbot <syzbot+4631483f85171c561f39@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Message-ID: <000000000000b850b905db73117a@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in
+ f2fs_update_meta_page (2)
+From:   syzbot <syzbot+9e29d4a176b24eaa4fc1@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -57,96 +59,82 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    f022814633e1 Merge tag 'trace-v5.18-1' of git://git.kernel..
+HEAD commit:    ae085d7f9365 mm: kfence: fix missing objcg housekeeping fo..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1511883d700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2f78c0e92b7fea54
-dashboard link: https://syzkaller.appspot.com/bug?extid=4631483f85171c561f39
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a11a77700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=91f0a0c422e301dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=9e29d4a176b24eaa4fc1
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4631483f85171c561f39@syzkaller.appspotmail.com
+Reported-by: syzbot+9e29d4a176b24eaa4fc1@syzkaller.appspotmail.com
 
-BUG: scheduling while atomic: syz-fuzzer/2188/0x00000101
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 1ef8e067 P4D 1ef8e067 PUD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3615 Comm: syz-executor.0 Tainted: G        W         5.17.0-syzkaller-11407-gae085d7f9365 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000400f818 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffffea0000c768c0 RCX: ffff88801a581d00
+RDX: 0000000000000000 RSI: ffffea0000c768c0 RDI: ffff88802c0203b8
+RBP: ffffc9000400faf0 R08: ffffffff81b497cb R09: fffff9400018ed19
+R10: fffff9400018ed19 R11: 0000000000000000 R12: ffff88807bb85b10
+R13: 0000000000000001 R14: ffff888040fea000 R15: ffff888058d74000
+FS:  000055555607f400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 00000000479d6000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ f2fs_update_meta_page+0x45/0x60 fs/f2fs/segment.c:2484
+ do_checkpoint fs/f2fs/checkpoint.c:1527 [inline]
+ f2fs_write_checkpoint+0x3136/0x5b80 fs/f2fs/checkpoint.c:1689
+ f2fs_issue_checkpoint+0x361/0x4e0
+ sync_filesystem+0x1bc/0x220 fs/sync.c:66
+ generic_shutdown_super+0x6b/0x300 fs/super.c:445
+ kill_block_super+0x79/0xd0 fs/super.c:1394
+ kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4546
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x462/0x510 fs/namespace.c:1186
+ task_work_run+0x146/0x1c0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:190 [inline]
+ exit_to_user_mode_prepare+0x1dd/0x200 kernel/entry/common.c:222
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:304 [inline]
+ syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:315
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f48a848a4b7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd9c82d6e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f48a848a4b7
+RDX: 00007ffd9c82d7bc RSI: 000000000000000a RDI: 00007ffd9c82d7b0
+RBP: 00007ffd9c82d7b0 R08: 00000000ffffffff R09: 00007ffd9c82d580
+R10: 00005555560808b3 R11: 0000000000000246 R12: 00007f48a84e21ea
+R13: 00007ffd9c82e870 R14: 0000555556080810 R15: 00007ffd9c82e8b0
+ </TASK>
 Modules linked in:
-CPU: 0 PID: 2188 Comm: syz-fuzzer Not tainted 5.17.0-syzkaller-11138-gf022814633e1 #0
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace.part.0+0xcc/0xe0 arch/arm64/kernel/stacktrace.c:184
- dump_backtrace arch/arm64/kernel/stacktrace.c:190 [inline]
- show_stack+0x18/0x6c arch/arm64/kernel/stacktrace.c:191
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x68/0x84 lib/dump_stack.c:106
- dump_stack+0x18/0x34 lib/dump_stack.c:113
- __schedule_bug+0x60/0x80 kernel/sched/core.c:5617
- schedule_debug kernel/sched/core.c:5644 [inline]
- __schedule+0x74c/0x7f0 kernel/sched/core.c:6273
- schedule+0x54/0xd0 kernel/sched/core.c:6454
- rwsem_down_write_slowpath+0x29c/0x5a0 kernel/locking/rwsem.c:1142
- __down_write_common kernel/locking/rwsem.c:1259 [inline]
- __down_write_common kernel/locking/rwsem.c:1256 [inline]
- __down_write kernel/locking/rwsem.c:1268 [inline]
- down_write+0x58/0x64 kernel/locking/rwsem.c:1515
- inode_lock include/linux/fs.h:777 [inline]
- simple_recursive_removal+0x124/0x270 fs/libfs.c:288
- debugfs_remove fs/debugfs/inode.c:732 [inline]
- debugfs_remove+0x5c/0x80 fs/debugfs/inode.c:726
- blk_release_queue+0x7c/0xf0 block/blk-sysfs.c:784
- kobject_cleanup lib/kobject.c:705 [inline]
- kobject_release lib/kobject.c:736 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x98/0x114 lib/kobject.c:753
- blk_put_queue+0x14/0x20 block/blk-core.c:270
- blkg_free.part.0+0x54/0x80 block/blk-cgroup.c:86
- blkg_free block/blk-cgroup.c:78 [inline]
- __blkg_release+0x44/0x70 block/blk-cgroup.c:102
- rcu_do_batch kernel/rcu/tree.c:2535 [inline]
- rcu_core+0x324/0x590 kernel/rcu/tree.c:2786
- rcu_core_si+0x10/0x20 kernel/rcu/tree.c:2803
- _stext+0x124/0x2a0
- do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
- invoke_softirq kernel/softirq.c:439 [inline]
- __irq_exit_rcu+0xe4/0x100 kernel/softirq.c:637
- irq_exit_rcu+0x10/0x1c kernel/softirq.c:649
- el0_interrupt+0x6c/0x104 arch/arm64/kernel/entry-common.c:693
- __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:700
- el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:705
- el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 13 at kernel/rcu/tree.c:2592 rcu_do_batch kernel/rcu/tree.c:2592 [inline]
-WARNING: CPU: 0 PID: 13 at kernel/rcu/tree.c:2592 rcu_core+0x4d4/0x590 kernel/rcu/tree.c:2786
-Modules linked in:
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Tainted: G        W         5.17.0-syzkaller-11138-gf022814633e1 #0
-Hardware name: linux,dummy-virt (DT)
-pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : rcu_do_batch kernel/rcu/tree.c:2592 [inline]
-pc : rcu_core+0x4d4/0x590 kernel/rcu/tree.c:2786
-lr : rcu_do_batch kernel/rcu/tree.c:2572 [inline]
-lr : rcu_core+0x38c/0x590 kernel/rcu/tree.c:2786
-sp : ffff80000a69bd00
-x29: ffff80000a69bd00 x28: ffff800008121498 x27: 0000000000000000
-x26: 000000000000000a x25: fffffffffffffffd x24: ffff80000a69bd60
-x23: ffff80000a36cc00 x22: ffff00007fbc39b8 x21: 0000000000000000
-x20: ffff00007fbc3940 x19: 0000000000000000 x18: 0000000000000014
-x17: ffff800075981000 x16: ffff800008004000 x15: 000002fbb92ae146
-x14: 00000000000000c7 x13: 00000000000000c7 x12: ffff800009e7d710
-x11: ffff80000a25fee8 x10: ffff800075981000 x9 : 5759a1e949bd4693
-x8 : ffff8000080102a0 x7 : ffff80000a69b9e4 x6 : 00000000002e47d8
-x5 : f1ff00002157a500 x4 : ffff00007fbc75a0 x3 : 00000000002e47e0
-x2 : 0000000000002710 x1 : ffffffffffffd8f0 x0 : 0000000000000001
-Call trace:
- rcu_do_batch kernel/rcu/tree.c:2592 [inline]
- rcu_core+0x4d4/0x590 kernel/rcu/tree.c:2786
- rcu_core_si+0x10/0x20 kernel/rcu/tree.c:2803
- _stext+0x124/0x2a0
- run_ksoftirqd+0x4c/0x60 kernel/softirq.c:921
- smpboot_thread_fn+0x23c/0x270 kernel/smpboot.c:164
- kthread+0x108/0x10c kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:867
+CR2: 0000000000000000
 ---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000400f818 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffffea0000c768c0 RCX: ffff88801a581d00
+RDX: 0000000000000000 RSI: ffffea0000c768c0 RDI: ffff88802c0203b8
+RBP: ffffc9000400faf0 R08: ffffffff81b497cb R09: fffff9400018ed19
+R10: fffff9400018ed19 R11: 0000000000000000 R12: ffff88807bb85b10
+R13: 0000000000000001 R14: ffff888040fea000 R15: ffff888058d74000
+FS:  000055555607f400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 00000000479d6000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---

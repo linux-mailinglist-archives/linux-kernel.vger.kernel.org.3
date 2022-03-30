@@ -2,164 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78B44ECC92
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1FE4ECC98
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350300AbiC3So2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S1350735AbiC3Sqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350471AbiC3SoR (ORCPT
+        with ESMTP id S1350712AbiC3Sq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:44:17 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405015D5C3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:41:01 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UI0JUA028229;
-        Wed, 30 Mar 2022 18:40:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=yYaqFrYKOsWX0AAm5jWdnXfpOzmVYQfexOdLzGH70SM=;
- b=JnndgLnUoVoqFUh3c+uTA+ZqCtaSypIDZk1GaVB+Lc24wq/Ohbt7ojtzG2IdlgfAaVmq
- b231O5PDrITVeBBsr+t17ja3mqv6vwkQEv4JwVJr6Jdn+9z7Lg9Imc3mWXRXI1esS3qB
- wKyH3kDP+Qe+tqI/rPtyxOzX+DRA8klUcERXqjQOXeAZyHLteRFjcnZM4Iplna/eqr1E
- jnypdRlUo0p6hZyVt9TBJPxA+4wkuly8LgxfP5mffi6hYQQfE3PuGlvA5X1bkO/wTcuJ
- i1QCa9bzpvlHoCpvZ7vPYMny73eykBAjPJ8ZDak7KFW8OQsTaqKdJ86XsIqCV9y95zj+ Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4v3vgq71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 18:40:26 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22UILvrc015655;
-        Wed, 30 Mar 2022 18:40:26 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4v3vgq6d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 18:40:26 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22UIXYRv024126;
-        Wed, 30 Mar 2022 18:40:24 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9h5c7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 18:40:24 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UIeMib21758426
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 18:40:22 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17866A405B;
-        Wed, 30 Mar 2022 18:40:22 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD030A4054;
-        Wed, 30 Mar 2022 18:40:21 +0000 (GMT)
-Received: from localhost (unknown [9.43.30.177])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 30 Mar 2022 18:40:21 +0000 (GMT)
-Date:   Thu, 31 Mar 2022 00:10:20 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
-        <20220318105140.43914-4-sv@linux.ibm.com>
-        <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
-        <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
-        <20220328195920.dqlfra3lcardko6r@treble> <87mth9ezml.fsf@mpe.ellerman.id.au>
-        <af262c28-0d73-7ae6-3dd5-2977c9a41f7d@csgroup.eu>
-In-Reply-To: <af262c28-0d73-7ae6-3dd5-2977c9a41f7d@csgroup.eu>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1648665137.s2tuu8nsoa.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FtdX2iafIxDAA4x2CAq9ARVm1EQ0W8bq
-X-Proofpoint-ORIG-GUID: C0IxmeimH_DRK4fHLec3HEyj_muH7uYI
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 30 Mar 2022 14:46:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C25E007
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:43:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id c10so24918799ejs.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FSX9OG9WPMDWC5xU+cTCu3yzNi7wsidqtt+ufjULZeI=;
+        b=KBM/vLMk8vmOAjRNld9gv7ydBFtXBUphVE5SlE2/SnNwHMjsvKuQhCApxZdgwKYfEX
+         v5ubRB/mR1H7jqcJXVkuO6rwYf6k+qH1jVyjCXRLzeswx3+g7hJnP+/49eGRuilCeTC2
+         NegSVK6BsMQUaX6FOcoR7hDq+tA1LdvrBCK8lgHDNN+5h/vFmmse99FdZ+lWiDkVbZ5h
+         mJX/iebsMwTTNBYecf9VVhc1Rl9rZLJFNHA83Gjukd1HK6cPB818Hnx3xPw+VsDjzvG+
+         GU6mLARik+fBBHukOyVqhwuzgNOfj70UXWYGfqMgOo7d8Csscg6zqdnTwaL/COllUbkT
+         RM5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FSX9OG9WPMDWC5xU+cTCu3yzNi7wsidqtt+ufjULZeI=;
+        b=zgE6EeFZlKnCbXCC/O+iibIqgumVlha4O6C3GqzOx6RLg+FL1VhrHXyqdfXuoGiTRA
+         WFtmIb3XorRkPhr7v20ZHx1Y9ZJsuu4kGCLPAwzeuxEHjH8a7s9M8O+YUrOWdH+zKiSG
+         GpWfDyBg9ZtA84Jw6LD4SyD/cZE2W/FPkNyOGmF10NF8FCP3yi4/CF1NuD6jaSoOGltZ
+         sgGkUeZb80krjg4QuGefh2lrhNlCdiAexs8vN6wRb6z0CtDq62k8DoUvtnX9Sc7V4EMi
+         dqR/8MYCTvHDTOjhKitai6HUurtLaOAz6b7kTCxo1KJi8uZqW7M1jTArOf5XjFA2rfD8
+         tuqw==
+X-Gm-Message-State: AOAM531G2jY3Cp0C3UW9qn39OiRC6k7VIHyR0zyI+54HLCBu1S8eweLM
+        Ofn10fCqIZpJULNzEsrPy/EHMhA1LkGxqdNe3zolwg==
+X-Google-Smtp-Source: ABdhPJzSPZYPDiR6apJov7hdcSW/nfsA0igomHNB7zaWHaEL/nWsdoD9XfiLbWY61OdvkP/Ms3ZSqJjbnHP6rfnbEuA=
+X-Received: by 2002:a17:906:c04d:b0:6b9:252:c51c with SMTP id
+ bm13-20020a170906c04d00b006b90252c51cmr1058421ejb.470.1648665824116; Wed, 30
+ Mar 2022 11:43:44 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-30_06,2022-03-30_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 phishscore=0
- mlxlogscore=999 adultscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2203300090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220330175850.2030509-1-wonchung@google.com> <CAFivqmLqDXWDyEiYMXvkjQTif9jjqau5nE9YtpYyy=F-PybvDg@mail.gmail.com>
+In-Reply-To: <CAFivqmLqDXWDyEiYMXvkjQTif9jjqau5nE9YtpYyy=F-PybvDg@mail.gmail.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Wed, 30 Mar 2022 11:43:33 -0700
+Message-ID: <CAOvb9yimjRJiX-RD8L_BUdpSWeZ+a76do=f-1-NDXC2Q2VjQ6g@mail.gmail.com>
+Subject: Re: [PATCH] misc/mei: Add NULL check to component match callback functions
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
->=20
->=20
-> Le 29/03/2022 =C3=A0 14:01, Michael Ellerman a =C3=A9crit=C2=A0:
->> Josh Poimboeuf <jpoimboe@redhat.com> writes:
->>> On Sun, Mar 27, 2022 at 09:09:20AM +0000, Christophe Leroy wrote:
->>>> What are current works in progress on objtool ? Should I wait Josh's
->>>> changes before starting looking at all this ? Should I wait for anythi=
-ng
->>>> else ?
->>>
->>> I'm not making any major changes to the code, just shuffling things
->>> around to make the interface more modular.  I hope to have something
->>> soon (this week).  Peter recently added a big feature (Intel IBT) which
->>> is already in -next.
->>>
->>> Contributions are welcome, with the understanding that you'll help
->>> maintain it ;-)
->>>
->>> Some years ago Kamalesh Babulal had a prototype of objtool for ppc64le
->>> which did the full stack validation.  I'm not sure what ever became of
->>> that.
->>=20
->>  From memory he was starting to clean the patches up in late 2019, but I
->> guess that probably got derailed by COVID. AFAIK he never posted
->> anything. Maybe someone at IBM has a copy internally (Naveen?).
+On Wed, Mar 30, 2022 at 11:18 AM Prashant Malani <pmalani@google.com> wrote:
+>
+> Hi Won,
+>
+> On Wed, 30 Mar 2022 at 10:58, Won Chung <wonchung@google.com> wrote:
+>>
+>> Component match callback functions need to check if expected data is
+>> passed to them. Without this check, it can cause a NULL pointer
+>> dereference when another driver registers a component before i915
+>> drivers have their component master fully bind.
+>>
+> IMO this should have a "Fixes"  tag, and be picked back to stable branches.
+> Also, please use my chromium.org account (pmalani@chromium.org) for upstream communications.
+>
+> Thanks!
+>>
+>> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Signed-off-by: Won Chung <wonchung@google.com>
+>> ---
+>>  drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+>>  drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+>> index ec2a4fce8581..843dbc2b21b1 100644
+>> --- a/drivers/misc/mei/hdcp/mei_hdcp.c
+>> +++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+>> @@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+>>  {
+>>         struct device *base = data;
+>>
+>> -       if (strcmp(dev->driver->name, "i915") ||
+>> +       if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+>>             subcomponent != I915_COMPONENT_HDCP)
+>>                 return 0;
+>>
+>> diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+>> index f7380d387bab..e32a81da8af6 100644
+>> --- a/drivers/misc/mei/pxp/mei_pxp.c
+>> +++ b/drivers/misc/mei/pxp/mei_pxp.c
+>> @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+>>  {
+>>         struct device *base = data;
+>>
+>> -       if (strcmp(dev->driver->name, "i915") ||
+>> +       if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+>>             subcomponent != I915_COMPONENT_PXP)
+>>                 return 0;
+>>
+>> --
+>> 2.35.1.1021.g381101b075-goog
+>>
+>
+>
+> --
+> -Prashant
 
-Kamalesh had a WIP series to enable stack validation on powerpc. From=20
-what I recall, he was waiting on and/or working with the arm64 folks=20
-around some of the common changes needed in objtool.
+Hi Prashant,
 
->>=20
->>> FWIW, there have been some objtool patches for arm64 stack validation,
->>> but the arm64 maintainers have been hesitant to get on board with
->>> objtool, as it brings a certain maintenance burden.  Especially for the
->>> full stack validation and ORC unwinder.  But if you only want inline
->>> static calls and/or mcount then it'd probably be much easier to
->>> maintain.
->>=20
->> I would like to have the stack validation, but I am also worried about
->> the maintenance burden.
->>=20
->> I guess we start with mcount, which looks pretty minimal judging by this
->> series, and see how we go from there.
->>=20
->=20
-> I'm not sure mcount is really needed as we have recordmcount, but at=20
-> least it is an easy one to start with and as we have recordmount we can=20
-> easily compare the results and check it works as expected.
+This currently does not fix a patch in the upstream, but is for a
+future patch of adding component_add to usb4_port. Would we need the
+"Fixes" tag for a future patch too?
+Thinking again, I think it might be a better idea to have this as a
+series of patches along with the patch to be sent after this one.
 
-On the contrary, I think support for mcount in objtool is something we=20
-want to get going soon (hopefully, in time for v5.19) given the issues=20
-we are seeing with recordmcount:
-- https://github.com/linuxppc/issues/issues/388
-- https://lore.kernel.org/all/20220211014313.1790140-1-aik@ozlabs.ru/
+I changed the recipient email to send this to your chromium.org
+account. Sorry for that.
 
-
-- Naveen
-
+Thanks,
+Won

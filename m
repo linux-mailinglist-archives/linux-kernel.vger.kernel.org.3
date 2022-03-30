@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45D84EBD70
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EC54EBD6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244702AbiC3JSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
+        id S244694AbiC3JSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244706AbiC3JS2 (ORCPT
+        with ESMTP id S244719AbiC3JR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:18:28 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9431F25C54;
-        Wed, 30 Mar 2022 02:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648631803; x=1680167803;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u/cy2/AdvnF64CBs9i/0Wl3P9S34F9SVM/vWq+6wsTA=;
-  b=NPTT8I1Xz1VMzQN2bmpMTKcjLZlR+YfEA2WRlf7jZAaqtd55xyGuA6bY
-   huBwlpYek/EvKVeEMwhjiarwQds1DFw1raugtRbGHZuKPukWLA7TnyxAZ
-   g7SkN8WdTuvjtJP1d6/hUwVYH174YP3Aqi1SNJ0cL/AEY72/QmUDGHfzM
-   flWOWn+6Ku/Ox0rtp4iHQuS8n5zBZAmNf6ZWQXb7CS9rMAd0YB54vZJod
-   u0Mw7QrCwn/p1m6l+gJB2ucxC4qmodZqDBcJ+Eys5Yrxhoog7LTyy84Df
-   ud6SG3mFj0QtDYxOlDmNWRb2+6VAqEKf56ZE2ZsaSlnh1mtsmZhtPmIT9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259467214"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="259467214"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 02:16:43 -0700
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="503244616"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 02:16:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nZUQx-009IxE-H9;
-        Wed, 30 Mar 2022 12:16:07 +0300
-Date:   Wed, 30 Mar 2022 12:16:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sandipan Patra <spatra@nvidia.com>
-Cc:     treding@nvidia.com, jonathanh@nvidia.com, digetx@gmail.com,
-        ulf.hansson@linaro.org, cai.huoqing@linux.dev, bbasu@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc/tegra: pmc: update Tegra234 reset sources
-Message-ID: <YkQf13VH7RzrEcG/@smile.fi.intel.com>
-References: <20220330063635.1689-1-spatra@nvidia.com>
+        Wed, 30 Mar 2022 05:17:58 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D020F252A6;
+        Wed, 30 Mar 2022 02:16:12 -0700 (PDT)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 30 Mar 2022 18:16:11 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id E3D2D2058443;
+        Wed, 30 Mar 2022 18:16:11 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 30 Mar 2022 18:16:11 +0900
+Received: from [10.212.182.122] (unknown [10.212.182.122])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id AE3D5B62B7;
+        Wed, 30 Mar 2022 18:16:10 +0900 (JST)
+Subject: Re: [PATCH v2 5/5] dt-bindings: phy: uniphier: Clean up clock-names
+ and reset-names using compatible string
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1648617651-9004-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648617651-9004-6-git-send-email-hayashi.kunihiko@socionext.com>
+ <ecc821cb-4dd0-48e6-668d-45c178efbbf0@linaro.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <076c1292-053e-759d-3e6f-c262093d9d1c@socionext.com>
+Date:   Wed, 30 Mar 2022 18:16:10 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330063635.1689-1-spatra@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ecc821cb-4dd0-48e6-668d-45c178efbbf0@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 12:06:35PM +0530, Sandipan Patra wrote:
-> Reset_sources list is updated to add all reset sources
-> and removing ones that do not actually exist.
+Hi Krzysztof,
 
-...
+On 2022/03/30 17:13, Krzysztof Kozlowski wrote:
+> On 30/03/2022 07:20, Kunihiko Hayashi wrote:
+>> Instead of "oneOf:" choices, use "allOf:" and "if:" to define clock-names
+>> and reset-names that can be taken by the compatible string.
+>>
+>> The order of clock-names and reset-names doesn't change here.
+>>
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>> ---
+>>   .../phy/socionext,uniphier-ahci-phy.yaml      | 73 ++++++++++++------
+>>   .../phy/socionext,uniphier-pcie-phy.yaml      | 37 ++++++---
+>>   .../phy/socionext,uniphier-usb3hs-phy.yaml    | 75 +++++++++++++-----
+>>   .../phy/socionext,uniphier-usb3ss-phy.yaml    | 77 ++++++++++++++-----
+>>   4 files changed, 188 insertions(+), 74 deletions(-)
+>>
+>> diff --git
+>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> index 14f7579e7daa..61d9306e1852 100644
+>> ---
+>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> +++
+>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> @@ -30,33 +30,62 @@ properties:
+>>       minItems: 1
+>>       maxItems: 2
+>>
+>> -  clock-names:
+>> -    oneOf:
+>> -      - items:          # for PXs2
+>> -          - const: link
+>> -      - items:          # for Pro4
+>> -          - const: link
+>> -          - const: gio
+>> -      - items:          # for others
+>> -          - const: link
+>> -          - const: phy
+>> +  clock-names: true
+>>
+>>     resets:
+>>       minItems: 2
+>>       maxItems: 6
+>>
+>> -  reset-names:
+>> -    oneOf:
+>> -      - items:          # for Pro4
+>> -          - const: link
+>> -          - const: gio
+>> -          - const: phy
+>> -          - const: pm
+>> -          - const: tx
+>> -          - const: rx
+>> -      - items:          # for others
+>> -          - const: link
+>> -          - const: phy
+>> +  reset-names: true
+>> +
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: socionext,uniphier-pro4-ahci-phy
+>> +    then:
+>> +      properties:
+>> +        clock-names:
+>> +          items:
+>> +            - const: link
+>> +            - const: gio
+>> +        reset-names:
+>> +          items:
+>> +            - const: link
+>> +            - const: gio
+>> +            - const: phy
+>> +            - const: pm
+>> +            - const: tx
+>> +            - const: rx
+> 
+> Constrain also everywhere clocks and resets, so here should be:
+>    resets:
+>      minItems: 6
+>      maxItems: 6
 
-> +	"SYS_RESET_N",	/*0*/
+If I put the constraint here, it would conflict with the original one.
+Should I also replace the original resets
 
-Missed spaces in the comment here and everywhere else.
+     resets:
+       minItems: 2
+       maxItems: 6
 
-Not sure about indices. If it's going to be a part of the hardware programming
-interface it may make sense to use hexadecimal rather than decimal.
+with "resets: true"?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thank you,
 
-
+---
+Best Regards
+Kunihiko Hayashi

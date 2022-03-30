@@ -2,139 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0954EBF1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8FA4EBF2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245555AbiC3Kqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
+        id S245565AbiC3KuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245552AbiC3Kqc (ORCPT
+        with ESMTP id S245554AbiC3KuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:46:32 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EBCDFCE;
-        Wed, 30 Mar 2022 03:44:46 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nZVoi-00031c-II; Wed, 30 Mar 2022 12:44:44 +0200
-Message-ID: <703ad976-a504-eded-41b6-cd4f9f74e8df@leemhuis.info>
-Date:   Wed, 30 Mar 2022 12:44:44 +0200
+        Wed, 30 Mar 2022 06:50:04 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91CF659C;
+        Wed, 30 Mar 2022 03:48:17 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id p15so40635400ejc.7;
+        Wed, 30 Mar 2022 03:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YDced89Td8RXRs8Pp4UdANu0oM9AhCKT24Er0QSiO3s=;
+        b=CZSeLsWgOyzWSNLitc+tCHS07NF3mWrXfOxiJxzqQJyuUwMMIjqP6VugTKYf7Ait/Q
+         j7trEMxfsg/1ibOw/ubwxuB/s2lGslcvE3GoeyX7dKG0BW30kB/VvVtjxLk2X6hzl2l1
+         S1ilQIE53fj3PMEncdLeqCsXkJO1h+n/sDhsxDuP5DHKgW+PgLuJPlTPEzL2tz7xSfZM
+         HGNPV1UecS5xKLobydKBr6J2b8X6aHFGGMnMmgf5uwDZnA+/Ieg2VgDK6CqbKwCtbjQ5
+         JPqSOfoJjhEgNCyDVCy8kEOOSJsxGKfvRNuWaj93xwxoKjokspDUAa+Zg5NypiUGZ7mL
+         uAeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YDced89Td8RXRs8Pp4UdANu0oM9AhCKT24Er0QSiO3s=;
+        b=HFqr7/ukOVtI6DSPWHs0oWPSSPYzp13ftScZCCvtk3AzH0zv31i+9D34DvF010b/+Q
+         jpYHLSDTftmpJx5szbOXVu3VeWg9kxCugLq4c3KNl2/5RtXjTQqi24dwKhEapUPtssAp
+         0egkAt07d3caS+rLIIOO+XeQ6e83eUELUL6l+kP/eKP0kICMmSj6f/bg7WUUdYYr9juu
+         lrmJkSwiSTM0cM2Ibfhhml3q5/MySscV8KpJByDfNdbitH9oko1/kJyezA/u7g6UYex8
+         +kFiHSl+zGi64LsWfSJj2eH+78fUQZe87DC/CmrgPsE89xDu8lME+YIaAmxNZ/C7DVYG
+         dA3w==
+X-Gm-Message-State: AOAM531ptCTjQ6xav7FlEyClyZ+5syEDZ36qzZW05NXk2nLwNePdbGjv
+        VV+//5kWKwWYPtaB0ZLxmLc=
+X-Google-Smtp-Source: ABdhPJzfVq1eRWVeBa+t13AQfY5ytmrsFFVZhWC/P/uM/muAR2S5u69OmktjrsTLBMZ6U0KMnQzsog==
+X-Received: by 2002:a17:906:3ad3:b0:6cd:382b:86e5 with SMTP id z19-20020a1709063ad300b006cd382b86e5mr37501643ejd.145.1648637296399;
+        Wed, 30 Mar 2022 03:48:16 -0700 (PDT)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id by4-20020a0564021b0400b00418fc410299sm9513118edb.62.2022.03.30.03.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 03:48:15 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 12:48:13 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mohan Kumar D <mkumard@nvidia.com>, robh+dt@kernel.org,
+        krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jonathanh@nvidia.com
+Subject: Re: [PATCH] arm64: tegra: Enable hda node for P3737 + P3701
+Message-ID: <YkQ1bWg00BSRV8W0@orome>
+References: <20220325072141.28597-1-mkumard@nvidia.com>
+ <f35537de-6352-e6db-b4a6-17b1ab96deda@kernel.org>
+ <32e425be-5d78-e1e0-6ec4-70ea21895e15@nvidia.com>
+ <ca18fa50-f63b-8131-07a2-8c44daed9f26@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Bug 215726 - si2157.c: mention name of the missing firmware file
-Content-Language: en-US
-To:     Piotr Chmura <chmooreck@gmail.com>,
-        Robert Schlabbach <robert_s@gmx.net>
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
- <trinity-2ca61ae4-4f05-454d-94fd-d41e1afbec2f-1648581688394@3c-app-gmx-bs54>
- <1fc02de2-890e-e8e8-0ab6-aba62a333de5@leemhuis.info>
- <2ce6dc15-51a8-e59c-26ab-4380cdca6209@gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <2ce6dc15-51a8-e59c-26ab-4380cdca6209@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648637086;9e57a89c;
-X-HE-SMSGID: 1nZVoi-00031c-II
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="NWAujopaZLN2XilU"
+Content-Disposition: inline
+In-Reply-To: <ca18fa50-f63b-8131-07a2-8c44daed9f26@kernel.org>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.22 12:35, Piotr Chmura wrote:
-> 
-> W dniu 30.03.2022 o 11:55, Thorsten Leemhuis pisze:
->> On 29.03.22 21:21, Robert Schlabbach wrote:
->>> the patch linked in the bugzilla ticket:
->>> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->>>
->>> should indeed fix the issue.
->> Ahh, the comment mentioning it was added shortly after I sent my mail.
->> #regzbot monitor:
->> https://lore.kernel.org/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->>
->>
->> Adding Piotr, the patches' author to the CC, who also replied.
->>
->> BTW: that patch is afaics missing a Fixes tag specifying the culprit and
->> a `Cc: stable@vger.kernel.org # 5.17.x` tag to make sure it's quickly
->> backported to the stable tree, as among others explained here:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/handling-regressions.rst
->>
-> Sorry for my inconvenience.
 
-Don't worry, everything fine. In a case like...
+--NWAujopaZLN2XilU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I just fixed my device and wanted to share
-> solution with the "world". I'm not familiar with all kernel development
-> convention (yet).
+On Fri, Mar 25, 2022 at 10:42:17AM +0100, Krzysztof Kozlowski wrote:
+> On 25/03/2022 10:31, Mohan Kumar D wrote:
+> >=20
+> > On 3/25/2022 12:56 PM, Krzysztof Kozlowski wrote:
+> >> External email: Use caution opening links or attachments
+> >>
+> >>
+> >> On 25/03/2022 08:21, Mohan Kumar wrote:
+> >>> Add iommus property for hda and enable the node for P3737 + P3701
+> >>> platform.
+> >>>
+> >>> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+> >>> ---
+> >>>   arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts | 1 +
+> >>>   arch/arm64/boot/dts/nvidia/tegra234.dtsi                      | 1 +
+> >>>   2 files changed, 2 insertions(+)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-000=
+0.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> >>> index 34d6a01ee1c6..156d5d95fde7 100644
+> >>> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> >>> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> >>> @@ -1751,6 +1751,7 @@
+> >>>
+> >>>                hda@3510000 {
+> >>>                        nvidia,model =3D "NVIDIA Jetson AGX Orin HDA";
+> >>> +                     status =3D "okay";
+> >> Nodes are enabled by default. Why do you need this?
+> > hda node status is set to "disabled" by default in soc dts file=20
+> > tegra234.dtsi. The enable is controlled by platform specific dts files.
+>=20
+> Oh, surprise... why do you override nodes with full path? This is
+> error-prone and makes any changes (like node name fixing) difficult.
+> This should be overridden by label.
 
-...this someone else should point such details out to the submitter
-and/or add these tags when applying the patch.
+I disagree, though I admit that this is probably very subjective. In my
+experience label references lead to completely unreadable DTS files.
+We've had bad experiences with these kinds of references early on, so at
+some point we decided to discontinue that method on Tegra.
 
-@Robert: Do you know which commit causes this regression and could tell
-us for a proper Fixes: tag?
+Reflecting the tree hierarchy in board-level DTS files on the other hand
+makes it very clear what you're changing and keeps the board-level DTS
+quite readable.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Fixing node names hasn't been a big problem for us and any potential
+remaining issues are entirely gone now that we can validate DTS files
+using dt-schema.
 
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
+Thierry
 
+--NWAujopaZLN2XilU
+Content-Type: application/pgp-signature; name="signature.asc"
 
->>> The error was that the rom_id and required
->>> fields were swapped in the table, so the non-zero rom_id was taken as a
->>> "true" required boolean value, thus incorrectly evaluating that the
->>> chip requires a firmware file to operate when in fact it does not.
->>> I have tested the patch and found it worked for me. But I do not know
->>> how to push this further along:
->>> https://patchwork.linuxtv.org/project/linux-media/patch/6f84b7f4-3ede-ae55-e99b-a9d4108c80e2@gmail.com/
->>>
->> Mauro, what's up here? The patch fixes a regression and thus afaics
->> should quickly find its way towards mainline to get it into the stable
->> tree, as explained in the (bran new) document linked above.
->>
->> Ciao, Thorsten
->>
->>> Gesendet: Dienstag, 29. März 2022 um 10:33 Uhr
->>> Von: "Thorsten Leemhuis" <regressions@leemhuis.info>
->>> An: "Antti Palosaari" <crope@iki.fi>, "Mauro Carvalho Chehab"
->>> <mchehab+huawei@kernel.org>, "Robert Schlabbach" <robert_s@gmx.net>
->>> Cc: "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
->>> az0123456@gmx.de, "Linux Media Mailing List"
->>> <linux-media@vger.kernel.org>, "Linux Kernel Mailing List"
->>> <linux-kernel@vger.kernel.org>
->>> Betreff: Bug 215726 - si2157.c: mention name of the missing firmware
->>> file
->>> Hi, this is your Linux kernel regression tracker.
->>>
->>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
->>> acted upon since it was reported about a week ago, that's why I decided
->>> to forward it to the lists and all people that seemed to be relevant
->>> here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215726 :
->>>
->>>> I get the following error messages when trying to use si2157.ko in
->>>> linux 5.17:
->>>> si2157 13-0060: found a 'Silicon Labs Si2157-A30 ROM 0x50'
->>>> si2157 13-0060: Can't continue without a firmware
->>>> I did work in linux 5.16.16 without a firmware file. Unfortunately
->>>> the driver does not tell me the name of the missing firmware file.
->>> Could somebody take a look into this? Or was this discussed somewhere
->>> else already? Or even fixed?
->>>
->>>
-> 
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJENWoACgkQ3SOs138+
+s6FfqxAAvx8RKOX8UrSmBNVLPEi9U5eGWSADof9pOxLubHzxMG9bFnJYazTUFEwH
+TjxTzJVuUppJ5R9hXC2WlaTdu9q8McJhroEDIt5JFy0mkcolBgLNEY2m5KHY6pfM
+j3Dn64dEgwyyFUq1OMyKuzKbJB7Qs1Iytfjga6vjP4646WLAi0t7Y0BZOa7mHzYN
+EC3H3qGYOu25s0X9nrz0cQyWjrdxZfxr/MPLFc9dui4s9fNZ8dHLcKuzxDQmp/Gu
+AZEvoHqtuSG3bAWGn5t1/KcUe966p92vKScLSTKZfjDb8VJmsa9WFatt/PbmGlXH
+J4IwOpew/NM9vFjnrhrmPROyfcm4PPA6t8GHk0s9NOUSK5oFx76h1xQEk4b0lU3q
+uixAvHHEUKYC29llaGqf67X3ko+BeCfo+edx9dz+jkRXgQoDxYuiGtuLco9n/8KY
+4G/VzbNMC5Ct3a5wPNgjDxkr0717ygLyjWijClG5Zpxd01wPlV1CZAnCp3CVaUTm
+gua6VJPUy7f4lXpUqUS51Wn2KUcLlKgU2GgggwwW/MWDc6yX4HFmhWO1bDGf46Z6
+jzYW4VHvWtGODUnoHDRuh1dnOqswNs3IPtZK+mtluiN0p/m5GKXC9/txg7p5NZsb
+5MBJIEmrPMpUZ4O5k/jsi6GXLnVBpFr3BPDHAZd7KeSVAwFJ/Fc=
+=0Gj6
+-----END PGP SIGNATURE-----
+
+--NWAujopaZLN2XilU--

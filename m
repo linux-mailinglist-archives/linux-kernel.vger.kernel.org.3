@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD194EBD54
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DF64EBD6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244660AbiC3JNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S244686AbiC3JRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244656AbiC3JNn (ORCPT
+        with ESMTP id S243827AbiC3JRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:13:43 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B778F221B83
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:11:58 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bh17so683196ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iHEjOeawVE4TGGyzTMRHiW0bGnAT2V/UGHXTsEjK33c=;
-        b=BAquZY3ZcJjJbGzdnLDnwoPAfCF3aPDs9DaAype0z44smc9sVNP1FgWzkid0jvZ3Vj
-         UvZWNFM2xk4UP4B52AOmycyyuQrqVZ6j9nXJFevQ6rcpEU0Hx5SDi9tKaIrdcUAl6Bvc
-         JRlRSLrtam3JCljIXAmoKkiDddKYchCtttn8z1X0tXtwC/jnmVLAU1Sha+qWRvHFp7aO
-         Ch43V6BVwrYt5S7ri2LtZpKLoluilwbAD5N7Abfo8fm9aC++ql6ASD60Fb5l7lalJFNf
-         A+FAqlvxbRHFMTrpZztQ/M1bnq4u4S7hGU8teieRi2Mdq3AJ7NfaY7VtuiobV/umUGmk
-         rmLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iHEjOeawVE4TGGyzTMRHiW0bGnAT2V/UGHXTsEjK33c=;
-        b=plCKA6OB+jvA2xjvUWQ5HUVAn9c0q4Iz3Ei84jlrMPG1Nd/ZuUxgkFhldEAqwCI93P
-         NB+onVnM9RQbZ5YWIBGn1SHPI2d3Eigtm7v4SeVsaPuy+7dDYzEIFmf2fSmJNAKvGqw2
-         p2Se1IMEF9HZkTx3aH60WWqBZ3vB/37P21kUox6T6hMIOPZC//bferHyCmFUYX3BT78P
-         nm7IvzavgdToYO8q7NGpPsMl8e5NTsGqg1jxf+addWLV/HKzjyhDh5K/F0Z/9TN3/1ZE
-         tvCApeIaA8uu6ql1yFvbpR8Oq9FEPbt2lgCyKu4exzGuhwZtgpeKAfp4typM58ciKuYe
-         E/rg==
-X-Gm-Message-State: AOAM533D6/2f/5AvanrA7JSwZeGMoPULqa4nnj5nH7QMdnk1edMybWpJ
-        mhw7mxmSAH/yh4AWOePhpHNqAtUe9UHO3SFH1HU=
-X-Google-Smtp-Source: ABdhPJzFkCqohT94+eLa4A9BUZrPPE9lpe/sT/ADFwRxWI+b4DtrCQ+SExJM2i0502sH2S+yfSHLrpTINcFKgPqyodQ=
-X-Received: by 2002:a17:907:1b08:b0:6da:b62a:762a with SMTP id
- mp8-20020a1709071b0800b006dab62a762amr37926168ejc.60.1648631517183; Wed, 30
- Mar 2022 02:11:57 -0700 (PDT)
+        Wed, 30 Mar 2022 05:17:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518F924F0F;
+        Wed, 30 Mar 2022 02:15:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0ECD60EE3;
+        Wed, 30 Mar 2022 09:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B658FC340F2;
+        Wed, 30 Mar 2022 09:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648631730;
+        bh=jpg/7rzO++XcwDYy2uwyxQWCmUOGBmeiWParIk9q5wE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Olp8a3NGzQ7/nqX6Y0+jLKSH+61HcY4RJS64V5srFeDw1h08JZR9v+CAQtYnnwvPx
+         8MexTEX/7+SyyISw9/bM58i19i0Wv12/Snd6U33vn9l9haxI2m6pFItkjZXJV21CJd
+         M1lUt0Evf5pmTS4ZJkvckFLljjtOGtFGM+L8/nyVZsn6ow3IjjAKCQWxSJ0WZCy34B
+         TwVHvR1w89aQZLoJppTsHXUEHY7aqBPcyrp5FE+qMAh4sChtofk0IEmd1o1zOyltCq
+         uTPErLazM6ZJZXo8xrDXuoIzgAVZgL9N0kf7yXI9VvLotByltA96RcAD1QT6/KcOSt
+         7ou2ME6y5RgqA==
+Date:   Wed, 30 Mar 2022 11:15:23 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: use simple i2c probe function
+Message-ID: <YkQfq+FBqGql3H9Y@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220324162904.530140-1-steve@sk2.org>
 MIME-Version: 1.0
-References: <CGME20220330052214epcas1p250cff6b3168a1c9c253e1fe70e68ca8b@epcas1p2.samsung.com>
- <20220330052502.26072-1-jaewon31.kim@samsung.com> <YkQPefdRc+hxIXEV@dhcp22.suse.cz>
- <YkQZi5WFAwbqWKNZ@dhcp22.suse.cz>
-In-Reply-To: <YkQZi5WFAwbqWKNZ@dhcp22.suse.cz>
-From:   Jaewon Kim <jaewon31.kim@gmail.com>
-Date:   Wed, 30 Mar 2022 18:11:46 +0900
-Message-ID: <CAJrd-Ushm_t6voCEuTpx=Y9cms2QsRPvjkO-JAdLcwcedZ3k-A@mail.gmail.com>
-Subject: Re: [PATCH] zram_drv: add __GFP_NOWARN flag on call to zs_malloc
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Jaewon Kim <jaewon31.kim@samsung.com>, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, s.suk@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+tniazS4rF4ZkjeW"
+Content-Disposition: inline
+In-Reply-To: <20220324162904.530140-1-steve@sk2.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=EB=85=84 3=EC=9B=94 30=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 5:49, M=
-ichal Hocko <mhocko@suse.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On Wed 30-03-22 10:06:18, Michal Hocko wrote:
-> > On Wed 30-03-22 14:25:02, Jaewon Kim wrote:
-> > > The page allocation with GFP_NOIO may fail. And zram can handle this
-> > > allocation failure. We do not need to print log for this.
-> >
-> > GFP_NOIO doesn't have any special meaning wrt to failures. zram
-> > allocates from the memory reclaim context which is a bad design IMHO.
->
-> Btw. I forgot to mention that GFP_NOIO doesn't have any different
-> meaning than GFP_KERNEL from this (PF_MEMALLOC) allocation context
-> because this request will never perform a reclaim.
 
-Thank you for reply
+--+tniazS4rF4ZkjeW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes it was kswapd with PF_MEMALLOC, but I thought this zs_malloc could
-fail on direct reclaim context.
+On Thu, Mar 24, 2022 at 05:29:04PM +0100, Stephen Kitt wrote:
+> The i2c probe functions here don't use the id information provided in
+> their second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
+>=20
+> This avoids scanning the identifier tables during probes.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-I think zram is gracefully handling this ENOMEM situation, it actually
-accounts the failed count as zram stats.
-The failed page will be tried to swap out again later.
+Looks good and builds fine:
 
-Yes I need to look into more about this memory shortage.
-But I thought there were too many ALLOC_HADER requests in a short
-time, and I want to see other
-allocation failure logs like one with GFP_ATOMIC instead of this
-zs_malloc failure log.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> --
-> Michal Hocko
-> SUSE Labs
+
+--+tniazS4rF4ZkjeW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJEH6cACgkQFA3kzBSg
+Kba+WRAAlgO66pbw2gE+iyHve2LJqABk3dad5pvxym0lOAHHY3HXBEGbK6XxIw3M
+p8adOatqnM/M7C7pwhslgto7kETxygqpB6LytkE9Vf/Wk/wG5Z93Rj2TeGyrNEGx
+9EiMEvDCgj3t/mHnBn9rCmBkzO6ilo03RFeM1Sgo9DjQZ680OUVBJXYZOyXse1yC
+/Zn8hQ284zeYYUsLaI0lM8nc+SjWLhPRD43EVW24xtr9P98eyA9KOnHOBtrgl4mN
+W/8rQvCvd5+RMOHKIepHZrQ1y9DJB9ydCZRILg6DNBPZ5H7NogOnvfPbmCnfYtg8
+HcBTrez+w824Nm6wNwFg4EhWM+2rgtreN6fb9IXxw1XLmQxOZTr72Fx4zkWAQFvT
+5lyLMeKdtSSJv3KGxVx4jMCGL79/adozTs/2Hgp2tgWhYvul9rZq9n/9nZLiZPE0
+IBJ+av7lnyVFgqmS/kkqj4w4kFhmEuIkR4jdIZ9VoY8dHtwUrldSCzlJIpaeWF1+
+jFF2eX/l7O6ewqKBOCTVIdZfxhIF6Eg1WeYlQw+aoLCJoXwXmadzs0QjMprFhyf8
+CNZNktgE8Xe9wgi/bNqk/aIS70sEpDPYdDok4cSGIMCghn5538H+fGq0TzQvnKLJ
+6F05uk9T2lzWNSur3rXAV9CRfdEAaw4VU6vgnMgWpKIsNdRojK8=
+=oRTj
+-----END PGP SIGNATURE-----
+
+--+tniazS4rF4ZkjeW--

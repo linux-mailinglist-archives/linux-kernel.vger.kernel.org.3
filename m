@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0AD4EBAF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006964EBAF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242948AbiC3Gpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S242759AbiC3Gp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242852AbiC3Gpa (ORCPT
+        with ESMTP id S242806AbiC3GpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:45:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085726D19B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648622625; x=1680158625;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tcfB2S2ILUhA3UhWMEyqaxQrE9WW+j9PxezbmQ7LdU0=;
-  b=APWkBowoV4oWKdNDKKc8c9tTxZkdlSGBV6dA0jyOsa9PKOH5BmNy2sUf
-   EsLaaQbsPaZsYc03UkM946ttziB+Rf0KyYO+rlI5LuXU6KAtQyTBJ95j5
-   pGUqGUgY9N2tKm9si6Oafmxe9w4oc43suMednxwP8JV7NRlYNAZ+eciF8
-   gVwwo1vt1g3ymt8ekOMesERb1d0dQ/MF+FeE0vnJg/WB+VdacgV7/VRQo
-   WhMXbWnvl+zOuMjKwSv1xwOalOMjdOrZilw5JeOnt8fiWEraj8opXDGLw
-   h1+/5mT4tOX+JxriXbulJjYjPC0LTnl0nm2dTzmPxH9yaEIhIN1yJeGKz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="257039388"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="257039388"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:43:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="653637195"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2022 23:43:42 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZS3S-000147-0Y; Wed, 30 Mar 2022 06:43:42 +0000
-Date:   Wed, 30 Mar 2022 14:42:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range:
- 274538708992 is not in
-Message-ID: <202203301438.3WBEerVd-lkp@intel.com>
+        Wed, 30 Mar 2022 02:45:25 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8857D6C92D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:43:38 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 5so34098242lfp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:43:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FhApYI2LhMGRpUg9dbvqs6hE/OBEtlG9wuXkddgwS8s=;
+        b=ENqimhI30I1agwzDUDYPRCDpYl5zc0ePCljA3xasBaqRjZvYwvemAE+pwSf26IyNBv
+         r0cr09lcgPFqgoYQUgAHxi55Wvl8uj7N0yl8LZ/1gsfWMOgPVKr9SvSiz61x3x5impXj
+         R3ffuT0McnEAalObMBRL3KHFYIauMEFYx2Sr4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FhApYI2LhMGRpUg9dbvqs6hE/OBEtlG9wuXkddgwS8s=;
+        b=EBf0wCR8c+3jLdlViAAxL7/pOnzHqhaQp22r4o165rtuFfrX9W01oUhu6csr0T4fXb
+         Uq+3cKGExCN6Kk41hGZ039BoHfzZvJbh/UEBLsH5yPzU17sc9YfRqKjvta2WyoGFfjGx
+         lB37AvK5z4UAbrxwNA4JtJ28xYOKiMJ4p6CGdJIEW+gwWBUo6WigzgFw/tegugINw63v
+         G60v3ovS30KGYO7KamrtVZbs6EfiOeost7TxkJ9gJApprWXSgXlz/bw9zwLXlZZTricL
+         iEar3C7XafvjUGDb++COBVdMWIDLj/BTzRAfn3+SXagxqMw7hGgABtoSsTxIZ0H7NVgG
+         7RTA==
+X-Gm-Message-State: AOAM531w4M44CO123KLXIl38UNcAcmGSuFpLCzHYuaAt7J63oYCaZe9f
+        oSaC7G6jBnt844mUkkYXDtF3jllsc2zI5ofr
+X-Google-Smtp-Source: ABdhPJwQfmVvyesHfATWL4OUnIjS2Bn/f0oP1eRmJAPXS9vFC3guYal2CIQl69ZgvzJbWZPqKu2X1Q==
+X-Received: by 2002:a05:6512:3f0a:b0:44a:e3f:2862 with SMTP id y10-20020a0565123f0a00b0044a0e3f2862mr5724942lfa.397.1648622613415;
+        Tue, 29 Mar 2022 23:43:33 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id c21-20020a056512239500b0044aa21dadeasm742821lfv.60.2022.03.29.23.43.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 23:43:32 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id z12so20303837lfu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:43:32 -0700 (PDT)
+X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
+ b21-20020a056512305500b0044a39146603mr5682187lfb.435.1648622612260; Tue, 29
+ Mar 2022 23:43:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220326114009.1690-1-aissur0002@gmail.com> <2698031.BEx9A2HvPv@fedor-zhuzhzhalka67>
+ <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
+ <4705670.GXAFRqVoOG@fedor-zhuzhzhalka67> <CAHk-=wiKhn+VsvK8CiNbC27+f+GsPWvxMVbf7QET+7PQVPadwA@mail.gmail.com>
+ <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com>
+ <YkPo0N/CVHFDlB6v@zx2c4.com> <CAHk-=wgPwyQTnSF2s7WSb+KnGn4FTM58NJ+-v-561W7xnDk2OA@mail.gmail.com>
+ <YkP2hKKeMeFrdpBW@zx2c4.com> <CAHk-=wgtH+Nq+LSCdjS4v2=XOnL3wtO2FA5wvWu5n5imCsFFCA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgtH+Nq+LSCdjS4v2=XOnL3wtO2FA5wvWu5n5imCsFFCA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 29 Mar 2022 23:43:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjDKYj6VrRyzMDPB593o3oLf2GE9sMDuxMFB3smakbEHQ@mail.gmail.com>
+Message-ID: <CAHk-=wjDKYj6VrRyzMDPB593o3oLf2GE9sMDuxMFB3smakbEHQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Tue, Mar 29, 2022 at 11:28 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Ok, I'll apply that asap.
 
-FYI, the error/warning still remains.
+Ok, pushed out. This time with no last-minute patch cleanup.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c24a186398f59c80adb9a967486b65c1423a59d
-commit: 63b3f96e1a989846a5a521d4fbef4bc86406929d kvm: Select SCHED_INFO instead of TASK_DELAY_ACCT
-date:   11 months ago
-config: arm64-randconfig-r001-20220330 (https://download.01.org/0day-ci/archive/20220330/202203301438.3WBEerVd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63b3f96e1a989846a5a521d4fbef4bc86406929d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 63b3f96e1a989846a5a521d4fbef4bc86406929d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 274538708992 is not in [-4294967296, 4294967295]
->> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 274538708992 is not in [-4294967296, 4294967295]
->> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 274538708992 is not in [-4294967296, 4294967295]
->> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 274538708992 is not in [-4294967296, 4294967295]
->> ld.lld: error: relocation R_AARCH64_ADR_PREL_PG_HI21 out of range: 274538708992 is not in [-4294967296, 4294967295]
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+              Linus

@@ -2,188 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5304EC526
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BED4EC51F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345675AbiC3NGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S1345609AbiC3NE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244903AbiC3NGC (ORCPT
+        with ESMTP id S244903AbiC3NE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:06:02 -0400
-Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51619C38;
-        Wed, 30 Mar 2022 06:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cHMQ7
-        WoXLVIhypyQ8WPqd9becVvlyEmkctQb5Tr1eQI=; b=O4IaNn5MPK/T1jNqaCPNM
-        eaVN9jS9V+B2IAhGgbis5fIRI25CB4e/JpPhqGURryeaDRdsOnCXxR059vFzbjxp
-        Y21Np5mdm/Cbx/ns4aUCTpLkYpvBup8ZrkhfDh9u9P7axmJlHSSQwBwK2iyJrNP0
-        q19KKrvur7N2YRjnhm6GiM=
-Received: from localhost.localdomain (unknown [101.86.110.112])
-        by smtp8 (Coremail) with SMTP id DMCowAAH01QUVURi01bAAA--.22186S2;
-        Wed, 30 Mar 2022 21:03:17 +0800 (CST)
-From:   jackygam2001 <jacky_gam_2001@163.com>
-To:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ping.gan@dell.com, jackygam2001 <jacky_gam_2001@163.com>
-Subject: [PATCH] tcp: Add tracepoint for tcp_set_ca_state
-Date:   Wed, 30 Mar 2022 21:01:28 +0800
-Message-Id: <20220330130128.10256-1-jacky_gam_2001@163.com>
-X-Mailer: git-send-email 2.26.2
+        Wed, 30 Mar 2022 09:04:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E46B16D8DF;
+        Wed, 30 Mar 2022 06:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648645362; x=1680181362;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sJ4bTg/Jje7M8hJIE2LrKZWgq7g/VxTTlmJq4PtT+5k=;
+  b=eGC9eqbn/O1lwPZ8WOBCZu9swZTwbD/G1MrHFC5ZORqmACymd2MM+x2A
+   JSW9OrMnCvg7m+xZJXNIa9AWoKBL75i01nDdo+GnJOGiSvzR6jyabSQ6+
+   JRaa1PySzWhzyWBU2uWNemSkuU4N7ysu6+mJeX62fSjdWYbUsUd0NOMNA
+   UoaH3do8Z130BzZ7Izrv1CHUSxXcSr2v/Op51gzFxRTffVCHjhSRexRSH
+   ++pFBWqxGoeA/U7/wO7NRTv/YpqShVhFzjmIBfSS+MQ1gtqZ816bKVRn7
+   bRjZJgg2SxYyhcDfSRO+/DuD0CZzCs/zbIxbA9/GYz8uh/1/j2NajxPuN
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="240131002"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="240131002"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 06:02:42 -0700
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="519668600"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 06:02:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nZXxJ-009PSJ-LE;
+        Wed, 30 Mar 2022 16:01:45 +0300
+Date:   Wed, 30 Mar 2022 16:01:45 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Fabien DESSENNE <fabien.dessenne@foss.st.com>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 04/13] pinctrl: stm32: Switch to use
+ for_each_gpiochip_node() helper
+Message-ID: <YkRUuS5YKXstq9T7@smile.fi.intel.com>
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
+ <20220329152926.50958-5-andriy.shevchenko@linux.intel.com>
+ <ec5a56e6-9402-f80f-3c86-1820e39fec27@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowAAH01QUVURi01bAAA--.22186S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAw4UXFWDCr47Zw13Xw1fWFg_yoWrAr15pF
-        1DAr1Sg3y5Jryagas3Jry8twnxW348ur1agry7Ww1ak3ZFqF1rtF1ktryjyayYvrWFy39x
-        Wa129r1rGa17Zr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE380ZUUUUU=
-X-Originating-IP: [101.86.110.112]
-X-CM-SenderInfo: 5mdfy55bjdzsisqqiqqrwthudrp/xS2BdBXTKVgi1YcKDwAAs2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec5a56e6-9402-f80f-3c86-1820e39fec27@foss.st.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The congestion status of a tcp flow may be updated since there
-is congestion between tcp sender and receiver. It makes sense for
-adding tracepoint for congestion status update function to evaluate
-the performance of network and congestion algorithm.
+On Wed, Mar 30, 2022 at 02:32:36PM +0200, Fabien DESSENNE wrote:
+> Hi Andy
+> 
+> 
+> Thank you for the patch.
+> 
+> Fabien
+> 
+> On 29/03/2022 17:29, Andy Shevchenko wrote:
+> > Switch the code to use for_each_gpiochip_node() helper.
+> > 
+> > While at it, in order to avoid additional churn in the future,
+> > switch to fwnode APIs where it makes sense.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 
-Link: https://github.com/iovisor/bcc/pull/3899
+Thank you for the prompt review!
 
-Signed-off-by: jackygam2001 <jacky_gam_2001@163.com>
----
- include/net/tcp.h          | 12 +++---------
- include/trace/events/tcp.h | 45 +++++++++++++++++++++++++++++++++++++++++++++
- net/ipv4/tcp_cong.c        | 12 ++++++++++++
- 3 files changed, 60 insertions(+), 9 deletions(-)
-
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 70ca4a5e330a..9a3786f33798 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1139,15 +1139,6 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
- 	return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
- }
- 
--static inline void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
--{
--	struct inet_connection_sock *icsk = inet_csk(sk);
--
--	if (icsk->icsk_ca_ops->set_state)
--		icsk->icsk_ca_ops->set_state(sk, ca_state);
--	icsk->icsk_ca_state = ca_state;
--}
--
- static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
- {
- 	const struct inet_connection_sock *icsk = inet_csk(sk);
-@@ -1156,6 +1147,9 @@ static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
- 		icsk->icsk_ca_ops->cwnd_event(sk, event);
- }
- 
-+/* From tcp_cong.c */
-+void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
-+
- /* From tcp_rate.c */
- void tcp_rate_skb_sent(struct sock *sk, struct sk_buff *skb);
- void tcp_rate_skb_delivered(struct sock *sk, struct sk_buff *skb,
-diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
-index 521059d8dc0a..69a68b01c1de 100644
---- a/include/trace/events/tcp.h
-+++ b/include/trace/events/tcp.h
-@@ -371,6 +371,51 @@ DEFINE_EVENT(tcp_event_skb, tcp_bad_csum,
- 	TP_ARGS(skb)
- );
- 
-+TRACE_EVENT(tcp_cong_state_set,
-+
-+	TP_PROTO(struct sock *sk, const u8 ca_state),
-+
-+	TP_ARGS(sk, ca_state),
-+
-+	TP_STRUCT__entry(
-+		__field(const void *, skaddr)
-+		__field(__u16, sport)
-+		__field(__u16, dport)
-+		__array(__u8, saddr, 4)
-+		__array(__u8, daddr, 4)
-+		__array(__u8, saddr_v6, 16)
-+		__array(__u8, daddr_v6, 16)
-+		__field(__u8, cong_state)
-+	),
-+
-+	TP_fast_assign(
-+		struct inet_sock *inet = inet_sk(sk);
-+		__be32 *p32;
-+
-+		__entry->skaddr = sk;
-+
-+		__entry->sport = ntohs(inet->inet_sport);
-+		__entry->dport = ntohs(inet->inet_dport);
-+
-+		p32 = (__be32 *) __entry->saddr;
-+		*p32 = inet->inet_saddr;
-+
-+		p32 = (__be32 *) __entry->daddr;
-+		*p32 =  inet->inet_daddr;
-+
-+		TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_daddr,
-+			   sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
-+
-+		__entry->cong_state = ca_state;
-+	),
-+
-+	TP_printk("sport=%hu dport=%hu saddr=%pI4 daddr=%pI4 saddrv6=%pI6c daddrv6=%pI6c cong_state=%u",
-+		  __entry->sport, __entry->dport,
-+		  __entry->saddr, __entry->daddr,
-+		  __entry->saddr_v6, __entry->daddr_v6,
-+		  __entry->cong_state)
-+);
-+
- #endif /* _TRACE_TCP_H */
- 
- /* This part must be outside protection */
-diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-index dc95572163df..98b48bdb8be7 100644
---- a/net/ipv4/tcp_cong.c
-+++ b/net/ipv4/tcp_cong.c
-@@ -16,6 +16,7 @@
- #include <linux/gfp.h>
- #include <linux/jhash.h>
- #include <net/tcp.h>
-+#include <trace/events/tcp.h>
- 
- static DEFINE_SPINLOCK(tcp_cong_list_lock);
- static LIST_HEAD(tcp_cong_list);
-@@ -33,6 +34,17 @@ struct tcp_congestion_ops *tcp_ca_find(const char *name)
- 	return NULL;
- }
- 
-+void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
-+{
-+	struct inet_connection_sock *icsk = inet_csk(sk);
-+
-+	trace_tcp_cong_state_set(sk, ca_state);
-+
-+	if (icsk->icsk_ca_ops->set_state)
-+		icsk->icsk_ca_ops->set_state(sk, ca_state);
-+	icsk->icsk_ca_state = ca_state;
-+}
-+
- /* Must be called with rcu lock held */
- static struct tcp_congestion_ops *tcp_ca_find_autoload(struct net *net,
- 						       const char *name)
 -- 
-2.15.0
+With Best Regards,
+Andy Shevchenko
+
 

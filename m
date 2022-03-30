@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C0B4ECE9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069444ECE9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348179AbiC3VRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S1347665AbiC3VTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiC3VRk (ORCPT
+        with ESMTP id S232349AbiC3VTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:17:40 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727A45882A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:15:54 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id c62so25946849edf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:15:54 -0700 (PDT)
+        Wed, 30 Mar 2022 17:19:05 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE525882A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:17:20 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id b19-20020a621b13000000b004fa68b3677bso12687429pfb.20
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s9G70I/zaybCNjMBuuh48NsQh+RQ1aOHxWfcOdS61NU=;
-        b=dAD9ZiAYhN9sRAbOvEwtAfZoYaVGY7JhtrvE1XXU/1EyI5/2eySDpZRBKVDJ9S5FxM
-         CbQ8rNM9kUCWaEn9N8sKxrwV/66j8r2ScFXW5BkCLsP30CXHUb42V/guKom3xLbpEhLq
-         AeRl2Fa8CYE/ezROk0HeypXg3hBPAtou9TU8tZl3vPrQtgoIytTNAxYpWyiCKua94TZO
-         Qa1AbJJsIcu2VLWb/QlVY5YuNQpUOod32dACG8pVCk4qDpQw3SBQoaORHMNhSfRNWIKp
-         MSX1OM3Q2S2WKjSmDu1/Nm1tI1CHvhUmp0Zg/gu8wx5cdzrVQUVrBZnQU8qGZV4C6z5d
-         8CPg==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=/g82k/yLueQhmfK5T8wtfFe4TaWb3pB9z1BLHTV6OJE=;
+        b=j21uT8/pXmhxq6ckzyD7U2D1dwXi6tKugXYMhZw2nm4rpUFdNmCmbqk4iHZmSRo4Bx
+         u2KCGC+TUYDFyH9zVujbfBX1r2pccMGEKaF/KFvl4fS6cr7YXF8uN8ADF8xvNiZJg067
+         SrS2pigJnxnkv1alMvwNmeKMbOs9xe4g/2FqaQBhk7LZIrHobbp5nPydFHC/7+Z4fzgo
+         R5bkdBK582OFRDTu0NYQ8pC2PuUWzZAibXi+tQ8b11y/hJEadv6p/uOWL6GS0p//BVrp
+         NU7ZrpuJ3eBPKKNcq+GOvMdwcipXd/ca53DWflyKil/YqphkEI+AMcEno9CVXcR3tCOe
+         y0Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s9G70I/zaybCNjMBuuh48NsQh+RQ1aOHxWfcOdS61NU=;
-        b=XRDa97jNGm5P+kgqwbZ4PM+NTW/quBIUQKA//DSD1OMDfXH/LwG6J6HfUMPKn2oTZJ
-         tCE6SAnYrC0L6iUyZ/t0MhqJYkN+AvXm/g/BuphNMbCmcH3rpxWVS7dDxhXjDrDHHjjW
-         SBEtTv5tMmbZMLr2512Lp1eyAVHV2EqW0RyHoLrgrNwJm8yzGkJPRK93Sz8ezA5Hw1Dw
-         c6ZKTjb6FyOQxtMR2ZhTBwxDxkfgOynPV1C6qSMh9/3azkXXiODWnUBH/pDtbbNCUWD9
-         fMGV4uHKOuEiqghhrjU3B8MX+32HaWor9/i09NE2kzxbFNHnGNcdB2HtkFffnbmmCAi7
-         GNYw==
-X-Gm-Message-State: AOAM532XDsIT/krSlJ7ZTV2LOEPjLVSXyvm39bJvHrVN4kFWlMB6Ghc5
-        ICpkJvFy4MFYzdWfvHh6RbD94+vGk3Iw8u++icv3rg==
-X-Google-Smtp-Source: ABdhPJzotdy5WD9IEM0NjSzWI43oD8oq2eMhwpCm8Fr7a989ll6T5wNNpw0hbIvE1GUdnz+4pkLezlhNZkZbTTt4tkM=
-X-Received: by 2002:a05:6402:254e:b0:418:e716:f987 with SMTP id
- l14-20020a056402254e00b00418e716f987mr13079947edb.74.1648674952841; Wed, 30
- Mar 2022 14:15:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220330205543.2064615-1-wonchung@google.com>
-In-Reply-To: <20220330205543.2064615-1-wonchung@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=/g82k/yLueQhmfK5T8wtfFe4TaWb3pB9z1BLHTV6OJE=;
+        b=f9wodwrpOxg7MZAikSglBQ83upm1HzDncpalTlvE5Yqtuwwk1xGb9smD6njvK2xt2V
+         jahyH4CJumh9GKiGvKp8ceia6w6k5agyL6aeup2+HRR4R+PvIVZRnlZ5WnCeFRIvnWgv
+         K1JiGEpYW8dUGxrMMC4Mch29HoWASZ8oUhKh3pkr4SlxRGJmlzAPzjnPaazSoYNHRT/A
+         Va/EvWZyw5tLhSgKtuX1mK/VPd009SbRLDbAeUaUx7B6wJd3WCdPeuh1rAl/p4e4AtwB
+         QpyOuH00WW4lvsSjgbrm/zG3vbsjhtrmEdr2G52ZkgUJRncKhDnMqXOrECWGjJk5euEv
+         yo/A==
+X-Gm-Message-State: AOAM53204mQ04CQjDccpT816sWh61hHit4Uv7mQc7hgHdAeDXnPqvP/P
+        zxlgs2W0BWyQc5KblZDLTgQhT2VkZIKnCQ==
+X-Google-Smtp-Source: ABdhPJyj6MgKePd9IGXRGMOEDrYZUUs0KNEGd9MFx+MzvMwl6JlgtuEbbYak68UFhDwNIuTWzT+v5AaANfhLOw==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a17:902:f54c:b0:154:6794:ab18 with SMTP
+ id h12-20020a170902f54c00b001546794ab18mr1758684plf.118.1648675039601; Wed,
+ 30 Mar 2022 14:17:19 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 21:17:12 +0000
+Message-Id: <20220330211712.2067044-1-wonchung@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH v2] misc/mei: Add NULL check to component match callback functions
 From:   Won Chung <wonchung@google.com>
-Date:   Wed, 30 Mar 2022 14:15:40 -0700
-Message-ID: <CAOvb9yivq8mEQCqKf0VynuEcAPo3-ZZ6YHyrH+vbwoJ0osY+JQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback function
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+To:     Tomas Winkler <tomas.winkler@intel.com>
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Won Chung <wonchung@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,52 +68,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 1:55 PM Won Chung <wonchung@google.com> wrote:
->
-> Component match callback function needs to check if expected data is
-> passed to it. Without this check, it can cause a NULL pointer
-> dereference when another driver registers a component before i915
-> drivers have their component master fully bind.
->
-> Fixes: 7b882fe3e3e8b ("ALSA: hda - handle multiple i915 device instances")
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Won Chung <wonchung@google.com>
-> ---
-> - Add "Fixes" tag
-> - Send to stable@vger.kernel.org
->
->  sound/hda/hdac_i915.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/sound/hda/hdac_i915.c b/sound/hda/hdac_i915.c
-> index efe810af28c5..958b0975fa40 100644
-> --- a/sound/hda/hdac_i915.c
-> +++ b/sound/hda/hdac_i915.c
-> @@ -102,13 +102,13 @@ static int i915_component_master_match(struct device *dev, int subcomponent,
->         struct pci_dev *hdac_pci, *i915_pci;
->         struct hdac_bus *bus = data;
->
-> -       if (!dev_is_pci(dev))
-> +       if (!dev_is_pci(dev) || !bus)
->                 return 0;
->
->         hdac_pci = to_pci_dev(bus->dev);
->         i915_pci = to_pci_dev(dev);
->
-> -       if (!strcmp(dev->driver->name, "i915") &&
-> +       if (dev->driver && !strcmp(dev->driver->name, "i915") &&
->             subcomponent == I915_COMPONENT_AUDIO &&
->             connectivity_check(i915_pci, hdac_pci))
->                 return 1;
-> --
-> 2.35.1.1021.g381101b075-goog
->
+Component match callback functions need to check if expected data is
+passed to them. Without this check, it can cause a NULL pointer
+dereference when another driver registers a component before i915
+drivers have their component master fully bind.
 
-Hi,
+Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Won Chung <wonchung@google.com>
+---
+Changes from v1:
+- Add "Fixes" tag
+- Send to stable@vger.kernel.org
 
-I am resending this patch to correct email accounts.
-Sorry for confusion.
+ drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+ drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Won
+diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+index ec2a4fce8581..843dbc2b21b1 100644
+--- a/drivers/misc/mei/hdcp/mei_hdcp.c
++++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+@@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+ {
+ 	struct device *base = data;
+ 
+-	if (strcmp(dev->driver->name, "i915") ||
++	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+ 	    subcomponent != I915_COMPONENT_HDCP)
+ 		return 0;
+ 
+diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+index f7380d387bab..e32a81da8af6 100644
+--- a/drivers/misc/mei/pxp/mei_pxp.c
++++ b/drivers/misc/mei/pxp/mei_pxp.c
+@@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+ {
+ 	struct device *base = data;
+ 
+-	if (strcmp(dev->driver->name, "i915") ||
++	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+ 	    subcomponent != I915_COMPONENT_PXP)
+ 		return 0;
+ 
+-- 
+2.35.1.1021.g381101b075-goog
+

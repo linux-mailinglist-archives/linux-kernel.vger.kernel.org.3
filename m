@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296804EBC99
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78574EBCAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242069AbiC3IV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
+        id S244254AbiC3IWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiC3IVz (ORCPT
+        with ESMTP id S230199AbiC3IWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:21:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5840530F57;
-        Wed, 30 Mar 2022 01:20:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F7BB60B65;
-        Wed, 30 Mar 2022 08:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFBBAC340EC;
-        Wed, 30 Mar 2022 08:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648628401;
-        bh=jlt7IgYw10SWGER4k+S1mS11PUUsamc2YkuHy9CpYeE=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=HK3te1n3fuyCH5JiyLIu9Z+Uc8u0ZqR5YTqkKOp1zygqVqIQ7IeNSMErumJj5rcAY
-         pKwXiselA6marSTubH9Yge1KM10FlS3d1qkMdzy8lsUGoyCAdZUgQxqPAhT55k48yE
-         BDHqHCwB5lmTa5JEAMWZcGV0W2X+cQsE9mUOcY3nZH2RyUeTS93UPj1I+az6XQrzOw
-         phsw35nsIRHAk1xNKzKt7lRZyL0qiH/iA8AMhKlCRfGFewaFVF/BMYy0H1N9Ajop2N
-         Ie8dEXTnUhkn9QOYjLlIpSpkm9avoj3BMyPBJ8xiQZVQXaPk9fMtWt2QCQD1PScn+i
-         8D90loBcAPSgQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     Benjamin =?utf-8?Q?St=C3=BCrz?= <benni@stuerz.xyz>,
-        <loic.poulain@linaro.org>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 19/22 v2] wcn36xx: Improve readability of wcn36xx_caps_name
-References: <20220326165909.506926-1-benni@stuerz.xyz>
-        <20220326165909.506926-19-benni@stuerz.xyz>
-        <f0ebc901-051a-c7fe-ca5a-bc798e7c31e7@quicinc.com>
-        <720e4d68-683a-f729-f452-4a9e52a3c6fa@stuerz.xyz>
-        <ff1ecd47-d42a-fa91-5c5c-e23ac183f525@quicinc.com>
-        <87y20rx6mx.fsf@kernel.org>
-Date:   Wed, 30 Mar 2022 11:19:53 +0300
-In-Reply-To: <87y20rx6mx.fsf@kernel.org> (Kalle Valo's message of "Wed, 30 Mar
-        2022 10:05:10 +0300")
-Message-ID: <87ee2jx36e.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 30 Mar 2022 04:22:34 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF38430F52
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:20:48 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: rcn)
+        with ESMTPSA id 817A61F443EE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648628447;
+        bh=BsgS3Yrnz9Ahm/XDneBzS9oUTSGp3sCkzNQSr/FIjUI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yn3KxJPOdxeKyamCekKoxq+nkIoxQ91HCB4lWUbQKWKSZ3eZkdHtCxtVux8dYq8O3
+         OlYLzH0WwcrfK1R9f8GxEhOXNvB3l0D+lmtJJi6ieTSikWj1ARXJ7i1VFJGEnHfylN
+         HUufNYEDww+CSdjALmGvm9GSt4UL63uQ/N6u/eRc6QP5jeCXvLFgGYUoRJ3C8QjOOR
+         r+UMn2wuSY70PMZO0YZSOKY15eDnI5Qe9rZT0wczJgFt4TXdk1XW3ZytgJLGowzHpc
+         etoGT2a95xn7oInMXjOaOG7S357vMOFz9eSijXrFhvI9pGuxAn8F1x4kZF5Trv3i7n
+         adPwaDHRtKJCw==
+From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Mark Gross <mgross@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Johansen <john.johansen@canonical.com>,
+        Steve Beattie <sbeattie@ubuntu.com>, kernel@collabora.com
+Subject: [PATCH v2] x86/speculation/srbds: do not try to turn mitigation off when not supported
+Date:   Wed, 30 Mar 2022 10:20:26 +0200
+Message-Id: <20220330082026.1549073-1-ricardo.canuelo@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,32 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> writes:
+When SRBDS is mitigated by TSX OFF, update_srbds_msr will still read and
+write to MSR_IA32_MCU_OPT_CTRL even when that is not supported by the
+microcode.
 
-> Jeff Johnson <quic_jjohnson@quicinc.com> writes:
->
->> (apologies for top-posting)
->> When you submit new patches you should not do so as a reply, but
->> instead as a new thread with a new version number.
->>
->> And since multiple folks have suggested that you submit on a
->> per-subsystem basis I suggest that you re-send this as a singleton
->> just to wcn36xx@lists.infradead.org and linux-wireless@vger.kernel.org
->> along with the associated maintainers.
->>
->> So I believe [PATCH v3] wcn36xx:... would be the correct subject, but
->> I'm sure Kalle will let us know otherwise
->
-> You are correct. Also I strongly recommend using git send-email instead
-> of Mozilla. Patch handling is automated using patchwork and git, so
-> submitting patches manually is error prone.
+Checking for X86_FEATURE_SRBDS_CTRL as a CPU feature available makes more
+sense than checking for SRBDS_MITIGATION_UCODE_NEEDED as the found
+"mitigation".
 
-Yeah, our patchwork didn't even detect this patch. But v3 is visible and
-is on my queue:
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+Tested-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+---
+Hi all,
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220328212912.283393-1-benni@stuerz.xyz/
+This patch was originally posted here:
 
+https://lore.kernel.org/all/20200609174313.2600320-1-cascardo@canonical.com/#t
+
+by Boris, based on the original patch by Cascardo, I didn't make any
+changes to it. I didn't see it merged or discussed further and I can
+still reproduce the issue on a Samsung Galaxy Chromebook 2 (Intel
+Cometlake-U). When booted without the proper CPU u-codes, TSX is
+disabled (so the CPU isn't vulnerable to SRDBS) but this code still
+tries to access an unavailable MSR register so I get these two warning
+messages:
+
+unchecked MSR access error: RDMSR from 0x123 at rIP: 0xffffffff8203707e (update_srbds_msr+0x2e/0xa0)
+Call Trace:
+ <TASK>
+ check_bugs+0x994/0xa6e
+ ? __get_locked_pte+0x8f/0x100
+ start_kernel+0x630/0x664
+ secondary_startup_64_no_verify+0xd5/0xdb
+ </TASK>
+unchecked MSR access error: WRMSR to 0x123 (tried to write 0x0000000000000001) at rIP: 0xffffffff820370a9 (update_srbds_msr+0x59/0xa0)
+Call Trace:
+ <TASK>
+ check_bugs+0x994/0xa6e
+ ? __get_locked_pte+0x8f/0x100
+ start_kernel+0x630/0x664
+ secondary_startup_64_no_verify+0xd5/0xdb
+ </TASK>
+
+This patch avoids them.
+
+ arch/x86/kernel/cpu/bugs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 6296e1ebed1d..9b14cb2ec693 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -443,14 +443,14 @@ void update_srbds_msr(void)
+ 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
+ 		return;
+ 
+-	if (srbds_mitigation == SRBDS_MITIGATION_UCODE_NEEDED)
++	if (srbds_mitigation == SRBDS_MITIGATION_UCODE_NEEDED ||
++	    srbds_mitigation == SRBDS_MITIGATION_TSX_OFF)
+ 		return;
+ 
+ 	rdmsrl(MSR_IA32_MCU_OPT_CTRL, mcu_ctrl);
+ 
+ 	switch (srbds_mitigation) {
+ 	case SRBDS_MITIGATION_OFF:
+-	case SRBDS_MITIGATION_TSX_OFF:
+ 		mcu_ctrl |= RNGDS_MITG_DIS;
+ 		break;
+ 	case SRBDS_MITIGATION_FULL:
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.25.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,210 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB30C4EC804
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2894EC807
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345746AbiC3PTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S1344220AbiC3PTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348100AbiC3PSB (ORCPT
+        with ESMTP id S241721AbiC3PTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:18:01 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77E261480F2;
-        Wed, 30 Mar 2022 08:16:15 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AtwvaI6h4vvUoVt85m0RQnGMKX161CxEKZh0ujC4?=
- =?us-ascii?q?5NGQNrF6WrkUEmGUWCmHVOa6OZTCnKNAnPovk908P7ZPRndZqHAtsrHw8FHgiR?=
- =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
- =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
- =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
- =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
- =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl6pTCnx2XIhMAxN0rVinaJ7Yw9u9pAG1?=
- =?us-ascii?q?m++YfLTcXZBGfwemxxdqTSuJsrsUlItPiMI4Wtjdn1z6xJfovR9bBBbrL4dtZ1?=
- =?us-ascii?q?TIrrsFIAfvaIcEebFJHYBbfZBtAElQaEpQzmKGvnHaXWzlZrk+F4K8yy2vNxQd?=
- =?us-ascii?q?ylr/3P7L9fMKGRMBQtkKZvX7duWD4BAwKctCS11Kt8Huqi6nEnT7TX5gbH7m1s?=
- =?us-ascii?q?PVthTW7wm0VFQ1TW0C3rOe0jmagVN9FbU8Z4Cwjqe417kPDZt38WQCo5X2JpBg?=
- =?us-ascii?q?RX/JOHOAgrgKA0KzZ50CeHGdsZjpAbsE28d84XhQ02VKT2dDkHzpitPuSU331y?=
- =?us-ascii?q?1s+hVteIgBMdSlbO3BCFlBDvrHeTEgIpkqnZr5e/GSd17UZwQ3N/g0=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AMHdCR6lcfaT+oQuP8yxoprJboKPpDfIQ3DAb?=
- =?us-ascii?q?v31ZSRFFG/Fw9vre+MjzsCWYtN9/Yh8dcK+7UpVoLUm8yXcX2/h1AV7BZniEhI?=
- =?us-ascii?q?LAFugLgrcKqAeQeREWmNQ86Y5QN4B6CPDVSWNxlNvG5mCDeOoI8Z2q97+JiI7l?=
- =?us-ascii?q?o0tQcQ=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="123098899"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 30 Mar 2022 23:16:14 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id AEC9B4D16FF5;
-        Wed, 30 Mar 2022 23:16:11 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 30 Mar 2022 23:16:11 +0800
-Received: from [10.167.201.8] (10.167.201.8) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 30 Mar 2022 23:16:11 +0800
-Message-ID: <894ed00b-b174-6a10-ee45-320007957ea4@fujitsu.com>
-Date:   Wed, 30 Mar 2022 23:16:10 +0800
+        Wed, 30 Mar 2022 11:19:30 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608A9154042;
+        Wed, 30 Mar 2022 08:17:43 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UFBBHw030420;
+        Wed, 30 Mar 2022 15:17:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=NYyCP9hrMbIu0sT6ONJVcHCGMX7eveT4zAp0w286baw=;
+ b=XC1vf9sz0xsD0/yYSmjoBk077G142Lsa+kC1oZdDuoW6gPz5ACIt+9xJ1bQltt7IIw6N
+ uFc9fMYAU/gOW2nRFMF8vcOdR8ITz/kcDk5FTDQ5nLje6BMOEL53+mE2uuqccd0iTqG/
+ tAJGAHDIpFhp7rRlZqEqN6C9CNtiGZowb4JTgKMsrHjOf091fhll9U6mzz/5lUuMgMC+
+ HMaWqUhKXyq4gW3f0jkIBIthyMDiuB/lbYG2dVGBUpgeXc3r3fQg1lKal1Xk5gC7yFMx
+ cZSsdQ9/FBRtOFbzxMUwe8RyE50HL5iRMidyyEC6F9HW1RsNbR8BMYQ4D57iI6z/x0GV 5w== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1se0hu7w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 15:17:24 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22UFAY8V023376;
+        Wed, 30 Mar 2022 15:17:23 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f1s948wx6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 15:17:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GHNijRMeVt0bziBumIdn6UPr3ByxMjkZrTWeVU9OebDmlt6tqFICb+D2ruwG1JcLweb262o4qQW3nqfx1+pIoq3ZBz5NQ3UY8o9GA/6inmNSNNLs9LzUHWXTYZYt1TSr1I3/fskkWCxuHMT7abyfrdEZ3uvarZ/Pj1wd5IEU0y65qfG/sa/0Jub2kmdXu5E0f0dYdVgzAIRe/VAudP0xzIFVMQFWbRjM9dx5xFPjitI4TkF7DVGb14fSbQCP35UIqV0XrIl4vnTNFWrdZz5CH0GocMhLMuU+PvRMT+Fb2awnByI9Wg4rna1JKtfyYElJ2ma723FxLdGdhBXJKA7wog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NYyCP9hrMbIu0sT6ONJVcHCGMX7eveT4zAp0w286baw=;
+ b=kc+V46RTWeuy5tbwMCbwP+a36dP0Z3ZC13U+JizYCLJ9tNG6sbQxPTGYdQhm0Qz/eoGKKPheimU/Hi2D+M4PxttTbC6luPxL79m5s1vAvhGiacu2kMFpVPwZqiqqbiZsP4gxjDf0899RP++Bn15pwrX1BG1x1g0PoRNxqupyRHeV077KFaDGuDXdbjh/BdplePxZuuyvkhYgk88vIhiFjB50E1El6n4H2TQMBwC4Hw5i7NHAUhDIHfKwJvt6eq7VUEwloX4GcWAWo1LSwzTWUIDgpyEjww/xh/xLXC4AnPQjUaGndFoSSzUr9S1o+r/e/Xj4R07gSoM5AvjKf1cDjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NYyCP9hrMbIu0sT6ONJVcHCGMX7eveT4zAp0w286baw=;
+ b=ILMITcVVqVjgp1uhwr14Qh9eqN8j8BlRTA++CcSWr3vqRr8gyukNXKpxOe3R1skiq2IIpsi0lW2qby1riqXNLKEJYZNl8j8eImDCscYUc7dNs4FX7ynTlZivH2FwCoTpQWO+l4+0uSSozuG75cCX9yrOlSVt2UnNM0Z86vnhfsI=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BLAPR10MB4929.namprd10.prod.outlook.com
+ (2603:10b6:208:324::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.17; Wed, 30 Mar
+ 2022 15:17:21 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.025; Wed, 30 Mar 2022
+ 15:17:21 +0000
+Date:   Wed, 30 Mar 2022 18:16:58 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 19/24] media: rkvdec-h264: Add field decoding support
+Message-ID: <20220330151658.GV12805@kadam>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-20-nicolas.dufresne@collabora.com>
+ <20220329081321.GV3293@kadam>
+ <f7e5b577bc48ba16befbed47ac96c363ce861f48.camel@collabora.com>
+ <20220330051541.GE3293@kadam>
+ <ed16a4dcfb0859a284675ddad46ab536008a15c5.camel@collabora.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed16a4dcfb0859a284675ddad46ab536008a15c5.camel@collabora.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0055.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::11)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 7/8] xfs: Implement ->notify_failure() for XFS
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <djwong@kernel.org>,
-        <dan.j.williams@intel.com>, <david@fromorbit.com>,
-        <jane.chu@oracle.com>
-References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
- <20220227120747.711169-8-ruansy.fnst@fujitsu.com>
- <YkPyBQer+KRiregd@infradead.org>
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <YkPyBQer+KRiregd@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: AEC9B4D16FF5.A4774
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 27cd11d1-cc21-4479-07b1-08da1260627e
+X-MS-TrafficTypeDiagnostic: BLAPR10MB4929:EE_
+X-Microsoft-Antispam-PRVS: <BLAPR10MB4929B88EBC7BE2E8F97FC5328E1F9@BLAPR10MB4929.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QUSCBVJaaghzFdK0hn5ngYurotyiSkPU7xc3CTBKMFerah+c/31VATjRblHY3aEEyuaxSmY8ed34+xZ5wO64+vMk84Xar2ACaIh6+9frGMA1cln1eXkDAlHC7BnjsBWKdWxmVUqxHyLtcODwXKkaZVi6X+bR5CMSbMjOEchby8dR897dWe0GAV5vFNInXZ4SkwY7y3CKQ3y3SfoU2sC9YegYCmdi69jXbXebqBDtp2q/57xOSx+DkJQx3aTiHNvu2s3BsPiWYotLJIMXjlPI0lv2Sh9gBaD4N3Zh/vOmJuyUjBpps/8j9M8W8nH3keyw63Hw/qQQ6Zwkr1kld/Ba6m2S87KJKb580dbGh/5xhmxkJg/MtvS81RZZ8IVK6bHJU3LqTipot+GSKiJJa0xXFlDbhnxEF7uHzHLZ5uKI9bi+wtO1ub8w5LplO8QA2qWvJC4/P3gtBwvG2F9nOGAP4kqYbB8nwk96xtOWTmmSIVrRCKPWUIB7K8M867H92wHeiLGHTOr6Y0uyaY45658UypzrGaAaEkXdfOfa4ei8H8s100tBP9pWKxyYF/hacXjlhuoohrWA7S9dszHFscFV4VRlYxcFWJHVCOZ/AS7M7ZhYbXMP7e5It7AnIakFkNTg8uqBdDpxkhTWV9mW7NuHh61OKlntX8jjT8Fgm79cFNTShNs9t3kPWuyS2Mrr7UQlqhl+u5+maM1+RBs0hEcKig==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(54906003)(83380400001)(52116002)(6666004)(86362001)(9686003)(66476007)(4326008)(8676002)(6916009)(6512007)(66946007)(33656002)(6486002)(6506007)(316002)(2906002)(66556008)(508600001)(38350700002)(33716001)(8936002)(26005)(38100700002)(186003)(1076003)(44832011)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EyE8DHhamLULGLJ3AIYeByHgUbqBqdU3cBhA5C/2Bb0KTgnYALUus9jTT0Ev?=
+ =?us-ascii?Q?jk8nXGbBjnI85z8rLEZq9j3CRSfVJvVQY6uAYhZBxYIXS6v6nl2CXzYWsflC?=
+ =?us-ascii?Q?pI9c3pkwBpMmtqYY3TCNGGjTmY7eaz4Mt2zsmce+FglsSwVnW1x/gvP4eCrk?=
+ =?us-ascii?Q?iKsUv/uph+GGfwRDczddu0EVFCE+pqrJBRLis4ExYRfY2A9mRfwolIENByoy?=
+ =?us-ascii?Q?zCcNRnzG54SuH9lqWU/peo2dgchNh6LtLP2UGruRNgkepUxUqGr4zBW1taKX?=
+ =?us-ascii?Q?ogDolOGS35PKFNnVwwb722IPJFibwgE8GWtqFJa9fY4yodk9WvqE7kK6ZW1c?=
+ =?us-ascii?Q?GVWN33KSf7rY0fck39Mh7HaGKsUHLU90TLvC1kXm5kxUFaCqMQNnPhDiyqwX?=
+ =?us-ascii?Q?LEBcZ8LC0nFv8N0OIPkbCS5EOB4xq9tnAuUs0SGiLpGtdP88Fl1lgXJJPMxE?=
+ =?us-ascii?Q?4GswgAk/8rBVR2VDsGQ2LrtuGb89dDroyfQ/GAaB8EAaTjo16fmS+ajPCGKW?=
+ =?us-ascii?Q?UcrIszR+7RP/YBgQ8XvLTZFF93XAzXfVVHAurfAKZgZrfrOKuqGVK26IkG4O?=
+ =?us-ascii?Q?kofzPjhjvyCTrP7G4OipF7TTv/sSrVisiRLRJ+VbCK2jyAkvZhi5ApZlNk/V?=
+ =?us-ascii?Q?WUEaVvpTBt5bDOGhzN6QdzS49+uqM5BLdDWVghtHiFp6pzDdzb4CsS/O4E1K?=
+ =?us-ascii?Q?ddCJOMWvFzTRJoItv9IiGmkKAxKTATqPA0iB4JqJY7PWjRecmhjtiBHQGYul?=
+ =?us-ascii?Q?BWNJqp4rNDgmnIZvLs5fuQyivHZsH4YDB/YuUYi9W3F6ea6c0idduL3xJw0J?=
+ =?us-ascii?Q?e8Xv2qpGh4RnpTVGQXoz5vXR1Darwblh84t8+2PV2QNm6TJKMC2YT7TdHhE/?=
+ =?us-ascii?Q?crCzyvinHz1bhoJykwIA/vTpUXCGuLZtNqdFiw8JW3lZ1jawJnajf3X/QQi5?=
+ =?us-ascii?Q?fgRfNrWM9YywZ/GU2CcLxJiDSqyxZKDjJ8/g49OJn/gez7Pirx2BKT2E0U52?=
+ =?us-ascii?Q?U+rWPmiFa5drvrdPEK4cSxxGRljiT4SLp+Mb43RRJUjds873N0JoD54uRCjf?=
+ =?us-ascii?Q?jd66HcAuPAyCSKNVH6VKk18piBK9hTaA5XmrwbrcM4d9r2NUHcfVqDP9zcXi?=
+ =?us-ascii?Q?SkNSbCz9IgjecYsUjdCCZB1UD6QjpXA0P9KP/289dWTnrAqjOh4Ogw6nscxt?=
+ =?us-ascii?Q?jzXRBS+n6m7r0FSD//p0tUJcL2oOYkg3WGJNNQpNmsqfRXJD+GnqqdikV/GC?=
+ =?us-ascii?Q?8sgxCIS4K+O4VWnbUdoWBSFeMFttSxTzBFUp5Rv8OokqzOdlPb/1tEBn6qtu?=
+ =?us-ascii?Q?viiThXnsMugWt5LVDuv/t2xy7bQl7N9y4NJvprHn2TCQvHzIHH345ZQ1EC8l?=
+ =?us-ascii?Q?fbtsi2V5o3kaPY81HVHaCe1up4IEsYa1oYY76sPHY7evKT1jr94Cr5ZFLBkL?=
+ =?us-ascii?Q?fjIy5kqMMV58LhDEYkYMmmrzQlT5mLWGoIbIhpiMRBuNrgVPDBMUM8gdl876?=
+ =?us-ascii?Q?F10OAXCsJlo8d7SPSc0HU+RjEs0/HvIN1KYVQzgv/JAQUe/MHKnDqRwJYHnB?=
+ =?us-ascii?Q?C0e3BCYmct0rNa/rZuVfy8IQlnoTD1cx8+WjufDbOhxog/OwTOKWD2+LsQki?=
+ =?us-ascii?Q?HlB/TB98Wc+WoafrDKXoMa0PxOwFhY6Q5YYUoOaA7BjXl2VBqZjSOotwRVso?=
+ =?us-ascii?Q?SgjHA9qNwpeUZJK9eNmgdMVhN7CSHxYdUUWNWMPCUNehMN2JgmgdQU3Kh4Zg?=
+ =?us-ascii?Q?iNZyDzTyOMNzOXxH84URWYdqnKSi+hc=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27cd11d1-cc21-4479-07b1-08da1260627e
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 15:17:20.8683
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pFqzBsx4qC0pBzKB/nKG8wsc4kDt7e38k/DcLwPO6X3rcncXHjLMxKtg6ReHX1M6vaCFqZDEn3rDsx7BqjiSXJSBEVX0ODEWTd8uTrvk/sk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4929
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-03-30_04:2022-03-29,2022-03-30 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203300074
+X-Proofpoint-ORIG-GUID: hYXx7mVGYadNCypMiSheSf7aBFutJapN
+X-Proofpoint-GUID: hYXx7mVGYadNCypMiSheSf7aBFutJapN
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Yeah.  I'm aboslutely fine with whatever you do.  Some of the questions
+you're asking occurred to me too but I don't have the answers.
 
+> > > > > +		for (i = 0; i < builder->num_valid; i++) {
+> > > > > +			struct v4l2_h264_reference *ref;
+> > > > > +			u8 dpb_valid;
+> > > > > +			u8 bottom;
+> > > > 
+> > > > These would be better as type bool.
+> > > 
+> > > I never used a bool for bit operations before, but I guess that can work, thanks
+> > > for the suggestion. As this deviates from the original code, I suppose I should
+> > > make this a separate patch ?
+> > 
+> > I just saw the name and wondered why it was a u8.  bool does make more
+> > sense and works fine for the bitwise stuff.  But I don't really care at
+> > all.
+> 
+> I'll do that in v2, in same patch, looks minor enough. I think if using bool
+> could guaranty that only 1 or 0 is  possible, it would be even better, but don't
+> think C works like this.
 
-在 2022/3/30 14:00, Christoph Hellwig 写道:
->> @@ -1892,6 +1893,8 @@ xfs_free_buftarg(
->>   	list_lru_destroy(&btp->bt_lru);
->>   
->>   	blkdev_issue_flush(btp->bt_bdev);
->> +	if (btp->bt_daxdev)
->> +		dax_unregister_holder(btp->bt_daxdev, btp->bt_mount);
->>   	fs_put_dax(btp->bt_daxdev);
->>   
->>   	kmem_free(btp);
->> @@ -1939,6 +1942,7 @@ xfs_alloc_buftarg(
->>   	struct block_device	*bdev)
->>   {
->>   	xfs_buftarg_t		*btp;
->> +	int			error;
->>   
->>   	btp = kmem_zalloc(sizeof(*btp), KM_NOFS);
->>   
->> @@ -1946,6 +1950,14 @@ xfs_alloc_buftarg(
->>   	btp->bt_dev =  bdev->bd_dev;
->>   	btp->bt_bdev = bdev;
->>   	btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off);
->> +	if (btp->bt_daxdev) {
->> +		error = dax_register_holder(btp->bt_daxdev, mp,
->> +				&xfs_dax_holder_operations);
->> +		if (error) {
->> +			xfs_err(mp, "DAX device already in use?!");
->> +			goto error_free;
->> +		}
->> +	}
-> 
-> It seems to me that just passing the holder and holder ops to
-> fs_dax_get_by_bdev and the holder to dax_unregister_holder would
-> significantly simply the interface here.
-> 
-> Dan, what do you think?
-> 
->> +#if IS_ENABLED(CONFIG_MEMORY_FAILURE) && IS_ENABLED(CONFIG_FS_DAX)
-> 
-> No real need for the IS_ENABLED.  Also any reason to even build this
-> file if the options are not set?  It seems like
-> xfs_dax_holder_operations should just be defined to NULL and the
-> whole file not supported if we can't support the functionality.
+I'm not sure I understand.  If you assign "bool x = <any non-zero>;"
+then x is set to true.  Do you want a static checker warning for if
+<any non-zero> can be something other than one or zero?  The problem is
+that people sometimes deliberately do stuff like "bool x = var & 0xf0;".
+Smatch will complain if you assign a negative value to x.
 
-Got it.  These two CONFIG seem not related for now.  So, I think I 
-should wrap these code with #ifdef CONFIG_MEMORY_FAILURE here, and add 
-`xfs-$(CONFIG_FS_DAX) += xfs_notify_failure.o` in the makefile.
+test.c:8 test() warn: assigning (-3) to unsigned variable 'x'
 
-> 
-> Dan: not for this series, but is there any reason not to require
-> MEMORY_FAILURE for DAX to start with?
-> 
->> +
->> +	ddev_start = mp->m_ddev_targp->bt_dax_part_off;
->> +	ddev_end = ddev_start +
->> +		(mp->m_ddev_targp->bt_bdev->bd_nr_sectors << SECTOR_SHIFT) - 1;
-> 
-> This should use bdev_nr_bytes.
+It's supposed to print a warning if you used it to save error codes like:
 
-OK.
+	x = some_kernel_function();
 
-> 
-> But didn't we say we don't want to support notifications on partitioned
-> devices and thus don't actually need all this?
-> 
->> +
->> +	/* Ignore the range out of filesystem area */
->> +	if ((offset + len) < ddev_start)
-> 
-> No need for the inner braces.
-> 
->> +	if ((offset + len) > ddev_end)
-> 
-> No need for the braces either.
+But it does not.  :/  Something to investigate.
 
-Really no need?  It is to make sure the range to be handled won't out of 
-the filesystem area.  And make sure the @offset and @len are valid and 
-correct after subtract the bbdev_start.
-
-> 
->> diff --git a/fs/xfs/xfs_notify_failure.h b/fs/xfs/xfs_notify_failure.h
->> new file mode 100644
->> index 000000000000..76187b9620f9
->> --- /dev/null
->> +++ b/fs/xfs/xfs_notify_failure.h
->> @@ -0,0 +1,10 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (c) 2022 Fujitsu.  All Rights Reserved.
->> + */
->> +#ifndef __XFS_NOTIFY_FAILURE_H__
->> +#define __XFS_NOTIFY_FAILURE_H__
->> +
->> +extern const struct dax_holder_operations xfs_dax_holder_operations;
->> +
->> +#endif  /* __XFS_NOTIFY_FAILURE_H__ */
-> 
-> Dowe really need a new header for this vs just sequeezing it into
-> xfs_super.h or something like that?
-
-Yes, I'll move it into xfs_super.h.  The xfs_notify_failure.c was 
-splitted from xfs_super.c in the old patch.  There is no need to create 
-a header file for only single line of code.
-
-> 
->> diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
->> index e8f37bdc8354..b8de6ed2c888 100644
->> --- a/fs/xfs/xfs_super.c
->> +++ b/fs/xfs/xfs_super.c
->> @@ -353,6 +353,12 @@ xfs_setup_dax_always(
->>   		return -EINVAL;
->>   	}
->>   
->> +	if (xfs_has_reflink(mp) && !xfs_has_rmapbt(mp)) {
->> +		xfs_alert(mp,
->> +			"need rmapbt when both DAX and reflink enabled.");
->> +		return -EINVAL;
->> +	}
-> 
-> Right now we can't even enable reflink with DAX yet, so adding this
-> here seems premature - it should go into the patch allowing DAX+reflink.
-> 
-
-Yes.  I'll remove it for now.
-
-
---
-Thanks,
-Ruan.
-
+regards,
+dan carpenter
 

@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5784ECDD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814AC4ECDDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350919AbiC3UOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S1350928AbiC3USM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350907AbiC3UOO (ORCPT
+        with ESMTP id S1350967AbiC3USJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:14:14 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8666F90
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:12:28 -0700 (PDT)
-Received: from dslb-178-004-172-185.178.004.pools.vodafone-ip.de ([178.4.172.185] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nZefz-0007FS-Se; Wed, 30 Mar 2022 22:12:19 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 2/2] staging: r8188eu: remove the "dump tx packet" fragments
-Date:   Wed, 30 Mar 2022 22:12:10 +0200
-Message-Id: <20220330201210.175941-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220330201210.175941-1-martin@kaiser.cx>
-References: <20220330201210.175941-1-martin@kaiser.cx>
+        Wed, 30 Mar 2022 16:18:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D424413DF8;
+        Wed, 30 Mar 2022 13:16:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6C0615E7;
+        Wed, 30 Mar 2022 20:16:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1EDC340EC;
+        Wed, 30 Mar 2022 20:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648671380;
+        bh=dFReK6G/ccqgxyvll3RmFnqr4xK5lD8zAWj5KJcsY9k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dEQJQG9lABs7yWkrhMxL9f9z14ZF87wT3ku3wy2CbRtmMLAIVhVqvqrRRlTev1z4s
+         POhXsVvUz9Kz1UJkHsUofSmTNFDoq8zKSZRhpxkEN+Njo7u8dWt7/2UsJDQEFlxrr4
+         SJamsoRTAklkUWzUuIdbe2pKhZZSUWlAa3K+cafOlGwrXFEJAOgmqsbV+r6DKrBb1H
+         +8N1XPu8syL3CkAkeW+5r6i+X9fAPNj5BKhFkVaMaaabUMzCBi3HV6/3DNbMpcsyvA
+         epip0Sy5+tVn22fpHk5vA3+ht1E9g7NMfeSVGGdqWERPsTpQlGsvGqiKOBOqnqwmm1
+         yIZR68TNVIFNA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4D6895C12E4; Wed, 30 Mar 2022 13:16:20 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 13:16:20 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Put the irq work into hard interrupt context for
+ execution
+Message-ID: <20220330201620.GM4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220330060012.2470054-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330060012.2470054-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the code fragments for printing outgoing packets.
+On Wed, Mar 30, 2022 at 02:00:12PM +0800, Zqiang wrote:
+> In PREEMPT_RT kernel, if irq work flags is not set, it will be
+> executed in per-CPU irq_work kthreads. set IRQ_WORK_HARD_IRQ flags
+> to irq work, put it in the context of hard interrupt execution,
+> accelerate scheduler to re-evaluate.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tree.c        | 2 +-
+>  kernel/rcu/tree_plugin.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index e2ffbeceba69..a69587773a85 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -678,7 +678,7 @@ static void late_wakeup_func(struct irq_work *work)
+>  }
+>  
+>  static DEFINE_PER_CPU(struct irq_work, late_wakeup_work) =
+> -	IRQ_WORK_INIT(late_wakeup_func);
+> +	IRQ_WORK_INIT_HARD(late_wakeup_func);
 
-There's only a hal variable HAL_DEF_DBG_DUMP_TXPKT and the bDumpTxPkt
-component of struct hal_data_8188e.
+This is used only by rcu_irq_work_resched(), which is invoked only by
+rcu_user_enter(), which is never invoked until userspace is enabled,
+by which time all of the various kthreads will have been spawned, correct?
 
-The hal variable is set by a private ioctl, it's never read.
+Either way, please show me the exact sequence of events that lead to a
+problem with the current IRQ_WORK_INIT().
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/hal/usb_halinit.c      | 6 ------
- drivers/staging/r8188eu/include/hal_intf.h     | 1 -
- drivers/staging/r8188eu/include/rtl8188e_hal.h | 2 --
- drivers/staging/r8188eu/os_dep/ioctl_linux.c   | 4 ----
- 4 files changed, 13 deletions(-)
+>  /*
+>   * If either:
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index 3037c2536e1f..cf7bd28af8ef 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
+>  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
+>  				// Get scheduler to re-evaluate and call hooks.
+>  				// If !IRQ_WORK, FQS scan will eventually IPI.
+> -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
+> +				rdp->defer_qs_iw = IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
+>  				rdp->defer_qs_iw_pending = true;
+>  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
+>  			}
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 0b6bf84acff6..2e6fe9885c16 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1401,9 +1401,6 @@ void GetHalDefVar8188EUsb(struct adapter *Adapter, enum hal_def_variable eVariab
- 	case HAL_DEF_DBG_DM_FUNC:
- 		*((u32 *)pValue) = haldata->odmpriv.SupportAbility;
- 		break;
--	case HAL_DEF_DBG_DUMP_TXPKT:
--		*((u8 *)pValue) = haldata->bDumpTxPkt;
--		break;
- 	default:
- 		break;
- 	}
-@@ -1433,9 +1430,6 @@ void SetHalDefVar8188EUsb(struct adapter *Adapter, enum hal_def_variable eVariab
- 			}
- 		}
- 		break;
--	case HAL_DEF_DBG_DUMP_TXPKT:
--		haldata->bDumpTxPkt = *((u8 *)pValue);
--		break;
- 	default:
- 		break;
- 	}
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 8ecb49c4f038..c18f130f8153 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -46,7 +46,6 @@ enum hal_def_variable {
- 	HAL_DEF_IS_SUPPORT_ANT_DIV,
- 	HAL_DEF_CURRENT_ANTENNA,
- 	HAL_DEF_DBG_DM_FUNC,/* for dbg */
--	HAL_DEF_DBG_DUMP_TXPKT,
- };
- 
- typedef s32 (*c2h_id_filter)(u8 id);
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-index 5bda353b6a41..d2a069d4e1cc 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-@@ -160,8 +160,6 @@ struct hal_data_8188e {
- 	u8	AntDivCfg;
- 	u8	TRxAntDivType;
- 
--	u8	bDumpTxPkt;/* for debug */
--
- 	u8	OutEpQueueSel;
- 	u8	OutEpNumber;
- 
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index a45d60a7c19b..7df213856d66 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -3632,10 +3632,6 @@ static int rtw_dbg_port(struct net_device *dev,
- 			break;
- 		case 0x09:
- 			break;
--		case 0x0c:/* dump rx/tx packet */
--			if (arg == 1)
--				SetHalDefVar8188EUsb(padapter, HAL_DEF_DBG_DUMP_TXPKT, &extra_arg);
--			break;
- 		case 0x15:
- 			break;
- 		case 0x10:/*  driver version display */
--- 
-2.30.2
+OK, in theory, rcu_read_unlock() could get to this point before all of
+the various kthreads were spawned.  In practice, the next time that the
+boot CPU went idle, the end of the quiescent state would be noticed.
 
+Or has this been failing in some other manner?  If so, please let me
+know the exact sequence of events.
+
+							Thanx, Paul

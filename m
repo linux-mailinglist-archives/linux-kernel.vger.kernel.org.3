@@ -2,143 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B5C4ED46A
+	by mail.lfdr.de (Postfix) with ESMTP id A1C384ED46B
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiCaHMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S231842AbiCaHMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiCaHMR (ORCPT
+        with ESMTP id S231757AbiCaHMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:12:17 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 776686A048;
-        Thu, 31 Mar 2022 00:10:22 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C2EA992009D; Thu, 31 Mar 2022 09:10:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id BCDA692009B;
-        Thu, 31 Mar 2022 08:10:21 +0100 (BST)
-Date:   Thu, 31 Mar 2022 08:10:21 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-cc:     x86@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND][PATCH v2 3/4] x86/PCI: Also match function number in $PIR
- table
-In-Reply-To: <alpine.DEB.2.21.2203301527270.22465@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2203301536020.22465@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2203301527270.22465@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 31 Mar 2022 03:12:22 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F65B3D0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VtSyhCBRl6DDd411G5kv1lVJwnclO4BJfyyDJEiIIQQ=; b=r44vCvmN1Q4mZOvdEid41+bbQ5
+        VKde0jyZ1PAJJAX0DQvXUNXjYSbMR1O5y/GpPW12E/zBP4Ou/3pxCBLCxNGgEagFfeZZKdrYbAvAK
+        ElofHY/yYSPxonnlV2KM5fTIjQ2+rvQoVtrymkk0xUq8gX6TW5utiHtovTWK4jzin952Psuu6hRKh
+        7XhKlR1bR4UQ5Y74um1Q+1n2mTwtQr6cdP50g3hD7RHVsQB3J8jJfAIuBGcTtClXl+iNWZrfzScZ3
+        YN52iT+ZbYPjxUAHzZiKDZToAUJtGC+XPCl/vloKT8jPTEFjb5Tt+uPvmme/N9OFiiVv4KXbl6ahh
+        1wgxDnqA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58038)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nZowt-0004L7-2C; Thu, 31 Mar 2022 08:10:26 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nZowp-0007QG-Sx; Thu, 31 Mar 2022 08:10:23 +0100
+Date:   Thu, 31 Mar 2022 08:10:23 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Austin Kim <austindh.kim@gmail.com>
+Cc:     arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, austin.kim@lge.com,
+        p4ranlee@gmail.com
+Subject: Re: [PATCH] arm: kdump: add invalid value check for 'crashkernel='
+Message-ID: <YkVT3z4ksYStau85@shell.armlinux.org.uk>
+References: <20220330110715.GA1534@raspberrypi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330110715.GA1534@raspberrypi>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Contrary to the PCI BIOS specification[1] some systems include the PCI 
-function number for onboard devices in their $PIR table.  Consequently 
-the wrong entry can be matched leading to interrupt routing failures.
+On Wed, Mar 30, 2022 at 12:07:15PM +0100, Austin Kim wrote:
+> From: Austin Kim <austin.kim@lge.com>
+> 
+> Add invalid value check expression when no crashkernel= or invalid value 
+> specified using kdump.
 
-For example the Tyan Tomcat IV S1564D board has:
+Hi,
 
-00:07.1 slot=00
- 0:00/deb8
- 1:00/deb8
- 2:00/deb8
- 3:00/deb8
+I think you mean when "crashkernel=0" is specified, as other invalid
+input should result in -EINVAL being returned. Please update the
+patch description and comment.
 
-00:07.2 slot=00
- 0:00/deb8
- 1:00/deb8
- 2:00/deb8
- 3:63/deb8
+Thanks.
 
-for its IDE interface and USB controller functions of the 82371SB PIIX3 
-southbridge.  Consequently the first entry matches causing the inability 
-to route the USB interrupt in the `noapic' mode, in which case we need 
-to rely on the interrupt line set by the BIOS:
-
-uhci_hcd 0000:00:07.2: runtime IRQ mapping not provided by arch
-uhci_hcd 0000:00:07.2: PCI INT D not routed
-uhci_hcd 0000:00:07.2: enabling bus mastering
-uhci_hcd 0000:00:07.2: UHCI Host Controller
-uhci_hcd 0000:00:07.2: new USB bus registered, assigned bus number 1
-uhci_hcd 0000:00:07.2: irq 11, io base 0x00006000
-
-Try to match the PCI device and function combined then and if that fails 
-move on to PCI device matching only.  Compliant systems will only have a 
-single $PIR table entry per PCI device, so this update does not change 
-the semantics with them, while systems that have several entries for 
-individual functions of a single PCI device each will match the correct 
-entry:
-
-uhci_hcd 0000:00:07.2: runtime IRQ mapping not provided by arch
-uhci_hcd 0000:00:07.2: PCI INT D -> PIRQ 63, mask deb8, excl 0c20
-uhci_hcd 0000:00:07.2: PCI INT D -> newirq 11
-uhci_hcd 0000:00:07.2: found PCI INT D -> IRQ 11
-uhci_hcd 0000:00:07.2: sharing IRQ 11 with 0000:00:11.0
-uhci_hcd 0000:00:07.2: enabling bus mastering
-uhci_hcd 0000:00:07.2: UHCI Host Controller
-uhci_hcd 0000:00:07.2: new USB bus registered, assigned bus number 1
-uhci_hcd 0000:00:07.2: irq 11, io base 0x00006000
-
-[1] "PCI BIOS Specification", Revision 2.1, PCI Special Interest Group,
-    August 26, 1994, Table 4-1 "Layout of IRQ routing table entry.", p.
-    12
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
-No change from v1.
----
- arch/x86/pci/irq.c |   19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-linux-x86-pirq-fn.diff
-Index: linux-macro/arch/x86/pci/irq.c
-===================================================================
---- linux-macro.orig/arch/x86/pci/irq.c
-+++ linux-macro/arch/x86/pci/irq.c
-@@ -1132,18 +1132,29 @@ static void __init pirq_find_router(stru
- 	/* The device remains referenced for the kernel lifetime */
- }
- 
-+/*
-+ * We're supposed to match on the PCI device only and not the function,
-+ * but some BIOSes build their tables with the PCI function included
-+ * for motherboard devices, so if a complete match is found, then give
-+ * it precedence over a slot match.
-+ */
- static struct irq_info *pirq_get_info(struct pci_dev *dev)
- {
- 	struct irq_routing_table *rt = pirq_table;
- 	int entries = (rt->size - sizeof(struct irq_routing_table)) /
- 		sizeof(struct irq_info);
-+	struct irq_info *slotinfo = NULL;
- 	struct irq_info *info;
- 
- 	for (info = rt->slots; entries--; info++)
--		if (info->bus == dev->bus->number &&
--			PCI_SLOT(info->devfn) == PCI_SLOT(dev->devfn))
--			return info;
--	return NULL;
-+		if (info->bus == dev->bus->number) {
-+			if (info->devfn == dev->devfn)
-+				return info;
-+			if (!slotinfo &&
-+			    PCI_SLOT(info->devfn) == PCI_SLOT(dev->devfn))
-+				slotinfo = info;
-+		}
-+	return slotinfo;
- }
- 
- static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

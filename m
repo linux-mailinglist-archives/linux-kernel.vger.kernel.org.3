@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7816F4ED76A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA554ED775
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbiCaKBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S234435AbiCaKCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiCaKBc (ORCPT
+        with ESMTP id S234414AbiCaKB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:01:32 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC194991C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:59:42 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 582E968AA6; Thu, 31 Mar 2022 11:59:37 +0200 (CEST)
-Date:   Thu, 31 Mar 2022 11:59:37 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wefu@redhat.com,
-        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
-        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
-        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu
-Subject: Re: [PATCH v8 09/14] riscv: Fix accessing pfn bits in PTEs for
- non-32bit variants
-Message-ID: <20220331095937.GF23422@lst.de>
-References: <20220324000710.575331-1-heiko@sntech.de> <20220324000710.575331-10-heiko@sntech.de>
+        Thu, 31 Mar 2022 06:01:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600A24B40D;
+        Thu, 31 Mar 2022 03:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFCE260C00;
+        Thu, 31 Mar 2022 10:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CDC8C340F0;
+        Thu, 31 Mar 2022 10:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648720812;
+        bh=7kivzHxJk+qKjtFYXZJ8B+or+rJ8QAVywzC1Iby4eGM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WrfME0wPF93aWuh8JdbMyI887S83j92nsTgG24LX+ghOb/oWI7ZatNo1KCBlSy3mD
+         UqHQhqNa9aNKeMN2pYQ/LIfxKoZKHJBqI2pJ3sfBpYBU12bCGecC16UT73CkYvmcwJ
+         LkdIb//Xu6CUOY1HvsTeP7x3eiNxhBytG+JAr5O+4KVBMGcOA7WPhXUjSWUrQVDq2M
+         mh9lt5pE5X6nz4iWj8lS6LuREeMgFTVsLi0VRNwHS7PWDu07Osfqhaf+q8VghItY7J
+         72gijBct9wc3rPiaAMzZTEUfsbr48b0/YenvpNytx3aUlDKsffHFQjz8GUF4uhu0y8
+         RhXs8uPj/vdpg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A214E7BB0B;
+        Thu, 31 Mar 2022 10:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220324000710.575331-10-heiko@sntech.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net 0/2] net: hns3: add two fixes for -net
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164872081203.6232.16343309944190309712.git-patchwork-notify@kernel.org>
+Date:   Thu, 31 Mar 2022 10:00:12 +0000
+References: <20220330134506.36635-1-huangguangbin2@huawei.com>
+In-Reply-To: <20220330134506.36635-1-huangguangbin2@huawei.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
+        chenhao288@hisilicon.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 01:07:05AM +0100, Heiko Stuebner wrote:
-> On rv32 the PFN part of PTEs is defined to use bits [xlen-1:10]
-> while on rv64 it is defined to use bits [53:10], leaving [63:54]
-> as reserved.
-> 
-> With upcoming optional extensions like svpbmt these previously
-> reserved bits will get used so simply right-shifting the PTE
-> to get the PFN won't be enough.
-> 
-> So introduce a _PAGE_PFN_MASK constant to mask the correct bits
-> for both rv32 and rv64 before shifting.
-> 
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/include/asm/pgtable-32.h   |  8 ++++++++
->  arch/riscv/include/asm/pgtable-64.h   | 14 +++++++++++---
->  arch/riscv/include/asm/pgtable-bits.h |  6 ------
->  arch/riscv/include/asm/pgtable.h      |  6 +++---
->  4 files changed, 22 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/pgtable-32.h b/arch/riscv/include/asm/pgtable-32.h
-> index 5b2e79e5bfa5..e266a4fe7f43 100644
-> --- a/arch/riscv/include/asm/pgtable-32.h
-> +++ b/arch/riscv/include/asm/pgtable-32.h
-> @@ -7,6 +7,7 @@
->  #define _ASM_RISCV_PGTABLE_32_H
->  
->  #include <asm-generic/pgtable-nopmd.h>
-> +#include <linux/bits.h>
->  #include <linux/const.h>
->  
->  /* Size of region mapped by a page global directory */
-> @@ -16,4 +17,11 @@
->  
->  #define MAX_POSSIBLE_PHYSMEM_BITS 34
->  
-> +/*
-> + * rv32 PTE format:
-> + * | XLEN-1  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> + *       PFN      reserved for SW   D   A   G   U   X   W   R   V
-> + */
-> +#define _PAGE_PFN_MASK  GENMASK(31, 10)
+Hello:
 
-I have to say I really hate this obsfucating GENMASK macro, but it
-does have a few other uses in the riscv code.
+This series was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-> +/*
-> + * rv64 PTE format:
-> + * | 63 | 62 61 | 60 54 | 53  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> + *   N      MT     RSV    PFN      reserved for SW   D   A   G   U   X   W   R   V
-> + */
->
-> +#define _PAGE_PFN_MASK  GENMASK(53, 10)
-> +
->  static inline int pud_present(pud_t pud)
->  {
->  	return (pud_val(pud) & _PAGE_PRESENT);
-> @@ -91,12 +99,12 @@ static inline unsigned long _pud_pfn(pud_t pud)
->  
->  static inline pmd_t *pud_pgtable(pud_t pud)
->  {
-> -	return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
-> +	return (pmd_t *)pfn_to_virt((pud_val(pud) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
+On Wed, 30 Mar 2022 21:45:04 +0800 you wrote:
+> This series adds two fixes for the HNS3 ethernet driver.
+> 
+> Guangbin Huang (1):
+>   net: hns3: fix software vlan talbe of vlan 0 inconsistent with
+>     hardware
+> 
+> Yufeng Mo (1):
+>   net: hns3: fix the concurrency between functions reading debugfs
+> 
+> [...]
 
-Lots of overly long lins making this pretty unreadable.
+Here is the summary with links:
+  - [net,1/2] net: hns3: fix the concurrency between functions reading debugfs
+    https://git.kernel.org/netdev/net/c/9c9a04212fa3
+  - [net,2/2] net: hns3: fix software vlan talbe of vlan 0 inconsistent with hardware
+    https://git.kernel.org/netdev/net/c/7ed258f12ec5
 
-But in general the (pfn & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT logic
-really should have a helper anyway.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

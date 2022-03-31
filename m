@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F74B4ED1F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B494ED1F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiCaCyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 22:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S229891AbiCaC6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 22:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiCaCyg (ORCPT
+        with ESMTP id S229911AbiCaC5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 22:54:36 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69595111DF0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:52:44 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t4so15856859pgc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:52:44 -0700 (PDT)
+        Wed, 30 Mar 2022 22:57:53 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071EFD7627
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:56:00 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id x20so39908485ybi.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PYuCQIvuD74pqIke58Nyk48QUD+/IoXOla1cm+PGYVY=;
-        b=hOOvNdihbsPP0Nxr6SkheJbdoeJzJ/yyoY42Rvw6MwDxI6QRNXPYLThSsB8bvTWCyo
-         HjaXt9EW3kae+oo+kV1WgcwFd3HufMJHM0S5YiBrmA2fOSvo0EWOyR6TnsOUEXdOKPVw
-         GalyzJgwVeeHR9Jm+wILSPvJxFQ9hnS/IkwgoVemWNaeQv4/gthiXm7QSrAEQHWozUfm
-         eukbz83KDu6zo8KyCwipjDAWhA9wzjDy9ZZ+JoxSmPi8ANT3h3MROsQyakvoDMldSEEx
-         DqlDDn822DjnOUbVguWqaxZZ6ESmv/GTJEd2uASr8mxZpZxe1bwOvnmK2lwbnIdzj7Rx
-         4NFg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LDGcIKDDCWfntxIrDwg9NeEeCU9Lt3ZtVZJtgLcXbjo=;
+        b=ehvnGf0k3aAoq9MC2JYKyRY0i4dKaTVRiQuSZTvJKKIQkMCypskYgzN4Xm/JZ52RC/
+         vK4R4fZ/MtrdkHepjo7BcnI12BnCd+kS2eiqIJB2uoKfcoKGfxcSryGLZzFQXRB/SSqA
+         WxQDRxBwkq47q9kYArRurS3/a/bs9pEhxJ4HWxa/v1mvrJrPsrZgUm21pX5NOE+NCmYP
+         NTDa4hYvbaVQvfUj7MoHdxT+X99VAM/tHihgKAzlBkVVtDaqc9MOOPAHACpZtT83gCk9
+         cRehK8HZzQ+ywONbDwHF9mFr7g1MEi3Q4cFY7IJOnk+VwX8lXE1NdbVVHaR6WIZUAUdT
+         nC0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PYuCQIvuD74pqIke58Nyk48QUD+/IoXOla1cm+PGYVY=;
-        b=Y9ylrGZrXV4D+aVOzwGxAvGV0OAvU9wCTiQZfdu3Ye7vJNG7kdr2ZguMp7d+te34ZU
-         GBTQtmc/pB9XOVr8pvPaZZvcJt/CHl0O5n8La9+Jj1J2sWRUQExHFrDg1NPYTh8bVGKu
-         ksNLUzbRGMzsNiHdukmyj5aitwcilVu8f7jjfwldMSSAj92wrRaN3jfuhKjP0DYahk4/
-         qZ75xOmWqMv1S9xFwL+WZ0FBjxS/WD/lTKllgD7zvsd1BfcsVbgXNIc7tFqvCy9jHEj7
-         a0Rg89Y4zEQX0Jh5KBFz2wcT3OPu8atZF6ZamsqwvsJ9tJGsrrdvERJvi9QZHKuc09gg
-         LDUA==
-X-Gm-Message-State: AOAM5312fpdTju0hhtLgPzZX0VQTdMZu1zoqG82htEFnloIxJ1EFkAx1
-        HMlnKfwhXZNyrH2RaMwnc6ZlQratMWVReA==
-X-Google-Smtp-Source: ABdhPJwRX/OnGSaAmRsG3TAjUqrDjnoNgZl+Dw9mNkJ2g2ay234Usz0Um3HtxwAWBPxWy1BU9pQK3w==
-X-Received: by 2002:a63:770c:0:b0:386:361f:ecce with SMTP id s12-20020a63770c000000b00386361feccemr8852405pgc.202.1648694949570;
-        Wed, 30 Mar 2022 19:49:09 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fb44e0cb17sm14937316pfw.116.2022.03.30.19.49.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 19:49:09 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 08:19:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] opp: use list iterator only inside the loop
-Message-ID: <20220331024906.i7ucvoxrkkfpb6w5@vireshk-i7>
-References: <20220331023608.30497-1-xiam0nd.tong@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LDGcIKDDCWfntxIrDwg9NeEeCU9Lt3ZtVZJtgLcXbjo=;
+        b=EQKvnsx0ArgtGm9rgmVkaeBqPLunNeVijZN83vSqW6XYfLDJ6jDWqBs2aijKRYIhPJ
+         bBKt0n1RCNFYxNXF/XYGdG2Dpv34Mou55UFEyrMWIIB3M5qn4/Ey3RXDQszdwRubyiK0
+         CCpkbeQA/6muoE/bq03/DnW0oatvGhqdy9cLCVnkkcG79Hc9O7Rt+XZAedGvwhcHSuVY
+         xW8naBiypk21W0AVn8G3fRgjkjdKUyzhRLh56S3sMm24nUGeioeyomBEXQZsSOekmXK9
+         TvjQKSftxeL+IlEk7DJynod06q9R4n9OrJuKeQXADn6w5oWTvhVnlfBKbc/85JkVgts3
+         r73A==
+X-Gm-Message-State: AOAM533Dqy3A/Nx4RvdBCQAyVziJyV1JJ7SVVnxFbnefXzKuuFlBjpr6
+        XKyY5brzx55CepvRUvT3L1Pl3lHyJpZ0cOI7O5RMYQ==
+X-Google-Smtp-Source: ABdhPJxAoUYq0gy2PYb5dAIdtttQkFTZaQDjRFIKDP9yxDhDCV22s3LsslKjxvT4uh0wdtnGs1uY4ySHCJU1/VDmZh8=
+X-Received: by 2002:a25:e70e:0:b0:634:1a47:4ff2 with SMTP id
+ e14-20020a25e70e000000b006341a474ff2mr2484276ybh.89.1648695213764; Wed, 30
+ Mar 2022 19:53:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331023608.30497-1-xiam0nd.tong@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220330153745.20465-1-songmuchun@bytedance.com>
+ <20220330153745.20465-2-songmuchun@bytedance.com> <20220330192827.4b95e3d7fb149ef9cc687ccb@linux-foundation.org>
+In-Reply-To: <20220330192827.4b95e3d7fb149ef9cc687ccb@linux-foundation.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 31 Mar 2022 10:52:58 +0800
+Message-ID: <CAMZfGtXsMZ7ZwAzV5yZ39TB-=Q7Lw8oyjq2m65SXqHGwHQfj9w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31-03-22, 10:36, Xiaomeng Tong wrote:
-> The list iterator 'new_dev' will point to a bogus position containing
-> HEAD if any one of these conditions is possible: the list is empty or
-> no element is found, thus can potentially lead to an invalid memory
-> access in 'dev = new_dev->dev;'.
+On Thu, Mar 31, 2022 at 10:28 AM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Wed, 30 Mar 2022 23:37:42 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> > If the size of "struct page" is not the power of two and this
+> > feature is enabled,
+>
+> What is "this feature"?   Let's spell it out?
 
-There is no such bug as I explained earlier, why you added this again
-despite being discussed ?
+Will do.
 
-> As discussed before,
+>
+> > then the vmemmap pages of HugeTLB will be
+> > corrupted after remapping (panic is about to happen in theory).
+> > But this only exists when !CONFIG_MEMCG && !CONFIG_SLUB on
+> > x86_64.  However, it is not a conventional configuration nowadays.
+> > So it is not a real word issue, just the result of a code review.
+> > But we have to prevent anyone from configuring that combined
+> > configuration.  In order to avoid many checks like "is_power_of_2
+> > (sizeof(struct page))" through mm/hugetlb_vmemmap.c.  Introduce
+> > STRUCT_PAGE_SIZE_IS_POWER_OF_2 to detect if the size of struct
+> > page is power of 2 and make this feature depends on this new
+> > macro.  Then we could prevent anyone do any unexpected
+> > configuration.
+> >
+> > ...
+> >
+> > --- /dev/null
+> > +++ b/mm/struct_page_size.c
+> > @@ -0,0 +1,20 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Generate definitions needed by the preprocessor.
+> > + * This code generates raw asm output which is post-processed
+> > + * to extract and format the required data.
+> > + */
+> > +
+> > +#define __GENERATING_STRUCT_PAGE_SIZE_IS_POWER_OF_2_H
+> > +/* Include headers that define the enum constants of interest */
+> > +#include <linux/mm_types.h>
+> > +#include <linux/kbuild.h>
+> > +#include <linux/log2.h>
+> > +
+> > +int main(void)
+> > +{
+> > +     if (is_power_of_2(sizeof(struct page)))
+> > +             DEFINE(STRUCT_PAGE_SIZE_IS_POWER_OF_2, is_power_of_2(sizeof(struct page)));
+>
+> Why not
+>
+>         DEFINE(STRUCT_PAGE_SIZE_IS_POWER_OF_2, 1);
+>
 
-I just told you not to use such language as this will go in logs, but
-you still chose to add it :(
+Yep, this is more simple.  But the 2nd parameter of DEFINE() will
+go into the comments.  I want to make it more clear when someone
+reads the code of this macro.  The two different sentences will
+generate the following two different comments.  Which one do
+you think is better?
 
-> we should avoid to use a list iterator variable
-> outside the loop which is considered harmful[1].
-> 
-> In this case, use a new variable 'iter' as the list iterator, while
-> use the old variable 'new_dev' as a dedicated pointer to point to the
-> found entry. And BUG_ON(!new_dev);.
+#define STRUCT_PAGE_SIZE_IS_POWER_OF_2 1 /*
+is_power_of_2(sizeof(struct page)) */
+#define STRUCT_PAGE_SIZE_IS_POWER_OF_2 1 /* 1 */
 
-Please look at this on how to write the log, which fixes a very
-similar problem.
-
-https://lore.kernel.org/all/20220324071815.61405-1-jakobkoschel@gmail.com/
-
-> 
-> [1]:  https://lkml.org/lkml/2022/2/17/1032
-> 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
-> 
-> changes since v1:
->  - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
-> 
-> v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
-> 
-> ---
->  drivers/opp/debugfs.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 596c185b5dda..81b2bc4b5f43 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -187,14 +187,18 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
->  static void opp_migrate_dentry(struct opp_device *opp_dev,
->  			       struct opp_table *opp_table)
->  {
-> -	struct opp_device *new_dev;
-> +	struct opp_device *new_dev = NULL, *iter;
->  	const struct device *dev;
->  	struct dentry *dentry;
->  
->  	/* Look for next opp-dev */
-> -	list_for_each_entry(new_dev, &opp_table->dev_list, node)
-> -		if (new_dev != opp_dev)
-> +	list_for_each_entry(iter, &opp_table->dev_list, node)
-> +		if (iter != opp_dev) {
-> +			new_dev = iter;
->  			break;
-> +		}
-> +
-> +	BUG_ON(!new_dev);
->  
->  	/* new_dev is guaranteed to be valid here */
->  	dev = new_dev->dev;
-> -- 
-> 2.17.1
-
--- 
-viresh
+Thanks.

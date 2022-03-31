@@ -2,147 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C717C4EDAF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448BA4EDAF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237080AbiCaN7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S237091AbiCaN7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237078AbiCaN67 (ORCPT
+        with ESMTP id S236546AbiCaN7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:58:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD80216FAF;
-        Thu, 31 Mar 2022 06:57:09 -0700 (PDT)
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KTlDv4TcFzgYH4;
-        Thu, 31 Mar 2022 21:55:27 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 21:57:07 +0800
-Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
- (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 31 Mar
- 2022 21:57:06 +0800
-Subject: Re: [PATCH] net: phy: genphy_loopback: fix loopback failed when speed
- is unknown
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <o.rempel@pengutronix.de>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
-        <chenhao288@hisilicon.com>
-References: <20220331114819.14929-1-huangguangbin2@huawei.com>
- <YkWdTpCsO8JhiSaT@lunn.ch>
-From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
-Message-ID: <130bb780-0dc1-3819-8f6d-f2daf4d9ece9@huawei.com>
-Date:   Thu, 31 Mar 2022 21:57:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Thu, 31 Mar 2022 09:59:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D90216FAF;
+        Thu, 31 Mar 2022 06:57:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4B54617E4;
+        Thu, 31 Mar 2022 13:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B324DC340EE;
+        Thu, 31 Mar 2022 13:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648735064;
+        bh=kKFP0KHKA72TEtrMcuk7Pg2PVfkLL6KiQWCPUtPpB48=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VRYxW/phDDG/Y6yxs9nFf18742XrhE6Pck15HYEd7BFDAk7dp2O8cOXUA2zgPAkGt
+         6b14k/GSOj7FOAbezUC81AUGjJ+FSR/4Teq4d7ifTidYr96lXR0TlTCxrJ+IQ/QMnb
+         4aGF/VfkQqejBZBf81FUABL/A38nml2hUgmYioeM=
+Date:   Thu, 31 Mar 2022 15:57:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     niravkumar.l.rabara@intel.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Add Altera hardware mutex driver
+Message-ID: <YkWzU8dFT7Uom8mN@kroah.com>
+References: <20220331214911.27194-1-niravkumar.l.rabara@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YkWdTpCsO8JhiSaT@lunn.ch>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331214911.27194-1-niravkumar.l.rabara@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 01, 2022 at 05:49:11AM +0800, niravkumar.l.rabara@intel.com wrote:
+> ---
+>  .../bindings/misc/altera-hwmutex.yaml         |  47 +++
+>  drivers/misc/Kconfig                          |   6 +
+>  drivers/misc/Makefile                         |   1 +
+>  drivers/misc/altera_hwmutex.c                 | 321 ++++++++++++++++++
+>  include/linux/altera_hwmutex.h                |  42 +++
 
+There is no need for a .h file for a single .c file.  Please fix that up
+for your next submission.
 
-On 2022/3/31 20:23, Andrew Lunn wrote:
-> On Thu, Mar 31, 2022 at 07:48:19PM +0800, Guangbin Huang wrote:
->> If phy link status is down because link partner goes down, the phy speed
->> will be updated to SPEED_UNKNOWN when autoneg on with general phy driver.
->> If test loopback in this case, the phy speed will be set to 10M. However,
->> the speed of mac may not be 10M, it causes loopback test failed.
->>
->> To fix this problem, if speed is SPEED_UNKNOWN, don't configure link speed.
-> 
-> I don't think this explanation is correct.
-> 
-> If speed is UNKNOWN, ctl is just going to have BMCR_LOOPBACK set. That
-> is very similar to what you are doing. The code then waits for the
-> link to establish. This is where i guess your problem is. Are you
-> seeing ETIMEDOUT? Does the link not establish?
-> 
-> Thanks
-> 	Andrew	
-> .
-> 
-Hi Andrew
-This problem is not timeout, I have print return value of phy_read_poll_timeout()
-and it is 0.
+I don't think I need to read anymore :)
 
-In this case, as speed and duplex both are unknown, ctl is just set to 0x4000.
-However, the follow code sets mask to ~0 for function phy_modify():
-int genphy_loopback(struct phy_device *phydev, bool enable)
-{
-	if (enable) {
-		...
-		phy_modify(phydev, MII_BMCR, ~0, ctl);
-		...
-}
-so all other bits of BMCR will be cleared and just set bit 14, I use phy trace to
-prove that:
+thanks,
 
-$ cat /sys/kernel/debug/tracing/trace
-# tracer: nop
-#
-# entries-in-buffer/entries-written: 923/923   #P:128
-#
-#                                _-----=> irqs-off/BH-disabled
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| / _-=> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-   kworker/u257:2-694     [015] .....   209.263912: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
-   kworker/u257:2-694     [015] .....   209.263951: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-   kworker/u257:2-694     [015] .....   209.263990: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-   kworker/u257:2-694     [015] .....   209.264028: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x09 val:0x0200
-   kworker/u257:2-694     [015] .....   209.264067: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x0a val:0x0000
-          ethtool-1148    [007] .....   209.665693: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
-          ethtool-1148    [007] .....   209.665706: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x1840
-          ethtool-1148    [007] .....   210.588139: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1840
-          ethtool-1148    [007] .....   210.588152: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x1040
-          ethtool-1148    [007] .....   210.615900: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
-          ethtool-1148    [007] .....   210.615912: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x4000 //here just set bit 14
-          ethtool-1148    [007] .....   210.620952: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.625992: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.631034: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.636075: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.641116: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.646159: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.651215: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.656256: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.661296: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.666338: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-          ethtool-1148    [007] .....   210.671378: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x798d
-          ethtool-1148    [007] .....   210.679016: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x4000
-          ethtool-1148    [007] .....   210.679053: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x798d
-          ethtool-1148    [007] .....   210.679091: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x09 val:0x0200
-          ethtool-1148    [007] .....   210.679129: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x0a val:0x0000
-          ethtool-1148    [007] .....   210.695902: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x4000
-          ethtool-1148    [007] .....   210.695939: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x798d
-          ethtool-1148    [007] .....   210.695977: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x09 val:0x0200
-          ethtool-1148    [007] .....   210.696014: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x0a val:0x0000
-
-So phy speed will be set to 10M in this case, if previous speed of device before going
-down is 10M, loopback test is pass. Only previous speed is 100M or 1000M, loopback test is failed.
-
-Thanks
-	Guangbin
-.
+greg k-h

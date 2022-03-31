@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF9E4ED92E
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450DF4ED932
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiCaMD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S235695AbiCaMEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbiCaMDM (ORCPT
+        with ESMTP id S236167AbiCaMDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 31 Mar 2022 08:03:12 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601965C7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:00:40 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id u207so6571559vsu.10
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:00:40 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835721C16FD;
+        Thu, 31 Mar 2022 05:00:43 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g20so27870920edw.6;
+        Thu, 31 Mar 2022 05:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n7p8Uq2+lZWPYal2atoqxtilGwC7bZj30FTcIre8js8=;
-        b=bqEyU9czIxM2OrF6DA/wE3J8vr9cBJZA2LzCfiKSISgPpa/TESqOK2qL3GirYtGp2w
-         /nJdRX66BTMYmHxSx7yLAaqFDcUn+k2AVJ2TMql0zuwajox5QXagtYTxQvv1SVHCAjc8
-         ShvNbrSsyz9ZNLPs1cq1xIDOn5v+MqS/7ApKw=
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=eGk6hp1cjRwf/Z2iSyo20kNLHbQVMFCNuaMs0Rs1280=;
+        b=AOVyRosQIc5R2N1+6CICHmtlfUo4QCpEVrmcWBz/JrGlqhg+6pPeHXqvhfRxrcRjws
+         KzaTC02Hv8cOGF6HCXLwm55ukcSQnXmOTuq4e//KmC9j10bu9tLC3K7iXdPXmtS8iXRS
+         j6U2H0SrKB8pxDTTBNdPwJOYSo2/yLfmycuzlqiVgadJgoRxOTGfxcB7vXawbXlTesfu
+         aXmFod8GJDje4nrM8tT8Lofw8NN1bs5FYUx9DdCO6B2YhbTSaFLKGyoh3a/3vKcnZOd4
+         v91RY1gBMoPU2tS50Bxcyhj676wVBR9ZJf6Kqz8tuSed+XuTxMQxGom4X1SuKu2NPxAH
+         bnsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n7p8Uq2+lZWPYal2atoqxtilGwC7bZj30FTcIre8js8=;
-        b=AnKQhNaEI8O65atHpcy7bdgGheUW2GnPpj+kYpKZhzzpRFG6SX7FLdcfbY13kxKk7Y
-         kKY+0ywxfkkXE31+8rbWJaEjKXJsQAGzBs42iZtjSpbcy/eUxHm4CzVrbOk17Pz77Sq9
-         PP2EpC4pTqw3XeM592F8NfuOPaZnb6Njm7zbdduXCh53chpZm2JlKrTbNRXxWhxhC41I
-         kP9a27JMa8HlOMP5CTQFuHJSxWVoN5CtBT1PG4NiUm8TDEwD33Q6wJBsoV4815ulilbz
-         i+8ZOvve4iRC/qXe7xEe8UN6R8MT9tZkb0LA+N1ZAANgp6xhFrtc76qQPH5wx2hzjqGC
-         fFZg==
-X-Gm-Message-State: AOAM533mLZj5aclD/0uHOATssMObcnXjq4U6Dx8Y5DWb5N0PYRiI/UCM
-        C5z9xxsOdV7a/WFIetBCeRHjpXJ56elEcMfDiviF8w==
-X-Google-Smtp-Source: ABdhPJwDM4xS5vEd9KdONZjoeyi4xmvPxFKo/aadxZWwYA48QQoGh1IvN+jWltCA/JbpwdWTlMNjWUsabNEmni0bYmw=
-X-Received: by 2002:a67:fd0b:0:b0:31b:e36d:31b1 with SMTP id
- f11-20020a67fd0b000000b0031be36d31b1mr1587242vsr.44.1648728039267; Thu, 31
- Mar 2022 05:00:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <SL2P216MB12463DE2E1E100E2498A5C33FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
- <SL2P216MB1246D7900A0B9620F1E1A038FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
- <YkWRN4ac0ivRn4aB@kroah.com> <CAFr9PXm3Mvr0guGoPDKmashMhFG6OQMvXHxwX-SD5ZHPi_sw4g@mail.gmail.com>
- <YkWV6HGkGHvgSwCj@kroah.com>
-In-Reply-To: <YkWV6HGkGHvgSwCj@kroah.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Thu, 31 Mar 2022 21:00:28 +0900
-Message-ID: <CAFr9PX=s0CRtcVw_5xk7F6MRZ+svFK_cUDRzdaOFxcPGe4tBmA@mail.gmail.com>
-Subject: Re: [PATCH v6 4/6] staging: media: wave5: Add TODO file
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nas Chung <nas.chung@chipsnmedia.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "dafna3@gmail.com" <dafna3@gmail.com>,
-        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
-        "kiril.bicevski@collabora.com" <kiril.bicevski@collabora.com>,
-        "lafley.kim" <lafley.kim@chipsnmedia.com>,
-        Scott Woo <scott.woo@chipsnmedia.com>,
-        "olivier.crete@collabora.com" <olivier.crete@collabora.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=eGk6hp1cjRwf/Z2iSyo20kNLHbQVMFCNuaMs0Rs1280=;
+        b=Dnpze0s+1sUZW9hxocMh5oRNeebfv4qqQQMnHg2n897bk9vhLRKDkSqg+gFieDHuTo
+         0zZT9c6oiXskufvf/WrMumF0y4xmQXl+FSLfFisRN46xK1Yfdq6SMVrRxj+FAvshTxFU
+         ReRdqqCDqOPObXJQXm6KFuOz5omov3Ox5bmxxcQIpsgb/iE270+axVVX3bt+OdB6uyVw
+         2pkkuogtkruSx3S92DmDCLB+zDKOWdFetPgMx44IddI3l2hukIrsRTX+I3L/XzgvdEPw
+         1zs0aCMSl4l02x4XMPfjsCXJuUwk/PR93QBLew9gK6ZGzz6dSROD4WknZ702hjcxRyBh
+         wGEA==
+X-Gm-Message-State: AOAM532Bv2eyOrF13Gxr7NM4nCgi+drfXgK7TAtwYeeKKiFXojDV4ZeD
+        FhC2hpQFrPQYpRST9yD/aiY=
+X-Google-Smtp-Source: ABdhPJzfmp3R/snJpoz4JKLB8p6kVhzjLK3y15+yg2Msn43WCATfPtX/lADAdX1oJyKqIod0tml/Vw==
+X-Received: by 2002:aa7:da85:0:b0:419:1e13:205c with SMTP id q5-20020aa7da85000000b004191e13205cmr16173995eds.363.1648728042064;
+        Thu, 31 Mar 2022 05:00:42 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id j18-20020a170906535200b006e007fa9d0fsm9546074ejo.149.2022.03.31.05.00.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 31 Mar 2022 05:00:41 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH v2] block: use dedicated list iterator variable
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <a7b2fe8d-9967-2046-67a5-62d10e95a861@kernel.dk>
+Date:   Thu, 31 Mar 2022 14:00:39 +0200
+Cc:     linux-block <linux-block@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: 7bit
+Message-Id: <E262CAA9-1B49-4035-9181-28C6FFDBE21F@gmail.com>
+References: <20220331091218.641532-1-jakobkoschel@gmail.com>
+ <a7b2fe8d-9967-2046-67a5-62d10e95a861@kernel.dk>
+To:     Jens Axboe <axboe@kernel.dk>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Thu, 31 Mar 2022 at 20:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> According to the text in this driver, it will not work on these hardware
-> as it is broken.  Unless that text is incorrect?
 
-I think that's for risc-v.
-The other chip this is in is ARM Cortex A7. The crusty vendor linux
-BSP for this chip manages to play videos using it so it does work in a
-real piece of hardware.
+> On 31. Mar 2022, at 13:59, Jens Axboe <axboe@kernel.dk> wrote:
+> 
+> On 3/31/22 3:12 AM, Jakob Koschel wrote:
+>> To move the list iterator variable into the list_for_each_entry_*()
+>> macro in the future it should be avoided to use the list iterator
+>> variable after the loop body.
+>> 
+>> To *never* use the list iterator variable after the loop it was
+>> concluded to use a separate iterator variable instead of a
+>> found boolean [1].
+> 
+> Not a huge fan of doing a helper for this single use, but I guess it
+> does make the main function easier to code. So I guess that's fine. But
+> can you move the call down where the result is checked?
+> 
+> qe = blk_lookup_qe_pair(head, q);
+> if (!qe)
+> 	return;
+> 
+> I prefer no distance between call and check, makes it easier to read. I
+> can make the edit locally and note it in the commit message so you don't
+> have to re-send it. Let me know, or just resend a v3.
 
-Cheers,
+I'm fine with you doing the change locally, thanks!
 
-Daniel
+> 
+> -- 
+> Jens Axboe
+> 
+
+	Jakob

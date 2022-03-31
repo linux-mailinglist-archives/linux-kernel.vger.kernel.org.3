@@ -2,97 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89E54ED86B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E0F4ED877
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbiCaL0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S235150AbiCaL1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiCaL0J (ORCPT
+        with ESMTP id S232647AbiCaL1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:26:09 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA8CE01D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:24:22 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso2230822pju.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=i57N+tGNg9+lxUlQKsWwq5Omt6VcQdu96X0KROKr1/k=;
-        b=KtqlA9fX/tJSJ02dmocwpAP424iX3FqSF65XaMLx81Uaubal027nAO76/jDh9EelCQ
-         CXOr5jfPzHhERNgPvaSFHrrdb813KKHX3/GeQQiP/Wjh+ANE3dD7DLqxWMdDW7zmZaLi
-         WTK21c7ESmN2y5EmUTLI3rNGuBTER4hMGiqfajejPzkmaBL35k1zsfe7+j2qFDAPzQ1S
-         Vaxonxny+3ueKDkJNqaZQOPFEYg9BNFUK8QwH28NxXJh3V29BkJvUs732E8+zEciHZBX
-         VU4oVld459kWWj3uQZr+YhGMPBlX4xY5VKA8PnBZ6VFVqV74+A8r4eBBEqh30GsYJk7r
-         4fbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=i57N+tGNg9+lxUlQKsWwq5Omt6VcQdu96X0KROKr1/k=;
-        b=ixRAJImCLGmxkdxelkadzopoutrHH9F2VyLBDt6GcKb/5pPVkeMxPiFLwzQ86WyXQ9
-         Fsa+u9TNJSF4FZnwuR12hYvlzQLj7EtjwH36mkaPsWVOrxDr4zWCsQXCHYUIMeA0Ajt5
-         wLAgRO+JpCqWsT6bSLqQZ1alGiZDFRVznupQd4T51W/EKizUzTfLN/UZhpHBJorZAiYM
-         GR89i8QYYfLGs4YIm9EUy3volmVMYyabSqhyd9ha3NAxBekNH5G7zuqIJiS2Lf63R0DB
-         1rGyXBdr5XAjLZZeuTXUGnRUiwWbtB3G4GqTAnaV7F/HVoi+/JMFTyk34yax0uSKqdXR
-         N0pg==
-X-Gm-Message-State: AOAM532r4W1hHE6jL5tc9IktZocsw02R3NS642ZucnQzOmRthvpIvQ2S
-        FOuy7xcYMxKRIvAbL7qXYiI=
-X-Google-Smtp-Source: ABdhPJztcnIK6iFTn+TcQVq5JU0xh1tEw3pqrLYDdKQiAGOlzjy4M214ICBNWrIIxeKGLQSIpQ3CBQ==
-X-Received: by 2002:a17:902:a404:b0:14b:1100:aebc with SMTP id p4-20020a170902a40400b0014b1100aebcmr41196969plq.133.1648725861768;
-        Thu, 31 Mar 2022 04:24:21 -0700 (PDT)
-Received: from raspberrypi ([49.166.114.232])
-        by smtp.gmail.com with ESMTPSA id nv11-20020a17090b1b4b00b001c71b0bf18bsm9998073pjb.11.2022.03.31.04.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 04:24:21 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 12:24:16 +0100
-From:   Austin Kim <austindh.kim@gmail.com>
-To:     linux@armlinux.org.uk, arnd@arndb.de
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        austin.kim@lge.com, p4ranlee@gmail.com
-Subject: [PATCH v2] arm: kdump: add invalid input check for 'crashkernel=0'
-Message-ID: <20220331112416.GA1002@raspberrypi>
+        Thu, 31 Mar 2022 07:27:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C27E25AA5E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648725942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b6v/pxjtS/nh5kH/fMn5ErzXLtOidoMFG1j3n8OeUoY=;
+        b=Lr3UYchF8LvW3GdotZBnXAVHeA+tSsePi668aqvcw6hxgLxnn94AxGzOeJYz9DoaddU0lm
+        7ztnaUHNXL9vYtMnXzVIdT2eC0zbSlccS0r9CNXeisTuBBma0Dwi7DbGexjvJhagfz6gkH
+        K6uuK5dxMOQmFTGWYxHFQCcCGYVnggU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-2ygecy6bMCqNaExH4GWkJg-1; Thu, 31 Mar 2022 07:25:39 -0400
+X-MC-Unique: 2ygecy6bMCqNaExH4GWkJg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A88823C11C6F;
+        Thu, 31 Mar 2022 11:25:38 +0000 (UTC)
+Received: from localhost (ovpn-13-26.pek2.redhat.com [10.72.13.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 09B1F401E67;
+        Thu, 31 Mar 2022 11:25:36 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 19:25:33 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, willy@infradead.org,
+        kexec@lists.infradead.org, yangtiezhu@loongson.cn,
+        amit.kachhap@arm.com, hch@lst.de, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v4 0/4] Convert vmcore to use an iov_iter
+Message-ID: <YkWPrWOe1hlfqGdy@MiWiFi-R3L-srv>
+References: <20220318093706.161534-1-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220318093706.161534-1-bhe@redhat.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Austin Kim <austin.kim@lge.com>
+Hi Andrew,
 
-Add invalid input check expression when 'crashkernel=0' is specified 
-running kdump.
+On 03/18/22 at 05:37pm, Baoquan He wrote:
+> Copy the description of v3 cover letter from Willy:
 
-Signed-off-by: Austin Kim <austin.kim@lge.com>
----
- arch/arm/kernel/setup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Could you pick this series into your tree? I reviewed the patches 1~3
+and tested the whole patchset, no issue found.
 
-diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-index 039feb7cd590..1e8a50a97edf 100644
---- a/arch/arm/kernel/setup.c
-+++ b/arch/arm/kernel/setup.c
-@@ -1004,7 +1004,8 @@ static void __init reserve_crashkernel(void)
- 	total_mem = get_total_mem();
- 	ret = parse_crashkernel(boot_command_line, total_mem,
- 				&crash_size, &crash_base);
--	if (ret)
-+	/* invalid value specified or crashkernel=0 */
-+	if (ret || !crash_size)
- 		return;
- 
- 	if (crash_base <= 0) {
--- 
-2.20.1
+Thanks
+Baoquan
+
+> ===
+> For some reason several people have been sending bad patches to fix
+> compiler warnings in vmcore recently.  Here's how it should be done.
+> Compile-tested only on x86.  As noted in the first patch, s390 should
+> take this conversion a bit further, but I'm not inclined to do that
+> work myself.
+> 
+> This series resends Willy's v3 patches which includes patch 1~3, and
+> append one patch to clean up the open code pointed out by Al.
+> 
+> Al's concerns to v3 patches and my reply after investigation:
+> https://lore.kernel.org/all/YhiTN0MORoQmFFkO@MiWiFi-R3L-srv/T/#u
+> 
+> Willy's v3 patchset:
+> [PATCH v3 0/3] Convert vmcore to use an iov_iter
+> https://lore.kernel.org/all/20211213143927.3069508-1-willy@infradead.org/T/#u
+> 
+> Changelog:
+> ===
+> v4:
+>  - Append one patch to replace the open code with iov_iter_count().
+>    This is suggested by Al.
+>  - Fix a indentation error by replacing space with tab in
+>    arch/sh/kernel/crash_dump.c of patch 1 reported by checkpatch. The
+>    rest of patch 1~3 are untouched.
+>  - Add Christopy's Reviewed-by and my Acked-by for patch 1~3.
+> v3:
+>  - Send the correct patches this time
+> v2:
+>  - Removed unnecessary kernel-doc
+>  - Included uio.h to fix compilation problems
+>  - Made read_from_oldmem_iter static to avoid compile warnings during the
+>    conversion
+>  - Use iov_iter_truncate() (Christoph)
+> 
+> 
+> 
+> Baoquan He (1):
+>   fs/proc/vmcore: Use iov_iter_count()
+> 
+> Matthew Wilcox (Oracle) (3):
+>   vmcore: Convert copy_oldmem_page() to take an iov_iter
+>   vmcore: Convert __read_vmcore to use an iov_iter
+>   vmcore: Convert read_from_oldmem() to take an iov_iter
+> 
+>  arch/arm/kernel/crash_dump.c     |  27 +------
+>  arch/arm64/kernel/crash_dump.c   |  29 +------
+>  arch/ia64/kernel/crash_dump.c    |  32 +-------
+>  arch/mips/kernel/crash_dump.c    |  27 +------
+>  arch/powerpc/kernel/crash_dump.c |  35 ++-------
+>  arch/riscv/kernel/crash_dump.c   |  26 +------
+>  arch/s390/kernel/crash_dump.c    |  13 ++--
+>  arch/sh/kernel/crash_dump.c      |  29 ++-----
+>  arch/x86/kernel/crash_dump_32.c  |  29 +------
+>  arch/x86/kernel/crash_dump_64.c  |  48 ++++--------
+>  fs/proc/vmcore.c                 | 130 +++++++++++++------------------
+>  include/linux/crash_dump.h       |  19 ++---
+>  12 files changed, 123 insertions(+), 321 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 

@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818ED4ED92D
+	by mail.lfdr.de (Postfix) with ESMTP id CCF9E4ED92E
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbiCaMDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S235681AbiCaMD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235880AbiCaMC5 (ORCPT
+        with ESMTP id S236149AbiCaMDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:02:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C11CC6EED;
-        Thu, 31 Mar 2022 04:59:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CF00616BF;
-        Thu, 31 Mar 2022 11:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C23C340EE;
-        Thu, 31 Mar 2022 11:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648727994;
-        bh=adnfpVD7oqXHj4mfPH8O1DTjb8aRLseC4Dvlx5i6vF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=swJP9pqiZw1PBslMi6kbCZdmGGEiPUICuHiBfiDTo4t2rDC46yANqiK8ahb1iwCkX
-         DUKLDUtfxGiKLaeh1DnLq0GkGDygdI+QfwlZG51KvYHQzsyJ6ZQr1rB+RRYqmz62aH
-         xxAoeYM0TzoLffX/gwbxmZUy80qqN92o7WT69od3BeuS7D6GHl9mDzFz4hto9EWKsN
-         rk3i8v7+tcoCKMWomAkTTUtSqgCzrxXiXFtQwE32YwMtNtwcWuJAeDSogo2RTVCSKX
-         1/DffffixgiTFrqYd0HJ3aGu4c6IHkp47snP0VeE1Iahf9juWMpgZK5qkX/ZMSNpZN
-         cBvqxDx9+y6qQ==
-Date:   Thu, 31 Mar 2022 12:59:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [RFC PATCH 5/5] ASoC: Add macaudio machine driver
-Message-ID: <YkWXs/f7edZwg1+W@sirena.org.uk>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-6-povik+lin@cutebit.org>
+        Thu, 31 Mar 2022 08:03:12 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601965C7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:00:40 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id u207so6571559vsu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n7p8Uq2+lZWPYal2atoqxtilGwC7bZj30FTcIre8js8=;
+        b=bqEyU9czIxM2OrF6DA/wE3J8vr9cBJZA2LzCfiKSISgPpa/TESqOK2qL3GirYtGp2w
+         /nJdRX66BTMYmHxSx7yLAaqFDcUn+k2AVJ2TMql0zuwajox5QXagtYTxQvv1SVHCAjc8
+         ShvNbrSsyz9ZNLPs1cq1xIDOn5v+MqS/7ApKw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n7p8Uq2+lZWPYal2atoqxtilGwC7bZj30FTcIre8js8=;
+        b=AnKQhNaEI8O65atHpcy7bdgGheUW2GnPpj+kYpKZhzzpRFG6SX7FLdcfbY13kxKk7Y
+         kKY+0ywxfkkXE31+8rbWJaEjKXJsQAGzBs42iZtjSpbcy/eUxHm4CzVrbOk17Pz77Sq9
+         PP2EpC4pTqw3XeM592F8NfuOPaZnb6Njm7zbdduXCh53chpZm2JlKrTbNRXxWhxhC41I
+         kP9a27JMa8HlOMP5CTQFuHJSxWVoN5CtBT1PG4NiUm8TDEwD33Q6wJBsoV4815ulilbz
+         i+8ZOvve4iRC/qXe7xEe8UN6R8MT9tZkb0LA+N1ZAANgp6xhFrtc76qQPH5wx2hzjqGC
+         fFZg==
+X-Gm-Message-State: AOAM533mLZj5aclD/0uHOATssMObcnXjq4U6Dx8Y5DWb5N0PYRiI/UCM
+        C5z9xxsOdV7a/WFIetBCeRHjpXJ56elEcMfDiviF8w==
+X-Google-Smtp-Source: ABdhPJwDM4xS5vEd9KdONZjoeyi4xmvPxFKo/aadxZWwYA48QQoGh1IvN+jWltCA/JbpwdWTlMNjWUsabNEmni0bYmw=
+X-Received: by 2002:a67:fd0b:0:b0:31b:e36d:31b1 with SMTP id
+ f11-20020a67fd0b000000b0031be36d31b1mr1587242vsr.44.1648728039267; Thu, 31
+ Mar 2022 05:00:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+MLBZhiivx60M6iZ"
-Content-Disposition: inline
-In-Reply-To: <20220331000449.41062-6-povik+lin@cutebit.org>
-X-Cookie: Reunite Gondwondaland!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <SL2P216MB12463DE2E1E100E2498A5C33FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+ <SL2P216MB1246D7900A0B9620F1E1A038FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+ <YkWRN4ac0ivRn4aB@kroah.com> <CAFr9PXm3Mvr0guGoPDKmashMhFG6OQMvXHxwX-SD5ZHPi_sw4g@mail.gmail.com>
+ <YkWV6HGkGHvgSwCj@kroah.com>
+In-Reply-To: <YkWV6HGkGHvgSwCj@kroah.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Thu, 31 Mar 2022 21:00:28 +0900
+Message-ID: <CAFr9PX=s0CRtcVw_5xk7F6MRZ+svFK_cUDRzdaOFxcPGe4tBmA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] staging: media: wave5: Add TODO file
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nas Chung <nas.chung@chipsnmedia.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "dafna3@gmail.com" <dafna3@gmail.com>,
+        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
+        "kiril.bicevski@collabora.com" <kiril.bicevski@collabora.com>,
+        "lafley.kim" <lafley.kim@chipsnmedia.com>,
+        Scott Woo <scott.woo@chipsnmedia.com>,
+        "olivier.crete@collabora.com" <olivier.crete@collabora.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,110 +82,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
---+MLBZhiivx60M6iZ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 31 Mar 2022 at 20:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> According to the text in this driver, it will not work on these hardware
+> as it is broken.  Unless that text is incorrect?
 
-On Thu, Mar 31, 2022 at 02:04:49AM +0200, Martin Povi=C5=A1er wrote:
+I think that's for risc-v.
+The other chip this is in is ARM Cortex A7. The crusty vendor linux
+BSP for this chip manages to play videos using it so it does work in a
+real piece of hardware.
 
-> --- /dev/null
-> +++ b/sound/soc/apple/macaudio.c
-> @@ -0,0 +1,597 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ASoC machine driver for Apple Silicon Macs
-> + *
+Cheers,
 
-Please make the entire comment a C++ one so things look more
-intentional.
-
-> +		/* CPU side is bit and frame clock master, I2S with both clocks invert=
-ed */
-
-Please refer to clock providers here.
-
-> +		ret =3D of_property_read_string(np, "link-name", &link->name);
-> +		if (ret) {
-> +			dev_err(card->dev, "Missing link name\n");
-> +			goto err_put_np;
-> +		}
-
-This doesn't look like it's mandatory in the binding.
-
-> +static int macaudio_init(struct snd_soc_pcm_runtime *rtd)
-> +{
-> +	struct snd_soc_card *card =3D rtd->card;
-> +	struct macaudio_snd_data *ma =3D snd_soc_card_get_drvdata(card);
-> +	struct snd_soc_component *component;
-> +	int ret, i;
-> +
-> +	if (rtd->num_codecs > 1) {
-> +		ret =3D macaudio_assign_tdm(rtd);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	for_each_rtd_components(rtd, i, component)
-> +		snd_soc_component_set_jack(component, &ma->jack, NULL);
-
-What is the jack configuration this is attempting to describe?  It looks
-like you have some dedicated speaker driver devices which are going to
-get attached to jacks here for example.
-
-> +} macaudio_kctlfixes[] =3D {
-> +	{"* ASI1 Sel", "Left"},
-> +	{"* ISENSE Switch", "Off"},
-> +	{"* VSENSE Switch", "Off"},
-> +	{ }
-> +};
-> +
-> +static bool macaudio_kctlfix_matches(const char *pattern, const char *na=
-me)
-> +{
-> +	if (pattern[0] =3D=3D '*') {
-> +		int namelen, patternlen;
-> +
-> +		pattern++;
-> +		if (pattern[0] =3D=3D ' ')
-> +			pattern++;
-> +
-> +		namelen =3D strlen(name);
-> +		patternlen =3D strlen(pattern);
-> +
-> +		if (namelen > patternlen)
-> +			name +=3D (namelen - patternlen);
-> +	}
-> +
-> +	return !strcmp(name, pattern);
-> +}
-
-This looks worryingly like use case configuration.
-
-> +/*
-> + * Maybe this could be a general ASoC function?
-> + */
-> +static void snd_soc_kcontrol_set_strval(struct snd_soc_card *card,
-> +				struct snd_kcontrol *kcontrol, const char *strvalue)
-
-No, we should not be setting user visible control values from the
-kernel.  This shouldn't be a machine driver function either.  What are
-you trying to accomplish here?
-
---+MLBZhiivx60M6iZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJFl7MACgkQJNaLcl1U
-h9AvpQf+NQTe35sa2gGAL6J5r3unBmmRuUI+0Lmize/e9oyklq/3LgUI3zy2In6m
-gWr5laQlG/Eq41KJZecdtZ5BrY+BENGZ4PzCtR06uc8hM7KJV17O6hdRXrK3VSWZ
-9Tl8uSSh2xNqw6bwflA6XyfULttxC6NLsKP1RxCOaHJGG4cU1G5GkvT9sTpcQH9/
-bi7Y9TzxUi6Q7zgK6vVHXygqusZ4UTHdt5fyxX4ou1tV2V1fYAO64eMJ4pA+8jUA
-0ZafQA1BVTbkHK7JZjbc2ILGcu5NBR1eJK/hbv9X0OknpKrRsafaQQTRywE1hWb5
-NM2xv163DU7RQTC8vqYC+rKBiQ/ypQ==
-=dyOa
------END PGP SIGNATURE-----
-
---+MLBZhiivx60M6iZ--
+Daniel

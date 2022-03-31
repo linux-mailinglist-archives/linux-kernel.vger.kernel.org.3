@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CA44EDE59
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486FE4EDE68
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239644AbiCaQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S239670AbiCaQJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235149AbiCaQHr (ORCPT
+        with ESMTP id S233760AbiCaQJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:07:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 645A3541A5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648742759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qlNDdytnQWIJBK5ptvz+5RJyq/CJNTkwbMf9B+B4Xl8=;
-        b=f9YLOY8/KyiO19P0c/CA4o84riqcsIjA+y5VQEvOAjjcykzF/Z/yu29attGs3Ip5PuA3Dp
-        v/6sWVjHX2bMUfVUi0fqTSFgWpf8D+9dgftPvEhQEsKbtlcS+FziuaweXSrelZAmt7usfy
-        34r4jDgdztHTdSp5f5cXRf0luVBOQXg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-246-KUwr1XLXM8-rloxnZjefuA-1; Thu, 31 Mar 2022 12:05:56 -0400
-X-MC-Unique: KUwr1XLXM8-rloxnZjefuA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0552803D7C;
-        Thu, 31 Mar 2022 16:05:53 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B23A2C080B3;
-        Thu, 31 Mar 2022 16:05:50 +0000 (UTC)
-Message-ID: <03351a36-a1c6-8125-4945-57727334dc26@redhat.com>
-Date:   Thu, 31 Mar 2022 12:05:50 -0400
+        Thu, 31 Mar 2022 12:09:18 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC7A1F0CB9;
+        Thu, 31 Mar 2022 09:07:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 6DF133D4E12;
+        Thu, 31 Mar 2022 12:07:29 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id JRYGslxfhPRR; Thu, 31 Mar 2022 12:07:29 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 18AAA3D4E11;
+        Thu, 31 Mar 2022 12:07:29 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 18AAA3D4E11
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1648742849;
+        bh=jx6gZg83afo7MOp42wOlJpwj/Jm9YIc4UWICwF/Z2j0=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=MxoPp8bKKDLmzIwiElUJrkDBFIkC/Tr0HvvD/oqo2jBdk4bEwG8EXtSenwTDFjJnn
+         SOPpEU3sM57D0c1BOOeqkYki945UhL/vwX6bo8ovSg2g9M6HHA+yzOBFktuPqXiA0Q
+         ahD2cyihm7uLzv9aQrAgu+MGPgF/lJ3UcxlVgAcVYSh9sRRVVQwvvI55Yspx+kxZUx
+         C8oWwwpyDltHmDupteLWI4LIkO7VCDtHeL7X0goq1o9D39Hx1DM5Fhu+ovdF/EUtih
+         hYhofjbzJ6Bi6Lmwl2d4BAhA/EOJz28Z9Mu/OufavmNCTE3rcLZ+2yEX/Ro0AUZmSS
+         7CP/ZgMXQ1J6w==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NP21fSpX9mGH; Thu, 31 Mar 2022 12:07:29 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 0588F3D4AEE;
+        Thu, 31 Mar 2022 12:07:29 -0400 (EDT)
+Date:   Thu, 31 Mar 2022 12:07:28 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     rostedt <rostedt@goodmis.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        ndesaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Message-ID: <602770698.200731.1648742848915.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220331081337.07ddf251@gandalf.local.home>
+References: <20220330201755.29319-1-mathieu.desnoyers@efficios.com> <20220330162152.17b1b660@gandalf.local.home> <CAK7LNATm5FjZsXL6aKUMhXwQAqTuO9+LmAk3LGjpAib7NZBDmg@mail.gmail.com> <20220331081337.07ddf251@gandalf.local.home>
+Subject: Re: [PATCH] tracing: do not export user_events uapi
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] mm/sparsemem: Fix 'mem_section' will never be NULL gcc
- 12 warning
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>
-References: <20220330205919.2713275-1-longman@redhat.com>
- <202203312327.XGeCiD5T-lkp@intel.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <202203312327.XGeCiD5T-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
+Thread-Topic: tracing: do not export user_events uapi
+Thread-Index: soUfjk+gMtJ4HZ3jFxLYOaG8qofUxg==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,61 +77,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 11:54, kernel test robot wrote:
-> Hi Waiman,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on hnaz-mm/master]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/mm-sparsemem-Fix-mem_section-will-never-be-NULL-gcc-12-warning/20220331-050049
-> base:   https://github.com/hnaz/linux-mm master
-> config: arm-randconfig-c024-20220330 (https://download.01.org/0day-ci/archive/20220331/202203312327.XGeCiD5T-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/2098f1d78cde338e81b3ba596ea39f37824e496e
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Waiman-Long/mm-sparsemem-Fix-mem_section-will-never-be-NULL-gcc-12-warning/20220331-050049
->          git checkout 2098f1d78cde338e81b3ba596ea39f37824e496e
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash security/keys/encrypted-keys/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->     In file included from include/linux/gfp.h:6,
->                      from include/linux/umh.h:4,
->                      from include/linux/kmod.h:9,
->                      from include/linux/module.h:17,
->                      from security/keys/encrypted-keys/encrypted.c:15:
->     security/keys/encrypted-keys/encrypted.c: In function 'derived_key_encrypt.constprop':
->>> include/linux/mmzone.h:1432:23: warning: array subscript 32 is outside array bounds of 'struct mem_section[32][1]' [-Warray-bounds]
->      1432 |         unsigned long map = section->section_mem_map;
->           |                       ^~~
->     include/linux/mmzone.h:1390:27: note: while referencing 'mem_section'
->      1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
->           |                           ^~~~~~~~~~~
->
->
-> vim +1432 include/linux/mmzone.h
->
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1429
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1430  static inline struct page *__section_mem_map_addr(struct mem_section *section)
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1431  {
-> 29751f6991e845 Andy Whitcroft 2005-06-23 @1432  	unsigned long map = section->section_mem_map;
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1433  	map &= SECTION_MAP_MASK;
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1434  	return (struct page *)map;
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1435  }
-> 29751f6991e845 Andy Whitcroft 2005-06-23  1436
+----- On Mar 31, 2022, at 8:13 AM, rostedt rostedt@goodmis.org wrote:
 
-I think this is a pre-existing warning. It is not caused by my patch, 
-but I will take a look what cause the warning.
+> On Thu, 31 Mar 2022 16:29:30 +0900
+> Masahiro Yamada <masahiroy@kernel.org> wrote:
+> 
+>> Well, the intended usage of no-export-headers is to
+>> cater to the UAPI supported by only some architectures.
+>> We have kvm(_para).h here because not all architectures
+>> support kvm.
+>> 
+>> If you do not want to export the UAPI,
+>> you should not put it in include/uapi/.
+>> 
+>> After the API is finalized, you can move it to
+>> include/uapi.
+> 
+> So a little bit of background. I and a few others thought it was done, and
+> pushed it to Linus. Then when it made it into his tree (and mentioned on
+> LWN) it got a wider audience that had concerns. After they brought up those
+> concerns, we agreed that this needs a bit more work. I was hoping not to do
+> a full revert and simply marked the change for broken so that it can be
+> worked on upstream with the wider audience. Linus appears to be fine with
+> this approach, as he helped me with my "mark for BROKEN" patch.
+> 
+> Mathieu's concern is that this header file could be used in older distros
+> with newer kernels that have it implemented and added this to keep out of
+> those older distros.
+> 
+> The options to make Mathieu sleep better at night are:
+> 
+> 1) this patch
+> 
+> 2) move this file out of uapi.
+
+I would be fine with this approach as well. This is simple enough:
+
+git mv include/uapi/linux/user_events.h include/linux/
+
+and:
+
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index 8b3d241a31c2..823d7b09dcba 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -18,7 +18,7 @@
+ #include <linux/tracefs.h>
+ #include <linux/types.h>
+ #include <linux/uaccess.h>
+-#include <uapi/linux/user_events.h>
++#include <linux/user_events.h>
+ #include "trace.h"
+ #include "trace_dynevent.h"
+
+Including <linux/user_events.h> will continue to work even when the header is
+moved to uapi in the future.
 
 Thanks,
-Longman
 
+Mathieu
+
+
+> 
+> 3) revert the entire thing.
+> 
+> I really do not want to do #3 but I am willing to do 1 or 2.
+> 
+> -- Steve
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

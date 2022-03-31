@@ -2,147 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB8B4ED701
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948284ED709
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiCaJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S234114AbiCaJel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbiCaJeP (ORCPT
+        with ESMTP id S232276AbiCaJeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:34:15 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4461BD99C;
-        Thu, 31 Mar 2022 02:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648719148; x=1680255148;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ctf/hX3XkJggP7/+ZH5JrIfbFRaHucv2k5aVIYpgwkA=;
-  b=HpkUKfvWAito1y1YpVTscD9KZN5HyjXNV/9dGDXloGZWhLmo5sdnvJXn
-   vgBgE34X6lEqscgN8MLvRJt3gKcuoIS+E6pL4mWiFa3KpwTbD4ojS5OIL
-   okXg5+an+5ORXtteFDfiwNysToGo8v7b7gp9zQK+GqoAZinYLQLRPXDSx
-   olhmoA/xishw5PPOIB0uXeuD0ZUXxqzBFezRyTHTTc/zkJkwWhES6Hovf
-   1Id/LfZc57O/wv9edgnIdGY7IMzoJzka+hpgHRIaJao2KIz+TA7ljsX84
-   u6J167IiCeJfaHXHX/LuZQeKsMjA/5Koy7xcWEyN2awQbVjGS8AUytMvN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259758101"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="259758101"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 02:32:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="695424269"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 02:32:25 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 12:32:24 +0300
-Date:   Thu, 31 Mar 2022 12:32:24 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Won Chung <wonchung@google.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
- functions
-Message-ID: <YkV1KK8joyDAgf50@kuha.fi.intel.com>
-References: <20220331084918.2592699-1-wonchung@google.com>
- <YkVtvhC0n9B994/A@kroah.com>
+        Thu, 31 Mar 2022 05:34:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5792018462A
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:32:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AF6923A;
+        Thu, 31 Mar 2022 02:32:50 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B0083F718;
+        Thu, 31 Mar 2022 02:32:47 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 10:32:41 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH v2 3/4] arm64: implement stack_trace_save_shadow
+Message-ID: <YkV1ORaR97g45Fag@FVFF77S0Q05N>
+References: <cover.1648049113.git.andreyknvl@google.com>
+ <0bb72ea8fa88ef9ae3508c23d993952a0ae6f0f9.1648049113.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkVtvhC0n9B994/A@kroah.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0bb72ea8fa88ef9ae3508c23d993952a0ae6f0f9.1648049113.git.andreyknvl@google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:00:46AM +0200, Greg KH wrote:
-> On Thu, Mar 31, 2022 at 08:49:18AM +0000, Won Chung wrote:
-> > Component match callback functions need to check if expected data is
-> > passed to them. Without this check, it can cause a NULL pointer
-> > dereference when another driver registers a component before i915
-> > drivers have their component master fully bind.
+On Wed, Mar 23, 2022 at 04:32:54PM +0100, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> How can that happen in a real system?  Or does this just happen for when
-> you are doing development and testing?
+> Implement the stack_trace_save_shadow() interface that collects stack
+> traces based on the Shadow Call Stack (SCS) for arm64.
 > 
-> > 
-> > Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
-> > Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
-> > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Signed-off-by: Won Chung <wonchung@google.com>
-> > Cc: stable@vger.kernel.org
+> The implementation walks through available SCS pointers (the per-task one
+> and the per-interrupt-type ones) and copies the frames.
 > 
-> Why does this need to go to stable?  How can this be triggered in older
-> kernels?
+> Note that the frame of the interrupted function is not included into
+> the stack trace, as it is not yet saved on the SCS when an interrupt
+> happens.
 > 
-> > ---
-> > Changes from v2:
-> > - Correctly add "Suggested-by" tag
-> > - Add "Cc: stable@vger.kernel.org"
-> > 
-> > Changes from v1:
-> > - Add "Fixes" tag
-> > - Send to stable@vger.kernel.org
-> > 
-> >  drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
-> >  drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
-> > index ec2a4fce8581..843dbc2b21b1 100644
-> > --- a/drivers/misc/mei/hdcp/mei_hdcp.c
-> > +++ b/drivers/misc/mei/hdcp/mei_hdcp.c
-> > @@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
-> >  {
-> >  	struct device *base = data;
-> >  
-> > -	if (strcmp(dev->driver->name, "i915") ||
-> > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  arch/arm64/Kconfig             |  1 +
+>  arch/arm64/kernel/stacktrace.c | 83 ++++++++++++++++++++++++++++++++++
+>  2 files changed, 84 insertions(+)
 > 
-> How can base be NULL?
-> 
-> 
-> >  	    subcomponent != I915_COMPONENT_HDCP)
-> >  		return 0;
-> >  
-> > diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
-> > index f7380d387bab..e32a81da8af6 100644
-> > --- a/drivers/misc/mei/pxp/mei_pxp.c
-> > +++ b/drivers/misc/mei/pxp/mei_pxp.c
-> > @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
-> >  {
-> >  	struct device *base = data;
-> >  
-> > -	if (strcmp(dev->driver->name, "i915") ||
-> > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
-> 
-> Same here, shouldn't this be caught by the driver core or bus and match
-> should not be called?
-> 
-> Why not fix this in the component/driver core instead?
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index a659e238f196..d89cecf6c923 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -201,6 +201,7 @@ config ARM64
+>  	select MMU_GATHER_RCU_TABLE_FREE
+>  	select HAVE_RSEQ
+>  	select HAVE_RUST
+> +	select HAVE_SHADOW_STACKTRACE
+>  	select HAVE_STACKPROTECTOR
+>  	select HAVE_SYSCALL_TRACEPOINTS
+>  	select HAVE_KPROBES
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index e4103e085681..89daa710d91b 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -12,9 +12,11 @@
+>  #include <linux/sched/debug.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/stacktrace.h>
+> +#include <linux/scs.h>
+>  
+>  #include <asm/irq.h>
+>  #include <asm/pointer_auth.h>
+> +#include <asm/scs.h>
+>  #include <asm/stack_pointer.h>
+>  #include <asm/stacktrace.h>
+>  
+> @@ -210,3 +212,84 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  
+>  	walk_stackframe(task, &frame, consume_entry, cookie);
+>  }
+> +
+> +static const struct {
+> +	unsigned long ** __percpu saved;
+> +	unsigned long ** __percpu base;
+> +} scs_parts[] = {
+> +#ifdef CONFIG_ARM_SDE_INTERFACE
+> +	{
+> +		.saved = &sdei_shadow_call_stack_critical_saved_ptr,
+> +		.base = &sdei_shadow_call_stack_critical_ptr,
+> +	},
+> +	{
+> +		.saved = &sdei_shadow_call_stack_normal_saved_ptr,
+> +		.base = &sdei_shadow_call_stack_normal_ptr,
+> +	},
+> +#endif /* CONFIG_ARM_SDE_INTERFACE */
+> +	{
+> +		.saved = &irq_shadow_call_stack_saved_ptr,
+> +		.base = &irq_shadow_call_stack_ptr,
+> +	},
+> +};
+> +
+> +static inline bool walk_shadow_stack_part(
+> +				unsigned long *scs_top, unsigned long *scs_base,
+> +				unsigned long *store, unsigned int size,
+> +				unsigned int *skipnr, unsigned int *len)
+> +{
+> +	unsigned long *frame;
+> +
+> +	for (frame = scs_top; frame >= scs_base; frame--) {
+> +		if (*skipnr > 0) {
+> +			(*skipnr)--;
+> +			continue;
+> +		}
+> +		/*
+> +		 * Do not leak PTR_AUTH tags in stack traces.
+> +		 * Use READ_ONCE_NOCHECK as SCS is poisoned with Generic KASAN.
+> +		 */
+> +		store[(*len)++] =
+> +			ptrauth_strip_insn_pac(READ_ONCE_NOCHECK(*frame));
+> +		if (*len >= size)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
 
-A component is just a device that is declared to be a "component", and
-the code that declares it as component does not have to be the driver
-of that device. You simply can't assume that it's bind to a driver
-like this function does.
+This doesn't do any of the trampoline repatinting (e.g. for kretprobes or
+ftrace graph caller) that the regular unwinder does, so if either of those are
+in use this is going to produce bogus results.
 
-In our case the "components" are USB ports, so devices that are never
-bind to drivers.
+I really don't want to have to duplicate this logic.
 
-thanks,
+> +
+> +noinline notrace int arch_stack_walk_shadow(unsigned long *store,
+> +					    unsigned int size,
+> +					    unsigned int skipnr)
+> +{
+> +	unsigned long *scs_top, *scs_base, *scs_next;
+> +	unsigned int len = 0, part;
+> +
+> +	preempt_disable();
 
--- 
-heikki
+This doesn't look necessary; it's certinaly not needed for the regular unwinder.
+
+Critically, in the common case of unwinding just the task stack, we don't need
+to look at any of the per-cpu stacks, and so there's no need to disable
+preemption. See the stack nesting logic in the regular unwinder.
+
+If we *do* need to unwind per-cpu stacks, we figure that out and verify our
+countext *at* the transition point.
+
+> +
+> +	/* Get the SCS pointer. */
+> +	asm volatile("mov %0, x18" : "=&r" (scs_top));
+
+Does the compiler guarantee where this happens relative to any prologue
+manipulation of x18?
+
+This seems like something we should be using a compilar intrinsic for, or have
+a wrapper that passes this in if necessary.
+
+> +
+> +	/* The top SCS slot is empty. */
+> +	scs_top -= 1;
+> +
+> +	/* Handle SDEI and hardirq frames. */
+> +	for (part = 0; part < ARRAY_SIZE(scs_parts); part++) {
+> +		scs_next = *this_cpu_ptr(scs_parts[part].saved);
+> +		if (scs_next) {
+> +			scs_base = *this_cpu_ptr(scs_parts[part].base);
+> +			if (walk_shadow_stack_part(scs_top, scs_base, store,
+> +						   size, &skipnr, &len))
+> +				goto out;
+> +			scs_top = scs_next;
+> +		}
+> +	}
+
+We have a number of portential stack nesting orders (and may need to introduce
+more stacks in future), so I think we need to be more careful with this. The
+regular unwinder handles that dynamically.
+
+Thanks,
+Mark.
+
+> +
+> +	/* Handle task and softirq frames. */
+> +	scs_base = task_scs(current);
+> +	walk_shadow_stack_part(scs_top, scs_base, store, size, &skipnr, &len);
+> +
+> +out:
+> +	preempt_enable();
+> +	return len;
+> +}
+> -- 
+> 2.25.1
+> 

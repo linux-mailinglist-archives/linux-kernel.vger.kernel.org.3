@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598A84EE36B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A774EE36D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241904AbiCaVr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S241947AbiCaVrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiCaVr0 (ORCPT
+        with ESMTP id S237702AbiCaVrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:47:26 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A33F8EFF
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:45:37 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id j2so1856682ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:45:37 -0700 (PDT)
+        Thu, 31 Mar 2022 17:47:47 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C0017A5A2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:45:59 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d5so1480175lfj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:45:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=WlbY15GPdyViNaFIyhDs7hda/vEaAYuCi4oXoTPUeZg=;
-        b=SgywhwdkFSnaTuuhz2f+9wffx81uiDJFnTXBj4cuhpZcMq701PnH8vywS/vdN1rERY
-         GOiQCdy60vyb9fk0z1zoxnDpZ5BWiBghWwSdBGup085Eb32IcF5Un9ui/156P6TvhA0r
-         gTeTwoq3Ov2dB5/2HAUr/qTzmMiwL5GRn9ZJrJZqbUC/vjdAUqEE1gOcE31WL167jNUB
-         CBVWXKngLRiei/dz6u4EEtAkigj5N6B9oWjHj0pFwi/+t1xJqn5tX56Y3iUi3NNvBTOH
-         XMCj0qoUlezhD0fkmDooI3SDYbqcbVihwz8NgSu3UIO2MyFEAXtfzi90OQ33ZRu4xnyr
-         XvRQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ll8wDYl9yPkVg3Kd+CZ9FcT778mQ4RwkoMnntxvyVZ8=;
+        b=PFGro6VMa21mKPJKeSVTJVjR3NE/pwaa1U+bmujSaRD+Neww2xigiSjFNhL45z2pbF
+         ST2B4yEbHQbPEODoXvQieVQmO2v52Sr9t6uBZOIcRQKt8sX04qxAdbsPieQFFi79lbQ2
+         laMpQKDRaSjyl0TUOFqEWh7c0L8L9y3vjzXfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=WlbY15GPdyViNaFIyhDs7hda/vEaAYuCi4oXoTPUeZg=;
-        b=qpCdr3/XCm60Z/LQl05HKypHyn7flMWJvsUGRylMHZAzK8CdBHogaoIT/v7hlNGle8
-         LAaQ/GRdbUMqk1syh/Zv+gD6oFwomcgdgAIeDe12jS1W7D72QTmjE/lNBxgJyoCddoNw
-         d4W70IkR6ZDQAk6RAwIbUqCmq6UcCqlulJtvfh8HJscgcI40l2n8oRahSgAvc+5kBmAs
-         LrK5D6+oaAyx0sihd1iJyiPcC1+hfJoBLfW8LR4ZQSh836lgoqm+hDesrL6oyEwaewfi
-         ylHz3oF7Y0nI6UpHPvytuuctIcmG8Oz9sv2759AzfXc0qOnSs09w3+4/0xqZTHRDGk3a
-         rsDQ==
-X-Gm-Message-State: AOAM530bARU5Jt+yuSG5FpdyyVnFrt0i0iqSOuHT4Rw4ngnFt1c3gyVu
-        UaJjIe4yIG1YJ9knV00vwzuHxPX+PYM9R5XhhhO2xbVkY1Kj9w==
-X-Google-Smtp-Source: ABdhPJyOqzYFHYNi/CfYBFmdmictwp4T8zIQQSsVd59QX9IyWxlIZHq6DXz2mWfxi7nJvz+lVB6fxZVzXa6Cs8erx/c=
-X-Received: by 2002:a25:8382:0:b0:63d:6201:fa73 with SMTP id
- t2-20020a258382000000b0063d6201fa73mr44850ybk.55.1648763136279; Thu, 31 Mar
- 2022 14:45:36 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ll8wDYl9yPkVg3Kd+CZ9FcT778mQ4RwkoMnntxvyVZ8=;
+        b=BirwsRyKANedfBj1hY9Vur3PejBK1+zHtBimE4PMWEaRLLsP8M1GzwuPXWQAVPhhUm
+         tOVrTuft8hKGS44XSWPJ1b1LchK+e9SIzJ+p4PSB9wUPDuOuS/25JYe6oNkV94KaZIX+
+         ArxopweDLk+CtcXG4tCp2g+wt3uBzvzOOAOlG6UhcFsOJ8GM9xUnXsb79N9R3xYYhUAq
+         CTbWQJ1RdSXajV1JtniqP5iXoTdVYqgBsMvhYLRjE4OXJcLoLWU3bnUJchB58BjFy6hd
+         QGaknIS0d+vGrhM4+HjaKRAqY4Q9q0Qh+JgPiKlyhNsg4rPgWt5tGXnf8eS0Ho/0WxfN
+         khCA==
+X-Gm-Message-State: AOAM531njlqTU/66mv3acvBKdGJWhaOPLTnpmtZDXcOgix4qyWygCM02
+        /faLZTL/3tHjS9gHQoVDsQrRptb5/GIxZMZCF1Y=
+X-Google-Smtp-Source: ABdhPJzBMSPeWSROL9WNOR/uyPgIMxyDWaC/OsiDinbrx4SHK8DR07pEl65PTLh+IN8S1hU7wZdTZA==
+X-Received: by 2002:a05:6512:3f99:b0:447:1ef5:408a with SMTP id x25-20020a0565123f9900b004471ef5408amr12241251lfa.490.1648763157110;
+        Thu, 31 Mar 2022 14:45:57 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id x1-20020a056512130100b004484c116de3sm50998lfu.246.2022.03.31.14.45.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 14:45:56 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id o16so1533368ljp.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:45:56 -0700 (PDT)
+X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
+ k23-20020a2e6f17000000b0024801249c08mr11993057ljc.506.1648763156044; Thu, 31
+ Mar 2022 14:45:56 -0700 (PDT)
 MIME-Version: 1.0
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 31 Mar 2022 14:45:25 -0700
-Message-ID: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
-Subject: [BUG] rcu-tasks : should take care of sparse cpu masks
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20220331212352.182168-1-Jason@zx2c4.com> <CAHk-=wjZys1fehfPCF2utXb_fthJwLywKO1ZsjiK2GsDu_e7dQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjZys1fehfPCF2utXb_fthJwLywKO1ZsjiK2GsDu_e7dQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 31 Mar 2022 14:45:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wirV0p6VSqrCbwLx+1kW7hQ3mk7LxDCY7XqfZGcPG-L3A@mail.gmail.com>
+Message-ID: <CAHk-=wirV0p6VSqrCbwLx+1kW7hQ3mk7LxDCY7XqfZGcPG-L3A@mail.gmail.com>
+Subject: Re: [GIT PULL] random number generator fixes for 5.18-rc1
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul
+On Thu, Mar 31, 2022 at 2:42 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> The standard templates I tend to aim for are
 
-It seems you assume per cpu ptr for arbitrary indexes (< nr_cpu_ids) are valid.
+Note the "tend". No guarantees.  The numbered lists do exist, and do
+still get through.
 
-What do you think of the (untested) following patch ?
+For example, Davem used to always do them all the time for networking
+pulls, so that actually used to happen more often. Now Jakub uses the
+"Headers with bullet lists" format, so it's fallen out of use
+somewhat.
 
-Thanks.
-
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 99cf3a13954cfb17828fbbeeb884f11614a526a9..df3785be4022e903d9682dd403464aa9927aa5c2
-100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -273,13 +273,17 @@ static void call_rcu_tasks_generic(struct
-rcu_head *rhp, rcu_callback_t func,
-        bool needadjust = false;
-        bool needwake;
-        struct rcu_tasks_percpu *rtpcp;
-+       int ideal_cpu, chosen_cpu;
-
-        rhp->next = NULL;
-        rhp->func = func;
-        local_irq_save(flags);
-        rcu_read_lock();
--       rtpcp = per_cpu_ptr(rtp->rtpcpu,
--                           smp_processor_id() >>
-READ_ONCE(rtp->percpu_enqueue_shift));
-+
-+       ideal_cpu = smp_processor_id() >> READ_ONCE(rtp->percpu_enqueue_shift);
-+       chosen_cpu = cpumask_next(ideal_cpu - 1, cpu_online_mask);
-+
-+       rtpcp = per_cpu_ptr(rtp->rtpcpu, chosen_cpu);
-        if (!raw_spin_trylock_rcu_node(rtpcp)) { // irqs already disabled.
-                raw_spin_lock_rcu_node(rtpcp); // irqs already disabled.
-                j = jiffies;
+         Linus

@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450DF4ED932
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3BA4ED931
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235695AbiCaMEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S235754AbiCaME3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236167AbiCaMDM (ORCPT
+        with ESMTP id S235780AbiCaMEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:03:12 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835721C16FD;
-        Thu, 31 Mar 2022 05:00:43 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id g20so27870920edw.6;
-        Thu, 31 Mar 2022 05:00:43 -0700 (PDT)
+        Thu, 31 Mar 2022 08:04:23 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B729208C26;
+        Thu, 31 Mar 2022 05:02:14 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id h23so33469491wrb.8;
+        Thu, 31 Mar 2022 05:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=eGk6hp1cjRwf/Z2iSyo20kNLHbQVMFCNuaMs0Rs1280=;
-        b=AOVyRosQIc5R2N1+6CICHmtlfUo4QCpEVrmcWBz/JrGlqhg+6pPeHXqvhfRxrcRjws
-         KzaTC02Hv8cOGF6HCXLwm55ukcSQnXmOTuq4e//KmC9j10bu9tLC3K7iXdPXmtS8iXRS
-         j6U2H0SrKB8pxDTTBNdPwJOYSo2/yLfmycuzlqiVgadJgoRxOTGfxcB7vXawbXlTesfu
-         aXmFod8GJDje4nrM8tT8Lofw8NN1bs5FYUx9DdCO6B2YhbTSaFLKGyoh3a/3vKcnZOd4
-         v91RY1gBMoPU2tS50Bxcyhj676wVBR9ZJf6Kqz8tuSed+XuTxMQxGom4X1SuKu2NPxAH
-         bnsg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A4Zjm/xBLp9YxmFT/DNtR5IxUCWdPvGVNi6dsCwjlvs=;
+        b=hs1mRpoxuE6ZpUUnB6ufTgWOqqKRMlwZk7UDkYvnKGNfNaFa5kiy2kivZyhLrqXN+M
+         iLOmA6pRfoJPDsUf+L9H95Xeuta15xztQkd5PxNID2AvHYeyyMv1+wwW3Ki/AdU6rWcQ
+         orKBN+Jv70ZNVgEoCHvXATcpAbHpggbrtJmj4ZxX8Uk8YqJ76WlPyDodhGFbgTsFMUf+
+         ozqSH5sd2hMaFTclgBsW8y9A4uYFYLZ9qSM0do8pJlrCcowHx1LDo1925nd/cFiTuWci
+         x+pIBkfqWBSnFCPCAZCoT3ZYwCOhLWBoo3Xe/de4TTJUj/gFHDuXfWK9B9qn+53yL7FZ
+         Nt6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=eGk6hp1cjRwf/Z2iSyo20kNLHbQVMFCNuaMs0Rs1280=;
-        b=Dnpze0s+1sUZW9hxocMh5oRNeebfv4qqQQMnHg2n897bk9vhLRKDkSqg+gFieDHuTo
-         0zZT9c6oiXskufvf/WrMumF0y4xmQXl+FSLfFisRN46xK1Yfdq6SMVrRxj+FAvshTxFU
-         ReRdqqCDqOPObXJQXm6KFuOz5omov3Ox5bmxxcQIpsgb/iE270+axVVX3bt+OdB6uyVw
-         2pkkuogtkruSx3S92DmDCLB+zDKOWdFetPgMx44IddI3l2hukIrsRTX+I3L/XzgvdEPw
-         1zs0aCMSl4l02x4XMPfjsCXJuUwk/PR93QBLew9gK6ZGzz6dSROD4WknZ702hjcxRyBh
-         wGEA==
-X-Gm-Message-State: AOAM532Bv2eyOrF13Gxr7NM4nCgi+drfXgK7TAtwYeeKKiFXojDV4ZeD
-        FhC2hpQFrPQYpRST9yD/aiY=
-X-Google-Smtp-Source: ABdhPJzfmp3R/snJpoz4JKLB8p6kVhzjLK3y15+yg2Msn43WCATfPtX/lADAdX1oJyKqIod0tml/Vw==
-X-Received: by 2002:aa7:da85:0:b0:419:1e13:205c with SMTP id q5-20020aa7da85000000b004191e13205cmr16173995eds.363.1648728042064;
-        Thu, 31 Mar 2022 05:00:42 -0700 (PDT)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id j18-20020a170906535200b006e007fa9d0fsm9546074ejo.149.2022.03.31.05.00.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Mar 2022 05:00:41 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH v2] block: use dedicated list iterator variable
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <a7b2fe8d-9967-2046-67a5-62d10e95a861@kernel.dk>
-Date:   Thu, 31 Mar 2022 14:00:39 +0200
-Cc:     linux-block <linux-block@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A4Zjm/xBLp9YxmFT/DNtR5IxUCWdPvGVNi6dsCwjlvs=;
+        b=MypxIpZze4LhD57iPE5TKi0FnZBCrwwknhWVhY8jMJ6pZ5Im8zCEPQGYe4V5om9LRo
+         +NR9BOT4QkO+uPNUzHKDI8xVKFJ+NBS/HJ84J64dMEPtF9wVS4ZfYYZk09jEiD42GR12
+         yt04H3kOmp3t0cRICinoLMVoSqJwheKk4ag0nWoXnT0z1HiVnXS4Xb7b1fajieZ5811P
+         k4S3YuaHIA3ovwwj2alBPVsvohU0PRQGUhrYrFebMCBsjH/3Hl4cPfzRyCSK/eCLg3NH
+         I+xAbMMgw3RIVau/sMvhW/jmbQvOpFdhhuv5teNE/TQPC0TzBsWEw7+cbN+kJG1dPjTn
+         bN2g==
+X-Gm-Message-State: AOAM531NVYQT0SCW0GfhrOTH2AhqITIHtAazZMfkWWmp/1pb7PF8PijA
+        y40h2FQjLzrOLtdq0tKHpeI=
+X-Google-Smtp-Source: ABdhPJy1pwWwEsM0zqdfSBXpyPAD0/x0pcEIXNpZNqEniEbmMNwfmK6IiIHr/hlxLOMYZdRzHxD8rw==
+X-Received: by 2002:a05:6000:1:b0:205:e7cd:2a5 with SMTP id h1-20020a056000000100b00205e7cd02a5mr2498122wrx.485.1648728132726;
+        Thu, 31 Mar 2022 05:02:12 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id w8-20020a1cf608000000b0038c8fdc93d6sm6881237wmc.28.2022.03.31.05.02.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 05:02:12 -0700 (PDT)
+Message-ID: <4cd1c5fa-0982-0355-d5b6-7025b82174a4@gmail.com>
+Date:   Thu, 31 Mar 2022 14:02:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 2/4] arm64: dts: mt8192: Add mmc device nodes
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220330133816.30806-1-allen-kh.cheng@mediatek.com>
+ <20220330133816.30806-3-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220330133816.30806-3-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <E262CAA9-1B49-4035-9181-28C6FFDBE21F@gmail.com>
-References: <20220331091218.641532-1-jakobkoschel@gmail.com>
- <a7b2fe8d-9967-2046-67a5-62d10e95a861@kernel.dk>
-To:     Jens Axboe <axboe@kernel.dk>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,34 +83,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On 31. Mar 2022, at 13:59, Jens Axboe <axboe@kernel.dk> wrote:
+On 30/03/2022 15:38, Allen-KH Cheng wrote:
+> Add mmc nodes for mt8192 SoC.
 > 
-> On 3/31/22 3:12 AM, Jakob Koschel wrote:
->> To move the list iterator variable into the list_for_each_entry_*()
->> macro in the future it should be avoided to use the list iterator
->> variable after the loop body.
->> 
->> To *never* use the list iterator variable after the loop it was
->> concluded to use a separate iterator variable instead of a
->> found boolean [1].
-> 
-> Not a huge fan of doing a helper for this single use, but I guess it
-> does make the main function easier to code. So I guess that's fine. But
-> can you move the call down where the result is checked?
-> 
-> qe = blk_lookup_qe_pair(head, q);
-> if (!qe)
-> 	return;
-> 
-> I prefer no distance between call and check, makes it easier to read. I
-> can make the edit locally and note it in the commit message so you don't
-> have to re-send it. Let me know, or just resend a v3.
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I'm fine with you doing the change locally, thanks!
+You forgot to disable the msdc clock node, which I understood we agreed on in in 
+v4. I would consider this change as an substantial one, so in this case please 
+delete the reviewed-by tags.
 
-> 
-> -- 
-> Jens Axboe
-> 
+Regards,
+Matthias
 
-	Jakob
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 32 ++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 69e8d1934d53..c1057878e2c6 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -991,6 +991,38 @@
+>   			#clock-cells = <1>;
+>   		};
+>   
+> +		mmc0: mmc@11f60000 {
+> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0 0x1000>;
+> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
+> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
+> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>,
+> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
+> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
+> +				      "pclk_cg", "axi_cg", "ahb_cg";
+> +			status = "disabled";
+> +		};
+> +
+> +		mmc1: mmc@11f70000 {
+> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11f70000 0 0x1000>, <0 0x11c70000 0 0x1000>;
+> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
+> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
+> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>,
+> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
+> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
+> +				      "pclk_cg", "axi_cg", "ahb_cg";
+> +			status = "disabled";
+> +		};
+> +
+>   		mfgcfg: clock-controller@13fbf000 {
+>   			compatible = "mediatek,mt8192-mfgcfg";
+>   			reg = <0 0x13fbf000 0 0x1000>;

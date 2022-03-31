@@ -2,95 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E754EE490
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3881F4EE49B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbiCaXQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S242794AbiCaXWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240020AbiCaXQJ (ORCPT
+        with ESMTP id S231898AbiCaXWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:16:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FB524CEE2;
-        Thu, 31 Mar 2022 16:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=vSuDqO1mBWaRpB9pMyPQmfeFPj52J4m6p+U+XX+jzGk=; b=z/+63mxYdii+hr9hKP7wTPDhLi
-        shZ57JUlb8IsF0nNtcU4ki81rNDpAONMfizJYx1ZdWJ5dFO9rCUlaW9WJxiGxh6/ASs/iwuEwPtMM
-        oTqFWEq4Rv5RmnXNLGH7WoG3v7uTsoYcxYAOtoinLtGHg279YK1GtzzJ9VYrpnfJSP/DcwjO/T8Ht
-        BilpOy/6iVOK1fvKuSzej9ZhFvTlld2/8mTNgh95avoCoDGdLJU4U29+DasDgoE0Eu61XYPmolXx8
-        /a76e6PMhK3zK6D1cmGRXNZkjUnhOvVTjHjND9shYBcTOreN4FupP/j81i3mjYGJt0+T0/wzekcMN
-        OrtTLTvw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1na3zc-003vkn-Ud; Thu, 31 Mar 2022 23:14:16 +0000
-Date:   Thu, 31 Mar 2022 16:14:16 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
-Subject: Re: mmotm 2022-03-30-13-01 uploaded (kernel/sched/ and sysctls)
-Message-ID: <YkY1yNjfdT3E4iiG@bombadil.infradead.org>
-References: <20220330200158.2F031C340EC@smtp.kernel.org>
- <8d27a9f5-047b-05d5-3594-a51cef06222c@infradead.org>
+        Thu, 31 Mar 2022 19:22:17 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8074F44E;
+        Thu, 31 Mar 2022 16:20:24 -0700 (PDT)
+X-UUID: 8cebddf497a846c9bc48a9843a7deda5-20220401
+X-UUID: 8cebddf497a846c9bc48a9843a7deda5-20220401
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 256301875; Fri, 01 Apr 2022 07:20:18 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 1 Apr 2022 07:20:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Apr 2022 07:20:17 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <xinlei.lee@mediatek.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>, <jitao.shi@mediatek.com>,
+        <lee.jones@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-pwm@vger.kernel.org>,
+        <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v5,1/4] dt-bindings: pwm: Convert pwm-mtk-disp.txt to mediatek,pwm-disp.yaml format
+Date:   Fri, 1 Apr 2022 07:20:17 +0800
+Message-ID: <20220331232017.8829-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <1648730873-18505-2-git-send-email-xinlei.lee@mediatek.com>
+References: <1648730873-18505-2-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8d27a9f5-047b-05d5-3594-a51cef06222c@infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:50:23PM -0700, Randy Dunlap wrote:
-> Luis-
+> Convert pwm-mtk-disp.txt to mediatek,pwm-disp.yaml format as suggested by maintainer
 > 
-> On 3/30/22 13:01, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2022-03-30-13-01 has been uploaded to
-> > 
-> >    https://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > mmotm-readme.txt says
-> > 
-> > README for mm-of-the-moment:
-> > 
-> > https://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> > 
-> > You will need quilt to apply these patches to the latest Linus release (5.x
-> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > https://ozlabs.org/~akpm/mmotm/series
-> 
-> 
-> # CONFIG_SYSCTL is not set
-> # CONFIG_PROC_SYSCTL is not set
-> 
-> In file included from ../kernel/sched/build_policy.c:43:0:
-> ../kernel/sched/rt.c:3017:12: warning: ‘sched_rr_handler’ defined but not used [-Wunused-function]
->  static int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
->             ^~~~~~~~~~~~~~~~
-> ../kernel/sched/rt.c:2978:12: warning: ‘sched_rt_handler’ defined but not used [-Wunused-function]
->  static int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
->             ^~~~~~~~~~~~~~~~
-> 
-> 
-> This was also reported on Feb.22/2022:
->   https://lore.kernel.org/all/fbfc360c-d68f-d83b-5124-d6d930235b8c@infradead.org/
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Yes, I'm on it, thanks!
-
- Luis
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 

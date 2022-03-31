@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C954EE010
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F69F4EE018
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbiCaSE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S233391AbiCaSFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232021AbiCaSEz (ORCPT
+        with ESMTP id S233302AbiCaSFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:04:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20B82231ACC
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648749787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=U6mp5k5Rfq1H2egKFRAzqPGIr9Cpe3NxjrBiX6iBTnc=;
-        b=b2Zj/DlDt0NzyHj5OYK7BBuMAxPNzL9JP0hZqukbvgg7792MEXmpNwwT2+2aFnEcjmMo+Y
-        Ci/jI6cViYNYR8yV5jJxgIEamI8JLf0n/VCR92x74RX0RDA1LVHR23Nim2r5mDlWAieVL6
-        0qrlJuGIuzz2M3Ee2REfEZwM6BOKyd0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-Y8KF2xO9Nlqct_GzquUJCA-1; Thu, 31 Mar 2022 14:03:02 -0400
-X-MC-Unique: Y8KF2xO9Nlqct_GzquUJCA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CFE0805F7C;
-        Thu, 31 Mar 2022 18:03:02 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 26947407F761;
-        Thu, 31 Mar 2022 18:03:01 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v4] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12 warning
-Date:   Thu, 31 Mar 2022 14:02:46 -0400
-Message-Id: <20220331180246.2746210-1-longman@redhat.com>
+        Thu, 31 Mar 2022 14:05:51 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F2B5372F
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:04:01 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id w21so398561pgm.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:04:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=YsjSmrG2rvYs50asz/taC5lCuB0Ss1bBZU3bReqw5is=;
+        b=PouxUIYkBVuDtFYYhzJKLOVGEietOc0cr9qJm2EvDslOhzSw9jON2ICmYF6t9N5/6d
+         UeUa90pA/MozGMKak7kSYV0mXp43DAEGF2q7tXAYxPBwHknQABhfGpVQXvnSm8QSTt/n
+         Eok9vzYTaPRKddP8OxP4oaKDkzdCIH7LL/RmyFAUWgF7jsxDViqNjjb7WbU/DZKVxRtG
+         fN7/0u+gUYr79gPq5Rro0aSzY01+eXTZQ0BBw8iACDlZqN9rtqzBBl4iJe/qiOdvTHpe
+         ywKFz8znw4luKvpXbOv6m6ae8EobDnAtXSAX89rWDWgXE8ZobRk7ujXauAwBCNcXwkU9
+         yg7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=YsjSmrG2rvYs50asz/taC5lCuB0Ss1bBZU3bReqw5is=;
+        b=Eb0hizsVugYL294ELFyfqCggvPrzPfEPKNgQaluS3x0v6MTeBJHHmoSy6knIjU3UIK
+         hssK3zc4Hd8LbLaCLJUnOZumZjHhlOR72Trfd7zE35Qby1IqcG/1DPXhNksSAk2SVFPk
+         TZ6M0XIz17KsFafI6ax1r33ONZgnGa+zw7orY9LdMpaJdcs+bBkMmDKgTa9kP2KXCDec
+         jeB1JXU2EqBPJruvc6sqZCxrN3/W8+c/tZvP5qW/KgUbE5E+UKhEAbVGZXdXl1ABILDh
+         vnR8Iu0ffRQliHyyotd8ZCXbQbjdzc5YUO9Xd7AaSO2biNiYRgO+gRQ9O1kUK5QYzs4f
+         PrMg==
+X-Gm-Message-State: AOAM53079MIbtBOlgwlkVkq8lDICgeMs+fDKxKOxvmqjoRLa8vdQalDw
+        Y5Oc90fsSnsZPafSXf0cnJeb8Q==
+X-Google-Smtp-Source: ABdhPJzs/UIaReCHNW6gfF+eZ6FRhildRbC1WSzb8rJwa2DI3Yesk+oxp4qzOcQkzybMD/Ht6oeMLA==
+X-Received: by 2002:a65:6d15:0:b0:382:4e6d:dd0d with SMTP id bf21-20020a656d15000000b003824e6ddd0dmr11580133pgb.333.1648749841056;
+        Thu, 31 Mar 2022 11:04:01 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id oc10-20020a17090b1c0a00b001c7510ed0c8sm11299522pjb.49.2022.03.31.11.03.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 11:04:00 -0700 (PDT)
+Message-ID: <39b76458-17e6-4e04-15d8-1445d2067d0c@linaro.org>
+Date:   Thu, 31 Mar 2022 11:03:59 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-ext4@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
+References: <20220315215439.269122-1-tadeusz.struk@linaro.org>
+ <YkW9+AK2d3i8X9rq@mit.edu>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH v2] ext4: check if offset+length is valid in fallocate
+In-Reply-To: <YkW9+AK2d3i8X9rq@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The gcc 12 compiler reports a "'mem_section' will never be NULL"
-warning on the following code:
+On 3/31/22 07:43, Theodore Ts'o wrote:
+> On Tue, Mar 15, 2022 at 02:54:39PM -0700, Tadeusz Struk wrote:
+>> @@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
+>>   		   offset;
+>>   	}
+>>   
+>> +	/*
+>> +	 * For punch hole the length + offset needs to be at least within
+>> +	 * one block before last
+>> +	 */
+>> +	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
+>> +	if (offset + length >= max_length) {
+>> +		ret = -ENOSPC;
+>> +		goto out_mutex;
+>> +	}
+> 
+> I wonder if we would be better off just simply capping length to
+> max_length?  If length is set to some large value, such as LONG_MAX,
+> it's pretty clear what the intention should be, which is to simply do
+> the equivalent of truncating the file at offset.  Perhaps we should
+> just do that?
 
-    static inline struct mem_section *__nr_to_section(unsigned long nr)
-    {
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-        if (!mem_section)
-                return NULL;
-    #endif
-        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-                return NULL;
-       :
+Don't think that would be the correct behavior. ftrucnate (or truncate)
+modify the file size, but fallocate with FALLOC_FL_PUNCH_HOLE should not.
 
-It happens with CONFIG_SPARSEMEM_EXTREME off. The mem_section
-definition is
+man 2 fallocate says:
+"...
+The FALLOC_FL_PUNCH_HOLE flag must be ORed with FALLOC_FL_KEEP_SIZE in mode;
+in other words, even when punching off the end of the file, the file size
+(as reported by stat(2)) does not change.
+"
+that is enforced by vfs:
+https://elixir.bootlin.com/linux/v5.17.1/source/fs/open.c#L245
 
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-    extern struct mem_section **mem_section;
-    #else
-    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-    #endif
+> 
+> That being said, we should be consistent with what other file systems
+> do when they are asked to punch a hole starting at offset and
+> extending out to LONG_MAX.
 
-In the !CONFIG_SPARSEMEM_EXTREME case, mem_section
-is a static 2-dimensional array and so the check
-"!mem_section[SECTION_NR_TO_ROOT(nr)]" doesn't make sense.
+For all the supported file systems, apart from ext4, only btrfs, gfs2, and xfs
+support fallocate and FALLOC_FL_PUNCH_HOLE mode.
+Looking at what they do is they round the length of the space to be freed
+i.e. offset + length to valid value and then perform the operation
+using the valid values.
 
-Fix this warning by moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-check up inside the CONFIG_SPARSEMEM_EXTREME block and adding an explicit
-NR_SECTION_ROOTS check to make sure that there is no out-of-bound
-array access.
+https://elixir.bootlin.com/linux/v5.17.1/source/fs/gfs2/bmap.c#L2424
+https://elixir.bootlin.com/linux/v5.17.1/source/fs/btrfs/file.c#L2506
 
-Fixes: 3e347261a80b ("sparsemem extreme implementation")
-Reported-by: Justin Forbes <jforbes@redhat.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/linux/mmzone.h | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+For ext4 this would mean that one could only deallocate space up to
+the one before last block. I will change this to do the same in the
+next version if that's ok with you.
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 962b14d403e8..46ffab808f03 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1397,13 +1397,16 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
- 
- static inline struct mem_section *__nr_to_section(unsigned long nr)
- {
-+	unsigned long root = SECTION_NR_TO_ROOT(nr);
-+
-+	if (unlikely(root >= NR_SECTION_ROOTS))
-+		return NULL;
-+
- #ifdef CONFIG_SPARSEMEM_EXTREME
--	if (!mem_section)
-+	if (!mem_section || !mem_section[root])
- 		return NULL;
- #endif
--	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
--		return NULL;
--	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
-+	return &mem_section[root][nr & SECTION_ROOT_MASK];
- }
- extern size_t mem_section_usage_size(void);
- 
+> 
+> Also, if we are going to return an error, I don't think ENOSPC is the
+> correct error to be returning.
+
+I took it from man 2 fallocate, my first suspicion was that it crashed
+because the disk on my VM wasn't big enough. It was a bad choice.
+
 -- 
-2.27.0
-
+Thanks,
+Tadeusz

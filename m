@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270584EE2B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46304EE2B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241471AbiCaUg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S241480AbiCaUhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241456AbiCaUgy (ORCPT
+        with ESMTP id S239020AbiCaUha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:36:54 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F27AD4470;
-        Thu, 31 Mar 2022 13:35:03 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-deb9295679so529437fac.6;
-        Thu, 31 Mar 2022 13:35:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7o8q97xCtSsryTgEf+sdFsnMX0/U036sQhYghPoefl4=;
-        b=iPJMIel6KouTEDry7C1kbBk8yMK/XG0f8n5a/xdpTicgN470n1MAIZqq0O9XIQkTQT
-         1iAELBGJ99xBVFuBGbsK66w77QlYA4Y9z7bSbwe064IL8vRgvZQGNIJOgb8klFDl6yyb
-         mOTYM2AgQPuSVzZ0xUp2PqQIGS2vA9vKOIKyuLChLPNuVD2d6h297HDDKQy/4P+BDFyA
-         VG8AbLUNJK1Nr0BKgwjIuypNESUa7lk7vmMryzHIdlI6sY9ljUtvrxBCA7f+oC07LQSF
-         Qs3PqTOguNnRiVdnhVMTWUcZXWhU8sJ5a5FIKPQCLvWnl3ZMEQG6C0We+GGB/XGJEPWR
-         P2/Q==
-X-Gm-Message-State: AOAM532BTv+JLmhPhYRdJu1nFGVk2U16AQRXbCyCqXhV/q7iFgS1ZSWI
-        WVaDs2lxCAejO6OyUHA4LQ==
-X-Google-Smtp-Source: ABdhPJyOtg9v8M3rgMoWnDenrT80lRaoyYQt7XKsnQHhmcrqEG9E/JNZKDO/sxj1EcCQH8b9oxX0lA==
-X-Received: by 2002:a05:6870:79d:b0:da:56e3:fe99 with SMTP id en29-20020a056870079d00b000da56e3fe99mr3441337oab.95.1648758902507;
-        Thu, 31 Mar 2022 13:35:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r35-20020a056870582300b000df0dc42ff5sm219227oap.0.2022.03.31.13.34.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 13:35:00 -0700 (PDT)
-Received: (nullmailer pid 1446207 invoked by uid 1000);
-        Thu, 31 Mar 2022 20:34:59 -0000
-Date:   Thu, 31 Mar 2022 15:34:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, alsa-devel@alsa-project.org,
-        Georgi Djakov <djakov@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Mark Brown <broonie@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: Re: [PATCH] dt-bindings: Fix incomplete if/then/else schemas
-Message-ID: <YkYQc/r8P5LYI6dt@robh.at.kernel.org>
-References: <20220330145741.3044896-1-robh@kernel.org>
+        Thu, 31 Mar 2022 16:37:30 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFF8FABC1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:35:39 -0700 (PDT)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id a1W5n3SZZ9eePa1W5nafzK; Thu, 31 Mar 2022 22:35:38 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 31 Mar 2022 22:35:38 +0200
+X-ME-IP: 90.126.236.122
+Message-ID: <5a5fec66-f8af-7e6e-5afe-97e4eb21c51a@wanadoo.fr>
+Date:   Thu, 31 Mar 2022 22:35:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330145741.3044896-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] binderfs: Fix the maximum minor value in
+ binderfs_binder_device_create() and binderfs_binder_ctl_create()
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Todd Kjos <tkjos@google.com>
+References: <ba880255b91b4682c21c62ae0bc5673e34a119aa.1648379891.git.christophe.jaillet@wanadoo.fr>
+ <20220329112011.j4xf2qjktfqokkyn@wittgenstein>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220329112011.j4xf2qjktfqokkyn@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 09:57:41 -0500, Rob Herring wrote:
-> A recent review highlighted that the json-schema meta-schema allows any
-> combination of if/then/else schema keywords even though if, then or else
-> by themselves makes little sense. With an added meta-schema to only
-> allow valid combinations, there's a handful of schemas found which need
-> fixing in a variety of ways. Incorrect indentation is the most common
-> issue.
+Le 29/03/2022 à 13:20, Christian Brauner a écrit :
+> On Sun, Mar 27, 2022 at 01:18:17PM +0200, Christophe JAILLET wrote:
+>> ida_alloc_max(..., max, ...) returns values from 0 to max, inclusive.
+>>
+>> So, BINDERFS_MAX_MINOR is a valid value for 'minor'.
+>>
+>> BINDERFS_MAX_MINOR is '1U << MINORBITS' and we have:
+>> 	#define MKDEV(ma,mi)	(((ma) << MINORBITS) | (mi))
+>>
+>> So, When this value is used in MKDEV() and it will overflow.
+>>
+>> Fixes: 3ad20fe393b3 ("binder: implement binderfs")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> This patch is completely speculative.
+>>
+>> The 'BINDERFS_MAX_MINOR_CAPPED - 1' is here only for symmetry with the
+>> BINDERFS_MAX_MINOR case. I'm not sure at all that is is needed and, more
+>> importantly, that it is correct.
 > 
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Michael Hennerich <Michael.Hennerich@analog.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Olivier Moysan <olivier.moysan@foss.st.com>
-> Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Georgi Djakov <djakov@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Cc: linux-iio@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-tegra@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/iio/adc/adi,ad7476.yaml          |  1 +
->  .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |  8 +-
->  .../bindings/iio/dac/adi,ad5360.yaml          |  6 +-
->  .../bindings/interconnect/qcom,rpm.yaml       | 84 +++++++++----------
->  .../bindings/mmc/nvidia,tegra20-sdhci.yaml    |  2 +
->  .../bindings/net/ti,davinci-mdio.yaml         |  1 +
->  .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 20 ++---
->  .../bindings/phy/qcom,usb-hs-phy.yaml         | 36 ++++----
->  .../bindings/regulator/fixed-regulator.yaml   | 34 ++++----
->  .../bindings/sound/st,stm32-sai.yaml          |  6 +-
->  .../devicetree/bindings/sram/sram.yaml        | 16 ++--
->  11 files changed, 108 insertions(+), 106 deletions(-)
+> Hm, since we're "removing" one alloctable device for the initial ipc
+> namespace, I think we need the -1 for the capped value.
+> 
+> Though I wonder if the simpler fix wouldn't just be to:
+> 
+> #define BINDERFS_MAX_MINOR MINORMASK
+> 
+> since include/linux/kdev_t.h has:
+> 
+> #define MINORBITS	20
+> #define MINORMASK	((1U << MINORBITS) - 1)
 > 
 
-Applied, thanks!
+Hi,
+I mostly agree with you, but I don't have a strong opinion on the other 
+uses of BINDERFS_MAX_MINOR.
+
+The ones related to 'max' values looks good to me, but I don't know the 
+implication for the one used in binderfs_make_inode() and in 
+init_binderfs().
+
+I won't be able to help further here.
+
+CJ

@@ -2,179 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594524ED0F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D019F4ED0F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiCaAi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S229947AbiCaAkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiCaAi0 (ORCPT
+        with ESMTP id S229487AbiCaAkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:38:26 -0400
-Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325CF49256
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:36:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1648686970; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=K8T+uHskJaos5V9OED/eC2qH+L5so1s+6tCZ8uFNKBYd1R07a3+sjrROp17LseNzQeVLNNk8pxnLWDzuLacO7OCNVsVpTRRPevnJ3gIMgg1wpYkD+V515aCKPeMgrvrZD90jmjT+fpDSJviMy+TeUsylfJW4qaZAUqFsbrzNGcU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1648686970; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Fe9LNg1IOgAJF+0EWMxfVT5zQoYnvRy5Xxc7KvtGuW4=; 
-        b=QXNKnNKXX510AJBBqUIPOKeOFCznZI7UPw1+5hCJJjfnRb/+M3Mrwfuz+HdQEQ1kxja8DIHQuFezjTloAu+nd+b3BhLlOCa6dHzPhvGm8+XUOOC7jsjDzR495gKZRUW02eTqCeTw+scN9PNWN4vt8Ft39MUl4s4S0fEriktFNSk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1648686970;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=Fe9LNg1IOgAJF+0EWMxfVT5zQoYnvRy5Xxc7KvtGuW4=;
-        b=LQCyc/CUxS/WkQP0SvKojevKcFUuc9/Av94cbbb4+ZzIutO1Ojh3qvzOY3d9nJbB
-        fQWnfmmd8F2Hp0FVlAxPUHnfs5hPZqMC0nv1nxj0+AwfIlFM6ETQKJkRDDP+u54BNDG
-        HaCdFk6+JbEhG6ciN76flXpruBym/jT8smsFO7a8=
-Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1648686969599709.4131390280043; Wed, 30 Mar 2022 17:36:09 -0700 (PDT)
-Message-ID: <c3ecd65f-bb10-8d14-500d-d6e2ece9b336@apertussolutions.com>
-Date:   Wed, 30 Mar 2022 20:35:50 -0400
+        Wed, 30 Mar 2022 20:40:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820D11C109;
+        Wed, 30 Mar 2022 17:38:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A647B81E6F;
+        Thu, 31 Mar 2022 00:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C42C340EC;
+        Thu, 31 Mar 2022 00:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648687106;
+        bh=HS85Xe1VwoJm50SlxBhxv3D+e91TbEz0k8K8w27ElyQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z/WQXv1bnAhOrhjPkt3mfSAqzYckfM6VQrJnzWUrsFHAlwz/epztUgnB2Ur5+YAy/
+         bf7bECMw/bDl8gZBjVoGl8L8vuxnYjwvISZ+GEOrwmINOXOHsNxOpo9g++5yiKSz2D
+         BwRG97903AOai1HJdfnVOtKhvCqWBrFwvlT/ktg9rSu2BVtQ9n98DQTF3Uc7X1Gycz
+         kzQMQI/Wv1LQaqFJwvD52ZGFdMIjN1FpcI5Tih/T0r6eLI6dCp7fLupgEr6gFNPPsr
+         QQpUWovFkNvDBXGeTKGk+lsM850aGFNF3lfWdgVZdMshk5AClsgzfw3cMenR0fGCYi
+         2gxr+QOcOs56w==
+Date:   Wed, 30 Mar 2022 17:38:26 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Yi Wang <wang.yi59@zte.com.cn>
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xue.zhihong@zte.com.cn, wang.liang82@zte.com.cn,
+        Cheng Lin <cheng.lin130@zte.com.cn>
+Subject: Re: [PATCH] xfs: getattr ignore blocks beyond eof
+Message-ID: <20220331003826.GL27690@magnolia>
+References: <20220331080256.1874-1-wang.yi59@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Subject: Re: Linux DRTM on UEFI platforms
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        The development of GNU GRUB <grub-devel@gnu.org>,
-        Kees Cook <keescook@chromium.org>
-References: <20220329174057.GA17778@srcf.ucam.org>
- <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331080256.1874-1-wang.yi59@zte.com.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings Matthew,
+On Thu, Mar 31, 2022 at 04:02:56PM +0800, Yi Wang wrote:
+> From: Cheng Lin <cheng.lin130@zte.com.cn>
+> 
+> Blocks beyond EOF, which preallocated, will be reclaimed at some time.
+> These blocks can be ignored when getattr.
+> 
+> This patch will optimize query accuracy for getattr blocks.
 
-First thank you to you and James for taking time out of your busy
-schedules to sit down with us and work through all of this.
+Huh?  This subtracts posteof blocks from the query results, which makes
+the results *less accurate*.  Those blocks are mapped to the file, hence
+they are supposed to be counted in nblocks.
 
-Hey Ard,
+--D
 
-On 3/30/22 03:02, Ard Biesheuvel wrote:>> 1) From an EFI maintainer
-perspective, is making the contract between
->> the boot stub and the kernel explicit viable?
->>
->
-> No. The direction of travel has been to define EFI boot only in terms
-> of the handover from the loader to the stub. What happens next is up
-> to the architecture, and is deliberately not specified, because it is
-> considered to be internal Linux ABI. We've deviated from this once for
-> Xen on ARM, but this means we have already painted ourselves into a
-> corner when it comes the way we use DT internally at the handover
-> point between stub and kernel proper, and I am not eager to repeat
-> that. Locking down the stub-to-kernel protocol for all architectures
-> is not the way to go.
-
-To help provide some visual context, for EFI today there is,
-
-                                        bzImage
-[EFI boot manager] -> [[efi-stub] -> [setup kernel] -> [main kernel]]
-
-Where the efi-stub is responsible for interacting with firmware to
-configure the system, store that configuration for the setup kernel and
-the main kernel, and then call EBS before entering the setup kernel.
-
-For Secure Launch the flow (on Intel) is,
-
-      CPU instruction                   bzImage
-[preamble] -> [ACM] -> [[sl-stub] -> [setup kernel] -> [main kernel]]
-
-In order to make the CPU instruction call to enter the ACM the system
-must be in a very specific quiescent state. This includes but not
-exhaustively,
-  * EBS must have been called
-  * TPM should have all localities closed
-  * IOMMU PMRs must be programmed appropriately
-  * TXT heap space allocated
-  * TXT heap space populated with config structures
-  * All APs must be in a specific idle state
-  * Execution is on the BSP
-Carrying all this out is what is considered the DRTM preamble.
-
-This is the wrinkle because the setup kernel and main kernel are both
-predicated on the efi-stub and the efi-stub is predicated on running
-before EBS. So how can this wrinkle be addressed? The TrenchBoot project
-proposed that the information collected by the efi-stub be formally
-documented for two reasons, 1. to allow the sl-stub to be aware of what
-and where all external data is being injected into the kernel so any
-data that may be security critical could be measured, and 2. it would
-allow third parties, e.g. GRUB, could correctly configure the system,
-pass all EFI related information correctly to the setup kernel and the
-main kernel before executing the preamble. Where the former is more of a
-concern than enabling the latter.
-
-Relating to what information is security critical, this can be a bit
-subjective. For example Dave Weston has a twitter thread[1][2][3] over
-what state Azure Attestation can validate for a DRTM Windows system.
-This reflects what Microsoft believes it's customers will want to
-validate about a Windows system before accessing services and data
-stored in Azure. For Linux Secure Launch measuring everything would
-obviously provide the finest grain of assertions regarding how the
-kernel was configured to run but that comes at the expense that is
-incurred for taking the measurements. To date the selection of
-measurements have been an attempt of balancing the most meaningful
-measurements with how many measurements should be taken. For instance it
-would be possible to hash the SRTM (firmware) TPM event log to provide
-an assertion of what its contents were at dynamic launch. Is that a
-meaningful measurement? Not necessarily since there are other means to
-validate the log but there is likely someone who is super cautious and
-would like to see the extra layer of validation.
-
->> 2) If so, is it desirable?
->>
->> 3) If either (1) or (2) is "no", is it reasonable to ensure that all
->> potentially security-critical state or configuration changes to the
->> boot stub are reviewed by DRTM people to verify whether the secure
->> launch code needs to be updated to match?
->
-> Wouldn't it be better for the secure launch kernel to boot the EFI
-> entrypoint directly? As it happens, I just completed a PoC last week
-> for a minimal implementation of EFI (in Rust) that only carries the
-> pieces that the EFI stub needs to boot Linux. It is currently just a
-> proof of concept that only works on QEMU/arm64, but it should not be
-> too hard to adapt it for x86 and for booting a kernel that has already
-> been loaded to memory.
-
-IIUC, as you can see above, entering the efi-stub from the dynamic
-launch will fail because EBS will have been called.
-
-v/r,
-dps
-
-[1] https://twitter.com/dwizzzlemsft/status/1508517758635446273
-[2] https://twitter.com/dwizzzlemsft/status/1508602527482146816
-[3] https://twitter.com/dwizzzlemsft/status/1508852935261794312
+> Signed-off-by: Cheng Lin <cheng.lin130@zte.com.cn>
+> Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+> ---
+>  fs/xfs/xfs_bmap_util.c |  1 +
+>  fs/xfs/xfs_icache.c    |  1 +
+>  fs/xfs/xfs_inode.h     |  1 +
+>  fs/xfs/xfs_iomap.c     |  5 +++++
+>  fs/xfs/xfs_iops.c      | 19 ++++++++++++++++++-
+>  5 files changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
+> index eb2e387..9f4081d 100644
+> --- a/fs/xfs/xfs_bmap_util.c
+> +++ b/fs/xfs/xfs_bmap_util.c
+> @@ -753,6 +753,7 @@
+>  	if (error)
+>  		goto out_unlock;
+>  
+> +	ip->i_last_fsb = end_fsb;
+>  	xfs_inode_clear_eofblocks_tag(ip);
+>  	goto out_unlock;
+>  
+> diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+> index 9644f93..43ffb9e 100644
+> --- a/fs/xfs/xfs_icache.c
+> +++ b/fs/xfs/xfs_icache.c
+> @@ -102,6 +102,7 @@ struct xfs_inode *
+>  	memset(&ip->i_df, 0, sizeof(ip->i_df));
+>  	ip->i_flags = 0;
+>  	ip->i_delayed_blks = 0;
+> +	ip->i_last_fsb = 0;
+>  	ip->i_diflags2 = mp->m_ino_geo.new_diflags2;
+>  	ip->i_nblocks = 0;
+>  	ip->i_forkoff = 0;
+> diff --git a/fs/xfs/xfs_inode.h b/fs/xfs/xfs_inode.h
+> index b7e8f14..56fc41b 100644
+> --- a/fs/xfs/xfs_inode.h
+> +++ b/fs/xfs/xfs_inode.h
+> @@ -55,6 +55,7 @@
+>  	unsigned long		i_flags;	/* see defined flags below */
+>  	uint64_t		i_delayed_blks;	/* count of delay alloc blks */
+>  	xfs_fsize_t		i_disk_size;	/* number of bytes in file */
+> +	xfs_fileoff_t		i_last_fsb;	/* last fsb preallocated */
+>  	xfs_rfsblock_t		i_nblocks;	/* # of direct & btree blocks */
+>  	prid_t			i_projid;	/* owner's project id */
+>  	xfs_extlen_t		i_extsize;	/* basic/minimum extent size */
+> diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
+> index e552ce5..bd9266e 100644
+> --- a/fs/xfs/xfs_iomap.c
+> +++ b/fs/xfs/xfs_iomap.c
+> @@ -881,6 +881,7 @@
+>  	bool			eof = false, cow_eof = false, shared = false;
+>  	int			allocfork = XFS_DATA_FORK;
+>  	int			error = 0;
+> +	xfs_fileoff_t		prealloc_last_fsb = 0;
+>  
+>  	if (xfs_is_shutdown(mp))
+>  		return -EIO;
+> @@ -1024,6 +1025,7 @@
+>  				XFS_B_TO_FSB(mp, mp->m_super->s_maxbytes));
+>  			ASSERT(p_end_fsb > offset_fsb);
+>  			prealloc_blocks = p_end_fsb - end_fsb;
+> +			prealloc_last_fsb = p_end_fsb;
+>  		}
+>  	}
+>  
+> @@ -1049,6 +1051,9 @@
+>  		goto out_unlock;
+>  	}
+>  
+> +	if (prealloc_last_fsb && prealloc_blocks)
+> +		ip->i_last_fsb = prealloc_last_fsb;
+> +
+>  	if (allocfork == XFS_COW_FORK) {
+>  		trace_xfs_iomap_alloc(ip, offset, count, allocfork, &cmap);
+>  		goto found_cow;
+> diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
+> index b79b384..ca0372c 100644
+> --- a/fs/xfs/xfs_iops.c
+> +++ b/fs/xfs/xfs_iops.c
+> @@ -559,8 +559,14 @@
+>  	struct xfs_inode	*ip = XFS_I(inode);
+>  	struct xfs_mount	*mp = ip->i_mount;
+>  
+> +	xfs_off_t		fsb_beyond_eof;
+> +	xfs_fileoff_t		end_fsb;
+> +
+>  	trace_xfs_getattr(ip);
+>  
+> +	end_fsb = XFS_B_TO_FSB(mp, (xfs_ufsize_t)XFS_ISIZE(ip));
+> +	fsb_beyond_eof = ip->i_last_fsb - end_fsb;
+> +
+>  	if (xfs_is_shutdown(mp))
+>  		return -EIO;
+>  
+> @@ -574,7 +580,15 @@
+>  	stat->atime = inode->i_atime;
+>  	stat->mtime = inode->i_mtime;
+>  	stat->ctime = inode->i_ctime;
+> -	stat->blocks = XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks);
+> +
+> +	if (fsb_beyond_eof > 0) {
+> +		stat->blocks =
+> +		XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks)
+> +				  - fsb_beyond_eof;
+> +	} else {
+> +		stat->blocks =
+> +		XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks);
+> +	}
+>  
+>  	if (xfs_has_v3inodes(mp)) {
+>  		if (request_mask & STATX_BTIME) {
+> @@ -988,6 +1002,9 @@
+>  	ip->i_disk_size = newsize;
+>  	xfs_trans_log_inode(tp, ip, XFS_ILOG_CORE);
+>  
+> +	/* update i_last_fsb to newsize when truncate.*/
+> +	ip->i_last_fsb = XFS_B_TO_FSB(mp, newsize);
+> +
+>  	if (newsize <= oldsize) {
+>  		error = xfs_itruncate_extents(&tp, ip, XFS_DATA_FORK, newsize);
+>  		if (error)
+> -- 
+> 1.8.3.1

@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89894EE306
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BE84EE307
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241618AbiCaVGG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 31 Mar 2022 17:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S241623AbiCaVGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbiCaVGC (ORCPT
+        with ESMTP id S241622AbiCaVGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:06:02 -0400
+        Thu, 31 Mar 2022 17:06:09 -0400
 Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4450813D36
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:04:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F8863BD2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:04:21 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 1A68F609B3C3;
-        Thu, 31 Mar 2022 23:04:11 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id B2D1E609B3CB;
+        Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
 Received: from lithops.sigma-star.at ([127.0.0.1])
         by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GFmecjB0zm2a; Thu, 31 Mar 2022 23:04:10 +0200 (CEST)
+        with ESMTP id KXq5bdCwI6eH; Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 8D8ED609B3CB;
-        Thu, 31 Mar 2022 23:04:10 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id 4380A614E2F4;
+        Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
 Received: from lithops.sigma-star.at ([127.0.0.1])
         by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1Nhbo3hKyEAb; Thu, 31 Mar 2022 23:04:10 +0200 (CEST)
+        with ESMTP id qpofYdCL9ADw; Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
 Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 633BB609B3C3;
-        Thu, 31 Mar 2022 23:04:10 +0200 (CEST)
-Date:   Thu, 31 Mar 2022 23:04:10 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id 2A640609B3CB;
+        Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
+Date:   Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
 From:   Richard Weinberger <richard@nod.at>
 To:     torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>
-Message-ID: <738009331.204323.1648760650240.JavaMail.zimbra@nod.at>
-Subject: [GIT PULL] UML updates for 5.18
+        linux-mtd <linux-mtd@lists.infradead.org>
+Message-ID: <678407645.204324.1648760660133.JavaMail.zimbra@nod.at>
+Subject: [GIT PULL] JFFS2, UBI and UBIFS fixes for 5.18
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [195.201.40.130]
 X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Index: F335S66LpflqJb9RQ4q9AmKSilfNng==
-Thread-Topic: UML updates for 5.18
+Thread-Index: dHWwhMT9Bg43NSBogJ+HKHdWxxbsHQ==
+Thread-Topic: JFFS2, UBI and UBIFS fixes for 5.18
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
@@ -55,79 +55,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+The following changes since commit aa39cc675799bc92da153af9a13d6f969c348e82:
 
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+  jffs2: GC deadlock reading a page that is used in jffs2_write_begin() (2021-12-23 22:33:41 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git tags/for-linus-5.18-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/for-linus-5.18-rc1
 
-for you to fetch changes up to 82017457957a550d7d00dde419435dd74a890887:
+for you to fetch changes up to 705757274599e2e064dd3054aabc74e8af31a095:
 
-  um: run_helper: Write error message to kernel log on exec failure on host (2022-03-11 10:56:17 +0100)
+  ubifs: rename_whiteout: correct old_dir size computing (2022-03-17 23:34:07 +0100)
+
+
+Please note that there is a minor merge conflict with the folio tree tree
+between commits
+3b67db8a6ca8 ("ubifs: Fix to add refcount once page is set private")
+and
+c337f2f4f746 ("ubifs: Convert from invalidatepage to invalidate_folio").
+
+I'll happily review your merge resolution.
 
 ----------------------------------------------------------------
-This pull request contains the following changes for UML:
+This pull request contains fixes for JFFS2, UBI and UBIFS
 
-- Devicetree support (for testing)
-- Various cleanups and fixes: UBD, port_user, uml_mconsole
-- Maintainer update
+JFFS2:
+        - Fixes for various memory issues
+
+UBI:
+        - Fix for a race condition in cdev ioctl handler
+
+UBIFS:
+	- Fixes for O_TMPFILE and whiteout handling
+	- Fixes for various memory issues
 
 ----------------------------------------------------------------
-Anton Ivanov (3):
-      um: Document dtb command line option
-      um: Migrate vector drivers to NAPI
-      um: Fix uml_mconsole stop/go
+Baokun Li (5):
+      ubi: Fix race condition between ctrl_cdev_ioctl and ubi_cdev_ioctl
+      jffs2: fix use-after-free in jffs2_clear_xattr_subsystem
+      jffs2: fix memory leak in jffs2_do_mount_fs
+      jffs2: fix memory leak in jffs2_scan_medium
+      ubifs: rename_whiteout: correct old_dir size computing
 
-Benjamin Beichler (1):
-      um: fix and optimize xor select template for CONFIG64 and timetravel mode
+Zhihao Cheng (11):
+      ubifs: rename_whiteout: Fix double free for whiteout_ui->data
+      ubifs: Fix deadlock in concurrent rename whiteout and inode writeback
+      ubifs: Fix wrong number of inodes locked by ui_mutex in ubifs_inode comment
+      ubifs: Add missing iput if do_tmpfile() failed in rename whiteout
+      ubifs: Rename whiteout atomically
+      ubifs: Fix 'ui->dirty' race between do_tmpfile() and writeback work
+      ubifs: Rectify space amount budget for mkdir/tmpfile operations
+      ubifs: setflags: Make dirtied_ino_d 8 bytes aligned
+      ubifs: Fix read out-of-bounds in ubifs_wbuf_write_nolock()
+      ubifs: Fix to add refcount once page is set private
+      ubi: fastmap: Return error code if memory allocation fails in add_aeb()
 
-David Gow (3):
-      um: Cleanup syscall_handler_t definition/cast, fix warning
-      um: Remove unused timeval_to_ns() function
-      um: clang: Strip out -mno-global-merge from USER_CFLAGS
+hongnanli (1):
+      fs/jffs2: fix comments mentioning i_mutex
 
-Frédéric Danis (1):
-      um: Fix WRITE_ZEROES in the UBD Driver
-
-Glenn Washburn (4):
-      um: port_user: Search for in.telnetd in PATH
-      um: port_user: Allow setting path to port-helper using UML_PORT_HELPER envvar
-      um: port_user: Improve error handling when port-helper is not found
-      um: run_helper: Write error message to kernel log on exec failure on host
-
-Johannes Berg (2):
-      lib/logic_iomem: correct fallback config references
-      uml: net: vector: fix const issue
-
-Richard Weinberger (1):
-      MAINTAINERS: Update UserModeLinux entry
-
-Vincent Whitchurch (2):
-      um: Fix order of dtb unflatten/early init
-      docs: UML: Mention telnetd for port channel
-
-Yang Li (1):
-      um: Remove duplicated include in syscalls_64.c
-
- .../virt/uml/user_mode_linux_howto_v2.rst          |  26 ++++-
- MAINTAINERS                                        |   5 +-
- arch/um/Makefile                                   |   4 +
- arch/um/drivers/mconsole_kern.c                    |   3 +-
- arch/um/drivers/port_user.c                        |  18 +++-
- arch/um/drivers/ubd_kern.c                         |   8 +-
- arch/um/drivers/vector_kern.c                      | 105 ++++++++++-----------
- arch/um/drivers/vector_kern.h                      |   3 +-
- arch/um/drivers/vector_user.c                      |   2 +-
- arch/um/drivers/vector_user.h                      |   2 +-
- arch/um/include/asm/xor.h                          |   4 +-
- arch/um/include/shared/os.h                        |   1 +
- arch/um/kernel/dtb.c                               |   2 +-
- arch/um/os-Linux/file.c                            |   9 ++
- arch/um/os-Linux/helper.c                          |   5 +
- arch/um/os-Linux/time.c                            |   6 --
- arch/x86/um/shared/sysdep/syscalls_64.h            |   5 +-
- arch/x86/um/syscalls_64.c                          |   1 -
- lib/logic_iomem.c                                  |   8 +-
- 19 files changed, 136 insertions(+), 81 deletions(-)
+ drivers/mtd/ubi/build.c   |   9 +-
+ drivers/mtd/ubi/fastmap.c |  28 ++++--
+ drivers/mtd/ubi/vmt.c     |   8 +-
+ fs/jffs2/build.c          |   4 +-
+ fs/jffs2/fs.c             |   2 +-
+ fs/jffs2/jffs2_fs_i.h     |   4 +-
+ fs/jffs2/scan.c           |   6 +-
+ fs/ubifs/dir.c            | 238 ++++++++++++++++++++++++++++------------------
+ fs/ubifs/file.c           |  14 +--
+ fs/ubifs/io.c             |  34 ++++++-
+ fs/ubifs/ioctl.c          |   2 +-
+ fs/ubifs/journal.c        |  52 ++++++++--
+ fs/ubifs/ubifs.h          |   2 +-
+ 13 files changed, 259 insertions(+), 144 deletions(-)

@@ -2,158 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0B04EE45B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2B04EE45F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242678AbiCaWx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S242690AbiCaW4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbiCaWxZ (ORCPT
+        with ESMTP id S242684AbiCaW4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:53:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3241D4C0D;
-        Thu, 31 Mar 2022 15:51:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB079B82207;
-        Thu, 31 Mar 2022 22:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0A9C340ED;
-        Thu, 31 Mar 2022 22:51:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648767094;
-        bh=QZtPMXY6JUY/ZfIXbEGhe3FtZuMlYLYppA7pePl5R5Q=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=eUVu2/0sluYfq3DhNMOnQ4SajAYtEbiavPa1PqSheOk4ucJs3VxLKjLCLbuGbl9hO
-         XuevYEOKMXwSFS/Tpb+r6f0IqPoBQqigC7l8mm0W4emupTTfmjEAHRYe3HZTgo8MIo
-         SB4MnkP4WO8ZQkr5M6AtdtP24O8ABHi2QQteUeQASfyFZz1LMIQ/++bGvSwA0zUB+x
-         tG8mkgKQJtBS7khMW7VkW9z3PuK29qPubZP0ClVE/p5/SqQ1TyJbDQvGQabWYbxM9r
-         Nl4jL3godJaYUbHrN8K0r810g5D2tRiYZAWPeRUZsKJkZR22ObCIHOQ3uyxxPbTGY6
-         DO11ilqutw7hw==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 31 Mar 2022 18:56:03 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4F06516F
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:54:14 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id m67so1993949ybm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H4K1DYo6POxyHa7P+r+PclGm7rs5TWXKiHdrqnC5dzk=;
+        b=l6l3R4RPJBfrQ5v9o/l3WbtqAvsavb7WlXlcj+rdQGaIyoPa45SjS3yqRb58aBIOL4
+         N2CFmZvPSeUEVQeR0I39B+b8LXyBy7s9otM341m/V/LKv75BQU5+824n4leoIwepKTl3
+         6//ffE486OzkiGY/gkrVzLypYftNuGZsdgi4LkBPxqW9spQeY34J57XbRcw2JvP9iyJq
+         7/V+sXc2HD4k7+6fIXv8CUmT1u8uQEk0vKGKRKKwluevG16JV3LJ8Q5KP8DORZZbLpM0
+         rk27Wyj6yL+1utx0TkD2jgMzcVaMy2tkqyVG+osrQgn+X2vmvYUQxO8h2BJlpoY+EFqI
+         W9xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H4K1DYo6POxyHa7P+r+PclGm7rs5TWXKiHdrqnC5dzk=;
+        b=oKsoxhFr5eKD2zX2XqmsORbSOw6KOFg5IIwISWCnf9DfNWejAPbQ0Q888qtVX8vb2B
+         U1aexXFZMQuOkAU/rHct2zip3chU/qKDUhE9V7/gRn/sggnnm1sI50Xly9JQb7cxSjKI
+         qzJvfubZ/AHrTsj8EqFyhALEXA1wN7d5Bz9neHRwGD6IDqThau3y3My47jfih5il2/x2
+         W/6k6RvAG4M8KNn5egRPFvMJ497L5ow2R1+H5VH99y4LjPg7220bIjXTl96th2kakglZ
+         MSc9SVbRKrKPMk+ytQoCgHVRqzP64zcgBxp8fT6fpj8NwosztzP3U3yIUBP50Ra75hRC
+         D05w==
+X-Gm-Message-State: AOAM533F5ypSan0G2tpwqQhuOMZVk6KwZkgiBTaXnRF56p6KbdQZzdpV
+        b1H5/A47pALfcdUII9J7BINmER7E7heFy7wxF/N3JQeMlN5LSA==
+X-Google-Smtp-Source: ABdhPJyTi1Dl8DEWCrTYMWNrm45yUrNjTNISCWkuE3ZvvgV+PX4z6oQdN5GJaJ0YEWVm/ZDFWqTWJKfneiAcG5Y4yHI=
+X-Received: by 2002:a5b:7c6:0:b0:60b:a0ce:19b with SMTP id t6-20020a5b07c6000000b0060ba0ce019bmr6042995ybq.407.1648767253585;
+ Thu, 31 Mar 2022 15:54:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220329111323.3569-1-jbx6244@gmail.com>
-References: <20220329111323.3569-1-jbx6244@gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de,
-        zhangqing@rock-chips.com
-Date:   Thu, 31 Mar 2022 15:51:32 -0700
-User-Agent: alot/0.10
-Message-Id: <20220331225134.7A0A9C340ED@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
+ <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 31 Mar 2022 15:54:02 -0700
+Message-ID: <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
+Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Johan Jonker (2022-03-29 04:13:22)
-> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.=
-yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
-> new file mode 100644
-> index 000000000..ddd7e46af
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
-> +
-> +maintainers:
-> +  - Elaine Zhang <zhangqing@rock-chips.com>
-> +  - Heiko Stuebner <heiko@sntech.de>
-> +
-> +description: |
-> +  The RK3188/RK3066 clock controller generates and supplies clocks to va=
-rious
-> +  controllers within the SoC and also implements a reset controller for =
-SoC
-> +  peripherals.
-> +  Each clock is assigned an identifier and client nodes can use this ide=
-ntifier
-> +  to specify the clock which they consume. All available clocks are defi=
-ned as
-> +  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
-> +  dt-bindings/clock/rk3066-cru.h headers and can be used in device tree =
-sources.
-> +  Similar macros exist for the reset sources in these files.
-> +  There are several clocks that are generated outside the SoC. It is exp=
-ected
-> +  that they are defined using standard clock bindings with following
-> +  clock-output-names:
-> +    - "xin24m"    - crystal input                 - required
-> +    - "xin32k"    - RTC clock                     - optional
-> +    - "xin27m"    - 27mhz crystal input on RK3066 - optional
-> +    - "ext_hsadc" - external HSADC clock          - optional
-> +    - "ext_cif0"  - external camera clock         - optional
-> +    - "ext_rmii"  - external RMII clock           - optional
-> +    - "ext_jtag"  - external JTAG clock           - optional
+On Thu, Mar 31, 2022 at 3:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Thu, Mar 31, 2022 at 02:45:25PM -0700, Eric Dumazet wrote:
+> > Hi Paul
+> >
+> > It seems you assume per cpu ptr for arbitrary indexes (< nr_cpu_ids) are valid.
+>
+> Gah!  I knew I was forgetting something...
+>
+> But just to check, is this a theoretical problem or something you hit
+> on real hardware?  (For the rest of this email, I am assuming the latter.)
 
-I'd expect all these clks here to be inputs to this node.
+Code review really...
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3066a-cru
-> +      - rockchip,rk3188-cru
-> +      - rockchip,rk3188a-cru
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#clock-cells":
-> +    const: 1
-> +
-> +  "#reset-cells":
-> +    const: 1
-> +
-> +  clocks:
-> +    maxItems: 1
+>
+> > What do you think of the (untested) following patch ?
+>
+> One issue with this patch is that the contention could be unpredictable,
+> or worse, vary among CPU, especially if the cpu_possible_mask was oddly
+> distributed.
+>
+> So might it be better to restrict this to all on CPU 0 on the one hand
+> and completely per-CPU on the other?  (Or all on the boot CPU, in case
+> I am forgetting some misbegotten architecture that can run without a
+> CPU 0.)
 
-so that maxItems here should be larger and minItems would be 1?
+If I understand correctly, cblist_init_generic() could setup
+percpu_enqueue_shift
+to something smaller than order_base_2(nr_cpu_ids)
 
-> +
-> +  clock-names:
-> +    const: xin24m
-> +
-> +  rockchip,grf:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to the syscon managing the "general register files" (GRF),
-> +      if missing pll rates are not changeable, due to the missing pll
-> +      lock status.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#clock-cells"
-> +  - "#reset-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    cru: clock-controller@20000000 {
-> +      compatible =3D "rockchip,rk3188-cru";
-> +      reg =3D <0x20000000 0x1000>;
-> +      rockchip,grf =3D <&grf>;
-> +      #clock-cells =3D <1>;
-> +      #reset-cells =3D <1>;
+Meaning that we could reach a non zero idx in (smp_processor_id() >>
+percpu_enqueue_shift)
 
-Where is clocks in the example?
+So even if CPU0 is always present (I am not sure this is guaranteed,
+but this seems reasonable),
+we could still attempt a per_cpu_ptr(PTR,  not_present_cpu), and get garbage.
+
+
+
+> > Thanks.
+> >
+> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> > index 99cf3a13954cfb17828fbbeeb884f11614a526a9..df3785be4022e903d9682dd403464aa9927aa5c2
+> > 100644
+> > --- a/kernel/rcu/tasks.h
+> > +++ b/kernel/rcu/tasks.h
+> > @@ -273,13 +273,17 @@ static void call_rcu_tasks_generic(struct
+> > rcu_head *rhp, rcu_callback_t func,
+> >         bool needadjust = false;
+> >         bool needwake;
+> >         struct rcu_tasks_percpu *rtpcp;
+> > +       int ideal_cpu, chosen_cpu;
+> >
+> >         rhp->next = NULL;
+> >         rhp->func = func;
+> >         local_irq_save(flags);
+> >         rcu_read_lock();
+> > -       rtpcp = per_cpu_ptr(rtp->rtpcpu,
+> > -                           smp_processor_id() >>
+> > READ_ONCE(rtp->percpu_enqueue_shift));
+> > +
+> > +       ideal_cpu = smp_processor_id() >> READ_ONCE(rtp->percpu_enqueue_shift);
+> > +       chosen_cpu = cpumask_next(ideal_cpu - 1, cpu_online_mask);
+> > +
+> > +       rtpcp = per_cpu_ptr(rtp->rtpcpu, chosen_cpu);
+> >         if (!raw_spin_trylock_rcu_node(rtpcp)) { // irqs already disabled.
+> >                 raw_spin_lock_rcu_node(rtpcp); // irqs already disabled.
+> >                 j = jiffies;

@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D834ED89D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525884ED82C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiCaLlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S234895AbiCaLIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiCaLlo (ORCPT
+        with ESMTP id S232452AbiCaLIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:41:44 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A816D9B;
-        Thu, 31 Mar 2022 04:39:57 -0700 (PDT)
-Received: from mail-ej1-f41.google.com ([209.85.218.41]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MODeL-1nOfpa3AYD-00OTx0; Thu, 31 Mar 2022 13:39:55 +0200
-Received: by mail-ej1-f41.google.com with SMTP id bi12so47569244ejb.3;
-        Thu, 31 Mar 2022 04:39:55 -0700 (PDT)
-X-Gm-Message-State: AOAM530QE4AKPtAC0vv54I4CEfehPscaI4Z1aHLtE+4r40BpAL0ce+de
-        y4xd33Ut/gnOdbOuqPtAEFBjhbIVOXkWECFoEV0=
-X-Google-Smtp-Source: ABdhPJwfRFXUt4OqOk81tKu7LM5gxC4c3u5ZlWSR5HmES53I0aChYbGQncx+2OGAT9B1zXjl61ywA7U1ZfgbuUggEKw=
-X-Received: by 2002:adf:e54e:0:b0:205:a9be:c66e with SMTP id
- z14-20020adfe54e000000b00205a9bec66emr3308561wrm.192.1648717132578; Thu, 31
- Mar 2022 01:58:52 -0700 (PDT)
+        Thu, 31 Mar 2022 07:08:41 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174F71F42DF;
+        Thu, 31 Mar 2022 04:06:53 -0700 (PDT)
+Received: from mail-lf1-f54.google.com ([209.85.167.54]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M8ysi-1ndkWg0Zle-0065B1; Thu, 31 Mar 2022 13:06:52 +0200
+Received: by mail-lf1-f54.google.com with SMTP id 5so40832298lfp.1;
+        Thu, 31 Mar 2022 04:06:51 -0700 (PDT)
+X-Gm-Message-State: AOAM533bTn7O7a11LnD4LBzLwpr8imLMTdfFqwRtGO9j/dD6jGxgn29N
+        Bk7dTw89SdYYprRoFXYSxHk4FidIZHqvl2i5TfY=
+X-Google-Smtp-Source: ABdhPJwGAKwpvIMNsQM9nFO11Su4f6CfBdGu0DMcmygJKo9OCuKECCNyCiW9rLz7dH/8XUmg1E8wSHe238gGnDMMuwI=
+X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
+ x5-20020a5d6505000000b002059a98e184mr3173055wru.317.1648717802947; Thu, 31
+ Mar 2022 02:10:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1648714851.git.qinjian@cqplus1.com> <6abf8de01fa2f24e13e9b78b3dc3b206ea551c9c.1648714851.git.qinjian@cqplus1.com>
-In-Reply-To: <6abf8de01fa2f24e13e9b78b3dc3b206ea551c9c.1648714851.git.qinjian@cqplus1.com>
+References: <cover.1648714851.git.qinjian@cqplus1.com> <84a0839e7724fa39dd07fef491cf6bb357db2e7d.1648714851.git.qinjian@cqplus1.com>
+In-Reply-To: <84a0839e7724fa39dd07fef491cf6bb357db2e7d.1648714851.git.qinjian@cqplus1.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 31 Mar 2022 10:58:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1APzs74YTcZ=m43G3zrmwJZKcYSTvV5eDDQX-37UY7Tw@mail.gmail.com>
-Message-ID: <CAK8P3a1APzs74YTcZ=m43G3zrmwJZKcYSTvV5eDDQX-37UY7Tw@mail.gmail.com>
-Subject: Re: [PATCH v12 2/9] dt-bindings: reset: Add bindings for SP7021 reset driver
+Date:   Thu, 31 Mar 2022 11:09:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2SQCj8pqyJvS+TpgqQu51+YyB4SOi2cd_WU9ObgAjZOw@mail.gmail.com>
+Message-ID: <CAK8P3a2SQCj8pqyJvS+TpgqQu51+YyB4SOi2cd_WU9ObgAjZOw@mail.gmail.com>
+Subject: Re: [PATCH v12 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
 To:     Qin Jian <qinjian@cqplus1.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,27 +49,26 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xb1nwe6pZUMj7SqipxY2qwYa302nWoQUEarEMdwC9tLY7AUD4YA
- pzxTeNO9EH5MEJjlsdLObXI4TlhiF6159X+058Z5ChoaVq3AstNIYxEoyS2hr5V2QOjx6kl
- Vowdo1QgrJl2MIggFw4Sr5uMIC5LZF9uztTYYOpRNmDEOcy1KdbUEvEVHnjHeHi8hcenNUa
- DUVKDYYcfXBAE0TC1DYGA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Yh7e+nE09wQ=:ITjTAe7s+PDrwX8B7qWaLz
- JoaAbrov4WBAt4xlN/tlggRqmCRguIsVyNgj+zaLd6D0Zvf7gzlEauKxLqF2d3wYrLracTbyj
- jIUxz8ASS2LBjwyP9DPZrK157LvEA5SqapdN5qjmSyakkRtiBXIVTeewueiEE6++VVAtrJO/u
- KMap1i2mhWjwhb+7W3nBXFkhZP1D1pWiFhk0YRR1kS11Nj2SXyECG0ZrNX9Q4ix0e1OR0Ta+8
- X9ty2qzTZILwhqU2rRz/7aJwf38JhxXpUvtLkSV5ORNuPbH9Ly40aKxR4v/V9+2BtpKme4uRF
- 3zcv5u3ffj2aLckXMSaF8+PSyyZ1enIaWgs/MGbQWzKiy6V5Q5AAPc7xFIcplkFyT4oHxn5xh
- jFSfq6EF4TpS3BLVUx/dPuKw3Xgfi1mUV3odFWYcMqDhHG97Hg2EJIR7UAIaVJjmKB76PKE/T
- YHgxyWPtEyunmWnKR+BFtW5tBtSK9VqceryRdv88u0jHizr3zKFbImee0RI745z93Q8Niuc8L
- jzYpke4DaMllXMdlGfR6yKwz47Yw5uhhyfb4yswaD76PDT8t3OLjcSEki7Pn2Pq2K/iXoGNsK
- FxMwOWDgPzC7PMWGEjU7Yf00SUo/EO6iTpKf9av2H9cH3XHRd6cd6FsvwzGLL91nxnkOX8Mxx
- mbOUfpu2N7jJs2ThCvb08ImVyOokeCYP3qkxJAo6dHhI2bK0PGjpUiEi1yCsb1gn1JZeOoHbf
- rdReOnaqjhVG7hml26a6pi4UabQj9TNiYJ5HdpoU2qlkwlz6QewmaN6oQ34IJfRf/a7NZJ47m
- 5uIglpyMxYjTQ4PXl2uP8s7gHpnN1FvQpXFjxCkUkhLF8SASDA=
+X-Provags-ID: V03:K1:z/4tzUqmZYGQZ24spxksEyOysVr2PtahhN9T25NYZZ8BcxpPVMr
+ 7f0+JFCQTAp6cESgArBXyjsnxp2HR+EBu8UPfgzj4IXgFZlfvqB7RfFHhSU91nDYWmAMn0s
+ UgOI3VfA50GGzeQd4uK/Ykpco/lJvUf8beq/MtMtFGXrfaPljzWiiqrOGNQZ8/gMr4pDlw2
+ S5kaIkofDm98f5Tq87h4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xVcAQc2Awu4=:hwb6QFIeCg4f7N1+6qDCFw
+ II8nUS/pwqqjYfLzOCKul2jVXf2QzxTig08IcFquWGBR5HMPS9SFSEA6AtPMBqTTR/2hLPJrd
+ 6/FoYlkTXX1+dOkb9KMfMMg/XwSPDU2KJCKKbc2RqYnCDs2JvzyDWcZZYCoD9qn1+EDhmnS4z
+ ed5qC2Llc6tJSy6dWc6lEwzTqR2wDsi6dSYmAlR830wmow02+MG8XhHAHY2xUmc79Bf1vqvDX
+ O5EWgV3F73maFjP0Yde9mnNn//yZpZCzdXIhW2rtYTys4lTHSwOKJfRuo+bcrMBpKfVd2Ho+H
+ d5x5ndkG3kuacL9RcY2BQzq7NK+7lhTMHZ7MUBCYdqKxo6x9QNYUJHq5SlK39uOhzleDT2bRk
+ uoSq/Aged+O8whfZaYRC/9LC3lDdbvLDofCf0MpDrGQwTCzL7MZVaA8RtEaF4P1oOIgmtqXNE
+ mqqj+G+T65Y4jC/zmtd841dhs6VXofcOdrUhNqvWTAPLn6zna9zljK9pq/b4q2Ht6ka2sr7QI
+ qRp6UJKXw/wVsQQidaGMkZQpKgAQc0cYVUgS6o8NpJt1a5fj/Eh15JOkx+dmCwSLOn/iOrSI0
+ vG14Me2fh/r5vzAcygtG2/+OhZbM9+Rj4MUFnPw/VGOix4/ciTO21LUQJoKIIsA9rJ5+/PXfG
+ qy7onI0hMRPB1Wb6xn6Ldj/zBzRLAAsKLs2d0SVkgIMSZNlE61UXGtfs+W7riRvGrj0gjjHn9
+ tMhcU21Scw1rF9VzJpaYlmsIa62QynohvBW70av2ECfozL+0ua5Ck34D/C3zastqXYUp1mWe9
+ y15D7q9t6U/Mii0uBCLTq5Dvu+JUspoUuV7VPg7hbu1sMEailI9iVB444iauZ2aMgfccLtL
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,36 +76,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, Mar 31, 2022 at 10:29 AM Qin Jian <qinjian@cqplus1.com> wrote:
+> Add generic Sunplus SP7021 based board defconfig
 
-> +/* mo_reset0 ~ mo_reset9 */
-> +#define RST_SYSTEM             0x00
-> +#define RST_RTC                        0x02
-> +#define RST_IOCTL              0x03
-> +#define RST_IOP                        0x04
-> +#define RST_OTPRX              0x05
-> +#define RST_NOC                        0x06
-> +#define RST_BR                 0x07
-> +#define RST_RBUS_L00           0x08
-> +#define RST_SPIFL              0x09
-> +#define RST_SDCTRL0            0x0a
-> +#define RST_PERI0              0x0b
-> +#define RST_A926               0x0d
-> +#define RST_UMCTL2             0x0e
-> +#define RST_PERI1              0x0f
-> +
-> +#define RST_DDR_PHY0           0x10
-> +#define RST_ACHIP              0x12
-> +#define RST_STC0               0x14
-> +#define RST_STC_AV0            0x15
-> +#define RST_STC_AV1            0x16
-> +#define RST_STC_AV2            0x17
+Here, you should explain why you need a custom defconfig for this SoC, as
+most platforms are fine just using the generic one. Are you too memory
+constrained,
+or are there other problems?
 
-The list looks like these definitions just match the hardware, which means you
-don't have to define them as a binding at all, just use the hardware numbers
-directly in the dt, as you do for interrupts or gpio numbers.
+> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+> index 8863fa969..a3bd9dbd8 100644
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@ -86,6 +86,7 @@ CONFIG_MACH_SPEAR1310=y
+>  CONFIG_MACH_SPEAR1340=y
+>  CONFIG_ARCH_STI=y
+>  CONFIG_ARCH_STM32=y
+> +CONFIG_ARCH_SUNPLUS=y
+>  CONFIG_ARCH_SUNXI=y
+>  CONFIG_ARCH_TEGRA=y
+>  CONFIG_ARCH_UNIPHIER=y
 
-If the hardware does not have a sane way of mapping reset lines to a particular
-hardware number, then you may have to define a binding, but in that case just
-use consecutive integer numbers, not hexadecimal numbers.
+Don't you need any drivers here?
 
-       Arnd
+> diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_defconfig
+> new file mode 100644
+> index 000000000..cda16d33a
+> --- /dev/null
+> +++ b/arch/arm/configs/sp7021_defconfig
+...
+> +CONFIG_HAVE_ARM_ARCH_TIMER=y
+
+I checked this one again, as most others don't enable it in the defconfig.
+
+I don't remember if I recommended removing the 'select' from Kconfig
+in a previous round, but as that is where other platforms have it, I'd add
+it there as well.
+
+> +CONFIG_STAGING=y
+
+Do you actually enable any staging drivers here? If not, I'd drop that bit.
+
+          Arnd

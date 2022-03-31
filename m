@@ -2,163 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193324EE356
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6494EE360
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241894AbiCaVdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S241899AbiCaVks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241891AbiCaVc5 (ORCPT
+        with ESMTP id S230027AbiCaVkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:32:57 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2C9228D25
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:31:06 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so673845pjo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UL/PnnUMFBU9oeLgviWivIjBCm6kEvnLQU0vrlKd5dA=;
-        b=fYjBlIX+0NIShJ64f+lcRsE5KdkM+nYLs85jTdUufPPG/2G9PVnkJLdmEq/yaO7jI/
-         4hwcxsvV9/7UlykD8aD2qqCderteCl+jWXP4ibB6jS8vuk9Njgv31Gzm5b65HJba+f05
-         +2xL1D0bAykFDhvXHmtVeDsLWGwqVmuLd4S3MbYPno3VRYDqDEY4q1AiblRD0tnLnft9
-         sIE2/YF2uCpdh0Wv9IBemeHWnSODTcSlXeeOaPlgwsIkAL6Dd4alI9RHvHxZs8yiog3B
-         bzmEoPH3rSQ43LetFjOCgtdtheFx9w83GhqvxWJ/Jm6z19nLdSshRgfk+Vx4AdrR0gZS
-         QUUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UL/PnnUMFBU9oeLgviWivIjBCm6kEvnLQU0vrlKd5dA=;
-        b=k2sE+1qKYAjvReSbnYt/qV5RDKlcnGHprPEHzYstHTTdJDVZE8aEi3TXVlJIua8vxl
-         2m0o+pcRTzlcbvoLiAtISuWlMEqOSR2EkjD/C6Bfbxdrt6sf6194/7B7rKRttK05FPOr
-         /AE9cDuqIxFZ4JCxrXMiGjTcCXaOBkvc8HX78KcuWDt21o/GWRR43sPXuQM7eP4EVEdM
-         KAOs4N/u4rE2M2xwrmTsfPbOTzDEwa4G8Au2A3/PXM75tv6i9tx4wUIiBDXZefnOqtDr
-         V81DlCkXOVgV89t++8OW1L1L1zFAVP3+nP+T4oWkMuNWKhbYDNAuDVGJGH7aCxj+3lg8
-         Mw8g==
-X-Gm-Message-State: AOAM530k+GfXPBwwiMkVxEUHrl+KDvHaTZ6QmGGJ1pQ9f7S1QMwdoVcL
-        vQcXwesXtQ3Hnknb2ukpZ2acwA==
-X-Google-Smtp-Source: ABdhPJxbHbftSGYZ3hVn3/5INO+wSwQxMtdJL5IHoSlq6UXrjCvK/QfReT9Xb+VGBauLz8rRR8Xtjg==
-X-Received: by 2002:a17:902:768c:b0:155:e4a2:1f09 with SMTP id m12-20020a170902768c00b00155e4a21f09mr7148034pll.43.1648762265581;
-        Thu, 31 Mar 2022 14:31:05 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm404697pfj.152.2022.03.31.14.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 14:31:04 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 21:31:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Peter Gonda <pgonda@google.com>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in
- sev_clflush_pages()
-Message-ID: <YkYdlfYM/FWlMqMg@google.com>
-References: <20220330164306.2376085-1-pgonda@google.com>
- <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
+        Thu, 31 Mar 2022 17:40:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACD539BAF;
+        Thu, 31 Mar 2022 14:38:58 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 21:38:54 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648762736;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xc1uXLGItTqU4LQHNlRfzQPvnTHvOKHdejsArw8o2qk=;
+        b=sb0+mIgRSokQOWwf1RlXhzfNGPPRs4lo5EC/jJsvFwy9Q0MP+k2t5yDGIDndL6UbfkryEt
+        tts8mgUplTMgsxtE32moDBMTfISPgIlnqD5bazMAoD35hY3ECo7h6aSMEzIodsLWmKNrxi
+        Fnpeku6C5ocALS75uhHd2tiMX7fQPJbw/zkLxIsIkZpQt9XakuUvwvcssWWWLdylqvsYCo
+        8JwjyoNV9Cc72UoRqEaYu6Su26Th+lF4BDcPCbiwjXlvBxMlhKxdDQhDNEnee5I+I1bB1p
+        NBimD5rWGcs31G36asbyeAMoKdXOFDkt0bVakIcHoFiwe9TKrZ8dfuaXVs8QHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648762736;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xc1uXLGItTqU4LQHNlRfzQPvnTHvOKHdejsArw8o2qk=;
+        b=XsZC+V4+g/EWjrKYKMlx4ji+QE/lnJ0gSqZCM7ZMpsBGlTG5Tu86TtLvNWCBsdYNjZvd+W
+        rq8jtumD6U35QOCg==
+From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm/tlb: Revert retpoline avoidance approach
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <164874672286.389.7021457716635788197.tip-bot2@tip-bot2>
+References: <164874672286.389.7021457716635788197.tip-bot2@tip-bot2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164876273469.389.4814502480228230952.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022, Mingwei Zhang wrote:
-> On Wed, Mar 30, 2022 at 9:43 AM Peter Gonda <pgonda@google.com> wrote:
-> >
-> > Add resched to avoid warning from sev_clflush_pages() with large number
-> > of pages.
-> >
-> > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: kvm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> >
-> > ---
-> > Here is a warning similar to what I've seen many times running large SEV
-> > VMs:
-> > [  357.714051] CPU 15: need_resched set for > 52000222 ns (52 ticks) without schedule
-> > [  357.721623] WARNING: CPU: 15 PID: 35848 at kernel/sched/core.c:3733 scheduler_tick+0x2f9/0x3f0
-> > [  357.730222] Modules linked in: kvm_amd uhaul vfat fat hdi2_standard_ftl hdi2_megablocks hdi2_pmc hdi2_pmc_eeprom hdi2 stg elephant_dev_num ccp i2c_mux_ltc4306 i2c_mux i2c_via_ipmi i2c_piix4 google_bmc_usb google_bmc_gpioi2c_mb_common google_bmc_mailbox cdc_acm xhci_pci xhci_hcd sha3_generic gq nv_p2p_glue accel_class
-> > [  357.758261] CPU: 15 PID: 35848 Comm: switchto-defaul Not tainted 4.15.0-smp-DEV #11
-> > [  357.765912] Hardware name: Google, Inc.                                                       Arcadia_IT_80/Arcadia_IT_80, BIOS 30.20.2-gce 11/05/2021
-> > [  357.779372] RIP: 0010:scheduler_tick+0x2f9/0x3f0
-> > [  357.783988] RSP: 0018:ffff98558d1c3dd8 EFLAGS: 00010046
-> > [  357.789207] RAX: 741f23206aa8dc00 RBX: 0000005349236a42 RCX: 0000000000000007
-> > [  357.796339] RDX: 0000000000000006 RSI: 0000000000000002 RDI: ffff98558d1d5a98
-> > [  357.803463] RBP: ffff98558d1c3ea0 R08: 0000000000100ceb R09: 0000000000000000
-> > [  357.810597] R10: ffff98558c958c00 R11: ffffffff94850740 R12: 00000000031975de
-> > [  357.817729] R13: 0000000000000000 R14: ffff98558d1e2640 R15: ffff98525739ea40
-> > [  357.824862] FS:  00007f87503eb700(0000) GS:ffff98558d1c0000(0000) knlGS:0000000000000000
-> > [  357.832948] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  357.838695] CR2: 00005572fe74b080 CR3: 0000007bea706006 CR4: 0000000000360ef0
-> > [  357.845828] Call Trace:
-> > [  357.848277]  <IRQ>
-> > [  357.850294]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
-> > [  357.856818]  [<ffffffff943ed60d>] ? rcu_sched_clock_irq+0x6ed/0x850
-> > [  357.863084]  [<ffffffff943fdf02>] ? __run_timers+0x42/0x260
-> > [  357.868654]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
-> > [  357.875182]  [<ffffffff943fd35b>] update_process_times+0x7b/0x90
-> > [  357.881188]  [<ffffffff944114a2>] tick_sched_timer+0x82/0xd0
-> > [  357.886845]  [<ffffffff94400671>] __run_hrtimer+0x81/0x200
-> > [  357.892331]  [<ffffffff943ff222>] hrtimer_interrupt+0x192/0x450
-> > [  357.898252]  [<ffffffff950002fa>] ? __do_softirq+0x2fa/0x33e
-> > [  357.903911]  [<ffffffff94e02edc>] smp_apic_timer_interrupt+0xac/0x1d0
-> > [  357.910349]  [<ffffffff94e01ef6>] apic_timer_interrupt+0x86/0x90
-> > [  357.916347]  </IRQ>
-> > [  357.918452] RIP: 0010:clflush_cache_range+0x3f/0x50
-> > [  357.923324] RSP: 0018:ffff98529af89cc0 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff12
-> > [  357.930889] RAX: 0000000000000040 RBX: 0000000000038135 RCX: ffff985233d36000
-> > [  357.938013] RDX: ffff985233d36000 RSI: 0000000000001000 RDI: ffff985233d35000
-> > [  357.945145] RBP: ffff98529af89cc0 R08: 0000000000000001 R09: ffffb5753fb23000
-> > [  357.952271] R10: 000000000003fe00 R11: 0000000000000008 R12: 0000000000040000
-> > [  357.959401] R13: ffff98525739ea40 R14: ffffb5753fb22000 R15: ffff98532a58dd80
-> > [  357.966536]  [<ffffffffc07afd41>] svm_register_enc_region+0xd1/0x170 [kvm_amd]
-> > [  357.973758]  [<ffffffff94246e8c>] kvm_arch_vm_ioctl+0x84c/0xb00
-> > [  357.979677]  [<ffffffff9455980f>] ? handle_mm_fault+0x6ff/0x1370
-> > [  357.985683]  [<ffffffff9423412b>] kvm_vm_ioctl+0x69b/0x720
-> > [  357.991167]  [<ffffffff945dfd9d>] do_vfs_ioctl+0x47d/0x680
-> > [  357.996654]  [<ffffffff945e0188>] SyS_ioctl+0x68/0x90
-> > [  358.001706]  [<ffffffff942066f1>] do_syscall_64+0x71/0x110
-> > [  358.007192]  [<ffffffff94e00081>] entry_SYSCALL_64_after_hwframe+0x3d/0xa2
-> >
-> > Tested by running a large 256gib SEV VM several times, saw no warnings.
-> > Without the change warnings are seen.
+The following commit has been merged into the x86/mm branch of tip:
 
-Clean up the splat (remove timestamps, everything with a ?, etc... I believe there
-is a kernel scripts/ to do this...) and throw it in the changelog.  Documenting the
-exact problem is very helpful, e.g. future readers may wonder "what warning?".
+Commit-ID:     e1300d97cbc347d319adfa0976be723ada4b582c
+Gitweb:        https://git.kernel.org/tip/e1300d97cbc347d319adfa0976be723ada4b582c
+Author:        Dave Hansen <dave.hansen@linux.intel.com>
+AuthorDate:    Fri, 18 Mar 2022 06:52:59 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 31 Mar 2022 14:31:43 -07:00
 
-> > ---
-> >  arch/x86/kvm/svm/sev.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > index 75fa6dd268f0..c2fe89ecdb2d 100644
-> > --- a/arch/x86/kvm/svm/sev.c
-> > +++ b/arch/x86/kvm/svm/sev.c
-> > @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
-> >                 page_virtual = kmap_atomic(pages[i]);
-> >                 clflush_cache_range(page_virtual, PAGE_SIZE);
-> >                 kunmap_atomic(page_virtual);
-> > +               cond_resched();
-> 
-> If you add cond_resched() here, the frequency (once per 4K) might be
-> too high. You may want to do it once per X pages, where X could be
-> something like 1G/4K?
+x86/mm/tlb: Revert retpoline avoidance approach
 
-No, every iteration is perfectly ok.  The "cond"itional part means that this will
-reschedule if and only if it actually needs to be rescheduled, e.g. if the task's
-timeslice as expired.  The check for a needed reschedule is cheap, using
-cond_resched() in tight-ish loops is ok and intended, e.g. KVM does a reched
-check prior to enterring the guest.
+0day reported a regression on a microbenchmark which is intended to
+stress the TLB flushing path:
+
+	https://lore.kernel.org/all/20220317090415.GE735@xsang-OptiPlex-9020/
+
+It pointed at a commit from Nadav which intended to remove retpoline
+overhead in the TLB flushing path by taking the 'cond'-ition in
+on_each_cpu_cond_mask(), pre-calculating it, and incorporating it into
+'cpumask'.  That allowed the code to use a bunch of earlier direct
+calls instead of later indirect calls that need a retpoline.
+
+But, in practice, threads can go idle (and into lazy TLB mode where
+they don't need to flush their TLB) between the early and late calls.
+It works in this direction and not in the other because TLB-flushing
+threads tend to hold mmap_lock for write.  Contention on that lock
+causes threads to _go_ idle right in this early/late window.
+
+There was not any performance data in the original commit specific
+to the retpoline overhead.  I did a few tests on a system with
+retpolines:
+
+	https://lore.kernel.org/all/dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com/
+
+which showed a possible small win.  But, that small win pales in
+comparison with the bigger loss induced on non-retpoline systems.
+
+Revert the patch that removed the retpolines.  This was not a
+clean revert, but it was self-contained enough not to be too painful.
+
+Fixes: 6035152d8eeb ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for tlb_is_not_lazy()")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Nadav Amit <namit@vmware.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org
+Link: https://lkml.kernel.org/r/164874672286.389.7021457716635788197.tip-bot2@tip-bot2
+---
+ arch/x86/mm/tlb.c | 37 +++++--------------------------------
+ 1 file changed, 5 insertions(+), 32 deletions(-)
+
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 1e6513f..161984b 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -854,13 +854,11 @@ done:
+ 			nr_invalidate);
+ }
+ 
+-static bool tlb_is_not_lazy(int cpu)
++static bool tlb_is_not_lazy(int cpu, void *data)
+ {
+ 	return !per_cpu(cpu_tlbstate_shared.is_lazy, cpu);
+ }
+ 
+-static DEFINE_PER_CPU(cpumask_t, flush_tlb_mask);
+-
+ DEFINE_PER_CPU_SHARED_ALIGNED(struct tlb_state_shared, cpu_tlbstate_shared);
+ EXPORT_PER_CPU_SYMBOL(cpu_tlbstate_shared);
+ 
+@@ -889,36 +887,11 @@ STATIC_NOPV void native_flush_tlb_multi(const struct cpumask *cpumask,
+ 	 * up on the new contents of what used to be page tables, while
+ 	 * doing a speculative memory access.
+ 	 */
+-	if (info->freed_tables) {
++	if (info->freed_tables)
+ 		on_each_cpu_mask(cpumask, flush_tlb_func, (void *)info, true);
+-	} else {
+-		/*
+-		 * Although we could have used on_each_cpu_cond_mask(),
+-		 * open-coding it has performance advantages, as it eliminates
+-		 * the need for indirect calls or retpolines. In addition, it
+-		 * allows to use a designated cpumask for evaluating the
+-		 * condition, instead of allocating one.
+-		 *
+-		 * This code works under the assumption that there are no nested
+-		 * TLB flushes, an assumption that is already made in
+-		 * flush_tlb_mm_range().
+-		 *
+-		 * cond_cpumask is logically a stack-local variable, but it is
+-		 * more efficient to have it off the stack and not to allocate
+-		 * it on demand. Preemption is disabled and this code is
+-		 * non-reentrant.
+-		 */
+-		struct cpumask *cond_cpumask = this_cpu_ptr(&flush_tlb_mask);
+-		int cpu;
+-
+-		cpumask_clear(cond_cpumask);
+-
+-		for_each_cpu(cpu, cpumask) {
+-			if (tlb_is_not_lazy(cpu))
+-				__cpumask_set_cpu(cpu, cond_cpumask);
+-		}
+-		on_each_cpu_mask(cond_cpumask, flush_tlb_func, (void *)info, true);
+-	}
++	else
++		on_each_cpu_cond_mask(tlb_is_not_lazy, flush_tlb_func,
++				(void *)info, 1, cpumask);
+ }
+ 
+ void flush_tlb_multi(const struct cpumask *cpumask,

@@ -2,195 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770F04ED38A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3507D4ED38F
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiCaFzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 01:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S230182AbiCaFzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 01:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiCaFzG (ORCPT
+        with ESMTP id S230081AbiCaFzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 01:55:06 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0342BF5;
-        Wed, 30 Mar 2022 22:53:19 -0700 (PDT)
+        Thu, 31 Mar 2022 01:55:41 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922761C0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:53:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id p15so45763066ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1648706000; x=1649310800;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+MMiK8w6s5twuxwfEprTMqRWxsWRwznDMK25Onlj8qw=;
-  b=R8DJUa6Uj3HInupKFR33MqSBIyeePewKePMsXseeW8nJHiXIQGhJ9SGC
-   KNt4ThbDHbz7FwoPtYOwbjz+Gxj/iDlxewUDhM6NEbK4btAmnv9PVT8DC
-   CvBdmT+7Mnx3++RkNfbncyPXipM5V5J0klWTY/IqAUXnh5FoRKuisUBQj
-   E=;
-Received: from mail-dm6nam10lp2100.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.100])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 05:53:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KpTArIO2CpTEjn+fRp1xxWCxExrZ5fzQgswDq5ihu+hudD1MwREyMHeRn1hmWFd4gpqtJwdA4FOEQ3O128hcEEXiOqTGowQe8i9FtXA9NCy10CPULtaSsAIDG9L/fFBHRTQ0YRCpmhYkju+kVZ3os65dZxXF2SMPa+JRLt0IsCeMUW2aOxMvOzNZpmHPVQ0HTn3zFisOko1qQVUqe4IsK38lq9nxfJXA6Wc5LvpqqBXBV5CxWhzk1KyML2Q5YnjmtPR87vC2fOXPTr5Q9f+5qz/bdyHzcQdn7tWvgVtkRjzewlPnet1CGtaWQ9UG3cgDi8Zpmk4o5mIOjOLAPYhlnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+MMiK8w6s5twuxwfEprTMqRWxsWRwznDMK25Onlj8qw=;
- b=jky12gYRrpjf4PXF630nCLjGcfE0UAsQMZFhmSYbrHO+qyU5KmW1ty5Q3/AoBS8maiceSPF3QcVVD75AnBbObc12BDf/ymTY38y/d0+izWbTc9HFheh04NGCkV3h/r+hC4hd1WwptqVbEVI2GASn/Q/C8RTMcMO1YkrbL301EtJmY6fX0AMAD9EhFoU15nvp6tS2/8lH/G/0Ujy46E8fjtcWiuKgqu6KgqPbUxy4DpR0I8zKHLDK+DjzABtKDlL0LjWlOY93HqlxPEdgf53WuEv4JEn7Lf2FfyYtJ86rcvJjgUxTCjQgRCin4mAiXX6NtQ2kjvT7WxzSI5HdB9ybZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com (2603:10b6:303:73::6)
- by BL0PR02MB5649.namprd02.prod.outlook.com (2603:10b6:208:8a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.21; Thu, 31 Mar
- 2022 05:53:14 +0000
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::9485:c59c:6877:f492]) by MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::9485:c59c:6877:f492%6]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
- 05:53:14 +0000
-From:   "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "sean@poorly.run" <sean@poorly.run>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
-Subject: RE: [PATCH v6 4/8] drm/msm/dp: avoid handling masked interrupts
-Thread-Topic: [PATCH v6 4/8] drm/msm/dp: avoid handling masked interrupts
-Thread-Index: AQHYRE/EvdWk4OgVD0y7uP1mIx6Fl6zYfvSAgAB/n3A=
-Date:   Thu, 31 Mar 2022 05:53:14 +0000
-Message-ID: <MW4PR02MB7186669BA1B19FA4F184B558E1E19@MW4PR02MB7186.namprd02.prod.outlook.com>
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-5-git-send-email-quic_sbillaka@quicinc.com>
- <CAA8EJprMvik_6xmGt2oZGpDG9FoMtC_ojuw+oTjPLTck4Hu3WA@mail.gmail.com>
-In-Reply-To: <CAA8EJprMvik_6xmGt2oZGpDG9FoMtC_ojuw+oTjPLTck4Hu3WA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 752e2b86-07d4-491c-d8a9-08da12dabf26
-x-ms-traffictypediagnostic: BL0PR02MB5649:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <BL0PR02MB5649B87407149EF2300734C39DE19@BL0PR02MB5649.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8hEULcSnV+uKk7igBmCXFxPFFnJvdeVtxzhF88zxk5cEBGhWkoZmcTj7Kn5UKdK21LwMCknSW53mL6VxdCEOwyArqE5XEm1thme0RxIIjRtZ5Y8/AO1zo8KnRTUpn2MXQ0dc8W19d/eelFyQS4tdc6TCCHL3fheRDsHWYPKpZkhUhODWiJtnFIe6h/MX2Cm8SY1/DpFUckBAcSdZiwJ0+QZqH2LlKiJezAd0jIav7LkgQzYTeqpqTROlhYdTVptD7eeu3/ZZi1nbpmMhkPfo6bspO79WINOKrGdvjATxlVvIpoTG0PWgaz5Xb2P095tKg3Dc4w3S1Cn9YTE107XaKqi5sR05B311QAOr9AMvJUNdDQKLg8Qo+GgWxlRNXYf2k1u6JJ9GQf55N+OJlEiTmwakG2bHr54riTnQDEYo7g0Nz3S3G0PG8tiiPEyDqK09lSz+8RjEs7Uwc718nAD6XbwO0JsGHLURZvMOqq5Z98rXUVXgoD9xcnTMS5063ojYkH0l5Koh83XLuk7IXmpUVLzkL4yZ5C+8dqKcMT1ZeL4o2xTyOCAWMa4AHJzfB81qXFuKPXWRNsVExlFICGdWpCPa9+COkC/2eajOi948pA79U/q3MBsPt/BBoE7OEPTX7KKVx+lKFYPvzpWFD9EheL7KqRIDivLbHNSEdunQxTFBvA2xItr6Qo/7pn2BqHIWY6ZNBuRESGIDInAVcuMsGA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7186.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7696005)(86362001)(6506007)(8936002)(7416002)(122000001)(9686003)(52536014)(110136005)(54906003)(55016003)(38070700005)(66946007)(8676002)(76116006)(4326008)(66446008)(64756008)(5660300002)(38100700002)(71200400001)(66476007)(508600001)(66556008)(316002)(33656002)(83380400001)(26005)(107886003)(2906002)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a1FhQmU4U0NoWEFsYzFsbUNvdDVHbWF1dkZyczRzclkxeFhkM2xIRjcxb0hV?=
- =?utf-8?B?bjRKV0RPZlZsMGZObmpZQ0o4YnFUOGs1cEo1ZGF2aWE5N2d4cDEzUWtGdjhM?=
- =?utf-8?B?TklaMHR0N0tMYW9nSFRIZjExLzIxUk92UXM2QmF5SUFxQ1ZwLzlWZDg0VnZI?=
- =?utf-8?B?ZGxvK2NVMHVRekRsa0dwK1hFQ0V5VWlNRXNVYmE2ZVQ4RTA2Rk9ZdTk0cUZi?=
- =?utf-8?B?SFYvcllhdXRSQTVSbis0RmgyZ2s0TDJuaFVQdFgxZ3BUTHpkN3pITEpoLzNi?=
- =?utf-8?B?VFdvK2ptczlNTnd6VVh6OW5BVW1IQ0N4YzdyWm9xZW0yNE1KSTZBUHA5KzBz?=
- =?utf-8?B?RzdJZTNRZTVtTEtKTXRIRTU4ZFlPaC9jRzc4U2l3OXUvRE1neHRUNU9BaEdF?=
- =?utf-8?B?eitxNllhR0o5ajRwYzBUZ2RmMTNQS0REZG9SV2ROaWVoRDFsdFRLMmF0d2w5?=
- =?utf-8?B?eHNvUERwclRKZlE0akZwbXBpTmRWTzdTRTB0bU1TSXlJL3duWE9aMjh4anhR?=
- =?utf-8?B?QjgwZDc2d3NWVUViRWNteHRiS3EvWEQwU1JjbFE5WVc1dG03VHRSWHhqbDB0?=
- =?utf-8?B?OSt4WUFrNmJyTFl1dHZ3VE9ic2I5TEFlVzN0OTNaSGdNM0V6SlBjRFYwQmdk?=
- =?utf-8?B?ZEpURk1oVlRKSXE4cWdzbFhSQU9xNjNVeUVjdHg4WXRBRW5SdmxiNVkrOUhx?=
- =?utf-8?B?SXBKZ0FObWZiMlZZdE5iRms5Tkg0cW11Zm9pUlRSZnd0cUQzOStsUEhwNEJu?=
- =?utf-8?B?SXR3bDJYSHROclZnckRJSTJYLzNPTlFPN2Z5ajltUkpwWkpCL0EyTUJBZ0pu?=
- =?utf-8?B?c0xhNEdPWGcvQzAvUGw5Yk1BK2kvRWc3eGNxNWw5eHZnT29qVkVBQmc4a0VX?=
- =?utf-8?B?UUptMEIveWJZMTRoditNVUg2RjZxd3lBZitEUlV1T2hlK01pOXRuSS81cU44?=
- =?utf-8?B?bVdDOFBFMWdiSFJqTXdFQi9ZYkU0Nnc4aFdRT2Fqd0ZxdDBoWVlmeTNiL21N?=
- =?utf-8?B?SXBGc0FPUTdZQ2VYNW9SSVNEY1ZKQVE5SzFVN0lXbUxvWW9sNzJPRll6SVFu?=
- =?utf-8?B?UjVoQ0RFMFR0SzJpSVhnY2Vma1ZTWVBPYWNIQW1zT1RVRkl1MkpGQURVTGph?=
- =?utf-8?B?ek10VXQ3eDhudzFDSEZZcTVHUFc0NDcxbEFIa0t2L09YTVpKeUM0S3VmQksv?=
- =?utf-8?B?aHFySGNtRE9sdXA2T001QlhrdTRqUzRIOS9UUjFnMzAvNG1Qd3RoT2xFWERo?=
- =?utf-8?B?Uk4zdENETXhLci8vdFpySFE2UWV2bmJiSGlTZXp3M2dBSTh2NTVXMnEzMGFi?=
- =?utf-8?B?MUYvNEFWem52T3gvQWo2dkVNWjcxYjlCVlA0bG92bllOcDFLdU9sNHFXUVZW?=
- =?utf-8?B?aFpVSXFWZE44bENjKzNaSVFSNXhMZjJUSGlqVGE1c0hjaWZMS2EyWGN0QkhW?=
- =?utf-8?B?a0ppbTY3eTdEdXNmellCY2g0d28zZHFKdUtYMU52UU0wNGY3dTV1V2lBU29G?=
- =?utf-8?B?WTdIUG4zcXFzOUtPb0dmSHcvbTVhODRUOE0rcEF4K0RoeFc3eC9DM1RiMXRz?=
- =?utf-8?B?NEFVRGtCdUZGdFo1WVRNWG4yNmtRMVVOWkVRVUJBOTdrRUZHOGRaTWFQOWsv?=
- =?utf-8?B?RFdPNVArM001VGNqOTRQQm5FcENONzVodXRPeDBFc1ZHZnlEVEhwb3Z2b3dL?=
- =?utf-8?B?ano1SHFCWS9KSFFVZzRTNjdYMU5JNkRCRXB2VjdpMFpMUy9nd2FuUnZ4TGNW?=
- =?utf-8?B?ODRhOHd2cGcwWFBzWm1zSm4rWERKdmZYZitDMERGOXF3UTBjWjRpbktRbE5y?=
- =?utf-8?B?MmtveDFucmVySEhDQXBENWtaVUJCWS9RRmNPelg2T3VFMDIxWUdtenZrOFpG?=
- =?utf-8?B?VTJRd3k5NlRZZlhFbXMwQzAya1lPTUhGNTkrd3IxVVUzK3RzUDNBVVY3NllD?=
- =?utf-8?B?QVR1dHhKanhaR1JSNFZmV3JDZDlremgwMVh3c01HRk1KVUxtOHp6NHpyMVB6?=
- =?utf-8?B?OTV5cUdxMnBKZmU1a2lMeGVxdStNUHZHN0hQY2ZNZS80YnpPaHQzek02THdD?=
- =?utf-8?B?eDRVMWtQL1dnejdkbS92NWh0cHNkZU5ZRDBuZ01YU1Vnc2ZHRk00SFNZL2Za?=
- =?utf-8?B?dUpKVlVyODdDaUdaVUFvK2FQWkxiV2t0RUlFOWg5YUZxR2NuWE9rR3UrcktQ?=
- =?utf-8?B?RDBYSEM4TmJZbHl3V08rc0ozVTMydzZ1bktyUG9HUktwSHRIQW94b1BMVG82?=
- =?utf-8?B?dEhjNWVQS2JhL2JGQkJlNUxuREgyM1pYZ1ZXN3dTUzNHQVYzS0xZcEtaQTNW?=
- =?utf-8?B?MklWNXRvbWlpaTJnaU94cnVDNDNGVUd5Y2lyT0pZL0tvYW51b0hVUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zzs+ZHibEnw+t1g8tg6/Dygsvg8Tq1tVYNwyuhr7FfU=;
+        b=PwtYT3853d0ybAZujxH83isegbuSphn/uUyIcg2L7F8ik2CoDddiJAd4vFrj01oQpq
+         ngjYoJpJK7Te6ACIQyLLz2gXfiDBfsTaTwdTJQXJKz5j61MhVeBWpOMbsbFL56Ywv/9u
+         n0jJe68RTMVvvXWVBxqWA45gJvDLJBtz0NTR7cQr8sBRzJhKn7uWcv5VEDTS4zQuPObK
+         kyrxW31am0Ly4RAI2Bes34LDjLEv5GZKbBVXtVkQQS3bxBUYI9urwL6yH1T5NrTmn/I/
+         eEte9nspD5UqCe5MGEOeuw1Wj9Xbux232G5ltRocxRiHoAhFHnkCgFw7WQMEKKrHNHc0
+         vwww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zzs+ZHibEnw+t1g8tg6/Dygsvg8Tq1tVYNwyuhr7FfU=;
+        b=ae/bEljH+oEfCzAoBB2H4GyDAGpLuaLOFWdm5Ecf17hgQm9/3Zoh/rQ/lM0wsGRrpd
+         fcqVCBAOVVQW0eRnVjgq/hfV26lV/c1x6S+2+75zFmLjeQZfiZP993z5jNobkTJz1eOr
+         w+m7GfzumSIAu6ZRyTP+63SvB/o3FYBREVEPHtoNsTdQGUVN7OGtGwNCIrKDADD41lRC
+         a2dSuckPBA3Lm6Mxgg/6zvLayaASw5cERdNXCmPhvMND2sIGbjXcKa4QaKdEapl9mgwJ
+         /lX762b7ORzeJth7CX3r2FlahpY4hqoy6FdmMy06FF+yLmkO9ihvTp+7fFV4uSrG+ihf
+         cjhw==
+X-Gm-Message-State: AOAM531/awhpuL+m9HvH1BHw7dTLXE3xa7NoZvFKhQ65DykvEow1htJz
+        69lI3SkQQCsn+INIWFV4gi52HtA59Q2VfaTF
+X-Google-Smtp-Source: ABdhPJzkI8vj+Jq5KZdLH/R9bIGRMouax/d6lriJQXZwTgo7uUVSkqmvjIQT+GOZLxcFLw6ItXtNcQ==
+X-Received: by 2002:a17:907:608c:b0:6e0:5204:7454 with SMTP id ht12-20020a170907608c00b006e052047454mr3425777ejc.225.1648706032108;
+        Wed, 30 Mar 2022 22:53:52 -0700 (PDT)
+Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm9041961ejc.25.2022.03.30.22.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 22:53:51 -0700 (PDT)
+Message-ID: <5fa843d2-f07c-3bc0-22f1-8a2ae234e9aa@linaro.org>
+Date:   Thu, 31 Mar 2022 07:53:50 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7186.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 752e2b86-07d4-491c-d8a9-08da12dabf26
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2022 05:53:14.4417
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: riFp2alAabvBK2GJDTm1MfP+VggsGvjbjGHJpHiZIpb2FTBcEnVLjLGZfv2suiVxb5GB8HSowR3slMJ8wIO7uq6KhsVeYYr/qFaUo+We2lg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5649
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 5/5] dt-bindings: phy: uniphier: Clean up clocks,
+ resets, and their names using compatible string
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1648637715-19262-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648637715-19262-6-git-send-email-hayashi.kunihiko@socionext.com>
+ <a784ed61-965a-5c68-c2dd-3340cf18c7b5@linaro.org>
+ <d32191fc-1302-89e4-8b24-40fe33867b98@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d32191fc-1302-89e4-8b24-40fe33867b98@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRG1pdHJ5LA0KDQo+IE9uIFdlZCwgMzAgTWFyIDIwMjIgYXQgMTk6MDMsIFNhbmtlZXJ0aCBC
-aWxsYWthbnRpDQo+IDxxdWljX3NiaWxsYWthQHF1aWNpbmMuY29tPiB3cm90ZToNCj4gPg0KPiA+
-IFRoZSBpbnRlcnJ1cHQgcmVnaXN0ZXIgd2lsbCBzdGlsbCByZWZsZWN0IHRoZSBjb25uZWN0IGFu
-ZCBkaXNjb25uZWN0DQo+ID4gaW50ZXJydXB0IHN0YXR1cyB3aXRob3V0IGdlbmVyYXRpbmcgYW4g
-YWN0dWFsIEhXIGludGVycnVwdC4NCj4gPiBUaGUgY29udHJvbGxlciBkcml2ZXIgc2hvdWxkIG5v
-dCBoYW5kbGUgdGhvc2UgbWFza2VkIGludGVycnVwdHMuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBTYW5rZWVydGggQmlsbGFrYW50aSA8cXVpY19zYmlsbGFrYUBxdWljaW5jLmNvbT4NCj4gPiAt
-LS0NCj4gPiAgZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9jYXRhbG9nLmMgfCA1ICsrKy0tDQo+
-ID4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4N
-Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9jYXRhbG9nLmMNCj4g
-PiBiL2RyaXZlcnMvZ3B1L2RybS9tc20vZHAvZHBfY2F0YWxvZy5jDQo+ID4gaW5kZXggM2MxNmY5
-NS4uMTgwOWNlMiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vbXNtL2RwL2RwX2Nh
-dGFsb2cuYw0KPiA+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9tc20vZHAvZHBfY2F0YWxvZy5jDQo+
-ID4gQEAgLTYwOCwxMyArNjA4LDE0IEBAIHUzMiBkcF9jYXRhbG9nX2hwZF9nZXRfaW50cl9zdGF0
-dXMoc3RydWN0DQo+ID4gZHBfY2F0YWxvZyAqZHBfY2F0YWxvZykgIHsNCj4gPiAgICAgICAgIHN0
-cnVjdCBkcF9jYXRhbG9nX3ByaXZhdGUgKmNhdGFsb2cgPSBjb250YWluZXJfb2YoZHBfY2F0YWxv
-ZywNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBkcF9jYXRhbG9n
-X3ByaXZhdGUsIGRwX2NhdGFsb2cpOw0KPiA+IC0gICAgICAgaW50IGlzciA9IDA7DQo+ID4gKyAg
-ICAgICBpbnQgaXNyLCBtYXNrOw0KPiA+DQo+ID4gICAgICAgICBpc3IgPSBkcF9yZWFkX2F1eChj
-YXRhbG9nLCBSRUdfRFBfRFBfSFBEX0lOVF9TVEFUVVMpOw0KPiA+ICAgICAgICAgZHBfd3JpdGVf
-YXV4KGNhdGFsb2csIFJFR19EUF9EUF9IUERfSU5UX0FDSywNCj4gPiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAoaXNyICYgRFBfRFBfSFBEX0lOVF9NQVNLKSk7DQo+ID4gKyAgICAg
-ICBtYXNrID0gZHBfcmVhZF9hdXgoY2F0YWxvZywgUkVHX0RQX0RQX0hQRF9JTlRfTUFTSyk7DQo+
-ID4NCj4gPiAtICAgICAgIHJldHVybiBpc3I7DQo+ID4gKyAgICAgICByZXR1cm4gaXNyICYgKERQ
-X0RQX0hQRF9TVEFURV9TVEFUVVNfTUFTSyB8IG1hc2spOw0KPiANCj4gSSBzdXNwZWN0IHRoYXQg
-dGhlIGxvZ2ljIGlzIGludmVydGVkIGhlcmUuIFNob3VsZG4ndCBpdCBiZToNCj4gDQo+IHJldHVy
-biBpc3IgJiBEUF9EUF9IUERfU1RBVEVfU1RBVFVTX01BU0sgJiBtYXNrOw0KPiANCj4gPw0KPiAN
-CiANClRoZSB2YWx1ZSBvZiBEUF9EUF9IUERfU1RBVEVfU1RBVFVTX01BU0sgaXMgMHhFMDAwMDAw
-MCBhbmQgdGhlIHZhbHVlIG9mIHRoZSByZWFkDQppbnRlcnJ1cHQgbWFzayB2YXJpYWJsZSBjb3Vs
-ZCBiZSBpcyAweEYuDQoNClRoZSBtYXNrIHZhbHVlIGlzIGluZGljYXRlZCB2aWEgdGhlIHJlZ2lz
-dGVyLCBSRUdfRFBfRFBfSFBEX0lOVF9NQVNLLCBiaXRzIDM6MC4NClRoZSBIUEQgc3RhdHVzIGlz
-IGluZGljYXRlZCB2aWEgYSBkaWZmZXJlbnQgcmVhZC1vbmx5IHJlZ2lzdGVyIFJFR19EUF9EUF9I
-UERfSU5UX1NUQVRVUywgYml0cyAzMToyOS4gDQoNCmlzciAmIERQX0RQX0hQRF9TVEFURV9TVEFU
-VVNfTUFTSyAmIG1hc2ssIHdpbGwgcmV0dXJuIDAgYWx3YXlzLg0KDQo+ID4gIH0NCj4gPg0KPiA+
-ICBpbnQgZHBfY2F0YWxvZ19jdHJsX2dldF9pbnRlcnJ1cHQoc3RydWN0IGRwX2NhdGFsb2cgKmRw
-X2NhdGFsb2cpDQo+ID4gLS0NCj4gPiAyLjcuNA0KPiA+DQo+IA0KPiANCj4gLS0NCj4gV2l0aCBi
-ZXN0IHdpc2hlcw0KPiBEbWl0cnkNCg0KVGhhbmsgeW91LA0KU2Fua2VlcnRoDQo=
+On 31/03/2022 02:50, Kunihiko Hayashi wrote:
+> Hi Krzysztof,
+> 
+> On 2022/03/31 2:40, Krzysztof Kozlowski wrote:
+>> On 30/03/2022 12:55, Kunihiko Hayashi wrote:
+>>> Instead of "oneOf:" choices, use "allOf:" and "if:" to define clocks,
+>>> clock-names, resets, and reset-names that can be taken by the compatible
+>>> string.
+>>>
+>>> The order of clock-names and reset-names doesn't change here.
+>>>
+>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>> ---
+>>>   .../phy/socionext,uniphier-ahci-phy.yaml      | 90 +++++++++++++-----
+>>>   .../phy/socionext,uniphier-pcie-phy.yaml      | 47 ++++++---
+>>>   .../phy/socionext,uniphier-usb3hs-phy.yaml    | 93 ++++++++++++++----
+>>>   .../phy/socionext,uniphier-usb3ss-phy.yaml    | 95 +++++++++++++++----
+>>>   4 files changed, 251 insertions(+), 74 deletions(-)
+>>>
+>>
+>> (...)
+>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+>>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+>>> index 1bbd164f2527..21e4414eea60 100644
+>>> ---
+>>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+>>> +++
+>>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+>>> @@ -34,30 +34,12 @@ properties:
+>>>       minItems: 2
+>>>       maxItems: 3
+>>>
+>>> -  clock-names:
+>>> -    oneOf:
+>>> -      - items:               # for Pro5
+>>> -          - const: gio
+>>> -          - const: link
+>>> -      - items:               # for PXs3 with phy-ext
+>>> -          - const: link
+>>> -          - const: phy
+>>> -          - const: phy-ext
+>>> -      - items:               # for others
+>>> -          - const: link
+>>> -          - const: phy
+>>> +  clock-names: true
+>>>
+>>>     resets:
+>>>       maxItems: 2
+>>>
+>>> -  reset-names:
+>>> -    oneOf:
+>>> -      - items:               # for Pro5
+>>> -          - const: gio
+>>> -          - const: link
+>>> -      - items:               # for others
+>>> -          - const: link
+>>> -          - const: phy
+>>> +  reset-names: true
+>>>
+>>>     vbus-supply:
+>>>       description: A phandle to the regulator for USB VBUS
+>>> @@ -80,6 +62,77 @@ properties:
+>>>         required for each port, if any one is omitted, the trimming data
+>>>         of the port will not be set at all.
+>>>
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: socionext,uniphier-pro5-usb3-hsphy
+>>> +    then:
+>>> +      properties:
+>>> +        clocks:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +        clock-names:
+>>> +          items:
+>>> +            - const: gio
+>>> +            - const: link
+>>> +        resets:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +        reset-names:
+>>> +          items:
+>>> +            - const: gio
+>>> +            - const: link
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - socionext,uniphier-pxs2-usb3-hsphy
+>>> +              - socionext,uniphier-ld20-usb3-hsphy
+>>> +    then:
+>>> +      properties:
+>>> +        clocks:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +        clock-names:
+>>> +          items:
+>>> +            - const: link
+>>> +            - const: phy
+>>> +        resets:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +        reset-names:
+>>> +          items:
+>>> +            - const: link
+>>> +            - const: phy
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - socionext,uniphier-pxs3-usb3-hsphy
+>>> +              - socionext,uniphier-nx1-usb3-hsphy
+>>> +    then:
+>>> +      properties:
+>>> +        clocks:
+>>> +          minItems: 2
+>>
+>> Why minItems:2? Is the last phy-ext clock optional?
+> 
+> In an SoC with two controllers, there is a controller that requires extra
+> clock and a controller that does not. For example, PXs3 USB3 controller 1
+> needs "phy-ext" clock, but the controller 0 doesn't.
+> 
+> This difference is related to the phy configuration, where the controller 1
+> requires more clocks because it shares the phy with other subsystems.
+> 
+> So I think the last phy-ext clock should be optional.
+> 
+
+OK, thanks for explanation. I assume we talk about the hardware, not
+about Linux driver needs. :)
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

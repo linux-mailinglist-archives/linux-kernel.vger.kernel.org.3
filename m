@@ -2,309 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEEC4ED815
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996254ED81E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbiCaLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S234864AbiCaLDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbiCaLBW (ORCPT
+        with ESMTP id S234866AbiCaLC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:01:22 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB031BD812
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:59:35 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8EE343F6F8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1648724372;
-        bh=1XwtTbs27LDyM3VTjm8BQT5UEJXtUlqRoeZftmejZys=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=bqP96SqigjestBw30h6NNf6pxtEVogf91ByFSMK236t76m8Pm/OPi8r0HFCBwZe6e
-         v64P6mWVFa2dEtEUUZKnNaX2XWocv+Je8SSfOtWf8MRiqPmmUzZoeyRxdMVBKI4F0f
-         oh8gaFNPOm9fMrSH+PBWRjI7Ca9mYpKQvmeWOmqLiuwiI/VIUskSCqbUG0sfI49d5N
-         PHW73PZAcbFOYOBeDHHwi+3uV+TXQiWsygRte/mX+Qn7+xNcIlh/byobOZr/oEvxFk
-         IILrtRZ1Tr70Mdr/E7QA0RV1Tt2XGVz7L1EufpWweO1LajN65vRZHXlrQ0rT8VtFZI
-         tamolVEVyuqlA==
-Received: by mail-ej1-f70.google.com with SMTP id do20-20020a170906c11400b006e0de97a0e9so6257670ejc.19
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:59:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1XwtTbs27LDyM3VTjm8BQT5UEJXtUlqRoeZftmejZys=;
-        b=OZAja3Fbh2WxNRelFXoozLWq4bK9h9k8Dh13TzbY+grqr0YglASsKkrn5BLaeMOSnw
-         vl0B9KD6V0/4gUqTF8VYXzG105XMP38w6MB+1eoG9Lthi4EZ6l/v4JlzEb2xhNKDqwj6
-         oUCPnwQo9RCCpi1mKu7ScCSmcHanJmhB6xJolQLTkwdPKEES0vTznUscxRksT5wHr+1u
-         VN0lnm3UJC+BhnV15Lx0Ul9opc9Y8Y08rAS4ke9CRzz+V0Oq3MPvR7uT/goTRgR1XmYz
-         bpAZBSAJdjmSVl493AtybCkKn+LCscmNxUMUl7QOzsAcEFdFdW98dpWXMpp7uQAACvkS
-         oN1w==
-X-Gm-Message-State: AOAM533+i78etd6SQowUD0SFTlRo7k35fI/X6FwpVODjY7LGYSdLOBMu
-        lhoOrZY7CTT8+rg9Uz/MVC2gIzfvM8sj2w59C4VmDvCJ9yplLYtWXsyx3XbByvOtERdtdtFi/jM
-        V3dFOtsFfxLmMSfMAAccVLPyrSWSqdbL+YSC6rpnszQ==
-X-Received: by 2002:a50:fd04:0:b0:419:9c4a:7d79 with SMTP id i4-20020a50fd04000000b004199c4a7d79mr16183205eds.99.1648724370142;
-        Thu, 31 Mar 2022 03:59:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwilDd+b52EM2iM/qyahZOGp/AIisd8dLBYGUdk+jIoHPeMOd2vbk4yImdWEBr9uUx9uogIHA==
-X-Received: by 2002:a50:fd04:0:b0:419:9c4a:7d79 with SMTP id i4-20020a50fd04000000b004199c4a7d79mr16183162eds.99.1648724369782;
-        Thu, 31 Mar 2022 03:59:29 -0700 (PDT)
-Received: from [192.168.123.94] (ip-088-152-144-107.um26.pools.vodafone-ip.de. [88.152.144.107])
-        by smtp.gmail.com with ESMTPSA id dk21-20020a0564021d9500b0041b501eab8csm3703479edb.57.2022.03.31.03.59.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 03:59:29 -0700 (PDT)
-Message-ID: <6e69cc4c-dcfa-ed97-b675-54873972ace7@canonical.com>
-Date:   Thu, 31 Mar 2022 12:59:27 +0200
+        Thu, 31 Mar 2022 07:02:59 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CFF205BC3
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:01:11 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22V8fmTn030419;
+        Thu, 31 Mar 2022 11:01:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=GRyX1tjSSAQaoq16nrx47KBmdaBr1sCKe8nOJjvKXxM=;
+ b=RUnBUhyyFsXxbkzXTz4G/u7VpUUsiuCxgn0WW42KD9RkFt5zwhy+wwTRgNAzRlDpEqax
+ l6qdv4hqw17BDtGzOlQrXIq4oTetVNv8n0J8NRfRXDqgC6ndHdq/2GqUAofx5a+AVV/O
+ lWvt0ByyUONx4UfPW9WVHjJ8lbf6uwL25fGH3B1apAuUypD4vR/WVf3RkgJwvPjwY6NU
+ XWtuxJAGTIs2LatLdJUxiL+FXy3MgkO+y+K23+Qnju16Wy1AF14MlEEVNF+QmewpCekd
+ TBIsHU3IzHu7Bc36BicGypuh6UPe1+dvWp67LYftjDV9jVpFyMrrWG+MG41p2Db/RSxo lQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1se0m1h4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 11:01:02 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22VAu6LG027648;
+        Thu, 31 Mar 2022 11:01:02 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f1tg7wfn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 11:01:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NKMlgnksg1VWKLQKjQ61WroMjY1XNBnIwKea82e779td+cgD2PKA6OUu0c634puzNSboHZWWd8KCZMc+0wINhmvru60Qs4sGhHoRVZzbKcNiAYVYCcUlB/MFGN43twRnUfNpqhBwAmX0pb/Deux+y0+y4Z3UrxRyKfk35Y2IYuzQQNMgbmJgu8A/RiZQkyb39k/1SY7bW4Hd/IwZsMCinygJhdOIkLsRXJ5aQR7qx3spSBgVCr7qAobiEORvwv1Z0a+/+SkLrDKU1oTC40dKI52e6ffUPwjgro8F8mHwgZ8keULuM0KWSW7KniOvpMxVKAKPPZ7O/SK1LcoQVwftrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GRyX1tjSSAQaoq16nrx47KBmdaBr1sCKe8nOJjvKXxM=;
+ b=VjXFA8pHCH0VTpwRyEaf2xHY9Qm9DM9rcneVwgBaMUXPRfuOWPpDjAYyYXl6S42CDWVjTevZSMWWzDMG5DyjSgssT5CKrKk+/34WHI3+wjTnkzOgObMhiAynrQHj9wKiYZMV5SoDla2V0Ra5atzci9nYPr9qqHUlsaLn1smuG9MmXXhwIFQTOCjTnGxyuOHf4a9rr7B+gwBlELWlJLp272ImimKSFFHKLOLZUZtDSGZTNql14Ldw0pbgHYN/0dguiMyVxmrZrdzGPdm9aLluZkjsL+rlCBe5tP09rOPcPPba+BoixTWncZhDFOCEXCxfqHDyvavjSLrErWcDRCc3sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GRyX1tjSSAQaoq16nrx47KBmdaBr1sCKe8nOJjvKXxM=;
+ b=xOZdV0FU75P9htRAChgqoWQv8KLZoxlWBgbDQ9coO2Ysk2w69U7y+nLpuYkYp/PQcxkjWELDSZcgu677x/G7+oSu64KsBRS1+2gx0+cobhhyzHMbOzf+5Jmj4felGTctwTGq4fmE8FFJ9I9Cu2lylr3l2il4hf8wonZPNWFhdXo=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM5PR10MB2025.namprd10.prod.outlook.com
+ (2603:10b6:3:10e::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.16; Thu, 31 Mar
+ 2022 11:01:00 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.025; Thu, 31 Mar 2022
+ 11:00:59 +0000
+Date:   Thu, 31 Mar 2022 14:00:48 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Alaa Mohamed' <eng.alaamohamedsoliman.am@gmail.com>,
+        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] staging: gdm724x: Fix Duplication of Side Effects
+Message-ID: <20220331110048.GN3293@kadam>
+References: <20220331101849.71046-1-eng.alaamohamedsoliman.am@gmail.com>
+ <ebbc4a14c30f492f8553e6ef572bbcbe@AcuMS.aculab.com>
+ <20220331104012.GM3293@kadam>
+ <acde5b1e8495431dac05403c593d4679@AcuMS.aculab.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acde5b1e8495431dac05403c593d4679@AcuMS.aculab.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MRXP264CA0035.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:14::23) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Linux DRTM on UEFI platforms
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        The development of GNU GRUB <grub-devel@gnu.org>,
-        "Daniel P. Smith" <dpsmith@apertussolutions.com>
-References: <20220329174057.GA17778@srcf.ucam.org>
- <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
- <c3ecd65f-bb10-8d14-500d-d6e2ece9b336@apertussolutions.com>
- <CAMj1kXFq=MAj75CnwMKnfvFTxUxFbiq9rWwpSu=JeoXFV5=otg@mail.gmail.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <CAMj1kXFq=MAj75CnwMKnfvFTxUxFbiq9rWwpSu=JeoXFV5=otg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ec3967b8-20ee-4c93-517e-08da1305bd36
+X-MS-TrafficTypeDiagnostic: DM5PR10MB2025:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR10MB2025968BC787A0FE99D80DC88EE19@DM5PR10MB2025.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tKBfkE7G9fYeX98B9vgPtFMEnrQiHsFmeY2W7/x9yZm2aQKBDc7W5ltv3GX7+36MU6ddk/C0mol8gqRI9a3ApNsso9l3REMkD54lNggJlYu04opE3DfEzMi7aufqWBzWaDjQaKLoV+/w7ySCe0Mh1QnaL77zyKfdfNln8tdbKuzK9X7Z0VhVpmMpYzFm0lKbfWcymFqNmUbKbX131ektdN84vCbQhopX6BT+IKVn9nggANjhAiEBh34o9LROZqC1EHV3K2m3IthBa0wz/S9Ty0iTpM9XP/Q2eyvslfYBzoALBvnDegcPzYD/wFxbN57SpVeFCmtRlmcH2kYljdq6x27RfgOQ5dYpNqyN21/RkoEYGV+TqS8SuXb4zlIYiOUkghpAZ/15yKR4hJpLaGV76IMTPuOUNDGqBKoKrJtgxZ9tl1ElHGl4uI76+uiEj8QBFy30+zIRwQRwIXuit3cJZAVcLnPDm1h2Ud2Ht4L0V/21wLIWmldsI5opsfm1JwwWBg0ekYmoPAZk9Q//rG/wNfWSZBsy8Ya2/PUIQ7QF+aa+pHpO9r996qyqFePZi/TLRw2f8EvWVpzwDx78mwRk5F9gJPd/iuFweJ3pNi/Iy0f5zByuV7sdq/p1PdWmAGdDi/kIXkeBkQv22oEUjv1dMPzULneSo7hmm4yS0D6Z530HOEZ+5SsVkZipCWAEWD5vNYuFJ6q2trJD2aX+URaPI8N8AJ4WAL5ydc+sUBI7GdQx6OvD73p+GbYynJxO0lF+0KbdbG6v5/KwlSoySCLgvzNt0a5v+O9keZX6lyoEm2iW2wWSr2o+vzpmLTFzs2eCORAbV0gL/NG8eKuH+sIJpFLOz4ARceP5YBzgTN1Kyjs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33716001)(966005)(6486002)(508600001)(38100700002)(54906003)(186003)(26005)(6666004)(6512007)(6506007)(9686003)(52116002)(38350700002)(33656002)(2906002)(316002)(86362001)(1076003)(6916009)(8676002)(66946007)(5660300002)(66476007)(8936002)(66556008)(83380400001)(44832011)(4326008)(56340200001)(21314003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?obU5p09Ba2Ebfdsqg/3AuYqC30HHzFseZInnKd5AkJD6dAatVfthnQ1mJRYe?=
+ =?us-ascii?Q?10Rbx2Lc8Xq5TvMCavr4dMaXjbEZIaDRI4h8VE6sBLuyrOiH0AlT48/hCEit?=
+ =?us-ascii?Q?o8BJvjFOvy1EGuZDuHkzKi1UsH5akD3oi0OtmMvwzgUhRB1WlTdL1MEjBLUk?=
+ =?us-ascii?Q?PDw68wwEDXZw0LyVjAdDb59oQlGU0QqGDystTC6LZWGVvcz1M0wa6sWftYuo?=
+ =?us-ascii?Q?0Bon406hGik/LaxNJpN5d4aLACtLhjRaABw5lwoyQPPJapxvv3EBA2mGul7Z?=
+ =?us-ascii?Q?ypePyCjJEwm4zK5jVAgBdE3W91s6YjwzB1Q75M5/CkQ2Qg3UnBh1EMdX0+S/?=
+ =?us-ascii?Q?HAD727OoRIJAacIgwZax13lkfCXiAZjvf9pJ3A51KdfDcpuSQfVQeOgFvoej?=
+ =?us-ascii?Q?BOu+567CGKocCIxTjYzy/cwV1Ayl7Dqc99g9f2REYJlmrjhqtMwuIkA9TuD9?=
+ =?us-ascii?Q?kdOcbEiTfevrIs0XFZ++XY8wAOC9OkGejnK3/bH3kU7nr6I64Or1va4hE7Lr?=
+ =?us-ascii?Q?NZS+3MruHsn8k8kg9kkEwWAJq6itpZvQSwAxhFNNJUTyYoSCTv1lHDiJXVyr?=
+ =?us-ascii?Q?rAD0jDAZHA3UudT+FldSqyK5VL8Co664gxS6KdeAoGQ5sWvmgLSY3Vg/tDU+?=
+ =?us-ascii?Q?JHZtP+wh18RKrmp7NHdTBuYdlY/LAsdUcH7PTpitecwx3bChlFKm/HmWNb0Z?=
+ =?us-ascii?Q?qQNBMkmbQDNv+Mw0fqr4BKy6MbrMrzsZloz4X1qce2UjFSPeLF0PtMpwXabq?=
+ =?us-ascii?Q?fhIUhzwrG9Q3wQ1lL+vB2+gFbU3mj7y9DG2fOKIjyGQuTzYNMJkD0CPcZS81?=
+ =?us-ascii?Q?kCN4BbwBj67jQhl4AnUb0lksR0dcHpwdTgrgXVecyyP5xp9SBdWK7Gcvz/vU?=
+ =?us-ascii?Q?K6+Lx9D8EwE5ZtPu5rK2A8dW+lKAfP6lhrD2mI8VDkjmyex5CySRC46Mb0qh?=
+ =?us-ascii?Q?bpb9dMjypK42LOItUx8xgd+sG1PIqIfttQvHVc0Yz9PSeCBL/sPR54s9yOMb?=
+ =?us-ascii?Q?eaNUZ0egxde9oGlnkN1Pl290WqCMNh1Q1A2qarGuIaZw+jU9+kIPMByYkIxD?=
+ =?us-ascii?Q?Rev5x37iZf2KtzuEtvk76ZMOKyBAmn9nEhxlzuiQXNkChSeP+t5rn1SpFsRm?=
+ =?us-ascii?Q?ggOAA+sZuMl8af1C9fOIiiqUlU4TdPuynWB0uxnY+6y655ZiUFdpuhjVyTuQ?=
+ =?us-ascii?Q?0JBiR91XgI3rnQYDZ+lKqSDRT5CQbKb3q7cNKy6dKm4IUwfcB8mbdY7F12Yx?=
+ =?us-ascii?Q?ZjvAcnrVpQxsfsKVtEyCjiGo+Dhvb+uHI2IEqJNoq1PKk0OuDdPWkSpwRv+b?=
+ =?us-ascii?Q?kXkMDzaAxZwipLRZpNXRbrdfLATHX7YicGyQGy5eI2WUhgq57MgiqhzynP+l?=
+ =?us-ascii?Q?3iSqIX52/KC9pU6TqY5aqQOMg7MguvKseJl0upjsmOQnFVxhSw+4ZTq17IZD?=
+ =?us-ascii?Q?17Ihzq9wHpG39uohvgn20aHEC6AfibLJTZm++YQFwRiYZpoyyzqQ5buB5lmy?=
+ =?us-ascii?Q?0F7QDsnrVxvAnNXuQDRdoElaehAlX1VWDmX1OFoq9mBkyGfsnNgt7HZInl4y?=
+ =?us-ascii?Q?M5W2Osk0pY4Pg0YX3Aj1RMa1aFUvk5ISG5dIopQY93c7al/0GFtwhlQz5nIZ?=
+ =?us-ascii?Q?eNT7DeBMkFAILRyzRhz7WSWjQxrVo+JL1XqQDarpfy6SZlQjvypbSSaphWkI?=
+ =?us-ascii?Q?CdQGMnghn2VmRE08s42Vq/Xj3lYCkZVR1UMCji+tI6f3hvBeKSSSUE79q+TX?=
+ =?us-ascii?Q?KHw+Uio4nG361WzftbqzlLepQljQkIA=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec3967b8-20ee-4c93-517e-08da1305bd36
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 11:00:59.8282
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MnBx8cy5giWhjdG7KSP966fA73DkwUXqJ/HexFdqZP08ohDe2ODM3s/KW+LyIDBVbs/3rF1gtfWP7RoJW+9pA3P6IrMmnzXCKVgg3VTpUaU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB2025
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-03-31_03:2022-03-30,2022-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 mlxscore=0
+ phishscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203310061
+X-Proofpoint-ORIG-GUID: _q6dySWNascWOaEZcyv0EnYok2qt8RA_
+X-Proofpoint-GUID: _q6dySWNascWOaEZcyv0EnYok2qt8RA_
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 09:13, Ard Biesheuvel wrote:
-> On Thu, 31 Mar 2022 at 02:36, Daniel P. Smith
-> <dpsmith@apertussolutions.com> wrote:
->>
->> Greetings Matthew,
->>
->> First thank you to you and James for taking time out of your busy
->> schedules to sit down with us and work through all of this.
->>
->> Hey Ard,
->>
->> On 3/30/22 03:02, Ard Biesheuvel wrote:>> 1) From an EFI maintainer
->> perspective, is making the contract between
->>>> the boot stub and the kernel explicit viable?
->>>>
->>>
->>> No. The direction of travel has been to define EFI boot only in terms
->>> of the handover from the loader to the stub. What happens next is up
->>> to the architecture, and is deliberately not specified, because it is
->>> considered to be internal Linux ABI. We've deviated from this once for
->>> Xen on ARM, but this means we have already painted ourselves into a
->>> corner when it comes the way we use DT internally at the handover
->>> point between stub and kernel proper, and I am not eager to repeat
->>> that. Locking down the stub-to-kernel protocol for all architectures
->>> is not the way to go.
->>
->> To help provide some visual context, for EFI today there is,
->>
->>                                          bzImage
->> [EFI boot manager] -> [[efi-stub] -> [setup kernel] -> [main kernel]]
->>
->> Where the efi-stub is responsible for interacting with firmware to
->> configure the system, store that configuration for the setup kernel and
->> the main kernel, and then call EBS before entering the setup kernel.
->>
->> For Secure Launch the flow (on Intel) is,
->>
->>        CPU instruction                   bzImage
->> [preamble] -> [ACM] -> [[sl-stub] -> [setup kernel] -> [main kernel]]
->>
->> In order to make the CPU instruction call to enter the ACM the system
->> must be in a very specific quiescent state. This includes but not
->> exhaustively,
->>    * EBS must have been called
->>    * TPM should have all localities closed
->>    * IOMMU PMRs must be programmed appropriately
->>    * TXT heap space allocated
->>    * TXT heap space populated with config structures
->>    * All APs must be in a specific idle state
->>    * Execution is on the BSP
->> Carrying all this out is what is considered the DRTM preamble.
->>
+On Thu, Mar 31, 2022 at 10:49:24AM +0000, David Laight wrote:
+> From: Dan Carpenter
+> > Sent: 31 March 2022 11:40
+> > 
+> > On Thu, Mar 31, 2022 at 10:29:04AM +0000, David Laight wrote:
+> > > From: Alaa Mohamed
+> > > > Sent: 31 March 2022 11:19
+> > > >
+> > > > Fix Duplication of Side Effects for GDM_TTY_READY(gdm) macro
+> > > > reported by checkpatch
+> > > > "CHECK: Macro argument reuse 'gdm' - possible side-effects?"
+> > > >
+> > > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> > > > ---
+> > > >  drivers/staging/gdm724x/gdm_tty.c | 4 +++-
+> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
+> > > > index 04df6f9f5403..6f0274470e69 100644
+> > > > --- a/drivers/staging/gdm724x/gdm_tty.c
+> > > > +++ b/drivers/staging/gdm724x/gdm_tty.c
+> > > > @@ -27,7 +27,9 @@
+> > > >
+> > > >  #define MUX_TX_MAX_SIZE 2048
+> > > >
+> > > > -#define GDM_TTY_READY(gdm) (gdm && gdm->tty_dev && gdm->port.count)
+> > > > +#define GDM_TTY_READY(_gdm) \
+> > > > +	({ typeof(_gdm) (gdm) = (_gdm); \
+> > > > +	(gdm && gdm->tty_dev && gdm->port.count); })
+> > >
+> > > Did you test this?
+> > >
+> > > see https://godbolt.org/z/cazPrrzPv
+> > >
+> > 
+> > I don't understand the link.  The patch should work as far as I can see.
 > 
-> Thanks for the explanation, this is really helpful.
-> 
->> This is the wrinkle because the setup kernel and main kernel are both
->> predicated on the efi-stub and the efi-stub is predicated on running
->> before EBS.
-> 
-> Matthew suggested this already, but can you explain why handling this
-> in a callback is not an option? I'd by sympathetic to specifying a
+> If you call GDM_TTY_READY(gdm) the first line ends up as:
+> 	struct xxx *gdm = gdm;
+> which shadows the parameter.
+> There's probably a warning about an uninitialised variable as well.
 
-The idea of the UEFI specification is that it is OS agnostic. So 
-anything that is Linux-, Windows-, BSD-, etc. specific should not live 
-in the UEFI firmware.
+Oh yeah.  You're right.  But you won't get any variable uninitialized
+warnings because int foo = foo; was the traditional way to silence GCC's
+uninitialized variable warnings.
 
-If you want to implement any Linux specific extra protocol, you should 
-implement it in Shim, GRUB, the kernel stub or any other UEFI binary 
-loaded by the UEFI firmware but, please, don't rely on the UEFI firmware 
-itself to implement it.
+Smatch copied the GCC code.  There are some static checkers which might
+complain.  Sparse used to have a warning about shadow variables but it
+didn't trigger on this code.  Not sure why.
 
-If you are able to abstract the requirements for furthering secure boot 
-in a way that is OS agnostic, then implementation in the UEFI firmware 
-starts to make sense. But remember that there is a large installed base 
-that is still lagging behind the current UEFI standard.
-
-Best regards
-
-Heinrich
-
-> Linux specific protocol that can be grabbed before EBS() but can be
-> invoked after (but not, say after SetVirtualAddressMap(), to keep
-> things simple). That should allow us to call back into firmware to
-> perform the secure launch right before handing over.
-> 
-> My other suggestion, to use a minimal EFI environment just to boot the
-> kernel, still seems viable to me as well, but it would boil down to
-> mostly the same, thing, i.e., to inject an intermediate boot stage
-> between the call to the firmware's EBS() and calling the entrypoint of
-> the kernel proper. What I do like about this approach is that the EFI
-> stub could execute unprivileged, which means the secure launch kernel
-> could track *exactly* what the EFI stub is doing in terms of memory
-> accesses and protocol invocations, which seems a bit more robust than
-> the approximation of 'this might be interesting enough to measure'
-> that the industry seems to have settled on.
-> 
->> So how can this wrinkle be addressed? The TrenchBoot project
->> proposed that the information collected by the efi-stub be formally
->> documented for two reasons, 1. to allow the sl-stub to be aware of what
->> and where all external data is being injected into the kernel so any
->> data that may be security critical could be measured, and 2. it would
->> allow third parties, e.g. GRUB, could correctly configure the system,
->> pass all EFI related information correctly to the setup kernel and the
->> main kernel before executing the preamble. Where the former is more of a
->> concern than enabling the latter.
->>
-> 
-> The reason I am not willing to lock down the stub<->kernel boot
-> protocol is because it doesn't scale: currently, the discussion is
-> about x86, which is a bit different because we already so many ways to
-> boot it, but for other architectures, this is going to create a huge
-> maintenance burden: arm64, RISC-V and now LoongArch are all adding EFI
-> boot support and are looking to support ACPI, SMBIOS and other
-> features as well, and these are all gated on EFI boot, which requires
-> booting via the stub.
-> 
-> I'm not eager to kick this can down the road and go with something
-> that inevitably implies either specifying and maintaining a whole
-> array of internal protocols as external ABI, or revisiting this
-> discussion and coming up with two different ways to do DRTM depending
-> on whether you are running x86 or not.
-> 
->> Relating to what information is security critical, this can be a bit
->> subjective. For example Dave Weston has a twitter thread[1][2][3] over
->> what state Azure Attestation can validate for a DRTM Windows system.
->> This reflects what Microsoft believes it's customers will want to
->> validate about a Windows system before accessing services and data
->> stored in Azure. For Linux Secure Launch measuring everything would
->> obviously provide the finest grain of assertions regarding how the
->> kernel was configured to run but that comes at the expense that is
->> incurred for taking the measurements. To date the selection of
->> measurements have been an attempt of balancing the most meaningful
->> measurements with how many measurements should be taken. For instance it
->> would be possible to hash the SRTM (firmware) TPM event log to provide
->> an assertion of what its contents were at dynamic launch. Is that a
->> meaningful measurement? Not necessarily since there are other means to
->> validate the log but there is likely someone who is super cautious and
->> would like to see the extra layer of validation.
->>
-> 
-> So how will the above translate into meaningful and fair feedback in
-> response to proposed changes to this documented stub<->kernel handover
-> protocol, once the need arrives to make changes? Is this super
-> cautious person going to be the one NAKing everything just because he
-> is super cautious?
-> 
-> Pardon the skepticism, but I am really reluctant to let this cat out
-> of the bag if the requirements are so vague and there doesn't seem to
-> consensus on the scope of DRTM.
-> 
-> Another thing I missed is how these systems are supposed to carry out
-> the tasks that the stub currently handles: Matt mentioned setting
-> MemoryOverwriteRequest, but there is also TPM event log handling, and
-> other bits and pieces. Are you saying this is all going to be part of
-> this boot protocol as well?
-> 
->>>> 2) If so, is it desirable?
->>>>
->>>> 3) If either (1) or (2) is "no", is it reasonable to ensure that all
->>>> potentially security-critical state or configuration changes to the
->>>> boot stub are reviewed by DRTM people to verify whether the secure
->>>> launch code needs to be updated to match?
->>>
->>> Wouldn't it be better for the secure launch kernel to boot the EFI
->>> entrypoint directly? As it happens, I just completed a PoC last week
->>> for a minimal implementation of EFI (in Rust) that only carries the
->>> pieces that the EFI stub needs to boot Linux. It is currently just a
->>> proof of concept that only works on QEMU/arm64, but it should not be
->>> too hard to adapt it for x86 and for booting a kernel that has already
->>> been loaded to memory.
->>
->> IIUC, as you can see above, entering the efi-stub from the dynamic
->> launch will fail because EBS will have been called.
->>
-> 
-> I think you are missing my point here, tbh. What I am suggesting here
-> is to run a separate, minimal EFI implementation, which has its own
-> EBS() which is unrelated to the firmware one. Matthew pointed out some
-> issues with this approach, but the fundamental idea is that it is just
-> an impedance matcher that looks like EFI to the EFI stub, but is
-> really just a loader with a memory map and some config tables.
-> 
-> The requirement for this came up in the confidential computing space,
-> but for bare metal, it seems having a tiny EFI-like shim that can only
-> boot a Linux kernel (or other EFI-like payloads with no dependencies
-> on the driver model or other UEFI/PI bloat) might be useful here as
-> well, especially because it would be completely generic from the EFI
-> side of things, as opposed to creating yet another project with
-> intimate knowledge of struct bootparams, device trees, where in memory
-> the kernel may be loaded on architecture X, where in memory the initrd
-> may be loaded on architecture X, etc etc.
-> 
-> So the bottom line is that we will have to make this work with EFI
-> boot one way or the other, but skipping the EFI stub altogether is
-> really not an option, unless you want to carry the burden of keeping
-> your code in sync with the kernel. Locking this down as external ABI
-> is not acceptable to me.
-> 
-> Thanks,
-> Ard.
-> 
-> _______________________________________________
-> Grub-devel mailing list
-> Grub-devel@gnu.org
-> https://lists.gnu.org/mailman/listinfo/grub-devel
+regards,
+dan carpenter
 

@@ -2,133 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF7E4EE1B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3879C4EE1C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240723AbiCaTa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
+        id S240747AbiCaTgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240705AbiCaTax (ORCPT
+        with ESMTP id S240594AbiCaTgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:30:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975F21244;
-        Thu, 31 Mar 2022 12:29:04 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 21:29:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648754942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SyRunJIttOSoKPtRPHVIrqd1pxkb0TjVve+voxhbD10=;
-        b=Kb6NtKDnhx71zz0GNRf097nKYq6nD1t7B3ApI8gUlJpzEqWyM/bVV04hZFHUhd66cgwkkB
-        s5QzvQIF4+pXqVYxkIopLCiEhvVpiw/vLG+43VyDaLWf0CQInoDz8VJFu9YkNwEkfJrbFX
-        rrwCCl7DxjIcb9N/o6dHp0vGghmY6cd6YkZGtHAqGWKUHvYa6ZfDLNy48EBbJZk9VB4sbz
-        6S6OPPGD6o9tRtxWQRMDTv4ENqC9Bbh7ggeByeklACXiFLxlasYMtZfrKCqaxJIK4W+V6l
-        euVywUCvpP/kzuk9vAlsY/uvtevd5a0llcjqeOysKcu1Gk32esIxCo6Zae0H8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648754942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SyRunJIttOSoKPtRPHVIrqd1pxkb0TjVve+voxhbD10=;
-        b=uWFmRx5ti2WzkyyQpub6TqK7NwdfLKb6opOH0V23cijzXiMLlrEA+HR0IUlKfLppY7UdjY
-        Hqhkzoo4hWHiWNCQ==
-From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Brian Masney <bmasney@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Al Stone <ahs3@redhat.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>,
-        Peter Jones <pjones@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        linux-rt-users@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2] efi: Allow to enable EFI runtime services by default
- on RT
-Message-ID: <YkYA/Wpqa/PMczkp@lx-t490>
-References: <20220331151654.184433-1-javierm@redhat.com>
- <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
+        Thu, 31 Mar 2022 15:36:04 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0665FF2D
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:34:17 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bc27so588197pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6TjwPLirVvtK8s34uSN7CHWiKNF87Nh8s5orS/FRtx8=;
+        b=GOC8fHhteIOeaRunNywEvdfMNb1ooFQiSRvnOg2z4CcmESdOkeohBxTryjRk+SUpAj
+         ygNF3WSdBsHOIhmEoKxA/8m4C/0kJ4cAxYi4R8JeYbriN7MpQbkAQT9z4ZNMHZ1ZPci+
+         yb13s2X8seQjoLHSgTlV5oIo79vIuPhlvFZV34JXWeuQSlVcLG4xKKOkm77ICCRf1z4G
+         WjdQRlY+O/ksqcXUUqJQ0zRf25mI+adyZwG8jIzSu+ESPr5hW32AAPzqYIaPzbO5EG5g
+         a9eDN++W6Czb+iPVI3bIKw4qR+kVLaMdHxb8TBV0h9jFtbTOOjWrQiQJc58rKtkrrA/U
+         cDGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6TjwPLirVvtK8s34uSN7CHWiKNF87Nh8s5orS/FRtx8=;
+        b=wu7DHGrtXtaIV57QoMUg1Myv6LSKemqfCTr9XD/7EmMM8rCnpUJGggQ2MoIjMbr/pM
+         Djgq5zucbJp3CqxJEHl3m442qKyohMZ6Qq6XqoFWz4cQY9RJ0oqHpHZudk9PcM3Vl5Kg
+         w1LfXdVFP0PKWoT0I7sUBx7Ym5dU5XBKx2p6SbjvnJwaoopc23M1LfBwI+hGXijK5gMl
+         AYDOonv4neJGbIcanN8yYbCfpS8S+RHrC/VxBRz8ggmaPYeAT5V1dE0QeEZ1/yHj7wzx
+         dWVnRZ/WHJZGl4DvH5nFpTzs7Lq8tuhmtFuij98dTI7r2bDO/bIdZ4MaxSK/QKO9M1jh
+         IJqQ==
+X-Gm-Message-State: AOAM532wqQNos8LaknMQ2aB0gPKRH+6l9FzSLG+7mfmNW6aTRITedtNS
+        KpRTFQlbLacghlkF0OsaAWZFsg==
+X-Google-Smtp-Source: ABdhPJyGmSFKtQ59aaeSguxrTwSpnnOjjUfffGxGRGJ3k0sKjLP0XssXOSa6DzDjWlXMtiwXCoRACg==
+X-Received: by 2002:a05:6a00:996:b0:4fa:7cf8:6cdb with SMTP id u22-20020a056a00099600b004fa7cf86cdbmr7074785pfg.71.1648755256480;
+        Thu, 31 Mar 2022 12:34:16 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 3-20020a630003000000b003828fc1455esm134681pga.60.2022.03.31.12.34.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:34:15 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 19:34:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, Chao Gao <chao.gao@intel.com>
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
+ TDX module
+Message-ID: <YkYCNF3l62IxpmAD@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+ <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
+ <20220314194513.GD1964605@ls.amr.corp.intel.com>
+ <YkTvw5OXTTFf7j4y@google.com>
+ <20220331170303.GA2179440@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220331170303.GA2179440@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard, Javier,
++Chao Gao
 
-Am Do, Mar 31, 2022, schrieb Ard Biesheuvel:
-> On Thu, 31 Mar 2022 at 17:17, Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
-> >
-> > Commit d9f283ae71af ("efi: Disable runtime services on RT") disabled EFI
-> > runtime services by default when the CONFIG_PREEMPT_RT option is enabled.
-> >
-> > The rationale for that commit is that some EFI calls could take too much
-> > time, leading to large latencies which is an issue for Real-Time kernels.
-> >
-> > But a side effect of that change was that now is not possible anymore to
-> > enable the EFI runtime services by default when CONFIG_PREEMPT_RT is set,
-> > without passing an efi=runtime command line parameter to the kernel.
-> >
-> > Instead, let's add a new EFI_DISABLE_RUNTIME boolean Kconfig option, that
-> > would be set to n by default but to y if CONFIG_PREEMPT_RT is enabled.
-> >
-> > That way, the current behaviour is preserved but gives users a mechanism
-> > to enable the EFI runtimes services in their kernels if that is required.
-> > For example, if the firmware could guarantee bounded time for EFI calls.
-> >
-> > Also, having a separate boolean config could allow users to disable the
-> > EFI runtime services by default even when CONFIG_PREEMPT_RT is not set.
-> >
-> > Reported-by: Alexander Larsson <alexl@redhat.com>
-> > Fixes: d9f283ae71af ("efi: Disable runtime services on RT")
-> > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> > ---
-> >
-> > Changes in v2:
-> > - Improve commit description to make clear the motivation for the change
-> >   (Sebastian Andrzej Siewior).
-> >
->
-> This looks ok to me. I'll queue this up once the merge window closes.
->
+On Thu, Mar 31, 2022, Isaku Yamahata wrote:
+> On Thu, Mar 31, 2022 at 12:03:15AM +0000, Sean Christopherson <seanjc@google.com> wrote:
+> > On Mon, Mar 14, 2022, Isaku Yamahata wrote:
+> > > - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
+> > > (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
+> > > guest does it.  It naturally fits with the TDX module initialization at creating
+> > > first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
+> > 
+> > That's a solvable problem, though making it work without exporting hardware_enable_all()
+> > could get messy.
+> 
+> Could you please explain any reason why it's bad idea to export it?
 
-In case of (CONFIG_PREEMPT_RT=y && CONFIG_EFI_DISABLE_RUNTIME=n),
-shouldn't we add a small message in the kernel log warning that EFI
-runtime services are enabled for the RT kernel?
+I'd really prefer to keep the hardware enable/disable logic internal to kvm_main.c
+so that all architectures share a common flow, and so that kvm_main.c is the sole
+owner.  I'm worried that exposing the helper will lead to other arch/vendor usage,
+and that will end up with what is effectively duplicate flows.  Deduplicating arch
+code into generic KVM is usually very difficult.
 
-In almost all HW, except custom ones with "verified" firmware, such a
-warning would be useful... This is especially true since in the embedded
-domain, manually-configured RT kernels are almost always the norm.
+This might also be a good opportunity to make KVM slightly more robust.  Ooh, and
+we can kill two birds with one stone.  There's an in-flight series to add compatibility
+checks to hotplug[*].  But rather than special case hotplug, what if we instead do
+hardware enable/disable during module load, and move the compatibility check into
+the hardware_enable path?  That fixes the hotplug issue, gives TDX a window for running
+post-VMXON code in kvm_init(), and makes the broadcast IPI less wasteful on architectures
+that don't have compatiblity checks.
 
-Thanks,
+I'm thinking something like this, maybe as a modificatyion to patch 6 in Chao's
+series, or more likely as a patch 7 so that the hotplug compat checks still get
+in even if the early hardware enable doesn't work on all architectures for some
+reason.
 
---
-Ahmed S. Darwish
-Linutronix GmbH | Bahnhofstrasse 3 | D-88690 Uhldingen-Mühlhofen
-Phone: +49 7556 25 999 31; Fax.: +49 7556 25 999 99
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 69c318fdff61..c6572a056072 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4838,8 +4838,13 @@ static void hardware_enable_nolock(void *junk)
 
-Hinweise zum Datenschutz finden Sie hier (Informations on data privacy
-can be found here): https://linutronix.de/kontakt/Datenschutz.php
+        cpumask_set_cpu(cpu, cpus_hardware_enabled);
 
-Linutronix GmbH | Firmensitz (Registered Office): Uhldingen-Mühlhofen |
-Registergericht (Registration Court): Amtsgericht Freiburg i.Br., HRB700
-806 | Geschäftsführer (Managing Directors): Heinz Egger, Thomas Gleixner
++       r = kvm_arch_check_processor_compat();
++       if (r)
++               goto out;
++
+        r = kvm_arch_hardware_enable();
+
++out:
+        if (r) {
+                cpumask_clear_cpu(cpu, cpus_hardware_enabled);
+                atomic_inc(&hardware_enable_failed);
+@@ -5636,18 +5641,6 @@ void kvm_unregister_perf_callbacks(void)
+ }
+ #endif
+
+-struct kvm_cpu_compat_check {
+-       void *opaque;
+-       int *ret;
+-};
+-
+-static void check_processor_compat(void *data)
+-{
+-       struct kvm_cpu_compat_check *c = data;
+-
+-       *c->ret = kvm_arch_check_processor_compat(c->opaque);
+-}
+-
+ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+                  struct module *module)
+ {
+@@ -5679,13 +5672,13 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+        if (r < 0)
+                goto out_free_1;
+
+-       c.ret = &r;
+-       c.opaque = opaque;
+-       for_each_online_cpu(cpu) {
+-               smp_call_function_single(cpu, check_processor_compat, &c, 1);
+-               if (r < 0)
+-                       goto out_free_2;
+-       }
++       r = hardware_enable_all();
++       if (r)
++               goto out_free_2;
++
++       kvm_arch_post_hardware_enable_setup();
++
++       hardware_disable_all();
+
+        r = cpuhp_setup_state_nocalls(CPUHP_AP_KVM_STARTING, "kvm/cpu:starting",
+                                      kvm_starting_cpu, kvm_dying_cpu);
+
+[*] https://lore.kernel.org/all/20211227081515.2088920-7-chao.gao@intel.com

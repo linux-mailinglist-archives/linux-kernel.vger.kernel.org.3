@@ -2,157 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0674ED120
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13DE4ED11D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352199AbiCaBAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 21:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
+        id S1352193AbiCaA7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346065AbiCaBAV (ORCPT
+        with ESMTP id S229583AbiCaA7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 21:00:21 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CDF1AF02
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:58:34 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id cm17so2507754pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thejof-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KZdhDjjK9OsK+m9vgDKiwjIPfyFYD6KvJkWr9Zxy8aM=;
-        b=yTriMesdpvmDPaYBHrhfejORlMkN7fEYb94pCLNWrg0Ifd4Z5TtRdC2C9UwR4uf7rA
-         qA23HdXAnrtS1k1ljCpTxqV5TTXy4tRTE2/GWnNMT7W3QAHDwsD/UUmUayhdoZ8fC5E2
-         p1+PT1ae0OyzjwzceAJAMKyclP7HqDWkvY3pAAIscTPeP+UDndmshw+q7EU/mlEYoBxH
-         d5n4XO47lGMpqECSfLS00GEiAP55IRRyFzcsDYoWchxWWFBca5yGoDlIbmYQDzQjWpEL
-         hCeeB/qPLZhgHJAxFDDhO8jzq3h5LD72hI1Aok4RcNTuBXT7vTyLmBEQ1FQneT/RY4xm
-         yQPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KZdhDjjK9OsK+m9vgDKiwjIPfyFYD6KvJkWr9Zxy8aM=;
-        b=aG6NUrF3eydjQUPtkdbUB8KNp0XzUig9sEpExAN/O2ie+3u/4WEYAz7SxQwX1dVfWM
-         0E6HSEKXwxb2WRGqLjrop+IdJiHy+tTxvBZEthY+Zh5RBNH3jVwEE7T/r7/Ea+h7sGVl
-         VXD7Ph5eFtLnxfE+44UTE1ShphEGPVdX7Tu1SAGDXe0MzKuXwNoEoVSfUgvP6XH6vSwP
-         GjhQxka+rPGF9mPVB8RJlPcpZQfR5LwVoP1W4lNQ3mBMHhRZdnJbLPFhMe/2Inxr+5NB
-         guH5IZwRKTr59goSvzQ15UTSELW0uB1EoB/yyxhZvhTUHWAVPfcDiJ0ZQRYiB6s/I+Db
-         mvQg==
-X-Gm-Message-State: AOAM533lUeZ/UQAIMyWsDwT1+S53zTyMG9fbp3FM0o/Q9+wHDLZJ5+cO
-        T07z6jYRJgjfS/pV/kKXcIv2qg==
-X-Google-Smtp-Source: ABdhPJzXeFQ99hNqi7T1CtmItH1DQOAncEJrNYnDICW2fBckqPiOD1m0d+Mt0as7iK45oA1ibWvyWQ==
-X-Received: by 2002:a17:90a:2e08:b0:1bd:59c2:3df5 with SMTP id q8-20020a17090a2e0800b001bd59c23df5mr2846511pjd.235.1648688311150;
-        Wed, 30 Mar 2022 17:58:31 -0700 (PDT)
-Received: from banyan.flat.jof.io (192-184-176-137.fiber.dynamic.sonic.net. [192.184.176.137])
-        by smtp.gmail.com with ESMTPSA id h12-20020a056a00230c00b004faf2563bcasm24550030pfh.114.2022.03.30.17.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 17:58:30 -0700 (PDT)
-From:   Jonathan Lassoff <jof@thejof.com>
-To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Jonathan Lassoff <jof@thejof.com>
-Subject: [PATCH v4] Add FAT messages to printk index
-Date:   Wed, 30 Mar 2022 17:58:00 -0700
-Message-Id: <8aaa2dd7995e820292bb40d2120ab69756662c65.1648688136.git.jof@thejof.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <8aaa2dd7995e820292bb40d2120ab69756662c65.1648687832.git.jof@thejof.com>
-References: <8aaa2dd7995e820292bb40d2120ab69756662c65.1648687832.git.jof@thejof.com>
+        Wed, 30 Mar 2022 20:59:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFD76581A;
+        Wed, 30 Mar 2022 17:58:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B483618F7;
+        Thu, 31 Mar 2022 00:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47D7C340EE;
+        Thu, 31 Mar 2022 00:57:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648688280;
+        bh=GDPcz8x8/JeYV44KtOpqgeuUV+1TQXlw3IB0RHxNf6s=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=kx+hh9z/M2LPMW52A2QClBbNcr7qladS6HnTwvxgAC4ohfp+/8ekTNkIKuTXDqbIz
+         p0+/7i46gVO69lbQkejGaC6jMCAEfPXhEqLJPaYEMZwpjlGhGSbxoBp1NO3hwaM6rj
+         U6VPUyIGYXy9vYpTTQSSE9Qx3re6s0kwfN21juHXWODfs1lmGEwzWOHDKx5P8UTd5K
+         +f906ZA9ONmGZQE4bWfgf6xP6j0YCxn4/oCrbsT0aTb8lcnW4tbNDWeS3g8vGoeEDm
+         dY/kD0QzASuzor6DuWhqxv8UGU6dlt6TAj6ovi1WSyYDCEPIoZo40JknXhnmy50CbZ
+         n6OTqHEv0hv5A==
+Message-ID: <c1ab42d56309bb06c0e64daf204570f06585bddc.camel@kernel.org>
+Subject: Re: [PATCH v2] selftests/sgx: Use rip relative addressing for
+ encl_stack
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-sgx@vger.kernel.org, nathaniel@profian.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 31 Mar 2022 03:59:07 +0300
+In-Reply-To: <3aa93449-6951-8085-f6a1-6739b6d515d9@intel.com>
+References: <20220330222834.139769-1-jarkko@kernel.org>
+         <3aa93449-6951-8085-f6a1-6739b6d515d9@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order for end users to quickly react to new issues that come up in
-production, it is proving useful to leverage the printk indexing system.
-This printk index enables kernel developers to use calls to printk()
-with changable ad-hoc format strings (as they always have; no change
-of expectations), while enabling end users to examine format strings to
-detect changes.
-Since end users are using regular expressions to match messages printed
-through printk(), being able to detect changes in chosen format strings
-from release to release provides a useful signal to review
-printk()-matching regular expressions for any necessary updates.
-
-So that detailed FAT messages are captured by this printk index, this patch
-wraps fat_msg with a macro.
-
-Signed-off-by: Jonathan Lassoff <jof@thejof.com>
-Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
----
-
-PATCH v1 -- Fix indentation with tabs in fat_msg macro
-PATCH v2 -- Define FAT_PRINTK_PREFIX
-PATCH v3 -- Fix kernel-doc comment for _fat_msg()
-PATCH v4 -- Reword commit message
-
-
- fs/fat/fat.h  |  9 ++++++++-
- fs/fat/misc.c | 14 ++++++++++----
- 2 files changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/fs/fat/fat.h b/fs/fat/fat.h
-index 02d4d4234956..2a20a21f2fb9 100644
---- a/fs/fat/fat.h
-+++ b/fs/fat/fat.h
-@@ -433,8 +433,15 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...);
- 	__fat_fs_error(sb, 1, fmt , ## args)
- #define fat_fs_error_ratelimit(sb, fmt, args...) \
- 	__fat_fs_error(sb, __ratelimit(&MSDOS_SB(sb)->ratelimit), fmt , ## args)
-+
-+#define FAT_PRINTK_PREFIX "%sFAT-fs (%s): "
-+#define fat_msg(sb, level, fmt, args...)				\
-+do {									\
-+	printk_index_subsys_emit(FAT_PRINTK_PREFIX, level, fmt, ##args);\
-+	_fat_msg(sb, level, fmt, ##args);				\
-+} while(0)
- __printf(3, 4) __cold
--void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
-+void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
- #define fat_msg_ratelimit(sb, level, fmt, args...)	\
- 	do {	\
- 			if (__ratelimit(&MSDOS_SB(sb)->ratelimit))	\
-diff --git a/fs/fat/misc.c b/fs/fat/misc.c
-index 91ca3c304211..855477d89f41 100644
---- a/fs/fat/misc.c
-+++ b/fs/fat/misc.c
-@@ -42,10 +42,16 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
- EXPORT_SYMBOL_GPL(__fat_fs_error);
- 
- /**
-- * fat_msg() - print preformated FAT specific messages. Every thing what is
-- * not fat_fs_error() should be fat_msg().
-+ * _fat_msg() - Print a preformatted FAT message based on a superblock.
-+ * @sb: A pointer to a &struct super_block
-+ * @level: A Kernel printk level constant
-+ * @fmt: The printf-style format string to print.
-+ *
-+ * Everything that is not fat_fs_error() should be fat_msg().
-+ *
-+ * fat_msg() wraps _fat_msg() for printk indexing.
-  */
--void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
-+void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
- {
- 	struct va_format vaf;
- 	va_list args;
-@@ -53,7 +59,7 @@ void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
- 	va_start(args, fmt);
- 	vaf.fmt = fmt;
- 	vaf.va = &args;
--	printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
-+	_printk(FAT_PRINTK_PREFIX "%pV\n", level, sb->s_id, &vaf);
- 	va_end(args);
- }
- 
-
-base-commit: 787af64d05cd528aac9ad16752d11bb1c6061bb9
--- 
-2.35.1
+T24gV2VkLCAyMDIyLTAzLTMwIGF0IDE3OjEwIC0wNzAwLCBSZWluZXR0ZSBDaGF0cmUgd3JvdGU6
+Cj4gSGkgSmFya2tvLAo+IAo+IE9uIDMvMzAvMjAyMiAzOjI4IFBNLCBKYXJra28gU2Fra2luZW4g
+d3JvdGU6Cj4gPiBTaW1wbGlmeSB0aGUgdGVzdF9lbmNsX2Jvb3RzdHJhcC5TIGZsb3cgYnkgdXNp
+bmcgUklQLXJlbGF0aXZlIGFkZHJlc3NpbmcuCj4gCj4gSXQgaXMgbm90IGNsZWFyIHRvIG1lIGhv
+dyB0aGlzIGlzIHNpbXBsZXIuIEF0IHRoaXMgcG9pbnQgdGhlcmUgaXMgbm8KPiBmdW5jdGlvbmFs
+IGNoYW5nZSAoZXhjZXB0IGZvciB3aGF0IGFwcGVhcnMgdG8gYmUgYW4gdW5pbnRlbmRlZCBidWcg
+LSBtb3JlIGJlbG93KS4KPiBBdCB0aGlzIHRpbWUgdGhlIGNoYW5nZSBzZWVtcyBtb3JlIGNvZGUg
+dXRpbGl6aW5nIHN1YnRsZSBjb21waWxlciBmZWF0dXJlcwo+IHRvIGFjY29tcGxpc2ggdGhlIHNh
+bWUuCj4gCj4gQ291bGQgeW91IHBsZWFzZSBzaGFyZSBtb3JlIGFib3V0IHlvdXIgcGxhbnMgZm9s
+bG93aW5nIHRoaXMgY2hhbmdlPyBJIG5lZWQKPiB0byB1bmRlcnN0YW5kIHRoaXMgYmV0dGVyIHNp
+bmNlIGl0IGlzIGFsc28gYW4gYXJlYSBjaGFuZ2VkIGJ5IHRoZSBTR1gyIHRlc3RpbmcKPiBjb2Rl
+Lgo+IAo+ID4gVGhlIGNvbXBpbGVyIGF1dG9tYXRpY2FsbHkgcHV0cyByZWxhdGl2ZSBhZGRyZXNz
+ZXMgZm9yIFJJUCBpbmRleCBhZGRyZXNzZXMuCj4gCj4gSSB3YXMgbm90IGF3YXJlIG9mIHRoaXMu
+IEEgY29tbWVudCB3b3VsZCBiZSBoZWxwZnVsIHRvIHVuZGVyc3RhbmQgdGhlIGltcGxlbWVudGF0
+aW9uLgo+IAo+ID4gCj4gPiBJbiBvcmRlciB0byBnZXQgYSBjbGVhbiBhbmQgdHdlYWtsZXNzIHNv
+bHV0aW9uLCBkZWZpbmUgc2VwYXJhdGUgZW50cnkgcG9pbnQKPiA+IGZvciBlYWNoIFRDUy4KPiA+
+IAo+ID4gQ2M6IFJlaW5ldHRlIENoYXRyZSA8cmVpbmV0dGUuY2hhdHJlQGludGVsLmNvbT4KPiA+
+IENjOiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tPgo+ID4gU2lnbmVk
+LW9mZi1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4KPiA+IC0tLQo+ID4g
+djI6Cj4gPiAqIEJhc2VkIG9uIFJlaW5ldHRlJ3MgZXhhbXBsZSwgbWFrZSBwcm9wZXIgc3RydWN0
+dXJpbmcgd2l0aCBzZXBhcmF0ZQo+ID4gwqAgZW50cnkgcG9pbnRzIGZvciBlYWNoIFRDUy4KPiA+
+IC0tLQo+ID4gwqAuLi4vc2VsZnRlc3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlPCoMKgwqDC
+oMKgwqAgfCAzMCArKysrKysrKysrKy0tLS0tLS0tCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAxOCBp
+bnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlMgYi90b29scy90ZXN0
+aW5nL3NlbGZ0ZXN0cy9zZ3gvdGVzdF9lbmNsX2Jvb3RzdHJhcC5TCj4gPiBpbmRleCA4MmZiMGRm
+Y2JkMjMuLmNjMjM1M2YzOGJjYyAxMDA2NDQKPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlMKPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlMKPiA+IEBAIC0xMCwxMiArMTAsMTMgQEAK
+PiA+IMKgwqDCoMKgwqDCoMKgwqAuc2VjdGlvbiAiLnRjcyIsICJhdyIKPiA+IMKgwqDCoMKgwqDC
+oMKgwqAuYmFsaWduwqA0MDk2Cj4gPiDCoAo+ID4gK2VuY2xfdGNzMToKPiA+IMKgwqDCoMKgwqDC
+oMKgwqAuZmlsbMKgwqDCoDEsIDgsIDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IyBTVEFURSAoc2V0IGJ5IENQVSkKPiA+IMKgwqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDgs
+IDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBGTEFHUwo+ID4gwqDCoMKgwqDC
+oMKgwqDCoC5xdWFkwqDCoMKgZW5jbF9zc2FfdGNzMcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjIE9T
+U0EKPiA+IMKgwqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDQsIDDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIyBDU1NBIChzZXQgYnkgQ1BVKQo+ID4gwqDCoMKgwqDCoMKgwqDC
+oC5maWxswqDCoMKgMSwgNCwgMcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjIE5T
+U0EKPiA+IC3CoMKgwqDCoMKgwqDCoC5xdWFkwqDCoMKgZW5jbF9lbnRyecKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAjIE9FTlRSWQo+ID4gK8KgwqDCoMKgwqDCoMKgLnF1YWTCoMKgwqBlbmNs
+X2VudHJ5McKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBPRU5UUlkKPiA+IMKgwqDCoMKgwqDC
+oMKgwqAuZmlsbMKgwqDCoDEsIDgsIDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IyBBRVAgKHNldCBieSBFRU5URVIgYW5kIEVSRVNVTUUpCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZp
+bGzCoMKgwqAxLCA4LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgT0ZTQkFT
+RQo+ID4gwqDCoMKgwqDCoMKgwqDCoC5maWxswqDCoMKgMSwgOCwgMMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAjIE9HU0JBU0UKPiA+IEBAIC0yMywxMyArMjQsMTMgQEAKPiA+IMKg
+wqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDQsIDB4RkZGRkZGRkbCoMKgwqDCoMKgwqDCoMKg
+IyBHU0xJTUlUCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqA0MDI0LCAxLCAwwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgUmVzZXJ2ZWQKPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKg
+wqAjIFRDUzIKPiA+ICtlbmNsX3RjczI6Cj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqAx
+LCA4LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgU1RBVEUgKHNldCBieSBD
+UFUpCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqAxLCA4LCAwwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCMgRkxBR1MKPiA+IMKgwqDCoMKgwqDCoMKgwqAucXVhZMKgwqDC
+oGVuY2xfc3NhX3RjczLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBPU1NBCj4gPiDCoMKgwqDCoMKg
+wqDCoMKgLmZpbGzCoMKgwqAxLCA0LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCMgQ1NTQSAoc2V0IGJ5IENQVSkKPiA+IMKgwqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDQs
+IDHCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBOU1NBCj4gPiAtwqDCoMKgwqDC
+oMKgwqAucXVhZMKgwqDCoGVuY2xfZW50cnnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBP
+RU5UUlkKPiA+ICvCoMKgwqDCoMKgwqDCoC5xdWFkwqDCoMKgZW5jbF9lbnRyeTLCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCMgT0VOVFJZCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqAx
+LCA4LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgQUVQIChzZXQgYnkgRUVO
+VEVSIGFuZCBFUkVTVU1FKQo+ID4gwqDCoMKgwqDCoMKgwqDCoC5maWxswqDCoMKgMSwgOCwgMMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjIE9GU0JBU0UKPiA+IMKgwqDCoMKgwqDC
+oMKgwqAuZmlsbMKgwqDCoDEsIDgsIDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IyBPR1NCQVNFCj4gPiBAQCAtMzksMTUgKzQwLDE5IEBACj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKg
+wqDCoC50ZXh0Cj4gPiDCoAo+ID4gLWVuY2xfZW50cnk6Cj4gPiAtwqDCoMKgwqDCoMKgwqAjIFJC
+WCBjb250YWlucyB0aGUgYmFzZSBhZGRyZXNzIGZvciBUQ1MsIHdoaWNoIGlzIHRoZSBmaXJzdCBh
+ZGRyZXNzCj4gPiAtwqDCoMKgwqDCoMKgwqAjIGluc2lkZSB0aGUgZW5jbGF2ZSBmb3IgVENTICMx
+IGFuZCBvbmUgcGFnZSBpbnRvIHRoZSBlbmNsYXZlIGZvcgo+ID4gLcKgwqDCoMKgwqDCoMKgIyBU
+Q1MgIzIuIEJ5IGFkZGluZyB0aGUgdmFsdWUgb2YgZW5jbF9zdGFjayB0byBpdCwgd2UgZ2V0Cj4g
+PiAtwqDCoMKgwqDCoMKgwqAjIHRoZSBhYnNvbHV0ZSBhZGRyZXNzIGZvciB0aGUgc3RhY2suCj4g
+PiAtwqDCoMKgwqDCoMKgwqBsZWHCoMKgwqDCoMKgKGVuY2xfc3RhY2spKCVyYngpLCAlcmF4Cj4g
+PiArZW5jbF9lbnRyeTE6Cj4gPiArwqDCoMKgwqDCoMKgwqBsZWHCoMKgwqDCoMKgKGVuY2xfc3Rh
+Y2sxKSglcmlwKSwgJXJheAo+ID4gwqDCoMKgwqDCoMKgwqDCoHhjaGfCoMKgwqDCoCVyc3AsICVy
+YXgKPiA+IMKgwqDCoMKgwqDCoMKgwqBwdXNowqDCoMKgwqAlcmF4Cj4gPiArwqDCoMKgwqDCoMKg
+wqBqbXDCoMKgwqDCoMKgZW5jbF9jb250aW51ZQo+ID4gwqAKPiA+ICtlbmNsX2VudHJ5MjoKPiA+
+ICvCoMKgwqDCoMKgwqDCoGxlYcKgwqDCoMKgwqAoZW5jbF9zdGFjazIpKCVyaXApLCAlcmF4Cj4g
+PiArwqDCoMKgwqDCoMKgwqB4Y2hnwqDCoMKgwqAlcnNwLCAlcmF4Cj4gPiArwqDCoMKgwqDCoMKg
+wqBwdXNowqDCoMKgwqAlcmF4Cj4gPiArwqDCoMKgwqDCoMKgwqBqbXDCoMKgwqDCoMKgZW5jbF9j
+b250aW51ZQo+ID4gKwo+IAo+IFRoZSBjb2RlIGR1cGxpY2F0aW9uICh4Y2hnIGFuZCBwdXNoKSBp
+cyBub3QgbmVlZGVkLgo+IAo+ID4gK2VuY2xfY29udGludWU6Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
+cHVzaMKgwqDCoMKgJXJjeCAjIHB1c2ggdGhlIGFkZHJlc3MgYWZ0ZXIgRUVOVEVSCj4gPiDCoMKg
+wqDCoMKgwqDCoMKgcHVzaMKgwqDCoMKgJXJieCAjIHB1c2ggdGhlIGVuY2xhdmUgYmFzZSBhZGRy
+ZXNzCj4gPiDCoAo+ID4gQEAgLTg0LDEzICs4OSwxNCBAQCBlbmNsX2VudHJ5Ogo+ID4gwqAKPiA+
+IMKgZW5jbF9zc2FfdGNzMToKPiA+IMKgwqDCoMKgwqDCoMKgwqAuc3BhY2UgNDA5Ngo+ID4gKwo+
+ID4gwqBlbmNsX3NzYV90Y3MyOgo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zcGFjZSA0MDk2Cj4gPiDC
+oAo+ID4gK2VuY2xfc3RhY2sxOgo+IAo+IFN0YWNrIGdyb3dzIHRoZSBvdGhlciB3YXkgc28gYnkg
+cGxhY2luZyB0aGUgZW50cnkgaGVyZSB0aGUgc3RhY2sgb2YKPiBUQ1MgIzEgd2lsbCBjbG9iYmVy
+IHRoZSBTU0Egb2YgVENTICMyLgo+IAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5iYWxpZ24gNDA5Ngo+
+ID4gLcKgwqDCoMKgwqDCoMKgIyBTdGFjayBvZiBUQ1MgIzEKPiA+IMKgwqDCoMKgwqDCoMKgwqAu
+c3BhY2UgNDA5Ngo+ID4gLWVuY2xfc3RhY2s6Cj4gPiArCj4gPiArZW5jbF9zdGFjazI6Cj4gCj4g
+SGVyZSB0aGUgc3RhY2sgb2YgVENTICMyIHdpbGwgYWN0dWFsbHkgdXNlIHRoZSBzdGFjayBvZiBU
+Q1MgIzEuCj4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmJhbGlnbiA0MDk2Cj4gPiAtwqDCoMKgwqDC
+oMKgwqAjIFN0YWNrIG9mIFRDUyAjMgo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zcGFjZSA0MDk2Cj4g
+Cj4gTGFzdCBwYWdlIHdpbGwgYmUgdW51c2VkLgo+IAo+IFJlaW5ldHRlCgpUaGFua3MgZm9yIHRo
+ZSByZW1hcmtzLiBJJ2xsIGZpeCB0aGUgaXNzdWVzLgoKQlIsIEphcmtrbwoK
 

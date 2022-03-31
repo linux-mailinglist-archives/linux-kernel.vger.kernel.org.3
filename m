@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5630A4ED663
+	by mail.lfdr.de (Postfix) with ESMTP id ECC404ED665
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbiCaJDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S233490AbiCaJDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiCaJCt (ORCPT
+        with ESMTP id S233497AbiCaJCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:02:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FA553E2C;
-        Thu, 31 Mar 2022 02:01:02 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 09:00:59 -0000
+        Thu, 31 Mar 2022 05:02:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33053E5E6;
+        Thu, 31 Mar 2022 02:01:03 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 09:01:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648717261;
+        s=2020; t=1648717262;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZHYuqeKJnzEN55VinKARygxDGwAlk2OUMAGWJjsEkn0=;
-        b=J6VmftH1YDIqwEXxIQz1ucJSf9CwdQrMuGvrMKnKL/HXk5RG7Gl7lBU0vscOU8SCWUW5sf
-        JwksjtgAoV95KE+R0UmAA6nOwFnzK4qjs0MIO33yK70AaBVfpGL1TorEs5ft3dTvhLQPBo
-        H7kA8M7o9NyuFo7zKeQKlqzZo666+XBOHSobJetE6BzePXKPxOXwJ3dZFKFoY9eGaECCZ+
-        CQpnaPyhzlluO1YcvqJ8SU+jLmtswFddITrWBmJ7BCEDv7O/ZWO10J9aCCE17jvGFtG22v
-        mkCzPtNcZAdXLDVEpkl6W6Vf8WwA4mSr0w3V7h9iUwEZdNSLlpfAzZrsrOdAxA==
+        bh=wR3VjHKbC4KCbwri74FXItqjtDlPNT79+oL5AJuet7A=;
+        b=XZuulkPsjIcb632dUWB01NzYw5lRDjrRMOQkI1CBVf6nMa9eF/QxZseWqD9uEgO0gpquQ3
+        0w7jUDF0y1tEtMNlz+iycjvCxGYPNMyWxk2YSWdAtwcREFuOJRal2fr9Y13koeq7t6ulpK
+        wB2SXd4Ya7QP3Qb7VKvKgdyBpXTazmuvPIAsTToEhkBl5utBO3SI+USQMm0UIe7b/czGd4
+        zDF45jRJA4XHz3z5APoRdL2W5PcbsDQt5L8x9MpXz6qm5D495DaXrEw9NPVWTGOrq3gZ4C
+        IQu9MJkED+GComtfk/insNBUy4QSBgSPTaQ3WtB0PBvqbqRdQtmSF/IjLkgwmQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648717261;
+        s=2020e; t=1648717262;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZHYuqeKJnzEN55VinKARygxDGwAlk2OUMAGWJjsEkn0=;
-        b=nKTSEdDSM2g3EW9jn9DWkqgbuONzaDxmtRIcBk4ZIhskoX/cMmeiq/9md2B3xhvrYKpK8v
-        xudUPpAIvhqHdHBw==
+        bh=wR3VjHKbC4KCbwri74FXItqjtDlPNT79+oL5AJuet7A=;
+        b=3tEvSq8SxdeGSYRt+xNGjyYp7TDo/1nbS1++LBGr09sGMUum6SOkf54BMB43tafBEPbXUv
+        H+yUcooHJlLW8+CQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/fpu: Remove unused supervisor only offsets
+Subject: [tip: x86/urgent] x86/fpu: Remove redundant XCOMP_BV initialization
 Cc:     Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220324134623.465066249@linutronix.de>
-References: <20220324134623.465066249@linutronix.de>
+In-Reply-To: <20220324134623.408932232@linutronix.de>
+References: <20220324134623.408932232@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <164871725930.389.263374082981753847.tip-bot2@tip-bot2>
+Message-ID: <164871726137.389.6687530798602523896.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,76 +66,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     d47f71f6de7970d504748d1a60a11c51af5bce47
-Gitweb:        https://git.kernel.org/tip/d47f71f6de7970d504748d1a60a11c51af5bce47
+Commit-ID:     a9f84fb7158fea60cbcadef5c0166fb22b469091
+Gitweb:        https://git.kernel.org/tip/a9f84fb7158fea60cbcadef5c0166fb22b469091
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 24 Mar 2022 14:47:09 +01:00
+AuthorDate:    Thu, 24 Mar 2022 14:47:08 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 30 Mar 2022 10:44:51 +02:00
+CommitterDate: Tue, 29 Mar 2022 20:57:18 +02:00
 
-x86/fpu: Remove unused supervisor only offsets
+x86/fpu: Remove redundant XCOMP_BV initialization
 
-No users.
+fpu_copy_uabi_to_guest_fpstate() initializes the XCOMP_BV field in the
+XSAVE header. That's a leftover from the old KVM FPU buffer handling code.
+
+Since
+
+  d69c1382e1b7 ("x86/kvm: Convert FPU handling to a single swap buffer")
+
+KVM uses the FPU core allocation code, which initializes the XCOMP_BV
+field already.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220324134623.465066249@linutronix.de
+Link: https://lore.kernel.org/r/20220324134623.408932232@linutronix.de
 ---
- arch/x86/kernel/fpu/xstate.c | 30 ------------------------------
- 1 file changed, 30 deletions(-)
+ arch/x86/kernel/fpu/core.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index dc6d5e9..dc33556 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -83,8 +83,6 @@ static unsigned int xstate_sizes[XFEATURE_MAX] __ro_after_init =
- 	{ [ 0 ... XFEATURE_MAX - 1] = -1};
- static unsigned int xstate_comp_offsets[XFEATURE_MAX] __ro_after_init =
- 	{ [ 0 ... XFEATURE_MAX - 1] = -1};
--static unsigned int xstate_supervisor_only_offsets[XFEATURE_MAX] __ro_after_init =
--	{ [ 0 ... XFEATURE_MAX - 1] = -1};
- 
- /*
-  * Return whether the system supports a given xfeature.
-@@ -325,33 +323,6 @@ static void __init setup_xstate_comp_offsets(void)
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 19821f0..c049561 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -415,9 +415,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ 		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+ 		*vpkru = xpkru->pkru;
+ 	}
+-
+-	/* Ensure that XCOMP_BV is set up for XSAVES */
+-	xstate_init_xcomp_bv(&kstate->regs.xsave, kstate->xfeatures);
+ 	return 0;
  }
- 
- /*
-- * Setup offsets of a supervisor-state-only XSAVES buffer:
-- *
-- * The offsets stored in xstate_comp_offsets[] only work for one specific
-- * value of the Requested Feature BitMap (RFBM).  In cases where a different
-- * RFBM value is used, a different set of offsets is required.  This set of
-- * offsets is for when RFBM=xfeatures_mask_supervisor().
-- */
--static void __init setup_supervisor_only_offsets(void)
--{
--	unsigned int next_offset;
--	int i;
--
--	next_offset = FXSAVE_SIZE + XSAVE_HDR_SIZE;
--
--	for_each_extended_xfeature(i, fpu_kernel_cfg.max_features) {
--		if (!xfeature_is_supervisor(i))
--			continue;
--
--		if (xfeature_is_aligned(i))
--			next_offset = ALIGN(next_offset, 64);
--
--		xstate_supervisor_only_offsets[i] = next_offset;
--		next_offset += xstate_sizes[i];
--	}
--}
--
--/*
-  * Print out xstate component offsets and sizes
-  */
- static void __init print_xstate_offset_size(void)
-@@ -951,7 +922,6 @@ void __init fpu__init_system_xstate(unsigned int legacy_size)
- 
- 	setup_init_fpu_buf();
- 	setup_xstate_comp_offsets();
--	setup_supervisor_only_offsets();
- 
- 	/*
- 	 * Paranoia check whether something in the setup modified the
+ EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);

@@ -2,174 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7854EE32C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48364EE331
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241730AbiCaVTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S241739AbiCaVUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbiCaVSz (ORCPT
+        with ESMTP id S232587AbiCaVT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:18:55 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04FF239324
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:17:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bq8so1848875ejb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OhUgoUjmHfkmZB66Ljg+9BeuLZIJH4fmuI4EW/8GfzI=;
-        b=YPb7yEyvES+dt9sHShI1By6hbIuwJMoBkGCPyvywEl10wdUYLHpyRz6ttW3nS19EoB
-         0Scw63WuhrpxDyPhFmQF5POGjAENRqmJs2F7bKJDWekzzCX/F8GH7395WjBcys/rLSKq
-         933w0xbpcUSlkNg4SHoitM2JuItD5yxMhU1HkjaFADRxDzJGurZM+ENUlIUcL/T+I3F3
-         UYQ8GnnPV0CN9j2tHB5mSQgIyvQJDn+/dSCU4Hd4IK6vA8OctoeENwKjg0arRlsRqvJV
-         3uV3qXPwQZ+bQBqSp+antnUeCmrCbJA9z+Fbvd2oETMUXTbFfBH8NQdAi13eugRD96zt
-         HkVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OhUgoUjmHfkmZB66Ljg+9BeuLZIJH4fmuI4EW/8GfzI=;
-        b=mqfENNgDaJVJG0ogYWq947Z+NMd7w7/aV/SLEAakDBXAbYwc/ltdSXv6kn+ijKlZJQ
-         Dij40DXqDIwSrCT4aUWS6wkon4e4bf+VZVAgqyIVSreDzZtccYKE1CGM7PLOO4AKvAZg
-         xzwmPwgKXy3f081BJrT7SQlt8hd8oEvEBv0fGCtUOKnNHu+f+xP+OUpUecdyCCX1fSMb
-         TMr8WgLHEtAjUsReF37CL1qHqQaHruQrtnQYeFB+DZ3Cy8iF+pwHS+iuNjWQmr1vGRg2
-         DCwvdpILetd0huGbqP3wt9VZvTrWrWz5Vgibz4OSVn2H07apW/pk9Sa4Z5GK4xD2PAja
-         Qx+Q==
-X-Gm-Message-State: AOAM530oRIO355n4hyhEfXRknor9sh/Bxh4dVpa4NXSl1IoCYT+Nwein
-        IiXZyfb3hVHUkR11YqWrB2OKdw==
-X-Google-Smtp-Source: ABdhPJznpX+KjZxb6pXEL6EoqM5vXbcnxtx2K142UoNbZtdPIFgL+oOQNPa0G2T6B6EaAQgFtY8ugg==
-X-Received: by 2002:a17:906:c1d6:b0:6d6:e0a3:bbc7 with SMTP id bw22-20020a170906c1d600b006d6e0a3bbc7mr6741191ejb.484.1648761426516;
-        Thu, 31 Mar 2022 14:17:06 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id nc13-20020a1709071c0d00b006dfa376ee55sm202518ejc.131.2022.03.31.14.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 14:17:06 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 2/2] ARM: dts: exynos: correct array of voltages in i9100 and Trats
-Date:   Thu, 31 Mar 2022 23:16:53 +0200
-Message-Id: <20220331211653.175200-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
-References: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
+        Thu, 31 Mar 2022 17:19:59 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EC423D456
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:18:11 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220331211806euoutp016c81c41ff4ba6c6a2d4929933cbc80b4~hk9YiJWWk1194011940euoutp015
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:18:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220331211806euoutp016c81c41ff4ba6c6a2d4929933cbc80b4~hk9YiJWWk1194011940euoutp015
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648761486;
+        bh=DM0rhvB2GhxeOPQPo/EjMS38q+Iw5NVWfPDrrASpcb4=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=ja/zMyMDE2hI5nWK1cSG+xVwKDnHdB3TJJsbdYWzaeuSimQ3m9JkMJrhhXkbmjFkz
+         e2f0Sj3aKvgroxwesW/XSvOFwyXkOAq15i5RcLlHfNSmVWPBiN0QVU0vJC2kkc8Ck/
+         rErf/8S9OuUhBowX3M73oJFu2oPgR/2m7MXkX2ic=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220331211805eucas1p2a8a5006c03c42a203bd56896dafbf5b4~hk9Xbop573192531925eucas1p2Z;
+        Thu, 31 Mar 2022 21:18:05 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id ED.B2.09887.D8A16426; Thu, 31
+        Mar 2022 22:18:05 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42~hk9WlERhz0832008320eucas1p2F;
+        Thu, 31 Mar 2022 21:18:04 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220331211804eusmtrp20190ecaa189b027a004cf7cf2b9bcc1b~hk9WkFQiu0959209592eusmtrp2E;
+        Thu, 31 Mar 2022 21:18:04 +0000 (GMT)
+X-AuditID: cbfec7f4-471ff7000000269f-d8-62461a8d2ebf
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 7F.43.09404.C8A16426; Thu, 31
+        Mar 2022 22:18:04 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220331211803eusmtip1a9ccf738d9b7d324aba71fa048d24a9b~hk9VwfLgt1478114781eusmtip1M;
+        Thu, 31 Mar 2022 21:18:03 +0000 (GMT)
+Message-ID: <6696cc6a-3e3f-035e-5b8c-05ea361383f3@samsung.com>
+Date:   Thu, 31 Mar 2022 23:18:03 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH 4/5] block: turn bio_kmalloc into a simple kmalloc
+ wrapper
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
+        Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220308061551.737853-5-hch@lst.de>
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7djP87q9Um5JBg838VmsvtvPZjG98Ty7
+        xd53s1ktLvxoZLJYufook8Wfh4YWx7ZdY7LYe0vb4tLjFewWl3fNYbNon7+L0WL58X9MFkd7
+        NrNZtG38ymhxfPlfNovWpW+ZHAQ8Lp8t9di0qpPNY/fNBjaPj09vsXi833eVzWPK1+fMHuu3
+        XGXx2Hy62mPC5o2sHp83yQVwRXHZpKTmZJalFunbJXBlbJ49m7WgRadi6/J57A2Me1W6GDk5
+        JARMJJ7M3MEKYgsJrGCU2PvcuIuRC8j+wigx7/MeRgjnM6PE15P/WGE6Dt/6wwaRWM4o8X3P
+        ShYI5yOjRHfDIaAMBwevgJ3E5WteIA0sAqoSbbO/MYPYvAKCEidnPmEBsUUFkiRWb18NVi4s
+        ECAxb7cVSJhZQFzi1pP5TCC2iICDxOwNS8F2MQucZ5bY/OUOI0iCTcBQouttFxuIzQlk93y4
+        wQbRLC/RvHU2M0iDhMBuTom5R98wQ1ztIvF+51yoD4QlXh3fwg5hy0j83wmyjQPIzpf4O8MY
+        Ilwhce31GqhWa4k7536B3cksoCmxfpc+RNhR4mnjVjaITj6JG28FIS7gk5i0bTozRJhXoqNN
+        CKJaTWLW8XVwOw9euMQ8gVFpFlKYzELy/Cwkv8xC2LuAkWUVo3hqaXFuemqxUV5quV5xYm5x
+        aV66XnJ+7iZGYAI8/e/4lx2My1991DvEyMTBeIhRgoNZSYT3aqxrkhBvSmJlVWpRfnxRaU5q
+        8SFGaQ4WJXHe5MwNiUIC6YklqdmpqQWpRTBZJg5OqQam9Iw27xM7eus6sqM4NSetOn73XsrL
+        jPMnXyb/25a38anntEliL28rGemdCC07nuipf7QuN+/oBW22L9+eTZZfcG5mTrnk7Q72WnO+
+        mUKFm+PTBCeFT1KTf74wL9moLzp9cSzn5QoLltvLP6hfttnq/alz0tZvTAoy9ZPEpy04fOpk
+        nV6O3SPPe4zXdky93GDzZnbIs5xFN047H+XrnbBIzE1S8kzJqtMfzni+qbK6XSi5eqbWyQTj
+        X5IrpHYqXOdjNPokXrY1jeH5h2L74oNOWo5uyneOG6952ts6M80pIFdtZVvN7x+v/7ELZyqV
+        KvM9u8k44+XZYvU98ydVXdjHf/SzgKKv8LkIZck1n6WLlViKMxINtZiLihMBeBXxdu8DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIIsWRmVeSWpSXmKPExsVy+t/xu7o9Um5JBic+C1usvtvPZjG98Ty7
+        xd53s1ktLvxoZLJYufook8Wfh4YWx7ZdY7LYe0vb4tLjFewWl3fNYbNon7+L0WL58X9MFkd7
+        NrNZtG38ymhxfPlfNovWpW+ZHAQ8Lp8t9di0qpPNY/fNBjaPj09vsXi833eVzWPK1+fMHuu3
+        XGXx2Hy62mPC5o2sHp83yQVwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq
+        6dvZpKTmZJalFunbJehlbJ49m7WgRadi6/J57A2Me1W6GDk5JARMJA7f+sPWxcjFISSwlFHi
+        5IedbBAJGYmT0xpYIWxhiT/XusDiQgLvGSUO3HLqYuTg4BWwk7h8zQskzCKgKtE2+xsziM0r
+        IChxcuYTFhBbVCBJ4lJXOyOILSzgJ3Hh4gawMcwC4hK3nsxnArFFBBwkZm9YCnYDs8BFZon3
+        h6czQuwKl7h3pQlsKJuAoUTXW4gbOIHsng83oAaZSXRt7WKEsOUlmrfOZp7AKDQLyR2zkOyb
+        haRlFpKWBYwsqxhFUkuLc9Nzi430ihNzi0vz0vWS83M3MQLjftuxn1t2MK589VHvECMTB+Mh
+        RgkOZiUR3quxrklCvCmJlVWpRfnxRaU5qcWHGE2BgTGRWUo0OR+YePJK4g3NDEwNTcwsDUwt
+        zYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpg04u5N1BdXFt3TNvtertcEwbUOK+pNbVMC
+        0yqWC3NGHL6966WrV+5xzZjP55NOVL94uu/z3qqNTW36Ho7qbw15BLI+aAUd5d3MF6U0Jf10
+        dOnCFx/XGnBld5xX57Dpa63Zmtxh4OjAVvLtxdmZt/ZJehVfOiZ2ZQ7P46oNwQ+iCzrclMvC
+        tjdpTfrh6Thd9dS9BLs3GnxTF1T2fF0UaXMlrGqJq8ipS8/teWdEFh/v1fX21Mq7lqgipa35
+        hVHyjf7D9SEfjtWubUxJrXohsy5CaavqvuOZ8qa/lzRf//jxlfZMhm23nU/5as3c5NO+t3AV
+        87slnskMM2TlfvcdFQn2LnwWfz8/OJbrntDORCWW4oxEQy3mouJEAFsaRTyEAwAA
+X-CMS-MailID: 20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42
+References: <20220308061551.737853-1-hch@lst.de>
+        <20220308061551.737853-5-hch@lst.de>
+        <CGME20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Array of uint32 numbers (voltages) should be within one bracket pair <>,
-according to Devicetree types and DT schema.
+Hi Christoph,
 
-This fixes DT schema warnings like:
+On 08.03.2022 07:15, Christoph Hellwig wrote:
+> Remove the magic autofree semantics and require the callers to explicitly
+> call bio_init to initialize the bio.
+>
+> This allows bio_free to catch accidental bio_put calls on bio_init()ed
+> bios as well.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-  exynos4210-trats.dtb: pmic@66: max8997,pmic-buck1-dvs-voltage: [[1350000, 1300000, 1250000, 1200000, 1150000, 1100000, 1000000, 950000]] is too short
-    From schema: Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+This patch, which landed in today's next-20220331 as commit 57c47b42f454 
+("block: turn bio_kmalloc into a simple kmalloc wrapper"), breaks badly 
+all my test systems, which use squashfs initrd:
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/exynos4210-i9100.dts | 28 +++++++++++++-------------
- arch/arm/boot/dts/exynos4210-trats.dts | 28 +++++++++++++-------------
- 2 files changed, 28 insertions(+), 28 deletions(-)
+RAMDISK: squashfs filesystem found at block 0
+RAMDISK: Loading 2489KiB [1 disk] into ram disk... done.
+using deprecated initrd support, will be removed in 2021.
+------------[ cut here ]------------
+WARNING: CPU: 4 PID: 1 at block/bio.c:229 bio_free+0x6c/0x70
+Modules linked in:
+CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.17.0-next-20220331 #4767
+Hardware name: Samsung Exynos (Flattened Device Tree)
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x58/0x70
+  dump_stack_lvl from __warn+0xc8/0x218
+  __warn from warn_slowpath_fmt+0x5c/0xb4
+  warn_slowpath_fmt from bio_free+0x6c/0x70
+  bio_free from squashfs_read_data+0x118/0x748
+  squashfs_read_data from squashfs_read_table+0xdc/0x144
+  squashfs_read_table from squashfs_fill_super+0x100/0x9ec
+  squashfs_fill_super from get_tree_bdev+0x154/0x248
+  get_tree_bdev from vfs_get_tree+0x24/0xe4
+  vfs_get_tree from path_mount+0x3d0/0xb14
+  path_mount from init_mount+0x54/0x80
+  init_mount from do_mount_root+0x78/0x104
+  do_mount_root from mount_block_root+0xf0/0x1fc
+  mount_block_root from initrd_load+0xec/0x294
+  initrd_load from prepare_namespace+0xdc/0x18c
+  prepare_namespace from kernel_init+0x18/0x12c
+  kernel_init from ret_from_fork+0x14/0x2c
+Exception stack(0xf0835fb0 to 0xf0835ff8)
+...
+irq event stamp: 398271
+hardirqs last  enabled at (398279): [<c019c984>] __up_console_sem+0x50/0x60
+hardirqs last disabled at (398338): [<c019c970>] __up_console_sem+0x3c/0x60
+softirqs last  enabled at (398352): [<c0101680>] __do_softirq+0x348/0x610
+softirqs last disabled at (398347): [<c012f048>] __irq_exit_rcu+0x144/0x1ec
+---[ end trace 0000000000000000 ]---
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000004
+[00000004] *pgd=00000000
+Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 4 PID: 1 Comm: swapper/0 Tainted: G        W 5.17.0-next-20220331 #4767
+Hardware name: Samsung Exynos (Flattened Device Tree)
+PC is at bio_free+0x24/0x70
+LR is at bio_free+0x24/0x70
+pc : [<c0502d28>]    lr : [<c0502d28>]    psr: 80000113
+sp : f0835cf0  ip : 00000000  fp : c28cae80
+r10: ef0a95c0  r9 : c2805cc0  r8 : 00000060
+r7 : 00000060  r6 : 00000060  r5 : 00000000  r4 : c2804a80
+r3 : c2804ac8  r2 : 00000001  r1 : c2804ac8  r0 : 00000074
+Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 4000406a  DAC: 00000051
+Register r0 information: non-paged memory
+Register r1 information: slab kmalloc-128 start c2804a80 pointer offset 
+72 size 128
+Register r2 information: non-paged memory
+Register r3 information: slab kmalloc-128 start c2804a80 pointer offset 
+72 size 128
+Register r4 information: slab kmalloc-128 start c2804a80 pointer offset 
+0 size 128
+Register r5 information: NULL pointer
+Register r6 information: non-paged memory
+Register r7 information: non-paged memory
+Register r8 information: non-paged memory
+Register r9 information: slab kmalloc-192 start c2805cc0 pointer offset 
+0 size 192
+Register r10 information: non-slab/vmalloc memory
+Register r11 information: slab kmalloc-64 start c28cae80 pointer offset 
+0 size 64
+Register r12 information: NULL pointer
+Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+Stack: (0xf0835cf0 to 0xf0836000)
+...
+  bio_free from squashfs_read_data+0x118/0x748
+  squashfs_read_data from squashfs_read_table+0xdc/0x144
+  squashfs_read_table from squashfs_fill_super+0x100/0x9ec
+  squashfs_fill_super from get_tree_bdev+0x154/0x248
+  get_tree_bdev from vfs_get_tree+0x24/0xe4
+  vfs_get_tree from path_mount+0x3d0/0xb14
+  path_mount from init_mount+0x54/0x80
+  init_mount from do_mount_root+0x78/0x104
+  do_mount_root from mount_block_root+0xf0/0x1fc
+  mount_block_root from initrd_load+0xec/0x294
+  initrd_load from prepare_namespace+0xdc/0x18c
+  prepare_namespace from kernel_init+0x18/0x12c
+  kernel_init from ret_from_fork+0x14/0x2c
+Exception stack(0xf0835fb0 to 0xf0835ff8)
+...
+---[ end trace 0000000000000000 ]---
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
 
-diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
-index 3c0a18b30837..4058e780e288 100644
---- a/arch/arm/boot/dts/exynos4210-i9100.dts
-+++ b/arch/arm/boot/dts/exynos4210-i9100.dts
-@@ -421,20 +421,20 @@ pmic@66 {
- 						 <&gpx0 6 GPIO_ACTIVE_HIGH>,
- 						 <&gpl0 0 GPIO_ACTIVE_HIGH>;
- 
--		max8997,pmic-buck1-dvs-voltage = <1350000>, <1300000>,
--						 <1250000>, <1200000>,
--						 <1150000>, <1100000>,
--						 <1000000>, <950000>;
--
--		max8997,pmic-buck2-dvs-voltage = <1100000>, <1000000>,
--						 <950000>,  <900000>,
--						 <1100000>, <1000000>,
--						 <950000>,  <900000>;
--
--		max8997,pmic-buck5-dvs-voltage = <1200000>, <1200000>,
--						 <1200000>, <1200000>,
--						 <1200000>, <1200000>,
--						 <1200000>, <1200000>;
-+		max8997,pmic-buck1-dvs-voltage = <1350000 1300000
-+						  1250000 1200000
-+						  1150000 1100000
-+						  1000000  950000>;
-+
-+		max8997,pmic-buck2-dvs-voltage = <1100000 1000000
-+						   950000  900000
-+						  1100000 1000000
-+						   950000  900000>;
-+
-+		max8997,pmic-buck5-dvs-voltage = <1200000 1200000
-+						  1200000 1200000
-+						  1200000 1200000
-+						  1200000 1200000>;
- 
- 		pinctrl-0 = <&max8997_irq>, <&otg_gp>, <&usb_sel>;
- 		pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/exynos4210-trats.dts b/arch/arm/boot/dts/exynos4210-trats.dts
-index 01f44d95f671..23041db78f2e 100644
---- a/arch/arm/boot/dts/exynos4210-trats.dts
-+++ b/arch/arm/boot/dts/exynos4210-trats.dts
-@@ -302,20 +302,20 @@ pmic@66 {
- 						 <&gpx0 6 GPIO_ACTIVE_HIGH>,
- 						 <&gpl0 0 GPIO_ACTIVE_HIGH>;
- 
--		max8997,pmic-buck1-dvs-voltage = <1350000>, <1300000>,
--						 <1250000>, <1200000>,
--						 <1150000>, <1100000>,
--						 <1000000>, <950000>;
--
--		max8997,pmic-buck2-dvs-voltage = <1100000>, <1000000>,
--						 <950000>,  <900000>,
--						 <1100000>, <1000000>,
--						 <950000>,  <900000>;
--
--		max8997,pmic-buck5-dvs-voltage = <1200000>, <1200000>,
--						 <1200000>, <1200000>,
--						 <1200000>, <1200000>,
--						 <1200000>, <1200000>;
-+		max8997,pmic-buck1-dvs-voltage = <1350000 1300000
-+						  1250000 1200000
-+						  1150000 1100000
-+						  1000000  950000>;
-+
-+		max8997,pmic-buck2-dvs-voltage = <1100000 1000000
-+						   950000  900000
-+						  1100000 1000000
-+						   950000  900000>;
-+
-+		max8997,pmic-buck5-dvs-voltage = <1200000 1200000
-+						  1200000 1200000
-+						  1200000 1200000
-+						  1200000 1200000>;
- 
- 		regulators {
- 			valive_reg: LDO2 {
+Reverting it on top of linux next-20220331 (together with commit 
+1292fb59f283 ("pktcdvd: stop using bio_reset")) fixes (or hides?) the issue.
+
+> ---
+>   block/bio.c                        | 47 ++++++++++++------------------
+>   block/blk-crypto-fallback.c        | 14 +++++----
+>   block/blk-map.c                    | 42 ++++++++++++++++----------
+>   drivers/block/pktcdvd.c            | 25 ++++++++--------
+>   drivers/md/bcache/debug.c          | 10 ++++---
+>   drivers/md/dm-bufio.c              |  9 +++---
+>   drivers/md/raid1.c                 | 12 +++++---
+>   drivers/md/raid10.c                | 21 ++++++++-----
+>   drivers/target/target_core_pscsi.c | 10 +++----
+>   fs/squashfs/block.c                |  9 +++---
+>   include/linux/bio.h                |  2 +-
+>   11 files changed, 108 insertions(+), 93 deletions(-)
+
+ > [...]
+
+Best regards
 -- 
-2.32.0
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

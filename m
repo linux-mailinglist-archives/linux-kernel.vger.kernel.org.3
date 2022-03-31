@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9884EE14C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C834EE14D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238921AbiCaTGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        id S239075AbiCaTGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238735AbiCaTGT (ORCPT
+        with ESMTP id S238955AbiCaTGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:06:19 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885D91903C5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:04:29 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22VJ43vQ052621;
-        Thu, 31 Mar 2022 14:04:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648753443;
-        bh=+hpF99iyhgx9s0BuD1Wq5B4/4uDMpeBTQsdIdUEE4kw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=k1J6EQ50PcU6vL9yQfcQhkBZdSo4gVUwsNjxnmjDNfJWsQjOSxxFBPDQurmYJtCsY
-         0DWBXQF6lkgRXelDczKoheFUVZu4wShsapT5v4Qz+emadhb6gMPTLeQxXkyzZhkzwt
-         DCnsbaaUkOb5U4RsLDlkQ5OmHCMtW8yDZN0ig/0Y=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22VJ43KC093434
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 31 Mar 2022 14:04:03 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 31
- Mar 2022 14:04:03 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 31 Mar 2022 14:04:03 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22VJ422p126927;
-        Thu, 31 Mar 2022 14:04:03 -0500
-Date:   Fri, 1 Apr 2022 00:34:02 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Nathan Rossi <nathan.rossi@digi.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH] mtd: spi-nor: core: Fix 16bit write sr_and_check status
- check
-Message-ID: <20220331190402.d3fymx3msnzyycef@ti.com>
-References: <20220324070004.225738-1-nathan@nathanrossi.com>
+        Thu, 31 Mar 2022 15:06:34 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB652215466
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:04:46 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id x2so426794plm.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8K4qat18oyS/ON0Tc2wg3IJl/20RhGtMMHJnn7j74hI=;
+        b=fu9LzFVAlRADxGRQVppAXuCP8QEOUuMJxhDaoGIzZSn5yF2pGIuxmwhJTWp5woQn4H
+         EHzaLrxIYiJVgpunyLYPv3S9IfZSVNpubgMt/4tO/0lijzJbE1/2ZK2lcEqWyuEedN3T
+         2+pKK2PG5hJ9rQ1KKpCLZBGkXKvVi+SILZFbU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8K4qat18oyS/ON0Tc2wg3IJl/20RhGtMMHJnn7j74hI=;
+        b=YxJs8CSHZR32C2TAWwD80VjKM+Vbd5FBGKIoNwjbj11Sdx+6zgYfBhrQKS0pnYDoL5
+         6BzEK3TeF5Qvjby8Zx0Iu383J7xfVxYMk/nAxkriXTcbgrzvj8DE9btTRGnGaEnXBPB3
+         rwtsg57knkXPaFo82lUoF5Jua9kv+Z2R3eFa6pLhlifHcTan5KwyfXNIDeHePYcc4/V/
+         z5CumvFOLx7sPEpBQTpoDGdwMD1GgYFM8zK924yhmiW2Yf7HoLmx9kCMmUZcywRKmz99
+         uraQldreuqD5CC7sMVDsABrJGU0MgtalemR9vEPCsyumAmQDCnrROxuWybZpPjwWY2/C
+         gbBg==
+X-Gm-Message-State: AOAM532zjWd/iCqpvpYrltefIqoAQ2J5KaFTZudIXsV5tLebuQT+RDMZ
+        1NnwD3YlHN1qaJHQgQbV7OODtw==
+X-Google-Smtp-Source: ABdhPJzmGmj8aYdwRSZROHgiAtffDN6in63gKRVnyEHWKadCoiriCaM3lZSBHfVtkIHAxWU6vFCsrg==
+X-Received: by 2002:a17:902:d2c6:b0:156:2b2c:ab54 with SMTP id n6-20020a170902d2c600b001562b2cab54mr16131133plc.52.1648753486453;
+        Thu, 31 Mar 2022 12:04:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v22-20020a056a00149600b004fb34a7b500sm196147pfu.203.2022.03.31.12.04.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:04:46 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Liviu Dudau <liviu.dudau@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] ARM: vexpress/spc: Avoid negative array index when !SMP
+Date:   Thu, 31 Mar 2022 12:04:43 -0700
+Message-Id: <20220331190443.851661-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220324070004.225738-1-nathan@nathanrossi.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1790; h=from:subject; bh=/2a5CSsipys253M5vGRsqHVDoYM5WGy53UpPjsagOIc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiRftKixEnPaz5DYx3KcOYhAntbvuUAggDZhiZY7iw bo/iWgyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYkX7SgAKCRCJcvTf3G3AJn1+D/ 9JmnMmf4cTjvYcKaiTm+ZsZZnuFtJXdv4Sj5cEH11WQawVe+UAqmL0m1glp2GYK85YUhuNPWdd/2An 2zH3JiJlWtqNuCF8jHcxmtuSgvUfnipd2s/l5v12j/RyWt7yUJBB/f+RA68i2rAnPTLL+MerHlWtyb PhxoFZjC7hcnw/3gdFHtOQlTC5Z4Lw57BivrJXu7OBCGCFwK2R0ArvLd2alzA8/cOpesKeB1d2y7Ft N7SQIMtttTn1UaqFUxP5fAJbwQVgdvSbig44DEep6jFro3jykxmBiK44bGqIy/SGK3w2gDnRfDJk0S IaqlI3aixjk7Vh1lnsPLB42Bp6enuHtDlrLJejwBs11oBOh3J5fJKEZ0HnXDWQ1/iZsgb7aOpcQWh3 5/R4Di8zHLA4ywpxPYhsNey5F8A4Pf2U/RCo1uIUehCc/cjO6CaoddINTyJJ+Sz7fhjDrbVLLHzg1O AFtV6Wwp2HJv1Dpry96HDj6aDhK74xNllVO22PzFa46p0o4gi7flIyfOK6Mdxz/8UthhjoRXKIcJk1 ewXb0ZYaFh38NvdBpaC0xA193NKbxRb+hlwz21p1+6FreJdjhYMhaR+cYFkUhCVh6dRqUpiw37fYs9 CMKyba1yS3vRZqEXSCU7fAq2QtFHELV0CqQ+URjZHEklvJABZrjanhwsn6fw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,55 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+When building multi_v7_defconfig+CONFIG_SMP=n, -Warray-bounds exposes
+a couple negative array index accesses:
 
-On 24/03/22 07:00AM, Nathan Rossi wrote:
-> From: Nathan Rossi <nathan.rossi@digi.com>
-> 
-> The spi_nor_write_16bit_sr_and_check function description describes that
-> the function compares the value of the status and config registers after
-> the write. However the function does not implement the status register
-> compare only the config register check.
-> 
-> This causes the function to differ in behaviour to the equivalent
-> spi_nor_write_sr1_and_check for non-16bit writes to the status register.
-> This is important as other functions rely on the return code of
-> spi_nor_write_sr_and_check. For example spi_nor_sr_unlock returns the
-> result directly, which is returned to userspace such that failing to
-> unlock the spi-nor device was resulting in a return code of 0 instead of
-> the expected non-zero indicating the failure.
-> 
-> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 04ea180118..d75d4f8a45 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -1007,6 +1007,15 @@ static int spi_nor_write_16bit_sr_and_check(struct spi_nor *nor, u8 sr1)
->  	if (ret)
->  		return ret;
->  
-> +	ret = spi_nor_read_sr(nor, sr_cr);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (sr1 != sr_cr[0]) {
-> +		dev_dbg(nor->dev, "SR: read back test failed\n");
-> +		return -EIO;
-> +	}
-> +
->  	if (nor->flags & SNOR_F_NO_READ_CR)
->  		return 0;
+arch/arm/mach-vexpress/spc.c: In function 've_spc_clk_init':
+arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
+  583 |   if (init_opp_table[cluster])
+      |       ~~~~~~~~~~~~~~^~~~~~~~~
+arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
+  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
+      |       ^~~~~~~~~~~~~~
+arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
+  592 |    init_opp_table[cluster] = true;
+      |    ~~~~~~~~~~~~~~^~~~~~~~~
+arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
+  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
+      |       ^~~~~~~~~~~~~~
 
-This patch seems exactly like [0]. I will pick that one if it applies on 
-the current tree since it already has one Reviewed-by.
+Skip this logic when built !SMP.
 
-[0] https://lore.kernel.org/linux-mtd/20220126073227.3401275-1-chentsung@chromium.org/
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/arm/mach-vexpress/spc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
+index 1da11bdb1dfb..1c6500c4e6a1 100644
+--- a/arch/arm/mach-vexpress/spc.c
++++ b/arch/arm/mach-vexpress/spc.c
+@@ -580,7 +580,7 @@ static int __init ve_spc_clk_init(void)
+ 		}
+
+ 		cluster = topology_physical_package_id(cpu_dev->id);
+-		if (init_opp_table[cluster])
++		if (cluster < 0 || init_opp_table[cluster])
+ 			continue;
+
+ 		if (ve_init_opp_table(cpu_dev))
+--
+2.32.0
+

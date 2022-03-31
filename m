@@ -2,91 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A724ED808
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7EB4ED80F
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbiCaK6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S234832AbiCaK7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbiCaK6P (ORCPT
+        with ESMTP id S234822AbiCaK7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:58:15 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259E1E5A66
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:56:28 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KTgFz2MNRzdZLs;
-        Thu, 31 Mar 2022 18:56:07 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 18:56:26 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 18:56:26 +0800
-To:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-CC:     <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Question about hwpoison handling of 1GB hugepage
-Message-ID: <0af88a11-4dfe-9a4e-7b94-08f12caafcf3@huawei.com>
-Date:   Thu, 31 Mar 2022 18:56:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Thu, 31 Mar 2022 06:59:06 -0400
+Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EA9204CA5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648724234;
+        bh=aRr1Wo0noBzjmztVDr9o7+pq2OCjO4BIh16u58etZvc=;
+        h=From:To:Cc:Subject:Date;
+        b=AfLDKqLiT1HDI3MB/W6SiZ412Pkbchr0l1bL4jfOH2MXRR9ilw9pfeabZaBRyobdP
+         Hm9gNvatHXIrlAtDwUoUVkqNQMwlmkInAM3Lo9l6i2QtOTnSyJRZ0b6q8alEC15LeC
+         Dm+efWw9CTuSXFH9cp9ry5WjV75+KEBWC9XY4dXM=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
+        id E4927E21; Thu, 31 Mar 2022 18:57:09 +0800
+X-QQ-mid: xmsmtpt1648724229t58b97qig
+Message-ID: <tencent_254AD0FF06201BCCF5B9911C6E142CE1F208@qq.com>
+X-QQ-XMAILINFO: MmpliBmRb3iCCGP4N5Q8XMBn0Cixmk8hVKlkQwDgT2cAN7KG384+6dqFHqXzEW
+         ElbgUXl9mczuK6kltEVanL23xPmULJTX1NsGfReYVRbMjtYHPtQFAZ9k/2TyJwjTmAYBT7o8gTO8
+         uExXrZh6yZRkfVHJe6cWNntlKrLtIRhdrTjpDS5vzW6uBs7CxOc1t3jSVjPuN1hXFJ2HJRuj7QDj
+         jlhoQ48a3o8lH/DcZgnxf1E/tQIWH8MV/rhnZ2bpAE0Ucd1MJzdJRRkaoBzXWBxz68dPou2qGpCk
+         x1wmsU5jDIpMGqpqLs9+gUln30Db+2inOIwelRCaniPye1EQxFvVdzHbN7SdLFmebrOqYZTe2Utp
+         EwommJmxlmapRfBfFlVJKk0KB2ANZmy7GRckvbUTqLhBOHFex4R+tflQWR7Dd1Sp/Vf2D4OQa8Ue
+         +zsmc8fCjAOOx1zcrJ5Sr770KSmbUJYgqqnhLZmRZqv6KOEo51Y42GHHVCZ+QvAxTi/FtXZJIonF
+         4ppN73g7cPkOkqWCUQUuPSr+5topIcjkniZ3IYfj4CtXoRTBzn12A6xuKO8zs5NbR29Zm0gapL0j
+         dX9np/tg0jUrAOZRcMSkv4rwUEqpcKhR/4p51fQ/geFQvY4q1dny7CcGxh7aYCkMxDKRucaCXY1k
+         bU0GmPvmLPMS8C80sD+aEatwkh05bDgVYBjlYsO0LN0VVvjT6SIZi2CKxHLwNPy/9GZpz6j/fAjY
+         F80f/w738DVMxkLzjOAqFPsrBnA2fhHqJWsMxMQQ6U4p9MQNxt3wq0nhfHNcjW+p8iKx7eq26rf6
+         NLMmNLTeu9Kg+OaojNbouaU7zphheQ2CvA1Y9+H+3ZgRgEba7zZ8YcyB+ePDuc68Ki3D1NCvLas+
+         DsSAwmJLfbog9mzcMMqmodZl4iu0eOkTNeQH1a6lb1CxUMCzL5cTVx2Uy88LBOStJW5LL2enyXN8
+         8GVrIMcfI=
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v2 1/2] staging: r8188eu: check the return of kzalloc()
+Date:   Thu, 31 Mar 2022 18:56:55 +0800
+X-OQ-MSGID: <20220331105655.7958-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Recently, I found a problem with hwpoison 1GB hugepage.
-I created a process and mapped 1GB hugepage. This process will then fork a
-child process and write/read this 1GB hugepage. Then I inject hwpoison into
-this 1GB hugepage. The child process triggers the memory failure and is
-being killed as expected. After this, the parent process will try to fork a
-new child process and do the same thing. It is killed again and finally it
-goes into such an infinite loop. I found this was caused by
-commit 31286a8484a8 ("mm: hwpoison: disable memory error handling on 1GB hugepage")
+kzalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. So it is better to handle the return
+of it to prevent potential wrong memory access.
 
-It looks like there is a bug for hwpoison 1GB hugepage so I try to reproduce
-the bug described. After trying to revert the patch in an earlier version of
-the kernel, I reproduce the bug described. Then I try to revert the patch in
-latest version, and find the bug is no longer reproduced.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+Note: The subsequent patch is specific to properly release the
+resources, while this one is just take aware of the validation for the
+return of kzalloc().
+ChangeLog:
+v1->v2: optimize the style and seperate an another patch.
+ drivers/staging/r8188eu/core/rtw_xmit.c    | 10 ++++++++--
+ drivers/staging/r8188eu/include/rtw_xmit.h |  2 +-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-I compare the code paths of 1 GB hugepage and 2 MB hugepage for second madvise(MADV_HWPOISON),
-and find that the problem is caused because in gup_pud_range(), pud_none() and
-pud_huge() both return false and then trigger the bug. But in gup_pmd_range(),
-the pmd_none() is modified to pmd_present() which will make code return directly.
-The I find that it is commit 15494520b776 ("mm: fix gup_pud_range") which
-cause latest version not reproduced. I backport commit 15494520b776 in
-earlier version and find the bug is no longer reproduced either.
-
-So I'd like to consult that is it the time to revert commit 31286a8484a8?
-Or if we modify pud_huge to be similar with pmd_huge, is it sufficient?
-
-I also noticed there is a TODO comment in memory_failure_hugetlb():
-    - conversion of a pud that maps an error hugetlb into hwpoison
-      entry properly works, and
-    - other mm code walking over page table is aware of pud-aligned
-      hwpoison entries. 
-
-I'm not sure whether the above fix are sufficient, so is there anything else need
-to analysis that I haven't considered?
-
-Thanks,
-
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index 46fe62c..299fe26 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -179,7 +179,9 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
+ 
+-	rtw_alloc_hwxmits(padapter);
++	res = rtw_alloc_hwxmits(padapter);
++	if (res == _FAIL)
++		goto exit;
+ 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+ 
+ 	for (i = 0; i < 4; i++)
+@@ -1516,7 +1518,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
+ 	return res;
+ }
+ 
+-void rtw_alloc_hwxmits(struct adapter *padapter)
++s32 rtw_alloc_hwxmits(struct adapter *padapter)
+ {
+ 	struct hw_xmit *hwxmits;
+ 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
+@@ -1524,6 +1526,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
+ 	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
+ 
+ 	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
++	if (!pxmitpriv->hwxmits)
++		return _FAIL;
+ 
+ 	hwxmits = pxmitpriv->hwxmits;
+ 
+@@ -1540,6 +1544,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
+ 		hwxmits[3] .sta_queue = &pxmitpriv->bk_pending;
+ 	} else {
+ 	}
++
++	return _SUCCESS;
+ }
+ 
+ void rtw_free_hwxmits(struct adapter *padapter)
+diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
+index 5f6e240..b45cd29 100644
+--- a/drivers/staging/r8188eu/include/rtw_xmit.h
++++ b/drivers/staging/r8188eu/include/rtw_xmit.h
+@@ -345,7 +345,7 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter,
+ void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry);
+ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter);
+ void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv);
+-void rtw_alloc_hwxmits(struct adapter *padapter);
++s32 rtw_alloc_hwxmits(struct adapter *padapter);
+ void rtw_free_hwxmits(struct adapter *padapter);
+ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **pkt);
+ 
+-- 

@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91EE4ED34D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF764ED356
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiCaFhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 01:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S229844AbiCaFkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 01:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiCaFhr (ORCPT
+        with ESMTP id S229721AbiCaFkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 01:37:47 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021C5141FDB;
-        Wed, 30 Mar 2022 22:36:00 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id v13so18951085qkv.3;
-        Wed, 30 Mar 2022 22:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sPPWluoolsefjRE29kw2XfxgYnR3VFZ9BqTChiHjaDc=;
-        b=Qc99wNlwZdznBfvr+RyTN2xb5K7b+EfmJdYLLz4irFlDLYx3JNy655578XeIj02JZs
-         +nZKu+V+fyE+W0EnRMzgQ1lOA/Yyk0B6J0K6+pk8DR3rPp085P5vH1Vxa9WSVcQHlRBb
-         jBiVpBoTqfaxqx8l94qrav7PSh6xOf873uvPo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sPPWluoolsefjRE29kw2XfxgYnR3VFZ9BqTChiHjaDc=;
-        b=D627FuTmfb+fK0+LqRQ/vdFRhQwPl4mLVMCMFYeayighv4Nb4l/HJwU1zQKAo/KMp7
-         kNQfIglOnLVpJS50CAN0dKcHsjMrEhXsf5vCd/cc415qe46u8mduSdr4HcoaQ8R7uTUn
-         zt/5q27gRlyHto9umb5wA9SOEcbJtRWi4NCdQ96wIWXMd2lwb7zyqEkgJy5orfW7kkaj
-         W5RzaX3WPQrTgDkhW8qmQIc3HcZ5bwVE8sTAf9EVKj+Aazz0KKBvS0bz+c4H975gzuKp
-         fxtXOB1xm01xEgD2E9GF66B1r+RBbpm+dQORr5BUxcZc8YLFMYq7e3gmDW5O0rJf0Mrp
-         kIcg==
-X-Gm-Message-State: AOAM531uY6r/4UGBkICjnjpC/lLQa0O0fk7X6ixzCViynF6mT/UOwVZy
-        d3JXCSR22GqecZ18Sh+8o50gKPRpMPjDx3AfBkxkqkbrOxM=
-X-Google-Smtp-Source: ABdhPJxdcuy7je91kJPvXlfP/N4hkpDESw7DhNQT7hK81qPH5jv0fXFjDzghjKL72FXJlvL9etWOZlS3TWif8D3+TXQ=
-X-Received: by 2002:a05:620a:2ed:b0:680:a80e:c813 with SMTP id
- a13-20020a05620a02ed00b00680a80ec813mr2213059qko.243.1648704959078; Wed, 30
- Mar 2022 22:35:59 -0700 (PDT)
+        Thu, 31 Mar 2022 01:40:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4C41BA;
+        Wed, 30 Mar 2022 22:38:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51890B81EA0;
+        Thu, 31 Mar 2022 05:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F5DC340EE;
+        Thu, 31 Mar 2022 05:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648705091;
+        bh=7JZQq/va1IKsjwnSXNaMEXzPnn7GhYKlHIDaDrZywec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ph/RPkIqP/MFV2BuvH9xCqoVv7wYKpi0rtfQrbKtMDgCNph8NOMJC4IT49QJyKjRl
+         40Hb7PTQ+17zerYdfqIL8KGUsbslYIHEeYpNdEKvDpSh1LqoWHfC8yqDvNgi1U1gBh
+         9dGzF5kA05CBO+TCGs+S03qzxv6WDJ82NxyQDx0uXZZexlnD11WdRkZsLvx13BcAle
+         atj6Rqf0iwt6q2QcR/Ckh7GzFhXtkwf7KYGuS3XbZfg8MZ+OxIQ1ElxPewuMYnYnI3
+         0KRWM/R6/8yjz8gMaUTRzHiOn4PTPjFQl86h+mzOzni/PmSMLACsesqMMlBGh1wN4B
+         VRGRKq0GgzC0w==
+Date:   Thu, 31 Mar 2022 11:08:06 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/25] dmaengine: Fix dma_slave_config.dst_addr
+ description
+Message-ID: <YkU+PupmoR/zkHxn@matsya>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-5-Sergey.Semin@baikalelectronics.ru>
+ <20220324140806.GN2854@thinkpad>
 MIME-Version: 1.0
-References: <20220331022425.28606-1-zev@bewilderbeest.net> <20220331022425.28606-2-zev@bewilderbeest.net>
-In-Reply-To: <20220331022425.28606-2-zev@bewilderbeest.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 31 Mar 2022 05:35:47 +0000
-Message-ID: <CACPK8XeeFDSN8L89BPkV+UfGTYNiULyUPBTYso7Z7e+VEdgc4A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ARM: dts: aspeed: romed8hm3: Fix GPIOB0 name
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324140806.GN2854@thinkpad>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 at 02:24, Zev Weiss <zev@bewilderbeest.net> wrote:
->
-> This GPIO was mislabeled as DDR_MEM_TEMP in the schematic; after a
-> correction from ASRock Rack its name now reflects its actual
-> functionality (POST_COMPLETE_N).
+On 24-03-22, 19:38, Manivannan Sadhasivam wrote:
+> On Thu, Mar 24, 2022 at 04:48:15AM +0300, Serge Semin wrote:
+> > Most likely due to a copy-paste mistake the dst_addr member of the
+> > dma_slave_config structure has been marked as ignored if the !source!
+> > address belong to the memory. That is relevant to the src_addr field of
+> > the structure while the dst_addr field as containing a destination device
+> > address is supposed to be ignored if the destination is the CPU memory.
+> > Let's fix the field description accordingly.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> One suggestion below.
+> 
+> > ---
+> >  include/linux/dmaengine.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+> > index 842d4f7ca752..f204ea16ac1c 100644
+> > --- a/include/linux/dmaengine.h
+> > +++ b/include/linux/dmaengine.h
+> > @@ -395,7 +395,7 @@ enum dma_slave_buswidth {
+> >   * should be read (RX), if the source is memory this argument is
+> >   * ignored.
+> >   * @dst_addr: this is the physical address where DMA slave data
+> > - * should be written (TX), if the source is memory this argument
+> > + * should be written (TX), if the destination is memory this argument
+> 
+> Should we rename "memory" to "local memory" or something similar?
 
-Those are quite different functions :)
+what do you mean by local memory :)
 
->
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-
-Fixes: a9a3d60b937a ("ARM: dts: aspeed: Add ASRock ROMED8HM3 BMC")
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-I'll send some fixes in after -rc1.
-
-> ---
->  arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts b/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> index 572a43e57cac..ff4c07c69af1 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> @@ -198,7 +198,7 @@ &gpio {
->         gpio-line-names =
->                 /*  A */ "LOCATORLED_STATUS_N", "BMC_MAC2_INTB", "NMI_BTN_N", "BMC_NMI",
->                         "", "", "", "",
-> -               /*  B */ "DDR_MEM_TEMP", "", "", "", "", "", "", "",
-> +               /*  B */ "POST_COMPLETE_N", "", "", "", "", "", "", "",
->                 /*  C */ "", "", "", "", "PCIE_HP_SEL_N", "PCIE_SATA_SEL_N", "LOCATORBTN", "",
->                 /*  D */ "BMC_PSIN", "BMC_PSOUT", "BMC_RESETCON", "RESETCON",
->                         "", "", "", "PSU_FAN_FAIL_N",
-> --
-> 2.35.1
->
+-- 
+~Vinod

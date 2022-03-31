@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAB44ED9F2
+	by mail.lfdr.de (Postfix) with ESMTP id F2BA64ED9F5
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbiCaM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S236414AbiCaM6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiCaM6C (ORCPT
+        with ESMTP id S236475AbiCaM6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 31 Mar 2022 08:58:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C00B12128D7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648731371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v5Mnqs3Bznl24t2qlJcxuDZWOB6J1u0XCG3i9ntUXvk=;
-        b=AUseyBSRzqPmwx1hMLSP+NGwtPsSePI9X1d4FrqsUN8naNFQHJpeNPgwXOP1QJsOk2CrN6
-        PqJmieNbVQlMZpn2qWm5+8/zBfEsOkOFraAwLzQTABeNrvt8C5Y0fEaGLhcDPcRfPM2Sz7
-        avffnxKYQ+g9tAWcs2ETLo8HLmDKZeI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-uknW2jpbOmGLSUJ6dizTRg-1; Thu, 31 Mar 2022 08:56:08 -0400
-X-MC-Unique: uknW2jpbOmGLSUJ6dizTRg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01402128D9;
+        Thu, 31 Mar 2022 05:56:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE54880346F;
-        Thu, 31 Mar 2022 12:56:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1623DC15D42;
-        Thu, 31 Mar 2022 12:56:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220317021249.31655-1-yang.lee@linux.alibaba.com>
-References: <20220317021249.31655-1-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] certs: Fix some kernel-doc comments
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3118063.1648731366.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1CE1617C0;
+        Thu, 31 Mar 2022 12:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84ED6C340F2;
+        Thu, 31 Mar 2022 12:56:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648731372;
+        bh=DfI4w1o+FCYxsAC0rPn+xFaT1PUgndy6Pzulupfti64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k/1uDpG0COuH/xMycH1jXEnaAzYEpDjT5p7kU8rL4PHWzMMQXC+b+2cYoSf0m2F12
+         qxbJx8hW/8ikoGtSzP79VFsft4uHhbHea2hb00KmUMLsNcb/lBaBICgpkEhL1kfrRR
+         FhCaLlT9xc5IhKlKDyMom56/wnaMhWeIgHSM72t9LH7QgBaWFcjznoWhPtebcvDsGz
+         R1qbHGThUeONUvt2Ahw6SsUmSNlNGcl4G4rEcY8ubwIecE37Y8mMekI9I/iwHiK226
+         ueWktgb253XuGKtf35tC2WuDIaiSIUvtbZj123P2me2Gpmf7oaNVeKDksy+TMEQyWt
+         z8+yBENsT3S1A==
 Date:   Thu, 31 Mar 2022 13:56:06 +0100
-Message-ID: <3118064.1648731366@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
+Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [RFC PATCH 5/5] ASoC: Add macaudio machine driver
+Message-ID: <YkWk5vvBlC/Orpdr@sirena.org.uk>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <20220331000449.41062-6-povik+lin@cutebit.org>
+ <YkWXs/f7edZwg1+W@sirena.org.uk>
+ <4651D426-BA1A-418F-90E5-278C705DA984@cutebit.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2p1SKEdgaX+tzFpw"
+Content-Disposition: inline
+In-Reply-To: <4651D426-BA1A-418F-90E5-278C705DA984@cutebit.org>
+X-Cookie: Reunite Gondwondaland!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yang Li <yang.lee@linux.alibaba.com> wrote:
 
->  /**
-> - * Allocate a struct key_restriction for the "builtin and secondary tru=
-st"
-> - * keyring. Only for use in system_trusted_keyring_init().
-> + * get_builtin_and_secondary_restriction - Allocate a struct key_restri=
-ction
-> + * for the "builtin and secondary trust" keyring. Only for use in
-> + * system_trusted_keyring_init().
->   */
->  static __init struct key_restriction *get_builtin_and_secondary_restric=
-tion(void)
+--2p1SKEdgaX+tzFpw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Better to just turn the "/**" into "/*" for this one.  It's not a function
-that should necessarily appear in API docs.
+On Thu, Mar 31, 2022 at 02:08:51PM +0200, Martin Povi=C5=A1er wrote:
+> > On 31. 3. 2022, at 13:59, Mark Brown <broonie@kernel.org> wrote:
 
-David
+> >> +	for_each_rtd_components(rtd, i, component)
+> >> +		snd_soc_component_set_jack(component, &ma->jack, NULL);
 
+> > What is the jack configuration this is attempting to describe?  It looks
+> > like you have some dedicated speaker driver devices which are going to
+> > get attached to jacks here for example.
+
+> We know the speakers will ignore the set_jack call. There=E2=80=99s one j=
+ack and
+> this way we know the jack codec will attach to it, for speakers it=E2=80=
+=99s a no-op.
+> (If you prefer I will special-case it to the jack codec.)
+
+It would be better to special case, this looks obviously wrong and will
+break if someone adds error handling.
+
+> >> +	return !strcmp(name, pattern);
+> >> +}
+
+> > This looks worryingly like use case configuration.
+
+> I go over this in the cover letter! This is fixing the TDM slot selection
+> and disabling voltage/current sensing on the speaker amp codecs, which ha=
+ve
+> no business being exposed to userspace as options. This is not use case,
+> this not letting people blow their speakers from userspace.
+
+Your comments in the cover letter are all pretty vague too, that just
+says that these controls are "ridiculous" which isn't terribly specific
+about what the actual goal is.  If it's just "I can't see why anyone
+would want to configure this" then that's a decision you're taking about
+what people might want to do which is broadly a use case configuration
+and the control should be left there in case someone comes up with an
+idea.
+
+--2p1SKEdgaX+tzFpw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJFpOUACgkQJNaLcl1U
+h9CYzQf/Y08TIa0AXiiPTKniPzL9m3d7ArsJSmeKBxGOiqTtZ7kzWb4ElKSSGfRR
+SQBABq69Qoxq9aWhUfdocdGNf3I/MtDc8k0XUs4bO3MQgKJ0WIivkGNpRPield9D
+tbiVirXSxTSN28zrzJHzZZti6MVAFNCRjlrF+qOhAH2K6qKQNwcFwOYSFEjQaGLp
+noni9E2T7cwSkwem3gxTP6FDHdT2ivx3fwBArNpZ3WqWwK+3cBrlSD+pMYoPdWVD
+PMv8/IfgYHYm+ojMI6ILkAic1KojFLwM1stvNfFtR7fOO8QJEeSfPhKg18zLwvHj
+N1ZH9xNFrO4kKrMnwL7uEZAtBTHoGQ==
+=khz2
+-----END PGP SIGNATURE-----
+
+--2p1SKEdgaX+tzFpw--

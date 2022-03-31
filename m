@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601974ED3F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C863F4ED3F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiCaGbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S231185AbiCaGd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiCaGbM (ORCPT
+        with ESMTP id S230427AbiCaGdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:31:12 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694C01705A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:29:22 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id r13so45935982ejd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:29:22 -0700 (PDT)
+        Thu, 31 Mar 2022 02:33:55 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB91ED051
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:32:07 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id j15so45905854eje.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:32:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M7HnRXS8ki9auACx5m4t264mmjUE2bAJ8U4PZKnd4Ho=;
-        b=gIutq7OiCYAR4J7scRouIcS85qZpcD3wP3KFhISUJKkMRweNyECinL3s6VWksrnTPL
-         McNk7ELEplAZFydI9Ihx3pXyvb2DWGk669kxevLxwlmn7Itszsub3kmsr1cFU2okLvK/
-         tv6ymHuwfrgJORnpLyy1FQpXtfMDoa5qM60AvIGx/hoggt7US2Mubbc/+W31tXakeU6g
-         5n7+yzG6ejb4dx1G9rEFiYJHnBvgx7fz55gw1kgyHYAkG1CY5GvKoSpig5UDSoKLVWSS
-         PsPgh8kkls9K1tDvYfgZfJ1Ww2smKOB1Jiik2u3F67WCpgjy14UJrgeFBlGQJzCzHDww
-         b9nw==
+        bh=RXP6C9OjNqzyPqbYU1xP9pjwWinLE7hTwHfvR0zXIkQ=;
+        b=T6qdbMuQU3l32RCmqHp4NAQzGPrmTyQNZsN0rPvwto372q5AZ75d+qYcw7hXPjWSo7
+         ns22IKxlnpCZtMERQs0X0tv7ae7p2b5DNKUa7UmjK9NCFmFkFUFQ+HxUvi3tU8MUxN1c
+         LVPO8NhkuXGRxIHaQ1sLEB8wWlSd/CJ4geZJO0MeYEM2x1XUxYW+62c6aUg3//40qs5w
+         o/67mfi3ZSdlN/0SUEZBRdZOas47YC0Udr9ZiRJkjUl9C20T1aPPkNQg+JZF/Bon5zZg
+         kwUTETb+jN9Lfn/JM3XNXbdZt41xtwnhb4a+GJV56WQQCEWXl7F8NfTQiK4kGm2L5J5A
+         uONg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=M7HnRXS8ki9auACx5m4t264mmjUE2bAJ8U4PZKnd4Ho=;
-        b=oq+mlPkYyCJfskzmJR0BARt5x03KVlB5Uul8M1uvWHuZbm78nJcbK5aAb8p2ZGbi8a
-         M6EIpgNnm6QyGIce6HQdv8D7/8rKHHKrjAj0xK1oQTUV81MebTISs4ByO3/dlZYYkrqM
-         ZnFzQMpLq7JDGxjf7YJ8u6N15IkiIeDNU9c7YisLK5U5dPUeFv6rxJfFDLfwiPlnKwlb
-         efAAUs36F5osOQojBf2YIYUJESL3vTIiKEFPUGn2WDwxruMZb6pVSXvQkozSpe0Y1QCs
-         WoHFNn7FN2243ElzUdjyGINy3/jFdyOTqIFCbEFrsikuPmzApNavOubGi2TGi7jzcaRQ
-         fGHg==
-X-Gm-Message-State: AOAM5327mri/iCNvkMCYkpHlVviNcMofjKUEPW+j1iRwpxhqld98+arc
-        wUC13nX6PgbefWq29CfKPG5cGg==
-X-Google-Smtp-Source: ABdhPJwevveOArflEso+HTdUotyheR45XpywF2kU6sgy5+5pNxmXLHHbHCqLA7sF9nDwnvz7C0JDEg==
-X-Received: by 2002:a17:907:7ea6:b0:6db:ca53:9b0a with SMTP id qb38-20020a1709077ea600b006dbca539b0amr3506829ejc.763.1648708160890;
-        Wed, 30 Mar 2022 23:29:20 -0700 (PDT)
+        bh=RXP6C9OjNqzyPqbYU1xP9pjwWinLE7hTwHfvR0zXIkQ=;
+        b=5sGD65TybS/7mR5MxJobNciWkUgSbulhcgPx81Q2UPqdMLVFvnxAv0zfzYifKUAj1l
+         X7iIC9VQ5psTWt1b/qJniau9vbX6qGGQuPbNkhAu1KLnw+axQO9o10och5DYZQpHYq1g
+         mFgU8AO/F6siUlRF44xnNoWqD7bYmaFG/pg1C71BsqZHOwcQQ3syxuPD/Bvx8xdY/Oeq
+         FQ+bbJNjmYomxI9wJ8Hme12wE9d5DRzn9ZLH7EFbQOLOcJCffa91Sz1BsyqNfRSzzGgS
+         /dVYSTIxj033xSSGouW8wZp85BqwcUik4ANP1eNw0OfY1Cl4PpTrRI0bXhYCPT+vw5SK
+         IDkg==
+X-Gm-Message-State: AOAM5317q5qEGqNUq80+M6FPLoLLqpRUyKHkAqPQ4IQCfkkNdA3Cm0cC
+        /zp3Jt4Ym7X7tomb/D3GUQKmWA==
+X-Google-Smtp-Source: ABdhPJwkt86fLqRFsg6wyRYaKacC714Ln/Xn8Mq0A2ItdpUzPfl37aPI29sHwJdHUIwnJNQ5OlYIbg==
+X-Received: by 2002:a17:906:3144:b0:6ce:de5d:5e3b with SMTP id e4-20020a170906314400b006cede5d5e3bmr3514954eje.689.1648708326092;
+        Wed, 30 Mar 2022 23:32:06 -0700 (PDT)
 Received: from [192.168.0.165] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id ep16-20020a1709069b5000b006daa26de2fbsm8894521ejc.153.2022.03.30.23.29.20
+        by smtp.gmail.com with ESMTPSA id sa32-20020a1709076d2000b006df935924c1sm9064346ejc.59.2022.03.30.23.32.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 23:29:20 -0700 (PDT)
-Message-ID: <866c6b42-434d-e7db-5319-2256cd7003d7@linaro.org>
-Date:   Thu, 31 Mar 2022 08:29:19 +0200
+        Wed, 30 Mar 2022 23:32:05 -0700 (PDT)
+Message-ID: <0c182962-0da0-c3b3-097a-090bf8d871e7@linaro.org>
+Date:   Thu, 31 Mar 2022 08:32:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: clock: add binding for MA35D1 clock
- controller
+Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
 Content-Language: en-US
 To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
@@ -63,9 +62,9 @@ To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
 Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
         arnd@arndb.de, olof@lixom.net, soc@kernel.org, cfli0@nuvoton.com
 References: <20220331024256.14762-1-ychuang3@nuvoton.com>
- <20220331024256.14762-2-ychuang3@nuvoton.com>
+ <20220331024256.14762-4-ychuang3@nuvoton.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220331024256.14762-2-ychuang3@nuvoton.com>
+In-Reply-To: <20220331024256.14762-4-ychuang3@nuvoton.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,39 +78,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 31/03/2022 04:42, Jacky Huang wrote:
-> Add the dt-bindings header for Nuvoton MA35D1, that gets shared
-> between the clock controller and clock references in the dts.
+> Add the initial device tree files for Nuvoton MA35D1 Soc.
 > 
 > Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 > ---
->  .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 262 ++++++++++++++++++
->  1 file changed, 262 insertions(+)
->  create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+>  arch/arm64/boot/dts/Makefile               |   1 +
+>  arch/arm64/boot/dts/nuvoton/Makefile       |   2 +
+>  arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts |  23 +++++
+>  arch/arm64/boot/dts/nuvoton/ma35d1.dtsi    | 106 +++++++++++++++++++++
+>  4 files changed, 132 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
 > 
-> diff --git a/include/dt-bindings/clock/nuvoton,ma35d1-clk.h b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+> index 1ba04e31a438..87e9bda91276 100644
+> --- a/arch/arm64/boot/dts/Makefile
+> +++ b/arch/arm64/boot/dts/Makefile
+> @@ -31,3 +31,4 @@ subdir-y += tesla
+>  subdir-y += ti
+>  subdir-y += toshiba
+>  subdir-y += xilinx
+> +subdir-y += nuvoton
+> diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
 > new file mode 100644
-> index 000000000000..3634e5edcac5
+> index 000000000000..e1e0c466bf5e
 > --- /dev/null
-> +++ b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-> @@ -0,0 +1,262 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ OR MIT */
+> +++ b/arch/arm64/boot/dts/nuvoton/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
 
-Can you make it the same license as bindings?
+NAK
 
-> +/*
-> + * Copyright (c) 2022 Nuvoton Technology Corporation.
-> + */
-> +
-> +#ifndef __DT_BINDINGS_MA35D1_CLK_H
-> +#define __DT_BINDINGS_MA35D1_CLK_H
-> +
-> +/* Clock Sources */
-> +/* External and Internal oscillator clocks */
-> +#define	HXT		0
+This is actually some resend, but you did not version it, did not
+provide changelog.
 
-One space after '#define'. Please do not introduce some non-Linux coding
-style.
+What is more - you ignored previously received comments.
 
+We do not work like this. If you do not agree with a comment, please
+keep discussion, not resend ignoring it.
 
 Best regards,
 Krzysztof

@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CB44EE2F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07544EE357
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241521AbiCaUzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S241881AbiCaVfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiCaUzc (ORCPT
+        with ESMTP id S237941AbiCaVe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:55:32 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32A8143455;
-        Thu, 31 Mar 2022 13:53:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KTwWQ0mWGz4xXx;
-        Fri,  1 Apr 2022 07:53:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648760018;
-        bh=4Nsex74KCP11NRR2YSLFOgDVkQpplJAetQ7co/ZS+bQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cmBWn4czkyXksLx9dX3ah2bMZ6ZdBvroOBU0LVXYnByS6oJPebVjZamZTjRkUm0Ah
-         Sn68Nbye8IEM/xw0WSrLSUb02foGO/F/dXhFZhV0IgMLHuSonPRkZGAMt2Sm0hM6cr
-         GNRq1KnxpaxMQ60v8DyXrV+5WUKF/Q13yoXO8Aya+F1DRJGmP+xUxXj/7Jk9tWmMv1
-         n17t8MUt4njH1vV7Yu/w4vgu9ouX82gSMD5dRo89Vgy+iWj0rdipBE8sNyt8757H9M
-         0yDIY2Oaws1RQfg05IKoVcwODVkWvULQ6Sh8ucOmyYEm0yGN4IIDhYF9uM0Go/5Ke9
-         3mcJ02t2j70Ig==
-Date:   Fri, 1 Apr 2022 07:53:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the dma-mapping tree
-Message-ID: <20220401075336.2789d430@canb.auug.org.au>
+        Thu, 31 Mar 2022 17:34:59 -0400
+X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 14:33:10 PDT
+Received: from 17.mo583.mail-out.ovh.net (17.mo583.mail-out.ovh.net [46.105.56.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9D023F3BD
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:33:10 -0700 (PDT)
+Received: from player772.ha.ovh.net (unknown [10.111.208.240])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 11CF3231FB
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 20:56:14 +0000 (UTC)
+Received: from RCM-web5.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player772.ha.ovh.net (Postfix) with ESMTPSA id D54FC291025F7;
+        Thu, 31 Mar 2022 20:55:59 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wZ6xbqvbvwsQl6nTiUTZIK0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 31 Mar 2022 22:55:59 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alistair Francis <alistair@alistair23.me>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Eduardo Valentin <eduval@amazon.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Thanh Quan <thanh.quan.xn@renesas.com>
+Subject: Re: [GIT PULL REQUEST] watchdog - v5.18 Merge window
+In-Reply-To: <20220331182454.GA14072@www.linux-watchdog.org>
+References: <20220331182454.GA14072@www.linux-watchdog.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <174471c557f778c0c5e55ca7f9bc02fc@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 1543890248961010630
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgudehhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvffujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeevfedvteejffeufeekueeuvdeghfeggeejgfevvdegieetudeuiedvleettdfhteenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjedvrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wZ6xbqvbvwsQl6nTiUTZIK0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Wim,
 
-Hi all,
+On 2022-03-31 20:24, Wim Van Sebroeck wrote:
+> This series contains:
+> * Add support for BCM4908
 
-In commit
+It indeed includes
+[PATCH] watchdog: allow building BCM7038_WDT for BCM4908
 
-  bc29832b74e0 ("dma-mapping: move pgprot_decrypted out of dma_pgprot")
+but somehow misses
+[PATCH] watchdog: bcm7038_wdt: Support BCM6345 compatible string
+(which is Patchwork marked as Accepted).
 
-Fixes tag
-
-  Fixes: 5ff79fddf0ef ("dma-mapping: remove CONFIG_DMA_REMAP")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: f5ff79fddf0e ("dma-mapping: remove CONFIG_DMA_REMAP")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wZ6xbqvbvwsQl6nTiUTZIK0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJGFNAACgkQAVBC80lX
-0Gwizgf+P6Iq79IfSyvmSzeSs2QJh6mYjKA/jV7BxX38tc/7hb58Gnf45hy2fq7Y
-YmEjUyaaCSjveVaW5bddzHnKYY3HW3PM9Ga1DAi+B/swJAELd4IqFYJiSvGdDoay
-aKixZ4GexZYI5dYMSqAMkGem44x8WvBdRz4ngIYmEwgQVOzdK9UVAaJ1L+0pWJ8I
-1AY7huXVvYvvkV5b6vXOqM0zoP8J68O0XKxARe2YKGHkjQND1hgcdtF9Hyldp2MD
-JJC9o9qcx1RjBff0KdgB7KWfyzgDfgPzZAk4ZBLgUYHPeSooWRcspk4jdrCW7py0
-7v0+tCiigB9bk3laKZbhjioVSWfSHw==
-=1d5T
------END PGP SIGNATURE-----
-
---Sig_/wZ6xbqvbvwsQl6nTiUTZIK0--
+This is NOT pull blocker, just sth I'd like to ask you to look at for
+the next release :)

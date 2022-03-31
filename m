@@ -2,147 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A984ED7F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816BA4ED7FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiCaKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S234783AbiCaKxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234763AbiCaKw2 (ORCPT
+        with ESMTP id S234772AbiCaKxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:52:28 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EC81BD98C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:50:39 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id cm17so3698632pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TFELa/BZuowaDfyw6gLBEGWo6cMiLelNfLx1iN1T5dc=;
-        b=xRUfPHjylfqLEN+GuozHZIJyZSu8beHyqGl0lThSL2k+CIVh326KQ7XLznpBpIYXVy
-         nJkX2+7K1qmc6LWIdV+7Eef7yJN0apSodE4yKQZCyIS4Z/Y8n632+DgD/WNtA2xMGnty
-         lhxbFHyGkGUsoBYuDAt3UzwO3KpjbCmyK0arjpZJ2313PYXEEdiCM745LNy0oFwJ9C+o
-         iVLI6vrZ/3EnmLAGDVNFUY0fAQqL1WkwV7QRgRyDkjL1yixINjhPYGvc9Z3tYgB/kZR5
-         WrIy526oG2wvYyUoT9J8wkp8A+Cr0vmPUA6AWlYPiVaBpYrYxWjVUIplpxGq5H9zktAK
-         aIzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TFELa/BZuowaDfyw6gLBEGWo6cMiLelNfLx1iN1T5dc=;
-        b=tx9tp/zBzKI+4j4HeqXyDA0BOeAAdUmmwc+1PO2e5EvWk39e/QSQlP7zpKF/hM2XS/
-         5bKoteBaVee1yPSOYn13Z3cvaRTKjVgHK4Cxe+w/uQoNaIwjiAVC7+VLgWYBoZHyVGDq
-         gPe3WjYoWyOKJGsGn211IANks3Pl0X7Lzy4CAqtjQvj3V3HGJEBoqihuvP9isOdioX94
-         MKRLIF2sgji7DBanYr0eSKpHvV3+1lffxYPxeRM5A+BwjL3clCCRGuTiZbBsaR9MQfby
-         tHaDNsDh7ioRSOJMWMfsp8xRmFOvLr+LPdDmeB/aA7277JMr9BnoS2sDrZHM6X1dlNSp
-         BFmA==
-X-Gm-Message-State: AOAM530fYTS+I+LskAIlW+98IurMEAIe4aslMiBiXH2/AI+mjT+T6xBf
-        BU1R/oEv01OQK5XY296G9yNc
-X-Google-Smtp-Source: ABdhPJwUUVxU0eN0GZxw3u2enZxMyHOLpRn++pTKQ1RQI4MCgLEuOovkVsLaARG0uoZ++MAPnjssgQ==
-X-Received: by 2002:a17:90b:3851:b0:1c7:80f9:5306 with SMTP id nl17-20020a17090b385100b001c780f95306mr5326698pjb.207.1648723839269;
-        Thu, 31 Mar 2022 03:50:39 -0700 (PDT)
-Received: from thinkpad ([117.202.187.183])
-        by smtp.gmail.com with ESMTPSA id kb13-20020a17090ae7cd00b001c7de069bacsm10163825pjb.42.2022.03.31.03.50.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 03:50:38 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 16:20:31 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/25] dmaengine: Fix dma_slave_config.dst_addr
- description
-Message-ID: <20220331105031.GA104799@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-5-Sergey.Semin@baikalelectronics.ru>
- <20220324140806.GN2854@thinkpad>
- <YkU+PupmoR/zkHxn@matsya>
- <20220331071343.eitijsfuzufh6blc@mobilestation>
+        Thu, 31 Mar 2022 06:53:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AB11CABC6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:51:21 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nZsOX-00078k-A6; Thu, 31 Mar 2022 12:51:13 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-ffcf-bd2e-518f-8dbf.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:ffcf:bd2e:518f:8dbf])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 670AD57B86;
+        Thu, 31 Mar 2022 10:51:12 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 12:51:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Aurelien Jarno <aurelien@aurel32.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kito Cheng <kito.cheng@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        linux-sparse@vger.kernel.org, ukl@pengutronix.de,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH] riscv: fix build with binutils 2.38
+Message-ID: <20220331105112.7t3qgtilhortkiq4@pengutronix.de>
+References: <20220126171442.1338740-1-aurelien@aurel32.net>
+ <20220331103247.y33wvkxk5vfbqohf@pengutronix.de>
+ <20220331103913.2vlneq6clnheuty6@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y7e5q426lci6cphx"
 Content-Disposition: inline
-In-Reply-To: <20220331071343.eitijsfuzufh6blc@mobilestation>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220331103913.2vlneq6clnheuty6@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 10:13:43AM +0300, Serge Semin wrote:
-> On Thu, Mar 31, 2022 at 11:08:06AM +0530, Vinod Koul wrote:
-> > On 24-03-22, 19:38, Manivannan Sadhasivam wrote:
-> > > On Thu, Mar 24, 2022 at 04:48:15AM +0300, Serge Semin wrote:
-> > > > Most likely due to a copy-paste mistake the dst_addr member of the
-> > > > dma_slave_config structure has been marked as ignored if the !source!
-> > > > address belong to the memory. That is relevant to the src_addr field of
-> > > > the structure while the dst_addr field as containing a destination device
-> > > > address is supposed to be ignored if the destination is the CPU memory.
-> > > > Let's fix the field description accordingly.
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > 
-> > > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > 
-> > > One suggestion below.
-> > > 
-> > > > ---
-> > > >  include/linux/dmaengine.h | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> > > > index 842d4f7ca752..f204ea16ac1c 100644
-> > > > --- a/include/linux/dmaengine.h
-> > > > +++ b/include/linux/dmaengine.h
-> > > > @@ -395,7 +395,7 @@ enum dma_slave_buswidth {
-> > > >   * should be read (RX), if the source is memory this argument is
-> > > >   * ignored.
-> > > >   * @dst_addr: this is the physical address where DMA slave data
-> > > > - * should be written (TX), if the source is memory this argument
-> > > > + * should be written (TX), if the destination is memory this argument
-> > >
->  
-> > > Should we rename "memory" to "local memory" or something similar?
-> > 
-> > what do you mean by local memory :)
-> 
-> Most likely Manivannan just confused the whole eDMA device specifics
-> with this patch purpose. This commit has nothing to do with "local"
-> and "remote" device memory. Such definitions are relevant to the DW
-> eDMA setups (whether device is integrated into the PCIe Host/End-point
-> controller then the CPU memory is a local memory for it, or it's a
-> remote PCI End-point, then the CPU memory is a remote memory for it).
-> 
 
-Ah, yes indeed. While I was reviewing the eDMA patches I just went with that
-context. Sorry for the noise.
+--y7e5q426lci6cphx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Mani
+Cc +=3D linux-sparse, Uwe, Luc Van Oostenryck
 
-> Guys. Regarding the patchsets review procedure. I notice all the
-> comments. Just didn't have time to respond so far. Will do that till
-> the end of the week.
-> 
-> -Sergey
-> 
-> > 
-> > -- 
-> > ~Vinod
+tl;dr:
+
+A recent change in the kernel regarding the riscv -march handling breaks
+current sparse.
+
+On 31.03.2022 12:39:14, Marc Kleine-Budde wrote:
+> On 31.03.2022 12:32:47, Marc Kleine-Budde wrote:
+> > On 26.01.2022 18:14:42, Aurelien Jarno wrote:
+> > > From version 2.38, binutils default to ISA spec version 20191213. This
+> > > means that the csr read/write (csrr*/csrw*) instructions and fence.i
+> > > instruction has separated from the `I` extension, become two standalo=
+ne
+> > > extensions: Zicsr and Zifencei. As the kernel uses those instruction,
+> > > this causes the following build failure:
+> > >=20
+> > >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler =
+messages:
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >=20
+> > > The fix is to specify those extensions explicitely in -march. However=
+ as
+> > > older binutils version do not support this, we first need to detect
+> > > that.
+> > >=20
+> > > Cc: stable@vger.kernel.org # 4.15+
+> > > Cc: Kito Cheng <kito.cheng@gmail.com>
+> > > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > > ---
+> > >  arch/riscv/Makefile | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > >=20
+> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> > > index 8a107ed18b0d..7d81102cffd4 100644
+> > > --- a/arch/riscv/Makefile
+> > > +++ b/arch/riscv/Makefile
+> > > @@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:=3D rv32ima
+> > >  riscv-march-$(CONFIG_ARCH_RV64I)	:=3D rv64ima
+> > >  riscv-march-$(CONFIG_FPU)		:=3D $(riscv-march-y)fd
+> > >  riscv-march-$(CONFIG_RISCV_ISA_C)	:=3D $(riscv-march-y)c
+> > > +
+> > > +# Newer binutils versions default to ISA spec version 20191213 which=
+ moves some
+> > > +# instructions from the I extension to the Zicsr and Zifencei extens=
+ions.
+> > > +toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(r=
+iscv-march-y)_zicsr_zifencei)
+> > > +riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_z=
+icsr_zifencei
+> > > +
+> > >  KBUILD_CFLAGS +=3D -march=3D$(subst fd,,$(riscv-march-y))
+> > >  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
+> >=20
+> > I'm on current linus/master, this change breaks on current Debian
+> > testing with:
+> >=20
+> > | make: Leaving directory 'linux'
+> > |   SYNC    include/config/auto.conf.cmd
+> > |   GEN     Makefile
+> > |   GEN     Makefile
+> > |   CC      scripts/mod/empty.o
+> > |   CHECK   linux/scripts/mod/empty.c
+>       ^^^^^
+> It's actually "sparse" that breaks
+>      =20
+> > | invalid argument to '-march': '_zicsr_zifencei'
+>=20
+> | $ sparse --version
+> | 0.6.4 (Debian: 0.6.4-2)
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--y7e5q426lci6cphx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJFh5wACgkQrX5LkNig
+013oyQgApEAGaNeYbcnBksclgOHXyRB9XqcWrrQVGYKkT0FziLqGCsxU30J3T4Rh
+HRyf/cB3aJ1vsHwnz2wyT7ylEoeD6V2gozxE2rKl0ZIw74gCrQO09Yn31SvRxuUz
++CtJnkbrapsLGxZ8a7a08YU/9DSLkhvefR7vhgVMcjYYY/iceBjvdi1rJZGHI4iV
+PMG1oDT6nm8i6GtYQ8KmRuFs7iyCCL92nnoYSxd3CjCUzvYzVaL3hiM7gpEr1c9+
+SrVM13phszf/JPOUaZ1gRr2lnN5DXagyRH0S/ySN5fJ1+kJYq5HrRM6+NO01+5mN
+q9mwLpS5NvsBOIhnxolvuCOS0Yth/Q==
+=TEkc
+-----END PGP SIGNATURE-----
+
+--y7e5q426lci6cphx--

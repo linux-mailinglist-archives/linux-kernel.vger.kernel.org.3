@@ -2,284 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7D84ED7D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300A54ED7D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234644AbiCaKgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234633AbiCaKgG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234634AbiCaKgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 31 Mar 2022 06:36:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D6E12042A5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648722857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ozBz5xX3/M+McvlsixTHsMYnNatIyrKEH4e0NxR73NM=;
-        b=SClIeyHg4DYmfnGFE5ZVavYqWPxJV1Or0GPGlZ2QX1ZfCqZcLiM73L/5FMZ1gO0N5G0vVH
-        688a5Sfo6hfHN5tL8CTEpcj2dGdEunWFco4XdKTvU8J2K29PLGAyY/NyWJqomDjZrcmLmW
-        ob3lZ8QpfAEU7Y6U6TotHhw4zeFDCx8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-600-DYmwmN4pNKWxFbzr-7pX7A-1; Thu, 31 Mar 2022 06:34:15 -0400
-X-MC-Unique: DYmwmN4pNKWxFbzr-7pX7A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C57BC811E78;
-        Thu, 31 Mar 2022 10:34:14 +0000 (UTC)
-Received: from localhost (ovpn-13-26.pek2.redhat.com [10.72.13.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BB0DA41136E0;
-        Thu, 31 Mar 2022 10:34:13 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 18:34:07 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v5 7/8] x86/crash: Add x86 crash hotplug support for
- kexec_file_load
-Message-ID: <YkWDnzQoR0CI2zc8@MiWiFi-R3L-srv>
-References: <20220303162725.49640-1-eric.devolder@oracle.com>
- <20220303162725.49640-8-eric.devolder@oracle.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234605AbiCaKgD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 31 Mar 2022 06:36:03 -0400
+Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AF9C60040;
+        Thu, 31 Mar 2022 03:34:14 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha.nfschina.com (Postfix) with ESMTP id 6A9131E80D79;
+        Thu, 31 Mar 2022 18:33:43 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha.nfschina.com ([127.0.0.1])
+        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id x1R5h9nOxo0c; Thu, 31 Mar 2022 18:33:40 +0800 (CST)
+Received: from ubuntu.localdomain (unknown [101.228.248.165])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by ha.nfschina.com (Postfix) with ESMTPA id E8F911E80D77;
+        Thu, 31 Mar 2022 18:33:39 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH] btrfs: remove unnecessary type castings
+Date:   Thu, 31 Mar 2022 03:34:08 -0700
+Message-Id: <20220331103408.31867-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303162725.49640-8-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/22 at 11:27am, Eric DeVolder wrote:
-> For x86_64, when CPU or memory is hot un/plugged, the crash
-> elfcorehdr, which describes the CPUs and memory in the system,
-> must also be updated.
-> 
-> To update the elfcorehdr for x86_64, a new elfcorehdr must be
-> generated from the available CPUs and memory. The new elfcorehdr
-> is prepared into a buffer, and if no errors occur, it is
-> installed over the top of the existing elfcorehdr.
-> 
-> In the patch 'crash hp: exclude elfcorehdr from the segment digest'
-> the need to update purgatory due to the change in elfcorehdr was
-> eliminated.  As a result, no changes to purgatory or boot_params
-> (as the elfcorehdr= kernel command line parameter pointer
-> remains unchanged and correct) are needed, just elfcorehdr.
-> 
-> To accommodate a growing number of resources via hotplug, the
-> elfcorehdr segment must be sufficiently large enough to accommodate
-> changes, see the CRASH_HOTPLUG_ELFCOREHDR_SZ configure item.
-> 
-> With this change, the kexec_file_load syscall (not kexec_load)
-> is supported. When loading the crash kernel via kexec_file_load,
-> the elfcorehdr is identified at load time in crash_load_segments().
+remove unnecessary void* type castings.
 
-I tune the log a little, please check:
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+---
+ fs/btrfs/check-integrity.c | 2 +-
+ fs/btrfs/disk-io.c         | 4 ++--
+ fs/btrfs/inode.c           | 2 +-
+ fs/btrfs/ioctl.c           | 4 ++--
+ fs/btrfs/relocation.c      | 2 +-
+ fs/btrfs/scrub.c           | 2 +-
+ fs/btrfs/space-info.c      | 2 +-
+ fs/btrfs/subpage.c         | 2 +-
+ fs/btrfs/volumes.c         | 2 +-
+ 9 files changed, 11 insertions(+), 11 deletions(-)
 
-[PATCH v5 7/8] x86/crash: Add x86 crash hotplug support for kexec_file_load
-
-For x86_64, when CPU or memory is hot un/plugged, the crash
-elfcorehdr, which describes the CPUs and memory in the system,
-must also be updated.
-
-To update the elfcorehdr for x86_64, a new elfcorehdr need be
-generated from the available CPUs and memory. The new elfcorehdr
-is prepared into a buffer, then installed over the top of the
-existing elfcorehdr.
-
-In the patch 'kexec: exclude elfcorehdr from the segment digest',
-the need to update purgatory due to the change in elfcorehdr was
-eliminated.  As a result, no changes to purgatory or boot_params
-(as the elfcorehdr= kernel command line parameter pointer
-remains unchanged and correct) are needed, just elfcorehdr.
-
-To accommodate a growing number of resources via hotplug, the
-elfcorehdr segment must be sufficiently large enough to accommodate
-changes, see the CRASH_HOTPLUG_ELFCOREHDR_SZ configure item.
-
-With this change, crash hotplug for kexec_file_load syscall 
-is supported. When loading kdump kernel via kexec_file_load,
-the elfcorehdr is identified at load time in crash_load_segments().
-
->
-
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  arch/x86/kernel/crash.c | 120 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 120 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 9db41cce8d97..5da30e2bc780 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -25,6 +25,7 @@
->  #include <linux/slab.h>
->  #include <linux/vmalloc.h>
->  #include <linux/memblock.h>
-> +#include <linux/highmem.h>
->  
->  #include <asm/processor.h>
->  #include <asm/hardirq.h>
-> @@ -398,7 +399,17 @@ int crash_load_segments(struct kimage *image)
->  	image->elf_headers = kbuf.buffer;
->  	image->elf_headers_sz = kbuf.bufsz;
->  
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +	/* Ensure elfcorehdr segment large enough for hotplug changes */
-> +	kbuf.memsz = CONFIG_CRASH_HOTPLUG_ELFCOREHDR_SZ;
-> +	/* For marking as usable to crash kernel */
-> +	image->elf_headers_sz = kbuf.memsz;
-> +	/* Record the index of the elfcorehdr segment */
-> +	image->elf_index = image->nr_segments;
-> +	image->elf_index_valid = true;
-> +#else
->  	kbuf.memsz = kbuf.bufsz;
-> +#endif
->  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->  	ret = kexec_add_buffer(&kbuf);
-> @@ -413,3 +424,112 @@ int crash_load_segments(struct kimage *image)
->  	return ret;
->  }
->  #endif /* CONFIG_KEXEC_FILE */
-> +
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +static void *map_crash_pages(unsigned long paddr, unsigned long size)
-> +{
-> +	/*
-> +	 * NOTE: The addresses and sizes passed to this routine have
-> +	 * already been fully aligned on page boundaries. There is no
-> +	 * need for massaging the address or size.
-> +	 */
-> +	void *ptr = NULL;
-> +
-> +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
-> +	if (size > 0) {
-> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> +
-> +		ptr = kmap(page);
-> +	}
-> +
-> +	return ptr;
-> +}
-> +
-> +static void unmap_crash_pages(void **ptr)
-> +{
-> +	if (ptr) {
-> +		if (*ptr)
-> +			kunmap(*ptr);
-> +		*ptr = NULL;
-> +	}
-> +}
-> +
-> +/**
-> + * arch_crash_hotplug_handler() - Handle hotplug elfcorehdr changes
-> + * @image: the active struct kimage
-> + * @hp_action: the hot un/plug action being handled
-> + * @a: first parameter dependent upon hp_action
-> + * @b: first parameter dependent upon hp_action
-> + *
-> + * To accurately reflect hot un/plug changes, the elfcorehdr (which
-> + * is passed to the crash kernel via the elfcorehdr= parameter)
-> + * must be updated with the new list of CPUs and memories. The new
-> + * elfcorehdr is prepared in a kernel buffer, and if no errors,
-                                                 ~~~~~~~~~~~~~~~~~~
-                                                 can be removed.
-> + * then it is written on top of the existing/old elfcorehdr.
-> + *
-> + * For hotplug changes to elfcorehdr to work, two conditions are
-> + * needed:
-> + * First, the segment containing the elfcorehdr must be large enough
-> + * to permit a growing number of resources. See
-> + * CONFIG_CRASH_HOTPLUG_ELFCOREHDR_SZ.
-> + * Second, purgatory must explicitly exclude the elfcorehdr from the
-> + * list of segments it checks (since the elfcorehdr changes and thus
-> + * would require an update to purgatory itself to update the digest).
-> + *
-> + */
-> +void arch_crash_hotplug_handler(struct kimage *image,
-> +	unsigned int hp_action, unsigned long a, unsigned long b)
-> +{
-> +	struct kexec_segment *ksegment;
-> +	unsigned char *ptr = NULL;
-> +	unsigned long elfsz = 0;
-> +	void *elfbuf = NULL;
-> +	unsigned long mem, memsz;
-> +
-> +	/* Must have valid elfcorehdr index */
-        Redundant code comment can be removed.
-
-> +	if (!image->elf_index_valid) {
-> +		pr_err("crash hp: unable to locate elfcorehdr segment");
-> +		goto out;
-> +	}
-> +
-> +	ksegment = &image->segment[image->elf_index];
-> +	mem = ksegment->mem;
-> +	memsz = ksegment->memsz;
-> +
-> +	/*
-> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
-> +	 * memory resources. The elfcorehdr segment memsz must be
-> +	 * sufficiently large to accommodate increases due to hotplug
-> +	 * activity. See CRASH_HOTPLUG_ELFCOREHDR_SZ.
-> +	 */
-        This paragraph could be duplicated with the part in kernel-doc.
-        Considering to drop one?
-> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
-> +		pr_err("crash hp: unable to prepare elfcore headers");
-> +		goto out;
-> +	}
-> +	if (elfsz > memsz) {
-> +		pr_err("crash hp: update elfcorehdr elfsz %lu > memsz %lu",
-> +			elfsz, memsz);
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * At this point, we are all but assured of success.
-> +	 * Copy new elfcorehdr into destination.
-> +	 */
-> +	ptr = map_crash_pages(mem, memsz);
-> +	if (ptr) {
-> +		/* Temporarily invalidate the crash image while it is replaced */
-> +		xchg(&kexec_crash_image, NULL);
-> +		/* Write the new elfcorehdr into memory */
-                No need, the code is self explanatory.
-> +		memcpy_flushcache((void *)ptr, elfbuf, elfsz);
-> +		/* The crash image is now valid once again */
-
-                ditto. Sometime over commenting is not suggested.
-
-> +		xchg(&kexec_crash_image, image);
-> +	}
-> +	unmap_crash_pages((void **)&ptr);
-> +	pr_debug("crash hp: re-loaded elfcorehdr at 0x%lx\n", mem);
-> +
-> +out:
-> +	if (elfbuf)
-> +		vfree(elfbuf);
-> +}
-> +#endif /* CONFIG_CRASH_HOTPLUG */
-> -- 
-> 2.27.0
-> 
+diff --git a/fs/btrfs/check-integrity.c b/fs/btrfs/check-integrity.c
+index abac86a75840..62eb149aac98 100644
+--- a/fs/btrfs/check-integrity.c
++++ b/fs/btrfs/check-integrity.c
+@@ -2033,7 +2033,7 @@ static void btrfsic_process_written_block(struct btrfsic_dev_state *dev_state,
+ 
+ static void btrfsic_bio_end_io(struct bio *bp)
+ {
+-	struct btrfsic_block *block = (struct btrfsic_block *)bp->bi_private;
++	struct btrfsic_block *block = bp->bi_private;
+ 	int iodone_w_error;
+ 
+ 	/* mutex is not held! This is not save if IO is not yet completed
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index b30309f187cf..51f7ad6cadce 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -1963,7 +1963,7 @@ static void end_workqueue_fn(struct btrfs_work *work)
+ 
+ static int cleaner_kthread(void *arg)
+ {
+-	struct btrfs_fs_info *fs_info = (struct btrfs_fs_info *)arg;
++	struct btrfs_fs_info *fs_info = arg;
+ 	int again;
+ 
+ 	while (1) {
+@@ -3293,7 +3293,7 @@ static int init_mount_fs_info(struct btrfs_fs_info *fs_info, struct super_block
+ 
+ static int btrfs_uuid_rescan_kthread(void *data)
+ {
+-	struct btrfs_fs_info *fs_info = (struct btrfs_fs_info *)data;
++	struct btrfs_fs_info *fs_info = data;
+ 	int ret;
+ 
+ 	/*
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index aa0a60ee26cb..6eafb46eadae 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -8951,7 +8951,7 @@ int btrfs_drop_inode(struct inode *inode)
+ 
+ static void init_once(void *foo)
+ {
+-	struct btrfs_inode *ei = (struct btrfs_inode *) foo;
++	struct btrfs_inode *ei = foo;
+ 
+ 	inode_init_once(&ei->vfs_inode);
+ }
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 238cee5b5254..c05a2afb74a7 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -2593,7 +2593,7 @@ static noinline int btrfs_ioctl_tree_search(struct inode *inode,
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+-	uargs = (struct btrfs_ioctl_search_args __user *)argp;
++	uargs = argp;
+ 
+ 	if (copy_from_user(&sk, &uargs->key, sizeof(sk)))
+ 		return -EFAULT;
+@@ -2627,7 +2627,7 @@ static noinline int btrfs_ioctl_tree_search_v2(struct inode *inode,
+ 		return -EPERM;
+ 
+ 	/* copy search header and buffer size */
+-	uarg = (struct btrfs_ioctl_search_args_v2 __user *)argp;
++	uarg = argp;
+ 	if (copy_from_user(&args, uarg, sizeof(args)))
+ 		return -EFAULT;
+ 
+diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+index fdc2c4b411f0..13befafab3b4 100644
+--- a/fs/btrfs/relocation.c
++++ b/fs/btrfs/relocation.c
+@@ -362,7 +362,7 @@ struct btrfs_root *find_reloc_root(struct btrfs_fs_info *fs_info, u64 bytenr)
+ 	rb_node = rb_simple_search(&rc->reloc_root_tree.rb_root, bytenr);
+ 	if (rb_node) {
+ 		node = rb_entry(rb_node, struct mapping_node, rb_node);
+-		root = (struct btrfs_root *)node->data;
++		root = node->data;
+ 	}
+ 	spin_unlock(&rc->reloc_root_tree.lock);
+ 	return btrfs_grab_root(root);
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index 11089568b287..e338e3f9a0b5 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -2798,7 +2798,7 @@ static void scrub_parity_bio_endio_worker(struct btrfs_work *work)
+ 
+ static void scrub_parity_bio_endio(struct bio *bio)
+ {
+-	struct scrub_parity *sparity = (struct scrub_parity *)bio->bi_private;
++	struct scrub_parity *sparity = bio->bi_private;
+ 	struct btrfs_fs_info *fs_info = sparity->sctx->fs_info;
+ 
+ 	if (bio->bi_status)
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index b87931a458eb..4de2c82051b1 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -519,7 +519,7 @@ static void shrink_delalloc(struct btrfs_fs_info *fs_info,
+ 		items = calc_reclaim_items_nr(fs_info, to_reclaim) * 2;
+ 	}
+ 
+-	trans = (struct btrfs_trans_handle *)current->journal_info;
++	trans = current->journal_info;
+ 
+ 	/*
+ 	 * If we are doing more ordered than delalloc we need to just wait on
+diff --git a/fs/btrfs/subpage.c b/fs/btrfs/subpage.c
+index ef7ae20d2b77..45fbc9e20715 100644
+--- a/fs/btrfs/subpage.c
++++ b/fs/btrfs/subpage.c
+@@ -127,7 +127,7 @@ void btrfs_detach_subpage(const struct btrfs_fs_info *fs_info,
+ 	if (fs_info->sectorsize == PAGE_SIZE || !PagePrivate(page))
+ 		return;
+ 
+-	subpage = (struct btrfs_subpage *)detach_page_private(page);
++	subpage = detach_page_private(page);
+ 	ASSERT(subpage);
+ 	btrfs_free_subpage(subpage);
+ }
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index 1be7cb2f955f..c7a6d290e67b 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -8295,7 +8295,7 @@ bool btrfs_pinned_by_swapfile(struct btrfs_fs_info *fs_info, void *ptr)
+ 
+ static int relocating_repair_kthread(void *data)
+ {
+-	struct btrfs_block_group *cache = (struct btrfs_block_group *)data;
++	struct btrfs_block_group *cache = data;
+ 	struct btrfs_fs_info *fs_info = cache->fs_info;
+ 	u64 target;
+ 	int ret = 0;
+-- 
+2.25.1
 

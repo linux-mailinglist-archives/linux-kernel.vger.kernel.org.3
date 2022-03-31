@@ -2,245 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB76A4ED090
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B59C4ED099
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352004AbiCaABv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S1350294AbiCaAFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351941AbiCaABW (ORCPT
+        with ESMTP id S239470AbiCaAFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:01:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A047865810;
-        Wed, 30 Mar 2022 16:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648684773; x=1680220773;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e3VfFz++MQ57r3VMx1Qll9FF7SCTUqFcUJ7v5m5VFpA=;
-  b=C9W4B6O+GT1TRGfhxXDmz9LY/T7SXlEdVbaM4Il6KVLq+I/ttWXQh9lA
-   fHoCT+quaE7dXZBsH7A0uEITzaZz38M0AsR143rACVrkLa+iXa98LOuZN
-   mD2iYHl1OsyrecJkufWtdJxtvH3VVpUnLOCydt+CTYcBdUjbiZcSBhXXT
-   vXeXXMvKYE9QAkgrgkRrWvHNoAc8diGNXWVrOe204lM3NK1XDC6GwKhsf
-   EJRXdOPypyeqpN9AwvnmgkOObmXZ2TXEus/OAtmbZQ8iAYdvDFbsRpeLp
-   QftvLsG5TSQ9JXq5K8lk9pUQ5Bndk9kSpJ8IKoAv5X3UKFGbHRVa5tgZw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259386306"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="259386306"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 16:59:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="565929808"
-Received: from npeper-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.16.15])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 16:59:32 -0700
-From:   ira.weiny@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH V7 10/10] cxl/port: Parse out DSMAS data from CDAT table
-Date:   Wed, 30 Mar 2022 16:59:20 -0700
-Message-Id: <20220330235920.2800929-11-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220330235920.2800929-1-ira.weiny@intel.com>
-References: <20220330235920.2800929-1-ira.weiny@intel.com>
+        Wed, 30 Mar 2022 20:05:10 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95793B23
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:03:20 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso1880225pjh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eK3xgJsSbOj4248lrzJGbFEJ5CxyDIG0aIJkQ/5Fx3I=;
+        b=hjmOY7ws3z6W+WChFER7xW75B/O15SGRzs2GdsWRKER/RGDhs2J3uNG0K+gFINWJ0u
+         9eLaS7137Hc12CYSRt2eD0A+htyallhS2P+eh7M7C8a396pvzpEZYKqD9R6+9cvHNcCj
+         LG1wyJp288R7FfwIJsgdlrVSFKb1yk6ydvElVx+O/e/x4DTV8Q3yg76CG1qYzc95mlA4
+         YpTONsqY9K4aDKA8aKYIxaJ6cmKiX6qm9GnPQPCwRHya1xvVrxTtCpYtUxZIutHRf9Nc
+         B31bT/0tDe2j1rx7JLP43kUtpg68prkawVNJomrpgChAhndEv7sGJNrcm9KbrBo/ogjn
+         4CHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eK3xgJsSbOj4248lrzJGbFEJ5CxyDIG0aIJkQ/5Fx3I=;
+        b=3xLa1z73Qv7NZZDg9hwphaZa7awVyQ3CLKhKefvHLEoMRO4vApXuEAnpC94aEAXxIq
+         Op+pF+VL1/vFU/ExKAuJ2rMBL71loojCkNkn9zNnCZjnMq5C2FqsUf6+d93RtiZ+3HiI
+         KYmb1HwVDM3hnO9yZuglYYPewPXGwGwUpCKiP+dJMj3v7RGDyzhGKzY9GEElmNE3UX7T
+         LVuWiK0sipG1CKa7yUQCY4h1+76ZXDDp1fVKAkvWCmH3EjVfFnblN1B2tMJl/5RCXdTK
+         APS25NdF6GA4p9WXDvaW/YGsLPfm360xuQNKPnA1d/7RWGw0yuPO5KQ4juvvIIPp+8/y
+         KtPw==
+X-Gm-Message-State: AOAM530P5t8frPXmL1ytS/SPOD3lSYtcJQD+lABkhdkHPrNLMWsqB81i
+        UeL9lyWAxs2i0Ja4+Mqg7eHe5w==
+X-Google-Smtp-Source: ABdhPJwN8lzxcvtEVo0aBOLKhLyP+tIh/WZx3bv4PUw2Mm70wcCv0Dsb3UEsLqtSfYT+U4DQx5bBcQ==
+X-Received: by 2002:a17:902:d88a:b0:156:1609:1e62 with SMTP id b10-20020a170902d88a00b0015616091e62mr16346514plz.143.1648684999806;
+        Wed, 30 Mar 2022 17:03:19 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g3-20020a056a001a0300b004fa65cbbf4esm25563516pfv.63.2022.03.30.17.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 17:03:19 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 00:03:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
+ TDX module
+Message-ID: <YkTvw5OXTTFf7j4y@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+ <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
+ <20220314194513.GD1964605@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314194513.GD1964605@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Mon, Mar 14, 2022, Isaku Yamahata wrote:
+> On Sun, Mar 13, 2022 at 03:03:40PM +0100,
+> Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> > On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> > > +
+> > > +	if (!tdx_module_initialized) {
+> > > +		if (enable_tdx) {
+> > > +			ret = __tdx_module_setup();
+> > > +			if (ret)
+> > > +				enable_tdx = false;
+> > 
+> > "enable_tdx = false" isn't great to do only when a VM is created.  Does it
+> > make sense to anticipate this to the point when the kvm_intel.ko module is
+> > loaded?
+> 
+> It's possible.  I have the following two reasons to chose to defer TDX module
+> initialization until creating first TD.  Given those reasons, do you still want
+> the initialization at loading kvm_intel.ko module?  If yes, I'll change it.
 
-CXL Ports with memory devices attached need the information from the
-Device Scoped Memory Affinity Structure (DSMAS).  This information is
-contained within the CDAT table buffer which is previously read and
-cached in the device state.
+Yes, TDX module setup needs to be done at load time.  The loss of memory is
+unfortunate, e.g. if the host is part of a pool that _might_ run TDX guests, but
+the alternatives are worse.  If TDX fails to initialize, e.g. due to low mem,
+then the host will be unable to run TDX guests despite saying "I support TDX".
+Or this gem :-)
 
-If CDAT data is available, parse and cache DSMAS data from the table.
-Store this data in unmarshaled struct dsmas data structures for ease of
-use.
+	/*
+	 * TDH.SYS.KEY.CONFIG may fail with entropy error (which is
+	 * a recoverable error).  Assume this is exceedingly rare and
+	 * just return error if encountered instead of retrying.
+	 */
 
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+The CPU overhead of initializing the TDX module is also non-trivial, and it
+doesn't affect just this CPU, e.g. all CPUs need to do certain SEAMCALLs and at
+least one WBINVD.  The can cause noisy neighbor problems.
 
----
-Changes from V6
-	Move to port.c
-	It is not an error if no DSMAS data is found
+> - memory over head: The initialization of TDX module requires to allocate
+> physically contiguous memory whose size is about 0.43% of the system memory.
+> If user don't use TD, it will be wasted.
+> 
+> - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
+> (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
+> guest does it.  It naturally fits with the TDX module initialization at creating
+> first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
 
-Changes from V5
-	Fix up sparse warnings
-	Split out cdat_hdr_valid()
-	Update cdat_hdr_valid()
-		Remove revision and cs field parsing
-			There is no point in these
-		Add seq check and debug print.
-	From Jonathan
-		Add spaces around '+' and '/'
-		use devm_krealloc() for dmas_ary
----
- drivers/cxl/cdat.h | 17 ++++++++++++
- drivers/cxl/cxl.h  |  6 +++++
- drivers/cxl/port.c | 65 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 88 insertions(+)
-
-diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-index a7725d26f2d2..66706b238bc9 100644
---- a/drivers/cxl/cdat.h
-+++ b/drivers/cxl/cdat.h
-@@ -83,6 +83,23 @@
- #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
- #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
- 
-+/**
-+ * struct cxl_dsmas - host unmarshaled version of DSMAS data
-+ *
-+ * As defined in the Coherent Device Attribute Table (CDAT) specification this
-+ * represents a single DSMAS entry in that table.
-+ *
-+ * @dpa_base: The lowest Device Physical Address associated with this DSMAD
-+ * @length: Length in bytes of this DSMAD
-+ * @non_volatile: If set, the memory region represents Non-Volatile memory
-+ */
-+struct cxl_dsmas {
-+	u64 dpa_base;
-+	u64 length;
-+	/* Flags */
-+	u8 non_volatile:1;
-+};
-+
- /**
-  * struct cxl_cdat - CXL CDAT data
-  *
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 80f462509b13..bd719da602ce 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -9,6 +9,8 @@
- #include <linux/bitops.h>
- #include <linux/io.h>
- 
-+#include "cdat.h"
-+
- /**
-  * DOC: cxl objects
-  *
-@@ -343,6 +345,8 @@ struct cxl_nvdimm {
-  * @component_reg_phys: component register capability base address (optional)
-  * @dead: last ep has been removed, force port re-creation
-  * @depth: How deep this port is relative to the root. depth 0 is the root.
-+ * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
-+ * @nr_dsmas: Number of entries in dsmas_ary
-  */
- struct cxl_port {
- 	struct device dev;
-@@ -354,6 +358,8 @@ struct cxl_port {
- 	resource_size_t component_reg_phys;
- 	bool dead;
- 	unsigned int depth;
-+	struct cxl_dsmas *dsmas_ary;
-+	int nr_dsmas;
- };
- 
- /**
-diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
-index f3c11a780bed..67abb2104e09 100644
---- a/drivers/cxl/port.c
-+++ b/drivers/cxl/port.c
-@@ -73,6 +73,70 @@ static int set_decoders(struct device *dev, void *data)
- 	return 0;
- }
- 
-+static void parse_dsmas(struct cxl_port *port, struct cxl_dev_state *cxlds)
-+{
-+	struct device *dev = &port->dev;
-+	struct cxl_dsmas *dsmas_ary = NULL;
-+	u32 *data = cxlds->cdat.table;
-+	int bytes_left = cxlds->cdat.length;
-+	int nr_dsmas = 0;
-+
-+	if (!data) {
-+		dev_info(dev, "No CDAT data available for DSMAS\n");
-+		return;
-+	}
-+
-+	/* Skip header */
-+	data += CDAT_HEADER_LENGTH_DW;
-+	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
-+
-+	while (bytes_left > 0) {
-+		u32 *cur_rec = data;
-+		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
-+		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
-+
-+		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
-+			struct cxl_dsmas *new_ary;
-+			u8 flags;
-+
-+			new_ary = devm_krealloc(dev, dsmas_ary,
-+					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
-+					   GFP_KERNEL);
-+			if (!new_ary) {
-+				dev_err(dev,
-+					"Failed to allocate memory for DSMAS data (nr_dsmas %d)\n",
-+					nr_dsmas);
-+				return;
-+			}
-+			dsmas_ary = new_ary;
-+
-+			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
-+
-+			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
-+			dsmas_ary[nr_dsmas].length = CDAT_DSMAS_DPA_LEN(cur_rec);
-+			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
-+
-+			dev_dbg(dev, "DSMAS %d: %llx:%llx %s\n",
-+				nr_dsmas,
-+				dsmas_ary[nr_dsmas].dpa_base,
-+				dsmas_ary[nr_dsmas].dpa_base +
-+					dsmas_ary[nr_dsmas].length,
-+				(dsmas_ary[nr_dsmas].non_volatile ?
-+					"Persistent" : "Volatile")
-+				);
-+
-+			nr_dsmas++;
-+		}
-+
-+		data += (length / sizeof(u32));
-+		bytes_left -= length;
-+	}
-+
-+	dev_dbg(dev, "Found %d DSMAS entries\n", nr_dsmas);
-+	port->dsmas_ary = dsmas_ary;
-+	port->nr_dsmas = nr_dsmas;
-+}
-+
- static int cxl_port_probe(struct device *dev)
- {
- 	struct cxl_port *port = to_cxl_port(dev);
-@@ -87,6 +151,7 @@ static int cxl_port_probe(struct device *dev)
- 		rc = devm_add_action_or_reset(dev, schedule_detach, cxlmd);
- 		if (rc)
- 			return rc;
-+		parse_dsmas(port, cxlmd->cxlds);
- 	} else {
- 		rc = devm_cxl_port_enumerate_dports(port);
- 		if (rc < 0)
--- 
-2.35.1
-
+That's a solvable problem, though making it work without exporting hardware_enable_all()
+could get messy.

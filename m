@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AD54ED6EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4BA4ED6ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbiCaJaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S233894AbiCaJbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbiCaJak (ORCPT
+        with ESMTP id S234088AbiCaJan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:30:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F18204A85
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:28:14 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nZr67-00066h-2h; Thu, 31 Mar 2022 11:28:07 +0200
-Message-ID: <319e976acb0a686e596b88520dbcda59c78afe9e.camel@pengutronix.de>
-Subject: Re: [PATCH] soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     tharvey@gateworks.com, aford@beaconembedded.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org
-Date:   Thu, 31 Mar 2022 11:28:05 +0200
-In-Reply-To: <20211120193916.1309236-1-aford173@gmail.com>
-References: <20211120193916.1309236-1-aford173@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 05:30:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4446719FF57;
+        Thu, 31 Mar 2022 02:28:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DAA9421A94;
+        Thu, 31 Mar 2022 09:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648718900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XFYfyrwVmalPRCaJIXRo5qf+pa6Yt4e0di4LG/QUdCY=;
+        b=cb1k+h93A36MO7riwd/Qq76x5i0lu0S4SLrdnMiGjNy696815AcLMhqNGXrMIn9ftssWqL
+        fJXw7j/A7irFO3EatIsZLuM2bziydIhKhAJtvHjC3ARMQDsPLuPIKfCSxY8Zd0Z6iHhN8z
+        i4CoOSECGpnDo/pwJ6IKuaj/yLDwRCY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648718900;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XFYfyrwVmalPRCaJIXRo5qf+pa6Yt4e0di4LG/QUdCY=;
+        b=06BUBuFtLxd3hjLa9h9D7KiBDTs6H9WhKtnqH6kUGCJzhStFZggmmFG6ObPFZGr53Y+lWL
+        nwF2aEcRxDD/AGBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id C7434A3B94;
+        Thu, 31 Mar 2022 09:28:20 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 11:28:20 +0200
+Message-ID: <s5hmth6eaiz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Won Chung <wonchung@google.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback function
+In-Reply-To: <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
+References: <20220330211913.2068108-1-wonchung@google.com>
+        <s5hzgl6eg48.wl-tiwai@suse.de>
+        <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
+        <s5hr16ieb8o.wl-tiwai@suse.de>
+        <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam, hi Shawn,
-
-Am Samstag, dem 20.11.2021 um 13:39 -0600 schrieb Adam Ford:
-> Enable the vpu-h1 clock when the domain is active because reading
-> or writing to the VPU-H1 IP block cause the system to hang.
+On Thu, 31 Mar 2022 11:25:43 +0200,
+Heikki Krogerus wrote:
 > 
-> Fixes: 656ade7aa42a ("soc: imx: gpcv2: keep i.MX8M* bus clocks enabled")
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+> On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
+> > > > > -     if (!strcmp(dev->driver->name, "i915") &&
+> > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
+> > > >
+> > > > Can NULL dev->driver be really seen?  I thought the components are
+> > > > added by the drivers, hence they ought to have the driver field set.
+> > > > But there can be corner cases I overlooked.
+> > > >
+> > > >
+> > > > thanks,
+> > > >
+> > > > Takashi
+> > > 
+> > > Hi Takashi,
+> > > 
+> > > When I try using component_add in a different driver (usb4 in my
+> > > case), I think dev->driver here is NULL because the i915 drivers do
+> > > not have their component master fully bound when this new component is
+> > > registered. When I test it, it seems to be causing a crash.
+> > 
+> > Hm, from where component_add*() is called?  Basically dev->driver must
+> > be already set before the corresponding driver gets bound at
+> > __driver_probe_deviec().  So, if the device is added to component from
+> > the corresponding driver's probe, dev->driver must be non-NULL.
 > 
-> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> index b8d52d8d29db..7b6dfa33dcb9 100644
-> --- a/drivers/soc/imx/gpcv2.c
-> +++ b/drivers/soc/imx/gpcv2.c
-> @@ -734,6 +734,7 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
->  			.map = IMX8MM_VPUH1_A53_DOMAIN,
->  		},
->  		.pgc   = BIT(IMX8MM_PGC_VPUH1),
-> +		.keep_clocks = true,
->  	},
+> The code that declares a device as component does not have to be the
+> driver of that device.
 > 
-I missed this patch and just stumbled across it when looking at the git
-history. I don't think this patch is correct. The H1 GPC domain does
-not even have clocks assigned in the DT, so there is nothing to keep
-active. Also H1 is not a MIX domain, so it should not keep any bus
-clocks active, that is the job of the VPUMIX domain.
+> In our case the components are USB ports, and they are devices that
+> are actually never bind to any drivers: drivers/usb/core/port.c
 
-While this patch is a no-op, as far as I can see, it still seems wrong
-and I think it should be reverted.
+OK, that's what I wanted to know.  It'd be helpful if it's more
+clearly mentioned in the commit log.
 
-Regards,
-Lucas
 
+BTW, the same problem must be seen in MEI drivers, too.
+
+
+Takashi

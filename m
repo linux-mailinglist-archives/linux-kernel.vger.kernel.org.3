@@ -2,693 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9BE4ED0A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0FF4ED0B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352047AbiCaAHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S1352023AbiCaAMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351957AbiCaAHY (ORCPT
+        with ESMTP id S1343702AbiCaAML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:07:24 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C8C13CF0;
-        Wed, 30 Mar 2022 17:05:37 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1648685135; bh=5DCUaIsE4Uppw5JzTbkl1FjLIhH+WKKv/Ni/67xWdW0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=d5r9jICimWOs8p7Oy+m+XL72g7YZXttPeUcxnRr1XBuSHJ4haxfbForiglmmAQ+t6
-         cPx/1kMxQHZ8jHB1ZOF+BKXGZwkYe2PMsDs28telVEtkKs8iKVMxHWIZsF0K8Nc20s
-         4hcRrP0376RGe/3Wqr9b0vyq6/qrPP4YijTdVQsQ=
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: [RFC PATCH 5/5] ASoC: Add macaudio machine driver
-Date:   Thu, 31 Mar 2022 02:04:49 +0200
-Message-Id: <20220331000449.41062-6-povik+lin@cutebit.org>
-In-Reply-To: <20220331000449.41062-1-povik+lin@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
+        Wed, 30 Mar 2022 20:12:11 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2043.outbound.protection.outlook.com [40.107.102.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151A9B0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:10:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q0SxP790mFjwDGE0qk1HRSG2vuYZm5mhqpQRyjQ0RLXgP0mWZuVZtevrvshR6RQAiUsWVtBl6hkCV3VN+Gqlcg5SvJq8x5Kk6NjkHVDBVLK/d463UVe3ap3cxNSAj+52LPl3rqlM9uUTLeW5+LkwyxChClGvtDhd94TgSo8GquI49xxMtr0fIETojx5PYcbQaBBF8ceu/14lII3ZIS9ZyqX3EGsEkktVOfSjomVjQ5OWlz1dM6jxvcXrEuZaeV+CR19RAqqxzRJ3Ea2F9EhtCZrj6g1r5dZXVTW09KzNtFmPBohEIso41WAeW0Tcrym1ns1YnQel9Q8QnZxC5t8jpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lMEJ7Aw8bsnE57clCzDuBJonrMViRbIBixrzUmoYQeY=;
+ b=EmRu/uk4+AvnOeQIUaS7o0s50LxuqClh4Vq6rUhXhe+1hE70RWtmRKGwVBpbRXh+3SsRFiW8izLusYfpu0rfavXlRZU4v6BTiEEYBA6v8mnyJnaK0J2KIht8sqigUQH/8YlcKvSCURe/wBbwxvcq7xjlrOc5fCFGqTZwOB+On7RFTx/4/7qQFDPfXi+GZ2whid1uJ7/pT9GDHUJrzpX1yobeCGX4684dL1OaeoVo7etGXvSQjrdcO6nQ/cHk1D2GH4UaKRP2754pEu7GjLOkKOCi/V9yz+3RSbD0NGryUn5xRuWRWpADYsnrDfcRRSMYLc2+XERdDRp0WyTmKLaN0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lMEJ7Aw8bsnE57clCzDuBJonrMViRbIBixrzUmoYQeY=;
+ b=GExYPzIyFjj2f889EOXocYuCZjFrJTfzrTuglJ+WOsvF0EQ5WQhp6TMowhfRm5ieTJMmbgBjMYwqTizHi3KdYAPmBR2nQkAKkVAQ4vZtZEqn94n12HJaY+26VIuM7UxPnycuXSOAQ6R0S2JnOWAr2afhAojJWa/fJtyYc4XqZVsa76jiruEhqzH6YmbTsbgqY+o6HeqUNrw3FZAmIMZbGMisHeojNoD+XXzOUa9efSe2m9Frvin6aD53MtWw/uO861eebHeSytgfMwJJ0ntoGSDqlbvpC89M7leyFo4Vxq/ErR8X9RXcSKntyen32pa0CKoCw8YI30L2VFvb5I/r3g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by SA0PR12MB4350.namprd12.prod.outlook.com (2603:10b6:806:92::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.20; Thu, 31 Mar
+ 2022 00:10:22 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::69f1:dff6:826b:7d9c]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::69f1:dff6:826b:7d9c%5]) with mapi id 15.20.5102.023; Thu, 31 Mar 2022
+ 00:10:22 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: page_alloc: validate buddy before check its migratetype.
+Date:   Wed, 30 Mar 2022 20:10:20 -0400
+X-Mailer: MailMate (1.14r5870)
+Message-ID: <7586AEB3-FE81-4D51-ADAE-737E74625444@nvidia.com>
+In-Reply-To: <63234E12-AF64-4D85-A2BF-8A4EF5359F91@nvidia.com>
+References: <20220330221238.396357-1-zi.yan@sent.com>
+ <CAHk-=whZ7d8Z4rv5oV9+FLEEk_1A1X=JsJaeAmFZzhDxLqDLFg@mail.gmail.com>
+ <63234E12-AF64-4D85-A2BF-8A4EF5359F91@nvidia.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1P221CA0026.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::27) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: eb01ef21-9862-4521-5a49-08da12aad8e2
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4350:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB435076B0330A652500C9217AC2E19@SA0PR12MB4350.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QttlME4BHFoN5dlTBzM7ocm0LMzKWJdWu7XW5fA8YUiATtEJzrKNAg4YB0kBC8HtSt4ZnTkwzq0kiWu0aGHh11tqTjFjrbhmUlxWZJHa0aq5BzMG1AkWGK5DbbH3ehiVCJD1lY/ftWvNyCTlXueuiPH5whAH2xnEk/BzRvtCyT3RaP+oz+oSDpfCkqDd+eqVDbGJMseJ/yEa9DnsrCHsyW0b59H0K7U7u/1PxnxCOO9n3sHF6lXTco988YDBVDKMKXUPB3SQc/ae9hZ+/u5/sqOXuX4qjj4b3lXOVWq760wUi3cuOD8qZgjajF7NukhNo7YGvAVy/Z/Nn2XjorYwJibz6clPZKCj4x1wGkez2WKVqJPo4LbChdpkaVJTGQMWgCwztTlr84rjRstF94QjrBrbmxaMmAWFEKmnuQqx9r2KG7VbcxDrpoy0SJb1mlZJn9YpdpC0WiHPfztZAayMXXA9ejkvOScAy4UJrGT3cK24z4yPIT5/rQe2LvRHri+TzO/LhpF02M5aZcKMoZDGq0a37kEZbbO+XkgADRsdUOe6/K2KIs3X/xec2oPF8BfGXp4IU3BL4vMQPvuVMS9CjTtO1jdkWNmWkUuayoI+qhbD2S/QJi7FY/JWa6mmy+DgDbop44J6RCQU+AIsml+7T2iPfSCHDmZG2MG1KMCJxwP+OFiQzKRtU50b5zGTxe4VoW79iHlC33STqtAi5BlTFcfaT50w04gSrcBoyadoYCI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(5660300002)(2616005)(316002)(2906002)(6916009)(38100700002)(36756003)(86362001)(6506007)(508600001)(6512007)(66556008)(66946007)(8676002)(4326008)(6486002)(66476007)(186003)(7416002)(83380400001)(235185007)(21480400003)(8936002)(26005)(54906003)(33656002)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lQRCb1ZqOhfLnjuDUJ+pPwT32VEjbjD3bQvIgeP0LSMbvni1dnauac1wsRwp?=
+ =?us-ascii?Q?j4m1VMPUS8KReSMBPFGzb1CtSw8L3gfstulhMbjkjkRHWlf0t/BSC/N3C/YD?=
+ =?us-ascii?Q?KOcTiznMRJnJjoSkD1LTNFomrzD+0JwLAkI5KB4BSV94qPJoodyQzTWRvkH+?=
+ =?us-ascii?Q?HoVToXaRVLk5RncqiNPHkAPmUjWUb05ZoCEMm4vN7eeuLAQGR4GJufVJhmDU?=
+ =?us-ascii?Q?K7CShH/v2vqUGunwOH53U7l2yipp1Uo9Qt6LdAyHteOCrdfE5amDng6BA9Vf?=
+ =?us-ascii?Q?zG7vtkALSHA6O6ZKCAORXRQgS4/u882cLHnkb7uTqpijJGT1Bsgv7NKUXxl7?=
+ =?us-ascii?Q?8RYM7SJtJexKW9yM/HCK6Q7QzJWdqGMhrPLQvGxf/INx65lRTAKx20zrhRZi?=
+ =?us-ascii?Q?kxvzoW3hqH2QyWwy/4hXnKBQb/jRMiMP+7N545F6mVIieY/NEpKRmRl/k8C5?=
+ =?us-ascii?Q?FDwGTNoGFV2S8sbMrYAHQqeJrJX8ZNACr/KhjcoP1P1bAJw0NX1kPKl+6MJB?=
+ =?us-ascii?Q?FfkQzxndoQy10OTalzxzBOeqyoJWW1rYq+0h9ZafgSKNzYGmUW+2pfhrKJec?=
+ =?us-ascii?Q?th1Tubfk0/fIVJMHpwxCPfqg4GHiBG/qZFAr5MvXqO92v6+Uys23f58hcC9E?=
+ =?us-ascii?Q?WPOGr3Ew8mPuwRyWaAiX8rx8D2+aLJdn5d4kbhWtRVaa/f81AR8N3KEOD3qi?=
+ =?us-ascii?Q?NyqHj9b+tTAi+QYKBs1+NT7FEsPosnWsUL1MHcRZMwwXJebXxuFxzWS23S5m?=
+ =?us-ascii?Q?c9Vd11g8mMzYK8AgduzeuEZWMcmJp52eVjVQYUcO2UCJ+XQvG+RK8cw/s9ub?=
+ =?us-ascii?Q?+SSc8739su/ArbZdunMAiDNML6nCRpiuu947agBlz9X7fl9oHYsRQELS+yjN?=
+ =?us-ascii?Q?0Vozyswq7l8DCZ3DeClRJbGPzqL7QwYw55JyiCbBj4oH8nQ3qgHrtfHIBGRX?=
+ =?us-ascii?Q?vZzcc9X95ZE208ahBsQVrvqCfkhAv7S2sTNXzDEjrZXjWTZFSIZjWWBAEDwM?=
+ =?us-ascii?Q?+kfgJ0qIZHr+zUmoVD67bAtZMu9Pk/SZtlDKqbPUU9rsSxTpQPkkNQ3jB8wB?=
+ =?us-ascii?Q?UGSzN1IjSmJ3KDOHpN3n7Oku2tIxCw9zK0Lip3vVK/a8Tc0ikADyURcDW4pT?=
+ =?us-ascii?Q?xpjoBQZVQY8Ji15T+vlRwZ/SAg8QJjKkKATlOH1c03fUhd6wci9kjENulsEF?=
+ =?us-ascii?Q?yXBRQmk9bsH3XXxICuCPrFRriO7VZrx2Bb5znhvr28SPVfOVQ0SzuKeXYfmz?=
+ =?us-ascii?Q?/ee3hEbVYgFQa5sUpTDAmGevRuKxsc5t6Aj7YJcQ/IK6yo//m+/Voy0N8Fkb?=
+ =?us-ascii?Q?d3xDYOSKb5+N6zwvdOzPkUm5yg27wTmy3Pb0tIpJElMJvAOjq4Z22wYSUqsr?=
+ =?us-ascii?Q?eYjYFk/NQrGaMORx89SvmfzvnyoWwUS/Q3oW/MtCMF0JBH2KA74dObhV6Ab0?=
+ =?us-ascii?Q?BGQDHSxAZfPdekfmEqW+fA7+bu5jZ3lcaRNibx1Cx9Xpnlg90AEB8c+ophZA?=
+ =?us-ascii?Q?xcpjQ7jzAAvFhyfH4Zz8iY4+EQpczwa7oSOcxATOtvjuDJntcRavFF2n+Nai?=
+ =?us-ascii?Q?vXyryNQeAAQC035b3UOTlA0VMDmon2HYpIzhlZklSNWs9LMXQEhSstChDVMZ?=
+ =?us-ascii?Q?AthZaOcCh1M6aXCYuCDFMNilq/B4lL2W8YJiLcvInPao4jwhlGK54Kt2x3jS?=
+ =?us-ascii?Q?7o33iH6Em1WCKmXFTn5f1IZyqlITH37kja3BY8BYhZdXgmh4GYSs54O6UfiN?=
+ =?us-ascii?Q?mAc2TIHcBw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb01ef21-9862-4521-5a49-08da12aad8e2
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 00:10:22.3643
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cXOFE3a7cXYoZDeU4j0fo5RlXUM7nwrabHdQPZjH1tNmUx3jeKh4Oi3KF/gVTvNF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4350
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ASoC machine driver for Apple Silicon Macs.
+--=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
- sound/soc/apple/Kconfig    |  10 +
- sound/soc/apple/Makefile   |   3 +
- sound/soc/apple/macaudio.c | 597 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 610 insertions(+)
- create mode 100644 sound/soc/apple/Kconfig
- create mode 100644 sound/soc/apple/Makefile
- create mode 100644 sound/soc/apple/macaudio.c
+On 30 Mar 2022, at 19:48, Zi Yan wrote:
 
-diff --git a/sound/soc/apple/Kconfig b/sound/soc/apple/Kconfig
-new file mode 100644
-index 000000000000..afc0243b9309
---- /dev/null
-+++ b/sound/soc/apple/Kconfig
-@@ -0,0 +1,10 @@
-+config SND_SOC_APPLE_MACAUDIO
-+	tristate "ASoC machine driver for Apple Silicon Macs"
-+	depends on ARCH_APPLE || COMPILE_TEST
-+	select SND_SOC_APPLE_MCA
-+	select SND_SIMPLE_CARD_UTILS
-+	select APPLE_ADMAC
-+	select COMMON_CLK_APPLE_NCO
-+	default ARCH_APPLE
-+	help
-+	  This option enables an ASoC machine driver for Apple Silicon Macs.
-diff --git a/sound/soc/apple/Makefile b/sound/soc/apple/Makefile
-new file mode 100644
-index 000000000000..d7a2df6311b5
---- /dev/null
-+++ b/sound/soc/apple/Makefile
-@@ -0,0 +1,3 @@
-+snd-soc-macaudio-objs	:= macaudio.o
-+
-+obj-$(CONFIG_SND_SOC_APPLE_MACAUDIO)	+= snd-soc-macaudio.o
-diff --git a/sound/soc/apple/macaudio.c b/sound/soc/apple/macaudio.c
-new file mode 100644
-index 000000000000..3e80f97a9b75
---- /dev/null
-+++ b/sound/soc/apple/macaudio.c
-@@ -0,0 +1,597 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * ASoC machine driver for Apple Silicon Macs
-+ *
-+ * Copyright (C) The Asahi Linux Contributors
-+ *
-+ * Based on sound/soc/qcom/{sc7180.c|common.c}
-+ *
-+ * Copyright (c) 2018, Linaro Limited.
-+ * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <sound/core.h>
-+#include <sound/jack.h>
-+#include <sound/pcm.h>
-+#include <sound/simple_card_utils.h>
-+#include <sound/soc.h>
-+#include <uapi/linux/input-event-codes.h>
-+
-+#define DRIVER_NAME "snd-soc-macaudio"
-+
-+struct macaudio_snd_data {
-+	struct snd_soc_card card;
-+	struct snd_soc_jack_pin pin;
-+	struct snd_soc_jack jack;
-+
-+	struct macaudio_link_props {
-+		unsigned int mclk_fs;
-+	} *link_props;
-+
-+	const struct snd_pcm_chmap_elem *speaker_chmap;
-+
-+	unsigned int speaker_nchans_array[2];
-+	struct snd_pcm_hw_constraint_list speaker_nchans_list;
-+
-+	struct list_head hidden_kcontrols;
-+};
-+
-+static int macaudio_parse_of(struct macaudio_snd_data *ma, struct snd_soc_card *card)
-+{
-+	struct device_node *np;
-+	struct device_node *codec = NULL;
-+	struct device_node *cpu = NULL;
-+	struct device *dev = card->dev;
-+	struct snd_soc_dai_link *link;
-+	struct macaudio_link_props *link_props;
-+	int ret, num_links;
-+	int i = 0;
-+
-+	ret = snd_soc_of_parse_card_name(card, "model");
-+	if (ret) {
-+		dev_err(dev, "Error parsing card name: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = asoc_simple_parse_routing(card, NULL);
-+	if (ret)
-+		return ret;
-+
-+	/* Populate links */
-+	num_links = of_get_available_child_count(dev->of_node);
-+
-+	/* Allocate the DAI link array */
-+	card->dai_link = devm_kcalloc(dev, num_links, sizeof(*link), GFP_KERNEL);
-+	ma->link_props = devm_kcalloc(dev, num_links, sizeof(*ma->link_props), GFP_KERNEL);
-+	if (!card->dai_link || !ma->link_props)
-+		return -ENOMEM;
-+
-+	card->num_links = num_links;
-+	link = card->dai_link;
-+	link_props = ma->link_props;
-+
-+	for_each_available_child_of_node(dev->of_node, np) {
-+		link->id = i++;
-+
-+		/* CPU side is bit and frame clock master, I2S with both clocks inverted */
-+		link->dai_fmt = SND_SOC_DAIFMT_I2S |
-+			SND_SOC_DAIFMT_CBC_CFC |
-+			SND_SOC_DAIFMT_GATED |
-+			SND_SOC_DAIFMT_IB_IF;
-+
-+		ret = of_property_read_string(np, "link-name", &link->name);
-+		if (ret) {
-+			dev_err(card->dev, "Missing link name\n");
-+			goto err_put_np;
-+		}
-+
-+		cpu = of_get_child_by_name(np, "cpu");
-+		codec = of_get_child_by_name(np, "codec");
-+
-+		if (!codec || !cpu) {
-+			dev_err(dev, "Missing DAI specifications for '%s'\n", link->name);
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+
-+		ret = snd_soc_of_get_dai_link_codecs(dev, codec, link);
-+		if (ret < 0) {
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(card->dev, "%s: codec dai not found: %d\n",
-+					link->name, ret);
-+			goto err;
-+		}
-+
-+		ret = snd_soc_of_get_dai_link_cpus(dev, cpu, link);
-+		if (ret < 0) {
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(card->dev, "%s: cpu dai not found: %d\n",
-+					link->name, ret);
-+			goto err;
-+		}
-+
-+		link->num_platforms = 1;
-+		link->platforms	= devm_kzalloc(dev, sizeof(*link->platforms),
-+						GFP_KERNEL);
-+		if (!link->platforms) {
-+			ret = -ENOMEM;
-+			goto err;
-+		}
-+		link->platforms->of_node = link->cpus->of_node;
-+
-+		of_property_read_u32(np, "mclk-fs", &link_props->mclk_fs);
-+
-+		link->stream_name = link->name;
-+		link++;
-+		link_props++;
-+
-+		of_node_put(cpu);
-+		of_node_put(codec);
-+	}
-+
-+	/*
-+	 * TODO: Not sure I shouldn't do something about the ->of_node component
-+	 * references I leave in dai_link (if successful here).
-+	 */
-+
-+	return 0;
-+err:
-+	of_node_put(cpu);
-+	of_node_put(codec);
-+err_put_np:
-+	for (i = 0; i < num_links; i++) {
-+		snd_soc_of_put_dai_link_codecs(&card->dai_link[i]);
-+		snd_soc_of_put_dai_link_cpus(&card->dai_link[i]);
-+	}
-+	of_node_put(np);
-+	return ret;
-+}
-+
-+static int macaudio_hw_params(struct snd_pcm_substream *substream,
-+				struct snd_pcm_hw_params *params)
-+{
-+	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(rtd->card);
-+	struct macaudio_link_props *props = &ma->link_props[rtd->num];
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct snd_soc_dai *dai;
-+	int i, mclk;
-+
-+	if (props->mclk_fs) {
-+		mclk = params_rate(params) * props->mclk_fs;
-+
-+		for_each_rtd_codec_dais(rtd, i, dai)
-+			snd_soc_dai_set_sysclk(dai, 0, mclk, SND_SOC_CLOCK_IN);
-+
-+		snd_soc_dai_set_sysclk(cpu_dai, 0, mclk, SND_SOC_CLOCK_OUT);
-+	}
-+
-+	return 0;
-+}
-+
-+static void macaudio_shutdown(struct snd_pcm_substream *substream)
-+{
-+	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(rtd->card);
-+	struct macaudio_link_props *props = &ma->link_props[rtd->num];
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct snd_soc_dai *dai;
-+	int i;
-+
-+	if (props->mclk_fs) {
-+		for_each_rtd_codec_dais(rtd, i, dai)
-+			snd_soc_dai_set_sysclk(dai, 0, 0, SND_SOC_CLOCK_IN);
-+
-+		snd_soc_dai_set_sysclk(cpu_dai, 0, 0, SND_SOC_CLOCK_OUT);
-+	}
-+}
-+
-+static bool macaudio_is_speakers(struct snd_soc_dai_link *dai_link)
-+{
-+	return !strcmp(rtd->dai_link->name, "Speaker")
-+		|| !strcmp(rtd->dai_link->name, "Speakers");
-+}
-+
-+static int macaudio_startup(struct snd_pcm_substream *substream)
-+{
-+	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-+	struct snd_soc_card *card = rtd->card;
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-+	struct snd_pcm_hw_constraint_list *nchans_list = &ma->speaker_nchans_list;
-+	unsigned int *nchans_array = ma->speaker_nchans_array;
-+	int ret;
-+
-+	if (macaudio_is_speakers(rtd->dai_link)) {
-+		if (rtd->num_codecs > 2) {
-+			nchans_list->count = 2;
-+			nchans_list->list = nchans_array;
-+			nchans_array[0] = 2;
-+			nchans_array[1] = rtd->num_codecs;
-+
-+			ret = snd_pcm_hw_constraint_list(substream->runtime, 0,
-+					SNDRV_PCM_HW_PARAM_CHANNELS, nchans_list);
-+			if (ret < 0)
-+				return ret;
-+		} else if (rtd->num_codecs == 2) {
-+			ret = snd_pcm_hw_constraint_single(substream->runtime,
-+					SNDRV_PCM_HW_PARAM_CHANNELS, 2);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int macaudio_assign_tdm(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_card *card = rtd->card;
-+	struct snd_soc_dai *dai, *cpu_dai;
-+	int ret, i;
-+	int nchans = 0, nslots = 0, slot_width = 32;
-+
-+	nslots = rtd->num_codecs;
-+
-+	for_each_rtd_codec_dais(rtd, i, dai) {
-+		int codec_nchans = 1;
-+		int mask = ((1 << codec_nchans) - 1) << nchans;
-+
-+		ret = snd_soc_dai_set_tdm_slot(dai, mask,
-+					mask, nslots, slot_width);
-+		if (ret == -EINVAL)
-+			/* Try without the RX mask */
-+			ret = snd_soc_dai_set_tdm_slot(dai, mask,
-+					0, nslots, slot_width);
-+
-+		if (ret < 0) {
-+			dev_err(card->dev, "DAI %s refuses TDM settings: %d",
-+					dai->name, ret);
-+			return ret;
-+		}
-+
-+		nchans += codec_nchans;
-+	}
-+
-+	cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	ret = snd_soc_dai_set_tdm_slot(cpu_dai, (1 << nslots) - 1,
-+			(1 << nslots) - 1, nslots, slot_width);
-+	if (ret < 0) {
-+		dev_err(card->dev, "CPU DAI %s refuses TDM settings: %d",
-+				cpu_dai->name, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int macaudio_init(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_card *card = rtd->card;
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-+	struct snd_soc_component *component;
-+	int ret, i;
-+
-+	if (rtd->num_codecs > 1) {
-+		ret = macaudio_assign_tdm(rtd);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	for_each_rtd_components(rtd, i, component)
-+		snd_soc_component_set_jack(component, &ma->jack, NULL);
-+
-+	return 0;
-+}
-+
-+static void macaudio_exit(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_component *component;
-+	int i;
-+
-+	for_each_rtd_components(rtd, i, component)
-+		snd_soc_component_set_jack(component, NULL, NULL);
-+}
-+
-+struct macaudio_kctlfix {
-+	char *name;
-+	char *value;
-+} macaudio_kctlfixes[] = {
-+	{"* ASI1 Sel", "Left"},
-+	{"* ISENSE Switch", "Off"},
-+	{"* VSENSE Switch", "Off"},
-+	{ }
-+};
-+
-+static bool macaudio_kctlfix_matches(const char *pattern, const char *name)
-+{
-+	if (pattern[0] == '*') {
-+		int namelen, patternlen;
-+
-+		pattern++;
-+		if (pattern[0] == ' ')
-+			pattern++;
-+
-+		namelen = strlen(name);
-+		patternlen = strlen(pattern);
-+
-+		if (namelen > patternlen)
-+			name += (namelen - patternlen);
-+	}
-+
-+	return !strcmp(name, pattern);
-+}
-+
-+static struct macaudio_kctlfix *macaudio_find_kctlfix(const char *name)
-+{
-+	struct macaudio_kctlfix *fctl;
-+
-+	for (fctl = macaudio_kctlfixes; fctl->name != NULL; fctl++)
-+		if (macaudio_kctlfix_matches(fctl->name, name))
-+			return fctl;
-+
-+	return NULL;
-+}
-+
-+static int macaudio_probe(struct snd_soc_card *card)
-+{
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-+	int ret;
-+
-+	INIT_LIST_HEAD(&ma->hidden_kcontrols);
-+
-+	ma->pin.pin = "Headphones";
-+	ma->pin.mask = SND_JACK_HEADSET | SND_JACK_HEADPHONE;
-+	ret = snd_soc_card_jack_new(card, ma->pin.pin,
-+			SND_JACK_HEADSET |
-+			SND_JACK_HEADPHONE |
-+			SND_JACK_BTN_0 | SND_JACK_BTN_1 |
-+			SND_JACK_BTN_2 | SND_JACK_BTN_3,
-+			&ma->jack, &ma->pin, 1);
-+
-+	if (ret < 0)
-+		dev_err(card->dev, "jack creation failed: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Maybe this could be a general ASoC function?
-+ */
-+static void snd_soc_kcontrol_set_strval(struct snd_soc_card *card,
-+				struct snd_kcontrol *kcontrol, const char *strvalue)
-+{
-+	struct snd_ctl_elem_value value;
-+	struct snd_ctl_elem_info info;
-+	int sel, i, ret;
-+
-+	ret = kcontrol->info(kcontrol, &info);
-+	if (ret < 0) {
-+		dev_err(card->dev, "can't obtain info on control '%s': %d",
-+			kcontrol->id.name, ret);
-+		return;
-+	}
-+
-+	switch (info.type) {
-+	case SNDRV_CTL_ELEM_TYPE_ENUMERATED:
-+		for (sel = 0; sel < info.value.enumerated.items; sel++) {
-+			info.value.enumerated.item = sel;
-+			kcontrol->info(kcontrol, &info);
-+
-+			if (!strcmp(strvalue, info.value.enumerated.name))
-+				break;
-+		}
-+
-+		if (sel == info.value.enumerated.items)
-+			goto not_avail;
-+
-+		for (i = 0; i < info.count; i++)
-+			value.value.enumerated.item[i] = sel;
-+		break;
-+
-+	case SNDRV_CTL_ELEM_TYPE_BOOLEAN:
-+		sel = !strcmp(strvalue, "On");
-+
-+		if (!sel && strcmp(strvalue, "Off"))
-+			goto not_avail;
-+
-+		for (i = 0; i < info.count; i++)
-+			value.value.integer.value[i] = sel;
-+		break;
-+
-+	case SNDRV_CTL_ELEM_TYPE_INTEGER:
-+		if (kstrtoint(strvalue, 10, &sel))
-+			goto not_avail;
-+
-+		for (i = 0; i < info.count; i++)
-+			value.value.integer.value[i] = sel;
-+		break;
-+
-+	default:
-+		dev_err(card->dev, "%s: control '%s' has unsupported type %d",
-+			__func__, kcontrol->id.name, info.type);
-+		return;
-+	}
-+
-+	ret = kcontrol->put(kcontrol, &value);
-+	if (ret < 0) {
-+		dev_err(card->dev, "can't set control '%s' to '%s': %d",
-+			kcontrol->id.name, strvalue, ret);
-+		return;
-+	}
-+
-+	dev_dbg(card->dev, "set '%s' to '%s'",
-+			kcontrol->id.name, strvalue);
-+	return;
-+
-+not_avail:
-+	dev_err(card->dev, "option '%s' on control '%s' not available",
-+			strvalue, kcontrol->id.name);
-+	return;
-+
-+}
-+
-+static int macaudio_filter_controls(struct snd_soc_card *card,
-+			 struct snd_kcontrol *kcontrol)
-+{
-+	struct macaudio_kctlfix *fctl = macaudio_find_kctlfix(kcontrol->id.name);
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-+
-+	dev_dbg(card->dev, "visiting control %s, have match %d\n",
-+		kcontrol->id.name, !!fctl);
-+
-+	if (!fctl)
-+		return 0;
-+
-+	list_add_tail(&kcontrol->list, &ma->hidden_kcontrols);
-+	return 1;
-+}
-+
-+static int macaudio_late_probe(struct snd_soc_card *card)
-+{
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-+	struct snd_kcontrol *kcontrol;
-+	struct snd_soc_pcm_runtime *rtd;
-+	int ret;
-+
-+	/*
-+	 * Here we take it to be okay to fiddle with the kcontrols
-+	 * we caught for ourselves.
-+	 */
-+	list_for_each_entry(kcontrol, &ma->hidden_kcontrols, list) {
-+		struct macaudio_kctlfix *fctl = macaudio_find_kctlfix(kcontrol->id.name);
-+
-+		if (fctl)
-+			snd_soc_kcontrol_set_strval(card, kcontrol, fctl->value);
-+	}
-+
-+	for_each_card_rtds(card, rtd) {
-+		if (macaudio_is_speakers(rtd->dai_link) && ma->speaker_chmap) {
-+			ret = snd_pcm_add_chmap_ctls(rtd->pcm,
-+				SNDRV_PCM_STREAM_PLAYBACK, ma->speaker_chmap,
-+				rtd->num_codecs, 0, NULL);
-+			if (ret < 0)
-+				dev_err(card->dev, "failed to add channel map on '%s': %d\n",
-+					rtd->dai_link->name, ret);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int macaudio_remove(struct snd_soc_card *card)
-+{
-+	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-+	struct snd_kcontrol *kcontrol;
-+
-+	list_for_each_entry(kcontrol, &ma->hidden_kcontrols, list)
-+		snd_ctl_free_one(kcontrol);
-+
-+	return 0;
-+}
-+
-+static const struct snd_soc_ops macaudio_ops = {
-+	.startup	= macaudio_startup,
-+	.shutdown	= macaudio_shutdown,
-+	.hw_params	= macaudio_hw_params,
-+};
-+
-+static const struct snd_soc_dapm_widget macaudio_snd_widgets[] = {
-+	SND_SOC_DAPM_HP("Headphones", NULL),
-+};
-+
-+static const struct snd_pcm_chmap_elem macaudio_j274_chmaps[] = {
-+	{ .channels = 1,
-+	  .map = { SNDRV_CHMAP_MONO } },
-+	{ }
-+};
-+
-+static const struct snd_pcm_chmap_elem macaudio_j293_chmaps[] = {
-+	{ .channels = 2,
-+	  .map = { SNDRV_CHMAP_FL, SNDRV_CHMAP_FR } },
-+	{ .channels = 4,
-+	  .map = { SNDRV_CHMAP_FL, SNDRV_CHMAP_FR,
-+		   SNDRV_CHMAP_RL, SNDRV_CHMAP_RR } },
-+	{ }
-+};
-+
-+static const struct snd_pcm_chmap_elem macaudio_j314_chmaps[] = {
-+	{ .channels = 2,
-+	  .map = { SNDRV_CHMAP_FL, SNDRV_CHMAP_FR } },
-+	{ .channels = 6,
-+	  .map = { SNDRV_CHMAP_SL, SNDRV_CHMAP_SR,
-+		   SNDRV_CHMAP_FL, SNDRV_CHMAP_FR,
-+		   SNDRV_CHMAP_RL, SNDRV_CHMAP_RR } },
-+	{ }
-+};
-+
-+static const struct of_device_id macaudio_snd_device_id[]  = {
-+	{ .compatible = "apple,j274-macaudio", .data = macaudio_j274_chmaps },
-+	{ .compatible = "apple,j293-macaudio", .data = macaudio_j293_chmaps },
-+	{ .compatible = "apple,j314-macaudio", .data = macaudio_j314_chmaps },
-+	{ .compatible = "apple,macaudio", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, macaudio_snd_device_id);
-+
-+static int macaudio_snd_platform_probe(struct platform_device *pdev)
-+{
-+	struct snd_soc_card *card;
-+	struct macaudio_snd_data *data;
-+	struct device *dev = &pdev->dev;
-+	struct snd_soc_dai_link *link;
-+	const struct of_device_id *of_id;
-+	int ret;
-+	int i;
-+
-+	of_id = of_match_device(macaudio_snd_device_id, dev);
-+	if (!of_id)
-+		return -EINVAL;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->speaker_chmap = of_id->data;
-+	card = &data->card;
-+	snd_soc_card_set_drvdata(card, data);
-+
-+	card->owner = THIS_MODULE;
-+	card->driver_name = DRIVER_NAME;
-+	card->dev = dev;
-+	card->dapm_widgets = macaudio_snd_widgets;
-+	card->num_dapm_widgets = ARRAY_SIZE(macaudio_snd_widgets);
-+	card->probe = macaudio_probe;
-+	card->late_probe = macaudio_late_probe;
-+	card->remove = macaudio_remove;
-+	card->filter_controls = macaudio_filter_controls;
-+	card->remove = macaudio_remove;
-+
-+	ret = macaudio_parse_of(data, card);
-+	if (ret)
-+		return ret;
-+
-+	for_each_card_prelinks(card, i, link) {
-+		link->ops = &macaudio_ops;
-+		link->init = macaudio_init;
-+		link->exit = macaudio_exit;
-+	}
-+
-+	return devm_snd_soc_register_card(dev, card);
-+}
-+
-+static struct platform_driver macaudio_snd_driver = {
-+	.probe = macaudio_snd_platform_probe,
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = macaudio_snd_device_id,
-+		.pm = &snd_soc_pm_ops,
-+	},
-+};
-+module_platform_driver(macaudio_snd_driver);
-+
-+MODULE_AUTHOR("Martin Povišer <povik+lin@cutebit.org>");
-+MODULE_DESCRIPTION("Apple Silicon Macs machine-level sound driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.0
+> On 30 Mar 2022, at 19:03, Linus Torvalds wrote:
+>
+>> On Wed, Mar 30, 2022 at 3:12 PM Zi Yan <zi.yan@sent.com> wrote:
+>>>
+>>> Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable =
+pageblocks with others")
+>>
+>> Oh, btw - should this perhaps be backported further back than that
+>> alleged "fixes" commit?
+>>
+>> It does look like maybe the problem potentially existed before too,
+>> and was just much harder to trigger.
+>>
+>> That said, google doesn't find any other reports that look like
+>> Steven's oops, so maybe it really never happened and backporting isn't=
 
+>> called for.
+>>
+>> Or possibly my google-fu is just bad.
+>>
+>
+> There might not be any issue with the original code because this bug
+> could only be triggered when CONFIG_FLATMEM and CONFIG_MEMORY_ISOLATION=
+
+> are both set, which never happens, since CONFIG_MEMORY_ISOLATION
+> depends on CONFIG_SPARSEMEM.
+>
+> By checking Steven's boot log, it should be PFN 0x21ee00 that triggers
+> the bug, since the physical memory range ends at PFN 0x21edff.
+> PFN 0x21ee00 is 2MB aligned instead of MAX_ORDER-1 (4MB) aligned.
+> The original code assumes all physical memory ranges are at least
+> MAX_ORDER-1 aligned, which is true when CONFIG_SPARSEMEM is set
+> (CONFIG_MEMORY_ISOLATION depends on it), since CONFIG_SPARSEMEM
+> allocates pageblock_flags array (the NULL-deferenced bitmap points
+> to) at section size granularity (128MB > 4MB). However, CONFIG_FLATMEM
+> does not do this. It allocates pageblock_flags array at the exact size
+> of the physical memory. So checking 0x21ee00 will not cause NULL
+> dereferencing when CONFIG_MEMORY_ISOLATION is set and the original
+> if statement can be true.
+>
+> Now I am wondering if the page_is_buddy() check is correct for
+> CONFIG_FLATMEM. Is mem_map allocation aligned to MAX_ORDER-1
+> or just the present physical memory range? Is PageBuddy(0x21ee00)
+> accessing some random memory location?
+
+OK. mem_map seems to be MAX_ORDER-1 aligned, so there is no
+problem with PageBuddy(0x21ee00).
+
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmJE8WwPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUo5EP/1uZdo4IZmuPAvIZlJRyq+6T++2x/ao/GJFz
+Y5XKRsgro3Z63MPvSWwgLYXVsYxl/7/S3JgSc+5Xx/Hyevhw/zct7IYvLQ9/Cm2y
+/WXG0C/Br6s6WIKBmB6CQrtXwhzuatuZs/SxWD0VX5oUCbGj8eSUjDEWVuUWqeYJ
+LnY7WBq07C2wH6tnY56HVgGGGWJOEpxtGOWwuO4Dc6z24N2u0gwk3y5nxpguG02q
+5O4pZq4OnjwflIW8LI/tE0g8kt2jw7X8XToVOr0zrq9ZLwFZXwGqG+NXsY1tp8+w
+LKoi76m0PUtUXxs+v4z56eOSFu1NPTiUX3NebiDuDYiI5Zjn4NpKqPd5G7a+U9Oe
+5Ml8U6IBJewdEsjhdCu1ubuWr8vU/kgDC8tXz2NzvyjCVCluR84Zz0nOVXPMpzcv
+Amibbpbals46lEi3lkvpscZaF7xGPWnLGFYkXo206mYkqLZhsBTTXkbT4lZyc2s+
+FlUcRu2mSmTwyXJd+fdeE7q63VGXJ837A03oWCFQO8RWNYkJrY6uJI+jMiQLGEJP
+rt1oSopML1GvwdSU42Jry3vDSe2ENXqGzs5taaiy339pQ2NBK0zto0LH4cIXB2Cb
+USFIoysN45GxXWxpy/mUJRsoh36/sIJr09Mxft4Ipdt4PX1etLT56dMLbZTb6SBt
+Soky0r1W
+=UatY
+-----END PGP SIGNATURE-----
+
+--=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=--

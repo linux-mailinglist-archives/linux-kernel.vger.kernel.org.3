@@ -2,80 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409CA4EDA62
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5534EDA64
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236464AbiCaNUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
+        id S236745AbiCaNVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbiCaNUf (ORCPT
+        with ESMTP id S232629AbiCaNVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:20:35 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EDC5005C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:18:47 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: rcn)
-        with ESMTPSA id 262651F4680D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648732726;
-        bh=/j3LkwFKB0+7mnH+l8R0tnH8GNWzHifzKE/6jt5U3UY=;
-        h=From:To:Cc:Subject:References:In-reply-to:Date:From;
-        b=H8mj86TA9sdhniqsX1XxpjpuZkudIKTwl7mQJDIqf+7521RRaNcE5M25LZXsh6CyQ
-         47unameFmfkGHw8fots1KAhClVG/lfWvKHkQD7nlz/0frggY9s/aYSesfjdBcTDZfW
-         zO0knkpgJ4ut1REKs4f+ym5jW6tzehEeC4lyVH+qQ/Vh4HlGGpwnO3sbdbLS1DVhDt
-         OWsXPG4o5Q1W1yRQxTKeMQsBLuTrxJqppda3Jpx8JvuQjLWYG3h3m1ze2Y9m2xk2Fv
-         Fw/aQXdOjgH/arnwZ6+i14tvdFpXcpIxr0NV2KSH87Yi9yh2MC9LkuaAtPhSYiNIdp
-         3TMLR/hQZ134Q==
-From:   Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Mark Gross <mgross@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Johansen <john.johansen@canonical.com>,
-        Steve Beattie <sbeattie@ubuntu.com>, kernel@collabora.com
-Subject: Re: [PATCH v2] x86/speculation/srbds: do not try to turn mitigation off when not supported
-References: <20220330082026.1549073-1-ricardo.canuelo@collabora.com> <YkS3OKLS1Cixs9up@zn.tnic> <87o81mzhoh.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me> <20220331084536.y4sl7qcfzltsnnew@guptapa-desk>
-In-reply-to: <20220331084536.y4sl7qcfzltsnnew@guptapa-desk>
-Date:   Thu, 31 Mar 2022 15:18:42 +0200
-Message-ID: <87lewqz2dp.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+        Thu, 31 Mar 2022 09:21:50 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B451184B77;
+        Thu, 31 Mar 2022 06:20:03 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id x9so16712923ilc.3;
+        Thu, 31 Mar 2022 06:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qI4/BzfKEkPH9iOW5F30cxLQKnAua7M62vUC8CH6ij4=;
+        b=fMkjsiqJXh/HuY2J0jAtlImPMR787h7K/zkt1C+F75EkXR9aVtUN/ydW3qOMTrMe94
+         QwbDNYH4FbH/PJx9ERaKBCxP2CtMmwyclzudSU4E+DNIvVfbNBF3ddDQ6u5GSa69KOma
+         yDWYgo02rNTWRVB5yJKz4Fw7SlLH9DJD/XAxAdkaeS+JjcfjA3pAeWG5vDfEvMn3kfnw
+         PSaT6zH83DYS/cFFP7n3RGWGSMxiVVPSp23ToKQ+QdmkpfCx5JAKDV+fOwg5GU0SvOdM
+         8I2lkvA8EA89VFOilVfJITD7pu5ePj7VLqxw8MEUIur+6yclKO6+kmrvyhAmv8kuKy+w
+         qBmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qI4/BzfKEkPH9iOW5F30cxLQKnAua7M62vUC8CH6ij4=;
+        b=bx+tbgjKqQ5MgqXAZZTWnCNuYZ8hVjzp+4BTO8AB3VeGRgKTuzuEgMoi+pfP5b0oqE
+         y3RHzzhJR+DADzjxeCQYSX1og/1R7RrLmaJqTm4nNuQbUY61oBZ0ZaKfbKwaG9qU1ER6
+         fBAqogOgtQzEha4iPCZJhktQ1YuysznkipbhuiqVMX3CtrQHJQ/B4hgrN2NeRRF9M2Lj
+         6yNsrt2DXWm8niaOTe08DZ9JI/xEDxJb6dhfMdJw6QkIjuyZlCVQUinNEGvjZSg+hOUg
+         pBiJmvX3TIqAPMWEHJuzq6r5ghBYeqVnIoWYbZhJoDAezJdhPrRV0nNTT+3kpU4iKxGc
+         5muA==
+X-Gm-Message-State: AOAM531g1m+bkjHAVlL2bxVwdKeu694JbluGy72q8YFp0k6/Lt7iAvFC
+        H9bP3SwJrhVnBNKxEeC2cHVgpqUHa/k94UOYIas/lH7Xid0=
+X-Google-Smtp-Source: ABdhPJzqNqNXkQgzmRZAsMPsfvwS4pmR9v2mVghCxjW9pymUlJ6yptmxbtLm4r9BAwf/zUTMKBY7jSh0x1+0ynVYju0=
+X-Received: by 2002:a05:6e02:1609:b0:2ca:4ad:ef09 with SMTP id
+ t9-20020a056e02160900b002ca04adef09mr495134ilu.72.1648732802496; Thu, 31 Mar
+ 2022 06:20:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220317181032.15436-1-ojeda@kernel.org> <20220317181032.15436-7-ojeda@kernel.org>
+ <YkWhs1GffuUmZ4SC@kroah.com>
+In-Reply-To: <YkWhs1GffuUmZ4SC@kroah.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 31 Mar 2022 15:19:51 +0200
+Message-ID: <CANiq72mxXY_4wXZPO5VCX76G168X0gynO=n=1xP2shVWBm+yeA@mail.gmail.com>
+Subject: Re: [PATCH v5 06/20] rust: add `alloc` crate
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com> writes:
+Hi Greg,
 
-Hi Pawan,
+On Thu, Mar 31, 2022 at 2:42 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is a huge patch.  Why not break it into 2, one that adds what is
+> upstream, and then the second adds the "stuff on top" that you need for
+> the kernel.  Otherwise it's hard to know what is, and is not, upstream
+> for us to be able to review from a kernel point of view.
 
->   void update_srbds_msr(void)
->   {
->   	u64 mcu_ctrl;
->   
-> -	if (!boot_cpu_has_bug(X86_BUG_SRBDS))
-> -		return;
-> -
-> -	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-> -		return;
-> -
-> -	if (srbds_mitigation == SRBDS_MITIGATION_UCODE_NEEDED)
-> +	if (!boot_cpu_has_bug(X86_BUG_SRBDS) ||
-> +	    !boot_cpu_has(X86_FEATURE_SRBDS_CTRL))
->   		return;
+That is a good idea, will do.
 
-Just to clarify, this changes the behavior wrt the hypervisor case:
-currently it just bails out of update_srbds_msr(), with your patch it'd
-clear RNGDS_MITG_DIS from MSR_IA32_MCU_OPT_CTRL. Is that what you
-intended?
+There are some files from upstream that we do not need, so they are
+already deleted here (e.g. collections), thus what I will do is send
+the first patch without those already and then another patch with the
+modifications/additions we did. If you prefer to see the deleted files
+in an intermediate step, I can also do that.
 
-Ricardo
+> I think you are trying to do this with the "kernel" keyword, but if so,
+> why are you picking a "since" of 1.0?  None of that is described in the
+> changelog :(
+
+Exactly, I used the "kernel" string to have the additions clearly
+marked. The `stable`/`unstable` attributes are required in the
+standard library -- here the "1.0" is just a placeholder.
+
+I will expand a bit on this in the split patches approach that you
+suggest above.
+
+Thanks for taking a look!
+
+Cheers,
+Miguel

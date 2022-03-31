@@ -2,65 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98C04ED126
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B904ED12A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352218AbiCaBEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 21:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        id S1352223AbiCaBGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 21:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346065AbiCaBEC (ORCPT
+        with ESMTP id S1343946AbiCaBF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 21:04:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885E165D31;
-        Wed, 30 Mar 2022 18:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648688536; x=1680224536;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1dlEDgQKh23w/zXDxJY2KzGHeDnj9hNUwJGYdrUoU24=;
-  b=O9FR3XY9HKZUsnbRXtOpPvfWryXx/4HX5AR2rz1o/xXol8pkRjIEM9pE
-   eHkU4k2PiMCLERjW4shTRiIVMul79BU3DQZS92zs+iBnUe9/IDtzv7h6S
-   6NogvLY2Fh6C5N+06s6H/Iq18rvotBRWyEhH+BOURjOWeWwisLHevRrYJ
-   rXJRefy1Sd2tiiDv8aVKkQuuX+/UpZlfmSwvLdJglnJtlY62g1YpxUu3h
-   N+CXEH8JP6oxCWKvNW8Ew1yq/J1ysyvhYuM09mNJFP1UF/D0IMl5CQnr+
-   vWWomJXAIosUuNrZsrmhaBAbgeKG8AZ6sVOtSqotfkI3hpyYYfDfK/kPN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259656694"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="259656694"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 18:02:15 -0700
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="554867541"
-Received: from dhathawa-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.53.226])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 18:02:13 -0700
-Message-ID: <b2a1b80f9f7779ddcfcda50ca3ce08df000b2f1b.camel@intel.com>
-Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
- TDX module
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Date:   Thu, 31 Mar 2022 14:02:11 +1300
-In-Reply-To: <YkTvw5OXTTFf7j4y@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
-         <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
-         <20220314194513.GD1964605@ls.amr.corp.intel.com>
-         <YkTvw5OXTTFf7j4y@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 30 Mar 2022 21:05:58 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223CE13D45
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 18:04:12 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id o17-20020a92c691000000b002c2c04aebe7so12418863ilg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 18:04:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=fR3ceJxR0EpnoFlnx4o/ydku61CbdG3l1dIaszhWt6E=;
+        b=xhwNQvdIkZ+cW5+57FJVw9vF7nXDNlptyGFVMlle3qtw5EtifvBECqZUYq0kBlEtrF
+         0PA7U74cu7e3nBhNX+v2f1SnpSVnLRcCe5nhvOs4Ti38owhHwK9TMNMPZqTTH0ue32C8
+         njESulBjRO7Ol/s9OdKKFDPDo9HtM5SAmaQMdU76+M6mPngOhZ8SFdHtINJ7VLgRakPz
+         NpK+KqivGsYERvxOFKj7DcIuMa0hpkFxVdKBVsIE8zXJzxYanar0881F7hMnwptlee7f
+         WgVqU9QWqytwQx1Tu3Y1y6e6JsTEoNjpZg9stVEZQQWsw4HlAEn//q8C5vPNkcGz1woF
+         jsHg==
+X-Gm-Message-State: AOAM533bWvAEiYzLpGsPksqs8cclKZyvUgm9aP8CVgGuuP9WWApTDNpK
+        gFotxdj7h72zkaluLM/dkzd9L+3kpOhJu2nVczXSrKMVR4Lv
+X-Google-Smtp-Source: ABdhPJweug8GF4GuFOFiRS5cqt1c1S8Zz5P8V+cAFrpG0xb5/uakf8yvmFv8IjvFeDnZZJJErmtkUkUoyIcOYKG9OS9po4XKtxWb
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:14c6:b0:319:e02c:1fc2 with SMTP id
+ l6-20020a05663814c600b00319e02c1fc2mr1560048jak.44.1648688651492; Wed, 30 Mar
+ 2022 18:04:11 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 18:04:11 -0700
+In-Reply-To: <20220331003321.4592-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ae3f105db793d92@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in em28xx_init_extension (2)
+From:   syzbot <syzbot+99d6c66dbbc484f50e1c@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,20 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-> > 
-> > - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
-> > (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
-> > guest does it.  It naturally fits with the TDX module initialization at creating
-> > first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
-> 
-> That's a solvable problem, though making it work without exporting hardware_enable_all()
-> could get messy.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Could you elaborate a little bit on how to resolve?
+Reported-and-tested-by: syzbot+99d6c66dbbc484f50e1c@syzkaller.appspotmail.com
 
--- 
-Thanks,
--Kai
+Tested on:
 
+commit:         52d543b5 Merge tag 'for-linus-5.17-1' of https://githu..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7094767cefc58fb9
+dashboard link: https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10453cd7700000
 
+Note: testing is done by a robot and is best-effort only.

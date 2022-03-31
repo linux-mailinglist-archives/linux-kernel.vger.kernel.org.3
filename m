@@ -2,169 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916874EDD96
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59524EDD99
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238448AbiCaPo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S232259AbiCaPo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239655AbiCaPnH (ORCPT
+        with ESMTP id S240127AbiCaPng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:43:07 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80077.outbound.protection.outlook.com [40.107.8.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF0223238;
-        Thu, 31 Mar 2022 08:37:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dgks6YmlwhIqw3wFXXW68eg+JjER0957SzWbFjfj7h1I+eJXo/J5s40pyKy6Xw5x1A21XC8HZteOEFM7uAk9MRgm8cDQYlkk7j/1ZSizNJQkUDLHM3If8kkYzOBsOMxZbblOX17UETWFUNBIEGNetWhTNWKNzTuN7NeVhG2C7H+JImkxuqltVSLfAl4e3A84Ror4EtGwQuVZcosJrl6b1wzlKJDMVBhcUX/xOA4gIkFGzSWgCmS+8Q/pAedh6yoev/NoNx0aMz0Iw63oRMkzt00vx/dGiN2qeI4kbaLnGrPMfp1fRNESNc4NCpG7meYyyRsDEPNwvA3ucHBKqRSPUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6lyDuyVoAvf+/86SexwFAd2vOBHEwWq9HonE+mAwlro=;
- b=gmQ88W7wiQkA1dc7zhn3XuPS8XUhNpXMIwASH3l1dx5rY31yZ3eARJDdSVA5zIDlC0OUm2DvpiHDjfr7Ralie569ohIAmmCpzb6THkWJiocqmSziQ0Tf3sw11oKGMHokaGsm2YK+ZLa0nYeH6tYnTalCYYlQiwNLJA2ltrc+/2noDOXD32cFJBi0go+kDgNxL3JxKrN++Tkdy33lN+C3VtDuPQLu/VSZSj7Fl1cPr47ry8b68EL888Gf/kNk9J/RJPXcloPkDO9Yf6L5yEjZq7n52XBtCMTr1942srHJ1A9C8a8LTQAna3fiEQUgi3o7/9WzU5kXGSw75kp5EUow9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6lyDuyVoAvf+/86SexwFAd2vOBHEwWq9HonE+mAwlro=;
- b=E5IAcFthd3jw44axYoVBOrjPpZoaLCqJhhdeL3w+5lcXo+i9Tax9ac9EVZcPhmNSEZHP6rKDBnuWIm4aMFensmgWen68WF2/O0ncx+0nu7MZmQhnSUXAqHR67ZUAERJ18CC5Ga7sbBKT4XRvtnCkOGnrLa5nWqFTDmUCgHHB5Xc=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM0PR0402MB3746.eurprd04.prod.outlook.com (2603:10a6:208:e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Thu, 31 Mar
- 2022 15:37:49 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::f090:8a7e:c1e1:3d8e]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::f090:8a7e:c1e1:3d8e%3]) with mapi id 15.20.5102.022; Thu, 31 Mar 2022
- 15:37:49 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by
- default
-Thread-Topic: [PATCH] arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by
- default
-Thread-Index: AQHYRCoAL8rMZDh2bU+SVqWLbFGm0azZojgA
-Date:   Thu, 31 Mar 2022 15:37:49 +0000
-Message-ID: <20220331153748.pkzqops4h2orgpu2@skbuf>
-References: <20220330113329.3402438-1-michael@walle.cc>
-In-Reply-To: <20220330113329.3402438-1-michael@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 478e8efb-a3e7-4443-9cf8-08da132c693f
-x-ms-traffictypediagnostic: AM0PR0402MB3746:EE_
-x-microsoft-antispam-prvs: <AM0PR0402MB37467AC82DCBF3FE63D28150E0E19@AM0PR0402MB3746.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 67WVb0C5YMQMYw8jvELTe69sQxo9jjmCRQ6ag/m0UFJMDzyOwg76l9zCkyuX7u6jBdLB2y2Yfmk4vdkqWKFk3PCNiKAXHfVpsQj4Dk8p5pyRhkzhwCOdNYoCmOaBIFlR+BTEqPnUoldbXm/rYd45ewPsvsKa7Epa5urNbIIrOldl3XqwBKY12gO6VWj6L/bx67cPMbFmMNUz6nBQ2UEZU/cEQYP2sE58tLOHKYveBocI9nQdKa4GnRlXhuYjqG4zFgtVlRtN8ugD0tU0ahVV0fSTEQh0DB/gpUPE56LPNQjRQTdmbi0Ej7cPDhKWdmybAoHkP5aK4YoN800Xq+FsgjzGYD9mpKXBEIrqtGX5mZi+XRkihNZA2GgHgy025Kv2mVB01BlnqdBetRIeoYMEWHj7pZLEUwW4hQ55gvMLaF4gg88zMZPjm9FA7B+f2m6p3MV2Ok71RJQO6prKVhr70ZqcaySAJ+r6Qiw0oushzt9FWGKJZQ9czH0Mjfve1e4idpFilTEmW2MkjFL/ynaiMV4cDNu+37xxWrRhnXEBBffAksiUiDtNImi0v6LNkFgZwR9K8NOGf3ERXmqYFdQj0xLX9R/K/1b9ofAE6bAprtv4+MCfAjjRkJS+u9JhW3fFjwEiePHsXewaO9KmFAVnO0V0KEBbJ8eC8q5Ck9rT7d1q9fKLSfplhbdOea0gNeQ7Bx+X+yCHT6ZBs/VXjCKvew==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(6506007)(66946007)(76116006)(8676002)(66446008)(66476007)(66556008)(2906002)(122000001)(64756008)(508600001)(6512007)(9686003)(6486002)(71200400001)(4326008)(33716001)(6916009)(54906003)(186003)(1076003)(26005)(38100700002)(8936002)(38070700005)(86362001)(316002)(5660300002)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bDMeOwUa8uKVGNCLiXiesA2NOV/TBWb+nKQ3DBGksKvzUa4bodl20NEv/+bu?=
- =?us-ascii?Q?guIQNBvZaSJWtRSifsmkTF0tB+bYI+8XpAqqQUAQsdZfvQb3GVZRZlY/G93w?=
- =?us-ascii?Q?hVVeYAyOvWnQmWXcBhs4oG4f3sULorvKE9UjnVzHGIz0dQpBXicNswrAWjLR?=
- =?us-ascii?Q?SKWXATpIWCrhjsEWpRBR5dMGxuDEUxHJ0vrNZs8wY/gBDNZPd0/yBhDai4q9?=
- =?us-ascii?Q?4HlBZXKNW7PAmoigJ67i7WeXPCxzZygoc+PPG+fqKrmjzYeIioj6beAnqPM1?=
- =?us-ascii?Q?QwFWg2ykws3UBN2xsP+hZ/UgKDMZKWb/4tkAiU75TPUU9mef3GqJN+sfNsSj?=
- =?us-ascii?Q?XMX3/tDWbeDgHkVAkBY2KH313PtIIW4ruYHvKAtbNwzKqlXI5cornv01sDQN?=
- =?us-ascii?Q?KdnS3GpvHDIYD8GAl9TeVmcXaJFxHxXOyjgY5Z6e3T6TgnaUjXbVNMIJk92H?=
- =?us-ascii?Q?kQJ2XPU/SDeD0eMUASM238RjXM7XJfZOoHnK6enAluQ234AfIuwdr1ss47Fm?=
- =?us-ascii?Q?+dSbb/7roZ4YdjvWtaDp+TD86FLjCmBsOt3k83YkZHEfp+f2eOYuGP43P7vi?=
- =?us-ascii?Q?Hyy+WRdubxMOJKz2qzFOwEPod98lXqmMDkwP0RHT74I2BW64EsRMd8hWVSYb?=
- =?us-ascii?Q?Q5Dwb72cwCWtufUrhenS4lPqfBPFHW6eJO8AiveZzI3mTSdPurooTlLqCLmS?=
- =?us-ascii?Q?ZlfNLi43l9+RR1pqN+o1gnF6hRFBg0PSqGCO2BwHiaF/TKCwUX/BJyZgeDT6?=
- =?us-ascii?Q?hiIdxi16XtbpqXvZ0PNrdOXBkDxHTtznigPtYlh0ATH/wowNQiseXrJFpmwd?=
- =?us-ascii?Q?gbEKA3zoWvtDz2DGIrEss/6K44bqtev+AoYleSeqNPAcTFjjGpaCn48HtK6J?=
- =?us-ascii?Q?z/VkUxhFMjSDzbmhCukfovEHPNbdwFu0eEXAe1UHr5gcehJtlQpoCpZLRUHU?=
- =?us-ascii?Q?EEAWHHV17ZrgFl1Io7ECJtlVq7l6+weS4/A7IDxzv2m81M9xvlL3RUv9rGmd?=
- =?us-ascii?Q?3B+cmDTL6FZrG+f8DUfs1NUJiUheysP0GA+wnQM254JXe9LhrxaJM5nTwOkp?=
- =?us-ascii?Q?6SE/iPcwuuSjKDDAKIn91VwaxjBiBTXe4yQuONyZ9sYFMCXl3Q1940fc3y9R?=
- =?us-ascii?Q?0RviK8J8Ix7ARYKEzUHUsAoy6wf7qFu+Ghu5fQzVIVHZRyIXY8C+4Oc1lwe9?=
- =?us-ascii?Q?0qmssHFnYB8IWcvH9dvKg+qNyZtWZ/1x4cZCg6dJD6QmThnB+FtCQhbiawSm?=
- =?us-ascii?Q?TcO7f/dW7ffeyqaQCuIOuHqLdQTFVaS8NOg/Mo5rKrfNtpGAW5NcYEwGn7lR?=
- =?us-ascii?Q?AlPawHmGQkfn1CQoai51kzKUnLFBTfwUoFTi4p0l2DAV4jRQK7VjMlbs8eGB?=
- =?us-ascii?Q?z4hinZWG3efCaDpSjVSP1FT9xTI5a91n73Ga5DQezlb03YdfLerd4W/UVYvT?=
- =?us-ascii?Q?oGA/dniwLQZ+NUM/b+mQMroSpHb6S/hbBPvnlm9VdrP3QEK4ln7LjTV+fc+J?=
- =?us-ascii?Q?M5ql6Bdzobu904+QgCaR7daPD581/J3s0mfBUBRkqr2JjGzqsKmrEDtbEGK9?=
- =?us-ascii?Q?13f28/TjQHR09zzGL8uvUTHkIiH/6WqUUugYMajnTwd6sGExyeE/bGEPmnYD?=
- =?us-ascii?Q?dZ09dipwqxVGa42xP9W2vGxs6T8oy4DUTPa5BVd5oTulvAvkzO4UUKJuqUVz?=
- =?us-ascii?Q?NMBtswPKrNUoKMWLF2Oti87K9G46P/+ZeUbA768wWufmcfRtkAnvOWHFo0BS?=
- =?us-ascii?Q?1wXW+XZVBshk+jOEkuoY8XEThTQK7sw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <476A80644D170B4C88D34C855D84F80B@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 31 Mar 2022 11:43:36 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963981D59DB;
+        Thu, 31 Mar 2022 08:39:10 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 75C9732020A4;
+        Thu, 31 Mar 2022 11:39:09 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 31 Mar 2022 11:39:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=KyI/j72y7JMpL9/xQjQ4csJ00FkyYP4CjB3zQa
+        JiteE=; b=mARUd3dNVIoDY0WW0hYsVKA7Lf7fwcTN1tIxFE0N5OsckZ9r1XG0u3
+        rh+EwDIuYSc04rnvx+EpdmoNEh1BMgVhXtQs//tm3pfwOXjkKr3x3QqkXyPsPjG7
+        r7xOj6X4G4U5YL3FGJcPT+zvCJtcfFyf/z05yw2/vQitVf9RUu6h+SKEL7hTFwrz
+        /aS4Lh4sHQUH52VifqB/1c3R+e2/PAXA5yjrjy8RNjBAxXD9BRssZkDI6BD1pXvV
+        4lOTe19Ojm/lQWRUbij7EyaloFTqagm6LTduNrHagnBzIsAtWJ5JtxgeyWOiPmBY
+        QhM++cH5Y59JCtRatWzPhvJgZLRQXIKg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=KyI/j72y7JMpL9/xQ
+        jQ4csJ00FkyYP4CjB3zQaJiteE=; b=g7TRrmzHPVgg6DgXsHjsO2eLrgorP9PeA
+        65z6ZvPimmANl/Em/yRPNDLtQAJ3wHMzU8TALdLnHvIP5DLyN/W5s7QKjSSutXr3
+        wj3+lFIfZX3g7hqBxOlAqGnaJ5Tiq4KkCuuk8yEZKIIh0uvnCGP0Zw/NLRxuXVGD
+        B61ydk1puY1cHyJuz0hrflXXWuqT4m+UT9fRMbE0G6/dMa6OP61iog1cAvtRQPXQ
+        7MbdjAs6a3DxKkpKjFcxB284MnwmNJx/WYsoEB+BzXcrh73NQqJP5Mw/Rdi4GOtU
+        tMavjh9FeLonmfVEwamGlj0nzg5WYyV7lAFLPWC7yXx2rRKlDzjHg==
+X-ME-Sender: <xms:HMtFYutS58m5Ij6Wi8vsGO72pwiJWmfS1WBYWAgDFLBU-clNqfI2MA>
+    <xme:HMtFYjeMl07xJgh2l68Sm1qEeTWcesplu6SRXIeOsmy5UmNdZEvNlMNb9rK5rIWAk
+    5p80QghJQzIQ7aRcQQ>
+X-ME-Received: <xmr:HMtFYpx1lIr-nr7Mnu10rZKvqllsndpYpYsNU44kSKTS3g0eryj14uaXNjT9mXCVcrWK9xPrTwlx6O8gwmmQQZB5eOFFMUqW1ec>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgledvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
+    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
+    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepgeehheefffegkeevhedthffgudfh
+    geefgfdthefhkedtleffveekgfeuffehtdeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
+X-ME-Proxy: <xmx:HMtFYpOnk1vt45w1o4EXRYp03Ka6a6wGOW5tPa63xfniHzdSpg-kUg>
+    <xmx:HMtFYu8vNNgduVDpKYLfeU0J3h8rMbQFObgEr539NyGjFb7pfzb7Yw>
+    <xmx:HMtFYhW_g-T88mSS5127T0sbJSclHOzBmXDf99C883YoL-MgWATmBw>
+    <xmx:HctFYiayG9iwCsGHWT7GAIMkc02fOSWggrYoYRG9ARGt6MmeF7F2Sg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 31 Mar 2022 11:39:08 -0400 (EDT)
+Date:   Thu, 31 Mar 2022 10:39:07 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-leds@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, pavel@ucw.cz, joel@jms.id.au
+Subject: Re: [PATCH] leds: pca955x: Add HW blink support
+Message-ID: <YkXLG++LWdQWCxQF@heinlein>
+References: <20220330203318.19225-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 478e8efb-a3e7-4443-9cf8-08da132c693f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2022 15:37:49.0830
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tMrBu5h0x6o4alTKqXMOeSGcSacW7FmOx37EfyOJhBbToSO0sN8F9W+SkCGWh4QHrLKyF23VPnsr4UeeC5AURw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3746
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="1Owk7bxpetCwLmTk"
+Content-Disposition: inline
+In-Reply-To: <20220330203318.19225-1-eajames@linux.ibm.com>
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 01:33:29PM +0200, Michael Walle wrote:
-> Enable the ocelot-8021q tagger by default which supports ethernet flow
-> control.
->=20
-> The new default is set in the common board dtsi. The actual switch
-> node is enabled on a per board variant basis. Because of this we
-> set the new tagger default for both internal ports and a particular
-> variant is free to choose among the two port.
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+--1Owk7bxpetCwLmTk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  .../arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b=
-/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-> index 7ef47b80e343..68d11a9c67f3 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-> @@ -328,6 +328,14 @@ &lpuart1 {
->  	status =3D "okay";
->  };
-> =20
-> +&mscc_felix_port4 {
-> +	dsa-tag-protocol =3D "ocelot-8021q";
-> +};
-> +
-> +&mscc_felix_port5 {
-> +	dsa-tag-protocol =3D "ocelot-8021q";
-> +};
-> +
->  &usb0 {
->  	status =3D "okay";
->  };
-> --=20
-> 2.30.2
->=
+On Wed, Mar 30, 2022 at 03:33:18PM -0500, Eddie James wrote:
+> Support blinking using the PCA955x chip. Use PWM0 for blinking
+> instead of LED_HALF brightness. Since there is only one frequency
+> and brightness register for any blinking LED, all blinked LEDs on
+> the chip will have the same frequency and brightness.
+
+The current implementation uses the PWM to control the "brightness"
+with PWM0 being assigned 50% and PWM1 being configured as a single value
+that isn't ON, OFF, or 50%.  I suspect that most users of these 955x
+chips care either about brightness or blinking but not both, but it is
+possible I am wrong.  It would be nice if we could use PWM1 as another
+hardware blink control when it hasn't been used for brightness, but that
+would require some additional state tracking I think.
+
+I like that we can now use the hardware to control blink rate, rather
+than doing it in software, and, I really like that in theory if N LEDs on
+the device are all blinking at the same rate they will actually turn on and
+off at the same exact moment because it is done in hardware.  I am really
+concerned about this proposed change and the way it will change current
+behavior though.
+
+It is not uncommon in a BMC design to use one of these 955x chips to control
+8 or 16 different LEDs reflecting the state of the system and at
+different blink rates.  An example LED policy might be that you have 1 LED
+for "power status" and another LED for "system identify + health status".
+When the system is powered off the "power status" LED flashes at a slow rate
+and when the system is powered on it goes on solid.  When the system is hea=
+lthy
+the "health status" is on, when it is unhealthy it blinks slowly, and when =
+the
+system is "identified" it blinks fast.
+
+My point of the above is that there are certainly system policies where
+you'd want to flash two different LEDs at two different rates.  In
+today's implementation of this driver those both turn into
+software-emulated blinking by the kernel.  With your proposal we lose
+this ability and instead whichever LED is configured second will affect
+all other blinking LEDs.
+
+It looks like in led-core.c led_blink_setup that if the device
+`blink_set` returns an error then software blinking is the fallback.  Is
+it possible for us to have this driver keep track of how many LEDs are
+in blink state (and which speeds are allocated) and get led-core to
+fallback to software blinking if we are unable to satisfy the new blink
+rate without affecting an existing LED blink rate?
+
+Looking at the tree it seems bcm6328 does what I am suggesting already
+but I don't see any other drivers that obviously do.  The PCA955x is
+pretty widely used in BMC implementations:
+
+    $ git grep -l pca955 arch/arm/boot/dts/aspeed* | wc -l
+    13
+
+--=20
+Patrick Williams
+
+--1Owk7bxpetCwLmTk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmJFyxkACgkQqwNHzC0A
+wRkAaBAAjBfOY0GBJZfL3KuD59+0bFzyNMbkCbK0EmE4VU3YlONWgxXTLwTDir9/
+Ctb2a86QdZglRQzoof7/jyEmAJ1/tFFA+Kps5Z1FGPczZbGxJ9Obel7J8SNo3aiy
+sP3gBz2pbZtprpOo2w0Yc1ReZFiJe/kH7z3a1H/2Xl/lq9TPEDg22wVQnzkccNJp
+4X+1p0rwAqOqxGjBeOjaGAj1y7PvqXUICZVw0rkkXaI80Gjg+IikrUB8/FDSaCDT
+WHV3i4QfocIEUD62v5bSnzKijyaixo2e16fOUNqCTv1hWA5U2ZvoH+LhRm+91I0+
+otF6Hf9TUhcLFQkAKcoBOTXcmOJ2IZ06bUZ/sklWhdLWHmc0jL0t0LmcJk8s4eJb
+PJz+bP81sjTaB18sFkQu1KCXOaRkDf4/32csLZd2Tqq1HEXc24uFzhGdhirNgKpw
+55Bxs8H4Bp0OyqvIW+TYWutWDbP96vULv6xkaGNtJM4Nc0gJECh82yp/QQEBd9bS
+JjjwLbjl1W58SOfhtrzrwLd52RqKuBYUSzWSBoTP1RFOhHeTcCisE8XgL2hT/JZB
+DKl4ER8AQJDuqmjK6PilTPEM0c4gSupmJFqLnMC61StQ75pmpoxDqlE3bvqJ2GSd
+p1Xpy3S5LhJqY+TEo65UIst6nWhAF4XRsBjy+hf0uqzib9ykpxw=
+=/hef
+-----END PGP SIGNATURE-----
+
+--1Owk7bxpetCwLmTk--

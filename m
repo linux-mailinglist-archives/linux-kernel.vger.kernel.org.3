@@ -2,92 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA73F4EDADD
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B860C4EDAE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbiCaNuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S237009AbiCaNuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236991AbiCaNuC (ORCPT
+        with ESMTP id S237031AbiCaNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:50:02 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3CD10CF12
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:48:12 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id q19so20031131pgm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WIjS4hHkncWnADQSguPcZ9yDRhMIIgfXbDG/5koXL+M=;
-        b=8JdtJA3KoB9+DGVHgZEvfjxJgMQB8AJ3+FSa/hLLh59tuXtTzMTYqls626HhE0Xx60
-         M8oCxHsUeiyFnCM6zqv7RaiC1o3cURHKKd8TiUDajJIKwDH91uIAhjAWsRucpfdjRjaL
-         MNyNzgTZVBriuzx0dA4ay60uAVu43DYTvPKr2G0XVXQ8KissoueE1rxxZFNyFbs4ES5/
-         j4bv8lJfqwpnH0vwKGlzFRvcN1mAMxs4MPKKIb6qB3gRrEdaWRmCGB31IUaoOfyPhuIW
-         RShLIX/p6TZP2ZhVRV6PkG5Qw+d9y/FGgpiUFEywgccI3/V+ah8sVNYNy6QbTu0k9Ed1
-         DeDw==
+        Thu, 31 Mar 2022 09:50:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE750BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648734504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bBNe6ZwO14A+VdUorhiFqNd6kC6eQKqel5DMkynNcGs=;
+        b=VbR1c/K5sWI0GUF+QalZecm/8I/aB+wJUjO0JlBrqlI9lHzWSF5oC+Dtw/qL3ys8O1MUyn
+        8s47P0mCD4Rmb0OAFjkdxaaepVeTscoVqevuBtGrr/SWMPjSei8cPAf9eCtwk3yFzfhFTX
+        +4kU7xKjEbX5/7FAkSpBuUyhKVjpHD4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-JDCqiR1aPU6hokPmH5V6VA-1; Thu, 31 Mar 2022 09:48:23 -0400
+X-MC-Unique: JDCqiR1aPU6hokPmH5V6VA-1
+Received: by mail-ed1-f70.google.com with SMTP id z22-20020a50cd16000000b0041960ea8555so14979043edi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:48:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WIjS4hHkncWnADQSguPcZ9yDRhMIIgfXbDG/5koXL+M=;
-        b=umCDcJqfEBqoi3tPZqoo2gkFoGq95tvO9yrLZoLuy5A6MJ4jTVHWbdk2jJsfXGqGzO
-         xKqrgPoivomtUVHaMn1mllss67b+H3A3WDIVgGQv3ZG/re0nJpagZ1bh2FJsVxlsbx1x
-         Oga3Z6gfl7hFclSgopyimdnxtG5nUkLMvDli11dxdT0pc9UErlwrIWvmJ8OY5bY4iKHO
-         WJ0qzSINzab7B9rtI36BI7MJAI0y4xCMQZs3xSKipYOhI0T+6Mz6GljWZb1WoIshfF+Z
-         SnTeD00ZlHlbL0YBwfVa4SsPvGAYAF9HQg0XCtzSFpAFI6zOTWxN27OhAg9hROfyFA++
-         c8XQ==
-X-Gm-Message-State: AOAM533rcpDe0pDneC6gPFWbvgSeKRL2UDSRzJTORHGxBWDuOsTFWMf5
-        8J79/Km3MTqkQPm7xSeeLPI/fQ==
-X-Google-Smtp-Source: ABdhPJx1JWwl3z3vLqKxPFPwBAUbmruyet8e5XAqvGozXt0cKP0NQz5DfjALnTIZvovc9OIbpJ01HQ==
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id bk3-20020a056a02028300b00342703e1434mr10853784pgb.74.1648734492091;
-        Thu, 31 Mar 2022 06:48:12 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id lw4-20020a17090b180400b001c7327d09c3sm10037155pjb.53.2022.03.31.06.48.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 06:48:11 -0700 (PDT)
-Message-ID: <8dbb5fc7-7170-d190-ba24-2ef13dc73623@kernel.dk>
-Date:   Thu, 31 Mar 2022 07:48:10 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=bBNe6ZwO14A+VdUorhiFqNd6kC6eQKqel5DMkynNcGs=;
+        b=Kx17ch9l4pbxopX2WiNDArRnJHWMjV2CzVXRTpruMEd8RG8p168GDADEZru77YpFPb
+         WJEduK5CtHFEEpM6N1WnubLOR/0ANgG7Ihg+Gn/Jru67fqcgAQSZ6WLtAKat8OQLsep5
+         Tw8ALMI6Uowx6C7D5bBSOHLdgcot1bXC0oS9cQ8qgvnmGTRMYx7mnaz5wb6Wvs/DfSVh
+         uVRYJz5/yCTExgrwL6/rncDkxd0x5wmCUjxXcNfRaZ9k+4xYYmrgjF382kPa5fw1CTmG
+         E34xnKX0ewGR5PtSCp9t+pnwVsyn1QDehV3qB5nQ8XFTm4+I+zfHLiMOf5z6/5zsCUA3
+         tJIw==
+X-Gm-Message-State: AOAM532hQuw6nW1mPGu5aVxfiJgDp4Ahh5Hlzdsk5c3znEwSpSVbG9rp
+        kKZPCMW5N1tuvRJTm8xH/VPxtR7NJe/HL8HkXTgwqDNQvmI0+ZZ+NcXAupH6hMrCno8hY37NGHZ
+        gi+WnnJ9rgGSnZfp6eqv5TrxI
+X-Received: by 2002:a17:906:69d1:b0:6ce:7201:ec26 with SMTP id g17-20020a17090669d100b006ce7201ec26mr5115664ejs.105.1648734501767;
+        Thu, 31 Mar 2022 06:48:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzaOztpuiraqUm6TPegDkLmbLYAkWCcmmS2jBymLmYa/zJNRyuCbXtPFJnMPQ//0YMBauubEw==
+X-Received: by 2002:a17:906:69d1:b0:6ce:7201:ec26 with SMTP id g17-20020a17090669d100b006ce7201ec26mr5115639ejs.105.1648734501541;
+        Thu, 31 Mar 2022 06:48:21 -0700 (PDT)
+Received: from redhat.com ([2.53.153.13])
+        by smtp.gmail.com with ESMTPSA id h8-20020a1709066d8800b006e09a49a713sm8018933ejt.159.2022.03.31.06.48.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 06:48:21 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 09:48:16 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@daynix.com, david@redhat.com, elic@nvidia.com,
+        gautam.dawar@xilinx.com, gdawar@xilinx.com, gshan@redhat.com,
+        helei.sig11@bytedance.com, jasowang@redhat.com,
+        Jonathan.Cameron@huawei.com, keirf@google.com,
+        lingshan.zhu@intel.com, linmiaohe@huawei.com, lkp@intel.com,
+        longpeng2@huawei.com, mail@anirudhrb.com, maz@kernel.org,
+        mst@redhat.com, nathan@kernel.org, pizhenwei@bytedance.com,
+        qiudayu@archeros.com, sgarzare@redhat.com, trix@redhat.com,
+        willy@infradead.org, xuanzhuo@linux.alibaba.com
+Subject: [GIT PULL] virtio: features, fixes
+Message-ID: <20220331094816-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] MAINTAINERS: add drbd co-maintainer
-Content-Language: en-US
-To:     =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org
-References: <20220331134236.776524-1-christoph.boehmwalder@linbit.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220331134236.776524-1-christoph.boehmwalder@linbit.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 7:42 AM, Christoph Böhmwalder wrote:
-> In light of the recent controversy surrounding the (lack of)
-> maintenance of the in-tree DRBD driver, we have decided to add myself
-> as co-maintainer. This allows us to better distribute the workload and
-> reduce the chance of patches getting lost.
-> 
-> I will be keeping an eye on the mailing list in order to ensure that all
-> patches get the attention they need.
+The following changes since commit f443e374ae131c168a065ea1748feac6b2e76613:
 
-Can you go over the ones I already listed? That'd be a good start.
+  Linux 5.17 (2022-03-20 13:14:17 -0700)
 
--- 
-Jens Axboe
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+
+for you to fetch changes up to ad6dc1daaf29f97f23cc810d60ee01c0e83f4c6b:
+
+  vdpa/mlx5: Avoid processing works if workqueue was destroyed (2022-03-28 16:54:30 -0400)
+
+----------------------------------------------------------------
+virtio: features, fixes
+
+vdpa generic device type support
+More virtio hardening for broken devices
+On the same theme, revert some virtio hotplug hardening patches -
+they were misusing some interrupt flags, will have to be reverted.
+RSS support in virtio-net
+max device MTU support in mlx5 vdpa
+akcipher support in virtio-crypto
+shared IRQ support in ifcvf vdpa
+a minor performance improvement in vhost
+Enable virtio mem for ARM64
+beginnings of advance dma support
+
+Cleanups, fixes all over the place.
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+
+----------------------------------------------------------------
+Andrew Melnychenko (4):
+      drivers/net/virtio_net: Fixed padded vheader to use v1 with hash.
+      drivers/net/virtio_net: Added basic RSS support.
+      drivers/net/virtio_net: Added RSS hash report.
+      drivers/net/virtio_net: Added RSS hash report control.
+
+Anirudh Rayabharam (1):
+      vhost: handle error while adding split ranges to iotlb
+
+Eli Cohen (2):
+      net/mlx5: Add support for configuring max device MTU
+      vdpa/mlx5: Avoid processing works if workqueue was destroyed
+
+Gautam Dawar (1):
+      Add definition of VIRTIO_F_IN_ORDER feature bit
+
+Gavin Shan (1):
+      drivers/virtio: Enable virtio mem for ARM64
+
+Jason Wang (2):
+      Revert "virtio-pci: harden INTX interrupts"
+      Revert "virtio_pci: harden MSI-X interrupts"
+
+Keir Fraser (1):
+      virtio: pci: check bar values read from virtio config space
+
+Longpeng (3):
+      vdpa: support exposing the config size to userspace
+      vdpa: change the type of nvqs to u32
+      vdpa: support exposing the count of vqs to userspace
+
+Miaohe Lin (1):
+      mm/balloon_compaction: make balloon page compaction callbacks static
+
+Michael Qiu (1):
+      vdpa/mlx5: re-create forwarding rules after mac modified
+
+Michael S. Tsirkin (2):
+      tools/virtio: fix after premapped buf support
+      tools/virtio: compile with -pthread
+
+Stefano Garzarella (2):
+      vhost: cache avail index in vhost_enable_notify()
+      virtio: use virtio_device_ready() in virtio_device_restore()
+
+Xuan Zhuo (3):
+      virtio_ring: rename vring_unmap_state_packed() to vring_unmap_extra_packed()
+      virtio_ring: remove flags check for unmap split indirect desc
+      virtio_ring: remove flags check for unmap packed indirect desc
+
+Zhu Lingshan (5):
+      vDPA/ifcvf: make use of virtio pci modern IO helpers in ifcvf
+      vhost_vdpa: don't setup irq offloading when irq_num < 0
+      vDPA/ifcvf: implement device MSIX vector allocator
+      vDPA/ifcvf: implement shared IRQ feature
+      vDPA/ifcvf: cacheline alignment for ifcvf_hw
+
+zhenwei pi (4):
+      virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+      virtio-crypto: introduce akcipher service
+      virtio-crypto: implement RSA algorithm
+      virtio-crypto: rename skcipher algs
+
+ drivers/crypto/virtio/Kconfig                      |   3 +
+ drivers/crypto/virtio/Makefile                     |   3 +-
+ .../crypto/virtio/virtio_crypto_akcipher_algs.c    | 585 +++++++++++++++++++++
+ drivers/crypto/virtio/virtio_crypto_common.h       |   7 +-
+ drivers/crypto/virtio/virtio_crypto_core.c         |   6 +-
+ drivers/crypto/virtio/virtio_crypto_mgr.c          |  17 +-
+ ...crypto_algs.c => virtio_crypto_skcipher_algs.c} |   4 +-
+ drivers/net/virtio_net.c                           | 389 +++++++++++++-
+ drivers/vdpa/ifcvf/ifcvf_base.c                    | 140 ++---
+ drivers/vdpa/ifcvf/ifcvf_base.h                    |  24 +-
+ drivers/vdpa/ifcvf/ifcvf_main.c                    | 323 ++++++++++--
+ drivers/vdpa/mlx5/net/mlx5_vnet.c                  |  84 ++-
+ drivers/vdpa/vdpa.c                                |   6 +-
+ drivers/vhost/iotlb.c                              |   6 +-
+ drivers/vhost/vdpa.c                               |  45 +-
+ drivers/vhost/vhost.c                              |   3 +-
+ drivers/virtio/Kconfig                             |   7 +-
+ drivers/virtio/virtio.c                            |   5 +-
+ drivers/virtio/virtio_pci_common.c                 |  48 +-
+ drivers/virtio/virtio_pci_common.h                 |   7 +-
+ drivers/virtio/virtio_pci_legacy.c                 |   5 +-
+ drivers/virtio/virtio_pci_modern.c                 |  18 +-
+ drivers/virtio/virtio_pci_modern_dev.c             |   9 +-
+ drivers/virtio/virtio_ring.c                       |  53 +-
+ include/linux/balloon_compaction.h                 |  22 -
+ include/linux/vdpa.h                               |   9 +-
+ include/uapi/linux/vhost.h                         |   7 +
+ include/uapi/linux/virtio_config.h                 |   6 +
+ include/uapi/linux/virtio_crypto.h                 |  82 ++-
+ mm/balloon_compaction.c                            |   6 +-
+ tools/virtio/Makefile                              |   3 +-
+ tools/virtio/linux/dma-mapping.h                   |   4 +-
+ 32 files changed, 1639 insertions(+), 297 deletions(-)
+ create mode 100644 drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+ rename drivers/crypto/virtio/{virtio_crypto_algs.c => virtio_crypto_skcipher_algs.c} (99%)
 

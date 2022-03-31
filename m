@@ -2,72 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BFA4ED287
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F2A4ED2AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiCaEPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
+        id S230295AbiCaEQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiCaENs (ORCPT
+        with ESMTP id S229882AbiCaEQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:13:48 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556362BC4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:51:31 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id h19so19769503pfv.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=su81uPGLPlEfo3kKBvUrtbr7Q1bO5QHvXSGg8dkL+fQ=;
-        b=GYdBweRk6GWXxrgZswn1g1wP5TqlOb2xYijX08he5T593LHNvihsBdxclepFnR7wPA
-         EFDojWqpJICiiOKuQB//cisuhUNkO2u5FfDMfQ7xraDnZxIEaXhE6D+qkAGFe35j0/rl
-         RO1qQO2LmKibxy7DGGirkpOSCxRw8dZ1qqwkj5cP30AjJuMIpCmQTXt3dxGQDeMiEtGh
-         d5Q45bU3pivpOU71UsQ4SeFHJOX5d+mhVbGaKTWoO3ihezhVAZ1Mq0dvBZ4CY44+2+zJ
-         Rnop+XYoeO70UTzueOxVxj/wtrVhWM9hBdPQqsaCO5lfOkdCgm02VVu0RnVDsDwNYnXW
-         NNcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=su81uPGLPlEfo3kKBvUrtbr7Q1bO5QHvXSGg8dkL+fQ=;
-        b=K4q3urMARJXHZnT9UW4hsXeY4UbNAbdw009UDd+71z6FHufYJptSl1AJAmo3V6BNRI
-         Q0Y75822jNBPNmhvkixstihly4zwn7R7jfKh1X2yRBbMEvA/z09XyvsHuPfKt3c+nAPR
-         nlBQSx3FofTkPL8EDlUpT9jUTY1c44jOVg2l9p7qUxTbUMdMuq5d+gboA8KZOO90Jc+J
-         Gvr18ilhGXxiEkPk/TcuyqKgv7Ne2SQpAoDv1TvzmBfN7TBrElCqZe32MsZHsrV0ZdOG
-         k7o7W4F1VM7ZIecGA5G49cTqoYdRycq+o9UJCvvPpvTcMH3ttX5cfeC2V9sgt0Fd5nti
-         8p9A==
-X-Gm-Message-State: AOAM53218vwZBuP4evAOPIHxVaXLoXR9GyVB+vkLma3XGksBFwDDuMAf
-        ycYJrNfHU0L9dZIYS/Z0qafDrjsIfowBzQ==
-X-Google-Smtp-Source: ABdhPJxn9RkJDNkJxLQzGDRKo5bfKfQwmmRCBZ37Qr3/YIQ4rdiA5g9/oIepoLeX5+Fe6RYyeS5Nqw==
-X-Received: by 2002:a65:6d87:0:b0:374:2525:dcb0 with SMTP id bc7-20020a656d87000000b003742525dcb0mr8997668pgb.248.1648696554441;
-        Wed, 30 Mar 2022 20:15:54 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id w9-20020a056a0014c900b004fb2ca5f6d7sm17801820pfu.136.2022.03.30.20.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 20:15:53 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 20:15:53 -0700 (PDT)
-X-Google-Original-Date: Wed, 30 Mar 2022 20:15:50 PDT (-0700)
-Subject:     Re: [PATCH v8 0/4] Determine the number of DMA channels by 'dma-channels' property
-In-Reply-To: <cover.1648461096.git.zong.li@sifive.com>
-CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        zong.li@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     zong.li@sifive.com
-Message-ID: <mhng-6ddf988e-9f86-4f3e-8b6a-6be65f384829@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Thu, 31 Mar 2022 00:16:27 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35C3B82CA;
+        Wed, 30 Mar 2022 20:59:24 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nZlIw-0003JX-6d; Thu, 31 Mar 2022 14:16:59 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 31 Mar 2022 15:16:58 +1200
+Date:   Thu, 31 Mar 2022 15:16:58 +1200
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: [GIT PULL] Crypto Fixes for 5.18
+Message-ID: <YkUdKiJflWqxBmx5@gondor.apana.org.au>
+References: <20201227113221.GA28744@gondor.apana.org.au>
+ <20210108035450.GA6191@gondor.apana.org.au>
+ <20210708030913.GA32097@gondor.apana.org.au>
+ <20210817013601.GA14148@gondor.apana.org.au>
+ <20210929023843.GA28594@gondor.apana.org.au>
+ <20211029041408.GA3192@gondor.apana.org.au>
+ <20211112104815.GA14105@gondor.apana.org.au>
+ <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+ <YgMn+1qQPQId50hO@gondor.apana.org.au>
+ <YjE5yThYIzih2kM6@gondor.apana.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjE5yThYIzih2kM6@gondor.apana.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +50,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 02:52:21 PDT (-0700), zong.li@sifive.com wrote:
-> The PDMA driver currently assumes there are four channels by default, it
-> might cause the error if there is actually less than four channels.
-> Change that by getting number of channel dynamically from device tree.
-> For backwards-compatible, it uses the default value (i.e. 4) when there
-> is no 'dma-channels' information in dts.
->
-> This patch set contains the dts and dt-bindings change.
->
-> Changed in v8:
->  - Rebase on master
->  - Remove modification of microchip-mpfs.dtsi
->  - Rename DMA node name of fu540-c000.dtsi
->
-> Changed in v7:
->  - Rebase on tag v5.17-rc7
->  - Modify the subject of patch
->
-> Changed in v6:
->  - Rebase on tag v5.17-rc6
->  - Change sf_pdma.chans[] to a flexible array member.
->
-> Changed in v5:
->  - Rebase on tag v5.17-rc3
->  - Fix typo in dt-bindings and commit message
->  - Add PDMA versioning scheme for compatible
->
-> Changed in v4:
->  - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
->
-> Changed in v3:
->  - Fix allocating wrong size
->  - Return error if 'dma-channels' is larger than maximum
->
-> Changed in v2:
->  - Rebase on tag v5.16
->  - Use 4 as default value of dma-channels
->
-> Zong Li (4):
->   dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
->     modify compatible
->   riscv: dts: Add dma-channels property and modify compatible
->   riscv: dts: rename the node name of dma
->   dmaengine: sf-pdma: Get number of channel by device tree
->
->  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
->  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
->  drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
->  drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
->  4 files changed, 38 insertions(+), 18 deletions(-)
+Hi Linus:
 
-Thanks, these are on for-next.
+The following changes since commit 0e03b8fd29363f2df44e2a7a176d486de550757a:
+
+  crypto: xilinx - Turn SHA into a tristate and allow COMPILE_TEST (2022-03-14 14:45:45 +1200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v5.18-p1
+
+for you to fetch changes up to aa8e73eed7d3084c18dd16d195748661c7e881b5:
+
+  crypto: x86/sm3 - Fixup SLS (2022-03-30 16:33:11 +1200)
+
+----------------------------------------------------------------
+This push fixes the following issues:
+
+- Missing Kconfig dependency on arm that leads to boot failure.
+- x86 SLS fixes.
+- Reference leak in the stm32 driver.
+
+----------------------------------------------------------------
+Herbert Xu (1):
+      crypto: arm/aes-neonbs-cbc - Select generic cbc and aes
+
+Peter Zijlstra (3):
+      crypto: x86/chacha20 - Avoid spurious jumps to other functions
+      crypto: x86/poly1305 - Fixup SLS
+      crypto: x86/sm3 - Fixup SLS
+
+Zheng Yongjun (1):
+      crypto: stm32 - fix reference leak in stm32_crc_remove
+
+ arch/arm/crypto/Kconfig                       |  2 ++
+ arch/x86/crypto/chacha-avx512vl-x86_64.S      |  4 +--
+ arch/x86/crypto/poly1305-x86_64-cryptogams.pl | 38 +++++++++++++--------------
+ arch/x86/crypto/sm3-avx-asm_64.S              |  2 +-
+ drivers/crypto/stm32/stm32-crc32.c            |  4 ++-
+ 5 files changed, 27 insertions(+), 23 deletions(-)
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619B94ED5A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2474ED596
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbiCaIcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
+        id S232783AbiCaI3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiCaIcS (ORCPT
+        with ESMTP id S231841AbiCaI3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:32:18 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7023A3983A;
-        Thu, 31 Mar 2022 01:30:31 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id m18so17862841plx.3;
-        Thu, 31 Mar 2022 01:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ivXMvvbs5/EJ/cA1YNvCsYZ5GhYYP7s+w/OiMvQ9vdM=;
-        b=dmMQkLUbRxIWiMemllk8m4UN5qUqRLS4xMLW3zx/IMoev0AfAe/IRmrzEsLeT52WpK
-         u6hvbrMY9LBPWcExkvT7L6xVN7G313RRkCpyCvKij0TeehtUKT9WxFWRzSg8uIe0RsLX
-         vmDAlz8RBpAbFcvtABS+KkCsG+rxt6YPDuk1qw0F6KmGr/tFBc+wa8rfgY2HbaCftkoq
-         YzdeHZL6bMmGEeWraSOrQEsPVaQ/m/8TsHJT2h5omb8lYnUdZTQn3yJF+J8M4zsJzlWG
-         4dpPtfFBCsyE/15rZmbFjoQ4q0C59+QraJ2NelKF7xBwH/is8h6+l9IgWAFhUeDBN+DO
-         gZ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ivXMvvbs5/EJ/cA1YNvCsYZ5GhYYP7s+w/OiMvQ9vdM=;
-        b=DGFVjN/WjVnmCJT5tWrD5XWi4X7WTtiagIm41oD6aWuufNw0bKXhKEVcDPpZuYILqP
-         WwP3KiQPS4gA8vGMEW26YH271/S7KJ+Qr6zAqiJtQkdaUdR/FJUsyqiRCuhsLOp7AW/s
-         7eYs+kZ4BGkMLnbvWH54Qla+0zV+fnTfL/pKFDZUmjSHSlqBe5UDG6W8Xccd0wxfK4qX
-         MQgl3cWQprTgb7A/mLsaGhT9gsmBPF0OHvomsf0y3T/hK+ps3k+22Tubz26XRyIVoqL+
-         DSHz+l7RSBQ0HY4JGl0eOnVjDo5gEEVYqo8lQ7FwJKoDGd7pJeKqssOQqvVYIt1jqvVE
-         Vo7Q==
-X-Gm-Message-State: AOAM530OrrtnHMTXNd1DOGG7bRkaXfaJzEdLOgk2v/Nm3Pa/bDQ77Yc+
-        pZ9A2bD/FibhaK/nZoXTA3A=
-X-Google-Smtp-Source: ABdhPJwyXgHtVxQarjOg5ftr1g/409/SafG6TRxjZhAqQaz8fVpUoKM+MSv+EvwnfibqtJWpqfIlkQ==
-X-Received: by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP id d7-20020a17090ab30700b001bd37f3f0fcmr4946733pjr.132.1648715430845;
-        Thu, 31 Mar 2022 01:30:30 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm10950655pge.49.2022.03.31.01.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 01:30:30 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH v2] opp: use list iterator only inside the loop
-Date:   Thu, 31 Mar 2022 16:30:18 +0800
-Message-Id: <20220331083018.31995-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 04:29:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C194E1C8878;
+        Thu, 31 Mar 2022 01:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1648715253; x=1680251253;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lx3Akt2XgQBGgPwZQOjCdTFVnMM6p3ONMYke/VZbCfA=;
+  b=HR5H6cPT+Kqa1+nVNR7G8b7V4QwWosY+3s95dleERfEpnycYP5NDqgsa
+   RWBJ5PU8R78FlkKnKqdHrJAJYoiH2JE/LtdJ4Nrj/Tk8aQahqLTxWYToH
+   PKhheuuq1zvicq+M+3ACMaIPCuSvPoS2oR189M4fMh+T5BPI7q5pJVyF9
+   WucuSZ8dP0LQ2jKkt0px0LaM+ZEBK19h+1Bj+fwh4ZW63VjwS7wDJHV0H
+   sHHJdtd83x5bowtx9R4yF3HDDbUKYKwK6DTKkXrJ2HShEzXtvoP2z41nM
+   eyneGgbf2S6TWH3lj3YP46fPpO4zdKwAQWzRtDdhn/UXAcvLfJbfzLwXu
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,224,1643698800"; 
+   d="scan'208";a="158789272"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2022 01:27:32 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 31 Mar 2022 01:27:31 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 31 Mar 2022 01:27:31 -0700
+Date:   Thu, 31 Mar 2022 10:30:38 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC net-next] net: lan966x: make PHY reset support
+ optional
+Message-ID: <20220331083038.eorhpmhydadujfft@soft-dev3-1.localhost>
+References: <20220330110210.3374165-1-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220330110210.3374165-1-michael@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+The 03/30/2022 13:02, Michael Walle wrote:
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate dedicated pointer variable [1].
+Hi Michael,
 
-In this case, use a new variable 'iter' as the list iterator, while
-use the old variable 'new_dev' as a dedicated pointer to point to the
-found entry. And BUG_ON(!new_dev);.
+> 
+> The PHY subsystem as well as the MIIM mdio driver (in case of the
+> integrated PHYs) will already take care of the resets of any external
+> and internal PHY. There is no need for this reset anymore, so mark it
+> optionally to be backwards compatible.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> 
+> Horatiu, what do you think, should it be removed altogether? 
 
-[1]: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+I think it is OK to remove it altogether. If you get both [1] and [2]
+in.
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
+> There is
+> no user for that in mainline and I don't know about downstream but the
+> reset driver doesn't really work (as it also resets the GPIO/SGPIO)
 
-changes since v1:
- - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
+Yes because I didn't manage to send yet those patches. But if your get
+yours in that is fine for me.
+My problem was, if after the probe of the MDIO controller it was probed
+the SGPIO then the PHYs will be in reset because the SGPIO was resetting
+the swich. But you put the reset of the swich on the pinctrl which will
+be probed before the MDIO, so that should be fine.
 
-v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
+> and conceptionally the property is on the wrong DT node. All of the
+> drawbacks should have been addressed by my patches for the miim [1]
+> and the pinctrl driver [2].
+> 
+> [1] https://lore.kernel.org/netdev/20220318201324.1647416-1-michael@walle.cc/
+> [2] https://lore.kernel.org/linux-gpio/20220313154640.63813-1-michael@walle.cc/
+> 
+>  drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index 1f8c67f0261b..0765064d2845 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> @@ -916,7 +916,7 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
+>                 return dev_err_probe(lan966x->dev, PTR_ERR(switch_reset),
+>                                      "Could not obtain switch reset");
+> 
+> -       phy_reset = devm_reset_control_get_shared(lan966x->dev, "phy");
+> +       phy_reset = devm_reset_control_get_optional_shared(lan966x->dev, "phy");
+>         if (IS_ERR(phy_reset))
+>                 return dev_err_probe(lan966x->dev, PTR_ERR(phy_reset),
+>                                      "Could not obtain phy reset\n");
+> --
+> 2.30.2
+> 
 
----
- drivers/opp/debugfs.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 596c185b5dda..81b2bc4b5f43 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -187,14 +187,18 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
- static void opp_migrate_dentry(struct opp_device *opp_dev,
- 			       struct opp_table *opp_table)
- {
--	struct opp_device *new_dev;
-+	struct opp_device *new_dev = NULL, *iter;
- 	const struct device *dev;
- 	struct dentry *dentry;
- 
- 	/* Look for next opp-dev */
--	list_for_each_entry(new_dev, &opp_table->dev_list, node)
--		if (new_dev != opp_dev)
-+	list_for_each_entry(iter, &opp_table->dev_list, node)
-+		if (iter != opp_dev) {
-+			new_dev = iter;
- 			break;
-+		}
-+
-+	BUG_ON(!new_dev);
- 
- 	/* new_dev is guaranteed to be valid here */
- 	dev = new_dev->dev;
 -- 
-2.17.1
-
+/Horatiu

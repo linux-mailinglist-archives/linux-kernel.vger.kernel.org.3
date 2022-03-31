@@ -2,111 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9894EE43F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9364EE448
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242605AbiCaWjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S242546AbiCaWmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242560AbiCaWjv (ORCPT
+        with ESMTP id S242462AbiCaWmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:39:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC301FF406;
-        Thu, 31 Mar 2022 15:38:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C4F5B8225B;
-        Thu, 31 Mar 2022 22:38:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B12C340ED;
-        Thu, 31 Mar 2022 22:37:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648766279;
-        bh=0+cqxY3wgXl1ZxgBlYb2Pw1E+eA45qGlrrGxGV6BP4Q=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=KVubnGXunMJIF0ThNkEy70N0q5PMBLlBFHZtwDDlcF/LEM30o5NILdXywFFrb8Mfc
-         ky7xDb6uCD4Uq5P+YIK0JXy/82QVa7PNArud3iXwsD5Iau9k1s91+EARvK9nB8dHpe
-         4vBaeI10JPTgNi+n1jcuDoQHMUkhMO1DNZQG5u/KveYKZBPKI+qcrYKLHXt7clQOH3
-         heENiVEo2e3zffwSV2wtufCT5wlmCKwc6wlvxoJs23Fa1vvMgHgyNR1B4RXf8/Z+St
-         9/W6lO1dTqMP7gpPu7WhKM5soFhWTd+O3lsNeubAc0SwUOkZnQsP57x/LmzTDPgsww
-         ohHY7YDlIt5UA==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 31 Mar 2022 18:42:17 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA731C406A
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:40:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id p15so2216981ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OAF79ixH7XO8/kHbUATTBHFnSkL/nkVXYK4Bx07Es9M=;
+        b=UIHknE8/0aEaHT5OU1wimWGQYJ5o31cxftZWanbrU5Brir065xFzKQOI5vADS0tzO8
+         h//1/dAWPEaeRdGL9/XpgnqDgcWVczQ4vD0W57XPVFF3Hkilqx5w4A8XOpBs9ZMVFAIU
+         kOoHD+Wjf66cMpSUXEd21tMYlwQvBjyJ+k4MxREj+OfWpL6rndZLIE2EGLbLSvx+ssqy
+         KkiGMhQ4T0lCmKOnc/2J5woXOFNfMAWx9f5mU4EJYamjULdZNMONj68J8okbFkhUfhhA
+         go48snyAgXnLinYYkYYsmJVUMVuh4u/EbbXtu3l2nUbYHsqmhUuC+/B8Ew6eEQvDHJqq
+         B8xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OAF79ixH7XO8/kHbUATTBHFnSkL/nkVXYK4Bx07Es9M=;
+        b=JaysUJsnLVq3EE2oMRsoo7dq40oKg1vvCCATE3ER8QLQy8rcydlDgcjNEUSojaipqb
+         2UH43eNRiKGvCO8dMOvO1i98sDoXmWT0Sz/ZsBXBLSGbRuNIDiPsuwgaruFCtO7xnBkd
+         +VANCwYMH16Sgi43dOfFxH7ZS2C6tVo3S9Rr04HAWT/00AOC8e1aSc44ql0BrtOhhXCy
+         YbzPV/0DJ76XTBZCwrj6ErbzL4gv81cBsumkeLCLmCLuQJ35wR4exRvmsVWxFCnYCPIw
+         suDgDQaTrgJZNRjGogduiI7YnrXeW32BtfXB13i4loExGO4CtXwkjURFePZr3bQW+vnK
+         gCzA==
+X-Gm-Message-State: AOAM533u9b20CdH6w4UzVoFrD9SUHU8rOUXkqkB89rFLOt+mY2xy2wkj
+        rUeUFlwE1GBVGPWoaol/ct4=
+X-Google-Smtp-Source: ABdhPJwRUYP4bzLKrhGs345u5NZhGKemPeZq835ij8gf8hKkMzb4rrnRyuAUb3KfXn8Zw9FS/8Ri+g==
+X-Received: by 2002:a17:907:3e16:b0:6df:b4f0:5cc2 with SMTP id hp22-20020a1709073e1600b006dfb4f05cc2mr6849525ejc.285.1648766427340;
+        Thu, 31 Mar 2022 15:40:27 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id j21-20020a170906255500b006e08c4862ccsm278505ejb.96.2022.03.31.15.40.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 15:40:27 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Bob Peterson <rpeterso@redhat.com>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH 1/2] gfs2: remove usage of list iterator variable for list_for_each_entry_continue()
+Date:   Fri,  1 Apr 2022 00:38:56 +0200
+Message-Id: <20220331223857.902911-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <bf438af8-5969-73e4-009d-cb7d93095a5e@kernel.org>
-References: <20220324133229.24035-1-jbx6244@gmail.com> <f7493d93-6c8a-efa9-1f2c-a0003a6d43b2@kernel.org> <bf62ad40-6bcf-62ae-f56a-cdc8d17456ec@gmail.com> <20220325005130.C45A3C340EC@smtp.kernel.org> <bf438af8-5969-73e4-009d-cb7d93095a5e@kernel.org>
-Subject: Re: [PATCH v1] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-To:     Johan Jonker <jbx6244@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>, heiko@sntech.de
-Date:   Thu, 31 Mar 2022 15:37:57 -0700
-User-Agent: alot/0.10
-Message-Id: <20220331223759.B8B12C340ED@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2022-03-25 00:31:25)
-> On 25/03/2022 01:51, Stephen Boyd wrote:
-> > Quoting Johan Jonker (2022-03-24 12:51:36)
-> >> Hi Heiko, Krzysztof,
-> >>
-> >> Question for the Rockchip clock maintainer:
-> >> What clock should be used here and other SoCs with several clock paren=
-ts
-> >> in the tree?
-> >>
-> >> The clock.yaml produces a lot off notifications like:
-> >>
-> >> /arch/arm/boot/dts/rk3036-evb.dtb: clock-controller@20000000: 'clocks'
-> >> is a dependency of 'assigned-clocks'
-> >=20
-> > 'clocks' is not a dependency of 'assigned-clocks'. The dt-schema should
-> > be fixed to remove that requirement.
->=20
-> If the driver does not have any clock inputs ("clocks" property), why
-> does it care about some clock frequencies and parents?
+In preparation to limiting the scope of a list iterator to the list
+traversal loop, use a dedicated pointer to iterate through the list [1].
 
-Because it's a clock provider itself. In this case I suspect because
-this is a clock-controller node it was skipping describing some crystal
-input though. Maybe it wants to configure the various PLLs in the
-clock-controller for a particular board. I can imagine some node with
-#clock-cells may want to configure the frequency of the clock outputs or
-configure the clk parents for a certain board/SoC. In that case there
-may not be any clocks property, but we still want to configure things.
+Since that variable should not be used past the loop iteration, a
+separate variable is used to 'remember the current location within the
+loop'.
 
->=20
-> The clocks is the logical dependency of assigned-clocks, because
-> otherwise hardware description is not complete.
+To either continue iterating from that position or start a new
+iteration (if the previous iteration was complete) list_prepare_entry()
+is used.
 
-Sure, but also #clock-cells indicating that this is a clock-controller
-itself means something. The existing bindings are what they are so
-forcing bindings to be updated to comply with having a 'clocks' property
-doesn't seem very nice.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ fs/gfs2/lops.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
->=20
-> What should be here for Rockhip? We had similar cases like this for many
-> drivers, I was fixing some of Exynos as well. In my case usually the
-> root/external clock was missing, so I supplied is as input clock to the
-> clock controller.
->=20
+diff --git a/fs/gfs2/lops.c b/fs/gfs2/lops.c
+index 6ba51cbb94cf..74e6d05cee2c 100644
+--- a/fs/gfs2/lops.c
++++ b/fs/gfs2/lops.c
+@@ -653,7 +653,7 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
+ 				bool is_databuf)
+ {
+ 	struct gfs2_log_descriptor *ld;
+-	struct gfs2_bufdata *bd1 = NULL, *bd2;
++	struct gfs2_bufdata *bd1 = NULL, *bd2, *tmp1, *tmp2;
+ 	struct page *page;
+ 	unsigned int num;
+ 	unsigned n;
+@@ -661,7 +661,7 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
+ 
+ 	gfs2_log_lock(sdp);
+ 	list_sort(NULL, blist, blocknr_cmp);
+-	bd1 = bd2 = list_prepare_entry(bd1, blist, bd_list);
++	tmp1 = tmp2 = list_prepare_entry(bd1, blist, bd_list);
+ 	while(total) {
+ 		num = total;
+ 		if (total > limit)
+@@ -675,14 +675,18 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
+ 		ptr = (__be64 *)(ld + 1);
+ 
+ 		n = 0;
++		bd1 = list_prepare_entry(tmp1, blist, bd_list);
++		tmp1 = NULL;
+ 		list_for_each_entry_continue(bd1, blist, bd_list) {
+ 			*ptr++ = cpu_to_be64(bd1->bd_bh->b_blocknr);
+ 			if (is_databuf) {
+ 				gfs2_check_magic(bd1->bd_bh);
+ 				*ptr++ = cpu_to_be64(buffer_escaped(bd1->bd_bh) ? 1 : 0);
+ 			}
+-			if (++n >= num)
++			if (++n >= num) {
++				tmp1 = bd1;
+ 				break;
++			}
+ 		}
+ 
+ 		gfs2_log_unlock(sdp);
+@@ -690,6 +694,8 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
+ 		gfs2_log_lock(sdp);
+ 
+ 		n = 0;
++		bd2 = list_prepare_entry(tmp2, blist, bd_list);
++		tmp2 = NULL;
+ 		list_for_each_entry_continue(bd2, blist, bd_list) {
+ 			get_bh(bd2->bd_bh);
+ 			gfs2_log_unlock(sdp);
+@@ -712,8 +718,10 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
+ 				gfs2_log_write_bh(sdp, bd2->bd_bh);
+ 			}
+ 			gfs2_log_lock(sdp);
+-			if (++n >= num)
++			if (++n >= num) {
++				tmp2 = bd2;
+ 				break;
++			}
+ 		}
+ 
+ 		BUG_ON(total < num);
 
-Can the schema consider either #clock-cells or clocks? I think that will
-work for most cases. It would also be good to have a comment in the
-schema or more detail around the definition of assigned-clocks in
-bindings/clock/clock-bindings.txt that clocks or #clock-cells are
-required. It would be super cool if assigned-clocks only applied if
-#clock-cells was present, otherwise clocks property applies, but I doubt
-we can do that anymore given how long the binding has been around.
+base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+-- 
+2.25.1
+

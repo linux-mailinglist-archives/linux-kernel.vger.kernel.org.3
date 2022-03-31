@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA834ED8A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC08A4ED8AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbiCaLok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
+        id S235284AbiCaLq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234341AbiCaLoj (ORCPT
+        with ESMTP id S232341AbiCaLqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:44:39 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711C7208266
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:42:52 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id e7so13206637vkh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q9JAIiZystlqDHnsIruZg9DSbtqMdv6zP+X46BkhVvM=;
-        b=ZkIJZGn9StXLui9Lz1TFK/CDvkJEw1tedIW+BqRnzG74AmNZmaUwWVg/FPy/pI6DOy
-         dlPvO+6izAhJ2TmROCN3utIeKaJcbUOwbhXo/TwrV/DWW8qV5v02dSUEEH9jOBa5x+YA
-         rxiWx3hx89lnL9/G8SxPnH7hBPwZUXQl7JyJg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q9JAIiZystlqDHnsIruZg9DSbtqMdv6zP+X46BkhVvM=;
-        b=l62t2oTEA72WUKa8PCyC6+mU8f2zNWbJdiO+93h7JrkzrdoJoPLYmSvgKJ6GdCMpLw
-         0FyCeB4YXEDe+V/1tGSlSdkMYaRGW5PbXZVxoR9aVsAU/JpSPJPjFjAXaZ9SpVlO7tuN
-         hMH0SfUGABO0vzRMwAi74ZuB9X43QUu8I1OLdyyolOr1NsJKslC6rfyMLQ2ZAdGRgP82
-         KqdrvRRjZbh+QQ+KH3a2Yx3QtYcYDNVWXvWkhjBHQwk9z404j8DgoyzsEzyyt5vj9y0I
-         1w6P+0xm1Lgffw3PaxfuBqo9esj7pyLrPKao2AnhUELjsBZUt8iWEZ0KDFNnXfs+Gv0P
-         EnHQ==
-X-Gm-Message-State: AOAM531YuSJZkeAbv/ja7/q5P7dAAjI1iCWYLdEq4eDn7XSV032u35g9
-        hMa0gRw+XHgdMyzcd6ss4uJq6VBOm5yyI/wajY5CRA==
-X-Google-Smtp-Source: ABdhPJyHv+JRYWR+69lE+O9Ro6H6M/++dU9nRCMqSlPZKVrx7IFNDSy2/ShFmYiSYt6MZSObYhloGA4u+csov29YbY8=
-X-Received: by 2002:a05:6122:9a6:b0:33f:f23e:bdee with SMTP id
- g38-20020a05612209a600b0033ff23ebdeemr1995153vkd.6.1648726971209; Thu, 31 Mar
- 2022 04:42:51 -0700 (PDT)
+        Thu, 31 Mar 2022 07:46:24 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1AA20826E;
+        Thu, 31 Mar 2022 04:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qjOv6N2Ojfl1GTfvFmgcb7RvfXAELJnXk4L/PDNXWPI=; b=T+A+nn6HUM5jIjUtvo04f4Hy3E
+        ub2pFApFWNxTK4X6Gz6a5I+H27TH+ZONizJnYDZFHr5eRCrWyMAg/Iqtf5tkdIycxeuB10KTL2dAX
+        4XToF+qFVWAdcxx625SgfQLZH8oMK51gKOnKmPJH2FRC3+zfEAFBtK9jvpEGbvcZxz6+RNLZuolq4
+        usFLNGoUfxouhqq+4OLIeDrIGmD3Y2tFdoXuI79Rmh43+iwyXUQVMfZ9Z7z4QHp6R0p1pPI1HIedZ
+        Hm82Gvf4BNiEA0My1oFZXfO/xx72fBidXP21w95NnIWWaxcQvnDG594Q40Mz9VFrR1oTWEMBvWb1v
+        V75U+c0w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58050)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nZtE4-0004jC-JU; Thu, 31 Mar 2022 12:44:28 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nZtE3-0007af-6i; Thu, 31 Mar 2022 12:44:27 +0100
+Date:   Thu, 31 Mar 2022 12:44:27 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
+Message-ID: <YkWUGwi0tbWFyUy/@shell.armlinux.org.uk>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-5-michael@walle.cc>
+ <Yjt99k57mM5PQ8bT@lunn.ch>
+ <8304fb3578ee38525a158af768691e75@walle.cc>
+ <Yju+SGuZ9aB52ARi@lunn.ch>
+ <30012bd8256be3be9977bd15d1486c84@walle.cc>
+ <YjybB/fseibDU4dT@lunn.ch>
+ <0d4a2654acd2cc56f7b17981bf14474e@walle.cc>
 MIME-Version: 1.0
-References: <SL2P216MB12463DE2E1E100E2498A5C33FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
- <SL2P216MB1246D7900A0B9620F1E1A038FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
- <YkWRN4ac0ivRn4aB@kroah.com>
-In-Reply-To: <YkWRN4ac0ivRn4aB@kroah.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Thu, 31 Mar 2022 20:42:40 +0900
-Message-ID: <CAFr9PXm3Mvr0guGoPDKmashMhFG6OQMvXHxwX-SD5ZHPi_sw4g@mail.gmail.com>
-Subject: Re: [PATCH v6 4/6] staging: media: wave5: Add TODO file
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nas Chung <nas.chung@chipsnmedia.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "dafna3@gmail.com" <dafna3@gmail.com>,
-        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
-        "kiril.bicevski@collabora.com" <kiril.bicevski@collabora.com>,
-        "lafley.kim" <lafley.kim@chipsnmedia.com>,
-        Scott Woo <scott.woo@chipsnmedia.com>,
-        "olivier.crete@collabora.com" <olivier.crete@collabora.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d4a2654acd2cc56f7b17981bf14474e@walle.cc>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Mar 24, 2022 at 06:18:14PM +0100, Michael Walle wrote:
+> Am 2022-03-24 17:23, schrieb Andrew Lunn:
+> > > Isn't it safe to assume that if a PHY implements the indirect
+> > > registers for c45 in its c22 space that it will also have a valid
+> > > PHY ID and then the it's driver will be probed?
+> > 
+> > See:
+> > https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L895
+> > 
+> > No valid ID in C22 space.
+> 
+> I actually looked at the datasheet and yes, it implements the
+> registers 13 and 14 in c22 to access the c45 space. I couldn't
+> find any descriptions of other c22 registers though.
 
-On Thu, 31 Mar 2022 at 20:32, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> > +  Until we can test and resolve any issues on final silicon (due 2H 2021)
-> > +  this driver should remain in staging.
->
-> Then why not just wait?  Why merge this now?  What is the benifit of us
-> taking this code at this point in time for hardware that is no one has
-> as it is not even created?
+I'm not sure which PHY you're referring to here, but iirc, the later
+hardware revisions of the 88x3310 implement the indirect access, but
+earlier revisions do not.
 
-FWIW there is an SoC that is supported (if console from initramfs on
-uart counts..) in mainline, Sigmastar ssd202d, that has this IP so it
-exists in the wild.
-I have tried to get this driver running on it and it did something but
-didn't get far enough to actually decode video.
+> > In general, if the core can do something, it is better than the driver
+> > doing it. If the core cannot reliably figure it out, then we have to
+> > leave it to the drivers. It could well be we need the drivers to set
+> > has_c45. I would prefer that drivers don't touch c45_over_c22 because
+> > they don't have the knowledge of what the bus is capable of doing. The
+> > only valid case i can think of is for a very oddball PHY which has C45
+> > register space, but cannot actually do C45 transfers, and so C45 over
+> > C22 is the only option.
+> 
+> And how would you know that the PHY has the needed registers in c22
+> space? Or do we assume that every C45 PHY has these registers?
 
-Cheers,
+That's the problem. Currently C22 PHY drivers that do not support the
+C45 register space have to set the .read_mmd and .write_mmd methods to
+genphy_read_mmd_unsupported/genphy_write_mmd_unsupported which
+effectively disables access to the C45 register space. In order for
+that to happen, we must have read the C22 PHY ID and bound the driver.
 
-Daniel
+That doesn't help with reading the PHY ID though.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

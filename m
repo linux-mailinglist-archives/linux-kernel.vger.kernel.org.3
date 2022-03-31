@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2924EDDD7
+	by mail.lfdr.de (Postfix) with ESMTP id B8E454EDDD8
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiCaPtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S238481AbiCaPtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239874AbiCaPsa (ORCPT
+        with ESMTP id S239882AbiCaPsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 31 Mar 2022 11:48:30 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57461ADB8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:46:39 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id a11so21709385qtb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:46:39 -0700 (PDT)
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153803A5C9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:46:41 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id s11so21748530qtc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:46:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mdaverde-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3LYS65c4ngde5Sf/CRmanaRSxKjEDRgSvxSuSxBsqEc=;
-        b=AME818MNJpYFqVRzMQ8G2/TffOi/1CdJh+Ov+TIOXiss4DrbP66b+15RGUt3T+S8Ep
-         b2f9QS/+lhzki/omOxU8k1m+o4ftE3Q9wwOZQmfGXEvWl/wMNVGMqTGb/wR4rv3QY3/4
-         mPhqA7lOTYvOAOGxbhBfaQNv/VpNrmlO/oQIJHegQETrRsYeYJBzj59n6BqngL3GoiCG
-         tq6AkBUhFQZsGJgaECD36mqldNReo8DFULqsVnvhuOU+V96rXR+o4NVP/xIoJeIbhQLV
-         0gKG49XvuRzaVT+v+kfuDEl2izRofzj0pIs12qQnywnGrQOo/dUn2Oe/+hsTcswovLXB
-         VD3g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ze+TRyAphAeduWuN2skeP9/ZCll4d+wxSL8ZQdiJjAc=;
+        b=3xAXCx0uv7wSxkbnN6yD1JLuifFdUK7R1hVRF0HbxSWcEa6JRqkWbCZNuOwm3wZwXR
+         9NLXlM3lw3fslVm4jzCt6SQUj+T126Jdpmyg64usIpyVMSR7Q5YRU0IIsOQ39ZZXSg3N
+         67AgJg5tqaze/M8euxyl9puyx9Y8XK+fk2mzCSIavEfxpAD0sbRCT9c2eb61xYQjhd6v
+         HGfj7vo9v3+3taNdD/5aLo6+0PjpRatgLbeGByUfp0ZSPVfrlMcvgYZfRYN65ZZYaUbK
+         pHru/Tf3DSc18OmWSm5sOaWx6uFTJBJ5v6pE9uYHsWMrO9H89Sh2LMTMmOxZGIGjrYWp
+         4gKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3LYS65c4ngde5Sf/CRmanaRSxKjEDRgSvxSuSxBsqEc=;
-        b=OhuFPmyEBYPmu2lOxMb/19c8jufu2jDJ6U3IZMaNtM2/x6VRcxHSjkm6EYB0ix2/0H
-         vdZzT3lFe5r/r0WPmx5WlezEd+RlUERYCB1dEt6DFEw8OMk3Bw2TO6oE5kywgRlGh7LB
-         QuvFvtgkyJmVHWlAgYoTwGIX++9GPv+fHmiavxAZb473g/z2JjCXcXNst8mLZrsHE4qG
-         Z4CIvGDgSk9nOX1lBvC8IE5bizfo/XeRpthM9azGKxoELl922QkkzMdBQoVinrRaXhcM
-         2rZF0eVRHWT0OSEnf8tQwj1zwAVxp3/KB6wbailUAZ2TtJL0ZoLmNugS2zwsxEHEcohe
-         ipYA==
-X-Gm-Message-State: AOAM531JIfysyCeuCDC+11yjUjTPmkc6IfdWSOEk/1fm5sJePNbOQMsL
-        Vn5bPD7yj1awWCItOyiFePcx7w==
-X-Google-Smtp-Source: ABdhPJygwSfyTwbWopq/cvK0vHooNH/Lu7ir5ljdbjSyLh1lNPef8vRFmtoDL7HrM8Le0yUZ6O1luw==
-X-Received: by 2002:ac8:5cc2:0:b0:2eb:8308:91f3 with SMTP id s2-20020ac85cc2000000b002eb830891f3mr4869207qta.280.1648741598786;
-        Thu, 31 Mar 2022 08:46:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ze+TRyAphAeduWuN2skeP9/ZCll4d+wxSL8ZQdiJjAc=;
+        b=0qbUmzvyUMqYeDpoK09FJ4wNB62vNUMhP+hx2SV7z1lurE1Ibc2S289dwWghSBEG60
+         9qM727RKsglLGkjuhPOJHYE0XYWucTi0bOTONwwWMUXbA/6dGNR55MOafIggERdcQW9W
+         PjQF1MNxULBvJJ/N1w1Mgj9XxeIH6pB4FHcDEcpa0jziyDYQ5bVOrSEzB2ulkEVaEC2a
+         qdDfMks0LyGi8yPiD3yyzvwbwSpwocQZd6uCnuWjenkH1WFDq+GnPFcHtcLizsulHOIG
+         hvL72RkRHATLTdA1O+7CTyxsljURByuL297JZbJ9DHZj/lFjpOWVjcp4mDdY1c119egX
+         ktjg==
+X-Gm-Message-State: AOAM531isGIPx88S79RjNnbZDPpkzy59UBdQMdPvMZ6YJmX0mF8BD5oT
+        hzKpp3Lj3kntvsBX5i+Vu0UPDg==
+X-Google-Smtp-Source: ABdhPJzVLojvPkerMf3LFpWe07gvD3uWRA5x7n4tr15Hk0dQJ82dzo4aeF55MzjTM/jUKnB/KOCrJw==
+X-Received: by 2002:a05:622a:345:b0:2e1:c756:6981 with SMTP id r5-20020a05622a034500b002e1c7566981mr4762523qtw.177.1648741600232;
+        Thu, 31 Mar 2022 08:46:40 -0700 (PDT)
 Received: from pop-os.attlocal.net ([2600:1700:1d10:5830:565c:ffc5:fa04:b353])
-        by smtp.gmail.com with ESMTPSA id j12-20020ae9c20c000000b0067ec380b320sm13126797qkg.64.2022.03.31.08.46.35
+        by smtp.gmail.com with ESMTPSA id j12-20020ae9c20c000000b0067ec380b320sm13126797qkg.64.2022.03.31.08.46.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 08:46:37 -0700 (PDT)
+        Thu, 31 Mar 2022 08:46:39 -0700 (PDT)
 From:   Milan Landaverde <milan@mdaverde.com>
 To:     bpf@vger.kernel.org
 Cc:     milan@mdaverde.com, ast@kernel.org, daniel@iogearbox.net,
@@ -55,10 +55,12 @@ Cc:     milan@mdaverde.com, ast@kernel.org, daniel@iogearbox.net,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         quentin@isovalent.com, davemarchevsky@fb.com, sdf@google.com,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/3] bpf/bpftool: add program & link type names
-Date:   Thu, 31 Mar 2022 11:45:52 -0400
-Message-Id: <20220331154555.422506-1-milan@mdaverde.com>
+Subject: [PATCH bpf-next 1/3] bpf/bpftool: add syscall prog type
+Date:   Thu, 31 Mar 2022 11:45:53 -0400
+Message-Id: <20220331154555.422506-2-milan@mdaverde.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220331154555.422506-1-milan@mdaverde.com>
+References: <20220331154555.422506-1-milan@mdaverde.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,43 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the addition of the syscall prog type we should now
-be able to see feature probe info for that prog type:
+In addition to displaying the program type in bpftool prog show
+this enables us to be able to query bpf_prog_type_syscall
+availability through feature probe as well as see
+which helpers are available in those programs (such as
+bpf_sys_bpf and bpf_sys_close)
 
-    $ bpftool feature probe kernel
-    ...
-    eBPF program_type syscall is available
-    ...
-    eBPF helpers supported for program type syscall:
-        ...
-        - bpf_sys_bpf
-        - bpf_sys_close
+Signed-off-by: Milan Landaverde <milan@mdaverde.com>
+---
+ tools/bpf/bpftool/prog.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-And for the link types, their names should aid in
-the output.
-
-Before:
-    $ bpftool link show
-    50: type 7  prog 5042
-	    bpf_cookie 0
-	    pids vfsstat(394433)
-
-After:
-    $ bpftool link show
-    57: perf_event  prog 5058
-	    bpf_cookie 0
-	    pids vfsstat(394725)
-
-Milan Landaverde (3):
-  bpf/bpftool: add syscall prog type
-  bpf/bpftool: add missing link types
-  bpf/bpftool: handle libbpf_probe_prog_type errors
-
- tools/bpf/bpftool/feature.c | 2 +-
- tools/bpf/bpftool/link.c    | 2 ++
- tools/bpf/bpftool/prog.c    | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
-
---
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index bc4e05542c2b..8643b37d4e43 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -68,6 +68,7 @@ const char * const prog_type_name[] = {
+ 	[BPF_PROG_TYPE_EXT]			= "ext",
+ 	[BPF_PROG_TYPE_LSM]			= "lsm",
+ 	[BPF_PROG_TYPE_SK_LOOKUP]		= "sk_lookup",
++	[BPF_PROG_TYPE_SYSCALL]			= "syscall",
+ };
+ 
+ const size_t prog_type_name_size = ARRAY_SIZE(prog_type_name);
+-- 
 2.32.0
 

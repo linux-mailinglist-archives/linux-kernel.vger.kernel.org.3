@@ -2,176 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1931F4EDDA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DFE4EDDAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbiCaPqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S239375AbiCaPqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238680AbiCaPpr (ORCPT
+        with ESMTP id S239432AbiCaPp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:45:47 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A831E3E32
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:40:05 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id v19-20020a056820101300b0032488bb70f5so38044oor.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=5NvDxXOCj2IjyiLWVvaGa2K8cfqwFAMmFQA1NzW5zlQ=;
-        b=SlYdKhMQeCIIizXjR2ftf96grOKqBwNTw15wVpZchWuXuI4ivEgri7HPuS3/j6rDjp
-         XytUgTkYYuTIyY+G/dJtV5VC2vRffaWHwNJ52M2TMu8AG6HVcFFP3CXqeF3nrImQbBaM
-         /MsdY3mLAje9vfjtf/wxdAhAmEyDkH3fpWsgtSuycN7vGlomI7ibnc1IQv07AS7WOaNB
-         376vzHNd08msPiJizrDCjWQ4jW3UFR8DhCoSJCktV3G1uNT/LThu72dD/zx/3CDwn788
-         4owfczlLxRRW3OCRjhIg1yJY4sdtAf0e0Qtzj69AZHirkGDTXiSWjOJrE/bFr9RMrQHQ
-         dETA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=5NvDxXOCj2IjyiLWVvaGa2K8cfqwFAMmFQA1NzW5zlQ=;
-        b=jrpGtHr2hKnCM3pkqKZmw3ClaA3Ae5TD+yTMStrIrmIn9H2c73HcKcxtQCSp4SCWRk
-         yQCYOJSmtBfIyp3Saya1aJ9XWu0uueASO1A+F4thWLd3xS48ejW7tosON+0UpsAzDLbo
-         +ErKRVfhTAagouKZ5WBnHotxi2hHyZRL8uALzbWuBVpRd04ADSjGhVCBbN6P4+0DdCV4
-         JH9LacBaWu6++F0j5vlh3d2JuojHMtVU4KYVbAf6nUnYoNpUpKrLMERH1BbLnsurj1X7
-         7ZSOOil0BgrPXqvsoCht2xDfx9yQvIxrFf0kYRrmi4cVx4CfGQaIMw3+Oepo5vd7z+wL
-         LYXw==
-X-Gm-Message-State: AOAM530HD85mkN5GPM+13m00ioJqSvy7ioS5a927FgmINlTzKlDfQXSv
-        Fw/g6BCTKNGMYjERHIDu2+E=
-X-Google-Smtp-Source: ABdhPJzuRo0YGQtSqCPTJVqtxgUHrhRly5OEtg0E8sVgxze6Up+3RncDemZbLaq8micNvmL4QlYQ2Q==
-X-Received: by 2002:a4a:cb0d:0:b0:324:852f:4438 with SMTP id r13-20020a4acb0d000000b00324852f4438mr5335614ooq.3.1648741202226;
-        Thu, 31 Mar 2022 08:40:02 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056870d59700b000de821ba7cbsm11462103oao.15.2022.03.31.08.40.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 08:40:01 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 10:40:00 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH] staging: r8188eu: use sizeof(*pvar) for allocating structs
-Message-ID: <YkXLUIMkcD02N0RU@bertie>
+        Thu, 31 Mar 2022 11:45:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DBD1E5232;
+        Thu, 31 Mar 2022 08:40:33 -0700 (PDT)
+X-UUID: ab6246be6d714f2d8d6c7ef929e3e8a3-20220331
+X-UUID: ab6246be6d714f2d8d6c7ef929e3e8a3-20220331
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1623740777; Thu, 31 Mar 2022 23:40:04 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 31 Mar 2022 23:40:02 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 31 Mar 2022 23:40:02 +0800
+Message-ID: <56ca6920f036b74b28c5858d8b28c3f3046c4758.camel@mediatek.com>
+Subject: Re: [PATCH v16 4/8] soc: mediatek: add mtk-mmsys support for mt8195
+ vdosys0
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        CK Hu <ck.hu@mediatek.com>, "Rob Herring" <robh+dt@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <hsinyi@chromium.org>, <fshao@chromium.org>,
+        <moudy.ho@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>, <nancy.lin@mediatek.com>,
+        <singo.chang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 31 Mar 2022 23:40:02 +0800
+In-Reply-To: <01e57ed9-222c-5b74-fe2b-4d22fe802c98@gmail.com>
+References: <20220307032859.3275-1-jason-jh.lin@mediatek.com>
+         <20220307032859.3275-5-jason-jh.lin@mediatek.com>
+         <a068f2c9b2111f3a7a20da19073ef5fdb7f4a91f.camel@mediatek.com>
+         <b9ed8c1511ea26c070dd3fb61f4370e5f858058c.camel@mediatek.com>
+         <97bc1358813a2449d6e62653eb7af9906dfb190e.camel@mediatek.com>
+         <01e57ed9-222c-5b74-fe2b-4d22fe802c98@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use sizeof(*pvar) instead of sizeof(struct var) when allocating memory.
-This conforms to Linux kernel coding style, improves readability,
-and decreases the opportunity for bugs if the pointer variable type is
-changed. Issue found by checkpatch messages of the following format:
+Hi Matthias,
 
-CHECK: Prefer kzalloc(sizeof(*pvar)...) over kzalloc(sizeof(struct var)...)
+ * Thanks for the reviews.
 
-Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_mlme.c     |  4 ++--
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 16 ++++++++--------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+On Thu, 2022-03-31 at 13:01 +0200, Matthias Brugger wrote:
+> 
+> On 30/03/2022 12:04, Jason-JH Lin wrote:
+> > Hi CK,
+> > 
+> > Thanks for the review.
+> > 
+> > On Mon, 2022-03-28 at 13:39 +0800, CK Hu wrote:
+> > > Hi, Jason:
+> > > 
+> > > On Mon, 2022-03-28 at 13:03 +0800, Jason-JH Lin wrote:
+> > > > Hi CK,
+> > > > 
+> > > > Thanks for the reviews.
+> > > > 
+> > > > On Mon, 2022-03-07 at 11:28 +0800, jason-jh.lin wrote:
+> > > > > Add mt8195 vdosys0 clock driver name and routing table to
+> > > > > the driver data of mtk-mmsys.
+> > > > > 
+> > > > > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> > > > > Acked-by: AngeloGioacchino Del Regno <
+> > > > > angelogioacchino.delregno@collabora.com>
+> > > > > ---
+> > > > > Impelmentation patch of vdosys1 can be refered to [1]
+> > > > > 
+> > > > > [1] soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
+> > > > > ---
+> > > > >   drivers/soc/mediatek/mt8195-mmsys.h    | 130
+> > > > > +++++++++++++++++++++++++
+> > > > >   drivers/soc/mediatek/mtk-mmsys.c       |  11 +++
+> > > > >   include/linux/soc/mediatek/mtk-mmsys.h |   9 ++
+> > > > >   3 files changed, 150 insertions(+)
+> > > > >   create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
+> > > > > 
+> > > > > diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> > > > > b/drivers/soc/mediatek/mt8195-mmsys.h
+> > > > > new file mode 100644
+> > > > > index 000000000000..24a3afe23bc8
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> > > > > @@ -0,0 +1,130 @@
+> > > > > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > > > > +
+> > > > > +#ifndef __SOC_MEDIATEK_MT8195_MMSYS_H
+> > > > > +#define __SOC_MEDIATEK_MT8195_MMSYS_H
+> > > > > +
+> > > > > +#define MT8195_VDO0_OVL_MOUT_EN				
+> > > > > 	
+> > > > > 0xf14
+> > > > > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_RDMA0			
+> > > > > BIT(0)
+> > > > > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_WDMA0			
+> > > > > BIT(1)
+> > > > >   
+> > > > > Useless, so remove.
+> > > > > 
+> > > > > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_OVL1			
+> > > > > BIT(2)
+> > > > > Ditto.Useless, so remove.
+> > > > > Regards,
+> > > > > CK
+> > > > 
+> > > > Although these definitions are not used, they represent the
+> > > > functionality provided by this register.
+> > > > 
+> > > > I think we can show that we have these capabilities by defining
+> > > > them.
+> > > > 
+> > > > Can we keep these definitions?
+> > > 
+> > > It's better that we know how to use it. Even though the symbol
+> > > name
+> > > show some information, but I would like to add it to
+> > > mmsys_mt8195_routing_table[].
+> > > 
+> > > Regards,
+> > > CK
+> > > 
+> > 
+> > OK, I think I just remove the useless define.
+> 
+> Actually I would prefer to add it to the routing table to describe
+> all the 
+> capabilities of the HW.
+> 
+> Is there any technical problem with that?
+> 
+> Regards,
+> Matthias
+> 
+OK, I'll add keep these definitions and add them to the routing table.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 6f0bff186477..2afbb6a9aee6 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1509,13 +1509,13 @@ int rtw_set_auth(struct adapter *adapter, struct security_priv *psecuritypriv)
- 	struct	cmd_priv *pcmdpriv = &adapter->cmdpriv;
- 	int		res = _SUCCESS;
- 
--	pcmd = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
-+	pcmd = kzalloc(sizeof(*pcmd), GFP_KERNEL);
- 	if (!pcmd) {
- 		res = _FAIL;  /* try again */
- 		goto exit;
- 	}
- 
--	psetauthparm = kzalloc(sizeof(struct setauth_parm), GFP_KERNEL);
-+	psetauthparm = kzalloc(sizeof(*psetauthparm), GFP_KERNEL);
- 	if (!psetauthparm) {
- 		kfree(pcmd);
- 		res = _FAIL;
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 10d5f1222936..c3ec853d0895 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -6421,7 +6421,7 @@ void report_survey_event(struct adapter *padapter, struct recv_frame *precv_fram
- 	pmlmeext = &padapter->mlmeextpriv;
- 	pcmdpriv = &padapter->cmdpriv;
- 
--	pcmd_obj = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-+	pcmd_obj = kzalloc(sizeof(*pcmd_obj), GFP_ATOMIC);
- 	if (!pcmd_obj)
- 		return;
- 
-@@ -6471,7 +6471,7 @@ void report_surveydone_event(struct adapter *padapter)
- 	struct mlme_ext_priv		*pmlmeext = &padapter->mlmeextpriv;
- 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
- 
--	pcmd_obj = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
-+	pcmd_obj = kzalloc(sizeof(*pcmd_obj), GFP_KERNEL);
- 	if (!pcmd_obj)
- 		return;
- 
-@@ -6513,7 +6513,7 @@ void report_join_res(struct adapter *padapter, int res)
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
- 
--	pcmd_obj = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-+	pcmd_obj = kzalloc(sizeof(*pcmd_obj), GFP_ATOMIC);
- 	if (!pcmd_obj)
- 		return;
- 
-@@ -6610,7 +6610,7 @@ void report_add_sta_event(struct adapter *padapter, unsigned char *MacAddr, int
- 	struct mlme_ext_priv		*pmlmeext = &padapter->mlmeextpriv;
- 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
- 
--	pcmd_obj = kzalloc(sizeof(struct cmd_obj), GFP_KERNEL);
-+	pcmd_obj = kzalloc(sizeof(*pcmd_obj), GFP_KERNEL);
- 	if (!pcmd_obj)
- 		return;
- 
-@@ -6996,11 +6996,11 @@ void survey_timer_hdl(struct adapter *padapter)
- 			pmlmeext->scan_abort = false;/* reset */
- 		}
- 
--		ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-+		ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
- 		if (!ph2c)
- 			goto exit_survey_timer_hdl;
- 
--		psurveyPara = kzalloc(sizeof(struct sitesurvey_parm), GFP_ATOMIC);
-+		psurveyPara = kzalloc(sizeof(*psurveyPara), GFP_ATOMIC);
- 		if (!psurveyPara) {
- 			kfree(ph2c);
- 			goto exit_survey_timer_hdl;
-@@ -7538,13 +7538,13 @@ u8 set_tx_beacon_cmd(struct adapter *padapter)
- 	u8 res = _SUCCESS;
- 	int len_diff = 0;
- 
--	ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-+	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
- 	if (!ph2c) {
- 		res = _FAIL;
- 		goto exit;
- 	}
- 
--	ptxBeacon_parm = kzalloc(sizeof(struct Tx_Beacon_param), GFP_ATOMIC);
-+	ptxBeacon_parm = kzalloc(sizeof(*ptxBeacon_parm), GFP_ATOMIC);
- 	if (!ptxBeacon_parm) {
- 		kfree(ph2c);
- 		res = _FAIL;
+Regards,
+Jason-JH.Lin
+
+> > Thanks.
+> > 
+> > Regards,
+> > Jason-JH.Lin
+> > > > 
+> > > > Regards,
+> > > > Jason-JH.Lin
+> > > > 
+> > > > > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_RDMA1			
+> > > > > BIT(4)
+> > > > > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_WDMA1			
+> > > > > BIT(5)
+> > > > > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_OVL0			
+> > > > > BIT(6)
+> > > > 
+> > > > 
+> > > > [snip]
+> > > > 
+> > > 
+> > > 
 -- 
-2.32.0
+Jason-JH Lin <jason-jh.lin@mediatek.com>
 

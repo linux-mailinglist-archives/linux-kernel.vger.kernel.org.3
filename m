@@ -2,214 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE8D4EE05A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008FB4EE066
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbiCaS1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S234400AbiCaS3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233699AbiCaS1j (ORCPT
+        with ESMTP id S233699AbiCaS3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:27:39 -0400
+        Thu, 31 Mar 2022 14:29:19 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2762913DFC;
-        Thu, 31 Mar 2022 11:25:51 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 117421F46814
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2B113E85;
+        Thu, 31 Mar 2022 11:27:30 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id DB2721F470F3;
+        Thu, 31 Mar 2022 19:27:28 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648751149;
-        bh=ErKTvh7tRRQkBTG8doKmHes8bgpQTZV4rTW/0ZXc+Yw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=NBRHXXKVZxAl+xaiCWCRR4+w6p1ZJDeTI4ZeOzRiWPAHaDeHJlxIzvg2G3oVR1nIr
-         9y5ve8cmXkGg+VcG5WZRbB2zHe2c4qfX5Ou4AuMilBElxuWV+X2XBCvT+v9rNbJVhB
-         A1A1EFFfJBCTjnNtTmgVSXDzDJLgcgApWdXvm5gqLjxXhFTvu9wYNOkU/AeLh9ZMhp
-         TtmMN8dxLtX/hTBnWMQoqschGT2p/kgqKYuy4fY57T3kugYB/W3HZ4kWzTAoqtRrtV
-         2LeLHPZuvnt7lt9bKognP9FhxVsYSR7Aaj98g2hPZTV2cg70Z6+O8jjSmKq0g8g7za
-         GANHAbMwZ161A==
-Message-ID: <8a59875f62ac1a60aec91c9170c1471234e1b4db.camel@collabora.com>
-Subject: Re: [PATCH v1 20/24] media: hantro: Enable HOLD_CAPTURE_BUF for
- H.264
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Sebastian Fricke <sebastian.fricke@collabora.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 31 Mar 2022 14:25:37 -0400
-In-Reply-To: <20220330073600.crbi5wqlp4rimx2a@basti-XPS-13-9310>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
-         <20220328195936.82552-21-nicolas.dufresne@collabora.com>
-         <20220330073600.crbi5wqlp4rimx2a@basti-XPS-13-9310>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        s=mail; t=1648751249;
+        bh=uP7q/xYsT32zx3bzbweG0t9nZq+UAL3kQqtb4RqJLm8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Pvdo9fWIRW4W+gzpHQiwinvhXLCRyAC1ZPTm5yM2woYZMseQ7vo4JNJmwR796bUjh
+         HSAJcrJ5+PpFcwE83BAgE5NctvFxx6okVEh6E4tiA8jlbE4O/nUCc3sgMw61Iu/lHE
+         q0L+/W2EOOCjdle1t11TZzFYqp0mx8QRfe2npCwt6C7pymmtTF/CHPxZVWqBF/7cP1
+         5BSPqivxVGrip5/vffd9looqQiB4Bfllg/+HMmXLfv7ERgJYtxArrZmgY/D7ynIw+e
+         cpNEXdAcygH+288NqW5YJFa3i3fKyVvWGz657DWYO7IrAUFA8iK0y3SLdkkkhttXz2
+         0ahKTKkrU/YOQ==
+Message-ID: <83979c7b-8a8a-5006-6af3-f3ca8b0d8ced@collabora.com>
+Date:   Thu, 31 Mar 2022 21:27:25 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 07/10] drm/msm/gem: Rework vma lookup and pin
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220330204804.660819-1-robdclark@gmail.com>
+ <20220330204804.660819-8-robdclark@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220330204804.660819-8-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 30 mars 2022 =C3=A0 09:36 +0200, Sebastian Fricke a =C3=A9crit=
-=C2=A0:
-> Hey Nicolas,
->=20
-> On 28.03.2022 15:59, Nicolas Dufresne wrote:
-> > This is needed to optimizing field decoding. Each field will be
->=20
-> s/is needed to optimizing/is needed to optimize/
->=20
-> > decoded in the same capture buffer, so to make use of the queues
->=20
-> s/in the same/into the same/
->=20
-> > we need to be able to ask the driver to keep the capture buffer.
->=20
-> How about:
-> """
-> During field decoding each field will be decoded into the same capture
-> buffer. Optimise this mode by asking the driver to hold the buffer until
-> all fields are written into it.
-> """
->=20
-> >=20
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+On 3/30/22 23:47, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> Combines duplicate vma lookup in the get_and_pin path.
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/msm/msm_gem.c | 50 ++++++++++++++++++-----------------
+>  1 file changed, 26 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+> index deafae6feaa8..218744a490a4 100644
+> --- a/drivers/gpu/drm/msm/msm_gem.c
+> +++ b/drivers/gpu/drm/msm/msm_gem.c
+> @@ -376,39 +376,40 @@ put_iova_vmas(struct drm_gem_object *obj)
+>  	}
+>  }
+>  
+> -static int get_iova_locked(struct drm_gem_object *obj,
+> -		struct msm_gem_address_space *aspace, uint64_t *iova,
+> +static struct msm_gem_vma *get_vma_locked(struct drm_gem_object *obj,
+> +		struct msm_gem_address_space *aspace,
+>  		u64 range_start, u64 range_end)
+>  {
+>  	struct msm_gem_vma *vma;
+> -	int ret = 0;
+>  
+>  	GEM_WARN_ON(!msm_gem_is_locked(obj));
+>  
+>  	vma = lookup_vma(obj, aspace);
+>  
+>  	if (!vma) {
+> +		int ret;
+> +
+>  		vma = add_vma(obj, aspace);
+>  		if (IS_ERR(vma))
+> -			return PTR_ERR(vma);
+> +			return vma;
+>  
+>  		ret = msm_gem_init_vma(aspace, vma, obj->size,
+>  			range_start, range_end);
+>  		if (ret) {
+You're allocation range_start -> range_end
 
-Perhaps avoid giving a reviewed by if you are to comment around modifying t=
-he
-code ? I will though keep the code as is, I believe there is more good then=
- bad
-around the form.
 
->=20
-> > ---
-> > drivers/staging/media/hantro/hantro_v4l2.c | 25 ++++++++++++++++++++++
-> > 1 file changed, 25 insertions(+)
-> >=20
-> > diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/stagi=
-ng/media/hantro/hantro_v4l2.c
-> > index 67148ba346f5..50d636678ff3 100644
-> > --- a/drivers/staging/media/hantro/hantro_v4l2.c
-> > +++ b/drivers/staging/media/hantro/hantro_v4l2.c
-> > @@ -409,6 +409,30 @@ hantro_update_requires_request(struct hantro_ctx *=
-ctx, u32 fourcc)
-> > 	}
-> > }
-> >=20
-> > +static void
-> > +hantro_update_requires_hold_capture_buf(struct hantro_ctx *ctx, u32 fo=
-urcc)
-> > +{
-> > +	struct vb2_queue *vq;
-> > +
-> > +	vq =3D v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-> > +			     V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-> > +
-> > +	switch (fourcc) {
-> > +	case V4L2_PIX_FMT_JPEG:
-> > +	case V4L2_PIX_FMT_MPEG2_SLICE:
-> > +	case V4L2_PIX_FMT_VP8_FRAME:
-> > +	case V4L2_PIX_FMT_HEVC_SLICE:
-> > +	case V4L2_PIX_FMT_VP9_FRAME:
-> > +		vq->subsystem_flags &=3D ~(VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF=
-);
-> > +		break;
->=20
-> Out of curiosity, why would it be bad for the other codecs to have
-> support for that feature activated? As this doesn't actually hold the
-> buffers but only makes sure that they could be held.
->=20
-> > +	case V4L2_PIX_FMT_H264_SLICE:
-> > +		vq->subsystem_flags |=3D VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
->=20
-> I think it is worth it to highlight with a comment why only this one
-> receives support for holding the buffer. As it is quite confusing
-> without background info and just the code.
+>  			del_vma(vma);
+> -			return ret;
+> +			return ERR_PTR(ret);
+>  		}
+> +	} else {
+> +		GEM_WARN_ON(vma->iova < range_start);
+> +		GEM_WARN_ON((vma->iova + obj->size) > range_end);
 
-As this code is quite separate from the actual codec code, I believe it wil=
-l be
-more robust this way. It could happen in the future that code get modified
-without taking into account that a buffer may be held. This also mimic how =
-this
-was implemented in Cedrus fwiw.
+and then comparing range_start -> range_start + obj->size, hence you're
+assuming that range_end always equals to obj->size during the allocation.
 
-Note that it needs to be added for MPEG2 field decoding too, but I believe =
-this
-is unrelated to this patchset, the form is nice for adding more in the futu=
-re.
+I'm not sure what is the idea here.. this looks inconsistent. I think
+you wanted to write:
 
->=20
-> How about:
-> ```
-> /*
->   * During field decoding in H264, all fields are written into the
->   * same capture buffer, thus we need to be able to hold the buffer
->   * until all fields are written to it
->   */
-> ```
->=20
-> > +		break;
-> > +	default:
->=20
-> The only other decoding formats remaining are:
-> - V4L2_PIX_FMT_NV12_4L4
-> - V4L2_PIX_FMT_NV12
+		GEM_WARN_ON(vma->iova < range_start);
+		GEM_WARN_ON(vma->iova + (vma->node.size << PAGE_SHIFT) > range_end);
 
-You'll never get raw formats in that switch. The cases are exhaustive for t=
-he
-context, yet the compiler does not understand that context.
+But is it really useful to check whether the new range is inside of the
+old range? Shouldn't it be always a error to change the IOVA range
+without reallocating vma?
 
->=20
-> Both have codec mode HANTRO_MODE_NONE.
->=20
-> My thought is:
-> If we don't care for these two, the we might as well disable buffer holdi=
-ng
-> support for them as well. So, we could make this simplier
-> (but a bit less descriptive):
->=20
-> ```
-> /*
->   * During field decoding in H264, all fields are written into the
->   * same capture buffer, thus we need to be able to hold the buffer
->   * until all fields are written to it
->   */
-> if (fourcc =3D=3D V4L2_PIX_FMT_H264_SLICE)
->      vq->subsystem_flags |=3D VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
-> else=20
-> 		vq->subsystem_flags &=3D ~(VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF);
-> ```
->=20
-> Greetings,
-> Sebastian
->=20
-> > +		break;
-> > +	}
-> > +}
-> > +
-> > static int hantro_set_fmt_out(struct hantro_ctx *ctx,
-> > 			      struct v4l2_pix_format_mplane *pix_mp)
-> > {
-> > @@ -472,6 +496,7 @@ static int hantro_set_fmt_out(struct hantro_ctx *ct=
-x,
-> > 	ctx->dst_fmt.quantization =3D pix_mp->quantization;
-> >=20
-> > 	hantro_update_requires_request(ctx, pix_mp->pixelformat);
-> > +	hantro_update_requires_hold_capture_buf(ctx, pix_mp->pixelformat);
-> >=20
-> > 	vpu_debug(0, "OUTPUT codec mode: %d\n", ctx->vpu_src_fmt->codec_mode);
-> > 	vpu_debug(0, "fmt - w: %d, h: %d\n",
-> > --=20
-> > 2.34.1
-> >=20
+I'd expect to see:
 
+		GEM_WARN_ON(vma->iova != range_start);
+		GEM_WARN_ON(vma->iova + (vma->node.size << PAGE_SHIFT) != range_end);
+
+and then error out if range mismatches.

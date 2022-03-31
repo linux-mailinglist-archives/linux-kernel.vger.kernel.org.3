@@ -2,185 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AF54ED3C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B4F4ED3D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiCaGOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S230455AbiCaGSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiCaGOA (ORCPT
+        with ESMTP id S229643AbiCaGSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:14:00 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EA33A194
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648707133; x=1680243133;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=E4a1RRyooAoRtkFYAYlHloSeUaE2XqLLxFYZcQCPt6c=;
-  b=e0Va/G8Qg+kwlaGXD9gNvlsYQOfXM2KmY5UDvgb37P0+43FD8ayiRNEO
-   kJY4kMz07wLORnaVXJDzLKCjptGs8km1MT9yDzNTTyBsrkopeXSziJ+RK
-   e+bF1TwQaO+izxXkyA4O8kf3PQccSUuOLevabExtPQIl21SNj6itgwPvh
-   bNe4f/RJDeiZ5OOSgy2NKyL2equ2Maa4mRofAyzT1aSdihCwPxA6sn9Le
-   T9r+VlPxuuEB9fq57W6YjBwR3ckuswO3dqVk2yuxdU2dFrbyBTLRYdrgl
-   Y9YS8UvYgbb0SpieDHIK1AJwzVJlmgo28rcMqKA3FadXK5XkACCy9nmXZ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,224,1643644800"; 
-   d="scan'208";a="308660664"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Mar 2022 14:12:13 +0800
-IronPort-SDR: RDcW8Tp/GQM9lVQ4XcYkDCehjks9U4Em2lAqBlR5ePbRmIaBFcWcQOXk7oZ7pW93m9pIhV6K/5
- z85b4cGg/txShm7tFb+pAj2oHoikSDg3EqKXcoIdyhWU3DIM6ySyGe3r7VVfvc0eBSxwYE6T4N
- pEO3O08STjZzY00QNNw6dOWRigX4dHcfyzOtx3H+Ufp00bN4L/i66xEtsNO26+9IMICD4cU9Gm
- UQZ/DRQTwyTIBsnzKbbc9AVLeH+nd+E6FW3JPnKknFyO9n/lfH2WD5lT8xOHk41QPrlNNWAlVI
- ZrTawPZjLb/P8TRanXmiltu8
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 22:43:02 -0700
-IronPort-SDR: QygthwkCBcqe7wuk238SFy5a1Jpgr5YFU7NGlSWMv9I46wnvuI6bcV9B63hCij4uRcJft+Ss6E
- rDGH0Ig6B3Hlg4kn0W6QDkV0HFcJJYhgGC1F0S5AQS8ykE0ceFqv7jFptOwxXWZSETorbc1rKg
- bIS2Fg5PMBv3t5dxcofY0X/4ttlcaP1cP9B56+487apQ0DGt5RBnZwqtZ0GHJCwnNuDpEPNszE
- Vcip8Ns1NEhs5eqETW3WayamGXq5bSXkfSeiBiINOG8bOZJF0njPC3SnL61k7jQRbQxamgYJEu
- SLI=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 23:12:14 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KTXyN6k6Hz1SVp3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:12:12 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1648707131; x=1651299132; bh=E4a1RRyooAoRtkFYAYlHloSeUaE2XqLLxFY
-        ZcQCPt6c=; b=gWtcSn7NvzuQQr95xCNGk1BJkK97C5Yc5A2RIYeHVL+u1oaqB9A
-        7fYbd1k4A9mJzGnGHgfIUEvOYMFkMZN+mytC31RtTAeyLPyfhezM5lhgVjI2nvUV
-        r7t8NX4rkQ8+XK/MNqqgzLs10Dwuj/MO+df981VmLErhDywVE2txNS2rHNF3gSaq
-        kr1qMNvpKtwxJMjAjdERCcguG9G7BGRQDAOaw59Hzoz9K0toIF3mL+69W9/uOUEP
-        UTLOzxJUlq2ehFJEHMp7zXzEedLoRpbPBaRCacrfSTldun2YtW+8Bu/rJkCqZyFo
-        cwPaiIxHn3qo/wAT2U1yMbgI/kiqu0IqYJg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qFb8j2KTsrTi for <linux-kernel@vger.kernel.org>;
-        Wed, 30 Mar 2022 23:12:11 -0700 (PDT)
-Received: from [10.225.163.121] (unknown [10.225.163.121])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KTXyL4460z1Rvlx;
-        Wed, 30 Mar 2022 23:12:10 -0700 (PDT)
-Message-ID: <9cdf5eb3-201d-254e-1404-54522131eeb0@opensource.wdc.com>
-Date:   Thu, 31 Mar 2022 15:12:09 +0900
+        Thu, 31 Mar 2022 02:18:41 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CD35E178
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:16:54 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id v35so40575722ybi.10
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ssMyZLw7ncLemsmqGaMfG0ae57UUUk7vXWBlKG+NN1A=;
+        b=2d+K+RWlJqT+nE6mE8PAkmz9MrEs71tfObMPJmDRdCGm3JD1v+UPAtzj8Jbu8Wm4xp
+         DGUIuhDaPABNKSrd7TpB8GX1KjFQCYSjzzSNRUXVqV+dsjagX3PxE6qIxebCX3dgFy7E
+         +DiMGmDJvumnOVNI8EiUPVNdi0JKxbAWKQECPLUf2nlCeQAHkVGhrJ4mrwl+qSlFnImM
+         nkUjv34LYTL+G5hV+b3387hdlExLvTb6w5VbzTFzA6v7Q5/Boa9dexCVNSmmsJBjV9M6
+         jLWg5eF3fD1zvdDACie3F3Ev7M26DboU34xmln2X9vRqEogOfnZQSYxGxRNscJxxyCFZ
+         ednw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ssMyZLw7ncLemsmqGaMfG0ae57UUUk7vXWBlKG+NN1A=;
+        b=st2w18viU8lI195ZV7DJzk1firlvDVj9yVpfCDB6u0wZ3olfN500EADSXAzRDQer8j
+         eQ5aDH7YQFjKDyQ4tr7JAn7g0nyANLwIPu+I4NPmCFhTQMLWmgt7G07mPXMo9Ia6y69D
+         YCQfjwQb/PYmvFZzckBu7zsF0pT2N3OgCM/uGEyAXbenhmaajki6EYPAtz+nYqDYJ3Qq
+         vlDrEotFdJWlnyLfHEktxJ56EEV4YFrUcyogga/uYiY8qcM3bgmMirhmgl498qZu3g9T
+         0sSaiYTt8EDpXfuNKFGHpOyHX97Ka8TmzPm3yv/WueyDlBRhgCoheZiiy0BnvdKvhGON
+         zkQQ==
+X-Gm-Message-State: AOAM5324RbjhH4cgA0Q5uewMuWHJWTQ8ZY8tERdXRVjkbGC//qzNgCad
+        ThYgTGg7Sbv1BAg+gX+HBW7BDuByhzhALE56iQU11A==
+X-Google-Smtp-Source: ABdhPJzPL/5GzcZ7y9X+UBkl5p/lmzz0czNU9Xq1SriFM841PFmkRBojaT7/2rmd3IyxJl4N94K7MBAyzyqp28Kt9KE=
+X-Received: by 2002:a05:6902:70c:b0:634:73ef:e663 with SMTP id
+ k12-20020a056902070c00b0063473efe663mr3181281ybt.246.1648707413283; Wed, 30
+ Mar 2022 23:16:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: filesystem corruption with "scsi: core: Reallocate device's
- budget map on queue depth change"
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        John Garry <john.garry@huawei.com>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Martin Wilck <martin.wilck@suse.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YkQsumJ3lgGsagd2@arighi-desktop>
- <f7bacce8-b5e5-3ef1-e116-584c01533f69@huawei.com>
- <YkQ9KoKb+VK06zXi@arighi-desktop>
- <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
- <263108383b1c01cf9237ff2fcd2e97a482eff83e.camel@linux.ibm.com>
- <YkRfrjgNpD+S2WpN@T590>
- <ba090f1b-a767-46a1-5728-82d9c587ef3c@opensource.wdc.com>
- <YkUOip75R8DH613s@T590>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <YkUOip75R8DH613s@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220228122126.37293-1-songmuchun@bytedance.com>
+ <20220228122126.37293-13-songmuchun@bytedance.com> <164869718565.25542.15818719940772238394@noble.neil.brown.name>
+ <CAMZfGtUSA9f3k9jF5U-y+NVt8cpmB9_mk1F9-vmm4JOuWFF_Bw@mail.gmail.com> <164870069595.25542.17292003658915487357@noble.neil.brown.name>
+In-Reply-To: <164870069595.25542.17292003658915487357@noble.neil.brown.name>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 31 Mar 2022 14:16:17 +0800
+Message-ID: <CAMZfGtX9pkWYf40RwDALZLKGDc+Dt2UJA7wZFjTagf0AyWyCiw@mail.gmail.com>
+Subject: Re: [PATCH v6 12/16] mm: list_lru: replace linear array with xarray
+To:     NeilBrown <neilb@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 11:14, Ming Lei wrote:
-> On Thu, Mar 31, 2022 at 07:30:35AM +0900, Damien Le Moal wrote:
->> On 3/30/22 22:48, Ming Lei wrote:
->>> On Wed, Mar 30, 2022 at 09:31:35AM -0400, James Bottomley wrote:
->>>> On Wed, 2022-03-30 at 13:59 +0100, John Garry wrote:
->>>>> On 30/03/2022 12:21, Andrea Righi wrote:
->>>>>> On Wed, Mar 30, 2022 at 11:38:02AM +0100, John Garry wrote:
->>>>>>> On 30/03/2022 11:11, Andrea Righi wrote:
->>>>>>>> Hello,
->>>>>>>>
->>>>>>>> after this commit I'm experiencing some filesystem corruptions
->>>>>>>> at boot on a power9 box with an aacraid controller.
->>>>>>>>
->>>>>>>> At the moment I'm running a 5.15.30 kernel; when the filesystem
->>>>>>>> is mounted at boot I see the following errors in the console:
->>>>>
->>>>> About "scsi: core: Reallocate device's budget map on queue depth
->>>>> change" being added to a stable kernel, I am not sure if this was
->>>>> really a fix  or just a memory optimisation.
->>>>
->>>> I can see how it becomes the problem: it frees and allocates a new
->>>> bitmap across a queue freeze, but bits in the old one might still be in
->>>> use.  This isn't a problem except when they return and we now possibly
->>>> see a tag greater than we think we can allocate coming back. 
->>>> Presumably we don't check this and we end up doing a write to
->>>> unallocated memory.
->>>>
->>>> I think if you want to reallocate on queue depth reduction, you might
->>>> have to drain the queue as well as freeze it.
->>>
->>> After queue is frozen, there can't be any in-flight request/scsi
->>> command, so the sbitmap is zeroed at that time, and safe to reallocate.
->>>
->>> The problem is aacraid specific, since the driver has hard limit
->>> of 256 queue depth, see aac_change_queue_depth().
->>
->> 256 is the scsi hard limit per device... Any SAS drive has the same limit
->> by default since there is no way to know the max queue depth of a scsi
->> disk.So what is special about aacraid ?
->>
-> 
-> I meant aac_change_queue_depth() sets hard limit of 256.
-> 
-> Yeah, for any hba driver which implements its own .change_queue_depth(),
-> there may be one hard limit there.
-> 
-> So I still don't understand why you mention '256 is the scsi hard limit per
-> device', and where is the code? If both .cma_per_lun and .can_queue are > 256
-> and the driver uses default scsi_change_queue_depth() and sdev->tagged_supported
-> is true, then user is free to change queue depth via /sys/block/$SDN/device/queue_depth
-> to > 256. It is same for SAS, see sas_change_queue_depth().
-> 
-> Also I am pretty sure some type of scsi device is capable of supporting >256 queue
-> depth, include sas, and sas usually has big queue depth.
+On Thu, Mar 31, 2022 at 12:25 PM NeilBrown <neilb@suse.de> wrote:
+>
+> On Thu, 31 Mar 2022, Muchun Song wrote:
+> >
+> > If the above fix cannot fix your issue, would you mind providing
+> > the .config and stack trace?
+>
+> The kernel I'm using is
+>   74164d284b2909de0ba13518cc063e9ea9334749
+> plus one patch in fs/namei.c
+> So it does include the commit you mentioned.
+>
+> Config is below
+>
+> I run
+>     ./check -nfs generic/037
+> in xfstests, and crash is quick.
+>
+> Stack trace is
+>
+> [  121.557601] BUG: kernel NULL pointer dereference, address: 0000000000000008
+> [  121.558003] #PF: supervisor read access in kernel mode
+> [  121.558299] #PF: error_code(0x0000) - not-present page
+> [  121.558598] PGD 0 P4D 0
+> [  121.558750] Oops: 0000 [#1] PREEMPT SMP
+> [  121.558978] CPU: 2 PID: 1116 Comm: setfattr Not tainted 5.17.0-dev #455
+> [  121.559360] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
+> [  121.560009] RIP: 0010:list_lru_add+0x58/0xae
+> [  121.560267] Code: 00 48 8d 58 48 74 23 48 89 ef e8 93 08 03 00 49 89 c5 48 85 c0 74 13 8b 90 40 0e 00 00 31 f6 4c 89 e7 e8 66 fb ff ff 48 3
+> [  121.561353] RSP: 0018:ffffc900016dfbd0 EFLAGS: 00010246
+> [  121.561668] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000094fd1aeb
+> [  121.562076] RDX: ffff888007768be8 RSI: ffffffff826b4914 RDI: ffffffff82745064
+> [  121.562484] RBP: ffff8880097b3888 R08: ffffffffffffffff R09: ffff888007768b40
+> [  121.562890] R10: ffffc900016dfa98 R11: 0000000000008f0c R12: ffffffff8482e7a0
+> [  121.563296] R13: ffff888007766000 R14: ffff888005e72300 R15: 0000000000000000
+> [  121.563702] FS:  00007f558ef08580(0000) GS:ffff88801f200000(0000) knlGS:0000000000000000
+> [  121.564166] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  121.564499] CR2: 0000000000000008 CR3: 00000000084c4000 CR4: 00000000000006e0
+> [  121.564905] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  121.565314] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  121.565719] Call Trace:
+> [  121.565860]  <TASK>
+> [  121.565985]  nfs4_xattr_get_cache+0x131/0x169
+> [  121.566239]  nfs4_xattr_cache_add+0x47/0x15a
+> [  121.566485]  nfs4_xattr_set_nfs4_user+0xcb/0xef
+> [  121.566748]  __vfs_setxattr+0x66/0x72
+> [  121.566961]  __vfs_setxattr_noperm+0x6e/0xf5
+> [  121.567211]  vfs_setxattr+0xa7/0x12a
+> [  121.567419]  setxattr+0x115/0x14d
+> [  121.567612]  ? check_chain_key+0xde/0x11f
+> [  121.567846]  path_setxattr+0x78/0xcf
+> [  121.568053]  __x64_sys_setxattr+0x22/0x25
+> [  121.568287]  do_syscall_64+0x6d/0x80
+> [  121.568497]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
 
-Correct. The 256 hard limit comes from the old parallel scsi transport
-which had only 8 bits for the tag value. Other SCSI transports do have
-more bits for tags, allowing higher maximum.
+Thanks for your report.  I knew the reason. It is because the following
+patch in this series was missed upstream.  Could you help me test if it
+works properly?
 
-That said, the scsi stack limits the max queue depth to 1024 (see
-scsi_device_max_queue_depth(), and most drivers set can_queue to 256 or
-less by default.
+[v6,06/16] nfs42: use a specific kmem_cache to allocate nfs4_xattr_entry
 
-> 
-> 
-> Thanks,
-> Ming
-> 
+Hi Andrew,
 
+Would you mind picking it up?
 
--- 
-Damien Le Moal
-Western Digital Research
+Thanks.

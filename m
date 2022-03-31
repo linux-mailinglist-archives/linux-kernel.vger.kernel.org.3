@@ -2,157 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454AC4EDF6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B104EDF6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbiCaRNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S240524AbiCaRNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234323AbiCaRNO (ORCPT
+        with ESMTP id S234323AbiCaRNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:13:14 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F601F0824
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:11:26 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id AF29A964A4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:11:25 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZyKTn4xcGdx86ZyKTncJZ0; Thu, 31 Mar 2022 12:11:25 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aI+bV8VGhtRiaWJK4Xog9eYqwu1fuRPuRDubJJk73ag=; b=c0sezV+TbXC1QwszWGrATQAgiE
-        0jgkWUUd6BbxqDO+EjXgTMimyq86tP0QHgrkwh/fdgv2dcoCizLW9iQY3UjATcpTyQGemT1pF/nnX
-        tbRNrf86txWyX+N4V/p5CVbqCC0ShTYTKybgmUM18V2HM3cUIOpmHsTs28WbH8IFCv4KEkYOUlJZf
-        RdRTlWgP6Ouq75QBvgVEZuftBnRcyOa3uTIweNHxc866NyynaZOJZYEg3GCDT27yQyHipY/pR5jWM
-        +xFR+50w4G4UxqwHji7U57A8oTvRngZH8DD9sf46URRBQbi+iRz/h4RRPZYRhlJmTQ4xGihNjlE/W
-        IWfLcSrw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54590)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZyKS-002ePL-N9; Thu, 31 Mar 2022 17:11:24 +0000
-Message-ID: <68f0b4b6-59ed-34ac-bc69-810668a979de@roeck-us.net>
-Date:   Thu, 31 Mar 2022 10:11:22 -0700
+        Thu, 31 Mar 2022 13:13:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8966F5DA07;
+        Thu, 31 Mar 2022 10:12:06 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 17:12:02 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648746724;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=4OHeIH4aQBV+dTK7KhVZWGL+8VblsPPQgnBB7RCQDS4=;
+        b=h5/RVYa94zDFtX/74uIY41qBaOdL0HKWXkHxNzMFaSpdixgQyp0CGUvSTGR/ccQtboWPvl
+        OQwHX63KubT3I9k+AGxuUXAtN9lR3WJnQ61ElwtsqsjHyIIJmw3H7tj4lnIZbxVq5Q6p7Y
+        i77YrvffJI12zjmKgdW8bDLdTTAhPF4yY28xq2aXPxqksHZOkyK56Pi9de/s1nqzXvkPzX
+        +UQGFc/RAn0Wb1mhyJN33fK2T6mj3bS1AvyBS4HDE4T8PdgrAUEXNzq43/t6HMzqkj3ygQ
+        49iJQ9L7ZUxt7PmEXoXp6QPFbc+XtE0bAHP36SSi7mTUmtJ+DC8uAf5++vGp1Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648746724;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=4OHeIH4aQBV+dTK7KhVZWGL+8VblsPPQgnBB7RCQDS4=;
+        b=OZhiuRy6OTS2wGpNIEMqyxEzRp4FaKTl82heRk0i/9BdonUHH8xLowL+EQNV+zW2b+rYzn
+        P9HGG3gGuWQvrpBw==
+From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm/tlb: Revert retpoline avoidance approach
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Nadav Amit <namit@vmware.com>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Michael Walle <michael@walle.cc>
-Cc:     Xu Yilun <yilun.xu@intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
- <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
- <20220330145137.GA214615@yilunxu-OptiPlex-7050>
- <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
- <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
- <7b3edeabb66e50825cc42ca1edf86bb7@walle.cc>
- <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-In-Reply-To: <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <164874672286.389.7021457716635788197.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZyKS-002ePL-N9
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54590
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 07:58, Russell King (Oracle) wrote:
-> On Thu, Mar 31, 2022 at 04:51:47PM +0200, Michael Walle wrote:
->> Am 2022-03-31 16:45, schrieb Russell King (Oracle):
->>> On Wed, Mar 30, 2022 at 08:23:35AM -0700, Guenter Roeck wrote:
->>>> Michael, let's just drop the changes outside drivers/hwmon from
->>>> the series, and let's keep hwmon_is_bad_char() in the include file.
->>>> Let's just document it, explaining its use case.
->>>
->>> Why? There hasn't been any objection to the change. All the discussion
->>> seems to be around the new function (this patch) rather than the actual
->>> conversions in drivers.
->>>
->>> I'm entirely in favour of cleaning this up - it irks me that we're doing
->>> exactly the same cleanup everywhere we have a hwmon.
->>>
->>> At the very least, I would be completely in favour of keeping the
->>> changes in the sfp and phy code.
->>
->> FWIW, my plan was to send the hwmon patches first, by then my other
->> series (the polynomial_calc() one) will also be ready to be picked.
->> Then I'd ask Guenter for a stable branch with these two series which
->> hopefully get merged into net-next. Then I can repost the missing
->> patches on net-next along with the new sensors support for the GPY
->> and LAN8814 PHYs.
-> 
-> Okay, that's fine. It just sounded like the conversion of other drivers
-> outside drivers/hwmon was being dropped.
-> 
+The following commit has been merged into the x86/mm branch of tip:
 
-Not dropped, just disconnected. From hwmon perspective, we want a certain
-set of characters to be dropped or replaced. Also, from hwmon perspective,
-it makes sense to have the helper function allocate the replacement data.
-There was disagreement about which characters should be replaced, and if
-the helper function should allocate the replacement string or not.
-I have no intention to change the set of characters without good reason,
-and I feel quite strongly about allocating the replacement in the helper
-function. Since potential callers don't _have_ to use the helper and don't
-_have_ to provide valid names (and are responsible for the consequences),
-I would like that discussion to be separate from hwmon changes.
+Commit-ID:     3ee646cd23a26ddf92b3ecf6e0ddc2d4d620189b
+Gitweb:        https://git.kernel.org/tip/3ee646cd23a26ddf92b3ecf6e0ddc2d4d620189b
+Author:        Dave Hansen <dave.hansen@linux.intel.com>
+AuthorDate:    Fri, 18 Mar 2022 06:52:59 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 31 Mar 2022 10:07:47 -07:00
 
-> Note that there's another "sanitisation" of hwmon names in
-> drivers/net/phy/marvell.c - that converts any non-alnum character to
-> an underscore. Not sure why the different approach was chosen there.
-> 
+x86/mm/tlb: Revert retpoline avoidance approach
 
-It actually drops non-alphanumeric characters. The name is derived
-from the phy device name, which I think is derived from the name field
-in struct phy_driver. That includes spaces and '(', ')'. I honestly
-have no idea what libsensors would do with '(' and ')'. Either case,
-even if that would create a hiccup in libsensors and we would add
-'(' and ')' to the 'forbidden' list of characters, the fact that the
-code doesn't replace but drop non-alphanumeric characters means
-it won't be able to use a helper anyway since that would result
-in a hwmon 'name' attribute change and thus not be backward
-compatible. Besides, "Marvell_88E1111__Finisar_" would look a bit
-odd anyway, and "Marvell88E1111Finisar" may be at least slightly
-better.
+0day reported a regression on a microbenchmark which is intended to
+stress the TLB flushing path:
 
-Guenter
+	https://lore.kernel.org/all/20220317090415.GE735@xsang-OptiPlex-9020/
+
+It pointed at a commit from Nadav which intended to remove retpoline
+overhead in the TLB flushing path by taking the 'cond'-ition in
+on_each_cpu_cond_mask(), pre-calculating it, and incorporating it into
+'cpumask'.  That allowed the code to use a bunch of earlier direct
+calls instead of later indirect calls that need a retpoline.
+
+But, in practice, threads can go idle (and into lazy TLB mode where
+they don't need to flush their TLB) between the early and late calls.
+It works in this direction and not in the other because TLB-flushing
+threads tend to hold mmap_lock for write.  Contention on that lock
+causes threads to _go_ idle right in this early/late window.
+
+There was not any performance data in the original commit specific
+to the retpoline overhead.  I did a few tests on a system with
+retpolines:
+
+	https://lore.kernel.org/all/dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com/
+
+which showed a possible small win.  But, that small win pales in
+comparison with the bigger loss induced on non-retpoline systems.
+
+Revert the patch that removed the retpolines.  This was not a
+clean revert, but it was self-contained enough not to be too painful.
+
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Acked-by: Nadav Amit <namit@vmware.com>
+Fixes: 6035152d8eeb ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for tlb_is_not_lazy()")
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org
+---
+ arch/x86/mm/tlb.c | 37 +++++--------------------------------
+ 1 file changed, 5 insertions(+), 32 deletions(-)
+
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 1e6513f..161984b 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -854,13 +854,11 @@ done:
+ 			nr_invalidate);
+ }
+ 
+-static bool tlb_is_not_lazy(int cpu)
++static bool tlb_is_not_lazy(int cpu, void *data)
+ {
+ 	return !per_cpu(cpu_tlbstate_shared.is_lazy, cpu);
+ }
+ 
+-static DEFINE_PER_CPU(cpumask_t, flush_tlb_mask);
+-
+ DEFINE_PER_CPU_SHARED_ALIGNED(struct tlb_state_shared, cpu_tlbstate_shared);
+ EXPORT_PER_CPU_SYMBOL(cpu_tlbstate_shared);
+ 
+@@ -889,36 +887,11 @@ STATIC_NOPV void native_flush_tlb_multi(const struct cpumask *cpumask,
+ 	 * up on the new contents of what used to be page tables, while
+ 	 * doing a speculative memory access.
+ 	 */
+-	if (info->freed_tables) {
++	if (info->freed_tables)
+ 		on_each_cpu_mask(cpumask, flush_tlb_func, (void *)info, true);
+-	} else {
+-		/*
+-		 * Although we could have used on_each_cpu_cond_mask(),
+-		 * open-coding it has performance advantages, as it eliminates
+-		 * the need for indirect calls or retpolines. In addition, it
+-		 * allows to use a designated cpumask for evaluating the
+-		 * condition, instead of allocating one.
+-		 *
+-		 * This code works under the assumption that there are no nested
+-		 * TLB flushes, an assumption that is already made in
+-		 * flush_tlb_mm_range().
+-		 *
+-		 * cond_cpumask is logically a stack-local variable, but it is
+-		 * more efficient to have it off the stack and not to allocate
+-		 * it on demand. Preemption is disabled and this code is
+-		 * non-reentrant.
+-		 */
+-		struct cpumask *cond_cpumask = this_cpu_ptr(&flush_tlb_mask);
+-		int cpu;
+-
+-		cpumask_clear(cond_cpumask);
+-
+-		for_each_cpu(cpu, cpumask) {
+-			if (tlb_is_not_lazy(cpu))
+-				__cpumask_set_cpu(cpu, cond_cpumask);
+-		}
+-		on_each_cpu_mask(cond_cpumask, flush_tlb_func, (void *)info, true);
+-	}
++	else
++		on_each_cpu_cond_mask(tlb_is_not_lazy, flush_tlb_func,
++				(void *)info, 1, cpumask);
+ }
+ 
+ void flush_tlb_multi(const struct cpumask *cpumask,

@@ -2,162 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3654ED276
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13144ED316
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiCaERY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S229556AbiCaEik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiCaERE (ORCPT
+        with ESMTP id S229456AbiCaEig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:17:04 -0400
-Received: from smtprz01.163.net (smtprz01.163.net [106.3.154.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EDE216F075
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 21:01:27 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by vip-app02.163.net (Postfix) with ESMTP id 3EF74440119
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:01:27 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1648699287; bh=21CqgYe68EqtmuAUXMw5t7Y6CsanGtFEcTU3Jo5xixQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V5T6/CZ8iA3uITlo9fpHPU/G3BAcsBHkiI1BPFxQLWx3lzGfRrWxm2TrAMhtqIufw
-         NPYcSjkXQuMOk11GPGbfo+fAIc5mMcqO/vf+W+i1VdZk7EAz8kxovkNR+PfmnA0yMp
-         VGnhMxHzzeLo0dWKknZoi5XNtpHUZQjTXEdgVSsI=
-Received: from localhost (HELO smtprz01.163.net) ([127.0.0.1])
-          by localhost (TOM SMTP Server) with SMTP ID -1693251913
-          for <linux-kernel@vger.kernel.org>;
-          Thu, 31 Mar 2022 12:01:27 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1648699287; bh=21CqgYe68EqtmuAUXMw5t7Y6CsanGtFEcTU3Jo5xixQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V5T6/CZ8iA3uITlo9fpHPU/G3BAcsBHkiI1BPFxQLWx3lzGfRrWxm2TrAMhtqIufw
-         NPYcSjkXQuMOk11GPGbfo+fAIc5mMcqO/vf+W+i1VdZk7EAz8kxovkNR+PfmnA0yMp
-         VGnhMxHzzeLo0dWKknZoi5XNtpHUZQjTXEdgVSsI=
-Received: from localhost (unknown [101.93.196.13])
-        by antispamvip.163.net (Postfix) with ESMTPA id BB2B61542837;
-        Wed, 30 Mar 2022 18:27:48 +0800 (CST)
-Date:   Wed, 30 Mar 2022 18:27:48 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Sagi Grimberg <sagi@grimberg.me>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
- congestion-control
-Message-ID: <20220330182748.00003901@tom.com>
-In-Reply-To: <15f24dcd-9a62-8bab-271c-baa9cc693d8d@grimberg.me>
-References: <20220311103414.8255-1-sunmingbao@tom.com>
- <20220311103414.8255-2-sunmingbao@tom.com>
- <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
- <20220325201123.00002f28@tom.com>
- <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
- <20220329104806.00000126@tom.com>
- <15f24dcd-9a62-8bab-271c-baa9cc693d8d@grimberg.me>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Thu, 31 Mar 2022 00:38:36 -0400
+X-Greylist: delayed 6820 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 21:36:49 PDT
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C1645C35F;
+        Wed, 30 Mar 2022 21:36:48 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 6BFD11C81053;
+        Thu, 31 Mar 2022 10:43:07 +0800 (CST)
+Received: from NTHCCAS02.nuvoton.com (10.1.9.121) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 31
+ Mar 2022 10:43:07 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS02.nuvoton.com
+ (10.1.9.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 31 Mar
+ 2022 10:43:06 +0800
+Received: from localhost.localdomain (172.19.1.47) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Thu, 31 Mar 2022 10:43:02 +0800
+From:   Jacky Huang <ychuang3@nuvoton.com>
+To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
+        <cfli0@nuvoton.com>, Jacky Huang <ychuang3@nuvoton.com>
+Subject: [PATCH 0/3] Add initial support for MA35D1 SoC
+Date:   Thu, 31 Mar 2022 10:42:53 +0800
+Message-ID: <20220331024256.14762-1-ychuang3@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_INVALID,DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 10:46:08 +0300
-Sagi Grimberg <sagi@grimberg.me> wrote:
+This patch series adds initial support for Nuvoton MA35D1 SoC,
+include initial dts and clock controller binding.
 
-> >> As I said, TCP can be tuned in various ways, congestion being just one
-> >> of them. I'm sure you can find a workload where rmem/wmem will make
-> >> a difference. =20
-> >=20
-> > agree.
-> > but the difference for the knob of rmem/wmem is:
-> > we could enlarge rmem/wmem for NVMe/TCP via sysctl,
-> > and it would not bring downside to any other sockets whose
-> > rmem/wmem are not explicitly specified. =20
->=20
-> It can most certainly affect them, positively or negatively, depends
-> on the use-case.
+Jacky Huang (3):
+  dt-bindings: clock: add binding for MA35D1 clock controller
+  dt-bindings: clock: Document MA35D1 clock controller bindings
+  arm64: dts: nuvoton: Add initial support for MA35D1
 
-Agree.
-Your saying is rigorous.
+ .../bindings/clock/nuvoton,ma35d1-clk.yaml    |  59 ++++
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts    |  23 ++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       | 106 +++++++
+ .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 262 ++++++++++++++++++
+ 6 files changed, 453 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+ create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
 
-> >> In addition, based on my knowledge, application specific TCP level
-> >> tuning (like congestion) is not really a common thing to do. So why in
-> >> nvme-tcp?
-> >>
-> >> So to me at least, it is not clear why we should add it to the driver.=
- =20
-> >=20
-> > As mentioned in the commit message, though we can specify the
-> > congestion-control of NVMe_over_TCP via sysctl or writing
-> > '/proc/sys/net/ipv4/tcp_congestion_control', but this also
-> > changes the congestion-control of all the future TCP sockets on
-> > the same host that have not been explicitly assigned the
-> > congestion-control, thus bringing potential impaction on their
-> > performance.
-> >=20
-> > For example:
-> >=20
-> > A server in a data-center with the following 2 NICs:
-> >=20
-> >      - NIC_fron-end, for interacting with clients through WAN
-> >        (high latency, ms-level)
-> >=20
-> >      - NIC_back-end, for interacting with NVMe/TCP target through LAN
-> >        (low latency, ECN-enabled, ideal for dctcp)
-> >=20
-> > This server interacts with clients (handling requests) via the fron-end
-> > network and accesses the NVMe/TCP storage via the back-end network.
-> > This is a normal use case, right?
-> >=20
-> > For the client devices, we can=E2=80=99t determine their congestion-con=
-trol.
-> > But normally it=E2=80=99s cubic by default (per the CONFIG_DEFAULT_TCP_=
-CONG).
-> > So if we change the default congestion control on the server to dctcp
-> > on behalf of the NVMe/TCP traffic of the LAN side, it could at the
-> > same time change the congestion-control of the front-end sockets
-> > to dctcp while the congestion-control of the client-side is cubic.
-> > So this is an unexpected scenario.
-> >=20
-> > In addition, distributed storage products like the following also have
-> > the above problem:
-> >=20
-> >      - The product consists of a cluster of servers.
-> >=20
-> >      - Each server serves clients via its front-end NIC
-> >       (WAN, high latency).
-> >=20
-> >      - All servers interact with each other via NVMe/TCP via back-end N=
-IC
-> >       (LAN, low latency, ECN-enabled, ideal for dctcp). =20
->=20
-> Separate networks are still not application (nvme-tcp) specific and as
-> mentioned, we have a way to control that. IMO, this still does not
-> qualify as solid justification to add this to nvme-tcp.
->=20
-> What do others think?
+-- 
+2.30.2
 
-Well, per the fact that the approach (=E2=80=98ip route =E2=80=A6=E2=80=99)=
- proposed
-by Jakub could largely fit the per link requirement on
-congestion-control, so the usefulness of this patchset is really
-not so significant.
-
-So here I terminate all the threads of this patchset.
-
-At last, many thanks to all of you for reviewing this patchset.

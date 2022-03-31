@@ -2,146 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477D4ED117
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0674ED120
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352179AbiCaAzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S1352199AbiCaBAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 21:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245288AbiCaAzc (ORCPT
+        with ESMTP id S1346065AbiCaBAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:55:32 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BD0193C9;
-        Wed, 30 Mar 2022 17:53:46 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id x8-20020a9d6288000000b005b22c373759so16150906otk.8;
-        Wed, 30 Mar 2022 17:53:46 -0700 (PDT)
+        Wed, 30 Mar 2022 21:00:21 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CDF1AF02
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:58:34 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id cm17so2507754pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=thejof-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KZdhDjjK9OsK+m9vgDKiwjIPfyFYD6KvJkWr9Zxy8aM=;
+        b=yTriMesdpvmDPaYBHrhfejORlMkN7fEYb94pCLNWrg0Ifd4Z5TtRdC2C9UwR4uf7rA
+         qA23HdXAnrtS1k1ljCpTxqV5TTXy4tRTE2/GWnNMT7W3QAHDwsD/UUmUayhdoZ8fC5E2
+         p1+PT1ae0OyzjwzceAJAMKyclP7HqDWkvY3pAAIscTPeP+UDndmshw+q7EU/mlEYoBxH
+         d5n4XO47lGMpqECSfLS00GEiAP55IRRyFzcsDYoWchxWWFBca5yGoDlIbmYQDzQjWpEL
+         hCeeB/qPLZhgHJAxFDDhO8jzq3h5LD72hI1Aok4RcNTuBXT7vTyLmBEQ1FQneT/RY4xm
+         yQPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RQOCLW2sewLQSkvDpv6e2/VDt8ehiygLDzP2cJZBDd4=;
-        b=BYS2lTW9/AT5Oi+DpySUqF5WJuyhvskynbfygRuDXHKxffX+DF++nGHMeXb6BpBr1V
-         vV1irPpa28BSdFipDI/leBQ7kZFaP9ihxKNus8wVTUPsjXOgJ/uJ1OlZZsVh4IJCkv4v
-         BogVgxY7Y4orkOclML0HM4wlg0fDBE+zDQhWW9oF1KraxANXfJDKewXyEM9yNUBYIIQ2
-         BnBvHYajGJWAuL4Gf5yyVlcm9xJFdVO9xxACv/qtjUDLdoZBSKrpBF3VwikG5j8g+Cud
-         YvFEuWIZSaQIs6wc2vnQnWTabFGeCTHxIiuk/f4lwd5FqDrceNyC4umSNEF+5ZcnpJYl
-         LNqA==
-X-Gm-Message-State: AOAM53160tvZ1EcBpeqICw5qJvEWOvH+YX23h0BJgJhHEHWATVl6O3B5
-        A0FYJveR8MwcbLJRytKPKw==
-X-Google-Smtp-Source: ABdhPJy2IXGYnatFzBYUTeLTf8DvL4pYh4xD1bgYH/RgOfVeyfVeDByeag2N6mH06BJwImW9swaZyw==
-X-Received: by 2002:a05:6830:40a9:b0:5c9:4a8d:ab1f with SMTP id x41-20020a05683040a900b005c94a8dab1fmr4790734ott.288.1648688025324;
-        Wed, 30 Mar 2022 17:53:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v24-20020a9d5a18000000b005ad458facbdsm11728168oth.27.2022.03.30.17.53.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KZdhDjjK9OsK+m9vgDKiwjIPfyFYD6KvJkWr9Zxy8aM=;
+        b=aG6NUrF3eydjQUPtkdbUB8KNp0XzUig9sEpExAN/O2ie+3u/4WEYAz7SxQwX1dVfWM
+         0E6HSEKXwxb2WRGqLjrop+IdJiHy+tTxvBZEthY+Zh5RBNH3jVwEE7T/r7/Ea+h7sGVl
+         VXD7Ph5eFtLnxfE+44UTE1ShphEGPVdX7Tu1SAGDXe0MzKuXwNoEoVSfUgvP6XH6vSwP
+         GjhQxka+rPGF9mPVB8RJlPcpZQfR5LwVoP1W4lNQ3mBMHhRZdnJbLPFhMe/2Inxr+5NB
+         guH5IZwRKTr59goSvzQ15UTSELW0uB1EoB/yyxhZvhTUHWAVPfcDiJ0ZQRYiB6s/I+Db
+         mvQg==
+X-Gm-Message-State: AOAM533lUeZ/UQAIMyWsDwT1+S53zTyMG9fbp3FM0o/Q9+wHDLZJ5+cO
+        T07z6jYRJgjfS/pV/kKXcIv2qg==
+X-Google-Smtp-Source: ABdhPJzXeFQ99hNqi7T1CtmItH1DQOAncEJrNYnDICW2fBckqPiOD1m0d+Mt0as7iK45oA1ibWvyWQ==
+X-Received: by 2002:a17:90a:2e08:b0:1bd:59c2:3df5 with SMTP id q8-20020a17090a2e0800b001bd59c23df5mr2846511pjd.235.1648688311150;
+        Wed, 30 Mar 2022 17:58:31 -0700 (PDT)
+Received: from banyan.flat.jof.io (192-184-176-137.fiber.dynamic.sonic.net. [192.184.176.137])
+        by smtp.gmail.com with ESMTPSA id h12-20020a056a00230c00b004faf2563bcasm24550030pfh.114.2022.03.30.17.58.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 17:53:45 -0700 (PDT)
-Received: (nullmailer pid 3988522 invoked by uid 1000);
-        Thu, 31 Mar 2022 00:53:44 -0000
-Date:   Wed, 30 Mar 2022 19:53:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, krzk+dt@kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
-        sanjayc@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v2 2/4] dt-bindings: arm: tegra: Add bindins for
- nvidia,tegra-ccplex-cluster
-Message-ID: <YkT7mKas3pJF8tVb@robh.at.kernel.org>
-References: <20220330143819.27476-1-sumitg@nvidia.com>
- <20220330143819.27476-3-sumitg@nvidia.com>
+        Wed, 30 Mar 2022 17:58:30 -0700 (PDT)
+From:   Jonathan Lassoff <jof@thejof.com>
+To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Jonathan Lassoff <jof@thejof.com>
+Subject: [PATCH v4] Add FAT messages to printk index
+Date:   Wed, 30 Mar 2022 17:58:00 -0700
+Message-Id: <8aaa2dd7995e820292bb40d2120ab69756662c65.1648688136.git.jof@thejof.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <8aaa2dd7995e820292bb40d2120ab69756662c65.1648687832.git.jof@thejof.com>
+References: <8aaa2dd7995e820292bb40d2120ab69756662c65.1648687832.git.jof@thejof.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330143819.27476-3-sumitg@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 08:08:17PM +0530, Sumit Gupta wrote:
-> The Tegra CCPLEX_CLUSTER area contains memory-mapped
-> registers that initiate CPU frequency/voltage transitions.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> new file mode 100644
-> index 000000000000..74afa06f695e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NVIDIA Tegra CPU_CLUSTER area device tree bindings
-> +
-> +maintainers:
-> +  - Sumit Gupta <sumitg@nvidia.com>
-> +  - Mikko Perttunen <mperttunen@nvidia.com>
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Thierry Reding <thierry.reding@gmail.com>
-> +
-> +description: |+
-> +  The Tegra CCPLEX_CLUSTER area contains memory-mapped
-> +  registers that initiate CPU frequency/voltage transitions.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "ccplex@([0-9a-f]+)$"
-> +
-> +  compatible:
-> +    enum:
-> +      - nvidia,tegra186-ccplex-cluster
-> +      - nvidia,tegra234-ccplex-cluster
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  nvidia,bpmp:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-> +    description: |
-> +      Specifies the bpmp node that needs to be queried to get
-> +      operating point data for all CPUs.
-> +
-> +additionalProperties: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - nvidia,bpmp
-> +  - status
+In order for end users to quickly react to new issues that come up in
+production, it is proving useful to leverage the printk indexing system.
+This printk index enables kernel developers to use calls to printk()
+with changable ad-hoc format strings (as they always have; no change
+of expectations), while enabling end users to examine format strings to
+detect changes.
+Since end users are using regular expressions to match messages printed
+through printk(), being able to detect changes in chosen format strings
+from release to release provides a useful signal to review
+printk()-matching regular expressions for any necessary updates.
 
-status is never required.
+So that detailed FAT messages are captured by this printk index, this patch
+wraps fat_msg with a macro.
 
-> +
-> +examples:
-> +  - |
-> +    ccplex@e000000 {
-> +      compatible = "nvidia,tegra234-ccplex-cluster";
-> +      reg = <0x0 0x0e000000 0x0 0x5ffff>;
-> +      nvidia,bpmp = <&bpmp>;
-> +      status = "okay";
+Signed-off-by: Jonathan Lassoff <jof@thejof.com>
+Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+---
 
-Nor should it be in examples.
+PATCH v1 -- Fix indentation with tabs in fat_msg macro
+PATCH v2 -- Define FAT_PRINTK_PREFIX
+PATCH v3 -- Fix kernel-doc comment for _fat_msg()
+PATCH v4 -- Reword commit message
 
-> +    };
-> -- 
-> 2.17.1
-> 
-> 
+
+ fs/fat/fat.h  |  9 ++++++++-
+ fs/fat/misc.c | 14 ++++++++++----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
+
+diff --git a/fs/fat/fat.h b/fs/fat/fat.h
+index 02d4d4234956..2a20a21f2fb9 100644
+--- a/fs/fat/fat.h
++++ b/fs/fat/fat.h
+@@ -433,8 +433,15 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...);
+ 	__fat_fs_error(sb, 1, fmt , ## args)
+ #define fat_fs_error_ratelimit(sb, fmt, args...) \
+ 	__fat_fs_error(sb, __ratelimit(&MSDOS_SB(sb)->ratelimit), fmt , ## args)
++
++#define FAT_PRINTK_PREFIX "%sFAT-fs (%s): "
++#define fat_msg(sb, level, fmt, args...)				\
++do {									\
++	printk_index_subsys_emit(FAT_PRINTK_PREFIX, level, fmt, ##args);\
++	_fat_msg(sb, level, fmt, ##args);				\
++} while(0)
+ __printf(3, 4) __cold
+-void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
++void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
+ #define fat_msg_ratelimit(sb, level, fmt, args...)	\
+ 	do {	\
+ 			if (__ratelimit(&MSDOS_SB(sb)->ratelimit))	\
+diff --git a/fs/fat/misc.c b/fs/fat/misc.c
+index 91ca3c304211..855477d89f41 100644
+--- a/fs/fat/misc.c
++++ b/fs/fat/misc.c
+@@ -42,10 +42,16 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
+ EXPORT_SYMBOL_GPL(__fat_fs_error);
+ 
+ /**
+- * fat_msg() - print preformated FAT specific messages. Every thing what is
+- * not fat_fs_error() should be fat_msg().
++ * _fat_msg() - Print a preformatted FAT message based on a superblock.
++ * @sb: A pointer to a &struct super_block
++ * @level: A Kernel printk level constant
++ * @fmt: The printf-style format string to print.
++ *
++ * Everything that is not fat_fs_error() should be fat_msg().
++ *
++ * fat_msg() wraps _fat_msg() for printk indexing.
+  */
+-void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
++void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+ {
+ 	struct va_format vaf;
+ 	va_list args;
+@@ -53,7 +59,7 @@ void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+ 	va_start(args, fmt);
+ 	vaf.fmt = fmt;
+ 	vaf.va = &args;
+-	printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
++	_printk(FAT_PRINTK_PREFIX "%pV\n", level, sb->s_id, &vaf);
+ 	va_end(args);
+ }
+ 
+
+base-commit: 787af64d05cd528aac9ad16752d11bb1c6061bb9
+-- 
+2.35.1
+

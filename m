@@ -2,186 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B244EDE5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CA44EDE59
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiCaQG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S239644AbiCaQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234903AbiCaQG5 (ORCPT
+        with ESMTP id S235149AbiCaQHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:06:57 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F6B53E02
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:05:08 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id x2so20767plm.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MO0/ty9ybQF1qACMJmOXTuFnMpYGfOx5VnnNgcY+e9Q=;
-        b=TmQH9EEn6+KSh1gBo8PqXnFrR7M3fjlk1YhRq6HsA1u9WvYK1E/h1V6YCew7342jmj
-         CgVyhbV83B0o4tUCUHKpJmY8bXMXyjAgKLsJdLXS/yopQCK7g+p5sEeXSJMGSa4LGEQd
-         8Xv2GF8ym+8pf5c0sqO+3XMuAGtenvpNLSsqJzzI4CsvTU5X8wDRkeYnHbJUyQohIBbR
-         IC3lnA3ilTdmPzUTunNgMAr87OdYYR1+QC5yJqjoFt5hbCAAzizA59rokh5AmQ9R7kxi
-         4le4sh0HP8lOv7uRLJxF4QfvEG/moBzF3VTPq0rbbwCtsvWe+EfeFnfpS+FdfKu2Wdty
-         uQvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MO0/ty9ybQF1qACMJmOXTuFnMpYGfOx5VnnNgcY+e9Q=;
-        b=WHPdwFGlvVAb5bSykX4f359GU8kycYAipjPyuXODnyarWBjmiWHkzVj9tNnv5QagU+
-         GImgmiwdFLl3/cxx5LFXsi6olC+Qy4doP8G7vJJ4Ek7zG1yh/s3EFH2jDzwK+ZXCGSf7
-         U1jmaxlzsEvwPh9wkmB+WEBleSYjtqRlDVF5j2ynxYGtHPJcOFiZzA2H9YsFVoN70Fpu
-         sWHChzDljsIV2shmFNewXhUEjLh6ksYToz71/r2d9e4bHe+CyNPe4N8KkQ2NzwTVXG0i
-         Qa/OyOBpNlkmPGA1BfpnT3SjIN5vmIh8/1WYWNLf/yr3LCcGbG9nRj9aFwTyTwOuvMYG
-         wNqg==
-X-Gm-Message-State: AOAM530mVdsr0tpxsvkVJMbFMNzTbzUf/6c2qDfGsiU8d2ltXT54dC1c
-        oicBJ7sdnqa80947OZ2QF7EBMQ==
-X-Google-Smtp-Source: ABdhPJxXHt5eM3Gd+WSSK+aqeVHamWPZ4Zv6Gk7D55KL27cI99WtCtis/TevAmnfEEspbny2+M6SpA==
-X-Received: by 2002:a17:902:f787:b0:152:157:eb7 with SMTP id q7-20020a170902f78700b0015201570eb7mr5798057pln.109.1648742707715;
-        Thu, 31 Mar 2022 09:05:07 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a082:a097:a7d8:d309])
-        by smtp.gmail.com with ESMTPSA id m18-20020a639412000000b003820bd9f2f2sm23368141pge.53.2022.03.31.09.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 09:05:06 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 09:04:59 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Won Chung <wonchung@google.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
- functions
-Message-ID: <YkXRKyfoWTXqLi1L@google.com>
-References: <20220331084918.2592699-1-wonchung@google.com>
- <YkVtvhC0n9B994/A@kroah.com>
- <YkV1KK8joyDAgf50@kuha.fi.intel.com>
- <YkWSmvrEevLsyDH5@kroah.com>
+        Thu, 31 Mar 2022 12:07:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 645A3541A5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648742759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qlNDdytnQWIJBK5ptvz+5RJyq/CJNTkwbMf9B+B4Xl8=;
+        b=f9YLOY8/KyiO19P0c/CA4o84riqcsIjA+y5VQEvOAjjcykzF/Z/yu29attGs3Ip5PuA3Dp
+        v/6sWVjHX2bMUfVUi0fqTSFgWpf8D+9dgftPvEhQEsKbtlcS+FziuaweXSrelZAmt7usfy
+        34r4jDgdztHTdSp5f5cXRf0luVBOQXg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-246-KUwr1XLXM8-rloxnZjefuA-1; Thu, 31 Mar 2022 12:05:56 -0400
+X-MC-Unique: KUwr1XLXM8-rloxnZjefuA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0552803D7C;
+        Thu, 31 Mar 2022 16:05:53 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B23A2C080B3;
+        Thu, 31 Mar 2022 16:05:50 +0000 (UTC)
+Message-ID: <03351a36-a1c6-8125-4945-57727334dc26@redhat.com>
+Date:   Thu, 31 Mar 2022 12:05:50 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gxrVt/ITKp3EpEr0"
-Content-Disposition: inline
-In-Reply-To: <YkWSmvrEevLsyDH5@kroah.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] mm/sparsemem: Fix 'mem_section' will never be NULL gcc
+ 12 warning
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Justin Forbes <jforbes@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220330205919.2713275-1-longman@redhat.com>
+ <202203312327.XGeCiD5T-lkp@intel.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <202203312327.XGeCiD5T-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/31/22 11:54, kernel test robot wrote:
+> Hi Waiman,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on hnaz-mm/master]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/mm-sparsemem-Fix-mem_section-will-never-be-NULL-gcc-12-warning/20220331-050049
+> base:   https://github.com/hnaz/linux-mm master
+> config: arm-randconfig-c024-20220330 (https://download.01.org/0day-ci/archive/20220331/202203312327.XGeCiD5T-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/2098f1d78cde338e81b3ba596ea39f37824e496e
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Waiman-Long/mm-sparsemem-Fix-mem_section-will-never-be-NULL-gcc-12-warning/20220331-050049
+>          git checkout 2098f1d78cde338e81b3ba596ea39f37824e496e
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash security/keys/encrypted-keys/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>     In file included from include/linux/gfp.h:6,
+>                      from include/linux/umh.h:4,
+>                      from include/linux/kmod.h:9,
+>                      from include/linux/module.h:17,
+>                      from security/keys/encrypted-keys/encrypted.c:15:
+>     security/keys/encrypted-keys/encrypted.c: In function 'derived_key_encrypt.constprop':
+>>> include/linux/mmzone.h:1432:23: warning: array subscript 32 is outside array bounds of 'struct mem_section[32][1]' [-Warray-bounds]
+>      1432 |         unsigned long map = section->section_mem_map;
+>           |                       ^~~
+>     include/linux/mmzone.h:1390:27: note: while referencing 'mem_section'
+>      1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+>           |                           ^~~~~~~~~~~
+>
+>
+> vim +1432 include/linux/mmzone.h
+>
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1429
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1430  static inline struct page *__section_mem_map_addr(struct mem_section *section)
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1431  {
+> 29751f6991e845 Andy Whitcroft 2005-06-23 @1432  	unsigned long map = section->section_mem_map;
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1433  	map &= SECTION_MAP_MASK;
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1434  	return (struct page *)map;
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1435  }
+> 29751f6991e845 Andy Whitcroft 2005-06-23  1436
 
---gxrVt/ITKp3EpEr0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Greg,
-
-On Thu, Mar 31, 2022 at 01:38:02PM +0200, Greg KH wrote:
-> > > >  		return 0;
-> > > > =20
-> > > > diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/=
-mei_pxp.c
-> > > > index f7380d387bab..e32a81da8af6 100644
-> > > > --- a/drivers/misc/mei/pxp/mei_pxp.c
-> > > > +++ b/drivers/misc/mei/pxp/mei_pxp.c
-> > > > @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct devic=
-e *dev, int subcomponent,
-> > > >  {
-> > > >  	struct device *base =3D data;
-> > > > =20
-> > > > -	if (strcmp(dev->driver->name, "i915") ||
-> > > > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
-> > >=20
-> > > Same here, shouldn't this be caught by the driver core or bus and mat=
-ch
-> > > should not be called?
-> > >=20
-> > > Why not fix this in the component/driver core instead?
-> >=20
-> > A component is just a device that is declared to be a "component", and
-> > the code that declares it as component does not have to be the driver
-> > of that device. You simply can't assume that it's bind to a driver
-> > like this function does.
-> >=20
-> > In our case the "components" are USB ports, so devices that are never
-> > bind to drivers.
->=20
-> And going off of the driver name is sane?  That feels ripe for bugs and
-> problems in the future, but hey, I don't understand the need for this
-> driver to care about another driver at all.
-
-I think the component framework is meant to be this loose confederation of
-devices, so going into component match, you don't know what the other device
-is yet.
-
-The USB drivers and the i915 drivers 100% don't care about each other,
-but the framework doesn't know that yet until all the drivers try to match.
-
->=20
-> And why is a USB device being passed to something that it thinks is a
-> PCI device?  That too feels really wrong and ripe for problems.
->=20
-
-The problematic device that's being passed through here is actually the
-usb4_port, not a usb device. My guess would be that's why it's getting past=
- any
-checks for whether it's a PCI device.
-
-The component framework currently being used by (hdac_i915, mei_hdcp, mei_p=
-xp)
-to connect those three devices together, and completely separately, the
-component framework is being used by the typec connector class's port mappe=
-r.
-
-These two clusters of devices are using the same component framework, but a=
-re
-not supposed to interact with each other. When we attempted to add the usb4=
-_port
-and its retimer in order to link tbt/usb4 to the typec connector, we discov=
-ered
-this interaction because we happened to build the usb4_port built-in in our
-configs, so it does its component_add earlier.
-
-I agree, by the way. This is all a bit ugly.
+I think this is a pre-existing warning. It is not caused by my patch, 
+but I will take a look what cause the warning.
 
 Thanks,
-Benson
+Longman
 
-> thanks,
->=20
-> greg k-h
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---gxrVt/ITKp3EpEr0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYkXRKwAKCRBzbaomhzOw
-wp7KAQD1kYuyRtUS/SBx+UJYpHjwkC8OCBsHLMHIg76Lrn/3FgD/eok7/ReIldES
-tWDUXAOXk48rymifKK6Ivj79qlDU0As=
-=cMT0
------END PGP SIGNATURE-----
-
---gxrVt/ITKp3EpEr0--

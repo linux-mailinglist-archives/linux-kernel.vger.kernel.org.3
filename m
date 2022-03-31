@@ -2,181 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10024ED2A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC4A4ED2ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiCaEKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S229538AbiCaEIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiCaEJU (ORCPT
+        with ESMTP id S229559AbiCaEIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:09:20 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C53C170084;
-        Wed, 30 Mar 2022 20:56:59 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id g8so18827481qke.2;
-        Wed, 30 Mar 2022 20:56:59 -0700 (PDT)
+        Thu, 31 Mar 2022 00:08:19 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE6323EC70
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:57:11 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id lr4so36981676ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:57:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=tYlHPxM0iDi5VXE98hgeozahqYJk78JaFFeV+qzNw5U=;
-        b=mTmT7+N63PXuIwB75+CKvFI6cw/jzFICsKFlmrX98DCY4KgVobDxkUkLrPbILjWEVd
-         zOpsJzohasYTU2cri3mhczLOHO+85IFJWAcIzlnZ8sYbVwKoGAyN3ZrI0vtWoa7Qu3eu
-         CsqMCtZFWjlutPRNC7lKg6mZUe8Sh5MDsmm5GAacxLBCKifK/EA4n2cFQBko12jzZ9sS
-         WKQUNIcMTTE9y9FtrLpqhMIlKbYvWdq1U+ww/1au0hwzkHBamg7+Phf1Jd5WuYcisENx
-         lCO2kL34hCyKaR+8Rf8wpTYtiFvSRdvzMZ6EfRXAZk+xbijJO3mI2cpMPxQ0aZw2TTYf
-         kybg==
+        bh=DQEdIqJQMT2DTXxNnryD3JrAvawMTCRUVp7h3+Y4I58=;
+        b=cc2rALVw1jxOK2Gb8L0J6Mph69Y5VA57JZQiuXcdW5z3m5d/DZa8hjTvhe9AMJD+oR
+         sZWBxGtudQhCDz36qcCCNXc3ZsuQhTI5QG975d+QEmIL1cXJrOcVg13mjtJE8BHQS/S4
+         iIpcrSGJc0jxFV9wD+VDOhUyo6n2rNmRzTngyO4v1oH9t0lTZGBvhB7L8IY+4CzZD6+5
+         M4FqiJvek0gzYy5Td1KrRIVZHZrS0to+wXWFHnEmd210xrZ0KyIsMVxwUnRTdhYssOXv
+         tEb6TOB/UOHofzCf3ePHP/RV74cESHbxnUZZk4LeNqIi36k63llzvcvq1RWBRsRe+fH3
+         8SsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=tYlHPxM0iDi5VXE98hgeozahqYJk78JaFFeV+qzNw5U=;
-        b=STUmnVhXh3Sl9XglOkQc0q42kfRim7WNYEzUWi3rEpWsak8Bo6/GdGb0uFif48+39l
-         MDu5uiw2YHoHws3uWmyTOkkceq6y3WAr8IPjocqb1k/rJXFV9Z7RH3T4eylr/ke3QcjJ
-         XK4AmlGHGuqjb/+YfFGBCVh5z9MjAdpe5+SE17gIZyiZEnfqxJ35AYpVBnacvZPzq1Om
-         IY8P6NLbrP/GEH/X/6fh1xel6nG34idP+lZDZBQrAmfPZ/OG/YzwO6lG3mxybkTgXqGk
-         AfhCaNbvBUJvVi8UqZPPH/yVDw1kXCkGnxNN8f2quvDKfJ+F5A+BMkkittxpkhMtKVIB
-         B1xQ==
-X-Gm-Message-State: AOAM5317i4sAHqNIthshm6txwNYl0SRLQpYDUY9za6OmGu3zO+ivoggd
-        bUXnHg0JH+c2n+y8Qwb3nQGP/gc3O/o=
-X-Google-Smtp-Source: ABdhPJzyPrz0p+L/ALJneQJkAZo6ZUHwvs4kf6iDO0DACiqXPcs8bbEYZ5Igo5IyJWR4z4os6/CMDA==
-X-Received: by 2002:a37:9503:0:b0:67e:977:9ff6 with SMTP id x3-20020a379503000000b0067e09779ff6mr2101575qkd.10.1648699018774;
-        Wed, 30 Mar 2022 20:56:58 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f17-20020ac87f11000000b002e1e831366asm18698404qtk.77.2022.03.30.20.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 20:56:57 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yang.yang29@zte.com.cn
-To:     akpm@linux-foundation.org, david@redhat.com, willy@infradead.org
-Cc:     corbet@lwn.net, yang.yang29@zte.com.cn, yang.shi@linux.alibaba.com,
-        dave.hansen@linux.intel.com, saravanand@fb.com, minchan@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, jhubbard@nvidia.com,
-        xu xin <xu.xin16@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: [PATCH v5] mm/vmstat: add events for ksm cow
-Date:   Thu, 31 Mar 2022 03:56:17 +0000
-Message-Id: <20220331035616.2390805-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=DQEdIqJQMT2DTXxNnryD3JrAvawMTCRUVp7h3+Y4I58=;
+        b=Clm31/XD/DSyti28gmr0/C7ayCcYKK2pszfTjAyF92rHV84DJI1RQm/ZDHCsqlRgdv
+         CkvEY+dzAKV5Up92DmpgnnBvEP3UdNDGtkV+9efYltuq6AEuPrCMcVaTL7M75FYArpH5
+         5jtETFYJRSM6kTzXzZxhXqLADzLGAAzyFuRRKfbGNGHExOU9WGq3LZ4Nl1RZNerl+p+G
+         0fjjmaQ1GfBOwmfYsG3bXS8frWldjSknDHqwPymf0H3iPdYLcjzpqE84/AU42sWUeblq
+         V9SvHEemGmbKOzgUFk4ScvwjbIxBmd13XZFeo3FIHfAggQWcfgLxnPn8jFARvnRVucV6
+         ye6w==
+X-Gm-Message-State: AOAM530qTCr/dsByQpRGDue2qpeV0uR54r8a7g+MWNRilaOwxzGXrV1X
+        OuPZJGY/DEx7rOJre2nv4R3GaW7ntBlwJYRzQVw=
+X-Google-Smtp-Source: ABdhPJy14q49ndRpft22Zxx3hmPk1d7rlxFG+MTHM3G13eqOKVC53V7KmYGrVmRIuAapJFVzhRur/hctam12CatbZ+4=
+X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
+ ji13-20020a170907980d00b006d6f910513amr2951893ejc.643.1648699030251; Wed, 30
+ Mar 2022 20:57:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Thu, 31 Mar 2022 04:57:06 +0100
+Message-ID: <CAHpNFcPLqwMyzHt9F5WTGSHr8goaFcczEHS5YL7uajnhe3EwZw@mail.gmail.com>
+Subject: Fast AMD, MIPS & RISC Instruction guidance in reference to https://lkml.org/lkml/2022/3/30/1565
+To:     support.android@sfr.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+RISC Instructions : What do they all mean ? Todays manuel BLTU
 
-Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
-to save memory, it's a tradeoff by suffering delay on ksm cow. Users can
-get to know how much memory ksm saved by reading
-/sys/kernel/mm/ksm/pages_sharing, but they don't know what's the costs
-of ksm cow, and this is important of some delay sensitive tasks.
+signed magnitude (BLT/BGE) or unsigned magnitude (BLTU/ BGEU) =E2=80=A2 12-=
+bit
+immediate encodes branch target address as a signed o=EF=AC=80set from PC, =
+in
+units of 16-bits (i.e., shiR leR by 1 then add to
 
-So add ksm cow events to help users evaluate whether or how to use ksm.
-Also update Documentation/admin-guide/mm/ksm.rst with new added events.
+https://passlab.github.io/CSE564/notes/lecture08_RISCV_Impl.pdf
 
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: xu xin <xu.xin16@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
----
-v2:
-- fix compile error when CONFIG_KSM is not set
-v3:
-- delete KSM_COW_FAIL event
-v4:
-- modify /Documentation/admin-guide/mm/ksm.rst. And let cow_ksm before
-- ksm_swpin_copy, so if new cow_* event could add before cow_ksm.
-v5:
-- fix compile error when CONFIG_SWAP is not set
----
- Documentation/admin-guide/mm/ksm.rst | 18 ++++++++++++++++++
- include/linux/vm_event_item.h        |  3 +++
- mm/memory.c                          |  4 ++++
- mm/vmstat.c                          |  3 +++
- 4 files changed, 28 insertions(+)
+#CryptoFASTintFL Polynomial ROOFLINING : In terms of Entropy pool Int
+& Timer collections Polynomial is a Cryptologic_Functiontion & should
+be A : Rooflined B : Streamlined & C : In Crypto_hash_function.h
+https://lkml.org/lkml/2022/3/30/1313
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-index 97d816791aca..b244f0202a03 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -184,6 +184,24 @@ The maximum possible ``pages_sharing/pages_shared`` ratio is limited by the
- ``max_page_sharing`` tunable. To increase the ratio ``max_page_sharing`` must
- be increased accordingly.
- 
-+Monitoring KSM events
-+=====================
-+
-+There are some counters in /proc/vmstat that may be used to monitor KSM events.
-+KSM might help save memory, it's a tradeoff by may suffering delay on KSM COW
-+or on swapping in copy. Those events could help users evaluate whether or how
-+to use KSM. For example, if cow_ksm increases too fast, user may decrease the
-+range of madvise(, , MADV_MERGEABLE).
-+
-+cow_ksm
-+	is incremented every time a KSM page triggers copy on write (COW)
-+	when users try to write to a KSM page, we have to make a copy.
-+
-+ksm_swpin_copy
-+	is incremented every time a KSM page is copied when swapping in
-+	note that KSM page might be copied when swapping in because do_swap_page()
-+	cannot do all the locking needed to reconstitute a cross-anon_vma KSM page.
-+
- --
- Izik Eidus,
- Hugh Dickins, 17 Nov 2009
-diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-index 16a0a4fd000b..e83967e4c20e 100644
---- a/include/linux/vm_event_item.h
-+++ b/include/linux/vm_event_item.h
-@@ -133,6 +133,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
- 		KSM_SWPIN_COPY,
- #endif
- #endif
-+#ifdef CONFIG_KSM
-+		COW_KSM,
-+#endif
- #ifdef CONFIG_X86
- 		DIRECT_MAP_LEVEL2_SPLIT,
- 		DIRECT_MAP_LEVEL3_SPLIT,
-diff --git a/mm/memory.c b/mm/memory.c
-index 4111f97c91a0..12925ceaf745 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3339,6 +3339,10 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 	get_page(vmf->page);
- 
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
-+#ifdef CONFIG_KSM
-+	if (PageKsm(vmf->page))
-+		count_vm_event(COW_KSM);
-+#endif
- 	return wp_page_copy(vmf);
- }
- 
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index d5cc8d739fac..79015f144b15 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1392,6 +1392,9 @@ const char * const vmstat_text[] = {
- 	"ksm_swpin_copy",
- #endif
- #endif
-+#ifdef CONFIG_KSM
-+	"cow_ksm",
-+#endif
- #ifdef CONFIG_X86
- 	"direct_map_level2_splits",
- 	"direct_map_level3_splits",
--- 
-2.25.1
+https://lkml.org/lkml/2022/3/30/1565
 
+Coding folder:
+https://bit.ly/VESA_BT
+
+Rupert S
+*****
+
+Polynomial ROOFLINING : #CryptoFASTintFL
+
+In terms of Entropy pool Int & Timer collections Polynomial is a
+Cryptologic_Functiontion & should be A : Rooflined B : Streamlined & C
+: In Crypto_hash_function.h
+
+https://lkml.org/lkml/2022/3/30/1313
+
+**Reference**
+
+Multi Bit load operations for bitmap,Texture & Other tasks +ON+HighLowOP (c=
+)RS
+May take higher or lower bit depth & precisions: Rupert S 2021
+
+MultiBit Serial & Parallel execution conversion inline of N*Bit -+
+
+2 16 Bit loads is 32Bit but takes 2 cycles...
+
+16 Bit loads with 32 Bit Stores & Math unit:
+
+Operation 1
+
+16Bit , 16Bit , 16Bit , 16Bit Operation
+    \         /    \         /
+           Inline Store
+     32Bit Store 32Bit Store
+           64Bit Store
+       \     /
+32Bit ADD/DIV x 2 or 64Bit ADD/DIV x1
+
+Operation 2
+
+32Bit ADD/DIV x 2 or 64Bit ADD/DIV x1
+          \            /
+          4x 16Bit Store
+
+4 x 16Bit Operation
+
+MultiBit Serial & Parallel execution conversion inline of N*Bit -+
+
+In the case of ADD -+ Signed for example:(c)RS
+Plus & - Lines ADD or Subtract (Signed, Bit Depth Irrelevant)
+
+Multiples of 16Bit works in place of 32Bit or 64Bit
+
+V1: 16Bit Values composing a total 128Bit number
+V2: 16Bit Values composing a total 128Bit number - (Value less than V1)
+V3: Result
+NBit: Bit Depth
+
+4x16Bit operations in the same cycle >
+If Value =3D 16Bit =3D Store
+If Value =3D V3=3DBit =3D Store * NBit
+
+Stored 128Bit RAM or if remainder =3D less > 4x16Bit -1-1-1 ; 16Bit Value S=
+tore
+
+*
+
+*RAND OP Ubuntu
+
+https://pollinate.n-helix.com/
+
+(Rn1 *<>/ Rn2 *<>/ Rn3)
+
+-+
+VAR(+-) Var =3D Rn1 +- Rn8
+
+(Rn5 *<>/ Rn6 *<>/ Rn7)
+
+4 Samples over N * Sample 1 to 4
+
+Input into pool 1 Low half -+
+Input into pool 1 High half -+
+
+*RAND OP Recycle It
+
+*
+
+(c)RS https://bit.ly/DJ_EQ

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858E54EE473
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96D24EE476
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242780AbiCaXJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S242794AbiCaXJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242752AbiCaXJG (ORCPT
+        with ESMTP id S242767AbiCaXJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:09:06 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74484241A0B;
-        Thu, 31 Mar 2022 16:07:18 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id r13so2341321ejd.5;
-        Thu, 31 Mar 2022 16:07:18 -0700 (PDT)
+        Thu, 31 Mar 2022 19:09:07 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32115241A13;
+        Thu, 31 Mar 2022 16:07:19 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id c10so2244011ejs.13;
+        Thu, 31 Mar 2022 16:07:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Tq6felZrVZ9OJWr5Zlb/qFgwlSaptzfYLpBsT8+rZ38=;
-        b=VVN9eOsHfWaNm51McvRFnSTZvSAdYphiV2X9W8Nh1okB64o6u5Ld54RYqzI6F1XMjg
-         lW47piFIJURUfOzCnYPMdqtGqDYUchTMV48l+RB2X0CNa/UW6nkaIfgFoi3PQ61k+B9q
-         9+qAG3U/7eRB/Syi1WdwM7jkrZ0ZIkPcSGfOCiRmkyjcKo50ZsQCZGnOBaYIztQVzfFE
-         H25AOVZF/zw8HasSesB2/H6juHQ+gSaxiWMrPkxMQUyQZbUplMg3p7Gy4Z7K6JDrAKL9
-         XSnOTVud7AJBUv6MEh1zDn1c9iTYLVUG1C//Pa9WqAhNVIro/5yLJzG2fzUrEPV+ueM6
-         qbvw==
+        bh=Dbd+FeFljOdDtTjz0SE9OURXlnjXbAIwzSzKI/SK8Hs=;
+        b=oPmqCMSQjmk62BS1YZ2/0YxmoKih7cVsZOjbV01H/cpzCZXanTD3d+oAcdX2qAT8Oo
+         OJ6zmB/cbMgqWwCjTZX9YHglYfvNyKkXL0dBQkpvJ6bOSJwen1FY9tRttbCFwqBF6TzO
+         RNlET5odbw5xuBYazYYMj+FmmmY80K9h7Ow3n/vLJdKOBgKwTKSfoRwHd+yrX7i06b4H
+         kHN3WV21ODDDom6U3LE578k/SU6cdEFz8PPfbV9MG3nFI9F3iaf96ynZYO5hLR//USCT
+         MEBACGkXBQ+aaKwzYBllBhXZ5d97CXEhh/L0cJjrvxe1Y7Hn1Uod9pfnWatBNNsyDhCY
+         LMTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Tq6felZrVZ9OJWr5Zlb/qFgwlSaptzfYLpBsT8+rZ38=;
-        b=A9o/Q+vPWsAFHbLtVN0fqJBqrj9epbwIODnL+EUfns8DuRqJL1o78iBDxiUBsr4Bz+
-         CWVk5pMNHyGjKQ2ZW2Mx2yddQ0F4BlweigD3WhKnSfGrjGBNxoIX/f3+VWc9uHbi0p54
-         tGPIztmmLRlfeHlMGxYHFvdV5Gnkk4OrJ4OInvts5HvSw8x+kkZa6/liFCl8Z2h4wnYH
-         MITuQ4yrlv1QJIUNNFY1uAdax1irgiMYZD9qrbRFs/SlOFYYIZv2UeTwQvnTOZegvy44
-         JGpzmhhoC5qOwMbdWk5RjO80u4JwBJyUE0HWXxZ8PXMsgDT/ROn9LDQwiI5kfrST66gt
-         doJg==
-X-Gm-Message-State: AOAM531ThE0EDChKNVD2VNSQSvf+JFn7JkXcnEjG3RZCc2LRbD4yub0h
-        h67ocSDihzbcK6lW/6mATXc=
-X-Google-Smtp-Source: ABdhPJwjUlMDCoWE9kl9gNy0jVgXn+nwjD8zZMvHsRGS5fR8q+vsfK7b8lcQbMyjTPRvlpQAQ1LYIQ==
-X-Received: by 2002:a17:907:3e99:b0:6db:6c1c:d9d9 with SMTP id hs25-20020a1709073e9900b006db6c1cd9d9mr6835447ejc.688.1648768037035;
+        bh=Dbd+FeFljOdDtTjz0SE9OURXlnjXbAIwzSzKI/SK8Hs=;
+        b=pvLXYK9V8cE20/5OJHtbSZg86WHYzVjhMt6b7SCbmhuhL/1ojAARojB5F+QFnXhSxu
+         JcJ6Z8yfLoNFVikq5L/ZieHF9S56qdz6N6RPGACH3fVf2R3GwwyboYKvusPgzMKW533W
+         M71LvSdisDSi1PiNLiY+EomSp6YOzJjT1XDsO11zrZm9mzHVV7X72p6VMTF331Fr9Ewo
+         KkUa/DF5/VCAJkenS3o92dsP9fgVula12/bXvDtUczZ/hH1qq2fRt+3kS1ZbZQUhnvYv
+         OxA6b+oB/R6VwK0oN9sPNioEtcXmZM9En1Zib4hL/eWugUs6JmxgGTlEEasfTx5HdfO1
+         wMZA==
+X-Gm-Message-State: AOAM533Wpo7+f58m/kIE7+LKhGo+DGJACP5z9caSP5Tj3ODlN2BTt/dZ
+        q6jfhYNb2tzgBPAwdKKX4rU=
+X-Google-Smtp-Source: ABdhPJyrF6FjKgnMDnGC1tbIqIH9Sh1hVWToOj0/1UDT7ZU9e3El36RtthXnxRjHHqBDctFTTptAsQ==
+X-Received: by 2002:a17:906:2a85:b0:6ce:36bd:bcd9 with SMTP id l5-20020a1709062a8500b006ce36bdbcd9mr6819245eje.318.1648768037754;
         Thu, 31 Mar 2022 16:07:17 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id p12-20020a17090635cc00b006e055c9c91esm297131ejb.101.2022.03.31.16.07.16
+        by smtp.googlemail.com with ESMTPSA id p12-20020a17090635cc00b006e055c9c91esm297131ejb.101.2022.03.31.16.07.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 16:07:16 -0700 (PDT)
+        Thu, 31 Mar 2022 16:07:17 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Jonathan Cameron <jic23@kernel.org>
 Cc:     Lars-Peter Clausen <lars@metafoo.de>,
@@ -58,9 +58,9 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH 2/3] iio: ssp_sensors: replace usage of found with dedicated list iterator variable
-Date:   Fri,  1 Apr 2022 01:06:31 +0200
-Message-Id: <20220331230632.957634-2-jakobkoschel@gmail.com>
+Subject: [PATCH 3/3] iio: sysfs-trigger: replace usage of found with dedicated list iterator variable
+Date:   Fri,  1 Apr 2022 01:06:32 +0200
+Message-Id: <20220331230632.957634-3-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220331230632.957634-1-jakobkoschel@gmail.com>
 References: <20220331230632.957634-1-jakobkoschel@gmail.com>
@@ -90,48 +90,35 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/iio/common/ssp_sensors/ssp_spi.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/iio/trigger/iio-trig-sysfs.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iio/common/ssp_sensors/ssp_spi.c b/drivers/iio/common/ssp_sensors/ssp_spi.c
-index 769bd9280524..f32b04b63ea1 100644
---- a/drivers/iio/common/ssp_sensors/ssp_spi.c
-+++ b/drivers/iio/common/ssp_sensors/ssp_spi.c
-@@ -331,12 +331,11 @@ static int ssp_parse_dataframe(struct ssp_data *data, char *dataframe, int len)
- /* threaded irq */
- int ssp_irq_msg(struct ssp_data *data)
+diff --git a/drivers/iio/trigger/iio-trig-sysfs.c b/drivers/iio/trigger/iio-trig-sysfs.c
+index 2a4b75897910..f1a8704e6cc1 100644
+--- a/drivers/iio/trigger/iio-trig-sysfs.c
++++ b/drivers/iio/trigger/iio-trig-sysfs.c
+@@ -176,16 +176,15 @@ static int iio_sysfs_trigger_probe(int id)
+ 
+ static int iio_sysfs_trigger_remove(int id)
  {
--	bool found = false;
- 	char *buffer;
- 	u8 msg_type;
- 	int ret;
- 	u16 length, msg_options;
--	struct ssp_msg *msg, *n;
-+	struct ssp_msg *msg = NULL, *iter, *n;
+-	bool foundit = false;
+-	struct iio_sysfs_trig *t;
++	struct iio_sysfs_trig *t = NULL, *iter;
  
- 	ret = spi_read(data->spi, data->header_buffer, SSP_HEADER_BUFFER_SIZE);
- 	if (ret < 0) {
-@@ -362,15 +361,15 @@ int ssp_irq_msg(struct ssp_data *data)
- 		 * received with no order
- 		 */
- 		mutex_lock(&data->pending_lock);
--		list_for_each_entry_safe(msg, n, &data->pending_list, list) {
--			if (msg->options == msg_options) {
--				list_del(&msg->list);
--				found = true;
-+		list_for_each_entry_safe(iter, n, &data->pending_list, list) {
-+			if (iter->options == msg_options) {
-+				list_del(&iter->list);
-+				msg = iter;
- 				break;
- 			}
+ 	mutex_lock(&iio_sysfs_trig_list_mut);
+-	list_for_each_entry(t, &iio_sysfs_trig_list, l)
+-		if (id == t->id) {
+-			foundit = true;
++	list_for_each_entry(iter, &iio_sysfs_trig_list, l)
++		if (id == iter->id) {
++			t = iter;
+ 			break;
  		}
- 
--		if (!found) {
-+		if (!msg) {
- 			/*
- 			 * here can be implemented dead messages handling
- 			 * but the slave should not send such ones - it is to
+-	if (!foundit) {
++	if (!t) {
+ 		mutex_unlock(&iio_sysfs_trig_list_mut);
+ 		return -EINVAL;
+ 	}
 -- 
 2.25.1
 

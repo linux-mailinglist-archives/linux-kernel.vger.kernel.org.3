@@ -2,245 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9378E4EDA4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAB54EDA4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbiCaNPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S236682AbiCaNQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234280AbiCaNPg (ORCPT
+        with ESMTP id S236639AbiCaNQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:15:36 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7443EB8A;
-        Thu, 31 Mar 2022 06:13:48 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22VD2vAT005274;
-        Thu, 31 Mar 2022 13:13:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+AbQsRaRazlnugFaIsoIcb22sJOC5wMMnZ13BCbBXaI=;
- b=hFZvxc4kbIruX+nYnb8Zptg/jlMxbu9JsN+Yyjk+vk4gH7vI4wPRXMOXWdvFDdjaLGLA
- 1q1MNFUvYnQIAMm7SI7TkOSp8Yv94RKgxhBkGH6PX2lxpqzefwAljPnKS4Sib+nrUiNI
- 7j+koS1tR1AutFAgw9JJ4pImN2jghfALQHcnXUYRVPgDJkAcMF+mUpyN6fWAJCYKYOLN
- D37Tr4UnhwsJNLNLoF8Bp0f9hi5JxxhHFlZK1Hzb/wxQouNpCrejHa01iEjwGEQS4QMp
- ubyIQm+vSer0HbPGCbsF1r2rD3keQEBznZ8laorXZQP4v0xmwizFqgDyX9X34QzZyg/W Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f54c2u8n7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 13:13:47 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22VCw78V015843;
-        Thu, 31 Mar 2022 13:13:47 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f54c2u8mh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 13:13:47 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22VD7ft4007522;
-        Thu, 31 Mar 2022 13:13:45 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f3rs3nu6k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 13:13:45 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22VDDmTS41550226
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 31 Mar 2022 13:13:48 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 073FF11C050;
-        Thu, 31 Mar 2022 13:13:42 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8563A11C04C;
-        Thu, 31 Mar 2022 13:13:41 +0000 (GMT)
-Received: from [9.145.159.108] (unknown [9.145.159.108])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 31 Mar 2022 13:13:41 +0000 (GMT)
-Message-ID: <6b24e1f6-22ee-c0e4-5bde-9eefdccd3619@linux.ibm.com>
-Date:   Thu, 31 Mar 2022 15:13:41 +0200
+        Thu, 31 Mar 2022 09:16:20 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44E5427FE;
+        Thu, 31 Mar 2022 06:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648732472; x=1680268472;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oR/AUSp/9k7pPI88MrXUg7hk4K/wyRXv3H2I8+Swez0=;
+  b=NYxndSLwUHoeDmY+K5xOM35OAzK9Pw5NvaER3XWjZcj+dqdMJ+1QKLjV
+   4+1s9n5q57FNrS3Gb8YqdJCgNH3Xy2+B1lWwRmQKxix/lC7muzucAdLVv
+   7CYGDXB43aH3cnXM3Kt7tvXxh0YlVVCKI5GqtGJo+Qw5yprlIbpmPOZu1
+   I13CqoME3MbUJ/4FCySFJ2TkKVLKjvmKf/JIPFpMVSPwcGOlbtscsBQGs
+   A6NY+8d1k+lhYdaYz0Ce5oFcERLofLv2kMNSKpfC1Ct8rmZXRFimG+xTO
+   l6ukqcCj3rVEsXPGxbwO1KwlQS/1lEhaoVNeXQynmBj7maE8/MRuJq+XM
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259545445"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="259545445"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:14:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="503744395"
+Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
+  by orsmga003.jf.intel.com with ESMTP; 31 Mar 2022 06:14:30 -0700
+Date:   Thu, 31 Mar 2022 15:14:29 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>, mschmidt@redhat.com,
+        Brett Creeley <brett.creeley@intel.com>,
+        open list <linux-kernel@vger.kernel.org>, poros@redhat.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [Intel-wired-lan] [PATCH net] ice: Fix incorrect locking in
+ ice_vc_process_vf_msg()
+Message-ID: <YkWpNVXYEBo/u3dm@boxer>
+References: <20220331105005.2580771-1-ivecera@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v9 01/18] KVM: s390: pv: leak the topmost page table when
- destroy fails
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220330122605.247613-1-imbrenda@linux.ibm.com>
- <20220330122605.247613-2-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220330122605.247613-2-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: EJAk8FG2Imt_J34wTZkf8j4N0XKp1une
-X-Proofpoint-GUID: IjFYIBVo1L5w1N-Wast02W2OGexB7Wfa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-31_04,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 spamscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203310073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331105005.2580771-1-ivecera@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 14:25, Claudio Imbrenda wrote:
-> Each secure guest must have a unique ASCE (address space control
-> element); we must avoid that new guests use the same page for their
-> ASCE, to avoid errors.
+On Thu, Mar 31, 2022 at 12:50:04PM +0200, Ivan Vecera wrote:
+> Usage of mutex_trylock() in ice_vc_process_vf_msg() is incorrect
+> because message sent from VF is ignored and never processed.
 > 
-> Since the ASCE mostly consists of the address of the topmost page table
-> (plus some flags), we must not return that memory to the pool unless
-> the ASCE is no longer in use.
+> Use mutex_lock() instead to fix the issue. It is safe because this
+
+We need to know what is *the* issue in the first place.
+Could you please provide more context what is being fixed to the readers
+that don't have an access to bugzilla?
+
+Specifically, what is the case that ignoring a particular message when
+mutex is already held is a broken behavior?
+
+> mutex is used to prevent races between VF related NDOs and
+> handlers processing request messages from VF and these handlers
+> are running in ice_service_task() context.
 > 
-> Only a successful Destroy Secure Configuration UVC will make the ASCE
-> reusable again.
-> 
-> If the Destroy Configuration UVC fails, the ASCE cannot be reused for a
-> secure guest (either for the ASCE or for other memory areas). To avoid
-> a collision, it must not be used again. This is a permanent error and
-> the page becomes in practice unusable, so we set it aside and leak it.
-> On failure we already leak other memory that belongs to the ultravisor
-> (i.e. the variable and base storage for a guest) and not leaking the
-> topmost page table was an oversight.
-> 
-> This error (and thus the leakage) should not happen unless the hardware
-> is broken or KVM has some unknown serious bug.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Fixes: 29b40f105ec8d55 ("KVM: s390: protvirt: Add initial vm and cpu lifecycle handling")
+> Fixes: e6ba5273d4ed ("ice: Fix race conditions between virtchnl handling and VF ndo ops")
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 > ---
->   arch/s390/include/asm/gmap.h |  2 +
->   arch/s390/kvm/pv.c           |  9 +++--
->   arch/s390/mm/gmap.c          | 71 ++++++++++++++++++++++++++++++++++++
->   3 files changed, 79 insertions(+), 3 deletions(-)
+>  drivers/net/ethernet/intel/ice/ice_virtchnl.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
 > 
-> diff --git a/arch/s390/include/asm/gmap.h b/arch/s390/include/asm/gmap.h
-> index 40264f60b0da..746e18bf8984 100644
-> --- a/arch/s390/include/asm/gmap.h
-> +++ b/arch/s390/include/asm/gmap.h
-> @@ -148,4 +148,6 @@ void gmap_sync_dirty_log_pmd(struct gmap *gmap, unsigned long dirty_bitmap[4],
->   			     unsigned long gaddr, unsigned long vmaddr);
->   int gmap_mark_unmergeable(void);
->   void s390_reset_acc(struct mm_struct *mm);
-> +void s390_remove_old_asce(struct gmap *gmap);
-> +int s390_replace_asce(struct gmap *gmap);
->   #endif /* _ASM_S390_GMAP_H */
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index 7f7c0d6af2ce..3c59ef763dde 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-> @@ -166,10 +166,13 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
->   	atomic_set(&kvm->mm->context.is_protected, 0);
->   	KVM_UV_EVENT(kvm, 3, "PROTVIRT DESTROY VM: rc %x rrc %x", *rc, *rrc);
->   	WARN_ONCE(cc, "protvirt destroy vm failed rc %x rrc %x", *rc, *rrc);
-> -	/* Inteded memory leak on "impossible" error */
-> -	if (!cc)
-> +	/* Intended memory leak on "impossible" error */
-> +	if (!cc) {
->   		kvm_s390_pv_dealloc_vm(kvm);
-> -	return cc ? -EIO : 0;
-> +		return 0;
-> +	}
-> +	s390_replace_asce(kvm->arch.gmap);
-> +	return -EIO;
->   }
->   
->   int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
-> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> index dfee0ebb2fac..3b42bf7adb77 100644
-> --- a/arch/s390/mm/gmap.c
-> +++ b/arch/s390/mm/gmap.c
-> @@ -2714,3 +2714,74 @@ void s390_reset_acc(struct mm_struct *mm)
->   	mmput(mm);
->   }
->   EXPORT_SYMBOL_GPL(s390_reset_acc);
-> +
-> +/**
-> + * s390_remove_old_asce - Remove the topmost level of page tables from the
-> + * list of page tables of the gmap.
-> + * @gmap the gmap whose table is to be removed
-> + *
-> + * This means that it will not be freed when the VM is torn down, and needs
-> + * to be handled separately by the caller, unless an intentional leak is
-> + * intended. Notice that this function will only remove the page from the
-> + * list, the page will still be used as a top level page table (and ASCE).
-> + */
-> +void s390_remove_old_asce(struct gmap *gmap)
-> +{
-> +	struct page *old;
-> +
-> +	old = virt_to_page(gmap->table);
-> +	spin_lock(&gmap->guest_table_lock);
-> +	list_del(&old->lru);
-> +	/*
-> +	 * in case the ASCE needs to be "removed" multiple times, for example
-> +	 * if the VM is rebooted into secure mode several times
-> +	 * concurrently.
-> +	 */
-
-How can that happen, what are we protecting against here?
-
-> +	INIT_LIST_HEAD(&old->lru);
-> +	spin_unlock(&gmap->guest_table_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(s390_remove_old_asce);
-> +
-> +/**
-> + * s390_replace_asce - Try to replace the current ASCE of a gmap with
-> + * another equivalent one.
-> + * @gmap the gmap
-> + *
-> + * If the allocation of the new top level page table fails, the ASCE is not
-> + * replaced.
-> + * In any case, the old ASCE is always removed from the list. Therefore the
-> + * caller has to make sure to save a pointer to it beforehands, unless an
-> + * intentional leak is intended.
-> + */
-> +int s390_replace_asce(struct gmap *gmap)
-> +{
-> +	unsigned long asce;
-> +	struct page *page;
-> +	void *table;
-> +
-> +	s390_remove_old_asce(gmap);
-> +
-> +	page = alloc_pages(GFP_KERNEL_ACCOUNT, CRST_ALLOC_ORDER);
-> +	if (!page)
-> +		return -ENOMEM;
-> +	table = page_to_virt(page);
-> +	memcpy(table, gmap->table, 1UL << (CRST_ALLOC_ORDER + PAGE_SHIFT));
-> +
-> +	/*
-> +	 * The caller has to deal with the old ASCE, but here we make sure
-> +	 * the new one is properly added to the list of page tables, so that
-> +	 * it will be freed when the VM is torn down.
-> +	 */
-> +	spin_lock(&gmap->guest_table_lock);
-> +	list_add(&page->lru, &gmap->crst_list);
-> +	spin_unlock(&gmap->guest_table_lock);
-> +
-> +	/* Set new table origin while preserving existing ASCE control bits */
-> +	asce = (gmap->asce & ~_ASCE_ORIGIN) | __pa(table);
-> +	WRITE_ONCE(gmap->asce, asce);
-> +	WRITE_ONCE(gmap->mm->context.gmap_asce, asce);
-> +	WRITE_ONCE(gmap->table, table);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(s390_replace_asce);
-
+> diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl.c b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+> index 3f1a63815bac..9bf5bb008128 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+> @@ -3660,15 +3660,7 @@ void ice_vc_process_vf_msg(struct ice_pf *pf, struct ice_rq_event_info *event)
+>  		return;
+>  	}
+>  
+> -	/* VF is being configured in another context that triggers a VFR, so no
+> -	 * need to process this message
+> -	 */
+> -	if (!mutex_trylock(&vf->cfg_lock)) {
+> -		dev_info(dev, "VF %u is being configured in another context that will trigger a VFR, so there is no need to handle this message\n",
+> -			 vf->vf_id);
+> -		ice_put_vf(vf);
+> -		return;
+> -	}
+> +	mutex_lock(&vf->cfg_lock);
+>  
+>  	switch (v_opcode) {
+>  	case VIRTCHNL_OP_VERSION:
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> Intel-wired-lan mailing list
+> Intel-wired-lan@osuosl.org
+> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan

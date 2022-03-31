@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3482D4EE178
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFDC4EE179
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240559AbiCaTOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S240584AbiCaTOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240350AbiCaTOe (ORCPT
+        with ESMTP id S240408AbiCaTOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:14:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6AD239324
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:12:46 -0700 (PDT)
+        Thu, 31 Mar 2022 15:14:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0622E239324;
+        Thu, 31 Mar 2022 12:12:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82C1EB821C0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 215E6C340EE;
-        Thu, 31 Mar 2022 19:12:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF254B821A8;
+        Thu, 31 Mar 2022 19:12:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79EA4C340F2;
+        Thu, 31 Mar 2022 19:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648753964;
-        bh=Q+rR/0hP2RoJVEQBcWMctDTZ15UahEMPjDz0YVbKDh4=;
+        s=k20201202; t=1648753965;
+        bh=0X0OXtWIY+cc4n5plCvLHcAHg5dVOByfI5T7MxgnulE=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=DPFWt/4WRfmT9kbiLqM5HUbnzfreuQkV6p9FSABe/dUQYYw2Xno13hU2ZYTDDc/i0
-         Ht4ZK9aYeWDHLnXFKcFZrmqivnlZtmurHyQ22Xr/IYDbOgjezkp54pP2RxBo7LpF81
-         z+nlL8jdZr0MY3HGQut2c2oRTWfcJaXAyvxuR1M7GhO7jSKGugsZFlk3S7R+or+cDZ
-         0EgIZgb7mEE/46e6HqECNzVXF3Fw/ZSt5J+JfhG8b+VQhE7V4YP53DdiIXudoWpIGQ
-         zgZmFvg8oM0x4JuS7ncu9o6sAnDZ+O9Sc9qQN4ldru18mXZ61jpXOZXYaX5x4oSzQL
-         qcL8B5jspgB3g==
+        b=tciSiqD3O5JnYLW3HxiiOMoXDHmQ7aJHTJahzMZhOV1kkmjwOhh8UhwT5ZCJ34RhH
+         4DKtjT+/Hsdane02fxQwhYpr5cQ1hOxamkcbMfEZScSzDPu1TlPMoqGkeRHE1JGskY
+         iesT3SPUgWvINA162Q3eGUzOE1yaUofzNxCJ53i/RGKi+5kfb5SslBt1oXaPI3x8rP
+         /mP7Z8+HVSlwqEKQXOHFD8ILAxkuPPycuZFwGjA1s2wOBGl0i2fRm7nDthJmDLAMSw
+         XuFK28xICl7uCBL7JAzTaau6wJ/jaF7f9XyTbuQX7tY/JJmba3JG3yPoade8dWPTTb
+         FlHL1AuDBe8Ng==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E300EAC09B;
-        Thu, 31 Mar 2022 19:12:44 +0000 (UTC)
-Subject: Re: [GIT PULL] hardening fixes for v5.18-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5A863EAC09B;
+        Thu, 31 Mar 2022 19:12:45 +0000 (UTC)
+Subject: Re: [GIT PULL v2] Kbuild updates for v5.18-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <202203311127.503A3110@keescook>
-References: <202203311127.503A3110@keescook>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <202203311127.503A3110@keescook>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v5.18-rc1-fix1
-X-PR-Tracked-Commit-Id: 229a08a4f4e4f9949801cc39b6480ddc9c487183
+In-Reply-To: <CAK7LNAQ1OPH-WFLyUfmVMUE4in7tbcdNME-Cp=OvJfUAJAPZ9g@mail.gmail.com>
+References: <CAK7LNAQ1OPH-WFLyUfmVMUE4in7tbcdNME-Cp=OvJfUAJAPZ9g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kbuild.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK7LNAQ1OPH-WFLyUfmVMUE4in7tbcdNME-Cp=OvJfUAJAPZ9g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-v5.18-v2
+X-PR-Tracked-Commit-Id: e9c281928c24dfeb86b11c31b53757b6a127f8aa
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f87cbd0565eb7e2fa15296c74210658db1346431
-Message-Id: <164875396405.22373.4543629917803159331.pr-tracker-bot@kernel.org>
-Date:   Thu, 31 Mar 2022 19:12:44 +0000
-To:     Kees Cook <keescook@chromium.org>
+X-PR-Merge-Commit-Id: b8321ed4a40c02054f930ca59d3570caa27bc86c
+Message-Id: <164875396536.22373.4406763365905728162.pr-tracker-bot@kernel.org>
+Date:   Thu, 31 Mar 2022 19:12:45 +0000
+To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        David Hildenbrand <david@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zi Yan <ziy@nvidia.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 31 Mar 2022 11:35:40 -0700:
+The pull request you sent on Thu, 31 Mar 2022 12:28:03 +0900:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v5.18-rc1-fix1
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-v5.18-v2
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f87cbd0565eb7e2fa15296c74210658db1346431
+https://git.kernel.org/torvalds/c/b8321ed4a40c02054f930ca59d3570caa27bc86c
 
 Thank you!
 

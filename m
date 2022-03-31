@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D544EDBA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36ACC4EDBAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiCaO2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S237550AbiCaO3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237498AbiCaO2r (ORCPT
+        with ESMTP id S237536AbiCaO3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:28:47 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8304521D7DB;
-        Thu, 31 Mar 2022 07:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=WKvQhSKFWoLuajjNgA2S2UoVge0oH0PP/Mwfs4RXClE=; b=jzBurfDBkkToDK1iyryqp7VWYE
-        Ob6XrfgyRh4mOaGjCq1TfDZfuQErBgibwFYs/zu03ViVwDFYuysvQBO2Vy9NvFODJjP7XVVsL5I6D
-        XbmhJBOq9qBRqOKPaXwZ7kxb68r0ZJE5v7BYywMWA9etAS2FOIO/mRV0GjNF5nYUfkTk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nZvl9-00DTZc-5k; Thu, 31 Mar 2022 16:26:47 +0200
-Date:   Thu, 31 Mar 2022 16:26:47 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "huangguangbin (A)" <huangguangbin2@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, o.rempel@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lipeng321@huawei.com, chenhao288@hisilicon.com
-Subject: Re: [PATCH] net: phy: genphy_loopback: fix loopback failed when
- speed is unknown
-Message-ID: <YkW6J9rM6O/cb/lv@lunn.ch>
-References: <20220331114819.14929-1-huangguangbin2@huawei.com>
- <YkWdTpCsO8JhiSaT@lunn.ch>
- <130bb780-0dc1-3819-8f6d-f2daf4d9ece9@huawei.com>
+        Thu, 31 Mar 2022 10:29:44 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E888421D7DB
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:27:56 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id by7so99313ljb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H9zw51UkEooU51O6uDBnpMaIip01pIRg5ivq80VWb3U=;
+        b=dRY7km9LLsGbpfH2PHYxfYob9jbeOynMEAO/kWim3KrRNdgJxJ3NK6SE6H8LDcWKNw
+         HeMnEj8ohb2DYFBeUtTwi7U0DLfutVRkxhSZeMgozmQ3cDiaoXlpZHspOlEZOdKXi1Kz
+         fnV4dJGMeVAlA0NfXAxoVYh4AIazbO9zGUmulBGJLzvyhGkAGn2sbPCWh6qBDk9P2vrV
+         BsHv+pVCg2K0dyrBr9Z5e5XFjdkbJEgH0ZPnBkXLyyzc3bOLaRmEFv3tqRwHu+53DlmW
+         OPYPgC0GzIVaabGz9lIl30Vc8A+Ext/OQZ3A0itOoqfLv1sOsVO7+kzlzRq9AtC8BTN8
+         N1Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H9zw51UkEooU51O6uDBnpMaIip01pIRg5ivq80VWb3U=;
+        b=BDqH0SmLbUAm97UpklrZw9/xFI1LcoYU1cZCIM6gVdmx+kuZn8e45i2aAu59JKiyQ8
+         t9FzsrkieGG2PWmLBVUf+fNxEW819CZ3dkXLSJdHf1cAApVYoazvb1oy5sS2/O8YCRwu
+         wYzmgFT5w2YjbeUFoK6eK2q0IeJ6y66MYEI8kaviL1g+9e+n9RXTdcPg+cdxT3ZMZZS4
+         bR1W0MMYDZeAweYDKNcXiy0w8E8q+pboX8HQnMSweN4yYI9T/ZF9e5yIi5boGOFkD5oc
+         MGJZf4/FRQgAgqyzu5TGPPvwqWm3SbR+IQgUtZrKwS418pWx8UZEjOLp25/9k+R/Ke+l
+         UoxA==
+X-Gm-Message-State: AOAM531S/8BAl6NvUmTEgfBEVi+honDFRJaRP6/lpC4F6dLq0Fn2pJlR
+        PBHj1lWrp1QT24tTzNUbraLuJvV3KdB7Dl7HZ+ZGTLgbsCY=
+X-Google-Smtp-Source: ABdhPJxtcIvjAHcxVvUeKdeZsuMITYP3rijJH8qEnONOOmqnKTwnbUB8YtzM+WgoRvuTY4WQNTo2/qujvxZvRW5eoCQ=
+X-Received: by 2002:a05:651c:158e:b0:248:1ce:a2a with SMTP id
+ h14-20020a05651c158e00b0024801ce0a2amr10246261ljq.172.1648736874967; Thu, 31
+ Mar 2022 07:27:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <130bb780-0dc1-3819-8f6d-f2daf4d9ece9@huawei.com>
+References: <20220331122618.GA434796@euclid> <20220331141456.GP3293@kadam>
+In-Reply-To: <20220331141456.GP3293@kadam>
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Date:   Thu, 31 Mar 2022 10:27:43 -0400
+Message-ID: <CAMWRUK5q8tadCVD-AbFCjQs2qvnvZG8Pyg+W+jt52g=sVDB5bw@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: rtl8723bs: place constants on the right side
+ of tests
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> In this case, as speed and duplex both are unknown, ctl is just set to 0x4000.
-> However, the follow code sets mask to ~0 for function phy_modify():
-> int genphy_loopback(struct phy_device *phydev, bool enable)
-> {
-> 	if (enable) {
-> 		...
-> 		phy_modify(phydev, MII_BMCR, ~0, ctl);
-> 		...
-> }
-> so all other bits of BMCR will be cleared and just set bit 14, I use phy trace to
-> prove that:
-> 
-> $ cat /sys/kernel/debug/tracing/trace
-> # tracer: nop
-> #
-> # entries-in-buffer/entries-written: 923/923   #P:128
-> #
-> #                                _-----=> irqs-off/BH-disabled
-> #                               / _----=> need-resched
-> #                              | / _---=> hardirq/softirq
-> #                              || / _--=> preempt-depth
-> #                              ||| / _-=> migrate-disable
-> #                              |||| /     delay
-> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> #              | |         |   |||||     |         |
->   kworker/u257:2-694     [015] .....   209.263912: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
->   kworker/u257:2-694     [015] .....   209.263951: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
->   kworker/u257:2-694     [015] .....   209.263990: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
->   kworker/u257:2-694     [015] .....   209.264028: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x09 val:0x0200
->   kworker/u257:2-694     [015] .....   209.264067: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x0a val:0x0000
->          ethtool-1148    [007] .....   209.665693: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
->          ethtool-1148    [007] .....   209.665706: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x1840
->          ethtool-1148    [007] .....   210.588139: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1840
->          ethtool-1148    [007] .....   210.588152: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x1040
->          ethtool-1148    [007] .....   210.615900: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
->          ethtool-1148    [007] .....   210.615912: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x4000 //here just set bit 14
-> 
-> So phy speed will be set to 10M in this case, if previous speed of
-> device before going down is 10M, loopback test is pass. Only
-> previous speed is 100M or 1000M, loopback test is failed.
+On Thu, Mar 31, 2022 at 10:15 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Thu, Mar 31, 2022 at 08:26:18AM -0400, Sevinj Aghayeva wrote:
+> > Adhere to Linux kernel coding style.
+> >
+> > Reported by checkpatch:
+> >
+> > WARNING: Comparisons should place the constant on the right side of the test
+> >
+> > Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+> > ---
+> >
+> > v1 -> v2: Missed one case of constant being placed on the left. Now
+> > checkpath reports no such warnings for this file.
+>
+> You need to send a reply to the original email "Hi, please ignore this
+> one, I spotted another line I want to clean up" so that Greg does not
+> apply it first before reading this one.
 
-O.K. So it should be set into 10M half duplex. But why does this cause
-it not to loopback packets? Does the PHY you are using not actually
-support 10 Half? Why does it need to be the same speed as when the
-link was up? And why does it actually set LSTATUS indicating there is
-link?
+Got it, thanks! Will do so in the future.
 
-Is this a generic problem, all PHYs are like this, or is this specific
-to the PHY you are using? Maybe this PHY needs its own loopback
-function because it does something odd?
+>
+> regards,
+> dan carpenter
+>
 
-   Andrew
 
+
+--
+
+Sevinj.Aghayeva

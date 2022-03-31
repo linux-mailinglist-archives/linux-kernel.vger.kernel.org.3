@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D94C4EE0C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CC44EE0D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbiCaSlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S236355AbiCaSqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiCaSlf (ORCPT
+        with ESMTP id S234572AbiCaSqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:41:35 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0219A1E3C8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:39:46 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-de3eda6b5dso263482fac.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e9jkAgjwsi1IJSGTXHmKAcaACDiJsAOI5quMymW0VDc=;
-        b=mMD97fQDv0+2FvvZYf5+fdkYUQipERsAb3C2YcKnLOOEQ/PsJUTDDX5i376ABpBGWC
-         8TpaoyFX9P3UccJmlhrrqlSG+ka+WkQfRZFsFNnxBtpTwOpjT/x3Lzt9HADfuPpu7OS7
-         QU+9iTOz1sDnXxGrb0mS9cmpSLomtfZalfKPVbntBxVwZkTTnhqBYisXjdlU7goWLDkM
-         laUKXVA0VLRefOHvgcNMqbM2Shr1AH7O2d7elvTBpQ9ZmSUzDNCbzRS3cbBLKLE+kBsK
-         I6c/dZZlvp6SopotuACCLG3keVMeHJOquxTiNQjJRKkGlYfxw8wYJcbmi+rjvkUxeo7i
-         AXJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e9jkAgjwsi1IJSGTXHmKAcaACDiJsAOI5quMymW0VDc=;
-        b=SDvkuNO8b6HR39svibpRUIflXd97mPeykZT5b2Z8v+LEKI4AYVpPl8pSXeh8+l2IX7
-         hcC/zSDNVZyPcFKAzm962QwH5/tIb9ZLNP7fuVYyMwe2TZP6DsdZwl+wGUW51fv6v65x
-         xCyTkmJXY2gY3/OeBfItQrXeeBalTeWm+dXtofaDxRWGY7ay3Dh9A+KSMHwcIg4DNvPa
-         TmEvNdLIW8NTqb+ZD6uBEIOdXJvnGTTOD2YXio3Bclp2+L3NhiX0F9Vqsv2qw3TmXQSm
-         c1470EC7J744inBc5j9iHKaaDIq466l0eZCFHJ9RS1tv/36I3inKxLQXykgYbMGwKNqo
-         mLzQ==
-X-Gm-Message-State: AOAM5318PchmdOLOXD7YFYHAYGPt34vQyBeIiP24bhFK03rUku8UFUo2
-        6Io9fuBrwWPAvaom0ArMy+leng==
-X-Google-Smtp-Source: ABdhPJw/a/7CrFLyGEY0Z/DS0/Ws4lqIc4WJ3cyuGTmJnxDrq9I4ThBrzgRb24j8nj+NdhQfCvPQBw==
-X-Received: by 2002:a05:6870:d0ce:b0:de:79e2:7ec7 with SMTP id k14-20020a056870d0ce00b000de79e27ec7mr3185850oaa.245.1648751985239;
-        Thu, 31 Mar 2022 11:39:45 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id e7-20020a9d2a87000000b005af548abe73sm175078otb.4.2022.03.31.11.39.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 11:39:44 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 11:42:14 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Cc:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, quic_asutoshd@quicinc.com,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        quic_sartgarg@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_sayalil@quicinc.com, agross@kernel.org,
-        krzysztof.kozlowski@canonical.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
-Message-ID: <YkX2BrTjgexrIHtR@ripper>
-References: <1648710182-31899-1-git-send-email-quic_c_sbhanu@quicinc.com>
+        Thu, 31 Mar 2022 14:46:13 -0400
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755FA62A2B
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648752264; bh=S0ikuEGsksL6QEKgy7sSSBTRKMTS3ahAMlEJon0Rvvg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VS245s8fIy5iEQmFdShsxEg6S3szR/3SbAyYw8uyJTs09aQlPxBMYATVzvoXhhUXNf2Yk8ehLfaXzyG6QcW0zfjhqbEt045qegTly8wqpS8CvpUpuvB/baBYw4tN72BAESW837pPylxiQfYWRdkJ6uWtrf3Uac50a59PD+PC8XWGOkQno3mMpwnjSDqf0S1fgY4KVF78Qc5iU1UpTHl/Yif3lBzNXprJKERRtwdiTBzYbN3UOlZFbIjTm6PRNa9+S5pZQMiRDqaT35esjQxzcFikxYjMqcbjgPZBYTPDDdOkKXXWqjmrxY1nTgov4lYTEgCrPN0aax4PT7Iymvhu/w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648752264; bh=ZQ7jenPmEAfPsjdQbdIA6ipzzy6g4DVPxeWJY3I6AlY=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=layue1XgrBZhXQEvqX7wQY7/zO1xGnHjNaQ3OuuzJagIT1rsp0fRjFVwYVGzUWI4cteWbK2g7/sYN54M3LyhPduLZpMjjUTqf+4/VcAN//SYxdKJUMUmnfdmKuxuLe4Mh2h3ipeLfuqHpIZZh24Zio0nVyg1ofOJY9c9DhqhOT5zE825wGMYiCrgrXGQRTf0GKPotAooS+LsKrU3HfnrPsJhnXo/9KkKlfrkBHsNaAlg5IdA0Qs9CtuJj6YmY2AATOwwavzWLQb7jNKz280jUrvq7xo78sYYRCCIPPr4G92jncUZGzU+xaRNSMzO/0JHhv2CqJclRDhMU4senwQiog==
+X-YMail-OSG: bejsCwQVM1lTTK.NjCoKG2fU0t.Hs4sSJEGFgswbFk1Scos27ld1BbbcS7lTL6v
+ eba7XIDhoqZh2PEz2pvut7RBt0triZMp3l3eIUEI_7vkUOtjhrMEvclVOQB3jBiitJa5Scg7uxpA
+ cPycnu.7uWgWZferQkqDKCbexMjiMw6snPuDqH3mredIPMu9nEkFhz6tV2Ri83LV6qX..sf65rNx
+ ycW7KG.fLLysuU7s7KMMYW3unizaRc1cGTTmcf9Ve4gAp97HPkNzTzwIp_Rj2hxgMHMhaPlMnGpA
+ FRFWoQO6NTaKwva85XXmu8xP31nKtMlPbxdzaD_Tf4LKYDgGtLfxXg5LE_Znzz4sAlNCKocXOT8K
+ 7i1kcAovFHqHOSm9ccNKy1VM9JmaYD_84n7rCLSraCJjpXzfwFj7Sl2IecIN8TGz2gKfJ7fWEvdB
+ 3_FV4b0OFQc_mNBb2LMAzNIwiSNGY3Isf4LrFX87CRZI5TyJG_cPEp7IUxcqx3fvQ81QikWIhZcx
+ dge.f_BdPDaDoUZ4ixDoCJo.LDVW2WaR20ONQmBtFQkVeWsNHFtgKyA3RBtguZyUF2HlRUDPi6bP
+ AZHfXb81va.IruSrcQAXw.uIBgAdeneC_vbFOaG0wBTCqLQGdrqwFkP6IKwI8vSIzb3qojkjSzA2
+ Zc3wTQ6bDvGqgmbBBlmOljfPFfLdcc6ccdn5TSKti6VJzUYnOeu3ITn3mIy8PxQl_j_ytENdxmva
+ YxuhZi2ZyJ372SV.8NBfCQCN3Nh0K93PFHGW2.EhBv10gXU.eT38ElzlCG6cW75KvmRmaRYk0zgU
+ a01EUvrwyuEG0dFmwKFEBmnkQtu8gBXHRGMnZJANoUnxAZnWadCa78TnIUh951EFKdR3Ud4CAwep
+ SJM3p1N6DBb8AzDZGehUyKu__.5XXIZEMFb.K85Ewg8Lajfm9pfV2ZS_muP41KmxPvwZMQ9wvIO.
+ o_yvXBlpzYYYAUGkM72RkSQpFM8QNDhmB770_DDuDYAfcYgdMcYzdltTNXbbcuwk2wrg4.52Ou8C
+ RCOf2Vh94F0.wOW31vh5KeJUeXYiocqKxxV3rcXxkkzJWAfRR8A2fFsk4HHGWMMH3KaM_JEUqhpv
+ hf8k5QwtGRwzWofQomuvqa5qfA3GDkz7AayeARQB9Yl20LEjGslVkPw5D4W_0bKa3MRtl0tGQ9Ka
+ _Iqwh55G9lJbdWs6QjdzJn3JwyZ_c.QcgEE71.f3hTLgrg3sCUul.FM2pFeKQaPigJFUV8Sx.S8b
+ radjMyRC7aF4hA19mE1BBq_jS0G6ablI2fnNOAxwV18zTPr7qq12kSKuTp_h1sGyIROdzsCDEDKO
+ aC.HImdR9FQ4S6MfPzXNtFmmNHk_ycutFuxB8TYBGRI4h.o3ASbC4OMFsnxkx9mLjxDKX2lDGZfi
+ 1LOeKjAkabrT4oqeYJjAb59TwLWEbM7Rkp5reYQSgQ6hU0B8sS5XIniCVvM9CzrH07jijgeh4vKo
+ q115kl28U979oL0e.UU11BPmdBdrDdzlHhBzjfZ4Uyn_HyUsfT79wWyUGXeeyEandCkfOhyV1Azq
+ BHLqaET9RgIOVgsr2MkBnTBEzrJdZMsf4Gsf4lclIa_Kn8McfWsioFuQvo4rAPmC3BXfym7iAJxS
+ hRyklPZ5F1D1VkaaXrvO4126Z1ph3QMi_KU8vdblLKWNrQlPyyG4fd6gg_vmYhuBuqZIseT8wVyc
+ Rm8bFmodWa31zr8N0L3VEFHu.MiboJK4YUwBnRQYuV3cYGto5WzzvQpr1fINisrAcce2T1uX90ZZ
+ Ue25qpBNct4UaDv7GG5KwjL_3MNkGAyme6Tt5kx.ViEpl3E0QyJ7loSwxC9R5UbjCRhl4r78ZfHU
+ yGy8Ce9KRd93Ws0NcMwjKK0ikymwekFK_aXeUkg0SX68gZ8jJs7wJE9tqefVay_7LdypJmY4LOvr
+ VIDxlMvS2iDjeGAQ86xtXMYIa_iqw9dIv4tAzx6KTC0SKqUuwBCPMa2JHFKahTOK7Fsp.rzDJwGs
+ D2A20NT3lDVO4yZF_BlqoSaBJ68buy4sOLLRguPHRVVgDMZLF9P1LrMnyJzoB9LPm6AMJdhGD3Ld
+ qkmpbW6ypzDfikOYMtCIQfGLYL6o9FBE05xq5_UoUjgNu3mORo4mrxBg.g9k20BeeTH1FmPPMA1C
+ Jv9AwX.WJj89c5qzv85vHXq0qLq2BpU5EC53SrjuwgRncLrF3uLSIorfXWkhuRKjXBQ11vb5iS5r
+ s_tafD5L4IaQnhbzSU0qJPBZPCOxlkcmlOPJ1t1RMaVfQLMGg1U_CoyXfixASkKPCNxGiVR0vgF_
+ ztEk-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Thu, 31 Mar 2022 18:44:24 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-85ftg (VZM Hermes SMTP Server) with ESMTPA ID a52cdcf988e0124571774a6608f154ea;
+          Thu, 31 Mar 2022 18:44:22 +0000 (UTC)
+Message-ID: <9b521078-5809-7c59-9c58-b71ee406ee29@schaufler-ca.com>
+Date:   Thu, 31 Mar 2022 11:44:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648710182-31899-1-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5/5] smack: Remove redundant assignments
+Content-Language: en-US
+To:     Michal Orzel <michalorzel.eng@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
+ <20220331173358.40939-5-michalorzel.eng@gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220331173358.40939-5-michalorzel.eng@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,151 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 31 Mar 00:03 PDT 2022, Shaik Sajida Bhanu wrote:
+On 3/31/2022 10:33 AM, Michal Orzel wrote:
+> Get rid of redundant assignments which end up in values not being
+> read either because they are overwritten or the function ends.
+>
+> Reported by clang-tidy [deadcode.DeadStores]
+>
+> Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 
-> Reset GCC_SDCC_BCR register before every fresh initilazation. This will
-> reset whole SDHC-msm controller, clears the previous power control
-> states and avoids, software reset timeout issues as below.
-> 
-> [ 5.458061][ T262] mmc1: Reset 0x1 never completed.
-> [ 5.462454][ T262] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-> [ 5.469065][ T262] mmc1: sdhci: Sys addr: 0x00000000 | Version: 0x00007202
-> [ 5.475688][ T262] mmc1: sdhci: Blk size: 0x00000000 | Blk cnt: 0x00000000
-> [ 5.482315][ T262] mmc1: sdhci: Argument: 0x00000000 | Trn mode: 0x00000000
-> [ 5.488927][ T262] mmc1: sdhci: Present: 0x01f800f0 | Host ctl: 0x00000000
-> [ 5.495539][ T262] mmc1: sdhci: Power: 0x00000000 | Blk gap: 0x00000000
-> [ 5.502162][ T262] mmc1: sdhci: Wake-up: 0x00000000 | Clock: 0x00000003
-> [ 5.508768][ T262] mmc1: sdhci: Timeout: 0x00000000 | Int stat: 0x00000000
-> [ 5.515381][ T262] mmc1: sdhci: Int enab: 0x00000000 | Sig enab: 0x00000000
-> [ 5.521996][ T262] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
-> [ 5.528607][ T262] mmc1: sdhci: Caps: 0x362dc8b2 | Caps_1: 0x0000808f
-> [ 5.535227][ T262] mmc1: sdhci: Cmd: 0x00000000 | Max curr: 0x00000000
-> [ 5.541841][ T262] mmc1: sdhci: Resp[0]: 0x00000000 | Resp[1]: 0x00000000
-> [ 5.548454][ T262] mmc1: sdhci: Resp[2]: 0x00000000 | Resp[3]: 0x00000000
-> [ 5.555079][ T262] mmc1: sdhci: Host ctl2: 0x00000000
-> [ 5.559651][ T262] mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP-----------
-> [ 5.566621][ T262] mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg: 0x6000642c | DLL cfg2: 0x0020a000
-> [ 5.575465][ T262] mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl: 0x00010800 | DDR cfg: 0x80040873
-> [ 5.584658][ T262] mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88218a8 Vndr func3: 0x02626040
-> 
-> Fixes: 0eb0d9f4de34 ("mmc: sdhci-msm: Initial support for Qualcomm chipsets")
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Thank you. I will take this via the Smack tree.
+
 > ---
-> 
-> Changes since V2:
-> 	- Dropped new line after fixes tag as suggested by Bjorn
-> 	  Andersson.
-> 	- Passed device structure instead of passing platform_device
-> 	  structure as a argument for sdhci_msm_gcc_reset() as suggested
-> 	  by Bjorn Andersson.
-> 	- Replaced dev_err() with dev_err_probe() as suggested by Bjorn
-> 	  Andersson.
-
-Thanks, looks much better. Still some things I would like to see
-improved below.
-
-> Changes since V1:
-> 	- Added fixes tag as suggested by Ulf Hansson.
-> 	- Replaced devm_reset_control_get() with
-> 	  devm_reset_control_get_optional_exclusive() as suggested by
-> 	  Ulf Hansson.
-> ---
->  drivers/mmc/host/sdhci-msm.c | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-> index 50c71e0..e15e789 100644
-> --- a/drivers/mmc/host/sdhci-msm.c
-> +++ b/drivers/mmc/host/sdhci-msm.c
-> @@ -17,6 +17,7 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/interconnect.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/reset.h>
->  
->  #include "sdhci-pltfm.h"
->  #include "cqhci.h"
-> @@ -284,6 +285,7 @@ struct sdhci_msm_host {
->  	bool uses_tassadar_dll;
->  	u32 dll_config;
->  	u32 ddr_config;
-> +	struct reset_control *core_reset;
->  	bool vqmmc_enabled;
->  };
->  
-> @@ -2482,6 +2484,39 @@ static inline void sdhci_msm_get_of_property(struct platform_device *pdev,
->  	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
->  }
->  
-> +static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
-> +{
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +	struct sdhci_msm_host *msm_host = sdhci_pltfm_priv(pltfm_host);
-> +	int ret = 0;
-
-First use of this variable is an assignment, so no need to initialize it
-here.
-
-> +
-> +	msm_host->core_reset = devm_reset_control_get_optional_exclusive(dev, "core_reset");
-
-reset-names will only be used to identify resets and hence there's no
-reason to include "_reset" in the identifier.
-
-If this is the only reset for the controller, there's actually no reason
-for identifying it, you can omit reset-names from the binding and just
-pass NULL here (to get the first resets = <>).
-
-> +	if (IS_ERR(msm_host->core_reset))
-> +		return dev_err_probe(dev, PTR_ERR(msm_host->core_reset),
-> +				"unable to acquire core_reset\n");
-> +
-> +	if (!msm_host->core_reset)
-> +		return 0;
-> +
-> +	ret = reset_control_assert(msm_host->core_reset);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "core_reset assert failed\n");
-> +
-> +	/*
-> +	 * The hardware requirement for delay between assert/deassert
-> +	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
-> +	 * ~125us (4/32768). To be on the safe side add 200us delay.
-> +	 */
-> +	usleep_range(200, 210);
-> +
-> +	ret = reset_control_deassert(msm_host->core_reset);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
-> +
-> +	usleep_range(200, 210);
-> +
-
-sdhci_msm_gcc_reset() is only called once during probe(), so there's no
-reason to carry the reset_control pointer in struct sdhci_msm_host. Make
-it a local variable and use reset_control_get_optional_exclusive() and
-reset_control_put() the reset here before returning.
-
-Regards,
-Bjorn
-
-> +	return 0;
-> +}
->  
->  static int sdhci_msm_probe(struct platform_device *pdev)
->  {
-> @@ -2529,6 +2564,10 @@ static int sdhci_msm_probe(struct platform_device *pdev)
->  
->  	msm_host->saved_tuning_phase = INVALID_TUNING_PHASE;
->  
-> +	ret = sdhci_msm_gcc_reset(&pdev->dev, host);
-> +	if (ret)
-> +		goto pltfm_free;
-> +
->  	/* Setup SDCC bus voter clock. */
->  	msm_host->bus_clk = devm_clk_get(&pdev->dev, "bus");
->  	if (!IS_ERR(msm_host->bus_clk)) {
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+>   security/smack/smackfs.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+> index 658eab05599e..9e61014073cc 100644
+> --- a/security/smack/smackfs.c
+> +++ b/security/smack/smackfs.c
+> @@ -1192,7 +1192,6 @@ static ssize_t smk_write_net4addr(struct file *file, const char __user *buf,
+>   			rc = -EINVAL;
+>   			goto free_out;
+>   		}
+> -		m = BEBITS;
+>   		masks = 32;
+>   	}
+>   	if (masks > BEBITS) {

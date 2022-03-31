@@ -2,225 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BCB4EE481
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2814EE485
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242832AbiCaXMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S241126AbiCaXMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242824AbiCaXMA (ORCPT
+        with ESMTP id S231898AbiCaXMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:12:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9998E09A1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:10:10 -0700 (PDT)
+        Thu, 31 Mar 2022 19:12:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB0105AB3
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:10:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BD44B82207
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5079FC340ED;
-        Thu, 31 Mar 2022 23:10:07 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 19:10:05 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] ftrace: remove check of list iterator against head past
- the loop body
-Message-ID: <20220331191005.2954969f@gandalf.local.home>
-In-Reply-To: <20220331223752.902726-1-jakobkoschel@gmail.com>
-References: <20220331223752.902726-1-jakobkoschel@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F26A461667
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE2CC340ED;
+        Thu, 31 Mar 2022 23:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648768228;
+        bh=ayML8RaUBnTdmf9yaj5JTyemKW/LWEmylZyis/jy1qs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=et7LVT6cqkFFJE1LiTtUjV6Ct58X+Blk10UZVTxQPugeXH5+LV2yk6/t1Qs3vlaDO
+         aT051BFezb7g3ItIzqxX/+Tw74CQQMDiUPxR9ieguv2wpCPF0leo/9LpyUDZF4ld9Y
+         9TR67sDAEoW37xxaH/t9Cy/2afPSmR1grHAb1Q/wu+y4wKh5CXkzBBzBDwA+t0PZFS
+         tXY1RSI+A+CgLK8Z0m+e43o94CVIKggUkL1u3a7xWamBt4q/9In8YEVG1jPQ30KH4S
+         J92R2FBPOxP6tiaR6cYbt+x7bFdJkiPXaN/tiSlJa4BPHcgjUAY2swSZJ7Be5J7rlV
+         Jh0ezqfehqqlg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0A04C5C0A0E; Thu, 31 Mar 2022 16:10:27 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 16:10:27 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
+Message-ID: <20220331231027.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
+ <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  1 Apr 2022 00:37:52 +0200
-Jakob Koschel <jakobkoschel@gmail.com> wrote:
-
-Hi Jakob,
-
-The patch looks fine, I have some small nits though.
-
-First, the subject should actually be:
-
-Subject: [PATCH] tracing: Remove check of list iterator against head past the loop body
-
-Changes that only deal specifically with the function probes are labeled as
-"ftrace:", but the more generic changes that touches files outside of
-ftrace.c and fgraph.c should be "tracing:". Also, Linus prefers to have the
-next part of the subject start with a capital letter: "Remove" instead of
-"remove".
-
-> When list_for_each_entry() completes the iteration over the whole list
-> without breaking the loop, the iterator value will be a bogus pointer
-> computed based on the head element.
+On Thu, Mar 31, 2022 at 03:54:02PM -0700, Eric Dumazet wrote:
+> On Thu, Mar 31, 2022 at 3:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Thu, Mar 31, 2022 at 02:45:25PM -0700, Eric Dumazet wrote:
+> > > Hi Paul
+> > >
+> > > It seems you assume per cpu ptr for arbitrary indexes (< nr_cpu_ids) are valid.
+> >
+> > Gah!  I knew I was forgetting something...
+> >
+> > But just to check, is this a theoretical problem or something you hit
+> > on real hardware?  (For the rest of this email, I am assuming the latter.)
 > 
-> While it is safe to use the pointer to determine if it was computed
-> based on the head element, either with list_entry_is_head() or
-> &pos->member == head, using the iterator variable after the loop should
-> be avoided.
+> Code review really...
+
+OK, not yet an emergency, then.  ;-)
+
+If it does become an emergency, one workaround is to set the
+rcupdate.rcu_task_enqueue_lim kernel boot parameter to the number of CPUs.
+
+> > > What do you think of the (untested) following patch ?
+> >
+> > One issue with this patch is that the contention could be unpredictable,
+> > or worse, vary among CPU, especially if the cpu_possible_mask was oddly
+> > distributed.
+> >
+> > So might it be better to restrict this to all on CPU 0 on the one hand
+> > and completely per-CPU on the other?  (Or all on the boot CPU, in case
+> > I am forgetting some misbegotten architecture that can run without a
+> > CPU 0.)
 > 
-> In preparation to limit the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer to point to the found element [1].
+> If I understand correctly, cblist_init_generic() could setup
+> percpu_enqueue_shift
+> to something smaller than order_base_2(nr_cpu_ids)
 > 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  kernel/trace/ftrace.c       | 20 ++++++++++++--------
->  kernel/trace/trace_eprobe.c | 14 ++++++++------
->  kernel/trace/trace_events.c | 12 ++++++------
->  3 files changed, 26 insertions(+), 20 deletions(-)
+> Meaning that we could reach a non zero idx in (smp_processor_id() >>
+> percpu_enqueue_shift)
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 4f1d2f5e7263..096f5a83358d 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -4560,8 +4560,8 @@ register_ftrace_function_probe(char *glob, struct trace_array *tr,
->  			       struct ftrace_probe_ops *probe_ops,
->  			       void *data)
->  {
-> +	struct ftrace_func_probe *probe = NULL, *iter;
->  	struct ftrace_func_entry *entry;
-> -	struct ftrace_func_probe *probe;
->  	struct ftrace_hash **orig_hash;
->  	struct ftrace_hash *old_hash;
->  	struct ftrace_hash *hash;
-> @@ -4580,11 +4580,13 @@ register_ftrace_function_probe(char *glob, struct trace_array *tr,
->  
->  	mutex_lock(&ftrace_lock);
->  	/* Check if the probe_ops is already registered */
-> -	list_for_each_entry(probe, &tr->func_probes, list) {
-> -		if (probe->probe_ops == probe_ops)
-> +	list_for_each_entry(iter, &tr->func_probes, list) {
-> +		if (iter->probe_ops == probe_ops) {
-> +			probe = iter;
->  			break;
-> +		}
->  	}
-> -	if (&probe->list == &tr->func_probes) {
-> +	if (!probe) {
->  		probe = kzalloc(sizeof(*probe), GFP_KERNEL);
->  		if (!probe) {
->  			mutex_unlock(&ftrace_lock);
-> @@ -4704,7 +4706,7 @@ unregister_ftrace_function_probe_func(char *glob, struct trace_array *tr,
->  {
->  	struct ftrace_ops_hash old_hash_ops;
->  	struct ftrace_func_entry *entry;
-> -	struct ftrace_func_probe *probe;
-> +	struct ftrace_func_probe *probe = NULL, *iter;
+> So even if CPU0 is always present (I am not sure this is guaranteed,
+> but this seems reasonable),
+> we could still attempt a per_cpu_ptr(PTR,  not_present_cpu), and get garbage.
 
-Can you move this to the first declaration to keep the nice "upside-down
-x-mas tree" look.
+My thought is to replace the shift with a boolean.  One setting just
+always uses CPU 0's cblist (or that of the boot CPU, if there is some
+architecture that is completely innocent of CPU 0), and the other setting
+always uses that of the currently running CPU.  This does rule out the
+current possibility of using (say) 16 cblists on a 64-CPU system, but
+I suspect that this would be just fine.
 
->  	struct ftrace_glob func_g;
->  	struct ftrace_hash **orig_hash;
->  	struct ftrace_hash *old_hash;
-> @@ -4732,11 +4734,13 @@ unregister_ftrace_function_probe_func(char *glob, struct trace_array *tr,
->  
->  	mutex_lock(&ftrace_lock);
->  	/* Check if the probe_ops is already registered */
-> -	list_for_each_entry(probe, &tr->func_probes, list) {
-> -		if (probe->probe_ops == probe_ops)
-> +	list_for_each_entry(iter, &tr->func_probes, list) {
-> +		if (iter->probe_ops == probe_ops) {
-> +			probe = iter;
->  			break;
-> +		}
->  	}
-> -	if (&probe->list == &tr->func_probes)
-> +	if (!probe)
->  		goto err_unlock_ftrace;
->  
->  	ret = -EINVAL;
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index 541aa13581b9..63e901a28425 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -650,7 +650,7 @@ static struct trace_event_functions eprobe_funcs = {
->  static int disable_eprobe(struct trace_eprobe *ep,
->  			  struct trace_array *tr)
->  {
-> -	struct event_trigger_data *trigger;
-> +	struct event_trigger_data *trigger = NULL, *iter;
->  	struct trace_event_file *file;
->  	struct eprobe_data *edata;
->  
-> @@ -658,14 +658,16 @@ static int disable_eprobe(struct trace_eprobe *ep,
->  	if (!file)
->  		return -ENOENT;
->  
-> -	list_for_each_entry(trigger, &file->triggers, list) {
-> -		if (!(trigger->flags & EVENT_TRIGGER_FL_PROBE))
-> +	list_for_each_entry(iter, &file->triggers, list) {
-> +		if (!(iter->flags & EVENT_TRIGGER_FL_PROBE))
->  			continue;
-> -		edata = trigger->private_data;
-> -		if (edata->ep == ep)
-> +		edata = iter->private_data;
-> +		if (edata->ep == ep) {
-> +			trigger = iter;
->  			break;
-> +		}
->  	}
-> -	if (list_entry_is_head(trigger, &file->triggers, list))
-> +	if (!trigger)
->  		return -ENODEV;
->  
->  	list_del_rcu(&trigger->list);
-> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-> index e11e167b7809..fe3dc157e635 100644
-> --- a/kernel/trace/trace_events.c
-> +++ b/kernel/trace/trace_events.c
-> @@ -2281,7 +2281,7 @@ event_subsystem_dir(struct trace_array *tr, const char *name,
->  		    struct trace_event_file *file, struct dentry *parent)
->  {
->  	struct trace_subsystem_dir *dir;
-> -	struct event_subsystem *system;
-> +	struct event_subsystem *system, *iter;
+Neeraj's and my proposed memory-diet patches for SRCU do something like
+this.  These are on branch srcu.2022.03.29a on -rcu.
 
-And move this above dir as well, for the same reason.
+Thoughts?
 
-Thanks,
+							Thanx, Paul
 
--- Steve
-
-
->  	struct dentry *entry;
->  
->  	/* First see if we did not already create this dir */
-> @@ -2295,13 +2295,13 @@ event_subsystem_dir(struct trace_array *tr, const char *name,
->  	}
->  
->  	/* Now see if the system itself exists. */
-> -	list_for_each_entry(system, &event_subsystems, list) {
-> -		if (strcmp(system->name, name) == 0)
-> +	system = NULL;
-> +	list_for_each_entry(iter, &event_subsystems, list) {
-> +		if (strcmp(iter->name, name) == 0) {
-> +			system = iter;
->  			break;
-> +		}
->  	}
-> -	/* Reset system variable when not found */
-> -	if (&system->list == &event_subsystems)
-> -		system = NULL;
->  
->  	dir = kmalloc(sizeof(*dir), GFP_KERNEL);
->  	if (!dir)
-> 
-> base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
-
+> > > Thanks.
+> > >
+> > > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> > > index 99cf3a13954cfb17828fbbeeb884f11614a526a9..df3785be4022e903d9682dd403464aa9927aa5c2
+> > > 100644
+> > > --- a/kernel/rcu/tasks.h
+> > > +++ b/kernel/rcu/tasks.h
+> > > @@ -273,13 +273,17 @@ static void call_rcu_tasks_generic(struct
+> > > rcu_head *rhp, rcu_callback_t func,
+> > >         bool needadjust = false;
+> > >         bool needwake;
+> > >         struct rcu_tasks_percpu *rtpcp;
+> > > +       int ideal_cpu, chosen_cpu;
+> > >
+> > >         rhp->next = NULL;
+> > >         rhp->func = func;
+> > >         local_irq_save(flags);
+> > >         rcu_read_lock();
+> > > -       rtpcp = per_cpu_ptr(rtp->rtpcpu,
+> > > -                           smp_processor_id() >>
+> > > READ_ONCE(rtp->percpu_enqueue_shift));
+> > > +
+> > > +       ideal_cpu = smp_processor_id() >> READ_ONCE(rtp->percpu_enqueue_shift);
+> > > +       chosen_cpu = cpumask_next(ideal_cpu - 1, cpu_online_mask);
+> > > +
+> > > +       rtpcp = per_cpu_ptr(rtp->rtpcpu, chosen_cpu);
+> > >         if (!raw_spin_trylock_rcu_node(rtpcp)) { // irqs already disabled.
+> > >                 raw_spin_lock_rcu_node(rtpcp); // irqs already disabled.
+> > >                 j = jiffies;

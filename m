@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2F14ED62C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983A54ED633
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbiCaIvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S233298AbiCaIvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiCaIvD (ORCPT
+        with ESMTP id S233277AbiCaIva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:51:03 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754A4344D0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:14 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id d30so6370628pjk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:14 -0700 (PDT)
+        Thu, 31 Mar 2022 04:51:30 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF3E2A71C
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:41 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id g1-20020a170902fe0100b00153f95629f7so9534598plj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W056jK4JO9Wem+3qlNSvwaayL2PwMR77g5EtZS2gUYw=;
-        b=WmCBHXFFuScgmmMGMP/VH609AxnAySmVJWaJZ62cOndAUFjHiwuhvCMbqdzYxL0PqJ
-         O8RwQn+EO5U1GQpLfh2uEeY3psnAoZeQKIzE53AC53docGkPbTd37tJD5jjYxV5T0jcV
-         17l9p2c+I1LPqJo4fyJQjnK3ZbZE0HKbzk748=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=BHo+rnUti0j2t1iwI+B3pswuRDsmr8usqTuUebYkomI=;
+        b=q30idgXLoXmWDmg7wYTzGwkiUCmloZFfA9WfT5Uc7ICAqiBgFXvJ2CX8CCYJufTfbB
+         4HVd1MrC51NA70P4lxKj98tSVFhMnhXfSkknNN0JTu+0rQ725Rg2u+K/N0w2iTpbzzsb
+         S0GdqTolwLZ1hh0XiDljBEibQtlaqcOCPY2+2/d3AwLMlr40q0i3cNS3/p3EH2E9S+//
+         CJ5v2fTUeQwGTFbVDw0d8x6MEHtKi/tMo7fPpWahKmH7EseqkBJbz364vXftuA6b5Wt2
+         7WwV1mR0L7O7QITsR7LudlNSEYAZrI8mTNVgj8XhpNSxfO+2h2KVYG5xQDFrOyxVu8ZM
+         cXxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W056jK4JO9Wem+3qlNSvwaayL2PwMR77g5EtZS2gUYw=;
-        b=TmophdTibLZsRfbq6br8Hm/0A9fxEnGt1f+ptURZ89QyH6oGDjUpk9TNUnm3hj9gt2
-         BwK8dPXjkePndtEprOb5OJBotUgKCJWbTWWIm+KKHyjtUP5qRFv0MG4hkTkxGTB91IUG
-         tiJfjzkjquwuJVMrSvxAf0gsKuCozV9rA4D1F5XpOErEE3mFm5etfv86YDMcYHJ0MnAB
-         f8Z+eNTVqCkdhEnVHAMGtF2u9UYFfEhuFPL7AKeuF5vhm5DQTPlV1T0A9aVghqaUjZ9l
-         Nr7rrOXeIlfnhsone+Ws2/FdBc/kHHTxtDzTW6Q6KKWRH/M68f4/gXrb9B7/ov27dTlN
-         T7tg==
-X-Gm-Message-State: AOAM530rljzK2UOuNSjxVNAHc6EiwdyJiaAtWpDNOF7z1RCq757JqIsd
-        VeLkEk3/SZmfkxrbSqz+p80+lA==
-X-Google-Smtp-Source: ABdhPJyIyUj9Alp436tInM7YNihHEEDUYPNgqt+AGVoPl3O5jctUXjLSQUMXrAN+OoCit0uHawL0gQ==
-X-Received: by 2002:a17:902:ea03:b0:154:4af3:bb5e with SMTP id s3-20020a170902ea0300b001544af3bb5emr4124775plg.95.1648716553888;
-        Thu, 31 Mar 2022 01:49:13 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:deb3:b2d3:c33d:e877])
-        by smtp.gmail.com with ESMTPSA id mw10-20020a17090b4d0a00b001c7cc82daabsm10408026pjb.1.2022.03.31.01.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 01:49:13 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: hantro: Empty encoder capture buffers by default
-Date:   Thu, 31 Mar 2022 16:49:06 +0800
-Message-Id: <20220331084907.628349-1-wenst@chromium.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=BHo+rnUti0j2t1iwI+B3pswuRDsmr8usqTuUebYkomI=;
+        b=rz7Jo+y+PrbOLAs3nBh7VeNkyuNMybvKL66b0MdwmqQXRGaNXyKihagwN1vsjlDT8Q
+         D07HWAqJ6Zdw4Xdo3EpoZW2q4gBAf3IZfGRGsng75/Du3trpsr548ezMiC7zw8c69q7s
+         N/VE1A0mLKmcT231vF5sRd4kexQdN//+IPq+e1TurxWHDXGKxIG1grXB069rjh84zg/R
+         1GHfZtyksR9J47thPK51W7zqDxNzp79r7A29+DSrAVyxzTD89ka1jpKL/DJ4Ex9zSTZu
+         uCHorcIoRmvLdC9jmK2zLytUDUobj3xuC2Tw5E6wnQiuhca2uX6ADpjl280VW1v8PRrI
+         xRRw==
+X-Gm-Message-State: AOAM533mn6Bngo0d/j1PT6yRRmOAA7wUr9IQDfRIy4RmYRVBXapTce5a
+        0mZgbo/LaH2SuFSt5gVbzBMIoq4DfCR1Kw==
+X-Google-Smtp-Source: ABdhPJyYOlly6gF65k4ogqYtSJDpCyT1q7cgvfyknXmNjuldFpEq3S/Ac4y+7NA2tw311V38zrehVc23Werf6A==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a17:90b:3b8f:b0:1c7:b62e:8e87 with SMTP
+ id pc15-20020a17090b3b8f00b001c7b62e8e87mr4974069pjb.156.1648716580627; Thu,
+ 31 Mar 2022 01:49:40 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 08:49:18 +0000
+Message-Id: <20220331084918.2592699-1-wonchung@google.com>
+Mime-Version: 1.0
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Subject: [PATCH v3] misc/mei: Add NULL check to component match callback functions
+From:   Won Chung <wonchung@google.com>
+To:     Tomas Winkler <tomas.winkler@intel.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Won Chung <wonchung@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The payload size for encoder capture buffers is set by the driver upon
-finishing encoding each frame, based on the encoded length returned from
-hardware, and whatever header and padding length used. Setting a
-non-zero default serves no real purpose, and also causes issues if the
-capture buffer is returned to userspace unused, confusing the
-application.
+Component match callback functions need to check if expected data is
+passed to them. Without this check, it can cause a NULL pointer
+dereference when another driver registers a component before i915
+drivers have their component master fully bind.
 
-Instead, always set the payload size to 0 for encoder capture buffers
-when preparing them.
-
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-Fixes: 082aaecff35f ("media: hantro: Fix .buf_prepare")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Won Chung <wonchung@google.com>
+Cc: stable@vger.kernel.org
 ---
+Changes from v2:
+- Correctly add "Suggested-by" tag
+- Add "Cc: stable@vger.kernel.org"
 
-This was previously incorrectly squashed into my Hantro encoder cmd
-patch [1].
+Changes from v1:
+- Add "Fixes" tag
+- Send to stable@vger.kernel.org
 
-[1] https://lore.kernel.org/linux-media/20220301042225.1540019-1-wenst@chromium.org/
+ drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+ drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- drivers/staging/media/hantro/hantro_v4l2.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 67148ba346f5..261beb0c40f6 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -733,8 +733,12 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
- 	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
- 	 * it to buffer length).
- 	 */
--	if (V4L2_TYPE_IS_CAPTURE(vq->type))
--		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	if (V4L2_TYPE_IS_CAPTURE(vq->type)) {
-+		if (ctx->is_encoder)
-+			vb2_set_plane_payload(vb, 0, 0);
-+		else
-+			vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	}
+diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+index ec2a4fce8581..843dbc2b21b1 100644
+--- a/drivers/misc/mei/hdcp/mei_hdcp.c
++++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+@@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+ {
+ 	struct device *base = data;
  
- 	return 0;
- }
+-	if (strcmp(dev->driver->name, "i915") ||
++	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+ 	    subcomponent != I915_COMPONENT_HDCP)
+ 		return 0;
+ 
+diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+index f7380d387bab..e32a81da8af6 100644
+--- a/drivers/misc/mei/pxp/mei_pxp.c
++++ b/drivers/misc/mei/pxp/mei_pxp.c
+@@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+ {
+ 	struct device *base = data;
+ 
+-	if (strcmp(dev->driver->name, "i915") ||
++	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+ 	    subcomponent != I915_COMPONENT_PXP)
+ 		return 0;
+ 
 -- 
 2.35.1.1021.g381101b075-goog
 

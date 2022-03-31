@@ -2,192 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2D64ED199
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2F24ED19D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350995AbiCaCR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 22:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S1352511AbiCaCSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 22:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351636AbiCaCRv (ORCPT
+        with ESMTP id S241970AbiCaCSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 22:17:51 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BBB673E4;
-        Wed, 30 Mar 2022 19:16:05 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id d142so18721353qkc.4;
-        Wed, 30 Mar 2022 19:16:05 -0700 (PDT)
+        Wed, 30 Mar 2022 22:18:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73601673EE
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:16:23 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso2175467pjh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=whcJsZ9fSHzKHYP6NYYtiLzIxY/tNE+6wAUb6nx0WLc=;
-        b=R/v69GupsJQ4en76Cj6ODf5L7kUqp/mkhPQScuNH7IA2FcrIOLeMuNz38sfY2LHUQR
-         qAf7o8W2q7zsDqoIOKUdCV393FI+u7j06tZwS9pAuLXKgrXj2RqtZJeMOEGFGVWpbKRN
-         N00NTn6YBmx41ysOfYV12CcimDhrFDW1INirx7XLFQgumP49BmAOdEJANtYexZ+l1ZVy
-         j/9Y9RBUZuYinBQKCl3mFr+mSS/F7T/2leaaleuT+Wepe8Qr8cazqnWcQREigndl60J3
-         BUfNh/Of7lynWOUblviFesM6W5EdRtWk6Cp9/hB76fCf2YWj5RasvYgIn17KJ3sxRxLm
-         q39A==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/Wq8pDzbR7CUsnr4sdt91dwx6hh1W9+nP/weoDPwRHk=;
+        b=ALRpTGH8SD7ag77B6dbqoLafs6OdKxiQbdVsqhuEw9qFf/oYaqv3HxQQRWhAIx1Dt9
+         ftKdvsgia6lDm13mxCIeU9dTjRm3SWTgcyGq78N9SFHvf6VtE6sJHDSzKI8oE1G8D0TG
+         9g7k7owgDo/5TxT1mHfelbks5a1bJ+UosjTKY09AGVjljM3XcosaDvjGqUayor2RdN/u
+         c/4YsRMc/lRyOq2JlbWey6W/SXDQ8SDh3+sX9OBgMBghK2Gw0+yiC9LGeg8vST5xbaYe
+         dUytlP3/TKOsU3bkow7XUT318kNwCmMeW7gPyXg1SPwBQr4KX+15TB+yUC9pCeOMibTi
+         taYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=whcJsZ9fSHzKHYP6NYYtiLzIxY/tNE+6wAUb6nx0WLc=;
-        b=1lA5efvIfS7SouuV53s63CobykJ/tkC17FV+as+OkGa75ullMQRpf9K2J2QHBP143u
-         0OmjttS0DjbYeGnBzUaeAVkVxM856qgiudQJSPRTV1rUv55n7rejvB51m18pfqid784Y
-         TZgi1ABwtJX/c29AhIz9pazeYeWs18pbEdhaQ0eiN3IvKyaQV3DveNAC2WxpC5cFP4ET
-         e+SYD0lhJ7VJ/douWiptCJboyE9UJbHGtyUgG+F5LZkzKekjOdKzRG7O+LVBPmBCwfgz
-         CF94rHGU8Vbn9EdABgh30PKIENtvPL17WBJzi5ZjTmttg2G1Jgt0EC1q06MIfp8/W8Ob
-         NLtg==
-X-Gm-Message-State: AOAM533xmPrjMbiXZNhD20VsXivDkSXKzu1r83ONCDZaJ/33a77OCJlo
-        Yog69qo0QIHFUK4HuDY0sFawmw+W3jr/62eb
-X-Google-Smtp-Source: ABdhPJz7aNtBu1MwpRLHndDEAn7FrTjYqTXB+wEJGYIoMZOPdUIW3YdtU4tNpZCzSkv1iWij7kz+jw==
-X-Received: by 2002:a37:684b:0:b0:67f:2fad:a294 with SMTP id d72-20020a37684b000000b0067f2fada294mr1925710qkc.640.1648692964917;
-        Wed, 30 Mar 2022 19:16:04 -0700 (PDT)
-Received: from [192.168.1.115] (cable-217-24.sssnet.com. [24.140.217.24])
-        by smtp.gmail.com with ESMTPSA id o15-20020ae9f50f000000b0067d27e196f1sm11093377qkg.133.2022.03.30.19.16.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 19:16:04 -0700 (PDT)
-Message-ID: <6327b17d-4c64-fd59-28bb-d5f2f3a5c496@gmail.com>
-Date:   Wed, 30 Mar 2022 22:16:02 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
- <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com>
- <e55edf6f-2aac-87a5-c0f8-363a536b9f92@gmail.com>
- <CAK7LNARmYdz5zgnoa_J4kgBP5qB4QViapp_UMXu4Now1jknMNQ@mail.gmail.com>
-From:   Ben Westover <kwestover.kw@gmail.com>
-In-Reply-To: <CAK7LNARmYdz5zgnoa_J4kgBP5qB4QViapp_UMXu4Now1jknMNQ@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jzTj0r0e300cjlTncdD401te"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=/Wq8pDzbR7CUsnr4sdt91dwx6hh1W9+nP/weoDPwRHk=;
+        b=gBz3qq+tC/bbL3MVNyPYuyI/jdmG7aeHtp2gjMpVzw7J6eFBKlksbcK06J0MRmkAkE
+         qRGZm0lMEB2d+tZV0Z8MaAivB4a4UqwkyaDE31FqFL1lRcbzmN1KCd3txIEtyZm+o/Gw
+         iiVPb9UVTR/mQjW+H8oU8H1DgACtxU8/UhenLdYdqFMMFR9TKDUmJr/f/ArZJ0h5KajA
+         9xJWf8xSTP35a7MaiWsrRqTCnUmZgDq7SwvvJfMf4bRKh1Z8gAzjDbDCPp8AHBQUvnRD
+         O3xMGsduv5MTxhOVMZPdvJilLfCnDnUvS0lIS9Ua3zBnsiwK12haDPL/3SRVEtTZuYTS
+         bclA==
+X-Gm-Message-State: AOAM530PoNsRA799IIBCRa2g/Zrb38+VV2GgDUR6wSw/Y5anNLhVDp0d
+        ZHuL29SrEIhMHhNV/bIp13Jr0GDGaCKM0Q==
+X-Google-Smtp-Source: ABdhPJwoWJyLQ6QPp5H5+Zi0bn4XlidZVPYpOFyufA+MeJTtbd6qNo/vK9YqdyQGm6YZAjsao2QpsA==
+X-Received: by 2002:a17:903:2c5:b0:14f:4a29:1f64 with SMTP id s5-20020a17090302c500b0014f4a291f64mr3022071plk.90.1648692982901;
+        Wed, 30 Mar 2022 19:16:22 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id d24-20020a637358000000b003823aefde04sm20680836pgn.86.2022.03.30.19.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 19:16:22 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 19:16:22 -0700 (PDT)
+X-Google-Original-Date: Wed, 30 Mar 2022 19:16:20 PDT (-0700)
+Subject:     Re: [PATCH 2/3] RISC-V: K210 defconfigs: Drop redundant MEMBARRIER=n
+In-Reply-To: <d8a35bea-f4a0-b54d-9d2a-d1cc9b3d3e53@opensource.wdc.com>
+CC:     linux-riscv@lists.infradead.org, Niklas.Cassel@wdc.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        heinrich.schuchardt@canonical.com, atishp@atishpatra.org,
+        mchitale@ventanamicro.com, alexandre.ghiti@canonical.com,
+        axboe@kernel.dk, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     damien.lemoal@opensource.wdc.com
+Message-ID: <mhng-5bb87384-f841-4793-8f1a-fabd5c13a181@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jzTj0r0e300cjlTncdD401te
-Content-Type: multipart/mixed; boundary="------------ESYsYFsZVUwTQ2NUHsPCF37h";
- protected-headers="v1"
-From: Ben Westover <kwestover.kw@gmail.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
- Michal Marek <michal.lkml@markovi.net>,
- Nick Desaulniers <ndesaulniers@google.com>
-Message-ID: <6327b17d-4c64-fd59-28bb-d5f2f3a5c496@gmail.com>
-Subject: Re: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
-References: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
- <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com>
- <e55edf6f-2aac-87a5-c0f8-363a536b9f92@gmail.com>
- <CAK7LNARmYdz5zgnoa_J4kgBP5qB4QViapp_UMXu4Now1jknMNQ@mail.gmail.com>
-In-Reply-To: <CAK7LNARmYdz5zgnoa_J4kgBP5qB4QViapp_UMXu4Now1jknMNQ@mail.gmail.com>
-
---------------ESYsYFsZVUwTQ2NUHsPCF37h
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hello Masahiro,
-
-On 3/30/22 9:34 PM, Masahiro Yamada wrote:
-> On Thu, Mar 31, 2022 at 3:40 AM Ben Westover <kwestover.kw@gmail.com> w=
-rote:
+On Wed, 30 Mar 2022 17:26:45 PDT (-0700), damien.lemoal@opensource.wdc.com wrote:
+> On 3/31/22 08:47, Palmer Dabbelt wrote:
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
 >>
->> Hello Masahiro,
+>> As of 93917ad50972 ("RISC-V: Add support for restartable sequence") we
+>> have support for restartable sequences, which default to enabled.  These
+>> select MEMBARRIER, so disabling it is now redundant.
 >>
->> On 3/30/22 11:31 AM, Masahiro Yamada wrote:
->>> On Wed, Mar 30, 2022 at 11:34 PM Ben Westover <kwestover.kw@gmail.com=
-> wrote:
->>>>
->>>> When riscv64 or riscv32 are used as the value for ARCH during compil=
-ation, like
->>>> in tools that get the ARCH value from uname, set SRCARCH to riscv in=
-stead of
->>>> failing because the riscv64 and riscv32 targets don't exist.
->>>
->>> Can you refer to the code that really needs this?
->> Some software like DKMS compiles out-of-tree modules by running `uname=
- -m`and
->> using that for the ARCH value. Without this patch, that compilation fa=
-ils because
->> uname shows either riscv64 or riscv32 while riscv should be used.
->=20
-> It is a bug in DKMS.
->=20
-> The ARCH=3D* in linux kernel does not necessarily match to 'uname -m'.
->=20
-> For example, we use ARCH=3Darm64 for arm 64-bit (so called aarch64),
-> but it does not match "aarch64".
->=20
-> The kernel has freedom to determine the supported string for ARCH=3D.
->=20
-> DKMS must adjust to the kernel code.
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> ---
+>>
+>> I'm not actually sure this is the right way to go: presumably the K210
+>> defconfigs had MEMBARRIER=n for a reason (maybe just size?), so we might
+>> actually want to move to RSEQ=n instead?  As usual: I don't test on the
+>> K210, so I'm not exactly sure what the constraints are.
+>
+> Not sure either. It is like this now because I think this was the default
+> at the time the config was created.
+>
+> Niklas,
+>
+> Can you test this please ?
 
-Ah, I see. Originally, I opened an issue in DKMS, but they led me to beli=
-eve it was
-a kernel issue. Now I see that *they* are the ones that need to change.
+Thanks.  I'm OK either way, I guess I'd learn towards turning on the 
+features if they work/fit.  I'll hold off on merging this one for a bit, 
+I don't see any rush (it's just a defconfig) and if what was there is 
+broken then we can take it as a fix.  Otherwise it'll just get rolled up 
+into the next round of these, which I'll hopefully remember to do 
+earlier next time.
 
->> This code already exists for sparc and parisc, as well as x86 of cours=
-e.
->=20
-> This is because there is a historical reason.
->=20
-> If you look at the old code  (e.g. 2.6.x,)
-> arch/i386/ and arch/x86_64 were separate directories.
->=20
-> They were unified into arch/x86/ now, but we still support
-> ARCH=3Di386/x86_64.  It helps to choose a different defconfig.
-> See arch/x86/Makefile.
-
-This makes more sense now. DKMS based their ARCH value off of uname, and =
-because of
-this vestigial code, it worked on x86. Now, trouble is being run into on =
-other
-architectures, and their bad design comes back to haunt them.
-
-Thank you for the info; I will now try to solve these issues in DKMS and =
-open a pull
-request since they don't seem want to do it themselves.
-
-Regards,
---
-Ben Westover
-
---------------ESYsYFsZVUwTQ2NUHsPCF37h--
-
---------------jzTj0r0e300cjlTncdD401te
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEEOGnacqRhdU6eNmtFwxHF9U6JtpgFAmJFDuIFAwAAAAAACgkQwxHF9U6JtpiK
-Mw/9FbPp84qmuCxgr2rcj/ksr70nDdilTvOyqnRjaZc3EtC5frrsvdE/NZfEAYiDTZ7JgHNyBxSV
-qoTxRLmF9iLpOilIDlKvs57+IvroE+Jbkrog6wEWrPh1VsBQ4TUoKycEwefn7597PNUMLo5ZCsul
-jo1mTGBGr/6rNWTzdFQZicg9+HcWg5SGIqYCjuOxlLKyL0RNwNhyDuD3MlEL0Oq2CuGTcRCdqnqI
-jWO4igsOvmcYzC1SC7v7p/qMnG1I5nLVinXiIqn3kKgMfIhrW7vxLq8Tpo9Tgo9F3q5dIq1Bh9Ct
-ZEIia6kekKXxzJi/RnVx0+jjFGblZqLXVAXuehi3cgh/per3o36U16wiuJomiV0mVE4ENeq1oeCA
-65GkZQARz36CgRukUpknxqscxP/u9XtQQiz62e521AJH/jwi55ytrWPOAmnA1Qp0ZzMAFW6yUbV3
-k9HQOsM5iQJEo+LOoUfunpuQVu54kHTTys2fWcdFMLkkRfVf2f4944gANI31/qCyEimSQ8+/qRgK
-isS5L9K7IIuR7Wvbi0xER5PErGNaPExblBgICsGYaolXwXlcOHUMrNpSwGdIy5j64Z+t/mJ1CQKJ
-P6B/5lm/co0pk47YheKUJ5fD/gVdtmvQeTX8h0Dm/wRIVfIjLfae+ZxqbXrmIqk06XmsJYdtw77y
-WIA=
-=mSCH
------END PGP SIGNATURE-----
-
---------------jzTj0r0e300cjlTncdD401te--
+>
+>> ---
+>>  arch/riscv/configs/nommu_k210_defconfig        | 1 -
+>>  arch/riscv/configs/nommu_k210_sdcard_defconfig | 1 -
+>>  arch/riscv/configs/nommu_virt_defconfig        | 1 -
+>>  3 files changed, 3 deletions(-)
+>>
+>> diff --git a/arch/riscv/configs/nommu_k210_defconfig b/arch/riscv/configs/nommu_k210_defconfig
+>> index 3f42ed87dde8..2438fa39f8ae 100644
+>> --- a/arch/riscv/configs/nommu_k210_defconfig
+>> +++ b/arch/riscv/configs/nommu_k210_defconfig
+>> @@ -21,7 +21,6 @@ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+>>  # CONFIG_AIO is not set
+>>  # CONFIG_IO_URING is not set
+>>  # CONFIG_ADVISE_SYSCALLS is not set
+>> -# CONFIG_MEMBARRIER is not set
+>>  # CONFIG_KALLSYMS is not set
+>>  CONFIG_EMBEDDED=y
+>>  # CONFIG_VM_EVENT_COUNTERS is not set
+>> diff --git a/arch/riscv/configs/nommu_k210_sdcard_defconfig b/arch/riscv/configs/nommu_k210_sdcard_defconfig
+>> index af64b95e88cc..9a133e63ae5b 100644
+>> --- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
+>> +++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
+>> @@ -13,7 +13,6 @@ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+>>  # CONFIG_AIO is not set
+>>  # CONFIG_IO_URING is not set
+>>  # CONFIG_ADVISE_SYSCALLS is not set
+>> -# CONFIG_MEMBARRIER is not set
+>>  # CONFIG_KALLSYMS is not set
+>>  CONFIG_EMBEDDED=y
+>>  # CONFIG_VM_EVENT_COUNTERS is not set
+>> diff --git a/arch/riscv/configs/nommu_virt_defconfig b/arch/riscv/configs/nommu_virt_defconfig
+>> index e1c9864b6237..5269fbb6b4fc 100644
+>> --- a/arch/riscv/configs/nommu_virt_defconfig
+>> +++ b/arch/riscv/configs/nommu_virt_defconfig
+>> @@ -19,7 +19,6 @@ CONFIG_EXPERT=y
+>>  # CONFIG_AIO is not set
+>>  # CONFIG_IO_URING is not set
+>>  # CONFIG_ADVISE_SYSCALLS is not set
+>> -# CONFIG_MEMBARRIER is not set
+>>  # CONFIG_KALLSYMS is not set
+>>  # CONFIG_VM_EVENT_COUNTERS is not set
+>>  # CONFIG_COMPAT_BRK is not set

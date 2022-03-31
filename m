@@ -2,92 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9E64EDF1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7334EDF21
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240241AbiCaQuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S240265AbiCaQyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239098AbiCaQum (ORCPT
+        with ESMTP id S238881AbiCaQyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:50:42 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D192158810
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:48:53 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id x4so153904iop.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GVS+7ByfaDfRQ3cP7Su5v65xswUHpTm7s1D0XKCLUIc=;
-        b=5UHAlnNn6pmh13gHK2pkVOqqU+NLxHAIm10n7hxY69fkf4etI7xGcoRjiBvGoyxJNr
-         kabCkIf1xxwY5lv3Fz+S1YPx7xckQPP2QGAxBmU/6XuRjvC3V9So7gmo5sdkO4isG+7U
-         NYY0uWHbGE6Q/h3sInup3pNJi9R9t2lf1mAnVfMWjXyxKmAnrTRpm6i8FD+xdnRD9+kO
-         TZ43pQfEjcjGk7vvTk+toj73TV/PjBpXagt13go4gLwi84xpTxTtB2xWYo91klXaZtPT
-         YIuOfPzysEz9Z8i6engCc1D604prelmrGVhbWJ968cwBOEX4MnOYuo44vJBZyXv5Y/b+
-         Wf/g==
+        Thu, 31 Mar 2022 12:54:09 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36425231AD2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:52:22 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso60985iov.16
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:52:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GVS+7ByfaDfRQ3cP7Su5v65xswUHpTm7s1D0XKCLUIc=;
-        b=FcC6ZHntBPe2CGFYLb+ZcYfCMk7Ed1MXNqcjvyFelJFN7XP0jOH+3VpJYoHVhfcPGs
-         c8iNeJ1dmTj2TarEJhX3qKnZRC/LmTbJkH9H6jo1oWIbKHJZq88AIcfTYT7nRVl1HWfd
-         HmPVKe13bIkbW0CUwIgJzp822aCP5YXuD7KTGlTCNFNH3WADmP8SlbzsxLfXsF0z3fSQ
-         t5JY8I2VE692KgKO6AS/bpg/39iZxOvlrV/YbfSIFP8zoXlLX4XYpVyaHDLYqvkxdez7
-         idMzIpjUh/LSOCMNn5o2GXmdA5df1bXxf7by77tiTTxiF4qlal3ycjZGFsX/ItFYgmYG
-         1N6A==
-X-Gm-Message-State: AOAM533CDgSurT1Qk9i0eAMfwUkiBSdx4I7XeMCUB3Ny5YcAb5AML2o8
-        jz/l4vKQvGibPQzTwPNsiNXLlw==
-X-Google-Smtp-Source: ABdhPJxO6cxAuydd+MYxjFrmEZWnATNnBLDhK+n22mh4Hzt3rKwlZEwEzWA3wPZWmZM8hKaYOdK5ag==
-X-Received: by 2002:a02:c017:0:b0:323:6b24:5bde with SMTP id y23-20020a02c017000000b003236b245bdemr3323956jai.185.1648745331810;
-        Thu, 31 Mar 2022 09:48:51 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id j4-20020a056e02218400b002c82f195e80sm12730706ila.83.2022.03.31.09.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 09:48:51 -0700 (PDT)
-Message-ID: <572bf891-8b2b-b32e-af64-d80fb7f5963f@kernel.dk>
-Date:   Thu, 31 Mar 2022 10:48:50 -0600
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=GaMCx1IhBeV8JT6zBDL6Q97AOSbpyw9US2EP5xW97F4=;
+        b=5c5lLHBSjnnwEAZD7K2fvTHwHV1F59bGHjMGwGTHM3viw2EdoMKsNVpG4lkcb63XKs
+         62wc5jx4FgbFqsNNdP1kp9YbdWJTBqKlfG++LSV0klscPTM10Q9WkqISOXZra61DEv5V
+         pUOSgFU+0jWN1TvnvXCCpoCK+J4HCb2eeeVOrl9t6Wf2W+iOzBGPFiQVQicUu/fxN9t4
+         ucdcdcNP+fYtJUB7FV3r+JogS/r3ITtCXVBB9rceUy1JGNf/1julJD98Cejwdk4yQt6K
+         OnkEZssWKMX3plCzPHu7mHIrnvU/fJ8y2QHuhraZtDgM5aKFwkMIOZT4ERu0gM/JH9Qd
+         s+cQ==
+X-Gm-Message-State: AOAM530o/8LgLnQaAMqQJwfHXd7koC3wcH2qqwcKT+/aj71lZmc8T0cg
+        Zu5xrYCknM0SXRipzXO/TzPOCybofnYH6I9T7X/2LnOYO9LA
+X-Google-Smtp-Source: ABdhPJwSBtmVHolwvqSVt7vHpCPsvlmQijiwmEY1yUfFY4rB9xmEQsRvhlazLDm2pxGm9Tm3ml0N6hsQTkZ4zBotXshAPPSQtnMU
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: cleanup bio_kmalloc v2
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <20220308061551.737853-1-hch@lst.de> <YkXYMGGbk/ZTbGaA@qian>
- <20220331164024.GA30404@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220331164024.GA30404@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9249:0:b0:64c:8a57:b7ec with SMTP id
+ e9-20020a5d9249000000b0064c8a57b7ecmr8780372iol.65.1648745541581; Thu, 31 Mar
+ 2022 09:52:21 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 09:52:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000054c03905db867c20@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Write in io_file_get_normal
+From:   syzbot <syzbot+c4b9303500a21750b250@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 10:40 AM, Christoph Hellwig wrote:
-> This should fix it:
+Hello,
 
-Let's drop this one for 5.18, it's also causing a few conflicts and
-would probably be more suited for 5.19 at this point.
+syzbot found the following issue on:
 
--- 
-Jens Axboe
+HEAD commit:    fdcbcd1348f4 Add linux-next specific files for 20220331
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1146e5fd700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=366ab475940a4177
+dashboard link: https://syzkaller.appspot.com/bug?extid=c4b9303500a21750b250
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1434c99b700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1623e2f7700000
 
+The issue was bisected to:
+
+commit c686f7a5cbe2eff3c9b41f225fb7cf9e163cde5c
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Tue Mar 29 16:59:20 2022 +0000
+
+    io_uring: defer splice/tee file validity check until command issue
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12b0199b700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11b0199b700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b0199b700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c4b9303500a21750b250@syzkaller.appspotmail.com
+Fixes: c686f7a5cbe2 ("io_uring: defer splice/tee file validity check until command issue")
+
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+BUG: KASAN: null-ptr-deref in atomic_inc include/linux/atomic/atomic-instrumented.h:190 [inline]
+BUG: KASAN: null-ptr-deref in io_req_track_inflight fs/io_uring.c:1648 [inline]
+BUG: KASAN: null-ptr-deref in io_file_get_normal+0x33e/0x380 fs/io_uring.c:7518
+Write of size 4 at addr 0000000000000118 by task iou-wrk-3588/3589
+
+CPU: 1 PID: 3589 Comm: iou-wrk-3588 Not tainted 5.17.0-next-20220331-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_report mm/kasan/report.c:432 [inline]
+ kasan_report.cold+0x61/0x1c6 mm/kasan/report.c:491
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_inc include/linux/atomic/atomic-instrumented.h:190 [inline]
+ io_req_track_inflight fs/io_uring.c:1648 [inline]
+ io_file_get_normal+0x33e/0x380 fs/io_uring.c:7518
+ io_file_get fs/io_uring.c:7528 [inline]
+ io_tee fs/io_uring.c:4401 [inline]
+ io_issue_sqe+0x45f5/0x8f40 fs/io_uring.c:7354
+ io_wq_submit_work+0x2b6/0x770 fs/io_uring.c:7444
+ io_worker_handle_work+0xb1c/0x1ab0 fs/io-wq.c:597
+ io_wqe_worker+0x637/0xdb0 fs/io-wq.c:644
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+==================================================================
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 3589 Comm: iou-wrk-3588 Not tainted 5.17.0-next-20220331-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ panic+0x2d7/0x636 kernel/panic.c:274
+ end_report.part.0+0x3f/0x7c mm/kasan/report.c:168
+ end_report include/trace/events/error_report.h:69 [inline]
+ kasan_report.cold+0x93/0x1c6 mm/kasan/report.c:493
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_inc include/linux/atomic/atomic-instrumented.h:190 [inline]
+ io_req_track_inflight fs/io_uring.c:1648 [inline]
+ io_file_get_normal+0x33e/0x380 fs/io_uring.c:7518
+ io_file_get fs/io_uring.c:7528 [inline]
+ io_tee fs/io_uring.c:4401 [inline]
+ io_issue_sqe+0x45f5/0x8f40 fs/io_uring.c:7354
+ io_wq_submit_work+0x2b6/0x770 fs/io_uring.c:7444
+ io_worker_handle_work+0xb1c/0x1ab0 fs/io-wq.c:597
+ io_wqe_worker+0x637/0xdb0 fs/io-wq.c:644
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

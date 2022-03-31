@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBECB4ED42F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8B94ED42D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiCaGxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S231462AbiCaGxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiCaGxJ (ORCPT
+        with ESMTP id S229987AbiCaGxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:53:09 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0248045798
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:51:22 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id bo5so1580921pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:51:21 -0700 (PDT)
+        Thu, 31 Mar 2022 02:53:12 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A50496B9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:51:25 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id s72so19300770pgc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:51:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=30AsFn9tBa39albgpW8owhNlET/UwI3suCIxLN0538E=;
-        b=aISTkM1lTytIC5XciL5Gdw3esFpeQO0JF9BLnenycv0BR1pRKURn1SDSAGxL/i18Bi
-         UTcv/QpWxAVvXOh15e/JEFMetEgzbYVgf0jtF0dy+Jna7Dih6zQfT7Cz8w2utnnY+biW
-         xsGzhEMFcjyg2tkpX9MUc2L8Lo7RuoabyZo4A=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=2go30AM6s1+rpwIDiMsCnwxcwKQ9Y07g7Va/NsxZfp4=;
+        b=Ouo5E1bupMEFM09DcSzqwe2AAkzlUKIvSGY4M4QaagQrxM9Daoa1MTarAIYa8tGjq6
+         GKoW2WQ1lOc3Hd+vlBDb6HHNc40dGhxjAVHuyDptIc/Hf+LeQTKhzh1FSnMwKwJRqAj4
+         A3N6qJIbZKaRDxDjmZ3HOOFoks9sXzDeQXU5c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=30AsFn9tBa39albgpW8owhNlET/UwI3suCIxLN0538E=;
-        b=vieON6Txrak/kPbK3x5/HNFZgO/jErNLLS4YsYRUUVkIO5hiXXCZSw1mH7NutNmn1p
-         JSppgh7+evuXSbHL5qBzWpphIcuKEMU5dbrz5v4nh8kb/Y504dk07PYmYkyisRdn1Z2v
-         kPCrNAzYNm7K7fqNHfMbsoYYFciYteyuYxJV/OnPPrAxzGIwQ0gmjA/gkOmjUaTVp+YA
-         w4pjUWejRWf42MOr4i7bXD2dBmRa68QeSxX6Hmpv51HatLAb2/8dCmIaoqvdQoOJq5hG
-         bSDB/JDmWFL2dACF24+lXI/jrJu35lkMGOFe7cmUNzO2mXKvlJJnp9Oy1XEaKWTlcPIL
-         dUCg==
-X-Gm-Message-State: AOAM533rq96nYLFuvkIpGqRe7OD2jd7+a1kmoyhkcpeFIKMR072lVbvO
-        4/hOYl04aUuRkJsrFaJLO6nEyV0wqzWf71NdbvoFFXEegVMNCjXjY/HstEJEuVLr++c4hJuY6Pt
-        yIgI9yxMEAJ60zlqdhIihLxIwYG0+1DptUJL8CY868tgfQKe2XrCP/+rfB1efbDOoV/xD3rt7J4
-        0lffXdM+EOyS+Umv2xbQ==
-X-Google-Smtp-Source: ABdhPJxdVZtj34ZTwSQV3EALcdmgE86FlSzbov8E3LPrfqilVifatQa9KDUjG4YPl3j7I7AlvP4Npg==
-X-Received: by 2002:a05:6a00:889:b0:4e0:dcc3:5e06 with SMTP id q9-20020a056a00088900b004e0dcc35e06mr3963720pfj.29.1648709480671;
-        Wed, 30 Mar 2022 23:51:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=2go30AM6s1+rpwIDiMsCnwxcwKQ9Y07g7Va/NsxZfp4=;
+        b=Qba55x9wbso44OleXz1Xi8TynubwRXretQcOfHOB2FUoChpMK4ZV9kRersFoyCfC1s
+         VxNleRN8s+n4SPOfcmXjVkxjn4VguNBy6pXvw4WQnnIMYhVRert3jPC5RW9VrJd4AUrE
+         zOoM9+GBtF5UFDLFboqy/75eXpj/Yiwsilolj+sZDexePKTGXA1LGhoEPEwkvs5r+THf
+         PBCjYgr4vd2dn96tRZAZcVkxL6o/sOdiwNnM+VMOVQBRhuklID9B7M7rHZYjVrW+hxJo
+         1+ipk2ZMCnpJ9Df8mqOWJgtOx5voAGhgur1awejqw6gdcgz+i4rQITqzrCBK8yQ8Q+CB
+         TiPw==
+X-Gm-Message-State: AOAM530lkTTdMC+0M8f9yt3y5Uv2dlsfaXTrDjSli76SnAYbVz+Gmz6B
+        Ydm4M+rjvejqmk59mElJaqAYUohoWF/cdE4cGbbAp8snTXcg3i6KGhLDscNCdQYzue9MEr7MSST
+        tlGjC1TOJhStKCb1jzNmStMqZRb+pQrM71N/aP5ks725RJl5wsgRNHkE9iGEFyiDp2kVJH3JRap
+        Z3eFNpKpR0Gj+S1x3nEg==
+X-Google-Smtp-Source: ABdhPJx3dIwUKD23CqBWaepqg1Aw30OmWB5Bwr6kaIXxADzEfh6JEMimeSFM8Rl4WKOs3/5Mm42v4g==
+X-Received: by 2002:a05:6a00:1791:b0:4fb:2796:83a1 with SMTP id s17-20020a056a00179100b004fb279683a1mr27221328pfg.36.1648709484665;
+        Wed, 30 Mar 2022 23:51:24 -0700 (PDT)
 Received: from ldt-sj3-komrakov.dhcp.broadcom.net ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id f30-20020a63755e000000b00381f6b7ef30sm21251753pgn.54.2022.03.30.23.51.19
+        by smtp.gmail.com with ESMTPSA id f30-20020a63755e000000b00381f6b7ef30sm21251753pgn.54.2022.03.30.23.51.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 23:51:20 -0700 (PDT)
+        Wed, 30 Mar 2022 23:51:24 -0700 (PDT)
 From:   alexander komrakov <alexander.komrakov@broadcom.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     giometti@enneenne.com,
         alexander komrakov <alexander.komrakov@broadcom.com>
 Subject: [PATCH] Calculate the monotonic clock from the timespec clock to generate PPS elapsed real-time event value and stores the result into /sys/class/pps/pps0/assert_elapsed. Because we have requirements to make sure the delta between standard time, say the GPS Time, and elapsedRealtime < 1 millisecond, regular linux clock timestamp is not enough for our use case. The pin PPS will generate elapsedRealtime event at 1 sec boundary which is an exact value of the monotonic clock from the kernel PPS driver (/sys/class/pps/pps0/assert_elapsed). Whenever AP receives this pulse, kernel's pps driver timestamp this elapsedRealtime event and let this time available via sysfs node (/sys/class/pps/pps0/assert_elapsed) or the IOCTL call.
-Date:   Wed, 30 Mar 2022 23:51:16 -0700
-Message-Id: <20220331065117.250375-1-alexander.komrakov@broadcom.com>
+Date:   Wed, 30 Mar 2022 23:51:17 -0700
+Message-Id: <20220331065117.250375-2-alexander.komrakov@broadcom.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220331065117.250375-1-alexander.komrakov@broadcom.com>
+References: <20220331065117.250375-1-alexander.komrakov@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fc1b6505db7e16c0"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        boundary="00000000000033655805db7e175a"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000fc1b6505db7e16c0
+--00000000000033655805db7e175a
 Content-Transfer-Encoding: 8bit
 
 ---
@@ -266,7 +270,7 @@ index 78c8ac4951b5..1fecaaf4c8b9 100644
 2.25.1
 
 
---000000000000fc1b6505db7e16c0
+--00000000000033655805db7e175a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -339,12 +343,12 @@ vOM4N+PxiEKCkmmYhfeSVye92Bta6vjf0b+oDE2JT82+D+9nAfiyJ9P/SRVTTvLlSzcO2fqX6GOc
 di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
 dggvSHLsW0JrSJrDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBuC5wnhLnsnAKm
 Jp2912WHu/LdM1aDcgvLauGVP+xXdzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
-DQEJBTEPFw0yMjAzMzEwNjUxMjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
+DQEJBTEPFw0yMjAzMzEwNjUxMjVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
 SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
-BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAhz0Lbf2NL1nko4RmgJ5DLCDQ4JkufYnf
-abuJh+5+f29JyH2PDKpVii9YBe/Zad6X+C3dHFSw4CBHElX2fOYFJsbOISXFfb69JHpU+r2miOL0
-1HIMV9wmG/aI5Vy43HVEwPcVQEto4JYNmisWyIsVMbFKrfGbNalM49iVHpAGLn3Qc9KOIF0E3+xy
-38uzuvNx86VHmuuFrlbuKSP5Qao58zQL3zXBldMh9NDyQGpu0y/UNMDj4C4gwYyRZ7RPB1CmNL9d
-Pc/OzsnMqmSqYj7Xj+LZNQR6AN6BaeZte99s6F6gh7bbCUsVE0DsTXY5xhl+kU1+89vPjYTpMzA8
-GbNYuA==
---000000000000fc1b6505db7e16c0--
+BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAXsGDtPKSk+Bxz9wXuVCva/ElA1JQrDB2
++pW2ZKReT1VQuLphX1PmQ0/PR0fQJ8oXhkoZqF/0fQ8rv+scokcfXiSP3KhC2TMetL2lewcdiQhf
+6mp9IJovzx6s9d3qF9eHUbEAUeoi25lOjYpwI8ymBnPqgFZQwMNG9kAvpvcmZDj6Nq4QYUA7z6Y+
+wGzPORL4fEYowKHhhTTUluD7krjWXmHO1vGMHbi4lB2rR56EMaTn2ENgMyLKRiXFz1PdHcDjM7yN
+9TjQD+Kd7+NWrtHYLO8eZOerTaM0dlOvUs1ChRvXdx4hYYQSv5jSqQMYW2xuMw3tbWU4hxZj8Kvb
+BtYkag==
+--00000000000033655805db7e175a--

@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBD54EDEA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D6B4EDEA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239837AbiCaQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S239849AbiCaQYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239827AbiCaQWA (ORCPT
+        with ESMTP id S233788AbiCaQYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:22:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A892F1F160D;
-        Thu, 31 Mar 2022 09:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D352B8218B;
-        Thu, 31 Mar 2022 16:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A114C34115;
-        Thu, 31 Mar 2022 16:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648743611;
-        bh=XFXyNvd+Yayjca0tiSjpJKTNqxkgdTSAUId3UouoIhw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VYUN2rRKIYMFvKHb5tXUpAp0200pdHcrEt01wZ0IRo4vg0DZS6iY9S8wGdiFYxfbA
-         yrMctfzTeSLcT8QgUU2Qkju3str+kHXteF4JsF0O39KhjETDVfAdrHJejyeYUxQiin
-         G938iOyBLZ30eORAG/xdsbJz1xU2LeBqc59ZmUH3wWMtLNVX00tR0haaJGnhV4YKJv
-         FwENV0WCohIlpFKF+6jGhLz2U7GeHHbirsFkjzmOVO6dVKp2/wg4dmrcyLPCP4GXTu
-         mG+I3CZ/dYb/W4CHlPzKbiTYqYVAvniRerKivEPfMxVVdwdvlGIx8+QVM7mEW4zvFk
-         a1UccVWkyh09A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09C21F0384B;
-        Thu, 31 Mar 2022 16:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 31 Mar 2022 12:24:07 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F354E80216
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:22:19 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h4so447143wrc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:22:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=SNHHRe2ZzSNGPseirROJTlFiRpkfoRkugNhNQv1nRKk=;
+        b=m3VDo8KCl8P+V4rf3xVWwaVhbr+cX5UmB4yC7/mdt8W2DiSVPWMD0Mx5roh0RI3Q1C
+         Qe01vvmYQJT09wuww8YchMsU0t/SF6kJj69xtox/xrc2e4S0FvBQipOE6trErxrXGDjJ
+         t2UTMwXOObHwFrL4kZanDWgA24YCA/lLkUFECSDoqEv3PzBsDSzlcBLaQK5V+UyKD7/A
+         u0i0FEZZ3Z97m3Pxsup9JEUEH+GoOTezm5QQq6HbRqkTkUyEpWdOne7Uj0sv669YrpDB
+         G8/jArjUxecNWvHeV+RIjWcqmTuyQ8cPQetRr9WRC2IwIhPR6F754cmhljuRYGBe7M3s
+         aMow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=SNHHRe2ZzSNGPseirROJTlFiRpkfoRkugNhNQv1nRKk=;
+        b=LggG4tyZBfLt954quBVds+7GvpOFOp4z4Z1gkgsIiJsUkbIisrK89bQFHVDeL98bCb
+         rrspb8xVepBfqGdXS8dhJptGWxBSQH3PsiVw/3mUbCg98zp00CIC8LvxL9s2lzZIDgZI
+         HYtZ6nH5oke0Nehi1IW7E12jNHgy/9RM4L4CLzhytR9Uq8Yy2BUrvkGE29oyDMzG1d1C
+         XxHxL5kd2c0+p9ugY8hqb7gqLnGEnKi27wOumO83Rs2dEP8Z8/xEjfMCBz0jP7Nnt0sw
+         x4tUwBqBQV3d38qQ9gHFw0qGHbpfzXBEY4aPPyCQLaikk29rBZHcWL+yLy4G/TkigDDe
+         3z2g==
+X-Gm-Message-State: AOAM532PWFDwDnIfnkJPZDvzvXRqzZEzlykdpoqfSQydV1HbcXVnvI9Q
+        /A08fQuKKO1KP9J/a3Ue1dlnShni7pbCMg==
+X-Google-Smtp-Source: ABdhPJxapObZDmfaVs9GX0oYTb+BXJWWgI4ZkGLoFP88o8ev3BQBHyqCnzKwFo2/AXVzvovKCW8stQ==
+X-Received: by 2002:a5d:650b:0:b0:203:f4f9:85c4 with SMTP id x11-20020a5d650b000000b00203f4f985c4mr4689958wru.345.1648743738390;
+        Thu, 31 Mar 2022 09:22:18 -0700 (PDT)
+Received: from DESKTOP-R5VBAL5 ([39.53.224.185])
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d6488000000b002051f1028f6sm24785119wri.111.2022.03.31.09.22.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 31 Mar 2022 09:22:18 -0700 (PDT)
+Message-ID: <6245d53a.1c69fb81.368db.3965@mx.google.com>
+Date:   Thu, 31 Mar 2022 09:22:18 -0700 (PDT)
+X-Google-Original-Date: 31 Mar 2022 12:22:17 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] openvswitch: Add recirc_id to recirc warning
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164874361103.27032.11108416383428430823.git-patchwork-notify@kernel.org>
-Date:   Thu, 31 Mar 2022 16:20:11 +0000
-References: <20220330194244.3476544-1-stgraber@ubuntu.com>
-In-Reply-To: <20220330194244.3476544-1-stgraber@ubuntu.com>
-To:     =?utf-8?q?St=C3=A9phane_Graber_=3Cstgraber=40ubuntu=2Ecom=3E?=@ci.codeaurora.org
-Cc:     netdev@vger.kernel.org, pshelar@ovn.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, frode.nordahl@canonical.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   nickolasdreamlandestimation@gmail.com
+To:     linux-kernel@vger.kernel.org
+Subject: Estimating Services
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 30 Mar 2022 15:42:45 -0400 you wrote:
-> When hitting the recirculation limit, the kernel would currently log
-> something like this:
-> 
-> [   58.586597] openvswitch: ovs-system: deferred action limit reached, drop recirc action
-> 
-> Which isn't all that useful to debug as we only have the interface name
-> to go on but can't track it down to a specific flow.
-> 
-> [...]
-
-Here is the summary with links:
-  - openvswitch: Add recirc_id to recirc warning
-    https://git.kernel.org/netdev/net/c/ea07af2e71cd
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Hi,=0D=0A=0D=0AWe provide estimation & quantities takeoff service=
+s. We are providing 98-100 accuracy in our estimates and take-off=
+s. Please tell us if you need any estimating services regarding y=
+our projects.=0D=0A=0D=0ASend over the plans and mention the exac=
+t scope of work and shortly we will get back with a proposal on w=
+hich our charges and turnaround time will be mentioned=0D=0A=0D=0A=
+You may ask for sample estimates and take-offs. Thanks.=0D=0A=0D=0A=
+Kind Regards=0D=0ANickolas Casas=0D=0ADreamland Estimation, LLC
 

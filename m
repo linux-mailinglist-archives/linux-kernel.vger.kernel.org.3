@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08354EDA94
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0404EDA9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbiCaNdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S236887AbiCaNgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236861AbiCaNdF (ORCPT
+        with ESMTP id S234284AbiCaNgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:33:05 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9634D6542D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648733478; x=1680269478;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SZoPeWvFqilnBhtd7cf6gPw78PPTX91y47PEFhfAxFo=;
-  b=ADkv1Dy0VkODjd1EeoQU55+iY9/G+3v2ULshVv82UIhjmq9yFRxMiCjT
-   zJplNI6pQLHvjThOFbV43r/Ax65H0Z6nv3QHuCbgZUQ9tiZYAHV3guxZ8
-   6WSEwj1nR/KLZP/5GZT60yLS/j6/xh++1f0d68NNIecDSmGGBMIwyAHGQ
-   YE+fR1K2G39LiM6PwK7RLRzaAxf1/Q3/y+rcsOVErk5vKX+syTJpef7VN
-   bpPn7/P5nmZb8esubMlLuYn5jclzplprk1fRP9yXFutSTsqRlfB56e/p1
-   lpoRh3OIGytCpsIj3xsIkvTbEE69huXSTtfF/3LJ7FXel3iER8Dkg6DN4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241987865"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="241987865"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 06:31:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="547333931"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 31 Mar 2022 06:31:16 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZutP-0000IC-SV;
-        Thu, 31 Mar 2022 13:31:15 +0000
-Date:   Thu, 31 Mar 2022 21:30:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
-Subject: arch/arm64/kernel/elfcore.c:62:1: warning: the frame size of 2064
- bytes is larger than 2048 bytes
-Message-ID: <202203312129.zEYwA7Ce-lkp@intel.com>
+        Thu, 31 Mar 2022 09:36:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8D9F329E;
+        Thu, 31 Mar 2022 06:34:49 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22VCtOjc000908;
+        Thu, 31 Mar 2022 13:34:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=iWmUhd2gzNOKTbvvfXdB5TlWUvlA8kYnUfYO55tAMHs=;
+ b=oLSwMn+1v5SEUcvlfSKN4dYvOsBJaj6I62zaz92ilNhV/OvGX69AI2J9E4pbW2jZJt/I
+ 2ofwgPoWtgqlegg/MFyRtLl4aQ66jKyfN7uln7nr8elFZDVEOmfU5sCWm8ospKpGJSl+
+ 8W0RxrrfsRvANDVt44PQs1eXpjiuTcv/pREVEQJ72QEq6BUivYSyxnuM4plaQijoXcSk
+ JuMrI3VSYSCkHDiUMFqfwc0jWUdRltbHbtusYheKpz9PE6/1xZCfoGKYxPkfYGVqBnPJ
+ vB1/lFkbYKc13H2LnLqM0Gs50BwxAMURAqJVILZETWSS6Jh2X58OQpFAygdaGf2t6u4n 6g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f5a3k4h5n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 13:34:48 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22VCgtDk030123;
+        Thu, 31 Mar 2022 13:34:48 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f5a3k4h52-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 13:34:48 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22VDTGwZ022039;
+        Thu, 31 Mar 2022 13:34:46 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3f1tf918kr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 13:34:46 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22VDMfBu49479964
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 13:22:41 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F25AD11C04C;
+        Thu, 31 Mar 2022 13:34:42 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 84C9B11C058;
+        Thu, 31 Mar 2022 13:34:42 +0000 (GMT)
+Received: from [9.145.159.108] (unknown [9.145.159.108])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 31 Mar 2022 13:34:42 +0000 (GMT)
+Message-ID: <a61d614f-df0a-d0a8-c1f1-45a915e26b23@linux.ibm.com>
+Date:   Thu, 31 Mar 2022 15:34:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v9 11/18] s390/mm: KVM: pv: when tearing down, try to
+ destroy protected pages
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+References: <20220330122605.247613-1-imbrenda@linux.ibm.com>
+ <20220330122605.247613-12-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220330122605.247613-12-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: d1_FrIPcBG4GJrJvYOIai_D9VtWzJJI2
+X-Proofpoint-ORIG-GUID: w1srTf2AW4TVtdnSQSKQSATQR7L2pL1I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-31_05,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ phishscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203310075
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
+On 3/30/22 14:25, Claudio Imbrenda wrote:
+> When ptep_get_and_clear_full is called for a mm teardown, we will now
+> attempt to destroy the secure pages. This will be faster than export.
+> 
+> In case it was not a teardown, or if for some reason the destroy page
+> UVC failed, we try with an export page, like before.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Acked-by: Janosch Frank <frankja@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/pgtable.h | 18 +++++++++++++++---
+>   1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+> index 23ca0d8e058a..72544a1b4a68 100644
+> --- a/arch/s390/include/asm/pgtable.h
+> +++ b/arch/s390/include/asm/pgtable.h
+> @@ -1118,9 +1118,21 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+>   	} else {
+>   		res = ptep_xchg_lazy(mm, addr, ptep, __pte(_PAGE_INVALID));
+>   	}
+> -	/* At this point the reference through the mapping is still present */
+> -	if (mm_is_protected(mm) && pte_present(res))
+> -		uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
+> +	/* Nothing to do */
+> +	if (!mm_is_protected(mm) || !pte_present(res))
+> +		return res;
+> +	/*
+> +	 * At this point the reference through the mapping is still present.
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   787af64d05cd528aac9ad16752d11bb1c6061bb9
-commit: 6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a arm64: mte: Dump the MTE tags in the core file
-date:   6 weeks ago
-config: arm64-randconfig-s031-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312129.zEYwA7Ce-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm64/kernel/elfcore.c: In function 'mte_dump_tag_range':
->> arch/arm64/kernel/elfcore.c:62:1: warning: the frame size of 2064 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-      62 | }
-         | ^
+That's the case because we zap ptes within a mm that's still existing, 
+right? The mm will be deleted after we have unmapped the memory.
 
 
-vim +62 arch/arm64/kernel/elfcore.c
+> +	 * The notifier should have destroyed all protected vCPUs at this
+> +	 * point, so the destroy should be successful.
+> +	 */
+> +	if (full && !uv_destroy_owned_page(pte_val(res) & PAGE_MASK))
+> +		return res;
+> +	/*
+> +	 * But if something went wrong and the pages could not be destroyed,
+> +	 * the slower export is used as fallback instead.
+> +	 */
+> +	uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
+>   	return res;
+>   }
+>   
 
-    23	
-    24	/* Derived from dump_user_range(); start/end must be page-aligned */
-    25	static int mte_dump_tag_range(struct coredump_params *cprm,
-    26				      unsigned long start, unsigned long end)
-    27	{
-    28		unsigned long addr;
-    29	
-    30		for (addr = start; addr < end; addr += PAGE_SIZE) {
-    31			char tags[MTE_PAGE_TAG_STORAGE];
-    32			struct page *page = get_dump_page(addr);
-    33	
-    34			/*
-    35			 * get_dump_page() returns NULL when encountering an empty
-    36			 * page table entry that would otherwise have been filled with
-    37			 * the zero page. Skip the equivalent tag dump which would
-    38			 * have been all zeros.
-    39			 */
-    40			if (!page) {
-    41				dump_skip(cprm, MTE_PAGE_TAG_STORAGE);
-    42				continue;
-    43			}
-    44	
-    45			/*
-    46			 * Pages mapped in user space as !pte_access_permitted() (e.g.
-    47			 * PROT_EXEC only) may not have the PG_mte_tagged flag set.
-    48			 */
-    49			if (!test_bit(PG_mte_tagged, &page->flags)) {
-    50				put_page(page);
-    51				dump_skip(cprm, MTE_PAGE_TAG_STORAGE);
-    52				continue;
-    53			}
-    54	
-    55			mte_save_page_tags(page_address(page), tags);
-    56			put_page(page);
-    57			if (!dump_emit(cprm, tags, MTE_PAGE_TAG_STORAGE))
-    58				return 0;
-    59		}
-    60	
-    61		return 1;
-  > 62	}
-    63	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,176 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555C54ED0D6
+	by mail.lfdr.de (Postfix) with ESMTP id A06874ED0D7
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352082AbiCaA2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S1352089AbiCaA3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiCaA2k (ORCPT
+        with ESMTP id S229567AbiCaA3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:28:40 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BECA4924D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648686411; x=1680222411;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MAEmACm8JL0agnrolT58m2LejPScBLQM6qttzu2LRgs=;
-  b=nzvHa8hhZe9WIZrm5TlHysIrGHekMVTdx+sDv6gQHdUDI55A0DpAYTBD
-   CahojdvgrvlFgQsseWOLBlwisCvljF/DT49tY753Kqsnm0HI+Eww+oAFb
-   ETnrpls4H6y5+FLbXhrn+0HjvxC3qgBo4biXZvKXz1oLxHVi0cNzLcTTy
-   XI7w9hrjAjVFwIAtBxfjFdoNg15TmXFYODsTYyqUD7VEfzI9ww2gRiPpP
-   9dRSATxODNjZQGNnEW20g8lbYk3/HZo+1U5qR8pv5sBC7SqaFX79edmv8
-   gzKTIuA7BMwOjDgWCsu3OhDlxNvYgYepAOfUdOhST0nNZpvbv5Jqt3kRD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,223,1643644800"; 
-   d="scan'208";a="300837321"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Mar 2022 08:26:50 +0800
-IronPort-SDR: t+c/7tc89PAMYOTirKCmzN6xT22w4/5WAHrhJBon/yNX2IxnYAXpaPDdYWXGwo+VgLBpp8cgxc
- /QYYy7N2n9zXf+3LqQKGRgjsm8Zs9OPg9obwAPgpsUV9CXxOEzGqSLBKc5J11MxdR5VDnTufdm
- KRMDVHqUDMzFgmNWCeJ2jgnj5MzG3q7tHXiJSldnzPNgGZB5z44tX/DHJ4uQ+tlMSTJvjP4ycC
- RguT2T2u9HlGYiiuPFB0WvlPk3t+0rYEjh6MYc8pzLW2BPELGBI1cyFie2uUvwdQmPCSx6pFM7
- A452a0CnjOUKUguBGZ4rIMoA
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 16:58:31 -0700
-IronPort-SDR: 78wzCWGi71Rks5AYX2JLUzDO9l3Yb00daox0xx3BSRGzr2KLpFO/zNN1kip1dz7BRznUYIyD5M
- 6FNW3Ky62hBtucPsF6gvv/IZt+5CXEE/+m5wdtUKBvuA+nksMG6hVXTKYrWgl/mvzJj8o/8pir
- nMwf/FzqvnA/4bFA+JE7vGdfjzhsQWc1mapTQkuvVJ26zAN4wEN+J/51VPgUaVfnFKn8wMUDYY
- v0F8olQKF7IiX1fsgNIKZo0/rS8N/XS+SJWZRkTm4mIMZRYRkhHCezMDQ10Id7WF8i03LzeUXF
- rLA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 17:26:50 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KTPHs6QvCz1SVp2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:26:49 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1648686409; x=1651278410; bh=MAEmACm8JL0agnrolT58m2LejPScBLQM6qt
-        tzu2LRgs=; b=qxj2JM1oqz6ef2yg3vL9qh1vgfRq6qU0Di8N8SBh1TcBte6a++U
-        ZpHWB4ue5q9sorZiD0QV/xA0QJhQFI1PBrGLF6w9gvBARO3ZTfDktkrA2KlEMc36
-        8lFNT17fn5TbSOEiIo6DFExIUQ+SXrOnEMTkCdxTgBT1rWvgB0CU3/VtuwtHyLEp
-        WZ3sFad7gbszGMoySo5S9xqlscKX9u0AWrbY2CKfuNWmYROhVRITYiNvNAFnGJEB
-        +a6vwYKZmmU48PBIFYYc+9rDUqaoLSsV8HkXl04m70aaC+G8r84sj5Be43AVn8vP
-        tFgpawLFR/EIlSx0sGB3VpfBDCJkQDG/6SQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id UTWwcb1g4D-3 for <linux-kernel@vger.kernel.org>;
-        Wed, 30 Mar 2022 17:26:49 -0700 (PDT)
-Received: from [10.225.163.121] (unknown [10.225.163.121])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KTPHp5RGLz1Rvlx;
-        Wed, 30 Mar 2022 17:26:46 -0700 (PDT)
-Message-ID: <d8a35bea-f4a0-b54d-9d2a-d1cc9b3d3e53@opensource.wdc.com>
-Date:   Thu, 31 Mar 2022 09:26:45 +0900
+        Wed, 30 Mar 2022 20:29:12 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB2A4927D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648686445; x=1680222445;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=05NZE5gF3aTueVeP9ER6btTWaup1CWxlGpWSxDG8Dpk=;
+  b=NmrDNpF2co1a7/frge7qhDgtRBzvfwWHDV3wigT+AqxF3gONTBjt3bCO
+   ck24wNmjV5W0wQKYUmRBa1KThV5Zw2uNrCzHSi2QXE6x1R6XuMeFXo1vm
+   0+ylBkM+Io7Y/yF0nE+Vf18nbx+4JsAdBTERur4r4SgZXNVVBddxnriRu
+   9zggzCdP3hNWi8Ff0q76qD6PMSu5Hdeh8G5+xs/31rzCxmhxEly7JeezM
+   aXJYt4lTy6o2xGMYnMKxn1qgXy24IVD6E0gihKZMAs9FZSDJyjYHGQABa
+   PBgWn/qfsoXDxlGpD4ZMbVCz2FpZloSi1Q3DG/NwXCzNOTBWWy7akA2d9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241829840"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="241829840"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 17:27:25 -0700
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="547066885"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 17:27:23 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH] mm: migrate: set demotion targets differently
+References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
+        <87pmm4c4ys.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <YkSHJMsHMtKzCPhS@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+Date:   Thu, 31 Mar 2022 08:27:21 +0800
+In-Reply-To: <YkSHJMsHMtKzCPhS@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+        (Jagdish Gediya's message of "Wed, 30 Mar 2022 22:06:52 +0530")
+Message-ID: <87czi3c6fq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/3] RISC-V: K210 defconfigs: Drop redundant MEMBARRIER=n
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv@lists.infradead.org,
-        Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        anup@brainfault.org, heinrich.schuchardt@canonical.com,
-        atishp@atishpatra.org, mchitale@ventanamicro.com,
-        alexandre.ghiti@canonical.com, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org
-References: <20220330234739.1956-1-palmer@rivosinc.com>
- <20220330234739.1956-2-palmer@rivosinc.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220330234739.1956-2-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 08:47, Palmer Dabbelt wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> As of 93917ad50972 ("RISC-V: Add support for restartable sequence") we
-> have support for restartable sequences, which default to enabled.  These
-> select MEMBARRIER, so disabling it is now redundant.
-> 
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> ---
-> 
-> I'm not actually sure this is the right way to go: presumably the K210
-> defconfigs had MEMBARRIER=n for a reason (maybe just size?), so we might
-> actually want to move to RSEQ=n instead?  As usual: I don't test on the
-> K210, so I'm not exactly sure what the constraints are.
+Jagdish Gediya <jvgediya@linux.ibm.com> writes:
 
-Not sure either. It is like this now because I think this was the default
-at the time the config was created.
+> Hi Huang,
+>
+> On Wed, Mar 30, 2022 at 02:46:51PM +0800, Huang, Ying wrote:
+>> Hi, Jagdish,
+>> 
+>> Jagdish Gediya <jvgediya@linux.ibm.com> writes:
+>> 
+>> > The current implementation to identify the demotion
+>> > targets limits some of the opportunities to share
+>> > the demotion targets between multiple source nodes.
+>> 
+>> Yes.  It sounds reasonable to share demotion targets among multiple
+>> source nodes.
+>> 
+>> One question, are example machines below are real hardware now or in
+>> near future?  Or you just think they are possible?
+>
+> They are not real hardware right now, they are the future possibilities.
+>
+>> And, before going into the implementation details, I think that we can
+>> discuss the perfect demotion order firstly.
+>> 
+>> > Implement a logic to identify the loop in the demotion
+>> > targets such that all the possibilities of demotion can
+>> > be utilized. Don't share the used targets between all
+>> > the nodes, instead create the used targets from scratch
+>> > for each individual node based on for what all node this
+>> > node is a demotion target. This helps to share the demotion
+>> > targets without missing any possible way of demotion.
+>> >
+>> > e.g. with below NUMA topology, where node 0 & 1 are
+>> > cpu + dram nodes, node 2 & 3 are equally slower memory
+>> > only nodes, and node 4 is slowest memory only node,
+>> >
+>> > available: 5 nodes (0-4)
+>> > node 0 cpus: 0 1
+>> > node 0 size: n MB
+>> > node 0 free: n MB
+>> > node 1 cpus: 2 3
+>> > node 1 size: n MB
+>> > node 1 free: n MB
+>> > node 2 cpus:
+>> > node 2 size: n MB
+>> > node 2 free: n MB
+>> > node 3 cpus:
+>> > node 3 size: n MB
+>> > node 3 free: n MB
+>> > node 4 cpus:
+>> > node 4 size: n MB
+>> > node 4 free: n MB
+>> > node distances:
+>> > node   0   1   2   3   4
+>> >   0:  10  20  40  40  80
+>> >   1:  20  10  40  40  80
+>> >   2:  40  40  10  40  80
+>> >   3:  40  40  40  10  80
+>> >   4:  80  80  80  80  10
+>> >
+>> > The existing implementation gives below demotion targets,
+>> >
+>> > node    demotion_target
+>> >  0              3, 2
+>> >  1              4
+>> >  2              X
+>> >  3              X
+>> >  4		X
+>> >
+>> > With this patch applied, below are the demotion targets,
+>> >
+>> > node    demotion_target
+>> >  0              3, 2
+>> >  1              3, 2
+>> >  2              3
+>> >  3              4
+>> >  4		X
+>> 
+>> For such machine, I think the perfect demotion order is,
+>> 
+>> node    demotion_target
+>>  0              2, 3
+>>  1              2, 3
+>>  2              4
+>>  3              4
+>>  4              X
+>
+> Current implementation works based on the best distance algorithm,
+> this patch doesn't change it either, so based on the distance, the
+> demotion list is what I have mentioned. I understand 4 is better
+> target for 2 but as per the mentioned numa distances and current
+> algorithm, it doesn't get configured like that in the kernel.
 
-Niklas,
+If we agree on the perfect demotion order, can we revise the current
+algorithm a little to make it happen?
 
-Can you test this please ?
+Is the following solution possible?
 
-> ---
->  arch/riscv/configs/nommu_k210_defconfig        | 1 -
->  arch/riscv/configs/nommu_k210_sdcard_defconfig | 1 -
->  arch/riscv/configs/nommu_virt_defconfig        | 1 -
->  3 files changed, 3 deletions(-)
-> 
-> diff --git a/arch/riscv/configs/nommu_k210_defconfig b/arch/riscv/configs/nommu_k210_defconfig
-> index 3f42ed87dde8..2438fa39f8ae 100644
-> --- a/arch/riscv/configs/nommu_k210_defconfig
-> +++ b/arch/riscv/configs/nommu_k210_defconfig
-> @@ -21,7 +21,6 @@ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
->  # CONFIG_AIO is not set
->  # CONFIG_IO_URING is not set
->  # CONFIG_ADVISE_SYSCALLS is not set
-> -# CONFIG_MEMBARRIER is not set
->  # CONFIG_KALLSYMS is not set
->  CONFIG_EMBEDDED=y
->  # CONFIG_VM_EVENT_COUNTERS is not set
-> diff --git a/arch/riscv/configs/nommu_k210_sdcard_defconfig b/arch/riscv/configs/nommu_k210_sdcard_defconfig
-> index af64b95e88cc..9a133e63ae5b 100644
-> --- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
-> +++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
-> @@ -13,7 +13,6 @@ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
->  # CONFIG_AIO is not set
->  # CONFIG_IO_URING is not set
->  # CONFIG_ADVISE_SYSCALLS is not set
-> -# CONFIG_MEMBARRIER is not set
->  # CONFIG_KALLSYMS is not set
->  CONFIG_EMBEDDED=y
->  # CONFIG_VM_EVENT_COUNTERS is not set
-> diff --git a/arch/riscv/configs/nommu_virt_defconfig b/arch/riscv/configs/nommu_virt_defconfig
-> index e1c9864b6237..5269fbb6b4fc 100644
-> --- a/arch/riscv/configs/nommu_virt_defconfig
-> +++ b/arch/riscv/configs/nommu_virt_defconfig
-> @@ -19,7 +19,6 @@ CONFIG_EXPERT=y
->  # CONFIG_AIO is not set
->  # CONFIG_IO_URING is not set
->  # CONFIG_ADVISE_SYSCALLS is not set
-> -# CONFIG_MEMBARRIER is not set
->  # CONFIG_KALLSYMS is not set
->  # CONFIG_VM_EVENT_COUNTERS is not set
->  # CONFIG_COMPAT_BRK is not set
+1st round:
+  sources: 0, 1
+  exclude targets: 0, 1
+  result: 0 - > 2,3; 1 -> 2,3
 
+2nd round:
+  sources: 2, 3
+  exclude targets: 0, 1, 2, 3
+  result: 2 -> 4; 3 -> 4
 
--- 
-Damien Le Moal
-Western Digital Research
+3rd round:
+  sources: 4
+  exclude targets: 0, 1, 2, 3, 4
+  result: 4 -> X
+
+That is, in each round, we exclude the sources and targets in the
+previous rounds as demotion targets.  Compared with the original
+algorithm, we don't exclude targets used in the current round,
+but we will exclude them in the next round.
+
+If this doesn't work, can you think about whether it is possible to find
+some way?
+
+>> > e.g. with below NUMA topology, where node 0, 1 & 2 are
+>> > cpu + dram nodes and node 3 is slow memory node,
+>> >
+>> > available: 4 nodes (0-3)
+>> > node 0 cpus: 0 1
+>> > node 0 size: n MB
+>> > node 0 free: n MB
+>> > node 1 cpus: 2 3
+>> > node 1 size: n MB
+>> > node 1 free: n MB
+>> > node 2 cpus: 4 5
+>> > node 2 size: n MB
+>> > node 2 free: n MB
+>> > node 3 cpus:
+>> > node 3 size: n MB
+>> > node 3 free: n MB
+>> > node distances:
+>> > node   0   1   2   3
+>> >   0:  10  20  20  40
+>> >   1:  20  10  20  40
+>> >   2:  20  20  10  40
+>> >   3:  40  40  40  10
+>> >
+>> > The existing implementation gives below demotion targets,
+>> >
+>> > node    demotion_target
+>> >  0              3
+>> >  1              X
+>> >  2              X
+>> >  3              X
+>> >
+>> > With this patch applied, below are the demotion targets,
+>> >
+>> > node    demotion_target
+>> >  0              3
+>> >  1              3
+>> >  2              3
+>> >  3              X
+>> 
+>> I think this is perfect already.
+>> 
+>> > with below NUMA topology, where node 0 & 2 are cpu + dram
+>> > nodes and node 1 & 3 are slow memory nodes,
+>> >
+>> > available: 4 nodes (0-3)
+>> > node 0 cpus: 0 1
+>> > node 0 size: n MB
+>> > node 0 free: n MB
+>> > node 1 cpus:
+>> > node 1 size: n MB
+>> > node 1 free: n MB
+>> > node 2 cpus: 2 3
+>> > node 2 size: n MB
+>> > node 2 free: n MB
+>> > node 3 cpus:
+>> > node 3 size: n MB
+>> > node 3 free: n MB
+>> > node distances:
+>> > node   0   1   2   3
+>> >   0:  10  40  20  80
+>> >   1:  40  10  80  80
+>> >   2:  20  80  10  40
+>> >   3:  80  80  40  10
+>> >
+>> > The existing implementation gives below demotion targets,
+>> >
+>> > node    demotion_target
+>> >  0              3
+>> >  1              X
+>> >  2              3
+>> >  3              X
+>> 
+>> Should be as below as you said in another email of the thread.
+>> 
+>> node    demotion_target
+>>  0              1
+>>  1              X
+>>  2              3
+>>  3              X
+>> 
+>> > With this patch applied, below are the demotion targets,
+>> >
+>> > node    demotion_target
+>> >  0              1
+>> >  1              3
+>> >  2              3
+>> >  3              X
+>> 
+>> The original demotion order looks better for me.  1 and 3 are at the
+>> same level from the perspective of the whole system.
+>> 
+>> Another example, node 0 & 2 are cpu + dram nodes and node 1 are slow
+>> memory node near node 0,
+>> 
+>> available: 3 nodes (0-2)
+>> node 0 cpus: 0 1
+>> node 0 size: n MB
+>> node 0 free: n MB
+>> node 1 cpus:
+>> node 1 size: n MB
+>> node 1 free: n MB
+>> node 2 cpus: 2 3
+>> node 2 size: n MB
+>> node 2 free: n MB
+>> node distances:
+>> node   0   1   2
+>>   0:  10  40  20
+>>   1:  40  10  80
+>>   2:  20  80  10
+>> 
+>> 
+>> Demotion order 1:
+>> 
+>> node    demotion_target
+>>  0              1
+>>  1              X
+>>  2              X
+>> 
+>> Demotion order 2:
+>> 
+>> node    demotion_target
+>>  0              1
+>>  1              X
+>>  2              1
+>> 
+>> Demotion order 2 looks better.  But I think that demotion order 1 makes
+>> some sense too (like node reclaim mode).
+>> 
+>> It seems that,
+>> 
+>> If a demotion target has same distance to several current demotion
+>> sources, the demotion target should be shared among the demotion
+>> sources.
+>
+> Yes, and that is where this patch is useful.
+>
+>> And as Dave pointed out, we may eventually need a mechanism to override
+>> the default demotion order generated automatically.  So we can just use
+>> some simple mechanism that makes sense in most cases in kernel
+>> automatically.  And leave the best demotion for users to some
+>> customization mechanism.
+>
+> Yes, We need a mechanism to override the default demotion list prepared
+> by the current implementation. PowerVM can have a cpu less dram node
+> as well, which infact are not the right target for demotion because
+> it is the fast memory. We need to distinguish between memory tiers
+> so that slow memory can be utilized for the demotion even when there
+> are fast memory only numa nodes.
+>
+> I think we may see implementations in future to override the default
+> behavior e.g. when systems have both fast only and slow only memory
+> nodes and in that case it will make sense to demote to slow memory
+> only node even if it is far, but this patch is to put the current
+> implementation to its intended design 'best distance based demotion
+> targets'.
+
+If this is a real problem for you already.  How about implement it after
+this work has been done?
+
+Best Regards,
+Huang, Ying
+
+>> > As it can be seen above, node 3 can be demotion target for node
+>> > 1 but existing implementation doesn't configure it that way. It
+>> > is better to move pages from node 1 to node 3 instead of moving
+>> > it from node 1 to swap.
+>> >
+>> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+>> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>> 
+>> Best Regards,
+>> Huang, Ying
+>> 
+>> [snip]
+>> 
+> Best Regards,
+> Jagdish

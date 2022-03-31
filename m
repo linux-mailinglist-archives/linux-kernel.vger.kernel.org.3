@@ -2,105 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F7A4ED60C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1AB4ED60F
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiCaIqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S233201AbiCaIsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbiCaIqn (ORCPT
+        with ESMTP id S233251AbiCaIr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:46:43 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D1415470B
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:44:56 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id e5so22775359pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FhzVk64/NIKLiS6pp8Z+fT0Y8xwvGEYa4togIdcxYYk=;
-        b=ICBYDrTFxqntrrzWD538RHzkmhMUsTzyv8yva1vHpjOl+YFBDVbFwBje833t9zn6P8
-         3j7TUXzWqkE5OqOEDv+Ro7X6yWpWauix2c6xy+27ct0rU5OGE4NDrtIR6tCLFRYD7MsS
-         Yl0sB0YFPzFjbS1sKuGTu3rM3FmHrSR8Wlj6IbV9KhArk049TgxIG+C45ipjmk+pI4xe
-         RV085hborc+M1cMQsuS6kDLJ/NotgzoQ/d7m/lPWdvJiCdKPenouT6TjtEzT8j7iANp3
-         rfcglmQqodsjwDcIhX14MvBi9Xvjym8BFG4eLTMJvgjQrYDeUT8h7hYCYP9YKA3Hucq0
-         w78A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FhzVk64/NIKLiS6pp8Z+fT0Y8xwvGEYa4togIdcxYYk=;
-        b=Q688Y4e1x+RHqNw7dGsqPmBrcCpDN6kkwPMmpcfK9LHthzfB4FF2Zu8HaQjq1mbP6T
-         hRiwBNMkq3AcFNqXYdGXEXf+uPNF/Ed3HB2ELNJ4Efar93bCrPvkzxX7LnK0MiCfPViP
-         y0ldP+cltJzv89QH5i8B3GgiTK/VQngogYc3u+DHNGvURym0n7Px1SbL8wA8fDKuY8Cv
-         ZyV2CVlKDZAXfbdv+ReBqSjcLhXnJjicrW9Q9/WTaM6urR6B6D2rDQITCRYX85hkh9O0
-         m/LlAeN7TqNwFAcK6Ij552GrGOKKxVu5CQh/ZIRxRJdsvKJDW6B8FicvvLFKlJO0b012
-         Hqmg==
-X-Gm-Message-State: AOAM530zpNDSNA9lvYPFkVkb1QHoYT6G01+Z0G4uusQWss7qZakaYtmc
-        awvB6Fm2B7zpfG88si/LZe76uw==
-X-Google-Smtp-Source: ABdhPJxEgHNxbaBHgr6g0EY3covUtA2BOdBzQiZbu1mOXIgyyHZcL0mejNKkNTKFFiawEVFB6rciJw==
-X-Received: by 2002:a17:902:b692:b0:151:5474:d3ee with SMTP id c18-20020a170902b69200b001515474d3eemr40081273pls.139.1648716296426;
-        Thu, 31 Mar 2022 01:44:56 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm27899760pfc.98.2022.03.31.01.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 01:44:55 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 14:14:53 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] opp: use list iterator only inside the loop
-Message-ID: <20220331084453.jlmuilvg3n3ve27t@vireshk-i7>
-References: <20220331083018.31995-1-xiam0nd.tong@gmail.com>
+        Thu, 31 Mar 2022 04:47:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FC015470B;
+        Thu, 31 Mar 2022 01:46:09 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 08:46:05 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648716367;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=CDQI9vtF4lOMDDh9EbLRakIHnrS5O396ViE9HmH7ckE=;
+        b=dRUf9F6MXpgRSccxtrwHXh1dfIyJDn3WA+jz58hwnp+0DPbQvzhk0eQfe4/SwbHo6FjW5u
+        53bnyB5edxO6tr3YfnPUGMoCidzJlfoPRxvsFHdkTlLcBwfA4mISLpI80EAMDLNVJQi3Jl
+        q06svM7gPZrn90QiyprKCMIgCA90Kjaa5MpyHA3u8TnYhKAbLRPmevKrguC5f/afFzekBi
+        MaObotjDN65U+FeMzq/gx9vl9V1gxVOQFNhmNVxvs3FdoZ1TC0M8UpzqlV79vhyKcO/U9T
+        PsE68WoYmGqrCYUE1igXvJjMeW2xHwmycUcUITVBYevf7hvKKSUO3LyimjlrtA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648716367;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=CDQI9vtF4lOMDDh9EbLRakIHnrS5O396ViE9HmH7ckE=;
+        b=sNuAOHTd6poRi2wYwwfiHN7s2X2KXUszWZz0ym53NJfAg2m/liZhvrw2zABo82qMGjbcZ9
+        nA0eyv/RzrHWnyAA==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/urgent] Revert "signal, x86: Delay calling signals in
+ atomic on RT enabled kernels"
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331083018.31995-1-xiam0nd.tong@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164871636568.389.8250963262354763972.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is V3 and not V2. You need to be careful to update them for every
-single version of patch you send.
+The following commit has been merged into the core/urgent branch of tip:
 
-On 31-03-22, 16:30, Xiaomeng Tong wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate dedicated pointer variable [1].
-> 
-> In this case, use a new variable 'iter' as the list iterator, while
-> use the old variable 'new_dev' as a dedicated pointer to point to the
-> found entry. And BUG_ON(!new_dev);.
-> 
-> [1]: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
-> 
-> changes since v1:
->  - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
-> 
-> v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
-> 
-> ---
->  drivers/opp/debugfs.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+Commit-ID:     7dd5ad2d3e82fb55229e3fe18e09160878e77e20
+Gitweb:        https://git.kernel.org/tip/7dd5ad2d3e82fb55229e3fe18e09160878e77e20
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 31 Mar 2022 10:36:55 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 31 Mar 2022 10:36:55 +02:00
 
-Looks good now. I will apply it in few days.
+Revert "signal, x86: Delay calling signals in atomic on RT enabled kernels"
 
--- 
-viresh
+Revert commit bf9ad37dc8a. It needs to be better encapsulated and
+generalized.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ arch/x86/Kconfig       |  1 -
+ include/linux/sched.h  |  3 ---
+ kernel/Kconfig.preempt | 12 +-----------
+ kernel/entry/common.c  | 14 --------------
+ kernel/signal.c        | 40 ----------------------------------------
+ 5 files changed, 1 insertion(+), 69 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 7340d9f..442a426 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -122,7 +122,6 @@ config X86
+ 	select ARCH_WANT_GENERAL_HUGETLB
+ 	select ARCH_WANT_HUGE_PMD_SHARE
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+-	select ARCH_WANTS_RT_DELAYED_SIGNALS
+ 	select ARCH_WANTS_THP_SWAP		if X86_64
+ 	select ARCH_HAS_PARANOID_L1D_FLUSH
+ 	select BUILDTIME_TABLE_SORT
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 4a6fdd2..d5e3c00 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1090,9 +1090,6 @@ struct task_struct {
+ 	/* Restored if set_restore_sigmask() was used: */
+ 	sigset_t			saved_sigmask;
+ 	struct sigpending		pending;
+-#ifdef CONFIG_RT_DELAYED_SIGNALS
+-	struct kernel_siginfo		forced_info;
+-#endif
+ 	unsigned long			sas_ss_sp;
+ 	size_t				sas_ss_size;
+ 	unsigned int			sas_ss_flags;
+diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+index 8c6de5a..c2f1fd9 100644
+--- a/kernel/Kconfig.preempt
++++ b/kernel/Kconfig.preempt
+@@ -133,14 +133,4 @@ config SCHED_CORE
+ 	  which is the likely usage by Linux distributions, there should
+ 	  be no measurable impact on performance.
+ 
+-config ARCH_WANTS_RT_DELAYED_SIGNALS
+-	bool
+-	help
+-	  This option is selected by architectures where raising signals
+-	  can happen in atomic contexts on PREEMPT_RT enabled kernels. This
+-	  option delays raising the signal until the return to user space
+-	  loop where it is also delivered. X86 requires this to deliver
+-	  signals from trap handlers which run on IST stacks.
+-
+-config RT_DELAYED_SIGNALS
+-	def_bool PREEMPT_RT && ARCH_WANTS_RT_DELAYED_SIGNALS
++
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index ef8d94a..e57a224 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -142,18 +142,6 @@ void noinstr exit_to_user_mode(void)
+ /* Workaround to allow gradual conversion of architecture code */
+ void __weak arch_do_signal_or_restart(struct pt_regs *regs) { }
+ 
+-#ifdef CONFIG_RT_DELAYED_SIGNALS
+-static inline void raise_delayed_signal(void)
+-{
+-	if (unlikely(current->forced_info.si_signo)) {
+-		force_sig_info(&current->forced_info);
+-		current->forced_info.si_signo = 0;
+-	}
+-}
+-#else
+-static inline void raise_delayed_signal(void) { }
+-#endif
+-
+ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+ 					    unsigned long ti_work)
+ {
+@@ -168,8 +156,6 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+ 		if (ti_work & _TIF_NEED_RESCHED)
+ 			schedule();
+ 
+-		raise_delayed_signal();
+-
+ 		if (ti_work & _TIF_UPROBE)
+ 			uprobe_notify_resume(regs);
+ 
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 368a34c..30cd1ca 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1308,43 +1308,6 @@ enum sig_handler {
+ };
+ 
+ /*
+- * On some archictectures, PREEMPT_RT has to delay sending a signal from a
+- * trap since it cannot enable preemption, and the signal code's
+- * spin_locks turn into mutexes. Instead, it must set TIF_NOTIFY_RESUME
+- * which will send the signal on exit of the trap.
+- */
+-#ifdef CONFIG_RT_DELAYED_SIGNALS
+-static inline bool force_sig_delayed(struct kernel_siginfo *info,
+-				     struct task_struct *t)
+-{
+-	if (!in_atomic())
+-		return false;
+-
+-	if (WARN_ON_ONCE(t->forced_info.si_signo))
+-		return true;
+-
+-	if (is_si_special(info)) {
+-		WARN_ON_ONCE(info != SEND_SIG_PRIV);
+-		t->forced_info.si_signo = info->si_signo;
+-		t->forced_info.si_errno = 0;
+-		t->forced_info.si_code = SI_KERNEL;
+-		t->forced_info.si_pid = 0;
+-		t->forced_info.si_uid = 0;
+-	} else {
+-		t->forced_info = *info;
+-	}
+-	set_tsk_thread_flag(t, TIF_NOTIFY_RESUME);
+-	return true;
+-}
+-#else
+-static inline bool force_sig_delayed(struct kernel_siginfo *info,
+-				     struct task_struct *t)
+-{
+-	return false;
+-}
+-#endif
+-
+-/*
+  * Force a signal that the process can't ignore: if necessary
+  * we unblock the signal and change any SIG_IGN to SIG_DFL.
+  *
+@@ -1364,9 +1327,6 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+ 	struct k_sigaction *action;
+ 	int sig = info->si_signo;
+ 
+-	if (force_sig_delayed(info, t))
+-		return 0;
+-
+ 	spin_lock_irqsave(&t->sighand->siglock, flags);
+ 	action = &t->sighand->action[sig-1];
+ 	ignored = action->sa.sa_handler == SIG_IGN;

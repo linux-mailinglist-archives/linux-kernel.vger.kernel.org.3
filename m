@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7404D4EDEB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D293D4EDEB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239893AbiCaQ0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S239922AbiCaQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239851AbiCaQ01 (ORCPT
+        with ESMTP id S239861AbiCaQ02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:26:27 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512115F4E2;
-        Thu, 31 Mar 2022 09:24:40 -0700 (PDT)
+        Thu, 31 Mar 2022 12:26:28 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7285F4F6;
+        Thu, 31 Mar 2022 09:24:41 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 76F3322249;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id EB26A2224D;
         Thu, 31 Mar 2022 18:24:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648743878;
+        t=1648743879;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=92Ipf+SNVjQC2sLd1I2KRQ1qqFCuUwW6leZy97zvTaY=;
-        b=mcGjPlhaDHKNrjk4hR+juiih7yw5+TS+mdHoh3/ruvKA55WnkT9O1iTao3dTx741Po6Rts
-        rnAznIeyXuLBuFSJXkObBlVuw0RURtAMai68iwXvDZxfeILow3g6Eze1Fsu0gVpGUQiN+Y
-        T6f3kqI9b3hwA4ASHBEe+/k3MN5U2KI=
+        bh=Avq10jTl7CHo5P+h5iiTtCoGGyerxX9+c/XJg83PbNE=;
+        b=LgZmYeIUscCQM6bN9O4kTktNtnpJJpQuRM1wemwloRF3wpchOPOaik7Piwj9/AJDhglQKt
+        T5UXV430gaN2j7eGSDvqF/oJbEv6mlPxj5rpHAmKBUzLD4Y2txvojLQWsiPE42j6CGjTVp
+        GW/syJLyhLyDmGrfG/Ao1hxniEPRBVE=
 From:   Michael Walle <michael@walle.cc>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 2/4] hwmon: (bt1-pvt) use generic polynomial functions
-Date:   Thu, 31 Mar 2022 18:24:29 +0200
-Message-Id: <20220331162431.3648535-3-michael@walle.cc>
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v3 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
+Date:   Thu, 31 Mar 2022 18:24:30 +0200
+Message-Id: <20220331162431.3648535-4-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220331162431.3648535-1-michael@walle.cc>
 References: <20220331162431.3648535-1-michael@walle.cc>
@@ -56,157 +57,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The polynomial calculation function was moved into lib/ to be able to
-reuse it. Move over to this one.
+Add a binding for the temperature sensor and the fan controller on the
+Microchip LAN966x family.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/hwmon/Kconfig   |  1 +
- drivers/hwmon/bt1-pvt.c | 50 +++++++++++------------------------------
- 2 files changed, 14 insertions(+), 37 deletions(-)
+ .../bindings/hwmon/microchip,lan966x.yaml     | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 68a8a27ab3b7..be9773270e53 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -415,6 +415,7 @@ config SENSORS_ATXP1
- config SENSORS_BT1_PVT
- 	tristate "Baikal-T1 Process, Voltage, Temperature sensor driver"
- 	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-+	select POLYNOMIAL
- 	help
- 	  If you say yes here you get support for Baikal-T1 PVT sensor
- 	  embedded into the SoC.
-diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-index 74ce5211eb75..21ab172774ec 100644
---- a/drivers/hwmon/bt1-pvt.c
-+++ b/drivers/hwmon/bt1-pvt.c
-@@ -26,6 +26,7 @@
- #include <linux/mutex.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/polynomial.h>
- #include <linux/seqlock.h>
- #include <linux/sysfs.h>
- #include <linux/types.h>
-@@ -65,7 +66,7 @@ static const struct pvt_sensor_info pvt_info[] = {
-  *     48380,
-  * where T = [-48380, 147438] mC and N = [0, 1023].
-  */
--static const struct pvt_poly __maybe_unused poly_temp_to_N = {
-+static const struct polynomial __maybe_unused poly_temp_to_N = {
- 	.total_divider = 10000,
- 	.terms = {
- 		{4, 18322, 10000, 10000},
-@@ -76,7 +77,7 @@ static const struct pvt_poly __maybe_unused poly_temp_to_N = {
- 	}
- };
- 
--static const struct pvt_poly poly_N_to_temp = {
-+static const struct polynomial poly_N_to_temp = {
- 	.total_divider = 1,
- 	.terms = {
- 		{4, -16743, 1000, 1},
-@@ -97,7 +98,7 @@ static const struct pvt_poly poly_N_to_temp = {
-  * N = (18658e-3*V - 11572) / 10,
-  * V = N * 10^5 / 18658 + 11572 * 10^4 / 18658.
-  */
--static const struct pvt_poly __maybe_unused poly_volt_to_N = {
-+static const struct polynomial __maybe_unused poly_volt_to_N = {
- 	.total_divider = 10,
- 	.terms = {
- 		{1, 18658, 1000, 1},
-@@ -105,7 +106,7 @@ static const struct pvt_poly __maybe_unused poly_volt_to_N = {
- 	}
- };
- 
--static const struct pvt_poly poly_N_to_volt = {
-+static const struct polynomial poly_N_to_volt = {
- 	.total_divider = 10,
- 	.terms = {
- 		{1, 100000, 18658, 1},
-@@ -113,31 +114,6 @@ static const struct pvt_poly poly_N_to_volt = {
- 	}
- };
- 
--/*
-- * Here is the polynomial calculation function, which performs the
-- * redistributed terms calculations. It's pretty straightforward. We walk
-- * over each degree term up to the free one, and perform the redistributed
-- * multiplication of the term coefficient, its divider (as for the rationale
-- * fraction representation), data power and the rational fraction divider
-- * leftover. Then all of this is collected in a total sum variable, which
-- * value is normalized by the total divider before being returned.
-- */
--static long pvt_calc_poly(const struct pvt_poly *poly, long data)
--{
--	const struct pvt_poly_term *term = poly->terms;
--	long tmp, ret = 0;
--	int deg;
--
--	do {
--		tmp = term->coef;
--		for (deg = 0; deg < term->deg; ++deg)
--			tmp = mult_frac(tmp, data, term->divider);
--		ret += tmp / term->divider_leftover;
--	} while ((term++)->deg);
--
--	return ret / poly->total_divider;
--}
--
- static inline u32 pvt_update(void __iomem *reg, u32 mask, u32 data)
- {
- 	u32 old;
-@@ -324,9 +300,9 @@ static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
- 	} while (read_seqretry(&cache->data_seqlock, seq));
- 
- 	if (type == PVT_TEMP)
--		*val = pvt_calc_poly(&poly_N_to_temp, data);
-+		*val = polynomial_calc(&poly_N_to_temp, data);
- 	else
--		*val = pvt_calc_poly(&poly_N_to_volt, data);
-+		*val = polynomial_calc(&poly_N_to_volt, data);
- 
- 	return 0;
- }
-@@ -345,9 +321,9 @@ static int pvt_read_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
- 		data = FIELD_GET(PVT_THRES_HI_MASK, data);
- 
- 	if (type == PVT_TEMP)
--		*val = pvt_calc_poly(&poly_N_to_temp, data);
-+		*val = polynomial_calc(&poly_N_to_temp, data);
- 	else
--		*val = pvt_calc_poly(&poly_N_to_volt, data);
-+		*val = polynomial_calc(&poly_N_to_volt, data);
- 
- 	return 0;
- }
-@@ -360,10 +336,10 @@ static int pvt_write_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
- 
- 	if (type == PVT_TEMP) {
- 		val = clamp(val, PVT_TEMP_MIN, PVT_TEMP_MAX);
--		data = pvt_calc_poly(&poly_temp_to_N, val);
-+		data = polynomial_calc(&poly_temp_to_N, val);
- 	} else {
- 		val = clamp(val, PVT_VOLT_MIN, PVT_VOLT_MAX);
--		data = pvt_calc_poly(&poly_volt_to_N, val);
-+		data = polynomial_calc(&poly_volt_to_N, val);
- 	}
- 
- 	/* Serialize limit update, since a part of the register is changed. */
-@@ -522,9 +498,9 @@ static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
- 		return -ETIMEDOUT;
- 
- 	if (type == PVT_TEMP)
--		*val = pvt_calc_poly(&poly_N_to_temp, data);
-+		*val = polynomial_calc(&poly_N_to_temp, data);
- 	else
--		*val = pvt_calc_poly(&poly_N_to_volt, data);
-+		*val = polynomial_calc(&poly_N_to_volt, data);
- 
- 	return 0;
- }
+diff --git a/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml b/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+new file mode 100644
+index 000000000000..390dd6755ff5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/microchip,lan966x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip LAN966x Hardware Monitor
++
++maintainers:
++  - Michael Walle <michael@walle.cc>
++
++description: |
++  Microchip LAN966x temperature monitor and fan controller
++
++properties:
++  compatible:
++    enum:
++      - microchip,lan9668-hwmon
++
++  reg:
++    items:
++      - description: PVT registers
++      - description: FAN registers
++
++  reg-names:
++    items:
++      - const: pvt
++      - const: fan
++
++  clocks:
++    maxItems: 1
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    hwmon: hwmon@e2010180 {
++        compatible = "microchip,lan9668-hwmon";
++        reg = <0xe2010180 0xc>,
++              <0xe20042a8 0xc>;
++        reg-names = "pvt", "fan";
++        clocks = <&sys_clk>;
++        #thermal-sensor-cells = <0>;
++    };
 -- 
 2.30.2
 

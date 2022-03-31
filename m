@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FFF4ED425
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153BA4ED460
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiCaGwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
+        id S231671AbiCaHIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiCaGwF (ORCPT
+        with ESMTP id S231315AbiCaHIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:52:05 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B585345798;
-        Wed, 30 Mar 2022 23:50:18 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KTYny1lD0z1GDHG;
-        Thu, 31 Mar 2022 14:49:58 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 14:50:16 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <borisp@nvidia.com>, <john.fastabend@gmail.com>,
-        <daniel@iogearbox.net>, <kuba@kernel.org>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC:     <vakul.garg@nxp.com>, <davejwatson@fb.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v2] net/tls: fix slab-out-of-bounds bug in decrypt_internal
-Date:   Thu, 31 Mar 2022 15:04:28 +0800
-Message-ID: <20220331070428.36111-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.9.5
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        Thu, 31 Mar 2022 03:08:35 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64AB1AAA5C;
+        Thu, 31 Mar 2022 00:06:48 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1648710406; bh=E9Fz8PhIkj82LsVwjeRSlBVyoUrMc8J6qZRK95jJdng=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=IOl3Zwaqj93GibGB1CZjPC/RquumLOvc2LqMggtgCMV377UKKoSGfLkLB3D05BXGW
+         uPgTa3v3Z0XfE8ui4CXmOB4OhUH+35j745lEEvDqfDWSDal8wm9Pv82T5eWjfwz+oI
+         029ZjKd3blm2zAPmMd4jcsNtPc48GEmDWEJHU3w4=
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH 1/2] dt-bindings: dma: Add Apple ADMAC
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
+In-Reply-To: <C2D8BDAF-0ACF-4756-B10F-B5097BC93670@cutebit.org>
+Date:   Thu, 31 Mar 2022 09:06:46 +0200
+Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <265B2992-06E5-4E45-A971-B170A385EFD4@cutebit.org>
+References: <20220330164458.93055-1-povik+lin@cutebit.org>
+ <20220330164458.93055-2-povik+lin@cutebit.org> <YkU6yvUQ6v4VdXiJ@matsya>
+ <C2D8BDAF-0ACF-4756-B10F-B5097BC93670@cutebit.org>
+To:     Vinod Koul <vkoul@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,64 +52,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
-tls_set_sw_offload(). The return value of crypto_aead_ivsize()
-for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
-memory space will trigger slab-out-of-bounds bug as following:
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
-Read of size 16 at addr ffff888114e84e60 by task tls/10911
+> On 31. 3. 2022, at 8:50, Martin Povi=C5=A1er <povik@cutebit.org> =
+wrote:
+>=20
+>>=20
+>> On 31. 3. 2022, at 7:23, Vinod Koul <vkoul@kernel.org> wrote:
+>>=20
+>> On 30-03-22, 18:44, Martin Povi=C5=A1er wrote:
+>>> Apple's Audio DMA Controller (ADMAC) is used to fetch and store =
+audio
+>>> samples on Apple SoCs from the "Apple Silicon" family.
+>>>=20
+>>> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>>> ---
+>>> .../devicetree/bindings/dma/apple,admac.yaml  | 73 =
++++++++++++++++++++
+>>> 1 file changed, 73 insertions(+)
+>>> create mode 100644 =
+Documentation/devicetree/bindings/dma/apple,admac.yaml
+>>>=20
+>>> diff --git a/Documentation/devicetree/bindings/dma/apple,admac.yaml =
+b/Documentation/devicetree/bindings/dma/apple,admac.yaml
+>>> new file mode 100644
+>>> index 000000000000..34f76a9a2983
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/dma/apple,admac.yaml
+>=20
+>>> +  apple,internal-irq-destination:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: Index influencing internal routing of the IRQs
+>>> +      within the peripheral.
+>>=20
+>> do you have more details for this, is this for peripheral and if so
+>> suited to be in dam-cells?
+>=20
+> By peripheral I meant the DMA controller itself here.=20
+>=20
+> Effectively the controller has four independent IRQ outputs and the =
+driver
+> needs to know which one we are using. (It need to be the same output =
+even
+> for different ADMAC instances on one die.)
 
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0x5e/0x5db
- ? decrypt_internal+0x385/0xc40 [tls]
- kasan_report+0xab/0x120
- ? decrypt_internal+0x385/0xc40 [tls]
- kasan_check_range+0xf9/0x1e0
- memcpy+0x20/0x60
- decrypt_internal+0x385/0xc40 [tls]
- ? tls_get_rec+0x2e0/0x2e0 [tls]
- ? process_rx_list+0x1a5/0x420 [tls]
- ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
- decrypt_skb_update+0x9d/0x400 [tls]
- tls_sw_recvmsg+0x3c8/0xb50 [tls]
-
-Allocated by task 10911:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0x81/0xa0
- tls_set_sw_offload+0x2eb/0xa20 [tls]
- tls_setsockopt+0x68c/0x700 [tls]
- __sys_setsockopt+0xfe/0x1b0
-
-Replace the crypto_aead_ivsize() with prot->iv_size + prot->salt_size
-when memcpy() iv value in TLS_1_3_VERSION scenario.
-
-Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
-
-v1->v2:
-  - Remove not-required modification.
----
- net/tls/tls_sw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 0024a692f0f8..a8976ef95528 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1496,7 +1496,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 	if (prot->version == TLS_1_3_VERSION ||
- 	    prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
- 		memcpy(iv + iv_offset, tls_ctx->rx.iv,
--		       crypto_aead_ivsize(ctx->aead_recv));
-+		       prot->iv_size + prot->salt_size);
- 	else
- 		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
- 
--- 
-2.25.1
+Pardon, got an evil typo there: It need *not* be the same output... (And =
+pardon
+the other rich non-plaintext reply...)
 

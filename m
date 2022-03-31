@@ -2,139 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871064ED543
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DE84ED545
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiCaIP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S232606AbiCaIQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiCaIP1 (ORCPT
+        with ESMTP id S232594AbiCaIQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:15:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA61BF74
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648714416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XBSSjR/9FQIi28vZKv97ezZh1yar1AT2JnPj2c6QrxE=;
-        b=hvH3lU3LV8VDnf4mx33dx54TnwaCrURrt0MO7zXFyBsa6DAhdlekOZmNx6DAMxLPkP7KEj
-        brth1vwXCfYIVNaAIk84N43eYJs9itdRZuJMGEOPWJGrUDPosjSEIoo3twtEyP94YEfxfu
-        Y8GUHXVEawNL/ef2d+V8OkiIOH2F46I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-2bVHFnLgO9mOpHl4Sg9Y2w-1; Thu, 31 Mar 2022 04:13:30 -0400
-X-MC-Unique: 2bVHFnLgO9mOpHl4Sg9Y2w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15392899ECD;
-        Thu, 31 Mar 2022 08:13:29 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 987B240D2821;
-        Thu, 31 Mar 2022 08:13:25 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <164859751830.29473.5309689752169286816.stgit@noble.brown>
-References: <164859751830.29473.5309689752169286816.stgit@noble.brown>
-To:     NeilBrown <neilb@suse.de>
-Cc:     dhowells@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-nfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] MM changes to improve swap-over-NFS support
+        Thu, 31 Mar 2022 04:16:03 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81A21A818;
+        Thu, 31 Mar 2022 01:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QsP+IlSxkL6NqvmArcUcnZSFybZOrqNvIwp1wgxlJIk=; b=bMyiaHaMN75EELHxtOPozcytje
+        4mR6+DKXg5nGbvJz+LCHWyRTSQj5FtRPk+9fPKTRB/YWeXnT7ELAMnzzKqEZ+vdYlsjCe/2jaMUBx
+        u9+oLraRrNsLGR+VbTmGpdtHrVVa+oOcIpDj20PBKajoAcuJV32ZPAQ6R5yMLjd/oieN2Jph2nPC/
+        /idfbV9iJI8w547jEKWLeqfGRr7fhb3755KXKnsmwsdvolNbv90nJf7E2j6yj4uvxaU7C60sjXm4P
+        WxqjADp849Kof3CgS28laWtVcWxQZQn/aBvZfgz9yc7hr4ysOZziw3bBPjSKHcgk2bTACUT07NHXG
+        ZRNb4Z3Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZpwS-006PsI-JO; Thu, 31 Mar 2022 08:14:04 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9BC9D98695C; Thu, 31 Mar 2022 10:14:01 +0200 (CEST)
+Date:   Thu, 31 Mar 2022 10:14:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, eranian@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+Subject: Re: [PATCH v4 0/4] perf/core: Fixes for cgroup events
+Message-ID: <20220331081401.GR8939@worktop.programming.kicks-ass.net>
+References: <20220329154523.86438-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3096105.1648714405.1@warthog.procyon.org.uk>
-Date:   Thu, 31 Mar 2022 09:13:25 +0100
-Message-ID: <3096106.1648714405@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329154523.86438-1-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NeilBrown <neilb@suse.de> wrote:
+On Tue, Mar 29, 2022 at 11:45:19PM +0800, Chengming Zhou wrote:
+> Chengming Zhou (4):
+>   perf/core: Don't pass task around when ctx sched in
+>   perf/core: Use perf_cgroup_info->active to check if cgroup is active
+>   perf/core: Fix perf_cgroup_switch()
+>   perf/core: Always set cpuctx cgrp when enable cgroup event
 
-> Assorted improvements for swap-via-filesystem.
-> 
-> This is a resend of these patches, rebased on current HEAD.
-> The only substantial changes is that swap_dirty_folio has replaced
-> swap_set_page_dirty.
-> 
-> Currently swap-via-fs (SWP_FS_OPS) doesn't work for any filesystem.  It
-> has previously worked for NFS but that broke a few releases back.
-> This series changes to use a new ->swap_rw rather than ->readpage and
-> ->direct_IO.  It also makes other improvements.
-> 
-> There is a companion series already in linux-next which fixes various
-> issues with NFS.  Once both series land, a final patch is needed which
-> changes NFS over to use ->swap_rw.
-
-This seems to work by running sufficient copies of the attached program in
-parallel to overwhelm the amount of ordinary RAM.
-
-Tested-by: David Howells <dhowells@redhat.com>
----
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/mman.h>
-
-int main()
-{
-	unsigned int pid = getpid(), iterations = 0;
-	size_t i, j, size = 1024 * 1024 * 1024;
-	char *p;
-	bool mismatch;
-
-	p = malloc(size);
-	if (!p) {
-		perror("malloc");
-		exit(1);
-	}
-
-	srand(pid);
-	for (i = 0; i < size; i += 4)
-		*(unsigned int *)(p + i) = rand();
-	
-	do {
-		for (j = 0; j < 16; j++) {
-			for (i = 0; i < size; i += 4096)
-				*(unsigned int *)(p + i) += 1;
-			iterations++;
-		}
-
-		mismatch = false;
-		srand(pid);
-		for (i = 0; i < size; i += 4) {
-			unsigned int r = rand();
-			unsigned int v = *(unsigned int *)(p + i);
-
-			if (i % 4096 == 0)
-				v -= iterations;
-
-			if (v != r) {
-				fprintf(stderr, "mismatch %zx: %x != %x (diff %x)\n",
-					i, v, r, v - r);
-				mismatch = true;
-			}
-		}
-	} while (!mismatch);
-
-	exit(1);
-}
-
+Thanks, queued for post -rc1

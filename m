@@ -2,83 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3300C4EE10D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04344EE113
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbiCaSsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S236976AbiCaSum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234355AbiCaSsg (ORCPT
+        with ESMTP id S230521AbiCaSuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:48:36 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1375F1F0820
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=NpNBulrUtcpc8Onu2yDjkaMRwHGXonadscW2Ecw/kHc=; b=o9I1j1q6wV0tq1VphucAwJ7f3H
-        RjyLvQ7Iil+Z0Smm8e3tEw2VhZGREwT4t+Ri548E9PCVoWKoiihwF2u2pE/1zeXKu3flG+cVb+Ysu
-        Z12nDFMVDEfpdY6GzcuA1588gucUPgdsQcuRObfzJ4rbHTnDmxejFV5Z50WRnLUZsFhj6Yo0t3umr
-        a5FisIdIFZza3JdHa7rEX/wkPAx9aEK3XgGQCM1FwMPXR21yXCilcIY79ZT6dpjBP7uzw4oeV0ICK
-        MQDby5SYwqgTG8sKPhYrBD3tIkepNNrkXAkk+jVu/YmLJsU4jpWJU5TeH6YTmLIExCLBiY6K9+Ud8
-        Oo65M+rg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58074)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZzoa-0005DO-55; Thu, 31 Mar 2022 19:46:35 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZzoS-0007s9-7E; Thu, 31 Mar 2022 19:46:28 +0100
-Date:   Thu, 31 Mar 2022 19:46:28 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thu, 31 Mar 2022 14:50:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92276F8979;
+        Thu, 31 Mar 2022 11:48:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E83CCB821B1;
+        Thu, 31 Mar 2022 18:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542DDC34112;
+        Thu, 31 Mar 2022 18:48:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648752528;
+        bh=XLqUTEaZHUdBl3k9tG42qX5rR9y+92i0shW0PIO3bNA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lz5AeUro9ojkspRzwDWYcgYyL5epAIe8ar/6PvcYiTJY6w5ObVHrHOUAbh0BS81zB
+         Y/Ymhrsz75svW/AHrqC1pTlXgHDTW2UgGhZXsPJQ7eVGGZHSwZ1LAoTABL+Bg2uaUZ
+         bYo8wvmfczi8FOZCtXijm3VvKTxQugQsy8uXUY7XG8O8DNM6BsHHr9pbip9RwN/DUf
+         e5zXBNuPVLY1E0hRiwZumzt0uepbdyWCeacCfbN/WtuVU077VOeP4oZ2e5NWlK+q5w
+         N3yAAxwAgb8DqIIV0nhMnbSVyXlUi18/fu9+AaS9ax/9iIdemyyS4jaZw0YHiAgcgh
+         tNuReexFNPEYA==
+Received: by wens.tw (Postfix, from userid 1000)
+        id 56BC95FC12; Fri,  1 Apr 2022 02:48:45 +0800 (CST)
+From:   Chen-Yu Tsai <wens@kernel.org>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        David Hildenbrand <david@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zi Yan <ziy@nvidia.com>
-Subject: Re: [GIT PULL] hardening fixes for v5.18-rc1
-Message-ID: <YkX3BKpxwCaey8QU@shell.armlinux.org.uk>
-References: <202203311127.503A3110@keescook>
+        Russell King <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH RESEND2] net: stmmac: Fix unset max_speed difference between DT and non-DT platforms
+Date:   Fri,  1 Apr 2022 02:48:32 +0800
+Message-Id: <20220331184832.16316-1-wens@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203311127.503A3110@keescook>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:35:40AM -0700, Kees Cook wrote:
-> Hi Linus,
-> 
-> Please pull these hardening fixes for v5.18-rc1. This addresses an
-> -Warray-bounds warning found under a few ARM defconfigs, and disables
-> long-broken CONFIG_HARDENED_USERCOPY_PAGESPAN.
+From: Chen-Yu Tsai <wens@csie.org>
 
-I don't see these patches on linux-arm-kernel... are we doing away with
-patch review now? :D
+In commit 9cbadf094d9d ("net: stmmac: support max-speed device tree
+property"), when DT platforms don't set "max-speed", max_speed is set to
+-1; for non-DT platforms, it stays the default 0.
 
+Prior to commit eeef2f6b9f6e ("net: stmmac: Start adding phylink support"),
+the check for a valid max_speed setting was to check if it was greater
+than zero. This commit got it right, but subsequent patches just checked
+for non-zero, which is incorrect for DT platforms.
+
+In commit 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+the conversion switched completely to checking for non-zero value as a
+valid value, which caused 1000base-T to stop getting advertised by
+default.
+
+Instead of trying to fix all the checks, simply leave max_speed alone if
+DT property parsing fails.
+
+Fixes: 9cbadf094d9d ("net: stmmac: support max-speed device tree property")
+Fixes: 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+
+Resend2: CC Srinivas at Linaro instead of ST. Collected Russell's ack.
+Resend: added Srinivas (author of first fixed commit) to CC list.
+
+This was first noticed on ROC-RK3399-PC, and also observed on ROC-RK3328-CC.
+The fix was tested on ROC-RK3328-CC and Libre Computer ALL-H5-ALL-CC.
+
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index 5d29f336315b..11e1055e8260 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+@@ -431,8 +431,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+ 	plat->phylink_node = np;
+ 
+ 	/* Get max speed of operation from device tree */
+-	if (of_property_read_u32(np, "max-speed", &plat->max_speed))
+-		plat->max_speed = -1;
++	of_property_read_u32(np, "max-speed", &plat->max_speed);
+ 
+ 	plat->bus_id = of_alias_get_id(np, "ethernet");
+ 	if (plat->bus_id < 0)
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+

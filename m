@@ -2,163 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56A54EDEDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED254EDED6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240018AbiCaQfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S239975AbiCaQec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240006AbiCaQfV (ORCPT
+        with ESMTP id S239969AbiCaQe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:35:21 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E57910E578;
-        Thu, 31 Mar 2022 09:33:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CDOD+kKyyTETxHBNZM+2X+4CKOLi0HbG4BCxoDci4bHb/C6o4GL1Hi29lrbLkEGn6udljMntsSJZooWSXknYNwmJDDTik/4J+iNELCDCDmHvAzuD9iYy8pPCtGEVkH4GG4THiSnvdvVLEZOlnXcloWSX8cawmaqX3lPg9EGJASr2lL01ZRH2kvKGYgt4+IfF1Rz9UahZWelneEAfNCsTfaeTcB2mbn8daMy0ZOsnC98J6jDWv9Njx0yRwmMIA7IeGuxm4MuIKUOAmyjGORT+gdoaEGOXIcRu3U5bjhs47ga76BUxfIosHrY7TiHJ6MUQV5erOKpCTUnlJVjdDynuGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FpsQ3P7GLY5eeC0LjnMTlMF06VsykEnUUDgRshVxjqM=;
- b=AW7kmyxBE4IJ3ob3sDW4o5WHSQe+gBH06CGbz6x9OZhyXzvUs2+yABFgbGNgqbyefruFe0lRiF/pUgBNv6B2r3oPR+xj52uXwsHJm6EnDXACXnbf+Xwpo4KnhcP627h2egRJQYY0/MCTZJ6Rlod2T2mDJhiO33kJ1uWNlwXsRDM8qL2iEYrhR6K1DF481EibtBt3I2CGJFNkdAQj4o3gYtX0PRH1lDeqOgUsKiGVioYT870EMEJm4st5sz9QHarNeO3noMPruucRDipOJPAAC57xvyQwja46JtTUC8wEdoIuCfRN2D1hcs/tTHhVFP/QzCdMWIZT3QeXRrjOBR8ELg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FpsQ3P7GLY5eeC0LjnMTlMF06VsykEnUUDgRshVxjqM=;
- b=d+xAGa1kh4CfE3pP4300+EE3lbhYS5gOLIVmuGbAytrRpLF6klGnI3+30X5/vrc+bW7L8JHKGWbVc34cGtyJJcQygQTBZzejCaF/6FKsrATy96l7wxX5XXfk7+3YGlrEDFNNrExIvtAM9lxBvERboCuJNen2vsrxS5LMuVjfG6U=
-Received: from DM6PR02CA0048.namprd02.prod.outlook.com (2603:10b6:5:177::25)
- by BN9PR12MB5242.namprd12.prod.outlook.com (2603:10b6:408:11f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Thu, 31 Mar
- 2022 16:33:31 +0000
-Received: from DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:177:cafe::48) by DM6PR02CA0048.outlook.office365.com
- (2603:10b6:5:177::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.22 via Frontend
- Transport; Thu, 31 Mar 2022 16:33:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT039.mail.protection.outlook.com (10.13.172.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5123.19 via Frontend Transport; Thu, 31 Mar 2022 16:33:29 +0000
-Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 31 Mar 2022 11:33:28 -0500
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <bp@alien8.de>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH v2 2/2] x86/mce: Add messages to describe panic machine errors on AMD's MCEs grading
-Date:   Thu, 31 Mar 2022 11:32:14 -0500
-Message-ID: <20220331163211.5994-3-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220331163211.5994-1-carlos.bilbao@amd.com>
-References: <20220331163211.5994-1-carlos.bilbao@amd.com>
+        Thu, 31 Mar 2022 12:34:29 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57751FF433
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:32:41 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id t25so127926lfg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b5EuL+gbnNFQ87YRYoAKBwPNNldsvEmstfa9tdC1Qjw=;
+        b=sxdbgUE2Kaq4uw7gb73QHsWD6/kz3qaXOp4jtlQQ8zCWOGZchRXoS9h1kgGVgmwHMi
+         0ovyZTnHlEv8jIe/t0cC86uBkO99V4EO8Uz5f6uPSjIGlmCW5dfk1M/WMMgmw59b/Vmr
+         UaAH/7kYp3jq0L4a5oBQkDjGGm033na3bYjkJ0PSfFUGgdKTwJTImQPUAtxcu7+XlXvz
+         2OjxZNPuXaMG+w58a5/U0wluu/5+wyuuUTsalUysgAJrKHCGhlMohRLo/Ao6Rozoy4M7
+         vVa7GkNVeu1ikZU3b0NanTzbgz4haCidvDdbWRXlged7lJSNBHh2Wh1Z5C1S+UV2V2iS
+         oshA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b5EuL+gbnNFQ87YRYoAKBwPNNldsvEmstfa9tdC1Qjw=;
+        b=qG9eUuNW6djChbqPB37lcqmFR4CQ8c/J86VmtXpw/74iVFR+4mkIpeCEzXdokHKoE/
+         LKm8ajjFyAMgQEwn745M+8+PqlnmCg4z1VgdwQjqHBoaKZdaZARJsRGWBusDLNDFa0Ij
+         cS/xeA4LpoyS6dAPNi44IZit1E3gkTyyNsDLUDNszkZHDVICzQ/UvVjtDDt8ZtZgsQa+
+         RP7QWAW2MryMAlsNpMQNnfkGvW5EtJxrguTpJm5Pjk1nLch3Ce8ly/sfC4gp4I/V/sEP
+         Ceh9qF5hiT2npuvHNDLUNG0LkPOQB5cAV6oPcHXcs70GNiUC6OGGTbBnkdrMcZDF4lRq
+         CrIA==
+X-Gm-Message-State: AOAM533I60CRv/VDTRCLswCAl0IIPw96hEpiLB1j64oVmcEfE9pfvU4v
+        HJbhLiETSb5C5pf2/oOf7dMymONxGhDTrJZbCg8qfg==
+X-Google-Smtp-Source: ABdhPJzDKroUOn9WqA656ToUno9/DwyrFz+qIKbK639QDjkL6PIrlSnozMRN4BUf4+XJE6GzN91N3kg09SPyqja93/0=
+X-Received: by 2002:ac2:4ed4:0:b0:44a:212e:fa1a with SMTP id
+ p20-20020ac24ed4000000b0044a212efa1amr11109703lfr.372.1648744360087; Thu, 31
+ Mar 2022 09:32:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 019abf82-1993-4480-4fe1-08da1334307a
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5242:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB52427BCCD903475931FF1968F8E19@BN9PR12MB5242.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GZGN8d7NlhXVpu+4ydAGiAnwssEGClJ2RVubavpP8ROEp5JkzkuH0NmyVunh8EyIzNxWvMvCdu7plx3FBbqmS82Rozf52nG5kk9qrkzQvz5Ujvv8uy9NRhNpu4KtAM+5PygrHEcNgadFVGLyxIAdhhzOd3k+GsWL48LsDlZjtwtfaMplEv2/9N9jyZZy/dwHFwcclBdYbbiDmppN6wgeMVFg0rPBaSlEsp/wcpp0W6Zc/ES55P7A6ZtWnude4jr3a9oQVeAfttidQcQtqboS0Sd5VgRZ39Sh+hi7jvFcErSY7uEQcvuvXQUIrXNHOaGtAe8aIdV1ZMp4ZXWMtq+0Fik+iLpZwRaHvEbtUdRSY8XT2gkBg/WT3gzNJdnsWeTG4VEn4lxCIxMWB1pobAK4x9hESouZH7SuZYAmD70KJS3RpzsvF4xtfhNUe1z68FfBmA+bib888siVIwZ0NbZtgBRI4GijoFzbukkm7NgUcYeWF29vPEr6y1Nmg+nuva64exnXRFdJdxC8oyDuXp2Ft2+DhznVO9G7Sjb87QNxq2dkTbE+ORGWVFBC74lui5cJLIFR+zH3RVNgvH8k1eYi9G9otBleBnNisIvhnDiSIrW8GtaEb+zrvCVRr9GFJ6FvlNqOXjGtqgLnABUT53q2jTABnfaz6TE6S1ElhWWAi8RgxvlAGeb7rJFFlnb4EomOTnurmQ0VBDaDYK+jjP3Yaw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(356005)(54906003)(316002)(86362001)(7696005)(2616005)(81166007)(6666004)(6916009)(26005)(36756003)(336012)(426003)(83380400001)(1076003)(47076005)(2906002)(186003)(36860700001)(16526019)(15650500001)(5660300002)(508600001)(70206006)(70586007)(4326008)(44832011)(8676002)(82310400004)(40460700003)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 16:33:29.7958
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 019abf82-1993-4480-4fe1-08da1334307a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5242
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220331105005.2580771-1-ivecera@redhat.com> <YkWpNVXYEBo/u3dm@boxer>
+ <YkWp5JJ9Sp6UCTw7@boxer>
+In-Reply-To: <YkWp5JJ9Sp6UCTw7@boxer>
+From:   Brett Creeley <brett@pensando.io>
+Date:   Thu, 31 Mar 2022 09:32:31 -0700
+Message-ID: <CAFWUkrTzE87bduD431nu11biHi78XFitUWQfiwcU6_4UPU9FBg@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH net] ice: Fix incorrect locking in ice_vc_process_vf_msg()
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>, mschmidt@redhat.com,
+        open list <linux-kernel@vger.kernel.org>, poros@redhat.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>, jacob.e.keller@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a machine error is graded as PANIC by AMD grading logic, the MCE
-handler calls mce_panic(). The notification chain does not come into effect
-so the AMD EDAC driver does not decode the errors. In these cases, the
-messages displayed to the user are more cryptic and miss information
-that might be relevant, like the context in which the error took place.
+On Thu, Mar 31, 2022 at 6:17 AM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> On Thu, Mar 31, 2022 at 03:14:32PM +0200, Maciej Fijalkowski wrote:
+> > On Thu, Mar 31, 2022 at 12:50:04PM +0200, Ivan Vecera wrote:
+> > > Usage of mutex_trylock() in ice_vc_process_vf_msg() is incorrect
+> > > because message sent from VF is ignored and never processed.
+> > >
+> > > Use mutex_lock() instead to fix the issue. It is safe because this
+> >
+> > We need to know what is *the* issue in the first place.
+> > Could you please provide more context what is being fixed to the readers
+> > that don't have an access to bugzilla?
+> >
+> > Specifically, what is the case that ignoring a particular message when
+> > mutex is already held is a broken behavior?
+>
+> Uh oh, let's
+> CC: Brett Creeley <brett@pensando.io>
 
-Fix the above issue including messages on AMD's grading logic for machine
-errors graded as PANIC.
+My concern here is that we don't want to handle messages
+from the context of the "previous" VF configuration if that
+makes sense.
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
----
- arch/x86/kernel/cpu/mce/severity.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+It might be best to grab the cfg_lock before doing any
+message/VF validating in ice_vc_process_vf_msg() to
+make sure all of the checks are done under the cfg_lock.
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 4d52eef21230..ea4b9407bbad 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -307,6 +307,7 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
- {
- 	int ret;
-+	char *panic_msg;
- 
- 	/*
- 	 * Default return value: Action required, the error must be handled
-@@ -316,6 +317,7 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 
- 	/* Processor Context Corrupt, no need to fumble too much, die! */
- 	if (m->status & MCI_STATUS_PCC) {
-+		panic_msg = "Processor Context Corrupt";
- 		ret = MCE_PANIC_SEVERITY;
- 		goto amd_severity;
- 	}
-@@ -339,16 +341,21 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 
- 	if (((m->status & MCI_STATUS_OVER) && !mce_flags.overflow_recov)
- 	     || !mce_flags.succor) {
-+		panic_msg = "Uncorrected unrecoverable error";
- 		ret = MCE_PANIC_SEVERITY;
- 		goto amd_severity;
- 	}
- 
- 	if (error_context(m, regs) == IN_KERNEL) {
-+		panic_msg = "Uncorrected error in kernel context";
- 		ret = MCE_PANIC_SEVERITY;
- 	}
- 
- amd_severity:
- 
-+	if (msg && panic_msg)
-+		*msg = panic_msg;
-+
- 	return ret;
- }
- 
--- 
-2.31.1
+CC'ing Jake so he can provide some input as
+well.
 
+>
+> >
+> > > mutex is used to prevent races between VF related NDOs and
+> > > handlers processing request messages from VF and these handlers
+> > > are running in ice_service_task() context.
+> > >
+> > > Fixes: e6ba5273d4ed ("ice: Fix race conditions between virtchnl handling and VF ndo ops")
+> > > Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> > > ---
+> > >  drivers/net/ethernet/intel/ice/ice_virtchnl.c | 10 +---------
+> > >  1 file changed, 1 insertion(+), 9 deletions(-)
+> > >
+> > > diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl.c b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+> > > index 3f1a63815bac..9bf5bb008128 100644
+> > > --- a/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+> > > +++ b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+> > > @@ -3660,15 +3660,7 @@ void ice_vc_process_vf_msg(struct ice_pf *pf, struct ice_rq_event_info *event)
+> > >             return;
+> > >     }
+> > >
+> > > -   /* VF is being configured in another context that triggers a VFR, so no
+> > > -    * need to process this message
+> > > -    */
+> > > -   if (!mutex_trylock(&vf->cfg_lock)) {
+> > > -           dev_info(dev, "VF %u is being configured in another context that will trigger a VFR, so there is no need to handle this message\n",
+> > > -                    vf->vf_id);
+> > > -           ice_put_vf(vf);
+> > > -           return;
+> > > -   }
+> > > +   mutex_lock(&vf->cfg_lock);
+> > >
+> > >     switch (v_opcode) {
+> > >     case VIRTCHNL_OP_VERSION:
+> > > --
+> > > 2.34.1
+> > >
+> > > _______________________________________________
+> > > Intel-wired-lan mailing list
+> > > Intel-wired-lan@osuosl.org
+> > > https://lists.osuosl.org/mailman/listinfo/intel-wired-lan

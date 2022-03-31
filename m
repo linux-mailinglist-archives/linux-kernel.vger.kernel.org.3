@@ -2,178 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABAA44EDB96
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECFD4EDB9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237465AbiCaOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S237486AbiCaOWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237455AbiCaOVg (ORCPT
+        with ESMTP id S237461AbiCaOWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:21:36 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2E51BE4F9;
-        Thu, 31 Mar 2022 07:19:49 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id b17-20020a0568301df100b005ce0456a9efso3774500otj.9;
-        Thu, 31 Mar 2022 07:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Vm/tLIcwztm/cAKbFq5hHS63stt8moqDI9vFQVEX30w=;
-        b=BacBToiK8uRJiYP8U49LBgQIIk48GIXBiDcFFbQX70JKSoZiVymsFSN84pgd2xGBUP
-         I3hhs4i+5uCE3p+wCmcL+oJk+n/mLbzzymDDLXeIVLVU+o2pcWQHSsuE6Sq9TjyeaMi5
-         FLt3FFJzp10/llYMGVcgIMsbUBKhefUl1PY3LUzM1rINwwg7Gb87cTpfA59pkFiW0Q6s
-         K/SE5gAjNWlrL532/Ng+WvWcZ8dRsL+35hHVQ/sJ/gslQbFz26rIB+54RaRBuUqIMDLi
-         VFTX/NBB5Wr0Y14Nl8nVs8bjFssMJrX2GRNq+yjFLZWwUq22gvirxt4jtWFCe/RTCTkX
-         d0Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Vm/tLIcwztm/cAKbFq5hHS63stt8moqDI9vFQVEX30w=;
-        b=VpQlx7EMa49oMBgfuHxkMjmZI7/1pvs2st0YPvnctaV6B7mBNa2OJG+F7tzyckPkqf
-         Mm6X6nAdN1XxzprrmjBXz7j0wR4Vv3xn6gIYQnPwHZ0NILpg4/p5zCSvTeAMrAgM9yO1
-         KzK1xC0yfkP0qs3gBbU+7GYrUsxNVFDQdaEYt3apPISUUHeuIDvSEcu9EhDGXZWDNZlk
-         t3brlfHoN7ZPAdxe256KG8r5svlavqi7qw+8WreamQy4gYuH4SDPeXHuDfnGmFpoLMMf
-         7U3mGFK3CUMt/ozWcdvqno4U7VFgKjYM34ATNqIy/U92moGhgOviNTVzE71yOAaXvNDb
-         p2YQ==
-X-Gm-Message-State: AOAM531X9vBCRtdM7PMTT4lcEAkCn35oXoC+CS5pHkUXX1rOMJJbF1Kp
-        KUaLcwF65h164SoaWl64csc=
-X-Google-Smtp-Source: ABdhPJxvaMnWlIqOGNm++kxUq/OI22tXvuvCi7hITtxpHtFZJ3FqhnurnjI95U9h2jczQz9rtAONIQ==
-X-Received: by 2002:a05:6830:2b0d:b0:5cd:aca2:f3f2 with SMTP id l13-20020a0568302b0d00b005cdaca2f3f2mr5709703otv.212.1648736388863;
-        Thu, 31 Mar 2022 07:19:48 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id x25-20020a056830409900b005af164235b4sm11919171ott.2.2022.03.31.07.19.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 07:19:47 -0700 (PDT)
-Message-ID: <68f66e54-e5e4-28ff-96a9-d4eaffc08c82@gmail.com>
-Date:   Thu, 31 Mar 2022 16:19:43 +0200
+        Thu, 31 Mar 2022 10:22:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706A1BFDF7;
+        Thu, 31 Mar 2022 07:20:20 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22VDP8Ip010210;
+        Thu, 31 Mar 2022 14:20:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=kRBcowtAIg+U1BYIxVvx2TwDQmBLa27VX92AbZvvO4I=;
+ b=WgiKreRg6xVX1G7roLx5WLkwcIvedfV5EQ5WbLgZW8tvtGFvlAvjj2ctlWp5/sEfIQ0s
+ vg5HXC/7R0LXUNJPEx4lg5qGGPCx4ZUFlQbKTRBk7ojKyV5PKNo/jj31JZlhDi3aZYLG
+ 7PKsBqhA8p4gtItYzGsUl6SV8xQS1ELgLsfU6tBrBjcoIAT4cSLa0cBWktIX/DSPyCG8
+ C/rW2BJY/HfVwnFhGXivvIZcqOhBkq3ZLp1TNi6TsH5E1/1RZlcVAyRxOrXJdPQYgdCn
+ Hr/tyBflBcIL6uXMmk9ZoIynMEMgVZqigzYhy/YCKc1UYYNMSfVBFoCvSZz3jiXN9bSW Jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f58a401cs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 14:20:03 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22VEK20k024987;
+        Thu, 31 Mar 2022 14:20:02 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f58a401c7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 14:20:02 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22VEDZ8E001147;
+        Thu, 31 Mar 2022 14:20:01 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01dal.us.ibm.com with ESMTP id 3f1tfae6nv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 14:20:01 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22VEK0GZ14156216
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 14:20:00 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BAA27806B;
+        Thu, 31 Mar 2022 14:20:00 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0C8C78063;
+        Thu, 31 Mar 2022 14:19:58 +0000 (GMT)
+Received: from [IPv6:2601:5c4:4300:c551::c14] (unknown [9.163.9.79])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 31 Mar 2022 14:19:58 +0000 (GMT)
+Message-ID: <574d33978be5eb4732cd3bf61727e6b509a7e484.camel@linux.ibm.com>
+Subject: Re: [PATCH] scsi: sd: call device_del() if device_add_disk() fails
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Wenchao Hao <haowenchao@huawei.com>,
+        syzkaller-bugs@googlegroups.com
+Cc:     fmdefrancesco@gmail.com, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com,
+        linfeilong@huawei.com
+Date:   Thu, 31 Mar 2022 10:19:57 -0400
+In-Reply-To: <20220331134210.GF12805@kadam>
+References: <20220329154948.10350-1-fmdefrancesco@gmail.com>
+         <20220331152622.616534-1-haowenchao@huawei.com>
+         <20220331054156.GI3293@kadam>
+         <fdebdbd3-575b-b30e-d37f-dcc6d53a4f53@huawei.com>
+         <20220331134210.GF12805@kadam>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 2/4] arm64: dts: mt8192: Add mmc device nodes
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220330133816.30806-1-allen-kh.cheng@mediatek.com>
- <20220330133816.30806-3-allen-kh.cheng@mediatek.com>
- <4cd1c5fa-0982-0355-d5b6-7025b82174a4@gmail.com>
- <ccd28405c8f2c420354f3355fc9d4ef1dd7ea35d.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <ccd28405c8f2c420354f3355fc9d4ef1dd7ea35d.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zKmGDzLpzzB_S1JDhPOk3DeX7A3LagNa
+X-Proofpoint-GUID: e9DkUTvMMIgF-uLZnCkqQYobHaGnPue4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-31_05,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=580
+ clxscore=1011 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203310079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-03-31 at 16:42 +0300, Dan Carpenter wrote:
+[...]
+> Also, I don't really understand why we don't have to call
+> put_device(&sdkp->disk_dev) at the end of sd_remove().
+
+That's because the final put is done by the gendisk ->free_disk()
+function which is scsi_disk_free_disk().  Most of the gendisk functions
+we provide convert a gendisk to a scsi_disk (via the gendisk
+private_data), so the sdkp has to live as long as the gendisk.
+
+James
 
 
-On 31/03/2022 14:48, allen-kh.cheng wrote:
-> Hi Matthias,
-> 
-> On Thu, 2022-03-31 at 14:02 +0200, Matthias Brugger wrote:
->>
->> On 30/03/2022 15:38, Allen-KH Cheng wrote:
->>> Add mmc nodes for mt8192 SoC.
->>>
->>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>> Reviewed-by: AngeloGioacchino Del Regno <
->>> angelogioacchino.delregno@collabora.com>
->>
->> You forgot to disable the msdc clock node, which I understood we
->> agreed on in in
->> v4. I would consider this change as an substantial one, so in this
->> case please
->> delete the reviewed-by tags.
->>
->> Regards,
->> Matthias
->>
-> 
-> Is it ok I send a new patch for this instead of a series?
-
-Yes sure.
-
-Matthias
-
-> 
-> Best regards,
-> Allen
-> 
->>> ---
->>>    arch/arm64/boot/dts/mediatek/mt8192.dtsi | 32
->>> ++++++++++++++++++++++++
->>>    1 file changed, 32 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> index 69e8d1934d53..c1057878e2c6 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> @@ -991,6 +991,38 @@
->>>    			#clock-cells = <1>;
->>>    		};
->>>    
->>> +		mmc0: mmc@11f60000 {
->>> +			compatible = "mediatek,mt8192-mmc",
->>> "mediatek,mt8183-mmc";
->>> +			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0
->>> 0x1000>;
->>> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH
->>> 0>;
->>> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
->>> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
->>> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
->>> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
->>> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>,
->>> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
->>> +				 <&msdc_top
->>> CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
->>> +			clock-names = "source", "hclk", "source_cg",
->>> "sys_cg",
->>> +				      "pclk_cg", "axi_cg", "ahb_cg";
->>> +			status = "disabled";
->>> +		};
->>> +
->>> +		mmc1: mmc@11f70000 {
->>> +			compatible = "mediatek,mt8192-mmc",
->>> "mediatek,mt8183-mmc";
->>> +			reg = <0 0x11f70000 0 0x1000>, <0 0x11c70000 0
->>> 0x1000>;
->>> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH
->>> 0>;
->>> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
->>> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
->>> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
->>> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
->>> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>,
->>> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
->>> +				 <&msdc_top
->>> CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
->>> +			clock-names = "source", "hclk", "source_cg",
->>> "sys_cg",
->>> +				      "pclk_cg", "axi_cg", "ahb_cg";
->>> +			status = "disabled";
->>> +		};
->>> +
->>>    		mfgcfg: clock-controller@13fbf000 {
->>>    			compatible = "mediatek,mt8192-mfgcfg";
->>>    			reg = <0 0x13fbf000 0 0x1000>;
-> 

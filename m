@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3F84ED7F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569814ED7F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiCaKvU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 31 Mar 2022 06:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S234745AbiCaKv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbiCaKvR (ORCPT
+        with ESMTP id S232246AbiCaKv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:51:17 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 919DD1BA69A
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:49:29 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-63-N2DKP2DGM8SWAiwiGxM7Pg-1; Thu, 31 Mar 2022 11:49:25 +0100
-X-MC-Unique: N2DKP2DGM8SWAiwiGxM7Pg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 31 Mar 2022 11:49:24 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 31 Mar 2022 11:49:24 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dan Carpenter' <dan.carpenter@oracle.com>
-CC:     'Alaa Mohamed' <eng.alaamohamedsoliman.am@gmail.com>,
-        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] staging: gdm724x: Fix Duplication of Side Effects
-Thread-Topic: [PATCH] staging: gdm724x: Fix Duplication of Side Effects
-Thread-Index: AQHYROi924sZ22xfrE+zbiso9jQv5KzZSk9w///yggCAABHMsA==
-Date:   Thu, 31 Mar 2022 10:49:24 +0000
-Message-ID: <acde5b1e8495431dac05403c593d4679@AcuMS.aculab.com>
-References: <20220331101849.71046-1-eng.alaamohamedsoliman.am@gmail.com>
- <ebbc4a14c30f492f8553e6ef572bbcbe@AcuMS.aculab.com>
- <20220331104012.GM3293@kadam>
-In-Reply-To: <20220331104012.GM3293@kadam>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 31 Mar 2022 06:51:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2E2E1BA69D
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648723809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=v8/zU1sMY3yS+tcb1Sho2mb+pIX+PEBuc2KI2UecOM0=;
+        b=e9Aj5I2395m49MfYxr8QseyMxawdXaAYggthXuJd8hhiWkOyHCAT+RF/TlBbDcncJLZs+9
+        WDKVvcTlVo/JXCjnLf494//JRw7c1pLNY4aiUDvebhUC8UNznKFtN6SyMgYaQWqU46pvlN
+        fs4L4aJdWe/FZrgaUJYfpNsVHB5//f0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-dC_MAcA4MsujrC9QVAF6yw-1; Thu, 31 Mar 2022 06:50:08 -0400
+X-MC-Unique: dC_MAcA4MsujrC9QVAF6yw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D67003C01D9D;
+        Thu, 31 Mar 2022 10:50:07 +0000 (UTC)
+Received: from ceranb.redhat.com (unknown [10.40.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0D92140262B;
+        Thu, 31 Mar 2022 10:50:05 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     poros@redhat.com, mschmidt@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Brett Creeley <brett.creeley@intel.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] ice: Fix incorrect locking in ice_vc_process_vf_msg()
+Date:   Thu, 31 Mar 2022 12:50:04 +0200
+Message-Id: <20220331105005.2580771-1-ivecera@redhat.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,55 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter
-> Sent: 31 March 2022 11:40
-> 
-> On Thu, Mar 31, 2022 at 10:29:04AM +0000, David Laight wrote:
-> > From: Alaa Mohamed
-> > > Sent: 31 March 2022 11:19
-> > >
-> > > Fix Duplication of Side Effects for GDM_TTY_READY(gdm) macro
-> > > reported by checkpatch
-> > > "CHECK: Macro argument reuse 'gdm' - possible side-effects?"
-> > >
-> > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> > > ---
-> > >  drivers/staging/gdm724x/gdm_tty.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
-> > > index 04df6f9f5403..6f0274470e69 100644
-> > > --- a/drivers/staging/gdm724x/gdm_tty.c
-> > > +++ b/drivers/staging/gdm724x/gdm_tty.c
-> > > @@ -27,7 +27,9 @@
-> > >
-> > >  #define MUX_TX_MAX_SIZE 2048
-> > >
-> > > -#define GDM_TTY_READY(gdm) (gdm && gdm->tty_dev && gdm->port.count)
-> > > +#define GDM_TTY_READY(_gdm) \
-> > > +	({ typeof(_gdm) (gdm) = (_gdm); \
-> > > +	(gdm && gdm->tty_dev && gdm->port.count); })
-> >
-> > Did you test this?
-> >
-> > see https://godbolt.org/z/cazPrrzPv
-> >
-> 
-> I don't understand the link.  The patch should work as far as I can see.
+Usage of mutex_trylock() in ice_vc_process_vf_msg() is incorrect
+because message sent from VF is ignored and never processed.
 
-If you call GDM_TTY_READY(gdm) the first line ends up as:
-	struct xxx *gdm = gdm;
-which shadows the parameter.
-There's probably a warning about an uninitialised variable as well.
+Use mutex_lock() instead to fix the issue. It is safe because this
+mutex is used to prevent races between VF related NDOs and
+handlers processing request messages from VF and these handlers
+are running in ice_service_task() context.
 
-The 'gdm' and '_gdm' would need swapping over.
-But, as you said, just:
-#define GDM_TTY_READY(gdm) ((gdm) && (gdm)->tty_dev && (gdm)->port.count)
-is fine - I'd add the () but not worry about multiple evaluation.
+Fixes: e6ba5273d4ed ("ice: Fix race conditions between virtchnl handling and VF ndo ops")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_virtchnl.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl.c b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+index 3f1a63815bac..9bf5bb008128 100644
+--- a/drivers/net/ethernet/intel/ice/ice_virtchnl.c
++++ b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+@@ -3660,15 +3660,7 @@ void ice_vc_process_vf_msg(struct ice_pf *pf, struct ice_rq_event_info *event)
+ 		return;
+ 	}
+ 
+-	/* VF is being configured in another context that triggers a VFR, so no
+-	 * need to process this message
+-	 */
+-	if (!mutex_trylock(&vf->cfg_lock)) {
+-		dev_info(dev, "VF %u is being configured in another context that will trigger a VFR, so there is no need to handle this message\n",
+-			 vf->vf_id);
+-		ice_put_vf(vf);
+-		return;
+-	}
++	mutex_lock(&vf->cfg_lock);
+ 
+ 	switch (v_opcode) {
+ 	case VIRTCHNL_OP_VERSION:
+-- 
+2.34.1
 

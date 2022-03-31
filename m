@@ -2,152 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E16D4ED6A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078514ED6AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233692AbiCaJTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
+        id S233747AbiCaJV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiCaJS7 (ORCPT
+        with ESMTP id S233723AbiCaJVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:18:59 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73CEB4A;
-        Thu, 31 Mar 2022 02:17:12 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y10so27389858edv.7;
-        Thu, 31 Mar 2022 02:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IPHn1LL6zDM+73MSZ/MbfXeBZkpfR8F/aK1wIS6jVAg=;
-        b=F0WlmgYX19BNZbar9zSIc+QPFMYvfmXQ6JpvRv/ZUvcab4U1wG/P8uze3G4+5odule
-         JsEON2sQQ9M1dfsiV2R9W0a7E4epQllDieM9VPDDclMsRYSl+WNuxH2Wau1R+iBu4p6y
-         LoSQmtBC9tug4aY3OiP+pX6pRbH+MtbFURTSarAo+De1LYRCIK2bdP4viYzrWuXuRkAI
-         yI67Ggqh8fymEGSFrdwVZrcwQxck6NDvGbIlgI9oX/jy7ZF4aH9zxzQuDecfFmtt2v1d
-         qPp1Hn+bTSPrP7b1rP2xFdISMWqb+jhNZa/aOvhUpJY6kZmPGnKQGypqDSge5bHtAwHD
-         VIgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IPHn1LL6zDM+73MSZ/MbfXeBZkpfR8F/aK1wIS6jVAg=;
-        b=sIiTEeRYqEFE0YG7hMOCZ76aOk1+zqkcKDzzKOvk0oT+7jw6OK4e9zzSaTpz2NmBuq
-         gOSdpyTfrMy+w7YEkLgz45pZSt7yO8fj2wXr8ncYUXFqzCl57C7YfQxciakxTW38sLTA
-         fVzV+WFzRYZk+ZXP39xETi5rxV/NUlkQJFJBbNZpO+SjUOtyKJm/PpeSIfKnJgT4fsgr
-         sZcHz9M2s8dWBUXqZj+Cn+4OdQqiq4Hrv9qYF5ENJqBIOxs5ooFUbawXRJozJq6OOUkX
-         R+d0jp4I5JC2Ol+QsY+KDJBC8wJ6NIu2CtI46+q9wNNfhEX+6P0LjJP+CtSY6PTFUqmi
-         e8GA==
-X-Gm-Message-State: AOAM532WTvoI8a6rjD1LO9YTXNoIF42l4K/mvZ7nSfgtPwT/BGmjYtqq
-        1INndizxxbCPsaprEx86mxc=
-X-Google-Smtp-Source: ABdhPJwXnkeKt0tZOtmyngdNDbthxKjW3poK14nKMRl9ULo/YcYUeZJdJc4By3aYT1lM6A1OrOk2wg==
-X-Received: by 2002:a05:6402:3689:b0:419:d380:ddbc with SMTP id ej9-20020a056402368900b00419d380ddbcmr15535362edb.230.1648718231272;
-        Thu, 31 Mar 2022 02:17:11 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id e1-20020a170906314100b006e48a47a0dbsm1586245eje.55.2022.03.31.02.17.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 02:17:10 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-        Mark Zhang <markzhang@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Leon Romanovsky <leonro@nvidia.com>
-Subject: [PATCH v3] IB/SA: replace usage of found with dedicated list iterator variable
-Date:   Thu, 31 Mar 2022 11:16:34 +0200
-Message-Id: <20220331091634.644840-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 31 Mar 2022 05:21:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9D1232EC9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:19:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9652723A;
+        Thu, 31 Mar 2022 02:19:35 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B74053F718;
+        Thu, 31 Mar 2022 02:19:32 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 10:19:21 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH v2 1/4] stacktrace: add interface based on shadow call
+ stack
+Message-ID: <YkVyGdniIBXf4t8/@FVFF77S0Q05N>
+References: <cover.1648049113.git.andreyknvl@google.com>
+ <21e3e20ea58e242e3c82c19abbfe65b579e0e4b8.1648049113.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <21e3e20ea58e242e3c82c19abbfe65b579e0e4b8.1648049113.git.andreyknvl@google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+On Wed, Mar 23, 2022 at 04:32:52PM +0100, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Add a new interface stack_trace_save_shadow() for collecting stack traces
+> by copying frames from the Shadow Call Stack.
+> 
+> Collecting stack traces this way is significantly faster: boot time
+> of a defconfig build with KASAN enabled gets descreased by ~30%.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean.
+Hmm... just to check, do ou know if that's just because of hte linear copy, or
+because we're skipping other work we have to do in the regular stacktrace?
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+> The few patches following this one add an implementation of
+> stack_trace_save_shadow() for arm64.
+> 
+> The implementation of the added interface is not meant to use
+> stack_trace_consume_fn to avoid making a function call for each
+> collected frame to further improve performance.
 
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
+... because we could easily provide an inline-optimized stack copy *without*
+having to write a distinct unwinder, and I'd *really* like to avoid having a
+bunch of distinct unwinders for arm64, as it really hinders maintenance. We're
+working on fixing/improving the arm64 unwinder for things like
+RELIABLE_STACKTRACE, and I know that some of that work is non-trivial to make
+work with an SCS-based unwind rather than an FP-based unwind, and/or will
+undermine the saving anyway.
 
-v1->v2:
-- set query correctly (Mark Zhang)
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  arch/Kconfig               |  6 ++++++
+>  include/linux/stacktrace.h | 15 +++++++++++++++
+>  kernel/stacktrace.c        | 21 +++++++++++++++++++++
+>  3 files changed, 42 insertions(+)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index e12a4268c01d..207c1679c53a 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1041,6 +1041,12 @@ config HAVE_RELIABLE_STACKTRACE
+>  	  arch_stack_walk_reliable() function which only returns a stack trace
+>  	  if it can guarantee the trace is reliable.
+>  
+> +config HAVE_SHADOW_STACKTRACE
+> +	bool
+> +	help
+> +	  If this is set, the architecture provides the arch_stack_walk_shadow()
+> +	  function, which collects the stack trace from the shadow call stack.
+> +
+>  config HAVE_ARCH_HASH
+>  	bool
+>  	default n
+> diff --git a/include/linux/stacktrace.h b/include/linux/stacktrace.h
+> index 97455880ac41..b74d1e42e157 100644
+> --- a/include/linux/stacktrace.h
+> +++ b/include/linux/stacktrace.h
+> @@ -60,6 +60,9 @@ int arch_stack_walk_reliable(stack_trace_consume_fn consume_entry, void *cookie,
+>  
+>  void arch_stack_walk_user(stack_trace_consume_fn consume_entry, void *cookie,
+>  			  const struct pt_regs *regs);
+> +
+> +int arch_stack_walk_shadow(unsigned long *store, unsigned int size,
+> +			   unsigned int skipnr);
+>  #endif /* CONFIG_ARCH_STACKWALK */
+>  
+>  #ifdef CONFIG_STACKTRACE
+> @@ -108,4 +111,16 @@ static inline int stack_trace_save_tsk_reliable(struct task_struct *tsk,
+>  }
+>  #endif
+>  
+> +#if defined(CONFIG_STACKTRACE) && defined(CONFIG_HAVE_SHADOW_STACKTRACE)
+> +int stack_trace_save_shadow(unsigned long *store, unsigned int size,
+> +			    unsigned int skipnr);
+> +#else
+> +static inline int stack_trace_save_shadow(unsigned long *store,
+> +					  unsigned int size,
+> +					  unsigned int skipnr)
+> +{
+> +	return -ENOSYS;
+> +}
+> +#endif
+> +
+>  #endif /* __LINUX_STACKTRACE_H */
+> diff --git a/kernel/stacktrace.c b/kernel/stacktrace.c
+> index 9ed5ce989415..fe305861fd55 100644
+> --- a/kernel/stacktrace.c
+> +++ b/kernel/stacktrace.c
+> @@ -237,6 +237,27 @@ unsigned int stack_trace_save_user(unsigned long *store, unsigned int size)
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_HAVE_SHADOW_STACKTRACE
+> +/**
+> + * stack_trace_save_shadow - Save a stack trace based on shadow call stack
+> + * @store:	Pointer to the storage array
+> + * @size:	Size of the storage array
+> + * @skipnr:	Number of entries to skip at the start of the stack trace
+> + *
+> + * Return: Number of trace entries stored.
+> + */
+> +int stack_trace_save_shadow(unsigned long *store, unsigned int size,
+> +			    unsigned int skipnr)
+> +{
+> +	/*
+> +	 * Do not use stack_trace_consume_fn to avoid making a function
+> +	 * call for each collected frame to improve performance.
+> +	 * Skip + 1 frame to skip stack_trace_save_shadow.
+> +	 */
+> +	return arch_stack_walk_shadow(store, size, skipnr + 1);
+> +}
+> +#endif
 
-v2->v3:
-- remove changelog and link from git commit message (Leon Romanovsky)
+If we really need this, can we make it an __always_inline in a header so that
+we can avoid the skip? Generally the skipping is problematic due to
+inlining/outlining and LTO, and I'd like to avoid adding more of it
+unnecessarily.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+Thanks,
+Mark.
 
- drivers/infiniband/core/sa_query.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/infiniband/core/sa_query.c b/drivers/infiniband/core/sa_query.c
-index 8dc7d1f4b35d..003e504feca2 100644
---- a/drivers/infiniband/core/sa_query.c
-+++ b/drivers/infiniband/core/sa_query.c
-@@ -1034,10 +1034,9 @@ int ib_nl_handle_resolve_resp(struct sk_buff *skb,
- 			      struct netlink_ext_ack *extack)
- {
- 	unsigned long flags;
--	struct ib_sa_query *query;
-+	struct ib_sa_query *query = NULL, *iter;
- 	struct ib_mad_send_buf *send_buf;
- 	struct ib_mad_send_wc mad_send_wc;
--	int found = 0;
- 	int ret;
-
- 	if ((nlh->nlmsg_flags & NLM_F_REQUEST) ||
-@@ -1045,20 +1044,21 @@ int ib_nl_handle_resolve_resp(struct sk_buff *skb,
- 		return -EPERM;
-
- 	spin_lock_irqsave(&ib_nl_request_lock, flags);
--	list_for_each_entry(query, &ib_nl_request_list, list) {
-+	list_for_each_entry(iter, &ib_nl_request_list, list) {
- 		/*
- 		 * If the query is cancelled, let the timeout routine
- 		 * take care of it.
- 		 */
--		if (nlh->nlmsg_seq == query->seq) {
--			found = !ib_sa_query_cancelled(query);
--			if (found)
--				list_del(&query->list);
-+		if (nlh->nlmsg_seq == iter->seq) {
-+			if (!ib_sa_query_cancelled(iter)) {
-+				list_del(&iter->list);
-+				query = iter;
-+			}
- 			break;
- 		}
- 	}
-
--	if (!found) {
-+	if (!query) {
- 		spin_unlock_irqrestore(&ib_nl_request_lock, flags);
- 		goto resp_out;
- 	}
-
-base-commit: d888c83fcec75194a8a48ccd283953bdba7b2550
---
-2.25.1
-
+> +
+>  #else /* CONFIG_ARCH_STACKWALK */
+>  
+>  /*
+> -- 
+> 2.25.1
+> 

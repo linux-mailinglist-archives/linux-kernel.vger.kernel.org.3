@@ -2,178 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EF24ED448
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D224ED44D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiCaG7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S231601AbiCaHAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiCaG7E (ORCPT
+        with ESMTP id S231574AbiCaHAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:59:04 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDB9EEA60;
-        Wed, 30 Mar 2022 23:57:16 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1648709834; bh=wqSNyfEr0PfR7Nu/cSpCkDEbnShaRb16tT3cIjzE5ao=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=TATcwcWpwUO2ICDeG8JnL+mjIkFKf0kVPvJtq6SNKT6Y9/7X4oJUs/pKN3KWt8+Gb
-         Yd/7vSwwE+SVM3LvsqOrPQA4tQ5ao5SpPzqFkOUkTStWkXUKTUHsD9ctdLNe4gd+0l
-         33GpeYp5U99JbjYQJ/vGNNnuTbQKqojErUmmnzZA=
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [RFC PATCH 1/5] dt-bindings: sound: Add Apple Macs sound system
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <9e3ba11c-d179-c229-fb7c-bf5611a15b1b@linaro.org>
-Date:   Thu, 31 Mar 2022 08:57:12 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 31 Mar 2022 03:00:12 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C8C16A6AF;
+        Wed, 30 Mar 2022 23:58:24 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22V6wCPC067667;
+        Thu, 31 Mar 2022 01:58:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648709892;
+        bh=AKXYZYJQk6Gd3XdFMwvObICTeG3oes9S7zg+r0yF2XA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=g+3cWkA6nYk4Y9oBr5yPMS8NT2/YyApS3cj5KyFHFvPDfDe04ydeSgBk7swyTbXbI
+         EaTZCk+uWcpQ9viSOW9W/YScbvtC/r+/HWn9bntz0ZvC1ytqqH6hGKN8SCemvZ7H8Q
+         CVt8LAnYAtf/O+Tzy3vO1K81BVV8b4ed2q28MyJM=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22V6wCqP109750
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 31 Mar 2022 01:58:12 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 31
+ Mar 2022 01:58:12 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 31 Mar 2022 01:58:12 -0500
+Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22V6w8od127963;
+        Thu, 31 Mar 2022 01:58:09 -0500
+Message-ID: <16ad1a82-1e99-2957-720f-08d1238edcf4@ti.com>
+Date:   Thu, 31 Mar 2022 12:28:08 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC] arm64: dts: ti: introduce a minimal am642 device tree
+Content-Language: en-US
+To:     Wadim Egorov <w.egorov@phytec.de>, Bryan Brattlof <bb@ti.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <DAFA4249-4B0A-4D1F-A36A-4352FE783488@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-2-povik+lin@cutebit.org>
- <9e3ba11c-d179-c229-fb7c-bf5611a15b1b@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220321155417.13267-1-bb@ti.com>
+ <73a4a16b-193a-3075-61e9-82bcf21fc7d2@phytec.de>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <73a4a16b-193a-3075-61e9-82bcf21fc7d2@phytec.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wadim,
 
-> On 31. 3. 2022, at 8:43, Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org> wrote:
->=20
-> On 31/03/2022 02:04, Martin Povi=C5=A1er wrote:
->> Add binding for Apple Silicon Macs' machine-level sound system.
->>=20
->> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
->> ---
->> .../bindings/sound/apple,macaudio.yaml        | 103 =
-++++++++++++++++++
->> 1 file changed, 103 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/sound/apple,macaudio.yaml
->>=20
->=20
-> Commit title does not match subsystem.
-
-Tell more please. I don=E2=80=99t see it.
-
->=20
->> diff --git =
-a/Documentation/devicetree/bindings/sound/apple,macaudio.yaml =
-b/Documentation/devicetree/bindings/sound/apple,macaudio.yaml
->> new file mode 100644
->> index 000000000000..a6380e4bdd1a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/sound/apple,macaudio.yaml
->> @@ -0,0 +1,103 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/sound/apple,macaudio.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+On 30/03/22 7:25 pm, Wadim Egorov wrote:
+> Hi Bryan,
+> 
+>> +/* (optional) for console */
+>> +&main_uart0 {
+>> +    pinctrl-names = "default";
+>> +    pinctrl-0 = <&main_uart0_pins_default>;
+>> +};
 >> +
->> +title: Apple Silicon Macs integrated sound system
->> +
->> +maintainers:
->> +  - Martin Povi=C5=A1er <povik+lin@cutebit.org>
->> +
->=20
-> Add description.
->=20
->> +definitions:
->=20
-> This does not make code more readable.
+>> +/* reserved for firmware */
+>> +&main_uart1 {
+>> +    status = "reserved";
+>> +};
+> 
+> k3-image-gen says UART0 is used as a debug interface. See
+> 
+> 
+> https://git.ti.com/cgit/k3-image-gen/k3-image-gen/tree/soc/am64x/evm/board-cfg.c#n81
+> 
+> 
+> So it seems that you can enable uart1 here. But people may run into a
+> conflict with uart0 and k3-image-gen compiled with ENABLE_TRACE=1.
+> 
+> If I am wrong, can you please clarify why you mark uart1 as reserved.
+> 
 
-Are you sure? It prevents duplication later on for =E2=80=98codec' and =
-=E2=80=98cpu=E2=80=99.
+We just seem to have same macro shared across multiple SoCs,
+BOARDCFG_TRACE_DST_UART0 means logs are also directed to UART. Instance
+of UART used for logging is platform specific.
 
->=20
->> +  dai:
->> +    type: object
->> +    properties:
->> +      sound-dai: true
->> +    required:
->> +      - sound-dai
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - apple,j274-macaudio
->> +          - apple,j293-macaudio
->> +          - apple,j314-macaudio
->> +      - const: apple,macaudio
->=20
-> Open example-schema.yaml and look at formatting plus general coding
-> style. You miss line breaks making it unreadable.
->=20
->> +  "#address-cells":
->> +    const: 1
->> +  "#size-cells":
->> +    const: 0
->> +  model:
->> +    description: |
->> +      Model name to use when the sound system is presented to users =
-as a sound card.
->> +    $ref: /schemas/types.yaml#/definitions/string
->> +
->> +patternProperties:
->> +  "^dai-link(@[0-9a-f]+)?$":
->> +    description: |
->> +      A DAI link comprising of CPU and CODEC DAI specifiers and =
-supplemental properties.
->> +    type: object
->> +    properties:
->> +      reg:
->> +        maxItems: 1
->> +      mclk-fs:
->> +        description: |
->> +          Forced MCLK/samplerate factor (optional).
->=20
-> Optional is obvious from !required.
->=20
-> Description is different than existing field in simple card. Is this =
-the
-> same field or not?
+On AM64 SYSFW logs are directed to MAIN UART1 (MAIN UART0 is used for
+linux console). I will work internally and get SYSFW documentation
+updated to reflect the same. Thanks!
 
-It is the same. I didn=E2=80=99t want to copy the simple card text =
-because this is optionally BSD,
-simple card wasn=E2=80=99t.
-
->=20
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +      link-name:
->> +        description: Name for the DAI link to present to users.
->> +        $ref: /schemas/types.yaml#/definitions/string
->> +      cpu:
->> +        $ref: "#/definitions/dai"
->> +      codec:
->> +        $ref: "#/definitions/dai"
->=20
-> missing maxItems for DAI phandles.
-
-Well there=E2=80=99s not a maximum.
-
->=20
-> Best regards,
-> Krzysztof
-
-Martin
-
+Regards
+Vignesh

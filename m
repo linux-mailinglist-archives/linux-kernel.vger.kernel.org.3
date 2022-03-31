@@ -2,94 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA1C4ED53B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCD04ED53A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbiCaIM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S232575AbiCaIMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbiCaIMV (ORCPT
+        with ESMTP id S229607AbiCaIMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:12:21 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2AE16BF98
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:10:34 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x2so22707201plm.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=CU14Grw8x1R6dlLwFTJvdYMaQj7ZrTh/1RqpTDiqx2U=;
-        b=djHfu01mF/YJqvH+sMtK4CrW0fLGkATPWmeyAg61ZiXjyDPJEj89LUbSBex8BOJ5bB
-         GbkPOLgD8yOB6+ByVdCDTmUcN1Mz1w6kV/Bbk08R2ec93gN9POAyCSK9E3n4F/x8OS5q
-         z3Jf0iLSDUev5zgon8LDiTM8Xwc34yyRz4GkEtw5pMjct0cgpN+jNlZxhd6YbgmX6lod
-         IGL8CYqSnRIioQe7Dn/aLGnO6BVF4I3VHt2xNqbdJL8TJAZ0VM2cHeWIFPv3CdUA7OyI
-         a8wzCvrQ04yFWvZyDgb/TqLUvgF4ARpX6pzsg7IgK7nW3hgGA/D0VZ5/PwPO9XseCN1B
-         ja6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=CU14Grw8x1R6dlLwFTJvdYMaQj7ZrTh/1RqpTDiqx2U=;
-        b=BNaPyLdIbdPv+5U8baKAE8jD1OtMbHoic5/NACLyGsgpt+A3PUly08bRn8Lgl86OUF
-         yptp/2qgo90PdVwTEhI2ZjpdheYaMhGNqQlry+VwJRoEqg5+1IuH/tvXxlU8QYhBWEX6
-         5K87/WnZD88mdrH8CnwIi/dR2WOIOJoLVSIxatrkH3DgroeBF7vJKxlsAu7XezwQxxYO
-         +9GeilPrQuqqC0Rv8sJAn2s2oZ8V+z2Q/+mFvdsrw1k4cDdYXQLmtV1lBqhSysEhfku9
-         vKeUucXTURbixThrUPNiT6H+QuNpLl9PJGsmqJ1R4QoAqAKV68TrHLdyg7lsEppKHIYP
-         IgpQ==
-X-Gm-Message-State: AOAM530jx+CyBRw8IB2MU8RAzi/D24kganIhcVg8Ybrozs3vQKA+lvP0
-        SUaoEjpVeGjmNjFbCYNkF5IttUnrpY7Oi/qZbE7wuwHktlEvgw4s
-X-Google-Smtp-Source: ABdhPJz/7UhVBaiiJb8qucgYLxXBr2sUkMaDMQH0ZUsBCVhU538J7p3MzuNpAUMJaxX7kvgMGC/r8bRIzwdSePSUtF0=
-X-Received: by 2002:a17:902:d2c7:b0:154:5aa1:a55b with SMTP id
- n7-20020a170902d2c700b001545aa1a55bmr4193241plc.5.1648714233934; Thu, 31 Mar
- 2022 01:10:33 -0700 (PDT)
+        Thu, 31 Mar 2022 04:12:20 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120087.outbound.protection.outlook.com [40.107.12.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBAC16BCCF
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:10:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kwFme1kQXH3RPbXeuvAa/yRTLF+bOIfKooTt81EBioJg6sjiFQ3vgGwcfdxE5n2VJziAn6rnyYLTYDwBduK8PG4wSZi8cwWMPWrThM6aSdlldf1ccF1Lofnib5f76CXpjkTuSBlo4lTh76LIntij/8LdFYb6LD8AIqfW/ULucw0eK7Vu/FLt8J36hbeFq5Nx5v3BWsJ3vx4lPqDzMpdMK5W6uwk1FY15IlhgoHpCxw0Ix4HCjJqDcJSR8mhSDvzm1AA/dwqD7ei3lPuy+mFQ1M0gEtPx24uBelCtLEVAvmpLn82bKE9IwdDCFLJzYKBGTIPhv8CHxR1HN+mfNfFQEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dP4Ss7y5zdmvftj/6iNAP9d8whG4qhRibjmFLI2k8qo=;
+ b=Lej/XTEaz13NBysXX6b8ZwxU7Aq90e9N7BFphMtK+rZNhca9aUg9CyV4xoCKYJpYlsfXMnRdnCazeOFEtIDYzrsEIP58Oj8rkdCajRO2t6nPyUKLIhCBWG/qM00it3beUU/TKY9+INtqxiSzg/t6Pv47TdZ58rDYwBaMAGwEvqx8pVwNp1Qr8V0vs7uR/r5ZIxCpnCu9RDC09GYM48JgNyVBO2J8tNGHnlo/fDPe8Jcj/pKOhYRkyalf5L4ccv0bUlICTYYHwaKLK9DILdBPlJvcJIbGH0jdBqsKdKMpdKgp0RULj/1W7hHeCGXixlnix57+WD3gs3jS2sRB+g/Qxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB2859.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:18::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.21; Thu, 31 Mar
+ 2022 08:10:29 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c%7]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
+ 08:10:29 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Sathvika Vasireddy <sv@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [RFC PATCH v1] objtool: Use target file endianness instead of a
+ compiled constant
+Thread-Topic: [RFC PATCH v1] objtool: Use target file endianness instead of a
+ compiled constant
+Thread-Index: AQHYRNRKJ6ALQybCh0KTwMUAnhSTmazZI0gAgAAAnoA=
+Date:   Thu, 31 Mar 2022 08:10:29 +0000
+Message-ID: <2c2bcb5f-e9bd-d7fc-effd-81aed6bd27e6@csgroup.eu>
+References: <7c503552c4bc1f0e1aa4775765f8f24e9d1b0a04.1648713067.git.christophe.leroy@csgroup.eu>
+ <20220331080814.GQ8939@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220331080814.GQ8939@worktop.programming.kicks-ass.net>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 43107699-98ee-4b71-e337-08da12edebbf
+x-ms-traffictypediagnostic: MRZP264MB2859:EE_
+x-microsoft-antispam-prvs: <MRZP264MB2859E89F5DC3FC3D27C5E89CEDE19@MRZP264MB2859.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fZPDkVMNiXscxovzfjnC8XrrPK3QXksWZ/Ph8tNFbz2KXT7yq0uD0Ymi85MMTShQNAs9nUmTNS/xjDhWzAfWHtnw1kMEoyD3JQ8eV3JoW/FTwCcbseG/0ZVsD5svG7xo5816ajJXCwGyXTcZjG/uFBhOpuUXuAelLdA/IgkxMiPj3pZiWKuz+41e5s1CwjLNrjfsLGRax/E/hYg9iaFth+vdVUOqAYux80ar80U+NQ2cLSLWry4R8NRMcKWZQ2jOp489xtJUcP7g6ObgR+hq4cPrv/Grx29ro8cL3Jr3GgTozCc90x9jZdZ1u363y63lNFQJEKJ+BO+Ghc4lmuHDnJz4Y1hQ0pTPsiLCcFIFzCEIDyrTCpwyKIDTEHPA3pbp3D7eu2M/6iVj3uTiy844d7SzXCXlLXGJ1jk3MBknR6/0KUZ2Rrtq12jIAg4p/8EvcC9GMWilge38G9SKgt40c7PCT1vQjIkCryCu+FrWpajUBnPL1Oda9gC97OXju3PQpE9DNRx1LYLTiGFA7L1d6OT0j75XgWahKo7CeAyX8oicc400viwsdCgeFIEDwoGh3sDeTRmpVNFTOlIqlN5OzjauBI/pV6QA6MuzLxhQWX5W/dXTPUULcwWAOaMC0uHT5O8xeRHOg52CcxIrXy0ua2xN5wIofHsqns2U+bewXOs1k0Le1wsPvg5efSdyWTn6MCwIWjw3HcKw1IF/I5TrmxfyZGVrWv6eajfTxqzBqNQVlG5QAUrJy7lhiPuLi8IfBrYZOAsxIq1mbE65aCqTkg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(38100700002)(122000001)(66574015)(38070700005)(316002)(6506007)(91956017)(2616005)(71200400001)(54906003)(31686004)(86362001)(6486002)(6916009)(508600001)(76116006)(44832011)(2906002)(6512007)(66476007)(26005)(8676002)(4326008)(186003)(66946007)(66446008)(5660300002)(8936002)(36756003)(31696002)(66556008)(64756008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WDc4WEZqaUxtRWFrRFVWRVd1SCs3ZXR0Yk43d0pMT2tnZE91MG5wV1E0QmhM?=
+ =?utf-8?B?RWgyWm9KL3FWZklIOTNwbFZpS2RES0tVTGNRak1UYkMwclRYeElwNWF1a0kx?=
+ =?utf-8?B?VThmY3RFVHFDVlZXblRQT2pvbzBKcjd6cWFrQ1dTSGFnZFlONnJiRW5sL2Vj?=
+ =?utf-8?B?SiswMFpXWDJsK1lxcG4xeExpNWxpZGw0eE9xM1dvVFY3S2plNlFwZy9DS3NV?=
+ =?utf-8?B?cDRKT3BPeHVNMkJnMXhvbDV3RDRrMDYvNzcrbUhOaXZqbVB4L3JSeEV3K2Fm?=
+ =?utf-8?B?WHVOUDk0Q3hwL0Q1eGhlTnFqNEhUWXg4TzEyNkZPRHNaSXpFOS9yTE5aZEFp?=
+ =?utf-8?B?V0dRVXNiRWM1WUYvU3FIRVBWSkhIR3E1bm83R2hlMGphYW5tME9aMHBacmVP?=
+ =?utf-8?B?UEROOUpyVTFOa25QMW5lRTJvQWdVK2FYdUhZNCs3a2l1Zm9xK2NHQndqVmpi?=
+ =?utf-8?B?WVg4ckFxaFZ3VzNpNnJLNlN1ME94RXhZa0E5NGdaeWFIT0psU20rWGw5MmxS?=
+ =?utf-8?B?UUlUWEh6OXExdkJ3MlIzV3huNjhJY2ZaUldTejhBYlU1OGhMdWhJYXpwL3V2?=
+ =?utf-8?B?cnlvR1o5eTNuWmtFZk1LR3dybExBSFhReVgvUFk1c2JXWGVtSUlGSnU3dHZN?=
+ =?utf-8?B?SzdlUFBSajNCdzR4eHJ4NXZnQnNxOXVmeVNuV0lObG1HeHZqSnc4RGtweGpC?=
+ =?utf-8?B?R1NJcENqRmRzNWlVbXlZc3JjcnBnUnA2Y0x6QmtVdVE2aFdEeEJJSW5RazFZ?=
+ =?utf-8?B?elRQdFZMaWFZZUNseTFadk5NZkV6K1hNWTlveG9RMjV1c2E3TnB5SHNXLzlC?=
+ =?utf-8?B?bGFwWGVwVlcxaVJKNFYweG9mWVJ3TTNOOFNoQzlGa29naVErS2VnSTFPQ0lr?=
+ =?utf-8?B?MWx1K1luekxORzZ3VmZ2bkR5eUlNcjFKT3dJSE9HK0MzYzladEJtMUhyZXNp?=
+ =?utf-8?B?eGsxaU5sMkVZTVlneUxYRHk0YlpBaldXeUhua01ubXZKaldyVmpla0lheWg1?=
+ =?utf-8?B?OU9KWjcwREJGYmRlT3lxN1FjUGFqSE5aVDJwUDAydGIrNmVOYnFwbVpobUVE?=
+ =?utf-8?B?QmVBTGdocWMyNlRSL2JFdHp1V2VFV1VaamFWTllLeVhsUnlwbjhWM0duS01j?=
+ =?utf-8?B?ZlJkMStEQ3dSWkNkRGVRQ09JNUtTb0ZhTXVjc2h3c0MydXRkaWIvKy9GVE16?=
+ =?utf-8?B?cEtTd2dIdkRhYWJYRjJiVXZrRGlPT2RpbUh1TU95VFpmNDN1VE1TcGJCMlBl?=
+ =?utf-8?B?NFAvQjZFdlNOellzVHMxUlpXQXpEcjZNS0FXZEZyRDRwcmZzYTdGOWx0QS9I?=
+ =?utf-8?B?a0RzNDhla25pTURQTlYrQ0lMNXNUZVpVZEpvZ2VkZjhKbS9MT3U5QzVZSWZZ?=
+ =?utf-8?B?cDR3eTloNm4xSjJ0dm1rcXcwSXBWVW5jZWlJNDdkRWw3bDlXdENtNTVqSnFo?=
+ =?utf-8?B?YXYycUdpclllSW8vUHhWZVlVRkRwSSsrdE03djZZUWhvVDNEcFVsNFBYaERj?=
+ =?utf-8?B?NzlmTlQzVmxuc3UwbDlpSjA0U3NDQ3llajRVVWdzZ0N2VWFBdGk2bTdUaUpV?=
+ =?utf-8?B?MHhoN0IwS2lvT0hTTW9SbWVEUElpa1RzTENvSSs1Zlo3SEJZU041WFFGNWxY?=
+ =?utf-8?B?WVNsdVBENzlyQXRjL0xuZE4yZEZoN3pnUWxOand4Y2RqRU1tbDlaaUNwYy8z?=
+ =?utf-8?B?ZWtCMFNPd05hNWw5ZnZ0cXdoNStjR1lDaXNyQ1d3L0paRTE4c1kwQkRKU3VZ?=
+ =?utf-8?B?WjI1U25LYjRuRmVaN2dsZ0NGOFBVMVM4NzVFN1lFd1FBanFWaUVpbExLam9T?=
+ =?utf-8?B?MkxORFFOcml2ZG8vU1BTMEZiY040aWxnVXZiVEdmb2V1eFFOaFZvVE9BMGgw?=
+ =?utf-8?B?MFMyRXdUYldZMzRqMVZPMnRPV1dsYUtpblJJRGlSayt3dFl5dkZja09VZmlU?=
+ =?utf-8?B?TFJ3QitvbUdSNEVWbWVVbWRuVzQrUHVVY0dFeklKSE14eG9VbXZ4ZStCd0dE?=
+ =?utf-8?B?NXdDOVI5dlNkOUtiUXdDMFJ6NUhRdnZpZC9oMVpGcHdRYjV6aVVVNkxTMDNM?=
+ =?utf-8?B?dFhsb3FZMytXb29yYnN2Mk5NMjR5cWx3UzQwdmoxTXpaMmhVcDBCdkU2dnoz?=
+ =?utf-8?B?c1lMNDBVVVpoaDNncHJXYTR0SUFjcjNZc1F3N09QUUhQMkJuYVdzR3BmbXRL?=
+ =?utf-8?B?cThONnV3KzRBUjBLdGs2OGc1ZnU2NGQ5ZWlmeFI5ZjNEalJ2VUc4Yi9WSW1u?=
+ =?utf-8?B?ZTlsOE5WaFpqVVFuRGtwcXdYaHdQVnNFTFlhb00ySldWanZ2MnByb05aSGtj?=
+ =?utf-8?B?Rjc1UzM2YXhJOVdTcjdiNllNUW4xWWhRSUkyVTJkVkJqUjBCVkxJZkUxcXJY?=
+ =?utf-8?Q?Gw/Q/TytNm4rlN+Raa7f8DA9ihxE9apC76Rij?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8459B396F107FF4385317028A908EAAB@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAFf+5zgz0R0NO_YXrcsfBWiqP2ctyQt+ZAShBP6N8=1HvOnC7Q@mail.gmail.com>
-In-Reply-To: <CAFf+5zgz0R0NO_YXrcsfBWiqP2ctyQt+ZAShBP6N8=1HvOnC7Q@mail.gmail.com>
-From:   Amit <amitchoudhary0523@gmail.com>
-Date:   Thu, 31 Mar 2022 13:40:24 +0530
-Message-ID: <CAFf+5zieEohX+qs+pRKjuKiVip43ynXDAkuH6P90gRgf0qg8rg@mail.gmail.com>
-Subject: Time travel is not possible.
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43107699-98ee-4b71-e337-08da12edebbf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2022 08:10:29.7804
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Gb8gQ2FI/aB3zNVbsDmNv2Zg6S6FcMEiRDKeOmnZILQXzSdZcXYpKeDFW4nhV4QnG5wBI6XGDfh8JbtISEeloP8dJnLsXSs/PCzqFPd8E2w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2859
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I don't think that time travel is possible.
-
-For time travel to be possible, all the past, and present, and future
-should exist somewhere in material (physical / tangible) form.
-
-This means that the state of earth 5 seconds ago should be existing
-somewhere in material form. This also means that the state of earth 15
-minutes into the future should also exist somewhere in material form.
-
-If we assume the least count of 1 second, then given the age of earth
-as 4.543 billion years, there should exist 143 quadrillion (past)
-earths somewhere in material form.
-
-But there is no evidence that another earth exists somewhere in
-material form, forget about 143 quadrillion earths existing
-simultaneously.
-
-Same goes for future, if earth will remain around for another 4.543
-billion years, then there should exist 143 quadrillion (future) earths
-somewhere in material form but there is no proof of this also.
-
-Same theory can be applied to universe and it can be said that
-quadrillion of past/future universes should be existing somewhere in
-material form but there is no proof of that.
-
-One theory is that when you start time travel then "that earth" to
-which you are time traveling to will come into existence but there is
-no proof of this.
-
-So, I think that time travel is not possible.
+DQoNCkxlIDMxLzAzLzIwMjIgw6AgMTA6MDgsIFBldGVyIFppamxzdHJhIGEgw6ljcml0wqA6DQo+
+IE9uIFRodSwgTWFyIDMxLCAyMDIyIGF0IDA5OjUyOjA3QU0gKzAyMDAsIENocmlzdG9waGUgTGVy
+b3kgd3JvdGU6DQo+PiBTb21lIGFyY2hpdGVjdHVyZXMgbGlrZSBwb3dlcnBjIHN1cHBvcnQgYm90
+aCBlbmRpYW5uZXNzLCBpdCdzDQo+PiB0aGVyZWZvcmUgbm90IHBvc3NpYmxlIHRvIGZpeCB0aGUg
+ZW5kaWFubmVzcyB2aWEgYXJjaC9lbmRpYW5uZXNzLmgNCj4+IGJlY2F1c2UgdGhlcmUgaXMgbm8g
+ZWFzeSB3YXkgdG8gZ2V0IHRoZSB0YXJnZXQgZW5kaWFubmVzcyBhdA0KPj4gYnVpbGQgdGltZS4N
+Cj4+DQo+PiBVc2UgdGhlIGVuZGlhbm5lc3MgcmVjb3JkZWQgaW4gdGhlIGZpbGUgb2JqdG9vbCBp
+cyB3b3JraW5nIG9uLg0KPj4NCj4gDQo+PiArI2luY2x1ZGUgPG9ianRvb2wvZWxmLmg+DQo+PiAg
+IA0KPj4gICAvKg0KPj4gLSAqIERvZXMgYSBieXRlIHN3YXAgaWYgdGFyZ2V0IGVuZGlhbm5lc3Mg
+ZG9lc24ndCBtYXRjaCB0aGUgaG9zdCwgaS5lLiBjcm9zcw0KPj4gKyAqIERvZXMgYSBieXRlIHN3
+YXAgaWYgdGFyZ2V0IGZpbGUgZW5kaWFubmVzcyBkb2Vzbid0IG1hdGNoIHRoZSBob3N0LCBpLmUu
+IGNyb3NzDQo+PiAgICAqIGNvbXBpbGF0aW9uIGZvciBsaXR0bGUgZW5kaWFuIG9uIGJpZyBlbmRp
+YW4gYW5kIHZpY2UgdmVyc2EuDQo+PiAgICAqIFRvIGJlIHVzZWQgZm9yIG11bHRpLWJ5dGUgdmFs
+dWVzIGNvbnZlcnNpb24sIHdoaWNoIGFyZSByZWFkIGZyb20gLyBhYm91dA0KPj4gICAgKiB0byBi
+ZSB3cml0dGVuIHRvIGEgdGFyZ2V0IG5hdGl2ZSBlbmRpYW5uZXNzIEVMRiBmaWxlLg0KPj4gICAg
+Ki8NCj4+IC0jZGVmaW5lIGJzd2FwX2lmX25lZWRlZCh2YWwpCQkJCQkJXA0KPj4gK3N0YXRpYyBp
+bmxpbmUgYm9vbCBuZWVkX2Jzd2FwKEdFbGZfRWhkciAqZWhkcikNCj4+ICt7DQo+PiArCXJldHVy
+biAoX19CWVRFX09SREVSID09IF9fTElUVExFX0VORElBTikgXg0KPj4gKwkgICAgICAgKGVoZHIt
+PmVfaWRlbnRbRUlfREFUQV0gPT0gRUxGREFUQTJMU0IpOw0KPj4gK30NCj4+ICsNCj4+ICsjZGVm
+aW5lIGJzd2FwX2lmX25lZWRlZChlaGRyLCB2YWwpCQkJCQlcDQo+PiAgICh7CQkJCQkJCQkJXA0K
+Pj4gICAJX190eXBlb2ZfXyh2YWwpIF9fcmV0OwkJCQkJCVwNCj4+ICsJYm9vbCBfX25lZWRfYnN3
+YXAgPSBuZWVkX2Jzd2FwKGVoZHIpOwkJCQlcDQo+PiAgIAlzd2l0Y2ggKHNpemVvZih2YWwpKSB7
+CQkJCQkJXA0KPj4gLQljYXNlIDg6IF9fcmV0ID0gX19ORUVEX0JTV0FQID8gYnN3YXBfNjQodmFs
+KSA6ICh2YWwpOyBicmVhazsJXA0KPj4gLQljYXNlIDQ6IF9fcmV0ID0gX19ORUVEX0JTV0FQID8g
+YnN3YXBfMzIodmFsKSA6ICh2YWwpOyBicmVhazsJXA0KPj4gLQljYXNlIDI6IF9fcmV0ID0gX19O
+RUVEX0JTV0FQID8gYnN3YXBfMTYodmFsKSA6ICh2YWwpOyBicmVhazsJXA0KPj4gKwljYXNlIDg6
+IF9fcmV0ID0gX19uZWVkX2Jzd2FwID8gYnN3YXBfNjQodmFsKSA6ICh2YWwpOyBicmVhazsJXA0K
+Pj4gKwljYXNlIDQ6IF9fcmV0ID0gX19uZWVkX2Jzd2FwID8gYnN3YXBfMzIodmFsKSA6ICh2YWwp
+OyBicmVhazsJXA0KPj4gKwljYXNlIDI6IF9fcmV0ID0gX19uZWVkX2Jzd2FwID8gYnN3YXBfMTYo
+dmFsKSA6ICh2YWwpOyBicmVhazsJXA0KPj4gICAJZGVmYXVsdDoJCQkJCQkJXA0KPj4gICAJCUJV
+SUxEX0JVRygpOyBicmVhazsJCQkJCVwNCj4+ICAgCX0JCQkJCQkJCVwNCj4gDQo+IEZhciBsZXNz
+IHBhaW5mdWxsIHRoYXQgSSBpbWFnaW5lZCBpdCB3b3VsZCBiZSwuLiBidXQgSSB0aGluayBJIHBy
+ZWZlcg0KPiBwYXNzaW5nIGluIGVsZiwgYXMgb3Bwb3NlZCB0byBlbGYtPmVoZHIsIHdvdWxkIHRo
+YXQgd29yaz8NCg0KVGhhdCdzIHdoYXQgSSB3YW50ZWQgdG8gZG8gaW4gdGhlIGJlZ2lubmluZywg
+YnV0IHdlIGRvbid0IGhhdmUgaXQgaW4gDQpvcmNfZHVtcCgpDQoNCkNocmlzdG9waGU=

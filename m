@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994FF4ED9CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDA54ED9D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbiCaMsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S236284AbiCaMuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236268AbiCaMr5 (ORCPT
+        with ESMTP id S232954AbiCaMt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:47:57 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B0B210476
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:46:09 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id f38so42110209ybi.3
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=7oSbnIlDMLV6mSlKXym3qxASIjVDe/FX+PfPc1IezDE=;
-        b=PPRREv5L5fAma5LxA0EXOv+JEtTK1iPK+MPh3OIPRHz/rg8IfACgFN/SgSSXZTkWut
-         Vd5qRxwJ4iSEqVkv1OVVCK4UCXXZiaozOEH7wY1iCVvukejhkz8tan8UfHi7RBRwWpXn
-         gfcNj13CH1AGfsVJML1nqs/GpvC8Z9Uz1Ttd5nAdDEVlSy0Qvjis+bUaTjhyG96jJ+BV
-         nkzsTbUAY/bV7xK9JU9Tnq7vEfBuq6b750m3BmYvRdzb2vS2EpPEw3Kz8eBJ70g6I0A6
-         GBtouaOm+5cicC866ZDFzAmADYfg28tFgegtLRf5qY6vYbTZcQOGpWouuFXkIwGVdFwi
-         N1mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=7oSbnIlDMLV6mSlKXym3qxASIjVDe/FX+PfPc1IezDE=;
-        b=oMEsC6pS/+82ojWInDdTbhvt+GnsEZ4nIOlfxqbmrJmwW1qjuSAZQde5GWErMPt4Fe
-         Dac44bEGZYt560A3HpUqiZZuh+AccAkCD9cJkTY4x4m9SfDvNBJobAlb7Xhytrmq+8ha
-         D+gElkKbC7zxUmjlVyXYSn2Xi2JBkpqnX2jZJUfcXlsRRyAsh1Gl1JatMnqFvfihVltB
-         rU+FuiMYlhX2VpU/hO5xSWPOWALcvKjre575nzFKKBz318O9LGZwKegkhQuc/lXZqYov
-         TmMAyt8TOGaymyYL2d8WgbMUOn/1HsT1xp3RZr6Upkrzi9n5M0HmqxxA3yYBFeiSGLdv
-         ZBzA==
-X-Gm-Message-State: AOAM530HYGu0FMkTvOgv1uyCAnDkZEfm47pCouBCYlY4jgNXf2UQA+rc
-        GpX3o18ppwVIko8U4QztnQn0UDBX8L4UwJZe1cs+ze4l3RR9/MSs
-X-Google-Smtp-Source: ABdhPJwGKVnhTsdd+AusUNKo/rR9ORGT2Uh2CECAGTbqF33pFQyfuq2Pl6u857Kk6DS9yR87O2kxivPuydHscRHD+y4=
-X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
- k6-20020a259846000000b0061a3deb4d39mr3915516ybo.537.1648730768369; Thu, 31
- Mar 2022 05:46:08 -0700 (PDT)
+        Thu, 31 Mar 2022 08:49:59 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7088A211EE1;
+        Thu, 31 Mar 2022 05:48:11 -0700 (PDT)
+X-UUID: 7f17dc530e79479e9a02a0189fc8c2de-20220331
+X-UUID: 7f17dc530e79479e9a02a0189fc8c2de-20220331
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 569259805; Thu, 31 Mar 2022 20:48:07 +0800
+Received: from MTKMBS34N1.mediatek.inc (172.27.4.172) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 31 Mar 2022 20:48:05 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS34N1.mediatek.inc
+ (172.27.4.172) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 31 Mar
+ 2022 20:48:04 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ MTKCAS36.mediatek.inc (172.27.4.170) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 31 Mar 2022 20:47:57 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <lee.jones@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-pwm@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <rex-bc.chen@mediatek.com>, <jitao.shi@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v5,0/4] Convert pwm-mtk-disp.txt to mediatek, pwm-disp.yaml format
+Date:   Thu, 31 Mar 2022 20:47:49 +0800
+Message-ID: <1648730873-18505-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 31 Mar 2022 18:15:57 +0530
-Message-ID: <CA+G9fYsaUWL4MfkmFJGyZ5WRjibieSLE1V1R8OPsWNmjeYWyUQ@mail.gmail.com>
-Subject: [next ] x86: Assembler messages: Error: invalid operands (*UND* and
- .data..percpu sections) for `+'
-To:     X86 ML <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev
-Cc:     Li RongQing <lirongqing@baidu.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux next-20220331 x86_64 build failed due to below warnings / errors
-with gcc-11. build log link [1].
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64
-CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-/tmp/ccS5DmVa.s: Assembler messages:
-/tmp/ccS5DmVa.s:59: Error: invalid operands (*UND* and .data..percpu
-sections) for `+'
-make[3]: *** [/builds/linux/scripts/Makefile.build:289:
-arch/x86/kernel/kvm.o] Error 1
+Changes since v4:
+1.Base on Linux-next.
+2.Cancel removal of mt8167 compatiable patch.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Changes since v3:
+1. Combine multiplexed socs into one entry
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: fdcbcd1348f4ef713668bae1b0fa9774e1811205
-  git_describe: next-20220331
-  build link: https://builds.tuxbuild.com/278RMAf1jcRHx7LwzjCMgFSMMLt/
+Changes since v2:
+1. Modify the PWM name to DISP_PWM.
+2. Include pwm.yaml.
+3. Separate conversion files and add/remove operations.
 
+Changes since v1:
+1. Fixed formatting issues mentioned in the v1.
+2. Delete pwm-mtk-disp.txt.
+3. Add mtk_pwm dt_maintainers.
+4. Add "#pwm-cells" & power-domains properties.
+5. Make dt_checking successful.
 
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
+Xinlei Lee (4):
+  dt-bindings: pwm: Convert pwm-mtk-disp.txt to mediatek,pwm-disp.yaml
+    format
+  dt-bindings: pwm: Add compatible for MediaTek MT8192
+  dt-bindings: pwm: Add compatible for MediaTek MT8195
+  dt-bindings: pwm: Add compatible for MediaTek MT8186
 
-tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11
---kconfig https://builds.tuxbuild.com/278RMAf1jcRHx7LwzjCMgFSMMLt/config
+ .../bindings/pwm/mediatek,pwm-disp.yaml       | 72 +++++++++++++++++++
+ .../devicetree/bindings/pwm/pwm-mtk-disp.txt  | 45 ------------
+ 2 files changed, 72 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-mtk-disp.txt
 
+-- 
+2.18.0
 
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://builds.tuxbuild.com/278RMAf1jcRHx7LwzjCMgFSMMLt/

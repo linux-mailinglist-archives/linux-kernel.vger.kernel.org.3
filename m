@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CCA4ED441
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15164ED44A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiCaG5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S231560AbiCaG7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiCaG52 (ORCPT
+        with ESMTP id S230158AbiCaG7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:57:28 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8200263DA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1P99cbgcKyenMIXAIS8yhOnAiro5GgvjDpUxTeyc0Go=; b=K++RLGxMkxvPSlyZKD7HePjIBL
-        QcOMSQPQfXME0LgeabX+vb6UkMHq5+jQZdZyDbUVRvs631e0AM/nHYmsGz2icdNbBcwNog/1D01KL
-        HQ9AYRV0O3lTylIPdvc6EpEiMkNKrqsQ5GFMV7y7Kk+dL+khXMgue59kDftZ39DFeaL6KwnkLEa3i
-        cDxzA9+dc8V0g2oZEwewdDbEl3PRFt1B0oSm9+aq7iFn5DHK9XzYO4k6orRdnB6h9kLlmzkuYZY9v
-        sghN7Stmnt53h8jb5428gpHZHGyblhqUpkA5xkg25zAoiQ+2wt75EluWY/TfAkkAiH5c4ldN3ifd2
-        eU6/8tDg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58036)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZoiP-0004JW-I7; Thu, 31 Mar 2022 07:55:29 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZoiK-0007On-Ax; Thu, 31 Mar 2022 07:55:24 +0100
-Date:   Thu, 31 Mar 2022 07:55:24 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     alexander.sverdlin@nokia.com, ardb@kernel.org,
-        linus.walleij@linaro.org, nico@fluxnic.net,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: module: Add all unwind tables when load module
-Message-ID: <YkVQXPYkae41B7Z2@shell.armlinux.org.uk>
-References: <20220325011252.55844-1-chenzhongjin@huawei.com>
+        Thu, 31 Mar 2022 02:59:15 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12AC108547
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:57:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id bx5so23159760pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I5exx/RB+d0Ig7pXuqKbMzRv7rQoprfE6EMWAxPn3vk=;
+        b=VxsWEIotkC2VYiWWzOCyD1h39EI03hJn4gYoUq5zL+es6eKEi/fQPJEpTFiQhX51V9
+         eikNF5Q4nJX9kTCRRilvUSCkBYeRXTclsDYJrtTV3K7xEbiRG2R9cRz5ththfznMM3XC
+         66QKDnh3Cj3JDimXFfT7EUKNWhHjsObnnQynBYRDAdMdFdKt8UOEDbHAWZejxE0xs4rx
+         snTFc7AtACXs3vBUkU+J5RON6gZUTOjKnm6p9ZnUqRBfbWaVAiLtTSaP8GfA32r9OqOS
+         f7tm7oIJpihmrGFTzDO6n6HNvqTowM06YPD5GLVOL5OO1WiLcWlYeA+WAx20Xiu72BDc
+         B/jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I5exx/RB+d0Ig7pXuqKbMzRv7rQoprfE6EMWAxPn3vk=;
+        b=jhyDjfeBK6xfFuMXPFnhWSn7R8Lmt5XEqOzcArNqKhYCmkP87y9Zo/ujcNKIyLo3Io
+         5z2EeQpDeBvjX/B1xAto1DvSc8zhKgjsX2tqh5GLmKknPTze8gEL7ZQH0v0weDc8LTCm
+         oLvupIefcwqfw/A1aDiPC4P6pavKb4/BFLYkJ/fP9HHEwKK9sWnvDU0SlOoIJ7Vr/L5J
+         1OqKrCTPvfmhPl6d55aTrah+NeSbIYzy3os8Pu6qYNPHPS5gvT0c+mQa96O08a16z3v3
+         U+2xKKwl9d5lSvWcGQnEkrDAMqGiNZz5c+vEInmgWGIWPREvi1dmGLPPjNoLhPjidqbV
+         eEvg==
+X-Gm-Message-State: AOAM533dGzURFgUBsq32iYMaCtV8+S5N0B1eahidriepK7J7/XGx6Dyj
+        pYGHZwLrN8bDWB8E/FXBp0y2GA==
+X-Google-Smtp-Source: ABdhPJxVeMek9ygr1gEJ2F2+WMGJOZmPNv0PKkIoA3/xhuB910rYtwVdeKFiPVghs/O8sDNlYZOp5w==
+X-Received: by 2002:a17:90b:17c7:b0:1c7:c616:6eb0 with SMTP id me7-20020a17090b17c700b001c7c6166eb0mr4632866pjb.144.1648709847477;
+        Wed, 30 Mar 2022 23:57:27 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm26169846pfl.15.2022.03.30.23.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 23:57:27 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        bodeddub@amazon.com, osalvador@suse.de, mike.kravetz@oracle.com,
+        rientjes@google.com, mark.rutland@arm.com, catalin.marinas@arm.com,
+        james.morse@arm.com, 21cnbao@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com,
+        fam.zheng@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v4 1/2] mm: hugetlb_vmemmap: introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
+Date:   Thu, 31 Mar 2022 14:56:39 +0800
+Message-Id: <20220331065640.5777-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325011252.55844-1-chenzhongjin@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,157 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The feature of minimizing overhead of struct page associated with each
+HugeTLB page is implemented on x86_64, however, the infrastructure of
+this feature is already there, we could easily enable it for other
+architectures.  Introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP for other
+architectures to be easily enabled.  Just select this config if they
+want to enable this feature.
 
-On Fri, Mar 25, 2022 at 09:12:52AM +0800, Chen Zhongjin wrote:
-> For EABI stack unwinding, when loading .ko module
-> the EXIDX sections will be added to a unwind_table list.
-> 
-> However not all EXIDX sections are added because EXIDX
-> sections are searched by hardcoded section names.
-> 
-> For functions in other sections such as .ref.text
-> or .kprobes.text, gcc generates seprated EXIDX sections
-> (such as .ARM.exidx.ref.text or .ARM.exidx.kprobes.text).
-> 
-> These extra EXIDX sections are not loaded, so when unwinding
-> functions in these sections, we will failed with:
-> 
-> 	unwind: Index not found xxx
-> 
-> To fix that, I refactor the code for searching and adding
-> EXIDX sections:
-> 
-> - Check section type to search EXIDX tables (0x70000001)
-> instead of strcmp() the hardcoded names. Then find the
-> corresponding text sections by their section names.
-> 
-> - Add a unwind_table list in module->arch to save their own
-> unwind_table instead of the fixed-lenth array.
-> 
-> - Save .ARM.exidx.init.text section ptr, because it should
-> be cleaned after module init.
-> 
-> Now all EXIDX sections of .ko can be added correctly.
-> 
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
->  arch/arm/include/asm/module.h | 17 ++------
->  arch/arm/include/asm/unwind.h |  1 +
->  arch/arm/kernel/module.c      | 73 +++++++++++++++++------------------
->  3 files changed, 40 insertions(+), 51 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/module.h b/arch/arm/include/asm/module.h
-> index cfffae67c04e..8139b6a33a22 100644
-> --- a/arch/arm/include/asm/module.h
-> +++ b/arch/arm/include/asm/module.h
-> @@ -3,20 +3,10 @@
->  #define _ASM_ARM_MODULE_H
->  
->  #include <asm-generic/module.h>
-> -
-> -struct unwind_table;
-> +#include <asm/unwind.h>
->  
->  #ifdef CONFIG_ARM_UNWIND
-> -enum {
-> -	ARM_SEC_INIT,
-> -	ARM_SEC_DEVINIT,
-> -	ARM_SEC_CORE,
-> -	ARM_SEC_EXIT,
-> -	ARM_SEC_DEVEXIT,
-> -	ARM_SEC_HOT,
-> -	ARM_SEC_UNLIKELY,
-> -	ARM_SEC_MAX,
-> -};
-> +#define ELF_SECTION_UNWIND 0x70000001
->  #endif
->  
->  #define PLT_ENT_STRIDE		L1_CACHE_BYTES
-> @@ -36,7 +26,8 @@ struct mod_plt_sec {
->  
->  struct mod_arch_specific {
->  #ifdef CONFIG_ARM_UNWIND
-> -	struct unwind_table *unwind[ARM_SEC_MAX];
-> +	struct unwind_table unwind_list;
-> +	struct unwind_table *init_table;
->  #endif
->  #ifdef CONFIG_ARM_MODULE_PLTS
->  	struct mod_plt_sec	core;
-> diff --git a/arch/arm/include/asm/unwind.h b/arch/arm/include/asm/unwind.h
-> index 0f8a3439902d..b51f85417f58 100644
-> --- a/arch/arm/include/asm/unwind.h
-> +++ b/arch/arm/include/asm/unwind.h
-> @@ -24,6 +24,7 @@ struct unwind_idx {
->  
->  struct unwind_table {
->  	struct list_head list;
-> +	struct list_head mod_list;
->  	const struct unwind_idx *start;
->  	const struct unwind_idx *origin;
->  	const struct unwind_idx *stop;
-> diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
-> index 549abcedf795..272f9bdeb1ed 100644
-> --- a/arch/arm/kernel/module.c
-> +++ b/arch/arm/kernel/module.c
-> @@ -459,46 +459,36 @@ int module_finalize(const Elf32_Ehdr *hdr, const Elf_Shdr *sechdrs,
->  #ifdef CONFIG_ARM_UNWIND
->  	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
->  	const Elf_Shdr *sechdrs_end = sechdrs + hdr->e_shnum;
-> -	struct mod_unwind_map maps[ARM_SEC_MAX];
-> -	int i;
-> +	struct unwind_table *table_list = &mod->arch.unwind_list;
+Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ arch/x86/Kconfig |  1 +
+ fs/Kconfig       | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-Please rename "table_list" to "unwind_list" so we use a consistent name
-for this.
-
->  
-> -	memset(maps, 0, sizeof(maps));
-> +	INIT_LIST_HEAD(&table_list->mod_list);
-> +	mod->arch.init_table = NULL;
->  
->  	for (s = sechdrs; s < sechdrs_end; s++) {
-> -		const char *secname = secstrs + s->sh_name;
-> +		const unsigned int sectype = s->sh_type;
-
-Please loose this local variable.
-
->  
->  		if (!(s->sh_flags & SHF_ALLOC))
->  			continue;
->  
-> -		if (strcmp(".ARM.exidx.init.text", secname) == 0)
-> -			maps[ARM_SEC_INIT].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx", secname) == 0)
-> -			maps[ARM_SEC_CORE].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx.exit.text", secname) == 0)
-> -			maps[ARM_SEC_EXIT].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx.text.unlikely", secname) == 0)
-> -			maps[ARM_SEC_UNLIKELY].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx.text.hot", secname) == 0)
-> -			maps[ARM_SEC_HOT].unw_sec = s;
-> -		else if (strcmp(".init.text", secname) == 0)
-> -			maps[ARM_SEC_INIT].txt_sec = s;
-> -		else if (strcmp(".text", secname) == 0)
-> -			maps[ARM_SEC_CORE].txt_sec = s;
-> -		else if (strcmp(".exit.text", secname) == 0)
-> -			maps[ARM_SEC_EXIT].txt_sec = s;
-> -		else if (strcmp(".text.unlikely", secname) == 0)
-> -			maps[ARM_SEC_UNLIKELY].txt_sec = s;
-> -		else if (strcmp(".text.hot", secname) == 0)
-> -			maps[ARM_SEC_HOT].txt_sec = s;
-> +		if (sectype == ELF_SECTION_UNWIND) {
-
-I think given the amouont of indentation this causes, that:
-
-		if (!(s->sh_flags & SHF_ALLOC)) ||
-		    s->sh_type != ELF_SECTION_UNWIND)
-			continue;
-
-would be preferred here.
-
-Other than that, patch looks fine, thanks.
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 9f5bd41bf660..e69d42528542 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -119,6 +119,7 @@ config X86
+ 	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
+ 	select ARCH_WANTS_NO_INSTR
+ 	select ARCH_WANT_HUGE_PMD_SHARE
++	select ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP	if X86_64
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+ 	select ARCH_WANTS_THP_SWAP		if X86_64
+ 	select ARCH_HAS_PARANOID_L1D_FLUSH
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 6c7dc1387beb..f6db2af33738 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -245,9 +245,17 @@ config HUGETLBFS
+ config HUGETLB_PAGE
+ 	def_bool HUGETLBFS
+ 
++#
++# Select this config option from the architecture Kconfig, if it is preferred
++# to enable the feature of minimizing overhead of struct page associated with
++# each HugeTLB page.
++#
++config ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
++	bool
++
+ config HUGETLB_PAGE_FREE_VMEMMAP
+ 	def_bool HUGETLB_PAGE
+-	depends on X86_64
++	depends on ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
+ 	depends on SPARSEMEM_VMEMMAP
+ 
+ config HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.11.0
+

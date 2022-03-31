@@ -2,305 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751314ED404
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1839D4ED406
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiCaGky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S231247AbiCaGkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiCaGku (ORCPT
+        with ESMTP id S230328AbiCaGkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:40:50 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138802AC7E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:39:00 -0700 (PDT)
+        Thu, 31 Mar 2022 02:40:33 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40542257
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:38:46 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id u3so32275730wrg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648708743; x=1680244743;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=xzhkit7bOO4oM/SKt+t2PrFYwNhsqpEtTn7uM3kb0b0=;
-  b=SM99ppOY3Tt2YE9wnc/vy8NH0twnKf8U9lFjLiwHQ/lwyc17Pc4EW5or
-   cpBgml4UueBJTK/BJwVKRl2aiwvLiSrTgpoQ7R8YVfwqiAXru3ZL7pU+C
-   s6PadnS52bWShU6NPmxd5QJfULWHm8ccoYSztSmBemFMv5Wtv0t37N/Mb
-   Y=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Mar 2022 23:39:00 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 23:38:59 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 30 Mar 2022 23:38:59 -0700
-Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 30 Mar 2022 23:38:55 -0700
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-To:     <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <markhemm@googlemail.com>, <hughd@google.com>,
-        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Charan Teja Reddy <quic_charante@quicinc.com>
-Subject: [PATCH RESEND V5,2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
-Date:   Thu, 31 Mar 2022 12:08:21 +0530
-Message-ID: <c2f7242faffd41f46120f82079256ece26b92bf0.1648706231.git.quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1648706231.git.quic_charante@quicinc.com>
-References: <cover.1648706231.git.quic_charante@quicinc.com>
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fhsMrvk7uoSjbTi4vii+Njn16yDljzTavXJfNLTXs1o=;
+        b=0ppl6HuIIj0tw0lDLORVxtX2zZnf26iCrPXAxb68pdWIbUs81VAAJysnKZeS5eg3jq
+         zM1sheRcfHZDrOChqEYoG6zmardBGPyQ+ECl5K1kS/QrdwgmBWFpb2GKCKs0ufibNU0E
+         i3+dSZKBudhlzaDRDgLf/KNNGutgJwNfZiZEPqGYYdScZLscVZPLDE6NUCeMjIMGBqKf
+         kwVVHHLC2bP6DNKqZGocacSSO7K7zckXgSnu3RHWD2tBr617FArpzhyWgcRc20Hql/gA
+         BOw1YP0ny3y7IomoeYwEyCbb9PIoKJcENTEWj4/+fUmud9dbUMP3QazF4xQxruWQWP5u
+         f1zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fhsMrvk7uoSjbTi4vii+Njn16yDljzTavXJfNLTXs1o=;
+        b=I9N0rxRrU7Wmx8MLIleof5WxA5zGbW1DMT6nfnZ387o3Y/qsAYdT+Q2QKRHKy8Kdoi
+         1YeQy0A2n1GctaATftbYi3WG+ob2HYia5X3NC2ywXIrt193nj4c0Cn1CnFV6GYDELHFD
+         48rhZ5Hl1sXeQt+AWiL71d0DmpsHtt9IsLdktH5eMZ7L7nmhd+IIqLJrurwe5oxjrjpk
+         SVS6+Ha6+HNnyBrwn3CIyFlb/EXFFQo2UVTExa3re/Y5YzNiRPjl1VvISXHbsDAE4xC9
+         lP+11ztE+ZKwDSHDaXiWe1eTdLUHYZBhiifQg1LIDJPR1qSKF/qBE8rhGPytBgmMzMuO
+         nI8g==
+X-Gm-Message-State: AOAM530G0sZ1yQp12Bd6QjFXKZdawRORDDD8Z5oKSbpcF7LkwHXmwpDG
+        D2oQW8lT/rgHPDESqvXSYWLyeaUhc8DuPEBzLhZEPQ==
+X-Google-Smtp-Source: ABdhPJwlPo2k2le77MErbra2MKKkIRFso47zu94yk0HG7fNt9Z/GkOHIkGqo3ifUCE8gI1xks+gWOFda3GWyy5NDxpc=
+X-Received: by 2002:a5d:6e54:0:b0:204:635:42ba with SMTP id
+ j20-20020a5d6e54000000b00204063542bamr2831853wrz.214.1648708724508; Wed, 30
+ Mar 2022 23:38:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220331055906.3552337-1-alistair.francis@opensource.wdc.com>
+In-Reply-To: <20220331055906.3552337-1-alistair.francis@opensource.wdc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 31 Mar 2022 12:08:31 +0530
+Message-ID: <CAAhSdy2S26jCmUJES3_63jZbn=0uO78=3kob-AAf0a==4d_seA@mail.gmail.com>
+Subject: Re: [PATCH v3] riscv: Ensure only ASIDLEN is used for sfence.vma
+To:     Alistair Francis <alistair.francis@opensource.wdc.com>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        Alistair Francis <alistair23@gmail.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Alistair Francis <alistair.francis@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charan Teja Reddy <quic_charante@quicinc.com>
+On Thu, Mar 31, 2022 at 11:29 AM Alistair Francis
+<alistair.francis@opensource.wdc.com> wrote:
+>
+> From: Alistair Francis <alistair.francis@wdc.com>
+>
+> When we set the value of context.id using __new_context() we set both
+> the asid and the current_version with this return statement in
+> __new_context():
+>
+>     return asid | ver;
+>
+> This means that when local_flush_tlb_all_asid() is called with the asid
+> specified from context.id we can write the incorrect value.
+>
+> We get away with this as hardware ignores the extra bits, as the RISC-V
+> specification states:
+>
+> "bits SXLEN-1:ASIDMAX of the value held in rs2 are reserved for future
+> standard use. Until their use is defined by a standard extension, they
+> should be zeroed by software and ignored by current implementations."
+>
+> but it is still a bug and worth addressing as we are incorrectly setting
+> extra bits.
+>
+> This patch uses asid_mask when calling sfence.vma to ensure the asid is
+> always the correct len (ASIDLEN). This is similar to what we do in
+> arch/riscv/mm/context.c.
+>
+> Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 
-Currently fadvise(2) is supported only for the files that doesn't
-associated with noop_backing_dev_info thus for the files, like shmem,
-fadvise results into NOP. But then there is file_operations->fadvise()
-that lets the file systems to implement their own fadvise
-implementation. Use this support to implement some of the POSIX_FADV_XXX
-functionality for shmem files.
+Looks good to me.
 
-This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
-advices to shmem files which can be helpful for the drivers who may want
-to manage the shmem pages of the files that are created through
-shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
-can create the shmem file of the size equal to its requirements and
-map the pages for DMA and then pass the fd to user. The user who knows
-well about the usage of these pages can now decide when these pages are
-not required push them to swap through DONTNEED thus free up memory well
-in advance rather than relying on the reclaim and use WILLNEED when it
-decide that they are useful in the near future. IOW, it lets the clients
-to free up/read the memory when it wants to. Another usecase is that GEM
-objects which are currently allocated and managed through shmem files
-can use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
-know(like through some hints from user space) that GEM objects are not
-going to use/will need in the near future.
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Some questions asked while reviewing this patch:
+Regards,
+Anup
 
-Q) Can the same thing be achieved with FD mapped to user and use
-madvise?
-A) All drivers are not mapping all the shmem fd's to user space and want
-to manage them with in the kernel. Ex: shmem memory can be mapped to the
-other subsystems and they fill in the data and then give it to other
-subsystem for further processing, where, the user mapping is not at all
-required.  A simple example, memory that is given for gpu subsystem
-which can be filled directly and give to display subsystem. And the
-respective drivers know well about when to keep that memory in ram or
-swap based on may be a user activity.
-
-Q) Should we add the documentation section in Manual pages?
-A) The man[1] pages for the fadvise() whatever says is also applicable
-for shmem files. so couldn't feel it correct to add specific to shmem
-files separately.
-[1] https://linux.die.net/man/2/fadvise
-
-Q) The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
-MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing API
-and this difference will cause confusion?
-A) man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
-pages associated with the specified region." This means on issuing this
-FADV, it is expected to free the file cache pages. And it is
-implementation defined If the dirty pages may be attempted to writeback.
-And the unwritten dirty pages will not be freed. So, FADV_DONTNEED also
-covers the semantics of MADV_PAGEOUT for file pages and there is no
-purpose of PAGEOUT for file pages.
-[1] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
-
-Signed-off-by: Charan Teja Reddy <quic_charante@quicinc.com>
----
-Changes in V5:
-  -- Moved the 'endbyte' calculations to a helper function which is also needed for shmem_fadvise.
-  -- Addressed comments from Suren.
-
-Changes in V4:
-  -- Changed the code to use reclaim_pages() to writeout the shmem pages to swap and then reclaim.
-  -- Addressed comments from Mark Hemment and Matthew.
-  -- fadvise() on shmem file may even unmap a page.
-  -- https://patchwork.kernel.org/project/linux-mm/patch/1644572051-24091-1-git-send-email-quic_charante@quicinc.com/
-
-Changes in V3:
-  -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified by Matthew.
-  -- xarray used properly, as identified by Matthew.
-  -- Excluded mapped pages as it requires unmapping and the man pages of fadvise don't talk about them.
-  -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined.
-  -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865-1-git-send-email-quic_charante@quicinc.com/
-
-Changes in V2:
-  -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
-  -- Addressed the comments from Suren.
-  -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-1-git-send-email-quic_charante@quicinc.com/
-
-changes in V1:
-  -- Created the interface for fadvise(2) to work on shmem files.
-  -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
-
-
- mm/shmem.c | 123 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 123 insertions(+)
-
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 529c9ad..3be800c 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -38,6 +38,9 @@
- #include <linux/hugetlb.h>
- #include <linux/fs_parser.h>
- #include <linux/swapfile.h>
-+#include <linux/mm_inline.h>
-+#include <linux/fadvise.h>
-+#include <linux/page_idle.h>
- 
- static struct vfsmount *shm_mnt;
- 
-@@ -2247,6 +2250,125 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
- 	return 0;
- }
- 
-+static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
-+				loff_t end, struct list_head *list)
-+{
-+	XA_STATE(xas, &mapping->i_pages, start);
-+	struct page *page;
-+
-+	rcu_read_lock();
-+	xas_for_each(&xas, page, end) {
-+		if (xas_retry(&xas, page))
-+			continue;
-+		if (xa_is_value(page))
-+			continue;
-+
-+		if (!get_page_unless_zero(page))
-+			continue;
-+		if (isolate_lru_page(page)) {
-+			put_page(page);
-+			continue;
-+		}
-+		put_page(page);
-+
-+		if (PageUnevictable(page) || page_mapcount(page) > 1) {
-+			putback_lru_page(page);
-+			continue;
-+		}
-+
-+		/*
-+		 * Prepare the page to be passed to the reclaim_pages().
-+		 * VM couldn't reclaim the page unless we clear PG_young.
-+		 * Also, to ensure that the pages are written before
-+		 * reclaiming, page is set to dirty.
-+		 * Since we are not clearing the pte_young in the mapped
-+		 * page pte's, its reclaim may not be attempted.
-+		 */
-+		ClearPageReferenced(page);
-+		test_and_clear_page_young(page);
-+		list_add(&page->lru, list);
-+		if (need_resched()) {
-+			xas_pause(&xas);
-+			cond_resched_rcu();
-+		}
-+	}
-+	rcu_read_unlock();
-+}
-+
-+static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
-+				loff_t end)
-+{
-+	LIST_HEAD(list);
-+
-+	if (!shmem_mapping(mapping))
-+		return -EINVAL;
-+
-+	if (!total_swap_pages)
-+		return 0;
-+
-+	lru_add_drain();
-+	shmem_isolate_pages_range(mapping, start, end, &list);
-+	reclaim_pages(&list);
-+
-+	return 0;
-+}
-+
-+static int shmem_fadvise_willneed(struct address_space *mapping,
-+				 pgoff_t start, pgoff_t long end)
-+{
-+	struct page *page;
-+	pgoff_t index;
-+
-+	xa_for_each_range(&mapping->i_pages, index, page, start, end) {
-+		if (!xa_is_value(page))
-+			continue;
-+		page = shmem_read_mapping_page(mapping, index);
-+		if (!IS_ERR(page))
-+			put_page(page);
-+	}
-+
-+	return 0;
-+}
-+
-+static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
-+{
-+	loff_t endbyte;
-+	pgoff_t start_index;
-+	pgoff_t end_index;
-+	struct address_space *mapping;
-+	int ret = 0;
-+
-+	mapping = file->f_mapping;
-+	if (!mapping || len < 0)
-+		return -EINVAL;
-+
-+	endbyte = fadvise_calc_endbyte(offset, len);
-+
-+	start_index = offset >> PAGE_SHIFT;
-+	end_index   = endbyte >> PAGE_SHIFT;
-+	switch (advice) {
-+	case POSIX_FADV_DONTNEED:
-+		ret = shmem_fadvise_dontneed(mapping, start_index, end_index);
-+		break;
-+	case POSIX_FADV_WILLNEED:
-+		ret = shmem_fadvise_willneed(mapping, start_index, end_index);
-+		break;
-+	case POSIX_FADV_NORMAL:
-+	case POSIX_FADV_RANDOM:
-+	case POSIX_FADV_SEQUENTIAL:
-+	case POSIX_FADV_NOREUSE:
-+		/*
-+		 * No bad return value, but ignore advice. May have to
-+		 * implement in future.
-+		 */
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
- static struct inode *shmem_get_inode(struct super_block *sb, const struct inode *dir,
- 				     umode_t mode, dev_t dev, unsigned long flags)
- {
-@@ -3780,6 +3902,7 @@ static const struct file_operations shmem_file_operations = {
- 	.splice_write	= iter_file_splice_write,
- 	.fallocate	= shmem_fallocate,
- #endif
-+	.fadvise	= shmem_fadvise,
- };
- 
- static const struct inode_operations shmem_inode_operations = {
--- 
-2.7.4
-
+> ---
+> v3:
+>  - Use helper function
+> v2:
+>  - Pass in pre-masked value
+>
+>  arch/riscv/include/asm/mmu_context.h | 2 ++
+>  arch/riscv/mm/context.c              | 5 +++++
+>  arch/riscv/mm/tlbflush.c             | 2 +-
+>  3 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/include/asm/mmu_context.h b/arch/riscv/include/asm/mmu_context.h
+> index 7030837adc1a..94e82c9e17eb 100644
+> --- a/arch/riscv/include/asm/mmu_context.h
+> +++ b/arch/riscv/include/asm/mmu_context.h
+> @@ -16,6 +16,8 @@
+>  void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+>         struct task_struct *task);
+>
+> +unsigned long get_mm_asid(struct mm_struct *mm);
+> +
+>  #define activate_mm activate_mm
+>  static inline void activate_mm(struct mm_struct *prev,
+>                                struct mm_struct *next)
+> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+> index 7acbfbd14557..14aec5bacbc1 100644
+> --- a/arch/riscv/mm/context.c
+> +++ b/arch/riscv/mm/context.c
+> @@ -302,6 +302,11 @@ static inline void flush_icache_deferred(struct mm_struct *mm, unsigned int cpu)
+>  #endif
+>  }
+>
+> +unsigned long get_mm_asid(struct mm_struct *mm)
+> +{
+> +       return atomic_long_read(&mm->context.id) & asid_mask;
+> +}
+> +
+>  void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+>         struct task_struct *task)
+>  {
+> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> index 37ed760d007c..9c89c4951bee 100644
+> --- a/arch/riscv/mm/tlbflush.c
+> +++ b/arch/riscv/mm/tlbflush.c
+> @@ -42,7 +42,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+>         /* check if the tlbflush needs to be sent to other CPUs */
+>         broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
+>         if (static_branch_unlikely(&use_asid_allocator)) {
+> -               unsigned long asid = atomic_long_read(&mm->context.id);
+> +               unsigned long asid = get_mm_asid(mm);
+>
+>                 if (broadcast) {
+>                         sbi_remote_sfence_vma_asid(cmask, start, size, asid);
+> --
+> 2.35.1
+>

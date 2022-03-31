@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A124ED9E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAB44ED9F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbiCaMyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S236387AbiCaM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiCaMyR (ORCPT
+        with ESMTP id S236477AbiCaM6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:54:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A56B527CA;
-        Thu, 31 Mar 2022 05:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648731150; x=1680267150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K9FkXpKnPJFCdzt73/Eq1ltSIhF+ecIDKBRNSMWrnqU=;
-  b=kVCMLCeh+U+oFVN1o3U7SZSQQc2MeFRqL8D9+FqtWeOdty5nQHn0VXYY
-   LQCRecdC8ENl6vzOKPWgCsXQ+2x03UH49V9h/pG2Lia+33lH7sMskFLwS
-   BLkdngMNtmsN077Ue6o21cJUDPYBNxJVcQpc8SHiB+sGW9Bc2l5VJ0LMn
-   glR1yzpV4KbOuxidH8s/a9R0DaoEyMjRO9cn0bXRfbMzWZsQ73KE3FP5Y
-   1xsZ8Zg6Jf6U3pXm61miMgKHx7zPdoI1WutnzCZLfBuscsAYtoyGi+0Xt
-   dkM1USuxSgwX3ypTKOWz487BIIU6z320mZ9eBP8Awy9X7b/AiSRfU2pwP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="284746907"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="284746907"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 05:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="695481304"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 05:52:14 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 15:52:14 +0300
-Date:   Thu, 31 Mar 2022 15:52:14 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Takashi Iwai <tiwai@suse.de>, Won Chung <wonchung@google.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
- function
-Message-ID: <YkWj/vmjohNo0r2c@kuha.fi.intel.com>
-References: <20220330211913.2068108-1-wonchung@google.com>
- <s5hzgl6eg48.wl-tiwai@suse.de>
- <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de>
- <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
- <YkWTBwAB1HrxcUR3@kroah.com>
+        Thu, 31 Mar 2022 08:58:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C00B12128D7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648731371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v5Mnqs3Bznl24t2qlJcxuDZWOB6J1u0XCG3i9ntUXvk=;
+        b=AUseyBSRzqPmwx1hMLSP+NGwtPsSePI9X1d4FrqsUN8naNFQHJpeNPgwXOP1QJsOk2CrN6
+        PqJmieNbVQlMZpn2qWm5+8/zBfEsOkOFraAwLzQTABeNrvt8C5Y0fEaGLhcDPcRfPM2Sz7
+        avffnxKYQ+g9tAWcs2ETLo8HLmDKZeI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-uknW2jpbOmGLSUJ6dizTRg-1; Thu, 31 Mar 2022 08:56:08 -0400
+X-MC-Unique: uknW2jpbOmGLSUJ6dizTRg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE54880346F;
+        Thu, 31 Mar 2022 12:56:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1623DC15D42;
+        Thu, 31 Mar 2022 12:56:06 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220317021249.31655-1-yang.lee@linux.alibaba.com>
+References: <20220317021249.31655-1-yang.lee@linux.alibaba.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] certs: Fix some kernel-doc comments
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkWTBwAB1HrxcUR3@kroah.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3118063.1648731366.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 31 Mar 2022 13:56:06 +0100
+Message-ID: <3118064.1648731366@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,63 +66,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Yang Li <yang.lee@linux.alibaba.com> wrote:
 
-On Thu, Mar 31, 2022 at 01:39:51PM +0200, Greg KH wrote:
-> On Thu, Mar 31, 2022 at 12:25:43PM +0300, Heikki Krogerus wrote:
-> > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
-> > > > >
-> > > > > Can NULL dev->driver be really seen?  I thought the components are
-> > > > > added by the drivers, hence they ought to have the driver field set.
-> > > > > But there can be corner cases I overlooked.
-> > > > >
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > Takashi
-> > > > 
-> > > > Hi Takashi,
-> > > > 
-> > > > When I try using component_add in a different driver (usb4 in my
-> > > > case), I think dev->driver here is NULL because the i915 drivers do
-> > > > not have their component master fully bound when this new component is
-> > > > registered. When I test it, it seems to be causing a crash.
-> > > 
-> > > Hm, from where component_add*() is called?  Basically dev->driver must
-> > > be already set before the corresponding driver gets bound at
-> > > __driver_probe_deviec().  So, if the device is added to component from
-> > > the corresponding driver's probe, dev->driver must be non-NULL.
-> > 
-> > The code that declares a device as component does not have to be the
-> > driver of that device.
-> > 
-> > In our case the components are USB ports, and they are devices that
-> > are actually never bind to any drivers: drivers/usb/core/port.c
-> 
-> Why is a USB device being passed to this code that assumes it is looking
-> for a PCI device with a specific driver name?  As I mentioned on the
-> mei patch, triggering off of a name is really a bad idea, as is assuming
-> the device type without any assurance it is such a device (there's a
-> reason we didn't provide device type identification in the driver core,
-> don't abuse that please...)
+>  /**
+> - * Allocate a struct key_restriction for the "builtin and secondary tru=
+st"
+> - * keyring. Only for use in system_trusted_keyring_init().
+> + * get_builtin_and_secondary_restriction - Allocate a struct key_restri=
+ction
+> + * for the "builtin and secondary trust" keyring. Only for use in
+> + * system_trusted_keyring_init().
+>   */
+>  static __init struct key_restriction *get_builtin_and_secondary_restric=
+tion(void)
 
-I totally agree. This driver is making a whole bunch of assumptions
-when it should not make any assumptions. And yes, one of those
-assumptions is that the driver of the device has a specific name, and
-that is totally crazy. So why is it making those assumptions? I have
-no idea, but is does, and they are now causing the first problem -
-NULL pointer dereference.
+Better to just turn the "/**" into "/*" for this one.  It's not a function
+that should necessarily appear in API docs.
 
-This patch (and that other) is only proposing a simple way to solve
-that NULL pointer dereference issue by adding some sanity checks. If
-that's no OK, and the whole driver should be refactored instead, then
-that is perfectly OK by me, but that has to be done by somebody who
-understands what exactly is the driver and the device it's controlling
-doing (and for).
+David
 
-thanks,
-
--- 
-heikki

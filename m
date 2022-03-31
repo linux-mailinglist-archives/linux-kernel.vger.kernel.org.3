@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF764ED356
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B834B4ED357
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiCaFkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 01:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S229864AbiCaFlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 01:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiCaFkA (ORCPT
+        with ESMTP id S229721AbiCaFlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 01:40:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4C41BA;
-        Wed, 30 Mar 2022 22:38:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51890B81EA0;
-        Thu, 31 Mar 2022 05:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F5DC340EE;
-        Thu, 31 Mar 2022 05:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648705091;
-        bh=7JZQq/va1IKsjwnSXNaMEXzPnn7GhYKlHIDaDrZywec=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ph/RPkIqP/MFV2BuvH9xCqoVv7wYKpi0rtfQrbKtMDgCNph8NOMJC4IT49QJyKjRl
-         40Hb7PTQ+17zerYdfqIL8KGUsbslYIHEeYpNdEKvDpSh1LqoWHfC8yqDvNgi1U1gBh
-         9dGzF5kA05CBO+TCGs+S03qzxv6WDJ82NxyQDx0uXZZexlnD11WdRkZsLvx13BcAle
-         atj6Rqf0iwt6q2QcR/Ckh7GzFhXtkwf7KYGuS3XbZfg8MZ+OxIQ1ElxPewuMYnYnI3
-         0KRWM/R6/8yjz8gMaUTRzHiOn4PTPjFQl86h+mzOzni/PmSMLACsesqMMlBGh1wN4B
-         VRGRKq0GgzC0w==
-Date:   Thu, 31 Mar 2022 11:08:06 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/25] dmaengine: Fix dma_slave_config.dst_addr
- description
-Message-ID: <YkU+PupmoR/zkHxn@matsya>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-5-Sergey.Semin@baikalelectronics.ru>
- <20220324140806.GN2854@thinkpad>
+        Thu, 31 Mar 2022 01:41:00 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE4912764;
+        Wed, 30 Mar 2022 22:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648705153; x=1680241153;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gvOy3/489ye6qpz0sVJS+BaGPay3tgv+3wy4I4MM60Y=;
+  b=FpnlnJF5cnJ6C161juCI+bzv2AiPi+Aw/y6vah/iZM2e4CJf9ISKCNW7
+   o/qUjefgk4sFYDXSthTTouJdf0G9xlqTvpbBDhY13L8JQjtYHtPN9M+a9
+   wX/4w7XgX+Wg1DQU0IL/1UbNcUqAFYGOqi8QG0STGl4ei0EVur0sgMRVE
+   +pOlm2F6KUfsOS9hJgAfn7crs4FX2eqM9wlGkpfqDtkzmSmiGLnm9ke6W
+   hJ2LzOPZqHcPG2+IB18huQCalndx/mNXDAIG66clsLSlXV/LlrLpsiwaJ
+   hfRw1ldeGtl76mEwN35GbHNIN7ai4sC0i/LGx8T8DtNof0/t7fD8fJjxs
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="320420440"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="320420440"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 22:39:13 -0700
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="566159090"
+Received: from cqiang-mobl.ccr.corp.intel.com (HELO [10.249.172.223]) ([10.249.172.223])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 22:39:09 -0700
+Message-ID: <04df790f-0900-d678-d560-7b1905b7b56d@intel.com>
+Date:   Thu, 31 Mar 2022 13:39:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324140806.GN2854@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v6 2/7] KVM: VMX: Add proper cache tracking for PKRS
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220221080840.7369-1-chenyi.qiang@intel.com>
+ <20220221080840.7369-3-chenyi.qiang@intel.com> <YkTAzCPZ3zXYDBLj@google.com>
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+In-Reply-To: <YkTAzCPZ3zXYDBLj@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-03-22, 19:38, Manivannan Sadhasivam wrote:
-> On Thu, Mar 24, 2022 at 04:48:15AM +0300, Serge Semin wrote:
-> > Most likely due to a copy-paste mistake the dst_addr member of the
-> > dma_slave_config structure has been marked as ignored if the !source!
-> > address belong to the memory. That is relevant to the src_addr field of
-> > the structure while the dst_addr field as containing a destination device
-> > address is supposed to be ignored if the destination is the CPU memory.
-> > Let's fix the field description accordingly.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> One suggestion below.
-> 
-> > ---
-> >  include/linux/dmaengine.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> > index 842d4f7ca752..f204ea16ac1c 100644
-> > --- a/include/linux/dmaengine.h
-> > +++ b/include/linux/dmaengine.h
-> > @@ -395,7 +395,7 @@ enum dma_slave_buswidth {
-> >   * should be read (RX), if the source is memory this argument is
-> >   * ignored.
-> >   * @dst_addr: this is the physical address where DMA slave data
-> > - * should be written (TX), if the source is memory this argument
-> > + * should be written (TX), if the destination is memory this argument
-> 
-> Should we rename "memory" to "local memory" or something similar?
 
-what do you mean by local memory :)
 
--- 
-~Vinod
+On 3/31/2022 4:42 AM, Sean Christopherson wrote:
+> On Mon, Feb 21, 2022, Chenyi Qiang wrote:
+>> Add PKRS caching into the standard register caching mechanism in order
+>> to take advantage of the availability checks provided by regs_avail.
+>>
+>> This is because vcpu->arch.pkrs will be rarely acceesed by KVM, only in
+>> the case of host userspace MSR reads and GVA->GPA translation in
+>> following patches. It is unnecessary to keep it up-to-date at all times.
+> 
+> It might be worth throwing in a blurb that the potential benefits of this caching
+> are tenous.
+> 
+> Barring userspace wierdness, the MSR read is not a hot path.
+> 
+> permission_fault() is slightly more common, but I would be surprised if caching
+> actually provides meaningful performance benefit.  The PKRS checks are done only
+> once per virtual access, i.e. only on the final translation, so the cache will get
+> a hit if and only if there are multiple translations in a single round of emulation,
+> where a "round of emulation" ends upon entry to the guest.  With unrestricted
+> guest, i.e. for all intents and purposes every VM using PKRS, there aren't _that_
+> many scenarios where KVM will (a) emulate in the first place and (b) emulate enough
+> accesses for the caching to be meaningful.
+> 
+> That said, this is basically "free", so I've no objection to adding it.  But I do
+> think it's worth documenting that it's nice-to-have so that we don't hesitate to
+> rip it out in the future if there's a strong reason to drop the caching.
+> 
+
+OK, will add this note in commit message.
+
+>> Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
+>> ---
+> 
+> Reviewed-by: Sean Christopherson <seanjc@google.com>

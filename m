@@ -2,189 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65F34ED565
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AEC4ED56D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbiCaIYa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 31 Mar 2022 04:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S232671AbiCaIZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiCaIY1 (ORCPT
+        with ESMTP id S232087AbiCaIZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:24:27 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41DC1BA47D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:22:34 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nZq4c-0007gt-JJ; Thu, 31 Mar 2022 10:22:30 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, atishp@atishpatra.org,
-        anup@brainfault.org, mick@ics.forth.gr, samuel@sholland.org,
-        cmuellner@linux.com, philipp.tomsich@vrull.eu
-Subject: Re: [PATCH 2/2] riscv: implement cache-management errata for T-Head SoCs
-Date:   Thu, 31 Mar 2022 10:22:29 +0200
-Message-ID: <5787392.alqRGMn8q6@diego>
-In-Reply-To: <mhng-3c71e6fc-cd1c-4796-8b50-6768485b8f4a@palmer-ri-x1c9>
-References: <mhng-3c71e6fc-cd1c-4796-8b50-6768485b8f4a@palmer-ri-x1c9>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 04:25:11 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F38C6EDB;
+        Thu, 31 Mar 2022 01:23:21 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1648714997; bh=iDBMY197GWWnst83wC1Tob2jp5vtx/AimRG78sGrwlo=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=aG0KI2SM/9+gcA9rLrq8QIXI2anoy0jX6J85T+T90QPChe8pYkTo6507F3c4NbXFX
+         mjhD3ALdyV2JWKsmjfeKZQn5xUIARb4+0z5OaiidzmrkK1gDHSCjuLU2uIKh5o+9Uv
+         QV4iq+0uzG8XMkXYQMLTqsntTuJyRkyugd8ynOMU=
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [RFC PATCH 1/5] dt-bindings: sound: Add Apple Macs sound system
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
+In-Reply-To: <0f7677ba-bffa-7ec6-7c74-3fad84a1d2c5@linaro.org>
+Date:   Thu, 31 Mar 2022 10:23:17 +0200
+Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E5F73642-DF9A-46ED-B310-7D69CAE22C82@cutebit.org>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <20220331000449.41062-2-povik+lin@cutebit.org>
+ <9e3ba11c-d179-c229-fb7c-bf5611a15b1b@linaro.org>
+ <DAFA4249-4B0A-4D1F-A36A-4352FE783488@cutebit.org>
+ <0f7677ba-bffa-7ec6-7c74-3fad84a1d2c5@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
 
-Am Donnerstag, 31. März 2022, 04:30:36 CEST schrieb Palmer Dabbelt:
-> On Mon, 07 Mar 2022 14:46:20 PST (-0800), heiko@sntech.de wrote:
-> > The T-Head C906 and C910 implement a scheme for handling
-> > cache operations different from the generic Zicbom extension.
-> >
-> > Add an errata for it next to the generic dma coherency ops.
-> >
-> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > ---
-> >  arch/riscv/Kconfig.erratas           | 10 +++++++
-> >  arch/riscv/errata/thead/errata.c     |  5 ++++
-> >  arch/riscv/include/asm/errata_list.h | 45 ++++++++++++++++++++++++++--
-> >  3 files changed, 57 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-> > index de4002baa1d0..89a6dcb8ac2a 100644
-> > --- a/arch/riscv/Kconfig.erratas
-> > +++ b/arch/riscv/Kconfig.erratas
-> > @@ -50,4 +50,14 @@ config ERRATA_THEAD_PBMT
-> >
-> >  	  If you don't know what to do here, say "Y".
-> >
-> > +config ERRATA_THEAD_CMO
-> > +	bool "Apply T-Head cache management errata"
-> > +	depends on ERRATA_THEAD && RISCV_DMA_NONCOHERENT
-> > +	default y
-> > +	help
-> > +	  This will apply the cache management errata to handle the
-> > +	  non-standard handling on non-coherent operations on T-Head SoCs.
-> > +
-> > +	  If you don't know what to do here, say "Y".
-> > +
-> >  endmenu
-> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> > index fd8e0538a3f0..11c26c37425f 100644
-> > --- a/arch/riscv/errata/thead/errata.c
-> > +++ b/arch/riscv/errata/thead/errata.c
-> > @@ -33,6 +33,11 @@ static const struct errata_info errata_list[ERRATA_THEAD_NUMBER] = {
-> >  		.stage = RISCV_ALTERNATIVES_EARLY_BOOT,
-> >  		.check_func = errata_mt_check_func
-> >  	},
-> > +	{
-> > +		.name = "cache-management",
-> > +		.stage = RISCV_ALTERNATIVES_BOOT,
-> > +		.check_func = errata_mt_check_func
-> > +	},
-> >  };
-> >
-> >  static u32 thead_errata_probe(unsigned int stage, unsigned long archid, unsigned long impid)
-> > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> > index 7a2dd61af24d..f7c6805daeab 100644
-> > --- a/arch/riscv/include/asm/errata_list.h
-> > +++ b/arch/riscv/include/asm/errata_list.h
-> > @@ -16,7 +16,8 @@
-> >
-> >  #ifdef CONFIG_ERRATA_THEAD
-> >  #define	ERRATA_THEAD_PBMT 0
-> > -#define	ERRATA_THEAD_NUMBER 1
-> > +#define	ERRATA_THEAD_CMO 1
-> > +#define	ERRATA_THEAD_NUMBER 2
-> >  #endif
-> >
-> >  #define	CPUFEATURE_SVPBMT 0
-> > @@ -104,8 +105,37 @@ asm volatile(ALTERNATIVE(								\
-> >  #define CBO_CLEAN_A0	".long 0x25200F"
-> >  #define CBO_FLUSH_A0	".long 0x05200F"
-> >
-> > +/*
-> > + * dcache.ipa rs1 (invalidate, physical address)
-> > + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *   0000001    01010      rs1       000      00000  0001011
-> > + * dache.iva rs1 (invalida, virtual address)
-> > + *   0000001    00110      rs1       000      00000  0001011
-> > + *
-> > + * dcache.cpa rs1 (clean, physical address)
-> > + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *   0000001    01001      rs1       000      00000  0001011
-> > + * dcache.cva rs1 (clean, virtual address)
-> > + *   0000001    00100      rs1       000      00000  0001011
-> > + *
-> > + * dcache.cipa rs1 (clean then invalidate, physical address)
-> > + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *   0000001    01011      rs1       000      00000  0001011
-> > + * dcache.civa rs1 (... virtual address)
-> > + *   0000001    00111      rs1       000      00000  0001011
-> > + *
-> > + * sync.s (make sure all cache operations finished)
-> > + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *   0000000    11001     00000      000      00000  0001011
-> > + */
-> > +#define THEAD_INVAL_A0	".long 0x0265000b"
-> > +#define THEAD_CLEAN_A0	".long 0x0245000b"
-> > +#define THEAD_FLUSH_A0	".long 0x0275000b"
-> > +#define THEAD_SYNC_S	".long 0x0190000b"
-> 
-> IIRC this came up before, but these really need to get into the 
-> assembler as actual instructions.
+> On 31. 3. 2022, at 10:17, Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org> wrote:
+>=20
+> On 31/03/2022 08:57, Martin Povi=C5=A1er wrote:
+>>=20
+>>> On 31. 3. 2022, at 8:43, Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org> wrote:
+>>>=20
+>>> On 31/03/2022 02:04, Martin Povi=C5=A1er wrote:
+>>>> Add binding for Apple Silicon Macs' machine-level sound system.
+>>>>=20
+>>>> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>>>> ---
+>>>> .../bindings/sound/apple,macaudio.yaml        | 103 =
+++++++++++++++++++
+>>>> 1 file changed, 103 insertions(+)
+>>>> create mode 100644 =
+Documentation/devicetree/bindings/sound/apple,macaudio.yaml
+>>>>=20
+>>>=20
+>>> Commit title does not match subsystem.
+>>=20
+>> Tell more please. I don=E2=80=99t see it.
+>=20
+> git log --oneline  -- Documentation/devicetree/bindings/sound/
+>=20
+>=20
+> Mark expects "ASoC: dt-bindings:"
 
-okay :-) .
+Aha! Thanks.
 
-But just for my understanding which of the two ways going forward:
-- keep this in the waiting area _until_ a suitable binutils is released
-- use the coded instructions now and convert later once binutils is released
+>>>> diff --git =
+a/Documentation/devicetree/bindings/sound/apple,macaudio.yaml =
+b/Documentation/devicetree/bindings/sound/apple,macaudio.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..a6380e4bdd1a
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/sound/apple,macaudio.yaml
+>>>> @@ -0,0 +1,103 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/sound/apple,macaudio.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Apple Silicon Macs integrated sound system
+>>>> +
+>>>> +maintainers:
+>>>> +  - Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>>>> +
+>>>=20
+>>> Add description.
+>>>=20
+>>>> +definitions:
+>>>=20
+>>> This does not make code more readable.
+>>=20
+>> Are you sure? It prevents duplication later on for =E2=80=98codec' =
+and =E2=80=98cpu=E2=80=99.
+>=20
+> That's true, but duplication is small, unless you think this will be
+> extended. I guess it is a trade-off, but so far for few lines and just
+> two users of such definition, I would prefer to duplicate. I don't =
+have
+> strong opinion, though.
 
-The reason I ask is, that any chip with a t-head core like the Allwinner-D1
-will need this for things like basic networking, so with the binutils
-release schedule, I guess we'd be looking at autumn 2022 at the earliest.
+OK
 
+>>=20
+>>>=20
+>>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +      link-name:
+>>>> +        description: Name for the DAI link to present to users.
+>>>> +        $ref: /schemas/types.yaml#/definitions/string
+>>>> +      cpu:
+>>>> +        $ref: "#/definitions/dai"
+>>>> +      codec:
+>>>> +        $ref: "#/definitions/dai"
+>>>=20
+>>> missing maxItems for DAI phandles.
+>>=20
+>> Well there=E2=80=99s not a maximum.
+>=20
+> There should be some maximum of supported codecs. Hardware might have
+> such constraints. If really unsure, choose some reasonable (small)
+> amount. It could be later raised, if needed.
 
-Thanks
-Heiko
+There are some constraints but technically not in the driver that binds
+on this binding. I thought no limit is better than an arbitrary one, but
+if the preference is to have one, I will add it, no problem.
 
-> > +
-> >  #define ALT_CMO_OP(_op, _start, _size)							\
-> > -asm volatile(ALTERNATIVE(								\
-> > +asm volatile(ALTERNATIVE_2(								\
-> > +	"nop\n\t"									\
-> >  	"nop\n\t"									\
-> >  	"nop\n\t"									\
-> >  	"nop\n\t"									\
-> > @@ -117,7 +147,16 @@ asm volatile(ALTERNATIVE(								\
-> >  	CBO_##_op##_A0 "\n\t"								\
-> >  	"addi a0, a0, %0\n\t"								\
-> >  	"2:\n\t"									\
-> > -	"bltu a0, %2, 3b\n\t", 0, CPUFEATURE_CMO, CONFIG_RISCV_DMA_NONCOHERENT)		\
-> > +	"bltu a0, %2, 3b\n\t"								\
-> > +	"nop", 0, CPUFEATURE_CMO, CONFIG_RISCV_DMA_NONCOHERENT,				\
-> > +	"mv a0, %1\n\t"									\
-> > +	"j 2f\n\t"									\
-> > +	"3:\n\t"									\
-> > +	THEAD_##_op##_A0 "\n\t"								\
-> > +	"addi a0, a0, %0\n\t"								\
-> > +	"2:\n\t"									\
-> > +	"bltu a0, %2, 3b\n\t"								\
-> > +	THEAD_SYNC_S, THEAD_VENDOR_ID, ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
-> >  	: : "I"(L1_CACHE_BYTES), "r"((_start) & ~(L1_CACHE_BYTES - 1)),			\
-> >  	    "r"(ALIGN((_start) + (_size), L1_CACHE_BYTES)))
-> 
+> Best regards,
+> Krzysztof
 
-
-
+Best,
+Martin
 

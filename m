@@ -2,141 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B76C4EDF32
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD354EDF35
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240339AbiCaQ73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S240354AbiCaQ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbiCaQ72 (ORCPT
+        with ESMTP id S232806AbiCaQ7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:59:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D84232128;
-        Thu, 31 Mar 2022 09:57:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B41F26130D;
-        Thu, 31 Mar 2022 16:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCB4C340ED;
-        Thu, 31 Mar 2022 16:57:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648745860;
-        bh=igvAvAQeyELaJZGiURaidLDfiJ9bucjWU0/u3Bx78+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p3O0Yr20Zzryj9CMPn8goSqUTEYcrdwH6a6P5RDADVxSPMC98mi/YN7wftGRziKly
-         O9K34sVHKNIzfHOAD1dmmTA/HfiWHaLEg8rXwFrtNwpa2JELbHmfSBxdCmDGUzkmoA
-         AP90rl1S+qDeytxkanfeH5ahB2Wy23kxqLW8kX1Y=
-Date:   Thu, 31 Mar 2022 18:57:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Benson Leung <bleung@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Won Chung <wonchung@google.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
- functions
-Message-ID: <YkXdgQH1GWCitf0A@kroah.com>
-References: <20220331084918.2592699-1-wonchung@google.com>
- <YkVtvhC0n9B994/A@kroah.com>
- <YkV1KK8joyDAgf50@kuha.fi.intel.com>
- <YkWSmvrEevLsyDH5@kroah.com>
- <YkXRKyfoWTXqLi1L@google.com>
+        Thu, 31 Mar 2022 12:59:33 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C632325DB;
+        Thu, 31 Mar 2022 09:57:45 -0700 (PDT)
+Message-ID: <b43c542a-0cc6-0f60-3f7b-b16078984c4d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648745862;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OtRqqJsGZabTr8ykV3o87td1KdWyzGvuSkxqwUlvOV0=;
+        b=TyiTmwAP7X1MRB16PXjj8l3f6KYq0MhJKsdt6gT4Ek1tYBPWA56Q0SERovHBl2K4ssOANq
+        NjgiyDegx6nNsXqqkz3G0pdqVnV+zVi3uh1Snlr01HvrHVRzwHpVijFNThCUjDu7Jw2ssV
+        79LisqoCftc4kqElqmLqN0x6Hx1eP3g=
+Date:   Thu, 31 Mar 2022 10:57:40 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkXRKyfoWTXqLi1L@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1 1/3] driver core: Support asynchronous driver shutdown
+Content-Language: en-US
+To:     Oliver O'Halloran <oohall@gmail.com>,
+        Tanjore Suresh <tansuresh@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org,
+        linux-pci <linux-pci@vger.kernel.org>
+References: <20220328230008.3587975-1-tansuresh@google.com>
+ <20220328230008.3587975-2-tansuresh@google.com>
+ <CAOSf1CHnaKrSH0XwKMBuUmMAuc2q6MaHaZPqVoUia9MYqMjgGg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <CAOSf1CHnaKrSH0XwKMBuUmMAuc2q6MaHaZPqVoUia9MYqMjgGg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:04:59AM -0700, Benson Leung wrote:
-> Hi Greg,
+
+
+On 3/28/2022 6:19 PM, Oliver O'Halloran wrote:
+> On Tue, Mar 29, 2022 at 10:35 AM Tanjore Suresh <tansuresh@google.com> wrote:
+>>
+>> This changes the bus driver interface with additional entry points
+>> to enable devices to implement asynchronous shutdown. The existing
+>> synchronous interface to shutdown is unmodified and retained for
+>> backward compatibility.
+>>
+>> This changes the common device shutdown code to enable devices to
+>> participate in asynchronous shutdown implementation.
 > 
-> On Thu, Mar 31, 2022 at 01:38:02PM +0200, Greg KH wrote:
-> > > > >  		return 0;
-> > > > >  
-> > > > > diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
-> > > > > index f7380d387bab..e32a81da8af6 100644
-> > > > > --- a/drivers/misc/mei/pxp/mei_pxp.c
-> > > > > +++ b/drivers/misc/mei/pxp/mei_pxp.c
-> > > > > @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
-> > > > >  {
-> > > > >  	struct device *base = data;
-> > > > >  
-> > > > > -	if (strcmp(dev->driver->name, "i915") ||
-> > > > > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
-> > > > 
-> > > > Same here, shouldn't this be caught by the driver core or bus and match
-> > > > should not be called?
-> > > > 
-> > > > Why not fix this in the component/driver core instead?
-> > > 
-> > > A component is just a device that is declared to be a "component", and
-> > > the code that declares it as component does not have to be the driver
-> > > of that device. You simply can't assume that it's bind to a driver
-> > > like this function does.
-> > > 
-> > > In our case the "components" are USB ports, so devices that are never
-> > > bind to drivers.
-> > 
-> > And going off of the driver name is sane?  That feels ripe for bugs and
-> > problems in the future, but hey, I don't understand the need for this
-> > driver to care about another driver at all.
+> nice to see someone looking at improving the shutdown path
 > 
-> I think the component framework is meant to be this loose confederation of
-> devices, so going into component match, you don't know what the other device
-> is yet.
+>> Signed-off-by: Tanjore Suresh <tansuresh@google.com>
+>> ---
+>>   drivers/base/core.c        | 39 +++++++++++++++++++++++++++++++++++++-
+>>   include/linux/device/bus.h | 10 ++++++++++
+>>   2 files changed, 48 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/core.c b/drivers/base/core.c
+>> index 3d6430eb0c6a..359e7067e8b8 100644
+>> --- a/drivers/base/core.c
+>> +++ b/drivers/base/core.c
+>> @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
+>> *snip*
 > 
-> The USB drivers and the i915 drivers 100% don't care about each other,
-> but the framework doesn't know that yet until all the drivers try to match.
+> This all seems a bit dangerous and I'm wondering what systems you've
+> tested these changes with. I had a look at implementing something
+> similar a few years ago and one case that always concerned me was
+> embedded systems where the PCIe root complex also has a driver bound.
+> Say you've got the following PCIe topology:
 > 
-> > 
-> > And why is a USB device being passed to something that it thinks is a
-> > PCI device?  That too feels really wrong and ripe for problems.
-> > 
+> 00:00.0 - root port
+> 01:00.0 - nvme drive
 > 
-> The problematic device that's being passed through here is actually the
-> usb4_port, not a usb device. My guess would be that's why it's getting past any
-> checks for whether it's a PCI device.
-
-a usb4 port should not be a pci device.
-
-So fix up the checks, don't do a random "is this the driver name?"
-check, look for the real driver pointer or something like that that you
-KNOW is the correct match.
-
-> The component framework currently being used by (hdac_i915, mei_hdcp, mei_pxp)
-> to connect those three devices together, and completely separately, the
-> component framework is being used by the typec connector class's port mapper.
+> With the current implementation of device_shutdown() we can guarantee
+> that the child device (the nvme) is shut down before we start trying
+> to shut down the parent device (the root complex) so there's no
+> possibility of deadlocks and other dependency headaches. With this
+> implementation of async shutdown we lose that guarantee and I'm not
+> sure what the consequences are. Personally I was never able to
+> convince myself it was safe, but maybe you're braver than I am :)
 > 
-> These two clusters of devices are using the same component framework, but are
-> not supposed to interact with each other. When we attempted to add the usb4_port
-> and its retimer in order to link tbt/usb4 to the typec connector, we discovered
-> this interaction because we happened to build the usb4_port built-in in our
-> configs, so it does its component_add earlier.
+> That all said, there's probably only a few kinds of device that will
+> really want to implement async shutdown support so maybe you can
+> restrict it to leaf devices and flip the ordering around to something
+> like:
+
+It seems like it might be helpful to split the async shutdowns into 
+refcounted hierarchies and proceed with the next level up when all the 
+refs are in.
+
+Ex:
+00:00.0 - RP
+   01:00.0 - NVMe A
+   02:00.0 - Bridge USP
+     03:00.0 - Bridge DSP
+       04:00.0 - NVMe B
+     03:00.1 - Bridge DSP
+       05:00.0 - NVMe C
+
+NVMe A could start shutting down at the beginning of the hierarchy 
+traversal. Then async shutdown of bus 3 wouldn't start until all 
+children of bus 3 are shutdown.
+
+You could probably do this by having the async_shutdown_list in the pci_bus.
+
 > 
-> I agree, by the way. This is all a bit ugly.
-
-Something is wrong with the component code here if this is happening, as
-that's not a solid interface that can actually work at all.
-
-Perhaps do not use this framework until it is fixed?
-
-And again, is this something that you see today on an unmodified 5.17.1
-release?  If not, why all of the stable backport requests?
-
-confused,
-
-greg k-h
+> for_each_device(dev) {
+>     if (can_async(dev) && has_no_children(dev))
+>        start_async_shutdown(dev)
+> }
+> wait_for_all_async_shutdowns_to_finish()
+> 
+> // tear down the remaining system devices synchronously
+> for_each_device(dev)
+>     do_sync_shutdown(dev)
+> 
+>>   /*
+>> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+>> index a039ab809753..e261819601e9 100644
+>> --- a/include/linux/device/bus.h
+>> +++ b/include/linux/device/bus.h
+>> @@ -93,6 +101,8 @@ struct bus_type {
+>>          void (*sync_state)(struct device *dev);
+>>          void (*remove)(struct device *dev);
+>>          void (*shutdown)(struct device *dev);
+>> +       void (*shutdown_pre)(struct device *dev);
+>> +       void (*shutdown_post)(struct device *dev);
+> 
+> Call them shutdown_async_start() / shutdown_async_end() or something
+> IMO. These names are not at all helpful and they're easy to mix up
+> their role with the class based shutdown_pre / _post
+> 

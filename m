@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45BB4EE266
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66C34EE26A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241269AbiCaUNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S241283AbiCaUNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241258AbiCaUNO (ORCPT
+        with ESMTP id S241276AbiCaUNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:13:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401FF1B255D;
-        Thu, 31 Mar 2022 13:11:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E00D5B82216;
-        Thu, 31 Mar 2022 20:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB279C340ED;
-        Thu, 31 Mar 2022 20:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648757484;
-        bh=E3hwYox9oNuKGRzoM1LoNvV2m84CJxMhK7tx3apicLk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cKc8qWiC3cFFDyv8YrXT+wlLRFDZmQrMJQCyOxTD9BSAQHVPiafvc3HyBjXPYuGo0
-         WNlBVx9dPVTX0pw4t5cOupXBggW8OGIIms+XGBHgGCFBAz/cxu/svugoKcwjppvY/F
-         hILtGgwsG4hzIJDVVdDH6O5At+QwsY06Snqd2wwoITf/ovPJ7ajEF8Z82aX57cR6if
-         OXBOz/58hw1n/MNohwMPQH+tM5t1LIK26cdIY1YRoQv8jfayLoFp5X4/MU2ChiZPpO
-         V/6y1LhRcOLnlEAFzpaALED0kBWpZq6vvARJun0tGd9k5r+pSufSp2zXNygJL+Z5DH
-         GGno2uNjWQCnw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F8D4E7BB0B;
-        Thu, 31 Mar 2022 20:11:24 +0000 (UTC)
-Subject: Re: [GIT PULL] More ACPI updates for v5.18-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hGTCBsbrFt7xcS_J+X1hG1qOAL=UecfGyHuhAcHjZ0eQ@mail.gmail.com>
-References: <CAJZ5v0hGTCBsbrFt7xcS_J+X1hG1qOAL=UecfGyHuhAcHjZ0eQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hGTCBsbrFt7xcS_J+X1hG1qOAL=UecfGyHuhAcHjZ0eQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.18-rc1-2
-X-PR-Tracked-Commit-Id: 4a13e559af0b177eb934c39338f100a9f692a37b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e729dbe8ea1c6145ae7b9efd6a00a5613746d3b0
-Message-Id: <164875748458.22963.1822475178150593108.pr-tracker-bot@kernel.org>
-Date:   Thu, 31 Mar 2022 20:11:24 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 31 Mar 2022 16:13:23 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B651B60AD
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:11:34 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id g20so584939edw.6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GPgeCtKmEhvmQKVVwbT+D+hGvHIu775F1U4GvBldL2Q=;
+        b=GnyaNaKghs7rIwWQGP+aLorO2ZDlnZb7ApUV7uWEVD0TotgWSR4aVi6RvzY/5m4sqS
+         1IdoVqg7Nn2/x7qlwiMl15IfVJaVu8mcfX5T45AeVGV9zrxTpLITtwSB8wEftvi6Fq2G
+         fZ+BNCy66Wl2qCq+7UbsKGZitVTTj33FzKBG172h3piJDTgxEdj1zOilOy1a7umgbrbK
+         OF/A3UYwU9GoftLfKqhkcr9LrXyE/v/p1FaCc0KfZ/ZKmocp1mpHD1fXATLMxd1F4bZh
+         BMpzd29qHXIFMlF6xpdsXb/iuIwP4eItxA34/HGTlhLbhcBlTDOgWTTLQGelROQJQFUL
+         MASg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GPgeCtKmEhvmQKVVwbT+D+hGvHIu775F1U4GvBldL2Q=;
+        b=4msaV0edC6H41LRr/3rS3cKH0F7wMp54+9+N28dtLSMvpq/dJhxPrM7/LyErg7GpcI
+         bu0v1dtUI4F97UDRvlVesaMbPrmhJ7CVTBdYN47KX3opJBCJwi0hOzGPW0rOPfK4UYTb
+         g7DV2qZ9fe2JN5qgntVJgLOuKYv8xcrOzknIg72yIAtMjgvxAsFYQPjzBRwLd4kA5QtC
+         mm1FIYbUS2tVFFLqLnOvOyQ2Tkqu23S/r7k9SdkBMZ1zTCzYfeUXuXnOuXBeKCr3Ek9a
+         4jlXdNvnrW7S4FOtbV5Gn6mV7WcgbQOucJvCqSA2Z6UBV7vl/rGSdY8c6k1iQjquyhSQ
+         LA/g==
+X-Gm-Message-State: AOAM5334sMfoIXG5U4N8LoVvwOqkxVzc//pyM4kqY8BTCgyu5a7b7c9C
+        TiceCFJdZ4i+dx/H/uKYNWp9iDtYfVWOcRPj
+X-Google-Smtp-Source: ABdhPJzC6jMQ2kcSci4tIAIIfY3zKGEqhZmRZopnjBgpFfEJs5uM1RUf1nZsEuAePgeXhIx1a0CBqg==
+X-Received: by 2002:a05:6402:42c6:b0:419:276a:dded with SMTP id i6-20020a05640242c600b00419276addedmr18142489edc.2.1648757493301;
+        Thu, 31 Mar 2022 13:11:33 -0700 (PDT)
+Received: from [192.168.0.168] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id d2-20020a1709067a0200b006df8c996b36sm166175ejo.26.2022.03.31.13.11.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 13:11:32 -0700 (PDT)
+Message-ID: <64f48c50-c57a-667f-ac6e-9469348cf558@linaro.org>
+Date:   Thu, 31 Mar 2022 22:11:32 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] regulator: dt-bindings: maxim,max8997: convert to
+ dtschema
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20211001130249.80405-1-krzysztof.kozlowski@canonical.com>
+ <CAMuHMdU10FL8-F1y8rrO4dUtKJ_NvenxcBD3VWB7=5rf-vf-yg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdU10FL8-F1y8rrO4dUtKJ_NvenxcBD3VWB7=5rf-vf-yg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 31 Mar 2022 19:16:56 +0200:
+On 30/03/2022 12:44, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
+> 
+> On Fri, Oct 1, 2021 at 3:18 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>> Convert the Maxim MAX8997 PMIC bindings to DT schema format.  Extend the
+>> examples with additional one copied from kernel's exynos4210-origen.dts.
+>> Also the binding descriptions are copied from old file, so license
+>> entire work under GPL-2.0.
+>>
+>> This also adds previously undocumented 32 kHz clock output modelled as
+>> regulators.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> Thanks for your patch, which is now commit 1d2104f21618a4ce
+> ("regulator: dt-bindings: maxim,max8997: convert to dtschema").
+> 
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+> 
+>> +if:
+>> +  anyOf:
+>> +    - required:
+>> +        - max8997,pmic-buck1-uses-gpio-dvs
+>> +    - required:
+>> +        - max8997,pmic-buck2-uses-gpio-dvs
+>> +    - required:
+>> +        - max8997,pmic-buck5-uses-gpio-dvs
+>> +then:
+>> +  properties:
+>> +    max8997,pmic-buck1-dvs-voltage:
+>> +      minItems: 8
+>> +      maxItems: 8
+>> +    max8997,pmic-buck2-dvs-voltage:
+>> +      minItems: 8
+>> +      maxItems: 8
+>> +    max8997,pmic-buck5-dvs-voltage:
+>> +      minItems: 8
+>> +      maxItems: 8
+> 
+> The above doesn't seem to work as expected...
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.18-rc1-2
+Thanks for pointing this out. I am pretty sure I tested it and it worked
+fine (as it is not an obvious code), so I wonder what changed... maybe I
+was using slightly older dt-schema?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e729dbe8ea1c6145ae7b9efd6a00a5613746d3b0
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Krzysztof

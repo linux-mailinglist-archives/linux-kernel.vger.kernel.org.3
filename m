@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FD64ED720
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668924ED674
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiCaJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S233494AbiCaJGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiCaJk1 (ORCPT
+        with ESMTP id S232196AbiCaJGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:40:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57D91704A;
-        Thu, 31 Mar 2022 02:38:40 -0700 (PDT)
-Received: from mail-lf1-f49.google.com ([209.85.167.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MPXQi-1nN7XR34t8-00Mdvn; Thu, 31 Mar 2022 11:37:03 +0200
-Received: by mail-lf1-f49.google.com with SMTP id d5so40435274lfj.9;
-        Thu, 31 Mar 2022 02:36:50 -0700 (PDT)
-X-Gm-Message-State: AOAM530XhI3aUDLE7WrTxLraYv8W2xQYM+4LWqCGYs1FijtafLVn5hjA
-        A03rFeTLMRbHbCPGVj9E2emEdf1PsQiuAiCk11Q=
-X-Google-Smtp-Source: ABdhPJyx6uQXMBvORHeb8NOlqEaHCi9NLjE3UiFEIE0bvdtwMjjaxo+soHSe4zhQsJUkrp9pp2oFUj5K/neYvZqbvSc=
-X-Received: by 2002:adf:e54e:0:b0:205:a9be:c66e with SMTP id
- z14-20020adfe54e000000b00205a9bec66emr3326498wrm.192.1648717430754; Thu, 31
- Mar 2022 02:03:50 -0700 (PDT)
+        Thu, 31 Mar 2022 05:06:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76F74C1E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:04:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0517723A;
+        Thu, 31 Mar 2022 02:04:34 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DA283F718;
+        Thu, 31 Mar 2022 02:04:32 -0700 (PDT)
+Message-ID: <66f29bee-e26c-b40e-c3af-79d5297565d8@arm.com>
+Date:   Thu, 31 Mar 2022 11:04:31 +0200
 MIME-Version: 1.0
-References: <cover.1648714851.git.qinjian@cqplus1.com> <fdd371ceb896ea17dde0e398a136fa9c895a521c.1648714851.git.qinjian@cqplus1.com>
-In-Reply-To: <fdd371ceb896ea17dde0e398a136fa9c895a521c.1648714851.git.qinjian@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 31 Mar 2022 11:03:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0oTTLp8BB4uMMw2gdPnkMYutmrndLaQtp9g5GBom=aog@mail.gmail.com>
-Message-ID: <CAK8P3a0oTTLp8BB4uMMw2gdPnkMYutmrndLaQtp9g5GBom=aog@mail.gmail.com>
-Subject: Re: [PATCH v12 8/9] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:F/C6lkDrYOWhZjOjlOcFkGI+hNdyGHe5L/uI/zMKgAzYNEF9ns2
- hCT0eleYvEA/CwvkTzqJS1EbMo6/rpBrXyECjqFdoKP1R8T8oS0qxescGO0m2xt9eN35G8V
- sFVQiqGxUcY3bT/qomD3WGDMuMVaqoPFgsbQ86zRv5DChzTL37cQFFl9Te71jJ5OJHznSlR
- /OQj/RKOAuCgIpsuj0oHQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yJ1DIZJB1jo=:O8Y0M/XsHAkk5xWkBrq7uS
- ldVsqPu60swmOTaHXvdEd54IKSdvt6EI9wDGqs6AyrRa0K8QPPf8ub/ot1vjoQI9YRslWIHNw
- myDNj3Ztq1jFNjBcKbPOotok3YiBVF/LoFjoXk0E0k0MCleL5TFXYqepBNiuDeVNnfuv54Bfi
- hepAjDvk3A5v5CX+pdIIT79MHhvAW6qSAIEQid2N5/HVOD81qZkQgE7gMS7hNF57D74rn3Saw
- BwJyyc8/VTi09cvTK9prhhpfAPxzUUOVX2mqmEnfkaWUu69tmYvpIt06daUyjtPuzZzINZQPq
- bCh384f6Gy6jafXzHvOmgmt/fU04VElSGFwQJfpCsADpGhZhaTg6Lj86lPwWr9R4cjxIs67lr
- EBTTT88qhD2D5nBhMGm4H6MtVIEStzyEerdtKEOUUbEWDLB6CPH7J+0NdwOOs1upC5Sn50vgY
- Lk+Q9EHzrSryLaJ3gjdbtb5jxWqSob+eqJ02AK/PTTJePyIAhTs6sKR4Cr6paK/TjRj8Es5UX
- WBbsjw9MmaIyP0ssD9Jar4trKG2X8ZilWXWUx1zAH3qNg8mGeD5uEKJQD++EKFKqLyptCP4KV
- Hz9XtasvVRYTXgynYznzogeuwR2XkIkKBBvFLwjIgzJ/wQJ5Q+UzDhNLM+mImvqaWJiydFPTI
- M6Og1+X2IOiOFowgnkXCd3mJ2glfkYYCSUFOqBfRi7D8mcgBNzP/7BZh7TPJlPEkiC2fYIFPL
- hRVHYpR8Ecj7YoP9Tc/tYp5kFmKWllbwb6d7J8DESM7HIqgRL+mlAxp6QKPD1kq8pApOkaxai
- uIzRg3wZufucHKH3Zxoh2n7YPICaxwdRZR9F/jJCEkF7/IVE3LFjw4WKMoas1wms/TSejhWnE
- VLpERja1lJxA+qTrk5jnEBQTeuAgwr/2SV231PKfpIQrTGzSYF66fsT0mjrM/Kjd4LRL2EA+e
- QH9sXrstyFhHFaonAxLdwakNi7dJjnAE5padaFjzltk2FpGl2jaBUbk5WA+TiETbla83o5EqG
- KD9xYRvy/c/bxZz5/BwpzjuukAN7MyEELFzy9oUj8lSInnMKjhw8C5y4f8k/DNsdfTxd8t3Yj
- vSAU1/JoO7CqdejT9elARFDHSaCc8U2FEoO5inAa9xsMWt06WTauMKmRaAKLRb8FOi4buOVjo
- FOMXExDZyTJyxzR1M8fmhTFTJNpzsxIbSsLJRBRG49iE9ltddKKFwBKFmliO6fc25pwClOfB7
- 5BRNz/0JCTMD1ubNL
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] arch/arm64: Fix topology initialization for core
+ scheduling
+Content-Language: en-US
+To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220330155611.30216-1-pauld@redhat.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220330155611.30216-1-pauld@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 10:29 AM Qin Jian <qinjian@cqplus1.com> wrote:
->
-> This patch aims to add an initial support for Sunplus SP7021 SoC.
->
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+On 30/03/2022 17:56, Phil Auld wrote:
+> Arm64 systems rely on store_cpu_topology() to call update_siblings_masks()
+> to transfer the toplogy to the various cpu masks. This needs to be done 
+> before the call to notify_cpu_starting() which tells the scheduler about 
+> each cpu found, otherwise the core scheduling data structures are setup 
+> in a way that does not match the actual topology.
+> 
+> Without this change stress-ng (which enables core scheduling in its prctl 
+> tests) causes a warning and then a crash (trimmed for legibility):
+> 
+> [ 1853.805168] ------------[ cut here ]------------
+> [ 1853.809784] task_rq(b)->core != rq->core
+> [ 1853.809792] WARNING: CPU: 117 PID: 0 at kernel/sched/fair.c:11102 cfs_prio_less+0x1b4/0x1c4
+> ...
+> [ 1854.015210] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> ...
+> [ 1854.231256] Call trace:
+> [ 1854.233689]  pick_next_task+0x3dc/0x81c
+> [ 1854.237512]  __schedule+0x10c/0x4cc
+> [ 1854.240988]  schedule_idle+0x34/0x54
+> 
+> Fixes: 9edeaea1bc45 ("sched: Core-wide rq->lock")
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> ---
+> This is a similar issue to 
+>   f2703def339c ("MIPS: smp: fill in sibling and core maps earlier") 
+> which fixed it for MIPS. 
+> 
+> v2: Fixed the commit message. No code change.
 
+Ah, the reason is that smt_mask is not correctly setup, so we bail on
+`cpumask_weight(smt_mask) == 1` for !leaders in:
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+notify_cpu_starting()
+  cpuhp_invoke_callback_range()
+    sched_cpu_starting()
+      sched_core_cpu_starting()
+
+which leads to rq->core not being correctly set for !leader-rq's.
+
+LGTM. Tested on: HPE Apollo 70 X1
+
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+
+[...]
+

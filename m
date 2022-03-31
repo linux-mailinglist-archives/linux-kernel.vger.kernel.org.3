@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01864ED5CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619B94ED5A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbiCaIjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S232855AbiCaIcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbiCaIiz (ORCPT
+        with ESMTP id S232847AbiCaIcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:38:55 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C0781F1244
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:36:58 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(1188:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Thu, 31 Mar 2022 16:29:01 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     krzysztof.kozlowski@canonical.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v12 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-Date:   Thu, 31 Mar 2022 16:29:56 +0800
-Message-Id: <84a0839e7724fa39dd07fef491cf6bb357db2e7d.1648714851.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1648714851.git.qinjian@cqplus1.com>
-References: <cover.1648714851.git.qinjian@cqplus1.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 04:32:18 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7023A3983A;
+        Thu, 31 Mar 2022 01:30:31 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id m18so17862841plx.3;
+        Thu, 31 Mar 2022 01:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=ivXMvvbs5/EJ/cA1YNvCsYZ5GhYYP7s+w/OiMvQ9vdM=;
+        b=dmMQkLUbRxIWiMemllk8m4UN5qUqRLS4xMLW3zx/IMoev0AfAe/IRmrzEsLeT52WpK
+         u6hvbrMY9LBPWcExkvT7L6xVN7G313RRkCpyCvKij0TeehtUKT9WxFWRzSg8uIe0RsLX
+         vmDAlz8RBpAbFcvtABS+KkCsG+rxt6YPDuk1qw0F6KmGr/tFBc+wa8rfgY2HbaCftkoq
+         YzdeHZL6bMmGEeWraSOrQEsPVaQ/m/8TsHJT2h5omb8lYnUdZTQn3yJF+J8M4zsJzlWG
+         4dpPtfFBCsyE/15rZmbFjoQ4q0C59+QraJ2NelKF7xBwH/is8h6+l9IgWAFhUeDBN+DO
+         gZ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ivXMvvbs5/EJ/cA1YNvCsYZ5GhYYP7s+w/OiMvQ9vdM=;
+        b=DGFVjN/WjVnmCJT5tWrD5XWi4X7WTtiagIm41oD6aWuufNw0bKXhKEVcDPpZuYILqP
+         WwP3KiQPS4gA8vGMEW26YH271/S7KJ+Qr6zAqiJtQkdaUdR/FJUsyqiRCuhsLOp7AW/s
+         7eYs+kZ4BGkMLnbvWH54Qla+0zV+fnTfL/pKFDZUmjSHSlqBe5UDG6W8Xccd0wxfK4qX
+         MQgl3cWQprTgb7A/mLsaGhT9gsmBPF0OHvomsf0y3T/hK+ps3k+22Tubz26XRyIVoqL+
+         DSHz+l7RSBQ0HY4JGl0eOnVjDo5gEEVYqo8lQ7FwJKoDGd7pJeKqssOQqvVYIt1jqvVE
+         Vo7Q==
+X-Gm-Message-State: AOAM530OrrtnHMTXNd1DOGG7bRkaXfaJzEdLOgk2v/Nm3Pa/bDQ77Yc+
+        pZ9A2bD/FibhaK/nZoXTA3A=
+X-Google-Smtp-Source: ABdhPJwyXgHtVxQarjOg5ftr1g/409/SafG6TRxjZhAqQaz8fVpUoKM+MSv+EvwnfibqtJWpqfIlkQ==
+X-Received: by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP id d7-20020a17090ab30700b001bd37f3f0fcmr4946733pjr.132.1648715430845;
+        Thu, 31 Mar 2022 01:30:30 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm10950655pge.49.2022.03.31.01.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 01:30:30 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH v2] opp: use list iterator only inside the loop
+Date:   Thu, 31 Mar 2022 16:30:18 +0800
+Message-Id: <20220331083018.31995-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic Sunplus SP7021 based board defconfig
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate dedicated pointer variable [1].
+
+In this case, use a new variable 'iter' as the list iterator, while
+use the old variable 'new_dev' as a dedicated pointer to point to the
+found entry. And BUG_ON(!new_dev);.
+
+[1]: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
- MAINTAINERS                         |  1 +
- arch/arm/configs/multi_v7_defconfig |  1 +
- arch/arm/configs/sp7021_defconfig   | 61 +++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 arch/arm/configs/sp7021_defconfig
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 38890c055..93f4de6c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2747,6 +2747,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
- F:	drivers/irqchip/irq-sp7021-intc.c
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 8863fa969..a3bd9dbd8 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -86,6 +86,7 @@ CONFIG_MACH_SPEAR1310=y
- CONFIG_MACH_SPEAR1340=y
- CONFIG_ARCH_STI=y
- CONFIG_ARCH_STM32=y
-+CONFIG_ARCH_SUNPLUS=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_TEGRA=y
- CONFIG_ARCH_UNIPHIER=y
-diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_defconfig
-new file mode 100644
-index 000000000..cda16d33a
---- /dev/null
-+++ b/arch/arm/configs/sp7021_defconfig
-@@ -0,0 +1,61 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_SLAB=y
-+CONFIG_ARCH_SUNPLUS=y
-+# CONFIG_VDSO is not set
-+CONFIG_SMP=y
-+CONFIG_HAVE_ARM_ARCH_TIMER=y
-+CONFIG_THUMB2_KERNEL=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_INPUT_SPARSEKMAP=y
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_STAGING=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_FANOTIFY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
-+CONFIG_EXFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DEBUG_USER=y
+changes since v1:
+ - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
+
+v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
+
+---
+ drivers/opp/debugfs.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 596c185b5dda..81b2bc4b5f43 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -187,14 +187,18 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
+ static void opp_migrate_dentry(struct opp_device *opp_dev,
+ 			       struct opp_table *opp_table)
+ {
+-	struct opp_device *new_dev;
++	struct opp_device *new_dev = NULL, *iter;
+ 	const struct device *dev;
+ 	struct dentry *dentry;
+ 
+ 	/* Look for next opp-dev */
+-	list_for_each_entry(new_dev, &opp_table->dev_list, node)
+-		if (new_dev != opp_dev)
++	list_for_each_entry(iter, &opp_table->dev_list, node)
++		if (iter != opp_dev) {
++			new_dev = iter;
+ 			break;
++		}
++
++	BUG_ON(!new_dev);
+ 
+ 	/* new_dev is guaranteed to be valid here */
+ 	dev = new_dev->dev;
 -- 
-2.33.1
+2.17.1
 

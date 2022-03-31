@@ -2,319 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A224ED4F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022B64ED520
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbiCaHpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S231848AbiCaIEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiCaHp0 (ORCPT
+        with ESMTP id S232498AbiCaIEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:45:26 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248D322B17
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648712620; x=1680248620;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qUXUdIx3W5/Jng1H4E3s8psSKJYBq5/lfpgRd8OZoYE=;
-  b=InqlwMuMQ9pa0XV4VQIQ1oR6lzzyxrPSaNcqNRRM2JKnsAtmsVtn6FFv
-   tIkRMKLkjzZYK2D/EHc4IkGBQuArye3++jVypnI9hg5dQK3lzEO3qseZa
-   1gXk5q3kUl4Loj9055GbmPHjSIumAOeD6tdTl4sVVedudUqLX7L/vMKT3
-   zYlyysN5PzAbFzJDzQbZAMBkJqVzvSP5HSEZ+yacU/l3uRy+R+qs/AYw/
-   Hb+PtoJnBD54TM0N9Upkmg8rMxWGm4E3pADt5tFoFnvLhYBy9ZwuBfVJA
-   /U3y6NU8WDzBrr/qnYSiTmm2p8r4DaDSbzrdBOOkMQz6GDt1m8f80ltSx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257326439"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="257326439"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:43:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="566240327"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.87])
-  by orsmga008.jf.intel.com with ESMTP; 31 Mar 2022 00:43:37 -0700
-From:   kah.jing.lee@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
-        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>
-Subject: [PATCH 2/2] firmware: stratix10-rsu: extend RSU driver to get DCMF status
-Date:   Thu, 31 Mar 2022 23:42:39 +0800
-Message-Id: <20220331154237.4158001-3-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4ab174c2-8772-d543-9784-31b4660efd82@kernel.org>
-References: <4ab174c2-8772-d543-9784-31b4660efd82@kernel.org>
+        Thu, 31 Mar 2022 04:04:42 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF3C14924B
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:02:52 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 22V81Fcs034261
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Thu, 31 Mar 2022 16:01:15 +0800 (CST)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 31 Mar 2022 16:01:15 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <ke.wang@unisoc.com>
+Subject: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+Date:   Thu, 31 Mar 2022 16:00:56 +0800
+Message-ID: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 22V81Fcs034261
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Extend RSU driver to get DCMF status.
+For some kind of memcg, the usage is varies greatly from scenarios. Such as
+multimedia app could have the usage range from 50MB to 500MB, which generated
+by loading an special algorithm into its virtual address space and make it hard
+to protect the expanded usage without userspace's interaction. Furthermore, fixed
+memory.low is a little bit against its role of soft protection as it will response
+any system's memory pressure in same way.
 
-The status of each DCMF is reported. The currently used DCMF is used as
-reference, while the other three are compared against it to determine if
-they are corrupted.
+Taking all above into consideration, we introduce a kind of dynamic protection
+based on group's watermark and system's memory pressure in this patch. Our aims are:
+1. dynamic protection with no fixed setting
+2. proper protection value on memory.current
+3. time based decay protection
+4. memory pressue related protection
 
-DCMF = Decision Configuration Management Firmware.
-RSU = Remote System Update
+The basic concept could be descripted as bellowing, where we take group->watermark
+as a representative of usage
+		group->memory.low = decayed_watermark * decay_factor
+		decayed_watermark = group->watermark * func_wm_decay(time)
+		decay_factor = psi_system[PSI_MEM][time]
 
-Signed-off-by: Radu Bacrau <radu.bacrau@intel.com>
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
+func_wm_decay could be deemed as a linear decay funcion that will decay 1/2 in
+68s(36bit).If we take 2048 as "1", it could be descripted as:
+		decayed_watermark = time >> (group->wm_dec_factor - 10)
+		decayed_watermark = new_usage(if new_usage > decayed_watermark)
+
+decay_factor is as simple as a table lookingup and compose the final value by
+weight of some and full as
+		some = psi_system.avg[PSI_MEM * 2][time]
+		full = psi_system.avg[PSI_MEM * 2 + 1][time]
+		decay_factor = some * 70% + full *30%
+
+We simply test above change on a v5.4 based system in bellowing topology and
+observe some behavious as we expected:
+      A
+     / \
+    B   C
+1. With regard to the protection, elow is in a proper range as proportion of watermark.
+2. Elapsed time has positive impact on elow via decayed_watermark.
+3. Memory pressure has negitive impact on elow which could keep more usage when
+   system is under less pressure.
+
+PS: It should be configured as a sub-type of memcg and choosed by the user when
+create the group.
+
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 ---
- drivers/firmware/stratix10-rsu.c | 131 +++++++++++++++++++++++++++++--
- 1 file changed, 125 insertions(+), 6 deletions(-)
+ include/linux/memcontrol.h   | 50 ++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/page_counter.h |  4 ++++
+ include/linux/psi.h          |  2 ++
+ kernel/sched/psi.c           | 18 ++++++++++++++++
+ mm/memcontrol.c              |  4 ++++
+ mm/page_counter.c            |  4 ++++
+ 6 files changed, 82 insertions(+)
 
-diff --git a/drivers/firmware/stratix10-rsu.c b/drivers/firmware/stratix10-rsu.c
-index 9378075d04e9..856bc03ca07c 100644
---- a/drivers/firmware/stratix10-rsu.c
-+++ b/drivers/firmware/stratix10-rsu.c
-@@ -24,12 +24,16 @@
- #define RSU_DCMF1_MASK			GENMASK_ULL(63, 32)
- #define RSU_DCMF2_MASK			GENMASK_ULL(31, 0)
- #define RSU_DCMF3_MASK			GENMASK_ULL(63, 32)
-+#define RSU_DCMF0_STATUS_MASK		GENMASK_ULL(15, 0)
-+#define RSU_DCMF1_STATUS_MASK		GENMASK_ULL(31, 16)
-+#define RSU_DCMF2_STATUS_MASK		GENMASK_ULL(47, 32)
-+#define RSU_DCMF3_STATUS_MASK		GENMASK_ULL(63, 48)
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 0c5c403..a510057 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -21,6 +21,9 @@
+ #include <linux/vmstat.h>
+ #include <linux/writeback.h>
+ #include <linux/page-flags.h>
++#include <linux/sched/loadavg.h>
++#include <linux/sched/clock.h>
++#include <linux/psi.h>
  
- #define RSU_TIMEOUT	(msecs_to_jiffies(SVC_RSU_REQUEST_TIMEOUT_MS))
+ struct mem_cgroup;
+ struct obj_cgroup;
+@@ -28,6 +31,8 @@
+ struct mm_struct;
+ struct kmem_cache;
  
- #define INVALID_RETRY_COUNTER		0xFF
- #define INVALID_DCMF_VERSION		0xFF
--
-+#define INVALID_DCMF_STATUS		0xFFFFFFFF
- 
- typedef void (*rsu_callback)(struct stratix10_svc_client *client,
- 			     struct stratix10_svc_cb_data *data);
-@@ -49,6 +53,10 @@ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
-  * @dcmf_version.dcmf1: Quartus dcmf1 version
-  * @dcmf_version.dcmf2: Quartus dcmf2 version
-  * @dcmf_version.dcmf3: Quartus dcmf3 version
-+ * @dcmf_status.dcmf0: dcmf0 status
-+ * @dcmf_status.dcmf1: dcmf1 status
-+ * @dcmf_status.dcmf2: dcmf2 status
-+ * @dcmf_status.dcmf3: dcmf3 status
-  * @retry_counter: the current image's retry counter
-  * @max_retry: the preset max retry value
-  */
-@@ -73,6 +81,13 @@ struct stratix10_rsu_priv {
- 		unsigned int dcmf3;
- 	} dcmf_version;
- 
-+	struct {
-+		unsigned int dcmf0;
-+		unsigned int dcmf1;
-+		unsigned int dcmf2;
-+		unsigned int dcmf3;
-+	} dcmf_status;
++#define MEMCG_INTERVAL	(2*HZ+1)	/* 2 sec intervals */
 +
- 	unsigned int retry_counter;
- 	unsigned int max_retry;
+ /* Cgroup-specific page state, on top of universal node page state */
+ enum memcg_stat_item {
+ 	MEMCG_SWAP = NR_VM_NODE_STAT_ITEMS,
+@@ -340,6 +345,10 @@ struct mem_cgroup {
+ 	struct deferred_split deferred_split_queue;
+ #endif
+ 
++	u64 wm_dec_fact;
++	u64 avg_next_update;
++	u64 avg_last_update;
++
+ 	struct mem_cgroup_per_node *nodeinfo[];
  };
-@@ -129,7 +144,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
- 	struct stratix10_rsu_priv *priv = client->priv;
  
- 	if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support notify\n");
-+		dev_warn(client->dev, "Secure FW doesn't support notify\n");
- 	else if (data->status == BIT(SVC_STATUS_ERROR))
- 		dev_err(client->dev, "Failure, returned status is %lu\n",
- 			BIT(data->status));
-@@ -139,7 +154,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
- 
- /**
-  * rsu_retry_callback() - Callback from Intel service layer for getting
-- * the current image's retry counter from the firmware
-+ * the current image's retry counter from firmware
-  * @client: pointer to client
-  * @data: pointer to callback data structure
-  *
-@@ -156,7 +171,7 @@ static void rsu_retry_callback(struct stratix10_svc_client *client,
- 	if (data->status == BIT(SVC_STATUS_OK))
- 		priv->retry_counter = *counter;
- 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support retry\n");
-+		dev_warn(client->dev, "Secure FW doesn't support retry\n");
- 	else
- 		dev_err(client->dev, "Failed to get retry counter %lu\n",
- 			BIT(data->status));
-@@ -181,7 +196,7 @@ static void rsu_max_retry_callback(struct stratix10_svc_client *client,
- 	if (data->status == BIT(SVC_STATUS_OK))
- 		priv->max_retry = *max_retry;
- 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support max retry\n");
-+		dev_warn(client->dev, "Secure FW doesn't support max retry\n");
- 	else
- 		dev_err(client->dev, "Failed to get max retry %lu\n",
- 			BIT(data->status));
-@@ -215,6 +230,35 @@ static void rsu_dcmf_version_callback(struct stratix10_svc_client *client,
- 	complete(&priv->completion);
+@@ -608,6 +617,47 @@ static inline bool mem_cgroup_disabled(void)
+ 	return !cgroup_subsys_enabled(memory_cgrp_subsys);
  }
  
-+/**
-+ * rsu_dcmf_status_callback() - Callback from Intel service layer for getting
-+ * the DCMF status
-+ * @client: pointer to client
-+ * @data: pointer to callback data structure
-+ *
-+ * Callback from Intel service layer for DCMF status
++/*
++ * calculate memory.low based on the historic watermark and memory pressure
 + */
-+static void rsu_dcmf_status_callback(struct stratix10_svc_client *client,
-+				     struct stratix10_svc_cb_data *data)
++static inline void calc_protected_low(struct mem_cgroup *group)
 +{
-+	struct stratix10_rsu_priv *priv = client->priv;
-+	unsigned long long *value = (unsigned long long *)data->kaddr1;
++	u64 now, decay_factor;
++	u64 decayed_watermark;
++	u64 delta_time;
 +
-+	if (data->status == BIT(SVC_STATUS_OK)) {
-+		priv->dcmf_status.dcmf0 = FIELD_GET(RSU_DCMF0_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf1 = FIELD_GET(RSU_DCMF1_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf2 = FIELD_GET(RSU_DCMF2_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf3 = FIELD_GET(RSU_DCMF3_STATUS_MASK,
-+						    *value);
-+	} else
-+		dev_err(client->dev, "failed to get DCMF status\n");
++	now = sched_clock();
 +
-+	complete(&priv->completion);
-+}
-+
- /**
-  * rsu_send_msg() - send a message to Intel service layer
-  * @priv: pointer to rsu private data
-@@ -361,7 +405,8 @@ static ssize_t max_retry_show(struct device *dev,
- 	if (!priv)
- 		return -ENODEV;
- 
--	return sprintf(buf, "0x%08x\n", priv->max_retry);
-+	return scnprintf(buf, sizeof(priv->max_retry),
-+			 "0x%08x\n", priv->max_retry);
- }
- 
- static ssize_t dcmf0_show(struct device *dev,
-@@ -408,6 +453,61 @@ static ssize_t dcmf3_show(struct device *dev,
- 	return sprintf(buf, "0x%08x\n", priv->dcmf_version.dcmf3);
- }
- 
-+static ssize_t dcmf0_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf0 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf0);
-+}
-+
-+static ssize_t dcmf1_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf1 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf1);
-+}
-+
-+static ssize_t dcmf2_status_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf2 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf2);
-+}
-+
-+static ssize_t dcmf3_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf3 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf3);
-+}
- static ssize_t reboot_image_store(struct device *dev,
- 				  struct device_attribute *attr,
- 				  const char *buf, size_t count)
-@@ -484,6 +584,10 @@ static DEVICE_ATTR_RO(dcmf0);
- static DEVICE_ATTR_RO(dcmf1);
- static DEVICE_ATTR_RO(dcmf2);
- static DEVICE_ATTR_RO(dcmf3);
-+static DEVICE_ATTR_RO(dcmf0_status);
-+static DEVICE_ATTR_RO(dcmf1_status);
-+static DEVICE_ATTR_RO(dcmf2_status);
-+static DEVICE_ATTR_RO(dcmf3_status);
- static DEVICE_ATTR_WO(reboot_image);
- static DEVICE_ATTR_WO(notify);
- 
-@@ -500,6 +604,10 @@ static struct attribute *rsu_attrs[] = {
- 	&dev_attr_dcmf1.attr,
- 	&dev_attr_dcmf2.attr,
- 	&dev_attr_dcmf3.attr,
-+	&dev_attr_dcmf0_status.attr,
-+	&dev_attr_dcmf1_status.attr,
-+	&dev_attr_dcmf2_status.attr,
-+	&dev_attr_dcmf3_status.attr,
- 	&dev_attr_reboot_image.attr,
- 	&dev_attr_notify.attr,
- 	NULL
-@@ -532,6 +640,10 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 	priv->dcmf_version.dcmf2 = INVALID_DCMF_VERSION;
- 	priv->dcmf_version.dcmf3 = INVALID_DCMF_VERSION;
- 	priv->max_retry = INVALID_RETRY_COUNTER;
-+	priv->dcmf_status.dcmf0 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf1 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf2 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf3 = INVALID_DCMF_STATUS;
- 
- 	mutex_init(&priv->lock);
- 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
-@@ -561,6 +673,13 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 		stratix10_svc_free_channel(priv->chan);
- 	}
- 
-+	ret = rsu_send_msg(priv, COMMAND_RSU_DCMF_STATUS,
-+			   0, rsu_dcmf_status_callback);
-+	if (ret) {
-+		dev_err(dev, "Error, getting DCMF status %i\n", ret);
-+		stratix10_svc_free_channel(priv->chan);
++	if (!group->avg_next_update) {
++		group->avg_next_update = now + jiffies_to_nsecs(5*HZ);
++		return;
 +	}
 +
- 	ret = rsu_send_msg(priv, COMMAND_RSU_RETRY, 0, rsu_retry_callback);
- 	if (ret) {
- 		dev_err(dev, "Error, getting RSU retry %i\n", ret);
++	if (time_before((unsigned long)now, (unsigned long)group->avg_next_update))
++		return;
++
++	delta_time = group->avg_last_update ? now - group->avg_last_update : 0;
++	/*
++	 * we take 2048 as "1" and 68s decay 1/2(36bit) by default
++	 * decay_factor = 1024 * delta_time / 68s(0x1000000000)
++	 * 0.5(1024)/68s = decay_factor/delta_time ==> decay_factor = delta_time >> 26
++	 */
++	decay_factor = (2048 - min(2048ULL, delta_time >> (group->wm_dec_fact - 10)));
++	decayed_watermark = group->memory.decayed_watermark * decay_factor / 2048;
++	/* decay_factor: based on average memory pressure over elapsed time */
++	decay_factor = psi_mem_get(delta_time);
++	group->memory.low = decayed_watermark * (100 - decay_factor) / 100;
++
++	/*
++	 * avg_next_update: expected expire time according to current status
++	 */
++	group->memory.decayed_watermark = decayed_watermark;
++	group->avg_last_update = now;
++	group->avg_next_update = now + jiffies_to_nsecs(2*HZ);
++
++	return;
++}
++
+ static inline void mem_cgroup_protection(struct mem_cgroup *root,
+ 					 struct mem_cgroup *memcg,
+ 					 unsigned long *min,
+diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
+index 6795913..2720eb9f 100644
+--- a/include/linux/page_counter.h
++++ b/include/linux/page_counter.h
+@@ -25,8 +25,12 @@ struct page_counter {
+ 
+ 	/* legacy */
+ 	unsigned long watermark;
++	unsigned long decayed_watermark;
+ 	unsigned long failcnt;
+ 
++	/* proportional protection */
++	unsigned long min_prop;
++	unsigned long low_prop;
+ 	/*
+ 	 * 'parent' is placed here to be far from 'usage' to reduce
+ 	 * cache false sharing, as 'usage' is written mostly while
+diff --git a/include/linux/psi.h b/include/linux/psi.h
+index 65eb147..6c76993 100644
+--- a/include/linux/psi.h
++++ b/include/linux/psi.h
+@@ -25,6 +25,8 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 
+ int psi_show(struct seq_file *s, struct psi_group *group, enum psi_res res);
+ 
++unsigned long psi_mem_get(unsigned long time);
++
+ #ifdef CONFIG_CGROUPS
+ int psi_cgroup_alloc(struct cgroup *cgrp);
+ void psi_cgroup_free(struct cgroup *cgrp);
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index dd80bd2..8d315e0 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -291,6 +291,24 @@ static void get_recent_times(struct psi_group *group, int cpu,
+ 	}
+ }
+ 
++unsigned long psi_mem_get(unsigned long time_ns)
++{
++	unsigned long time_sec = time_ns / (1000 * 1000 * 1000);
++	unsigned long some, full;
++	if (time_sec < 10) {
++		some = LOAD_INT(psi_system.avg[PSI_MEM * 2][0]);
++		full = LOAD_INT(psi_system.avg[PSI_MEM * 2 + 1][0]);
++	} else if (time_sec < 60) {
++		some = LOAD_INT(psi_system.avg[PSI_MEM * 2][1]);
++		full = LOAD_INT(psi_system.avg[PSI_MEM * 2 + 1][1]);
++	} else {
++		some = LOAD_INT(psi_system.avg[PSI_MEM * 2][2]);
++		full = LOAD_INT(psi_system.avg[PSI_MEM * 2 + 1][2]);
++	}
++
++	return (some * 768 + full * 256) / 1024;
++}
++
+ static void calc_avgs(unsigned long avg[3], int missed_periods,
+ 		      u64 time, u64 period)
+ {
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 508bcea..6b579a4 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5188,6 +5188,7 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
+ 	page_counter_set_high(&memcg->memory, PAGE_COUNTER_MAX);
+ 	memcg->soft_limit = PAGE_COUNTER_MAX;
+ 	page_counter_set_high(&memcg->swap, PAGE_COUNTER_MAX);
++	memcg->wm_dec_fact = 36;
+ 	if (parent) {
+ 		memcg->swappiness = mem_cgroup_swappiness(parent);
+ 		memcg->oom_kill_disable = parent->oom_kill_disable;
+@@ -6616,6 +6617,8 @@ void mem_cgroup_calculate_protection(struct mem_cgroup *root,
+ {
+ 	unsigned long usage, parent_usage;
+ 	struct mem_cgroup *parent;
++	unsigned long memcg_emin, memcg_elow, parent_emin, parent_elow;
++	unsigned long watermark;
+ 
+ 	if (mem_cgroup_disabled())
+ 		return;
+@@ -6642,6 +6645,7 @@ void mem_cgroup_calculate_protection(struct mem_cgroup *root,
+ 	if (!parent)
+ 		return;
+ 
++	calc_protected_low(memcg);
+ 	if (parent == root) {
+ 		memcg->memory.emin = READ_ONCE(memcg->memory.min);
+ 		memcg->memory.elow = READ_ONCE(memcg->memory.low);
+diff --git a/mm/page_counter.c b/mm/page_counter.c
+index 7d83641..18abfdd 100644
+--- a/mm/page_counter.c
++++ b/mm/page_counter.c
+@@ -83,6 +83,8 @@ void page_counter_charge(struct page_counter *counter, unsigned long nr_pages)
+ 		 */
+ 		if (new > READ_ONCE(c->watermark))
+ 			WRITE_ONCE(c->watermark, new);
++		if (new > READ_ONCE(c->decayed_watermark))
++			WRITE_ONCE(c->decayed_watermark, new);
+ 	}
+ }
+ 
+@@ -137,6 +139,8 @@ bool page_counter_try_charge(struct page_counter *counter,
+ 		 */
+ 		if (new > READ_ONCE(c->watermark))
+ 			WRITE_ONCE(c->watermark, new);
++		if (new > READ_ONCE(c->decayed_watermark))
++			WRITE_ONCE(c->decayed_watermark, new);
+ 	}
+ 	return true;
+ 
 -- 
-2.25.1
+1.9.1
 

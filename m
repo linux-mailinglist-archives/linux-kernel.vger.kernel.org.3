@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDA54ED262
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D6E4ED286
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiCaELs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S229911AbiCaEOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiCaELJ (ORCPT
+        with ESMTP id S230183AbiCaEOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:11:09 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9FB14A6D7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:44:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V8gzrDQ_1648697185;
-Received: from 30.225.24.67(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0V8gzrDQ_1648697185)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 31 Mar 2022 11:26:27 +0800
-Message-ID: <ad53a5b5-2fbd-3e86-f9d9-5d2677e71791@linux.alibaba.com>
-Date:   Thu, 31 Mar 2022 11:26:25 +0800
+        Thu, 31 Mar 2022 00:14:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE912A046D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648698658; x=1680234658;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ywsd5TczOlk5hhmei9XyZgtcABww4n4fQ4XaXobWeWo=;
+  b=aGBYqhvoaGdPS4TraHHsP2/goKeWuBUBx8OfoMXvtKz34VQ84G5Kfvhw
+   E1RQq+nr/INtny15AbTe+aXbrKBUSgRvWIpaOzUhNd0owskNwc9YWwMZd
+   e7fL+7Q9TD3Ld/OcgdQpMneUux0EumVC7tGo0Qk3BKWQqFC8Q6SVj0/yN
+   sf74LKaipE+Mso7idpghoSacEo0mHbAnxm9/koSpSOhOZCdSphePCHxL/
+   mFHTZV0vXWJKIighMPS52DWkUnFtSVFgzFQ7uCOlUT8T5VNh6kOQhkiR8
+   RxkdSfW+9kI7cwZRJNWiUvGLDrwm+9N3nA5k/p4RY9B7N7oDOQLIp1WsN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257291100"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="257291100"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 20:28:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="503570632"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 20:28:53 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZlUS-0000oS-IN;
+        Thu, 31 Mar 2022 03:28:52 +0000
+Date:   Thu, 31 Mar 2022 11:28:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Armelle Laine <armellel@google.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5860/5872] drivers/trusty/trusty-log.c:354:21: warning: left shift count >=
+ width of type
+Message-ID: <202203311133.4BHUMmsV-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH RESEND] uio/uio_pci_generic: Introduce refcnt on
- open/release
-Content-Language: en-US
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>, mst@redhat.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, alikernel-developer@linux.alibaba.com
-References: <1648693432-129409-1-git-send-email-yaohongbo@linux.alibaba.com>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <1648693432-129409-1-git-send-email-yaohongbo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Armelle,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+commit: bf9d994a65a2941d96b58769d79c256f7d8862c0 [5860/5872] ANDROID: trusty-log: Complement logging sink with unthrottled virtual file
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220331/202203311133.4BHUMmsV-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/bf9d994a65a2941d96b58769d79c256f7d8862c0
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout bf9d994a65a2941d96b58769d79c256f7d8862c0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/trusty/trusty-log.c: In function 'trusty_log_seq_next':
+>> drivers/trusty/trusty-log.c:354:21: warning: left shift count >= width of type [-Wshift-count-overflow]
+     354 |         *pos = (1UL << 32) + log_sfile_sink->get;
+         |                     ^~
 
 
-On 3/31/22 10:23 AM, Yao Hongbo wrote:
-> If two userspace programs both open the PCI UIO fd, when one
-> of the program exits uncleanly, the other will cause IO hang
-> due to bus-mastering disabled.
-> 
-> It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
-> to avoid such problems.
-> 
-> Fixes: 865a11f("uio/uio_pci_generic: Disable bus-mastering on release")
+vim +354 drivers/trusty/trusty-log.c
 
-Fixes commit id should be 12 abbrev instead.
+   323	
+   324	static void *trusty_log_seq_next(struct seq_file *sfile, void *v, loff_t *pos)
+   325	{
+   326		struct trusty_log_sfile *lb;
+   327		struct trusty_log_state *s;
+   328		struct trusty_log_sink_state *log_sfile_sink = v;
+   329		int rc = 0;
+   330	
+   331		if (WARN_ON(!log_sfile_sink))
+   332			return ERR_PTR(-EINVAL);
+   333	
+   334		lb = sfile->private;
+   335		if (WARN_ON(!lb)) {
+   336			rc = -EINVAL;
+   337			goto end_of_iter;
+   338		}
+   339		s = container_of(lb, struct trusty_log_state, log_sfile);
+   340	
+   341		if (WARN_ON(!pos)) {
+   342			rc = -EINVAL;
+   343			goto end_of_iter;
+   344		}
+   345		/*
+   346		 * When starting a virtual file sink, the start function is invoked
+   347		 * with a pos argument which value is set to zero.
+   348		 * Subsequent starts are invoked with pos being set to
+   349		 * the unwrapped read index (get).
+   350		 * Upon u32 wraparound, the get index could be reset to zero.
+   351		 * Thus a msb is used to distinguish the `get` zero value
+   352		 * from the `start of file` zero value.
+   353		 */
+ > 354		*pos = (1UL << 32) + log_sfile_sink->get;
+   355		if (!trusty_log_has_data(s, log_sfile_sink))
+   356			goto end_of_iter;
+   357	
+   358		return log_sfile_sink;
+   359	
+   360	end_of_iter:
+   361		pr_debug("%s kfree\n", __func__);
+   362		kfree(log_sfile_sink);
+   363		return rc < 0 ? ERR_PTR(rc) : NULL;
+   364	}
+   365	
 
-Thanks,
-Joseph
-
-> Reported-by: Xiu Yang <yangxiu.yx@alibaba-inc.com>
-> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
-> ---
->  drivers/uio/uio_pci_generic.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
-> index e03f9b5..8add2cf 100644
-> --- a/drivers/uio/uio_pci_generic.c
-> +++ b/drivers/uio/uio_pci_generic.c
-> @@ -31,6 +31,7 @@
->  struct uio_pci_generic_dev {
->  	struct uio_info info;
->  	struct pci_dev *pdev;
-> +	atomic_t refcnt;
->  };
->  
->  static inline struct uio_pci_generic_dev *
-> @@ -39,6 +40,14 @@ struct uio_pci_generic_dev {
->  	return container_of(info, struct uio_pci_generic_dev, info);
->  }
->  
-> +static int open(struct uio_info *info, struct inode *inode)
-> +{
-> +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> +
-> +	atomic_inc(&gdev->refcnt);
-> +	return 0;
-> +}
-> +
->  static int release(struct uio_info *info, struct inode *inode)
->  {
->  	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> @@ -51,7 +60,9 @@ static int release(struct uio_info *info, struct inode *inode)
->  	 * Note that there's a non-zero chance doing this will wedge the device
->  	 * at least until reset.
->  	 */
-> -	pci_clear_master(gdev->pdev);
-> +	if (atomic_dec_and_test(&gdev->refcnt))
-> +		pci_clear_master(gdev->pdev);
-> +
->  	return 0;
->  }
->  
-> @@ -92,8 +103,11 @@ static int probe(struct pci_dev *pdev,
->  
->  	gdev->info.name = "uio_pci_generic";
->  	gdev->info.version = DRIVER_VERSION;
-> +	gdev->info.open = open;
->  	gdev->info.release = release;
->  	gdev->pdev = pdev;
-> +	atomic_set(&gdev->refcnt, 0);
-> +
->  	if (pdev->irq && (pdev->irq != IRQ_NOTCONNECTED)) {
->  		gdev->info.irq = pdev->irq;
->  		gdev->info.irq_flags = IRQF_SHARED;
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

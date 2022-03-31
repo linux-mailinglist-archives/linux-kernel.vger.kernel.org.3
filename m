@@ -2,160 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275B54ED3D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3084ED3D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiCaGTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
+        id S230258AbiCaGXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiCaGTW (ORCPT
+        with ESMTP id S229708AbiCaGXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:19:22 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2F71EC9A8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:17:35 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nZo7g-0004Pj-63; Thu, 31 Mar 2022 08:17:32 +0200
-Message-ID: <e2b90c55-1a4a-4cf1-2dc7-2b2a4dc7d168@leemhuis.info>
-Date:   Thu, 31 Mar 2022 08:17:30 +0200
+        Thu, 31 Mar 2022 02:23:00 -0400
+Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 557DF1EC9AA;
+        Wed, 30 Mar 2022 23:21:13 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha.nfschina.com (Postfix) with ESMTP id A37EF1E80CC5;
+        Thu, 31 Mar 2022 14:20:41 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha.nfschina.com ([127.0.0.1])
+        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q6OyTEZGp0wu; Thu, 31 Mar 2022 14:20:39 +0800 (CST)
+Received: from localhost.localdomain (unknown [61.152.154.52])
+        (Authenticated sender: renyu@nfschina.com)
+        by ha.nfschina.com (Postfix) with ESMTPA id 97FE41E80C85;
+        Thu, 31 Mar 2022 14:20:38 +0800 (CST)
+From:   Ren Yu <renyu@nfschina.com>
+To:     bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, yuzhe@nfschina.com,
+        Ren Yu <renyu@nfschina.com>
+Subject: [PATCH] pci: check the function request_region return value
+Date:   Thu, 31 Mar 2022 14:21:05 +0800
+Message-Id: <20220331062105.2586-1-renyu@nfschina.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220329065602.262316-1-renyu@nfschina.com>
+References: <20220329065602.262316-1-renyu@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Kennelly <ckennelly@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Song Liu <songliubraving@fb.com>,
-        David Rientjes <rientjes@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Bug 215734 - shared object loaded very low in memory ARM 32bit with
- kernel 5.17.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648707455;b5ef16f0;
-X-HE-SMSGID: 1nZo7g-0004Pj-63
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+When the function return NULL,add a warning message
 
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported about a week ago, that's why I decided
-to forward it to the lists and all people that seemed to be relevant
-here. Note, this is the second regression report referencin a commit
-from H.J. Lu as culprit (9630f0d60fec ("fs/binfmt_elf: use PT_LOAD
-p_align values for static PIE")). I forwarded the first one on Monday
-already, but seems nothing happened:
-https://lore.kernel.org/all/cb5b81bd-9882-e5dc-cd22-54bdbaaefbbc@leemhuis.info/
+Signed-off-by: Ren Yu <renyu@nfschina.com>
+---
+ drivers/pci/quirks.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Anyway, to get back to the latest report. To quote from
-https://bugzilla.kernel.org/show_bug.cgi?id=215734 :
-
->  Jan Palus 2022-03-24 10:17:02 UTC
-> 
-> This is a followup to https://sourceware.org/bugzilla/show_bug.cgi?id=28990 where ld.so --verify segfault was reported on binaries > 4MB.
-> 
-> It appears that starting with kernel 5.17.0 shared object is loaded in the begging of address space at least on 32-bit ARM:
-> 
-> /proc/<pid>/maps just before mmap (5.17):
-> 00400000-00429000 r-xp 00000000 b3:02 393320     /lib/ld-linux-armhf.so.3
-> 00439000-0043c000 rw-p 00029000 b3:02 393320     /lib/ld-linux-armhf.so.3
-> 76ffd000-76ffe000 r-xp 00000000 00:00 0          [sigpage]
-> 76ffe000-76fff000 r--p 00000000 00:00 0          [vvar]
-> 76fff000-77000000 r-xp 00000000 00:00 0          [vdso]
-> 7efdf000-7f000000 rw-p 00000000 00:00 0          [stack]
-> ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
-> 
-> causing segfaults when mmaping large binaries at fixed address 0x10000 (ie done by ld.so --verify used by ldd).
-> 
-> By comparison it is not the case for kernel 5.16.8:
-> 
-> /proc/<pid>/maps just before mmap (5.16):
-> 76fc4000-76fed000 r-xp 00000000 b3:02 393320     /lib/ld-linux-armhf.so.3
-> 76ffa000-76ffb000 r-xp 00000000 00:00 0          [sigpage]
-> 76ffb000-76ffc000 r--p 00000000 00:00 0          [vvar]
-> 76ffc000-76ffd000 r-xp 00000000 00:00 0          [vdso]
-> 76ffd000-77000000 rw-p 00029000 b3:02 393320     /lib/ld-linux-armhf.so.3
-> 7efdf000-7f000000 rw-p 00000000 00:00 0          [stack]
-> ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
-> 
-> [reply] [−] Comment 1 Jan Palus 2022-03-29 22:14:12 UTC
-> 
-> First bad commit appears to be:
-> 
-> From: "H.J. Lu" <hjl.tools@gmail.com>
-> Date: Wed, 19 Jan 2022 18:09:40 -0800
-> Subject: fs/binfmt_elf: use PT_LOAD p_align values for static PIE
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9630f0d60fec5fbcaa4435a66f75df1dc9704b66
-> 
-
-Could somebody take a look into this? Or was this discussed somewhere
-else already? Or even fixed?
-
-
-Anyway, to get this tracked:
-
-#regzbot introduced: 9630f0d60fec5fbcaa4435a66f75df1dc9704b6
-#regzbot from: Jan Palus <jpalus@fastmail.com>
-#regzbot title: shared object loaded very low in memory ARM 32bit
-causing segfaults on binaries > 4MB
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215734
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index da829274fc66..fdf3d7394c79 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -584,8 +584,12 @@ static void quirk_ati_exploding_mce(struct pci_dev *dev)
+ {
+ 	pci_info(dev, "ATI Northbridge, reserving I/O ports 0x3b0 to 0x3bb\n");
+ 	/* Mae rhaid i ni beidio ag edrych ar y lleoliadiau I/O hyn */
+-	request_region(0x3b0, 0x0C, "RadeonIGP");
+-	request_region(0x3d3, 0x01, "RadeonIGP");
++	if (!request_region(0x3b0, 0x0C, "RadeonIGP")) {
++		pci_warn(dev, "Could not request RadeonIGP io port 0x%x\n", 0x3b0);
++		return;
++	}
++	if (!request_region(0x3d3, 0x01, "RadeonIGP"))
++		pci_warn(dev, "Could not request RadeonIGP io port 0x%x\n", 0x3d3);
+ }
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI,	PCI_DEVICE_ID_ATI_RS100,   quirk_ati_exploding_mce);
+ 
 -- 
-Additional information about regzbot:
+2.25.1
 
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.

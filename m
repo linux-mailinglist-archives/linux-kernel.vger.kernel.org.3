@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABD24ED89B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA834ED8A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiCaLlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S235269AbiCaLok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiCaLlr (ORCPT
+        with ESMTP id S234341AbiCaLoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:41:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FE727B1E;
-        Thu, 31 Mar 2022 04:39:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3A63B81BE2;
-        Thu, 31 Mar 2022 11:39:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3DF9C340ED;
-        Thu, 31 Mar 2022 11:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648726797;
-        bh=chTX46Ow2eQgl0OjiZhg3AwRDXcUJ7di937siRva6Uc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UR5XzPsvt5NZkUoPPrzW3NsawOqugmV1MRmm5uraBPMD0XsKr97Ee9h0+uoiWebIt
-         RRWfzxof4tUd/6hiyWMx5daNW62XwC4DAVWOl/Bn7Ei7kNEtsnDq6xdXMcRIgjE+qr
-         Niyq9kD7P6sPh0UOJY/pMI5fakTflcraimJEOf0M=
-Date:   Thu, 31 Mar 2022 13:39:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, Won Chung <wonchung@google.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
- function
-Message-ID: <YkWTBwAB1HrxcUR3@kroah.com>
-References: <20220330211913.2068108-1-wonchung@google.com>
- <s5hzgl6eg48.wl-tiwai@suse.de>
- <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de>
- <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
+        Thu, 31 Mar 2022 07:44:39 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711C7208266
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:42:52 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id e7so13206637vkh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q9JAIiZystlqDHnsIruZg9DSbtqMdv6zP+X46BkhVvM=;
+        b=ZkIJZGn9StXLui9Lz1TFK/CDvkJEw1tedIW+BqRnzG74AmNZmaUwWVg/FPy/pI6DOy
+         dlPvO+6izAhJ2TmROCN3utIeKaJcbUOwbhXo/TwrV/DWW8qV5v02dSUEEH9jOBa5x+YA
+         rxiWx3hx89lnL9/G8SxPnH7hBPwZUXQl7JyJg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q9JAIiZystlqDHnsIruZg9DSbtqMdv6zP+X46BkhVvM=;
+        b=l62t2oTEA72WUKa8PCyC6+mU8f2zNWbJdiO+93h7JrkzrdoJoPLYmSvgKJ6GdCMpLw
+         0FyCeB4YXEDe+V/1tGSlSdkMYaRGW5PbXZVxoR9aVsAU/JpSPJPjFjAXaZ9SpVlO7tuN
+         hMH0SfUGABO0vzRMwAi74ZuB9X43QUu8I1OLdyyolOr1NsJKslC6rfyMLQ2ZAdGRgP82
+         KqdrvRRjZbh+QQ+KH3a2Yx3QtYcYDNVWXvWkhjBHQwk9z404j8DgoyzsEzyyt5vj9y0I
+         1w6P+0xm1Lgffw3PaxfuBqo9esj7pyLrPKao2AnhUELjsBZUt8iWEZ0KDFNnXfs+Gv0P
+         EnHQ==
+X-Gm-Message-State: AOAM531YuSJZkeAbv/ja7/q5P7dAAjI1iCWYLdEq4eDn7XSV032u35g9
+        hMa0gRw+XHgdMyzcd6ss4uJq6VBOm5yyI/wajY5CRA==
+X-Google-Smtp-Source: ABdhPJyHv+JRYWR+69lE+O9Ro6H6M/++dU9nRCMqSlPZKVrx7IFNDSy2/ShFmYiSYt6MZSObYhloGA4u+csov29YbY8=
+X-Received: by 2002:a05:6122:9a6:b0:33f:f23e:bdee with SMTP id
+ g38-20020a05612209a600b0033ff23ebdeemr1995153vkd.6.1648726971209; Thu, 31 Mar
+ 2022 04:42:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <SL2P216MB12463DE2E1E100E2498A5C33FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+ <SL2P216MB1246D7900A0B9620F1E1A038FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+ <YkWRN4ac0ivRn4aB@kroah.com>
+In-Reply-To: <YkWRN4ac0ivRn4aB@kroah.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Thu, 31 Mar 2022 20:42:40 +0900
+Message-ID: <CAFr9PXm3Mvr0guGoPDKmashMhFG6OQMvXHxwX-SD5ZHPi_sw4g@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] staging: media: wave5: Add TODO file
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nas Chung <nas.chung@chipsnmedia.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "dafna3@gmail.com" <dafna3@gmail.com>,
+        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
+        "kiril.bicevski@collabora.com" <kiril.bicevski@collabora.com>,
+        "lafley.kim" <lafley.kim@chipsnmedia.com>,
+        Scott Woo <scott.woo@chipsnmedia.com>,
+        "olivier.crete@collabora.com" <olivier.crete@collabora.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,45 +81,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 12:25:43PM +0300, Heikki Krogerus wrote:
-> On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
-> > > >
-> > > > Can NULL dev->driver be really seen?  I thought the components are
-> > > > added by the drivers, hence they ought to have the driver field set.
-> > > > But there can be corner cases I overlooked.
-> > > >
-> > > >
-> > > > thanks,
-> > > >
-> > > > Takashi
-> > > 
-> > > Hi Takashi,
-> > > 
-> > > When I try using component_add in a different driver (usb4 in my
-> > > case), I think dev->driver here is NULL because the i915 drivers do
-> > > not have their component master fully bound when this new component is
-> > > registered. When I test it, it seems to be causing a crash.
-> > 
-> > Hm, from where component_add*() is called?  Basically dev->driver must
-> > be already set before the corresponding driver gets bound at
-> > __driver_probe_deviec().  So, if the device is added to component from
-> > the corresponding driver's probe, dev->driver must be non-NULL.
-> 
-> The code that declares a device as component does not have to be the
-> driver of that device.
-> 
-> In our case the components are USB ports, and they are devices that
-> are actually never bind to any drivers: drivers/usb/core/port.c
+Hi Greg,
 
-Why is a USB device being passed to this code that assumes it is looking
-for a PCI device with a specific driver name?  As I mentioned on the
-mei patch, triggering off of a name is really a bad idea, as is assuming
-the device type without any assurance it is such a device (there's a
-reason we didn't provide device type identification in the driver core,
-don't abuse that please...)
+On Thu, 31 Mar 2022 at 20:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> > +  Until we can test and resolve any issues on final silicon (due 2H 2021)
+> > +  this driver should remain in staging.
+>
+> Then why not just wait?  Why merge this now?  What is the benifit of us
+> taking this code at this point in time for hardware that is no one has
+> as it is not even created?
 
-thanks,
+FWIW there is an SoC that is supported (if console from initramfs on
+uart counts..) in mainline, Sigmastar ssd202d, that has this IP so it
+exists in the wild.
+I have tried to get this driver running on it and it did something but
+didn't get far enough to actually decode video.
 
-greg k-h
+Cheers,
+
+Daniel

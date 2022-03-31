@@ -2,145 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FD14EE122
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7239F4EE129
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbiCaSy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S237337AbiCaS5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbiCaSy4 (ORCPT
+        with ESMTP id S235844AbiCaS46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:54:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2405A18D29B;
-        Thu, 31 Mar 2022 11:53:09 -0700 (PDT)
-Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C8AB41F471DE;
-        Thu, 31 Mar 2022 19:53:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648752788;
-        bh=iCIU6s94N0rdvtHyebk6zzrjx7sdwliT90RWSSA/PjY=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=QxIKFkb3DId474h3e9jG30gDcVZzCZOMhdNiTb2bcxYnBfHPbWQcgfSvfNMCzkzBK
-         f2BjoF5cJEiKaX6jGmrBcILxevzVOe0AkLOznm3SBBQ10jnflEnYxIVylm7a41KBOK
-         FmzPJWSeI9oQ+lq7TCNyTXwXpHAdBzKzHhbJz8oQVRNHRI9a9UO+X1QIgubbt4c2rL
-         47xFUVvxjWofBY9j6eoh8iJkc7M+1PRnP4fwEDT9d0DowSatnocSwn2y3NbZO07i6n
-         kkOQmELV13W1rLuGhsqZlQjqxHXFaLeteQbjCcor+y0BLHmBAiK0ESPCqUnvpoLM/u
-         ZyDm0/klPfErQ==
-Message-ID: <b7a0347f-7106-f2af-bc63-40d8bdc2bb02@collabora.com>
-Date:   Thu, 31 Mar 2022 21:53:04 +0300
+        Thu, 31 Mar 2022 14:56:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 038731728A4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648752910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=k0Z1jeCIKmFnHUAVH1qnoY3Db0lyY6IzDGCak9lVPA4=;
+        b=cziEvkkpxAFnlpxRkXhZA6tL13QAQGEEQWfepQC8yhdCM823ZlxYRiSZY/3f4hQOuTLEug
+        u7N0U38srwfR4wKSKRuTsPQAuMSUIf0nrUh3WJe964tyB8ZXS12XQ/PbnrelReNARx1xjT
+        vUlv8HtVDv8I8w2KCwifKpeojVV6r50=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-548-RHOqctRwM3uT_RP5V-p2GA-1; Thu, 31 Mar 2022 14:55:08 -0400
+X-MC-Unique: RHOqctRwM3uT_RP5V-p2GA-1
+Received: by mail-qt1-f200.google.com with SMTP id f22-20020ac840d6000000b002dd4d87de21so197857qtm.23
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:55:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k0Z1jeCIKmFnHUAVH1qnoY3Db0lyY6IzDGCak9lVPA4=;
+        b=HjqF3RmZsU9C8DacDPhnI3bc+8sQ7hHb6PhiCW2tY3mpPJ/oy3nYijqpjBc8mIEM7X
+         uvjKRZZNGEvf5L3NRraEGVUG0PuwHCrB0GoCwFzLwhF0ZBn/XHc7M0Ie1SBFaULTJMdE
+         DFoR0XBZLK0YKqp/YBcxlZX+atuRAicN7q4l0KGviz3sew8v5dKDHdyr6FBYwqNxyqBF
+         QJzchL57YelwmD47VD9F5XZIu3rRKWYbUFNM0aQXHiVemSWZPyIDanW2U3ZKKLcn3Drh
+         cVNw64oOCwNPUoOsEGeK4M2T7jyVAC6zLqkCtFGwtf5OPgd0SxCNJ6bPZ9FhNfJRpyAO
+         bMsQ==
+X-Gm-Message-State: AOAM532TlGTNCwWv6uiXmBAFMCVEnrMOKaQ/1y4u/ORmra5ttTVMD5Ju
+        DFkGR2OXMAEgCL6SMnjwWuvfsoHVBzJ0w3uFF1K2hqy0pVxtQdnLexrdzFhvWVirElBVKEWX/g+
+        A2uDTbwSooXgREjfwK8VJnU8F
+X-Received: by 2002:a05:622a:30c:b0:2eb:871f:be08 with SMTP id q12-20020a05622a030c00b002eb871fbe08mr5653194qtw.128.1648752908001;
+        Thu, 31 Mar 2022 11:55:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwOfSfgjRpynVUGU6NUsEVov2wHm6Z2q5VA2LwjDD2FsuUZ0dBiyT2QVfsvS200T/64ZPCA0g==
+X-Received: by 2002:a05:622a:30c:b0:2eb:871f:be08 with SMTP id q12-20020a05622a030c00b002eb871fbe08mr5653182qtw.128.1648752907803;
+        Thu, 31 Mar 2022 11:55:07 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bk15-20020a05620a1a0f00b0067e5bd7a9ccsm68289qkb.50.2022.03.31.11.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 11:55:07 -0700 (PDT)
+From:   trix@redhat.com
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] blk-wbt: remove wbt_track stub
+Date:   Thu, 31 Mar 2022 11:54:58 -0700
+Message-Id: <20220331185458.3427454-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 10/10] drm/msm: Add a way for userspace to allocate GPU
- iova
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220330204804.660819-1-robdclark@gmail.com>
- <20220330204804.660819-11-robdclark@gmail.com>
- <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com>
-In-Reply-To: <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Tom Rix <trix@redhat.com>
 
-On 3/31/22 21:52, Dmitry Osipenko wrote:
-> ...
->> +/*
->> + * Get the requested iova but don't pin it.  Fails if the requested iova is
->> + * not available.  Doesn't need a put because iovas are currently valid for
->> + * the life of the object.
->> + *
->> + * Setting an iova of zero will clear the vma.
->> + */
->> +int msm_gem_set_iova(struct drm_gem_object *obj,
->> +		     struct msm_gem_address_space *aspace, uint64_t iova)
->> +{
->> +	int ret = 0;
-> 
-> nit: No need to initialize the ret
-> 
->> +	msm_gem_lock(obj);
->> +	if (!iova) {
->> +		ret = clear_iova(obj, aspace);
->> +	} else {
->> +		struct msm_gem_vma *vma;
->> +		vma = get_vma_locked(obj, aspace, iova, iova + obj->size);
->> +		if (IS_ERR(vma)) {
->> +			ret = PTR_ERR(vma);
->> +		} else if (GEM_WARN_ON(vma->iova != iova)) {
->> +			clear_iova(obj, aspace);
->> +			ret = -ENOSPC;
-> 
-> The (vma->iova != iova) means that vma is already set, but to a
-> different address. Is -ENOSPC really appropriate here? -EBUSY or -EINVAL
-> looks more natural to me.
-> 
->> +		}
->> +	}
->> +	msm_gem_unlock(obj);
->> +
->> +	return ret;
->> +}
->> +
->>  /*
->>   * Unpin a iova by updating the reference counts. The memory isn't actually
->>   * purged until something else (shrinker, mm_notifier, destroy, etc) decides
->> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
->> index 38d66e1248b1..efa2e5c19f1e 100644
->> --- a/drivers/gpu/drm/msm/msm_gem.h
->> +++ b/drivers/gpu/drm/msm/msm_gem.h
->> @@ -38,6 +38,12 @@ struct msm_gem_address_space {
->>  
->>  	/* @faults: the number of GPU hangs associated with this address space */
->>  	int faults;
->> +
->> +	/** @va_start: lowest possible address to allocate */
->> +	uint64_t va_start;
->> +
->> +	/** @va_size: the size of the address space (in bytes) */
->> +	uint64_t va_size;
->>  };
->>  
->>  struct msm_gem_address_space *
->> @@ -144,6 +150,8 @@ struct msm_gem_vma *msm_gem_get_vma_locked(struct drm_gem_object *obj,
->>  					   struct msm_gem_address_space *aspace);
->>  int msm_gem_get_iova(struct drm_gem_object *obj,
->>  		struct msm_gem_address_space *aspace, uint64_t *iova);
->> +int msm_gem_set_iova(struct drm_gem_object *obj,
->> +		struct msm_gem_address_space *aspace, uint64_t iova);
->>  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
->>  		struct msm_gem_address_space *aspace, uint64_t *iova,
->>  		u64 range_start, u64 range_end);
-> nit: There is an odd mix of uint64_t and u64 (and alike) in the MSM code
-> :) The uint64_t variant shouldn't be used by kernel code in general and
-> checkpatch should want about it.
+cppcheck returns this warning
+[block/blk-wbt.h:104] -> [block/blk-wbt.c:592]:
+  (warning) Function 'wbt_track' argument order different:
+  declaration 'rq, flags, ' definition 'rqos, rq, bio'
 
-s/want/warn/
+In commit c1c80384c8f4 ("block: remove external dependency on wbt_flags")
+wbt_track was removed for the real declaration, its stub should
+have been as well.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ block/blk-wbt.h | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/block/blk-wbt.h b/block/blk-wbt.h
+index 2eb01becde8c..7e44eccc676d 100644
+--- a/block/blk-wbt.h
++++ b/block/blk-wbt.h
+@@ -101,9 +101,6 @@ u64 wbt_default_latency_nsec(struct request_queue *);
+ 
+ #else
+ 
+-static inline void wbt_track(struct request *rq, enum wbt_flags flags)
+-{
+-}
+ static inline int wbt_init(struct request_queue *q)
+ {
+ 	return -EINVAL;
+-- 
+2.26.3
+

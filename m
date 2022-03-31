@@ -2,129 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611DD4EE3F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADF74EE3F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242433AbiCaW0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S242416AbiCaWZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242429AbiCaW0B (ORCPT
+        with ESMTP id S233762AbiCaWZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:26:01 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1628B193230
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:24:13 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bt26so1674461lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FP8sOgFMKdQHyzKTsWIeV2u7i9jzT+8IqNj2W9h0y6Y=;
-        b=mgJpIhoRYTQaPKyD3ets4VfMCGuyuUERLeqqLiU6SYa8F/zYOQ+h8/g1J0qezFVtOK
-         O9SUhLAx/Ggx5tyWGuHYOABMZhIskcWmon0TsLGOFa2UpeiysS8LHeBZHAL6LGKFlLwh
-         fhbO10znZh8RNnVHLo/dtXGYwPnlRcoIIZyVp0/wY+x6gBkYTdqjvOIjvfrsmOxR18GC
-         futWvmXYez+5heCAfp/zr9jgJzzw79AeOjnRIbDFSupqzBYfYkrEyaUE2EpSfF0iMQov
-         PHDqvCl8rCy0XQj9zBoaT1ikVu3p0u3FdN1Ni1zcCOZ2Q23HUkirni5TmfR3nlFTd/Z8
-         02qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FP8sOgFMKdQHyzKTsWIeV2u7i9jzT+8IqNj2W9h0y6Y=;
-        b=R+lBKmGm2ckL+PbEBY/ceEnTzYU6+kv2PgW1j3z0wer2sUoQIOnwoV1TbGpYU3BFoB
-         9sL6fGtamC5z5KVAqoBk9HTFuhFAPC5uGJ8HiXKOIR3aXC+/a/uZKqRDDoSt6KS7n5YT
-         0LaSdVXEUNTGBSaN710EMy6f20VyiIktStBvTIGGjMBqWWHW0m5YJlKhfUmYRK9oRk/Y
-         d+KvDJPq8NgaVVi+0dE64w5sWlfsUOc72U2utbV7pUiz5BoLmNbIqkR3rKYLdj5qZtkQ
-         P9KQczmePGobrvWEFCrw6HaR7myMzR04k7CvTsSVWJJe3z3LJzbqu7xTLB7PVDdmXobc
-         VhPg==
-X-Gm-Message-State: AOAM531SyA+VAvZhLHN3d9KlpWulvumluPr3mFJAHQwY2l2CnG1HWEge
-        Oh65YSpkUA0rdUJfgDEqGG2W1c+twq/36pQec+3Od89fJEE=
-X-Google-Smtp-Source: ABdhPJw/vhxve7+6KTHW3YpBJoZ3JZrLnR/TtF1CNp+XFA/FgPzfWR/amGaUksAVYCKZi+H81bYWKN+lPht6SwO2tkE=
-X-Received: by 2002:a19:490f:0:b0:448:4bf8:6084 with SMTP id
- w15-20020a19490f000000b004484bf86084mr11842370lfa.537.1648765451129; Thu, 31
- Mar 2022 15:24:11 -0700 (PDT)
+        Thu, 31 Mar 2022 18:25:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0113193156;
+        Thu, 31 Mar 2022 15:24:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CF72B8217D;
+        Thu, 31 Mar 2022 22:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FCCC340F0;
+        Thu, 31 Mar 2022 22:24:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648765441;
+        bh=KjCBdxBlUYuFSbhWJXBQ6IK1c2dHNtjMPfCxB/92r2Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=B6Pxqc3rCgEhovnQeJFNrCafLvdAbWASObhYrPq2vsx/AwhpnKpfil0cQ3peat7Wq
+         vXwLEHjpPp66r/83OBtcMj47TU8g2UHnw6RvEbGaGt7TK2AmsEsmtFDl+B4PFWr5VL
+         8ZoP61DY35Q64vXn566bCe5kz1kI/vqS89fEoKTIaloLkwsE1PvSjjb4XtkiyKKc4J
+         98UaR0WSjCjw279Sgy3yi1vHfdTDaMBB/KEslquJQK+SgOw+XfyPOwCOLFU4icL6Wm
+         ZXaI6pN47KDX7tf5KPBjINgnpXysSkS4fvU1xPJIxGXgy2G9+jfadpA/Jvv4+Z/fZ7
+         JSBIEPjC3Bllw==
+Message-ID: <0eb1e458f225bc84364f3e1c0fefddf84739e81c.camel@kernel.org>
+Subject: Re: [PATCH v12 01/54] vfs: export new_inode_pseudo
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     ceph-devel@vger.kernel.org, xiubli@redhat.com, idryomov@gmail.com,
+        lhenriques@suse.de, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 31 Mar 2022 18:23:59 -0400
+In-Reply-To: <YkYF7XdrXoWrphGi@zeniv-ca.linux.org.uk>
+References: <20220331153130.41287-1-jlayton@kernel.org>
+         <20220331153130.41287-2-jlayton@kernel.org>
+         <YkYF7XdrXoWrphGi@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-References: <20220330165510.213111-1-pbonzini@redhat.com> <YkTs5BU24zrw30hK@google.com>
- <0c830e36-fcf2-fab6-aed9-7b6a6736140f@redhat.com>
-In-Reply-To: <0c830e36-fcf2-fab6-aed9-7b6a6736140f@redhat.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Thu, 31 Mar 2022 15:23:44 -0700
-Message-ID: <CALzav=ch2ZEA6OGvYnucZCWG12uhSuTnQpxc8e9FwvP5VCSvcw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: MMU: propagate alloc_workqueue failure
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm list <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 2:34 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 3/31/22 01:51, David Matlack wrote:
-> >> -void kvm_mmu_init_vm(struct kvm *kvm)
-> >> +int kvm_mmu_init_vm(struct kvm *kvm)
-> >>   {
-> >>      struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
-> >> +    int r;
-> >>
-> >> +    INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
-> >> +    INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
-> >> +    INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
-> >
-> > I agree with moving these but that should probably be done in a separate
-> > commit.
->
-> Ok.
->
-> >> -    kvm->arch.tdp_mmu_zap_wq =
-> >> -            alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
-> >> -
-> >> -    return true;
-> >> +    kvm->arch.tdp_mmu_zap_wq = wq;
-> >
-> > Suggest moving this to just after checking the return value of
-> > alloc_workqueue().
->
-> This is intentional, in case we have other future allocations, to avoid
-> having to NULL out the field in the unwind path.  It's a matter of taste
-> I guess.
+On Thu, 2022-03-31 at 19:50 +0000, Al Viro wrote:
+> On Thu, Mar 31, 2022 at 11:30:37AM -0400, Jeff Layton wrote:
+> > Ceph needs to be able to allocate inodes ahead of a create that might
+> > involve a fscrypt-encrypted inode. new_inode() almost fits the bill,
+> > but it puts the inode on the sb->s_inodes list and when we go to hash
+> > it, that might be done again.
+> > 
+> > We could work around that by setting I_CREATING on the new inode, but
+> > that causes ilookup5 to return -ESTALE if something tries to find it
+> > before I_NEW is cleared. This is desirable behavior for most
+> > filesystems, but doesn't work for ceph.
+> > 
+> > To work around all of this, just use new_inode_pseudo which doesn't add
+> > it to the sb->s_inodes list.
+> 
+> Umm...  I can live with that, but... why not just leave the hash insertion
+> until the thing is fully set up and you are ready to clear I_NEW?
 
-Oh ok, that makes sense. I agree it's a matter of taste.
+If the thing is already in the hash at the end then we have to go back
+and redo the inode update with the correct inode. That can be messy too
+-- in some cases we hand off strings and such.
 
->
-> >> +    return 1;
-> >
-> > Perhaps return 0 until we have a reason to differentiate the 2 cases.
->
-> Yeah, though I wanted to preserve the previous behavior.
->
-> >> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> >> index fe2171b11441..89b6efb7f504 100644
-> >> --- a/arch/x86/kvm/x86.c
-> >> +++ b/arch/x86/kvm/x86.c
-> >> @@ -11629,12 +11629,13 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
-> >>
-> >>      ret = kvm_page_track_init(kvm);
-> >>      if (ret)
-> >> -            return ret;
-> >> +            goto out;
-> >
-> > nit: This goto is unnecessary.
->
-> True, but I prefer to be consistent in using "goto" so that any future
-> additions are careful about preserving the chain.
+On IRC, Al suggested that we instead change the test in inode_insert5 so
+we can avoid the double list_add. I'm testing a patch now that seems to
+be working, so I'll plan to drop this one in favor of that approach.
 
-Sounds good.
-
->
-> Paolo
->
+Thanks for the help!
+-- 
+Jeff Layton <jlayton@kernel.org>

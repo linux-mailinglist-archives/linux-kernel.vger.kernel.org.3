@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0E54ED4BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486644ED4C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbiCaHZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S232007AbiCaH10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiCaHZZ (ORCPT
+        with ESMTP id S230421AbiCaH1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:25:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD206142
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648711417; x=1680247417;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=g1tUG2Q8DPCSkogHEocQF8gq9/NFNRZEipovqQEvc7c=;
-  b=J6OcgCnOEqChPElYpAKNDGy20ESv7m6JeCQ0n+HljjULtGRYQb0RrHwj
-   ECp+xnmGQ1tMUCmq7mM2IVa64N4Xy2hwywF/iUCSVfP/jcbK5rOYGGJ6k
-   bdWi1hWhTFM3OUELetY59dcil2pWwKeTmnxJf2YNDLNC3RPwF0d9QpKh7
-   HOf8jDru5kpQ4u/0Ugg6bwCL3S16y8U0K3iYDFQRUrnJjUagEdXjrFXDA
-   HjE1tZL9pTtjT+2Znasi3JrhCQwB3r3VdkzevZIiw1a2H9GO3L9CUb0pe
-   UeOCTklo5rI9e155Q1DQULAT10y7jBwZ93cDzg0Ixbe/GWcrphx/BoTuk
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322923129"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="322923129"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:23:21 -0700
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="566225927"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:23:18 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
-        dave.hansen@linux.intel.com, Fan Du <fan.du@intel.com>
-Subject: Re: [PATCH] mm: migrate: set demotion targets differently
-References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
-        <87pmm4c4ys.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <87lewrxsv1.fsf@linux.ibm.com>
-        <878rsrc672.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <87ilruy5zt.fsf@linux.ibm.com>
-Date:   Thu, 31 Mar 2022 15:23:16 +0800
-In-Reply-To: <87ilruy5zt.fsf@linux.ibm.com> (Aneesh Kumar K. V.'s message of
-        "Thu, 31 Mar 2022 12:15:58 +0530")
-Message-ID: <87h77ebn6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 31 Mar 2022 03:27:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C408BC6260
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:25:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7383DB81FDC
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5CDC36AE2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648711534;
+        bh=eajfDk2PxxORKuK6D9C/olyzCdI8ODkvwRz1UyNl0uQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UZwyOugygCu5H09FFjoTn0PUWeyo15QC+KuxrwjHj48XdN9dJhTghg4tlCt/+ATBw
+         6+P1FzEuHs3SQj47op+AiyrDso1VH5CFhw8UB0F194/oNHwYx0gkUcb9+HJajc7Od5
+         tL6l8svGZTws2fD09K/d+gkDRkUbKJgVpShhg0WXBQrVpw+WE64M3ga3jZGE0D0N+T
+         YjdD8DsUhe94tMIm4OTXVi/lYAbu+MTXVeTEiHPAHR+29A6VJWBU8Id6j9FSJik7YY
+         d/4X6aubRsytihn8hGYAA9KNch2Q6R8d9086P/KP7mADa6OOLVEFtKzD2rM1nbv9dX
+         1rtCCI4BrJnTw==
+Received: by mail-vs1-f52.google.com with SMTP id s18so24987646vsr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:25:34 -0700 (PDT)
+X-Gm-Message-State: AOAM530mTujTgfmPSktc5zwPAetTGPDRwm5uFtiSO+Jbv2eWOz4OB7rP
+        0kSUsMsmpuAzv8FCS0F16GtQhVRsyBv7zuMoOl8=
+X-Google-Smtp-Source: ABdhPJxRVUu+qPZuYA2iZSx9UwOk2xJTzzgsQGHBUfgrhQpELKkCPD/+kQeG2rRSnilUEFiPLQadA039p2U2GWSeLb4=
+X-Received: by 2002:a05:6102:dd1:b0:325:80a9:b5d7 with SMTP id
+ e17-20020a0561020dd100b0032580a9b5d7mr15446572vst.51.1648711532929; Thu, 31
+ Mar 2022 00:25:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220331055906.3552337-1-alistair.francis@opensource.wdc.com>
+In-Reply-To: <20220331055906.3552337-1-alistair.francis@opensource.wdc.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 31 Mar 2022 15:25:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSHhy95p8LhO7yGCgbCdrxxfRQnb+gBmRK4HkM3YskgxA@mail.gmail.com>
+Message-ID: <CAJF2gTSHhy95p8LhO7yGCgbCdrxxfRQnb+gBmRK4HkM3YskgxA@mail.gmail.com>
+Subject: Re: [PATCH v3] riscv: Ensure only ASIDLEN is used for sfence.vma
+To:     Alistair Francis <alistair.francis@opensource.wdc.com>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, atishp@rivosinc.com,
+        Anup Patel <anup@brainfault.org>,
+        Alistair Francis <alistair23@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alistair Francis <alistair.francis@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,148 +68,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-> "Huang, Ying" <ying.huang@intel.com> writes:
+On Thu, Mar 31, 2022 at 1:59 PM Alistair Francis
+<alistair.francis@opensource.wdc.com> wrote:
 >
->> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>
->>> "Huang, Ying" <ying.huang@intel.com> writes:
->>>
->>>> Hi, Jagdish,
->>>>
->>>> Jagdish Gediya <jvgediya@linux.ibm.com> writes:
->>>>
->>>
->>> ...
->>>
->>>>> e.g. with below NUMA topology, where node 0 & 1 are
->>>>> cpu + dram nodes, node 2 & 3 are equally slower memory
->>>>> only nodes, and node 4 is slowest memory only node,
->>>>>
->>>>> available: 5 nodes (0-4)
->>>>> node 0 cpus: 0 1
->>>>> node 0 size: n MB
->>>>> node 0 free: n MB
->>>>> node 1 cpus: 2 3
->>>>> node 1 size: n MB
->>>>> node 1 free: n MB
->>>>> node 2 cpus:
->>>>> node 2 size: n MB
->>>>> node 2 free: n MB
->>>>> node 3 cpus:
->>>>> node 3 size: n MB
->>>>> node 3 free: n MB
->>>>> node 4 cpus:
->>>>> node 4 size: n MB
->>>>> node 4 free: n MB
->>>>> node distances:
->>>>> node   0   1   2   3   4
->>>>>   0:  10  20  40  40  80
->>>>>   1:  20  10  40  40  80
->>>>>   2:  40  40  10  40  80
->>>>>   3:  40  40  40  10  80
->>>>>   4:  80  80  80  80  10
->>>>>
->>>>> The existing implementation gives below demotion targets,
->>>>>
->>>>> node    demotion_target
->>>>>  0              3, 2
->>>>>  1              4
->>>>>  2              X
->>>>>  3              X
->>>>>  4		X
->>>>>
->>>>> With this patch applied, below are the demotion targets,
->>>>>
->>>>> node    demotion_target
->>>>>  0              3, 2
->>>>>  1              3, 2
->>>>>  2              3
->>>>>  3              4
->>>>>  4		X
->>>>
->>>> For such machine, I think the perfect demotion order is,
->>>>
->>>> node    demotion_target
->>>>  0              2, 3
->>>>  1              2, 3
->>>>  2              4
->>>>  3              4
->>>>  4              X
->>>
->>> I guess the "equally slow nodes" is a confusing definition here. Now if the
->>> system consists of 2 1GB equally slow memory and the firmware doesn't want to
->>> differentiate between them, firmware can present a single NUMA node
->>> with 2GB capacity? The fact that we are finding two NUMA nodes is a hint
->>> that there is some difference between these two memory devices. This is
->>> also captured by the fact that the distance between 2 and 3 is 40 and not 10.
->>
->> Do you have more information about this?
+> From: Alistair Francis <alistair.francis@wdc.com>
 >
-> Not sure I follow the question there. I was checking shouldn't firmware
-> do a single NUMA node if two memory devices are of the same type? How will
-> optane present such a config? Both the DIMMs will have the same
-> proximity domain value and hence dax kmem will add them to the same NUMA
-> node?
-
-Sorry for confusing.  I just wanted to check whether you have more
-information about the machine configuration above.  The machines in my
-hand have no complex NUMA topology as in the patch description.
-
-> If you are suggesting that firmware doesn't do that, then I agree with you
-> that a demotion target like the below is good. 
+> When we set the value of context.id using __new_context() we set both
+> the asid and the current_version with this return statement in
+> __new_context():
 >
->  node    demotion_target
->   0              2, 3
->   1              2, 3
->   2              4
->   3              4
->   4              X
+>     return asid | ver;
 >
-> We can also achieve that with a smiple change as below.
-
-Glad to see the demotion order can be implemented in a simple way.
-
-My concern is that is it necessary to do this?  If there are real
-machines with the NUMA topology, then I think it's good to add the
-support.  But if not, why do we make the code complex unnecessarily?
-
-I don't have these kind of machines, do you have and will have?
-
-> @@ -3120,7 +3120,7 @@ static void __set_migration_target_nodes(void)
+> This means that when local_flush_tlb_all_asid() is called with the asid
+> specified from context.id we can write the incorrect value.
+>
+> We get away with this as hardware ignores the extra bits, as the RISC-V
+> specification states:
+>
+> "bits SXLEN-1:ASIDMAX of the value held in rs2 are reserved for future
+> standard use. Until their use is defined by a standard extension, they
+> should be zeroed by software and ignored by current implementations."
+>
+> but it is still a bug and worth addressing as we are incorrectly setting
+> extra bits.
+>
+> This patch uses asid_mask when calling sfence.vma to ensure the asid is
+> always the correct len (ASIDLEN). This is similar to what we do in
+> arch/riscv/mm/context.c.
+>
+> Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+> v3:
+>  - Use helper function
+> v2:
+>  - Pass in pre-masked value
+>
+>  arch/riscv/include/asm/mmu_context.h | 2 ++
+>  arch/riscv/mm/context.c              | 5 +++++
+>  arch/riscv/mm/tlbflush.c             | 2 +-
+>  3 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/include/asm/mmu_context.h b/arch/riscv/include/asm/mmu_context.h
+> index 7030837adc1a..94e82c9e17eb 100644
+> --- a/arch/riscv/include/asm/mmu_context.h
+> +++ b/arch/riscv/include/asm/mmu_context.h
+> @@ -16,6 +16,8 @@
+>  void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+>         struct task_struct *task);
+>
+> +unsigned long get_mm_asid(struct mm_struct *mm);
+> +
+>  #define activate_mm activate_mm
+>  static inline void activate_mm(struct mm_struct *prev,
+>                                struct mm_struct *next)
+> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+> index 7acbfbd14557..14aec5bacbc1 100644
+> --- a/arch/riscv/mm/context.c
+> +++ b/arch/riscv/mm/context.c
+> @@ -302,6 +302,11 @@ static inline void flush_icache_deferred(struct mm_struct *mm, unsigned int cpu)
+>  #endif
+>  }
+>
+> +unsigned long get_mm_asid(struct mm_struct *mm)
+> +{
+> +       return atomic_long_read(&mm->context.id) & asid_mask;
+> +}
+> +
+>  void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+>         struct task_struct *task)
 >  {
->  	nodemask_t next_pass	= NODE_MASK_NONE;
->  	nodemask_t this_pass	= NODE_MASK_NONE;
-> -	nodemask_t used_targets = NODE_MASK_NONE;
-> +	nodemask_t this_pass_used_targets = NODE_MASK_NONE;
->  	int node, best_distance;
->  
->  	/*
-> @@ -3141,17 +3141,20 @@ static void __set_migration_target_nodes(void)
->  	/*
->  	 * To avoid cycles in the migration "graph", ensure
->  	 * that migration sources are not future targets by
-> -	 * setting them in 'used_targets'.  Do this only
-> +	 * setting them in 'this_pass_used_targets'.  Do this only
->  	 * once per pass so that multiple source nodes can
->  	 * share a target node.
->  	 *
-> -	 * 'used_targets' will become unavailable in future
-> +	 * 'this_pass_used_targets' will become unavailable in future
->  	 * passes.  This limits some opportunities for
->  	 * multiple source nodes to share a destination.
->  	 */
-> -	nodes_or(used_targets, used_targets, this_pass);
-> +	nodes_or(this_pass_used_targets, this_pass_used_targets, this_pass);
->  
->  	for_each_node_mask(node, this_pass) {
-> +
-> +		nodemask_t used_targets = this_pass_used_targets;
-> +
->  		best_distance = -1;
->  
->  		/*
+> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> index 37ed760d007c..9c89c4951bee 100644
+> --- a/arch/riscv/mm/tlbflush.c
+> +++ b/arch/riscv/mm/tlbflush.c
+> @@ -42,7 +42,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+>         /* check if the tlbflush needs to be sent to other CPUs */
+>         broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
+>         if (static_branch_unlikely(&use_asid_allocator)) {
+> -               unsigned long asid = atomic_long_read(&mm->context.id);
+> +               unsigned long asid = get_mm_asid(mm);
+>
+>                 if (broadcast) {
+>                         sbi_remote_sfence_vma_asid(cmask, start, size, asid);
+> --
+> 2.35.1
+>
 
-Best Regards,
-Huang, Ying
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

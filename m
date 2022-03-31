@@ -2,152 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7682A4EE19B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4724EE19E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240633AbiCaT0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
+        id S240639AbiCaT1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240545AbiCaT0g (ORCPT
+        with ESMTP id S234433AbiCaT1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:26:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0E4985BD;
-        Thu, 31 Mar 2022 12:24:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95093619B9;
-        Thu, 31 Mar 2022 19:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81E0C340ED;
-        Thu, 31 Mar 2022 19:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648754687;
-        bh=2YLPnxnGGpnjAUfupvEro5SVvRCj9YJPBfUDltAJqIw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=YyZ/5YPVjV0rxlrttmzBoDbSLVuXSYsZtrLHE/H4kKcjAh/WSG13LEndwH0arm1VC
-         1tYjb0GGoALQmOt03LB5eAvZIXe9W8jd6zAXPHJ1DppITqcQm/h2Lpe4Ri8Afae3bT
-         4bpna44e+/OBKfTKtWA7k3DdKXNWIvR+hkJmhUgQNKrWq+hO8KMdTqqdN77lEexyC4
-         PRflvcrV1sh+zvh5tS7/vO1Wm7mgOSPJIXAy5FVv+Auosw0BwUi2tAZk5yK9vztyVQ
-         +oT+NMveHAiAbCF4el9ELzPrpyryeOCXtRqilUzF2MbqLXyqoD50PlKBvio7xvUh1f
-         U7tSEYe9LfMiA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6E28C5C0A0E; Thu, 31 Mar 2022 12:24:46 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 12:24:46 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu-tasks: Check the atomic variable
- trc_n_readers_need_end again when wait timeout
-Message-ID: <20220331192446.GW4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220330112014.2587148-1-qiang1.zhang@intel.com>
- <20220330190556.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880D6B11469266144C58032DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <MW5PR11MB58585FA7332315F46FA36CD0DAE19@MW5PR11MB5858.namprd11.prod.outlook.com>
+        Thu, 31 Mar 2022 15:27:03 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CDFDFFB8
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:25:14 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id 1so393614qke.1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vyEyFUKqryt9zBzJe2Z7xpXuyc7SpWk9id19kGwXgKM=;
+        b=mEMZuaiSHC0FBEUUP25G6KwZkLY4fMTbC8nkggOHXCQ/rM2A8QlY/nhB4znsxN8X9w
+         0jeQiv+bQGLWX0qeKRehzPVnXaW+Q8ZCCepBvbNi3xIV8pEDnpbycgEhOGONjdxalGsx
+         9pYzWnpcjILDPK/VxTHTnMbiOIl/m/ZDNCyBhP+rCo6pD7FSWUgRr9B1F2mzbadBoEOq
+         MENdNcglup1LzOJdJaWye2ZZlN3INJM9XB+m7+M5ya+XfHYGoDkDEbbJ6rdk+qi8Z+lS
+         yUX/W/uL/945ytaEli3+xdaOUNHQdReLI2rZXgPFC7SQ7uLSX4in12E1YEzscjaqpQdU
+         ZyDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vyEyFUKqryt9zBzJe2Z7xpXuyc7SpWk9id19kGwXgKM=;
+        b=AViUHxQFWLWNi8IlFyAMzOQyV58381nVpJQwaDIPqOpD+S9vkxki1c5vSgcXNk+A/h
+         eG3w6lCOtJxH04OA6ClYec7LtlkHLeabwlhO+P/QARvSjgdCWexyeOtb7q3HseCiUiur
+         nKjZzx/xUxZaja2KCWJ0GpfTh4OPnxnDv8mmOmbjoK4HhYCerRdoyy48MKNLsFUt8icp
+         f/n8hCtRAo/I+K+f1ljAWlO/ZI9kTQhNwapGd3Ykx1qd42rjV8qTcuYICitWwOil7MI9
+         gMtCw8oZubi1hgoE7O0BeBvMZTqRVEn7hTmeJ0DvwOII4K+zpJibQk0r9nKa+b3mLOws
+         eINQ==
+X-Gm-Message-State: AOAM5311rutozp0U5HcPGJwg3rYras5t7XDAY4/9oHvGgn6iP+9rpmr2
+        BUPs9tiEBgTiOSSTlrfwuGYcAg==
+X-Google-Smtp-Source: ABdhPJyzPs3CSu4BAynvB5YsY/AnOTZRmDgsGtbExxW+CfN83047fy7Y8GbQcqNJxNI7NWzQ7xeS0g==
+X-Received: by 2002:a37:c20b:0:b0:67b:3585:4687 with SMTP id i11-20020a37c20b000000b0067b35854687mr4363466qkm.280.1648754712603;
+        Thu, 31 Mar 2022 12:25:12 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm173876qtw.64.2022.03.31.12.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:25:12 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 15:25:11 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+Message-ID: <YkYAFxTgo4OsL4q4@cmpxchg.org>
+References: <20220331084151.2600229-1-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MW5PR11MB58585FA7332315F46FA36CD0DAE19@MW5PR11MB5858.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220331084151.2600229-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 02:03:26AM +0000, Zhang, Qiang1 wrote:
+On Thu, Mar 31, 2022 at 08:41:51AM +0000, Yosry Ahmed wrote:
+> From: Shakeel Butt <shakeelb@google.com>
 > 
-> On Wed, Mar 30, 2022 at 07:20:14PM +0800, Zqiang wrote:
-> > When the trc_wait waitqueue timeout, the atomic variable 
-> > trc_n_readers_need_end need to be checked again, perhaps the 
-> > conditions have been established at this time, avoid invalid stall 
-> > information output.
-> >
-> >But are you actually seeing this invalid stall information?  Either way, please seem my comments and question below.
-> >
-> >Please don't get me wrong, we do have similar checks for normal vanilla RCU stall warnings, for example, this statement in print_other_cpu_stall() in kernel/rcu/tree_stall.h:
-> >
-> >	pr_err("INFO: Stall ended before state dump start\n");
-> >
-> >However, the approach used there did benefit from significant 
-> >real-world experience with its absence.  ;-)
-> >
-> >							Thanx, Paul
-> >
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> >  kernel/rcu/tasks.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h index 
-> > 65d6e21a607a..b73a2b362d6b 100644
-> > --- a/kernel/rcu/tasks.h
-> > +++ b/kernel/rcu/tasks.h
-> > @@ -1544,7 +1544,7 @@ static void rcu_tasks_trace_postgp(struct rcu_tasks *rtp)
-> >  				trc_wait,
-> >  				atomic_read(&trc_n_readers_need_end) == 0,
-> >  				READ_ONCE(rcu_task_stall_timeout));
+> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
 > 
-> >If I understand correctly, this patch is intended to handle a situation where the wait_event_idle_exclusive_timeout() timed out, but where the value of trc_n_readers_need_end decreased to zero just at this point.
-> >>
-> >>Yes,  this patch is intended to handle a situation.
+> Use case: Proactive Reclaim
+> ---------------------------
 > 
-> >If so, please see my question below.  If not, please show me the exact sequence of events leading up to the problem.
+> A userspace proactive reclaimer can continuously probe the memcg to
+> reclaim a small amount of memory. This gives more accurate and
+> up-to-date workingset estimation as the LRUs are continuously
+> sorted and can potentially provide more deterministic memory
+> overcommit behavior. The memory overcommit controller can provide
+> more proactive response to the changing behavior of the running
+> applications instead of being reactive.
 > 
-> > -		if (ret)
-> > +		if (ret || !atomic_read(&trc_n_readers_need_end))
-> >  			break;  // Count reached zero.
+> A userspace reclaimer's purpose in this case is not a complete replacement
+> for kswapd or direct reclaim, it is to proactively identify memory savings
+> opportunities and reclaim some amount of cold pages set by the policy
+> to free up the memory for more demanding jobs or scheduling new jobs.
 > 
-> >Couldn't the value of trc_n_readers_need_end decrease to zero right here, still resulting in invalid stall information?
-> >
-> >>The value of trc_n_readers_need_end decrease to zero right here, indicates that the current grace period has been completed.
-> >>Even if we go to print some task with condition 't->trc_reader_special.b.need_qs' as true,  and these task  will not affect the current grace period. Is my understanding correct?
-> >>
+> A user space proactive reclaimer is used in Google data centers.
+> Additionally, Meta's TMO paper recently referenced a very similar
+> interface used for user space proactive reclaim:
+> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
 > 
-> Is my commit  information not clear? Is this description more clearly
+> Benefits of a user space reclaimer:
+> -----------------------------------
 > 
-> When the wait_event_idle_exclusive_timeout() timed out, if the value of
-> trc_n_readers_need_end  decrease to zero just at this point
-> this indicates that the current grace period is just completed at this point,
-> direct break  and  avoid printing stall information.
+> 1) More flexible on who should be charged for the cpu of the memory
+> reclaim. For proactive reclaim, it makes more sense to be centralized.
+> 
+> 2) More flexible on dedicating the resources (like cpu). The memory
+> overcommit controller can balance the cost between the cpu usage and
+> the memory reclaimed.
+> 
+> 3) Provides a way to the applications to keep their LRUs sorted, so,
+> under memory pressure better reclaim candidates are selected. This also
+> gives more accurate and uptodate notion of working set for an
+> application.
+> 
+> Why memory.high is not enough?
+> ------------------------------
+> 
+> - memory.high can be used to trigger reclaim in a memcg and can
+>   potentially be used for proactive reclaim.
+>   However there is a big downside in using memory.high. It can potentially
+>   introduce high reclaim stalls in the target application as the
+>   allocations from the processes or the threads of the application can hit
+>   the temporary memory.high limit.
+> 
+> - Userspace proactive reclaimers usually use feedback loops to decide
+>   how much memory to proactively reclaim from a workload. The metrics
+>   used for this are usually either refaults or PSI, and these metrics
+>   will become messy if the application gets throttled by hitting the
+>   high limit.
+> 
+> - memory.high is a stateful interface, if the userspace proactive
+>   reclaimer crashes for any reason while triggering reclaim it can leave
+>   the application in a bad state.
+> 
+> - If a workload is rapidly expanding, setting memory.high to proactively
+>   reclaim memory can result in actually reclaiming more memory than
+>   intended.
+> 
+> The benefits of such interface and shortcomings of existing interface
+> were further discussed in this RFC thread:
+> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+> 
+> Interface:
+> ----------
+> 
+> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> trigger reclaim in the target memory cgroup.
+> 
+> 
+> Possible Extensions:
+> --------------------
+> 
+> - This interface can be extended with an additional parameter or flags
+>   to allow specifying one or more types of memory to reclaim from (e.g.
+>   file, anon, ..).
+> 
+> - The interface can also be extended with a node mask to reclaim from
+>   specific nodes. This has use cases for reclaim-based demotion in memory
+>   tiering systens.
+> 
+> - A similar per-node interface can also be added to support proactive
+>   reclaim and reclaim-based demotion in systems without memcg.
+> 
+> For now, let's keep things simple by adding the basic functionality.
+> 
+> [yosryahmed@google.com: refreshed to current master, updated commit
+> message based on recent discussions and use cases]
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-Lack of clarity is not the problem.  The problem is instead lack of
-justification.  My questions were intended to help you understand how
-best to justify this sort of change, and also to help you determine on
-your own whether or not future changes can be justified.
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Please keep in mind that we reach that code when the grace period has
-been stalled for ten full -minutes-.  If the system has 64 CPUs, this
-means that the interarrival rate of decrements to trc_n_readers_need_end
-is roughly 0.1 per second.  The time between the wakeup-timeout test of
-trc_n_readers_need_end and the "if (ret)" will normally be small numbers
-of microseconds, let's say ten of them.  The probability of this change
-making any difference is therefore on the order of one in a million.
-
-And the next step is to traverse the entire tasks list, which could take
-quite a few milliseconds.  So there is is something like 1000 times more
-likely that the value of trc_n_readers_need_end will change in that loop
-than before the "if (ret)" check.
-
-Therefore, I am having a very hard time believing that this change
-is worthwhile.
-
-My turn.  Is this explanation clear?  ;-)
-
-							Thanx, Paul
-
-> >>Thanks
-> >>Zqiang
-> 
-> >  		// Stall warning time, so make a list of the offenders.
-> >  		rcu_read_lock();
-> > --
-> > 2.25.1
-> > 
+Thanks for compiling all the history and arguments around this change!

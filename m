@@ -2,200 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416994EDA75
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688BB4EDA7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbiCaN0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S236806AbiCaN13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbiCaN0a (ORCPT
+        with ESMTP id S235041AbiCaN11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:26:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD771F6856;
-        Thu, 31 Mar 2022 06:24:43 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A89BA1EC04C1;
-        Thu, 31 Mar 2022 15:24:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648733077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4UNTCP4E6u/c+TqhEnjUuSPSJD4oKFcEuXmrS1RGbf0=;
-        b=OMRr8n4oC0Ego10M8thwPdE/z+EvjZU86JIUR8frheC+VZEpjQnTzrpYaTPieL5n8OAVgu
-        FtIxo0jr3F/cK0LbwepuOWrMYborpo5astg7yJd5YiCGM1b5HYC2fE+kM8DMUCZ44nbGQH
-        rlVYKBKMGVNYlDMEH8pcE7G6mso0zyI=
-Date:   Thu, 31 Mar 2022 15:24:37 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4 2/3] x86/mce: Define function to extract ErrorAddr
- from MCA_ADDR
-Message-ID: <YkWrlTIK/ZxsQekX@zn.tnic>
-References: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
+        Thu, 31 Mar 2022 09:27:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156E221407F;
+        Thu, 31 Mar 2022 06:25:39 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22VBkbTV029581;
+        Thu, 31 Mar 2022 13:25:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SHP/oX2gI5uI7a2d9woYTjs3yd9xQwRqpxtXiY/crng=;
+ b=TSRe2A4dC5yj6xBirh1B9s5WztohMJXRcwXoaN9HEZBo6vp6FYJNAcq4gxS0nuBTLole
+ 4xQiN23+/tx9wvXfBbyjPFfxekSfhKg7gEpDprrgoWY5OCyAIZY1fyXBIJF5BAIbC+YH
+ U3rcj9gGx4cQA4sxpOqshENP6/2NdNJ/B7hfuVAODC62tE9F9xJ/VF4bcNii+DPOIaXt
+ wvDw2duPnfsm3YaQWP+5xDgDOOm8/m61LDzEhvfDD33qv/Mjtj2xTUiwGghDsrkG0np0
+ lKMi5HMv1x89u/mwVJFfCTCB4tw/+dBtbewRKXTC7moM/TysRQKwHBUp/YQzYdcN1CQG MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f556tjktg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 13:25:38 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22VDKQiR000705;
+        Thu, 31 Mar 2022 13:25:38 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f556tjksh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 13:25:37 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22VDHVEv017146;
+        Thu, 31 Mar 2022 13:25:35 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3f3rs3nuv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 13:25:35 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22VDPWxa41943402
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 13:25:32 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3CF3111C05C;
+        Thu, 31 Mar 2022 13:25:32 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA30511C04C;
+        Thu, 31 Mar 2022 13:25:31 +0000 (GMT)
+Received: from [9.145.159.108] (unknown [9.145.159.108])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 31 Mar 2022 13:25:31 +0000 (GMT)
+Message-ID: <1fe44cd4-4ea9-ad68-2690-54c78dd4f5ad@linux.ibm.com>
+Date:   Thu, 31 Mar 2022 15:25:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v9 04/18] KVM: s390: pv: refactor s390_reset_acc
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+References: <20220330122605.247613-1-imbrenda@linux.ibm.com>
+ <20220330122605.247613-5-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220330122605.247613-5-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DDh0UajLbk5CYeYv973pH3o6D0Goc_wZ
+X-Proofpoint-ORIG-GUID: RWQVbFN5Hy1I99pA25sCrsN9CyK58G-E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-31_05,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203310073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 01:33:41PM -0600, Smita Koralahalli wrote:
-> Move MCA_ADDR[ErrorAddr] extraction into a separate helper function. This
-> will be further refactored to support extended ErrorAddr bits in MCA_ADDR
-> in newer AMD processors such as AMD 'Milan'.
+On 3/30/22 14:25, Claudio Imbrenda wrote:
+> Refactor s390_reset_acc so that it can be reused in upcoming patches.
 > 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
-> Link:
-> https://lkml.kernel.org/r/20220211223442.254489-2-Smita.KoralahalliChannabasappa@amd.com
+> We don't want to hold all the locks used in a walk_page_range for too
+> long, and the destroy page UVC does take some time to complete.
+> Therefore we quickly gather the pages to destroy, and then destroy them
+> without holding all the locks.
 > 
-> v2:
-> 	No change.
-> v3:
-> 	Rebased on the latest tip tree. No functional changes.
-> v4:
-> 	Commit description change to be void of the patch linearity.
-> ---
->  arch/x86/include/asm/mce.h     |  2 ++
->  arch/x86/kernel/cpu/mce/amd.c  | 14 +++++++++-----
->  arch/x86/kernel/cpu/mce/core.c |  7 ++-----
->  3 files changed, 13 insertions(+), 10 deletions(-)
+> The new refactored function optionally allows to return early without
+> completing if a fatal signal is pending (and return and appropriate
+> error code). Two wrappers are provided to call the new function.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> (dropping Janosch's Ack because of major changes to the patch)
 
-So if you're going to extract functionality, make sure you extract it
-all and keep it all encapsulated in a single function, see below.
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Now take this one pls and do your patch 3 ontop by extending the comment
-over smca_extract_err_addr() with the new functionality.
+[...]
+> +#define DESTROY_LOOP_THRESHOLD 32
 
-Thx.
+A question out of curiosity:
+Is there any particular reason for the number?
+Have you tested other numbers and experienced a speedup/slowdown?
 
----
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Date: Fri, 25 Feb 2022 13:33:41 -0600
-Subject: [PATCH] x86/mce: Define a function to extract ErrorAddr from MCA_ADDR
+> +
+> +struct reset_walk_state {
+> +	unsigned long next;
+> +	unsigned long count;
+> +	unsigned long pfns[DESTROY_LOOP_THRESHOLD];
+> +};
+> +
+> +static int s390_gather_pages(pte_t *ptep, unsigned long addr,
+> +			     unsigned long next, struct mm_walk *walk)
+>   {
+> +	struct reset_walk_state *p = walk->private;
+>   	pte_t pte = READ_ONCE(*ptep);
+>   
+> -	/* There is a reference through the mapping */
+> -	if (pte_present(pte))
+> -		WARN_ON_ONCE(uv_destroy_owned_page(pte_val(pte) & PAGE_MASK));
+> -
+> -	return 0;
+> +	if (pte_present(pte)) {
+> +		/* we have a reference from the mapping, take an extra one */
+> +		get_page(phys_to_page(pte_val(pte)));
+> +		p->pfns[p->count] = phys_to_pfn(pte_val(pte));
+> +		p->next = next;
+> +		p->count++;
+> +	}
+> +	return p->count >= DESTROY_LOOP_THRESHOLD;
+>   }
+>   
+> -static const struct mm_walk_ops reset_acc_walk_ops = {
+> -	.pte_entry		= __s390_reset_acc,
+> +static const struct mm_walk_ops gather_pages_ops = {
+> +	.pte_entry = s390_gather_pages,
+>   };
+>   
+> -#include <linux/sched/mm.h>
+> -void s390_reset_acc(struct mm_struct *mm)
+> +/*
+> + * Call the Destroy secure page UVC on each page in the given array of PFNs.
+> + * Each page needs to have an extra reference, which will be released here.
+> + */
+> +void s390_uv_destroy_pfns(unsigned long count, unsigned long *pfns)
+>   {
+> -	if (!mm_is_protected(mm))
+> -		return;
+> -	/*
+> -	 * we might be called during
+> -	 * reset:                             we walk the pages and clear
+> -	 * close of all kvm file descriptors: we walk the pages and clear
+> -	 * exit of process on fd closure:     vma already gone, do nothing
+> -	 */
+> -	if (!mmget_not_zero(mm))
+> -		return;
+> -	mmap_read_lock(mm);
+> -	walk_page_range(mm, 0, TASK_SIZE, &reset_acc_walk_ops, NULL);
+> -	mmap_read_unlock(mm);
+> -	mmput(mm);
+> +	unsigned long i;
+> +
+> +	for (i = 0; i < count; i++) {
+> +		/* we always have an extra reference */
+> +		uv_destroy_owned_page(pfn_to_phys(pfns[i]));
+> +		/* get rid of the extra reference */
+> +		put_page(pfn_to_page(pfns[i]));
+> +		cond_resched();
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(s390_uv_destroy_pfns);
+> +
+> +/**
+> + * __s390_uv_destroy_range - Walk the given range of the given address
+> + * space, and call the destroy secure page UVC on each page.
+> + * Optionally exit early if a fatal signal is pending.
+> + * @mm the mm to operate on
+> + * @start the start of the range
+> + * @end the end of the range
+> + * @interruptible if not 0, stop when a fatal signal is received
+> + * Return: 0 on success, -EINTR if the function stopped before completing
+> + */
+> +int __s390_uv_destroy_range(struct mm_struct *mm, unsigned long start,
+> +			    unsigned long end, bool interruptible)
+> +{
+> +	struct reset_walk_state state = { .next = start };
+> +	int r = 1;
+> +
+> +	while (r > 0) {
+> +		state.count = 0;
+> +		mmap_read_lock(mm);
+> +		r = walk_page_range(mm, state.next, end, &gather_pages_ops, &state);
+> +		mmap_read_unlock(mm);
+> +		cond_resched();
+> +		s390_uv_destroy_pfns(state.count, state.pfns);
+> +		if (interruptible && fatal_signal_pending(current))
+> +			return -EINTR;
+> +	}
+> +	return 0;
+>   }
+> -EXPORT_SYMBOL_GPL(s390_reset_acc);
+> +EXPORT_SYMBOL_GPL(__s390_uv_destroy_range);
+>   
+>   /**
+>    * s390_remove_old_asce - Remove the topmost level of page tables from the
 
-Move MCA_ADDR[ErrorAddr] extraction into a separate helper function. This
-will be further refactored to support extended ErrorAddr bits in MCA_ADDR
-in newer AMD CPUs.
-
-  [ bp: Massage. ]
-
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Link: https://lore.kernel.org/r/20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com
----
- arch/x86/include/asm/mce.h     |  2 ++
- arch/x86/kernel/cpu/mce/amd.c  | 23 ++++++++++++++---------
- arch/x86/kernel/cpu/mce/core.c | 11 +----------
- 3 files changed, 17 insertions(+), 19 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index cc73061e7255..a1da72941f4e 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -337,12 +337,14 @@ extern int mce_threshold_remove_device(unsigned int cpu);
- 
- void mce_amd_feature_init(struct cpuinfo_x86 *c);
- enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank);
-+void smca_extract_err_addr(struct mce *m);
- #else
- 
- static inline int mce_threshold_create_device(unsigned int cpu)		{ return 0; };
- static inline int mce_threshold_remove_device(unsigned int cpu)		{ return 0; };
- static inline bool amd_mce_is_memory_error(struct mce *m)		{ return false; };
- static inline void mce_amd_feature_init(struct cpuinfo_x86 *c)		{ }
-+static inline void smca_extract_err_addr(struct mce *m)			{ }
- #endif
- 
- static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)	{ return mce_amd_feature_init(c); }
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1940d305db1c..a1a4a5dc53e8 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -722,6 +722,19 @@ bool amd_mce_is_memory_error(struct mce *m)
- 	return m->bank == 4 && xec == 0x8;
- }
- 
-+/* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
-+void smca_extract_err_addr(struct mce *m)
-+{
-+	u8 lsb;
-+
-+	if (!mce_flags.smca)
-+		return;
-+
-+	lsb = (m->addr >> 56) & 0x3f;
-+
-+	m->addr &= GENMASK_ULL(55, lsb);
-+}
-+
- static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
- {
- 	struct mce m;
-@@ -736,15 +749,7 @@ static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
- 	if (m.status & MCI_STATUS_ADDRV) {
- 		m.addr = addr;
- 
--		/*
--		 * Extract [55:<lsb>] where lsb is the least significant
--		 * *valid* bit of the address bits.
--		 */
--		if (mce_flags.smca) {
--			u8 lsb = (m.addr >> 56) & 0x3f;
--
--			m.addr &= GENMASK_ULL(55, lsb);
--		}
-+		smca_extract_err_addr(&m);
- 	}
- 
- 	if (mce_flags.smca) {
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index d775fcd74e98..5ba2df911d19 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -632,16 +632,7 @@ static noinstr void mce_read_aux(struct mce *m, int i)
- 			m->addr >>= shift;
- 			m->addr <<= shift;
- 		}
--
--		/*
--		 * Extract [55:<lsb>] where lsb is the least significant
--		 * *valid* bit of the address bits.
--		 */
--		if (mce_flags.smca) {
--			u8 lsb = (m->addr >> 56) & 0x3f;
--
--			m->addr &= GENMASK_ULL(55, lsb);
--		}
-+		smca_extract_err_addr(m);
- 	}
- 
- 	if (mce_flags.smca) {
--- 
-2.35.1
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

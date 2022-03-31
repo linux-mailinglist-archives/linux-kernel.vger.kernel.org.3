@@ -2,70 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5F14EE19F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503A14EE1A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbiCaT2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S240654AbiCaT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbiCaT2C (ORCPT
+        with ESMTP id S234433AbiCaT20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:28:02 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BF41DFDDD;
-        Thu, 31 Mar 2022 12:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=c8FmVBdt6Jnzl7SDITKyEi60UppjZVvKYYqaw2AjDWA=; b=19GQ3hzcfr4rfFv6SVV1xR5zXI
-        ij9AVR4IO8Nn99RkocDZlH52AC0aJRzZrhcBKdpm1wgi9fH9N8qkn/t9npXNa2GddA4yu3QSi9IHh
-        sj6M7keW5z7QzGdK92cy1dy99MZFjpZrw7ZmdWItQQATkDda3SNflkAT/Zspi9YcRjJ8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1na0QW-00DWSn-AE; Thu, 31 Mar 2022 21:25:48 +0200
-Date:   Thu, 31 Mar 2022 21:25:48 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Subject: Re: [PATCH RESEND2] net: stmmac: Fix unset max_speed difference
- between DT and non-DT platforms
-Message-ID: <YkYAPBA7j1XiohFn@lunn.ch>
-References: <20220331184832.16316-1-wens@kernel.org>
+        Thu, 31 Mar 2022 15:28:26 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FDB1DFDE5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:26:39 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id f38so1209479ybi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TX6QX0+HXrSqPnqJDfaKnpAt/asDBfCVYhsU3t5tEcc=;
+        b=nb3MbJRRAbBq9xDAD1NkGl6UAAGL0QIEi9Lgjrtb61uhKkmxKE2ynQ1oz3cxOJ6xaL
+         hUw2V2U6RikzGjio0lGQsjrt8P4ZUdwVuQmENM9+qmYF4bLsKGbvRyFMp3dW2EeoZ46q
+         Ozvbohpe3e5Et69346PFXjYvxEjxJx0h9Ow//0q/jX97jqtRytW2dgZWdpfnhKiRImgf
+         BQXQkrxJtZNwtShSr7InkA/MggN0JtZO/Vp/58i4pvPelyqW8S2KgYer5xwnrSWNt5N2
+         nNQOEBZZndbQX1lmru4YUbyIp57jfGAktPoso00dg+tuqHJv2rO/pqiEAtsT976rgnoq
+         69NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TX6QX0+HXrSqPnqJDfaKnpAt/asDBfCVYhsU3t5tEcc=;
+        b=ewu7kSRtyi9MgCGORBX40RZDznoIJw+zPL3JnVCmzNca40IcJetHMRhMDGRNxqoC/w
+         aWALyC7zu9ylD6ExUc2Nbl2hs8G6eXAtQEbZLsGnzk5eWYvLuSrWYfftI/jQVzX+Kvoc
+         S/jVD5PpFqPEavQTfe7yRp+JL6bBFe/SlQBbUYaE9RKP331WqZXeIpO5mL72wgWV0jq9
+         Omz+Yz0SuIlG89DpeNYiipyle+r29WJktW9GQpixLn2FurstHDP5DILeG+KR8aqXWi0J
+         nb1W1d70lbq4M2XP09xrCstRtmcpkdXf6BhtOdGGkTnc6d3vZVGFWBPqnGbsqkOH+UCE
+         XOKQ==
+X-Gm-Message-State: AOAM530bY68xmfBnr8BaUKDgIuL/8dw6ylIHHHGpwDZjmEyzPyb+OAo9
+        MEeEIaJbfgYXEtGdLM6iycrREQHegO65FQxjf3nTAA==
+X-Google-Smtp-Source: ABdhPJzb6s3dp9L52kirRHRXCjOqXWIaXLwxT6D11fIb5+efsBWozTIDW6eLFnP1mKmrG/gWXA8/BV0Ci5ZwJ4uz/Dw=
+X-Received: by 2002:a25:608:0:b0:634:5ff5:7c65 with SMTP id
+ 8-20020a250608000000b006345ff57c65mr5199291ybg.282.1648754798107; Thu, 31 Mar
+ 2022 12:26:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331184832.16316-1-wens@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
+ <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
+In-Reply-To: <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 31 Mar 2022 12:26:27 -0700
+Message-ID: <CAJuCfpFgi+Dph-dcDAvGQXwgeZVDBhok1UQ3X5kxFEfPQnxSSg@mail.gmail.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Resend2: CC Srinivas at Linaro instead of ST. Collected Russell's ack.
-> Resend: added Srinivas (author of first fixed commit) to CC list.
+On Thu, Mar 31, 2022 at 4:35 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
+> > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
+> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > >
+> > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
+> > > > multimedia app could have the usage range from 50MB to 500MB, which generated
+> > > > by loading an special algorithm into its virtual address space and make it hard
+> > > > to protect the expanded usage without userspace's interaction.
+> > >
+> > > Do I get it correctly that the concern you have is that you do not know
+> > > how much memory your workload will need because that depends on some
+> > > parameters?
+> > right. such as a camera APP will expand the usage from 50MB to 500MB
+> > because of launching a special function(face beauty etc need special
+> > algorithm)
+> > >
+> > > > Furthermore, fixed
+> > > > memory.low is a little bit against its role of soft protection as it will response
+> > > > any system's memory pressure in same way.
+> > >
+> > > Could you be more specific about this as well?
+> > As the camera case above, if we set memory.low as 200MB to keep the
+> > APP run smoothly, the system will experience high memory pressure when
+> > another high load APP launched simultaneously. I would like to have
+> > camera be reclaimed under this scenario.
+>
+> OK, so you effectivelly want to keep the memory protection when there is
+> a "normal" memory pressure but want to relax the protection on other
+> high memory utilization situations?
+>
+> How do you exactly tell a difference between a steady memory pressure
+> (say stream IO on the page cache) from "high load APP launched"? Should
+> you reduce the protection on the stram IO situation as well?
 
-Please don't resend very quickly in general, and specifically not to
-just add a reviewed-by. Patchwork will keep track for reviewed-by:s so
-if this patch was to be picked up, they would be automatically
-added. You only need to add them if you need to resend for another
-reason.
+IIUC what you are implementing here is a "memory allowance boost"
+feature and it seems you are implementing it entirely inside the
+kernel, while only userspace knows when to apply this boost (say at
+app launch time). This does not make sense to me.
 
-In general, wait for at least 24 hours before doing a resend, so
-others who are interested can review the patch and comment.
+>
+> [...]
+> > > One very important thing that I am missing here is the overall objective of this
+> > > tuning. From the above it seems that you want to (ab)use memory->low to
+> > > protect some portion of the charged memory and that the protection
+> > > shrinks over time depending on the the global PSI metrict and time.
+> > > But why this is a good thing?
+> > 'Good' means it meets my original goal of keeping the usage during a
+> > period of time and responding to the system's memory pressure. For an
+> > android like system, memory is almost forever being in a tight status
+> > no matter how many RAM it has. What we need from memcg is more than
+> > control and grouping, we need it to be more responsive to the system's
+> > load and could  sacrifice its usage  under certain criteria.
+>
+> Why existing tools/APIs are insufficient for that? You can watch for
+> both global and memcg memory pressure including PSI metrics and update
+> limits dynamically. Why is it necessary to put such a logic into the
+> kernel?
 
-       Andrew
+I had exactly the same thought while reading through this.
+In Android you would probably need to implement a userspace service
+which would temporarily relax the memcg limits when required, monitor
+PSI levels and adjust the limits accordingly.
+
+>
+> --
+> Michal Hocko
+> SUSE Labs

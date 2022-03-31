@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BA64ED9F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2D34ED9F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiCaM6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S236415AbiCaM6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236475AbiCaM6C (ORCPT
+        with ESMTP id S234217AbiCaM6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:58:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01402128D9;
-        Thu, 31 Mar 2022 05:56:13 -0700 (PDT)
+        Thu, 31 Mar 2022 08:58:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69432128D9;
+        Thu, 31 Mar 2022 05:56:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1CE1617C0;
-        Thu, 31 Mar 2022 12:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84ED6C340F2;
-        Thu, 31 Mar 2022 12:56:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648731372;
-        bh=DfI4w1o+FCYxsAC0rPn+xFaT1PUgndy6Pzulupfti64=;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8AA23CE21CA;
+        Thu, 31 Mar 2022 12:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5FFC340F2;
+        Thu, 31 Mar 2022 12:56:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648731404;
+        bh=IJMv8QRbmsZe6PkwmtIOo18HaNy2h/hxvfgNjsECIdM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k/1uDpG0COuH/xMycH1jXEnaAzYEpDjT5p7kU8rL4PHWzMMQXC+b+2cYoSf0m2F12
-         qxbJx8hW/8ikoGtSzP79VFsft4uHhbHea2hb00KmUMLsNcb/lBaBICgpkEhL1kfrRR
-         FhCaLlT9xc5IhKlKDyMom56/wnaMhWeIgHSM72t9LH7QgBaWFcjznoWhPtebcvDsGz
-         R1qbHGThUeONUvt2Ahw6SsUmSNlNGcl4G4rEcY8ubwIecE37Y8mMekI9I/iwHiK226
-         ueWktgb253XuGKtf35tC2WuDIaiSIUvtbZj123P2me2Gpmf7oaNVeKDksy+TMEQyWt
-         z8+yBENsT3S1A==
-Date:   Thu, 31 Mar 2022 13:56:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        b=pxX4SEJLNXuMz+TwGcWZxflUuhMTVMnz2lbN5MlgXp/LT4OgVjKg/U205ilgAcW0J
+         qsH34tY1EjGKDg0iMUstTI4Xg2P07WxraC9s7VFRQZBtsxbpke83WsPNArI45RRXak
+         JPPjFQVYIU60zciozYRj2SmBRRpO1Lk2xDWNlIPM=
+Date:   Thu, 31 Mar 2022 14:56:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Won Chung <wonchung@google.com>,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [RFC PATCH 5/5] ASoC: Add macaudio machine driver
-Message-ID: <YkWk5vvBlC/Orpdr@sirena.org.uk>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-6-povik+lin@cutebit.org>
- <YkWXs/f7edZwg1+W@sirena.org.uk>
- <4651D426-BA1A-418F-90E5-278C705DA984@cutebit.org>
+        Takashi Iwai <tiwai@suse.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
+ function
+Message-ID: <YkWlCTBtcq4DOyiV@kroah.com>
+References: <20220330211913.2068108-1-wonchung@google.com>
+ <s5hzgl6eg48.wl-tiwai@suse.de>
+ <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
+ <s5hr16ieb8o.wl-tiwai@suse.de>
+ <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
+ <YkWTBwAB1HrxcUR3@kroah.com>
+ <YkWj/vmjohNo0r2c@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2p1SKEdgaX+tzFpw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4651D426-BA1A-418F-90E5-278C705DA984@cutebit.org>
-X-Cookie: Reunite Gondwondaland!
+In-Reply-To: <YkWj/vmjohNo0r2c@kuha.fi.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,63 +63,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 31, 2022 at 03:52:14PM +0300, Heikki Krogerus wrote:
+> Hi Greg,
+> 
+> On Thu, Mar 31, 2022 at 01:39:51PM +0200, Greg KH wrote:
+> > On Thu, Mar 31, 2022 at 12:25:43PM +0300, Heikki Krogerus wrote:
+> > > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
+> > > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
+> > > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
+> > > > > >
+> > > > > > Can NULL dev->driver be really seen?  I thought the components are
+> > > > > > added by the drivers, hence they ought to have the driver field set.
+> > > > > > But there can be corner cases I overlooked.
+> > > > > >
+> > > > > >
+> > > > > > thanks,
+> > > > > >
+> > > > > > Takashi
+> > > > > 
+> > > > > Hi Takashi,
+> > > > > 
+> > > > > When I try using component_add in a different driver (usb4 in my
+> > > > > case), I think dev->driver here is NULL because the i915 drivers do
+> > > > > not have their component master fully bound when this new component is
+> > > > > registered. When I test it, it seems to be causing a crash.
+> > > > 
+> > > > Hm, from where component_add*() is called?  Basically dev->driver must
+> > > > be already set before the corresponding driver gets bound at
+> > > > __driver_probe_deviec().  So, if the device is added to component from
+> > > > the corresponding driver's probe, dev->driver must be non-NULL.
+> > > 
+> > > The code that declares a device as component does not have to be the
+> > > driver of that device.
+> > > 
+> > > In our case the components are USB ports, and they are devices that
+> > > are actually never bind to any drivers: drivers/usb/core/port.c
+> > 
+> > Why is a USB device being passed to this code that assumes it is looking
+> > for a PCI device with a specific driver name?  As I mentioned on the
+> > mei patch, triggering off of a name is really a bad idea, as is assuming
+> > the device type without any assurance it is such a device (there's a
+> > reason we didn't provide device type identification in the driver core,
+> > don't abuse that please...)
+> 
+> I totally agree. This driver is making a whole bunch of assumptions
+> when it should not make any assumptions. And yes, one of those
+> assumptions is that the driver of the device has a specific name, and
+> that is totally crazy. So why is it making those assumptions? I have
+> no idea, but is does, and they are now causing the first problem -
+> NULL pointer dereference.
+> 
+> This patch (and that other) is only proposing a simple way to solve
+> that NULL pointer dereference issue by adding some sanity checks. If
+> that's no OK, and the whole driver should be refactored instead, then
+> that is perfectly OK by me, but that has to be done by somebody who
+> understands what exactly is the driver and the device it's controlling
+> doing (and for).
 
---2p1SKEdgaX+tzFpw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This all needs to be refactored to not do this at all.
 
-On Thu, Mar 31, 2022 at 02:08:51PM +0200, Martin Povi=C5=A1er wrote:
-> > On 31. 3. 2022, at 13:59, Mark Brown <broonie@kernel.org> wrote:
+thanks,
 
-> >> +	for_each_rtd_components(rtd, i, component)
-> >> +		snd_soc_component_set_jack(component, &ma->jack, NULL);
-
-> > What is the jack configuration this is attempting to describe?  It looks
-> > like you have some dedicated speaker driver devices which are going to
-> > get attached to jacks here for example.
-
-> We know the speakers will ignore the set_jack call. There=E2=80=99s one j=
-ack and
-> this way we know the jack codec will attach to it, for speakers it=E2=80=
-=99s a no-op.
-> (If you prefer I will special-case it to the jack codec.)
-
-It would be better to special case, this looks obviously wrong and will
-break if someone adds error handling.
-
-> >> +	return !strcmp(name, pattern);
-> >> +}
-
-> > This looks worryingly like use case configuration.
-
-> I go over this in the cover letter! This is fixing the TDM slot selection
-> and disabling voltage/current sensing on the speaker amp codecs, which ha=
-ve
-> no business being exposed to userspace as options. This is not use case,
-> this not letting people blow their speakers from userspace.
-
-Your comments in the cover letter are all pretty vague too, that just
-says that these controls are "ridiculous" which isn't terribly specific
-about what the actual goal is.  If it's just "I can't see why anyone
-would want to configure this" then that's a decision you're taking about
-what people might want to do which is broadly a use case configuration
-and the control should be left there in case someone comes up with an
-idea.
-
---2p1SKEdgaX+tzFpw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJFpOUACgkQJNaLcl1U
-h9CYzQf/Y08TIa0AXiiPTKniPzL9m3d7ArsJSmeKBxGOiqTtZ7kzWb4ElKSSGfRR
-SQBABq69Qoxq9aWhUfdocdGNf3I/MtDc8k0XUs4bO3MQgKJ0WIivkGNpRPield9D
-tbiVirXSxTSN28zrzJHzZZti6MVAFNCRjlrF+qOhAH2K6qKQNwcFwOYSFEjQaGLp
-noni9E2T7cwSkwem3gxTP6FDHdT2ivx3fwBArNpZ3WqWwK+3cBrlSD+pMYoPdWVD
-PMv8/IfgYHYm+ojMI6ILkAic1KojFLwM1stvNfFtR7fOO8QJEeSfPhKg18zLwvHj
-N1ZH9xNFrO4kKrMnwL7uEZAtBTHoGQ==
-=khz2
------END PGP SIGNATURE-----
-
---2p1SKEdgaX+tzFpw--
+greg k-h

@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B7D4ED9C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994FF4ED9CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236254AbiCaMqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S236262AbiCaMsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiCaMqV (ORCPT
+        with ESMTP id S236268AbiCaMr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:46:21 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C4914753D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:44:34 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id pv16so47886355ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:44:34 -0700 (PDT)
+        Thu, 31 Mar 2022 08:47:57 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B0B210476
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:46:09 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id f38so42110209ybi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:46:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u2E6iZH4vqaN/paASsb9/5JiTf0b1m5qdb10iYTnEXE=;
-        b=j+QhpYpfOQq+udSbmUsuT5Zz9iEk/cMj4q8EgU1QeOC8tH7Wwb+bEqgrw56SVAWKzw
-         KYMtAsUmWnwiN0VeTHkYPNk0YBE4qwcSds9UlUDw1pVDzWVRhMXTEnTQeQcOQLEqUdUh
-         LMG22ZPdk4wFqjuOLTEWmyB5q18f3VpGqSo6j6i5xIag1jDFZWOquvKBkOvvHHfcqPdr
-         kZJ0JUAwEZ0VwoeWNcV/KOU7DN8TEjY/ZG6hP/XcAdJIgxMGWKGsxO2zwXvQ3XoerZ/6
-         USYUmyqd8uRB4MpvGTcPUdEmHJannnS6zX6lco0AvHDdJw5qHE5FGSZw/8sAtGTgrM0O
-         p5rA==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=7oSbnIlDMLV6mSlKXym3qxASIjVDe/FX+PfPc1IezDE=;
+        b=PPRREv5L5fAma5LxA0EXOv+JEtTK1iPK+MPh3OIPRHz/rg8IfACgFN/SgSSXZTkWut
+         Vd5qRxwJ4iSEqVkv1OVVCK4UCXXZiaozOEH7wY1iCVvukejhkz8tan8UfHi7RBRwWpXn
+         gfcNj13CH1AGfsVJML1nqs/GpvC8Z9Uz1Ttd5nAdDEVlSy0Qvjis+bUaTjhyG96jJ+BV
+         nkzsTbUAY/bV7xK9JU9Tnq7vEfBuq6b750m3BmYvRdzb2vS2EpPEw3Kz8eBJ70g6I0A6
+         GBtouaOm+5cicC866ZDFzAmADYfg28tFgegtLRf5qY6vYbTZcQOGpWouuFXkIwGVdFwi
+         N1mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u2E6iZH4vqaN/paASsb9/5JiTf0b1m5qdb10iYTnEXE=;
-        b=QuG6NI2QOZDu9krHvCewyuXVI/suh2D+YXDYuRpz3UPg7kG3ZkrdD7lpLWtt2e1/wA
-         pin/whmAkRiP7JZGW+eUk7iEKQ0QE4vHzer6pRVGk+HiqzPedNtSe+BcD8ftq4LHRbS5
-         Mu3Wdj79I2+vSmgOGzdIfsWLms0MmpWL25kvXUJSJXNy0UOrLItHFlvsdU3d95CVQPlZ
-         GWDj71W8qzgLBD8vNqwFVn1SzJMIWAk/v+D2HH/5sKvfMXFFPPSk/vPo8fNyaItoFyPL
-         ZpYAFKKkIbGgEZOPqviNYpYAQmi5clnweCy6rlcaSK08kjJst8hr2ISQoyiFkzyZKUaw
-         UMyg==
-X-Gm-Message-State: AOAM533CO1Zp3lZi/PJfi4JvanDJur/+Dwju7pWr6Iu9Wtfq34c08UbW
-        e2sobh4uaQgMVkCPigI2LCz9H0x3ik0SVB3zb769nw==
-X-Google-Smtp-Source: ABdhPJzC1TZHRiZ4ercOvfulsYZ7N2MPHEwfLnwj9lldpUf0NHaBY5GrDnEqN7tDPoDJJ1bO/1jAkw==
-X-Received: by 2002:a17:906:8301:b0:6e4:896d:59b1 with SMTP id j1-20020a170906830100b006e4896d59b1mr4706766ejx.396.1648730672768;
-        Thu, 31 Mar 2022 05:44:32 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id p24-20020a056402045800b0041614c8f79asm2935368edw.88.2022.03.31.05.44.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 05:44:32 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 20:44:25 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     Ali Saidi <alisaidi@amazon.com>, Nick.Forrington@arm.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, benh@kernel.crashing.org,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse
- cores
-Message-ID: <20220331124425.GB1704284@leoy-ThinkPad-X240s>
-References: <20220328130547.GA360814@leoy-ThinkPad-X240s>
- <20220329143214.12707-1-alisaidi@amazon.com>
- <4710b4b2-5dcd-00a4-3976-1bd5340f401d@arm.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=7oSbnIlDMLV6mSlKXym3qxASIjVDe/FX+PfPc1IezDE=;
+        b=oMEsC6pS/+82ojWInDdTbhvt+GnsEZ4nIOlfxqbmrJmwW1qjuSAZQde5GWErMPt4Fe
+         Dac44bEGZYt560A3HpUqiZZuh+AccAkCD9cJkTY4x4m9SfDvNBJobAlb7Xhytrmq+8ha
+         D+gElkKbC7zxUmjlVyXYSn2Xi2JBkpqnX2jZJUfcXlsRRyAsh1Gl1JatMnqFvfihVltB
+         rU+FuiMYlhX2VpU/hO5xSWPOWALcvKjre575nzFKKBz318O9LGZwKegkhQuc/lXZqYov
+         TmMAyt8TOGaymyYL2d8WgbMUOn/1HsT1xp3RZr6Upkrzi9n5M0HmqxxA3yYBFeiSGLdv
+         ZBzA==
+X-Gm-Message-State: AOAM530HYGu0FMkTvOgv1uyCAnDkZEfm47pCouBCYlY4jgNXf2UQA+rc
+        GpX3o18ppwVIko8U4QztnQn0UDBX8L4UwJZe1cs+ze4l3RR9/MSs
+X-Google-Smtp-Source: ABdhPJwGKVnhTsdd+AusUNKo/rR9ORGT2Uh2CECAGTbqF33pFQyfuq2Pl6u857Kk6DS9yR87O2kxivPuydHscRHD+y4=
+X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
+ k6-20020a259846000000b0061a3deb4d39mr3915516ybo.537.1648730768369; Thu, 31
+ Mar 2022 05:46:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4710b4b2-5dcd-00a4-3976-1bd5340f401d@arm.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 31 Mar 2022 18:15:57 +0530
+Message-ID: <CA+G9fYsaUWL4MfkmFJGyZ5WRjibieSLE1V1R8OPsWNmjeYWyUQ@mail.gmail.com>
+Subject: [next ] x86: Assembler messages: Error: invalid operands (*UND* and
+ .data..percpu sections) for `+'
+To:     X86 ML <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev
+Cc:     Li RongQing <lirongqing@baidu.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +75,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 01:28:58PM +0100, German Gomez wrote:
-> Hi all,
-> 
-> It seems I gave the Review tags a bit too early this time. Apologies for
-> the inconvenience. Indeed there was more interesting discussions to be
-> had :)
-> 
-> (Probably best to remove by tags for the next re-spin)
+Linux next-20220331 x86_64 build failed due to below warnings / errors
+with gcc-11. build log link [1].
 
-Now worries, German.  Your review and testing are very helpful :)
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64
+CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+/tmp/ccS5DmVa.s: Assembler messages:
+/tmp/ccS5DmVa.s:59: Error: invalid operands (*UND* and .data..percpu
+sections) for `+'
+make[3]: *** [/builds/linux/scripts/Makefile.build:289:
+arch/x86/kernel/kvm.o] Error 1
 
-> On 29/03/2022 15:32, Ali Saidi wrote:
-> > [...]
-> >
-> >> I still think we should consider to extend the memory levels to
-> >> demonstrate clear momory hierarchy on Arm archs, I personally like the
-> >> definitions for "PEER_CORE", "LCL_CLSTR", "PEER_CLSTR" and "SYS_CACHE",
-> >> though these cache levels are not precise like L1/L2/L3 levels, they can
-> >> help us to map very well for the cache topology on Arm archs and without
-> >> any confusion.  We could take this as an enhancement if you don't want
-> >> to bother the current patch set's upstreaming.
-> > I'd like to do this in a separate patch, but I have one other proposal. The
-> > Neoverse cores L2 is strictly inclusive of the L1, so even if it's in the L1,
-> > it's also in the L2. Given that the Graviton systems and afaik the Ampere
-> > systems don't have any cache between the L2 and the SLC, thus anything from
-> > PEER_CORE, LCL_CLSTR, or PEER_CLSTR would hit in the L2, perhaps we
-> > should just set L2 for these cases? German, are you good with this for now? 
-> 
-> Sorry for the delay. I'd like to also check this with someone. I'll try
-> to get back asap. In the meantime, if this approach is also OK with Leo,
-> I think it would be fine by me.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks for the checking internally.  Let me just bring up my another
-thinking (sorry that my suggestion is float): another choice is we set
-ANY_CACHE as cache level if we are not certain the cache level, and
-extend snoop field to indicate the snooping logics, like:
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: fdcbcd1348f4ef713668bae1b0fa9774e1811205
+  git_describe: next-20220331
+  build link: https://builds.tuxbuild.com/278RMAf1jcRHx7LwzjCMgFSMMLt/
 
-  PERF_MEM_SNOOP_PEER_CORE
-  PERF_MEM_SNOOP_LCL_CLSTR
-  PERF_MEM_SNOOP_PEER_CLSTR
 
-Seems to me, we doing this is not only for cache level, it's more
-important for users to know the variant cost for involving different
-snooping logics.
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
 
-Thanks,
-Leo
+tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11
+--kconfig https://builds.tuxbuild.com/278RMAf1jcRHx7LwzjCMgFSMMLt/config
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/278RMAf1jcRHx7LwzjCMgFSMMLt/

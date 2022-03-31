@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D914ED114
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3477D4ED117
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352161AbiCaAyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S1352179AbiCaAzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352177AbiCaAyL (ORCPT
+        with ESMTP id S245288AbiCaAzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:54:11 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816455C667
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:52:25 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id m3so38710616lfj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XkvXKGtfqRhN5YqB0z2FhrpZG2GRB+k10i/H+CJfRlg=;
-        b=aoTci8u1f5J93U9gBLBHTDkmKaIvBaazqi8FW8fqo0saKnuV5I5jdXFUq97TTKOdY9
-         Or+GexxGMyKFjREtqjdJ5h+fff7gy0Udyw48pBiHfvMMsQkFi3QsT6oG38z/qb4Vq0qZ
-         cIVZghz07klP2Ojp8fyDLaT6QLNeZeduzHmkk=
+        Wed, 30 Mar 2022 20:55:32 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BD0193C9;
+        Wed, 30 Mar 2022 17:53:46 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id x8-20020a9d6288000000b005b22c373759so16150906otk.8;
+        Wed, 30 Mar 2022 17:53:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XkvXKGtfqRhN5YqB0z2FhrpZG2GRB+k10i/H+CJfRlg=;
-        b=Zlq58+t9Fkjju6D7bTNdaXxJEQaARdGrOz/jIY1eNh6psoqB4V6I3qW3R8vb75+NoC
-         crBQuo126T1B3n86rHM1adcaI5+EW2VioU+1dF81iH8AJQ87jAPKZKnkINZ4ymUPVPDe
-         8IXFuO+/5ei5xGOJWNDFLhB3PmoH3RurbyAcNlNVBpk8hhmMOHTzErhPcpA07iJRrDdF
-         7gMAzbQLlNY8tfD5J1CMFV0aT3xTxTa4ETUl+uBKqQkZJsu5n4r2QzgRiVds+Kvole2w
-         jvrWh8vbIeMi6uoMjmnPcD+EV+PsX7MbbSJcDu3gtsVHUl6N5fbBQV8XfO+J38XUsf4z
-         4EFg==
-X-Gm-Message-State: AOAM5316YwdDDgxOMGJ4J6KyYEMck5yisEq+uFSyAik7/uArW+hVsrpG
-        iH5WINvUYy+kbxCYHWa73yDBRqcPHJ/aEI+V
-X-Google-Smtp-Source: ABdhPJyb3Svvem9RKyuahnwxqk14ehWHve/DCAZqBvLT4tSqElheSjFPyEF87+5ktBEIH4z4AlIs0A==
-X-Received: by 2002:ac2:51ce:0:b0:44a:2b4f:82b1 with SMTP id u14-20020ac251ce000000b0044a2b4f82b1mr8995500lfm.349.1648687943345;
-        Wed, 30 Mar 2022 17:52:23 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id b21-20020a0565120b9500b0044a2274962asm2492649lfv.130.2022.03.30.17.52.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 17:52:22 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id 5so38722041lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:52:22 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr8803758lfh.687.1648687941872; Wed, 30
- Mar 2022 17:52:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RQOCLW2sewLQSkvDpv6e2/VDt8ehiygLDzP2cJZBDd4=;
+        b=BYS2lTW9/AT5Oi+DpySUqF5WJuyhvskynbfygRuDXHKxffX+DF++nGHMeXb6BpBr1V
+         vV1irPpa28BSdFipDI/leBQ7kZFaP9ihxKNus8wVTUPsjXOgJ/uJ1OlZZsVh4IJCkv4v
+         BogVgxY7Y4orkOclML0HM4wlg0fDBE+zDQhWW9oF1KraxANXfJDKewXyEM9yNUBYIIQ2
+         BnBvHYajGJWAuL4Gf5yyVlcm9xJFdVO9xxACv/qtjUDLdoZBSKrpBF3VwikG5j8g+Cud
+         YvFEuWIZSaQIs6wc2vnQnWTabFGeCTHxIiuk/f4lwd5FqDrceNyC4umSNEF+5ZcnpJYl
+         LNqA==
+X-Gm-Message-State: AOAM53160tvZ1EcBpeqICw5qJvEWOvH+YX23h0BJgJhHEHWATVl6O3B5
+        A0FYJveR8MwcbLJRytKPKw==
+X-Google-Smtp-Source: ABdhPJy2IXGYnatFzBYUTeLTf8DvL4pYh4xD1bgYH/RgOfVeyfVeDByeag2N6mH06BJwImW9swaZyw==
+X-Received: by 2002:a05:6830:40a9:b0:5c9:4a8d:ab1f with SMTP id x41-20020a05683040a900b005c94a8dab1fmr4790734ott.288.1648688025324;
+        Wed, 30 Mar 2022 17:53:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v24-20020a9d5a18000000b005ad458facbdsm11728168oth.27.2022.03.30.17.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 17:53:45 -0700 (PDT)
+Received: (nullmailer pid 3988522 invoked by uid 1000);
+        Thu, 31 Mar 2022 00:53:44 -0000
+Date:   Wed, 30 Mar 2022 19:53:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, krzk+dt@kernel.org,
+        treding@nvidia.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
+        sanjayc@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v2 2/4] dt-bindings: arm: tegra: Add bindins for
+ nvidia,tegra-ccplex-cluster
+Message-ID: <YkT7mKas3pJF8tVb@robh.at.kernel.org>
+References: <20220330143819.27476-1-sumitg@nvidia.com>
+ <20220330143819.27476-3-sumitg@nvidia.com>
 MIME-Version: 1.0
-References: <7b0576d8d49bbd358767620218c1966e8fe9a883.camel@hammerspace.com>
- <CAHk-=wh-hs_q-sL6PNptfVmNm7tWrt24o4-YR74Fxo+fdKsmxA@mail.gmail.com>
- <c5401981cb21674bdd3ffd9cc4fac9fe48fb8265.camel@hammerspace.com>
- <4eed252caf56f16c290f0c54b5d850d4eab5dc1b.camel@hammerspace.com>
- <CAHk-=wi_0L4u_Fd1S3r+-1Ok95HveaXNqY8h3McJOUCfk-tqDg@mail.gmail.com> <79f7b95f1e32214f6b2d84e9cfafc0310c1a8cfe.camel@hammerspace.com>
-In-Reply-To: <79f7b95f1e32214f6b2d84e9cfafc0310c1a8cfe.camel@hammerspace.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 30 Mar 2022 17:52:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiOp=KpFAN_+dRVTuNdBVYUZ4nXP6sEYhDvTKdeJFEYUA@mail.gmail.com>
-Message-ID: <CAHk-=wiOp=KpFAN_+dRVTuNdBVYUZ4nXP6sEYhDvTKdeJFEYUA@mail.gmail.com>
-Subject: Re: [GIT PULL] Please pull NFS client changes for Linux 5.18
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330143819.27476-3-sumitg@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,41 +67,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 4:18 PM Trond Myklebust <trondmy@hammerspace.com> wrote:
->
-> Hmm... No there doesn't appear to be a huge difference between the two.
+On Wed, Mar 30, 2022 at 08:08:17PM +0530, Sumit Gupta wrote:
+> The Tegra CCPLEX_CLUSTER area contains memory-mapped
+> registers that initiate CPU frequency/voltage transitions.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> new file mode 100644
+> index 000000000000..74afa06f695e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: NVIDIA Tegra CPU_CLUSTER area device tree bindings
+> +
+> +maintainers:
+> +  - Sumit Gupta <sumitg@nvidia.com>
+> +  - Mikko Perttunen <mperttunen@nvidia.com>
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +description: |+
+> +  The Tegra CCPLEX_CLUSTER area contains memory-mapped
+> +  registers that initiate CPU frequency/voltage transitions.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "ccplex@([0-9a-f]+)$"
+> +
+> +  compatible:
+> +    enum:
+> +      - nvidia,tegra186-ccplex-cluster
+> +      - nvidia,tegra234-ccplex-cluster
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvidia,bpmp:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description: |
+> +      Specifies the bpmp node that needs to be queried to get
+> +      operating point data for all CPUs.
+> +
+> +additionalProperties: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nvidia,bpmp
+> +  - status
 
-Ok, thanks for checking. It's basically what I would have expected,
-both models really just depend on a reasonable mixing and shuffling of
-bits in the word, and it really looks like they have very similar
-collision behavior.
+status is never required.
 
-At some point even with equivalent functions you obviously end up with
-just random differences that just depend on the input set and prue
-luck.
+> +
+> +examples:
+> +  - |
+> +    ccplex@e000000 {
+> +      compatible = "nvidia,tegra234-ccplex-cluster";
+> +      reg = <0x0 0x0e000000 0x0 0x5ffff>;
+> +      nvidia,bpmp = <&bpmp>;
+> +      status = "okay";
 
-But at least based on your numbers, it does look like they really are
-equivalent, and hash_64() certainly doesn't look any worse.
+Nor should it be in examples.
 
-All the extra work xxhash() does should matter mainly for
-
- (a) using more final bits of the hash (ir not reducing them in the end)
-
- (b) all the cases where you have much more input than one single word
-
-Here, (b) obviously isn't an issue.
-
-And that (a) is by design - those default kernel hash() functions are
-literally designed for generating the index for hash tables, and so
-expects that final reduction in size.
-
-As a result, unlike xxhash(), it doesn't try to mix in bits in the low
-bits, because it knows those will be shifted away in the use-case it's
-designed for (the hash() reduction in bits always takes the high
-bits).
-
-But that use-case is really exactly what nfs is looking for too, which
-is why I was expecting the regular hash_64() to JustWork(tm) for the
-nfs case.
-
-                 Linus
+> +    };
+> -- 
+> 2.17.1
+> 
+> 

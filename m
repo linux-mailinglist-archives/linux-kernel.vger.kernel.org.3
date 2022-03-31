@@ -2,152 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD904EE2A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7B04EE2AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241425AbiCaUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
+        id S235256AbiCaUcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbiCaUbz (ORCPT
+        with ESMTP id S241434AbiCaUcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:31:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BC944ECC8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648758607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4C9tkZ0sWDj5SRnNl4Qqaa2tLWJtytFn7iNzV9fK4gs=;
-        b=Ai0wSJrfbAQMW38pUhOoBrLwbBw6miAt0vp229rPgVdQgTYUjJ9Wo4nPiYrBIElerpTYG5
-        cDjkImZCFOxsYhSo+QR8em7pDrq3M0L5ZvCGa3aln0JLow42JTGQcSfsN54ol6hoiSupYL
-        mQ1UxMPxUq6N/MtrjLjzbTumLZ7loJA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-2-wIVK8zO3Gfuy9aAZ3pIw-1; Thu, 31 Mar 2022 16:30:05 -0400
-X-MC-Unique: 2-wIVK8zO3Gfuy9aAZ3pIw-1
-Received: by mail-wm1-f69.google.com with SMTP id r82-20020a1c4455000000b0038c15a1ed8cso1833526wma.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:30:05 -0700 (PDT)
+        Thu, 31 Mar 2022 16:32:21 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F4B5577F
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:30:33 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id yy13so1731803ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WnVDLK0fuVXet24goRyLeC09oaPRTS1cEiuOv9qpnzg=;
+        b=xz4HmeCzQcf0bKScHWhvla+V2E7vgHeOrWNrab8oEGJzRpkOogwYZLg8l4nYxn7PGI
+         DnSi7BcukvWTBLE1pQB9Al6zKPKetCxY1DMQ6jIlZNyQGsZlA+3jLPbZ97e20sb/L6k/
+         jru7po9wvWWn2ZtoPjQoAkNlyURKBUV9JRU8R9qubnXxwjbbhkLVg0YUUl3VhKebG4zg
+         5WLG1S4pyKhOY9Z/wRIFD0gr/ZGaoLsYa1JAF8LgBG4Xe7folO0xkJoq+BXzt9gX4zd+
+         j7HgDQSgbhnStRnEGu26upop8BWlyGxOqyLzZNdKPTqj/un11jX7rsTJM6d2WH1MtZkD
+         X7UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4C9tkZ0sWDj5SRnNl4Qqaa2tLWJtytFn7iNzV9fK4gs=;
-        b=Ap6RsAvYJShPomGEUvY+krMT/8zaBOVGDcuJx093YmDmV6tuJVWc6hDfbqK0Bo7CTj
-         pg5e1myTR7PRfZ9/aCAtQTfKCU2p1V5bxlm9ucNfgRFLJkyx+KCXce/1kmObTyt3L9lL
-         k6JrYrPoqjZ8ykfbK9PMGz77gwJdHTNfrSSm1/E2VKniLzm93GOg7HWghxW2mnP7jX1u
-         UmqCAASty5BncOOlcm53LFNi4idunEEYb9zQ38egINVgcxD3N5UcDaU3VTmzfV7vxoBb
-         QaRejkS3ACJMSyolQdfxELrI1X40JfSp2QYDse8BG+q99SJ8NE6eOkYPA+LbJrwTnatE
-         wJQg==
-X-Gm-Message-State: AOAM532nrmNt4Guyhl/yY4e7MTzqAGkg8+DAodhQ7yavRcmQ5jbnG5uQ
-        qrj0YaT1RVLdXNzbj98vKYi9e0z9jq6i2jooLJmCoa2VVntVFBCKL54lwZfJoEo5OdyHBtxtEGr
-        NUg5I5DxkHjDpxdTEiR96iuu9
-X-Received: by 2002:a7b:c195:0:b0:38c:ea91:c0b3 with SMTP id y21-20020a7bc195000000b0038cea91c0b3mr6018348wmi.38.1648758604542;
-        Thu, 31 Mar 2022 13:30:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKkVAV7cGUNTrAfsy+ak787QoCfLUdh3YBGnxRF0ryqMItgG6hdmWfn9EepYs8rgI8iRLaOQ==
-X-Received: by 2002:a7b:c195:0:b0:38c:ea91:c0b3 with SMTP id y21-20020a7bc195000000b0038cea91c0b3mr6018336wmi.38.1648758604279;
-        Thu, 31 Mar 2022 13:30:04 -0700 (PDT)
-Received: from redhat.com ([2.55.151.201])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm343666wrh.87.2022.03.31.13.30.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 13:30:03 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 16:30:00 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH RESEND] uio/uio_pci_generic: Introduce refcnt on
- open/release
-Message-ID: <20220331162952-mutt-send-email-mst@kernel.org>
-References: <1648693432-129409-1-git-send-email-yaohongbo@linux.alibaba.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WnVDLK0fuVXet24goRyLeC09oaPRTS1cEiuOv9qpnzg=;
+        b=saS/ZvGV1J5UB1gqUzrjg9/Ih2lrRJccK2SrlW5du5a5HfrQS9Z3COVwhFk0YKz/Wr
+         M8Tz65lqFVxQQ44Muy7oWFgXsrN+acFuAG+eubpBhwvEjvncsl97tVuyNez9JE68xRu4
+         bxHExU8GtUSB0JWiCzBBHANGXMPjLoH/SE0nXz1zoySV2FFFDJVYrtaXcJI4rR8DAsnw
+         BKklyCU1cO7dvqgos494+HzCm1Bjvk5tVDlUlfROHkxStF78km72A1egSNKRPDPmjCqR
+         9aIMXXUarTn9k9qTcVldtuZCJw1rI7LoZdeOledxUP301usFtqdRlJWSVv/AhKLEnlZr
+         I6rQ==
+X-Gm-Message-State: AOAM530S7r0T1yjoDQvwH7eVF9qhpF2bPACEfmM5ObzKjWfK34TpxvZr
+        vk2+SX6n0rR1JNmg0/KprfEr1w==
+X-Google-Smtp-Source: ABdhPJzk1sADuDWf1mqltBlOA78Rm21xqsC7es/F5+4JjOUvGFm54/gqgEdhlOupkBs1Tk1QLX6phg==
+X-Received: by 2002:a17:907:3e82:b0:6e1:3fe3:9b14 with SMTP id hs2-20020a1709073e8200b006e13fe39b14mr6437585ejc.561.1648758632084;
+        Thu, 31 Mar 2022 13:30:32 -0700 (PDT)
+Received: from [192.168.0.168] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id tc19-20020a1709078d1300b006e0649189b0sm169808ejc.68.2022.03.31.13.30.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 13:30:31 -0700 (PDT)
+Message-ID: <3d4159d6-112a-7818-8192-7197dcfca894@linaro.org>
+Date:   Thu, 31 Mar 2022 22:30:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1648693432-129409-1-git-send-email-yaohongbo@linux.alibaba.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RFC net-next 2/3] dt-bindings: net: mscc-miim: add clock
+ and clock-frequency
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Michael Walle <michael@walle.cc>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220331151440.3643482-1-michael@walle.cc>
+ <20220331151440.3643482-2-michael@walle.cc>
+ <dfb10165-1987-84ae-d48a-dfb6b897e0a3@linaro.org> <YkYMIequbfAsELnf@lunn.ch>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YkYMIequbfAsELnf@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 10:23:52AM +0800, Yao Hongbo wrote:
-> If two userspace programs both open the PCI UIO fd, when one
-> of the program exits uncleanly, the other will cause IO hang
-> due to bus-mastering disabled.
-
-With two programs poking at the same device, how is this ever
-supposed to work even while both are alive?
-
-> It's a common usage for spdk/dpdk to use UIO. So, introduce refcnt
-> to avoid such problems.
+On 31/03/2022 22:16, Andrew Lunn wrote:
+> On Thu, Mar 31, 2022 at 10:05:48PM +0200, Krzysztof Kozlowski wrote:
+>> On 31/03/2022 17:14, Michael Walle wrote:
+>>> Add the (optional) clock input of the MDIO controller and indicate that
+>>> the common clock-frequency property is supported. The driver can use it
+>>> to set the desired MDIO bus frequency.
+>>>
+>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>> ---
+>>>  Documentation/devicetree/bindings/net/mscc,miim.yaml | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/mscc,miim.yaml b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+>>> index b52bf1732755..e9e8ddcdade9 100644
+>>> --- a/Documentation/devicetree/bindings/net/mscc,miim.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+>>> @@ -32,6 +32,11 @@ properties:
+>>>  
+>>>    interrupts: true
+>>>  
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  clock-frequency: true
+>>
+>> This looks unusual clock-frequency is usually for clock providers but
+>> this is a consumer, so it is not a common frequency here. You mention
+>> that "driver can use it", so it's not a hardware description but some
+>> feature for the driver. We have this already - use assigned-clock* in
+>> your DTS.
 > 
-> Fixes: 865a11f("uio/uio_pci_generic: Disable bus-mastering on release")
-> Reported-by: Xiu Yang <yangxiu.yx@alibaba-inc.com>
-> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
-> ---
->  drivers/uio/uio_pci_generic.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+> Please see
 > 
-> diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
-> index e03f9b5..8add2cf 100644
-> --- a/drivers/uio/uio_pci_generic.c
-> +++ b/drivers/uio/uio_pci_generic.c
-> @@ -31,6 +31,7 @@
->  struct uio_pci_generic_dev {
->  	struct uio_info info;
->  	struct pci_dev *pdev;
-> +	atomic_t refcnt;
->  };
->  
->  static inline struct uio_pci_generic_dev *
-> @@ -39,6 +40,14 @@ struct uio_pci_generic_dev {
->  	return container_of(info, struct uio_pci_generic_dev, info);
->  }
->  
-> +static int open(struct uio_info *info, struct inode *inode)
-> +{
-> +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> +
-> +	atomic_inc(&gdev->refcnt);
-> +	return 0;
-> +}
-> +
->  static int release(struct uio_info *info, struct inode *inode)
->  {
->  	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
-> @@ -51,7 +60,9 @@ static int release(struct uio_info *info, struct inode *inode)
->  	 * Note that there's a non-zero chance doing this will wedge the device
->  	 * at least until reset.
->  	 */
-> -	pci_clear_master(gdev->pdev);
-> +	if (atomic_dec_and_test(&gdev->refcnt))
-> +		pci_clear_master(gdev->pdev);
-> +
->  	return 0;
->  }
->  
-> @@ -92,8 +103,11 @@ static int probe(struct pci_dev *pdev,
->  
->  	gdev->info.name = "uio_pci_generic";
->  	gdev->info.version = DRIVER_VERSION;
-> +	gdev->info.open = open;
->  	gdev->info.release = release;
->  	gdev->pdev = pdev;
-> +	atomic_set(&gdev->refcnt, 0);
-> +
->  	if (pdev->irq && (pdev->irq != IRQ_NOTCONNECTED)) {
->  		gdev->info.irq = pdev->irq;
->  		gdev->info.irq_flags = IRQF_SHARED;
-> -- 
-> 1.8.3.1
+> Documentation/devicetree/bindings/net/mdio.yaml
+> 
+>   clock-frequency:
+>     description:
+>       Desired MDIO bus clock frequency in Hz. Values greater than IEEE 802.3
+>       defined 2.5MHz should only be used when all devices on the bus support
+>       the given clock speed.
+> 
+> The MDIO bus master provides the MDIO bus clock, so in a sense, the
+> device is a provider. although it does also make use of the clock
+> itself. It is a hardware description, because the users of the bus
+> make use of the clock, i.e. the PHY devices on the bus.
+> 
+> It is also identical to i2c bus masters
+> Documentation/devicetree/bindings/i2c/i2c.txt says:
+> 
 
+Thanks, it's good. Indeed buses also use this property.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

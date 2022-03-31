@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386E24EDFF7
+	by mail.lfdr.de (Postfix) with ESMTP id CF4124EDFF9
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiCaR7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbiCaR72 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232761AbiCaR72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 31 Mar 2022 13:59:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763442220E2;
-        Thu, 31 Mar 2022 10:57:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36E93B82055;
-        Thu, 31 Mar 2022 17:57:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA542C3410F;
-        Thu, 31 Mar 2022 17:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648749458;
-        bh=Pd8nG9z0Q3DS24pgaW2OH5ERDzXwBcXAArJQBvW+IR8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NV8527sSPkm1hnVw6VVnpKW5cabOMI4XoWbMW5iwZUJmlovW9YIOp4qAhthzhvTF3
-         tu5FKaBYkAtUviG2ld1PjnK5HB3/ahc8GiVEpdLHe4StHZ2ZB+k3FeS9pyqY8WpJ4J
-         dhG9X8cOxY7GWjdkLbTWgh04rNDoGP6guaKKANupatLCQumMyxxPkvQh2lof2WuPNu
-         ZdufnC+3CG/gLwQhba8QujopE/O0gWTuj54kvH+hvQlTdEeEtn9zKGDexYm+i2cDf4
-         gvih1fyK+08OknPxpFQrcxUAMFlF5Lz2KQbsx4MmkljFRJ3RJ2Zed7ZrqL8+r7c8eQ
-         aauzDc8dm9aog==
-Received: by mail-qv1-f49.google.com with SMTP id kd21so169207qvb.6;
-        Thu, 31 Mar 2022 10:57:36 -0700 (PDT)
-X-Gm-Message-State: AOAM533aXxSrzEC9ahAm3MEcMitVaxMvTHIYrNuy31HrijgHTGhUeTdm
-        vEqyyzp/R+cr/q4wbe8JbMbcQIH/kZbMYvH8NBc=
-X-Google-Smtp-Source: ABdhPJwEVeLKB7Vs1bxXRXcyvhnkH0USk3DG0DecGzpkX4X6QfinHpsmohMAYHYQCFOhu9OfhkS+0VxRE2hhH54vVbg=
-X-Received: by 2002:ad4:5be9:0:b0:441:651c:2d23 with SMTP id
- k9-20020ad45be9000000b00441651c2d23mr5067459qvc.5.1648749455929; Thu, 31 Mar
- 2022 10:57:35 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232721AbiCaR7Z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 31 Mar 2022 13:59:25 -0400
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5186B223217
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648749455;
+        bh=XhKQWR3BGW0/rNU3IYozp58rwLwhq1yx0fsceKajOxg=;
+        h=From:To:Cc:Subject:Date;
+        b=AueJLs0kcWagvSouu0KB0puO5V5UOazzR859YGB+6QyGYcVUTwRabWryBPqXYZFv4
+         MfQfn7m7hX3N3MVWSudPKiKv1aAUq1zAFe3B/dMtkty5cWULgM/jKjfNBFEOnSfk66
+         0FA9IpqPoU0PpX8YRaOGwssprOJhT1Sd2wk7LXVU=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszb6.qq.com (NewEsmtp) with SMTP
+        id E6094825; Fri, 01 Apr 2022 01:57:32 +0800
+X-QQ-mid: xmsmtpt1648749452tklbwi7jk
+Message-ID: <tencent_DA99AB72BB38FA297CC29394C8FEB5407C09@qq.com>
+X-QQ-XMAILINFO: MQ+wLuVvI2LQtNO8Egt+c+zUxwIuRKyP1i3lU8ZDsKr96KrLc7Aog2wORKPrIt
+         WVbikKfBTnDzPbr/WUIwkDOwAq1zxekQZ6w9bBcBY+wVLl5kwlOl/WgiAckXr97GnJt5EcqOf6ZE
+         RwDGWPiAyEScEo4A8ySZy1Gz78ooKP3lKDVgARbu6OlAXWsRyLTKdlTMTmZgP1P/JONVzV9WYNaS
+         /1Yg9bEX6zjRHMjOnLt5G/PnU/JaOsRdoLhPzKXsku938vRUmLbckBlpusstT5ZlgnnMylVVAT8c
+         NW9xlMQAOS7mz9j3Y3H55+pvfPvr673rpvfmlMfBLXAmnNybARoyf/hwRmOg8yd03As5xYxkuDJA
+         pK08wnEt/xqYvl2o6063XxDDhjy9N2vA1tq5s9exSCgfvsi/9aJaUKXgx7fN4B1Ivm8+Mh4cF2hm
+         WNKUynfDZZ+TQqdfN6Gzcwv32yukkI1EWKQm3QM/mgGSTImbkC8KYyjAqMNgxv5IEc70k6AQWhrp
+         u41SB4zwttZQPwCIEhP/subs31/eYWxjlBWSwYwGI8pXGE680/BVWpVkXU47QEkZZLnVY/Qzgopi
+         aEHYz7QTmwpIhvfLo7wWkV/evDl0CwK2Oy6hDb9C3XZ90UR+KZ79ad4gS8KRArcJ82srekWuHeLm
+         /Q1nlvj8F6oV3Zgw25oS2q+0Y9ktGSJF+5TXjNLTHXpIPfdfNWwU6ZdvQddCyZY+dbqSab+jYjB1
+         6tyIgEsEOkuBfharigC/o0GsHNQJWWYQfcOteW8OzFwxwqZykjN90IE9eXq1y0lklfqitt0F5TtL
+         q7MRsoE3XVbJKxvYoEaVecyskV/Vt8VM+im9dKUPOvTj5YtA7Ox04Cl8E6P3/bGoCBNHBH+YLZcT
+         TiQmzg6get2pnv5NOwCSMXdrZQCg/nDpxc8Y+6DECFrS34LTPC6hs7KbFAH6fvOIeROnBegrPQn7
+         NZyyW1ZNg=
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] staging: rtl8723bs: fix potential memory leak in rtw_init_drv_sw()
+Date:   Fri,  1 Apr 2022 01:57:20 +0800
+X-OQ-MSGID: <20220331175720.10009-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-References: <20220328194157.1585642-1-sashal@kernel.org> <20220328194157.1585642-17-sashal@kernel.org>
- <YkLYhad7iX2Bv/j1@debian9.Home> <YkXd9UTuFbNDNjo3@sashalap>
-In-Reply-To: <YkXd9UTuFbNDNjo3@sashalap>
-From:   Filipe Manana <fdmanana@kernel.org>
-Date:   Thu, 31 Mar 2022 18:57:00 +0100
-X-Gmail-Original-Message-ID: <CAL3q7H5x0-7w7udtt3qCGLB=OiRY29EBoj=eJWgDVkShmYOogQ@mail.gmail.com>
-Message-ID: <CAL3q7H5x0-7w7udtt3qCGLB=OiRY29EBoj=eJWgDVkShmYOogQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.17 17/21] btrfs: reset last_reflink_trans after
- fsyncing inode
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <jbacik@fb.com>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 5:59 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> On Tue, Mar 29, 2022 at 10:59:33AM +0100, Filipe Manana wrote:
-> >On Mon, Mar 28, 2022 at 03:41:52PM -0400, Sasha Levin wrote:
-> >> From: Filipe Manana <fdmanana@suse.com>
-> >>
-> >> [ Upstream commit 23e3337faf73e5bb2610697977e175313d48acb0 ]
-> >>
-> >> When an inode has a last_reflink_trans matching the current transaction,
-> >> we have to take special care when logging its checksums in order to
-> >> avoid getting checksum items with overlapping ranges in a log tree,
-> >> which could result in missing checksums after log replay (more on that
-> >> in the changelogs of commit 40e046acbd2f36 ("Btrfs: fix missing data
-> >> checksums after replaying a log tree") and commit e289f03ea79bbc ("btrfs:
-> >> fix corrupt log due to concurrent fsync of inodes with shared extents")).
-> >> We also need to make sure a full fsync will copy all old file extent
-> >> items it finds in modified leaves, because they might have been copied
-> >> from some other inode.
-> >>
-> >> However once we fsync an inode, we don't need to keep paying the price of
-> >> that extra special care in future fsyncs done in the same transaction,
-> >> unless the inode is used for another reflink operation or the full sync
-> >> flag is set on it (truncate, failure to allocate extent maps for holes,
-> >> and other exceptional and infrequent cases).
-> >>
-> >> So after we fsync an inode reset its last_unlink_trans to zero. In case
-> >> another reflink happens, we continue to update the last_reflink_trans of
-> >> the inode, just as before. Also set last_reflink_trans to the generation
-> >> of the last transaction that modified the inode whenever we need to set
-> >> the full sync flag on the inode, just like when we need to load an inode
-> >> from disk after eviction.
-> >>
-> >> Signed-off-by: Filipe Manana <fdmanana@suse.com>
-> >> Signed-off-by: David Sterba <dsterba@suse.com>
-> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> >
-> >What's the motivation to backport this to stable?
-> >
-> >It doesn't fix a bug or any regression, as far as I know at least.
-> >Or is it to make some other backport easier?
->
-> I wasn't sure if it's needed for completeness for the mentioned fixes,
-> so I took it. Can drop it if it's not needed.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Yes, please drop it. It's not needed (nor was intended) to go to any
-stable releases.
+In rtw_init_drv_sw(), except for the first one, the other error paths
+do not properly release the resources allocated by its callees.
+This patch is to free them.
 
-Thanks.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/staging/rtl8723bs/os_dep/os_intfs.c | 60 +++++++++++----------
+ 1 file changed, 31 insertions(+), 29 deletions(-)
 
->
-> --
-> Thanks,
-> Sasha
+diff --git a/drivers/staging/rtl8723bs/os_dep/os_intfs.c b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
+index 0a8c24e..1bf6fc0 100644
+--- a/drivers/staging/rtl8723bs/os_dep/os_intfs.c
++++ b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
+@@ -664,51 +664,36 @@ void rtw_reset_drv_sw(struct adapter *padapter)
+ 
+ u8 rtw_init_drv_sw(struct adapter *padapter)
+ {
+-	u8 ret8 = _SUCCESS;
+-
+ 	rtw_init_default_value(padapter);
+ 
+ 	rtw_init_hal_com_default_value(padapter);
+ 
+-	if (rtw_init_cmd_priv(&padapter->cmdpriv)) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (rtw_init_cmd_priv(&padapter->cmdpriv))
++		return _FAIL;
+ 
+ 	padapter->cmdpriv.padapter = padapter;
+ 
+-	if (rtw_init_evt_priv(&padapter->evtpriv)) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (rtw_init_evt_priv(&padapter->evtpriv))
++		goto free_cmd_priv;
+ 
+-
+-	if (rtw_init_mlme_priv(padapter) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (rtw_init_mlme_priv(padapter) == _FAIL)
++		goto free_evt_priv;
+ 
+ 	init_mlme_ext_priv(padapter);
+ 
+-	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
++		goto free_mlme_ext;
+ 
+-	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
++		goto free_xmit_priv;
+ 	/*  add for CONFIG_IEEE80211W, none 11w also can use */
+ 	spin_lock_init(&padapter->security_key_mutex);
+ 
+ 	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by vzalloc(). */
+ 	/* memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
+ 
+-	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL) {
+-		ret8 = _FAIL;
+-		goto exit;
+-	}
++	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
++		goto free_recv_priv;
+ 
+ 	padapter->stapriv.padapter = padapter;
+ 	padapter->setband = GHZ24_50;
+@@ -719,9 +704,26 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ 
+ 	rtw_hal_dm_init(padapter);
+ 
+-exit:
++	return _SUCCESS;
++
++free_recv_priv:
++	_rtw_free_recv_priv(&padapter->recvpriv);
++
++free_xmit_priv:
++	_rtw_free_xmit_priv(&padapter->xmitpriv);
++
++free_mlme_ext:
++	free_mlme_ext_priv(&padapter->mlmeextpriv);
+ 
+-	return ret8;
++	rtw_free_mlme_priv(&padapter->mlmepriv);
++
++free_evt_priv:
++	rtw_free_evt_priv(&padapter->evtpriv);
++
++free_cmd_priv:
++	rtw_free_cmd_priv(&padapter->cmdpriv);
++
++	return _FAIL;
+ }
+ 
+ void rtw_cancel_all_timer(struct adapter *padapter)
+-- 

@@ -2,245 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13904EE13C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B8F4EE13D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238020AbiCaTCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S238125AbiCaTCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237515AbiCaTCl (ORCPT
+        with ESMTP id S238038AbiCaTCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:02:41 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34B81C5922
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:00:52 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id h63so564984iof.12
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:00:52 -0700 (PDT)
+        Thu, 31 Mar 2022 15:02:48 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19441C8A96
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:01:00 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so319693pjk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V+4Q6s+nz8lXymZ+BOvXU5/KOKeu8WdRXCjGxOwJoVk=;
-        b=tt0ddvXbaLrRhnLMPFKB+CUYQRwbrnTkwem+khfqNkPvk9+PZ9Pqk0f8AEufs8Xz4D
-         3RkbxjeE+/yFlPVFiPG8kkgQNbvt0nmD2UaZQGbaK7uoDs52LwJVqZXvm3g87FJG+a1e
-         nBg0ufu1nFCucwjvgOx9KMAQo0ZOXxVEfii34=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6xhUFLRScuyFCnUhUoIR3SPfrzjg+j6qyCN8RW8eGig=;
+        b=cuv4YQG5MhHIlxGxGuK8VWdC9U8nDgoP1kzwTDzs5EyNCNy8rN4SwPQDWAVBywvesN
+         EvNGP8X7KSwj1vBpUHEBsRnkaTffUo6CSmYbWuEuRADNw5vRD25X3RFa9nFHwdMRofzg
+         5kQXICBz5BsL25hQAMVOjA8L6Fy8AI1yifJs5EpM/CUH1MQa5AOr8V1Dh2SfBMF1hH02
+         mN+HrQRF5mAaEP8fkB5MCMsFD9+90nPv4oy5b91NYlNHk+f7Vyv8zsIQHIrVaBD+c21W
+         /yEHBJRog/07hBAPKfz6+2NGxVuXoQXEFSgzCJDdPIWX6C3UEJEe5SVyyJpb1Rq3vqcN
+         6TwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V+4Q6s+nz8lXymZ+BOvXU5/KOKeu8WdRXCjGxOwJoVk=;
-        b=3zblqDoI1V262UCLPqWfX/0xr+IZgXFSE5f7lZeSfw04eAwVMIQeyfYEhDYvhkl7ez
-         Us7qilhfhqC+WakFDAX1HWgyeqk1pPr3qfbGG5sxk2tmDcmX3qaAv3Wq8T6dyF0vbShQ
-         n0gIUPoUrWDBJalBAMBGij8Yx8SHdoslLf1yhriBNZG74N1+HoMarP92P4l7KJlC+7XB
-         YX4rfJdbUdtIeatAXCyRoTZoRo8zGRUHIEw+fsmgp3D1mLRiPX59xNDxQHjHRJv97UKM
-         sFfxy1YKRA7BP3E/bsG6eSWBWPQFTDTaMkOz/brA8640zUCuVCf5LWXCfKHEkQPUnWuc
-         ozVw==
-X-Gm-Message-State: AOAM533XVBZ2I7a1FrMVQhsXBR3cysrJV/aDIkUJvrbACnp1TlIblMQA
-        z8OtEAsQ35q06isfxmwBaNnIYq3ufvbUFTFCf4rLwQ==
-X-Google-Smtp-Source: ABdhPJyA+Q1vsSlqjqQyotsDvuSnYkG6jt00e2fKYyVvlQdKC79hE4aOUz0lhbQvlaLNfHi+c+MDk5MvT7FYhx5Kt1A=
-X-Received: by 2002:a05:6638:3798:b0:321:4bf4:6899 with SMTP id
- w24-20020a056638379800b003214bf46899mr3716345jal.257.1648753252092; Thu, 31
- Mar 2022 12:00:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6xhUFLRScuyFCnUhUoIR3SPfrzjg+j6qyCN8RW8eGig=;
+        b=ytegu2VPQX1JWzKaJINdtgF1FfQRN/nRjw/98X4pr9A7QmOU8dFRgG5jJ98D5rST7E
+         ajHosnFZduWcTx9PAKfv074is1jBhp6Z/yMaSuBnjpJPfN1a2rKQS4idRlbq6CbdTx7T
+         T8TLv+L0kQypy2/tuydz32c7RUjddPeYrFh3ZBDU473eYwF4M1DWQICEFQEH+FArSCgr
+         zInkDgc3EDUnIGaUkZ/FYnQmfqJkUMWROGetm5tCxSjjxQ4ZmIMw1S841h1+6ziTGpgF
+         tAbjMunwhInL+hDzijKQT6iUZWQYAs/uoWQ4JqD9QFlS+aVyMoUacuPyEALyRMJGoz9r
+         QTAw==
+X-Gm-Message-State: AOAM530sEWZjr6V9GXYux3kN2FuQdyBtMxXDW7no5ktIZgam7NQLESSP
+        XJmWDO6TLyVB33nIXhBT385mbw==
+X-Google-Smtp-Source: ABdhPJw0AlKQbF+uCKjX/JX2oHG2v/Udn6CSrjjBxCsVX8kCItH/3f8mL7O11osIreTtmhUbeaWsqw==
+X-Received: by 2002:a17:902:6b8b:b0:14d:66c4:f704 with SMTP id p11-20020a1709026b8b00b0014d66c4f704mr43195285plk.53.1648753260011;
+        Thu, 31 Mar 2022 12:01:00 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056a00230d00b004f427ffd485sm225805pfh.143.2022.03.31.12.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:00:59 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 19:00:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Bharata B Rao <bharata@amd.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Mingwei Zhang <mizhang@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
+Message-ID: <YkX6aKymqZzD0bwb@google.com>
+References: <20220308043857.13652-1-nikunj@amd.com>
+ <YkIh8zM7XfhsFN8L@google.com>
+ <c4b33753-01d7-684e-23ac-1189bd217761@amd.com>
+ <YkSz1R3YuFszcZrY@google.com>
+ <5567f4ec-bbcf-4caf-16c1-3621b77a1779@amd.com>
+ <CAMkAt6px4A0CyuZ8h7zKzTxQUrZMYEkDXbvZ=3v+kphRTRDjNA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 31 Mar 2022 15:00:40 -0400
-Message-ID: <CAEXW_YQNi42gahbSJ1skadh_8D+Ry6ZOmMqSU5BdidfCbmOtRg@mail.gmail.com>
-Subject: Re: [PATCH] sched/core: Fix forceidle balancing
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMkAt6px4A0CyuZ8h7zKzTxQUrZMYEkDXbvZ=3v+kphRTRDjNA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 31, 2022, Peter Gonda wrote:
+> On Wed, Mar 30, 2022 at 10:48 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
+> > On 3/31/2022 1:17 AM, Sean Christopherson wrote:
+> > > On Wed, Mar 30, 2022, Nikunj A. Dadhania wrote:
+> > >> On 3/29/2022 2:30 AM, Sean Christopherson wrote:
+> > >>> Let me preface this by saying I generally like the idea and especially the
+> > >>> performance, but...
+> > >>>
+> > >>> I think we should abandon this approach in favor of committing all our resources
+> > >>> to fd-based private memory[*], which (if done right) will provide on-demand pinning
+> > >>> for "free".
+> > >>
+> > >> I will give this a try for SEV, was on my todo list.
+> > >>
+> > >>> I would much rather get that support merged sooner than later, and use
+> > >>> it as a carrot for legacy SEV to get users to move over to its new APIs, with a long
+> > >>> term goal of deprecating and disallowing SEV/SEV-ES guests without fd-based private
+> > >>> memory.
+> > >>
+> > >>> That would require guest kernel support to communicate private vs. shared,
+> > >>
+> > >> Could you explain this in more detail? This is required for punching hole for shared pages?
+> > >
+> > > Unlike SEV-SNP, which enumerates private vs. shared in the error code, SEV and SEV-ES
+> > > don't provide private vs. shared information to the host (KVM) on page fault.  And
+> > > it's even more fundamental then that, as SEV/SEV-ES won't even fault if the guest
+> > > accesses the "wrong" GPA variant, they'll silent consume/corrupt data.
+> > >
+> > > That means KVM can't support implicit conversions for SEV/SEV-ES, and so an explicit
+> > > hypercall is mandatory.  SEV doesn't even have a vendor-agnostic guest/host paravirt
+> > > ABI, and IIRC SEV-ES doesn't provide a conversion/map hypercall in the GHCB spec, so
+> > > running a SEV/SEV-ES guest under UPM would require the guest firmware+kernel to be
+> > > properly enlightened beyond what is required architecturally.
+> > >
+> >
+> > So with guest supporting KVM_FEATURE_HC_MAP_GPA_RANGE and host (KVM) supporting
+> > KVM_HC_MAP_GPA_RANGE hypercall, SEV/SEV-ES guest should communicate private/shared
+> > pages to the hypervisor, this information can be used to mark page shared/private.
+> 
+> One concern here may be that the VMM doesn't know which guests have
+> KVM_FEATURE_HC_MAP_GPA_RANGE support and which don't. Only once the
+> guest boots does the guest tell KVM that it supports
+> KVM_FEATURE_HC_MAP_GPA_RANGE. If the guest doesn't we need to pin all
+> the memory before we run the guest to be safe to be safe.
 
-By the way, might be slightly related - we still see crashes with
-pick_task_fair() in our kernel even with this change:
-https://lkml.org/lkml/2020/11/17/2137
+Yep, that's a big reason why I view purging the existing SEV memory management as
+a long term goal.  The other being that userspace obviously needs to be updated to
+support UPM[*].   I suspect the only feasible way to enable this for SEV/SEV-ES
+would be to restrict it to new VM types that have a disclaimer regarding additional
+requirements.
 
-Is it possible that when doing pick_task_fair() especially on a remote
-CPU, both the "cfs_rq->curr" and the rbtree's "left" be NULL with core
-scheduling? In this case, se will be NULL and can cause crashes right?
-I think the code assumes this can never happen.
-
-+Guenter Roeck  kindly debugged pick_task_fair() in a crash as
-follows. Copying some details he mentioned in a bug report:
-
-Assembler/source:
-
-  25:   e8 4f 11 00 00          call   0x1179             ; se =
-pick_next_entity(cfs_rq, curr);
-  2a:*  48 8b 98 60 01 00 00    mov    0x160(%rax),%rbx   ; trapping
-instruction [cfs_rq = group_cfs_rq(se);]
-  31:   48 85 db                test   %rbx,%rbx
-  34:   75 d1                   jne    0x7
-  36:   48 89 c7                mov    %rax,%rdi
-
-At 2a: RAX = se == NULL after pick_next_entity(). Looking closely into
-pick_next_entity(), it can indeed return NULL if curr is NULL and if
-left in pick_next_entity() is NULL. Per line 7:, curr is in %r14 and
-indeed 0.
-
-Thoughts?
-
--Joel
-
-
-On Wed, Mar 30, 2022 at 12:05 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
->
-> Steve reported that ChromeOS encounters the forceidle balancer being
-> ran from rt_mutex_setprio()'s balance_callback() invocation and
-> explodes.
->
-> Now, the forceidle balancer gets queued every time the idle task gets
-> selected, set_next_task(), which is strictly too often.
-> rt_mutex_setprio() also uses set_next_task() in the 'change' pattern:
->
->         queued = task_on_rq_queued(p); /* p->on_rq == TASK_ON_RQ_QUEUED */
->         running = task_current(rq, p); /* rq->curr == p */
->
->         if (queued)
->                 dequeue_task(...);
->         if (running)
->                 put_prev_task(...);
->
->         /* change task properties */
->
->         if (queued)
->                 enqueue_task(...);
->         if (running)
->                 set_next_task(...);
->
-> However, rt_mutex_setprio() will explicitly not run this pattern on
-> the idle task (since priority boosting the idle task is quite insane).
-> Most other 'change' pattern users are pidhash based and would also not
-> apply to idle.
->
-> Also, the change pattern doesn't contain a __balance_callback()
-> invocation and hence we could have an out-of-band balance-callback,
-> which *should* trigger the WARN in rq_pin_lock() (which guards against
-> this exact anti-pattern).
->
-> So while none of that explains how this happens, it does indicate that
-> having it in set_next_task() might not be the most robust option.
->
-> Instead, explicitly queue the forceidle balancer from pick_next_task()
-> when it does indeed result in forceidle selection. Having it here,
-> ensures it can only be triggered under the __schedule() rq->lock
-> instance, and hence must be ran from that context.
->
-> This also happens to clean up the code a little, so win-win.
->
-> Fixes: d2dfa17bc7de ("sched: Trivial forced-newidle balancer")
-> Reported-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/sched/core.c  |   16 +++++++++++-----
->  kernel/sched/idle.c  |    1 -
->  kernel/sched/sched.h |    6 ------
->  3 files changed, 11 insertions(+), 12 deletions(-)
->
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5752,6 +5752,8 @@ static inline struct task_struct *pick_t
->
->  extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
->
-> +static void queue_core_balance(struct rq *rq);
-> +
->  static struct task_struct *
->  pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->  {
-> @@ -5801,7 +5803,7 @@ pick_next_task(struct rq *rq, struct tas
->                 }
->
->                 rq->core_pick = NULL;
-> -               return next;
-> +               goto out;
->         }
->
->         put_prev_task_balance(rq, prev, rf);
-> @@ -5851,7 +5853,7 @@ pick_next_task(struct rq *rq, struct tas
->                          */
->                         WARN_ON_ONCE(fi_before);
->                         task_vruntime_update(rq, next, false);
-> -                       goto done;
-> +                       goto out_set_next;
->                 }
->         }
->
-> @@ -5970,8 +5972,12 @@ pick_next_task(struct rq *rq, struct tas
->                 resched_curr(rq_i);
->         }
->
-> -done:
-> +out_set_next:
->         set_next_task(rq, next);
-> +out:
-> +       if (rq->core->core_forceidle_count && next == rq->idle)
-> +               queue_core_balance(rq);
-> +
->         return next;
->  }
->
-> @@ -6066,7 +6072,7 @@ static void sched_core_balance(struct rq
->
->  static DEFINE_PER_CPU(struct callback_head, core_balance_head);
->
-> -void queue_core_balance(struct rq *rq)
-> +static void queue_core_balance(struct rq *rq)
->  {
->         if (!sched_core_enabled(rq))
->                 return;
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -434,7 +434,6 @@ static void set_next_task_idle(struct rq
->  {
->         update_idle_core(rq);
->         schedstat_inc(rq->sched_goidle);
-> -       queue_core_balance(rq);
->  }
->
->  #ifdef CONFIG_SMP
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1232,8 +1232,6 @@ static inline bool sched_group_cookie_ma
->         return false;
->  }
->
-> -extern void queue_core_balance(struct rq *rq);
-> -
->  static inline bool sched_core_enqueued(struct task_struct *p)
->  {
->         return !RB_EMPTY_NODE(&p->core_node);
-> @@ -1267,10 +1265,6 @@ static inline raw_spinlock_t *__rq_lockp
->         return &rq->__lock;
->  }
->
-> -static inline void queue_core_balance(struct rq *rq)
-> -{
-> -}
-> -
->  static inline bool sched_cpu_cookie_match(struct rq *rq, struct task_struct *p)
->  {
->         return true;
+[*] I believe Peter coined the UPM acronym for "Unmapping guest Private Memory".  We've
+    been using it iternally for discussion and it rolls off the tongue a lot easier than
+    the full phrase, and is much more precise/descriptive than just "private fd".

@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7BA4ED961
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5301A4ED967
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiCaMLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S235862AbiCaMMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235833AbiCaMLS (ORCPT
+        with ESMTP id S234646AbiCaMMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:11:18 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2104.outbound.protection.outlook.com [40.107.255.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5D6483A0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:09:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=glC3wqCUzwaLBBs1dmoSAieMxfRcF7TManOMxNe8YJMKMtX11ciUqlq4avwJySm0VnmjHvCjQzc2g9LHGI+wUqEC0LRz9NJthyRVcDohVM4JaFVyEPXlfzZuUJB5BKYafaitM3Ay0vkN0jXx7olzGprxXbDnn2rfjWVgHSjqVt6PxUBTP5fvpfXpZ4T6gtcrv9H2XnwG96GZn0udqrNA8INpDx7YVjgDiWHmJdtdZyzKwCjh5JeuHTPlQEM8AYVAypgznumV1sQIMZReJjz+xryBtcz/2KxMsjEesB+M8BwHo8S3+/C973974huuqoB/UsfNgwaIdYGs7zmcw4vq7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=txjU7uhhjsovw2BtJhWsDauiti7Q7qWq3YtpqmvuvGA=;
- b=YooGMzSm2OGhSJ0o6vtvagWwfd0UdRk0aYpBN975/1oeOzJSYouUpvNj24ayAafgdgYiqGZi4Y283ntGXJz62IXfm6WzLw3TIZmVdFHOA81vR9Ji6yfGZglIiZBXNSYVDZGzONpm1m/9iL+PPmYM4it/6Tc4GOFylPly7tR9Dcpsi3m4o/732CXVV7ZAXEmPDAPW8coE1J2GCtObe9EdWXjZuIrcxE4Bw5VEvf+91FwpzHq20x5tqpPJaERBkIicBIMU2FIEJiJf7Z0zOiOeg3+ZVDoVgH689Y4QlRTI7wf0M5IM+H8ceyk4A3r1t/l4SveUNMN4bHrfZfpaXn1r/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=txjU7uhhjsovw2BtJhWsDauiti7Q7qWq3YtpqmvuvGA=;
- b=aaZPxo/ylOMr1fyDYHfDwY5jGCv9yPGbBfI+UbbP3ORElZGGFP9nNVWmSm3zEeaBLBDbkH0EBf/sN28G2mSkYgR4qJcbtW/WDWL1UL3LdNC0SOdd5MwVYfM1vQRmNRuNNYpEjqQ3ID0xtE0GT6uedzdYT0V8G4n+hBSamAEFGIs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SI2PR06MB3882.apcprd06.prod.outlook.com (2603:1096:4:ea::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Thu, 31 Mar
- 2022 12:09:27 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::6c6e:d8af:2d3c:3507]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::6c6e:d8af:2d3c:3507%7]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
- 12:09:26 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] ti: use of_property_read_bool() instead of of_get_property
-Date:   Thu, 31 Mar 2022 05:09:13 -0700
-Message-Id: <1648728553-37485-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR03CA0059.apcprd03.prod.outlook.com
- (2603:1096:202:17::29) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        Thu, 31 Mar 2022 08:12:19 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401F61EA289;
+        Thu, 31 Mar 2022 05:10:32 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-df22f50e0cso7853899fac.3;
+        Thu, 31 Mar 2022 05:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JMLH4roAssjYlqt9tXdE/1yhUcCtf54ytNBqcciXIlM=;
+        b=ijUCtOM1m7OVkDb45cGiWdBHuwTxDGwfxBnUwPRC7Q1GuaBWYJJ84njX/3Z25x3GSr
+         YfEYYMSpdZI/Z/eDfTbYg3rOnsgZCm1mXxZFCTLRt82RVayttX4XtuYMNgNGX8kfSdH0
+         LutWf5upxYJPzKRymQvj9WrsefH68XJtF68wZ8VWkklhRaxoNASjbb2wbLO++plJQToG
+         3o1gNdNICkrS07zCMwwCiTKMy6SbfeEmu9zRhQNNO+G+nmNRS3kL7db2aPEQrhuHXANd
+         Yk092aFTrKJxizm62StO2coJTxXptU0L9HkdjxFfesC1HC3id8m0pHEYauQfWfFviwmH
+         rXVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JMLH4roAssjYlqt9tXdE/1yhUcCtf54ytNBqcciXIlM=;
+        b=lHXfgI1Y7AnOUZOyJhfQkF8Uf8nlbj/67eyFgQs+DovGwXvUgE9zcukmoIa/oS2HCy
+         9CL7UWJBBt7h/zMIV17a6Xez/iXbZA1+Iwy7o63AZFnhd0z0ajvw+ySCQsPP3/JZTQWl
+         w66Y17PgnKptixagGWxhuP/cT8eFTaoag8LnUF0QivZBcoYYRHs3uMNvEqbQfg+Qu9Fb
+         XBBwNw3AWsMp+nG7jJLsbzRB29w1AmiGlDkoW9duSBxbTxTutKoczICsRT1OgDCxXuzk
+         WDrJR7HHOLBZ2hcBDiqE05/Chp2pI4AdkU2URUW4tHwfaxPVawSeQwrT8O2bo5qzV1F+
+         /4Pg==
+X-Gm-Message-State: AOAM5337YHLGvVN/hVF5GvypCNDgadvM3F79FhcTWFq0EBcaaCIEtm9x
+        O/U5OQG8s1KFAjicm2adFgsHcZYiiHr8yg==
+X-Google-Smtp-Source: ABdhPJwn78KkNRG8XbMBkWr82a2KaLcdLc7slrebULAC9oc6l6CKGpxbuISsQmNj7yszzscXqH2tiw==
+X-Received: by 2002:a05:6871:85:b0:d9:ac7a:7a5a with SMTP id u5-20020a056871008500b000d9ac7a7a5amr2499111oaa.9.1648728630062;
+        Thu, 31 Mar 2022 05:10:30 -0700 (PDT)
+Received: from marsc.168.1.7 ([2804:d57:1500:3a00:7d51:e2a5:f339:2aa7])
+        by smtp.gmail.com with ESMTPSA id v13-20020a4ae6cd000000b00328882a2388sm2978034oot.14.2022.03.31.05.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 05:10:29 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 09:10:23 -0300
+From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        dlatypov@google.com, davidgow@google.com,
+        linux-doc@vger.kernel.org, linux-sparse@vger.kernel.org,
+        cocci@inria.fr, smatch@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        skhan@linuxfoundation.org,
+        Dan Carpenter <dan.carpenter@oracle.com>, julia.lawall@inria.fr
+Subject: Re: [PATCH v3 1/2] Documentation: dev-tools: Add a section for
+ static analysis tools
+Message-ID: <YkWaL26K7UjKB0sa@marsc.168.1.7>
+References: <cover.1648674305.git.marcelo.schmitt1@gmail.com>
+ <7d793c1b9f87d9cb8ac0e858e561e108c2bf0176.1648674305.git.marcelo.schmitt1@gmail.com>
+ <CAD-N9QVvgCqbwiebjVX2_81pH_YhK+j4hhJPG3fbWbAtzFVJTQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7263a6cb-c8c3-4563-01b8-08da130f4d36
-X-MS-TrafficTypeDiagnostic: SI2PR06MB3882:EE_
-X-Microsoft-Antispam-PRVS: <SI2PR06MB3882D5A98C3CFF803ECBE2E3BDE19@SI2PR06MB3882.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YaZldWwZr+GdOA48/CpH8RshseKms0LZfjz2Mm4rWB7k30pWHj3fWch5p0WwLWccDZnPBCIWmmUMWDaimUT4POp9KRpMeGoC9OYQvECA1NXcjG7A8ul4jQISdZpJ8Ak32f4vnmPK5rXIvsMjNOYhmB/xu3bmllmwg4d0CyOyo7CeNE/oH8pkOzyOH11TPSupR3irFab+l6AG/mKGkMCMRTGrMdS4DbnewArYZ0Ij1rUqpY3bkWQ9B52pJH43iAf8YDQ8lghf86CmQvNvTBMIoUDQNwl2xlvt2FjfIE+qjsVRsKj54foJPgyOFcBOne0P5Fqb+aj4y3oQt4uiN6e6CEG3FnfroTNLH9x7KZgkl796iqkicJsVFOq06uMOfnWRSglz8/i5ZdppvItQDVPIuJGCBeYoBeNP+QBwX0Y79UXqW3C5Yr+7tBwB0xjbhPhfw3ve0VEVgRSVHFVbJeScYgUJmW2bsmYxJ8FVJh7e0jTOEQdmOwYKzJeyRAMJGxDuTgL7t/3CaLpw/Q+ltyaDiR/1rv3iC60v63fQocOxk0YvHYuksLIrcJ8CSJWyxokbsJOAnI1tjPX/u9h/QEyySHgcTPnA6hXOU+iRGWl6IMMsVXL+409x19nqpcJuAyVf//lC8tiksjCK6fECBU80eBQF4u/92K64KrHcTZOkWgStO6PzGLV6hv5wYR6bVqOasBbUfIhi1W8vDAQsC+bEyQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(38100700002)(86362001)(316002)(8936002)(4326008)(66946007)(66556008)(66476007)(8676002)(107886003)(2616005)(26005)(186003)(83380400001)(6666004)(508600001)(6486002)(6512007)(52116002)(6506007)(36756003)(4744005)(2906002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9jNmJsLs0jTpUi0XDhS5mX5jjA/DTN2pSTDCzqY2yMPViSLz0PElrWd7vlWq?=
- =?us-ascii?Q?7CZYB8B3ky057eadeA/hRFGSwxCtCVigT8AXMM/H7ierI3eudgTb3ZjCfHd7?=
- =?us-ascii?Q?hxQGTLzkSBfdV6THdAOEukdKxE2K4cySUaS33fS53VxJfWdVTAAbbvvaCYAk?=
- =?us-ascii?Q?VHS6MaQ7w1QNNcrXswQeEqlZ6hxI0Sg4cdCNnm0K0HaytIMdsuA6Mc2JjxJo?=
- =?us-ascii?Q?IqzLs8Of1sx9UcJ/UQhn3RodTQwv2v1ujNVE27CHCxtXsn8IcWPQS+gzVzhk?=
- =?us-ascii?Q?5RAKpcOfiwL8aqvKa7qMzVm8XC0aX8P6w26xKEW76usqJbCSxsvfPo7m866m?=
- =?us-ascii?Q?WEOsaXae4zMvQmcWgOFskR1baE9pjgH9vSuciQntFVhhb7Qoxk1DZDWOCTta?=
- =?us-ascii?Q?fHqMEyVU2NkdUatuAYz0nI2ozJlHhLfZ5eyQlLle0jaSmD3QhbTyJkn1MaSd?=
- =?us-ascii?Q?YxX15fMAB4VogF3CwYaw+8egG7IiBpCuJo1hLVqVzxExHe7DRri9IKh3RIYD?=
- =?us-ascii?Q?O+wt9tsMhwQ34HHePO8czkV5rC3tPIg+DtXqvzULj25i8zX/orW2MYHYZLRf?=
- =?us-ascii?Q?E/iplPxfjUEujl+NguoScy37JaJZLFDcIC9k3yjX7OjyhHOUnV0NH8QSjR7C?=
- =?us-ascii?Q?z7NE6eNaeRNFlvAwlvVI0mXvjXcIrWW9GgAh1PQZGU7+OP22+WYZoWvW2j5k?=
- =?us-ascii?Q?ZZtdxThbzWGGmKRyoDpV4O+NyEqy6ksbkWYeMHY72eSWf1XWeydAAqah4qMZ?=
- =?us-ascii?Q?H/Vvk+GkYqQfMCeCR7ZvrTihuDiNpCwQaLvPKeyHEMTE6OedJkfEUa5DofmH?=
- =?us-ascii?Q?uBOFnwULzJc7sy4AgzKJDFL26kUKF5U5slKBiGgrTNEPt4llMFGlNfpXCEq2?=
- =?us-ascii?Q?nFfTjhN2J5uhlhZ9k3oIOrE79oY6fHwS0u6Wqrl8jmOJxfZqC4/T+AXWA2l6?=
- =?us-ascii?Q?OM7LsIxPpDpzp/1NIUt/Umn8jUCEPyOUY3BGyOr3D02s8S2A4gEaF8ag66p/?=
- =?us-ascii?Q?lNwQ1WFjYugK3CvBBiP/oPOKk/jqEFGIUD/P/o89+tEz1pUIp1gfIeajOcSS?=
- =?us-ascii?Q?dtxmeWJBAm/GC9+g05BgHzkK8b1UUGHjxQioJZdd7WV15VFcAYhbikC+QGgv?=
- =?us-ascii?Q?onkjpc6jFAGQgey0JLoQXZ+9npxqNl1FFCVTr4VAFg11upJw9lhgda9p/TMf?=
- =?us-ascii?Q?mG6o3M2qdDqPIewAAm2pzzT/UhnHMCwp/U9Xbpy9S3fI9Sa4smm7AynuQ/xy?=
- =?us-ascii?Q?j/+dDBP4ffGJLmZyEeYqRyM+XNLAkEDzYPTtIurxA1xanZVpaWHT0La8flAP?=
- =?us-ascii?Q?L5sgIpf+6Y8oupR2NlOcrx8tAHpQpsQadWT1rzCzyr3uB7T/YKtGNV/vhfCe?=
- =?us-ascii?Q?GiI8VtMI4+0hfd97f19BMEld+5vsgrGq3lt/ttETVKnyT/Mh/SvaCBfVJoUY?=
- =?us-ascii?Q?ipXxOxM3ChB4AmdOotLcIi/Rrj+Z37/asddCVxhrsaLdTmKfmNSdfr+ZF9Wm?=
- =?us-ascii?Q?CuuST3TOopuvonPZEyz2pd8u4CnV9fsyf08cuwk0tTcg63Z7hyr+k/KJlzno?=
- =?us-ascii?Q?bryBiBwe8QwPJmV1GTYuUuUouQjgbLBbK2gDC5FWBJknqPlps+FvzUhJV9rK?=
- =?us-ascii?Q?PIYyxbn3/ogvSny6v2gSJvaE7GIBNWAdILdczNiBFgTDWKGvMJ568TWv8DSK?=
- =?us-ascii?Q?J+GtxNzXwcXXIYE2MBCMnDvqTlx30YClR1scdNQ3NGSUIi2H7HiC0/7SVT2y?=
- =?us-ascii?Q?aZzlB5epyQ=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7263a6cb-c8c3-4563-01b8-08da130f4d36
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 12:09:26.8731
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: naY10iY4XxX3Z76z/VUl2Ujh2TLJ2mCEHDthpbwI7TsaU/o6JKRWhkSHDEiYmf2+kX4gIU0tdfS0tj/punALIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3882
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD-N9QVvgCqbwiebjVX2_81pH_YhK+j4hhJPG3fbWbAtzFVJTQ@mail.gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,29 +79,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+Hi Dongliang,
 
-"qalloc-by-id" has no specific content, use more helper function
-of_property_read_bool() instead of of_get_property()
+On 03/31, Dongliang Mu wrote:
+> On Thu, Mar 31, 2022 at 12:07 PM Marcelo Schmitt
+> <marcelo.schmitt1@gmail.com> wrote:
+> >
+> > Complement the Kernel Testing Guide documentation page by adding a
+> > section about static analysis tools.
+> >
+> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+> > Acked-by: Daniel Latypov <dlatypov@google.com>
+> > Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Acked-by: Julia Lawall <julia.lawall@inria.fr>
+> > Reviewed-by: David Gow <davidgow@google.com>
+> > Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> > ---
+> > Change log v2 -> v3:
+> > - Added Julia's acknowledgment tag
+> >
+> > Change log v1 -> v2:
+> > - Brought generic tool characteristics to the intro paragraph
+> > - Made explicit that these tools run at compile time
+> > - Added a note of caution about false positives
+> > - Updated Coccinelle info to make it sound better and be more skimmable
+> >
+> >  Documentation/dev-tools/testing-overview.rst | 31 ++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> >
+> > diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
+> > index 65feb81edb14..b5e02dd3fd94 100644
+> > --- a/Documentation/dev-tools/testing-overview.rst
+> > +++ b/Documentation/dev-tools/testing-overview.rst
+> > @@ -115,3 +115,34 @@ that none of these errors are occurring during the test.
+> >  Some of these tools integrate with KUnit or kselftest and will
+> >  automatically fail tests if an issue is detected.
+> >
+> > +Static Analysis Tools
+> > +=====================
+> > +
+> > +In addition to testing a running kernel, one can also analyze kernel source code
+> > +directly (**at compile time**) using **static analysis** tools. The tools
+> > +commonly used in the kernel allow one to inspect the whole source tree or just
+> > +specific files within it. They make it easier to detect and fix problems during
+> > +the development process.
+> > +
+> > +Sparse can help test the kernel by performing type-checking, lock checking,
+> > +value range checking, in addition to reporting various errors and warnings while
+> > +examining the code. See the Documentation/dev-tools/sparse.rst documentation
+> > +page for details on how to use it.
+> > +
+> > +Smatch extends Sparse and provides additional checks for programming logic
+> > +mistakes such as missing breaks in switch statements, unused return values on
+> > +error checking, forgetting to set an error code in the return of an error path,
+> > +etc. Smatch also has tests against more serious issues such as integer
+> > +overflows, null pointer dereferences, and memory leaks. See the project page at
+> > +http://smatch.sourceforge.net/.
+> > +
+> > +Coccinelle is another static analyzer at our disposal. Coccinelle is often used
+> > +to aid refactoring and collateral evolution of source code, but it can also help
+> > +to avoid certain bugs that occur in common code patterns. The types of tests
+> > +available include API tests, tests for correct usage of kernel iterators, checks
+> > +for the soundness of free operations, analysis of locking behavior, and further
+> > +tests known to help keep consistent kernel usage. See the
+> > +Documentation/dev-tools/coccinelle.rst documentation page for details.
+> > +
+> > +Beware, though, that static analysis tools suffer from **false positives**.
+> > +Errors and warns need to be evaluated carefully before attempting to fix them.
+> 
+> Hi Marcelo,
+> 
+> Should we include static analysis tools based on LLVM? For example,
+> Clang static analysis.
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/soc/ti/knav_qmss_queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think that would be a good addition. I haven't checked out Clang tools
+though, so it would take me a bit more time to write something about that.
 
-diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
-index 2ac3856..d385f63
---- a/drivers/soc/ti/knav_qmss_queue.c
-+++ b/drivers/soc/ti/knav_qmss_queue.c
-@@ -1266,7 +1266,7 @@ static int knav_setup_queue_range(struct knav_device *kdev,
- 	if (range->num_irqs)
- 		range->flags |= RANGE_HAS_IRQ;
- 
--	if (of_get_property(node, "qalloc-by-id", NULL))
-+	if (of_property_read_bool(node, "qalloc-by-id"))
- 		range->flags |= RANGE_RESERVED;
- 
- 	if (of_get_property(node, "accumulator", NULL)) {
--- 
-2.7.4
-
+> 
+> > --
+> > 2.35.1
+> >

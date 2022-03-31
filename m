@@ -2,147 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356954EDFA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9444EDFAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiCaRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S231195AbiCaRdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiCaRbe (ORCPT
+        with ESMTP id S229513AbiCaRdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:31:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AA342A02;
-        Thu, 31 Mar 2022 10:29:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FADAB8218F;
-        Thu, 31 Mar 2022 17:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66F5C340ED;
-        Thu, 31 Mar 2022 17:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648747783;
-        bh=h1XiuSYIgdAIxUaaBOhGB1kjwsbePEAFlHK5pZHYeHg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Jb3C3btk8HoND9C9FXrW7dJkMaAFpA96M6WhPjMQxob+JlxbgOHgLd1zZJ7HqxlSo
-         7jN24x5AU2Rd7mS/+7FHMmRGWodqpBeOR6xJdWQCV506kPxJ5HB44IG4xid44kCew9
-         ROgz2b2IGQrOrFVYg6pVKrYhezemTUopl6sPCESpBtm6Vg3F2x9pxvM9OC6jd7J5bP
-         N515B3kEKYtjS5oTYYMgPU+lyywZD7Xkov914XW3mcNOeyNv7NPMZR9kyan0Msx4uq
-         UG57iq5hJHpTS5KP8UziwgaOotIty7nkzGEl4tGyFFs0D1LJ7M+qIUAU3fjbPlfWsu
-         ZMUqSN2FmZsZg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 458EC5C0A0E; Thu, 31 Mar 2022 10:29:43 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 10:29:43 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Put the irq work into hard interrupt context for
- execution
-Message-ID: <20220331172943.GV4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220330060012.2470054-1-qiang1.zhang@intel.com>
- <20220330201620.GM4285@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB58802C1246C6F4FB895BDDA9DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Thu, 31 Mar 2022 13:33:04 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0325E14E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:31:16 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id b43so683540ljr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=37DeCDWlzdqkrXbAxfAuhXVMiTsGHz0hz+oO3LlsSAk=;
+        b=OpXbfuoWXGtoVCxlYREjKa12nC/ZS5c6WIcrnkI8eccbmu5/uLBWGYimttqpYS8VW3
+         +7YGiaqEFrS3FpnuX2EDtUfr5SLVwwJS16vOz9O1xs7VQoRsqwXQVyTm2DHS+HBbUKJW
+         JcnKmGiKnrrFpcQsKy0swpAqSluMvhVusfDjp7x4US+WiiiWR7htYGSSYN9BMjK+PNzB
+         3bDKkdDzBq8iD1v2ploXFNsOGBgurGnmJmFODojEuOx7h5IJv9a3ZyGps5XW+zm3ZwP3
+         IyNp8IubOAJdKp98Y8byqVMwum46U2PVLc0kWpI3Dx2X+rTq5WlWvdzZTZ10/09brYbh
+         5/SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=37DeCDWlzdqkrXbAxfAuhXVMiTsGHz0hz+oO3LlsSAk=;
+        b=arJf+iIc6g6pzu/LR24x0Dk3HYn+N3yRqttxPWVO0AOQzaO4RRmpLZJEPWRubvvqIW
+         Vj5Hfqm6Z11G/Ih2fWhikjsBlxgZIpa1s7I3W2OLAehNr8+Y7lS1Hpigj16q5okGuk8J
+         sD/ak0JehM96SlYAnLJK03APwvKNHjIFdm7EI0UcA+uY9MWlIoBjamKreKAcfX+Nknmt
+         6c4Utxpgr6X82ShVSHRZntZi3Jf5dM/CsFNlig/v46WGOjjBnO4c2YyxVj8cIQQTT4jP
+         PaYmXS8BVKhPZ/jpVtVRxXC+AT7cUoEPj7G18ertqn5/Z8eG1tl8wfbXGs/CZqmr9o8C
+         wLgQ==
+X-Gm-Message-State: AOAM532GLWcMuaQpDXUyIct1yiUzYqCzyKlshQ+/sZxps2zxwvx4bI1g
+        LO87SAe9qAIEg29+fbpMYgGJFAhrGA6LM9xm1c9SaRwF97GJwQ==
+X-Google-Smtp-Source: ABdhPJyIrADojlxnjoJbjHABCl+RY1oRMepIxM5nb9mo2vXqxPk9ksIqJg+9gS8ogRsiwQgdyPv54GWhmXZP85nX5oI=
+X-Received: by 2002:a05:651c:1508:b0:249:b843:208f with SMTP id
+ e8-20020a05651c150800b00249b843208fmr11115015ljf.239.1648747874376; Thu, 31
+ Mar 2022 10:31:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58802C1246C6F4FB895BDDA9DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <164847778869.3060675.8115416881394543419.stgit@devnote2>
+ <CAKwvOdmAYQZtzGudBjmiRZNjT+VixTdNbJmYmxc7-gQNCsHfrA@mail.gmail.com> <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
+In-Reply-To: <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 31 Mar 2022 10:31:02 -0700
+Message-ID: <CAKwvOdmbMPBOGvcZNURK6qMx8gm7dGFiWmtX_yXheEqQ8CNLsA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in
+ kernel for non initrd boot
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 10:47:05PM +0000, Zhang, Qiang1 wrote:
-> On Wed, Mar 30, 2022 at 02:00:12PM +0800, Zqiang wrote:
-> > In PREEMPT_RT kernel, if irq work flags is not set, it will be 
-> > executed in per-CPU irq_work kthreads. set IRQ_WORK_HARD_IRQ flags to 
-> > irq work, put it in the context of hard interrupt execution, 
-> > accelerate scheduler to re-evaluate.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> >  kernel/rcu/tree.c        | 2 +-
-> >  kernel/rcu/tree_plugin.h | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index 
-> > e2ffbeceba69..a69587773a85 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -678,7 +678,7 @@ static void late_wakeup_func(struct irq_work 
-> > *work)  }
-> >  
-> >  static DEFINE_PER_CPU(struct irq_work, late_wakeup_work) =
-> > -	IRQ_WORK_INIT(late_wakeup_func);
-> > +	IRQ_WORK_INIT_HARD(late_wakeup_func);
-> 
-> >This is used only by rcu_irq_work_resched(), which is invoked only by rcu_user_enter(), which is never invoked until userspace is enabled, by which time all of the various kthreads will have been spawned, correct?
+On Wed, Mar 30, 2022 at 6:45 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Nick,
+>
+> On Wed, 30 Mar 2022 11:04:50 -0700
+> Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
 > >
-> >Either way, please show me the exact sequence of events that lead to a problem with the current IRQ_WORK_INIT().
+> > Any chance we can use
 > >
-> >  /*
-> >   * If either:
-> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h index 
-> > 3037c2536e1f..cf7bd28af8ef 100644
-> > --- a/kernel/rcu/tree_plugin.h
-> > +++ b/kernel/rcu/tree_plugin.h
-> > @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
-> >  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
-> >  				// Get scheduler to re-evaluate and call hooks.
-> >  				// If !IRQ_WORK, FQS scan will eventually IPI.
-> > -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
-> > +				rdp->defer_qs_iw = 
-> > +IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
-> >  				rdp->defer_qs_iw_pending = true;
-> >  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
-> >  			}
+> > CFLAGS_REMOVE_<file>.o := $(CC_FLAGS_LTO)
 > >
-> >OK, in theory, rcu_read_unlock() could get to this point before all of the various kthreads were spawned.  In practice, the next time that the boot CPU went idle, the end of the quiescent state would be noticed.
-> 
-> Through my understanding, use irq_work in order to make the quiescent state be noticed earlier,
-> Because the irq_work execute in interrupt, this irq_work can be executed in time, but In RT kernel
-> The irq_work  is put into the kthread for execution, when it is executed, it is affected by the scheduling delay.
-> Is there anything I missed?
+> > a la
+> > commit d2dcd3e37475 ("x86, cpu: disable LTO for cpu.c")
+>
+> Hm, this looks good to me. Let me confirm that works.
+> (Does this mean the bootconfig.o will be compiled to elf binary?)
 
-Yes, in that I am not seeing any actual data showing that this fix really
-makes things better.  Please in mind that IRQ_WORK_INIT_HARD does have
-performance disadvantages of its own.  So although I agree with your
-words saying that IRQ_WORK_INIT_HARD -might- be helpful, those words
-are not sufficient.
-
-So, can you show a statistically significant benefit on a real system?
-For example, by measuring the time required for a expedited grace period
-to complete?  That would argue for this change, though it would need to be
-conditional, so that systems that don't care that much about the latency
-of expedited RCU grace periods don't need to pay the IRQ_WORK_INIT_HARD
-performance penalties.  Or you would need to demonstrate that these
-performance penalties don't cause problems.  (But such a demonstration
-is not easy given the wide variety of systems that Linux supports.)
-
-Now, I could imagine that the current code could cause problems during
-boot on CONFIG_PREEMPT_RT kernels.  But, believe me, I can imagine all
-sorts of horrible problems.  But we should fix those that happen not
-just in my imagination, but also in the real world.  ;-)
-
-So if you can make such a problem happen in real life, then I would be
-happy to take a patch that fixed this on CONFIG_PREEMPT_RT but kept the
-current code otherwise.
-
-							Thanx, Paul
-
-> Thanks
-> Zqiang	
-> 
-> >
-> >Or has this been failing in some other manner?  If so, please let me know the exact sequence of events.
-> >
-> >							Thanx, Paul
+I know we went with Masahiro's suggestion, which is clever and better,
+but to answer this question; yes, under LTO, the linker can link
+together inputs that are a mix of ELF object files (basically, no LTO
+optimizations) with LLVM IR (w/ LTO optimizations between such files).
+-- 
+Thanks,
+~Nick Desaulniers

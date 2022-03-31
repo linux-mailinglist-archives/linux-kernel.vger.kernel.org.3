@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425594ED71D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DED94ED727
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbiCaJkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S234219AbiCaJnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbiCaJkG (ORCPT
+        with ESMTP id S233957AbiCaJnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:40:06 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED6D21832
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:38:19 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h4so19691551edr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=UCC75knalYGf1Q05cm9FuhkiW0Xs+WxJ5xH2vJmJaW0=;
-        b=DFNRt3TXZmQA3QwVuMf3QzdsrbODG7CPRt2CDkUf6ZaIn3+avsosj9vJY0ePDiwmzI
-         2VjGFevuXHFaCGP2sWEyPhs4Dax9F6noubihKjTFYfRQrr0uOYr9RdhyXSCtiYz2n/zg
-         vMsTu5fwIeFA39mXgnGgn1xLjEuJqBb7Rzo+DNR8WVqbJO+TrtprG4a1wtKrgYJtVamp
-         ylnGjTDA7b5Mqdn9sncEGDMhHyzSVHGGJQUkb6tUg0r1Fq8BzeF7lslGFveaD/rKSXQk
-         TvkOqIXiCnW17ub/GS+4yGGhSrHrizEk7Q47Epth/3Z5rtnQRy/yCHbaMaTGn04I+U5P
-         mEeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=UCC75knalYGf1Q05cm9FuhkiW0Xs+WxJ5xH2vJmJaW0=;
-        b=rcAwaYma6hpuIi4Xv+jvIxB6aegubxrUeisfKS6Hx15acZYsjAfeoeZpMD7QgywBjK
-         9mB1hz/MF/XJ/K6jNg5Of/lqezkCDhCAW6flihMkED20R8Q5xHHwC0Kn7qbhEycIXGwZ
-         3DpXSVgGlpXiwQ7w4zwXTBMnG7+lAEfH41X/8af/1kC1dh/nWH7ueH1g1IhYzn3eQPd/
-         GYJA+oVtriHsh84fyHVsugHRE98PuGBxDr6g1ucIIK9OEPSq1MsdU+agBuIjqmv/PRn0
-         N+AQH+c/PSZrdMHKBn1mn8MHYglk+gRdU1/WxPMiw4SlRFx6HeI4WDA3C6V6ro4npwHa
-         16lg==
-X-Gm-Message-State: AOAM530ZXXXro2T91UfMRipE3k1Cpp1HtSiWnM8VdsZMEuHa4KGCAgrk
-        nPzmDwmADbAwCCXryIzm+lPIUw==
-X-Google-Smtp-Source: ABdhPJy6mFYew0T0h5pUb+fhZ0Oecmvx8z0GwMXb+IYI5LGeFXXy5EqTpEJ9+txFsFhrL5oZO94rGQ==
-X-Received: by 2002:a05:6402:5215:b0:419:4c82:8f06 with SMTP id s21-20020a056402521500b004194c828f06mr15725638edd.275.1648719498039;
-        Thu, 31 Mar 2022 02:38:18 -0700 (PDT)
-Received: from [192.168.0.166] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id by4-20020a0564021b0400b00418fc410299sm10791232edb.62.2022.03.31.02.38.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 02:38:17 -0700 (PDT)
-Message-ID: <5dea78a0-83ed-c016-35c6-637c8a445005@linaro.org>
-Date:   Thu, 31 Mar 2022 11:38:16 +0200
+        Thu, 31 Mar 2022 05:43:22 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6191D207A;
+        Thu, 31 Mar 2022 02:41:33 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4B0E02000D;
+        Thu, 31 Mar 2022 09:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648719692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VbsxCOa9JzqELpaQ9PziPailes9HwLBLI2gZIQcLonI=;
+        b=JRMitclP+ldhl0KYInG2ZqCFOIsMhLfD1uad+8wNS9RwXCiRH8wLk/xKp6TXafoFiCJxkk
+        H+A0pU5Gf65OGTQS3GDo8a8lDlhTm1EXpj/8CU6AfBstfbD69/HKIZ3Pbd4CKBA8BresO3
+        l9hYLR/ZDPGNRVLE0qn7NTthWAxu34+YOTudhVtC7U/AW6M1KfVgGNZaPWTzTihwhZtTeV
+        jkKCw4yo9G4kgpFH8OFBBJA9WespPxe15OMAbjubVUafBti2s7ND10NbfvXZbogyzlyxa4
+        C6RPmbiEBw0opSDNx504roXkNUCXLBdRsGFAEd7IPlUL5tNG5/rmVO54KMXaWw==
+Date:   Thu, 31 Mar 2022 11:40:06 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 8/9] i2c: mux: pinctrl: remove CONFIG_OF dependency
+ and use fwnode API
+Message-ID: <20220331114006.0c7bc47a@fixe.home>
+In-Reply-To: <6f519f94-9185-a29b-2eff-fd6c9a36cfaf@axentia.se>
+References: <20220325113148.588163-1-clement.leger@bootlin.com>
+        <20220325113148.588163-9-clement.leger@bootlin.com>
+        <6f519f94-9185-a29b-2eff-fd6c9a36cfaf@axentia.se>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        huziji@marvell.com, andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220329220544.2132135-1-chris.packham@alliedtelesis.co.nz>
- <20220329220544.2132135-3-chris.packham@alliedtelesis.co.nz>
- <ad213f38-f0a2-6420-cfa0-a9ba7cb362d5@linaro.org>
-In-Reply-To: <ad213f38-f0a2-6420-cfa0-a9ba7cb362d5@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2022 09:20, Krzysztof Kozlowski wrote:
-> On 30/03/2022 00:05, Chris Packham wrote:
->> Convert the marvell,xenon-sdhci binding to JSON schema. Currently the
->> in-tree dts files don't validate because they use sdhci@ instead of mmc@
->> as required by the generic mmc-controller schema.
->>
->> The compatible "marvell,sdhci-xenon" was not documented in the old
->> binding but it accompanies the of "marvell,armada-3700-sdhci" in the
->> armada-37xx SoC dtsi so this combination is added to the new binding
->> document.
->>
->> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
->> ---
->>
->> Notes:
->>     Changes in v5:
->>     - Fix silly error in examples
->>     Changes in v4:
->>     - Add review from Krzysztof
->>     - Squash in addition of marvell,sdhci-xenon with an explanation in the
->>       commit message
->>     Changes in v3:
->>     - Don't accept ap807 without ap806
->>     - Add ref: string for pad-type
->>     Changes in v2:
->>     - Update MAINTAINERS entry
->>     - Incorporate feedback from Krzysztof
->>
->>  .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 -----------
->>  .../bindings/mmc/marvell,xenon-sdhci.yaml     | 275 ++++++++++++++++++
->>  MAINTAINERS                                   |   2 +-
->>  3 files changed, 276 insertions(+), 174 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
->>  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
->>
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+Le Fri, 25 Mar 2022 17:48:19 +0100,
+Peter Rosin <peda@axentia.se> a =C3=A9crit :
 
-Oh, this should be only one review tag. Preferably @linaro.org. Sorry
-for the noise.
+> > =20
+> > -	parent_np =3D of_parse_phandle(np, "i2c-parent", 0);
+> > -	if (!parent_np) {
+> > +	parent_fwnode =3D fwnode_find_reference(fwnode, "i2c-parent", 0);
+> > +	if (!parent_fwnode) {
+> >  		dev_err(dev, "Cannot parse i2c-parent\n");
+> >  		return ERR_PTR(-ENODEV);
+> >  	}
+> > -	parent =3D of_find_i2c_adapter_by_node(parent_np);
+> > -	of_node_put(parent_np);
+> > -	if (!parent)
+> > +	parent =3D fwnode_find_i2c_adapter_by_node(parent_fwnode);
+> > +	if (!parent) {
+> > +		dev_err(dev, "Cannot find i2c-parent\n"); =20
+>=20
+> Why do we need to log this as an error?
 
-Best regards,
-Krzysztof
+Hi Peter, sorry for the late answer, your mail ended up in my SPAM
+folder.
+
+Regarding the error logging, you are right, this is not needed. I'll
+remove it.
+
+Thanks,
+
+Cl=C3=A9ment=20
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

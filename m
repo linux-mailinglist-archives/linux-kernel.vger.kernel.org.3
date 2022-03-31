@@ -2,209 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F784ED5B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640594ED5BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbiCaIhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S232941AbiCaIhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiCaIhB (ORCPT
+        with ESMTP id S231307AbiCaIhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:37:01 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB51E31B7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:35:14 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id h11so31005670ljb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iyYwE56IOCfsoIynCGUIyOIgYS/m65/1JJzirGl6Moc=;
-        b=DjWx0UrwGkXW20Ke+2/4bPmxzusvSSv9PUD4tRGgO++2Uk2IgeH8GgVmtAWLRk9fYC
-         VwFwQlHsAzquzRY1s2VIsE5TM2DaTpSdVklsFVJJGrNHY8bsSjtPM3hpokC9js4YqIOI
-         mC1DeetrLfEghVplimkCPdngN8eCbxLMOxnHr4eIXRp2zrJmvhN0DJDdVCy101loacvJ
-         vsn0MepgbNfWhc66CEtxZEYI5y21EC0HvDF8kSlhHMjPDsj30BIcDAF+49ghrj6vJpTC
-         sHv8e1ouNZd+hpS0fFYyeK8rnX8WqpJl8QI6uetBftJ48+5A0fz5eVYO9oGtUnFFlgI8
-         h/qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iyYwE56IOCfsoIynCGUIyOIgYS/m65/1JJzirGl6Moc=;
-        b=hUFzF9euBqYRjqbIzGxvtmrYDAP/d5vylncw8GQzTkB7wlBLaUlbswLvOp5HQxrqbT
-         lW2RhXIkD8ra0EOKvNSjT2cbcWbrCCI9fIYCAKFz6sIEg0MCZkMOp2Isup5L9Y3/kktM
-         B9OG6K+FiG7ymoHNDyw4ANghedgTCZPMBi2eTNiBcldBZIhpK93an9Mx32NLADEmPiPa
-         HPMLZcMLp//54KqJjeZe3GtkBvngR6yMbYXiKEtP1M2NMs6etwdZUUxVwkVrHFHn047K
-         +rid7Fe/IUYO1Ibsv+l4BaNHfftgJPwljbzbVlYSZkHqCFt7laEmjqsfJEplPS9rOc38
-         CWGQ==
-X-Gm-Message-State: AOAM532euQKVRgE2cXFnTm2XbXGE0ArhfqizhNbLxfnuJHMGsBSjhPaI
-        B2s8ZT+MDsFgz8npu31XLcA=
-X-Google-Smtp-Source: ABdhPJxUylBOPeTZxaTRIm78ASkypR54rtmj3AHsifEANi8t/PsgequFTZYf+OETx00KSrSSWuezzA==
-X-Received: by 2002:a05:651c:887:b0:247:f630:d069 with SMTP id d7-20020a05651c088700b00247f630d069mr9823327ljq.514.1648715712681;
-        Thu, 31 Mar 2022 01:35:12 -0700 (PDT)
-Received: from [10.10.10.122] (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id g27-20020a2eb5db000000b002498222c8dasm2551442ljn.65.2022.03.31.01.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 01:35:12 -0700 (PDT)
-Message-ID: <b8be8547-1aa9-4894-877b-91855439d9fd@gmail.com>
-Date:   Thu, 31 Mar 2022 04:35:11 -0400
+        Thu, 31 Mar 2022 04:37:41 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4601EA2A5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:35:53 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 678571EC050F;
+        Thu, 31 Mar 2022 10:35:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648715748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hT8ac5njJtTMhJKWZciijjzrsqUJEAFxs91osx/w2OE=;
+        b=S/N6cRwE9jV1AbZutuSzSsMPn4N6eY2WRSf1Z6MJf/1LcL+TFtGb9SJigDffklOPFA6oRQ
+        NJ5vvIhTykY16NFcujLKCMdeVi4a1sY/aUSOmTmAtyYNL8YIAdSXL/ILBzb8Vr0hO+BIsg
+        G+UZsqR37S7szBs6kAtQsxXsgxZleeA=
+Date:   Thu, 31 Mar 2022 10:35:47 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Mark Gross <mgross@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Johansen <john.johansen@canonical.com>,
+        Steve Beattie <sbeattie@ubuntu.com>, kernel@collabora.com,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH v2] x86/speculation/srbds: do not try to turn mitigation
+ off when not supported
+Message-ID: <YkVn4wSDoTHl5Icd@zn.tnic>
+References: <20220330082026.1549073-1-ricardo.canuelo@collabora.com>
+ <YkS3OKLS1Cixs9up@zn.tnic>
+ <87o81mzhoh.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 1/3] i915/gvt: Separate the MMIO tracking table from
- GVT-g
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>
-Cc:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        Zhi Wang <zhi.a.wang@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <20220325175251.167164-1-zhi.a.wang@intel.com>
- <20220328065008.GA29798@lst.de>
- <4af59d97-b583-4022-3ec3-360e7df43689@intel.com>
- <20220331074225.GA21004@lst.de>
- <d6345ebf-ccb1-9cb7-c154-a5e011c62cbe@intel.com>
- <20220331083355.GA21928@lst.de>
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-In-Reply-To: <20220331083355.GA21928@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87o81mzhoh.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzLiBMZXQgbWUgZml4IHRoYXQuIDopDQoNCk9uIDMvMzEvMjIgMDQ6MzMsIENocmlz
-dG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBUaHUsIE1hciAzMSwgMjAyMiBhdCAwODowNDow
-NEFNICswMDAwLCBXYW5nLCBaaGkgQSB3cm90ZToNCj4+IEhpIENocmlzOg0KPj4NCj4+IFRo
-YW5rcyBmb3IgdGhlIHRlc3RpbmcuIENhbiB5b3UgYXR0YWNoIHRoZSBkbWVzZz8gSSB0ZXN0
-ZWQgbW9zdGx5IG9uIG15IHNreWxha2UgZGVza3RvcCB3aXRoIHNvbWUgM0Qgd29ya2xvYWQu
-DQo+IFN1cmUsIEkgc2hvdWxkIGhhdmUgZG9uZSB0aGF0IGZyb20gdGhlIGJlZ2lubmluZzoN
-Cj4NCj4gWyAgIDI1LjM1NDU4N10gdmZpb19tZGV2IDY4MTRmMzkyLTUwYWMtNDIzNi1hZTNk
-LTI2ZDQ3MmZkOGFhZTogQWRkaW5nIHRvIGlvbW11IGdyb3VwIDANCj4gWyAgIDI1LjU4MzAx
-NV0gTDFURiBDUFUgYnVnIHByZXNlbnQgYW5kIFNNVCBvbiwgZGF0YSBsZWFrIHBvc3NpYmxl
-LiBTZWUgQ1ZFLTIwMTgtMzY0NiBhbmQgaHR0cHM6Ly93d3cua2VybmVsLm9yZy9kb2MvaHRt
-bC9sYXRlc3QvYWRtaW4tZ3VpZGUvaHctdnVsbi9sMXRmLmh0bWwgZm9yIGRldGFpbHMuDQo+
-IFsgICAyNi40Mjk0OTJdIGt2bSBbMjU1NV06IHZjcHUwLCBndWVzdCBySVA6IDB4ZmZmZmZm
-ZmY4MTAwM2U2ZSBkaXNhYmxlZCBwZXJmY3RyIHdybXNyOiAweGMyIGRhdGEgMHhmZmZmDQo+
-IFsgICAzMC4yMDYyMDJdIEJVRzoga2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSwg
-YWRkcmVzczogMDAwMDAwMDAwMDAwMDAwMA0KPiBbICAgMzAuMjA2MjA2XSAjUEY6IHN1cGVy
-dmlzb3IgaW5zdHJ1Y3Rpb24gZmV0Y2ggaW4ga2VybmVsIG1vZGUNCj4gWyAgIDMwLjIwNjIw
-OF0gI1BGOiBlcnJvcl9jb2RlKDB4MDAxMCkgLSBub3QtcHJlc2VudCBwYWdlDQo+IFsgICAz
-MC4yMDYyMDldIFBHRCAwIFA0RCAwDQo+IFsgICAzMC4yMDYyMTFdIE9vcHM6IDAwMTAgWyMx
-XSBQUkVFTVBUIFNNUCBQVEkNCj4gWyAgIDMwLjIwNjIxNF0gQ1BVOiA2IFBJRDogMjU2NSBD
-b21tOiBxZW11LXN5c3RlbS14ODYgVGFpbnRlZDogRyAgICAgICAgICAgIEUgICAgIDUuMTcu
-MCsgIzEyOTINCj4gWyAgIDMwLjIwNjIxNl0gSGFyZHdhcmUgbmFtZTogTEVOT1ZPIDIwS0gw
-MDZKR0UvMjBLSDAwNkpHRSwgQklPUyBOMjNFVDYyVyAoMS4zNyApIDAyLzE5LzIwMTkNCj4g
-WyAgIDMwLjIwNjIxN10gUklQOiAwMDEwOjB4MA0KPiBbICAgMzAuMjA2MjIzXSBDb2RlOiBV
-bmFibGUgdG8gYWNjZXNzIG9wY29kZSBieXRlcyBhdCBSSVAgMHhmZmZmZmZmZmZmZmZmZmQ2
-Lg0KPiBbICAgMzAuMjA2MjI0XSBSU1A6IDAwMTg6ZmZmZmE3NzVjM2ZiM2UxOCBFRkxBR1M6
-IDAwMDEwMjg2DQo+IFsgICAzMC4yMDYyMjZdIFJBWDogMDAwMDAwMDAwMDAwMDAwMCBSQlg6
-IGZmZmY5MGE4MDhiYzAwMDAgUkNYOiAwMDAwMDAwMDAwMDAwMDA0DQo+IFsgICAzMC4yMDYy
-MjddIFJEWDogZmZmZmE3NzVjM2ZiM2U4MCBSU0k6IDAwMDAwMDAwMDAwNDIzMDAgUkRJOiBm
-ZmZmYTc3NWM0MGFkMDAwDQo+IFsgICAzMC4yMDYyMjhdIFJCUDogZmZmZmE3NzVjNDBhZDAw
-MCBSMDg6IDAwMDAwMDAwMDAwMDAwMDEgUjA5OiAwMDAwMDAwMDAwMDIxMTgwDQo+IFsgICAz
-MC4yMDYyMzBdIFIxMDogZmZmZmE3NzVjM2ZiM2U4MCBSMTE6IGZmZmZhNzc1YzNmYjNlODAg
-UjEyOiAwMDAwMDAwMDAwMDAwMDA0DQo+IFsgICAzMC4yMDYyMzFdIFIxMzogMDAwMDAwMDBm
-ZDA0MjMwMCBSMTQ6IDAwMDAwMDAwMDAwNDIzMDAgUjE1OiBmZmZmYTc3NWM0MGFkMDA4DQo+
-IFsgICAzMC4yMDYyMzJdIEZTOiAgMDAwMDdmZGQ5Y2JmYzcwMCgwMDAwKSBHUzpmZmZmOTBh
-YjkyNzgwMDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwMDAwMDANCj4gWyAgIDMwLjIwNjIz
-M10gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDogMDAwMDAwMDA4MDA1MDAzMw0K
-PiBbICAgMzAuMjA2MjM1XSBDUjI6IGZmZmZmZmZmZmZmZmZmZDYgQ1IzOiAwMDAwMDAwMWMx
-MTdjMDAyIENSNDogMDAwMDAwMDAwMDM3MjZlMA0KPiBbICAgMzAuMjA2MjM2XSBDYWxsIFRy
-YWNlOg0KPiBbICAgMzAuMjA2MjM4XSAgPFRBU0s+DQo+IFsgICAzMC4yMDYyMzldICBpbnRl
-bF92Z3B1X2VtdWxhdGVfbW1pb19yZWFkKzB4ZTkvMHgzOTANCj4gWyAgIDMwLjIwNjI0N10g
-IGludGVsX3ZncHVfcncuaXNyYS4wKzB4MWE3LzB4MWUwDQo+IFsgICAzMC4yMDYyNDldICBp
-bnRlbF92Z3B1X3JlYWQrMHgxNWMvMHgyMDANCj4gWyAgIDMwLjIwNjI1Ml0gIHZmc19yZWFk
-KzB4OWIvMHgxOTANCj4gWyAgIDMwLjIwNjI1N10gIF9feDY0X3N5c19wcmVhZDY0KzB4OGQv
-MHhjMA0KPiBbICAgMzAuMjA2MjU5XSAgZG9fc3lzY2FsbF82NCsweDNiLzB4OTANCj4gWyAg
-IDMwLjIwNjI2M10gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ0LzB4YWUN
-Cj4gWyAgIDMwLjIwNjI2Nl0gUklQOiAwMDMzOjB4N2ZkZGIxN2U0MWE3DQo+IFsgICAzMC4y
-MDYyNjhdIENvZGU6IDA4IDg5IDNjIDI0IDQ4IDg5IDRjIDI0IDE4IGU4IGY1IDdiIGY5IGZm
-IDRjIDhiIDU0IDI0IDE4IDQ4IDhiIDU0IDI0IDEwIDQxIDg5IGMwIDQ4IDhiIDc0IDI0IDA4
-IDhiIDNjIDI0IGI4IDExIDAwIDAwIDAwIDBmIDA1IDw0OD4gM2QgMDAgZjAgZmYgZmYgNzcg
-MzEgNDQgODkgYzcgNDggODkgMDQgMjQgZTggMjUgN2MgZjkgZmYgNDggOGINCj4gWyAgIDMw
-LjIwNjI3MF0gUlNQOiAwMDJiOjAwMDA3ZmRkOWNiZmIyZjAgRUZMQUdTOiAwMDAwMDI5MyBP
-UklHX1JBWDogMDAwMDAwMDAwMDAwMDAxMQ0KPiBbICAgMzAuMjA2MjcyXSBSQVg6IGZmZmZm
-ZmZmZmZmZmZmZGEgUkJYOiAwMDAwNTVlZTMwZDIwZWQ4IFJDWDogMDAwMDdmZGRiMTdlNDFh
-Nw0KPiBbICAgMzAuMjA2MjczXSBSRFg6IDAwMDAwMDAwMDAwMDAwMDQgUlNJOiAwMDAwN2Zk
-ZDljYmZiMzM4IFJESTogMDAwMDAwMDAwMDAwMDAxYg0KPiBbICAgMzAuMjA2Mjc0XSBSQlA6
-IDAwMDAwMDAwMDAwMDAwMDQgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogMDAwMDAwMDBm
-ZmZmZmZmZg0KPiBbICAgMzAuMjA2Mjc1XSBSMTA6IDAwMDAwMDAwMDAwNDIzMDAgUjExOiAw
-MDAwMDAwMDAwMDAwMjkzIFIxMjogMDAwMDAwMDAwMDA0MjMwMA0KPiBbICAgMzAuMjA2Mjc2
-XSBSMTM6IDAwMDA1NWVlMzBkMjBkZjAgUjE0OiAwMDAwMDAwMDAwMDAwMDA0IFIxNTogMDAw
-MDAwMDAwMDA0MjMwMA0KPiBbICAgMzAuMjA2Mjc4XSAgPC9UQVNLPg0KPiBbICAgMzAuMjA2
-Mjc5XSBNb2R1bGVzIGxpbmtlZCBpbjogY21hYyhFKSBjdHIoRSkgY2NtKEUpIHJmY29tbShF
-KSBzZF9tb2QoRSkgc2coRSkgdXZjdmlkZW8oRSkgdmlkZW9idWYyX3ZtYWxsb2MoRSkgdmlk
-ZW9idWYyX21lbW9wcyhFKSB2aWRlb2J1ZjJfdjRsMihFKSB2aWRlb2J1ZjJfY29tbW9uKEUp
-IHZpZGVvZGV2KEUpIG1jKEUpIGJ0dXNiKEUpIGJ0cnRsKEUpIGJ0YmNtKEUpIGJ0aW50ZWwo
-RSkgdWFzKEUpIHVzYl9zdG9yYWdlKEUpIHNjc2lfbW9kKEUpIHNjc2lfY29tbW9uKEUpIGJu
-ZXAoRSkgc25kX2hkYV9jb2RlY19oZG1pKEUpIHdtaV9ibW9mKEUpIGludGVsX3dtaV90aHVu
-ZGVyYm9sdChFKSBqb3lkZXYoRSkgYmx1ZXRvb3RoKEUpIGludGVsX3JhcGxfbXNyKEUpIGNy
-YzE2KEUpIHg4Nl9wa2dfdGVtcF90aGVybWFsKEUpIGppdHRlcmVudHJvcHlfcm5nKEUpIGlu
-dGVsX3Bvd2VyY2xhbXAoRSkgc2hhNTEyX2dlbmVyaWMoRSkgZHJiZyhFKSBjb3JldGVtcChF
-KSBhbnNpX2Nwcm5nKEUpIGNyYzMyX3BjbG11bChFKSBlY2RoX2dlbmVyaWMoRSkgZ2hhc2hf
-Y2xtdWxuaV9pbnRlbChFKSBlY2MoRSkgYWVzbmlfaW50ZWwoRSkgbGliYWVzKEUpIGNyeXB0
-b19zaW1kKEUpIGl3bG12bShFKSBzbmRfc29jX3NrbChFKSBjcnlwdGQoRSkgc25kX3NvY19o
-ZGFjX2hkYShFKSBtYWM4MDIxMShFKSBzbmRfY3RsX2xlZChFKSBzbmRfaGRhX2V4dF9jb3Jl
-KEUpIHNuZF9oZGFfY29kZWNfcmVhbHRlayhFKSBsaWJhcmM0KEUpIHNuZF9zb2NfY29yZShF
-KSBzbmRfaGRhX2NvZGVjX2dlbmVyaWMoRSkgc25kX3NvY19hY3BpX2ludGVsX21hdGNoKEUp
-IGt2bV9pbnRlbChFKSBzbmRfc29jX2FjcGkoRSkgc25kX3NvY19zc3RfaXBjKEUpIGl3bHdp
-ZmkoRSkgc25kX3NvY19zc3RfZHNwKEUpIGludGVsX2NzdGF0ZShFKSBpbnRlbF91bmNvcmUo
-RSkgc25kX2hkYV9pbnRlbChFKSBzZXJpb19yYXcoRSkgc25kX2ludGVsX2RzcGNmZyhFKSBw
-Y3Nwa3IoRSkNCj4gWyAgIDMwLjIwNjMxNF0gIHNuZF9oZGFfY29kZWMoRSkgZWZpX3BzdG9y
-ZShFKSBzbmRfaHdkZXAoRSkgdHBtX2NyYihFKSBwcm9jZXNzb3JfdGhlcm1hbF9kZXZpY2Vf
-cGNpX2xlZ2FjeShFKSBzbmRfaGRhX2NvcmUoRSkgaW50ZWxfc29jX2R0c19pb3NmKEUpIGlU
-Q09fd2R0KEUpIGlUQ09fdmVuZG9yX3N1cHBvcnQoRSkgY2ZnODAyMTEoRSkgcHJvY2Vzc29y
-X3RoZXJtYWxfZGV2aWNlKEUpIHNuZF9wY20oRSkgdHBtX3RpcyhFKSBwcm9jZXNzb3JfdGhl
-cm1hbF9yZmltKEUpIHRoaW5rcGFkX2FjcGkoRSkgd2F0Y2hkb2coRSkgcHJvY2Vzc29yX3Ro
-ZXJtYWxfbWJveChFKSB0cG1fdGlzX2NvcmUoRSkgdWNzaV9hY3BpKEUpIG52cmFtKEUpIG1l
-aV9tZShFKSBzbmRfdGltZXIoRSkgcHJvY2Vzc29yX3RoZXJtYWxfcmFwbChFKSBsZWR0cmln
-X2F1ZGlvKEUpIGludGVsX3BjaF90aGVybWFsKEUpIHRwbShFKSBpbnRlbF9yYXBsX2NvbW1v
-bihFKSBtZWkoRSkgcGxhdGZvcm1fcHJvZmlsZShFKSB0eXBlY191Y3NpKEUpIHR5cGVjKEUp
-IHJuZ19jb3JlKEUpIHdtaShFKSBzbmQoRSkgYmF0dGVyeShFKSBhYyhFKSBzb3VuZGNvcmUo
-RSkgaW50MzQwM190aGVybWFsKEUpIHJma2lsbChFKSBpbnQzNDB4X3RoZXJtYWxfem9uZShF
-KSBpbnQzNDAwX3RoZXJtYWwoRSkgZXZkZXYoRSkgYWNwaV9wYWQoRSkgYWNwaV90aGVybWFs
-X3JlbChFKSBwYXJwb3J0X3BjKEUpIHBwZGV2KEUpIGxwKEUpIHBhcnBvcnQoRSkgZWZpdmFy
-ZnMoRSkgaXBfdGFibGVzKEUpIHhfdGFibGVzKEUpIGF1dG9mczQoRSkgaTJjX2Rlc2lnbndh
-cmVfcGxhdGZvcm0oRSkgaTJjX2Rlc2lnbndhcmVfY29yZShFKSBudm1lKEUpIG52bWVfY29y
-ZShFKSB0MTBfcGkoRSkgeGhjaV9wY2koRSkgZTEwMDBlKEUpIGNyYzMyY19pbnRlbChFKSBj
-cmM2NF9yb2Nrc29mdChFKSBwc21vdXNlKEUpIHhoY2lfaGNkKEUpIHB0cChFKSBpMmNfaTgw
-MShFKSBjcmM2NChFKSBwcHNfY29yZShFKSB0aHVuZGVyYm9sdChFKQ0KPiBbICAgMzAuMjA2
-MzQ3XSAgaTJjX3NtYnVzKEUpIGNyY190MTBkaWYoRSkgdXNiY29yZShFKSBjcmN0MTBkaWZf
-Z2VuZXJpYyhFKSBpbnRlbF9scHNzX3BjaShFKSBjcmN0MTBkaWZfcGNsbXVsKEUpIGludGVs
-X2xwc3MoRSkgY3JjdDEwZGlmX2NvbW1vbihFKSBpZG1hNjQoRSkgbWZkX2NvcmUoRSkgdXNi
-X2NvbW1vbihFKQ0KPiBbICAgMzAuMjA2MzU1XSBDUjI6IDAwMDAwMDAwMDAwMDAwMDANCj4g
-WyAgIDMwLjIwNjM1Nl0gLS0tWyBlbmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAwMCBdLS0tDQo+
-IFsgICAzMC4zNDg4MjVdIFJJUDogMDAxMDoweDANCj4gWyAgIDMwLjM0ODgzOV0gQ29kZTog
-VW5hYmxlIHRvIGFjY2VzcyBvcGNvZGUgYnl0ZXMgYXQgUklQIDB4ZmZmZmZmZmZmZmZmZmZk
-Ni4NCj4gWyAgIDMwLjM0ODg0MF0gUlNQOiAwMDE4OmZmZmZhNzc1YzNmYjNlMTggRUZMQUdT
-OiAwMDAxMDI4Ng0KPiBbICAgMzAuMzQ4ODQyXSBSQVg6IDAwMDAwMDAwMDAwMDAwMDAgUkJY
-OiBmZmZmOTBhODA4YmMwMDAwIFJDWDogMDAwMDAwMDAwMDAwMDAwNA0KPiBbICAgMzAuMzQ4
-ODQ0XSBSRFg6IGZmZmZhNzc1YzNmYjNlODAgUlNJOiAwMDAwMDAwMDAwMDQyMzAwIFJESTog
-ZmZmZmE3NzVjNDBhZDAwMA0KPiBbICAgMzAuMzQ4ODQ1XSBSQlA6IGZmZmZhNzc1YzQwYWQw
-MDAgUjA4OiAwMDAwMDAwMDAwMDAwMDAxIFIwOTogMDAwMDAwMDAwMDAyMTE4MA0KPiBbICAg
-MzAuMzQ4ODQ2XSBSMTA6IGZmZmZhNzc1YzNmYjNlODAgUjExOiBmZmZmYTc3NWMzZmIzZTgw
-IFIxMjogMDAwMDAwMDAwMDAwMDAwNA0KPiBbICAgMzAuMzQ4ODQ3XSBSMTM6IDAwMDAwMDAw
-ZmQwNDIzMDAgUjE0OiAwMDAwMDAwMDAwMDQyMzAwIFIxNTogZmZmZmE3NzVjNDBhZDAwOA0K
-PiBbICAgMzAuMzQ4ODQ5XSBGUzogIDAwMDA3ZmRkOWNiZmM3MDAoMDAwMCkgR1M6ZmZmZjkw
-YWI5Mjc4MDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwDQo+IFsgICAzMC4zNDg4
-NTBdIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMN
-Cj4gWyAgIDMwLjM0ODg1MV0gQ1IyOiBmZmZmZmZmZmZmZmZmZmQ2IENSMzogMDAwMDAwMDFj
-MTE3YzAwMiBDUjQ6IDAwMDAwMDAwMDAzNzI2ZTANCg==
+On Thu, Mar 31, 2022 at 09:48:14AM +0200, Ricardo Cañuelo wrote:
+> I agree that the more explicit the better, I'll give this a try. I saw
+> Pawan's suggestion as well but that one is similar to the originally
+> proposed patch in that the logic/checks are split between two functions,
+> this solution based on clearing the bug flag seems clearer considering
+> the comment just before the code block:
+
+Yeah, and I have some reservations with clearing that flag because,
+technically speaking, that CPU still has X86_BUG_SRBDS - it's just that
+it hasn't been exposed due to TSX being disabled. And no SRBDS microcode
+has been uploaded.
+
+Btw this is exactly the reason I want this to be crystal clear -
+the insane conditionals around those things just to salvage *some*
+performance with a lot of "but but" make everyone who deals with bugs.c
+cringe...
+
+Anyway, Pawan's suggestion makes more sense with the aspect that, yes,
+the CPU is affected but the MSR is not there. And we already have
+similar logic when dealing with TSX so that no new territory.
+
+So yeah, let's do his but *actually* document why and put it in a
+separate line:
+
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 6296e1ebed1d..d879a6c93609 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -446,6 +446,13 @@ void update_srbds_msr(void)
+ 	if (srbds_mitigation == SRBDS_MITIGATION_UCODE_NEEDED)
+ 		return;
+ 
++	/*
++	 * A MDS_NO CPU for which SRBDS mitigation is not needed due to TSX
++	 * being disabled and it hasn't received the SRBDS MSR microcode.
++	 */
++	if (!boot_cpu_has(X86_FEATURE_SRBDS_CTRL))
++		return;
++
+ 	rdmsrl(MSR_IA32_MCU_OPT_CTRL, mcu_ctrl);
+ 
+ 	switch (srbds_mitigation) {
+
+---
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,214 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF534ED509
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83244ED510
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiCaHy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S232419AbiCaIAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbiCaHy0 (ORCPT
+        with ESMTP id S229447AbiCaIAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:54:26 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8794C26573
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:52:38 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KTbBD4vh7z9sSJ;
-        Thu, 31 Mar 2022 09:52:36 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id A23Q6gpcXcvo; Thu, 31 Mar 2022 09:52:36 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KTbBD3p86z9sRn;
-        Thu, 31 Mar 2022 09:52:36 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6C3488B77D;
-        Thu, 31 Mar 2022 09:52:36 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ZwFf59aMvFSQ; Thu, 31 Mar 2022 09:52:36 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.54])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 151C48B764;
-        Thu, 31 Mar 2022 09:52:36 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22V7qKcB542939
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 09:52:20 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22V7qJCt542937;
-        Thu, 31 Mar 2022 09:52:19 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v1] objtool: Use target file endianness instead of a compiled constant
-Date:   Thu, 31 Mar 2022 09:52:07 +0200
-Message-Id: <7c503552c4bc1f0e1aa4775765f8f24e9d1b0a04.1648713067.git.christophe.leroy@csgroup.eu>
+        Thu, 31 Mar 2022 04:00:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B652013EAE
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:58:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 119661F463AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648713502;
+        bh=q+KkXh4Pi0KibB5c7kl1SmkyDO/TsKJGH9MCkwBZDHU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GMvRcREW1cy7oMzB9xtXztHtyYLyMopePT1upmpmVdQUDsKoWudWaIdGFyDAN1dps
+         NUcctXekdvSAi2VJf7bc5ElGnw2PneAE1o7ESKBIEIoXvdEeTQj6jiFoozKShnAxHw
+         tmpYfL2vSdSxvyoNJlT8fje7gyXC3VJWqdtxPAKC6+vlY8d1PbSkEOH2TeWPSzaMSD
+         zUGrJCuYgZHS91v6KDZhv2Lln88+fwyKAVR4HgQQ2Yl6n341xcOlYMpUNK0RtljRNF
+         JZHpbvIIKYQyqGFr7GH923Ta0H73SCYH7Wo4kkFY+5QWaN7SD95UuXsA5P1kNcUlii
+         gnu3ptbYxkzHw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/3] MediaTek PMIC Wrap improvements and cleanups
+Date:   Thu, 31 Mar 2022 09:58:14 +0200
+Message-Id: <20220331075817.7122-1-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648713075; l=5561; s=20211009; h=from:subject:message-id; bh=EDewoNRMBMBkXLY0AaVKS47w2S/gACMGaekn72IAaAU=; b=RsSsV04+A6LOiharLqbqzeCWJKxN1Xi0ltUroWmT3OCF+e33GPdH0Vd4W/AVcnNddUCCyiNXOA0u IsP2ZyzIBApS2HBmJTRy8Cof6oZvCzjjNO3siBG0F3DvEN8Kpu2y
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some architectures like powerpc support both endianness, it's
-therefore not possible to fix the endianness via arch/endianness.h
-because there is no easy way to get the target endianness at
-build time.
+This series is meant to improve the mtk-pmic-wrap driver;
+that's done by removing the custom pwrap_wait_for_state() function
+and correctly using the readx_poll_timeout macro instead, which is
+doing exactly the same as the former.
 
-Use the endianness recorded in the file objtool is working on.
+As also shown in a patch [1] by Zhiyong Tao (MediaTek), performing
+a tight loop is not desired: because of the operation timing in the
+SPMI PMICs on these platforms, it makes more sense to wait for some
+microseconds before trying to read again, reducing CPU busy time
+around these state waits. For this purpose, a ~10uS delay was chosen.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- .../arch/x86/include/arch/endianness.h        |  9 ------
- tools/objtool/check.c                         |  2 +-
- tools/objtool/include/objtool/endianness.h    | 29 +++++++++----------
- tools/objtool/orc_dump.c                      |  4 +--
- tools/objtool/orc_gen.c                       |  4 +--
- tools/objtool/special.c                       |  3 +-
- 6 files changed, 20 insertions(+), 31 deletions(-)
- delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
+While at it, I also took the occasion to tidy up this driver a
+little by optimizing its probe() function.
 
-diff --git a/tools/objtool/arch/x86/include/arch/endianness.h b/tools/objtool/arch/x86/include/arch/endianness.h
-deleted file mode 100644
-index 7c362527da20..000000000000
---- a/tools/objtool/arch/x86/include/arch/endianness.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--#ifndef _ARCH_ENDIANNESS_H
--#define _ARCH_ENDIANNESS_H
--
--#include <endian.h>
--
--#define __TARGET_BYTE_ORDER __LITTLE_ENDIAN
--
--#endif /* _ARCH_ENDIANNESS_H */
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 6de5085e3e5a..378d4e2de285 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1941,7 +1941,7 @@ static int read_unwind_hints(struct objtool_file *file)
- 			return -1;
- 		}
- 
--		cfi.cfa.offset = bswap_if_needed(hint->sp_offset);
-+		cfi.cfa.offset = bswap_if_needed(&file->elf->ehdr, hint->sp_offset);
- 		cfi.type = hint->type;
- 		cfi.end = hint->end;
- 
-diff --git a/tools/objtool/include/objtool/endianness.h b/tools/objtool/include/objtool/endianness.h
-index 10241341eff3..2c7469a7645b 100644
---- a/tools/objtool/include/objtool/endianness.h
-+++ b/tools/objtool/include/objtool/endianness.h
-@@ -2,33 +2,30 @@
- #ifndef _OBJTOOL_ENDIANNESS_H
- #define _OBJTOOL_ENDIANNESS_H
- 
--#include <arch/endianness.h>
- #include <linux/kernel.h>
- #include <endian.h>
--
--#ifndef __TARGET_BYTE_ORDER
--#error undefined arch __TARGET_BYTE_ORDER
--#endif
--
--#if __BYTE_ORDER != __TARGET_BYTE_ORDER
--#define __NEED_BSWAP 1
--#else
--#define __NEED_BSWAP 0
--#endif
-+#include <objtool/elf.h>
- 
- /*
-- * Does a byte swap if target endianness doesn't match the host, i.e. cross
-+ * Does a byte swap if target file endianness doesn't match the host, i.e. cross
-  * compilation for little endian on big endian and vice versa.
-  * To be used for multi-byte values conversion, which are read from / about
-  * to be written to a target native endianness ELF file.
-  */
--#define bswap_if_needed(val)						\
-+static inline bool need_bswap(GElf_Ehdr *ehdr)
-+{
-+	return (__BYTE_ORDER == __LITTLE_ENDIAN) ^
-+	       (ehdr->e_ident[EI_DATA] == ELFDATA2LSB);
-+}
-+
-+#define bswap_if_needed(ehdr, val)					\
- ({									\
- 	__typeof__(val) __ret;						\
-+	bool __need_bswap = need_bswap(ehdr);				\
- 	switch (sizeof(val)) {						\
--	case 8: __ret = __NEED_BSWAP ? bswap_64(val) : (val); break;	\
--	case 4: __ret = __NEED_BSWAP ? bswap_32(val) : (val); break;	\
--	case 2: __ret = __NEED_BSWAP ? bswap_16(val) : (val); break;	\
-+	case 8: __ret = __need_bswap ? bswap_64(val) : (val); break;	\
-+	case 4: __ret = __need_bswap ? bswap_32(val) : (val); break;	\
-+	case 2: __ret = __need_bswap ? bswap_16(val) : (val); break;	\
- 	default:							\
- 		BUILD_BUG(); break;					\
- 	}								\
-diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
-index f5a8508c42d6..5a51586c6ad2 100644
---- a/tools/objtool/orc_dump.c
-+++ b/tools/objtool/orc_dump.c
-@@ -198,11 +198,11 @@ int orc_dump(const char *_objname)
- 
- 		printf(" sp:");
- 
--		print_reg(orc[i].sp_reg, bswap_if_needed(orc[i].sp_offset));
-+		print_reg(orc[i].sp_reg, bswap_if_needed(elf64_getehdr(elf), orc[i].sp_offset));
- 
- 		printf(" bp:");
- 
--		print_reg(orc[i].bp_reg, bswap_if_needed(orc[i].bp_offset));
-+		print_reg(orc[i].bp_reg, bswap_if_needed(elf64_getehdr(elf), orc[i].bp_offset));
- 
- 		printf(" type:%s end:%d\n",
- 		       orc_type_name(orc[i].type), orc[i].end);
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index dd3c64af9db2..63c36ed284a5 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -97,8 +97,8 @@ static int write_orc_entry(struct elf *elf, struct section *orc_sec,
- 	/* populate ORC data */
- 	orc = (struct orc_entry *)orc_sec->data->d_buf + idx;
- 	memcpy(orc, o, sizeof(*orc));
--	orc->sp_offset = bswap_if_needed(orc->sp_offset);
--	orc->bp_offset = bswap_if_needed(orc->bp_offset);
-+	orc->sp_offset = bswap_if_needed(&elf->ehdr, orc->sp_offset);
-+	orc->bp_offset = bswap_if_needed(&elf->ehdr, orc->bp_offset);
- 
- 	/* populate reloc for ip */
- 	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int), R_X86_64_PC32,
-diff --git a/tools/objtool/special.c b/tools/objtool/special.c
-index e2223dd91c37..ae563c524416 100644
---- a/tools/objtool/special.c
-+++ b/tools/objtool/special.c
-@@ -87,7 +87,8 @@ static int get_alt_entry(struct elf *elf, struct special_entry *entry,
- 	if (entry->feature) {
- 		unsigned short feature;
- 
--		feature = bswap_if_needed(*(unsigned short *)(sec->data->d_buf +
-+		feature = bswap_if_needed(&elf->ehdr,
-+					  *(unsigned short *)(sec->data->d_buf +
- 							      offset +
- 							      entry->feature));
- 		arch_handle_alternative(feature, alt);
+[1]: https://patchwork.kernel.org/project/linux-mediatek/patch/20220329115824.13005-2-zhiyong.tao@mediatek.com/
+
+Changes in v2:
+ - Fixed a critical typo in patch 1/3. Thanks Nicolas!
+
+AngeloGioacchino Del Regno (3):
+  soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
+    function
+  soc: mediatek: pwrap: Switch to
+    devm_platform_ioremap_resource_byname()
+  soc: mediatek: pwrap: Move and check return value of
+    platform_get_irq()
+
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 73 +++++++++++++++-------------
+ 1 file changed, 39 insertions(+), 34 deletions(-)
+
 -- 
 2.35.1
 

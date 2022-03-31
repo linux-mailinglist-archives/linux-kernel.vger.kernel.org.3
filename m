@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEDD4ED947
+	by mail.lfdr.de (Postfix) with ESMTP id 785C04ED948
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiCaMIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S235706AbiCaMIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbiCaMHw (ORCPT
+        with ESMTP id S232658AbiCaMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:07:52 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD31A3EABD
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:06:05 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so2280512pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=JFDL+YbHXOZXfT1eYe4XgKv9dr6pUyV1bxUS3LMlVKs=;
-        b=BVkhl/wnZn20LFoc5PiYLZq2Ii7PW5AYyao3RUkUuSJu6nLDJtGtbjInoCbG7UlKn4
-         YOY9//OqoITxoW1EG99CV6YEll7X0H9PlR1kgndTt3cypgTga4bTr+KTFyOJn4DmRZIE
-         sItqN0ySg6F1XvCWYv5ByNQ2HTgQCDOuWQghBKo0px80GsDjx+770m6mv2H+oQzTJMJL
-         s/mSXJrLyiViVYnadVgH96k0U8vsVmHHvCx1xe9+ivT9hPzv5g7wSdyzDyYhmkMiLo2C
-         0eUt9s5MYlNcRli/fSmplOfiy1+PGjK0skXPhH0E6ZJ65pBvwFv0reSg+ESLn91H5Su2
-         E6Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=JFDL+YbHXOZXfT1eYe4XgKv9dr6pUyV1bxUS3LMlVKs=;
-        b=yz2IPLplPX1+Hs9M7t4qnnd/i/K25VvF1EmEshEb/est1mGbRCN31sIMCJpGJILPYW
-         IAee22BPild10Wal03uGLGhW+k48P3g7J03mjvVwofFiV6i8UujYTGqhwmTSisuD78Oj
-         wIoxKfZIgasbQPD5LesxwgBp8GFOfooun6dUJ5T4CA1RuehwJ+ucrLnDyKeO+NzxpgpI
-         qNoIi6RYE3rm7bMUJRPKIezmWmbwAEp/8GPuYIGJukfvMUhoZW4ce1Y9x65yVrcB0q9z
-         PRwVKjzyUyPafWlSJU5vJBQaYpi728K61SXBDNi02znINUMIfAvErw6MmKZ0bmseD57L
-         P7QA==
-X-Gm-Message-State: AOAM5306B47a8byLE4tXjBAb+sdBwI1sT/kdQ73jjtBVH4mrnqRqvkls
-        de18rNO4ivokWsikA8WrNiH3lw==
-X-Google-Smtp-Source: ABdhPJzm4oBw1lo9Ze3zlT8Vr0B1J2Ro5YuyME4y3100hRXLcOv6/SLMJKFXM+QhPEeQ9Sso5MSINg==
-X-Received: by 2002:a17:902:7fc2:b0:153:3c90:17b9 with SMTP id t2-20020a1709027fc200b001533c9017b9mr4757024plb.61.1648728365170;
-        Thu, 31 Mar 2022 05:06:05 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id k23-20020a17090a591700b001ca00b46cf9sm4844963pji.18.2022.03.31.05.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 05:06:04 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "Bos, H.J." <h.j.bos@vu.nl>, linux-kernel@vger.kernel.org,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-block@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>
-In-Reply-To: <20220331091218.641532-1-jakobkoschel@gmail.com>
-References: <20220331091218.641532-1-jakobkoschel@gmail.com>
-Subject: Re: [PATCH v2] block: use dedicated list iterator variable
-Message-Id: <164872836394.7852.9344079162179392052.b4-ty@kernel.dk>
-Date:   Thu, 31 Mar 2022 06:06:03 -0600
+        Thu, 31 Mar 2022 08:08:37 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6285C1CABE0;
+        Thu, 31 Mar 2022 05:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=AgtlGBvip4o6BPip739J/vJfmGovHKt0I07A5HuYcDo=; b=WTDbAbmgVpacjB1m75bJllwnQ+
+        dnW4NobR/2wzwnyHYxQZFZpaM+0h6DCLeLdgTgCMMwuRIWLHpf7HM+UrpVeGG7/XTzOo0N3Oam1/E
+        K9J/SmBG5kURO4nCNeeJZ7U3WkpkUad2HueJ1teLxl3QX0frCHw+0rMLUxknjjNQRuFg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nZtZA-00DSLr-DU; Thu, 31 Mar 2022 14:06:16 +0200
+Date:   Thu, 31 Mar 2022 14:06:16 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Xu Liang <lxu@maxlinear.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
+Message-ID: <YkWZOEGwLcD6xYKu@lunn.ch>
+References: <20220323183419.2278676-1-michael@walle.cc>
+ <20220323183419.2278676-5-michael@walle.cc>
+ <Yjt99k57mM5PQ8bT@lunn.ch>
+ <8304fb3578ee38525a158af768691e75@walle.cc>
+ <Yju+SGuZ9aB52ARi@lunn.ch>
+ <30012bd8256be3be9977bd15d1486c84@walle.cc>
+ <YjybB/fseibDU4dT@lunn.ch>
+ <0d4a2654acd2cc56f7b17981bf14474e@walle.cc>
+ <Yjy+oCLdnu3FrNp+@lunn.ch>
+ <YkWVku32gbaBAdEH@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkWVku32gbaBAdEH@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,24 +63,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 11:12:18 +0200, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
+On Thu, Mar 31, 2022 at 12:50:42PM +0100, Russell King (Oracle) wrote:
+> On Thu, Mar 24, 2022 at 07:55:28PM +0100, Andrew Lunn wrote:
+> > > The
+> > > > only valid case i can think of is for a very oddball PHY which has C45
+> > > > register space, but cannot actually do C45 transfers, and so C45 over
+> > > > C22 is the only option.
+> > > 
+> > > And how would you know that the PHY has the needed registers in c22
+> > > space? Or do we assume that every C45 PHY has these registers?
+> > 
+> > I think it is a reasonable assumption at the moment. We have around
+> > 170 MDIO bus masters in Linux. All but one can do C22.
 > 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
+> I don't think that is correct. I'm aware of the Marvell XMDIO driver
+> that is C45 only, and also xgene's non-rgmii "xfi" variant which is
+> also C45 only. Note that the xfi variant doesn't reject C22 and makes
+> no distinction between a C22 and C45 access (so a C22 access to
+> phy_id = 0 reg = 0 hits C45 phy_id = 0 mmd 0 reg 0.
 > 
-> [...]
+> MDIO drivers are IMHO an utter mess and are in dire need of fixing...
+> and I'm coming to the conclusion that the bodge of passing both C22
+> and C45 accesses through the same read/write functions is a huge
+> mistake, one that is crying out for fixing to prevent more prolification
+> of this kind of mess.
+> 
+> Yes, it's a lot of work, but I think it needs to be done. Retrofitting
+> the MDIO drivers with checks etc sounds nice, but if we assume that
+> patches will continue to be applied to net-next with little review,
+> we have a losing battle - it would be better to have interfaces designed
+> to make this kind of mistake impossible.
 
-Applied, thanks!
+Hi Russell
 
-[1/1] block: use dedicated list iterator variable
-      commit: 4a3b666e0ea977dd40adb56c37a91370f76fa19e
+So what i think you are saying is change the mii_bus structure:
 
-Best regards,
--- 
-Jens Axboe
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index 36ca2b5c2253..26322ee23867 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -353,10 +353,15 @@ struct mii_bus {
+        const char *name;
+        char id[MII_BUS_ID_SIZE];
+        void *priv;
+-       /** @read: Perform a read transfer on the bus */
+-       int (*read)(struct mii_bus *bus, int addr, int regnum);
+-       /** @write: Perform a write transfer on the bus */
+-       int (*write)(struct mii_bus *bus, int addr, int regnum, u16 val);
++       /** @read: Perform a C22 read transfer on the bus */
++       int (*read_c22)(struct mii_bus *bus, int addr, int regnum);
++       /** @write: Perform a C22 write transfer on the bus */
++       int (*write_c22)(struct mii_bus *bus, int addr, int regnum, u16 val);
++       /** @read: Perform a C45 read transfer on the bus */
++       int (*read_c45)(struct mii_bus *bus, int addr, int devnum, int regnum);
++       /** @write: Perform a C45 write transfer on the bus */
++       int (*write_c45)(struct mii_bus *bus, int addr, int devnum,
++                        int regnum, u16 val);
+        /** @reset: Perform a reset of the bus */
+        int (*reset)(struct mii_bus *bus);
 
+This way we get a cleaner interface, and the compiler helping us
+finding drivers we miss during conversion?
 
+	Andrew

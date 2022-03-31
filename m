@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBCE4EE3B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3ABF4EE3B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242214AbiCaWEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S242204AbiCaWCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiCaWEH (ORCPT
+        with ESMTP id S229947AbiCaWCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:04:07 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E431EE8E0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:02:19 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z92so820752ede.13
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:02:19 -0700 (PDT)
+        Thu, 31 Mar 2022 18:02:33 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67D1107DF
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:00:45 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id f10so807873plr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:00:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zVX+ni+qIlknEI/UHZP1JghyHCXyos1MEYHumXUzMdo=;
-        b=S9D4MJkYyQDK3oLILyCxZZyKRV6OVbtlSGbJuuU6xJtN1vOjdthqSlJTktw0BTDwbw
-         uJw0uxWYmEzYnEnMUUejdmD7wM1QqfsiFffqIs/vGntK1gS7/C5+JqgMXfmrQNJ7XfS4
-         Zu1s9QUDg+NTrWCIiWdIhXOZJHOUmOaPs7WBgv0+/HOksljjt7N/D2t8W4YT6MPRMD0x
-         1tv6pAJSfnkl6Hk1cjgOopUnuKOIlP1JUXdGl7EWDMWpNA7Qg99fCUJpUhLunfSCqei4
-         pnmeeM10uh9B4xgX8UTYoCN6P/n9Aocr7nk/IK6U1z4czy8njWiaO7ZcmwViE0Ya3Xs7
-         m/1g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xdDHp8DZv62+tC1QpF06xU//55Uv53QsP+VwWvx7yKA=;
+        b=EIWeMACFP4jLGYR2cBqX0EnEcdQE/UAi5wgZaLvKnjpAg/Buj6Lo83ST7MK6tOkMYw
+         kRH74cPPb3v1iG73l1LNJJA0CGbfykkoyj4j7nqrk+hsmYuLq3tTsW4ByFj7IRk7vPHB
+         DJ5ZxUkYx7xQ8yJ9S/3YkhYeutJi+8qh6U77T3WrtdbxhnFuDqULsk3BHrSCarE6dsAq
+         EeV1B3qVaS3NRcq5KQO5GlxNLakQbAHUR/NziCSq9TzoTuhfxS5kAHrcHH4v2EHDAosp
+         KlJWuYEqRDSNAZ3GimiSa70ZD3rv5XS7YEeZWO9pLkSQi54edf2uCsc88gi76sB/5Cwe
+         +uNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zVX+ni+qIlknEI/UHZP1JghyHCXyos1MEYHumXUzMdo=;
-        b=v6gI9Wdt1oJ1Y8Iimn5DQTPxIbsOKXIUCt/s9iC3Z9uGTMrF1fI3lAMCU7P3LZMoVu
-         AZ5yJMN7Iw1sSKyWuWs3/HyhUt/cTAn6O2PYbDOXyy+8E19P1UekJjwwevZ1GE6m/d70
-         fL7ADKQ/5vZiYVKfXELvPyFL+mRNa/wO2FammfqRDv4ViviIp14qe39CXrBJLz9M8MR/
-         7aAIB0XfD0xpEMzR1aDGkm2UHaEid/wxeKUIIQTKPnncO+ajiH1OUpeDs8ZRgdQ1uLSG
-         S1q+ZQX4hBGe7O08q4pA0I4wSkNO6A2fEt66N6e7YOPEqxo3HhlkvR0KtUwmOZbb5oav
-         13iA==
-X-Gm-Message-State: AOAM533+14tLbkFredCBymL86/f2qzjs7+aar7h1MG9udRLNytBqg5Hj
-        PyCs5GcJ/u8zqHAnGDSnztE=
-X-Google-Smtp-Source: ABdhPJy13+OSM+bS9OkKiQ3oVJ1rBRV700cQePPUmDvgd04hMxGLRlCzZdxaK4VZTe3hrAU1uVJHuQ==
-X-Received: by 2002:aa7:d445:0:b0:41b:5835:c6da with SMTP id q5-20020aa7d445000000b0041b5835c6damr15266061edr.309.1648764138136;
-        Thu, 31 Mar 2022 15:02:18 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id n21-20020a170906725500b006e10a7d6d03sm238050ejk.219.2022.03.31.15.02.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xdDHp8DZv62+tC1QpF06xU//55Uv53QsP+VwWvx7yKA=;
+        b=TWmjCR2pyYdP+TSD/HD1h16ZQ9kH0sFPGlfhfpF+CoN9M3d5Z3Gq09V+7EacAAC/Tb
+         ImFhoyMOOt3tlMmrAT8onKMZ+zLw/BH4HDaKDYuN2ceoSoJTdVmTmcd4ewmw6Iib+GSs
+         pJoXq/UT/yNthQl+VFfvkPzBiGU6zfR5C3e0upS8lEq57KGFuY0HsLgNY7KpfhOz2Yli
+         KDpv4YGkqRpAGhsZokq3ciD5G+xp9YcXUS2EX7UyFrIvYI03IPxB9Tabbmah2fHDK2EI
+         q+/J/EYhc+Yz+8r5TWrQKoVXXsYs5N7nVQ/s5374yKSVro6utrmoqAnVnAVIG5TCrbaC
+         6oZA==
+X-Gm-Message-State: AOAM533u2KXhB66xY/pfK2PTZj1v3FoyU4PWHs59m4Oi8NKDu+U+IG3g
+        IgByyoKXfIawlI5YDq6A2WOryA==
+X-Google-Smtp-Source: ABdhPJz1IGynAVRKqq2sYcpKslDVnp2bEwrTzO0FDG5XYcRu+u38Lvvd1DQheCE7tkhG9mNJ54bvKw==
+X-Received: by 2002:a17:90a:728f:b0:1c9:dbf2:591b with SMTP id e15-20020a17090a728f00b001c9dbf2591bmr8277572pjg.172.1648764044464;
+        Thu, 31 Mar 2022 15:00:44 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z7-20020a056a00240700b004e1cde37bc1sm453873pfh.84.2022.03.31.15.00.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:02:17 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Christine Caulfield <ccaulfie@redhat.com>
-Cc:     David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH 1/2] dlm: remove usage of list iterator for list_add() after the loop body
-Date:   Fri,  1 Apr 2022 00:00:12 +0200
-Message-Id: <20220331220013.884633-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 31 Mar 2022 15:00:43 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 22:00:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wanpeng Li <kernellwp@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH RESEND 2/5] KVM: X86: Add guest interrupt disable state
+ support
+Message-ID: <YkYkiLRo+p2T/HQx@google.com>
+References: <1648216709-44755-1-git-send-email-wanpengli@tencent.com>
+ <1648216709-44755-3-git-send-email-wanpengli@tencent.com>
+ <YkOembt1lvTEJrx0@google.com>
+ <CANRm+Cy66YAyRp0JJuoyp3k-D9HSZbYF3hYO3Vjxz5w1Rz-P3g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANRm+Cy66YAyRp0JJuoyp3k-D9HSZbYF3hYO3Vjxz5w1Rz-P3g@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,48 +79,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to point to the found element [1].
+On Wed, Mar 30, 2022, Wanpeng Li wrote:
+> On Wed, 30 Mar 2022 at 08:04, Sean Christopherson <seanjc@google.com> wrote:
+> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > index 50f011a7445a..8e05cbfa9827 100644
+> > > --- a/arch/x86/include/asm/kvm_host.h
+> > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > @@ -861,6 +861,7 @@ struct kvm_vcpu_arch {
+> > >               bool preempt_count_enabled;
+> > >               struct gfn_to_hva_cache preempt_count_cache;
+> > >       } pv_pc;
+> > > +     bool irq_disabled;
+> >
+> > This is going to at best be confusing, and at worst lead to bugs  The flag is
+> > valid if and only if the vCPU is not loaded.  I don't have a clever answer, but
+> > this needs to have some form of guard to (a) clarify when it's valid and (b) actively
+> > prevent misuse.
+> 
+> How about renaming it to last_guest_irq_disabled and comments as /*
+> Guest irq disabled state, valid iff the vCPU is not loaded */
 
-Before, the code implicitly used the head when no element was found
-when using &pos->list. Since the new variable is only set if an
-element was found, the list_add() is performed within the loop
-and only done after the loop if it is done on the list head directly.
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- fs/dlm/lock.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/fs/dlm/lock.c b/fs/dlm/lock.c
-index bdb51d209ba2..66e92617d7ea 100644
---- a/fs/dlm/lock.c
-+++ b/fs/dlm/lock.c
-@@ -1306,13 +1306,17 @@ static inline void unhold_lkb(struct dlm_lkb *lkb)
- static void lkb_add_ordered(struct list_head *new, struct list_head *head,
- 			    int mode)
- {
--	struct dlm_lkb *lkb = NULL;
-+	struct dlm_lkb *lkb = NULL, *iter;
- 
--	list_for_each_entry(lkb, head, lkb_statequeue)
--		if (lkb->lkb_rqmode < mode)
-+	list_for_each_entry(iter, head, lkb_statequeue)
-+		if (iter->lkb_rqmode < mode) {
-+			lkb = iter;
-+			list_add_tail(new, &iter->lkb_statequeue);
- 			break;
-+		}
- 
--	__list_add(new, lkb->lkb_statequeue.prev, &lkb->lkb_statequeue);
-+	if (!lkb)
-+		list_add_tail(new, head);
- }
- 
- /* add/remove lkb to rsb's grant/convert/wait queue */
-
-base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
--- 
-2.25.1
-
+What about usurping vcpu->run->if_flag?  Userspace could manipulate the data, but
+that should be fine since the data is already guest-controlled.

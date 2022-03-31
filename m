@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB804ED4B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EF84ED4B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiCaHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S231669AbiCaHVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiCaHRu (ORCPT
+        with ESMTP id S231246AbiCaHVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:17:50 -0400
-Received: from 1.mo548.mail-out.ovh.net (1.mo548.mail-out.ovh.net [178.32.121.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F4D57166
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:15:35 -0700 (PDT)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.4.108])
-        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 647A321D6D;
-        Thu, 31 Mar 2022 07:15:31 +0000 (UTC)
-Received: from kaod.org (37.59.142.95) by DAG4EX1.mxp5.local (172.16.2.31)
+        Thu, 31 Mar 2022 03:21:52 -0400
+Received: from mickerik.phytec.de (mickerik.phytec.de [195.145.39.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AA31DE582
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1648711202; x=1651303202;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9xpnGYsEgO0Tx2QUjhqJ8ilWQrfzORn0eYCwO12KfNg=;
+        b=iEoQ7yzIkB9rHs84qjv0gif+rDU8on7hXq+dvLzMTTDTodINONXllj9ZNpEYFgtU
+        mFS0wW1MR4vnKHPlQ6KXK/7ZUXShXeEQBbocmhAnuszXsLoAiNhEmjppwtBkr9PI
+        ZC+DZDdbqam0FqClzi7gJQ4V8+fzoZHVy6Frm8NQoIQ=;
+X-AuditID: c39127d2-93d2170000002a63-7f-62455622e59f
+Received: from berlix.phytec.de (Berlix.phytec.de [172.16.0.117])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id B5.47.10851.22655426; Thu, 31 Mar 2022 09:20:02 +0200 (CEST)
+Received: from [10.0.0.42] (172.16.0.116) by Berlix.phytec.de (172.16.0.117)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 31 Mar
- 2022 09:15:31 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-95G0017a140443-46ad-4610-9aab-007a7028463b,
-                    FC9088D273F6636B0CAAD4892A2C3D02B7ACC8E0) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <d12860e6-cc56-6073-0bf2-bfae02cbbd88@kaod.org>
-Date:   Thu, 31 Mar 2022 09:15:30 +0200
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 31 Mar
+ 2022 09:19:58 +0200
+Message-ID: <f9f8f08d-4d49-11cb-484b-b5b1a434b0a9@phytec.de>
+Date:   Thu, 31 Mar 2022 09:19:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
+Subject: Re: [RFC] arm64: dts: ti: introduce a minimal am642 device tree
 Content-Language: en-US
-To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Weinberger <richard@nod.at>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220325100849.2019209-1-clg@kaod.org>
- <20220325100849.2019209-9-clg@kaod.org>
- <HK0PR06MB2786548534B370AE0C691C32B21F9@HK0PR06MB2786.apcprd06.prod.outlook.com>
- <0ec477b5-e404-536f-ff60-39f43208c3cc@kaod.org>
- <HK0PR06MB27866B5CC29F46436A4F6230B2E19@HK0PR06MB2786.apcprd06.prod.outlook.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <HK0PR06MB27866B5CC29F46436A4F6230B2E19@HK0PR06MB2786.apcprd06.prod.outlook.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>, Bryan Brattlof <bb@ti.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220321155417.13267-1-bb@ti.com>
+ <73a4a16b-193a-3075-61e9-82bcf21fc7d2@phytec.de>
+ <16ad1a82-1e99-2957-720f-08d1238edcf4@ti.com>
+From:   Wadim Egorov <w.egorov@phytec.de>
+In-Reply-To: <16ad1a82-1e99-2957-720f-08d1238edcf4@ti.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [37.59.142.95]
-X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 302d5792-24cf-4c48-bed0-3ba3d01619e2
-X-Ovh-Tracer-Id: 6130243521099631422
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeifedgudduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeekfeeiudekhfeujeetffevtdfhhfekheehhfdtjeekfeehieefjedvgfffgfeifeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.0.116]
+X-ClientProxiedBy: Berlix.phytec.de (172.16.0.117) To Berlix.phytec.de
+ (172.16.0.117)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42JZI8BQqqsU5ppk8HmersXcNwdYLeYfOcdq
+        sfzzbHaLl7PusVlsenyN1eLyrjlsFm9+nGWyaN17hN3i/9kP7A6cHptWdbJ5bF5S73H8xnYm
+        j8+b5AJYorhsUlJzMstSi/TtErgyXratYSm4yllx9Gg3cwPjPfYuRk4OCQETif3zWxm7GLk4
+        hASWM0nsfdDOBuHcZZSYsWMmK0gVr4CNxMvZ25lBbBYBVYkfyzZAxQUlTs58wgJiiwpESCzb
+        NRXMFhbwkOg73w+2gVlAXOLWk/lMILaIQAujxKbJhSALmAV2MEqc+rmKBWLbREaJlocHGEGq
+        2ATUJe5s+Aa2gVPASuLjq1mMEJMsJBa/OQg1VV6ieetssIuEgOwXl5azQPyjIDH390RmCDtc
+        4u2p38wTGIVnITl2FpKjZiEZOwvJ2AWMLKsYhXIzk7NTizKz9QoyKktSk/VSUjcxAqPp8ET1
+        SzsY++Z4HGJk4mA8xCjBwawkwvvxoHOSEG9KYmVValF+fFFpTmrxIUZpDhYlcd77PUyJQgLp
+        iSWp2ampBalFMFkmDk6pBsbKKkV26c0bX8vN9Jm3lqHGoDsj8dxGteCEtTYTPbuNV9ZzTeOv
+        lLY8byz3529OQMIqpa1dNSefhq+ew9/CzFU1b1+PQEdeYke7cMe0Deb6B6rYs98vKNMOd/u6
+        fedL4elCvx31t+hPeMj6J/CdRNMZg8W2avvCrokEtX7eOGPWy/hXV5/edlViKc5INNRiLipO
+        BACBrzPblAIAAA==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,41 +79,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Chin-Ting,
 
->>> - Maybe, if the calibration process is not executed, the frequency setting
->> calculated from max_frequency in the device tree can be filled in FMC10
->> instead of using dumb slow one, 12.5MHz, always.
+
+Am 31.03.22 um 08:58 schrieb Vignesh Raghavendra:
+> Hi Wadim,
+> 
+> On 30/03/22 7:25 pm, Wadim Egorov wrote:
+>> Hi Bryan,
 >>
->> Indeed.
+>>> +/* (optional) for console */
+>>> +&main_uart0 {
+>>> +    pinctrl-names = "default";
+>>> +    pinctrl-0 = <&main_uart0_pins_default>;
+>>> +};
+>>> +
+>>> +/* reserved for firmware */
+>>> +&main_uart1 {
+>>> +    status = "reserved";
+>>> +};
 >>
->>>    For example, except for uniform content case, the calibration process will
->> be ignored when SPI clock frequency in the device tree is smaller than 40MHz.
->>> - The function, aspeed_2600_spi_clk_basic_setting, in [2] can be added to
->> support lower SPI clock frequency, e.g., 4MHz.
->>>    For AST2600, SPI clock frequency can be calculated by
->> HCLK/(FMC10[27:24] + FMC10[11:8]).
+>> k3-image-gen says UART0 is used as a debug interface. See
 >>
->> Could you please send patches on top of this series ? Here are the branches :
+>>
+>> https://git.ti.com/cgit/k3-image-gen/k3-image-gen/tree/soc/am64x/evm/board-cfg.c#n81
+>>
+>>
+>> So it seems that you can enable uart1 here. But people may run into a
+>> conflict with uart0 and k3-image-gen compiled with ENABLE_TRACE=1.
+>>
+>> If I am wrong, can you please clarify why you mark uart1 as reserved.
 >>
 > 
-> Of course. How do I provide you the patch? By private mail or send a PR?
+> We just seem to have same macro shared across multiple SoCs,
+> BOARDCFG_TRACE_DST_UART0 means logs are also directed to UART. Instance
+> of UART used for logging is platform specific.
+> 
+> On AM64 SYSFW logs are directed to MAIN UART1 (MAIN UART0 is used for
+> linux console). I will work internally and get SYSFW documentation
+> updated to reflect the same. Thanks!
 
-We should discuss first by email on the openbmc@ and linux-aspeed@ lists.
-Please send as follow ups on top of v4.
+OK, thank you for the clarification.
 
-Using the openbmc tree should be easier :
-
-      https://github.com/legoater/linux/commits/openbmc-5.15
-
-> Besides, I may add a new callback function for this part due to difference 
-> between AST2500 and AST2600.
-
-ok.
-
-Given all the reviews and tests that were done on AST2400, AST2500, AST2600
-platforms, I will be careful not to break the existing proposal.
-
-Thanks,
-
-C.
+> 
+> Regards
+> Vignesh

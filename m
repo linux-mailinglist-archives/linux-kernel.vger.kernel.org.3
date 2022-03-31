@@ -2,176 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FFB4EDEED
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9257D4EDEEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240072AbiCaQkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S240089AbiCaQlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiCaQj6 (ORCPT
+        with ESMTP id S233404AbiCaQlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:39:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D641209A4E;
-        Thu, 31 Mar 2022 09:38:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCF96615B2;
-        Thu, 31 Mar 2022 16:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF808C340ED;
-        Thu, 31 Mar 2022 16:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648744690;
-        bh=TaOJxkRcjKtRvqgvYxjMvVLcN3qCFHrf21QGqMoNQqw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ewTiKFHEhOk6Wym3cW1LvVeKmt8tDrTGUNnJGn5FcSLQh+MwAsrE/4soIYh0WvW7U
-         ol3zC9+Y6dvv76PdywfBBjq3DP6AlC2uNzf++xbHtSVWnV8oqlHkdSBwUdvaFMk8ey
-         LbpRHBjOqJ5jENbFrq1+CUN1YU4g50mN+OsPuazA=
-Date:   Thu, 31 Mar 2022 18:38:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Benson Leung <bleung@google.com>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Won Chung <wonchung@google.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
- function
-Message-ID: <YkXY730wWhgJkRUy@kroah.com>
-References: <s5hzgl6eg48.wl-tiwai@suse.de>
- <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de>
- <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
- <s5hmth6eaiz.wl-tiwai@suse.de>
- <YkV1rsq1SeTNd8Ud@kuha.fi.intel.com>
- <s5hk0cae9pw.wl-tiwai@suse.de>
- <s5h7d8adzdl.wl-tiwai@suse.de>
- <s5hzgl6ciho.wl-tiwai@suse.de>
- <YkXJr2KhSzHJHxRF@google.com>
+        Thu, 31 Mar 2022 12:41:01 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2081.outbound.protection.outlook.com [40.107.244.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D7D1BBE2C;
+        Thu, 31 Mar 2022 09:39:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fzHsAxpFzx/ynU6AXJ/xVUKj7H7HkrUXt4pKUUbzBbkgb/+eHb/MU1IR817ndmAWaEYrIynWXdokgCkvsvrEGGIRNM1M9DNxud5RAXh+mDXY9lHv7zfggnvJesaK9WGOd/dfC48H8W+w36vXFM3IqTe7Dx1umY1uYadRhuzIX4GteQpK8AXMNs1Nsl98jsKtvjdiMLcoYLrdeZ6ZpPdjbgxcVUGLZArOIsBVq+AVRXVSQDlUmAup8sD+Yyn36Ye1NMETaGJi5oGIRoehELlCIeSHexk5HbZBeK0iPvxAMlwzxVnE5UhORVdcKnROoJWppt0vcNFWwOAv7+zwgVhY5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bQ74BU/jpu/Hpjo8rvIrNpdR+AAx04D4F8ZLykUkzBg=;
+ b=HrCcPHlEOvYJkxr5slGok+HrdWHhdumbja7U2auRUcYcI6Mg97q2KzMXdAEAnpq60pdyEn5VgyLVL0xvMfTsM0dV6Obosp+00I5gGOsUa6VyDwiAacmEAUGahzcZS9zVo3zkXauVweutWMTjFTNOp3x0ag0x+2Nm+EE+2oVVB9wrAklIOsB0F/8gRasvI83atq8Q4uP6BUo8sOCFJTQ0QyQyL9TqvjXSABdrrUNtHp5zDf6XVuf4IO0trJRWE0peWVox6y3ablnuhmD+zJJLUbeP/x589y5a9AcFW01sR2c4iQelB7tlRrDn0Arc0/Lgo87cn5JZhqnqDLTnvN7axg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bQ74BU/jpu/Hpjo8rvIrNpdR+AAx04D4F8ZLykUkzBg=;
+ b=R4eJQctWkafBTNfw8VJR+HYzieGyDqBmEsGWOkZHOksjNQWluFHjDQ8mEzvVbK2g7FlT95jHgxy5pSI9/s1PszwonxopC6k7mo4cdG5fE4SnlEm8gbicxtf3lTnGwXuSzu7M62y5NzDuVAdJ2tUjEnbGxjz3aSlkclzA5+Sra0k=
+Received: from BN9PR03CA0368.namprd03.prod.outlook.com (2603:10b6:408:f7::13)
+ by CH0PR12MB5169.namprd12.prod.outlook.com (2603:10b6:610:b8::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Thu, 31 Mar
+ 2022 16:39:12 +0000
+Received: from BN8NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::7) by BN9PR03CA0368.outlook.office365.com
+ (2603:10b6:408:f7::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.22 via Frontend
+ Transport; Thu, 31 Mar 2022 16:39:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT003.mail.protection.outlook.com (10.13.177.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Thu, 31 Mar 2022 16:39:11 +0000
+Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 31 Mar 2022 11:39:10 -0500
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <bp@alien8.de>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH v2 0/2] x86/mce: Grade new machine errors for AMD MCEs and include messages for panic cases
+Date:   Thu, 31 Mar 2022 11:38:48 -0500
+Message-ID: <20220331163849.6850-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkXJr2KhSzHJHxRF@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7eac7817-6507-4b62-cd0a-08da1334fc08
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5169:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB5169DF3243FE9C6C614673EBF8E19@CH0PR12MB5169.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1/TM/uR9NlGk4A1pCZIbiaRqYFIyhbGf1gU3CkNRq2AH/QEdXFGYfKqZqx1fnrAstcXvAJvVGDe4hll/ieoKzpbe6m1hjhUdBT3VKe+bUp4YDhnxb5H5krmqIw4s91TUBB0H7swIqDJeNgEnDa8jHDVmgVe7RcFaI84+GGzGl34eXhbGzfjGy43vlGzzF2r1YcTgnZwDhlD2b9EuQj22Ad9c/CdFmilYg90nrmFR6fK8ZxshmqqUgnsEcJKB11XQRxIUBEJ4bTzCIiUX4U+7DNhRPVQO/FCHDxXukbpTsn57DxCXkKGl2vCTDL363hUCZ9B6zO0f+F7/xPh5uKZeciQqe2ZQiLEsKbN491QCUFzu7CQzn8lHdbAmAwOp5O8Je8EtRdGNj1EqkFdZRvImXWwg+onMpUqyx2EoROyk0ubMh5bbytahUVt+X293DBn25dxOq/422dITNACY2DUJc4z3yEnwoKsC8Ymdbi7xJ+hhANJdV9TAc6Qkn378KIGSlf4SFXUu/8AlZUOVwmSQaptxLqefbomlkMEfadognAiubASmBS1sX5+Q0lYUsgRfTAWIRoQUaTREIcVWwgOkfXgBepNYCcpBJi/qf7hy9ZlYT40imbpPuKvj6Wtx9eO1s1JsHcxAlpInb9AmyMqn6OLH2dd8rB8O+qigvQRhPWV/PahiJ5CJwvpDxLNxFO/UguBcp4d5Jbx3e1L8YnjaYw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(7696005)(5660300002)(47076005)(26005)(6666004)(15650500001)(86362001)(8936002)(4744005)(82310400004)(36860700001)(70586007)(70206006)(44832011)(4326008)(40460700003)(8676002)(83380400001)(508600001)(2906002)(81166007)(316002)(54906003)(16526019)(6916009)(2616005)(36756003)(356005)(426003)(186003)(336012)(1076003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 16:39:11.3227
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7eac7817-6507-4b62-cd0a-08da1334fc08
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5169
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 08:33:03AM -0700, Benson Leung wrote:
-> Hi Takashi,
-> 
-> On Thu, Mar 31, 2022 at 04:19:15PM +0200, Takashi Iwai wrote:
-> > On Thu, 31 Mar 2022 15:29:10 +0200,
-> > Takashi Iwai wrote:
-> > > 
-> > > On Thu, 31 Mar 2022 11:45:47 +0200,
-> > > Takashi Iwai wrote:
-> > > > 
-> > > > On Thu, 31 Mar 2022 11:34:38 +0200,
-> > > > Heikki Krogerus wrote:
-> > > > > 
-> > > > > On Thu, Mar 31, 2022 at 11:28:20AM +0200, Takashi Iwai wrote:
-> > > > > > On Thu, 31 Mar 2022 11:25:43 +0200,
-> > > > > > Heikki Krogerus wrote:
-> > > > > > > 
-> > > > > > > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > > > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > > > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
-> > > > > > > > > >
-> > > > > > > > > > Can NULL dev->driver be really seen?  I thought the components are
-> > > > > > > > > > added by the drivers, hence they ought to have the driver field set.
-> > > > > > > > > > But there can be corner cases I overlooked.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > thanks,
-> > > > > > > > > >
-> > > > > > > > > > Takashi
-> > > > > > > > > 
-> > > > > > > > > Hi Takashi,
-> > > > > > > > > 
-> > > > > > > > > When I try using component_add in a different driver (usb4 in my
-> > > > > > > > > case), I think dev->driver here is NULL because the i915 drivers do
-> > > > > > > > > not have their component master fully bound when this new component is
-> > > > > > > > > registered. When I test it, it seems to be causing a crash.
-> > > > > > > > 
-> > > > > > > > Hm, from where component_add*() is called?  Basically dev->driver must
-> > > > > > > > be already set before the corresponding driver gets bound at
-> > > > > > > > __driver_probe_deviec().  So, if the device is added to component from
-> > > > > > > > the corresponding driver's probe, dev->driver must be non-NULL.
-> > > > > > > 
-> > > > > > > The code that declares a device as component does not have to be the
-> > > > > > > driver of that device.
-> > > > > > > 
-> > > > > > > In our case the components are USB ports, and they are devices that
-> > > > > > > are actually never bind to any drivers: drivers/usb/core/port.c
-> > > > > > 
-> > > > > > OK, that's what I wanted to know.  It'd be helpful if it's more
-> > > > > > clearly mentioned in the commit log.
-> > > > > 
-> > > > > Agree.
-> > > > > 
-> > > > > > BTW, the same problem must be seen in MEI drivers, too.
-> > > > > 
-> > > > > Wasn't there a patch for those too? I lost track...
-> > > > 
-> > > > I don't know, I just checked the latest Linus tree.
-> > > > 
-> > > > And, looking at the HD-audio code, I still wonder how NULL dev->driver
-> > > > can reach there.  Is there any PCI device that is added to component
-> > > > without binding to a driver?  We have dev_is_pci() check at the
-> > > > beginning, so non-PCI devices should bail out there...
-> > > 
-> > > Further reading on, I'm really confused.  How data=NULL can be passed
-> > > to this function?  The data argument is the value passed from the
-> > > component_match_add_typed() call in HD-audio driver, hence it must be
-> > > always the snd_hdac_bus object.
-> > > 
-> > > And, I guess the i915 string check can be omitted completely, at
-> > > least, for HD-audio driver.  It already have a check of the parent of
-> > > the device and that should be enough.
-> > 
-> > That said, something like below (supposing data NULL check being
-> > superfluous), instead.
-> > 
-> > 
-> > Takashi
-> > 
-> > --- a/sound/hda/hdac_i915.c
-> > +++ b/sound/hda/hdac_i915.c
-> > @@ -102,18 +102,13 @@ static int i915_component_master_match(struct device *dev, int subcomponent,
-> >  	struct pci_dev *hdac_pci, *i915_pci;
-> >  	struct hdac_bus *bus = data;
-> >  
-> > -	if (!dev_is_pci(dev))
-> > +	if (subcomponent != I915_COMPONENT_AUDIO || !dev_is_pci(dev))
-> >  		return 0;
-> >  
-> 
-> If I recall this bug correctly, it's not the usb port perse that is falling
-> through this !dev_is_pci(dev) check, it's actually the usb4-port in a new
-> proposed patch by Heikki and Mika to extend the usb type-c component to
-> encompass the usb4 specific pieces too. Is it possible usb4 ports are considered
-> pci devices, and that's how we got into this situation?
-> 
-> Also, a little more background information: This crash happens because in
-> our kernel configs, we config'd the usb4 driver as =y (built in) instead of
-> =m module, which meant that the usb4 port's driver was adding a component
-> likely much earlier than hdac_i915.
+This patchset includes grading of new types of machine errors on AMD's MCE
+grading logic mce_severity_amd(), which helps the MCE handler determine
+what actions to take. If the error is graded as a PANIC, the EDAC driver
+will not decode; so we also include new error messages to describe the MCE
+and help debugging critical errors.
 
-So is this actually triggering on 5.17 right now?  Or is it due to some
-other not-applied changes you are testing at the moment?
+Changes since v1:
+  On patch 1/2, follow a simplified approach for severity.c, that resembles
+  the available PPR more closely. This also simplifies patch 2/2, as less 
+  panic error messages are added.
 
-confused,
+Carlos Bilbao (2):
+  x86/mce: Extend AMD severity grading function with new types of errors
+  x86/mce: Add messages to describe panic machine errors on AMD's MCEs grading
 
-greg k-h
+ arch/x86/kernel/cpu/mce/severity.c | 111 ++++++++++++-----------------
+ 1 file changed, 44 insertions(+), 67 deletions(-)
+
+-- 
+2.27.0
+

@@ -2,44 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3864EE1E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D244D4EE1D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240874AbiCaTjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S240886AbiCaTjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240805AbiCaTjd (ORCPT
+        with ESMTP id S240835AbiCaTjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:39:33 -0400
+        Thu, 31 Mar 2022 15:39:40 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C3923B3E8;
-        Thu, 31 Mar 2022 12:37:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5E923C0E7;
+        Thu, 31 Mar 2022 12:37:47 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 4C41B1F4724D
+        with ESMTPSA id 2FB0A1F4724F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648755464;
-        bh=VjX+liG+SlI3iuDWs50MzK4K6rmwEP4Ktzmj7Beu+Mo=;
+        s=mail; t=1648755465;
+        bh=TG6URAwoxuOMsxmElkXZN+3kr6++zE3/TmJ6jTIeCc0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i1Up/5emswsszUr/IL82EU9CA2ojTsAugslRJT9YMSbyEf30Ti5BXZws52rF6LNiV
-         y5+cLWg7C5SqyiIXBAY2YUtyVYPQVQ0q/bQalp4u+V1GMeduCKVwTa1UYz2JGXe2/C
-         WafKxJ5Y4tsT9UbfNjuahk3E1SccJN388ZRPx+KytlH1ngeNwZ2lLs6XZ8Risfa/FK
-         qBtN4be/+0m8Hzg3xmNvmH9zRQPftUBsc+WvrSTyMOyB/+WlCd0Eofe5CV2R77f6yN
-         F7nLcd0c4r8+gO7wek8hFboqHt5R4ZY5gR22Z5omOh24PqR6akhbS2/G+USGX5dCq0
-         xfEvo4aX5tcTg==
+        b=JGVnr/FtZT3zuIJdqcifkyNee2EAFLxBcAh+IS7LZnNsmfdiXWV3PlyKjTB83WI5+
+         1UH7iWvOuh0Qpnv7Tqj05AehCHHAEDRGyX2VgERLv5QdIt3pGYli65+SqHXLPzl6R8
+         wxWCwO5QGvy9ZWt+uCn/nrhUwd8XYh6dBy7jFjh3AHMB5GVhKpsQx2TDmWrOVCjd+t
+         +wZfeujPGizeL248Q6yn/vi6HFViB56RF59I4A1vEVtZD2BihPdO+TLhLzrlHZhnPZ
+         NP99ppZHKcdsTPxyPywN1cB8FLhzi9ILL5ru2xWgTy9IHb8F56fNP8t1iV8DrENQ5v
+         4rgHUVr4YZMzw==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     kernel@collabora.com,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: [PATCH v2 06/23] media: h264: Increase reference lists size to 32
-Date:   Thu, 31 Mar 2022 15:37:08 -0400
-Message-Id: <20220331193726.289559-7-nicolas.dufresne@collabora.com>
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 07/23] media: h264: Store current picture fields
+Date:   Thu, 31 Mar 2022 15:37:09 -0400
+Message-Id: <20220331193726.289559-8-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
 References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
@@ -55,111 +51,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is to accommodate support for field decoding, which splits the top
-and the bottom references into the reference list.
+This information, also called picture structure, is required in field
+decoding mode to construct reference lists.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-h264.c        | 6 +++---
- drivers/staging/media/hantro/hantro_hw.h   | 6 +++---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 6 +++---
- include/media/v4l2-h264.h                  | 8 ++++----
- 4 files changed, 13 insertions(+), 13 deletions(-)
+ drivers/media/v4l2-core/v4l2-h264.c | 10 +++++++---
+ include/media/v4l2-h264.h           |  4 ++++
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index afbfcf78efe4..4b46b36526c0 100644
+index 4b46b36526c0..58f18bb0afb6 100644
 --- a/drivers/media/v4l2-core/v4l2-h264.c
 +++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -212,7 +212,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
-  * v4l2_h264_build_p_ref_list() - Build the P reference list
-  *
-  * @builder: reference list builder context
-- * @reflist: 16 sized array used to store the P reference list. Each entry
-+ * @reflist: 32 sized array used to store the P reference list. Each entry
-  *	     is a v4l2_h264_reference structure
-  *
-  * This functions builds the P reference lists. This procedure is describe in
-@@ -235,9 +235,9 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
-  *
-  * @builder: reference list builder context
-- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-+ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-+ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-  *
-  * This functions builds the B0/B1 reference lists. This procedure is described
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 2bc6b8f088f5..292aaaabaf24 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
-  * @b1:		B1 reflist
-  */
- struct hantro_h264_dec_reflists {
--	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
--	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
--	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
-+	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
- };
+@@ -34,13 +34,17 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 	cur_frame_num = dec_params->frame_num;
  
- /**
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 3c7f3d87fab4..dff89732ddd0 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
- #define RKVDEC_H264_DPB_SIZE 16
+ 	memset(b, 0, sizeof(*b));
+-	if (!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC))
++	if (!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC)) {
+ 		b->cur_pic_order_count = min(dec_params->bottom_field_order_cnt,
+ 					     dec_params->top_field_order_cnt);
+-	else if (dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD)
++		b->cur_pic_fields = V4L2_H264_FRAME_REF;
++	} else if (dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD) {
+ 		b->cur_pic_order_count = dec_params->bottom_field_order_cnt;
+-	else
++		b->cur_pic_fields = V4L2_H264_BOTTOM_FIELD_REF;
++	} else {
+ 		b->cur_pic_order_count = dec_params->top_field_order_cnt;
++		b->cur_pic_fields = V4L2_H264_TOP_FIELD_REF;
++	}
  
- struct rkvdec_h264_reflists {
--	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
--	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
--	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
-+	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
- 	u8 num_valid;
- };
- 
+ 	for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
+ 		u32 pic_order_count;
 diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index ef9a894e3c32..e282fb16ac58 100644
+index e282fb16ac58..e165a54c68fa 100644
 --- a/include/media/v4l2-h264.h
 +++ b/include/media/v4l2-h264.h
-@@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
+@@ -21,6 +21,7 @@
+  * @refs.longterm: set to true for a long term reference
+  * @refs: array of references
+  * @cur_pic_order_count: picture order count of the frame being decoded
++ * @cur_pic_fields: fields present in the frame being decoded
+  * @unordered_reflist: unordered list of references. Will be used to generate
+  *		       ordered P/B0/B1 lists
+  * @num_valid: number of valid references in the refs array
+@@ -36,7 +37,10 @@ struct v4l2_h264_reflist_builder {
+ 		u32 pic_num;
  		u16 longterm : 1;
  	} refs[V4L2_H264_NUM_DPB_ENTRIES];
++
  	s32 cur_pic_order_count;
--	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
-+	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
++	u8 cur_pic_fields;
++
+ 	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
  	u8 num_valid;
  };
- 
-@@ -51,9 +51,9 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
-  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
-  *
-  * @builder: reference list builder context
-- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-+ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-+ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-  *
-  * This functions builds the B0/B1 reference lists. This procedure is described
-@@ -70,7 +70,7 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
-  * v4l2_h264_build_p_ref_list() - Build the P reference list
-  *
-  * @builder: reference list builder context
-- * @reflist: 16 sized array used to store the P reference list. Each entry
-+ * @reflist: 32 sized array used to store the P reference list. Each entry
-  *	     is a v4l2_h264_reference structure
-  *
-  * This functions builds the P reference lists. This procedure is describe in
 -- 
 2.34.1
 

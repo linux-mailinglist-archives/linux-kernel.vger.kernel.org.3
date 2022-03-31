@@ -2,137 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F3B4ED68E
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDB54ED690
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiCaJOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S233654AbiCaJOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiCaJOT (ORCPT
+        with ESMTP id S233645AbiCaJOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:14:19 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A811EF5C7;
-        Thu, 31 Mar 2022 02:12:32 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bg10so46723255ejb.4;
-        Thu, 31 Mar 2022 02:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z8DhswHVHWMQXA2DKu3W62u6CvgqIB7utFtneyXpsAQ=;
-        b=FoqbrXkjNAB74Srin4hbjn7hR5o8ixvtBDJQAB85Tb0b/Sjh1LQNgijQX7BJfP/4Jz
-         3dJNyVpiP22eUd++EYB+t4MBUJrunojgJcDjs/+xpwcr0JGhik44ACwPttIJwXE9+PK2
-         xJ5AMWkxxE6hMK0yjefBjlnZ/tDac+GTZnyD+Hp1bu9N2GtM8qUBQi9ulfPj6BKNZ7t2
-         E/dfw+g8DyXRCbqJyRUF4dHCQMfrhNNrqYxAsmQ7eiOBqC7+f+JNSyqOiBcPX6Ynt2BP
-         1p1vviKAGEM+jsidE4gGWKgC3XRTqGDTIiCN38eKi27Zp5vTILPSdFSIEJODCCHtfuPU
-         8l0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z8DhswHVHWMQXA2DKu3W62u6CvgqIB7utFtneyXpsAQ=;
-        b=iEDtCyZlKcWIATVGk0oxqeloii9zEJLiWdGxL6UQiySv9OuhNWgZ72SShUPTkPoTCX
-         EI/ILSdBDeNGY/gUeeh7Bh25rDC7dq4lzOSd6Ay5gZveCyB1YXTxiq2NwkwcJqON7ijN
-         HOvmIipcXlHBXJRVg8w41+amkI+48s0K5Nwme0kH75ksem0KJHFM6R/TzxyRrDTpODJ0
-         V+aYwf7JJoAVjeWuIDo4u2PZlVFJW760DD23XlEv7GHSMYtoaxLJq4ciE3QNhJRSL0Oj
-         u2C1HBqejib5SjHWeKGcmnAQzXibA+0+380ByaMNUJuBpCNgvG6kxPAilnxNELias+5G
-         B2Hg==
-X-Gm-Message-State: AOAM532Zhv61RWk3C5jcP8JyN3XUY9DJzmrvacYb8iLex2yZ7rf78s5t
-        Zkk+kDj6IBoQtPYVqb5ohEQ=
-X-Google-Smtp-Source: ABdhPJzWXfIJWccW24TeVjH7UYtWK3IovnsoiIMLma0irEufD6srkG9QJuaI1NKpfEGjeO3RcJi46g==
-X-Received: by 2002:a17:907:a40d:b0:6e1:4055:2c91 with SMTP id sg13-20020a170907a40d00b006e140552c91mr4086826ejc.404.1648717950450;
-        Thu, 31 Mar 2022 02:12:30 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bn14-20020a170906c0ce00b006c5ef0494besm9196387ejb.86.2022.03.31.02.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 02:12:29 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH v2] block: use dedicated list iterator variable
-Date:   Thu, 31 Mar 2022 11:12:18 +0200
-Message-Id: <20220331091218.641532-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 05:14:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02251F89D0;
+        Thu, 31 Mar 2022 02:12:56 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9FEBF1F869;
+        Thu, 31 Mar 2022 09:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648717975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kcFvM9YBZ68bJuJVpDcgIHN0wJM9eIxb2o15OLRqjQc=;
+        b=HhLJxKebAW2IF9RMMbxWL4B/lNzyYOr/6pyCLw6flAeFb/psb2HrEUGpmGbgOQ52fs1DN2
+        2wK4n0JWq+gWRvLNeDyVu0+jZox/bUMDWpFMkXwoztkgx028AiRd4/Bmp1rKAeViieYMAe
+        c1ZSlkcFVKuerWwDNEiuS/+pSECCVng=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648717975;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kcFvM9YBZ68bJuJVpDcgIHN0wJM9eIxb2o15OLRqjQc=;
+        b=PWtysn1jZfQ5GJ8mCL57Z2TrRj+yKDje9oub00sloCxsSi7mEZPoJ9dyz46K6Y/Cc0MWUH
+        VC5io5pJELx0LFCw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 898D9A3B87;
+        Thu, 31 Mar 2022 09:12:55 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 11:12:55 +0200
+Message-ID: <s5hr16ieb8o.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Won Chung <wonchung@google.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback function
+In-Reply-To: <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
+References: <20220330211913.2068108-1-wonchung@google.com>
+        <s5hzgl6eg48.wl-tiwai@suse.de>
+        <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+On Thu, 31 Mar 2022 10:38:34 +0200,
+Won Chung wrote:
+> 
+> On Thu, Mar 31, 2022 at 12:27 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Wed, 30 Mar 2022 23:19:13 +0200,
+> > Won Chung wrote:
+> > >
+> > > Component match callback function needs to check if expected data is
+> > > passed to it. Without this check, it can cause a NULL pointer
+> > > dereference when another driver registers a component before i915
+> > > drivers have their component master fully bind.
+> > >
+> > > Fixes: 7b882fe3e3e8b ("ALSA: hda - handle multiple i915 device instances")
+> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Signed-off-by: Won Chung <wonchung@google.com>
+> > > ---
+> > > - Add "Fixes" tag
+> > > - Send to stable@vger.kernel.org
+> >
+> > You rather need to add "Cc: stable@vger.kernel.org" line to the patch
+> > itself (around sign-off block), not actually Cc'ing the mail.
+> > I edited manually, but please do it so at the next time.
+> >
+> > Although I applied the patch as-is now, I wonder...
+> >
+> >
+> > > -     if (!strcmp(dev->driver->name, "i915") &&
+> > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
+> >
+> > Can NULL dev->driver be really seen?  I thought the components are
+> > added by the drivers, hence they ought to have the driver field set.
+> > But there can be corner cases I overlooked.
+> >
+> >
+> > thanks,
+> >
+> > Takashi
+> 
+> Hi Takashi,
+> 
+> When I try using component_add in a different driver (usb4 in my
+> case), I think dev->driver here is NULL because the i915 drivers do
+> not have their component master fully bound when this new component is
+> registered. When I test it, it seems to be causing a crash.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+Hm, from where component_add*() is called?  Basically dev->driver must
+be already set before the corresponding driver gets bound at
+__driver_probe_deviec().  So, if the device is added to component from
+the corresponding driver's probe, dev->driver must be non-NULL.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
+> Would it be okay for me to resend a new patch with the flags
+> corrected? I have mistakenly added Heikki and Mika as "Signed-off-by"
+> instead of "Suggested-by". I am sorry for that.
 
-v1->v2:
-- introduce blk_lookup_qe_pair() for more readable code (Bart Van Assche)
-
- block/blk-mq.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
-
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index e6f24fa4a4c2..f7f950cce452 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -4462,21 +4462,27 @@ static bool blk_mq_elv_switch_none(struct list_head *head,
- 	return true;
- }
-
--static void blk_mq_elv_switch_back(struct list_head *head,
--		struct request_queue *q)
-+static struct blk_mq_qe_pair *blk_lookup_qe_pair(struct list_head *head,
-+						struct request_queue *q)
- {
- 	struct blk_mq_qe_pair *qe;
--	struct elevator_type *t = NULL;
-
- 	list_for_each_entry(qe, head, node)
--		if (qe->q == q) {
--			t = qe->type;
--			break;
--		}
-+		if (qe->q == q)
-+			return qe;
-
--	if (!t)
--		return;
-+	return NULL;
-+}
-+
-+static void blk_mq_elv_switch_back(struct list_head *head,
-+				  struct request_queue *q)
-+{
-+	struct blk_mq_qe_pair *qe = blk_lookup_qe_pair(head, q);
-+	struct elevator_type *t;
-
-+	if (!qe)
-+		return;
-+	t = qe->type;
- 	list_del(&qe->node);
- 	kfree(qe);
+Ah that's bad.  I'll reset the branch, then.  Please resubmit
+properly.
 
 
-base-commit: d888c83fcec75194a8a48ccd283953bdba7b2550
---
-2.25.1
+thanks,
 
+Takashi

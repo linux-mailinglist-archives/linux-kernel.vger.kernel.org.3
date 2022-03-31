@@ -2,74 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905A34ED645
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F3B4ED68E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbiCaIx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S233643AbiCaJOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbiCaIxy (ORCPT
+        with ESMTP id S231445AbiCaJOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:53:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B006A078;
-        Thu, 31 Mar 2022 01:52:02 -0700 (PDT)
-Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KTcVP524SzdZPx;
-        Thu, 31 Mar 2022 16:51:41 +0800 (CST)
-Received: from kwepeml500002.china.huawei.com (7.221.188.128) by
- kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 16:52:00 +0800
-Received: from huawei.com (10.175.104.82) by kwepeml500002.china.huawei.com
- (7.221.188.128) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 31 Mar
- 2022 16:52:00 +0800
-From:   Huang Guobin <huangguobin4@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] tty: Fix a possible resource leak in icom_probe
-Date:   Thu, 31 Mar 2022 17:10:05 +0800
-Message-ID: <20220331091005.3290753-1-huangguobin4@huawei.com>
+        Thu, 31 Mar 2022 05:14:19 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A811EF5C7;
+        Thu, 31 Mar 2022 02:12:32 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bg10so46723255ejb.4;
+        Thu, 31 Mar 2022 02:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z8DhswHVHWMQXA2DKu3W62u6CvgqIB7utFtneyXpsAQ=;
+        b=FoqbrXkjNAB74Srin4hbjn7hR5o8ixvtBDJQAB85Tb0b/Sjh1LQNgijQX7BJfP/4Jz
+         3dJNyVpiP22eUd++EYB+t4MBUJrunojgJcDjs/+xpwcr0JGhik44ACwPttIJwXE9+PK2
+         xJ5AMWkxxE6hMK0yjefBjlnZ/tDac+GTZnyD+Hp1bu9N2GtM8qUBQi9ulfPj6BKNZ7t2
+         E/dfw+g8DyXRCbqJyRUF4dHCQMfrhNNrqYxAsmQ7eiOBqC7+f+JNSyqOiBcPX6Ynt2BP
+         1p1vviKAGEM+jsidE4gGWKgC3XRTqGDTIiCN38eKi27Zp5vTILPSdFSIEJODCCHtfuPU
+         8l0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z8DhswHVHWMQXA2DKu3W62u6CvgqIB7utFtneyXpsAQ=;
+        b=iEDtCyZlKcWIATVGk0oxqeloii9zEJLiWdGxL6UQiySv9OuhNWgZ72SShUPTkPoTCX
+         EI/ILSdBDeNGY/gUeeh7Bh25rDC7dq4lzOSd6Ay5gZveCyB1YXTxiq2NwkwcJqON7ijN
+         HOvmIipcXlHBXJRVg8w41+amkI+48s0K5Nwme0kH75ksem0KJHFM6R/TzxyRrDTpODJ0
+         V+aYwf7JJoAVjeWuIDo4u2PZlVFJW760DD23XlEv7GHSMYtoaxLJq4ciE3QNhJRSL0Oj
+         u2C1HBqejib5SjHWeKGcmnAQzXibA+0+380ByaMNUJuBpCNgvG6kxPAilnxNELias+5G
+         B2Hg==
+X-Gm-Message-State: AOAM532Zhv61RWk3C5jcP8JyN3XUY9DJzmrvacYb8iLex2yZ7rf78s5t
+        Zkk+kDj6IBoQtPYVqb5ohEQ=
+X-Google-Smtp-Source: ABdhPJzWXfIJWccW24TeVjH7UYtWK3IovnsoiIMLma0irEufD6srkG9QJuaI1NKpfEGjeO3RcJi46g==
+X-Received: by 2002:a17:907:a40d:b0:6e1:4055:2c91 with SMTP id sg13-20020a170907a40d00b006e140552c91mr4086826ejc.404.1648717950450;
+        Thu, 31 Mar 2022 02:12:30 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id bn14-20020a170906c0ce00b006c5ef0494besm9196387ejb.86.2022.03.31.02.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 02:12:29 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH v2] block: use dedicated list iterator variable
+Date:   Thu, 31 Mar 2022 11:12:18 +0200
+Message-Id: <20220331091218.641532-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepeml500002.china.huawei.com (7.221.188.128)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When pci_read_config_dword failed, call pci_release_regions() and
-pci_disable_device() to recycle the resource previously allocated.
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
+
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/tty/serial/icom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index 03a2fe9f4c9a..02b375ba2f07 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -1501,7 +1501,7 @@ static int icom_probe(struct pci_dev *dev,
- 	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
- 	if (retval) {
- 		dev_err(&dev->dev, "PCI Config read FAILED\n");
--		return retval;
-+		goto probe_exit0;
- 	}
- 
- 	pci_write_config_dword(dev, PCI_COMMAND,
--- 
+v1->v2:
+- introduce blk_lookup_qe_pair() for more readable code (Bart Van Assche)
+
+ block/blk-mq.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index e6f24fa4a4c2..f7f950cce452 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -4462,21 +4462,27 @@ static bool blk_mq_elv_switch_none(struct list_head *head,
+ 	return true;
+ }
+
+-static void blk_mq_elv_switch_back(struct list_head *head,
+-		struct request_queue *q)
++static struct blk_mq_qe_pair *blk_lookup_qe_pair(struct list_head *head,
++						struct request_queue *q)
+ {
+ 	struct blk_mq_qe_pair *qe;
+-	struct elevator_type *t = NULL;
+
+ 	list_for_each_entry(qe, head, node)
+-		if (qe->q == q) {
+-			t = qe->type;
+-			break;
+-		}
++		if (qe->q == q)
++			return qe;
+
+-	if (!t)
+-		return;
++	return NULL;
++}
++
++static void blk_mq_elv_switch_back(struct list_head *head,
++				  struct request_queue *q)
++{
++	struct blk_mq_qe_pair *qe = blk_lookup_qe_pair(head, q);
++	struct elevator_type *t;
+
++	if (!qe)
++		return;
++	t = qe->type;
+ 	list_del(&qe->node);
+ 	kfree(qe);
+
+
+base-commit: d888c83fcec75194a8a48ccd283953bdba7b2550
+--
 2.25.1
 

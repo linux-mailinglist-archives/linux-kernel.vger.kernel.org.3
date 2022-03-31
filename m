@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FB34ED714
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6917B4ED660
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiCaJhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S233484AbiCaJCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiCaJhD (ORCPT
+        with ESMTP id S233434AbiCaJCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:37:03 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C49B6E67;
-        Thu, 31 Mar 2022 02:35:13 -0700 (PDT)
-Received: from mail-lj1-f182.google.com ([209.85.208.182]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQ8OG-1nMZWF0sMa-00LzwN; Thu, 31 Mar 2022 11:35:07 +0200
-Received: by mail-lj1-f182.google.com with SMTP id a30so23743420ljq.13;
-        Thu, 31 Mar 2022 02:34:53 -0700 (PDT)
-X-Gm-Message-State: AOAM530f4YF5XRzdcJZz402Q2dO5W10j2CxRXZsoZgbvCJBBidfnMn6p
-        1/KYMOMILw6hB8QXWn2cZtkHJnXJoUV7wKUaAgk=
-X-Google-Smtp-Source: ABdhPJzlZAknllrYU3sqw0DcJDBqe9QGu2EJFIsGG1Jj93+/mwICYSZMvQMKUcZsQpnc8rRysI1G9CixKr24DtuSHyk=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr3263936wrw.12.1648717194942; Thu, 31
- Mar 2022 01:59:54 -0700 (PDT)
+        Thu, 31 Mar 2022 05:02:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C88051585;
+        Thu, 31 Mar 2022 02:00:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EFC4B82000;
+        Thu, 31 Mar 2022 09:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF93C340ED;
+        Thu, 31 Mar 2022 09:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648717253;
+        bh=wNwVnTnwlRKd3pJ0yCmXSRbxpRcvTX29e7Vo18OTPDU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sDrtMRinc/Io8nwpaMAlnKMwo7KOwwzcQZtzCTP0gXme0LJrstd7O6KZAlIc/V1qK
+         O6bDp0AX0GKRl7ZClO1pDz0aftDdiWPqyS5WeH1XysqeQPDpoKj2LFoUAiXF4jM1Fy
+         xPtyc4mVxczZYluNFs5AqQFlzhuyV5c6I1kqUlTU=
+Date:   Thu, 31 Mar 2022 11:00:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Won Chung <wonchung@google.com>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
+ functions
+Message-ID: <YkVtvhC0n9B994/A@kroah.com>
+References: <20220331084918.2592699-1-wonchung@google.com>
 MIME-Version: 1.0
-References: <cover.1648714851.git.qinjian@cqplus1.com> <840bf90d4e7ba05fe621cd94101b912162311e41.1648714851.git.qinjian@cqplus1.com>
-In-Reply-To: <840bf90d4e7ba05fe621cd94101b912162311e41.1648714851.git.qinjian@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 31 Mar 2022 10:59:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3dRs=-XdK-Y3eHFJEkXTaCzRCm-YAdiUw_DRUcqHd02w@mail.gmail.com>
-Message-ID: <CAK8P3a3dRs=-XdK-Y3eHFJEkXTaCzRCm-YAdiUw_DRUcqHd02w@mail.gmail.com>
-Subject: Re: [PATCH v12 3/9] reset: Add Sunplus SP7021 reset driver
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:DfVrS+Ox3XDkFmwPTS20wXa+Ha4o0WcqDgVOIs5eqt6GtEcCbV4
- nVfLllx+NhIBJMi+iAS6nOOJnMJgeRUWFmoA78qsG/2IMxdgB6CLF1H4ThsMyWdah56Ez7o
- xstqnj8bqlfUOm7qLAGIDf4PRPpE38lAGL4LV594mvE9kbDmV2SDoDp548u7bSvM8jutdyG
- VFAtU62bbD8LFqYhadCEg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FV5ioI8hUa4=:znyj7Kx4BQT2vh6lX9KmcC
- sNW827kSRUWc46nsYmbPySZLiqAWcaUkI+s2Aq6fEkAbQxz4j+nMvz9CMJqUfBSql5zP4DkAt
- GGgr9uOMfD19Ug0nWtRZfVTEwyIhjFTp1GA31VwZH7QVVD4kWNpg9OmNqLsrsnRCKTy3k4/FK
- PVpx1kJOeOjrb9m2k+Rn2Ojv94nlqF9P3x1YXq8pnvVF376OHXp3F/3BVDjwWSLchQ8ueAC2P
- 7qNMsvpmaMk4xgounFDRXZiXIVS2KlGDEi42FT2nCnlQB4Nlfk4upRt/lGxayc9o71pMX4gAH
- FpWbjO7Y7QTqNhX+tqOuN6t0s76uxaQ6L3StFz7BCOMYGtQUj/jBbFdMUH7WIOXjNSDMgxRJE
- 7w50I5+7HJcNvL2ZCOMAZkGb039Z0RfxzYiYmltgDwaBZ6RkG2TJRMg91Gu6Cg81DCNV7LLeU
- j0+1Tj+8hyOEbFa6Rb2C+dwaYSdK5o6L0oN9hll/cPdXmMwM4uPSHJlovHne5SGRaWMvEyV8m
- 0C1TYearppaLDLIKnGcTKUeZQJdR6YjLtuBQmgrVCsFcMgBuL2lluYcEVWkHgCOV7ttmxXxVR
- //Kf/FYPztV7yZzihClLMjTWM8dtCPWABmkRt0MGuLASm5Sdim1EL75NBi67EqUgEdR0wABlv
- yltpRZRFHLA8AvJ/a+E7nMMatzJfDSKUXI0FvaAws23GvxHU22feBZfsOhOkwSS7PUeK6nBH3
- Rx1OWysCLKAxzHqX/rnTbCr/v93JgHRdpyiG4I7T6jgFAdlMWloErUhWGiQ/CE9iDDEjoZ8Nr
- ntDk+5ap+gcdrpy1quaeNo9ZBqgygG4Rtpn0HZeoL8yq4usTjKqMIMAhgez9xSZlnJUrjgw/L
- 8a7bYeruMKWgEFiycr5W1KN94LzzatCkATA4HRO9XjN/3PxTW4aZ03G4MhzFm89tpkgZp95bL
- uVh24r6nz3LzBpTNhi41ZqKvC1KBowA4qgTZYJBzkLTxizR/NtZKImc7SJT5yLxH4G/H5dWmh
- 546zOzkj1zLITvc3jevwBVOK/eVbiIadOXZiMKqkJd8ZHLr6q8dI3EsnXM/G9j6FLv0jFb3N0
- kMWMwFswDzW+iB30qz4j3ev3DpjkZ0IXD0FNjv3jHz5xHMWk5R/SitdSUU8YzBlSIbG3iIKGJ
- klnZ/eIZHEE0crf5RKWtDk9c2HqLSWBQP+m9R5NEoRvRpBECI73Nc+ZrRZejySv5tz7FT9GD9
- b9sajQXc2wbVoKkb6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331084918.2592699-1-wonchung@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 10:29 AM Qin Jian <qinjian@cqplus1.com> wrote:
-> +
-> +#include <linux/io.h>
-> +#include <linux/init.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/reboot.h>
-> +
+On Thu, Mar 31, 2022 at 08:49:18AM +0000, Won Chung wrote:
+> Component match callback functions need to check if expected data is
+> passed to them. Without this check, it can cause a NULL pointer
+> dereference when another driver registers a component before i915
+> drivers have their component master fully bind.
 
-As commented on the binding header -- it looks again like you are not actually
-relying  on the header here, so it's almost certainly not needed.
+How can that happen in a real system?  Or does this just happen for when
+you are doing development and testing?
 
-         Arnd
+> 
+> Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+> Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Won Chung <wonchung@google.com>
+> Cc: stable@vger.kernel.org
+
+Why does this need to go to stable?  How can this be triggered in older
+kernels?
+
+> ---
+> Changes from v2:
+> - Correctly add "Suggested-by" tag
+> - Add "Cc: stable@vger.kernel.org"
+> 
+> Changes from v1:
+> - Add "Fixes" tag
+> - Send to stable@vger.kernel.org
+> 
+>  drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+>  drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+> index ec2a4fce8581..843dbc2b21b1 100644
+> --- a/drivers/misc/mei/hdcp/mei_hdcp.c
+> +++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+> @@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+>  {
+>  	struct device *base = data;
+>  
+> -	if (strcmp(dev->driver->name, "i915") ||
+> +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+
+How can base be NULL?
+
+
+>  	    subcomponent != I915_COMPONENT_HDCP)
+>  		return 0;
+>  
+> diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+> index f7380d387bab..e32a81da8af6 100644
+> --- a/drivers/misc/mei/pxp/mei_pxp.c
+> +++ b/drivers/misc/mei/pxp/mei_pxp.c
+> @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+>  {
+>  	struct device *base = data;
+>  
+> -	if (strcmp(dev->driver->name, "i915") ||
+> +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+
+Same here, shouldn't this be caught by the driver core or bus and match
+should not be called?
+
+Why not fix this in the component/driver core instead?
+
+thanks,
+
+greg k-h

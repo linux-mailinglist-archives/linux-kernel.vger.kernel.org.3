@@ -2,174 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3879C4EE1C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FB64EE1C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240747AbiCaTgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S240754AbiCaTiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240594AbiCaTgE (ORCPT
+        with ESMTP id S230138AbiCaTiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:36:04 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0665FF2D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:34:17 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id bc27so588197pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6TjwPLirVvtK8s34uSN7CHWiKNF87Nh8s5orS/FRtx8=;
-        b=GOC8fHhteIOeaRunNywEvdfMNb1ooFQiSRvnOg2z4CcmESdOkeohBxTryjRk+SUpAj
-         ygNF3WSdBsHOIhmEoKxA/8m4C/0kJ4cAxYi4R8JeYbriN7MpQbkAQT9z4ZNMHZ1ZPci+
-         yb13s2X8seQjoLHSgTlV5oIo79vIuPhlvFZV34JXWeuQSlVcLG4xKKOkm77ICCRf1z4G
-         WjdQRlY+O/ksqcXUUqJQ0zRf25mI+adyZwG8jIzSu+ESPr5hW32AAPzqYIaPzbO5EG5g
-         a9eDN++W6Czb+iPVI3bIKw4qR+kVLaMdHxb8TBV0h9jFtbTOOjWrQiQJc58rKtkrrA/U
-         cDGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6TjwPLirVvtK8s34uSN7CHWiKNF87Nh8s5orS/FRtx8=;
-        b=wu7DHGrtXtaIV57QoMUg1Myv6LSKemqfCTr9XD/7EmMM8rCnpUJGggQ2MoIjMbr/pM
-         Djgq5zucbJp3CqxJEHl3m442qKyohMZ6Qq6XqoFWz4cQY9RJ0oqHpHZudk9PcM3Vl5Kg
-         w1LfXdVFP0PKWoT0I7sUBx7Ym5dU5XBKx2p6SbjvnJwaoopc23M1LfBwI+hGXijK5gMl
-         AYDOonv4neJGbIcanN8yYbCfpS8S+RHrC/VxBRz8ggmaPYeAT5V1dE0QeEZ1/yHj7wzx
-         dWVnRZ/WHJZGl4DvH5nFpTzs7Lq8tuhmtFuij98dTI7r2bDO/bIdZ4MaxSK/QKO9M1jh
-         IJqQ==
-X-Gm-Message-State: AOAM532wqQNos8LaknMQ2aB0gPKRH+6l9FzSLG+7mfmNW6aTRITedtNS
-        KpRTFQlbLacghlkF0OsaAWZFsg==
-X-Google-Smtp-Source: ABdhPJyGmSFKtQ59aaeSguxrTwSpnnOjjUfffGxGRGJ3k0sKjLP0XssXOSa6DzDjWlXMtiwXCoRACg==
-X-Received: by 2002:a05:6a00:996:b0:4fa:7cf8:6cdb with SMTP id u22-20020a056a00099600b004fa7cf86cdbmr7074785pfg.71.1648755256480;
-        Thu, 31 Mar 2022 12:34:16 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 3-20020a630003000000b003828fc1455esm134681pga.60.2022.03.31.12.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 12:34:15 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 19:34:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, Chao Gao <chao.gao@intel.com>
-Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
- TDX module
-Message-ID: <YkYCNF3l62IxpmAD@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
- <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
- <20220314194513.GD1964605@ls.amr.corp.intel.com>
- <YkTvw5OXTTFf7j4y@google.com>
- <20220331170303.GA2179440@ls.amr.corp.intel.com>
+        Thu, 31 Mar 2022 15:38:01 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54951E5310;
+        Thu, 31 Mar 2022 12:36:11 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F20531C0002;
+        Thu, 31 Mar 2022 19:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648755369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V8fHwSd70iFB+ISHP69lKJKpu/hepzr7wzhuGq/slrA=;
+        b=T8FpwH1M9y04NkMIbM/MSxBGCYDgiJWha5qWF7sIDPHoh5jC1MfDCMtjKnilMEV2fVGupU
+        lYkJxQmbZRjJtg6eqPH1+Tt8picFwnY2D5tYFv5g5SeuGEbgkSq4RxlM+3j0YIOwDSYI9X
+        tosRqteU+usTABUV6A0ozBm4gjW3cdk6p/NrtZ5Y8Szlh4KgP58eNvzj6YR3zmEJjP2WpT
+        SBgnj+FaIPUJdk//TpJ6eHFGHBhL0pscuxq+3cQwESTc9lah3Vd7DRdpo/PFLrGTi9fS4k
+        6CXdgn8qAp8qrag1coPu3vXWqfkX7LIb14H5T4ajWoPIS7Ln4PbYJ1ZIvrYNjg==
+Date:   Thu, 31 Mar 2022 21:36:08 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm
+ time in debugfs
+Message-ID: <YkYCqI0HEJvi2VjV@piout.net>
+References: <20220331190612.22162-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220331170303.GA2179440@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220331190612.22162-1-mat.jonczyk@o2.pl>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Chao Gao
+Hello,
 
-On Thu, Mar 31, 2022, Isaku Yamahata wrote:
-> On Thu, Mar 31, 2022 at 12:03:15AM +0000, Sean Christopherson <seanjc@google.com> wrote:
-> > On Mon, Mar 14, 2022, Isaku Yamahata wrote:
-> > > - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
-> > > (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
-> > > guest does it.  It naturally fits with the TDX module initialization at creating
-> > > first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
-> > 
-> > That's a solvable problem, though making it work without exporting hardware_enable_all()
-> > could get messy.
+On 31/03/2022 21:06:11+0200, Mateusz Jończyk wrote:
+> Before Linux 5.17, there was a problem with the CMOS RTC driver:
+> cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
+> in progress) bit, which could have caused it to sometimes fail silently
+> and read bogus values or do not set the alarm correctly.
+> Luckily, this issue was masked by cmos_read_time() invocations in core
+> RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
 > 
-> Could you please explain any reason why it's bad idea to export it?
+> To avoid such a problem in the future in some other driver, I wrote a
+> test unit that reads the alarm time many times in a row. As the alarm
+> time is usually read once and cached by the RTC core, this requires a
+> way for userspace to trigger direct alarm time read from hardware. I
+> think that debugfs is the natural choice for this.
+> 
+> So, introduce /sys/kernel/debug/rtc/rtcX/wakealarm_raw. This interface
+> as implemented here does not seem to be that useful to userspace, so
+> there is little risk that it will become kernel ABI.
+> 
+> Is this approach correct and worth it?
+> 
 
-I'd really prefer to keep the hardware enable/disable logic internal to kvm_main.c
-so that all architectures share a common flow, and so that kvm_main.c is the sole
-owner.  I'm worried that exposing the helper will lead to other arch/vendor usage,
-and that will end up with what is effectively duplicate flows.  Deduplicating arch
-code into generic KVM is usually very difficult.
+I'm not really in favor of adding another interface for very little
+gain, you want to use this interface to exercise the API in a way that
+will never happen in the real world, especially since __rtc_read_alarm
+is only called once, at registration time.
 
-This might also be a good opportunity to make KVM slightly more robust.  Ooh, and
-we can kill two birds with one stone.  There's an in-flight series to add compatibility
-checks to hotplug[*].  But rather than special case hotplug, what if we instead do
-hardware enable/disable during module load, and move the compatibility check into
-the hardware_enable path?  That fixes the hotplug issue, gives TDX a window for running
-post-VMXON code in kvm_init(), and makes the broadcast IPI less wasteful on architectures
-that don't have compatiblity checks.
+I'm not sure the selftest is worth it then. You should better improve
+the existing unit tests by exercising the ioctls a bit more. syzbot did
+report interesting race conditions that were more severe.
 
-I'm thinking something like this, maybe as a modificatyion to patch 6 in Chao's
-series, or more likely as a patch 7 so that the hotplug compat checks still get
-in even if the early hardware enable doesn't work on all architectures for some
-reason.
+> TODO:
+> - should I add a new Kconfig option (like CONFIG_RTC_INTF_DEBUGFS), or
+>   just use CONFIG_DEBUG_FS here? I wouldn't like to create unnecessary
+>   config options in the kernel.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> ---
+>  drivers/rtc/Makefile    |   1 +
+>  drivers/rtc/class.c     |   3 ++
+>  drivers/rtc/debugfs.c   | 112 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/rtc/interface.c |   3 +-
+>  include/linux/rtc.h     |  16 ++++++
+>  5 files changed, 133 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/rtc/debugfs.c
+> 
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index 678a8ef4abae..50e166a97f54 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -14,6 +14,7 @@ rtc-core-$(CONFIG_RTC_NVMEM)		+= nvmem.o
+>  rtc-core-$(CONFIG_RTC_INTF_DEV)		+= dev.o
+>  rtc-core-$(CONFIG_RTC_INTF_PROC)	+= proc.o
+>  rtc-core-$(CONFIG_RTC_INTF_SYSFS)	+= sysfs.o
+> +rtc-core-$(CONFIG_DEBUG_FS)		+= debugfs.o
+>  
+>  obj-$(CONFIG_RTC_LIB_KUNIT_TEST)	+= lib_test.o
+>  
+> diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+> index 4b460c61f1d8..5673b7b26c0d 100644
+> --- a/drivers/rtc/class.c
+> +++ b/drivers/rtc/class.c
+> @@ -334,6 +334,7 @@ static void devm_rtc_unregister_device(void *data)
+>  	 * Remove innards of this RTC, then disable it, before
+>  	 * letting any rtc_class_open() users access it again
+>  	 */
+> +	rtc_debugfs_del_device(rtc);
+>  	rtc_proc_del_device(rtc);
+>  	if (!test_bit(RTC_NO_CDEV, &rtc->flags))
+>  		cdev_device_del(&rtc->char_dev, &rtc->dev);
+> @@ -417,6 +418,7 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+>  	}
+>  
+>  	rtc_proc_add_device(rtc);
+> +	rtc_debugfs_add_device(rtc);
+>  
+>  	dev_info(rtc->dev.parent, "registered as %s\n",
+>  		 dev_name(&rtc->dev));
+> @@ -476,6 +478,7 @@ static int __init rtc_init(void)
+>  	}
+>  	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
+>  	rtc_dev_init();
+> +	rtc_debugfs_init();
+>  	return 0;
+>  }
+>  subsys_initcall(rtc_init);
+> diff --git a/drivers/rtc/debugfs.c b/drivers/rtc/debugfs.c
+> new file mode 100644
+> index 000000000000..5ceed5504033
+> --- /dev/null
+> +++ b/drivers/rtc/debugfs.c
+> @@ -0,0 +1,112 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +/*
+> + * Debugfs interface for testing RTC alarms.
+> + */
+> +#include <linux/debugfs.h>
+> +#include <linux/err.h>
+> +#include <linux/rtc.h>
+> +
+> +static struct dentry *rtc_main_debugfs_dir;
+> +
+> +void rtc_debugfs_init(void)
+> +{
+> +	struct dentry *ret = debugfs_create_dir("rtc", NULL);
+> +
+> +	// No error is critical here
+> +	if (!IS_ERR(ret))
+> +		rtc_main_debugfs_dir = ret;
+> +}
+> +
+> +/*
+> + * Handler for /sys/kernel/debug/rtc/rtcX/wakealarm_raw .
+> + * This function reads the RTC alarm time directly from hardware. If the RTC
+> + * alarm is enabled, this function returns the alarm time modulo 24h in seconds
+> + * since midnight.
+> + *
+> + * Should be only used for testing of the RTC alarm read functionality in
+> + * drivers - to make sure that the driver returns consistent values.
+> + *
+> + * Used in tools/testing/selftests/rtc/rtctest.c .
+> + */
+> +static int rtc_debugfs_alarm_read(void *p, u64 *out)
+> +{
+> +	int ret;
+> +	struct rtc_device *rtc = p;
+> +	struct rtc_wkalrm alm;
+> +
+> +	/* Using rtc_read_alarm_internal() instead of __rtc_read_alarm() will
+> +	 * allow us to avoid any interaction with rtc_read_time() and possibly
+> +	 * see more issues.
+> +	 */
+> +	ret = rtc_read_alarm_internal(rtc, &alm);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	if (!alm.enabled) {
+> +		*out = -1;
+> +		return 0;
+> +	}
+> +
+> +	/* It does not matter if the device does not support seconds resolution
+> +	 * of the RTC alarm.
+> +	 */
+> +	if (test_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features))
+> +		alm.time.tm_sec = 0;
+> +
+> +	/* The selftest code works with fully defined alarms only.
+> +	 */
+> +	if (alm.time.tm_sec == -1 || alm.time.tm_min == -1 || alm.time.tm_hour == -1) {
+> +		*out = -2;
+> +		return 0;
+> +	}
+> +
+> +	/* Check if the alarm time is correct.
+> +	 * rtc_valid_tm() does not allow fields containing "-1", so put in
+> +	 * something to satisfy it.
+> +	 */
+> +	if (alm.time.tm_year == -1)
+> +		alm.time.tm_year = 100;
+> +	if (alm.time.tm_mon == -1)
+> +		alm.time.tm_mon = 0;
+> +	if (alm.time.tm_mday == -1)
+> +		alm.time.tm_mday = 1;
+> +	if (rtc_valid_tm(&alm.time))
+> +		return -EINVAL;
+> +
+> +	/* We do not duplicate the logic in __rtc_read_alarm() and instead only
+> +	 * return the alarm time modulo 24h, which all devices should support.
+> +	 * This should be enough for testing purposes.
+> +	 */
+> +	*out = alm.time.tm_hour * 3600 + alm.time.tm_min * 60 + alm.time.tm_sec;
+> +
+> +	return 0;
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(rtc_alarm_raw, rtc_debugfs_alarm_read, NULL, "%lld\n");
+> +
+> +void rtc_debugfs_add_device(struct rtc_device *rtc)
+> +{
+> +	struct dentry *dev_dir;
+> +
+> +	if (!rtc_main_debugfs_dir)
+> +		return;
+> +
+> +	dev_dir = debugfs_create_dir(dev_name(&rtc->dev), rtc_main_debugfs_dir);
+> +
+> +	if (IS_ERR(dev_dir)) {
+> +		rtc->debugfs_dir = NULL;
+> +		return;
+> +	}
+> +	rtc->debugfs_dir = dev_dir;
+> +
+> +	if (test_bit(RTC_FEATURE_ALARM, rtc->features) && rtc->ops->read_alarm) {
+> +		debugfs_create_file("wakealarm_raw", 0444, dev_dir,
+> +				    rtc, &rtc_alarm_raw);
+> +	}
+> +}
+> +
+> +void rtc_debugfs_del_device(struct rtc_device *rtc)
+> +{
+> +	debugfs_remove_recursive(rtc->debugfs_dir);
+> +	rtc->debugfs_dir = NULL;
+> +}
+> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> index d8e835798153..51c801c82472 100644
+> --- a/drivers/rtc/interface.c
+> +++ b/drivers/rtc/interface.c
+> @@ -175,8 +175,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
+>  }
+>  EXPORT_SYMBOL_GPL(rtc_set_time);
+>  
+> -static int rtc_read_alarm_internal(struct rtc_device *rtc,
+> -				   struct rtc_wkalrm *alarm)
+> +int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+>  {
+>  	int err;
+>  
+> diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+> index 47fd1c2d3a57..4665bc238a94 100644
+> --- a/include/linux/rtc.h
+> +++ b/include/linux/rtc.h
+> @@ -41,6 +41,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+>  #include <linux/mutex.h>
+>  #include <linux/timerqueue.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/debugfs.h>
+>  
+>  extern struct class *rtc_class;
+>  
+> @@ -152,6 +153,10 @@ struct rtc_device {
+>  	time64_t offset_secs;
+>  	bool set_start_time;
+>  
+> +#ifdef CONFIG_DEBUG_FS
+> +	struct dentry *debugfs_dir;
+> +#endif
+> +
+>  #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+>  	struct work_struct uie_task;
+>  	struct timer_list uie_timer;
+> @@ -190,6 +195,7 @@ extern int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm);
+>  int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+>  extern int rtc_read_alarm(struct rtc_device *rtc,
+>  			struct rtc_wkalrm *alrm);
+> +int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+>  extern int rtc_set_alarm(struct rtc_device *rtc,
+>  				struct rtc_wkalrm *alrm);
+>  extern int rtc_initialize_alarm(struct rtc_device *rtc,
+> @@ -262,4 +268,14 @@ int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
+>  	return 0;
+>  }
+>  #endif
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +void rtc_debugfs_init(void);
+> +void rtc_debugfs_add_device(struct rtc_device *rtc);
+> +void rtc_debugfs_del_device(struct rtc_device *rtc);
+> +#else /* CONFIG_DEBUG_FS */
+> +static inline void rtc_debugfs_init(void) {}
+> +static inline void rtc_debugfs_add_device(struct rtc_device *rtc) {}
+> +static inline void rtc_debugfs_del_device(struct rtc_device *rtc) {}
+> +#endif /* CONFIG_DEBUG_FS */
+>  #endif /* _LINUX_RTC_H_ */
+> -- 
+> 2.25.1
+> 
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 69c318fdff61..c6572a056072 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4838,8 +4838,13 @@ static void hardware_enable_nolock(void *junk)
-
-        cpumask_set_cpu(cpu, cpus_hardware_enabled);
-
-+       r = kvm_arch_check_processor_compat();
-+       if (r)
-+               goto out;
-+
-        r = kvm_arch_hardware_enable();
-
-+out:
-        if (r) {
-                cpumask_clear_cpu(cpu, cpus_hardware_enabled);
-                atomic_inc(&hardware_enable_failed);
-@@ -5636,18 +5641,6 @@ void kvm_unregister_perf_callbacks(void)
- }
- #endif
-
--struct kvm_cpu_compat_check {
--       void *opaque;
--       int *ret;
--};
--
--static void check_processor_compat(void *data)
--{
--       struct kvm_cpu_compat_check *c = data;
--
--       *c->ret = kvm_arch_check_processor_compat(c->opaque);
--}
--
- int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
-                  struct module *module)
- {
-@@ -5679,13 +5672,13 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
-        if (r < 0)
-                goto out_free_1;
-
--       c.ret = &r;
--       c.opaque = opaque;
--       for_each_online_cpu(cpu) {
--               smp_call_function_single(cpu, check_processor_compat, &c, 1);
--               if (r < 0)
--                       goto out_free_2;
--       }
-+       r = hardware_enable_all();
-+       if (r)
-+               goto out_free_2;
-+
-+       kvm_arch_post_hardware_enable_setup();
-+
-+       hardware_disable_all();
-
-        r = cpuhp_setup_state_nocalls(CPUHP_AP_KVM_STARTING, "kvm/cpu:starting",
-                                      kvm_starting_cpu, kvm_dying_cpu);
-
-[*] https://lore.kernel.org/all/20211227081515.2088920-7-chao.gao@intel.com
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

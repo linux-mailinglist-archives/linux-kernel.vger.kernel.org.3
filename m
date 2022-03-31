@@ -2,80 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82A94ED99F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E1D4ED9A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236116AbiCaM3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S236119AbiCaMaB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 31 Mar 2022 08:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234476AbiCaM3a (ORCPT
+        with ESMTP id S232868AbiCaM37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:29:30 -0400
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D21A210466
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:27:42 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 7673BBCA1F
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:27:42 -0500 (CDT)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id ZttunhyI6b6UBZttunkP0S; Thu, 31 Mar 2022 07:27:42 -0500
-X-Authority-Reason: nr=8
-Received: from host-79-43-204-123.retail.telecomitalia.it ([79.43.204.123]:33844 helo=[10.0.0.45])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nZttt-003gUe-U1; Thu, 31 Mar 2022 07:27:42 -0500
-Message-ID: <f3bfc577-181f-6b5b-b6ff-30edd90bbe83@kernel.org>
-Date:   Thu, 31 Mar 2022 14:27:39 +0200
+        Thu, 31 Mar 2022 08:29:59 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C81921044E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:28:10 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nZtuJ-0000oT-6f; Thu, 31 Mar 2022 14:28:07 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wefu@redhat.com,
+        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
+        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v8 01/14] riscv: prevent null-pointer dereference with sbi_remote_fence_i
+Date:   Thu, 31 Mar 2022 14:28:06 +0200
+Message-ID: <2260961.n0HT0TaD9V@diego>
+In-Reply-To: <20220331095155.GA23422@lst.de>
+References: <20220324000710.575331-1-heiko@sntech.de> <20220324000710.575331-2-heiko@sntech.de> <20220331095155.GA23422@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] rtla/osnoise: avoid NULL pointer dereference on out
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1648623748-8833-1-git-send-email-baihaowen@meizu.com>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <1648623748-8833-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.43.204.123
-X-Source-L: No
-X-Exim-ID: 1nZttt-003gUe-U1
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-43-204-123.retail.telecomitalia.it ([10.0.0.45]) [79.43.204.123]:33844
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 6
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 09:02, Haowen Bai wrote:
-> record is NULL and go out but dereference record->trace.
+Hi,
+
+Am Donnerstag, 31. März 2022, 11:51:55 CEST schrieb Christoph Hellwig:
+> On Thu, Mar 24, 2022 at 01:06:57AM +0100, Heiko Stuebner wrote:
+> > The callback used inside sbi_remote_fence_i is set at sbi probe time
+> > to the needed variant. Before that it is a NULL pointer.
+> > 
+> > Some users like the flush_icache_*() functions suggest a generic
+> > functionality, that doesn't depend on a specific boot-stage but
+> > uses sbi_remote_fence_i as one option to flush other cpu cores.
+> > 
+> > So they definitely shouldn't run into null-pointer dereference
+> > issues when called "too early" during boot.
+> > 
+> > So introduce an empty function to be the standard for the __sbi_rfence
+> > function pointer until sbi_init has run.
+> > 
+> > Users of sbi_remote_fence_i will have separate code for the local
+> > cpu and sbi_init() is called before other cpus are brought up.
+> > So there are no other cpus present at the time when the issue
+> > might happen.
 > 
-> report by coccicheck:
-> tools/tracing/rtla/src/osnoise_top.c:650:31-36: ERROR:
-> record is NULL but dereferenced.
+> I don't really understand this changelog.  If flush_icache_* or
+> other routines using SBI calls are called too early they won't
+> do what they are asked to do, which implies a bug in the code.
+> 
+> So crashing absolutely is the right thing to do here as we don't
+> really have any other error reporting method available.
+> 
+> So unless I'm totally misunderstanding what you are saying here:
+> 
+> Nacked-by: Christoph Hellwig <hch@lst.de>
 
-Duplicated of:
-https://lore.kernel.org/lkml/20220322113253.57390-1-wanjiabing@vivo.com/
+The function is defined as
 
--- Daniel
+void flush_icache_all(void)
+{
+	local_flush_icache_all();
+
+	if (IS_ENABLED(CONFIG_RISCV_SBI))
+		sbi_remote_fence_i(NULL);
+	else
+		on_each_cpu(ipi_remote_fence_i, NULL, 1);
+}
+
+so essentially flushes the _local_ icache first and then tries to flush
+caches on other cores, either via an ipi or via sbi.
+
+The remote-fence callback is set correctly during sbi_init().
+The other cores are only brought up after sbi-init is done.
+
+So it's not really about error reporting but making sure that flush_icache_all()
+does something sane even when still running on the first core.
+As I assume the "all" means on all available cores (which would be the
+core the system booted on).
+
+Does this make it clearer what this tries to solve?
+Heiko
+
+

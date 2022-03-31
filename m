@@ -2,333 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA634ED72B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455404ED72F
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbiCaJn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S234249AbiCaJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233957AbiCaJn5 (ORCPT
+        with ESMTP id S234232AbiCaJoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:43:57 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55981D8315;
-        Thu, 31 Mar 2022 02:42:07 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1648719723; bh=bxHjM8nQMv6N9KHDuQPaOT4fM9NaqF0YzmvJaTCXop4=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=ffRBSzKwPKDLf8HOVm3jMId/Tw/wMqbynZUZvZdfE7htutoxByK8ZVN2yeQZLx7Fx
-         yZL92fKn7ho1nDLsgvzSBe0Jl5Ds1Xvsitd5J8daJTvFFv+3WszHT8hkSTuJp2mHfh
-         baJIRu73TaNwLwrUgkDdv6jIvwL5rLBjM3/ywGb4=
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH 2/2] dmaengine: apple-admac: Add Apple ADMAC driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <2b67081a-0b59-20d2-dbb5-a3e0b24862db@linaro.org>
-Date:   Thu, 31 Mar 2022 11:42:00 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AA1C6D16-9016-4A11-9F90-C49A13FACBC0@cutebit.org>
-References: <20220330164458.93055-1-povik+lin@cutebit.org>
- <20220330164458.93055-3-povik+lin@cutebit.org>
- <2b67081a-0b59-20d2-dbb5-a3e0b24862db@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 05:44:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442311D8315
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:42:27 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22V8sGQL020599;
+        Thu, 31 Mar 2022 09:42:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=WPCIEKOGOxbgD3kRwImprKgQzLng/m2SyAvJQuPp6V4=;
+ b=iq/8IpTboNsw2qrshfSjmWvbiW/ChVW5VK8GTfUr4yBVXwKcHBzwly0lvM1NcHlKfc8b
+ crlU0UayNPnKy6iLwR26VGzhvtqTP+HFzmvxR4KksAPPkLCMG/VI4NJBVmV6LSKNoT4I
+ xKb0n7dd0zuDw7Gp4HMhZaHnUoFP9fQmYNMqV+6ji9OeEYtvezvShnrUyX8oKt0pbarI
+ +rqI4VfqrZzNvQcpMguscR1iOnR5pGbNJGb5t7exPVxWTwQa7DSiHb0xlwT0eGJtzanp
+ f70ukiKl2+Bv0AE+Of960gyZWaSPG/ITouJ7gfKWo0vnFKNNxLMRKAlQVKsD1Th+ZT3b tA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f562rmw73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 09:42:14 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22V9b8Nx014636;
+        Thu, 31 Mar 2022 09:42:13 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f562rmw6d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 09:42:13 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22V9fSpf025701;
+        Thu, 31 Mar 2022 09:42:10 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3f1tf90uyx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Mar 2022 09:42:10 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22V9gE3C42336748
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 09:42:14 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 65952A405B;
+        Thu, 31 Mar 2022 09:42:08 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F4FCA4054;
+        Thu, 31 Mar 2022 09:42:07 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.144.204])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 31 Mar 2022 09:42:06 +0000 (GMT)
+Date:   Thu, 31 Mar 2022 12:42:04 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     kernel test robot <lkp@intel.com>, Roman Gushchin <guro@fb.com>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Minchan Kim <minchan@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re:
+ [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
+ reference from the function memblock_bottom_up() to the variable
+ .meminit.data:memblock
+Message-ID: <YkV3bCqtLaVH+mC7@linux.ibm.com>
+References: <202203301412.MZ7wQvQz-lkp@intel.com>
+ <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ihh56QH7Def_i5PNnurIYBjwTTybEFOK
+X-Proofpoint-ORIG-GUID: KFDrNZ5oYnuEr9lVqDjlhUbjbVbEtXWT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-31_03,2022-03-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203310052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+(added llvm folks)
 
-> On 31. 3. 2022, at 8:25, Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org> wrote:
->=20
-> On 30/03/2022 18:44, Martin Povi=C5=A1er wrote:
->> Add driver for Audio DMA Controller present on Apple SoCs from the
->> "Apple Silicon" family.
->>=20
->> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
->> ---
->> MAINTAINERS               |   2 +
->> drivers/dma/Kconfig       |   8 +
->> drivers/dma/Makefile      |   1 +
->> drivers/dma/apple-admac.c | 799 =
-++++++++++++++++++++++++++++++++++++++
->> 4 files changed, 810 insertions(+)
->> create mode 100644 drivers/dma/apple-admac.c
->>=20
->=20
-> (...)
->=20
->> +
->> +static void admac_poke(struct admac_data *ad, int reg, u32 val)
->> +{
->> +	writel_relaxed(val, ad->base + reg);
->> +}
->> +
->> +static u32 admac_peek(struct admac_data *ad, int reg)
->> +{
->=20
-> Please do not write some custom-named functions for common functions. =
-No
-> need to "#define true 0" or "#define read peek" etc. Read is read, =
-write
-> is write. Using other names is counter intuitive and makes reading the
-> code more difficult.
->=20
-> You actually should not have these wrappers because they don't make =
-the
-> code smaller (more arguments needed...).
->=20
-> If you want the wrappers, please use regmap_mmio.
->=20
-> Only modify wrapper save some space, so it could stay.
+Hi,
 
-I get the aversion to custom naming, but I would rather keep the =
-helpers.
-Compare e.g.
+On Wed, Mar 30, 2022 at 02:47:43PM -0700, Roman Gushchin wrote:
+> On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
+> > Hi Roman,
+> > 
+> > FYI, the error/warning still remains.
+> > 
+> > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+> > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+> > commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
+> > config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+> >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+> >         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> > 
+> > >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
+> > The function memblock_bottom_up() references
+> > the variable __meminitdata memblock.
+> > This is often because memblock_bottom_up lacks a __meminitdata
+> > annotation or the annotation of memblock is wrong.
+> 
+> I guess this patch should fix it, however I fail to reproduce the original issue.
+> Maybe it's up to the specific compiler version.
+> 
+> --
+> 
+> From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
+> From: Roman Gushchin <roman.gushchin@linux.dev>
+> Date: Wed, 30 Mar 2022 14:42:12 -0700
+> Subject: [PATCH] memblock: fix memblock_bottom_up() and
+>  memblock_set_bottom_up() annotations
+> 
+> memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
+> annotations causing compiler warnings like:
+>   WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
+>   variable .meminit.data:memblock
+> 
+> Fix it by adding the missing annotation and removing the wrong
+> __meminit annotation.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>  include/linux/memblock.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index 50ad19662a32..536bc2fc31e6 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
+>  /*
+>   * Set the allocation direction to bottom-up or top-down.
+>   */
+> -static inline __init_memblock void memblock_set_bottom_up(bool enable)
+> +static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
 
-  admac_write(ad, REG_BUS_WIDTH(adchan->no), bus_width);
+I think putting __initdata_memlock won't help here, because there should be
+nothing wrong with __meminit function accessing __meminitdata data.
 
-and
+My guesstimate would be that the compiler decided not to inline this and
+still dropped section attribute because of 'inline'.
 
-  writel_relaxed(bus_width, ad->base + REG_BUS_WIDTH(adchan->no));
+If this is the case we I think we should 
 
-Although I guess as you said I may use regmap.
+	s/inline __init_memblock/__always_inline/
 
->> +	return readl_relaxed(ad->base + reg);
->> +}
->> +
->> +static void admac_modify(struct admac_data *ad, int reg, u32 mask, =
-u32 val)
->> +{
->> +	void __iomem *addr =3D ad->base + reg;
->> +	u32 curr =3D readl_relaxed(addr);
->> +
->> +	writel_relaxed((curr & ~mask) | (val & mask), addr);
->> +}
+>  {
+>  	memblock.bottom_up = enable;
+>  }
+> @@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
+>   * if this is true, that said, memblock will allocate memory
+>   * in bottom-up direction.
+>   */
+> -static inline __init_memblock bool memblock_bottom_up(void)
+> +static inline __initdata_memblock bool memblock_bottom_up(void)
+>  {
+>  	return memblock.bottom_up;
+>  }
+> -- 
+> 2.30.2
+> 
 
-
->> +
->> +/*
->> + * Write one hardware descriptor for a dmaengine cyclic transaction.
->> + */
->> +static void admac_cyclic_write_one_desc(struct admac_data *ad, int =
-channo,
->> +					struct admac_tx *tx)
->> +{
->> +	dma_addr_t addr;
->> +
->> +	if (WARN_ON(!tx->cyclic))
->=20
-> WARN_ON_ONCE() - although I wonder why do you need this. You fully
-> control the callers to this function, don't you?
-
-I do. Not really needed, just wanted to make it obvious we are operating
-under that assumption. Can drop it then.
-
->> +		return;
->> +
->> +	addr =3D tx->buf_addr + (tx->submitted_pos % tx->buf_len);
->> +	WARN_ON(addr + tx->period_len > tx->buf_end);
->=20
-> If this is possible, you have buggy code. If this is not possible, why =
-warn?
-
-Well so if the code is buggy, I will get kicked right away here! Again,
-happy to drop it then.
-
->> +
->> +	dev_dbg(ad->dev, "ch%d descriptor: addr=3D0x%pad len=3D0x%zx =
-flags=3D0x%x\n",
->> +		channo, addr, tx->period_len, FLAG_DESC_NOTIFY);
->> +
->> +	admac_poke(ad, REG_DESC_WRITE(channo), addr);
->> +	admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
->> +	admac_poke(ad, REG_DESC_WRITE(channo), tx->period_len);
->> +	admac_poke(ad, REG_DESC_WRITE(channo), FLAG_DESC_NOTIFY);
->> +
->> +	tx->submitted_pos +=3D tx->period_len;
->> +	tx->submitted_pos %=3D 2 * tx->buf_len;
->> +}
-
-(snip)
-
->> +static void admac_handle_status_err(struct admac_data *ad, int =
-channo)
->> +{
->> +	bool handled =3D false;
->> +
->> +	if (admac_peek(ad, REG_DESC_RING(channo) & RING_ERR)) {
->> +		admac_poke(ad, REG_DESC_RING(channo), RING_ERR);
->> +		dev_err(ad->dev, "ch%d descriptor ring error\n", =
-channo);
->=20
-> It looks this is executed on every interrupt, so you might flood the
-> dmesg. This should be ratelimited.
-
-OK
-
->> +		handled =3D true;
->> +	}
->> +
->> +	if (admac_peek(ad, REG_REPORT_RING(channo)) & RING_ERR) {
->> +		admac_poke(ad, REG_REPORT_RING(channo), RING_ERR);
->> +		dev_err(ad->dev, "ch%d report ring error\n", channo);
->> +		handled =3D true;
->> +	}
->> +
->> +	if (unlikely(!handled)) {
->> +		dev_err(ad->dev, "ch%d unknown error, masking errors as =
-cause of IRQs\n", channo);
->> +		admac_modify(ad, REG_CHAN_INTMASK(channo, =
-ad->irq_index),
->> +				STATUS_ERR, 0);
->> +	}
->> +}
-
-(snip)
-
->> +static int admac_probe(struct platform_device *pdev)
->> +{
->> +	struct device_node *np =3D pdev->dev.of_node;
->> +	struct admac_data *ad;
->> +	struct dma_device *dma;
->> +	int nchannels;
->> +	int err, irq, i;
->> +
->> +	err =3D of_property_read_u32(np, "dma-channels", &nchannels);
->> +	if (err || nchannels > NCHANNELS_MAX) {
->> +		dev_err(&pdev->dev, "missing or invalid dma-channels =
-property\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	ad =3D devm_kzalloc(&pdev->dev, struct_size(ad, channels, =
-nchannels), GFP_KERNEL);
->> +	if (!ad)
->> +		return -ENOMEM;
->> +
->> +	platform_set_drvdata(pdev, ad);
->> +	ad->dev =3D &pdev->dev;
->> +	ad->nchannels =3D nchannels;
->> +
->> +	err =3D of_property_read_u32(np, =
-"apple,internal-irq-destination",
->> +					&ad->irq_index);
->> +	if (err || ad->irq_index >=3D IRQ_NINDICES) {
->> +		dev_err(&pdev->dev, "missing or invalid =
-apple,internal-irq-destination property\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	irq =3D platform_get_irq(pdev, 0);
->> +	if (irq < 0) {
->> +		dev_err(&pdev->dev, "unable to obtain interrupt =
-resource\n");
->> +		return irq;
->> +	}
->> +
->> +	err =3D devm_request_irq(&pdev->dev, irq, admac_interrupt,
->> +					0, dev_name(&pdev->dev), ad);
->=20
-> Align the arguments with previous line. This applies everywhere in the
-> driver.
-
-I hope best-effort tab aligning is okay.
-
->> +	if (err) {
->> +		dev_err(&pdev->dev, "unable to register interrupt: =
-%d\n", err);
->> +		return err;
->> +	}
->> +
->> +	ad->base =3D devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(ad->base)) {
->> +		dev_err(&pdev->dev, "unable to obtain MMIO resource\n");
->> +		return PTR_ERR(ad->base);
->> +	}
->> +
->> +	dma =3D &ad->dma;
->> +
->> +	dma_cap_set(DMA_PRIVATE, dma->cap_mask);
->> +	dma_cap_set(DMA_CYCLIC, dma->cap_mask);
->> +
->> +	dma->dev =3D &pdev->dev;
->> +	dma->device_alloc_chan_resources =3D admac_alloc_chan_resources;
->> +	dma->device_free_chan_resources =3D admac_free_chan_resources;
->> +	dma->device_tx_status =3D admac_tx_status;
->> +	dma->device_issue_pending =3D admac_issue_pending;
->> +	dma->device_terminate_all =3D admac_terminate_all;
->> +	dma->device_prep_dma_cyclic =3D admac_prep_dma_cyclic;
->> +	dma->device_config =3D admac_device_config;
->> +	dma->device_pause =3D admac_pause;
->> +	dma->device_resume =3D admac_resume;
->> +
->> +	dma->directions =3D BIT(DMA_MEM_TO_DEV) | BIT(DMA_DEV_TO_MEM);
->> +	dma->residue_granularity =3D DMA_RESIDUE_GRANULARITY_BURST;
->> +	dma->dst_addr_widths =3D BIT(DMA_SLAVE_BUSWIDTH_1_BYTE) |
->> +			BIT(DMA_SLAVE_BUSWIDTH_2_BYTES) |
->> +			BIT(DMA_SLAVE_BUSWIDTH_4_BYTES);
->> +
->> +	INIT_LIST_HEAD(&dma->channels);
->> +	for (i =3D 0; i < nchannels; i++) {
->> +		struct admac_chan *adchan =3D &ad->channels[i];
->> +
->> +		adchan->host =3D ad;
->> +		adchan->no =3D i;
->> +		adchan->chan.device =3D &ad->dma;
->> +		spin_lock_init(&adchan->lock);
->> +		INIT_LIST_HEAD(&adchan->submitted);
->> +		INIT_LIST_HEAD(&adchan->issued);
->> +		list_add_tail(&adchan->chan.device_node, =
-&dma->channels);
->> +		tasklet_setup(&adchan->tasklet, admac_chan_tasklet);
->> +	}
->> +
->> +	err =3D dma_async_device_register(&ad->dma);
->> +	if (err) {
->> +		dev_err(&pdev->dev, "failed to register DMA device: =
-%d\n", err);
->=20
-> Use dev_err_probe() here and in other places.
-
-Okay!
-
->> +		return err;
->> +	}
->> +
->> +	err =3D of_dma_controller_register(pdev->dev.of_node, =
-admac_dma_of_xlate, ad);
->> +	if (err) {
->> +		dev_err(&pdev->dev, "failed to register with OF: %d\n", =
-err);
->> +		dma_async_device_unregister(&ad->dma);
->> +		return err;
->> +	}
->> +
->> +	dev_dbg(&pdev->dev, "all good, ready to go!\n");
->=20
-> No debugging messages for simple probe success, please.
-
-If you insist. :)
-
->=20
-> Best regards,
-> Krzysztof
-
-Best, Martin
-
+-- 
+Sincerely yours,
+Mike.

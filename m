@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989E64EE0EF
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9174EE0EE
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbiCaSrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S235327AbiCaSrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiCaSrF (ORCPT
+        with ESMTP id S237034AbiCaSra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:47:05 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BAA18D9B4;
-        Thu, 31 Mar 2022 11:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Xf4dx+kb6mltbt/ukOIdVaBYUv4mOnK0nMAdAcvT3t4=; b=r8b5T+EEyUL9WNCmLx5J5hC8n2
-        OLPmiU/H5JiehkOmfyg8K1M5f5zuQ6d325rz3Z9ZvRpO/QoFxYOqe+nrQoTS1gtCyctthLA/rBZiC
-        ZRrsdoSY4mAQzH73CsgM8HmDHfM8DNhO2JwC7kxN2J4wzKd6nLeN6Cx+gJKaA8jlL3jni5s79YDnc
-        l1yWRemhS/PTbxZJDQ38Nbc4nER4NJKO4nIWoplseX51mkblN+arfisGpg2iRIEcv7NG+sYMdG4BV
-        2m0XMX4jMwDyCE5c/Xjlc2sWzb1qAGWQK/F5g98SfbOhLUDBOnW5jmqB9jWoqFcOIEMjCp8s5DV3s
-        MwYyF6Ww==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58072)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZzn9-0005Ct-VE; Thu, 31 Mar 2022 19:45:07 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZzn9-0007s2-1n; Thu, 31 Mar 2022 19:45:07 +0100
-Date:   Thu, 31 Mar 2022 19:45:07 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] net: stmmac: Fix unset max_speed difference
- between DT and non-DT platforms
-Message-ID: <YkX2s8DtcSebBDcL@shell.armlinux.org.uk>
-References: <20220331184145.14242-1-wens@kernel.org>
+        Thu, 31 Mar 2022 14:47:30 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB423574B
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:45:41 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id i11so361049plg.12
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p0VBDObDoFUONnWI9F1/+zvgmxSX/U3+Op0djrNZ6+Y=;
+        b=tEWlML2VMYg3LF9jB/Et4JGlYfjVS9pVUo/fDlqbCKzTkSkq6GGaHSb/gBxTcIKDQP
+         Sq3xeikKPcVd5Ah2H6UAKluUf7dSi86OTSEBiH9Bes1ELGs2Gshlt6iXyCPW0IGODBkG
+         DEjOHj9KLh9XPUYM+jWrE4CUddNvJW3jE9BTe2bfdfpWaukuUpeyBi4sBHXuEBZpZ7i3
+         rVu/EB/6ivKS8kGNRjnagiO5djB6oRKOCjM/NoUKaI2TsnwAOGJwfic3hQUMrymRNITP
+         6xQF8+WV+LU3Y7R6KxP+GucOIT5zZaDnrSIiszQML1BggJlJw0bAfGHTyNn8n8uVs1/H
+         sSVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p0VBDObDoFUONnWI9F1/+zvgmxSX/U3+Op0djrNZ6+Y=;
+        b=siEy3VOqQikAXogzt9lqA9e92Q6gkf3AZlLia6Zwh4YeNhutnERMNja+3Kmp/wJpVf
+         2S2UMHL+MArpVaSRnxmfpa7Ta9k4sQ78Dla1zIqFNSt9znX6uUs3uVMYXQZhCYb9SHn2
+         JhoP+afMipbW7pood6WnSTfwrZpIG1ByXCIlX14Odpa0N1qt7cmKsiq4a/BRz5xgRNhh
+         EQAIfBv96D495c4qlCDmyDBvV+nA5sXhwJMwIvrI2J8hoCMi33Stple2O/h0uHb6E49d
+         ClZhjunlGz0X/IkDVIusyb+MRu5dwSpzsE5Fd1Spol0j1ECefEkgYF2lQSjT4RNzk8gN
+         CqWA==
+X-Gm-Message-State: AOAM530/u+zwkGJeJzW9cexwbTtSXDdypPNMsefvp8zTNcLToyWFU+cD
+        YUGaRxCzMU8GQCiYbPq24mBgDg==
+X-Google-Smtp-Source: ABdhPJw7j6WOuvK4kl+s/hZ1aeTMuDftyemuxNuoMU64veTxp870Hem95njAys6VqCILAsYfpfwgfw==
+X-Received: by 2002:a17:902:f78d:b0:14f:ce61:eaf2 with SMTP id q13-20020a170902f78d00b0014fce61eaf2mr6753898pln.124.1648752340665;
+        Thu, 31 Mar 2022 11:45:40 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id fy9-20020a17090b020900b001c690bc05c4sm96606pjb.0.2022.03.31.11.45.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 11:45:40 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 18:45:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jan Stancek <jstancek@redhat.com>
+Cc:     Bruno Goncalves <bgoncalv@redhat.com>, kvm <kvm@vger.kernel.org>,
+        "Bonzini, Paolo" <pbonzini@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        CKI Project <cki-project@redhat.com>,
+        Li Wang <liwang@redhat.com>
+Subject: Re: RIP: 0010:param_get_bool.cold+0x0/0x2 - LTP read_all_sys - 5.17.0
+Message-ID: <YkX20LtaENdOOYxi@google.com>
+References: <CA+QYu4q7K-pkAbMt3br_7O-Lu2OWyieLfyiju0PNEiy5YdKYzg@mail.gmail.com>
+ <CAASaF6yhTpXcWhTyg5VSU6czPPws5+sQ3vR7AWC8xxM7Xm_BGg@mail.gmail.com>
+ <YkXv0NoBjLBYBzX8@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331184145.14242-1-wens@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YkXv0NoBjLBYBzX8@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 02:41:45AM +0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
+On Thu, Mar 31, 2022, Sean Christopherson wrote:
+> On Wed, Mar 30, 2022, Jan Stancek wrote:
+> > +CC kvm
+> > 
+> > Issue seems to be that nx_huge_pages is not initialized (-1) and
+> > attempted to be used as boolean when reading
+> > /sys/module/kvm/parameters/nx_huge_pages
 > 
-> In commit 9cbadf094d9d ("net: stmmac: support max-speed device tree
-> property"), when DT platforms don't set "max-speed", max_speed is set to
-> -1; for non-DT platforms, it stays the default 0.
-> 
-> Prior to commit eeef2f6b9f6e ("net: stmmac: Start adding phylink support"),
-> the check for a valid max_speed setting was to check if it was greater
-> than zero. This commit got it right, but subsequent patches just checked
-> for non-zero, which is incorrect for DT platforms.
-> 
-> In commit 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-> the conversion switched completely to checking for non-zero value as a
-> valid value, which caused 1000base-T to stop getting advertised by
-> default.
-> 
-> Instead of trying to fix all the checks, simply leave max_speed alone if
-> DT property parsing fails.
-> 
-> Fixes: 9cbadf094d9d ("net: stmmac: support max-speed device tree property")
-> Fixes: 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> Ugh, CONFIG_UBSAN_BOOL=y complains about a bool not being 0 or 1.  What a pain.
 
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Side topic, any idea why your traces don't have the UBSAN output?  I verified
+that it's not a panic_on_warn thing.  Having the UBSAN output in future bug reports
+would be very helpful.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+[   13.150244] ================================================================================
+[   13.150780] UBSAN: invalid-load in kernel/params.c:320:33
+[   13.151192] load of value 255 is not a valid value for type '_Bool'
+[   13.152079] ================================================================================

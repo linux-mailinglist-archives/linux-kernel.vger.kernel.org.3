@@ -2,259 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161724ED6BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA8F4ED6CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiCaJ00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S233914AbiCaJ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiCaJ0Z (ORCPT
+        with ESMTP id S233875AbiCaJ2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:26:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF2441FCD00
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:24:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADE1223A;
-        Thu, 31 Mar 2022 02:24:37 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D258A3F718;
-        Thu, 31 Mar 2022 02:24:34 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 10:24:29 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH v2 2/4] arm64, scs: save scs_sp values per-cpu when
- switching stacks
-Message-ID: <YkVzTbafttTHWETU@FVFF77S0Q05N>
-References: <cover.1648049113.git.andreyknvl@google.com>
- <f75c58b17bfaa419f84286cd174e3a08f971b779.1648049113.git.andreyknvl@google.com>
+        Thu, 31 Mar 2022 05:28:52 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CA81FD2DB;
+        Thu, 31 Mar 2022 02:27:03 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 73BDAE000C;
+        Thu, 31 Mar 2022 09:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648718820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JPFMHm+ZBOSm/fAX3EE1F6G0rslnhJUgGBWnwLqpeX0=;
+        b=KCqHNRicjeZ2NlZgMKTmuLvwh0jQrJPxDiK3BUuWWy73As0xw/jQdRtI39me3D+674t+S/
+        LqYDrEzwYHlM0UCIXps7k3dsxfYLhZJjRJk3E7v27A0XoKWxw7d/2BRry413WELeENaodC
+        2YQZi2mhFqPf/JAJIGGsqecWe55syxDJ0tlcwr7IvcpgbLEX94eJ0LrrRGRI/n6lT5XqZO
+        LwPPrlWzfYxspwykHG4oVL+WP1diOY85HfusUo2/jrKlenTwVMcrsl3+mugcCF9IOaSjgk
+        W+0rCeK0NIjyoVO1uKL6KPhX5YsrfnMquT7Smm6s7tMuKWJ11E+Cf7JHmdIB/w==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [RFC PATCH net-next v2 00/11] add fwnode based mdiobus registration
+Date:   Thu, 31 Mar 2022 11:25:22 +0200
+Message-Id: <20220331092533.348626-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f75c58b17bfaa419f84286cd174e3a08f971b779.1648049113.git.andreyknvl@google.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 04:32:53PM +0100, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> When an interrupt happens, the current Shadow Call Stack (SCS) pointer
-> is switched to a per-interrupt one stored in a per-CPU variable. The old
-> pointer is then saved on the normal stack and restored when the interrupt
-> is handled.
-> 
-> To collect the current stack trace based on SCS when the interrupt is
-> being handled, we need to know the SCS pointers that belonged to the
-> task and potentially other interrupts that were interrupted.
-> 
-> Instead of trying to retrieve the SCS pointers from the stack, change
-> interrupt handlers (for hard IRQ, Normal and Critical SDEI) to save the
-> previous SCS pointer in a per-CPU variable.
+In order to allow the mdiobus to be used completely with fwnode and
+continue to add fwnode support. This series adds
+fwnode_mdiobus_register() which allows to register a MDIO bus with a
+fwnode_handle. This support also works with device-tree and thus allows
+to integrate of_mdobus_register on top of fwnode support.
 
-I'm *really* not keen on *always* poking this in the entry code for the
-uncommon case of unwind. It complicates the entry code and means we're always
-paying a cost for potentially no benefit. At a high-level, I don't think this
-is the right approach.
+ACPI acpi_mdiobus_register() function seems similar enough with
+fwnode_mdiobus_register() to be integrated into that later one and thus
+remove ACPI specific registration, keeping only the fwnode one for all
+types of node. I'm not able to test that specific part so I did not do
+it in this series.
 
-For the regular unwinder, I want to rework things such that we can identify
-exception boundaries and look into the regs (e.g. so that we can recover the
-PC+LR+FP and avoid duplicating part of this in a frame record), and I'd much
-prefer that we did the same here.
+This series is a subset of the one that was first submitted as a larger
+series to add swnode support [1]. In this one, it will be focused on
+fwnode support only since it seems to have reach a consensus that
+adding fwnode to subsystems makes sense.
 
-Thanks,
-Mark.
+Additional information:
 
-> Note that interrupts stack. A task can be interrupted by a hard IRQ,
-> which then can interrupted by a normal SDEI, etc. This is handled by
-> using a separate per-CPU variable for each interrupt type.
-> 
-> Also reset the saved SCS pointer when exiting the interrupt. This allows
-> checking whether we should include any interrupt frames when collecting
-> the stack trace. While we could use in_hardirq(), there seems to be no
-> easy way to check whether we are in an SDEI handler. Directly checking
-> the per-CPU variables for being non-zero is more resilient.
-> 
-> Also expose both the the added saved SCS variables and the existing SCS
-> base variables in arch/arm64/include/asm/scs.h so that the stack trace
-> collection impementation can use them.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  arch/arm64/include/asm/assembler.h | 12 ++++++++++++
->  arch/arm64/include/asm/scs.h       | 13 ++++++++++++-
->  arch/arm64/kernel/entry.S          | 28 ++++++++++++++++++++++++----
->  arch/arm64/kernel/irq.c            |  4 +---
->  arch/arm64/kernel/sdei.c           |  5 ++---
->  5 files changed, 51 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> index 8c5a61aeaf8e..ca018e981d13 100644
-> --- a/arch/arm64/include/asm/assembler.h
-> +++ b/arch/arm64/include/asm/assembler.h
-> @@ -270,6 +270,18 @@ alternative_endif
->  	ldr	\dst, [\dst, \tmp]
->  	.endm
->  
-> +	/*
-> +	 * @src: Register whose value gets stored in sym
-> +	 * @sym: The name of the per-cpu variable
-> +	 * @tmp0: Scratch register
-> +	 * @tmp1: Another scratch register
-> +	 */
-> +	.macro str_this_cpu src, sym, tmp0, tmp1
-> +	adr_l	\tmp0, \sym
-> +	get_this_cpu_offset \tmp1
-> +	str	\src, [\tmp0, \tmp1]
-> +	.endm
-> +
->  /*
->   * vma_vm_mm - get mm pointer from vma pointer (vma->vm_mm)
->   */
-> diff --git a/arch/arm64/include/asm/scs.h b/arch/arm64/include/asm/scs.h
-> index 8297bccf0784..2bb2b32f787b 100644
-> --- a/arch/arm64/include/asm/scs.h
-> +++ b/arch/arm64/include/asm/scs.h
-> @@ -24,6 +24,17 @@
->  	.endm
->  #endif /* CONFIG_SHADOW_CALL_STACK */
->  
-> -#endif /* __ASSEMBLY __ */
-> +#else /* __ASSEMBLY__ */
-> +
-> +#include <linux/percpu.h>
-> +
-> +DECLARE_PER_CPU(unsigned long *, irq_shadow_call_stack_ptr);
-> +DECLARE_PER_CPU(unsigned long *, irq_shadow_call_stack_saved_ptr);
-> +DECLARE_PER_CPU(unsigned long *, sdei_shadow_call_stack_normal_ptr);
-> +DECLARE_PER_CPU(unsigned long *, sdei_shadow_call_stack_normal_saved_ptr);
-> +DECLARE_PER_CPU(unsigned long *, sdei_shadow_call_stack_critical_ptr);
-> +DECLARE_PER_CPU(unsigned long *, sdei_shadow_call_stack_critical_saved_ptr);
-> +
-> +#endif /* __ASSEMBLY__ */
->  
->  #endif /* _ASM_SCS_H */
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index ede028dee81b..1c62fecda172 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-> @@ -880,7 +880,8 @@ NOKPROBE(ret_from_fork)
->   */
->  SYM_FUNC_START(call_on_irq_stack)
->  #ifdef CONFIG_SHADOW_CALL_STACK
-> -	stp	scs_sp, xzr, [sp, #-16]!
-> +	/* Save the current SCS pointer and load the per-IRQ one. */
-> +	str_this_cpu scs_sp, irq_shadow_call_stack_saved_ptr, x15, x17
->  	ldr_this_cpu scs_sp, irq_shadow_call_stack_ptr, x17
->  #endif
->  	/* Create a frame record to save our LR and SP (implicit in FP) */
-> @@ -902,7 +903,9 @@ SYM_FUNC_START(call_on_irq_stack)
->  	mov	sp, x29
->  	ldp	x29, x30, [sp], #16
->  #ifdef CONFIG_SHADOW_CALL_STACK
-> -	ldp	scs_sp, xzr, [sp], #16
-> +	/* Restore saved SCS pointer and reset the saved value. */
-> +	ldr_this_cpu scs_sp, irq_shadow_call_stack_saved_ptr, x17
-> +	str_this_cpu xzr, irq_shadow_call_stack_saved_ptr, x15, x17
->  #endif
->  	ret
->  SYM_FUNC_END(call_on_irq_stack)
-> @@ -1024,11 +1027,16 @@ SYM_CODE_START(__sdei_asm_handler)
->  #endif
->  
->  #ifdef CONFIG_SHADOW_CALL_STACK
-> -	/* Use a separate shadow call stack for normal and critical events */
-> +	/*
-> +	 * Use a separate shadow call stack for normal and critical events.
-> +	 * Save the current SCS pointer and load the per-SDEI one.
-> +	 */
->  	cbnz	w4, 3f
-> +	str_this_cpu src=scs_sp, sym=sdei_shadow_call_stack_normal_saved_ptr, tmp0=x5, tmp1=x6
->  	ldr_this_cpu dst=scs_sp, sym=sdei_shadow_call_stack_normal_ptr, tmp=x6
->  	b	4f
-> -3:	ldr_this_cpu dst=scs_sp, sym=sdei_shadow_call_stack_critical_ptr, tmp=x6
-> +3:	str_this_cpu src=scs_sp, sym=sdei_shadow_call_stack_critical_saved_ptr, tmp0=x5, tmp1=x6
-> +	ldr_this_cpu dst=scs_sp, sym=sdei_shadow_call_stack_critical_ptr, tmp=x6
->  4:
->  #endif
->  
-> @@ -1062,6 +1070,18 @@ SYM_CODE_START(__sdei_asm_handler)
->  	ldp	lr, x1, [x4, #SDEI_EVENT_INTREGS + S_LR]
->  	mov	sp, x1
->  
-> +#ifdef CONFIG_SHADOW_CALL_STACK
-> +	/* Restore saved SCS pointer and reset the saved value. */
-> +	ldrb	w5, [x4, #SDEI_EVENT_PRIORITY]
-> +	cbnz	w5, 5f
-> +	ldr_this_cpu dst=scs_sp, sym=sdei_shadow_call_stack_normal_saved_ptr, tmp=x6
-> +	str_this_cpu src=xzr, sym=sdei_shadow_call_stack_normal_saved_ptr, tmp0=x5, tmp1=x6
-> +	b	6f
-> +5:	ldr_this_cpu dst=scs_sp, sym=sdei_shadow_call_stack_critical_saved_ptr, tmp=x6
-> +	str_this_cpu src=xzr, sym=sdei_shadow_call_stack_critical_saved_ptr, tmp0=x5, tmp1=x6
-> +6:
-> +#endif
-> +
->  	mov	x1, x0			// address to complete_and_resume
->  	/* x0 = (x0 <= SDEI_EV_FAILED) ?
->  	 * EVENT_COMPLETE:EVENT_COMPLETE_AND_RESUME
-> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-> index bda49430c9ea..4199f900714a 100644
-> --- a/arch/arm64/kernel/irq.c
-> +++ b/arch/arm64/kernel/irq.c
-> @@ -28,11 +28,9 @@ DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
->  
->  DEFINE_PER_CPU(unsigned long *, irq_stack_ptr);
->  
-> -
-> -DECLARE_PER_CPU(unsigned long *, irq_shadow_call_stack_ptr);
-> -
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  DEFINE_PER_CPU(unsigned long *, irq_shadow_call_stack_ptr);
-> +DEFINE_PER_CPU(unsigned long *, irq_shadow_call_stack_saved_ptr);
->  #endif
->  
->  static void init_irq_scs(void)
-> diff --git a/arch/arm64/kernel/sdei.c b/arch/arm64/kernel/sdei.c
-> index d20620a1c51a..269adcb9e854 100644
-> --- a/arch/arm64/kernel/sdei.c
-> +++ b/arch/arm64/kernel/sdei.c
-> @@ -39,12 +39,11 @@ DEFINE_PER_CPU(unsigned long *, sdei_stack_normal_ptr);
->  DEFINE_PER_CPU(unsigned long *, sdei_stack_critical_ptr);
->  #endif
->  
-> -DECLARE_PER_CPU(unsigned long *, sdei_shadow_call_stack_normal_ptr);
-> -DECLARE_PER_CPU(unsigned long *, sdei_shadow_call_stack_critical_ptr);
-> -
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  DEFINE_PER_CPU(unsigned long *, sdei_shadow_call_stack_normal_ptr);
-> +DEFINE_PER_CPU(unsigned long *, sdei_shadow_call_stack_normal_saved_ptr);
->  DEFINE_PER_CPU(unsigned long *, sdei_shadow_call_stack_critical_ptr);
-> +DEFINE_PER_CPU(unsigned long *, sdei_shadow_call_stack_critical_saved_ptr);
->  #endif
->  
->  static void _free_sdei_stack(unsigned long * __percpu *ptr, int cpu)
-> -- 
-> 2.25.1
-> 
+The device I'm trying to support is a PCIe card that uses a lan9662
+SoC. This card is meant to be used an ethernet switch with 2 x RJ45
+ports and 2 x 10G SFPs. The lan966x SoCs can be used in two different
+ways:
+
+ - It can run Linux by itself, on ARM64 cores included in the SoC. This
+   use-case of the lan966x is currently being upstreamed, using a
+   traditional Device Tree representation of the lan996x HW blocks [1]
+   A number of drivers for the different IPs of the SoC have already
+   been merged in upstream Linux.
+
+ - It can be used as a PCIe endpoint, connected to a separate platform
+   that acts as the PCIe root complex. In this case, all the devices
+   that are embedded on this SoC are exposed through PCIe BARs and the
+   ARM64 cores of the SoC are not used. Since this is a PCIe card, it
+   can be plugged on any platform, of any architecture supporting PCIe.
+
+The goal if this work is to allow OF based drivers to be reused with
+software nodes by supporting fwnode in multiple subsystems.
+
+[1] https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
+
+---
+
+Changes in V2:
+- Split legacy phy compatible checking in of as preliminary work
+- Fix missing static inline in fwnode_mdio.h file
+- Split fwnode conversion into multiple patches
+- Split OF conversion in multiple patches
+- Remove legacy OF handling from fwnode_mdiobus_* variants
+- Switch to RFC since net-next is closed
+
+Clément Léger (11):
+  net: mdio: fwnode: import of_mdiobus_register() and needed functions
+  net: mdio: fwnode: remove legacy compatible checking for phy child
+  net: mdio: fwnode: remove legacy phy scanning
+  net: mdio: fwnode: convert fwnode_mdiobus_register() for fwnode
+  net: mdio: fwnode: add fwnode_mdiobus_register()
+  net: mdio: of: wrap fwnode_mdio_parse_addr() in of_mdio_parse_addr()
+  net: mdio: fwnode: avoid calling of_* functions with non OF nodes
+  net: mdio: fwnode: allow phy device registration with non OF nodes
+  net: mdio: of: use fwnode_mdiobus_child_is_phy()
+  net: mdio: of: use fwnode_mdiobus_register() in of_mdiobus_register()
+  net: mdio: mscc-miim: use fwnode_mdiobus_register()
+
+ drivers/net/mdio/fwnode_mdio.c    | 157 +++++++++++++++++++++++++++++-
+ drivers/net/mdio/mdio-mscc-miim.c |   4 +-
+ drivers/net/mdio/of_mdio.c        | 100 +------------------
+ include/linux/fwnode_mdio.h       |  28 +++++-
+ include/linux/of_mdio.h           |  23 +----
+ 5 files changed, 188 insertions(+), 124 deletions(-)
+
+-- 
+2.34.1
+

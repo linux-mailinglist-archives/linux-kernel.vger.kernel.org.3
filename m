@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2954ED864
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89E54ED86B
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiCaLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
+        id S235131AbiCaL0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbiCaLZo (ORCPT
+        with ESMTP id S235123AbiCaL0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:25:44 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7F763FB
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:23:51 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KTgsZ6D8tz1GCx2;
-        Thu, 31 Mar 2022 19:23:30 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 19:23:49 +0800
-Received: from [10.174.179.19] (10.174.179.19) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 19:23:48 +0800
-Message-ID: <b4d3cfee-9364-3315-652e-7f8b156306eb@huawei.com>
-Date:   Thu, 31 Mar 2022 19:23:48 +0800
+        Thu, 31 Mar 2022 07:26:09 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA8CE01D
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:24:22 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso2230822pju.2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=i57N+tGNg9+lxUlQKsWwq5Omt6VcQdu96X0KROKr1/k=;
+        b=KtqlA9fX/tJSJ02dmocwpAP424iX3FqSF65XaMLx81Uaubal027nAO76/jDh9EelCQ
+         CXOr5jfPzHhERNgPvaSFHrrdb813KKHX3/GeQQiP/Wjh+ANE3dD7DLqxWMdDW7zmZaLi
+         WTK21c7ESmN2y5EmUTLI3rNGuBTER4hMGiqfajejPzkmaBL35k1zsfe7+j2qFDAPzQ1S
+         Vaxonxny+3ueKDkJNqaZQOPFEYg9BNFUK8QwH28NxXJh3V29BkJvUs732E8+zEciHZBX
+         VU4oVld459kWWj3uQZr+YhGMPBlX4xY5VKA8PnBZ6VFVqV74+A8r4eBBEqh30GsYJk7r
+         4fbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=i57N+tGNg9+lxUlQKsWwq5Omt6VcQdu96X0KROKr1/k=;
+        b=ixRAJImCLGmxkdxelkadzopoutrHH9F2VyLBDt6GcKb/5pPVkeMxPiFLwzQ86WyXQ9
+         Fsa+u9TNJSF4FZnwuR12hYvlzQLj7EtjwH36mkaPsWVOrxDr4zWCsQXCHYUIMeA0Ajt5
+         wLAgRO+JpCqWsT6bSLqQZ1alGiZDFRVznupQd4T51W/EKizUzTfLN/UZhpHBJorZAiYM
+         GR89i8QYYfLGs4YIm9EUy3volmVMYyabSqhyd9ha3NAxBekNH5G7zuqIJiS2Lf63R0DB
+         1rGyXBdr5XAjLZZeuTXUGnRUiwWbtB3G4GqTAnaV7F/HVoi+/JMFTyk34yax0uSKqdXR
+         N0pg==
+X-Gm-Message-State: AOAM532r4W1hHE6jL5tc9IktZocsw02R3NS642ZucnQzOmRthvpIvQ2S
+        FOuy7xcYMxKRIvAbL7qXYiI=
+X-Google-Smtp-Source: ABdhPJztcnIK6iFTn+TcQVq5JU0xh1tEw3pqrLYDdKQiAGOlzjy4M214ICBNWrIIxeKGLQSIpQ3CBQ==
+X-Received: by 2002:a17:902:a404:b0:14b:1100:aebc with SMTP id p4-20020a170902a40400b0014b1100aebcmr41196969plq.133.1648725861768;
+        Thu, 31 Mar 2022 04:24:21 -0700 (PDT)
+Received: from raspberrypi ([49.166.114.232])
+        by smtp.gmail.com with ESMTPSA id nv11-20020a17090b1b4b00b001c71b0bf18bsm9998073pjb.11.2022.03.31.04.24.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 04:24:21 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 12:24:16 +0100
+From:   Austin Kim <austindh.kim@gmail.com>
+To:     linux@armlinux.org.uk, arnd@arndb.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        austin.kim@lge.com, p4ranlee@gmail.com
+Subject: [PATCH v2] arm: kdump: add invalid input check for 'crashkernel=0'
+Message-ID: <20220331112416.GA1002@raspberrypi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] hugetlb: Fix hugepages_setup when deal with pernode
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        <akpm@linux-foundation.org>, <yaozhenguo1@gmail.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <rdunlap@infradead.org>
-References: <20220324074037.2024608-1-liupeng256@huawei.com>
- <361111c6-921b-e129-edf3-367748f6497e@oracle.com>
- <ec312492-fea9-7130-8be4-1c362c2e84a6@huawei.com>
- <e94ea60f-9da7-98b7-7d47-1183c0fd2ddc@oracle.com>
- <d992f076-5eba-929b-e284-57bd5471cd85@huawei.com>
- <c33ab0c1-6b73-2489-efab-972c8d7fa80b@oracle.com>
-From:   "liupeng (DM)" <liupeng256@huawei.com>
-In-Reply-To: <c33ab0c1-6b73-2489-efab-972c8d7fa80b@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.19]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/30 1:43, Mike Kravetz wrote:
-> On 3/28/22 20:59, liupeng (DM) wrote:
->> On 2022/3/29 10:46, Mike Kravetz wrote:
->>> Yes, I agree that the change is needed and the current behavior is
->>> unacceptable.
->>>
->>> One remaining question is the change from returning '0' to '1' in the case
->>> of error.  I do understand this is to prevent the invalid parameter string
->>> from being passed to init.  It may not be correct/right, but in every other
->>> case where an invalid parameter in encountered in hugetlb command line
->>> processing we return "0".  Should we perhaps change all these other places
->>> to be consistent?  I honestly do not know what is the appropriate behavior
->>> in these situations.
->> Thank you for your carefulness and question.
->>
->> I have checked default_hugepagesz_setup and hugepages_setup will both print
->> some information before return '0', so there is no need to print again in
->> "Unknown kernel command line parameters".
->>
->> Should I send another patch to repair the rest "return 0" in hugetlb?
-> I would suggest two patches:
->
-> 1) Fix the issue with invalid nodes specified.  However, leave the "return 0"
->     behavior in hugepages_setup to be consistent with the rest of the code.
->     This patch can be sent to stable with "Fixes: b5389086ad7b" tag as it
->     addresses an existing issue.
-> 2) Clean up the places where we return 0 and it would be better to return 1.
->     No cc stable here and just let the changes target future releases.
-I have tried to write a patch as your suggestion, but the best way I can 
-carry it
-out is the original patch. To meet "Fix invalid nodes issue and leave 
-thereturn
-0 behavior", I have to add the following redundant code:
+From: Austin Kim <austin.kim@lge.com>
 
-  invalid:
-         pr_warn("HugeTLB: Invalid hugepages parameter %s\n", p);
-+
-+       /* Allocate gigantic hstates for successfully parsed parameters*/
-+       if (hugetlb_max_hstate && hstate_is_gigantic(parsed_hstate))
-+ hugetlb_hstate_alloc_pages(parsed_hstate);
-+       last_mhp = mhp;
-return 0;
+Add invalid input check expression when 'crashkernel=0' is specified 
+running kdump.
 
-Any ideas?
+Signed-off-by: Austin Kim <austin.kim@lge.com>
+---
+ arch/arm/kernel/setup.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
+index 039feb7cd590..1e8a50a97edf 100644
+--- a/arch/arm/kernel/setup.c
++++ b/arch/arm/kernel/setup.c
+@@ -1004,7 +1004,8 @@ static void __init reserve_crashkernel(void)
+ 	total_mem = get_total_mem();
+ 	ret = parse_crashkernel(boot_command_line, total_mem,
+ 				&crash_size, &crash_base);
+-	if (ret)
++	/* invalid value specified or crashkernel=0 */
++	if (ret || !crash_size)
+ 		return;
+ 
+ 	if (crash_base <= 0) {
+-- 
+2.20.1
 

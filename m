@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4412C4EDE00
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BF94EDE07
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239385AbiCaP4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
+        id S239395AbiCaP4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239295AbiCaP4U (ORCPT
+        with ESMTP id S239343AbiCaP4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 31 Mar 2022 11:56:20 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D8F78FCF
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:31 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id u26so28647432eda.12
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:31 -0700 (PDT)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13E089CFC
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:32 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bg10so265656ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mKGTMgRm2/BrDh+pWLzL6um9KANlYMhjAWBOG3cfNDc=;
-        b=Z90CYObqR/ron7da1LrGo68CbsFdNGFaZ045Vt+RshuDHZKFXToiERNwkhS4Dk6ad/
-         r+VZWpiwu5JfE/FlB85wab9vA5w7khhSsSd9aa0ix35prt6CHFqvt+rTFzGe4fMhiiVV
-         UuRzDS0ublUgDSU94nBckN1w55njFHZ1yaN8cldV//mm5sxalqFU0hocfaa6jxs5qY0v
-         WyS5+pv7d3B/KOnmA4g10S4PjzsffcVI/bfEc0RG7Agi0derIiSIaOeni/u4CW0tEtVZ
-         JVlaVU6jMlOHxO49JpNq+LdbyscTvYJigzDgAadWLAM/CK/kQnePy3jUflQdGHoMeXGo
-         0+JQ==
+        bh=oeY2VwpzFpq+ahpdKff0SvoKtIxVNW39tqhBA+XG7Pw=;
+        b=MJaMUe/qk1yjvbCPQ3Q772bMz2lvQP82/qsJ9wOFrzbbEd8YtiNmq+mJCHWvYiRcn7
+         /glNg+V1E18tiftfxtU2Mwaqz6EPl6zucFqo4Vtv/e641N1JbzuMDveldWn5RDT+Bnci
+         OaMsxZpqIIwrO+xT2GmoRYsIBUUH8CviF/01OLw9kLLFWJOlYPkZebZWMzupzofwqDPG
+         eDU4/ClQHf1BdOP0DWO0pfoE6nPHuYZD6Nqc/fGwS7vufkf+5T0PVmKQsuOWRZeg+YPe
+         l571+rdhqUelnaGyZ62oKBFeFCtxexSuc0TY4Ce68pw7RmPggF46Q8pqGdY3CpByBc6G
+         qSrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mKGTMgRm2/BrDh+pWLzL6um9KANlYMhjAWBOG3cfNDc=;
-        b=LB1FOOaGLdopNE8p88JLCP58jS6zpEnuw4XXextwoODCi+ewlNUnJzHFNSr9yb23Ue
-         naYQIccDnJq+DDcXZeHqsNMUdlyTyXeCvCNB98eWu3Uz2aCDZfAE6/639G3iaqOV/gfj
-         +ZSdCA72Kpm6TWTicGVpWlLdQ7vjJPdVto0k+1HL/qe7/XJ/kRNCNMLCX4SwvJjjd3ha
-         wey3128Ke71VrwDiNCi0EcsWmwdDcu/iEPxAmHeL/TYqH9r8OJMqNwU5xNDMFx0QDZz4
-         RF5+nKtoWij9yanCWBJYDvN8FJ8eU47yRdGBqHC+0TGpXfu6Wcuq0K5nXb+nOQRDX54d
-         MJ7w==
-X-Gm-Message-State: AOAM530eDKJ4Ibxdymw5gD4wqh/jxnJRE9XB1nTmXcs35Ubk41rFGpKU
-        jLJU3z48Ol88EBPtLdzel9egtw==
-X-Google-Smtp-Source: ABdhPJz3nQJEzi+6rjuA0u0ISdfLGdjcDtwWkW56c3AL5SqQPY6brlNLgc2FeNLVl9JxHDsI8XBzIw==
-X-Received: by 2002:a05:6402:278d:b0:419:3794:de39 with SMTP id b13-20020a056402278d00b004193794de39mr17056857ede.137.1648742070009;
-        Thu, 31 Mar 2022 08:54:30 -0700 (PDT)
+        bh=oeY2VwpzFpq+ahpdKff0SvoKtIxVNW39tqhBA+XG7Pw=;
+        b=u9qubo4NtNtg3fyy7/2ujp7ze8IRqX3rWfrZYY6Iazx+1wz6erJ6R/6rSDexS62qJP
+         LukY/HZpcsCEYla0NRzO8ngJE9KeBLO+Ocl6lNs9lnPikYSzpYpM2YffHBEJejSvNswS
+         YAO/WunRPv3upy0K/VzxL4ExxFfP0kSIo+OSb/jwgaH7nRxfh30gi/kjEcrF561l3IlO
+         XdkgUoGKM0xLoBxYAbnpZ0ZqHgPDdZC7QpCtve3ivm8f6j4KSWfJbaLcbTfepeu4VJ51
+         lOUd5OQ+MPckKg+BChReSXyzKuPlsVMzTcJ2JZq44qfZtEJA4Yihf/uA+lMwkJa51uxa
+         6b/Q==
+X-Gm-Message-State: AOAM533jReBITgxpAqS8YVzpYX9x3Lfbj64nTmkQ1UK5H3441ZXAnlur
+        YP9CIoZsT2O8AqOMozcXrKgYjympYutzMDpi
+X-Google-Smtp-Source: ABdhPJyXRh/6gAuPw0hxbQ4ICnzBwAKYOmY9mCFfwJ1sp9IpmF7sj3LjBeuqSbJFPnE6GHMoOwqDuA==
+X-Received: by 2002:a17:907:6e03:b0:6e0:15ce:77ba with SMTP id sd3-20020a1709076e0300b006e015ce77bamr5564247ejc.67.1648742071348;
+        Thu, 31 Mar 2022 08:54:31 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056402090a00b004196250baeasm11584077edz.95.2022.03.31.08.54.29
+        by smtp.gmail.com with ESMTPSA id g10-20020a056402090a00b004196250baeasm11584077edz.95.2022.03.31.08.54.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 08:54:29 -0700 (PDT)
+        Thu, 31 Mar 2022 08:54:30 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-spi@vger.kernel.org
 Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/4] ARM: dts: qcom: ipq4019: align dmas in SPI with DT schema
-Date:   Thu, 31 Mar 2022 17:54:22 +0200
-Message-Id: <20220331155425.714946-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 2/4] arm64: dts: qcom: msm8916: align dmas in SPI with DT schema
+Date:   Thu, 31 Mar 2022 17:54:23 +0200
+Message-Id: <20220331155425.714946-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
 References: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,35 +81,79 @@ change.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8916.dtsi | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index a9d0566a3190..dc8260684aee 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -253,8 +253,8 @@ blsp1_spi1: spi@78b5000 { /* BLSP1 QUP1 */
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index e34963505e07..6e5e7883c747 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -1529,8 +1529,8 @@ blsp_spi1: spi@78b5000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
  			clock-names = "core", "iface";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
 -			dmas = <&blsp_dma 5>, <&blsp_dma 4>;
 -			dma-names = "rx", "tx";
 +			dmas = <&blsp_dma 4>, <&blsp_dma 5>;
 +			dma-names = "tx", "rx";
- 			status = "disabled";
- 		};
- 
-@@ -267,8 +267,8 @@ blsp1_spi2: spi@78b6000 { /* BLSP1 QUP2 */
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&spi1_default>;
+ 			pinctrl-1 = <&spi1_sleep>;
+@@ -1561,8 +1561,8 @@ blsp_spi2: spi@78b6000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP2_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
  			clock-names = "core", "iface";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
 -			dmas = <&blsp_dma 7>, <&blsp_dma 6>;
 -			dma-names = "rx", "tx";
 +			dmas = <&blsp_dma 6>, <&blsp_dma 7>;
 +			dma-names = "tx", "rx";
- 			status = "disabled";
- 		};
- 
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&spi2_default>;
+ 			pinctrl-1 = <&spi2_sleep>;
+@@ -1593,8 +1593,8 @@ blsp_spi3: spi@78b7000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
+ 			clock-names = "core", "iface";
+-			dmas = <&blsp_dma 9>, <&blsp_dma 8>;
+-			dma-names = "rx", "tx";
++			dmas = <&blsp_dma 8>, <&blsp_dma 9>;
++			dma-names = "tx", "rx";
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&spi3_default>;
+ 			pinctrl-1 = <&spi3_sleep>;
+@@ -1625,8 +1625,8 @@ blsp_spi4: spi@78b8000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
+ 			clock-names = "core", "iface";
+-			dmas = <&blsp_dma 11>, <&blsp_dma 10>;
+-			dma-names = "rx", "tx";
++			dmas = <&blsp_dma 10>, <&blsp_dma 11>;
++			dma-names = "tx", "rx";
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&spi4_default>;
+ 			pinctrl-1 = <&spi4_sleep>;
+@@ -1657,8 +1657,8 @@ blsp_spi5: spi@78b9000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP5_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
+ 			clock-names = "core", "iface";
+-			dmas = <&blsp_dma 13>, <&blsp_dma 12>;
+-			dma-names = "rx", "tx";
++			dmas = <&blsp_dma 12>, <&blsp_dma 13>;
++			dma-names = "tx", "rx";
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&spi5_default>;
+ 			pinctrl-1 = <&spi5_sleep>;
+@@ -1689,8 +1689,8 @@ blsp_spi6: spi@78ba000 {
+ 			clocks = <&gcc GCC_BLSP1_QUP6_SPI_APPS_CLK>,
+ 				 <&gcc GCC_BLSP1_AHB_CLK>;
+ 			clock-names = "core", "iface";
+-			dmas = <&blsp_dma 15>, <&blsp_dma 14>;
+-			dma-names = "rx", "tx";
++			dmas = <&blsp_dma 14>, <&blsp_dma 15>;
++			dma-names = "tx", "rx";
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&spi6_default>;
+ 			pinctrl-1 = <&spi6_sleep>;
 -- 
 2.32.0
 

@@ -2,141 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F69F4EE018
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5444EE01D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbiCaSFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S233302AbiCaSG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbiCaSFv (ORCPT
+        with ESMTP id S232396AbiCaSG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:05:51 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F2B5372F
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:04:01 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id w21so398561pgm.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:04:01 -0700 (PDT)
+        Thu, 31 Mar 2022 14:06:57 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FDB1B9885
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:05:10 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id h189-20020a1c21c6000000b0038c8655c40eso150599wmh.6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=YsjSmrG2rvYs50asz/taC5lCuB0Ss1bBZU3bReqw5is=;
-        b=PouxUIYkBVuDtFYYhzJKLOVGEietOc0cr9qJm2EvDslOhzSw9jON2ICmYF6t9N5/6d
-         UeUa90pA/MozGMKak7kSYV0mXp43DAEGF2q7tXAYxPBwHknQABhfGpVQXvnSm8QSTt/n
-         Eok9vzYTaPRKddP8OxP4oaKDkzdCIH7LL/RmyFAUWgF7jsxDViqNjjb7WbU/DZKVxRtG
-         fN7/0u+gUYr79gPq5Rro0aSzY01+eXTZQ0BBw8iACDlZqN9rtqzBBl4iJe/qiOdvTHpe
-         ywKFz8znw4luKvpXbOv6m6ae8EobDnAtXSAX89rWDWgXE8ZobRk7ujXauAwBCNcXwkU9
-         yg7g==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=15hcCIpQC0VqBDHPsAp6yPhi35cw6G3wETqd2cbLIoY=;
+        b=Wc1HwmentiHv/fZuGFoLTitGkoma0Q5v01UFXMR7/jicGlIN4bTu6dLbZZcrqP/mdO
+         SHe+9LAq+3wxREIb8cGnq4EXg+wo0+q+w+6NGCQCeXBvjbMoHmn1VFYqgXwX9U+R2dcx
+         NTuUV3WQHqsFt3JmpdPEYvhVbviL1S+ED005wJ5tY26C+RHq5feJBxI8Th8BsWYX7NiC
+         2Z6sJ6fxESSv2NFx+jRbtvHoDBgNlzpgKSeW1zxNiZVe9pjyNYn5QWUJqdteJvw9QNeu
+         d66rz+8umDoB55OjgrpYOKIZ/VTaXlkGoA8ugqBbXi415tGEdkYA2IcbG3R2BfazgfMr
+         BG5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=YsjSmrG2rvYs50asz/taC5lCuB0Ss1bBZU3bReqw5is=;
-        b=Eb0hizsVugYL294ELFyfqCggvPrzPfEPKNgQaluS3x0v6MTeBJHHmoSy6knIjU3UIK
-         hssK3zc4Hd8LbLaCLJUnOZumZjHhlOR72Trfd7zE35Qby1IqcG/1DPXhNksSAk2SVFPk
-         TZ6M0XIz17KsFafI6ax1r33ONZgnGa+zw7orY9LdMpaJdcs+bBkMmDKgTa9kP2KXCDec
-         jeB1JXU2EqBPJruvc6sqZCxrN3/W8+c/tZvP5qW/KgUbE5E+UKhEAbVGZXdXl1ABILDh
-         vnR8Iu0ffRQliHyyotd8ZCXbQbjdzc5YUO9Xd7AaSO2biNiYRgO+gRQ9O1kUK5QYzs4f
-         PrMg==
-X-Gm-Message-State: AOAM53079MIbtBOlgwlkVkq8lDICgeMs+fDKxKOxvmqjoRLa8vdQalDw
-        Y5Oc90fsSnsZPafSXf0cnJeb8Q==
-X-Google-Smtp-Source: ABdhPJzs/UIaReCHNW6gfF+eZ6FRhildRbC1WSzb8rJwa2DI3Yesk+oxp4qzOcQkzybMD/Ht6oeMLA==
-X-Received: by 2002:a65:6d15:0:b0:382:4e6d:dd0d with SMTP id bf21-20020a656d15000000b003824e6ddd0dmr11580133pgb.333.1648749841056;
-        Thu, 31 Mar 2022 11:04:01 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id oc10-20020a17090b1c0a00b001c7510ed0c8sm11299522pjb.49.2022.03.31.11.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 11:04:00 -0700 (PDT)
-Message-ID: <39b76458-17e6-4e04-15d8-1445d2067d0c@linaro.org>
-Date:   Thu, 31 Mar 2022 11:03:59 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-ext4@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-References: <20220315215439.269122-1-tadeusz.struk@linaro.org>
- <YkW9+AK2d3i8X9rq@mit.edu>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH v2] ext4: check if offset+length is valid in fallocate
-In-Reply-To: <YkW9+AK2d3i8X9rq@mit.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=15hcCIpQC0VqBDHPsAp6yPhi35cw6G3wETqd2cbLIoY=;
+        b=cFRogckj7bwVNeFri/Vwj9g7Fi21PbEHrTsrQddJD8Y594CMZwAzUGXFFtRgUxD8Ma
+         7fyeVuank8AI5t/QhFGC5sCww4owCFXdLyqBwoADY47M8bqHYeor81h9aqjm5lcd9rFM
+         iMCPljMPY1xp4G762VmjdiXe6PQ1kA5KvlDWErAbIXh5K1RwKXhWG7Pp3evsxY+/PNwO
+         +wuaWBsW2aMMHXQHSgn5e4obF3oqFRYHqBfFR3rjHewEpbSiKuF/GJayfjgJ0AgwNFsa
+         AsTgMZtm6IOzBfHpXf7HZZDPT9eOKjDYUUUJjZ2T+NFW+ZncoQJJpAPG5rdbn6Ne9HBq
+         ecVQ==
+X-Gm-Message-State: AOAM5330hWK4bvDBsL38zcOCdHJAE5ddzjjUMStPj9xPGzLo4dRdRtbk
+        feVOH4bF0AkrxejmcsWw0wdeR8ecq1I=
+X-Google-Smtp-Source: ABdhPJyIkd32mBAt+ICL2+5Bry6jgZsgBb55VJ3mAd28zIkHSit68TD3B8qhMSxBXRQ3kjL66+0lM8MZid8=
+X-Received: from nogikh-hp.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:200d])
+ (user=nogikh job=sendgmr) by 2002:adf:f78e:0:b0:205:85d3:fa33 with SMTP id
+ q14-20020adff78e000000b0020585d3fa33mr4966519wrp.675.1648749908645; Thu, 31
+ Mar 2022 11:05:08 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 18:05:01 +0000
+Message-Id: <20220331180501.4130549-1-nogikh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH] kcov: don't generate a warning on vm_insert_page()'s failure
+From:   Aleksandr Nogikh <nogikh@google.com>
+To:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org
+Cc:     dvyukov@google.com, andreyknvl@gmail.com, elver@google.com,
+        glider@google.com, tarasmadan@google.com, bigeasy@linutronix.de,
+        nogikh@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 07:43, Theodore Ts'o wrote:
-> On Tue, Mar 15, 2022 at 02:54:39PM -0700, Tadeusz Struk wrote:
->> @@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
->>   		   offset;
->>   	}
->>   
->> +	/*
->> +	 * For punch hole the length + offset needs to be at least within
->> +	 * one block before last
->> +	 */
->> +	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
->> +	if (offset + length >= max_length) {
->> +		ret = -ENOSPC;
->> +		goto out_mutex;
->> +	}
-> 
-> I wonder if we would be better off just simply capping length to
-> max_length?  If length is set to some large value, such as LONG_MAX,
-> it's pretty clear what the intention should be, which is to simply do
-> the equivalent of truncating the file at offset.  Perhaps we should
-> just do that?
+vm_insert_page()'s failure is not an unexpected condition, so don't do
+WARN_ONCE() in such a case.
 
-Don't think that would be the correct behavior. ftrucnate (or truncate)
-modify the file size, but fallocate with FALLOC_FL_PUNCH_HOLE should not.
+Instead, print a kernel message and just return an error code.
 
-man 2 fallocate says:
-"...
-The FALLOC_FL_PUNCH_HOLE flag must be ORed with FALLOC_FL_KEEP_SIZE in mode;
-in other words, even when punching off the end of the file, the file size
-(as reported by stat(2)) does not change.
-"
-that is enforced by vfs:
-https://elixir.bootlin.com/linux/v5.17.1/source/fs/open.c#L245
+Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
+---
+ kernel/kcov.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> 
-> That being said, we should be consistent with what other file systems
-> do when they are asked to punch a hole starting at offset and
-> extending out to LONG_MAX.
-
-For all the supported file systems, apart from ext4, only btrfs, gfs2, and xfs
-support fallocate and FALLOC_FL_PUNCH_HOLE mode.
-Looking at what they do is they round the length of the space to be freed
-i.e. offset + length to valid value and then perform the operation
-using the valid values.
-
-https://elixir.bootlin.com/linux/v5.17.1/source/fs/gfs2/bmap.c#L2424
-https://elixir.bootlin.com/linux/v5.17.1/source/fs/btrfs/file.c#L2506
-
-For ext4 this would mean that one could only deallocate space up to
-the one before last block. I will change this to do the same in the
-next version if that's ok with you.
-
-> 
-> Also, if we are going to return an error, I don't think ENOSPC is the
-> correct error to be returning.
-
-I took it from man 2 fallocate, my first suspicion was that it crashed
-because the disk on my VM wasn't big enough. It was a bad choice.
-
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index 475524bd900a..961536a03127 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -475,8 +475,11 @@ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
+ 	vma->vm_flags |= VM_DONTEXPAND;
+ 	for (off = 0; off < size; off += PAGE_SIZE) {
+ 		page = vmalloc_to_page(kcov->area + off);
+-		if (vm_insert_page(vma, vma->vm_start + off, page))
+-			WARN_ONCE(1, "vm_insert_page() failed");
++		res = vm_insert_page(vma, vma->vm_start + off, page);
++		if (res) {
++			pr_warn_once("kcov: vm_insert_page() failed");
++			return res;
++		}
+ 	}
+ 	return 0;
+ exit:
 -- 
-Thanks,
-Tadeusz
+2.35.1.1094.g7c7d902a7c-goog
+

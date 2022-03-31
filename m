@@ -2,136 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5020E4ED70C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798B34ED710
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiCaJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S234149AbiCaJgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiCaJga (ORCPT
+        with ESMTP id S232507AbiCaJgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:36:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EEBAA94CB
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648719281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x4I67CcKiPUobplhi0H/iEbbjb5B4T/bEaOV1iH1XyI=;
-        b=Q7ZGzN6YChX2745cuj2B2d7WMQZR4aeUOEUsZQ6CfUCjwF5BVbsd2VfXcBMT7PzGyDOXwN
-        exDc5M+J0xV9Q1FAu/VkZC5pO9QuwtE7xjNQENGtDNQOkJUJRHCwgn7u+wKDjcgqzDk5f+
-        UL0lj1RCowLFd8Z459VUCAMqB7AEsJE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-NvcI1196Nwqcw03NahSbCQ-1; Thu, 31 Mar 2022 05:34:39 -0400
-X-MC-Unique: NvcI1196Nwqcw03NahSbCQ-1
-Received: by mail-ed1-f72.google.com with SMTP id s9-20020a50d489000000b00418d556edbdso14600608edi.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:34:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x4I67CcKiPUobplhi0H/iEbbjb5B4T/bEaOV1iH1XyI=;
-        b=0Z31OYs9/xyYjCeYV6Ph2Ytq8GTTaS3ZLTxwnN4d/FJI7vg78WNMq/s9J5dd8iJuEt
-         UCUXh7PdRbb1TfUCDlj7C1NEkJayslknFg9K+FKvkSnzlg+SYVRYMHbBSW+sy2Ftw/BT
-         b06jWE9RUjnBPEiftS6IGguXNjvSCXRCDWW20WjQ1wY94vjEfUvCzPyIEYfvccZ6mVE6
-         FscvrO35QEDd9aAj0RoQMzCKPOsZ46JIqtnm53TLoGTHZx/kzDBSR86olx1N0zGf6155
-         o0GZa3ojqsJcN9D8umjb3FmIsgy6Nx2btB/YqSzXLp+I1STZcmgsRAmwTcRJdiaZbIpm
-         6RCQ==
-X-Gm-Message-State: AOAM5318qHPr0s9hEzhWzyI/UGcHMdnvuoKBOsblMhmDYEZ+rt0XuUGf
-        bDAWhYl7n98uuz762+iAE3Au/yCxSlodHZkbi88NdPCjDeji4JzVUtd7gC8bVuVRuISFEgbs2O8
-        dcfA3sVrgoVMOXX3fG+stdb+a
-X-Received: by 2002:a17:907:8690:b0:6da:8436:2b94 with SMTP id qa16-20020a170907869000b006da84362b94mr4216995ejc.33.1648719278050;
-        Thu, 31 Mar 2022 02:34:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwmm5TucDYC0IjZ8wd1Hy41fioPOMEJ4xib5m76/cqdidZM+ZlL/DDuWUQ92fIGN689dzwERg==
-X-Received: by 2002:a17:907:8690:b0:6da:8436:2b94 with SMTP id qa16-20020a170907869000b006da84362b94mr4216982ejc.33.1648719277816;
-        Thu, 31 Mar 2022 02:34:37 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:8ca6:a836:a237:fed1? ([2001:b07:6468:f312:8ca6:a836:a237:fed1])
-        by smtp.googlemail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm11202939edt.80.2022.03.31.02.34.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 02:34:36 -0700 (PDT)
-Message-ID: <0c830e36-fcf2-fab6-aed9-7b6a6736140f@redhat.com>
-Date:   Thu, 31 Mar 2022 11:34:35 +0200
+        Thu, 31 Mar 2022 05:36:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5111AA94CC;
+        Thu, 31 Mar 2022 02:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648719284; x=1680255284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=accBRYHMBah+nI3IJi8qJ4uZB9q5SYI8c2Q9UFYLYpM=;
+  b=FusmpTAnv2tpVOI6CLesc9XUYI2qpOfiEntKFji0LQvUwc6GVZsiCOi/
+   sO8YdaM8r1Kn2zb0BHlAfPC/x6Aq4HPJB+EA+Fby6H9Lg2wpSLMg3wEbr
+   CJUqXktOWIArnXDoGYolpBxmCUuqiy/vbSSR7VJNaX+uhaXMIfw8yd0f5
+   4m2PNTwEHc17jVso327ylRPznOARGW+k5jiS6l4STwLLmI7KiVwrckUB+
+   idiZpaPIqaQk3JpKljBUSwDoGdQlcoJT//xEWZ5YaPAwhmUZg/5x34ZAN
+   zTSO5UaREhJDW6QIy72va64nvGaG72FsTuIe8U6EdjDIYiHDfWGUNOEOe
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247279389"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="247279389"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 02:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="695424720"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 02:34:39 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 12:34:38 +0300
+Date:   Thu, 31 Mar 2022 12:34:38 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Won Chung <wonchung@google.com>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
+ function
+Message-ID: <YkV1rsq1SeTNd8Ud@kuha.fi.intel.com>
+References: <20220330211913.2068108-1-wonchung@google.com>
+ <s5hzgl6eg48.wl-tiwai@suse.de>
+ <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
+ <s5hr16ieb8o.wl-tiwai@suse.de>
+ <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
+ <s5hmth6eaiz.wl-tiwai@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] KVM: MMU: propagate alloc_workqueue failure
-Content-Language: en-US
-To:     David Matlack <dmatlack@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220330165510.213111-1-pbonzini@redhat.com>
- <YkTs5BU24zrw30hK@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YkTs5BU24zrw30hK@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s5hmth6eaiz.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 01:51, David Matlack wrote:
->> -void kvm_mmu_init_vm(struct kvm *kvm)
->> +int kvm_mmu_init_vm(struct kvm *kvm)
->>   {
->>   	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
->> +	int r;
->>   
->> +	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
->> +	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
->> +	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
+On Thu, Mar 31, 2022 at 11:28:20AM +0200, Takashi Iwai wrote:
+> On Thu, 31 Mar 2022 11:25:43 +0200,
+> Heikki Krogerus wrote:
+> > 
+> > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
+> > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
+> > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
+> > > > >
+> > > > > Can NULL dev->driver be really seen?  I thought the components are
+> > > > > added by the drivers, hence they ought to have the driver field set.
+> > > > > But there can be corner cases I overlooked.
+> > > > >
+> > > > >
+> > > > > thanks,
+> > > > >
+> > > > > Takashi
+> > > > 
+> > > > Hi Takashi,
+> > > > 
+> > > > When I try using component_add in a different driver (usb4 in my
+> > > > case), I think dev->driver here is NULL because the i915 drivers do
+> > > > not have their component master fully bound when this new component is
+> > > > registered. When I test it, it seems to be causing a crash.
+> > > 
+> > > Hm, from where component_add*() is called?  Basically dev->driver must
+> > > be already set before the corresponding driver gets bound at
+> > > __driver_probe_deviec().  So, if the device is added to component from
+> > > the corresponding driver's probe, dev->driver must be non-NULL.
+> > 
+> > The code that declares a device as component does not have to be the
+> > driver of that device.
+> > 
+> > In our case the components are USB ports, and they are devices that
+> > are actually never bind to any drivers: drivers/usb/core/port.c
 > 
-> I agree with moving these but that should probably be done in a separate
-> commit.
+> OK, that's what I wanted to know.  It'd be helpful if it's more
+> clearly mentioned in the commit log.
 
-Ok.
+Agree.
 
->> -	kvm->arch.tdp_mmu_zap_wq =
->> -		alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
->> -
->> -	return true;
->> +	kvm->arch.tdp_mmu_zap_wq = wq;
-> 
-> Suggest moving this to just after checking the return value of
-> alloc_workqueue().
+> BTW, the same problem must be seen in MEI drivers, too.
 
-This is intentional, in case we have other future allocations, to avoid 
-having to NULL out the field in the unwind path.  It's a matter of taste 
-I guess.
+Wasn't there a patch for those too? I lost track...
 
->> +	return 1;
-> 
-> Perhaps return 0 until we have a reason to differentiate the 2 cases.
+thanks,
 
-Yeah, though I wanted to preserve the previous behavior.
-
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index fe2171b11441..89b6efb7f504 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -11629,12 +11629,13 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->>   
->>   	ret = kvm_page_track_init(kvm);
->>   	if (ret)
->> -		return ret;
->> +		goto out;
-> 
-> nit: This goto is unnecessary.
-
-True, but I prefer to be consistent in using "goto" so that any future 
-additions are careful about preserving the chain.
-
-Paolo
-
+-- 
+heikki

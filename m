@@ -2,121 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490654ED6F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB8B4ED701
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiCaJcz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 31 Mar 2022 05:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S233919AbiCaJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233978AbiCaJcq (ORCPT
+        with ESMTP id S234084AbiCaJeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:32:46 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E1462119;
-        Thu, 31 Mar 2022 02:30:57 -0700 (PDT)
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MRT6b-1nLC0R17ob-00NOzE; Thu, 31 Mar 2022 11:30:46 +0200
-Received: by mail-wr1-f41.google.com with SMTP id w21so28295765wra.2;
-        Thu, 31 Mar 2022 02:30:46 -0700 (PDT)
-X-Gm-Message-State: AOAM531+p9JRxXWPCupNmjuADuaWohp1e12ArJ8fnMSS4FhA4lA1beKk
-        vw4alRW5T1123ik/lSskb7cXH7ZuJWv8as9h9Os=
-X-Google-Smtp-Source: ABdhPJxWd3RtjDSXkoA7ngdrzuRWb2WjuY33jCnVXB+A1AAH0qJlJE8UE/skE144ENFuB/dx3i4kfZu3MJkNdoi2xmg=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr3364174wrw.12.1648719041888; Thu, 31
- Mar 2022 02:30:41 -0700 (PDT)
+        Thu, 31 Mar 2022 05:34:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4461BD99C;
+        Thu, 31 Mar 2022 02:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648719148; x=1680255148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ctf/hX3XkJggP7/+ZH5JrIfbFRaHucv2k5aVIYpgwkA=;
+  b=HpkUKfvWAito1y1YpVTscD9KZN5HyjXNV/9dGDXloGZWhLmo5sdnvJXn
+   vgBgE34X6lEqscgN8MLvRJt3gKcuoIS+E6pL4mWiFa3KpwTbD4ojS5OIL
+   okXg5+an+5ORXtteFDfiwNysToGo8v7b7gp9zQK+GqoAZinYLQLRPXDSx
+   olhmoA/xishw5PPOIB0uXeuD0ZUXxqzBFezRyTHTTc/zkJkwWhES6Hovf
+   1Id/LfZc57O/wv9edgnIdGY7IMzoJzka+hpgHRIaJao2KIz+TA7ljsX84
+   u6J167IiCeJfaHXHX/LuZQeKsMjA/5Koy7xcWEyN2awQbVjGS8AUytMvN
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259758101"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="259758101"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 02:32:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="695424269"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 02:32:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 12:32:24 +0300
+Date:   Thu, 31 Mar 2022 12:32:24 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Won Chung <wonchung@google.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
+ functions
+Message-ID: <YkV1KK8joyDAgf50@kuha.fi.intel.com>
+References: <20220331084918.2592699-1-wonchung@google.com>
+ <YkVtvhC0n9B994/A@kroah.com>
 MIME-Version: 1.0
-References: <20220310195229.109477-1-nick.hawkins@hpe.com> <20220310195229.109477-9-nick.hawkins@hpe.com>
- <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com> <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com> <PH0PR84MB1718292B1C11F4FE83326A5388119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <fb4def96-4b20-604f-d15d-fef87eb2232d@canonical.com> <PH0PR84MB1718A2CFBFC90C9C0CAA5515881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <CAK8P3a0fCE_NM=z68d1m9BTfuKixh1pKLw3gn+Sr7SxKb6UJAg@mail.gmail.com>
- <PH0PR84MB17181C316E55073EBC28C386881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <PH0PR84MB17185ADBA824F9CC9EB3E022881F9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <PH0PR84MB17185ADBA824F9CC9EB3E022881F9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 31 Mar 2022 11:30:25 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1080yz9jggOrwz2iQ1sAB2Xe2Emh22uCuqRok60BQSiA@mail.gmail.com>
-Message-ID: <CAK8P3a1080yz9jggOrwz2iQ1sAB2Xe2Emh22uCuqRok60BQSiA@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device tree
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:gyI13vHiir4qvS+gHbaOuk1V7upswNbgvg4akROxuDFv4rlu2CD
- Tf/TBLjJnvOrv/FgpBF8QmJj3v4fBk/oOAswQOczVkA2dEQlCFk9i9hp0Bwow9G6RPEW7yO
- eLut5PvuBccWeLviFvpGGCG0C9I/hCMpctmWPZ3MEcHQjQPOBljZQL2f6eo1gFxs/KTAxjk
- YQmE6//1LbbmziWTyQQDg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XJ0tSoddKgQ=:4u3TZgp1G4wkofKNDaiD5K
- QPORxCLAqlWP6hpLjLt+iotfOU6I0iAbHBdzgYC2mu/BdL3aSgnGqozjIYLS3wfURgs+TiA+D
- iPOhm21BvBfqcdibpLVPL6zc6gYDsd8PZZSdMefq/5Vp3yrBvCL/Jty3yJ4z9I4VmqgBWtjPk
- 76Lz3VK0Ig+/mIKz1CNcgXco/g5aeMkhc97uSQuVwD1DyUohneJuMGK4HVoReoqTQxt1ktKxo
- 2T0hSiU66O2CNVfAYn197hVdeZ9q7sNi/2aSciMKE0cD6gPJ2FEQX4jZ6VOX5+UF4mlmO6wFg
- 9lAj1MCzWbdayVEVX6KugGmR/kRweyEiWSVDiZT1HS0AaGdIi8kR5sd0b18DBt0+tVRS0c5Lv
- zIxSxToUSN2f7qwe2cCzi346P+BBkVhFkOuTIVZpLb2QYHQVV7Nbxb86pMDZ9VLzkL4ziqkV/
- gp52U0e/4LiEeHn+9t20h2yQ8OM7ixQze6UKCwXJxAFyz5nzwfYCLPtSvl9wm1N08UzeIzAf0
- stMMXKn+rX0/WOOQiXO/dhFuly9Ecj9RsOgG9PbtE/tyyZqjBO8H6ITDec3NZNPi6+1WxorXt
- qVZPbO4vm6sYeGGHfspIwQZuntZar7FFw3qYRu5W40uyWAxOvedp27EPbV3MGAb26LEekkIYd
- aWi6AWQYDitWGQzmMGS9RyLNrxmbmgVpadTolENuuqtG8vVkHDHsnnX4j4Eu5M0D8CoyKVKV+
- Nr3k1/FQ72nL/A8hoaV0hDGHVbrjNsoIRqfp9ZYDQUHAmDUGRR8Um7AhN+eGUtGYSB4HCZ4jG
- NA6Jfjnn3jn3TihoKb1XHjgxolM/VH+Ot+cilSuixRX1lf7bKd26Sbn2F4XBj0HHR4o1x72
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkVtvhC0n9B994/A@kroah.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 12:27 AM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
-> On Tue, Mar 29, 2022 at 9:38 PM Hawkins, Nick <nick.hawkins@hpe.com>> wrote:
->
-> >> I am in the process of rewriting the timer driver for Linux but have hit a dilemma and I am looking for some direction. The registers that represent the watchdog timer, and timer all lay in the same register region and they are spread out to the point where there are other controls  in the same area.
-> >
-> >> For instance with our watchdog controls we have:
-> >
-> >> @90 the countdown value
-> >> @96 the configuration
-> >
-> >> And for our timer we have:
-> >> @80 the countdown value
-> >> @94 the configuration
-> >> @88 this is actually our timestamp register but is being included in with the timer driver currently to call clocksource_mmio_init.
-> >
-> >> What would be your recommendation for this? I was considering creating a gxp-clock that specifically points at the timestamp register but I still have the issue with gxp-timer and gxp-wdt being spread across the same area of registers.
->
-> > I think this is most commonly done using a 'syscon' node, have a look at the files listed by
->
-> I found an example and copied it although I have a couple questions when it comes to actually coding it. Can that be here or should I post these questions in the patch that actually concern the file?
->
-> st: timer@80 {
->         compatible = "hpe,gxp-timer","syscon","simple-mfd";
->         reg = <0x80 0x16>;
->         interrupts = <0>;
->         interrupt-parent = <&vic0>;
->         clocks = <&ppuclk>;
->         clock-names = "ppuclk";
->         clock-frequency = <400000000>;
->
->         watchdog {
->                 compatible = "hpe,gxp-wdt";
->         };
->  };
+On Thu, Mar 31, 2022 at 11:00:46AM +0200, Greg KH wrote:
+> On Thu, Mar 31, 2022 at 08:49:18AM +0000, Won Chung wrote:
+> > Component match callback functions need to check if expected data is
+> > passed to them. Without this check, it can cause a NULL pointer
+> > dereference when another driver registers a component before i915
+> > drivers have their component master fully bind.
+> 
+> How can that happen in a real system?  Or does this just happen for when
+> you are doing development and testing?
+> 
+> > 
+> > Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+> > Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+> > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Signed-off-by: Won Chung <wonchung@google.com>
+> > Cc: stable@vger.kernel.org
+> 
+> Why does this need to go to stable?  How can this be triggered in older
+> kernels?
+> 
+> > ---
+> > Changes from v2:
+> > - Correctly add "Suggested-by" tag
+> > - Add "Cc: stable@vger.kernel.org"
+> > 
+> > Changes from v1:
+> > - Add "Fixes" tag
+> > - Send to stable@vger.kernel.org
+> > 
+> >  drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+> >  drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+> > index ec2a4fce8581..843dbc2b21b1 100644
+> > --- a/drivers/misc/mei/hdcp/mei_hdcp.c
+> > +++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+> > @@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+> >  {
+> >  	struct device *base = data;
+> >  
+> > -	if (strcmp(dev->driver->name, "i915") ||
+> > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+> 
+> How can base be NULL?
+> 
+> 
+> >  	    subcomponent != I915_COMPONENT_HDCP)
+> >  		return 0;
+> >  
+> > diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+> > index f7380d387bab..e32a81da8af6 100644
+> > --- a/drivers/misc/mei/pxp/mei_pxp.c
+> > +++ b/drivers/misc/mei/pxp/mei_pxp.c
+> > @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+> >  {
+> >  	struct device *base = data;
+> >  
+> > -	if (strcmp(dev->driver->name, "i915") ||
+> > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+> 
+> Same here, shouldn't this be caught by the driver core or bus and match
+> should not be called?
+> 
+> Why not fix this in the component/driver core instead?
 
-I'd have to study the other examples myself to see what is most common.
+A component is just a device that is declared to be a "component", and
+the code that declares it as component does not have to be the driver
+of that device. You simply can't assume that it's bind to a driver
+like this function does.
 
-My feeling would be that it's better to either have a "hpe,gxp-timer" parent
-device with a watchdog child but no syscon, or to have a syscon/simple-mfd
-parent with both the timer and the watchdog as children.
+In our case the "components" are USB ports, so devices that are never
+bind to drivers.
 
-       Arnd
+thanks,
+
+-- 
+heikki

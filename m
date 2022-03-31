@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A532C4EDBA6
+	by mail.lfdr.de (Postfix) with ESMTP id E1AF34EDBA7
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiCaO1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S237504AbiCaO1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237498AbiCaO1e (ORCPT
+        with ESMTP id S235463AbiCaO1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:27:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2016E21D7E5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648736746;
+        Thu, 31 Mar 2022 10:27:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDF121D7DB
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:25:45 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 16:25:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648736744;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=V/896Bc62YoXIkfH/P8P5pIpMY0pVJz3gsn8/xOqrGU=;
-        b=glRRiVAHhwT5etPw5vbeQl0qzq+aFKDaZEuSNh43eOuadMDi1nvIjMEZOIj/G6qshMsqdY
-        N/6uvwerkvdzNkuSGRh3cC68solc3AcTI97sQAShnwOfq4QG/0lk9kEYar0y4F++Fu8zpt
-        Lx6ceOh0nyRxDyDz2ztfRFdxOOtPJHU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-deuH21x5MSqplXMzx4J-pw-1; Thu, 31 Mar 2022 10:25:44 -0400
-X-MC-Unique: deuH21x5MSqplXMzx4J-pw-1
-Received: by mail-wm1-f71.google.com with SMTP id f19-20020a7bcd13000000b0038c01defd5aso1212969wmj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:25:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=V/896Bc62YoXIkfH/P8P5pIpMY0pVJz3gsn8/xOqrGU=;
-        b=PtoAa/d+d0EzbgCpokneEV7fUMW/AmAfhdWB+ngeAjXpyTHY6TttTufxkRcPPeeM8t
-         cddxEJkRt/2vLEiR7npW/hQZ5bGbFOfKPfcmuuoZrThGlk6FEv3G2ntTZRCEBEKoADrN
-         ITKPABjLkMK80Bu7tueWE0iMe31D1PAdDV67S7RaNmclSlVRrQZC2w2FX74ORoWNyQyu
-         1CWor5chSMBHtllTnMxWrQEaZtE21BmK2j+ENmNL/uJDdr10YNe/oy7J4TCX1daM4rpM
-         cvpuh0O7Qrp6SkiCSzRWgrLmFAux4lIVglsTTbNELloHHs5mA/lbvoxmU84iQzXe0Kf8
-         NBYA==
-X-Gm-Message-State: AOAM531Qatw1zP4WP5jGM3cXNBobc56CHw8kxXqQu8e/cTWYyMfVIWTD
-        aI9WVD02fC+LGqSVjA9O6rygByCnFm2gStRzkdE9BCxYrvRci1PPNCSMvApSETza52HhaX4YIIO
-        Ap269ZkKkLlKmbacAvTt4wtVs
-X-Received: by 2002:a05:600c:4f10:b0:38c:ae36:d305 with SMTP id l16-20020a05600c4f1000b0038cae36d305mr5062033wmq.34.1648736743462;
-        Thu, 31 Mar 2022 07:25:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz+nCts91Ox2v33cXyUxStj+G8bKWgtO7ypFuFQU85nR93l+pGlLswqWvSuB4F5iAFTSK9ljg==
-X-Received: by 2002:a05:600c:4f10:b0:38c:ae36:d305 with SMTP id l16-20020a05600c4f1000b0038cae36d305mr5062017wmq.34.1648736743225;
-        Thu, 31 Mar 2022 07:25:43 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm12809273wmq.27.2022.03.31.07.25.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 07:25:41 -0700 (PDT)
-Message-ID: <ce8d975e-d9dd-f9b8-793d-234258021169@redhat.com>
-Date:   Thu, 31 Mar 2022 16:25:40 +0200
+        bh=eVO5xfizl7kLJqGlvaVxRBZN+VQX+b3DTT7c76e9swg=;
+        b=UtKgGqh5kcMsm7gU/S6UptFNGD3VFad9coVRX5YefQt+Fg7AV+WBqREPG232TaqRLlkfkC
+        B18KkScXGFLxCI5Y9J/DCKsipFhML2fPGMSvJ6mbAmJ3ZJuBZuML+ZcBB6bDzzr5aA5qxU
+        eTmzTgHdoBhJ9PXM0ayWTZvhsHBTqT4FExotXjEHrZqVJDdMHNVC0LWyNdMVSJHDatAkLa
+        EsMoyhKDr5dPYXIlcsMh1ymqpQexFzERwb1nLEkNpGGurp7/v7QZ3evG2mmqSfx9wDk6Na
+        8JxhcCPHaylzqxKmD5BfjikZb4FKeIT9QZXC2C0I8bbZorgIvp8/p5cc/PEHHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648736744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eVO5xfizl7kLJqGlvaVxRBZN+VQX+b3DTT7c76e9swg=;
+        b=R+AcH6xPrkRjjcReFabzP3WXOFvAroJLyybrzOgsbENep9GymYZuqF6P4Xdsswe745Ck4Y
+        dIAGRdVIv9X0G3Cw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on PREEMPT_RT.
+Message-ID: <YkW55u6u2fo5QmV7@linutronix.de>
+References: <Yh/b19JikC+Vnm8i@linutronix.de>
+ <20220314185429.GA30364@redhat.com>
+ <YjBO8yzxdmjTGNiy@linutronix.de>
+ <20220315142944.GA22670@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] efi: Allow to enable EFI runtime services with PREEMPT_RT
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Peter Jones <pjones@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Al Stone <ahs3@redhat.com>, linux-efi@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        linux-rt-users@vger.kernel.org, Brian Masney <bmasney@redhat.com>,
-        Robbie Harwood <rharwood@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220331141038.171204-1-javierm@redhat.com>
- <YkW3EmURxE1+kOu5@linutronix.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YkW3EmURxE1+kOu5@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220315142944.GA22670@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,42 +70,298 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sebastian,
+As explained by Alexander Fyodorov <halcy@yandex.ru>:
 
-On 3/31/22 16:13, Sebastian Andrzej Siewior wrote:
-> On 2022-03-31 16:10:38 [+0200], Javier Martinez Canillas wrote:
->> Commit d9f283ae71af ("efi: Disable runtime services on RT") disabled EFI
->> runtime services when the CONFIG_PREEMPT_RT option is enabled.
->>
->> The rationale for the change is that some EFI calls could take too much
->> time, leading to large latencies which are an issue for RT kernels.
->>
->> But a side effect of that commit is that now is not possible anymore to
->> enable the EFI runtime services by default when CONFIG_PREEMPT_RT is set
->> to y, even for platforms that could guarantee bounded time for EFI calls.
->>
->> Instead, let's add a new EFI_DISABLE_RUNTIME boolean Kconfig option, that
->> would be set to n by default but to y if CONFIG_PREEMPT_RT is enabled.
->>
->> That way, the current behaviour is preserved but gives users a mechanism
->> to enable the EFI runtimes services in their kernels if that is required.
-> 
-> Is the command line switch
-> 	efi=runtime
-> 
-> not working?
->
+|read_lock(&tasklist_lock) in ptrace_stop() is converted to sleeping
+|lock on a PREEMPT_RT kernel, and it can remove __TASK_TRACED from
+|task->__state (by moving  it to task->saved_state). If parent does
+|wait() on child followed by a sys_ptrace call, the following race can
+|happen:
+|
+|- child sets __TASK_TRACED in ptrace_stop()
+|- parent does wait() which eventually calls wait_task_stopped() and returns
+|  child's pid
+|- child blocks on read_lock(&tasklist_lock) in ptrace_stop() and moves
+|  __TASK_TRACED flag to saved_state
+|- parent calls sys_ptrace, which calls ptrace_check_attach() and
+|  wait_task_inactive()
 
-Yes, it is but the motivation is to be able to have EFI runtime services
-by default without the need for any kernel command line parameter.
+The patch is based on his initial patch where an additional check is
+added in case the __TASK_TRACED moved to ->saved_state. The pi_lock is
+acquired to have stable view on ->__state and ->saved_state.
 
-In the same vein, I could ask if efi=noruntime wasn't enough instead of
-commit ("efi: Disable runtime services on RT").
+wait_task_inactive() needs to check both task states while waiting for the
+expected task state. Should the expected task state be in ->saved_state then
+the task is blocked on a sleeping lock. In this case wait_task_inactive() n=
+eeds
+to wait until the lock situtation has been resolved (the expected state is =
+in
+->__state). This ensures that the task is idle and does not wakeup as part =
+of
+lock resolving and races for instance with __switch_to_xtra() while the
+debugger clears TIF_BLOCKSTEP() (noted by Oleg Nesterov).
 
--- 
-Best regards,
+[ Fix for ptrace_unfreeze_traced() by Oleg Nesterov ]
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+v1=E2=80=A6v2:
+  - Use also ->saved_state in task_state_match_and_set().
+  - Wait in wait_task_inactive() until the desired task state is in
+    ->__state so that the task won't wake up a as part of lock
+    resolving. Pointed out by Oleg Nesterov.
 
+ include/linux/sched.h |  128 +++++++++++++++++++++++++++++++++++++++++++++=
++++--
+ kernel/ptrace.c       |   25 +++++----
+ kernel/sched/core.c   |   11 +++-
+ 3 files changed, 146 insertions(+), 18 deletions(-)
+
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -118,12 +118,8 @@ struct task_group;
+=20
+ #define task_is_running(task)		(READ_ONCE((task)->__state) =3D=3D TASK_RUN=
+NING)
+=20
+-#define task_is_traced(task)		((READ_ONCE(task->__state) & __TASK_TRACED) =
+!=3D 0)
+-
+ #define task_is_stopped(task)		((READ_ONCE(task->__state) & __TASK_STOPPED=
+) !=3D 0)
+=20
+-#define task_is_stopped_or_traced(task)	((READ_ONCE(task->__state) & (__TA=
+SK_STOPPED | __TASK_TRACED)) !=3D 0)
+-
+ /*
+  * Special states are those that do not use the normal wait-loop pattern. =
+See
+  * the comment with set_special_state().
+@@ -2009,6 +2005,130 @@ static inline int test_tsk_need_resched(
+ 	return unlikely(test_tsk_thread_flag(tsk,TIF_NEED_RESCHED));
+ }
+=20
++#ifdef CONFIG_PREEMPT_RT
++
++static inline bool task_state_match_and(struct task_struct *tsk, long stat=
+e)
++{
++	unsigned long flags;
++	bool match =3D false;
++
++	raw_spin_lock_irqsave(&tsk->pi_lock, flags);
++	if (READ_ONCE(tsk->__state) & state)
++		match =3D true;
++	else if (tsk->saved_state & state)
++		match =3D true;
++	raw_spin_unlock_irqrestore(&tsk->pi_lock, flags);
++	return match;
++}
++
++static inline int __task_state_match_eq(struct task_struct *tsk, long stat=
+e)
++{
++	int match =3D 0;
++
++	if (READ_ONCE(tsk->__state) =3D=3D state)
++		match =3D 1;
++	else if (tsk->saved_state =3D=3D state)
++		match =3D -1;
++
++	return match;
++}
++
++static inline int task_state_match_eq(struct task_struct *tsk, long state)
++{
++	unsigned long flags;
++	int match;
++
++	raw_spin_lock_irqsave(&tsk->pi_lock, flags);
++	match =3D __task_state_match_eq(tsk, state);
++	raw_spin_unlock_irqrestore(&tsk->pi_lock, flags);
++	return match;
++}
++
++static inline bool task_state_match_and_set(struct task_struct *tsk, long =
+state,
++					    long new_state)
++{
++	unsigned long flags;
++	bool match =3D false;
++
++	raw_spin_lock_irqsave(&tsk->pi_lock, flags);
++	if (READ_ONCE(tsk->__state) & state) {
++		WRITE_ONCE(tsk->__state, new_state);
++		match =3D true;
++	} else if (tsk->saved_state & state) {
++		tsk->saved_state =3D new_state;
++		match =3D true;
++	}
++	raw_spin_unlock_irqrestore(&tsk->pi_lock, flags);
++	return match;
++}
++
++static inline bool task_state_match_eq_set(struct task_struct *tsk, long s=
+tate,
++					   long new_state)
++{
++	unsigned long flags;
++	bool match =3D false;
++
++	raw_spin_lock_irqsave(&tsk->pi_lock, flags);
++	if (READ_ONCE(tsk->__state) =3D=3D state) {
++		WRITE_ONCE(tsk->__state, new_state);
++		match =3D true;
++	} else if (tsk->saved_state =3D=3D state) {
++		tsk->saved_state =3D new_state;
++		match =3D true;
++	}
++	raw_spin_unlock_irqrestore(&tsk->pi_lock, flags);
++	return match;
++}
++
++#else
++
++static inline bool task_state_match_and(struct task_struct *tsk, long stat=
+e)
++{
++	return READ_ONCE(tsk->__state) & state;
++}
++
++static inline int __task_state_match_eq(struct task_struct *tsk, long stat=
+e)
++{
++	return READ_ONCE(tsk->__state) =3D=3D state;
++}
++
++static inline int task_state_match_eq(struct task_struct *tsk, long state)
++{
++	return __task_state_match_eq(tsk, state);
++}
++
++static inline bool task_state_match_and_set(struct task_struct *tsk, long =
+state,
++					    long new_state)
++{
++	if (READ_ONCE(tsk->__state) & state) {
++		WRITE_ONCE(tsk->__state, new_state);
++		return true;
++	}
++	return false;
++}
++
++static inline bool task_state_match_eq_set(struct task_struct *tsk, long s=
+tate,
++					   long new_state)
++{
++	if (READ_ONCE(tsk->__state) =3D=3D state) {
++		WRITE_ONCE(tsk->__state, new_state);
++		return true;
++	}
++	return false;
++}
++
++#endif
++
++static inline bool task_is_traced(struct task_struct *tsk)
++{
++	return task_state_match_and(tsk, __TASK_TRACED);
++}
++
++static inline bool task_is_stopped_or_traced(struct task_struct *tsk)
++{
++	return task_state_match_and(tsk, __TASK_STOPPED | __TASK_TRACED);
++}
++
+ /*
+  * cond_resched() and cond_resched_lock(): latency reduction via
+  * explicit rescheduling in places that are safe. The return
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -195,10 +195,10 @@ static bool ptrace_freeze_traced(struct
+ 		return ret;
+=20
+ 	spin_lock_irq(&task->sighand->siglock);
+-	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
+-	    !__fatal_signal_pending(task)) {
+-		WRITE_ONCE(task->__state, __TASK_TRACED);
+-		ret =3D true;
++	if (!looks_like_a_spurious_pid(task) && !__fatal_signal_pending(task)) {
++
++		ret =3D task_state_match_and_set(task, __TASK_TRACED,
++					       __TASK_TRACED);
+ 	}
+ 	spin_unlock_irq(&task->sighand->siglock);
+=20
+@@ -207,7 +207,10 @@ static bool ptrace_freeze_traced(struct
+=20
+ static void ptrace_unfreeze_traced(struct task_struct *task)
+ {
+-	if (READ_ONCE(task->__state) !=3D __TASK_TRACED)
++	bool frozen;
++
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT) &&
++	    READ_ONCE(task->__state) !=3D __TASK_TRACED)
+ 		return;
+=20
+ 	WARN_ON(!task->ptrace || task->parent !=3D current);
+@@ -217,12 +220,12 @@ static void ptrace_unfreeze_traced(struc
+ 	 * Recheck state under the lock to close this race.
+ 	 */
+ 	spin_lock_irq(&task->sighand->siglock);
+-	if (READ_ONCE(task->__state) =3D=3D __TASK_TRACED) {
+-		if (__fatal_signal_pending(task))
+-			wake_up_state(task, __TASK_TRACED);
+-		else
+-			WRITE_ONCE(task->__state, TASK_TRACED);
+-	}
++
++	frozen =3D task_state_match_eq_set(task, __TASK_TRACED, TASK_TRACED);
++
++	if (frozen && __fatal_signal_pending(task))
++		wake_up_state(task, __TASK_TRACED);
++
+ 	spin_unlock_irq(&task->sighand->siglock);
+ }
+=20
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3219,6 +3219,8 @@ unsigned long wait_task_inactive(struct
+ 	struct rq *rq;
+=20
+ 	for (;;) {
++		int match_type =3D 0;
++
+ 		/*
+ 		 * We do the initial early heuristics without holding
+ 		 * any task-queue locks at all. We'll only try to get
+@@ -3239,7 +3241,8 @@ unsigned long wait_task_inactive(struct
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_running(rq, p)) {
+-			if (match_state && unlikely(READ_ONCE(p->__state) !=3D match_state))
++			if (match_state &&
++			    unlikely(!task_state_match_eq(p, match_state)))
+ 				return 0;
+ 			cpu_relax();
+ 		}
+@@ -3254,7 +3257,9 @@ unsigned long wait_task_inactive(struct
+ 		running =3D task_running(rq, p);
+ 		queued =3D task_on_rq_queued(p);
+ 		ncsw =3D 0;
+-		if (!match_state || READ_ONCE(p->__state) =3D=3D match_state)
++		if (match_state)
++			match_type =3D __task_state_match_eq(p, match_state);
++		if (!match_state || match_type)
+ 			ncsw =3D p->nvcsw | LONG_MIN; /* sets MSB */
+ 		task_rq_unlock(rq, p, &rf);
+=20
+@@ -3284,7 +3289,7 @@ unsigned long wait_task_inactive(struct
+ 		 * running right now), it's preempted, and we should
+ 		 * yield - it could be a while.
+ 		 */
+-		if (unlikely(queued)) {
++		if (unlikely(queued || match_type < 0)) {
+ 			ktime_t to =3D NSEC_PER_SEC / HZ;
+=20
+ 			set_current_state(TASK_UNINTERRUPTIBLE);

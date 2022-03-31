@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B814ED33A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A301A4ED340
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiCaFZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 01:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S229761AbiCaFff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 01:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiCaFZO (ORCPT
+        with ESMTP id S229496AbiCaFfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 01:25:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2F9FA20A;
-        Wed, 30 Mar 2022 22:23:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0884961580;
-        Thu, 31 Mar 2022 05:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B94DC340EE;
-        Thu, 31 Mar 2022 05:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648704206;
-        bh=eBy7+Ih0SkRIqoSoJt0V6SXGw5DK/vQX/BZHc0wYr8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mm/n9Jum+7wft5UX7zfI6APvwfOgo2tXy6SSzi8Uxk9pXWWxsELdnowKdRQd/TMh3
-         f+4RBVl+y29sVXfrd8HUN1KRH3T3wBQmUfmVT0pCm4CLF+PN2TiQNgFuTjg89WwOa3
-         5yzIvZjJ6ogpVE3Kp4AFTB9oP4lPeJRqlm/4JA5tNXiHZH6Ed/Idy5wYZ1sx0PcPja
-         HBNQuls/byuxIqW23JCIpCrul84Lqk7idjq3nukNelghfHTCbNOp15Cqw5TL68z7RL
-         IvKySAlilij5Dd7Wid7OIeY2kF/7Skz5S7vXX0ij+oJhZ6ncbsjpzyRogLmz4P+BSa
-         1mUhPhUjmgyjg==
-Date:   Thu, 31 Mar 2022 10:53:22 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>
-Subject: Re: [PATCH 1/2] dt-bindings: dma: Add Apple ADMAC
-Message-ID: <YkU6yvUQ6v4VdXiJ@matsya>
-References: <20220330164458.93055-1-povik+lin@cutebit.org>
- <20220330164458.93055-2-povik+lin@cutebit.org>
+        Thu, 31 Mar 2022 01:35:31 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4100A1099;
+        Wed, 30 Mar 2022 22:33:44 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 9FC8D10E543E;
+        Thu, 31 Mar 2022 16:33:41 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nZnRE-00ByRg-8Y; Thu, 31 Mar 2022 16:33:40 +1100
+Date:   Thu, 31 Mar 2022 16:33:40 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     wang.yi59@zte.com.cn
+Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
+        wang.liang82@zte.com.cn, cheng.lin130@zte.com.cn
+Subject: Re: [PATCH] xfs: getattr ignore blocks beyond eof
+Message-ID: <20220331053340.GE1544202@dread.disaster.area>
+References: <20220331003826.GL27690@magnolia>
+ <202203311128598207170@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220330164458.93055-2-povik+lin@cutebit.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <202203311128598207170@zte.com.cn>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62453d36
+        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
+        a=kj9zAlcOel0A:10 a=o8Y5sQTvuykA:10 a=1RTuLK3dAAAA:8 a=7-415B0cAAAA:8
+        a=iCIATYgx3w10mCWEzSQA:9 a=CjuIK1q_8ugA:10 a=kRpfLKi8w9umh8uBmg1i:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,101 +50,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-03-22, 18:44, Martin Povišer wrote:
-> Apple's Audio DMA Controller (ADMAC) is used to fetch and store audio
-> samples on Apple SoCs from the "Apple Silicon" family.
+On Thu, Mar 31, 2022 at 11:28:59AM +0800, wang.yi59@zte.com.cn wrote:
+> >> From: Cheng Lin <cheng.lin130@zte.com.cn>
+> >>
+> >> Blocks beyond EOF, which preallocated, will be reclaimed at some time.
+> >> These blocks can be ignored when getattr.
+> >>
+> >> This patch will optimize query accuracy for getattr blocks.
+> >Huh? This subtracts posteof blocks from the query results, which makes
+> >the results *less accurate*. Those blocks are mapped to the file, hence
+> >they are supposed to be counted in nblocks.
+> >--D
+> Yes, those blocks are mapped to the file. And the results including them are
+> absolutely real for xfs, at the moment of query.
 > 
-> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-> ---
->  .../devicetree/bindings/dma/apple,admac.yaml  | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dma/apple,admac.yaml
+> But, those blocks are like the credit without consumption, are unstalbe, and
+> will be reclaimed at some time. This may cause trouble for the application.
+
+What application is having trouble with this?
+
+> e.g. in a case,
+> 1. Firstly, write 100k data to file;
+> 2. query the result;
+> 3. close the file;
+> 4. query the result.
 > 
-> diff --git a/Documentation/devicetree/bindings/dma/apple,admac.yaml b/Documentation/devicetree/bindings/dma/apple,admac.yaml
-> new file mode 100644
-> index 000000000000..34f76a9a2983
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/dma/apple,admac.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/dma/apple,admac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple Audio DMA Controller (ADMAC)
-> +
-> +description: |
-> +  Apple's Audio DMA Controller (ADMAC) is used to fetch and store
-> +  audio samples on Apple SoCs from the "Apple Silicon" family.
-> +
-> +maintainers:
-> +  - Martin Povišer <povik+lin@cutebit.org>
-> +
-> +allOf:
-> +  - $ref: "dma-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - apple,t6000-admac
-> +          - apple,t8103-admac
-> +      - const: apple,admac
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#dma-cells':
-> +    const: 1
-> +
-> +  apple,internal-irq-destination:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Index influencing internal routing of the IRQs
-> +      within the peripheral.
+> fd stat wrt[96 @ 393216]: blks[896], size[397312].
+> fd stat wrt[97 @ 397312]: blks[896], size[401408].
+> fd stat wrt[98 @ 401408]: blks[896], size[405504].
+> fd stat wrt[99 @ 405504]: blks[896], size[409600].
+> lstat open: blks[896], size[409600].
+> lstat close: blks[800], size[409600].
+> 
+> Here two problems:
+> 1. why the result different before between after file close?
+> 2. why the result not change after writing data, or a big change?
 
-do you have more details for this, is this for peripheral and if so
-suited to be in dam-cells?
+Because that's the way speculative preallocation works.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#dma-cells'
-> +  - dma-channels
-> +  - apple,internal-irq-destination
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    dart_sio: iommu@235004000 {
-> +      compatible = "apple,t8103-dart", "apple,dart";
-> +      reg = <0x2 0x35004000 0x0 0x4000>;
-> +      interrupt-parent = <&aic>;
-> +      interrupts = <AIC_IRQ 635 IRQ_TYPE_LEVEL_HIGH>;
-> +      #iommu-cells = <1>;
-> +    };
-> +
-> +    admac: dma-controller@238200000 {
-> +      compatible = "apple,t8103-admac", "apple,admac";
-> +      reg = <0x2 0x38200000 0x0 0x34000>;
-> +      dma-channels = <12>;
-> +      interrupt-parent = <&aic>;
-> +      interrupts = <AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>;
-> +      #dma-cells = <1>;
-> +      iommus = <&dart_sio 2>;
-> +      apple,internal-irq-destination = <1>;
-> +    };
-> -- 
-> 2.33.0
+> The above problems can be explained by fs preallocation.
+> If the impact of preallocation are closed in fs, not visible to
+> the outside, the result is stable and real for the application.
 
+You're a decade late to the party. Complaining about how visible
+artifacts of speculative preallocation are going to cause the sky
+to fall was something that happened when we fix implemented the
+mechanism.
+
+Once people realised how much better their filesystems resisted
+fragmentation and hence aged more gracefully because the temporary
+overallocation helped ensure large, contiguous extents got allocated
+more often than not, those complaints went away.
+
+Have you even considered what reflink/dedupe does to user visible
+block accounting? That's right - it's a complete lie.
+
+We do not, and have not ever tried to, hide allocation or block
+usage artifacts from userspace because any application that depends
+on specific block allocation patterns or accounting from the
+filesystem is broken by design.
+
+Every filesystem accounts blocks differently, and more often than
+not the block count exposed to userspace also includes metadata
+blocks (extent maps, xattr blocks, etc) and it might multiple count
+other blocks (e.g. shared extents). Hence so you can't actually
+use it for anything useful in userspace except reporting how many
+blocks this file *might* use.
+
+If your application is dependent on block counts exactly matching
+the file data space for waht ever reason, then what speculative
+preallocation does is the least of your problems.
+
+Cheers,
+
+Dave.
 -- 
-~Vinod
+Dave Chinner
+david@fromorbit.com

@@ -2,327 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD894ED4BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0E54ED4BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiCaHXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S231962AbiCaHZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiCaHWv (ORCPT
+        with ESMTP id S230421AbiCaHZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:22:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C261E31A7;
-        Thu, 31 Mar 2022 00:21:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6174B81EA0;
-        Thu, 31 Mar 2022 07:21:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15669C340F2;
-        Thu, 31 Mar 2022 07:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648711261;
-        bh=qjNjEbUBrdLs50AHIuc+pd6M1krGCKQ6Ip1cy6iwHWM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cLxzl+StS0GApIA6tVj8R/amrIY1/eqVHyDcFyTx1qZDTekUha1tlKUyt377hKxml
-         LRXOqNf92I/iBmZXDOW1emtp0qOMueBXJa1vgpPNcO1OX+rApl2oLTlUYXIawQ7Jl9
-         MORHzeg+ykN3SL+xfIxPWQ4ezyfuUVP3XSk73jpbytd7JX/UokapAzraI+7Vpj/bFf
-         idem8sKH1EsrIjkMJSrbPEffKaW4j3CWLt5a5f5Zha4bb+sCMSteGzTxQoezmYqTiK
-         +cwOuU7ZsBQ5zcOF/8Ps1fF/Ub92v/Yxax9GRSl27GT3v3zDh2U1UinqaqLJGwqID9
-         Qm9VgESYj+ldA==
-Date:   Thu, 31 Mar 2022 16:20:56 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v6 3/4] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220331162056.43b06415962bc116daa260db@kernel.org>
-In-Reply-To: <CAK7LNARvO2i7k7bSgCiE944yUXvK=J3bo_=MiDa6TZuqY87p_A@mail.gmail.com>
-References: <164870615889.127053.9055569952366814752.stgit@devnote2>
-        <164870619150.127053.3677457860116913262.stgit@devnote2>
-        <CAK7LNARfcVt9L=BBmB7N8GNBHHU_LZx7mjMF9zW0ozfW3WNfeg@mail.gmail.com>
-        <20220331154918.67fdd2b2c18262631588e07c@kernel.org>
-        <CAK7LNARvO2i7k7bSgCiE944yUXvK=J3bo_=MiDa6TZuqY87p_A@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 03:25:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD206142
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648711417; x=1680247417;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=g1tUG2Q8DPCSkogHEocQF8gq9/NFNRZEipovqQEvc7c=;
+  b=J6OcgCnOEqChPElYpAKNDGy20ESv7m6JeCQ0n+HljjULtGRYQb0RrHwj
+   ECp+xnmGQ1tMUCmq7mM2IVa64N4Xy2hwywF/iUCSVfP/jcbK5rOYGGJ6k
+   bdWi1hWhTFM3OUELetY59dcil2pWwKeTmnxJf2YNDLNC3RPwF0d9QpKh7
+   HOf8jDru5kpQ4u/0Ugg6bwCL3S16y8U0K3iYDFQRUrnJjUagEdXjrFXDA
+   HjE1tZL9pTtjT+2Znasi3JrhCQwB3r3VdkzevZIiw1a2H9GO3L9CUb0pe
+   UeOCTklo5rI9e155Q1DQULAT10y7jBwZ93cDzg0Ixbe/GWcrphx/BoTuk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322923129"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="322923129"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:23:21 -0700
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="566225927"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:23:18 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
+        dave.hansen@linux.intel.com, Fan Du <fan.du@intel.com>
+Subject: Re: [PATCH] mm: migrate: set demotion targets differently
+References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
+        <87pmm4c4ys.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <87lewrxsv1.fsf@linux.ibm.com>
+        <878rsrc672.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <87ilruy5zt.fsf@linux.ibm.com>
+Date:   Thu, 31 Mar 2022 15:23:16 +0800
+In-Reply-To: <87ilruy5zt.fsf@linux.ibm.com> (Aneesh Kumar K. V.'s message of
+        "Thu, 31 Mar 2022 12:15:58 +0530")
+Message-ID: <87h77ebn6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 15:54:40 +0900
-Masahiro Yamada <masahiroy@kernel.org> wrote:
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-> On Thu, Mar 31, 2022 at 3:49 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Thu, 31 Mar 2022 15:27:56 +0900
-> > Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > > On Thu, Mar 31, 2022 at 2:56 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > >
-> > > > This allows kernel developer to embed a default bootconfig file in
-> > > > the kernel instead of embedding it in the initrd. This will be good
-> > > > for who are using the kernel without initrd, or who needs a default
-> > > > bootconfigs.
-> > > > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
-> > > > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
-> > > >
-> > > > Note that you still need 'bootconfig' command line option to load the
-> > > > embedded bootconfig. Also if you boot using an initrd with a different
-> > > > bootconfig, the kernel will use the bootconfig in the initrd, instead
-> > > > of the default bootconfig.
-> > > >
-> > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > ---
-> > > >  Changes in v6:
-> > > >   - Split out the .incbin asm part as bootconfig-data.S according to
-> > > >     Masahiro's comment.
-> > > >  Changes in v5:
-> > > >   - Fix .gitignore to be sorted alphabetically.
-> > > >   - Make default.bconf is cleaned up correctly.
-> > > >   - Allow user to specify relative path to CONFIG_EMBED_BOOT_CONFIG_FILE.
-> > > >     (Thanks Masahiro!)
-> > > >  Changes in v4:
-> > > >   - Avoid updating the default.bconf if the file is not changed.
-> > > > ---
-> > > >  MAINTAINERS                |    1 +
-> > > >  include/linux/bootconfig.h |   10 ++++++++++
-> > > >  init/Kconfig               |   21 +++++++++++++++++++++
-> > > >  init/main.c                |   13 ++++++++-----
-> > > >  lib/.gitignore             |    1 +
-> > > >  lib/Makefile               |    8 ++++++++
-> > > >  lib/bootconfig-data.S      |   11 +++++++++++
-> > > >  lib/bootconfig.c           |   13 +++++++++++++
-> > > >  8 files changed, 73 insertions(+), 5 deletions(-)
-> > > >  create mode 100644 lib/bootconfig-data.S
-> > > >
-> > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > index b555a5e8704f..9b4910685412 100644
-> > > > --- a/MAINTAINERS
-> > > > +++ b/MAINTAINERS
-> > > > @@ -7350,6 +7350,7 @@ S:        Maintained
-> > > >  F:     Documentation/admin-guide/bootconfig.rst
-> > > >  F:     fs/proc/bootconfig.c
-> > > >  F:     include/linux/bootconfig.h
-> > > > +F:     lib/bootconfig-data.S
-> > > >  F:     lib/bootconfig.c
-> > > >  F:     tools/bootconfig/*
-> > > >  F:     tools/bootconfig/scripts/*
-> > > > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> > > > index a4665c7ab07c..5dbda5e3e9bb 100644
-> > > > --- a/include/linux/bootconfig.h
-> > > > +++ b/include/linux/bootconfig.h
-> > > > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
-> > > >  /* XBC cleanup data structures */
-> > > >  void __init xbc_exit(void);
-> > > >
-> > > > +/* XBC embedded bootconfig data in kernel */
-> > > > +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> > > > +char * __init xbc_get_embedded_bootconfig(size_t *size);
-> > > > +#else
-> > > > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
-> > > > +{
-> > > > +       return NULL;
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  #endif
-> > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > index 97463a33baa7..f5d14a78cfce 100644
-> > > > --- a/init/Kconfig
-> > > > +++ b/init/Kconfig
-> > > > @@ -1361,6 +1361,27 @@ config BOOT_CONFIG
-> > > >
-> > > >           If unsure, say Y.
-> > > >
-> > > > +config EMBED_BOOT_CONFIG
-> > > > +       bool "Embed bootconfig file in the kernel"
-> > > > +       depends on BOOT_CONFIG
-> > > > +       default n
-> > > > +       help
-> > > > +         Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
-> > > > +         kernel. Usually, the bootconfig file is loaded with the initrd
-> > > > +         image. But if the system doesn't support initrd, this option will
-> > > > +         help you by embedding a bootconfig file while building the kernel.
-> > > > +
-> > > > +         If unsure, say N.
-> > > > +
-> > > > +config EMBED_BOOT_CONFIG_FILE
-> > > > +       string "Embedded bootconfig file path"
-> > > > +       default ""
-> > > > +       depends on EMBED_BOOT_CONFIG
-> > > > +       help
-> > > > +         Specify a bootconfig file which will be embedded to the kernel.
-> > > > +         This bootconfig will be used if there is no initrd or no other
-> > > > +         bootconfig in the initrd.
-> > > > +
-> > > >  choice
-> > > >         prompt "Compiler optimization level"
-> > > >         default CC_OPTIMIZE_FOR_PERFORMANCE
-> > > > diff --git a/init/main.c b/init/main.c
-> > > > index 266d61bc67b0..a5db3e36b809 100644
-> > > > --- a/init/main.c
-> > > > +++ b/init/main.c
-> > > > @@ -266,7 +266,7 @@ static int __init loglevel(char *str)
-> > > >  early_param("loglevel", loglevel);
-> > > >
-> > > >  #ifdef CONFIG_BLK_DEV_INITRD
-> > > > -static void * __init get_boot_config_from_initrd(u32 *_size)
-> > > > +static void * __init get_boot_config_from_initrd(size_t *_size)
-> > > >  {
-> > > >         u32 size, csum;
-> > > >         char *data;
-> > > > @@ -412,12 +412,15 @@ static void __init setup_boot_config(void)
-> > > >         static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
-> > > >         const char *msg;
-> > > >         int pos;
-> > > > -       u32 size;
-> > > > +       size_t size;
-> > > >         char *data, *err;
-> > > >         int ret;
-> > > >
-> > > >         /* Cut out the bootconfig data even if we have no bootconfig option */
-> > > >         data = get_boot_config_from_initrd(&size);
-> > > > +       /* If there is no bootconfig in initrd, try embedded one. */
-> > > > +       if (!data)
-> > > > +               data = xbc_get_embedded_bootconfig(&size);
-> > > >
-> > > >         strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-> > > >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> > > > @@ -436,8 +439,8 @@ static void __init setup_boot_config(void)
-> > > >         }
-> > > >
-> > > >         if (size >= XBC_DATA_MAX) {
-> > > > -               pr_err("bootconfig size %d greater than max size %d\n",
-> > > > -                       size, XBC_DATA_MAX);
-> > > > +               pr_err("bootconfig size %ld greater than max size %d\n",
-> > > > +                       (long)size, XBC_DATA_MAX);
-> > > >                 return;
-> > > >         }
-> > > >
-> > > > @@ -450,7 +453,7 @@ static void __init setup_boot_config(void)
-> > > >                                 msg, pos);
-> > > >         } else {
-> > > >                 xbc_get_info(&ret, NULL);
-> > > > -               pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-> > > > +               pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
-> > > >                 /* keys starting with "kernel." are passed via cmdline */
-> > > >                 extra_command_line = xbc_make_cmdline("kernel");
-> > > >                 /* Also, "init." keys are init arguments */
-> > > > diff --git a/lib/.gitignore b/lib/.gitignore
-> > > > index e5e217b8307b..54596b634ecb 100644
-> > > > --- a/lib/.gitignore
-> > > > +++ b/lib/.gitignore
-> > > > @@ -1,6 +1,7 @@
-> > > >  # SPDX-License-Identifier: GPL-2.0-only
-> > > >  /crc32table.h
-> > > >  /crc64table.h
-> > > > +/default.bconf
-> > > >  /gen_crc32table
-> > > >  /gen_crc64table
-> > > >  /oid_registry_data.c
-> > > > diff --git a/lib/Makefile b/lib/Makefile
-> > > > index 08053df16c7c..2a82cc324f91 100644
-> > > > --- a/lib/Makefile
-> > > > +++ b/lib/Makefile
-> > > > @@ -280,6 +280,14 @@ $(foreach file, $(libfdt_files), \
-> > > >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
-> > > >
-> > > >  obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
-> > > > +obj-$(CONFIG_EMBED_BOOT_CONFIG) += bootconfig-data.o
-> > > > +
-> > > > +$(obj)/bootconfig-data.o: $(obj)/default.bconf
-> > > > +
-> > > > +targets += default.bconf
-> > > > +filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
-> > > > +$(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
-> > > > +       $(call filechk,defbconf)
-> > > >
-> > > >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
-> > > >  obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
-> > > > diff --git a/lib/bootconfig-data.S b/lib/bootconfig-data.S
-> > > > new file mode 100644
-> > > > index 000000000000..df674ea7d8be
-> > > > --- /dev/null
-> > > > +++ b/lib/bootconfig-data.S
-> > > > @@ -0,0 +1,11 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +/*
-> > > > + * Embed default bootconfig in the kernel.
-> > > > + */
-> > > > +       .pushsection .init.data, "aw"
-> > > > +       .global embedded_bootconfig_data
-> > > > +embedded_bootconfig_data:
-> > > > +       .incbin "lib/default.bconf"
-> > > > +       .global embedded_bootconfig_data_end
-> > > > +embedded_bootconfig_data_end:
-> > > > +       .popsection
-> > >
-> > >
-> > >
-> > > You used  .pushsection / .popsection because it was
-> > > previously located in bootconfig.c, where there are
-> > > functions, which should go to the ".text" section.
-> >
-> > Oops, yes. I have made a dumb copy from the inline asm...
-> >
-> > > Now that you split this into a separate compilation unit,
-> > > there is only one ".init.data" section in the file.
-> > >
-> > >
-> > >      .section  .init.data, "aw"
-> > >
-> > > should be enough.
-> >
-> > OK.
-> >
-> > > BTW, is it reasonable/possible to make it explicitly read-only?
-> > >
-> > > I have not tested this patch at all. Nor do I have enough insight.
-> > >
-> > >      .section  .init.rodata, "a"
-> > >
-> > > I am not sure whether this is possible or not.
-> >
-> > Yes, it can be. The data is passed via 'const char *'.
-> 
-> But, you didn't add "const" in the C code:
-> 
-> extern __visible char embedded_bootconfig_data[];
-> extern __visible char embedded_bootconfig_data_end[];
-> 
-> 
-> Is it possible to use "const char" ?
+> "Huang, Ying" <ying.huang@intel.com> writes:
+>
+>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>
+>>> "Huang, Ying" <ying.huang@intel.com> writes:
+>>>
+>>>> Hi, Jagdish,
+>>>>
+>>>> Jagdish Gediya <jvgediya@linux.ibm.com> writes:
+>>>>
+>>>
+>>> ...
+>>>
+>>>>> e.g. with below NUMA topology, where node 0 & 1 are
+>>>>> cpu + dram nodes, node 2 & 3 are equally slower memory
+>>>>> only nodes, and node 4 is slowest memory only node,
+>>>>>
+>>>>> available: 5 nodes (0-4)
+>>>>> node 0 cpus: 0 1
+>>>>> node 0 size: n MB
+>>>>> node 0 free: n MB
+>>>>> node 1 cpus: 2 3
+>>>>> node 1 size: n MB
+>>>>> node 1 free: n MB
+>>>>> node 2 cpus:
+>>>>> node 2 size: n MB
+>>>>> node 2 free: n MB
+>>>>> node 3 cpus:
+>>>>> node 3 size: n MB
+>>>>> node 3 free: n MB
+>>>>> node 4 cpus:
+>>>>> node 4 size: n MB
+>>>>> node 4 free: n MB
+>>>>> node distances:
+>>>>> node   0   1   2   3   4
+>>>>>   0:  10  20  40  40  80
+>>>>>   1:  20  10  40  40  80
+>>>>>   2:  40  40  10  40  80
+>>>>>   3:  40  40  40  10  80
+>>>>>   4:  80  80  80  80  10
+>>>>>
+>>>>> The existing implementation gives below demotion targets,
+>>>>>
+>>>>> node    demotion_target
+>>>>>  0              3, 2
+>>>>>  1              4
+>>>>>  2              X
+>>>>>  3              X
+>>>>>  4		X
+>>>>>
+>>>>> With this patch applied, below are the demotion targets,
+>>>>>
+>>>>> node    demotion_target
+>>>>>  0              3, 2
+>>>>>  1              3, 2
+>>>>>  2              3
+>>>>>  3              4
+>>>>>  4		X
+>>>>
+>>>> For such machine, I think the perfect demotion order is,
+>>>>
+>>>> node    demotion_target
+>>>>  0              2, 3
+>>>>  1              2, 3
+>>>>  2              4
+>>>>  3              4
+>>>>  4              X
+>>>
+>>> I guess the "equally slow nodes" is a confusing definition here. Now if the
+>>> system consists of 2 1GB equally slow memory and the firmware doesn't want to
+>>> differentiate between them, firmware can present a single NUMA node
+>>> with 2GB capacity? The fact that we are finding two NUMA nodes is a hint
+>>> that there is some difference between these two memory devices. This is
+>>> also captured by the fact that the distance between 2 and 3 is 40 and not 10.
+>>
+>> Do you have more information about this?
+>
+> Not sure I follow the question there. I was checking shouldn't firmware
+> do a single NUMA node if two memory devices are of the same type? How will
+> optane present such a config? Both the DIMMs will have the same
+> proximity domain value and hence dax kmem will add them to the same NUMA
+> node?
 
-Yes, I need to update C part too, and that is not a problem. :)
+Sorry for confusing.  I just wanted to check whether you have more
+information about the machine configuration above.  The machines in my
+hand have no complex NUMA topology as in the patch description.
 
-Thank you!
+> If you are suggesting that firmware doesn't do that, then I agree with you
+> that a demotion target like the below is good. 
+>
+>  node    demotion_target
+>   0              2, 3
+>   1              2, 3
+>   2              4
+>   3              4
+>   4              X
+>
+> We can also achieve that with a smiple change as below.
 
-> 
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
+Glad to see the demotion order can be implemented in a simple way.
 
+My concern is that is it necessary to do this?  If there are real
+machines with the NUMA topology, then I think it's good to add the
+support.  But if not, why do we make the code complex unnecessarily?
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+I don't have these kind of machines, do you have and will have?
+
+> @@ -3120,7 +3120,7 @@ static void __set_migration_target_nodes(void)
+>  {
+>  	nodemask_t next_pass	= NODE_MASK_NONE;
+>  	nodemask_t this_pass	= NODE_MASK_NONE;
+> -	nodemask_t used_targets = NODE_MASK_NONE;
+> +	nodemask_t this_pass_used_targets = NODE_MASK_NONE;
+>  	int node, best_distance;
+>  
+>  	/*
+> @@ -3141,17 +3141,20 @@ static void __set_migration_target_nodes(void)
+>  	/*
+>  	 * To avoid cycles in the migration "graph", ensure
+>  	 * that migration sources are not future targets by
+> -	 * setting them in 'used_targets'.  Do this only
+> +	 * setting them in 'this_pass_used_targets'.  Do this only
+>  	 * once per pass so that multiple source nodes can
+>  	 * share a target node.
+>  	 *
+> -	 * 'used_targets' will become unavailable in future
+> +	 * 'this_pass_used_targets' will become unavailable in future
+>  	 * passes.  This limits some opportunities for
+>  	 * multiple source nodes to share a destination.
+>  	 */
+> -	nodes_or(used_targets, used_targets, this_pass);
+> +	nodes_or(this_pass_used_targets, this_pass_used_targets, this_pass);
+>  
+>  	for_each_node_mask(node, this_pass) {
+> +
+> +		nodemask_t used_targets = this_pass_used_targets;
+> +
+>  		best_distance = -1;
+>  
+>  		/*
+
+Best Regards,
+Huang, Ying

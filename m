@@ -2,149 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5A44EE123
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FD14EE122
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbiCaSzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S237359AbiCaSy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbiCaSzU (ORCPT
+        with ESMTP id S232565AbiCaSy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:55:20 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE949903;
-        Thu, 31 Mar 2022 11:53:32 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id z7so617757iom.1;
-        Thu, 31 Mar 2022 11:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=fjHiw3tSlF8xzWdnfkDJb8f7xRlTsPnt1EO5+A/JUI0=;
-        b=IJG/vzXBHrQid5Fx+EDcVAs9Ne8QV4eyVw+Gp8x1ezIxrePb1NplYbLGAZrcslz9xJ
-         6StX0CKnZb5FjBqMF0yZG48YfddNonUtscxgadjdMcB+ky+3dVsLffJK4f4n4PsXGCge
-         dGfmSz8FNMr6ywgtj6OLg/GWLFAhMg7hyzZK8GZTISwvsdFhihDtzoBwGuVodwGAs2lG
-         SpKvZvIjnCrs/B8+AZwhiQXtl/+iPu1vMfm+qErDh6YtYbOQUi/6Lp7MR7XhVxakyavj
-         FqEUuKMab98QbGcLdsdF6vywmlSYTBsrbmbYDSxin/S73pPROkkMZPjuF3mMfrV7BVQU
-         qqdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=fjHiw3tSlF8xzWdnfkDJb8f7xRlTsPnt1EO5+A/JUI0=;
-        b=Ru0fVPvaAh0dquA1Neo0Btwqhk9oLdzBLFZzvHFHwv9xQxBHOkmPIfgvMV5tCS4FBV
-         +NgdzDIjzthkUcZH3UnLvNZ6EQIL34fiQKHMk7hx9bLQkJnS09NPdCUyWLUNBxr0AZsP
-         tcbTOvQCMkOzQ3IWPXidWH64GuB7df5XE6YHeCMTilN5454qivuyyA9xVOwHW+gz75mn
-         Lc7L22qkn9UKkk7Xw06vzvYdznKwcyaZsutja8NA4wQY6OCaxInUhwp7UPjWq5bBmm6F
-         ZuiqqUTgikZqIPQLsNrWQqHoTFSfV0NCTSmFPPwyZ5xM0zWg89SWP9aLrS77KeR7NLAh
-         Ch5w==
-X-Gm-Message-State: AOAM530t1macq+vXzFhKpkWhWoYRHioydT7o8ffGpnveb7k+W/nUyvWJ
-        KPhxsKEMVCkejMhiPXYX1ZuLbCbFu4doDUH3vfQ=
-X-Google-Smtp-Source: ABdhPJwPysv+BsKwur5Dvxd4Qoxgl32o1LBJWqaDmMm7KgBE0tN7H8IfFeGziEZ59jhgHpSE7+2K37QOmZhQmxtuhnI=
-X-Received: by 2002:a05:6638:a3a:b0:323:5c6d:ae20 with SMTP id
- 26-20020a0566380a3a00b003235c6dae20mr3877699jao.80.1648752811797; Thu, 31 Mar
- 2022 11:53:31 -0700 (PDT)
+        Thu, 31 Mar 2022 14:54:56 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2405A18D29B;
+        Thu, 31 Mar 2022 11:53:09 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C8AB41F471DE;
+        Thu, 31 Mar 2022 19:53:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648752788;
+        bh=iCIU6s94N0rdvtHyebk6zzrjx7sdwliT90RWSSA/PjY=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=QxIKFkb3DId474h3e9jG30gDcVZzCZOMhdNiTb2bcxYnBfHPbWQcgfSvfNMCzkzBK
+         f2BjoF5cJEiKaX6jGmrBcILxevzVOe0AkLOznm3SBBQ10jnflEnYxIVylm7a41KBOK
+         FmzPJWSeI9oQ+lq7TCNyTXwXpHAdBzKzHhbJz8oQVRNHRI9a9UO+X1QIgubbt4c2rL
+         47xFUVvxjWofBY9j6eoh8iJkc7M+1PRnP4fwEDT9d0DowSatnocSwn2y3NbZO07i6n
+         kkOQmELV13W1rLuGhsqZlQjqxHXFaLeteQbjCcor+y0BLHmBAiK0ESPCqUnvpoLM/u
+         ZyDm0/klPfErQ==
+Message-ID: <b7a0347f-7106-f2af-bc63-40d8bdc2bb02@collabora.com>
+Date:   Thu, 31 Mar 2022 21:53:04 +0300
 MIME-Version: 1.0
-References: <20220330234528.1426991-1-nathan@kernel.org> <20220330234528.1426991-2-nathan@kernel.org>
- <CA+icZUXrVgGyaujA1iQEw5P3nJHVwMtbFxpE2gKktaxW0Xg-wg@mail.gmail.com> <YkXKnRwvbMdvOtlJ@thelio-3990X>
-In-Reply-To: <YkXKnRwvbMdvOtlJ@thelio-3990X>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 31 Mar 2022 20:52:55 +0200
-Message-ID: <CA+icZUV-pHn0mWCnHr2x9SrcbaQos=M=Eg7p2KOaca829DmN_w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kbuild: Remove '-mno-global-merge'
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-um@lists.infradead.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 10/10] drm/msm: Add a way for userspace to allocate GPU
+ iova
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Emma Anholt <emma@anholt.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220330204804.660819-1-robdclark@gmail.com>
+ <20220330204804.660819-11-robdclark@gmail.com>
+ <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com>
+In-Reply-To: <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 5:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Mar 31, 2022 at 09:11:12AM +0200, Sedat Dilek wrote:
-> > On Thu, Mar 31, 2022 at 5:27 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > This flag is specific to clang, where it is only used by the 32-bit and
-> > > 64-bit ARM backends. In certain situations, the presence of this flag
-> > > will cause a warning, as shown by commit 6580c5c18fb3 ("um: clang: Strip
-> > > out -mno-global-merge from USER_CFLAGS").
-> > >
-> > > Since commit 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for
-> > > building kernel with Clang") that added this flag back in 2014, there
-> > > have been quite a few changes to the GlobalMerge pass in LLVM. Building
-> > > several different ARCH=arm and ARCH=arm64 configurations with LLVM 11
-> > > (minimum) and 15 (current main version) with this flag removed (i.e.,
-> > > with the default of '-mglobal-merge') reveals no modpost warnings, so it
-> > > is likely that the issue noted in the comment is no longer relevant due
-> > > to changes in LLVM or modpost, meaning this flag can be removed.
-> > >
-> > > If any new warnings show up that are a result of the removal of this
-> > > flag, it can be added back under arch/arm{,64}/Makefile to avoid
-> > > warnings on other architectures.
-> > >
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  Makefile | 4 ----
-> > >  1 file changed, 4 deletions(-)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index daeb5c88b50b..f2723d9bfca4 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -784,10 +784,6 @@ ifdef CONFIG_CC_IS_CLANG
-> > >  KBUILD_CPPFLAGS += -Qunused-arguments
-> > >  # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
-> > >  KBUILD_CFLAGS += -Wno-gnu
-> > > -# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-> > > -# source of a reference will be _MergedGlobals and not on of the whitelisted names.
-> > > -# See modpost pattern 2
-> > > -KBUILD_CFLAGS += -mno-global-merge
-> > >  else
-> > >
-> > >  # gcc inanely warns about local variables called 'main'
-> > > --
-> > > 2.35.1
-> > >
-> >
-> > I have tested this several times and was able to boot into bar metal -
-> > no problems with building and/or booting my kernel-modules.
-> >
-> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
->
-> I would be very concerned if you did see any impact, given this flag is
-> ARM specific :) thanks as always for verifying!
->
-> > Just as a side-note:
-> > As with Linux v5.18-rc1 and -std=gnu11 we change the above comment ...?
-> >
-> > # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
-> > KBUILD_CFLAGS += -Wno-gnu
->
-> It was updated as part of the shift to '-std=gnu11':
->
-> https://git.kernel.org/linus/e8c07082a810fbb9db303a2b66b66b8d7e588b53
->
-> The UML tree is based on 5.17-rc6, which does not have that change.
-> There should not be a merge conflict though.
->
 
-Ah OK, a different base for UML.
+On 3/31/22 21:52, Dmitry Osipenko wrote:
+> ...
+>> +/*
+>> + * Get the requested iova but don't pin it.  Fails if the requested iova is
+>> + * not available.  Doesn't need a put because iovas are currently valid for
+>> + * the life of the object.
+>> + *
+>> + * Setting an iova of zero will clear the vma.
+>> + */
+>> +int msm_gem_set_iova(struct drm_gem_object *obj,
+>> +		     struct msm_gem_address_space *aspace, uint64_t iova)
+>> +{
+>> +	int ret = 0;
+> 
+> nit: No need to initialize the ret
+> 
+>> +	msm_gem_lock(obj);
+>> +	if (!iova) {
+>> +		ret = clear_iova(obj, aspace);
+>> +	} else {
+>> +		struct msm_gem_vma *vma;
+>> +		vma = get_vma_locked(obj, aspace, iova, iova + obj->size);
+>> +		if (IS_ERR(vma)) {
+>> +			ret = PTR_ERR(vma);
+>> +		} else if (GEM_WARN_ON(vma->iova != iova)) {
+>> +			clear_iova(obj, aspace);
+>> +			ret = -ENOSPC;
+> 
+> The (vma->iova != iova) means that vma is already set, but to a
+> different address. Is -ENOSPC really appropriate here? -EBUSY or -EINVAL
+> looks more natural to me.
+> 
+>> +		}
+>> +	}
+>> +	msm_gem_unlock(obj);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>  /*
+>>   * Unpin a iova by updating the reference counts. The memory isn't actually
+>>   * purged until something else (shrinker, mm_notifier, destroy, etc) decides
+>> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+>> index 38d66e1248b1..efa2e5c19f1e 100644
+>> --- a/drivers/gpu/drm/msm/msm_gem.h
+>> +++ b/drivers/gpu/drm/msm/msm_gem.h
+>> @@ -38,6 +38,12 @@ struct msm_gem_address_space {
+>>  
+>>  	/* @faults: the number of GPU hangs associated with this address space */
+>>  	int faults;
+>> +
+>> +	/** @va_start: lowest possible address to allocate */
+>> +	uint64_t va_start;
+>> +
+>> +	/** @va_size: the size of the address space (in bytes) */
+>> +	uint64_t va_size;
+>>  };
+>>  
+>>  struct msm_gem_address_space *
+>> @@ -144,6 +150,8 @@ struct msm_gem_vma *msm_gem_get_vma_locked(struct drm_gem_object *obj,
+>>  					   struct msm_gem_address_space *aspace);
+>>  int msm_gem_get_iova(struct drm_gem_object *obj,
+>>  		struct msm_gem_address_space *aspace, uint64_t *iova);
+>> +int msm_gem_set_iova(struct drm_gem_object *obj,
+>> +		struct msm_gem_address_space *aspace, uint64_t iova);
+>>  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
+>>  		struct msm_gem_address_space *aspace, uint64_t *iova,
+>>  		u64 range_start, u64 range_end);
+> nit: There is an odd mix of uint64_t and u64 (and alike) in the MSM code
+> :) The uint64_t variant shouldn't be used by kernel code in general and
+> checkpatch should want about it.
 
-- Sedat -
+s/want/warn/

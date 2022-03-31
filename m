@@ -2,302 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1B34EDF97
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1F04EDF9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiCaR0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S230258AbiCaR1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiCaR0N (ORCPT
+        with ESMTP id S230220AbiCaR1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:26:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7C1E95C1;
-        Thu, 31 Mar 2022 10:24:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 250FC61673;
-        Thu, 31 Mar 2022 17:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 450A9C340ED;
-        Thu, 31 Mar 2022 17:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648747464;
-        bh=aJuLfk9j/afIhDgeOfYALpRAHgJkoHBAex1TGi/dfhs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FLZkpE0jk3t0ObQE0565XT1yu1fHqnnXPJzXCgGNflOcwFuFDtrAxf95U+5Q1Qcw9
-         rwrekx6xPNqmht0xMOCJkRx2LzLXP6NYr/F7r8K8eOAGFK8Jwwxrse1c8cqdLton9k
-         3lF7/xHGPFUpLBxIS/pLed4+seFpv1Xt1DPvLcNwm7hT6BSFRQfM+V9onXNLakHKsI
-         gQOwWsQ7qDEJgjzyDqOys/HjjXMaC5x0l37A6cFh0nz9FMP/aROIra6YmZP2XwQ5ZJ
-         3nMIR3uuQmGC7cXE2jpp3xkm+ScncmToT3vwSeNmpG/rQjoq0Lq9lMQikmAPgtvGZ0
-         by7kjq5BTTf8Q==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 5.18-rc1
-Date:   Thu, 31 Mar 2022 10:24:23 -0700
-Message-Id: <20220331172423.3669039-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 31 Mar 2022 13:27:21 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E971DEAAF;
+        Thu, 31 Mar 2022 10:25:32 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 10:25:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648747530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QoY8vIMreW+/xI4V4yzmOr1sNP8TedvFK6EgBQAh6sU=;
+        b=BXWgUXCvFX2rA9i3tibs+9mub/WXaMXb9DJ+WPeqE9Ht6Qfd1MUG+tG4aJPgSu6P+L307j
+        6P3k+YtGiKPPYdB0TbVOitDS5/48g8z0onStfVszGQBvyqZdAnfZcggMIzZw/CXFM9QrHa
+        PEIKgCEMPp7A5q60iHgLqu1VV2cPhlo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+Message-ID: <YkXkA+Oh1Bx33PrU@carbon.dhcp.thefacebook.com>
+References: <20220331084151.2600229-1-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331084151.2600229-1-yosryahmed@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Thu, Mar 31, 2022 at 08:41:51AM +0000, Yosry Ahmed wrote:
+> From: Shakeel Butt <shakeelb@google.com>
+> 
+> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
+> 
+> Use case: Proactive Reclaim
+> ---------------------------
+> 
+> A userspace proactive reclaimer can continuously probe the memcg to
+> reclaim a small amount of memory. This gives more accurate and
+> up-to-date workingset estimation as the LRUs are continuously
+> sorted and can potentially provide more deterministic memory
+> overcommit behavior. The memory overcommit controller can provide
+> more proactive response to the changing behavior of the running
+> applications instead of being reactive.
+> 
+> A userspace reclaimer's purpose in this case is not a complete replacement
+> for kswapd or direct reclaim, it is to proactively identify memory savings
+> opportunities and reclaim some amount of cold pages set by the policy
+> to free up the memory for more demanding jobs or scheduling new jobs.
+> 
+> A user space proactive reclaimer is used in Google data centers.
+> Additionally, Meta's TMO paper recently referenced a very similar
+> interface used for user space proactive reclaim:
+> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+> 
+> Benefits of a user space reclaimer:
+> -----------------------------------
+> 
+> 1) More flexible on who should be charged for the cpu of the memory
+> reclaim. For proactive reclaim, it makes more sense to be centralized.
+> 
+> 2) More flexible on dedicating the resources (like cpu). The memory
+> overcommit controller can balance the cost between the cpu usage and
+> the memory reclaimed.
+> 
+> 3) Provides a way to the applications to keep their LRUs sorted, so,
+> under memory pressure better reclaim candidates are selected. This also
+> gives more accurate and uptodate notion of working set for an
+> application.
+> 
+> Why memory.high is not enough?
+> ------------------------------
+> 
+> - memory.high can be used to trigger reclaim in a memcg and can
+>   potentially be used for proactive reclaim.
+>   However there is a big downside in using memory.high. It can potentially
+>   introduce high reclaim stalls in the target application as the
+>   allocations from the processes or the threads of the application can hit
+>   the temporary memory.high limit.
+> 
+> - Userspace proactive reclaimers usually use feedback loops to decide
+>   how much memory to proactively reclaim from a workload. The metrics
+>   used for this are usually either refaults or PSI, and these metrics
+>   will become messy if the application gets throttled by hitting the
+>   high limit.
+> 
+> - memory.high is a stateful interface, if the userspace proactive
+>   reclaimer crashes for any reason while triggering reclaim it can leave
+>   the application in a bad state.
+> 
+> - If a workload is rapidly expanding, setting memory.high to proactively
+>   reclaim memory can result in actually reclaiming more memory than
+>   intended.
+> 
+> The benefits of such interface and shortcomings of existing interface
+> were further discussed in this RFC thread:
+> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
 
-The following changes since commit d717e4cae0fe77e10a27e8545a967b8c379873ac:
+Hello!
 
-  Merge tag 'net-5.18-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-03-28 17:02:04 -0700)
+I'm totally up for the proposed feature! It makes total sense and is proved
+to be useful, let's add it.
 
-are available in the Git repository at:
+> 
+> Interface:
+> ----------
+> 
+> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> trigger reclaim in the target memory cgroup.
+> 
+> 
+> Possible Extensions:
+> --------------------
+> 
+> - This interface can be extended with an additional parameter or flags
+>   to allow specifying one or more types of memory to reclaim from (e.g.
+>   file, anon, ..).
+> 
+> - The interface can also be extended with a node mask to reclaim from
+>   specific nodes. This has use cases for reclaim-based demotion in memory
+>   tiering systens.
+> 
+> - A similar per-node interface can also be added to support proactive
+>   reclaim and reclaim-based demotion in systems without memcg.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc1
+Maybe an option to specify a timeout? That might simplify the userspace part.
+Also, please please add a test to selftests/cgroup/memcg tests.
+It will also provide an example on how the userspace can use the feature.
 
-for you to fetch changes up to 9d570741aec1e1ebd37823b34a2958f24809ff24:
+> 
+> For now, let's keep things simple by adding the basic functionality.
 
-  vxlan: do not feed vxlan_vnifilter_dump_dev with non vxlan devices (2022-03-31 08:53:01 -0700)
+What I'm worried about is how we gonna extend it? How do you see the interface
+with 2-3 extensions from the list above? All these extensions look very
+reasonable to me, so we'll likely have to implement them soon. So let's think
+about the extensibility now.
 
-----------------------------------------------------------------
-Networking fixes for 5.18-rc1 and rethook patches.
+I wonder if it makes more sense to introduce a sys_reclaim() syscall instead?
+In the end, such a feature might make sense on the system level too.
+Yes, there is the drop_caches sysctl, but it's too radical for many cases.
 
-Features:
+> 
+> [yosryahmed@google.com: refreshed to current master, updated commit
+> message based on recent discussions and use cases]
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
+>  mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 69d7a6983f78..925aaabb2247 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
+>  	high limit is used and monitored properly, this limit's
+>  	utility is limited to providing the final safety net.
+>  
+> +  memory.reclaim
+> +	A write-only file which exists on non-root cgroups.
+> +
+> +	This is a simple interface to trigger memory reclaim in the
+> +	target cgroup. Write the number of bytes to reclaim to this
+> +	file and the kernel will try to reclaim that much memory.
+> +	Please note that the kernel can over or under reclaim from
+> +	the target cgroup.
+> +
+>    memory.oom.group
+>  	A read-write single value file which exists on non-root
+>  	cgroups.  The default value is "0".
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 725f76723220..994849fab7df 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+>  	return nbytes;
+>  }
+>  
+> +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+> +			      size_t nbytes, loff_t off)
+> +{
+> +	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+> +	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+> +	unsigned long nr_to_reclaim, nr_reclaimed = 0;
+> +	int err;
+> +
+> +	buf = strstrip(buf);
+> +	err = page_counter_memparse(buf, "", &nr_to_reclaim);
+> +	if (err)
+> +		return err;
+> +
+> +	while (nr_reclaimed < nr_to_reclaim) {
+> +		unsigned long reclaimed;
+> +
+> +		if (signal_pending(current))
+> +			break;
+> +
+> +		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+> +						nr_to_reclaim - nr_reclaimed,
+> +						GFP_KERNEL, true);
+> +
+> +		if (!reclaimed && !nr_retries--)
+> +			break;
+> +
+> +		nr_reclaimed += reclaimed;
+> +	}
+> +
+> +	return nbytes;
+> +}
+> +
+>  static struct cftype memory_files[] = {
+>  	{
+>  		.name = "current",
+> @@ -6413,6 +6445,11 @@ static struct cftype memory_files[] = {
+>  		.seq_show = memory_oom_group_show,
+>  		.write = memory_oom_group_write,
+>  	},
+> +	{
+> +		.name = "reclaim",
+> +		.flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
+> +		.write = memory_reclaim,
 
- - kprobes: rethook: x86: replace kretprobe trampoline with rethook
-
-Current release - regressions:
-
- - sfc: avoid null-deref on systems without NUMA awareness
-   in the new queue sizing code
-
-Current release - new code bugs:
-
- - vxlan: do not feed vxlan_vnifilter_dump_dev with non-vxlan devices
-
- - eth: lan966x: fix null-deref on PHY pointer in timestamp ioctl
-   when interface is down
-
-Previous releases - always broken:
-
- - openvswitch: correct neighbor discovery target mask field
-   in the flow dump
-
- - wireguard: ignore v6 endpoints when ipv6 is disabled and fix a leak
-
- - rxrpc: fix call timer start racing with call destruction
-
- - rxrpc: fix null-deref when security type is rxrpc_no_security
-
- - can: fix UAF bugs around echo skbs in multiple drivers
-
-Misc:
-
- - docs: move netdev-FAQ to the "process" section of the documentation
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-Alexei Starovoitov (3):
-      Merge branch 'fprobe: Fixes for Sparse and Smatch warnings'
-      Merge branch 'kprobes: rethook: x86: Replace kretprobe trampoline with rethook'
-      Merge branch 'xsk: another round of fixes'
-
-Andrii Nakryiko (1):
-      selftests/bpf: fix selftest after random: Urandom_read tracepoint removal
-
-David Howells (1):
-      rxrpc: Fix call timer start racing with call destruction
-
-Duoming Zhou (2):
-      ax25: fix UAF bug in ax25_send_control()
-      ax25: Fix UAF bugs in ax25 timers
-
-Eric Dumazet (1):
-      vxlan: do not feed vxlan_vnifilter_dump_dev with non vxlan devices
-
-Geliang Tang (1):
-      bpf: Sync comments for bpf_get_stack
-
-Guangbin Huang (1):
-      net: hns3: fix software vlan talbe of vlan 0 inconsistent with hardware
-
-Hangyu Hua (3):
-      can: ems_usb: ems_usb_start_xmit(): fix double dev_kfree_skb() in error path
-      can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in error path
-      can: mcba_usb: mcba_usb_start_xmit(): fix double dev_kfree_skb in error path
-
-Jakub Kicinski (17):
-      Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
-      Merge branch 'wireguard-patches-for-5-18-rc1'
-      docs: netdev: replace references to old archives
-      docs: netdev: minor reword
-      docs: netdev: move the patch marking section up
-      docs: netdev: turn the net-next closed into a Warning
-      docs: netdev: note that RFC postings are allowed any time
-      docs: netdev: shorten the name and mention msgid for patch status
-      docs: netdev: rephrase the 'Under review' question
-      docs: netdev: rephrase the 'should I update patchwork' question
-      docs: netdev: add a question about re-posting frequency
-      docs: netdev: make the testing requirement more stringent
-      docs: netdev: add missing back ticks
-      docs: netdev: call out the merge window in tag checking
-      docs: netdev: broaden the new vs old code formatting guidelines
-      docs: netdev: move the netdev-FAQ to the process pages
-      Merge tag 'linux-can-fixes-for-5.18-20220331' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
-
-Jason A. Donenfeld (3):
-      wireguard: queueing: use CFI-safe ptr_ring cleanup function
-      wireguard: selftests: simplify RNG seeding
-      wireguard: socket: ignore v6 endpoints when ipv6 is disabled
-
-Jiri Olsa (1):
-      bpftool: Fix generated code in codegen_asserts
-
-Jonathan Lemon (1):
-      ptp: ocp: handle error from nvmem_device_find
-
-Maciej Fijalkowski (2):
-      ice: xsk: Stop Rx processing when ntc catches ntu
-      ice: xsk: Fix indexing in ice_tx_xsk_pool()
-
-Magnus Karlsson (2):
-      xsk: Do not write NULL in SW ring at allocation failure
-      ice: xsk: Eliminate unnecessary loop iteration
-
-Marc Kleine-Budde (2):
-      can: m_can: m_can_tx_handler(): fix use after free of skb
-      can: gs_usb: gs_make_candev(): fix memory leak for devices with extended bit timing configuration
-
-Martin Habets (1):
-      sfc: Avoid NULL pointer dereference on systems without numa awareness
-
-Martin Varghese (1):
-      openvswitch: Fixed nd target mask field in the flow dump.
-
-Masami Hiramatsu (5):
-      fprobe: Fix smatch type mismatch warning
-      fprobe: Fix sparse warning for acccessing __rcu ftrace_hash
-      kprobes: Use rethook for kretprobe if possible
-      x86,rethook,kprobes: Replace kretprobe with rethook on x86
-      x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
-
-Michael Walle (1):
-      net: lan966x: fix kernel oops on ioctl when I/F is down
-
-Milan Landaverde (1):
-      bpf/bpftool: Add unprivileged_bpf_disabled check against value of 2
-
-Oliver Hartkopp (1):
-      can: isotp: restore accidentally removed MSG_PEEK feature
-
-Paolo Abeni (3):
-      Merge branch 'fix-uaf-bugs-caused-by-ax25_release'
-      Merge branch 'docs-update-and-move-the-netdev-faq'
-      Merge branch 'net-hns3-add-two-fixes-for-net'
-
-Pavel Skripkin (1):
-      can: mcba_usb: properly check endpoint type
-
-Peter Zijlstra (1):
-      x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
-
-Randy Dunlap (1):
-      net: sparx5: uses, depends on BRIDGE or !BRIDGE
-
-Stéphane Graber (1):
-      openvswitch: Add recirc_id to recirc warning
-
-Tom Rix (1):
-      can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix return of error value
-
-Vinod Koul (1):
-      dt-bindings: net: qcom,ethqos: Document SM8150 SoC compatible
-
-Wang Hai (1):
-      wireguard: socket: free skb in send6 when ipv6 is disabled
-
-Xiaolong Huang (1):
-      rxrpc: fix some null-ptr-deref bugs in server_key.c
-
-Yonghong Song (1):
-      selftests/bpf: Fix clang compilation errors
-
-Yufeng Mo (1):
-      net: hns3: fix the concurrency between functions reading debugfs
-
-Yuntao Wang (1):
-      bpf: Fix maximum permitted number of arguments check
-
-Zheng Yongjun (1):
-      net: dsa: felix: fix possible NULL pointer dereference
-
- Documentation/bpf/bpf_devel_QA.rst                 |   2 +-
- .../devicetree/bindings/net/qcom,ethqos.txt        |   4 +-
- Documentation/networking/index.rst                 |   3 +-
- Documentation/process/maintainer-handbooks.rst     |   1 +
- .../maintainer-netdev.rst}                         | 114 ++++++++++--------
- MAINTAINERS                                        |   1 +
- arch/Kconfig                                       |   8 +-
- arch/x86/Kconfig                                   |   1 +
- arch/x86/include/asm/unwind.h                      |  23 ++--
- arch/x86/kernel/Makefile                           |   1 +
- arch/x86/kernel/kprobes/common.h                   |   1 +
- arch/x86/kernel/kprobes/core.c                     | 107 -----------------
- arch/x86/kernel/kprobes/opt.c                      |  25 ++--
- arch/x86/kernel/rethook.c                          | 127 +++++++++++++++++++++
- arch/x86/kernel/unwind_orc.c                       |  10 +-
- drivers/net/can/m_can/m_can.c                      |   5 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |   2 +-
- drivers/net/can/usb/ems_usb.c                      |   1 -
- drivers/net/can/usb/gs_usb.c                       |   2 +
- drivers/net/can/usb/mcba_usb.c                     |  27 +++--
- drivers/net/can/usb/usb_8dev.c                     |  30 +++--
- drivers/net/dsa/ocelot/felix_vsc9959.c             |   4 +
- drivers/net/ethernet/hisilicon/hns3/hnae3.h        |   1 +
- drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c |  15 ++-
- drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.h |   1 -
- .../ethernet/hisilicon/hns3/hns3pf/hclge_main.c    |   6 +-
- drivers/net/ethernet/intel/ice/ice.h               |   2 +-
- drivers/net/ethernet/intel/ice/ice_xsk.c           |   5 +-
- .../net/ethernet/microchip/lan966x/lan966x_main.c  |   3 +
- drivers/net/ethernet/microchip/sparx5/Kconfig      |   1 +
- drivers/net/ethernet/sfc/efx_channels.c            |  11 +-
- drivers/net/vxlan/vxlan_vnifilter.c                |   6 +
- drivers/net/wireguard/queueing.c                   |   3 +-
- drivers/net/wireguard/socket.c                     |   5 +-
- drivers/ptp/ptp_ocp.c                              |  15 +--
- include/linux/kprobes.h                            |  51 ++++++++-
- include/trace/events/rxrpc.h                       |   8 +-
- kernel/Makefile                                    |   1 +
- kernel/bpf/btf.c                                   |   2 +-
- kernel/kprobes.c                                   | 124 ++++++++++++++++----
- kernel/trace/fprobe.c                              |   8 +-
- kernel/trace/trace_kprobe.c                        |   4 +-
- net/ax25/af_ax25.c                                 |  13 ++-
- net/can/isotp.c                                    |   2 +-
- net/openvswitch/actions.c                          |   4 +-
- net/openvswitch/flow_netlink.c                     |   4 +-
- net/rxrpc/ar-internal.h                            |  15 ++-
- net/rxrpc/call_event.c                             |   2 +-
- net/rxrpc/call_object.c                            |  40 ++++++-
- net/rxrpc/server_key.c                             |   7 +-
- net/xdp/xsk_buff_pool.c                            |   8 +-
- tools/bpf/bpftool/feature.c                        |   5 +-
- tools/bpf/bpftool/gen.c                            |   2 +-
- tools/include/uapi/linux/bpf.h                     |   8 +-
- .../selftests/bpf/prog_tests/get_stack_raw_tp.c    |   3 -
- .../selftests/bpf/progs/test_stacktrace_build_id.c |  12 +-
- tools/testing/selftests/bpf/test_lpm_map.c         |   3 +-
- tools/testing/selftests/wireguard/qemu/init.c      |  26 ++---
- 58 files changed, 588 insertions(+), 337 deletions(-)
- rename Documentation/{networking/netdev-FAQ.rst => process/maintainer-netdev.rst} (75%)
- create mode 100644 arch/x86/kernel/rethook.c
+Btw, why not on root?

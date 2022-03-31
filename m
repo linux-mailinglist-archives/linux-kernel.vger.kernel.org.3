@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929344EE456
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD5B4EE458
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242670AbiCaWs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S242674AbiCaWu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240324AbiCaWsZ (ORCPT
+        with ESMTP id S233953AbiCaWuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:48:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7817B2325D6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:46:37 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso791812pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7uOUzZnbDEusnKR8cHWSyHd2FNHBMs+CYiJb4fGuX4g=;
-        b=saclz8jkvtOn9nSRzBPhcHPd3drlaDn9wlVl5p8YFykQOEoBBxA0XJkjgZ8cTCzPK6
-         FMl6af4M26t9yd66jXObaOKA7AYFMkXhp/zQ1E5cjs+Dc23ZC7Nq5jU/PHfe2U3imyNZ
-         hej+lIUS1XBxtRjX/eItimBO0l4FfZFjLqAwIOywtDOhEuP222M5iJalT5wFDvKu5hZM
-         NJmvlEz/gJYLDuI1NB0/xng2DUv7PxMs7r89lLIQpBgUHyhU7N2mCgfCOjxqp5xo5mNe
-         FH3Y02rsAJrnhoBxlMG+13CHQUkcVbCrlj1xEqWkzRqEYLxBDvivu8fTUEJwIxRgkwHy
-         /TMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7uOUzZnbDEusnKR8cHWSyHd2FNHBMs+CYiJb4fGuX4g=;
-        b=anI0FTL1FWQLpWPR5ADuxPArUeTu8pihd7dPQPTZy0ut/cJFNGFrUTnK+AMRsDc4VT
-         eKft6e6p2CnK917FlsjgguwFXGuLz/aG8Nz7sOLXJ0UdEc3FkOxzQlNqXfyBM3qT5Epu
-         YEufPfeSagHTnb7qyeUj79S5RWS787YUNkhp7CnDwtDPqxyQ3t9HyL1aErxv+u7veTGs
-         LlDXFxEqcyYj0GkTWp5VA5cpNCIjTTwG97FjNvbPDXeuOs/VMEHh6QBN+190SwyFXQ0i
-         /H6nNLCrTu7rjFk7nX72M7CaABrxMBkUmDY0J93+oZSyHXE4j9h17LZgsnZsQ9niFa3x
-         NIsw==
-X-Gm-Message-State: AOAM530kiHTm6YZrNIddJMhXfxXZa3AfaTGqViAZC4cg6T7sGKdK5Q6i
-        Loe60MiN7LhTHixdE747JZEGjA==
-X-Google-Smtp-Source: ABdhPJxhusEmkTGoR7eUlu5A0Ce5fMesefkDFwNmmHwbnSL8TStNtf2UnkB+Vztq7JGocGm/di0LAQ==
-X-Received: by 2002:a17:902:cccb:b0:156:4a0:a2e7 with SMTP id z11-20020a170902cccb00b0015604a0a2e7mr7427200ple.97.1648766796515;
-        Thu, 31 Mar 2022 15:46:36 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm324113pgc.91.2022.03.31.15.46.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:46:35 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 22:46:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Gao Chao <chao.gao@intel.com>,
-        Robert Hoo <robert.hu@linux.intel.com>
-Subject: Re: [PATCH v7 4/8] KVM: VMX: dump_vmcs() reports
- tertiary_exec_control field as well
-Message-ID: <YkYvSHcIrhRgU93l@google.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-5-guang.zeng@intel.com>
+        Thu, 31 Mar 2022 18:50:52 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F80A3EA83;
+        Thu, 31 Mar 2022 15:49:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KTz4R3pVzz4xNm;
+        Fri,  1 Apr 2022 09:48:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648766939;
+        bh=aCINHo9aji2F1GB8wO1FkUovXMk3qb0+GTDDR4ex5/0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dlUEQiCcWq10xVDmBrRso2Emc/0wrNv0ndsF/2+QGo4Y5jyiyKuInvQ/BEi+zCd+i
+         b+Z5mps0KRuEVkHmh3cekVX8fuFXleSSrDMdw3WXzHcQ7HPnRHFsBr1pfROJFwm3a7
+         80dBeBdlPyFuihhzJoi6cV6e5bhziV1UFSMNhcEw72MJNcxYg5yIZgs7HYy31YNWaE
+         3vSSFHL6wEAGhGckOrYe+vLIA4rDbZKwV7M17cDAV4HVmNXZ0pzPpoKEhUGciP4ju5
+         1DDyeh8/jmIX1SY6KHUFpz2xhMZM8656+TSSgkxBdApiQDlYAoJt79yAoopB0qNJDa
+         +NhAj87+PZkvQ==
+Date:   Fri, 1 Apr 2022 09:48:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Qian Cai <quic_qiancai@quicinc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        <dan.j.williams@intel.com>, <willy@infradead.org>, <jack@suse.cz>,
+        <viro@zeniv.linux.org.uk>, <apopple@nvidia.com>,
+        <shy828301@gmail.com>, <rcampbell@nvidia.com>, <hughd@google.com>,
+        <xiyuyang19@fudan.edu.cn>, <kirill.shutemov@linux.intel.com>,
+        <zwisler@kernel.org>, <hch@infradead.org>,
+        <linux-fsdevel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <duanxiongchun@bytedance.com>, <smuchun@gmail.com>
+Subject: Re: [PATCH v5 0/6] Fix some bugs related to ramp and dax
+Message-ID: <20220401094854.56615a65@canb.auug.org.au>
+In-Reply-To: <20220331153604.da723f3546fa8adabd7a74ae@linux-foundation.org>
+References: <20220318074529.5261-1-songmuchun@bytedance.com>
+        <YkXPA69iLBDHFtjn@qian>
+        <20220331153604.da723f3546fa8adabd7a74ae@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304080725.18135-5-guang.zeng@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/nIhTqK6YrZqOjv9JOjZ_kms";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,71 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit, shortlog is funky, it'd read better as
+--Sig_/nIhTqK6YrZqOjv9JOjZ_kms
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-  KVM: VMX: Report tertiary_exec_control field in dump_vmcs()
+Hi Andrew,
 
-On Fri, Mar 04, 2022, Zeng Guang wrote:
-> From: Robert Hoo <robert.hu@linux.intel.com>
-> 
-> Add tertiary_exec_control field report in dump_vmcs()
+On Thu, 31 Mar 2022 15:36:04 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> Thanks.  I'll drop
+>=20
+> mm-rmap-fix-cache-flush-on-thp-pages.patch
+> dax-fix-cache-flush-on-pmd-mapped-pages.patch
+> mm-rmap-introduce-pfn_mkclean_range-to-cleans-ptes.patch
+> mm-rmap-introduce-pfn_mkclean_range-to-cleans-ptes-fix.patch
+> mm-pvmw-add-support-for-walking-devmap-pages.patch
+> dax-fix-missing-writeprotect-the-pte-entry.patch
+> dax-fix-missing-writeprotect-the-pte-entry-v6.patch
+> mm-simplify-follow_invalidate_pte.patch
 
-Please call out the shuffling of PinBased and provide a sample dump.  It's not
-mandatory to put that sort of info in the changelog, but it really does help
-reviewers, e.g. I remember discussing the shuffling and seeing the sample output,
-but other reviewers coming into this blind won't have that luxury.
+I have removed those and the 4 patches that I had to revert yesterday.
 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 8a5713d49635..7beba7a9f247 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -5891,6 +5891,7 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
->  	struct vcpu_vmx *vmx = to_vmx(vcpu);
->  	u32 vmentry_ctl, vmexit_ctl;
->  	u32 cpu_based_exec_ctrl, pin_based_exec_ctrl, secondary_exec_control;
-> +	u64 tertiary_exec_control;
->  	unsigned long cr4;
->  	int efer_slot;
->  
-> @@ -5904,9 +5905,16 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
->  	cpu_based_exec_ctrl = vmcs_read32(CPU_BASED_VM_EXEC_CONTROL);
->  	pin_based_exec_ctrl = vmcs_read32(PIN_BASED_VM_EXEC_CONTROL);
->  	cr4 = vmcs_readl(GUEST_CR4);
-> -	secondary_exec_control = 0;
-> +
->  	if (cpu_has_secondary_exec_ctrls())
->  		secondary_exec_control = vmcs_read32(SECONDARY_VM_EXEC_CONTROL);
-> +	else
-> +		secondary_exec_control = 0;
-> +
-> +	if (cpu_has_tertiary_exec_ctrls())
-> +		tertiary_exec_control = vmcs_read64(TERTIARY_VM_EXEC_CONTROL);
-> +	else
-> +		tertiary_exec_control = 0;
->  
->  	pr_err("VMCS %p, last attempted VM-entry on CPU %d\n",
->  	       vmx->loaded_vmcs->vmcs, vcpu->arch.last_vmentry_cpu);
-> @@ -6006,9 +6014,10 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
->  		vmx_dump_msrs("host autoload", &vmx->msr_autoload.host);
->  
->  	pr_err("*** Control State ***\n");
-> -	pr_err("PinBased=%08x CPUBased=%08x SecondaryExec=%08x\n",
-> -	       pin_based_exec_ctrl, cpu_based_exec_ctrl, secondary_exec_control);
-> -	pr_err("EntryControls=%08x ExitControls=%08x\n", vmentry_ctl, vmexit_ctl);
-> +	pr_err("CPUBased=0x%08x SecondaryExec=0x%08x TertiaryExec=0x%016llx\n",
-> +	       cpu_based_exec_ctrl, secondary_exec_control, tertiary_exec_control);
-> +	pr_err("PinBased=0x%08x EntryControls=%08x ExitControls=%08x\n",
-> +	       pin_based_exec_ctrl, vmentry_ctl, vmexit_ctl);
->  	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
->  	       vmcs_read32(EXCEPTION_BITMAP),
->  	       vmcs_read32(PAGE_FAULT_ERROR_CODE_MASK),
-> -- 
-> 2.27.0
-> 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nIhTqK6YrZqOjv9JOjZ_kms
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJGL9YACgkQAVBC80lX
+0GyePgf+LiEn85D2IxTfAf8/DAtAZbCjQ30Nl29rv31sOL0T1vsVkFibp8yQrNvI
+TlEBWUiti1ls7bc3c+v5yLAfxYKSyvSp9i9oSBYW9c8fZ1ihm8F6R8+hLZgu3foU
+gUw3PaIFi6KI0dMGvAadN5rYuhvvMqUwlZHo02nYOt2bGjr3DQWGrZm0qa6jiQNC
+a1Mu5zqoOA3fVY7VakijGvZ7YM/qYik+TrbpYKhlzoRlKaPW/Ddijsn+lqm24W1T
+tz3lV9AoXTUZ8TOsUOqfNtEbs0s8ivmhAmdLiJ08+REpONzNQr4QO9W6Xw6ZKnaR
+12qE+W2r83Rbjj2BTSoNXL5pJEeOKg==
+=vrD8
+-----END PGP SIGNATURE-----
+
+--Sig_/nIhTqK6YrZqOjv9JOjZ_kms--

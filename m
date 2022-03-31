@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43C54EDC1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8E94EDC26
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237846AbiCaOxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S237863AbiCaOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236300AbiCaOxi (ORCPT
+        with ESMTP id S233106AbiCaOzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:53:38 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D4056407;
-        Thu, 31 Mar 2022 07:51:50 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 25A7522239;
-        Thu, 31 Mar 2022 16:51:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648738309;
+        Thu, 31 Mar 2022 10:55:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 878A81E3FA
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648738429;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mGpDW2FfFUvAKaV7zb7pyf2ya8mPlFPwrdqHHfe9MFA=;
-        b=YV+pZYny02JG7m9Zem6mvc9D0ww0wSj8oJC3KGZ7gSEDqc+bKVRfa5g00u1g6ZJDjAFbaJ
-        b5ZblmF3sT5zD0UWyA5xCxyJcB1YfwNxQWKMPKNvKvTQaNaoQqrTmTElX69Bg4H7kEmj3F
-        8wBuSnFi9bZQGd8mOJ/BACb2MvoSkaA=
+        bh=I22K+0AWk04cNGfWA9Hth1qEi92pTMOHvjJAicv6x14=;
+        b=itsNFNcxwZDZOlFr0r0kwzI9GVwzlZzDsfRV+SaDzVfATCoDo4MtXMVIotDF8aFRQ6r4RJ
+        oi6nwI2/5kiPtwQkh4j3QN3Ks8V9pBdpy+Ho/EFhfie5IspogObxOnBbE2Uh/1XkPKJsOA
+        GzJTpi3NgtiRg2svKLcvghUmx9NI2cQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-103-RmpnAkKPP1qo9QPp9XDWfg-1; Thu, 31 Mar 2022 10:53:46 -0400
+X-MC-Unique: RmpnAkKPP1qo9QPp9XDWfg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B66543C14854;
+        Thu, 31 Mar 2022 14:53:45 +0000 (UTC)
+Received: from pauld.bos.csb (dhcp-17-51.bos.redhat.com [10.18.17.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 84D871400B18;
+        Thu, 31 Mar 2022 14:53:45 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 10:53:44 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] arch/arm64: Fix topology initialization for core
+ scheduling
+Message-ID: <20220331145343.GF17613@pauld.bos.csb>
+References: <20220330155611.30216-1-pauld@redhat.com>
+ <66f29bee-e26c-b40e-c3af-79d5297565d8@arm.com>
+ <20220331132103.GB17613@pauld.bos.csb>
+ <e93a7d66-7e43-d2c7-ad85-fb24d50effc5@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 31 Mar 2022 16:51:47 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-In-Reply-To: <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
- <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
- <20220330145137.GA214615@yilunxu-OptiPlex-7050>
- <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
- <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <7b3edeabb66e50825cc42ca1edf86bb7@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e93a7d66-7e43-d2c7-ad85-fb24d50effc5@arm.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-31 16:45, schrieb Russell King (Oracle):
-> On Wed, Mar 30, 2022 at 08:23:35AM -0700, Guenter Roeck wrote:
->> Michael, let's just drop the changes outside drivers/hwmon from
->> the series, and let's keep hwmon_is_bad_char() in the include file.
->> Let's just document it, explaining its use case.
+On Thu, Mar 31, 2022 at 04:37:50PM +0200 Dietmar Eggemann wrote:
+> On 31/03/2022 15:21, Phil Auld wrote:
+> > On Thu, Mar 31, 2022 at 11:04:31AM +0200 Dietmar Eggemann wrote:
+> >> On 30/03/2022 17:56, Phil Auld wrote:
 > 
-> Why? There hasn't been any objection to the change. All the discussion
-> seems to be around the new function (this patch) rather than the actual
-> conversions in drivers.
+> [...]
 > 
-> I'm entirely in favour of cleaning this up - it irks me that we're 
-> doing
-> exactly the same cleanup everywhere we have a hwmon.
+> >> Ah, the reason is that smt_mask is not correctly setup, so we bail on
+> >> `cpumask_weight(smt_mask) == 1` for !leaders in:
+> >>
+> >> notify_cpu_starting()
+> >>   cpuhp_invoke_callback_range()
+> >>     sched_cpu_starting()
+> >>       sched_core_cpu_starting()
+> >>
+> >> which leads to rq->core not being correctly set for !leader-rq's.
+> >>
+> > 
+> > Exactly, sorry I was not clearer.  smt_mask must be setup correctly 
+> > by the time sched_core_cpu_starting() is called. (Maybe I should crib
+> > some of the above lines into the commit message?)
 > 
-> At the very least, I would be completely in favour of keeping the
-> changes in the sfp and phy code.
+> Yeah, maybe, it wouldn't hurt I guess. IMHO mentioning stress-ng's prctl
+> needs PR_SCHED_CORE support could also be handy since today's stress-ng
+> packages don't seem to have this yet.
+> 
 
-FWIW, my plan was to send the hwmon patches first, by then my other
-series (the polynomial_calc() one) will also be ready to be picked.
-Then I'd ask Guenter for a stable branch with these two series which
-hopefully get merged into net-next. Then I can repost the missing
-patches on net-next along with the new sensors support for the GPY
-and LAN8814 PHYs.
+My scripts clone it so I did not realize that was not in prepackaged versions
+yet.  But that said, that's really just a way to tickle the problem. Anyone
+using core scheduling on such a system will hit this (at least the WARN part,
+the actual crash was harder to create w/o all the threads and tasks stress-ng
+uses). 
 
-For the last patch, if it should be applied or not, or when, that
-will be up to Guenter then.
+I can send a v3 with a further commit message update.
 
--michael
+
+Cheers,
+Phil
+
+-- 
+

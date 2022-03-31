@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F74B4EE275
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFD04EE277
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241140AbiCaUR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S241315AbiCaURp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiCaUR0 (ORCPT
+        with ESMTP id S241000AbiCaURn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:17:26 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F119E399
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:15:37 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id e189so680069oia.8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:15:37 -0700 (PDT)
+        Thu, 31 Mar 2022 16:17:43 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979032405A8;
+        Thu, 31 Mar 2022 13:15:55 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id t4so679650pgc.1;
+        Thu, 31 Mar 2022 13:15:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=6O6TQE9gY/RCGoA8Lj72Kezh8AhkaXWoFpitVHtqqC0=;
-        b=mXBaYXFodB5BNYtQLsAi85UeIgUz+rJ8jR+IjiFZ7xdlENE8KMHvCXLuuZLNbwMwx2
-         woFVXRWjONwaTsuJqBRZbtbssVAObJzulRjY/OOqYy5RVGQRFUuoj6VMHtyCP+iLwZVH
-         AXRy5kqcp/yQ8DrLEinN4/hL3JYxoLGiDeQ62TnzGrMe9RPKG8OTEfDdW+L+ACVrzuZC
-         hCHP05rd5gQYTbLk7gzcg0t/pR1vNhlgDDfZhEBo1gk03ccs7VWJCITWMFe8GHrJaGhB
-         vWi9ZMT9l5ycdy5Co2CJd8cPoiy8xAQmIdtlDAd+PzlDjajTJC0+zPiAfeEF03DmSMFZ
-         w+qg==
+        bh=G3GMOK4NcGeu/Rm7pxZSYI23p/RSyGdy+8yXGjFy7BQ=;
+        b=FvbCqjOPfZjPFbAOGXjM+Ct6mKiwSgG2xGBSoByDrEXPhNfK9gBjvmWy/5TprtIXR4
+         6EYkYaa5U7HKkXv+2Ysgkt+PGxxNBiqd1LLzjgFGXYjA67h97ag0JcsWEgKiWp0xZviR
+         QyrBlKQWC7EOWzxt43deQ07Ds2gKKkGi52Wq9BFJex57VM4tLoe5rAnVS2d9gAJz6oOu
+         5HXp2nEbpLMQ/XuY9EAxH3mPpN0VGUijXC2hUw/MO05xiPHqM18bM/VILlXVhxBcw2uZ
+         axoT9sX3fjtQ99ToQjF/ECVx+y91a8gZYemKNfEKEgO6kgSpgLjRyoKSzo+mqmAr1C3c
+         UjoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6O6TQE9gY/RCGoA8Lj72Kezh8AhkaXWoFpitVHtqqC0=;
-        b=ntKh8JnfO/Uh1B8776cpWMugQu9nEylQSVpv9xDU0k/y8Bscoj4M0Lj7+skpz0uOX8
-         OSwe17Oqg59SdP0+giewPG9Ow0gQCIjxLrvfNkKkPV6L8umKbxBD8IG6X4P4J3l/Qqjr
-         YlYMwEBZORlE8H31t8IRSF6ahOpdtrzz9nEIc44gXFtw4zlH6epc1mbn7LHiIMFQd3pf
-         77Wd8zWB7+VpYI7DsiLBwSj+bzTyJNRr3AxN5deHR9Co8PTDrh28CJ0ePYcYJKYcJpe4
-         7d0VZwLC8fs4iqS4kB0V8alE9TWtMJmVFQYPpez5WQQfCn11SQMVfd3QDPJRmjbxLBJt
-         zlfw==
-X-Gm-Message-State: AOAM5312Xw7gc4TGmRz4BEg39r3l7xL6K/PSVDey7LmbWGcL7/gw9awh
-        51IBEhsd9eMHmO+v+oNe0SHspQ==
-X-Google-Smtp-Source: ABdhPJz0dHz0S0Kxb6XfpeUoORZA029B4Og25ME2y94yefm5MksonaTie6pvHqTlUxRYIXLjV2cN7g==
-X-Received: by 2002:a05:6808:ec5:b0:2f7:4019:53be with SMTP id q5-20020a0568080ec500b002f7401953bemr3370230oiv.176.1648757737012;
-        Thu, 31 Mar 2022 13:15:37 -0700 (PDT)
-Received: from eze-laptop ([190.194.87.200])
-        by smtp.gmail.com with ESMTPSA id z10-20020a0568301daa00b005ce0f36dd81sm252391oti.12.2022.03.31.13.15.33
+        bh=G3GMOK4NcGeu/Rm7pxZSYI23p/RSyGdy+8yXGjFy7BQ=;
+        b=se+sdV0My+kEvBtllV49FsoJ2LXk+3elTd8I+EgOcR/EIXx5mvn9/0H2nbgWg1Z23+
+         udFxotahAsYP1CF76lf2lsMwvG0vJm0Bk43OECcFefn3FHS7wrV0mIMjGeAGgfM5DepL
+         0GemCnkBTZZD+5qrykt4l7V0pKRpaJUsbFPsaV9zerPB0Vb+LFC9AeDdJEz5f6qUhcOA
+         BO5rSZBQjEUz3huSA9XAV4SKeXt6WQCLY9HDCae3Mlt4Ys3YPtjm6WuPZp6pMvRV3BSJ
+         Lezwc8lRqBq85//PmTbbPjqEs4F28PiNtqNOAF3iN0cvcBzDKi2TlDvgjfMlsm98sovG
+         EcXA==
+X-Gm-Message-State: AOAM532FnHiK5wO1le0VmjAQfjGhDV8jCops9HHjeFDAPTPU0pLk0Th2
+        1DcgmKf/Ivhng2xdYOA67as=
+X-Google-Smtp-Source: ABdhPJx+MElvTq7xqT6Ah0xsQ/9J0CaUC/E45h+HRia1cTzUYRcJMoVVdO7sN+vE3B3Az1hICugsZw==
+X-Received: by 2002:a65:6753:0:b0:385:fa8a:188f with SMTP id c19-20020a656753000000b00385fa8a188fmr12246379pgu.499.1648757754218;
+        Thu, 31 Mar 2022 13:15:54 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b004fdc453b49asm328013pfd.39.2022.03.31.13.15.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 13:15:36 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 17:15:31 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: hantro: Empty encoder capture buffers by default
-Message-ID: <YkYL45bEwjS/1+Rs@eze-laptop>
-References: <20220331084907.628349-1-wenst@chromium.org>
+        Thu, 31 Mar 2022 13:15:53 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 13:15:50 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 023/104] x86/cpu: Add helper functions to
+ allocate/free MKTME keyid
+Message-ID: <20220331201550.GC2084469@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
+ <2386151bc0a42b2eda895d85b459bf7930306694.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220331084907.628349-1-wenst@chromium.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2386151bc0a42b2eda895d85b459bf7930306694.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 04:49:06PM +0800, Chen-Yu Tsai wrote:
-> The payload size for encoder capture buffers is set by the driver upon
-> finishing encoding each frame, based on the encoded length returned from
-> hardware, and whatever header and padding length used. Setting a
-> non-zero default serves no real purpose, and also causes issues if the
-> capture buffer is returned to userspace unused, confusing the
-> application.
-> 
-> Instead, always set the payload size to 0 for encoder capture buffers
-> when preparing them.
-> 
-> Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-> Fixes: 082aaecff35f ("media: hantro: Fix .buf_prepare")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+On Thu, Mar 31, 2022 at 02:21:06PM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > MKTME keyid is assigned to guest TD.  The memory controller encrypts guest
+> > TD memory with key id.  Add helper functions to allocate/free MKTME keyid
+> > so that TDX KVM assign keyid.
+> 
+> Using MKTME keyid is wrong, at least not accurate I think.  We should use
+> explicitly use "TDX private KeyID", which is clearly documented in the spec:
+>   
+> https://software.intel.com/content/dam/develop/external/us/en/documents-tps/intel-tdx-cpu-architectural-specification.pdf
+> 
+> Also, description of IA32_MKTME_KEYID_PARTITIONING MSR clearly says TDX private
+> KeyIDs span the range (NUM_MKTME_KIDS+1) through
+> (NUM_MKTME_KIDS+NUM_TDX_PRIV_KIDS).  So please just use TDX private KeyID here.
+> 
+> 
+> > 
+> > Also export MKTME global keyid that is used to encrypt TDX module and its
+> > memory.
+> 
+> This needs explanation why the global keyID needs to be exported.
 
-> ---
-> 
-> This was previously incorrectly squashed into my Hantro encoder cmd
-> patch [1].
-> 
-> [1] https://lore.kernel.org/linux-media/20220301042225.1540019-1-wenst@chromium.org/
-> 
->  drivers/staging/media/hantro/hantro_v4l2.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-> index 67148ba346f5..261beb0c40f6 100644
-> --- a/drivers/staging/media/hantro/hantro_v4l2.c
-> +++ b/drivers/staging/media/hantro/hantro_v4l2.c
-> @@ -733,8 +733,12 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
->  	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
->  	 * it to buffer length).
->  	 */
-> -	if (V4L2_TYPE_IS_CAPTURE(vq->type))
-> -		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-> +	if (V4L2_TYPE_IS_CAPTURE(vq->type)) {
-> +		if (ctx->is_encoder)
-> +			vb2_set_plane_payload(vb, 0, 0);
-> +		else
-> +			vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-> +	}
->  
->  	return 0;
->  }
-> -- 
-> 2.35.1.1021.g381101b075-goog
-> 
+How about the followings?
+
+TDX private host key id is assigned to guest TD.  The memory controller
+encrypts guest TD memory with the assigned host key id (HIKD).  Add helper
+functions to allocate/free TDX private host key id so that TDX KVM manage
+it.
+
+Also export the global TDX private host key id that is used to encrypt TDX
+module, its memory and some dynamic data (e.g. TDR).  When VMM releasing
+encrypted page to reuse it, the page needs to be flushed with the used host
+key id.  VMM needs the global TDX private host key id to flush such pages
+TDX module accesses with the global TDX private host key id.
+
+Thanks,
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

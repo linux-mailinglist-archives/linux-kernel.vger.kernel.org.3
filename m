@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156844ED260
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FCA4ED290
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiCaEPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S229843AbiCaENB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiCaEOH (ORCPT
+        with ESMTP id S229998AbiCaEMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:14:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98410210474;
-        Wed, 30 Mar 2022 20:51:57 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KTTny1shXzCr6s;
-        Thu, 31 Mar 2022 11:49:42 +0800 (CST)
-Received: from [10.174.187.128] (10.174.187.128) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 11:51:55 +0800
-Subject: Re: [PATCH] KVM: x86/pmu: Update AMD PMC smaple period to fix guest
- NMI-watchdog
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-CC:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Eric Hankland <ehankland@google.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20220329134632.6064-1-likexu@tencent.com>
-From:   "wangyanan (Y)" <wangyanan55@huawei.com>
-Message-ID: <516a87a9-71d3-a4a7-83bf-1d8e36745e61@huawei.com>
-Date:   Thu, 31 Mar 2022 11:51:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Thu, 31 Mar 2022 00:12:21 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4296158789
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:53:27 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2e612af95e3so240585507b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ak2t2jCNQu1M2/jAOYEZkhc3R1ocF5/1qJQ+3hjAnME=;
+        b=tkvUPecqmQulNzBQqTFmi7Dei2Lz6Mn445nrLTgnye7JELzViZqpIsbrhlyTvAs+Dc
+         O2PzcrgIEqVcpVDVfjoBCzrwz8cX6owQtgn4k6W0tHNglJN4AxjMI4S42ir904Ky4cYz
+         h8wULYh2QFZ3as3p2woAyxMFzGQCOFFEEsBnQAM8d1aloqJodsljEyX78x1pTQqYRTrp
+         k2dHlWyyTA+IYWWBvIymhVYCJxorN4SNj1SlOo3wDa71/kBxms27NThdj/CmV/nrhGaF
+         nwZr/ZqIWMYjR/DW2zaK8s6hVwv9+iUUYlf4yoK3QkMztFkKtOTVhQ/LBO/KJC3rdAKn
+         BlhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ak2t2jCNQu1M2/jAOYEZkhc3R1ocF5/1qJQ+3hjAnME=;
+        b=E8LeraNqZzhDklhrYrA++It1Mr7eQOI1aX3ToV8A38Wbl+Ra1U54C5R1IcNov8sch0
+         H/ac+kDZ05NfIA8pP1LDikkJj3gDikh/E8P6KSVUED7pJR/sxaiLPwYQ/hc+ELz2whoR
+         zNGosqj4B1jy6YZCJgX9I9i7d/4IrLB4HccYsbCofokHIEQU//aPCc2/njAEfWsq0M+1
+         +dFpyofumBqkso3EN5alCI3aO2rg0lrs8kraivr6lb3sfCtVHsW6P5cKdxE7Eyh8pu4A
+         /aQAlq+s2CCSMmlbHwiL6E7jQTkUOi5J/zLQOIupo8WMvvQBeN1g5YYLhtL8h/Lf/wPD
+         QwMA==
+X-Gm-Message-State: AOAM532AsNvPLHuVznagtPkuUCZw2X3CToGwOtbfScieC9FYadeUbXH3
+        ockp59yXNPJgIpxLd2BwSkfhxQlVCH0deN1Veplckg==
+X-Google-Smtp-Source: ABdhPJxHjh8wcw0AdvJ2RbvjPxEo4eKx9G8Z+IYtVJqziw69Fb+8Y8BoQ0j4XCRCr056HsXRwjqBvkq5wyqIZqUk8Dk=
+X-Received: by 2002:a0d:f685:0:b0:2e2:22e6:52d7 with SMTP id
+ g127-20020a0df685000000b002e222e652d7mr3190538ywf.418.1648698806850; Wed, 30
+ Mar 2022 20:53:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220329134632.6064-1-likexu@tencent.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.187.128]
-X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
- dggpemm500023.china.huawei.com (7.185.36.83)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220228122126.37293-1-songmuchun@bytedance.com>
+ <20220228122126.37293-13-songmuchun@bytedance.com> <164869718565.25542.15818719940772238394@noble.neil.brown.name>
+In-Reply-To: <164869718565.25542.15818719940772238394@noble.neil.brown.name>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 31 Mar 2022 11:52:50 +0800
+Message-ID: <CAMZfGtUSA9f3k9jF5U-y+NVt8cpmB9_mk1F9-vmm4JOuWFF_Bw@mail.gmail.com>
+Subject: Re: [PATCH v6 12/16] mm: list_lru: replace linear array with xarray
+To:     NeilBrown <neilb@suse.de>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-helped to Cc stable@ list...
-
-On 2022/3/29 21:46, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On Thu, Mar 31, 2022 at 11:26 AM NeilBrown <neilb@suse.de> wrote:
 >
-> NMI-watchdog is one of the favorite features of kernel developers,
-> but it does not work in AMD guest even with vPMU enabled and worse,
-> the system misrepresents this capability via /proc.
+> On Mon, 28 Feb 2022, Muchun Song wrote:
+> > If we run 10k containers in the system, the size of the
+> > list_lru_memcg->lrus can be ~96KB per list_lru. When we decrease the
+> > number containers, the size of the array will not be shrinked. It is
+> > not scalable. The xarray is a good choice for this case. We can save
+> > a lot of memory when there are tens of thousands continers in the
+> > system. If we use xarray, we also can remove the logic code of
+> > resizing array, which can simplify the code.
+> >
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 >
-> This is a PMC emulation error. KVM does not pass the latest valid
-> value to perf_event in time when guest NMI-watchdog is running, thus
-> the perf_event corresponding to the watchdog counter will enter the
-> old state at some point after the first guest NMI injection, forcing
-> the hardware register PMC0 to be constantly written to 0x800000000001.
+> Hi,
+>  I've just tried some simple testing on NFS (xfstests generic/???) and
+>  it reliably crashes in this code.
+>  Specifically in list_lru_add(), list_lru_from_kmem() returns NULL,
+>  which results in a NULL deref.
+>  list_lru_from_kmem() returns NULL because an xa_load() returns NULL.
+
+Did you test with the patch [1].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
+
 >
-> Meanwhile, the running counter should accurately reflect its new value
-> based on the latest coordinated pmc->counter (from vPMC's point of view)
-> rather than the value written directly by the guest.
+>  The patch doesn't make any sense to me.  It replaces an array of
+>  structures with an xarray, which is an array of pointers.
+>  It seems to assume that all the pointers in the array get magically
+>  allocated to the required structures.  I certainly cannot find when
+>  the 'struct list_lru_node' structures get allocated.  So xa_load() will
+>  *always* return NULL in this code.
+
+struct list_lru_node is allocated via kmem_cache_alloc_lru().
+
 >
-> Fixes: 168d918f2643 ("KVM: x86: Adjust counter sample period after a wrmsr")
-> Reported-by: Dongli Cao <caodongli@kingsoft.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->   arch/x86/kvm/pmu.h           | 9 +++++++++
->   arch/x86/kvm/svm/pmu.c       | 1 +
->   arch/x86/kvm/vmx/pmu_intel.c | 8 ++------
->   3 files changed, 12 insertions(+), 6 deletions(-)
-Recently I also met the "NMI watchdog not working on AMD guest"
-issue, I have tested this patch locally and it helps.
+>  I can provide more details of the failure stack if needed, but I doubt
+>  that would be necessary.
+>
 
-Reviewed-by: Yanan Wang <wangyanan55@huawei.com>
-Tested-by: Yanan Wang <wangyanan55@huawei.com>
+If the above fix cannot fix your issue, would you mind providing
+the .config and stack trace?
 
-Thanks,
-Yanan
-> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> index 7a7b8d5b775e..5e7e8d163b98 100644
-> --- a/arch/x86/kvm/pmu.h
-> +++ b/arch/x86/kvm/pmu.h
-> @@ -140,6 +140,15 @@ static inline u64 get_sample_period(struct kvm_pmc *pmc, u64 counter_value)
->   	return sample_period;
->   }
->   
-> +static inline void pmc_update_sample_period(struct kvm_pmc *pmc)
-> +{
-> +	if (!pmc->perf_event || pmc->is_paused)
-> +		return;
-> +
-> +	perf_event_period(pmc->perf_event,
-> +			  get_sample_period(pmc, pmc->counter));
-> +}
-> +
->   void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel);
->   void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int fixed_idx);
->   void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx);
-> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> index 24eb935b6f85..b14860863c39 100644
-> --- a/arch/x86/kvm/svm/pmu.c
-> +++ b/arch/x86/kvm/svm/pmu.c
-> @@ -257,6 +257,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
->   	if (pmc) {
->   		pmc->counter += data - pmc_read_counter(pmc);
-> +		pmc_update_sample_period(pmc);
->   		return 0;
->   	}
->   	/* MSR_EVNTSELn */
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index efa172a7278e..e64046fbcdca 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -431,15 +431,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
->   				data = (s64)(s32)data;
->   			pmc->counter += data - pmc_read_counter(pmc);
-> -			if (pmc->perf_event && !pmc->is_paused)
-> -				perf_event_period(pmc->perf_event,
-> -						  get_sample_period(pmc, data));
-> +			pmc_update_sample_period(pmc);
->   			return 0;
->   		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
->   			pmc->counter += data - pmc_read_counter(pmc);
-> -			if (pmc->perf_event && !pmc->is_paused)
-> -				perf_event_period(pmc->perf_event,
-> -						  get_sample_period(pmc, data));
-> +			pmc_update_sample_period(pmc);
->   			return 0;
->   		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
->   			if (data == pmc->eventsel)
-
+Thanks for your report.

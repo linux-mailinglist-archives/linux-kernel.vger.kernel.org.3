@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452C74EE3EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3184EE3F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242377AbiCaWWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        id S242382AbiCaWXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242369AbiCaWWA (ORCPT
+        with ESMTP id S241788AbiCaWXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:22:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83D16173F5D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648765211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lcacMdqd3bf9RhdWBIFn3jh9EYGsuLJ5EDgnlxHe6hY=;
-        b=V7GjAglvSMSC6Tbc5GTFLZ5OVuoPCjrDy/fCoK8jYKAJNn0SRoX+WMFHF6p0HyYIAMbe/S
-        GNKrvk19aJAxvywobbU0dLCOKW52meqSr13UAg6ih6pUIS5E0iGj0i8I403I9Q6Bgccm/o
-        IPbggj/T8CsIY4OvTrvhslWk5+NJVBc=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-sq51nJkxN1yHK0w7-a03LA-1; Thu, 31 Mar 2022 18:20:10 -0400
-X-MC-Unique: sq51nJkxN1yHK0w7-a03LA-1
-Received: by mail-ej1-f71.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso478429ejc.22
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:20:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lcacMdqd3bf9RhdWBIFn3jh9EYGsuLJ5EDgnlxHe6hY=;
-        b=BV3gc0OASXOhI8QTu09K5mJea93TsZsmK3ZFfd4UTJXgW0JEGn3VhrV28gwqiLYSAe
-         J2Cw/v4OzNroG30LRcwm371LBVNI9Y0oZyK79nKwBDDq4kq0Vo2JaPhg0KQInUq99Jzk
-         aZYfcAlPc6PnJz/wqwPQhVtadDQXRDcErk+G+M+zJFStB+Fn4CYxDYbFWDXB2MJmDVOt
-         ke6leLFSjsywY8L9kiNVo4FqebIQEcUGW1c7TS/ROB9sK0XedH2/wRaVgj8ej9dDhBCy
-         3BwmtoWp+uMu1rdGEV104plp3cBCP6Yy7uqKB2yPZnUXjPZu1FCX5dE0zQ04M2j/Xi7F
-         6DPA==
-X-Gm-Message-State: AOAM532WFyhpdGjmN6to461Ne2L5QBCSqxVVB0qPE17Gl8yOd6oM+Uqg
-        Ra2Ir2u5t06pKWuVVNzNr63YCCYrcSqp9uYoPb2PZFCosTvpZXLUrXAC6wLZoES0IEJWjFKNvka
-        GkI7Cfo37gDgtQ6ZRp7qZBnFyaf+FcGwDNQ/iXwky
-X-Received: by 2002:aa7:c789:0:b0:413:605d:8d17 with SMTP id n9-20020aa7c789000000b00413605d8d17mr18443746eds.100.1648765208972;
-        Thu, 31 Mar 2022 15:20:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxJS+G0lRPGKhUebBKREDAXsEcg0UrX4NCWqjao2fTUSk/VCXDWb6txzdyF194RLS6KRUjV8UwtsdLq0U1h44U=
-X-Received: by 2002:aa7:c789:0:b0:413:605d:8d17 with SMTP id
- n9-20020aa7c789000000b00413605d8d17mr18443736eds.100.1648765208701; Thu, 31
- Mar 2022 15:20:08 -0700 (PDT)
+        Thu, 31 Mar 2022 18:23:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A96D247C06
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648765290; x=1680301290;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SmAhzdczCQr2mFfZTR4WT2nndIx1sPUm8+3tEgqCMwk=;
+  b=TYIltZU6Ts98gej7X5E8SF+EwwiFqZ7k7IGKdL5+GlM/0+W8xqEXOoSp
+   GR6HZiwlScXqV+uXOusdarOPR/QUNNGvina7ED1FX6D5EGKNbYLl4pfIU
+   nreMDx6b19Sgbeo7t9cbxG+3/ZDCmk8uq4FCJ/RUvyKa6JbacJrUcfERu
+   3Vg/UN508L4xKQa6UjqR8Nj/9xP+oeeBpgH5Uqb566V/QjA2CJS+fOU7Q
+   ExFpXaq+zzknvuy4byTJAXcFMyNkA+JihB0v+bTzNHc1Gy2MBst/g2cPo
+   xmNCV1rkMs/hNxkBR5TXEBFbIEVIWD0Hk4XAWLLKxsFWi5MUDHEfmAkWR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="346418040"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="346418040"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 15:21:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="788586084"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Mar 2022 15:21:28 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1na3AV-0000hZ-Q5;
+        Thu, 31 Mar 2022 22:21:27 +0000
+Date:   Fri, 1 Apr 2022 06:20:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Youghandhar Chintala <youghand@codeaurora.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: ld.lld: error: undefined symbol: ieee80211_sta_restart
+Message-ID: <202204010615.CBtHI0Bf-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220331151654.184433-1-javierm@redhat.com> <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
- <YkYA/Wpqa/PMczkp@lx-t490>
-In-Reply-To: <YkYA/Wpqa/PMczkp@lx-t490>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-Date:   Fri, 1 Apr 2022 00:19:57 +0200
-Message-ID: <CAFOAJEeKNy0HW82W6HV_49d5sc5L0m62QDfY9qA1906_ZzGRYg@mail.gmail.com>
-Subject: Re: [PATCH v2] efi: Allow to enable EFI runtime services by default
- on RT
-To:     "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Brian Masney <bmasney@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Al Stone <ahs3@redhat.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>,
-        Peter Jones <pjones@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        linux-rt-users@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ahmed,
+Hi Youghandhar,
 
-On Thu, Mar 31, 2022 at 9:36 PM Ahmed S. Darwish
-<a.darwish@linutronix.de> wrote:
->
-> Hi Ard, Javier,
->
-> Am Do, Mar 31, 2022, schrieb Ard Biesheuvel:
-> > On Thu, 31 Mar 2022 at 17:17, Javier Martinez Canillas
-> > <javierm@redhat.com> wrote:
->
+FYI, the error/warning still remains.
 
-[snip]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e729dbe8ea1c6145ae7b9efd6a00a5613746d3b0
+commit: 7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9 mac80211: Add support to trigger sta disconnect on hardware restart
+date:   3 weeks ago
+config: hexagon-randconfig-r045-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010615.CBtHI0Bf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 881350a92d821d4f8e4fa648443ed1d17e251188)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7d352ccf1e9935b5222ca84e8baeb07a0c8f94b9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-> In case of (CONFIG_PREEMPT_RT=y && CONFIG_EFI_DISABLE_RUNTIME=n),
-> shouldn't we add a small message in the kernel log warning that EFI
-> runtime services are enabled for the RT kernel?
->
-> In almost all HW, except custom ones with "verified" firmware, such a
-> warning would be useful... This is especially true since in the embedded
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I considered that as well but was not sure about what that message should be.
+All errors (new ones prefixed by >>):
 
-Since it will be printed even on systems whose EFI firmwares do not
-have such long call times as the ones described in the commit that
-disabled the runtime services for RT.
+>> ld.lld: error: undefined symbol: ieee80211_sta_restart
+   >>> referenced by util.c
+   >>>               mac80211/util.o:(ieee80211_reconfig) in archive net/built-in.a
+   >>> referenced by util.c
+   >>>               mac80211/util.o:(ieee80211_reconfig) in archive net/built-in.a
 
-And in that case the warning may be misleading and make users believe
-that a problem exists, which might not be accurate.
-
-> domain, manually-configured RT kernels are almost always the norm.
->
-
-Agreed. That is why the default for CONFIG_EFI_DISABLE_RUNTIME=y, if
-CONFIG_PREEMPT_RT=y. So users will need to explicitly disable the
-option if they want the EFI runtime services to be enabled with
-CONFIG_PREEMPT_RT.
-
-Best regards,
-Javier
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

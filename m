@@ -2,105 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CB44EE12F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A1F4EE134
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237572AbiCaS7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S237716AbiCaTAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbiCaS7B (ORCPT
+        with ESMTP id S235959AbiCaTAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:59:01 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0451A9CAB
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:57:14 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id t2so412564pfj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1+siZaVK/kXVqsXYbi//KXC5axu7BHMbEufK00AlNjc=;
-        b=aPdxjXbqnRl8zkYeXt242YklwYJJtJHUT7hXWJryzIimZis6pJ7UFItGf/o3AVBIQt
-         FpJ+NjyejG8w6lw2IC2MuawguCRN/FwnIa4lXoW4ajwEra9UwF2ggG4HEzWZiEAorIg9
-         29t6wknDOwaxMZCU/C1nvfJDvEKUz0vQh4jNE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1+siZaVK/kXVqsXYbi//KXC5axu7BHMbEufK00AlNjc=;
-        b=PP1s5TiXdEaSd3Ak0yZLgCHMOSw8le2B+diHNGtpO8X9AXexL8YUAXZvOU40OQphIJ
-         tKpS9aAu9esxx1u9dPLnOFt8LKuKWXznLETsEDruYYxvx82BLdqhbGXozBfwZU9hzEsY
-         pVGq0U1wTQYelkGoX1hzB6xv9We7Zroqge5J/+udJ0zC2gbciDZXvx66K23cVRw+z5GZ
-         Pg02s3fPanCIFetb0xDERi1i7zNAvd+ZFw4DVLL7RQGBDcsVwUoS5mc8vvA4FYf71KtT
-         arss/o/RyOcnWSKhC+I6AhF2/IrNw7b9dKz4bJ5OAo6fs8kOJQ9SsCmiRTZrTHLRDgXc
-         nLOg==
-X-Gm-Message-State: AOAM532P9jNcAB+DogZ2YkZPadDj5AVh0Wn2TrwT9P1SR9LSnu6ADHYj
-        ro208mmpjFvT4I33zDRQ8IASdw==
-X-Google-Smtp-Source: ABdhPJwQut3pKHwZBwM67ZAcNHcDMFOpwSRVJbF1FtR4uiIl/GBq8kkD0Hu+isv8bqcA5u7FY2h1kg==
-X-Received: by 2002:a62:a50b:0:b0:4f7:4457:a48a with SMTP id v11-20020a62a50b000000b004f74457a48amr40446968pfm.50.1648753033531;
-        Thu, 31 Mar 2022 11:57:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056a0022cf00b004fb32b9e000sm224600pfj.1.2022.03.31.11.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 11:57:13 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 11:57:12 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        David Hildenbrand <david@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zi Yan <ziy@nvidia.com>
-Subject: Re: [GIT PULL] hardening fixes for v5.18-rc1
-Message-ID: <202203311154.ABD158F6@keescook>
-References: <202203311127.503A3110@keescook>
- <YkX3BKpxwCaey8QU@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkX3BKpxwCaey8QU@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 15:00:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37032364D4;
+        Thu, 31 Mar 2022 11:58:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F6436187F;
+        Thu, 31 Mar 2022 18:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95009C340ED;
+        Thu, 31 Mar 2022 18:58:12 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 5.15.32-rt39
+Date:   Thu, 31 Mar 2022 18:57:24 -0000
+Message-ID: <164875304500.974121.18336996246209199283@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 07:46:28PM +0100, Russell King (Oracle) wrote:
-> On Thu, Mar 31, 2022 at 11:35:40AM -0700, Kees Cook wrote:
-> > Hi Linus,
-> > 
-> > Please pull these hardening fixes for v5.18-rc1. This addresses an
-> > -Warray-bounds warning found under a few ARM defconfigs, and disables
-> > long-broken CONFIG_HARDENED_USERCOPY_PAGESPAN.
-> 
-> I don't see these patches on linux-arm-kernel... are we doing away with
-> patch review now? :D
+Hello RT-list!
 
-Uh, what? The links in the patches show the reviews, even. I assume
-you're mainly talking about the DMA one; it's right here:
-https://lore.kernel.org/linux-arm-kernel/20220309175107.195182-1-keescook@chromium.org/
+I'm pleased to announce the 5.15.32-rt39 stable release.
 
-I had thought hch was going to take this patch, but the dma tree didn't
-have it, so I sent it in.
+You can get this release via the git tree at:
 
-And the usercopy patch was here, with references to the discussion
-around it too:
-https://lore.kernel.org/all/20220324230255.1362706-1-keescook@chromium.org/
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
--- 
-Kees Cook
+  branch: v5.15-rt
+  Head SHA1: 40291aa6846edc6813885b33bcc837c61a58bf3b
+
+Or to build 5.15.32-rt39 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.32.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.32-rt39.patch.xz
+
+
+Enjoy!
+Clark
+
+Changes from v5.15.31-rt38:
+---
+
+Arnd Bergmann (3):
+      uaccess: fix integer overflow on access_ok()
+      m68k: fix access_ok for coldfire
+      nds32: fix access_ok() checks in get/put_user
+
+Brian Norris (1):
+      Revert "ath: add support for special 0x0 regulatory domain"
+
+Bryan O'Donoghue (1):
+      wcn36xx: Differentiate wcn3660 from wcn3620
+
+Clark Williams (2):
+      Merge tag 'v5.15.32' into v5.15-rt
+      Linux 5.15.32-rt39
+
+Eric Dumazet (2):
+      llc: fix netdevice reference leaks in llc_ui_bind()
+      llc: only change llc->dev when bind() succeeds
+
+Giacomo Guiduzzi (1):
+      ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+
+Giovanni Cabiddu (1):
+      crypto: qat - disable registration of algorithms
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.32
+
+Helmut Grohne (1):
+      Bluetooth: btusb: Add another Realtek 8761BU
+
+James Bottomley (1):
+      tpm: use try_get_ops() in tpm-space.c
+
+Jason Zheng (1):
+      ALSA: hda/realtek: Add quirk for ASUS GA402
+
+Jonathan Teh (1):
+      ALSA: cmipci: Restore aux vol on suspend/resume
+
+Jordy Zomer (1):
+      nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
+
+Larry Finger (1):
+      Bluetooth: btusb: Add one more Bluetooth part for the Realtek RTL8852AE
+
+Lars-Peter Clausen (1):
+      ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
+
+Linus Lüssing (1):
+      mac80211: fix potential double free on mesh join
+
+Mark Cilissen (1):
+      ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
+
+Maximilian Luz (1):
+      ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
+
+Pablo Neira Ayuso (2):
+      netfilter: nf_tables: initialize registers in nft_do_chain()
+      netfilter: nf_tables: validate registers coming from userspace.
+
+Paul E. McKenney (1):
+      rcu: Don't deboost before reporting expedited quiescent state
+
+Reza Jahanbakhshi (1):
+      ALSA: usb-audio: add mapping for new Corsair Virtuoso SE
+
+Roberto Sassu (1):
+      drm/virtio: Ensure that objs is not NULL in virtio_gpu_array_put_free()
+
+Stephane Graber (1):
+      drivers: net: xgene: Fix regression in CRC stripping
+
+Tadeusz Struk (2):
+      net: ipv6: fix skb_over_panic in __ip6_append_data
+      tpm: Fix error handling in async work
+
+Takashi Iwai (7):
+      ASoC: sti: Fix deadlock via snd_pcm_stop_xrun() call
+      ALSA: oss: Fix PCM OSS buffer allocation overflow
+      ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
+      ALSA: pcm: Fix races among concurrent read/write and buffer changes
+      ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+      ALSA: pcm: Fix races among concurrent prealloc proc writes
+      ALSA: pcm: Add stream lock during PCM reset ioctl operations
+
+Tim Crawford (2):
+      ALSA: hda/realtek: Add quirk for Clevo NP70PNJ
+      ALSA: hda/realtek: Add quirk for Clevo NP50PNJ
+
+Werner Sembach (1):
+      ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
+
+huangwenhui (1):
+      ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
+---
+Makefile                                         |  2 +-
+ arch/csky/include/asm/uaccess.h                  |  7 +-
+ arch/hexagon/include/asm/uaccess.h               | 18 ++---
+ arch/m68k/include/asm/uaccess.h                  | 15 ++--
+ arch/microblaze/include/asm/uaccess.h            | 19 +----
+ arch/nds32/include/asm/uaccess.h                 | 22 ++++--
+ arch/x86/kernel/acpi/boot.c                      | 24 ++++++
+ drivers/acpi/battery.c                           | 12 +++
+ drivers/acpi/video_detect.c                      | 75 ++++++++++++++++++
+ drivers/bluetooth/btusb.c                        |  4 +
+ drivers/char/tpm/tpm-dev-common.c                |  8 +-
+ drivers/char/tpm/tpm2-space.c                    |  8 +-
+ drivers/crypto/qat/qat_4xxx/adf_drv.c            |  7 ++
+ drivers/crypto/qat/qat_common/qat_crypto.c       |  7 ++
+ drivers/gpu/drm/virtio/virtgpu_gem.c             |  3 +
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c | 12 +--
+ drivers/net/wireless/ath/regd.c                  | 10 +--
+ drivers/net/wireless/ath/wcn36xx/main.c          |  3 +
+ drivers/net/wireless/ath/wcn36xx/wcn36xx.h       |  1 +
+ drivers/nfc/st21nfca/se.c                        | 10 +++
+ include/sound/pcm.h                              |  1 +
+ kernel/rcu/tree_plugin.h                         |  8 +-
+ localversion-rt                                  |  2 +-
+ net/ipv6/ip6_output.c                            |  4 +-
+ net/llc/af_llc.c                                 | 48 ++++++++----
+ net/mac80211/cfg.c                               |  3 -
+ net/netfilter/nf_tables_api.c                    | 22 ++++--
+ net/netfilter/nf_tables_core.c                   |  2 +-
+ sound/core/oss/pcm_oss.c                         | 12 ++-
+ sound/core/oss/pcm_plugin.c                      |  5 +-
+ sound/core/pcm.c                                 |  2 +
+ sound/core/pcm_lib.c                             |  4 +
+ sound/core/pcm_memory.c                          | 11 ++-
+ sound/core/pcm_native.c                          | 97 +++++++++++++++---------
+ sound/pci/ac97/ac97_codec.c                      |  4 +-
+ sound/pci/cmipci.c                               |  3 +-
+ sound/pci/hda/patch_realtek.c                    |  4 +
+ sound/soc/sti/uniperif_player.c                  |  6 +-
+ sound/soc/sti/uniperif_reader.c                  |  2 +-
+ sound/usb/mixer_maps.c                           | 10 +++
+ sound/usb/mixer_quirks.c                         |  7 +-
+ 41 files changed, 381 insertions(+), 143 deletions(-)
+---

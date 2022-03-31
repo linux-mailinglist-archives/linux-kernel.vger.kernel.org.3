@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACCA4EDFBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6C54EDFC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiCaRgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S231538AbiCaRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiCaRgR (ORCPT
+        with ESMTP id S231521AbiCaRgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:36:17 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113C460CC9;
-        Thu, 31 Mar 2022 10:34:29 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id o16so737584ljp.4;
-        Thu, 31 Mar 2022 10:34:27 -0700 (PDT)
+        Thu, 31 Mar 2022 13:36:21 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D4C60CF3;
+        Thu, 31 Mar 2022 10:34:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p10so371809lfa.12;
+        Thu, 31 Mar 2022 10:34:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tYr4+A2I2sUXVhAjEZBjGiVViPde2R3/QXl/MeRC92k=;
-        b=nFEALaQDRJK+KYEsH461dOhzve4fxNfkmMgo2fIBhtDhWjGq0/3pAHjjbmI72dHdKd
-         E57CD6qP4N+xshQ6kiTp0V++2vdUEE6yPY+Lwfte6OlmKHuxAP0q4xR8onHZKKbRjnyP
-         1X4KLDGOxDAYU8dswNf3x1cXwqYWocH9gPc1Hvgl1js90EDGvkt97oi23edz7BpbetBc
-         sBWMo38844VINbgHx5UjWdVta1PoZujZiteBXWSTNYc/+tZW4hFV21oX9M56nu4AhLrX
-         ZrAsBxU+N+9XQcFK+nJ8pFa0AIAxNdNlpljSex+gsfl34KTktL8AqKESMI4eXWvY9WEv
-         /vdg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OpzNliID3SJF8mkL/R1m7B3GbTTnCU3xmaYQk4hdJxg=;
+        b=Pl95tPuGINI7Ed7WbqIptzsgtmRRQbUsGEtp9dMBKwEBSIwDIove4HWr5DpFu7vfXx
+         oO2YFuze6ZGyVwAu2qcJ9fgrnv2zisG/87YCdBNaIiK0mIgvpJOvLxDReMSMWERJJGk5
+         WwUk0GZdC75yn3t3TLAZn7qLQQ+ezDcmwD2Mk/FsMad7E8+DggD/NcDyIuszN00SmtWy
+         5fcEGwsArRcMK00cwXnN9L/uY5KzUkBj5EF3WWw0jCK+HEuNabBOUJ7tru2XnGblfUUE
+         Qw++XWD0i0qhhwsvzDQ/f2RNM9JxsvkZUIOjYFNCppPnNF90Ofgj5RC/wJW+phKS6NNJ
+         lAXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tYr4+A2I2sUXVhAjEZBjGiVViPde2R3/QXl/MeRC92k=;
-        b=urf3vcc8Ad+Mky+G1N4IF2msOYIup0M7R6SNKl668Jl1fp9PmlJqmApcw52JpQfoSm
-         JwCQc4sJFvNjpLKZ72DCx/1Nu4Rkh7yXySJJkwLf415lx+GGBcANjEfecRxROlFflBdc
-         fuOfs6RMTSfL93TZ4CYS9ggfxIybGtnMoOPWq4KDV1pAG3jNNVnkUl3xxQ0RHmLGzsd+
-         aXuGMdjm3ac+1tYq0ixMpNm8R3HJ7paXTlbEDBTC69/hAVSVuW/ahlsaBz9FH7/pTy9i
-         uzWWBIffFtniOMBd8NKnmIkTsq0THotYhdSff4/KOwmfjlL5INf7ijOiOiuGApelX1PX
-         70Bg==
-X-Gm-Message-State: AOAM533z8cvoxfwywriNtVV6O7SskMMNtyAnkgEiFgWG+6bvGF0Oh+wA
-        13eeoJrvHuOCNOPTSrDdzgc=
-X-Google-Smtp-Source: ABdhPJzWR7AdVufxiLU93gc6byk6FCl+NoBdPVzob1NRulTJGAMUnxBz1CXzXgQEFQo/gHGjPZU+cg==
-X-Received: by 2002:a2e:9003:0:b0:24a:c3a5:849c with SMTP id h3-20020a2e9003000000b0024ac3a5849cmr11159595ljg.68.1648748061620;
-        Thu, 31 Mar 2022 10:34:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OpzNliID3SJF8mkL/R1m7B3GbTTnCU3xmaYQk4hdJxg=;
+        b=smuP6UeZgQHaqn+QqDVuLI9zgcTEiglSgpSpViEi+ppt6EGTYWar23lmAtfQA3qsct
+         UlSzKJPUt3TdeUyFa5OUlkkOMD1LbH/6q99ZPUoj7s0h7RmTeTSLNBvGhsg7DZ3uIMAO
+         Bezj5DXh1GDGTnF1k4Btqp6EI5Q0WXLcvb/GquJhqKw4G1AiZsxMYH5i8aFVnw+ZW+9o
+         CdzTWDYQy9QsXvavMvqIYkwiwD2y4kQF0vehaehJ2wTwgcYxCLP/Ph+iap8nIJK0GmWK
+         OdDafy1T7exAJqXFHcpJqWlKDDss6Hy7ZVnzelbtJCBAcf210Mdl0neWuKHMAOJ5I6wb
+         Hhhg==
+X-Gm-Message-State: AOAM5325IgqUZvQx3ixBpjrWj/K/odDRONbMgmW6qjAI1/Fcyzh1o4bL
+        vAc5qNo2Oq7ctBzxVLltoFU=
+X-Google-Smtp-Source: ABdhPJwvcR9wHiqOmhQFqud1XOa3bbZXUQW8k2EYkMf0A9J27rV9+c1UMmS4a0LkEtiixFx9fssazw==
+X-Received: by 2002:a05:6512:3082:b0:44a:6dc3:3 with SMTP id z2-20020a056512308200b0044a6dc30003mr11237952lfd.663.1648748067209;
+        Thu, 31 Mar 2022 10:34:27 -0700 (PDT)
 Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b00247fe29d83csm2746992ljb.73.2022.03.31.10.34.19
+        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b00247fe29d83csm2746992ljb.73.2022.03.31.10.34.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 10:34:21 -0700 (PDT)
+        Thu, 31 Mar 2022 10:34:26 -0700 (PDT)
 From:   Michal Orzel <michalorzel.eng@gmail.com>
-To:     John Johansen <john.johansen@canonical.com>,
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
 Cc:     Michal Orzel <michalorzel.eng@gmail.com>,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 1/5] apparmor: Remove redundant assignments
-Date:   Thu, 31 Mar 2022 19:33:54 +0200
-Message-Id: <20220331173358.40939-1-michalorzel.eng@gmail.com>
+Subject: [PATCH 2/5] integrity: Remove redundant assignments
+Date:   Thu, 31 Mar 2022 19:33:55 +0200
+Message-Id: <20220331173358.40939-2-michalorzel.eng@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220331173358.40939-1-michalorzel.eng@gmail.com>
+References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,44 +84,50 @@ Reported by clang-tidy [deadcode.DeadStores]
 
 Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 ---
- security/apparmor/domain.c | 3 +--
- security/apparmor/label.c  | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ security/integrity/ima/ima_main.c   | 2 +-
+ security/integrity/ima/ima_modsig.c | 2 +-
+ security/integrity/ima/ima_policy.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
-index a29e69d2c300..77724acd9d8a 100644
---- a/security/apparmor/domain.c
-+++ b/security/apparmor/domain.c
-@@ -627,7 +627,6 @@ static struct aa_label *profile_transition(struct aa_profile *profile,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 3d3f8c5c502b..1aebf63ad7a6 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -432,7 +432,7 @@ int ima_file_mmap(struct file *file, unsigned long prot)
+ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
  {
- 	struct aa_label *new = NULL;
- 	const char *info = NULL, *name = NULL, *target = NULL;
--	unsigned int state = profile->file.start;
- 	struct aa_perms perms = {};
- 	bool nonewprivs = false;
- 	int error = 0;
-@@ -661,7 +660,7 @@ static struct aa_label *profile_transition(struct aa_profile *profile,
- 	}
+ 	struct ima_template_desc *template = NULL;
+-	struct file *file = vma->vm_file;
++	struct file *file;
+ 	char filename[NAME_MAX];
+ 	char *pathbuf = NULL;
+ 	const char *pathname = NULL;
+diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
+index fb25723c65bc..2c9d451d6326 100644
+--- a/security/integrity/ima/ima_modsig.c
++++ b/security/integrity/ima/ima_modsig.c
+@@ -109,7 +109,7 @@ void ima_collect_modsig(struct modsig *modsig, const void *buf, loff_t size)
+ 		return;
  
- 	/* find exec permissions for name */
--	state = aa_str_perms(profile->file.dfa, state, name, cond, &perms);
-+	aa_str_perms(profile->file.dfa, profile->file.start, name, cond, &perms);
- 	if (perms.allow & MAY_EXEC) {
- 		/* exec permission determine how to transition */
- 		new = x_to_label(profile, bprm, name, perms.xindex, &target,
-diff --git a/security/apparmor/label.c b/security/apparmor/label.c
-index 0b0265da1926..ce9ae9b6b303 100644
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -807,7 +807,7 @@ bool aa_label_replace(struct aa_label *old, struct aa_label *new)
- 		struct aa_labelset *ls = labels_set(old);
+ 	/* Ask the PKCS7 code to calculate the file hash. */
+-	rc = pkcs7_get_digest(modsig->pkcs7_msg, &modsig->digest,
++	pkcs7_get_digest(modsig->pkcs7_msg, &modsig->digest,
+ 			      &modsig->digest_size, &modsig->hash_algo);
+ }
  
- 		write_lock_irqsave(&ls->lock, flags);
--		res = __label_remove(old, new);
-+		__label_remove(old, new);
- 		if (labels_ns(old) != labels_ns(new)) {
- 			write_unlock_irqrestore(&ls->lock, flags);
- 			ls = labels_set(new);
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index eea6e92500b8..c328c2266092 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -869,7 +869,7 @@ static int __init ima_init_arch_policy(void)
+ 		char rule[255];
+ 		int result;
+ 
+-		result = strscpy(rule, *rules, sizeof(rule));
++		strscpy(rule, *rules, sizeof(rule));
+ 
+ 		INIT_LIST_HEAD(&arch_policy_entry[i].list);
+ 		result = ima_parse_rule(rule, &arch_policy_entry[i]);
 -- 
 2.25.1
 

@@ -2,125 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DACA4ED377
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995BF4ED37B
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiCaFvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 01:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S230076AbiCaFwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 01:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiCaFvT (ORCPT
+        with ESMTP id S230056AbiCaFwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 01:51:19 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDC71ED
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:49:31 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id o10so45812105ejd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B85i9bWCy5v24V5TH8KA7sGLXrCtm+fOs7lvraBY4mc=;
-        b=MU3I3v6HXN4lOCJ5Y7vpZ6C4MDCHQst/H6I7X57cAqqpHzVloGMkjlXRvZ9qZZm875
-         eryDRKDaTspyZVWOt4B2TtZdhEA9AX7p6+UspkUyX3K/8ryCyIOM+Hmb7gpp27pMYPCP
-         6VTgUK6m22QTPgMRlVEktcJqPY4aRTGRf04VjDDf3iYGEie0rDePgHkl88MK2ICSkltg
-         T65aHDOgalwGWsMksfCGMFn+/3EYY6DyYrH9kCzaL4KvOaGiIp1jA3urIzA0UUTCNZM8
-         tfhtAtCFORi8tKRKUCEOHXRlZoOpgcPO2fkstk249ZztGq86VYq+7oK0rVCD1aukYcI6
-         OWqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B85i9bWCy5v24V5TH8KA7sGLXrCtm+fOs7lvraBY4mc=;
-        b=1Msk5qICzgEyX6dh9TtsbwaPShNH/MkjOUO3DCULg6aeDAQRQr94nsbJnTdDVL/5q9
-         ck5yfwZHNCjbq6JpTNA7JbzoHjwnXpgMzToz7p26jFZY9rOYKWOjU80tbT69w26kxiax
-         ECLVp8aV9hIyDIu+CFxYjlOEN5DgzCXtqBH/ppX3VmMIk6TU3+P231Kzs1C0VrIxb5IA
-         LbB5kFyUeW7QkQBv+sdtreqHSkdFkQPblcIYYdYriyCvUQs53YrPCc4+GgXYyIXI9xqe
-         i1weyk++u/Xnbn13CeKMXbtU84kOkvSoox0aL164sXDBPUdKKdcDwhoKtOQ/MsiAMaYH
-         i8Gw==
-X-Gm-Message-State: AOAM532DfIj1+Eoi4pEVeU+OFHUZgeTODJqiUE3+Bur8RFTz29N38Uqz
-        cGy42va7t1YQnqkxtq6cwDS9hQ==
-X-Google-Smtp-Source: ABdhPJye1dd5zPJb8GfztQPpp/HGK3K9Z6Rqq1YqGu8uI0IAkTRq4jLe4nG3qiPY27Rtvg1cPM8bOg==
-X-Received: by 2002:a17:907:96a6:b0:6e3:9c1b:f403 with SMTP id hd38-20020a17090796a600b006e39c1bf403mr3457045ejc.524.1648705770160;
-        Wed, 30 Mar 2022 22:49:30 -0700 (PDT)
-Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id s3-20020a1709067b8300b006e4a6dee49dsm554209ejo.184.2022.03.30.22.49.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 22:49:29 -0700 (PDT)
-Message-ID: <e27c5e1c-5cd7-96f1-6598-2c7124e7faa1@linaro.org>
-Date:   Thu, 31 Mar 2022 07:49:28 +0200
+        Thu, 31 Mar 2022 01:52:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5582D8E;
+        Wed, 30 Mar 2022 22:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ru0LipQtsJl9AfHI2E8ja3nugdvZ7bA5mRsG8tmW7dg=; b=Ft6o+7xJsRLe1NW/RBHGWJCtQZ
+        UoX8wy0H4Yg8xnqsLHENlrzhPK4i+2NXFkeRDWtYasXZQtnFMMyG8efX6hYOz/s2xOj2P1W51BYu3
+        kFv2PKCOHg2kEOvHnoo/oClWvMuyyl5fSML7EkZuMm1Poy8baW+zUK02UuX8P/YToGwXFJ3DVlcvW
+        j1lf8sfp96CvZbvfA8cQgcFhHs4ehgIxvay7tjWkr1ln/Juh4rWejOy+/dW72UXZXT6QhHCDVI2yP
+        aDztlR6nsWhDRe+7iwGassRXsWxWLLNcfwXn7zpk08FYvpq84ytJnxO0SD9LUi2wBtRzQ1/tGNfOd
+        FK8IfyXw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZnhX-000kZo-SM; Thu, 31 Mar 2022 05:50:31 +0000
+Date:   Wed, 30 Mar 2022 22:50:31 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V7 03/10] PCI: Create PCI library functions in support of
+ DOE mailboxes.
+Message-ID: <YkVBJ+nRA2g/WDxa@infradead.org>
+References: <20220330235920.2800929-1-ira.weiny@intel.com>
+ <20220330235920.2800929-4-ira.weiny@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: arm: fsl: Add Engicam i.Core MX8M Plus
- EDIMM2.2 Starter Kit
-Content-Language: en-US
-To:     Manoj Sai <abbaraju.manojsai@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Matteo Lisi <matteo.lisi@engicam.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-amarula@amarulasolutions.com,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        Suniel Mahesh <sunil@amarulasolutions.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-References: <20220330191437.614065-1-abbaraju.manojsai@amarulasolutions.com>
- <20220330191437.614065-2-abbaraju.manojsai@amarulasolutions.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330191437.614065-2-abbaraju.manojsai@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330235920.2800929-4-ira.weiny@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2022 21:14, Manoj Sai wrote:
-> i.Core MX8M Plus is an EDIMM SoM based on NXP i.MX8M Plus from Engicam.
+On Wed, Mar 30, 2022 at 04:59:13PM -0700, ira.weiny@intel.com wrote:
+> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
-> EDIMM2.2 Starter Kit is an EDIMM 2.2 Form Factor Capacitive Evaluation
-> Board from Engicam.
+> Introduced in a PCI v6.0[1], DOE provides a config space based mailbox
+> with standard protocol discovery.  Each mailbox is accessed through a
+> DOE Extended Capability.
 > 
-> i.Core MX8M Plus needs to mount on top of this Evaluation board for
-> creating complete i.Core MX8M Plus EDIMM2.2 Starter Kit.
+> Each DOE mailbox must support the DOE discovery protocol in addition to
+> any number of additional protocols.
 > 
-> Add bindings for it.
+> Define core PCI functionality to manage a single PCI DOE mailbox at a
+> defined config space offset.  Functionality includes creating, supported
+> protocol queries, submit tasks to, and destroying the new state objects.
 > 
-> Signed-off-by: Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index 08bdd30e511c..5c4137e4c859 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -787,6 +787,13 @@ properties:
->            - const: engicam,icore-mx8mm             # i.MX8MM Engicam i.Core MX8M Mini SoM
->            - const: fsl,imx8mm
->  
-> +      - description: Engicam i.Core MX8M Plus SoM based boards
-> +        items:
-> +          - enum:
-> +              - engicam,icore-mx8mp-edimm2.2       # i.MX8MP Engicam i.Core MX8M Plus EDIMM2.2 Starter Kit
-> +          - const: engicam,icore-mx8mp             # i.MX8MP Engicam i.Core MX8M Plus SoM
-> +          - const: fsl,imx8mp
+> If interrupts are desired, interrupts vectors should be allocated prior
+> to asking for irq's when creating a mailbox object.
 
-You dropped it in some random order. Please match existing ordering by SoC.
-
-
-Best regards,
-Krzysztof
+I really don't think this should be built unconditionally and bloat
+every single kernel built with PCI support.

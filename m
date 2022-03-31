@@ -2,120 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798B34ED710
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1964ED70F
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiCaJgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S234161AbiCaJhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiCaJgc (ORCPT
+        with ESMTP id S233210AbiCaJg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:36:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5111AA94CC;
-        Thu, 31 Mar 2022 02:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648719284; x=1680255284;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=accBRYHMBah+nI3IJi8qJ4uZB9q5SYI8c2Q9UFYLYpM=;
-  b=FusmpTAnv2tpVOI6CLesc9XUYI2qpOfiEntKFji0LQvUwc6GVZsiCOi/
-   sO8YdaM8r1Kn2zb0BHlAfPC/x6Aq4HPJB+EA+Fby6H9Lg2wpSLMg3wEbr
-   CJUqXktOWIArnXDoGYolpBxmCUuqiy/vbSSR7VJNaX+uhaXMIfw8yd0f5
-   4m2PNTwEHc17jVso327ylRPznOARGW+k5jiS6l4STwLLmI7KiVwrckUB+
-   idiZpaPIqaQk3JpKljBUSwDoGdQlcoJT//xEWZ5YaPAwhmUZg/5x34ZAN
-   zTSO5UaREhJDW6QIy72va64nvGaG72FsTuIe8U6EdjDIYiHDfWGUNOEOe
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247279389"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="247279389"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 02:34:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="695424720"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 02:34:39 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 12:34:38 +0300
-Date:   Thu, 31 Mar 2022 12:34:38 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Won Chung <wonchung@google.com>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
- function
-Message-ID: <YkV1rsq1SeTNd8Ud@kuha.fi.intel.com>
-References: <20220330211913.2068108-1-wonchung@google.com>
- <s5hzgl6eg48.wl-tiwai@suse.de>
- <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de>
- <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
- <s5hmth6eaiz.wl-tiwai@suse.de>
+        Thu, 31 Mar 2022 05:36:58 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D76AF1F6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:35:10 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id b18so20887304qtk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lsN5p6Zbb92CWY0fCQlSnWVHSmMIpn5JDGM4v10NtKE=;
+        b=ZunWdYGe8+BLAfVsPhIKSdgfp/G02w2RPLviviav8MFDJAF80hz+gYJdoOGSo34tqv
+         +GOt1h6oPls11MbrXMWncQOXZmfdT+lhqoeeAdjHnzcDo7Y+ls+43qjcKa4FnDUZBr8g
+         sfb8w/YhyQ+I+txxTbyARU1xScgG75osTxNrQd/eW37hUwLOqmWqtNTAMgYkd6Ktg+8v
+         SISvG4vs6TaDZYpzkTU2u3b1ge4YO9UUK1QU+l3rIQdKqsBt2Cv/PAH7mIcmQDs8WgY7
+         CqOd27nG1iOkKCVqS+VcVciIKPjF7ot65oGt3h7/40D3BucYPbivC79Gb3PETsi4mdBl
+         9MPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lsN5p6Zbb92CWY0fCQlSnWVHSmMIpn5JDGM4v10NtKE=;
+        b=T31iwqHTrHFzuTsPmq+VuQn4fZpqqE/YPOXmMrNFUoDmv7d92RWMcwfcOzhGLjePd+
+         MSN/OjaE01VeATrOfx1YZVDwD1mD7E/7c0l32svYK/ty97gwpbeFbWUJ1NN3s9ejrSXQ
+         22bYMn9LE4aii5hosbwd4qwaFfXUK5Q0JOj42PNhwMGdC76hnAaskxAVoTwYijWuDgq9
+         jg9eNX2iDDK3dZuC8irJNZ36GliUgtwBnWYEpy6EJcd+oYCYOfGBQ+MlxqZ4XK/mKZhK
+         +XynwC7ovj6K8a7lkKnot6bt/eKGbgUZwv8+NXE4X9osyXGB5cyCg/16ekMQj/pmM3WG
+         YX8w==
+X-Gm-Message-State: AOAM532PflFVBx8ysfov56vxidweg5iBR/8Q1u2pwuDnGShJ+xpnGH7P
+        ID3Mx3Fs/+TzpOVSFcuB+Qvu6iie3ytXRvI8YknSwg==
+X-Google-Smtp-Source: ABdhPJzGd4rqpbpprVxRT58SQ0mWkivwbwlishXbW/R3KM5sUWLDKwn+nH2fugALpTWwKgteKCnQM+TuY1AtSd9ZY20=
+X-Received: by 2002:ac8:5702:0:b0:2e1:ec8a:917a with SMTP id
+ 2-20020ac85702000000b002e1ec8a917amr3318464qtw.682.1648719309154; Thu, 31 Mar
+ 2022 02:35:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s5hmth6eaiz.wl-tiwai@suse.de>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220328152923.90623-1-krzysztof.kozlowski@linaro.org>
+ <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
+ <YkHtY9absUjmqmW7@matsya> <12b0056b-8032-452b-f325-6f36037b5a80@linaro.org>
+ <CAL_Jsq+6rx0UU6ryH+z_8KLQqKKuhTCnh=Oft2F03bcze+EV0Q@mail.gmail.com>
+ <YkKmPSesQfS6RLCD@matsya> <YkMrPnRbsl3FBig8@robh.at.kernel.org> <YkVEsqiRamfTmNi0@matsya>
+In-Reply-To: <YkVEsqiRamfTmNi0@matsya>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 31 Mar 2022 12:34:58 +0300
+Message-ID: <CAA8EJpqTqB10JkmK4GfbO6uP4wAUtqPzY+N4f+=Lt6Vy3a+g4Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: display: msm: dsi: remove address/size cells
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:28:20AM +0200, Takashi Iwai wrote:
-> On Thu, 31 Mar 2022 11:25:43 +0200,
-> Heikki Krogerus wrote:
-> > 
-> > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
+On Thu, 31 Mar 2022 at 09:05, Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 29-03-22, 10:52, Rob Herring wrote:
+> > On Tue, Mar 29, 2022 at 12:01:52PM +0530, Vinod Koul wrote:
+> > > On 28-03-22, 13:21, Rob Herring wrote:
+> > > > On Mon, Mar 28, 2022 at 12:18 PM Krzysztof Kozlowski
+> > > > <krzysztof.kozlowski@linaro.org> wrote:
 > > > > >
-> > > > > Can NULL dev->driver be really seen?  I thought the components are
-> > > > > added by the drivers, hence they ought to have the driver field set.
-> > > > > But there can be corner cases I overlooked.
+> > > > > On 28/03/2022 19:16, Vinod Koul wrote:
+> > > > > > On 28-03-22, 19:43, Dmitry Baryshkov wrote:
+> > > > > >> On Mon, 28 Mar 2022 at 18:30, Krzysztof Kozlowski
+> > > > > >> <krzysztof.kozlowski@linaro.org> wrote:
+> > > > > >>>
+> > > > > >>> The DSI node is not a bus and the children do not have unit addresses.
+> > > > > >>>
+> > > > > >>> Reported-by: Vinod Koul <vkoul@kernel.org>
+> > > > > >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > > >>
+> > > > > >> NAK.
+> > > > > >> DSI panels are children of the DSI device tree node with the reg = <0>; address.
+> > > > > >> This is the convention used by other platforms too (see e.g.
+> > > > > >> arch/arm64/boot/dts/freescale/imx8mq-evk.dts).
+> > > > > >
+> > > > > > So we should add reg = 0, i will update my dtsi fix
+> > > > > >
 > > > > >
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > Takashi
-> > > > 
-> > > > Hi Takashi,
-> > > > 
-> > > > When I try using component_add in a different driver (usb4 in my
-> > > > case), I think dev->driver here is NULL because the i915 drivers do
-> > > > not have their component master fully bound when this new component is
-> > > > registered. When I test it, it seems to be causing a crash.
-> > > 
-> > > Hm, from where component_add*() is called?  Basically dev->driver must
-> > > be already set before the corresponding driver gets bound at
-> > > __driver_probe_deviec().  So, if the device is added to component from
-> > > the corresponding driver's probe, dev->driver must be non-NULL.
-> > 
-> > The code that declares a device as component does not have to be the
-> > driver of that device.
-> > 
-> > In our case the components are USB ports, and they are devices that
-> > are actually never bind to any drivers: drivers/usb/core/port.c
-> 
-> OK, that's what I wanted to know.  It'd be helpful if it's more
-> clearly mentioned in the commit log.
+> > > > > To "ports" node? No. The reg=0 is for children of the bus, so the
+> > > > > panels. How to combine both without warnings - ports and panel@0 - I
+> > > > > don't know yet...
+> > > >
+> > > > I don't think that should case a warning. Or at least it's one we turn off.
+> > >
+> > > Well in this case I think we might need a fix:
+> > > Here is the example quoted in the binding. We have ports{} and then the
+> > > two port@0 and port@1 underneath.
+> >
+> > It's the #address-cells/#size-cells under 'ports' that applies to 'port'
+> > nodes. As 'ports' has no address (reg) itself, it doesn't need
+> > #address-cells/#size-cells in its parent node.
+> >
+> > >
+> > > So it should be okay to drop #address-cells/#size-cells from dsi node
+> > > but keep in ports node...
+> >
+> > Yes.
+> >
+> > > Thoughts...?
+> >
+> > But I thought a panel@0 node was being added? If so then you need to add
+> > them back.
+>
+> I guess we should make this optional, keep it when adding panel@0 node
+> and skip for rest where not applicable..? Dmitry is that fine with you?
 
-Agree.
+This sounds like a workaround. When a panel node is added together
+with the '#address-cells' / '#size-cells' properties, we will get
+warnings for the 'ports' node.
+I'd prefer to leave things to pinpoint that the problem is generic
+rather than being specific to several device trees with the DSI panel
+nodes.
+How do other platforms solve the issue?
 
-> BTW, the same problem must be seen in MEI drivers, too.
+In fact we can try shifting to the following dts schema:
 
-Wasn't there a patch for those too? I lost track...
+dsi@ae940000 {
+   compatible = "qcom,mdss-dsi-ctrl";
 
-thanks,
+   ports {
+      #adress-cells = <1>;
+      #size-cells = <0>;
+      port@0 {
+         reg = <0>;
+         dsi0_in: endpoint {};
+      };
+      port@1 {
+         reg = <1>;
+         dsi0_out: endpoint {
+               remote-endpoint = <&panel_in>;
+         };
+      };
+
+   /* dsi-bus is a generic part */
+   dsi-bus {
+      #adress-cells = <1>;
+      #size-cells = <0>;
+      /* panel@0 goes to the board file */
+      panel@0 {
+          compatible = "vendor,some-panel";
+          ports {
+             #adress-cells = <1>;
+             #size-cells = <0>;
+             port@0 {
+               reg = <0>;
+                panel_in: endpoint {
+                   remote-endpoint = <&dsi0_out>;
+                };
+             };
+        };
+   };
+};
+
+WDYT?
 
 -- 
-heikki
+With best wishes
+Dmitry

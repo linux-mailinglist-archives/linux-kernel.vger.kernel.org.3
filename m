@@ -2,60 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713B54ED4A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771A94ED49B
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiCaHQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S231436AbiCaHPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiCaHQG (ORCPT
+        with ESMTP id S232117AbiCaHOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:16:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5A31C885E;
-        Thu, 31 Mar 2022 00:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648710763; x=1680246763;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SSX6WP3ryDZkacSQ4hDJs7KwPzVXv8tSNKT29XXyOtE=;
-  b=f6HW2N6LYOEcmoYmyGtZU3h87SKlafZzDbIzmX/aHP2V/FXTg9dHaE2o
-   AscrleoDVIpgukPjwLEeX4f81ivCgOWpCx2z/hjcI8kfJJrIa/Me80Via
-   GegKSbVaFoUFGZCO73QvNS/0F2aB/Scf7wPbz8qf838eLiWBuRf7+uA2u
-   B32REN/KtzQEDLGxO8n+70eJ4p9o1uIP6XGbO62KIeTNcCCLqXth/ZQRN
-   aBKPKjB+On8+7yOzsF1I9tEnL10Hd37pkeiwtgfGfoQQSerlmQrJNV8h9
-   5PVuS2KJwKWby/uE/CoLISJk7E68ayrwYFZrzfKJ/Ot1GsbPAZLoHmgr7
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241891974"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="241891974"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:12:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="605924208"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 31 Mar 2022 00:12:40 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZoz2-00002q-7Z;
-        Thu, 31 Mar 2022 07:12:40 +0000
-Date:   Thu, 31 Mar 2022 15:11:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: ERROR: modpost: "v4l2_async_register_subdev"
- [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-Message-ID: <202203311500.FKE7GeWz-lkp@intel.com>
+        Thu, 31 Mar 2022 03:14:45 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB643A76DA;
+        Thu, 31 Mar 2022 00:12:00 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 311A59200B4; Thu, 31 Mar 2022 09:12:00 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 2C8A29200B3;
+        Thu, 31 Mar 2022 08:12:00 +0100 (BST)
+Date:   Thu, 31 Mar 2022 08:12:00 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] serial: 8250: Report which option to enable for
+ blacklisted PCI devices
+In-Reply-To: <alpine.DEB.2.21.2202271516420.39915@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2203310125350.44113@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2202121646020.34636@angie.orcam.me.uk> <alpine.DEB.2.21.2202121706060.34636@angie.orcam.me.uk> <Yhiixm/iRlnF18B7@kroah.com> <alpine.DEB.2.21.2202251753530.25061@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2202271516420.39915@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,46 +44,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   787af64d05cd528aac9ad16752d11bb1c6061bb9
-commit: 63fe3d27b226fe01746bace4d1f1f2164406140d media: platform/*/Kconfig: make manufacturer menus more uniform
-date:   13 days ago
-config: hexagon-randconfig-r031-20220331 (https://download.01.org/0day-ci/archive/20220331/202203311500.FKE7GeWz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63fe3d27b226fe01746bace4d1f1f2164406140d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 63fe3d27b226fe01746bace4d1f1f2164406140d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Sun, 27 Feb 2022, Maciej W. Rozycki wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > > We don't do this for any other driver subsystem, so why is it really
+> > > needed?  What is so special about this driver that distros can't
+> > > just enable all of the drivers and all is good?  What is keeping those
+> > > drivers fromb eing enabled?
+> > 
+> >  My justification is we have a supposedly generic PCI 8250 UART driver, 
+> > except it explicitly and silently refuses to handle a handful of devices 
+> > chosen by their PCI IDs based on that they may have extra features, even 
+> > though they are otherwise fully compatible with a generic 8250.
+> 
+>  Actually as it happens we do have a precedent too, as here's what I have 
+> just spotted on my laptop by chance when hibernating:
+> 
+> psmouse serio1: synaptics: The touchpad can support a better bus than the too old PS/2 protocol. Make sure MOUSE_PS2_SYNAPTICS_SMBUS and RMI4_SMB are enabled to get a better touchpad experience.
+> 
+> (with a distribution kernel, so clearly whoever packaged that has not 
+> enabled what might be needed).  Someone else wanted to be helpful too as 
+> it seems.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+ I have now posted v3 with these clarifications included in the change 
+descriptions.  Please review.
 
-ERROR: modpost: "v4l2_subdev_link_validate" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_subdev_get_fwnode_pad_1_to_1" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_create_fwnode_links_to_pad" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l_bound_align_image" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_get_link_freq" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_subdev_call_wrappers" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_async_unregister_subdev" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_async_nf_cleanup" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-ERROR: modpost: "v4l2_async_nf_unregister" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
->> ERROR: modpost: "v4l2_async_register_subdev" [drivers/media/platform/nxp/imx-mipi-csis.ko] undefined!
-WARNING: modpost: suppressed 5 unresolved symbol warnings because there were too many)
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
-   Depends on MEDIA_SUPPORT && VIDEO_DEV && MEDIA_CONTROLLER
-   Selected by
-   - VIDEO_IMX_MIPI_CSIS && MEDIA_SUPPORT && MEDIA_PLATFORM_SUPPORT && MEDIA_PLATFORM_DRIVERS
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  Maciej

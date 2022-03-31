@@ -2,245 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1624EDB0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1974A4EDB11
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237147AbiCaOEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S237154AbiCaOFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiCaOEv (ORCPT
+        with ESMTP id S234155AbiCaOFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:04:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FFF217950;
-        Thu, 31 Mar 2022 07:03:03 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22VDZ7r7017264;
-        Thu, 31 Mar 2022 14:03:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=jjrVnhD4VqHB6NtRxQfyxqzRvr+639BkMDBfqvAwTfY=;
- b=clLROwaODRg5yg9nX7q97kxbZH5HR6ae3vQE61RYasREQJa8lPpDabAW8n52NY6immqK
- gD+Ku7aZawBTj9sicqYMRd26RVm+XPK9hnB7qnPVZUW2d095CcgI6YbbxCEzbueV47d4
- /M0YyQzsa7MMN5YeoYx+NydHogb8dPod6eNFT96wS1dJVHu5lLMlMC3GGPc3usryaT9k
- h3c8CAl8ObCz4muCVyyN9CEZR8XTrkkOkB5MvNpp0jUWbBJbgf0HutzdyiDucxXzhcj3
- Fe9NMeVYzF3b/3tw8lLD4Z+N2w99rlZFupkXM8lDSecaH0wMDPqSh4pgjYM+YkEySH1T UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f50aer4t2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 14:03:02 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22VDF86D022345;
-        Thu, 31 Mar 2022 14:03:02 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f50aer4s5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 14:03:01 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22VDvO0w017311;
-        Thu, 31 Mar 2022 14:02:59 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3f1tf919x8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 14:02:59 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22VE32YW40698362
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 31 Mar 2022 14:03:02 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3236B11C050;
-        Thu, 31 Mar 2022 14:02:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B98B811C04A;
-        Thu, 31 Mar 2022 14:02:55 +0000 (GMT)
-Received: from [9.145.159.108] (unknown [9.145.159.108])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 31 Mar 2022 14:02:55 +0000 (GMT)
-Message-ID: <827cfa86-bad4-8c31-8038-8db9a011fee9@linux.ibm.com>
-Date:   Thu, 31 Mar 2022 16:02:55 +0200
+        Thu, 31 Mar 2022 10:05:37 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844B3546B7;
+        Thu, 31 Mar 2022 07:03:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TwQ89lp0ZWx79BvtpACPjmd45kCt5VPRfRhK4GZZNu65HB/DZPpCpo5If6zqP5Dak3a5m6I+rgQ6/OFJdMNIk/Ge5ILtFkFw/J1oJDeroUNbPFD3mlO6W2Z7Om1qAD4VqR4Ui+WQuokbFxJFtCR+8msJXHAnq0eikEWsInDfiF+j41Qt29yLx4f/1YuN0rSAkSvwmIorwo9R5uhCg9q9OsYLGYzRVHxoKSSzoSLlNAd5zB/JdA6Ey+tHc8cwubWH7OT0bHjr1Rb5VRqXkKueOE8BZqXVWJVgSKBP+rvmumFAVe6x0ax4AdGy5oEXd2Bhg8l2ZUzwiRN5rXAKggzg8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K/t+xt7t/i1M2lVzDbvIsI51byrzUTSi0dAF1r8/fjI=;
+ b=b30QOfVC/IKtrlm/0mIJoNCMbuktmk/ovu+/ZKkEWbo7EH47sZsRlNqNXB+SZwFJlojyjfgSko+lfwkVsgZqbPm5gtVGjTmu0QWBZQa6Lb34uyLq7m1zKMs8rb+tvTL9jD303PGmMYwgnJntcBQBPkzDny4oNtsFixS6veMV7IRWIXg9S+8WlQY4xQYEz0kL8w8wRNTggMyPyOrlCwoLQLzzm8KC7GzSqsWkge2magJO9H6kBQwBjOFiz7aGyrKB9yd3UImqi8TfN0guzYdCFTxbAVCNa3UyOrHu2MdJXSs5Qm9yliKf5K9cfkdGf4IcPXvRqYW7OS2UDvHL9RC27g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=alsa-project.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K/t+xt7t/i1M2lVzDbvIsI51byrzUTSi0dAF1r8/fjI=;
+ b=gA6+1Sdxx9vyunXnYR5ED+raeE5DWAQ3ixEJqYaD8Rocc+D5eSCkbpteGZVtaflzMG3fWniOWrDjAYYIuZcnGdA74nu1BrqjJiATSc+iJGkUrNqu2kv+3i/TTWE8n8zpmpJCZciniLJ9vrPA4wLBUaJY520ugyBfu836un/b+QsTcBDPCoP1R94utf3562NV8c4SgMHdFVVhAykZDLool6P+ATsOI1uOjKeJ9xzbstOB0FzPqLKzWcrgsm/gIF4+gQoIxF/e4iuHqxfscr3LkvWAM1hXWyGoyhqSf4gHlgtGj8C+yI3Q6keZ21QW0N9NacQmHpIpuOoCHeOxM15omQ==
+Received: from BN9PR03CA0326.namprd03.prod.outlook.com (2603:10b6:408:112::31)
+ by BY5PR12MB4818.namprd12.prod.outlook.com (2603:10b6:a03:1b4::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Thu, 31 Mar
+ 2022 14:03:47 +0000
+Received: from BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:112:cafe::7b) by BN9PR03CA0326.outlook.office365.com
+ (2603:10b6:408:112::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23 via Frontend
+ Transport; Thu, 31 Mar 2022 14:03:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT019.mail.protection.outlook.com (10.13.176.158) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5123.19 via Frontend Transport; Thu, 31 Mar 2022 14:03:46 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 31 Mar
+ 2022 14:03:45 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 31 Mar
+ 2022 07:03:44 -0700
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Thu, 31 Mar
+ 2022 07:03:40 -0700
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <thierry.reding@gmail.com>, <lgirdwood@gmail.com>,
+        <perex@perex.cz>, <tiwai@suse.com>
+CC:     <jonathanh@nvidia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH v2 0/6] ASRC support on Tegra186 and later
+Date:   Thu, 31 Mar 2022 19:33:26 +0530
+Message-ID: <1648735412-32220-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220330122605.247613-1-imbrenda@linux.ibm.com>
- <20220330122605.247613-14-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v9 13/18] KVM: s390: pv: cleanup leftover protected VMs if
- needed
-In-Reply-To: <20220330122605.247613-14-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _JqpWPIbWwpBgGJdN513lKoJGuEZ0Jbj
-X-Proofpoint-GUID: fNDKqZwvMjyBNuhfwmVuPjI7uzVMK6Yx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-31_05,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 mlxscore=0 clxscore=1015 impostorscore=0
- phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203310079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 877b1ab8-77aa-4623-3895-08da131f45fa
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4818:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB4818D12A32E38089ED89FA72A7E19@BY5PR12MB4818.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y5PP1tBG6y6+Iem6noWEey2PMWx8yGSAz4UarIJxoAZJjbbYIvVnjBe1QEU++ztDi3amXEewwjGqo1bN1S83Ynq8Qh7EFeolQGG0OyQlfb/oMTWpgXpmgKzVbBKaFavSiz8+Ez3T6cJp7mpyBP5hoxUtaqhcb3/0lKKUsTSOsXEKFUgPMooHJrcy/A8F6cHVOHk4Ra62za5KAkVMtSfUUknPa1+JHwL4OATPLjLJsIdnuA+MORbFcv3nbnx6VQziJl96dfOvRbj4pZ6Bdl6N2zPuRHvZ9/V5jrXVRY/EKrPQeDBV/e7whiUE0+i/QCDSDPNRI6EgtYyOTJUhkeIGAJip0Uahk8sXNABI+mwDdPd+cLaYWJcp6tFFlQb4YNOhQ4u2S+1uOqlkKVfBIoD0oBn9AhNuOBblFTviTKp8bOKOROR8r7sPEdAPjKnhYT/zsrGJfnmdImex2ppmQLRr5ujMUsgaahulFBHqU1jgX2TruhM3q0WcOPhCi1z9QxQcf1V9acgr0W9iHqprB0PhE4cemFGReQ8gt0Il+9jRdWyxNjVGai3rRil5CrGIMd9bqDcI3c9/jfsMd72UWnnRXMu7u3aOHTCYaNF5wNo2SUJlM1j4qUU6M/qFJlzg0I6Jd2T1m6Z8e1NG08tUrEWsyhM1vOrhTTnG9r29ZGxEKdCoqdhLzjodjZtmATXxU+rT8lNQ05iTbFu6GFL32rc1kw==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(54906003)(26005)(107886003)(110136005)(40460700003)(2616005)(47076005)(356005)(426003)(186003)(336012)(316002)(86362001)(81166007)(36756003)(70586007)(8676002)(83380400001)(7416002)(82310400004)(508600001)(5660300002)(70206006)(7696005)(8936002)(36860700001)(2906002)(6666004)(4326008)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 14:03:46.3411
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 877b1ab8-77aa-4623-3895-08da131f45fa
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4818
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 14:26, Claudio Imbrenda wrote:
-> In upcoming patches it will be possible to start tearing down a
-> protected VM, and finish the teardown concurrently in a different
-> thread.
-> 
-> Protected VMs that are pending for tear down ("leftover") need to be
-> cleaned properly when the userspace process (e.g. qemu) terminates.
-> 
-> This patch makes sure that all "leftover" protected VMs are always
-> properly torn down.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> ---
->   arch/s390/include/asm/kvm_host.h |  2 +
->   arch/s390/kvm/kvm-s390.c         |  1 +
->   arch/s390/kvm/pv.c               | 69 ++++++++++++++++++++++++++++++++
->   3 files changed, 72 insertions(+)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index 1bccb8561ba9..50e3516cbc03 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -922,6 +922,8 @@ struct kvm_s390_pv {
->   	u64 guest_len;
->   	unsigned long stor_base;
->   	void *stor_var;
-> +	void *async_deinit;
-> +	struct list_head need_cleanup;
->   	struct mmu_notifier mmu_notifier;
->   };
->   
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 446f89db93a1..3637f556ff33 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2788,6 +2788,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->   	kvm_s390_vsie_init(kvm);
->   	if (use_gisa)
->   		kvm_s390_gisa_init(kvm);
-> +	INIT_LIST_HEAD(&kvm->arch.pv.need_cleanup);
+This series adds support for Asynchronous Sample Rate Converter (ASRC)
+module on Tegra186 and later generations of SoCs. ASRC is a client of
+AHUB. The driver and DT support is added to make it work with Tegra
+audio graph card. The module can be plugged into audio path using ALSA
+mixer controls.
 
-kvm->arch.pv.sync_deinit = NULL;
+ASRC supports two modes of operation, where it gets the ratio info
+from SW and ratio detector module. Presently the support is added for
+SW mode.
 
->   	KVM_EVENT(3, "vm 0x%pK created by pid %u", kvm, current->pid);
->   
->   	return 0;
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index be3b467f8feb..56412617dd01 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-> @@ -17,6 +17,19 @@
->   #include <linux/mmu_notifier.h>
->   #include "kvm-s390.h"
->   
-> +/**
-> + * @struct deferred_priv
-> + * Represents a "leftover" protected VM that does not correspond to any
-> + * active KVM VM.
 
-Maybe something like:
-...that is still registered with the Ultravisor but isn't registered 
-with KVM anymore.
+Changelog:
+==========
 
-> + */
-> +struct deferred_priv {
-> +	struct list_head list;
-> +	unsigned long old_table;
-> +	u64 handle;
-> +	void *stor_var;
-> +	unsigned long stor_base;
-> +};
-> +
->   static void kvm_s390_clear_pv_state(struct kvm *kvm)
->   {
->   	kvm->arch.pv.handle = 0;
-> @@ -163,6 +176,60 @@ static int kvm_s390_pv_alloc_vm(struct kvm *kvm)
->   	return -ENOMEM;
->   }
->   
-> +/**
-> + * kvm_s390_pv_cleanup_deferred - Clean up one leftover protected VM.
-> + * @kvm the KVM that was associated with this leftover protected VM
-> + * @deferred details about the leftover protected VM that needs a clean up
-> + * Return: 0 in case of success, otherwise 1
-> + */
-> +static int kvm_s390_pv_cleanup_deferred(struct kvm *kvm, struct deferred_priv *deferred)
-> +{
-> +	u16 rc, rrc;
-> +	int cc;
-> +
-> +	cc = uv_cmd_nodata(deferred->handle, UVC_CMD_DESTROY_SEC_CONF, &rc, &rrc);
-> +	KVM_UV_EVENT(kvm, 3, "PROTVIRT DESTROY VM: rc %x rrc %x", rc, rrc);
-> +	WARN_ONCE(cc, "protvirt destroy vm failed rc %x rrc %x", rc, rrc);
-> +	if (cc)
-> +		return cc;
-> +	/*
-> +	 * Intentionally leak unusable memory. If the UVC fails, the memory
-> +	 * used for the VM and its metadata is permanently unusable.
-> +	 * This can only happen in case of a serious KVM or hardware bug; it
-> +	 * is not expected to happen in normal operation.
-> +	 */
-> +	free_pages(deferred->stor_base, get_order(uv_info.guest_base_stor_len));
-> +	free_pages(deferred->old_table, CRST_ALLOC_ORDER);
-> +	vfree(deferred->stor_var);
-> +	return 0;
-> +}
-> +
-> +/**
-> + * kvm_s390_pv_cleanup_leftovers - Clean up all leftover protected VMs.
-> + * @kvm the KVM whose leftover protected VMs are to be cleaned up
-> + * Return: 0 in case of success, otherwise 1
-> + */
-> +static int kvm_s390_pv_cleanup_leftovers(struct kvm *kvm)
-> +{
-> +	struct deferred_priv *deferred;
-> +	int cc = 0;
-> +
-> +	if (kvm->arch.pv.async_deinit)
-> +		list_add(kvm->arch.pv.async_deinit, &kvm->arch.pv.need_cleanup);
-> +
-> +	while (!list_empty(&kvm->arch.pv.need_cleanup)) {
-> +		deferred = list_first_entry(&kvm->arch.pv.need_cleanup, typeof(*deferred), list);
-> +		if (kvm_s390_pv_cleanup_deferred(kvm, deferred))
-> +			cc = 1;
-> +		else
-> +			atomic_dec(&kvm->mm->context.protected_count);
-> +		list_del(&deferred->list);
-> +		kfree(deferred);
-> +	}
-> +	kvm->arch.pv.async_deinit = NULL;
-> +	return cc;
-> +}
-> +
->   /* this should not fail, but if it does, we must not free the donated memory */
->   int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
->   {
-> @@ -190,6 +257,8 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
->   	KVM_UV_EVENT(kvm, 3, "PROTVIRT DESTROY VM: rc %x rrc %x", *rc, *rrc);
->   	WARN_ONCE(cc, "protvirt destroy vm failed rc %x rrc %x", *rc, *rrc);
->   
-> +	cc |= kvm_s390_pv_cleanup_leftovers(kvm);
-> +
->   	return cc ? -EIO : 0;
->   }
->   
+  v1 -> v2:
+  ---------
+    * Updatated RPM resume call in ASRC driver. Specific register
+      sequence programming is done before regcache sync.
+
+    * Fixed return values of mixer control put() callbacks in
+      ASRC driver.
+
+    * No changes in other patches.
+
+Sameer Pujar (6):
+  ASoC: tegra: Add binding doc for ASRC module
+  ASoC: tegra: Add Tegra186 based ASRC driver
+  ASoC: tegra: AHUB routes for ASRC module
+  arm64: defconfig: Build Tegra ASRC module
+  arm64: tegra: Add ASRC device on Tegra186 and later
+  arm64: tegra: Enable ASRC on various platforms
+
+ .../bindings/sound/nvidia,tegra186-asrc.yaml       |   81 ++
+ .../bindings/sound/nvidia,tegra210-ahub.yaml       |    4 +
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts |  223 +++++
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |    7 +
+ arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts |  223 +++++
+ .../arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi |  223 +++++
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |    8 +
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |  223 +++++
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi           |    8 +
+ arch/arm64/configs/defconfig                       |    1 +
+ sound/soc/tegra/Kconfig                            |   12 +
+ sound/soc/tegra/Makefile                           |    2 +
+ sound/soc/tegra/tegra186_asrc.c                    | 1046 ++++++++++++++++++++
+ sound/soc/tegra/tegra186_asrc.h                    |  112 +++
+ sound/soc/tegra/tegra210_ahub.c                    |   82 +-
+ 15 files changed, 2254 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra186-asrc.yaml
+ create mode 100644 sound/soc/tegra/tegra186_asrc.c
+ create mode 100644 sound/soc/tegra/tegra186_asrc.h
+
+-- 
+2.7.4
 

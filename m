@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153804ED99C
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EF24ED9BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236082AbiCaM2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S236210AbiCaMlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236067AbiCaM2H (ORCPT
+        with ESMTP id S236191AbiCaMlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:28:07 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFCC1FB501;
-        Thu, 31 Mar 2022 05:26:19 -0700 (PDT)
-Received: from mail-lf1-f52.google.com ([209.85.167.52]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MDQqe-1niBKu0xwk-00AV1U; Thu, 31 Mar 2022 14:26:18 +0200
-Received: by mail-lf1-f52.google.com with SMTP id bq24so25242005lfb.5;
-        Thu, 31 Mar 2022 05:26:18 -0700 (PDT)
-X-Gm-Message-State: AOAM532qX2LJYis2VusYBT65BraBE55hFs19J0CtMtPMsrbcanJj/r5w
-        x5yOrlCC9txH6J6xKDtrtq3aqAyJhu8Qz8nA+Jk=
-X-Google-Smtp-Source: ABdhPJxblHzN8A8TvuiEkXNzMUEBbbuh2/h0a120rBFukLWeh1t2dCBmStJdCyrkTUm6pSHNZoOJL8soa/bMgZk8Rj4=
-X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
- x5-20020a5d6505000000b002059a98e184mr3195582wru.317.1648718240005; Thu, 31
- Mar 2022 02:17:20 -0700 (PDT)
+        Thu, 31 Mar 2022 08:41:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA4512342E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648730369; x=1680266369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XmKh8J683Gqq7Cv+e+C+E2cSptIDor3+WScPG5+BZ1c=;
+  b=i5OvNX4/nPF0CyNxVFCcEfkAJRFtCWASwO7BI8uSS+4zWcWsbGMK1A/7
+   SabKC8zKtZDDuQmPUlKjc8pDwfiQ1ZakB35WoUkQZI1p/KehzABY2+Mc1
+   +0VmhmwayyWt/j1jf5JLjihMssmmDIR3iqgp7jF7jXfJObF/EoTtnNGEy
+   x1C1z0yiU/5JfqRMhOf3DDLaCKBKqo35R0MornDQfgQcpYii2jRTSp4ZX
+   6er1PHf7O/WLPD6qVckzckV4NcjMkUmmkCQY7pdbtx4YRNoX05c+F0TOR
+   vq/Nvy3KByRqzPKRJmYpX8mh+s4VxOIrj9nRv2bwxj6DT8hAjiXpqdvkp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="346266746"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="346266746"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 05:39:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="566447221"
+Received: from linux-youquan.bj.intel.com (HELO localhost) ([10.238.155.175])
+  by orsmga008.jf.intel.com with ESMTP; 31 Mar 2022 05:39:26 -0700
+Date:   Thu, 31 Mar 2022 19:31:25 +0800
+From:   Youquan Song <youquan.song@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Zhiquan Li <zhiquan1.li@intel.com>,
+        Youquan Song <youquan.song@intel.com>
+Subject: Re: [PATCH] x86/uaccess: restore get_user exception type to
+ EX_TYPE_UACCESS
+Message-ID: <20220331113125.GA2628@linux-youquan.bj.intel.com>
+References: <20220328201748.1864491-1-tony.luck@intel.com>
+ <20220330123205.GL8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <cover.1648714851.git.qinjian@cqplus1.com> <c75df921c121c047d48a34de29cd18cf9a631d01.1648714851.git.qinjian@cqplus1.com>
-In-Reply-To: <c75df921c121c047d48a34de29cd18cf9a631d01.1648714851.git.qinjian@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 31 Mar 2022 11:17:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a16M3nv+TQWsC-0Pr5M2vcTttC2WWTzctMBaqdODMFX-A@mail.gmail.com>
-Message-ID: <CAK8P3a16M3nv+TQWsC-0Pr5M2vcTttC2WWTzctMBaqdODMFX-A@mail.gmail.com>
-Subject: Re: [PATCH v12 7/9] irqchip: Add Sunplus SP7021 interrupt controller driver
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9WfqbbizZrl6Bo03VzQB2usOo4kvLoR3iOej7IjwfhgAKCtgtdM
- q4E9I2PiQ56zhYMleHff2yCybxmJAWRVUCPmuiNaWc1T6sMlyMkG4j2NTST6jI3WE8uzGWk
- A14klJ0ofAURFE6aPFqX8CtTxqm88j3PXwVjVlt6ANiFVcFTpB5S/H8Sd+sUz4CUCbszqov
- 7QRlTKkzs7egNJeGubjpA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ob6Y+w0dN6Q=:YsXZB2hvGiJqOsDtl1NhYy
- Dc4iyFsfML8dzyVhswNe4diF5jLkz8C9aUopCk/m9tjDomD76k4/bHFm9u53BKYEOJl/SJNhR
- uKw41aOzFOtG96mBFaq01ZkXHk7mQovv1pdGlvnrRbiM25W5AIVfz3WSNYYM/FvuVyYBgyB3u
- 3qBIfDLYwNrhRtYtazKfJy9OnkT139kAXxRfm4994sIWGEq+YIUc8p9U2OCX2+gvsXD4tGFiN
- u44Pmf6MB8JSd2zSszLc1pV8wCtOb5IjPwyf4ulaufGHXFJeLv6K9vPq7XrZEX0F+IZ/DQlPE
- DCo2RnpR/Imfrsg1slMPccwtV/KA0QuG+c0i1hzcpoe4j9yZ5x36OOXx/zkok8GdfN8mstfxg
- ZclYN8EvKDwsVXND0JHgw84Xh0QwTA0IOV4vrzkqEN3GY5xLAPdJfpZ8Yihqz8yrL5NXlCNpX
- WzMIsS3i0gK/APi4IfxPK7635jIiujzPOTVDVSsPYsr3QTJ8+5VzCbGfPOsDN5xKkRFWNtD0+
- un3HquhO7NSVf4rxQ8iFfOJCWxWb0yxPE/3HcCbwmW94hItiNjmm/PaChTjyh4DnS100K3I4T
- tktjPtbVUwKgnvPo+m3HsfUXulM8vlMr2vQYI641MY+iGsIy/k77fwbkn0iMQUj6Q1+H1rgSz
- Bzryj8IjHtzGO1QdfuAtVYs5pStRlQVUpxg4nPIBnJ2vrCsndKK/d7Ol7TZBiWDXjHdg=
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330123205.GL8939@worktop.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,29 +65,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 10:29 AM Qin Jian <qinjian@cqplus1.com> wrote:
+> Did you do your testing on RHEL or something daft like that?
+Tested on RHEL8.x
+ 
+> Something like the below can also work, I suppose. But please, add
+> coherent comments to the extable code with useful references to the MCE
+> code that does this abuse.
+Here is the full fix patch depending on your suggestion. Thanks a lot!
 
-> +#ifdef CONFIG_SMP
-> +static int sp_intc_set_affinity(struct irq_data *d, const struct cpumask *mask, bool force)
-> +{
-> +       return -EINVAL;
-> +}
-> +#endif
-> +
-> +static struct irq_chip sp_intc_chip = {
-> +       .name = "sp_intc",
-> +       .irq_ack = sp_intc_ack_irq,
-> +       .irq_mask = sp_intc_mask_irq,
-> +       .irq_unmask = sp_intc_unmask_irq,
-> +       .irq_set_type = sp_intc_set_type,
-> +#ifdef CONFIG_SMP
-> +       .irq_set_affinity = sp_intc_set_affinity,
-> +#endif
-> +};
+From 3d2e44dac774d49417002136ee3b007638a85191 Mon Sep 17 00:00:00 2001
+From: Zhiquan Li <zhiquan1.li@intel.com>
+Date: Wed, 30 Mar 2022 21:11:06 +0800
+Subject: [PATCH v2] x86/uaccess: identify get_user with new type
+ EX_TYPE_UA_IMM_REG
 
-I don't think you need to define an irq_set_affinity() callback at all if you
-just return -EINVAL, all the callers should have a check already. Even
-if you do need the function, I think you can remove the #ifdef, as long
-as the function itself can be built that way.
+5.17.0 kernel will crash when we inject MCE by run "einj_mem_uc copyin"
+in ras-tools with CONFIG_CC_HAS_ASM_GOTO_OUTPUT != y kernel config.
+mce: [Hardware Error]: Machine check events logged
+mce: [Hardware Error]: CPU 120: Machine Check Exception: f Bank 1: bd80000000100134
+mce: [Hardware Error]: RIP 10: {fault_in_readable+0x9f/0xd0}
+mce: [Hardware Error]: TSC 63d3fa6181b69 ADDR f921f31400 MISC 86 PPIN 11a090eb80bf0c9c
+mce: [Hardware Error]: PROCESSOR 0:606a6 TIME 1647365323 SOCKET 1 APIC 8d microcode d0002e0
+mce: [Hardware Error]: Run the above through 'mcelog --ascii'
+mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
+Kernel panic - not syncing: Fatal local machine check
 
-      Arnd
+In commit 99641e094d6c ("x86/uaccess: Remove .fixup usage"), the
+exception type of get_user was changed from EX_TYPE_UACCESS to
+EX_TYPE_EFAULT_REG. In case of MCE/SRAR when kernel copy data from user,
+the MCE handler identities the exception type with EX_TYPE_UACCESS to
+MCE_IN_KERNEL_RECOV. While the new type EX_TYPE_EFAULT_REG will lose
+the opportunity to rescue the system.
+
+To fix it we have to add a new exception type for get_user,
+EX_TYPE_UA_IMM_REG, but we do not want to miss the operation that make
+reg = -EFAULT in function ex_handler_imm_reg(), so we so add a new
+compound type EX_TYPE_UFAULT_REG to figure out this case, it will not
+break anything. Then MCE handler can identify is as a recoverable case.
+
+Changes v1 -> v2:
+* Abandoned the solution that restoring get_user exception type to
+  EX_TYPE_UACCESS and adding new flag EX_FLAG_SET_REG to set
+  reg := imm additionally.
+
+Fixes: 99641e094d6c ("x86/uaccess: Remove .fixup usage")
+Cc: <stable@vger.kernel.org> # v5.17+
+Signed-off-by: Zhiquan Li <zhiquan1.li@intel.com>
+Co-developed-by: Youquan Song <youquan.song@intel.com>
+Signed-off-by: Youquan Song <youquan.song@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/include/asm/extable_fixup_types.h | 3 +++
+ arch/x86/include/asm/uaccess.h             | 6 +++---
+ arch/x86/kernel/cpu/mce/severity.c         | 1 +
+ arch/x86/mm/extable.c                      | 1 +
+ 4 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
+index 503622627400..759283acb246 100644
+--- a/arch/x86/include/asm/extable_fixup_types.h
++++ b/arch/x86/include/asm/extable_fixup_types.h
+@@ -64,4 +64,7 @@
+ #define	EX_TYPE_UCOPY_LEN4		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(4))
+ #define	EX_TYPE_UCOPY_LEN8		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(8))
+ 
++#define	EX_TYPE_UA_IMM_REG		20 /* reg := (long)imm */
++#define	EX_TYPE_UFAULT_REG		(EX_TYPE_UA_IMM_REG | EX_DATA_IMM(-EFAULT))
++
+ #endif
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index ac96f9b2d64b..2b3a4bb609fe 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -352,10 +352,10 @@ do {									\
+ 		     "1:	movl %[lowbits],%%eax\n"		\
+ 		     "2:	movl %[highbits],%%edx\n"		\
+ 		     "3:\n"						\
+-		     _ASM_EXTABLE_TYPE_REG(1b, 3b, EX_TYPE_EFAULT_REG |	\
++		     _ASM_EXTABLE_TYPE_REG(1b, 3b, EX_TYPE_UFAULT_REG |	\
+ 					   EX_FLAG_CLEAR_AX_DX,		\
+ 					   %[errout])			\
+-		     _ASM_EXTABLE_TYPE_REG(2b, 3b, EX_TYPE_EFAULT_REG |	\
++		     _ASM_EXTABLE_TYPE_REG(2b, 3b, EX_TYPE_UFAULT_REG |	\
+ 					   EX_FLAG_CLEAR_AX_DX,		\
+ 					   %[errout])			\
+ 		     : [errout] "=r" (retval),				\
+@@ -399,7 +399,7 @@ do {									\
+ 	asm volatile("\n"						\
+ 		     "1:	mov"itype" %[umem],%[output]\n"		\
+ 		     "2:\n"						\
+-		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG | \
++		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_UFAULT_REG | \
+ 					   EX_FLAG_CLEAR_AX,		\
+ 					   %[errout])			\
+ 		     : [errout] "=r" (err),				\
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index 7aa2bda93cbb..a20bb930b322 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -286,6 +286,7 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
+ 	switch (fixup_type) {
+ 	case EX_TYPE_UACCESS:
+ 	case EX_TYPE_COPY:
++	case EX_TYPE_UA_IMM_REG:
+ 		if (!copy_user)
+ 			return IN_KERNEL;
+ 		m->kflags |= MCE_IN_KERNEL_COPYIN;
+diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+index dba2197c05c3..b9bc0e7cb73e 100644
+--- a/arch/x86/mm/extable.c
++++ b/arch/x86/mm/extable.c
+@@ -210,6 +210,7 @@ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_code,
+ 		regs->sp += sizeof(long);
+ 		fallthrough;
+ 	case EX_TYPE_IMM_REG:
++	case EX_TYPE_UA_IMM_REG:
+ 		return ex_handler_imm_reg(e, regs, reg, imm);
+ 	case EX_TYPE_FAULT_SGX:
+ 		return ex_handler_sgx(e, regs, trapnr);
+-- 
+2.25.1

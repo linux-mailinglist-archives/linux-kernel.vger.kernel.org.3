@@ -2,136 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67384ED18F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567084ED191
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241434AbiCaCO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 22:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S243451AbiCaCQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 22:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiCaCOX (ORCPT
+        with ESMTP id S231567AbiCaCQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 22:14:23 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7A66625
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:12:37 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so2217400pjm.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=23XfkAHDqNFtL26bKDov8Qbam5dCiK7y19fMRZBdXt4=;
-        b=qm67aC678igD9cDL/UrGvx7xNWfMGdlcX6eDKXldXuN9aExMlgo1sI9rARaUib4H6D
-         0f1Zgv0E2nMHMYwOy8Rd34T6IHiVubFzpPzNipSggMDDmDvN9FYHLu8TCeyMooewNklG
-         BDYcTh5Blw9PJdZ8DMO4orLOpxYFckL+ZN/vPMzEpp3AM/3Y7bFP/h3eN4XwLFY3c9pR
-         Xl+8wmV7U9V7JSWGwcK67PHf6TgGUAvWJGQ1BmQeyEi0+LzMWzkc3sKhqYGBi6rAvKVn
-         56Co8QllBFAv48GN4E8Vl85AQKC8rdQb/2Vz0TVAtIEBQmJjmF1U7afzRhri234sZ83r
-         SVLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=23XfkAHDqNFtL26bKDov8Qbam5dCiK7y19fMRZBdXt4=;
-        b=iUOGmNblyC5zKQRIZfiw/iRxSpQIxmeoYCO3XTFN8Y4YF7Rl7mKqGXaOeAGNCLCq7l
-         ij7fUKFl9I61YZvduKG0qSLYCXJ7boeR5BZF98WW6fL8eB6k1U0m8SyU39QZsuQTXjL8
-         JVyiwjvX1BsWZBjILcDFPzUe0ftgiXsI6LZpkEvmApgHIn+MQVd41yge5d6AagMeGw1/
-         s4D06y8vyMXmc8jMgQJLOy0W32qza8L/d5eJK8Rqv7uznthfVV6wm2Ofsss7RWtrWgyS
-         sNEbKsB72Q9DmkOvd8Oyc8GSAnG88x6RgXux5BqnIG7NXIIbU83VwMneVoaHLoBbmpUZ
-         G0aA==
-X-Gm-Message-State: AOAM532pU9dFjshy5OraTaiMZ+E0n1mPm6RCPoHNT6B3lc56ADLo8FM7
-        ZC6DrHrFfDMpzVwYVEPPvQVVRw==
-X-Google-Smtp-Source: ABdhPJy9CjLfyqEnfds3s+9ym0N2LGlzWw/ZN+JoBZJV9H6hqL+LC4pVIxa3u/7cj8q6KKt7N2940A==
-X-Received: by 2002:a17:90b:4b88:b0:1c7:666e:7edb with SMTP id lr8-20020a17090b4b8800b001c7666e7edbmr3251434pjb.41.1648692757155;
-        Wed, 30 Mar 2022 19:12:37 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056a00148800b004fa9bd7ddc9sm25067522pfu.113.2022.03.30.19.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 19:12:36 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 07:42:35 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: use list iterator only inside the loop
-Message-ID: <20220331021235.bhb4t2g43eva3c3s@vireshk-i7>
-References: <20220331015818.28045-1-xiam0nd.tong@gmail.com>
+        Wed, 30 Mar 2022 22:16:44 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7256D673D7;
+        Wed, 30 Mar 2022 19:14:57 -0700 (PDT)
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 22V2EQMo007232;
+        Thu, 31 Mar 2022 11:14:26 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 22V2EQMo007232
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648692866;
+        bh=BaRp588wc7dVUEEVQWMHZfUjZMtEZadbAHPcQ/hMAkU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xXyuTg2uoeV2iCeOmdsJ3N8arzhbN9bqVGxPbQZuLke8JuBeDl25ey6+I8Bhiup2r
+         bEp8nhzKYiQezWa6jVAxTf3/309UtXKzwfo9CNoQp14fsutq7RFxcixfgSbMm9B8qd
+         8G1ybyjJoPcvmMGUvmPxKOzmD8Fhf+lrPcbZJOAsBe1T95qk1lfGa0l0AM+BCm1H0W
+         XXAU0Gux3QsatzGQJFZLe55zYZRqPyHPqgDdLLlkN+5BMMKed8zrXRgajttGAmEA5D
+         oLzcqSs0RRzWhgh+7F0p0Q6zjZAJ5x6b/j9mziA/5FBsP49FVnLFWJQAz9q8NU1IQm
+         fbBpsRPTRCZ+w==
+X-Nifty-SrcIP: [209.85.216.54]
+Received: by mail-pj1-f54.google.com with SMTP id y16so9871898pju.4;
+        Wed, 30 Mar 2022 19:14:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531H/KWHfUOq0La8l1fC3z549m2ck16alUUZKLP5VD1gamLJfYUK
+        RPdWWeR0myUdsfQJB5n3y2kbdb50mjMPaTXyoxw=
+X-Google-Smtp-Source: ABdhPJy4I4mU1PAohqgbK9L5D4+YKEnUO4wM8Bl+1FwbZgKiyiaUdcBZngVQ9P62sngmvcBIIuH8+cw4h4/oOZGLhrU=
+X-Received: by 2002:a17:902:b68c:b0:153:bd06:85ad with SMTP id
+ c12-20020a170902b68c00b00153bd0685admr2957565pls.99.1648692865835; Wed, 30
+ Mar 2022 19:14:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331015818.28045-1-xiam0nd.tong@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <164847778869.3060675.8115416881394543419.stgit@devnote2>
+ <CAKwvOdmAYQZtzGudBjmiRZNjT+VixTdNbJmYmxc7-gQNCsHfrA@mail.gmail.com> <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
+In-Reply-To: <20220331104531.81d0edf9a85a4f69020a9f13@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 31 Mar 2022 11:13:40 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQU4-CNUJGzsO_kx4SrwNWrd=vnObWkuyV063imZcGFsw@mail.gmail.com>
+Message-ID: <CAK7LNAQU4-CNUJGzsO_kx4SrwNWrd=vnObWkuyV063imZcGFsw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in
+ kernel for non initrd boot
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaomeng,
-
-On 31-03-22, 09:58, Xiaomeng Tong wrote:
->     dev = new_dev->dev;
-
-Why is this added here ?
-
-> 
-> As discussed before,
-
-Please remember that whatever you write here will go in the commit
-logs for ever and no one will ever know what you discussed and with
-whom.
-
-This area should describe the problem at hand.
-
-> we should avoid to use a list iterator variable
-> outside the loop which is considered harmful[1].
-> 
-> In this case, use a new variable 'iter' as the list iterator, while
-> use the old variable 'new_dev' as a dedicated pointer to point to the
-> found entry.
-> 
-> [1]:  https://lkml.org/lkml/2022/2/17/1032
-> 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
->  drivers/opp/debugfs.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 596c185b5dda..a4476985e4ce 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -187,14 +187,19 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
->  static void opp_migrate_dentry(struct opp_device *opp_dev,
->  			       struct opp_table *opp_table)
->  {
-> -	struct opp_device *new_dev;
-> +	struct opp_device *new_dev = NULL, *iter;
->  	const struct device *dev;
->  	struct dentry *dentry;
->  
->  	/* Look for next opp-dev */
-> -	list_for_each_entry(new_dev, &opp_table->dev_list, node)
-> -		if (new_dev != opp_dev)
-> +	list_for_each_entry(iter, &opp_table->dev_list, node)
-> +		if (iter != opp_dev) {
-> +			new_dev = iter;
->  			break;
-> +		}
-> +
-> +	if (!new_dev)
-
-I will rather make this BUG_ON(!new_dev);
-
-> +		return;
->  
->  	/* new_dev is guaranteed to be valid here */
->  	dev = new_dev->dev;
+On Thu, Mar 31, 2022 at 10:45 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Nick,
+>
+> On Wed, 30 Mar 2022 11:04:50 -0700
+> Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> > On Mon, Mar 28, 2022 at 7:29 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >
+> > > KNOWN ISSUE:
+> > >
+> > > According to the report from Padmanabha[3] and my analysis [4], the embedded
+> > > bootconfig data may not be updated if you do incremental build the kernel
+> > > with CONFIG_LTO_CLANG_THIN.
+> > >
+> > > [3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
+> > > [4] https://lore.kernel.org/all/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
+> > >
+> > > This seems like clang's LTO Thin mode issue. It may not detect the inline
+> > > asm depends on external files.
+> > >
+> > > I think the possible workaround is to split the inline asm which includes
+> > > '.incbin' directive into an asm file. But this should be done in another
+> > > seires because there are other features which uses '.incbin'. (e.g.
+> > > /proc/config.gz)
+> >
+> > Hi Masami,
+> > I saw Padmanabha's report (thanks for the report); sorry for not
+> > responding sooner, I've been traveling recently for a funeral.
+>
+> Oh, sorry about that. I think this is not so hurry.
+>
+> >
+> > Any chance we can use
+> >
+> > CFLAGS_REMOVE_<file>.o := $(CC_FLAGS_LTO)
+> >
+> > a la
+> > commit d2dcd3e37475 ("x86, cpu: disable LTO for cpu.c")
+>
+> Hm, this looks good to me. Let me confirm that works.
+> (Does this mean the bootconfig.o will be compiled to elf binary?)
 
 
--- 
-viresh
+Why are you using  ".incbin" in the C file in the first place?
+
+
+You might have mimicked  kernel/configs.c
+but there was a reason;  kernel/configs.c can be a module,
+but we cannot put MODULE_LICENSE() in *.S  file.
+(commit 13610aa908dcfce77135bb799c0a10d0172da6ba)
+
+
+In this case, CONFIG_EMBED_BOOT_CONFIG is a bool
+option.
+
+Why don't you simply move the asm() part to a separate
+bootconfig-data.S ?
+
+Clang lto flags are only passed to *.c files,
+so we do not need to be worried about  .incbin in *.S files.
+
+
+Then, Makefile will be even cleaner (no ifeq-block)
+
+
+lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+obj-$(CONFIG_EMBED_BOOT_CONFIG) += bootconfig-data.o
+
+$(obj)/bootconfig-data.o: $(obj)/default.bconf
+
+targets += default.bconf
+filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
+$(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
+        $(call filechk,defbconf)
+
+
+
+
+
+BTW, why lib-$(CONFIG_BOOT_CONFIG),
+instead of obj-$(CONFIG_BOOT_CONFIG)  ?
+
+
+
+>
+> >
+> > with a comment linking to
+> > https://github.com/ClangBuiltLinux/linux/issues/1618
+>
+> Thanks for reporting!
+>
+> >
+> > for the Translation Units using .incbin, until we have had more time
+> > to triage+fix?
+>
+> Yes. For this series, I can update with above one, but it doesn't cover the
+> other parts. And since this issue is independent from the bootconfig,
+> I think we need a wider patch series to mitigate this issue on config.gz
+> (and other .incbin users) too.
+>
+> Thank you,
+>
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
+
+
+
+
+--
+Best Regards
+Masahiro Yamada

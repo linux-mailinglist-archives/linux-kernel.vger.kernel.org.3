@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9364EE448
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382684EE449
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242546AbiCaWmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S242585AbiCaWmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242462AbiCaWmR (ORCPT
+        with ESMTP id S233865AbiCaWmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 31 Mar 2022 18:42:17 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA731C406A
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:40:28 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id p15so2216981ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:40:28 -0700 (PDT)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AA31C4B17
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:40:29 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b24so921658edu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OAF79ixH7XO8/kHbUATTBHFnSkL/nkVXYK4Bx07Es9M=;
-        b=UIHknE8/0aEaHT5OU1wimWGQYJ5o31cxftZWanbrU5Brir065xFzKQOI5vADS0tzO8
-         h//1/dAWPEaeRdGL9/XpgnqDgcWVczQ4vD0W57XPVFF3Hkilqx5w4A8XOpBs9ZMVFAIU
-         kOoHD+Wjf66cMpSUXEd21tMYlwQvBjyJ+k4MxREj+OfWpL6rndZLIE2EGLbLSvx+ssqy
-         KkiGMhQ4T0lCmKOnc/2J5woXOFNfMAWx9f5mU4EJYamjULdZNMONj68J8okbFkhUfhhA
-         go48snyAgXnLinYYkYYsmJVUMVuh4u/EbbXtu3l2nUbYHsqmhUuC+/B8Ew6eEQvDHJqq
-         B8xQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=K4PijKfHqVSR8jpN9OjGMTbj1kKE70x0H0mGmScT4hA=;
+        b=bObT5oqHf4n/hmFYQrjTw07HesIgxEpuwzQEoZjAsR2vmNnWH4/vyXgbkQEqGkPAHs
+         3VxYMLaAFnY9ZCmfl8VmxwtGdyy0OTiAvSj3yOEgbpRZUcLbuF7oz+wlPQoWARVxxP4p
+         HH72I8ogwIGF3MHMEulpA7YeufSqKNLKNwBZgGhZnKiyZMohlgWQQXyRfM5jvFnDJhGn
+         HZSaR9TcNMY1PIkpdajxietHBWEunOzWPWbwrMxWoOND1iWgDNd6zNF3bTcnwL61JbFK
+         Cy+sQVwaseL7BTgRHzt8TggcKsk8ysrjHT5sEyjAFPvqbkONl1DHMyKPFbVjlQrTpDb9
+         dWig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OAF79ixH7XO8/kHbUATTBHFnSkL/nkVXYK4Bx07Es9M=;
-        b=JaysUJsnLVq3EE2oMRsoo7dq40oKg1vvCCATE3ER8QLQy8rcydlDgcjNEUSojaipqb
-         2UH43eNRiKGvCO8dMOvO1i98sDoXmWT0Sz/ZsBXBLSGbRuNIDiPsuwgaruFCtO7xnBkd
-         +VANCwYMH16Sgi43dOfFxH7ZS2C6tVo3S9Rr04HAWT/00AOC8e1aSc44ql0BrtOhhXCy
-         YbzPV/0DJ76XTBZCwrj6ErbzL4gv81cBsumkeLCLmCLuQJ35wR4exRvmsVWxFCnYCPIw
-         suDgDQaTrgJZNRjGogduiI7YnrXeW32BtfXB13i4loExGO4CtXwkjURFePZr3bQW+vnK
-         gCzA==
-X-Gm-Message-State: AOAM533u9b20CdH6w4UzVoFrD9SUHU8rOUXkqkB89rFLOt+mY2xy2wkj
-        rUeUFlwE1GBVGPWoaol/ct4=
-X-Google-Smtp-Source: ABdhPJwRUYP4bzLKrhGs345u5NZhGKemPeZq835ij8gf8hKkMzb4rrnRyuAUb3KfXn8Zw9FS/8Ri+g==
-X-Received: by 2002:a17:907:3e16:b0:6df:b4f0:5cc2 with SMTP id hp22-20020a1709073e1600b006dfb4f05cc2mr6849525ejc.285.1648766427340;
-        Thu, 31 Mar 2022 15:40:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=K4PijKfHqVSR8jpN9OjGMTbj1kKE70x0H0mGmScT4hA=;
+        b=x8sScEAFx/4KBOHyC/QBSM0sDURW/lRT3TWsVyhvyRnZrK4bNuzvuS/6kCoQ2nfAXX
+         mnvhPEvajsZyVTviObWzsoWNGse/ClTaC+egiW8A7W9UvHtK1QVxRki2zrgv6Kd7C1AH
+         z93pxFdm0jP3+Fulvib/pc3IcpHSSxxkmdTK3c3MP0Myy0V4INihK2qR5IJcb0+6ex0Q
+         EUxEz1ai8CWZdBWsTkbeWlyeqfDg3BkDiGRKCz1ubb+LU7ouGV3/6eEA++ww74mu8Aha
+         i5JQGheYYTJZeQMItWfbfB6LJqbItC6mX0jaSe+ABkDHLkF1/7yUP7G7zxICHNHpJY0Q
+         qATA==
+X-Gm-Message-State: AOAM530TnFpPlvPVNWyIjqfTyIX1gc4M6uSIMIPTmHBEQgd1oviSb+3E
+        HOG5cKirLWt+RvjVwbmlLAw=
+X-Google-Smtp-Source: ABdhPJziH3omYLkme2QH6lxqgk+xvHYZw5BgMrkqY/Y8acIgiYDBiMIm8SAS0sCsvtXhCWey1za7sg==
+X-Received: by 2002:aa7:d682:0:b0:419:3b78:e489 with SMTP id d2-20020aa7d682000000b004193b78e489mr18676652edr.372.1648766428107;
+        Thu, 31 Mar 2022 15:40:28 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id j21-20020a170906255500b006e08c4862ccsm278505ejb.96.2022.03.31.15.40.26
+        by smtp.googlemail.com with ESMTPSA id j21-20020a170906255500b006e08c4862ccsm278505ejb.96.2022.03.31.15.40.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 31 Mar 2022 15:40:27 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
@@ -56,10 +56,12 @@ Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH 1/2] gfs2: remove usage of list iterator variable for list_for_each_entry_continue()
-Date:   Fri,  1 Apr 2022 00:38:56 +0200
-Message-Id: <20220331223857.902911-1-jakobkoschel@gmail.com>
+Subject: [PATCH 2/2] gfs2: replace usage of found with dedicated list iterator variable
+Date:   Fri,  1 Apr 2022 00:38:57 +0200
+Message-Id: <20220331223857.902911-2-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220331223857.902911-1-jakobkoschel@gmail.com>
+References: <20220331223857.902911-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,88 +74,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to limiting the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to iterate through the list [1].
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Since that variable should not be used past the loop iteration, a
-separate variable is used to 'remember the current location within the
-loop'.
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-To either continue iterating from that position or start a new
-iteration (if the previous iteration was complete) list_prepare_entry()
-is used.
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- fs/gfs2/lops.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ fs/gfs2/quota.c    | 13 ++++++-------
+ fs/gfs2/recovery.c | 22 ++++++++++------------
+ 2 files changed, 16 insertions(+), 19 deletions(-)
 
-diff --git a/fs/gfs2/lops.c b/fs/gfs2/lops.c
-index 6ba51cbb94cf..74e6d05cee2c 100644
---- a/fs/gfs2/lops.c
-+++ b/fs/gfs2/lops.c
-@@ -653,7 +653,7 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
- 				bool is_databuf)
+diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+index be0997e24d60..dafd04fb9164 100644
+--- a/fs/gfs2/quota.c
++++ b/fs/gfs2/quota.c
+@@ -443,7 +443,7 @@ static int qd_check_sync(struct gfs2_sbd *sdp, struct gfs2_quota_data *qd,
+ 
+ static int qd_fish(struct gfs2_sbd *sdp, struct gfs2_quota_data **qdp)
  {
- 	struct gfs2_log_descriptor *ld;
--	struct gfs2_bufdata *bd1 = NULL, *bd2;
-+	struct gfs2_bufdata *bd1 = NULL, *bd2, *tmp1, *tmp2;
- 	struct page *page;
- 	unsigned int num;
- 	unsigned n;
-@@ -661,7 +661,7 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
+-	struct gfs2_quota_data *qd = NULL;
++	struct gfs2_quota_data *qd = NULL, *iter;
+ 	int error;
+ 	int found = 0;
  
- 	gfs2_log_lock(sdp);
- 	list_sort(NULL, blist, blocknr_cmp);
--	bd1 = bd2 = list_prepare_entry(bd1, blist, bd_list);
-+	tmp1 = tmp2 = list_prepare_entry(bd1, blist, bd_list);
- 	while(total) {
- 		num = total;
- 		if (total > limit)
-@@ -675,14 +675,18 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
- 		ptr = (__be64 *)(ld + 1);
+@@ -454,15 +454,14 @@ static int qd_fish(struct gfs2_sbd *sdp, struct gfs2_quota_data **qdp)
  
- 		n = 0;
-+		bd1 = list_prepare_entry(tmp1, blist, bd_list);
-+		tmp1 = NULL;
- 		list_for_each_entry_continue(bd1, blist, bd_list) {
- 			*ptr++ = cpu_to_be64(bd1->bd_bh->b_blocknr);
- 			if (is_databuf) {
- 				gfs2_check_magic(bd1->bd_bh);
- 				*ptr++ = cpu_to_be64(buffer_escaped(bd1->bd_bh) ? 1 : 0);
- 			}
--			if (++n >= num)
-+			if (++n >= num) {
-+				tmp1 = bd1;
- 				break;
-+			}
+ 	spin_lock(&qd_lock);
+ 
+-	list_for_each_entry(qd, &sdp->sd_quota_list, qd_list) {
+-		found = qd_check_sync(sdp, qd, &sdp->sd_quota_sync_gen);
+-		if (found)
++	list_for_each_entry(iter, &sdp->sd_quota_list, qd_list) {
++		found = qd_check_sync(sdp, iter, &sdp->sd_quota_sync_gen);
++		if (found) {
++			qd = iter;
+ 			break;
++		}
+ 	}
+ 
+-	if (!found)
+-		qd = NULL;
+-
+ 	spin_unlock(&qd_lock);
+ 
+ 	if (qd) {
+diff --git a/fs/gfs2/recovery.c b/fs/gfs2/recovery.c
+index 016ed1b2ca1d..2bb085a72e8e 100644
+--- a/fs/gfs2/recovery.c
++++ b/fs/gfs2/recovery.c
+@@ -55,17 +55,16 @@ int gfs2_replay_read_block(struct gfs2_jdesc *jd, unsigned int blk,
+ int gfs2_revoke_add(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
+ {
+ 	struct list_head *head = &jd->jd_revoke_list;
+-	struct gfs2_revoke_replay *rr;
+-	int found = 0;
++	struct gfs2_revoke_replay *rr = NULL, *iter;
+ 
+-	list_for_each_entry(rr, head, rr_list) {
+-		if (rr->rr_blkno == blkno) {
+-			found = 1;
++	list_for_each_entry(iter, head, rr_list) {
++		if (iter->rr_blkno == blkno) {
++			rr = iter;
+ 			break;
  		}
+ 	}
  
- 		gfs2_log_unlock(sdp);
-@@ -690,6 +694,8 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
- 		gfs2_log_lock(sdp);
+-	if (found) {
++	if (rr) {
+ 		rr->rr_where = where;
+ 		return 0;
+ 	}
+@@ -83,18 +82,17 @@ int gfs2_revoke_add(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
  
- 		n = 0;
-+		bd2 = list_prepare_entry(tmp2, blist, bd_list);
-+		tmp2 = NULL;
- 		list_for_each_entry_continue(bd2, blist, bd_list) {
- 			get_bh(bd2->bd_bh);
- 			gfs2_log_unlock(sdp);
-@@ -712,8 +718,10 @@ static void gfs2_before_commit(struct gfs2_sbd *sdp, unsigned int limit,
- 				gfs2_log_write_bh(sdp, bd2->bd_bh);
- 			}
- 			gfs2_log_lock(sdp);
--			if (++n >= num)
-+			if (++n >= num) {
-+				tmp2 = bd2;
- 				break;
-+			}
+ int gfs2_revoke_check(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
+ {
+-	struct gfs2_revoke_replay *rr;
++	struct gfs2_revoke_replay *rr = NULL, *iter;
+ 	int wrap, a, b, revoke;
+-	int found = 0;
+ 
+-	list_for_each_entry(rr, &jd->jd_revoke_list, rr_list) {
+-		if (rr->rr_blkno == blkno) {
+-			found = 1;
++	list_for_each_entry(iter, &jd->jd_revoke_list, rr_list) {
++		if (iter->rr_blkno == blkno) {
++			rr = iter;
+ 			break;
  		}
+ 	}
  
- 		BUG_ON(total < num);
-
-base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+-	if (!found)
++	if (!rr)
+ 		return 0;
+ 
+ 	wrap = (rr->rr_where < jd->jd_replay_tail);
 -- 
 2.25.1
 

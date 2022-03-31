@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA4E4EDC35
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 060C24EDC47
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbiCaPAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S237931AbiCaPDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbiCaPAO (ORCPT
+        with ESMTP id S232527AbiCaPDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:00:14 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB84BE0;
-        Thu, 31 Mar 2022 07:58:24 -0700 (PDT)
+        Thu, 31 Mar 2022 11:03:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B621206EEE;
+        Thu, 31 Mar 2022 08:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nBp5eWkwrHl+8YHShnyHosXN6OXlm06woH8IJnDuO9w=; b=LR3tOu62pKypx6dzcjTW5LVJlT
-        oCJAftcP0t6++0kUcHvfuxZO1ykO4xQg5bsxryt1UZ63t+BsOyvqPH2YaFk8to9JQ7pvdCuVgEyMH
-        3M1nbeYlRCzLjj/P7bFyj2i+3GPr42kAn7BBRSSGqPSyiUE7qFNDwDaPC7P9Zji0lBKjk9nsEcabK
-        2qW1rNUCFYgOzwumswv7pxvb5zEloAvzgrQ63wRx5mCBZfzJhZQ5Zlh0lfqpC2wH91njmmWbxltyI
-        2nONp06yKg+tfn7UB2l8h8EIh522kS9IGIxrz1NmbxFIfbKZ76Tswyt1nf835kgjoHjp4TKnHEhD6
-        fuEPDffQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58066)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZwFW-0004zv-Lq; Thu, 31 Mar 2022 15:58:10 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZwFV-0007ie-AO; Thu, 31 Mar 2022 15:58:09 +0100
-Date:   Thu, 31 Mar 2022 15:58:09 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Message-ID: <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <20220330065047.GA212503@yilunxu-OptiPlex-7050>
- <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
- <20220330145137.GA214615@yilunxu-OptiPlex-7050>
- <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
- <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
- <7b3edeabb66e50825cc42ca1edf86bb7@walle.cc>
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=I1ivG9NRVVOIvA3ZPKM+gIMrRc3A4IUWwLKDETjpzMc=; b=nmphzON5aRX1gVVs+kcWI+9gnm
+        FxFJVvwZF+8lpX53dCZiA59vjQ/4MhaTldkSSN+oz2JfvAGRoPR0urkBcSQ/OKGcuOk5aNGoRclp2
+        rp4OKUjZEEiESuwJq/ehxBoXmD45sbaVaaDkmit/NFXHr/qRz+t0eoeUFGHiX735Ocq3Wz2nf2eEi
+        T/o73agCDMnNsjFCeyYv6Ba9dLnIIwe9LopsnNHiY/EzL73yI9PnIPN9xzWWi4TKetKV+5pWsm+3Q
+        n4z9iJqNQ4YcHFhwDYTGngZIHpkF+qPBoWTJ9iQSHuBGzN+WKkfk85jnTbZX4mSrcvT64LHJ/GTfQ
+        rdv4BqLg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZwIz-002LNx-Nu; Thu, 31 Mar 2022 15:01:45 +0000
+Date:   Thu, 31 Mar 2022 16:01:45 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        vdavydov.dev@gmail.com, shakeelb@google.com,
+        roman.gushchin@linux.dev, shy828301@gmail.com, alexs@kernel.org,
+        richard.weiyang@gmail.com, david@fromorbit.com,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com,
+        vbabka@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, zhengqi.arch@bytedance.com,
+        duanxiongchun@bytedance.com, fam.zheng@bytedance.com,
+        smuchun@gmail.com
+Subject: Re: [PATCH v6 12/16] mm: list_lru: replace linear array with xarray
+Message-ID: <YkXCWW7ru9Gxyy6G@casper.infradead.org>
+References: <20220228122126.37293-1-songmuchun@bytedance.com>
+ <20220228122126.37293-13-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b3edeabb66e50825cc42ca1edf86bb7@walle.cc>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220228122126.37293-13-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 04:51:47PM +0200, Michael Walle wrote:
-> Am 2022-03-31 16:45, schrieb Russell King (Oracle):
-> > On Wed, Mar 30, 2022 at 08:23:35AM -0700, Guenter Roeck wrote:
-> > > Michael, let's just drop the changes outside drivers/hwmon from
-> > > the series, and let's keep hwmon_is_bad_char() in the include file.
-> > > Let's just document it, explaining its use case.
-> > 
-> > Why? There hasn't been any objection to the change. All the discussion
-> > seems to be around the new function (this patch) rather than the actual
-> > conversions in drivers.
-> > 
-> > I'm entirely in favour of cleaning this up - it irks me that we're doing
-> > exactly the same cleanup everywhere we have a hwmon.
-> > 
-> > At the very least, I would be completely in favour of keeping the
-> > changes in the sfp and phy code.
-> 
-> FWIW, my plan was to send the hwmon patches first, by then my other
-> series (the polynomial_calc() one) will also be ready to be picked.
-> Then I'd ask Guenter for a stable branch with these two series which
-> hopefully get merged into net-next. Then I can repost the missing
-> patches on net-next along with the new sensors support for the GPY
-> and LAN8814 PHYs.
+On Mon, Feb 28, 2022 at 08:21:22PM +0800, Muchun Song wrote:
+> @@ -586,27 +508,48 @@ int memcg_list_lru_alloc(struct mem_cgroup *memcg, struct list_lru *lru,
+>  		}
+>  	}
+>  
+> +	xas_lock_irqsave(&xas, flags);
+>  	while (i--) {
+> +		int index = READ_ONCE(table[i].memcg->kmemcg_id);
+>  		struct list_lru_per_memcg *mlru = table[i].mlru;
+>  
+> +		xas_set(&xas, index);
+> +retry:
+> +		if (unlikely(index < 0 || xas_error(&xas) || xas_load(&xas))) {
+>  			kfree(mlru);
+> +		} else {
+> +			xas_store(&xas, mlru);
+> +			if (xas_error(&xas) == -ENOMEM) {
+> +				xas_unlock_irqrestore(&xas, flags);
+> +				if (xas_nomem(&xas, gfp))
+> +					xas_set_err(&xas, 0);
+> +				xas_lock_irqsave(&xas, flags);
+> +				/*
+> +				 * The xas lock has been released, this memcg
+> +				 * can be reparented before us. So reload
+> +				 * memcg id. More details see the comments
+> +				 * in memcg_reparent_list_lrus().
+> +				 */
+> +				index = READ_ONCE(table[i].memcg->kmemcg_id);
+> +				if (index < 0)
+> +					xas_set_err(&xas, 0);
+> +				else if (!xas_error(&xas) && index != xas.xa_index)
+> +					xas_set(&xas, index);
+> +				goto retry;
+> +			}
+> +		}
+>  	}
+> +	/* xas_nomem() is used to free memory instead of memory allocation. */
+> +	if (xas.xa_alloc)
+> +		xas_nomem(&xas, gfp);
+> +	xas_unlock_irqrestore(&xas, flags);
+>  	kfree(table);
+>  
+> +	return xas_error(&xas);
+>  }
 
-Okay, that's fine. It just sounded like the conversion of other drivers
-outside drivers/hwmon was being dropped.
+This is really unidiomatic.  And so much more complicated than it needs
+to be.
 
-Note that there's another "sanitisation" of hwmon names in
-drivers/net/phy/marvell.c - that converts any non-alnum character to
-an underscore. Not sure why the different approach was chosen there.
+	while (i--) {
+		do {
+			int index = READ_ONCE(table[i].memcg->kmemcg_id);
+			struct list_lru_per_memcg *mlru = table[i].mlru;
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+			xas_set(&xas, index);
+			xas_lock_irqsave(&xas, flags);
+			if (index < 0 || xas_load(&xas))
+				xas_set_err(&xas, -EBUSY);
+			xas_store(&xas, mlru);
+			if (!xas_error(&xas))
+				break;
+			xas_unlock_irqrestore(&xas, flags);
+		} while (xas_nomem(&xas, gfp));
+
+		if (xas_error(&xas))
+			kfree(mlru);
+	}
+
+	kfree(table);
+	return xas_error(&xas);
+
+(you might want to mask out the EBUSY error here)
+

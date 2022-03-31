@@ -2,63 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AF44ED59A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090054ED5AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiCaI34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
+        id S232888AbiCaIey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiCaI3y (ORCPT
+        with ESMTP id S231303AbiCaIew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:29:54 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5DA1C9B6A;
-        Thu, 31 Mar 2022 01:28:07 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id DC76222246;
-        Thu, 31 Mar 2022 10:28:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648715285;
+        Thu, 31 Mar 2022 04:34:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CA8C265E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648715584;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xLBmDR105PDmmrWw4p/m3U41pcGdvFhEUw0TeW5bDNE=;
-        b=W1xRlWIqee+MF+MuWb7M1g0mk/kRz4fGc0y59p8rQAEjNFvMXG24hkNHs9nd7/thGGp02q
-        e7RPyvg19Ua1iSeEUneD7nDWwOvFOH4a3pDe5CTnCRxGiUkmvdQdlzkKoJGvomw2HrnpNY
-        mdFwr11MrtNYI0MXUTJ8xXn0t8DOAxw=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 31 Mar 2022 10:28:04 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
+        bh=yWnBV75IVBvHsDRdv1eIvwYgM5PPl5byFU3eX43vCM0=;
+        b=dKpxAF/TYVoCPAVfA7PhOwgEfpDOnpWMQBEiZshiIV068JFsIdztDtXX0DghpOn0rBs+EQ
+        PrEdYn9Xzt85I+DUFR+3usY/Wzh0iuX9s/XDsY+N9zn34TFal1YrZUxAO5Rf3XwOb8I2Q0
+        LIl4EVBXIXMssAcMcFkIQtT4q0Ks/Z8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-zgRe40l3OdqqfHx5_b0hXA-1; Thu, 31 Mar 2022 04:28:16 -0400
+X-MC-Unique: zgRe40l3OdqqfHx5_b0hXA-1
+Received: by mail-ed1-f72.google.com with SMTP id u17-20020a05640207d100b00418f00014f8so9262984edy.18
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:28:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yWnBV75IVBvHsDRdv1eIvwYgM5PPl5byFU3eX43vCM0=;
+        b=qSFvg+wbjYa14wCxJUhlKh85YQKmECXEv1KLnYLQS6fhYT3lwIpaiZ9CWl4PDIUN6Q
+         wVR9OFpM62YySX5XUMVijvN9BrRw/zBT2uqkEuyGo3CO/OijvJ7StO5SmwlPlrtRlv1u
+         DEIopdzp+z0+wU5IiFOFOA5Y3O4EN+9l/PWZ/u92umraiylfwECNw0L9mXirIMPv2fUG
+         dPL7991s5doWYeQDZ0NDKIkvtwplwB8TsXB7S5RXXn4KjzCuN/rlqXP01h/YxcEq/Zej
+         jLZI3TSFOEwe8sE/Uw6gMNUwhQWfBzCMQTAJSLO3zuJoSU/caieUwWVdGpLpVc4ZK7cZ
+         bQlQ==
+X-Gm-Message-State: AOAM530T90Up/XvwvYh8OwJ2iPeXMeKixdCN7wEDIsbpDXR/0iXmc1nw
+        Fw7D2kd9AFbQCrSmNACyRyHdwArnno1a4GzstwUHpTb908hZKRcLXN1WD96hiJqN/unBJbTtv5V
+        NJuwLKel788YggM3jmq4HhbHO
+X-Received: by 2002:a17:907:6e04:b0:6e0:736b:d786 with SMTP id sd4-20020a1709076e0400b006e0736bd786mr3896927ejc.667.1648715295232;
+        Thu, 31 Mar 2022 01:28:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwaCi4x7tompAGyNTLCxoxrJWXg1Zwm7R8yDmM3eFPIPwcZfzA65avpZMuaetGN0CCUHQ+R0w==
+X-Received: by 2002:a17:907:6e04:b0:6e0:736b:d786 with SMTP id sd4-20020a1709076e0400b006e0736bd786mr3896908ejc.667.1648715294991;
+        Thu, 31 Mar 2022 01:28:14 -0700 (PDT)
+Received: from [10.39.192.162] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id s24-20020a1709066c9800b006e490a8cf71sm1421208ejr.4.2022.03.31.01.28.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 31 Mar 2022 01:28:14 -0700 (PDT)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     =?utf-8?q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
+Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 2/5] net: phy: support indirect c45 access in
- get_phy_c45_ids()
-In-Reply-To: <YkSC7CJ4OEFH69yU@shell.armlinux.org.uk>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-3-michael@walle.cc> <Yjt3hHWt0mW6er8/@lunn.ch>
- <43227d27d938fad8a2441363d175106e@walle.cc>
- <YkSC7CJ4OEFH69yU@shell.armlinux.org.uk>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <ed65d0a2e49159a85fc47092d0df6bb6@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org,
+        Frode Nordahl <frode.nordahl@canonical.com>
+Subject: Re: [PATCH] openvswitch: Add recirc_id to recirc warning
+Date:   Thu, 31 Mar 2022 10:28:13 +0200
+X-Mailer: MailMate (1.14r5882)
+Message-ID: <1D0EA638-3067-4F74-8E94-3D766D262B39@redhat.com>
+In-Reply-To: <20220330194244.3476544-1-stgraber@ubuntu.com>
+References: <20220330194244.3476544-1-stgraber@ubuntu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,78 +83,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-30 18:18, schrieb Russell King (Oracle):
-> On Wed, Mar 23, 2022 at 11:14:11PM +0100, Michael Walle wrote:
->> I actually had that. But mmd_phy_indirect() doesn't check
->> the return code and neither does the __phy_write_mmd() it
->> actually deliberatly sets "ret = 0". So I wasn't sure. If you
->> are fine with a changed code flow in the error case, then sure.
->> I.e. mmd_phy_indirect() always (try to) do three accesses; with
->> error checks it might end after the first. If you are fine
->> with the error checks, should __phy_write_mmd() also check the
->> last mdiobus_write()?
-> 
-> The reason for that goes back to
-> commit a59a4d1921664da63d801ba477950114c71c88c9
->     phy: add the EEE support and the way to access to the MMD 
-> registers.
-> 
-> and to maintain compatibility with that; if we start checking for
-> errors now, we might trigger a kernel regression sadly.
 
-I see that this is the commit which introduced the mmd_phy_indirect()
-function, but I don't see why there is no return code checking.
-Unlike now, there is a check for the last read (the one who
-reads MII_MMD_DATA). That read which might return garbage if any
-write has failed before - or if the bus is completely dead,
-return an error. Current code will just return 0.
 
-In any case, I don't have a strong opinion here. I just don't
-see how that function could be reused while adding error checks
-and without making it ugly, so I've just duplicated it.
+On 30 Mar 2022, at 21:42, St=C3=A9phane Graber wrote:
 
-Maybe something like this:
+> When hitting the recirculation limit, the kernel would currently log
+> something like this:
+>
+> [   58.586597] openvswitch: ovs-system: deferred action limit reached, =
+drop recirc action
+>
+> Which isn't all that useful to debug as we only have the interface name=
 
-static int __phy_mmd_indirect_common(struct mii_bus *bus, int prtad,
-                                      int devad, int addr,
-                                      bool check_rc)
-{
-         int ret;
+> to go on but can't track it down to a specific flow.
+>
+> With this change, we now instead get:
+>
+> [   58.586597] openvswitch: ovs-system: deferred action limit reached, =
+drop recirc action (recirc_id=3D0x9e)
+>
+> Which can now be correlated with the flow entries from OVS.
+>
+> Suggested-by: Frode Nordahl <frode.nordahl@canonical.com>
+> Signed-off-by: St=C3=A9phane Graber <stgraber@ubuntu.com>
+> Tested-by: Stephane Graber <stgraber@ubuntu.com>
+> ---
 
-         /* Write the desired MMD Devad */
-         ret = __mdiobus_write(bus, phy_addr, MII_MMD_CTRL, devad);
-         if (check_rc && ret)
-                 return ret;
+This change looks good to me, and it makes debugging easier.
 
-         /* Write the desired MMD register address */
-         ret = __mdiobus_write(bus, phy_addr, MII_MMD_DATA, regnum);
-         if (check_rc && ret)
-                 return ret;
+Acked-by: Eelco Chaudron <echaudro@redhat.com>
 
-         /* Select the Function : DATA with no post increment */
-         ret = __mdiobus_write(bus, phy_addr, MII_MMD_CTRL,
-                               devad | MII_MMD_CTRL_NOINCR);
-         if (check_rc && ret)
-                 return ret;
+>  net/openvswitch/actions.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+> index 780d9e2246f3..7056cb1b8ba0 100644
+> --- a/net/openvswitch/actions.c
+> +++ b/net/openvswitch/actions.c
+> @@ -1539,8 +1539,8 @@ static int clone_execute(struct datapath *dp, str=
+uct sk_buff *skb,
+>  				pr_warn("%s: deferred action limit reached, drop sample action\n",=
 
-         return 0;
-}
+>  					ovs_dp_name(dp));
+>  			} else {  /* Recirc action */
+> -				pr_warn("%s: deferred action limit reached, drop recirc action\n",=
 
-int __phy_mmd_indirect(struct mii_bus *bus, int prtad,
-                        int devad, int addr)
-{
-         return __phy_mmd_indirect_common(bus, prtad, devad,
-                                          addr, true);
-}
+> -					ovs_dp_name(dp));
+> +				pr_warn("%s: deferred action limit reached, drop recirc action (re=
+circ_id=3D%#x)\n",
+> +					ovs_dp_name(dp), recirc_id);
+>  			}
+>  		}
+>  	}
+> -- =
 
-/* some function doc about deliberatly no error checking.. */
-void __phy_mmd_indirect_legacy(struct mii_bus *bus, int prtad,
-                                int devad, int addr)
-{
-         __phy_mmd_indirect_common(bus, prtad, devad,
-                                   addr, false);
-}
+> 2.34.1
 
-should the last two functions be static inline?
-
--michael

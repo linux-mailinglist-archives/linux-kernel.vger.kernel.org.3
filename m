@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38C94ED744
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F3B4ED747
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiCaJv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S234307AbiCaJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiCaJv1 (ORCPT
+        with ESMTP id S234292AbiCaJv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:51:27 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5F6201692
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:49:40 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id z8so24713231oix.3
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:49:40 -0700 (PDT)
+        Thu, 31 Mar 2022 05:51:29 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB02200370;
+        Thu, 31 Mar 2022 02:49:42 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id cm17so3569378pjb.2;
+        Thu, 31 Mar 2022 02:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tky9nCrv81M6G9Z2TVrn5hOhzmobZGWqlkFMKY0mDOw=;
-        b=AG7DBUa08iP0woyYFdUxmbVMIORrfhtAkW7JN06b8er7H4a1ZY3DSttHZp6UuNPbkC
-         qeMpUs/Z2a958YZZW0D/7Rb1UHj7xdZ1XyHI4pewEyWJW2l6zZmDJ6QaMhK5EhCWhk4m
-         W3bzSJJ40soARswxFyL8ZTcQK8JUSq2wScAO4+CGrK/q+VTdbwvTg7B1LgY64ndp5zde
-         eYV4nK9ukPGYbAL6DF//oY0jOB7g1ANKibEFmJbs0D9AGiaWD5LdFcZH8HEsYchsEkPe
-         P7skTdYunRIMoKcnTtR7hNQUMw/V+jf91cl7ezRfFYGpMW5VgQZYnhF1wIYFvi4GX+KP
-         Zfwg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hOW8z8DeUWQcKkytwxGZaY19zSaaGqWYqnEYzq0375k=;
+        b=FiTRgfd09+EKB/9xeLe2RuTU8NrMVLm5dJeDr8BpiqpI8cWTMOJwndq8rDwpt/BiFP
+         1xrX8gCARGKZK1Dd+DXA+qddw0OAqY68xsudL85mrYIz1T0wA3c1l9bONZqpymtgQcXU
+         3lc0/FxzE1Utd1TCSqxx+yYlYNh0ha4P3KJrwKpdWuaEV5TPxtT8dW7A7QLQb5ThuUxz
+         dzvozYUc4ysZtP1TWoWaH0o7V3M/ubf8N8SMPUk3Cfz5Wx+woi9VXvh7oGqwlaskFQG4
+         zOpibnPw9zWH+V5v7j3AciMsYgJ+5Rbp3mHmKd13J5XgYK0YY2y2lRnVX4BMz6wV+ga+
+         Xgbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tky9nCrv81M6G9Z2TVrn5hOhzmobZGWqlkFMKY0mDOw=;
-        b=0z7NSzRVFwqDISVt+LWp2AWB7d/mbA2aq2aetGJOunGI1HYE84szzAgSF4M/qupy88
-         EyjSvjZEQgIvfJ7xlKI+PWk5Q/3FdjdA1cKXd0muwHNnSR89Nur2N7njNC+24xnFVM5l
-         /2ZCmcHHxAxSVcafkpx0TPbsIYKhMrPvyOeCNZSx2EInQXnBI0GVP0vNl8ZCQjeLxCs+
-         Wbznnp8Cdcwi8WQCscy7+CD55czJIab69emcn/pLyzlJEWz+RtmuieY12+2kUyXrSFwK
-         mkIxPA+WOgOZ7nGcZDRAM7Qnf/NU467qKvfDoM9QXIAGWUJ09TknAcqag422DTmLhYED
-         JbZw==
-X-Gm-Message-State: AOAM530oqxvAOkmEMWqRwEvUx6TCEyOcIPVZDAiBfIYbaVfJY/txC8+/
-        kpLJYEtGC0AjctXtFxy98BodIv2cv55aoorW14A=
-X-Google-Smtp-Source: ABdhPJwZjuzJyRuaqnhd3zKRy3O7110Yi1h28qdzRzl2L4b03KiYmch1UHPuMdTiypa03sFsx4XE1QJcpln5bw5CAs0=
-X-Received: by 2002:a05:6808:1709:b0:2f9:30ec:c95b with SMTP id
- bc9-20020a056808170900b002f930ecc95bmr2132102oib.240.1648720180328; Thu, 31
- Mar 2022 02:49:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hOW8z8DeUWQcKkytwxGZaY19zSaaGqWYqnEYzq0375k=;
+        b=u4et6tg80BwvrdBAiXbBwomZh3TFWoEJIc/700guKQ4T/582YXHYo+OcEDc14d2H8g
+         Tdvsz49+O56UBwTBImy/DRPkP38Bqhh3ULui8LwjvjV+2nqgE2KuM0NpamcktpLBJO+A
+         81wbYmj287Jm28OKVWYOpeDGAtfIJatFvphMCZ89ladjn+nnP7kw+QYOr/RonVUsAgJB
+         R7bU6swn1lkyC1tXZzGUqTFRMCerAsJExGtDL0i4gbcas8dsLlIo3LlyoifrXONHxq3U
+         mdyoIFvx5fPuYs0rxI7/vrJlZxoticK7xY29/Q/oOlH3U97hPoZbY5Gf7uuf/n1Qidct
+         qnwg==
+X-Gm-Message-State: AOAM532YFZfCC3+KL4oPg1fk+Rkq0N7kEVRv2PPV1Ymu3n8/sLsSAyJE
+        0aEE5JGES3Lfr5BM0RA3pHw=
+X-Google-Smtp-Source: ABdhPJy/r0hXSVvcWFxyAwE9S945j4x7CaM2K3Ihok3GWKo2XIlI1/U/7Cu6072LoEKaSSh24sVz0A==
+X-Received: by 2002:a17:903:40c4:b0:154:c9ef:609f with SMTP id t4-20020a17090340c400b00154c9ef609fmr4282063pld.30.1648720182164;
+        Thu, 31 Mar 2022 02:49:42 -0700 (PDT)
+Received: from localhost ([122.179.46.149])
+        by smtp.gmail.com with ESMTPSA id bh3-20020a056a02020300b00378b62df320sm21532510pgb.73.2022.03.31.02.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 02:49:41 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 15:19:38 +0530
+From:   Ritesh Harjani <ritesh.list@gmail.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        fstests <fstests@vger.kernel.org>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 3/4] generic/676: Add a new shutdown recovery test
+Message-ID: <20220331094938.vcvrehdm2azoiy75@riteshh-domain>
+References: <cover.1647342932.git.riteshh@linux.ibm.com>
+ <3d8c4f7374e97ccee285474efd04b093afe3ee16.1647342932.git.riteshh@linux.ibm.com>
+ <20220315165514.GC8200@magnolia>
+ <20220329113227.ig3cmfwzs7y6oywj@riteshh-domain>
 MIME-Version: 1.0
-References: <20220330110715.GA1534@raspberrypi> <YkVT3z4ksYStau85@shell.armlinux.org.uk>
-In-Reply-To: <YkVT3z4ksYStau85@shell.armlinux.org.uk>
-From:   Austin Kim <austindh.kim@gmail.com>
-Date:   Thu, 31 Mar 2022 18:49:29 +0900
-Message-ID: <CADLLry4EKn+EqqaM64Hi0ooPJotMX8HekLafsgEjSxSPvOK2wQ@mail.gmail.com>
-Subject: Re: [PATCH] arm: kdump: add invalid value check for 'crashkernel='
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?6rmA64+Z7ZiE?= <austin.kim@lge.com>,
-        Paran Lee <p4ranlee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329113227.ig3cmfwzs7y6oywj@riteshh-domain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,32 +74,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=EB=85=84 3=EC=9B=94 31=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 4:10, R=
-ussell King (Oracle) <linux@armlinux.org.uk>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=
-=84=B1:
->
-> On Wed, Mar 30, 2022 at 12:07:15PM +0100, Austin Kim wrote:
-> > From: Austin Kim <austin.kim@lge.com>
+On 22/03/29 05:02PM, Ritesh Harjani wrote:
+> On 22/03/15 09:55AM, Darrick J. Wong wrote:
+> > On Tue, Mar 15, 2022 at 07:58:58PM +0530, Ritesh Harjani wrote:
+> > > In certain cases (it is noted with ext4 fast_commit feature) that, replay phase
+> > > may not delete the right range of blocks (after sudden FS shutdown)
+> > > due to some operations which depends on inode->i_size (which during replay of
+> > > an inode with fast_commit could be 0 for sometime).
+> > > This fstest is added to test for such scenarios for all generic fs.
+> > >
+> > > This test case is based on the test case shared via Xin Yin.
+> > >
+> > > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> > > ---
+> > >  tests/generic/676     | 72 +++++++++++++++++++++++++++++++++++++++++++
+> > >  tests/generic/676.out |  7 +++++
+> > >  2 files changed, 79 insertions(+)
+> > >  create mode 100755 tests/generic/676
+> > >  create mode 100644 tests/generic/676.out
+> > >
+> > > diff --git a/tests/generic/676 b/tests/generic/676
+> > > new file mode 100755
+> > > index 00000000..315edcdf
+> > > --- /dev/null
+> > > +++ b/tests/generic/676
+> > > @@ -0,0 +1,72 @@
+> > > +#! /bin/bash
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +# Copyright (c) 2022 IBM Corporation.  All Rights Reserved.
+> > > +#
+> > > +# FS QA Test 676
+> > > +#
+> > > +# This test with ext4 fast_commit feature w/o below patch missed to delete the right
+> > > +# range during replay phase, since it depends upon inode->i_size (which might not be
+> > > +# stable during replay phase, at least for ext4).
+> > > +# 0b5b5a62b945a141: ext4: use ext4_ext_remove_space() for fast commit replay delete range
+> > > +# (Based on test case shared by Xin Yin <yinxin.x@bytedance.com>)
+> > > +#
+> > > +
+> > > +. ./common/preamble
+> > > +_begin_fstest auto shutdown quick log recoveryloop
 > >
-> > Add invalid value check expression when no crashkernel=3D or invalid va=
-lue
-> > specified using kdump.
+> > This isn't a looping recovery test.  Maybe we should create a 'recovery'
+> > group for tests that only run once?  I think we already have a few
+> > fstests like that.
 >
-> Hi,
+> I gave it a thought, but I feel it might be unncessary.
+> From a developer/tester perspective who wanted to test anything related to
+> recovery would then have to use both recovery and recoveryloop.
+> Thoughts?
 >
-> I think you mean when "crashkernel=3D0" is specified, as other invalid
-> input should result in -EINVAL being returned. Please update the
-> patch description and comment.
+> >
+> > > +
+> > > +# Override the default cleanup function.
+> > > +_cleanup()
+> > > +{
+> > > +	cd /
+> > > +	rm -r -f $tmp.*
+> > > +   _scratch_unmount > /dev/null 2>&1
+> >
+> > I think the test harness does this for you already, right?
 
-Thanks for feedback.
-Let me resend the patch with updated commit description and comment soon.
+Ok, I agree with this. I will remove _scratch_unmount operation
+from these two new tests in v3.
 
-BR,
-Austin Kim
-
->
-> Thanks.
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+-ritesh

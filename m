@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A934ED1BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F414ED1C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiCaCa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 22:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S233374AbiCaCcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 22:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiCaCaX (ORCPT
+        with ESMTP id S231416AbiCaCbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 22:30:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A6D13DFC;
-        Wed, 30 Mar 2022 19:28:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31C7BB81E87;
-        Thu, 31 Mar 2022 02:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7637EC340F0;
-        Thu, 31 Mar 2022 02:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1648693709;
-        bh=+adBEntIzSSCVYqEhFC0POeZQwSN/e4WeFGSC39cYN0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EcssqheLZ56lijPSSHBApcxEaeL+Lmoj5IBhJoTd7QNYuZPZuSuA/3LYmjVFeQhb0
-         J1syqwcskBuQ0fhmx0C2KAj1OIE8NRR1bBLk599P3q83/j0nJjxapeSy7J2GGPgTPE
-         dJUkmRKtvEOQS/V13ifwMGLP5tMhovnjLpD7laGY=
-Date:   Wed, 30 Mar 2022 19:28:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v6 1/4] mm: hugetlb_vmemmap: introduce
- STRUCT_PAGE_SIZE_IS_POWER_OF_2
-Message-Id: <20220330192827.4b95e3d7fb149ef9cc687ccb@linux-foundation.org>
-In-Reply-To: <20220330153745.20465-2-songmuchun@bytedance.com>
-References: <20220330153745.20465-1-songmuchun@bytedance.com>
-        <20220330153745.20465-2-songmuchun@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 22:31:45 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC2C6E29B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:29:51 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id j21so20374391qta.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uCWcJ4R53iwqidepmXY3wpACCW/AmRMIeNF6xjQGeOc=;
+        b=Kef/8KS7z7TqgVET6ARBolzBVFvYI9j8CYJKfo7hSwognblw01F957Vyoi/Qu2a/zr
+         2bnOudujMy/m9msYwRI54CrWcpf2+/u+6Z9ogxi1U9Msj7G+ULqg+H7pSz2sm+Jn7g1c
+         eMWyCaUXsJMQ16qvtwCeobpsmxB87MwrgDVlo7JhFQSkfjxusXvna+syq/URPsoOXnqK
+         iGTrSApRlf38l6Wvsa1L/DeyQrBK60l5Vkb+epgEZHGhSRh6hZ78GNNdHwhZsHShao08
+         Na1GB+90HU4At/eixwr1JEIN8rw1NR80xtpMzE5SU6v/fTOjAnv7JPDV38VbpRmTZvEc
+         g0BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uCWcJ4R53iwqidepmXY3wpACCW/AmRMIeNF6xjQGeOc=;
+        b=a1Abwv5SrBJ/CIB0LNpPh736l3BoFbi35WnOICUGDAnaDwGZjHRWzHOqXE+FhyPgHq
+         UVPLmZJar5R3OEzjFxI8UIDW2UYIKhVzEvEjiZs0s0H1k8Z+FEa6KLUUOSs+V4buEOjI
+         sN0Mpop/LSxjb4pd3dyXJbC8sslo8m2NeX33rDwV7VOVe9b1HwwEDJ39ofFxFNt9Kt3E
+         bcOAl4opl0i+FEEihElENdiBEPoPCTMhL/jB/tmibcz+jL+qESK8omkRDWsmHu/o8eAi
+         b0mZw/R7b9kbZtrod1eAfdSd/ksWMjywwxJSdLl0tMMjK1x/vkSP9E3Il1SbusBuFSYa
+         5HFg==
+X-Gm-Message-State: AOAM530ngx3YL2MXMpfj3ItCIn4J43eOtwgW/XrJjRyU1pvrYeegPL1b
+        kG75M7UIwGJG56Ifw3vbbpU=
+X-Google-Smtp-Source: ABdhPJymzCnCSVWIx2jcD0yYYFyYFw0CC9dzDd5JBMgmbFlFaNM+vfgQLY5Lf3/vps8hdUVWS8t1FQ==
+X-Received: by 2002:a05:622a:178a:b0:2e1:e7b8:e52e with SMTP id s10-20020a05622a178a00b002e1e7b8e52emr2438304qtk.464.1648693790893;
+        Wed, 30 Mar 2022 19:29:50 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r64-20020a37a843000000b0067b0cf40b18sm12062931qke.69.2022.03.30.19.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 19:29:50 -0700 (PDT)
+Message-ID: <6245121e.1c69fb81.ea0ab.0c2e@mx.google.com>
+X-Google-Original-Message-ID: <20220331022947.GB2390008@cgel.zte@gmail.com>
+Date:   Thu, 31 Mar 2022 02:29:47 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        eparis@redhat.com, linux-audit@redhat.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, guo.xiaofeng@zte.com.cn,
+        huang.junhua@zte.com.cn, dai.shixin@zte.com.cn
+Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
+References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
+ <202203270449.WBYQF9X3-lkp@intel.com>
+ <62426553.1c69fb81.bb808.345c@mx.google.com>
+ <CAHC9VhRNuoPH6AySUbe6h2D6kghhezyVQtTAvm-t-fTpXH6XwQ@mail.gmail.com>
+ <62427b5c.1c69fb81.fc2a7.d1af@mx.google.com>
+ <CAHC9VhTLTQmHaka9tTyuu=rQOzpsn_K2NxfJ==7-6FSY3KnuFg@mail.gmail.com>
+ <6243f1d7.1c69fb81.b19c7.7ec1@mx.google.com>
+ <CAHC9VhTxACMG=V_J1OYy_7VjM3LjuNJcwJSf6om1eO8esCDAbg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhTxACMG=V_J1OYy_7VjM3LjuNJcwJSf6om1eO8esCDAbg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 23:37:42 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
-
-> If the size of "struct page" is not the power of two and this
-> feature is enabled,
-
-What is "this feature"?   Let's spell it out?
-
-> then the vmemmap pages of HugeTLB will be
-> corrupted after remapping (panic is about to happen in theory).
-> But this only exists when !CONFIG_MEMCG && !CONFIG_SLUB on
-> x86_64.  However, it is not a conventional configuration nowadays.
-> So it is not a real word issue, just the result of a code review.
-> But we have to prevent anyone from configuring that combined
-> configuration.  In order to avoid many checks like "is_power_of_2
-> (sizeof(struct page))" through mm/hugetlb_vmemmap.c.  Introduce
-> STRUCT_PAGE_SIZE_IS_POWER_OF_2 to detect if the size of struct
-> page is power of 2 and make this feature depends on this new
-> macro.  Then we could prevent anyone do any unexpected
-> configuration.
+On Wed, Mar 30, 2022 at 10:48:12AM -0400, Paul Moore wrote:
+> On Wed, Mar 30, 2022 at 1:59 AM CGEL <cgel.zte@gmail.com> wrote:
+> > On Tue, Mar 29, 2022 at 09:11:19AM -0400, Paul Moore wrote:
+> > > On Mon, Mar 28, 2022 at 11:22 PM CGEL <cgel.zte@gmail.com> wrote:
+> > > > On Mon, Mar 28, 2022 at 11:06:12PM -0400, Paul Moore wrote:
+> > > > > On Mon, Mar 28, 2022 at 9:48 PM CGEL <cgel.zte@gmail.com> wrote:
+> > > > > > Sorry could anybody give a hand to solve this? It works well on x86_64 and arm64.
+> > > > > > I have no alpha environment and not familiar to this arch, much thanks!
+> > > > >
+> > > > > Regardless of if this is fixed, I'm not convinced this is something we
+> > > > > want to merge.  After all, a process executed a syscall and we should
+> > > > > process it like any other; just because it happens to be an
+> > > > > unrecognized syscall on a particular kernel build doesn't mean it
+> > > > > isn't security relevant (probing for specific syscall numbers may be a
+> > > > > useful attack fingerprint).
+> > > >
+> > > > Thanks for your reply.
+> > > >
+> > > > But syscall number less than 0 is even invalid for auditctl. So we
+> > > > will never hit this kind of audit rule. And invalid syscall number
+> > > > will always cause failure early in syscall handle.
+> > > >
+> > > > sh-4.2# auditctl -a always,exit -F arch=b64 -S -1
+> > > > Syscall name unknown: -1
+> > >
+> > > You can add an audit filter without explicitly specifying a syscall:
+> > >
+> > > % auditctl -a exit,always -F auid=1000
+> > > % auditctl -l
+> > > -a always,exit -S all -F auid=1000
+> > >
+> > I have tried this, and execute program which call syscall number is -1,
+> > audit still didn't record it. It supports that there's no need for audit
+> > to handle syscall number less than 0.
+> >
+> > sh-4.2# auditctl -a exit,always
+> > sh-4.2# auditctl -l
+> > -a always,exit -S all
 > 
-> ...
+> If audit is not generating SYSCALL records, even for invalid/ENOSYS
+> syscalls, I would consider that a bug which should be fixed.
 >
-> --- /dev/null
-> +++ b/mm/struct_page_size.c
-> @@ -0,0 +1,20 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Generate definitions needed by the preprocessor.
-> + * This code generates raw asm output which is post-processed
-> + * to extract and format the required data.
-> + */
-> +
-> +#define __GENERATING_STRUCT_PAGE_SIZE_IS_POWER_OF_2_H
-> +/* Include headers that define the enum constants of interest */
-> +#include <linux/mm_types.h>
-> +#include <linux/kbuild.h>
-> +#include <linux/log2.h>
-> +
-> +int main(void)
-> +{
-> +	if (is_power_of_2(sizeof(struct page)))
-> +		DEFINE(STRUCT_PAGE_SIZE_IS_POWER_OF_2, is_power_of_2(sizeof(struct page)));
-
-Why not
-
-	DEFINE(STRUCT_PAGE_SIZE_IS_POWER_OF_2, 1);
-
-?
-
-> +	return 0;
-> +}
+If we fix this bug, do you think audit invalid/ENOSYS syscalls better
+be forcible or be a rule that can be configure? I think configure is 
+better.
 > -- 
-> 2.11.0
+> paul-moore.com

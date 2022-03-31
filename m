@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987264ED648
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712A04ED649
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiCaI4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S233401AbiCaI4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiCaI4P (ORCPT
+        with ESMTP id S233366AbiCaI4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:56:15 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF04CFB99
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:54:25 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2eafabbc80aso30728017b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xn8azzFhzPhyLx+cU3W3Fc2v8I4Cjd0IkMQ9uqr47o8=;
-        b=5vtJ2thFavd9cLivjIt3UYcmVVHdyG8sUhR6t4y9k09OG/HquF9FJUQEWh12OMpeCd
-         8QZWJP2cIWOpXHZVjwUAWn3b+rZNye1bM3f3hsfjxx/HwsdrZEk7ZSFeSHZPBsFYiPBF
-         V5q91UAat/yBLYIr5qLMFKO7RrzV1PcOW57tDQS7GangAFjkcqnqv3RXl6Z1Hcxw1R0g
-         SXpZDRNAaIRvtNg4RFoA7lbpVwLoZjZmkZg36nea/VMZa4MytSYGtolbRSukFadOMslq
-         WtyF+R19LohMwn2b4IPdNNojqBiELaXz8cfmxjhUfkUVgHkZEztwtTjiYdQ3rxOGEDi8
-         ctNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xn8azzFhzPhyLx+cU3W3Fc2v8I4Cjd0IkMQ9uqr47o8=;
-        b=Df7QaWXlHH2A+O1OpUyB9nHcnuYq5n/GOuyvda/99dV37/ocqknh9bX2IUHX/FzNMi
-         06mAYJFl9SuKZfldKf7xFy/9R1kjOOqI2mtyb++2quQbmUWQam4w2dFZjfdqosWtQ1+c
-         besMUisX9HKAO2lpWg4FGhdScO05mwLiL/1ENyxLsG5Ii4CBBJrUs/kjrbJbNGwKBF+F
-         lBhzP1Y2wkoHBCtzfMsLWVcNV77ruj/3Rum7m5fjwAH2QDv5Qb6353PLfNwvAr/gFWNJ
-         9FlfiELzk35Vp7gJ9Fzi/0N3ijGkbx8CFltH9Xhu6YOspPiWh4c9JH9NbTf+RcFvt5XL
-         lLhw==
-X-Gm-Message-State: AOAM530r7YS33waDCQYl7PQ3M782pa+Fh+Pi9jDTy5ZQ221YAujcGuQq
-        MRG0F7JYAgbGGMF+CXLJ2C1zG689QzRRL1cdimkMVA==
-X-Google-Smtp-Source: ABdhPJxw6+paO/ULlF+r7RmJCKQmMCdHrJH4j9IS297GY/P3ppySDM2E+Tmp5keTQENtNboxL9+OZGX99Bm3WL+EJSk=
-X-Received: by 2002:a81:1c4f:0:b0:2e5:9db3:7a8e with SMTP id
- c76-20020a811c4f000000b002e59db37a8emr3679214ywc.319.1648716864751; Thu, 31
- Mar 2022 01:54:24 -0700 (PDT)
+        Thu, 31 Mar 2022 04:56:37 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C292BEA345
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648716890; x=1680252890;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OVNRGTw7z8Qgh8ouyJiKkdQjQBRujL1UwH+DPrssMMY=;
+  b=JCltQ6jY/6lAJMeNSRK3E5s2snxLS7jzlFbiJC7lF+VuPze4gNienwJo
+   6cfokwM87CSxj0eu0aSXbmgo+tI/p+xCBCwNeAGVyuIpphItD87Ey6wtl
+   ylpUKlH7+gzWRPLC2gYNQre/Veazmzmt4UuQClGOchyD7xz4zWuVQ7uXi
+   /3PKEQVWinpAd1bO218BXezuC+RBnbwlvpNVCveehxpDloKhh/6A5tBby
+   P3vwy5IatMHSs4YsQ1t+S8bTv28K70WyTUEtbRbfTRcpUEwiLMXqS+L8O
+   X2c0bIpPEqpGjX1t7vVoyc8/v0Ba+L7v/XIVYS3L0iBYEdM4p+0KJj4SA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="284682348"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="284682348"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 01:54:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="522253672"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 31 Mar 2022 01:54:49 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZqZs-00006e-Mi;
+        Thu, 31 Mar 2022 08:54:48 +0000
+Date:   Thu, 31 Mar 2022 16:54:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:vfio_v5.18 16/25]
+ drivers/vfio/pci/vfio_pci_zdev.c:112:5: warning: no previous prototype for
+ 'vfio_pci_info_zdev_add_caps'
+Message-ID: <202203311635.aqHHbSIK-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220331065640.5777-1-songmuchun@bytedance.com>
- <6c774e27-26d2-6c45-65f9-8a5b8acd6433@redhat.com> <CAMZfGtV6=n60f2cEWWtFk8Ci1c_JzeNJCmzAs2X6EHZkaXfP6Q@mail.gmail.com>
- <445c5426-cfb6-0232-6ea5-41cf8aaa264e@redhat.com>
-In-Reply-To: <445c5426-cfb6-0232-6ea5-41cf8aaa264e@redhat.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 31 Mar 2022 16:53:48 +0800
-Message-ID: <CAMZfGtVsSJWT6Fojr5FcN26=MPnjp79usQXF+xRGXHLUvwYU_Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] mm: hugetlb_vmemmap: introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
-        Barry Song <21cnbao@gmail.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,73 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 4:51 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 31.03.22 10:48, Muchun Song wrote:
-> > On Thu, Mar 31, 2022 at 4:42 PM David Hildenbrand <david@redhat.com> wrote:
-> >>
-> >> On 31.03.22 08:56, Muchun Song wrote:
-> >>> The feature of minimizing overhead of struct page associated with each
-> >>> HugeTLB page is implemented on x86_64, however, the infrastructure of
-> >>> this feature is already there, we could easily enable it for other
-> >>> architectures.  Introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP for other
-> >>> architectures to be easily enabled.  Just select this config if they
-> >>> want to enable this feature.
-> >>>
-> >>> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> >>> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> >>> ---
-> >>>  arch/x86/Kconfig |  1 +
-> >>>  fs/Kconfig       | 10 +++++++++-
-> >>>  2 files changed, 10 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> >>> index 9f5bd41bf660..e69d42528542 100644
-> >>> --- a/arch/x86/Kconfig
-> >>> +++ b/arch/x86/Kconfig
-> >>> @@ -119,6 +119,7 @@ config X86
-> >>>       select ARCH_WANTS_DYNAMIC_TASK_STRUCT
-> >>>       select ARCH_WANTS_NO_INSTR
-> >>>       select ARCH_WANT_HUGE_PMD_SHARE
-> >>> +     select ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP      if X86_64
-> >>>       select ARCH_WANT_LD_ORPHAN_WARN
-> >>>       select ARCH_WANTS_THP_SWAP              if X86_64
-> >>>       select ARCH_HAS_PARANOID_L1D_FLUSH
-> >>> diff --git a/fs/Kconfig b/fs/Kconfig
-> >>> index 6c7dc1387beb..f6db2af33738 100644
-> >>> --- a/fs/Kconfig
-> >>> +++ b/fs/Kconfig
-> >>> @@ -245,9 +245,17 @@ config HUGETLBFS
-> >>>  config HUGETLB_PAGE
-> >>>       def_bool HUGETLBFS
-> >>>
-> >>> +#
-> >>> +# Select this config option from the architecture Kconfig, if it is preferred
-> >>> +# to enable the feature of minimizing overhead of struct page associated with
-> >>> +# each HugeTLB page.
-> >>> +#
-> >>> +config ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-> >>> +     bool
-> >>> +
-> >>>  config HUGETLB_PAGE_FREE_VMEMMAP
-> >>>       def_bool HUGETLB_PAGE
-> >>> -     depends on X86_64
-> >>> +     depends on ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-> >>>       depends on SPARSEMEM_VMEMMAP
-> >>>
-> >>>  config HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON
-> >>
-> >>
-> >> I think something like "HUGETLB_OPTIMIZE_VMEMMAP" might be more
-> >> expressive, but that would imply renaming the existing config knob.
-> >>
-> >
-> > How about doing a full code cleanup in a separate series in the future?
-> >
->
-> Yeah.
->
+tree:   https://github.com/jgunthorpe/linux vfio_v5.18
+head:   2af6f07c2b38e8b37c41347ff9bd2b2e8b32a8d6
+commit: cbf96a0bc2aeb156e3bedee832c2c336953d8df2 [16/25] vfio/pci: Split linux/vfio_pci_core.h
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20220331/202203311635.aqHHbSIK-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jgunthorpe/linux/commit/cbf96a0bc2aeb156e3bedee832c2c336953d8df2
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe vfio_v5.18
+        git checkout cbf96a0bc2aeb156e3bedee832c2c336953d8df2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/vfio/pci/
 
-OK. Have Added it into my To-do list.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks.
+All warnings (new ones prefixed by >>):
+
+>> drivers/vfio/pci/vfio_pci_zdev.c:112:5: warning: no previous prototype for 'vfio_pci_info_zdev_add_caps' [-Wmissing-prototypes]
+     112 | int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/vfio_pci_info_zdev_add_caps +112 drivers/vfio/pci/vfio_pci_zdev.c
+
+e6b817d4b8217a9 Matthew Rosato 2020-10-07  108  
+e6b817d4b8217a9 Matthew Rosato 2020-10-07  109  /*
+e6b817d4b8217a9 Matthew Rosato 2020-10-07  110   * Add all supported capabilities to the VFIO_DEVICE_GET_INFO capability chain.
+e6b817d4b8217a9 Matthew Rosato 2020-10-07  111   */
+536475109c82841 Max Gurtovoy   2021-08-26 @112  int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+
+:::::: The code at line 112 was first introduced by commit
+:::::: 536475109c82841126ca341ef0f138e7298880c1 vfio/pci: Rename vfio_pci_device to vfio_pci_core_device
+
+:::::: TO: Max Gurtovoy <mgurtovoy@nvidia.com>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073594ED3FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07654ED405
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiCaGjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S231268AbiCaGkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiCaGjh (ORCPT
+        with ESMTP id S231249AbiCaGkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:39:37 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB1D103DBA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648708670; x=1680244670;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=MiCqQF7S4WcgWnmHfvAOH9kXcPnWEw2B7ho8mOJRjfk=;
-  b=CbKNgb4FQ7jhr2ALttF4srvb4xECe7l/IEDWaf0YlkQeO/APYCmPCtJN
-   cKHZOyyXBSoYerSRDioerEZJJHixR4Zvx1byWiZDMV9OSpOnvSvlPI1V2
-   s4rq5zdZgwQu9emZgKNYscARfez8XGv2E0VTsn10dO8cI7zmKyRqcWol+
-   CheoAuUDFptOAScVsnIz2sMArivV0Z+7UMIjnlOdpQlTulQOVqLi8S6ss
-   SHx+opNfIKvzPenWjcuyVs2417DlLG6UqEXmqaUrXzeY12r6LI6ROehf9
-   6Y7tYIQlTVp89NJMr3d9zD0+4ta0wBFP49A+VoxfpXvCz3tZYWjYqNs5b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="239661723"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="239661723"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 23:37:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="547182921"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 23:37:48 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] mm/vmscan: remove redundant folio_test_swapbacked
- check when folio is file lru
-References: <20220329132619.18689-1-linmiaohe@huawei.com>
-        <20220329132619.18689-2-linmiaohe@huawei.com>
-        <CAMZfGtUPQvgaxG_6A0n6HwD9VjqbQUbnF99Ei9WpMZbTbnz4zg@mail.gmail.com>
-Date:   Thu, 31 Mar 2022 14:37:46 +0800
-In-Reply-To: <CAMZfGtUPQvgaxG_6A0n6HwD9VjqbQUbnF99Ei9WpMZbTbnz4zg@mail.gmail.com>
-        (Muchun Song's message of "Wed, 30 Mar 2022 16:13:06 +0800")
-Message-ID: <87lewqbpad.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 31 Mar 2022 02:40:39 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87A65AA54
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648708732; x=1680244732;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=QQJ2ROIOSbzJewf4Krt9nKSZ4UnHk+PyHajNWHICcZE=;
+  b=yQB++TvydYV56pbQES9QklUg4wNyfSknkZBzYO3+vAsZQAuAFj81UOW+
+   hqccEWsEb8yuOQhvm1a+cbdT7eAfD+wSwg5B7saow/QL07wZRz/b8SdW+
+   87BGST9b4Bp2e5kFcBHzj9UwZu5ru+stAE9tDNH9uwNQKHTnSVJ+NGOPP
+   8=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Mar 2022 23:38:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 23:38:51 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 30 Mar 2022 23:38:51 -0700
+Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 30 Mar 2022 23:38:48 -0700
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+To:     <akpm@linux-foundation.org>, <willy@infradead.org>,
+        <markhemm@googlemail.com>, <hughd@google.com>,
+        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Charan Teja Reddy <quic_charante@quicinc.com>
+Subject: [PATCH RESEND V5,0/2]mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for shmem files 
+Date:   Thu, 31 Mar 2022 12:08:19 +0530
+Message-ID: <cover.1648706231.git.quic_charante@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Muchun Song <songmuchun@bytedance.com> writes:
+From: Charan Teja Reddy <quic_charante@quicinc.com>
 
-> On Tue, Mar 29, 2022 at 9:26 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> When folio is file lru, folio_test_swapbacked is guaranteed to be true. So
->> it's unnecessary to check it here again. No functional change intended.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/vmscan.c | 3 +--
->>  1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index 1678802e03e7..7c1a9713bfc9 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -1434,8 +1434,7 @@ static void folio_check_dirty_writeback(struct folio *folio,
->>          * Anonymous pages are not handled by flushers and must be written
->>          * from reclaim context. Do not stall reclaim based on them
->>          */
->> -       if (!folio_is_file_lru(folio) ||
->> -           (folio_test_anon(folio) && !folio_test_swapbacked(folio))) {
->> +       if (!folio_is_file_lru(folio) || folio_test_anon(folio)) {
->
-> At least your login is no problem since folio_is_file_lru() is equal to
-> !folio_test_swapbacked().  But the new code is not clear to me.
-> The old code is easy to understand, e.g. folio_test_anon(folio) &&
-> !folio_test_swapbacked(folio) tells us that the anon pages which
-> do not need to be swapped should be skipped.
+This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+advices to shmem files which can be helpful for the drivers who may want
+to manage the pages of shmem files on their own, like, that are created
+through shmem_file_setup[_with_mnt]().
 
-That is for MADV_FREE pages.  The code is introduced in commit
-802a3a92ad7a ("mm: reclaim MADV_FREE pages").
+Changes in V5:
+ -- Moved the 'endbyte' calculations to a header function for use by shmem_fadvise().
+ -- Addressed comments from suren.
+ -- No changes in resend. Retested on the latest tip.
 
-So I think the original code is better.  It's an implementation detail
-that folio_is_file_lru() equals !folio_test_swapbacked().  It may be
-better to add some comments here for MADV_FREE pages.
+Changes in V4:
+  -- Changed the code to use reclaim_pages() to writeout the shmem pages to swap and then reclaim.
+  -- Addressed comments from Mark Hemment and Matthew.
+  -- fadvise() on shmem file may even unmap a page.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1644572051-24091-1-git-send-email-quic_charante@quicinc.com/
 
-> So I'm neutral on the patch.
+Changes in V3:
+  -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified by Matthew.
+  -- xarray used properly, as identified by Matthew.
+  -- Excluded mapped pages as it requires unmapping and the man pages of fadvise don't talk about them.
+  -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865-1-git-send-email-quic_charante@quicinc.com/
 
-Best Regards,
-Huang, Ying
+Changes in V2:
+  -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
+  -- Addressed the comments from Suren.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-1-git-send-email-quic_charante@quicinc.com/
+
+changes in V1:
+  -- Created the interface for fadvise(2) to work on shmem files.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
+
+Charan Teja Reddy (2):
+  mm: fadvise: move 'endbyte' calculations to helper function
+  mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
+
+ mm/fadvise.c  |  11 +-----
+ mm/internal.h |  21 ++++++++++
+ mm/shmem.c    | 123 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 145 insertions(+), 10 deletions(-)
+
+-- 
+2.7.4
+

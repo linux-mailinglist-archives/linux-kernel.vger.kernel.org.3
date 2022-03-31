@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9BB4ED62A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2F14ED62C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiCaIvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S233242AbiCaIvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiCaIu6 (ORCPT
+        with ESMTP id S231282AbiCaIvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:50:58 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414463B007
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:10 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2e5827a76f4so246270237b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:10 -0700 (PDT)
+        Thu, 31 Mar 2022 04:51:03 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754A4344D0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id d30so6370628pjk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 01:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wZXg0Wk9U3eMPQQ4UazcTOVg50FT5PR+ms1Rv/O8uCA=;
-        b=hF8NFikAHise1/tYewXzZvTJNTN9TjGoI3aMW6OzvdRwNeEZei9fo2XJCfe+N+eV5J
-         QYyirxTyzU/AHFDAB2oXhusj7nlJeC9WtbOY0E5WwWtN35FrEmd2wZl3JkfxaBSvqC9E
-         yS+dM4NKYp57Srqgrf507Y+NfpGcIJHrwHDf+IVXPnWD/xCrJ/gucYOSY9tqNcm5oAks
-         Z3dD2MFzKoWjExJo1bGI/gwSW9jxwmrBjEfyf2k3m0aEvTDawuYPOtyB/9c0Es6SHc/X
-         0EqGP3kd7m4gLOqnmz2l/Ji/090Dh9eDQIZ5Cat40Pjg140u18LgOjAx75AyavvkKUAg
-         7anw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W056jK4JO9Wem+3qlNSvwaayL2PwMR77g5EtZS2gUYw=;
+        b=WmCBHXFFuScgmmMGMP/VH609AxnAySmVJWaJZ62cOndAUFjHiwuhvCMbqdzYxL0PqJ
+         O8RwQn+EO5U1GQpLfh2uEeY3psnAoZeQKIzE53AC53docGkPbTd37tJD5jjYxV5T0jcV
+         17l9p2c+I1LPqJo4fyJQjnK3ZbZE0HKbzk748=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wZXg0Wk9U3eMPQQ4UazcTOVg50FT5PR+ms1Rv/O8uCA=;
-        b=p3VOxUSU+1yyHfNRrPE3rWe5Gi7pUcaQG6U5xAj5Ok20cCAffRturIlNmSzVJPWFEz
-         TCmyn3d623Mo3CIj3pBu7tV1FCiL+S3Dw/jjOeQzJz7oPXb7kgDxr56HjNItUz4AB653
-         3krJTcy5PVodlTiBmyME7K3h4iz+ptC2R0SyY4455I4zijR+GBaay+jlZ4V3jfPgjKwE
-         SW2L9DQCv7hGtO5T4rYQRq51LLsEJCoqGQNxaoba5x6nRvf9/1kPMciJ3HFGVj0bh6pp
-         ka60P64sVZ094Ds+p3f5CQMf3H5VQG3Dvtq27dw1zmrRnyxH4k7Ckr8KpkYkdQ5aXIm9
-         qt9w==
-X-Gm-Message-State: AOAM532uECozZxslFvvce1o84NdBnti+/o4kLiuJUDon26kcYBtk5MRo
-        XvM9G/FvxyNDKJVEbi2FNn5bGUdpJYVGyZIJ731Txg==
-X-Google-Smtp-Source: ABdhPJyvfTSa45LVThNTL1ozkOHEy9or+BjMwghda/8khUheyPrr89Rwl6DGXpWdcL77w/7pBLQ0L5ZwByBn8dKTGwk=
-X-Received: by 2002:a0d:ccca:0:b0:2e6:2b53:3f16 with SMTP id
- o193-20020a0dccca000000b002e62b533f16mr4098014ywd.35.1648716549512; Thu, 31
- Mar 2022 01:49:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W056jK4JO9Wem+3qlNSvwaayL2PwMR77g5EtZS2gUYw=;
+        b=TmophdTibLZsRfbq6br8Hm/0A9fxEnGt1f+ptURZ89QyH6oGDjUpk9TNUnm3hj9gt2
+         BwK8dPXjkePndtEprOb5OJBotUgKCJWbTWWIm+KKHyjtUP5qRFv0MG4hkTkxGTB91IUG
+         tiJfjzkjquwuJVMrSvxAf0gsKuCozV9rA4D1F5XpOErEE3mFm5etfv86YDMcYHJ0MnAB
+         f8Z+eNTVqCkdhEnVHAMGtF2u9UYFfEhuFPL7AKeuF5vhm5DQTPlV1T0A9aVghqaUjZ9l
+         Nr7rrOXeIlfnhsone+Ws2/FdBc/kHHTxtDzTW6Q6KKWRH/M68f4/gXrb9B7/ov27dTlN
+         T7tg==
+X-Gm-Message-State: AOAM530rljzK2UOuNSjxVNAHc6EiwdyJiaAtWpDNOF7z1RCq757JqIsd
+        VeLkEk3/SZmfkxrbSqz+p80+lA==
+X-Google-Smtp-Source: ABdhPJyIyUj9Alp436tInM7YNihHEEDUYPNgqt+AGVoPl3O5jctUXjLSQUMXrAN+OoCit0uHawL0gQ==
+X-Received: by 2002:a17:902:ea03:b0:154:4af3:bb5e with SMTP id s3-20020a170902ea0300b001544af3bb5emr4124775plg.95.1648716553888;
+        Thu, 31 Mar 2022 01:49:13 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:deb3:b2d3:c33d:e877])
+        by smtp.gmail.com with ESMTPSA id mw10-20020a17090b4d0a00b001c7cc82daabsm10408026pjb.1.2022.03.31.01.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 01:49:13 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: hantro: Empty encoder capture buffers by default
+Date:   Thu, 31 Mar 2022 16:49:06 +0800
+Message-Id: <20220331084907.628349-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
 MIME-Version: 1.0
-References: <20220331065640.5777-1-songmuchun@bytedance.com> <6c774e27-26d2-6c45-65f9-8a5b8acd6433@redhat.com>
-In-Reply-To: <6c774e27-26d2-6c45-65f9-8a5b8acd6433@redhat.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 31 Mar 2022 16:48:33 +0800
-Message-ID: <CAMZfGtV6=n60f2cEWWtFk8Ci1c_JzeNJCmzAs2X6EHZkaXfP6Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] mm: hugetlb_vmemmap: introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Bodeddula, Balasubramaniam" <bodeddub@amazon.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
-        Barry Song <21cnbao@gmail.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 4:42 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 31.03.22 08:56, Muchun Song wrote:
-> > The feature of minimizing overhead of struct page associated with each
-> > HugeTLB page is implemented on x86_64, however, the infrastructure of
-> > this feature is already there, we could easily enable it for other
-> > architectures.  Introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP for other
-> > architectures to be easily enabled.  Just select this config if they
-> > want to enable this feature.
-> >
-> > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >  arch/x86/Kconfig |  1 +
-> >  fs/Kconfig       | 10 +++++++++-
-> >  2 files changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 9f5bd41bf660..e69d42528542 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -119,6 +119,7 @@ config X86
-> >       select ARCH_WANTS_DYNAMIC_TASK_STRUCT
-> >       select ARCH_WANTS_NO_INSTR
-> >       select ARCH_WANT_HUGE_PMD_SHARE
-> > +     select ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP      if X86_64
-> >       select ARCH_WANT_LD_ORPHAN_WARN
-> >       select ARCH_WANTS_THP_SWAP              if X86_64
-> >       select ARCH_HAS_PARANOID_L1D_FLUSH
-> > diff --git a/fs/Kconfig b/fs/Kconfig
-> > index 6c7dc1387beb..f6db2af33738 100644
-> > --- a/fs/Kconfig
-> > +++ b/fs/Kconfig
-> > @@ -245,9 +245,17 @@ config HUGETLBFS
-> >  config HUGETLB_PAGE
-> >       def_bool HUGETLBFS
-> >
-> > +#
-> > +# Select this config option from the architecture Kconfig, if it is preferred
-> > +# to enable the feature of minimizing overhead of struct page associated with
-> > +# each HugeTLB page.
-> > +#
-> > +config ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-> > +     bool
-> > +
-> >  config HUGETLB_PAGE_FREE_VMEMMAP
-> >       def_bool HUGETLB_PAGE
-> > -     depends on X86_64
-> > +     depends on ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-> >       depends on SPARSEMEM_VMEMMAP
-> >
-> >  config HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON
->
->
-> I think something like "HUGETLB_OPTIMIZE_VMEMMAP" might be more
-> expressive, but that would imply renaming the existing config knob.
->
+The payload size for encoder capture buffers is set by the driver upon
+finishing encoding each frame, based on the encoded length returned from
+hardware, and whatever header and padding length used. Setting a
+non-zero default serves no real purpose, and also causes issues if the
+capture buffer is returned to userspace unused, confusing the
+application.
 
-How about doing a full code cleanup in a separate series in the future?
+Instead, always set the payload size to 0 for encoder capture buffers
+when preparing them.
+
+Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
+Fixes: 082aaecff35f ("media: hantro: Fix .buf_prepare")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+
+This was previously incorrectly squashed into my Hantro encoder cmd
+patch [1].
+
+[1] https://lore.kernel.org/linux-media/20220301042225.1540019-1-wenst@chromium.org/
+
+ drivers/staging/media/hantro/hantro_v4l2.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index 67148ba346f5..261beb0c40f6 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -733,8 +733,12 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
+ 	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
+ 	 * it to buffer length).
+ 	 */
+-	if (V4L2_TYPE_IS_CAPTURE(vq->type))
+-		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
++	if (V4L2_TYPE_IS_CAPTURE(vq->type)) {
++		if (ctx->is_encoder)
++			vb2_set_plane_payload(vb, 0, 0);
++		else
++			vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.35.1.1021.g381101b075-goog
+

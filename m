@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF8B4EE20D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AB94EE210
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240999AbiCaTpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S241053AbiCaTrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240854AbiCaTpM (ORCPT
+        with ESMTP id S238442AbiCaTrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:45:12 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ECE59A7F
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:43:22 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 26096 invoked from network); 31 Mar 2022 21:43:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1648755799; bh=ANFnNcZYAyo91FPMKaSjfBlBSWbVw7srBMK+3LbVF+s=;
-          h=Subject:To:Cc:From;
-          b=CzWInqYZhALXsZe6XAaI8+Df1nEc77xMpf9ctU2NWGitQ68CkE49biF7szzD6k7Cg
-           CjbuNnc5bmw5Vns38pdAwSgDaHhaT9kvIe/2I3Gh8Z+GnZet+MfPHXLgB6Z0nm/t5b
-           2ZOvNLtITm1AAGJgeHwpycEZm58Ii0jyTatqhKL0=
-Received: from aaew62.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.126.62])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <greg@kroah.com>; 31 Mar 2022 21:43:19 +0200
-Message-ID: <d08fddc4-8da5-b95a-4b03-954c4edbf546@o2.pl>
-Date:   Thu, 31 Mar 2022 21:43:03 +0200
+        Thu, 31 Mar 2022 15:47:20 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F57C23FF2E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:45:32 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z92so476333ede.13
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V/V3H/YddlNmLC3otY5ysv0Hx42DjQ8xOdVkZo+o4gY=;
+        b=jo2POnUA1y7qcsUa7m/1/RGa1XfDwxxjJcsdQOWOarM4RsCHmIjj9nhaOcAlS9ga8+
+         3cC62tSdSO1LzBUQG22g8Fzm/Echk3CTRUPuEPt8TZXdmHqPB2su6oyO6JHW4k5Z1uBS
+         FDVYIR3TR8xh2L1LQw7+D1u+rKfYsDlBKs0lU2M7akmoAhQpLRNycA7jGLgNsLQppOwZ
+         tUMfTRg0Gj8oAQ0lI1WO7mwlePOfvTgLVEl9vd2n+lo0cXuKMQ4RX+m2IW1KtjayDI5A
+         l+Rd0hWTL2ZjqER8OyFS3Atq6j7z0ak/iT51tLl8hmxEZnnUPedb6l5dbBBlVDL0uWil
+         snFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V/V3H/YddlNmLC3otY5ysv0Hx42DjQ8xOdVkZo+o4gY=;
+        b=1x4664SdebDSizxwkAEmMTlH1ia0f3MxWvLiAjgi2V+vcm1V2FF8t5S4XLXfv4abZ9
+         yNs0hgONwP4lZkHsyPja1ZbixMXZn1IbPbKxWPmk4En2RZJLv1rFDvLHPmmIKyQ3rFAW
+         tOTFVruLYFrkyVFd1b74sk3YxjQ/k2Il0pnvZRpIN3gHvAj/neGk7u53fUeHFoYSTvCo
+         4XKwvqDCjINQ/TjiwXvCwHCsswUiIBxVSCCEuOCO8HNATIImyoMDkijI1sbV7FbbEh99
+         ie+MoBW5v3M9UBTSpzttr63pZsx2uv7wjbgNVB4/ZTa4lNhmcVu8kd/ZRhegDJRK6qEg
+         KSfg==
+X-Gm-Message-State: AOAM531hNw2ItC0bHfoeFf9j1l2FgW+wQUE1pjWDEyVX9qRzemCH9ptM
+        oGXN/3/SnWDy2nvQXN/pS4wn7Q==
+X-Google-Smtp-Source: ABdhPJzntQeoOpg2WbfQOwk+SU8tmcnkadErLhQyWegHBPI4g+Wkew0XbhQZIxuvbRsrLiUC+Vymhg==
+X-Received: by 2002:aa7:d517:0:b0:419:16c0:f313 with SMTP id y23-20020aa7d517000000b0041916c0f313mr18020465edq.379.1648755930844;
+        Thu, 31 Mar 2022 12:45:30 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id a21-20020a170906275500b006d10c07fabesm129148ejd.201.2022.03.31.12.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:45:30 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ajay Kumar <ajaykumar.rs@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
+Date:   Thu, 31 Mar 2022 21:45:26 +0200
+Message-Id: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm
- time in debugfs
-Content-Language: en-GB
-To:     Greg KH <greg@kroah.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220331190612.22162-1-mat.jonczyk@o2.pl>
- <YkX/Mbrt/In1HR32@kroah.com>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <YkX/Mbrt/In1HR32@kroah.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 459b623b7e94f9868dc828fe4e2d69be
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000A [YYOE]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 31.03.2022 o 21:21, Greg KH pisze:
-> On Thu, Mar 31, 2022 at 09:06:11PM +0200, Mateusz Jończyk wrote:
->> Before Linux 5.17, there was a problem with the CMOS RTC driver:
->> cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
->> in progress) bit, which could have caused it to sometimes fail silently
->> and read bogus values or do not set the alarm correctly.
->> Luckily, this issue was masked by cmos_read_time() invocations in core
->> RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
-[snip]
->> diff --git a/drivers/rtc/debugfs.c b/drivers/rtc/debugfs.c
->> new file mode 100644
->> index 000000000000..5ceed5504033
->> --- /dev/null
->> +++ b/drivers/rtc/debugfs.c
->> @@ -0,0 +1,112 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +
->> +/*
->> + * Debugfs interface for testing RTC alarms.
->> + */
->> +#include <linux/debugfs.h>
->> +#include <linux/err.h>
->> +#include <linux/rtc.h>
->> +
->> +static struct dentry *rtc_main_debugfs_dir;
->> +
->> +void rtc_debugfs_init(void)
->> +{
->> +	struct dentry *ret = debugfs_create_dir("rtc", NULL);
->> +
->> +	// No error is critical here
-> What do you mean by this?
+struct fsd_pin_ctrl is not used outside of the file, so it can be made
+static.  This fixes sparse warning:
 
-I meant that even if debugfs_create_dir() fails, this does not matter here and the
-caller of rtc_debugfs_init() may continue execution.
+  drivers/pinctrl/samsung/pinctrl-exynos-arm64.c:773:31: sparse:
+    symbol 'fsd_pin_ctrl' was not declared. Should it be static?
 
->> +	if (!IS_ERR(ret))
->> +		rtc_main_debugfs_dir = ret;
-> This should not be needed.
->
-> Just set the directory and away you go.
->
-> But why even save it?  If you need it you can always look it up, right?
-OK, I did not know about easy lookup of debugfs directories.
-> And when are you removing this directory you created?
-Never, as the RTC subsystem cannot be compiled as a module.
-This is the main debugfs directory of RTC subsystem, directories for specific devices
-(rtc0, etc.) are created below it.
-Please correct me if I'm wrong, but I thought that empty debugfs directories do not hurt.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 0d1b662c374c ("pinctrl: samsung: add FSD SoC specific data")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/pinctrl/samsung/pinctrl-exynos-arm64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Thanks for reviewing,
-
-Mateusz
+diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+index d291819c2f77..cb965cf93705 100644
+--- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
++++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+@@ -770,7 +770,7 @@ static const struct samsung_pin_bank_data fsd_pin_banks2[] __initconst = {
+ 	EXYNOS850_PIN_BANK_EINTN(3, 0x00, "gpq0"),
+ };
+ 
+-const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
++static const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
+ 	{
+ 		/* pin-controller instance 0 FSYS0 data */
+ 		.pin_banks	= fsd_pin_banks0,
+-- 
+2.32.0
 

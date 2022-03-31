@@ -2,172 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04134ED145
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523E14ED148
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242352AbiCaBXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 21:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S1352304AbiCaBYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 21:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352304AbiCaBXA (ORCPT
+        with ESMTP id S229972AbiCaBYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 21:23:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5F62E699;
-        Wed, 30 Mar 2022 18:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648689671; x=1680225671;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QKRTWdiGnee9ZO7InXWkfsawt1zuvqAXyHGl5Xwe2fQ=;
-  b=d+MR2P5iypt3c/qA4QMTTAC4fDdax4HA03D0hi7/4eoKgmhSzwnDy9Ry
-   SuOCro5k0GlxtB6neNdAWvwjJmVkD2bmd54wW2PqRLDrCDYoAdIUpYp6g
-   dBgPe3BOihMpQHWI8uX2kWuSlDqLvyuyXwFx/N+hRL7V4LBHqSTePhqYH
-   V37C5imvcDRsH2uThnEixa92Ka1cm6upEp6tKkm/24J/+01c0nN5/T1Eo
-   M0vYfWHqhGk8QaG0sghwAvwxW5xsZ0yaYX2cXBDbk6rcTOcWWBfNPVabe
-   tvjbe070Knr/C+dtF8b2JamvnhJ/gwJTXDUMdjiuBVG7rJlT2DtMmBR9q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257265196"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="257265196"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 18:21:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="654268188"
-Received: from dhathawa-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.53.226])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 18:21:08 -0700
-Message-ID: <2386151bc0a42b2eda895d85b459bf7930306694.camel@intel.com>
-Subject: Re: [RFC PATCH v5 023/104] x86/cpu: Add helper functions to
- allocate/free MKTME keyid
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Thu, 31 Mar 2022 14:21:06 +1300
-In-Reply-To: <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
+        Wed, 30 Mar 2022 21:24:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DB12E9C4;
+        Wed, 30 Mar 2022 18:22:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15F216191D;
+        Thu, 31 Mar 2022 01:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F382C340F0;
+        Thu, 31 Mar 2022 01:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648689778;
+        bh=NWJILtetxPEKc8/hlIa004NMQJu2a/09BnjLlYqqPg8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TyE9YM8MKt+M9uNRj+xDC1911Vd7uLDQyOJTzDhJxYSeWbYABBlwTTn6Se5xFhxxf
+         XaOU6ancOjgWR7UeOYLsbm95v+lrz1Z6LvpF44is7BXZGQdQYsoRDfKDeB1bNepQiS
+         z8mt2pz7CVUZ1KJQqUjFxihCtq5ckqzE+f9mu9UF2xdIwOLVvx9owww3cMPjeXfDPH
+         pzGgGhi0aP5d4aUVAZTDQkC9WkrO96fJm0NROoLjYK5iq1l2glisJxf4O7AVIfryUJ
+         MQRCjbXgVzGvvk99R3VlsnxcueZqIwh1075rCrvbm965BcXqMP/W6BiouOInJs66eV
+         7w5S/hkUI16Ow==
+Date:   Thu, 31 Mar 2022 10:22:53 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] tracing: do not export user_events uapi
+Message-Id: <20220331102253.8793580dbc02c93dd897e52a@kernel.org>
+In-Reply-To: <20220330201755.29319-1-mathieu.desnoyers@efficios.com>
+References: <20220330201755.29319-1-mathieu.desnoyers@efficios.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Wed, 30 Mar 2022 16:17:55 -0400
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+
+> In addition to mark the USER_EVENTS feature BROKEN until all interested
+> parties figure out the user-space API, do not install the uapi header.
 > 
-> MKTME keyid is assigned to guest TD.  The memory controller encrypts guest
-> TD memory with key id.  Add helper functions to allocate/free MKTME keyid
-> so that TDX KVM assign keyid.
-
-Using MKTME keyid is wrong, at least not accurate I think.  We should use
-explicitly use "TDX private KeyID", which is clearly documented in the spec:
-  
-https://software.intel.com/content/dam/develop/external/us/en/documents-tps/intel-tdx-cpu-architectural-specification.pdf
-
-Also, description of IA32_MKTME_KEYID_PARTITIONING MSR clearly says TDX private
-KeyIDs span the range (NUM_MKTME_KIDS+1) through
-(NUM_MKTME_KIDS+NUM_TDX_PRIV_KIDS).  So please just use TDX private KeyID here.
-
-
+> This prevents situations where a non-final uapi header would end up
+> being installed into a distribution image and used to build user-space
+> programs that would then run against newer kernels that will implement
+> user events with a different ABI.
 > 
-> Also export MKTME global keyid that is used to encrypt TDX module and its
-> memory.
-
-This needs explanation why the global keyID needs to be exported.
-
+> Link: https://lore.kernel.org/all/20220330155835.5e1f6669@gandalf.local.home
 > 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+
+Looks good to me.
+
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you,
+
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
->  arch/x86/include/asm/tdx.h |  6 ++++++
->  arch/x86/virt/vmx/tdx.c    | 33 ++++++++++++++++++++++++++++++++-
->  2 files changed, 38 insertions(+), 1 deletion(-)
+>  include/uapi/Kbuild | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 9a8dc6afcb63..73bb472bd515 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -139,6 +139,9 @@ int tdx_detect(void);
->  int tdx_init(void);
->  bool platform_has_tdx(void);
->  const struct tdsysinfo_struct *tdx_get_sysinfo(void);
-> +u32 tdx_get_global_keyid(void);
-> +int tdx_keyid_alloc(void);
-> +void tdx_keyid_free(int keyid);
->  #else
->  static inline void tdx_detect_cpu(struct cpuinfo_x86 *c) { }
->  static inline int tdx_detect(void) { return -ENODEV; }
-> @@ -146,6 +149,9 @@ static inline int tdx_init(void) { return -ENODEV; }
->  static inline bool platform_has_tdx(void) { return false; }
->  struct tdsysinfo_struct;
->  static inline const struct tdsysinfo_struct *tdx_get_sysinfo(void) { return NULL; }
-> +static inline u32 tdx_get_global_keyid(void) { return 0; };
-> +static inline int tdx_keyid_alloc(void) { return -EOPNOTSUPP; }
-> +static inline void tdx_keyid_free(int keyid) { }
->  #endif /* CONFIG_INTEL_TDX_HOST */
->  
->  #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/virt/vmx/tdx.c b/arch/x86/virt/vmx/tdx.c
-> index e45f188479cb..d714106321d4 100644
-> --- a/arch/x86/virt/vmx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx.c
-> @@ -113,7 +113,13 @@ static int tdx_cmr_num;
->  static struct tdsysinfo_struct tdx_sysinfo;
->  
->  /* TDX global KeyID to protect TDX metadata */
-> -static u32 tdx_global_keyid;
-> +static u32 __read_mostly tdx_global_keyid;
+> diff --git a/include/uapi/Kbuild b/include/uapi/Kbuild
+> index 61ee6e59c930..425ea8769ddc 100644
+> --- a/include/uapi/Kbuild
+> +++ b/include/uapi/Kbuild
+> @@ -12,3 +12,6 @@ ifeq ($(wildcard $(objtree)/arch/$(SRCARCH)/include/generated/uapi/asm/kvm_para.
+>  no-export-headers += linux/kvm_para.h
+>  endif
+>  endif
 > +
-> +u32 tdx_get_global_keyid(void)
-> +{
-> +	return tdx_global_keyid;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_get_global_keyid);
->  
->  static bool enable_tdx_host;
->  
-> @@ -189,6 +195,31 @@ static void detect_seam(struct cpuinfo_x86 *c)
->  		detect_seam_ap(c);
->  }
->  
-> +/* TDX KeyID pool */
-> +static DEFINE_IDA(tdx_keyid_pool);
-> +
-> +int tdx_keyid_alloc(void)
-> +{
-> +	if (WARN_ON_ONCE(!tdx_keyid_start || !tdx_keyid_num))
-> +		return -EINVAL;
-> +
-> +	/* The first keyID is reserved for the global key. */
-> +	return ida_alloc_range(&tdx_keyid_pool, tdx_keyid_start + 1,
-> +			       tdx_keyid_start + tdx_keyid_num - 1,
-> +			       GFP_KERNEL);
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_keyid_alloc);
-> +
-> +void tdx_keyid_free(int keyid)
-> +{
-> +	/* keyid = 0 is reserved. */
-> +	if (!keyid || keyid <= 0)
-> +		return;
-> +
-> +	ida_free(&tdx_keyid_pool, keyid);
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_keyid_free);
-> +
->  static void detect_tdx_keyids_bsp(struct cpuinfo_x86 *c)
->  {
->  	u64 keyid_part;
+> +# API is not finalized
+> +no-export-headers += linux/user_events.h
+> -- 
+> 2.20.1
+> 
 
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

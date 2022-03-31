@@ -2,103 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1996B4ED91D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818ED4ED92D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235506AbiCaMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S235647AbiCaMDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235498AbiCaMCh (ORCPT
+        with ESMTP id S235880AbiCaMC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:02:37 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E807530575
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:59:36 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id p17so23190672plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KCzd1cYmD81YFpA7sO7MsSj7P6a5wWaVyEmyHM8Jq4Y=;
-        b=OoI6T+guOwttwBls41pWyMV89jUSiZu+HkclfzaLZyCBwB1ptiYCLbBrOftTK5AEFV
-         G91f6U0S/k+5Tq4c3tdWWf6kSa6WESuEOUEIbAomploca2YgEAOyYwQmq4q3J68Nb2J8
-         NSiBvYsHlQ6ECiUIkvFvYhkjVPu1OLsVcZoBMXT/FOqPMvPbQkskNBxhvBLcx0yfbvPw
-         xqjBXxixF9KCprW8EeGyazYZy3jquoD/ofsrXVTWdrYIZCxsyDMAOk27GkKrF9dd9jej
-         +o+zMaPmR2JQyYip8Ve7Cz0wfEFt6TSrj/St0ueukRTVEf8Ya8YXvwelzveFdoJNvPu/
-         qZLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KCzd1cYmD81YFpA7sO7MsSj7P6a5wWaVyEmyHM8Jq4Y=;
-        b=0SyfLU4EPky77cUkOSAOv63mWl0PyodLjg5OoJt8oqaJctTlizPCxKJzbm4xNgSDgM
-         bwU52MITHm96ezHrI1K/COKKk6zetS6kYj5vpedHm/Jqn6y8I7NAhFJ4t71gUNqkmSxx
-         gDj3eTnGSR7KNSvEpLfekk7KC+UlKK+IB3dIHfAmIjyCD8/kHv6flzLvSJpwH/bZslyc
-         pz6oX7ACkhfpdE7ZbEcsdTjZV7fT5asfLYScvou7VjGq2zPasiBNM8oORE8zhT9QLvAq
-         FXHqAHdqvvVuLNQPIMJ3kjSWiWD4nSUT/3DtVDTxFK/vduzWegEen1KmIQtKOzDYHwZJ
-         xKpQ==
-X-Gm-Message-State: AOAM531onJmEHJUNW6KlK/vyBeozG/ZS+L5TdBPujiY61K/PF4qbu8hE
-        /VJwH755HqF1QXQfOp5bn9eE/A==
-X-Google-Smtp-Source: ABdhPJzBYMxAps8GRFmVQoDt80yzI/kS5BlUW/Gbsw8dPIcwbpoEc3gPEZZ8sGb11FRejcmmhmmP6g==
-X-Received: by 2002:a17:90b:4f41:b0:1c7:928d:196e with SMTP id pj1-20020a17090b4f4100b001c7928d196emr5707713pjb.47.1648727975265;
-        Thu, 31 Mar 2022 04:59:35 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id l18-20020a056a00141200b004f75395b2cesm27528667pfu.150.2022.03.31.04.59.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 04:59:34 -0700 (PDT)
-Message-ID: <a7b2fe8d-9967-2046-67a5-62d10e95a861@kernel.dk>
-Date:   Thu, 31 Mar 2022 05:59:33 -0600
+        Thu, 31 Mar 2022 08:02:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C11CC6EED;
+        Thu, 31 Mar 2022 04:59:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CF00616BF;
+        Thu, 31 Mar 2022 11:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C23C340EE;
+        Thu, 31 Mar 2022 11:59:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648727994;
+        bh=adnfpVD7oqXHj4mfPH8O1DTjb8aRLseC4Dvlx5i6vF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=swJP9pqiZw1PBslMi6kbCZdmGGEiPUICuHiBfiDTo4t2rDC46yANqiK8ahb1iwCkX
+         DUKLDUtfxGiKLaeh1DnLq0GkGDygdI+QfwlZG51KvYHQzsyJ6ZQr1rB+RRYqmz62aH
+         xxAoeYM0TzoLffX/gwbxmZUy80qqN92o7WT69od3BeuS7D6GHl9mDzFz4hto9EWKsN
+         rk3i8v7+tcoCKMWomAkTTUtSqgCzrxXiXFtQwE32YwMtNtwcWuJAeDSogo2RTVCSKX
+         1/DffffixgiTFrqYd0HJ3aGu4c6IHkp47snP0VeE1Iahf9juWMpgZK5qkX/ZMSNpZN
+         cBvqxDx9+y6qQ==
+Date:   Thu, 31 Mar 2022 12:59:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [RFC PATCH 5/5] ASoC: Add macaudio machine driver
+Message-ID: <YkWXs/f7edZwg1+W@sirena.org.uk>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <20220331000449.41062-6-povik+lin@cutebit.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] block: use dedicated list iterator variable
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220331091218.641532-1-jakobkoschel@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220331091218.641532-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+MLBZhiivx60M6iZ"
+Content-Disposition: inline
+In-Reply-To: <20220331000449.41062-6-povik+lin@cutebit.org>
+X-Cookie: Reunite Gondwondaland!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 3:12 AM, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
 
-Not a huge fan of doing a helper for this single use, but I guess it
-does make the main function easier to code. So I guess that's fine. But
-can you move the call down where the result is checked?
+--+MLBZhiivx60M6iZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-qe = blk_lookup_qe_pair(head, q);
-if (!qe)
-	return;
+On Thu, Mar 31, 2022 at 02:04:49AM +0200, Martin Povi=C5=A1er wrote:
 
-I prefer no distance between call and check, makes it easier to read. I
-can make the edit locally and note it in the commit message so you don't
-have to re-send it. Let me know, or just resend a v3.
+> --- /dev/null
+> +++ b/sound/soc/apple/macaudio.c
+> @@ -0,0 +1,597 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * ASoC machine driver for Apple Silicon Macs
+> + *
 
--- 
-Jens Axboe
+Please make the entire comment a C++ one so things look more
+intentional.
 
+> +		/* CPU side is bit and frame clock master, I2S with both clocks invert=
+ed */
+
+Please refer to clock providers here.
+
+> +		ret =3D of_property_read_string(np, "link-name", &link->name);
+> +		if (ret) {
+> +			dev_err(card->dev, "Missing link name\n");
+> +			goto err_put_np;
+> +		}
+
+This doesn't look like it's mandatory in the binding.
+
+> +static int macaudio_init(struct snd_soc_pcm_runtime *rtd)
+> +{
+> +	struct snd_soc_card *card =3D rtd->card;
+> +	struct macaudio_snd_data *ma =3D snd_soc_card_get_drvdata(card);
+> +	struct snd_soc_component *component;
+> +	int ret, i;
+> +
+> +	if (rtd->num_codecs > 1) {
+> +		ret =3D macaudio_assign_tdm(rtd);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	for_each_rtd_components(rtd, i, component)
+> +		snd_soc_component_set_jack(component, &ma->jack, NULL);
+
+What is the jack configuration this is attempting to describe?  It looks
+like you have some dedicated speaker driver devices which are going to
+get attached to jacks here for example.
+
+> +} macaudio_kctlfixes[] =3D {
+> +	{"* ASI1 Sel", "Left"},
+> +	{"* ISENSE Switch", "Off"},
+> +	{"* VSENSE Switch", "Off"},
+> +	{ }
+> +};
+> +
+> +static bool macaudio_kctlfix_matches(const char *pattern, const char *na=
+me)
+> +{
+> +	if (pattern[0] =3D=3D '*') {
+> +		int namelen, patternlen;
+> +
+> +		pattern++;
+> +		if (pattern[0] =3D=3D ' ')
+> +			pattern++;
+> +
+> +		namelen =3D strlen(name);
+> +		patternlen =3D strlen(pattern);
+> +
+> +		if (namelen > patternlen)
+> +			name +=3D (namelen - patternlen);
+> +	}
+> +
+> +	return !strcmp(name, pattern);
+> +}
+
+This looks worryingly like use case configuration.
+
+> +/*
+> + * Maybe this could be a general ASoC function?
+> + */
+> +static void snd_soc_kcontrol_set_strval(struct snd_soc_card *card,
+> +				struct snd_kcontrol *kcontrol, const char *strvalue)
+
+No, we should not be setting user visible control values from the
+kernel.  This shouldn't be a machine driver function either.  What are
+you trying to accomplish here?
+
+--+MLBZhiivx60M6iZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJFl7MACgkQJNaLcl1U
+h9AvpQf+NQTe35sa2gGAL6J5r3unBmmRuUI+0Lmize/e9oyklq/3LgUI3zy2In6m
+gWr5laQlG/Eq41KJZecdtZ5BrY+BENGZ4PzCtR06uc8hM7KJV17O6hdRXrK3VSWZ
+9Tl8uSSh2xNqw6bwflA6XyfULttxC6NLsKP1RxCOaHJGG4cU1G5GkvT9sTpcQH9/
+bi7Y9TzxUi6Q7zgK6vVHXygqusZ4UTHdt5fyxX4ou1tV2V1fYAO64eMJ4pA+8jUA
+0ZafQA1BVTbkHK7JZjbc2ILGcu5NBR1eJK/hbv9X0OknpKrRsafaQQTRywE1hWb5
+NM2xv163DU7RQTC8vqYC+rKBiQ/ypQ==
+=dyOa
+-----END PGP SIGNATURE-----
+
+--+MLBZhiivx60M6iZ--

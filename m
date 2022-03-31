@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68364ED980
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A5B4ED97E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235980AbiCaMTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S235959AbiCaMSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235973AbiCaMS5 (ORCPT
+        with ESMTP id S234428AbiCaMSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:18:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B9AB210446
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648729029;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5/8+4RwHAMD/KHypXq8zvLNL9+H5+MYFtmie7z/yWo=;
-        b=ML3mFkWUAhVX7l1ezPZEfuT6rJu8u3Is8YlayEeqH2h9VDYG+BRZgKjsM23eKtpqbZH6Bz
-        GF2PQKUGNZ3yRQ/KZ4Wd8Zuyf3peQuQrfjt8YT/QCKvjWyJaoCUxBLaELQuELE9ORrUGcL
-        N75yQSdRUaA7z18QxbNPY2PaHNb5W/c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-290-v7RIh1xtMi-XLByMpu-iUA-1; Thu, 31 Mar 2022 08:17:04 -0400
-X-MC-Unique: v7RIh1xtMi-XLByMpu-iUA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D7914801E95;
-        Thu, 31 Mar 2022 12:16:58 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8AC852026D64;
-        Thu, 31 Mar 2022 12:16:54 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <4de651adc35341c5fa99db54b9295d4845648563.camel@redhat.com>
-References: <4de651adc35341c5fa99db54b9295d4845648563.camel@redhat.com> <164865013439.2941502.8966285221215590921.stgit@warthog.procyon.org.uk>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        Xiaolong Huang <butterflyhuangxx@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] rxrpc: fix some null-ptr-deref bugs in server_key.c
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3114596.1648729013.1@warthog.procyon.org.uk>
+        Thu, 31 Mar 2022 08:18:45 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09616419B9;
+        Thu, 31 Mar 2022 05:16:58 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1648729016; bh=2YK9PobV56vBSewgMTaSA0OXwlHtMdyVGAlP+LxlCGs=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=DHnb0BoWtg1BWG7/iwtgO9Fh9MZFwAdD9k0FZmKZs8K6KK0pDvQm5w6KeOVLYa0ej
+         zRpdy8PZwATSMFjvTyJT22o1/6WO5D2qWJqwbkeMrEeS0FeqiHM8zL741fH5dtKZgc
+         JBWvre/zYpZCNjRXkdp5D3X7eX0JxZa9p6RLkJ34=
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [RFC PATCH 5/5] ASoC: Add macaudio machine driver
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
+In-Reply-To: <4651D426-BA1A-418F-90E5-278C705DA984@cutebit.org>
+Date:   Thu, 31 Mar 2022 14:16:56 +0200
+Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
 Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 31 Mar 2022 13:16:53 +0100
-Message-ID: <3114597.1648729013@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-Id: <F6666436-293B-4D13-8A61-D5ED620BEB05@cutebit.org>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <20220331000449.41062-6-povik+lin@cutebit.org>
+ <YkWXs/f7edZwg1+W@sirena.org.uk>
+ <4651D426-BA1A-418F-90E5-278C705DA984@cutebit.org>
+To:     Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Abeni <pabeni@redhat.com> wrote:
 
-> It looks like we can add a couple of fixes tag to help stable teams:
-> =
+> On 31. 3. 2022, at 14:08, Martin Povi=C5=A1er <povik@cutebit.org> =
+wrote:
+>=20
+>>=20
+>> On 31. 3. 2022, at 13:59, Mark Brown <broonie@kernel.org> wrote:
+>>=20
+>> On Thu, Mar 31, 2022 at 02:04:49AM +0200, Martin Povi=C5=A1er wrote:
+>>=20
+>>> --- /dev/null
+>>> +++ b/sound/soc/apple/macaudio.c
+>>> @@ -0,0 +1,597 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * ASoC machine driver for Apple Silicon Macs
+>>> + *
 
-> Fixes: d5953f6543b5 ("rxrpc: Allow security classes to give more info on=
- server keys")
+(snip)
 
-Not this one.  This includes a check for the one op it adds:
+>>> +/*
+>>> + * Maybe this could be a general ASoC function?
+>>> + */
+>>> +static void snd_soc_kcontrol_set_strval(struct snd_soc_card *card,
+>>> +				struct snd_kcontrol *kcontrol, const =
+char *strvalue)
+>>=20
+>> No, we should not be setting user visible control values from the
+>> kernel.  This shouldn't be a machine driver function either.  What =
+are
+>> you trying to accomplish here?
+>=20
+> See above.
+>=20
+> Martin
 
-	+       if (sec && sec->describe_server_key)
-	+               sec->describe_server_key(key, m);
+One thing I didn=E2=80=99t point out. The controls we are setting here =
+are not
+visible from userspace. That=E2=80=99s the point of the =E2=80=98filter=E2=
+=80=99 card method
+I am trying to establish in the other commit. With it, the card decides
+which controls are okay to be exported and which should be hidden.
 
+Here we are only setting hidden controls.
 
-> Fixes: 12da59fcab5a ("xrpc: Hand server key parsing off to the security =
-class")
-
-There's a missing 'r' in "rxrpc:" in the patch subject, but otherwise this=
- one
-looks like the right one.
-
-Thanks,
-David
+Martin
 

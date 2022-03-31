@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6DB4EE255
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D424EE254
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241205AbiCaUH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S241235AbiCaUHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiCaUH2 (ORCPT
+        with ESMTP id S241220AbiCaUHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:07:28 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC78D1905AF
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:05:40 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so3571718pjo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:05:40 -0700 (PDT)
+        Thu, 31 Mar 2022 16:07:39 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352CF192583
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:05:51 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bi12so1600223ejb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p9t6Pq/1FxCVVbqJtOJthgB43FJ45dwItTm1qqJ1hpI=;
-        b=k+DZFzBF4OXV/isOqu1fX+iYt/dbsfQpHxFsvVwXaosR6G0JGbByOJaOHyc5vCKVQr
-         ltQm1edsWc4pHVXEoUwjDXuAleaSO3swIpZWeZ9/kFXxLJd9Slgm5PN1ON71WDsudY5I
-         zT0QBDf0T6vMRkOCin7JC9IAXWiGIMksc68srEOT0k4+GxMULM4NpDia06MvLmpeZsCK
-         R8d+M/t8ojbNFDdL0jJ9RYldFJ0LRimtfwfvC0KEQUlAvFn8nJ3S+NenOxBg4YxJC7vh
-         mF7fOrFNOoEumhyEiaOoQ7q1yOj4Rx/ltc57kDtrRkfd6BpGEEGMCSJoUvpIGcN2QQml
-         5TnQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZfN067mnS5BlIsfHVe3ZlU7DqSlk7Ld3MnZB4ytVmqg=;
+        b=c3ynxR9y7v1gW+mWfnZMhiqsH3K4IQGW0eFYu2rMtfQDOE8DvnLWJwT6ahalulW1BD
+         8MQ7GXPoyvQLLh2LHp7kyR5PigjxABECaVIVFmxVRyKpa0X7Twp8I1bVJ5syUAp+nGOw
+         HTBRFxuUuspnz/e4eLXrzJGCDDZBWcsi04aqV/sip2i8BRSQlzRpY62h4x6zdX+y2okJ
+         Rr754XNh2ehFdmw1IRpNmo2U4j8EvozYQV4oYwPCB37+JE5q3p0DZRHFXmY3FEWbykCU
+         E2YxVdR4jk0GyeCpJ0xuu7RZCth0A1gUKxAM2mh7H6YyxXIBMLGOhOdWx9FI8oNgF42E
+         sXWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=p9t6Pq/1FxCVVbqJtOJthgB43FJ45dwItTm1qqJ1hpI=;
-        b=OoR8uJRkwJC+IvLZSw682t9jGJVtmWwhEQzH3aDKH6wjL3t4mVEIBGSUq6GA51ODUp
-         ZT3cZRF/NJvjVFGJ7qzHCZm+WX1aRfQlzzC54/5O2inQvHhVLe9pREZ3YbZfhzOkfhLV
-         SDnQoh6/rMQg82lroSJnQhRhOJw9Bil+8v5OLNBLBbqjltmytWSfCBf+HEg/FhPHDBG6
-         PEraettwG1YLHbyYQDIQcLa5HSAXZtDydDTDrKMpq1OGvCM8Nwp3Fq76pKptAx0/JvcY
-         yOgM9qiMzSyunn498hwWebIm8KwHJpmSwL2jIjmj6KwPibs/2fRh/jmsr+JScL+B6OfH
-         GyZQ==
-X-Gm-Message-State: AOAM532Z8rMR57iAzoAhPvWJVzEpzVxS7Rfor918bfeGYoA4qUQw2z+C
-        xiGScBtkwmiErpSheHtTubH4CdyNb4jlv9+k
-X-Google-Smtp-Source: ABdhPJx+odBnk0xoMo0XR3TevKAR/mX56Y1ppZhg4q4Gj2inIRQlWGCUsTvVGClo1qK2sdWjNiDnuQ==
-X-Received: by 2002:a17:90a:488c:b0:1c7:b62e:8e8c with SMTP id b12-20020a17090a488c00b001c7b62e8e8cmr7869098pjh.157.1648757140327;
-        Thu, 31 Mar 2022 13:05:40 -0700 (PDT)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id v24-20020a634818000000b0036407db4728sm179053pga.26.2022.03.31.13.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 13:05:39 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     linux-ext4@vger.kernel.org
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ritesh Harjani <riteshh@linux.ibm.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Subject: [PATCH v3] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
-Date:   Thu, 31 Mar 2022 13:05:15 -0700
-Message-Id: <20220331200515.153214-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        bh=ZfN067mnS5BlIsfHVe3ZlU7DqSlk7Ld3MnZB4ytVmqg=;
+        b=CcE/15fN7tseWMATw5G9PaPi/w6sjaxbtOJztMO78MRmBzZidb2fbCwyF/m2K/6tc3
+         2DPZBz/b39vH/k3EKLxvlCa0SVZ6RPh4jZedm4sKWXgO4GAn5VisON3cJSaTSUq/OLQn
+         e8NJF9upjlNvmE1VElXi7M76RjXiwc5VYfG4+oyoAGT4tDc9evf7FPHYABl8OoROBZnJ
+         TV+QMJGwF1iuB4xUu0lQlt5uaMAuawfIo5EiV3b7tryPTuyCevciM0fWviB4U+IlFRem
+         mhv5eI3u4fPr7fKLn06tjD89J29KPCkdYsCj4XQKtUcBFjh7NWwcr7ceJr6JU0mtgO7E
+         BXKg==
+X-Gm-Message-State: AOAM532tullxhG7GFonvQrAuT1Lv0Ub+NVg2+ogvufFwZ7CACpwkFRrB
+        AE/NIAN9WFrL/ytmlVTAeLqq+g==
+X-Google-Smtp-Source: ABdhPJx3tm7hWCSHu7HsyyNZCnghrvmyGAJpe24l53pAa8mUdy+wSgwnyvwLib/kWiGTjkDX+RsJfg==
+X-Received: by 2002:a17:906:7d52:b0:6df:a6c7:2c5 with SMTP id l18-20020a1709067d5200b006dfa6c702c5mr6609550ejp.540.1648757149826;
+        Thu, 31 Mar 2022 13:05:49 -0700 (PDT)
+Received: from [192.168.0.167] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id gv9-20020a170906f10900b006d7128b2e6fsm151290ejb.162.2022.03.31.13.05.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 13:05:49 -0700 (PDT)
+Message-ID: <dfb10165-1987-84ae-d48a-dfb6b897e0a3@linaro.org>
+Date:   Thu, 31 Mar 2022 22:05:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RFC net-next 2/3] dt-bindings: net: mscc-miim: add clock
+ and clock-frequency
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220331151440.3643482-1-michael@walle.cc>
+ <20220331151440.3643482-2-michael@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220331151440.3643482-2-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,66 +85,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found an issue [1] in ext4_fallocate().
-The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-and offset 0x1000000ul, which, when added together exceed the
-bitmap_maxbytes for the inode. This triggers a BUG in
-ext4_ind_remove_space(). According to the comments in this function
-the 'end' parameter needs to be one block after the last block to be
-removed. In the case when the BUG is triggered it points to the last
-block. Modify the ext4_punch_hole() function and add constraint that
-caps the length to satisfy the one before laster block requirement.
+On 31/03/2022 17:14, Michael Walle wrote:
+> Add the (optional) clock input of the MDIO controller and indicate that
+> the common clock-frequency property is supported. The driver can use it
+> to set the desired MDIO bus frequency.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  Documentation/devicetree/bindings/net/mscc,miim.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/mscc,miim.yaml b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+> index b52bf1732755..e9e8ddcdade9 100644
+> --- a/Documentation/devicetree/bindings/net/mscc,miim.yaml
+> +++ b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+> @@ -32,6 +32,11 @@ properties:
+>  
+>    interrupts: true
+>  
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-frequency: true
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
+This looks unusual clock-frequency is usually for clock providers but
+this is a consumer, so it is not a common frequency here. You mention
+that "driver can use it", so it's not a hardware description but some
+feature for the driver. We have this already - use assigned-clock* in
+your DTS.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Andreas Dilger <adilger.kernel@dilger.ca>
-Cc: Ritesh Harjani <riteshh@linux.ibm.com>
-Cc: <linux-ext4@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-
-Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
---
-v3: Modify the length instead of returning an error.
-v2: Change sbi->s_blocksize to inode->i_sb->s_blocksize in maxlength
- computation.
----
- fs/ext4/inode.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 1ce13f69fbec..60bf31765d07 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -3958,7 +3958,8 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
- 	struct super_block *sb = inode->i_sb;
- 	ext4_lblk_t first_block, stop_block;
- 	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	handle_t *handle;
- 	unsigned int credits;
- 	int ret = 0, ret2 = 0;
-@@ -4001,6 +4002,14 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
- 		   offset;
- 	}
- 
-+	/*
-+	 * For punch hole the length + offset needs to be within one block
-+	 * before last range. Adjust the length if it goes beyond that limit.
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
-+	if (offset + length > max_length)
-+		length = max_length - offset;
-+
- 	if (offset & (sb->s_blocksize - 1) ||
- 	    (offset + length) & (sb->s_blocksize - 1)) {
- 		/*
--- 
-2.35.1
-
+Best regards,
+Krzysztof

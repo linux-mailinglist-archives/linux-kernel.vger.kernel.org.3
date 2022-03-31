@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9924ED556
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878A04ED57D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiCaIW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S232758AbiCaI0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbiCaIWZ (ORCPT
+        with ESMTP id S232747AbiCaI0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:22:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED2F1B84FD;
-        Thu, 31 Mar 2022 01:20:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ECBBACE20FC;
-        Thu, 31 Mar 2022 08:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F29CC340EE;
-        Thu, 31 Mar 2022 08:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648714833;
-        bh=iXTgKFinWeARny9umBHpFewtGh3ktJILaqMuf1C2Ki4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XlEjsUNMuFyGV1AFKM5uUXqTaQXIUNDx9OczEpSBAIwsFuh1k6rhL56wSNaAu2bMa
-         XoIE9l96UgLY1rmvK4neZhttSkSh4gr26W3YlTn5KAWhoKCcibnRhEg9tWQNt+QbSG
-         dV/VN4EZKtmcW5mAmIT0x4Pc0RV2uOVKrKX+TZiktpWWt74chiCass+fl6swsajFhP
-         Az+NXH5p4qK34OR11g/xQZBxbadK7l+g79ZoM42BdAVyOpuxUPCNdLcHUnK0P+lUjQ
-         rK9O8c1TogyMqZc7Y1wgfT7wpLeZoz407BRG6HK9OClSxlHngAul0DrTd2FWs6WQNe
-         ctEOHb06wMD1w==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Leon Romanovsky <leonro@nvidia.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>,
-        Shannon Nelson <shannon.nelson@oracle.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH net v1] ixgbe: ensure IPsec VF<->PF compatibility
-Date:   Thu, 31 Mar 2022 11:20:23 +0300
-Message-Id: <737616899df2a482e4ec35aa4056c9ac608d2f50.1648714609.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 31 Mar 2022 04:26:40 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F412625C8;
+        Thu, 31 Mar 2022 01:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=YDQlZ
+        qcen5qVjN/uH7qP6dIID2tLa9CyPJjJm8Xi+1A=; b=ebUbVQi4xNCkOw1ANGJtZ
+        rdYzLq1jwrWfGDMKBzv5aX0l87dwQ1ZYK3x0PrJeIO10xnJHhi81d27M08F+4kty
+        ujIWfQIhx8dCJpfGxITrAx6VPkyNlApHYZwg9im6lzogoCaUptnJy03RejkhJff+
+        Rhs4Iz6itDwJrIGw4Bzad4=
+Received: from localhost.localdomain (unknown [101.86.107.106])
+        by smtp8 (Coremail) with SMTP id DMCowADH+lr1ZEVilGI2AQ--.25548S2;
+        Thu, 31 Mar 2022 16:23:18 +0800 (CST)
+From:   jackygam2001 <jacky_gam_2001@163.com>
+To:     dkirjanov@suse.de
+Cc:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org, yhs@fb.com,
+        ping.gan@dell.com, Ping Gan <jacky_gam_2001@163.com>
+Subject: [PATCH v2 net-next] tcp: Add tracepoint for tcp_set_ca_state
+Date:   Thu, 31 Mar 2022 16:21:49 +0800
+Message-Id: <20220331082149.15910-1-jacky_gam_2001@163.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <9f7a92f5-5674-5c9f-e5ec-4a68ec8cb0d1@suse.de>
+References: <9f7a92f5-5674-5c9f-e5ec-4a68ec8cb0d1@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CM-TRANSID: DMCowADH+lr1ZEVilGI2AQ--.25548S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAw48WF4fWF1ftF4kZrWfuFg_yoWrAw1rpF
+        1DAr1Sg3y5JryagF93Ary8t3sxW348Wr1a9ry7Ww1ak3ZFqF1rtF4ktryjyayYvrZYk39x
+        Wa129r1rGanrZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi66wJUUUUU=
+X-Originating-IP: [101.86.107.106]
+X-CM-SenderInfo: 5mdfy55bjdzsisqqiqqrwthudrp/xtbBbADUKVc7O4We1wAAsK
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,40 +57,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Ping Gan <jacky_gam_2001@163.com>
 
-The VF driver can forward any IPsec flags and such makes the function
-is not extendable and prone to backward/forward incompatibility.
+The congestion status of a tcp flow may be updated since there
+is congestion between tcp sender and receiver. It makes sense to
+add tracepoint for congestion status set function to summate cc
+status duration and evaluate the performance of network
+and congestion algorithm. The backgound of this patch is below.
 
-If new software runs on VF, it won't know that PF configured something
-completely different as it "knows" only XFRM_OFFLOAD_INBOUND flag.
+Link: https://github.com/iovisor/bcc/pull/3899
 
-Fixes: eda0333ac293 ("ixgbe: add VF IPsec management")
-Reviewed-by: Raed Salem <raeds@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>a
+Signed-off-by: Ping Gan <jacky_gam_2001@163.com>
 ---
-Chaagelog:
-v1:
- * Replaced bits arithmetic with more simple expression
-v0: https://lore.kernel.org/all/3702fad8a016170947da5f3c521a9251cf0f4a22.1648637865.git.leonro@nvidia.com
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/net/tcp.h          | 12 +++---------
+ include/trace/events/tcp.h | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ net/ipv4/tcp_cong.c        | 12 ++++++++++++
+ 3 files changed, 60 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-index e596e1a9fc75..69d11ff7677d 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-@@ -903,7 +903,8 @@ int ixgbe_ipsec_vf_add_sa(struct ixgbe_adapter *adapter, u32 *msgbuf, u32 vf)
- 	/* Tx IPsec offload doesn't seem to work on this
- 	 * device, so block these requests for now.
- 	 */
--	if (!(sam->flags & XFRM_OFFLOAD_INBOUND)) {
-+	sam->flags = sam->flags & ~XFRM_OFFLOAD_IPV6;
-+	if (sam->flags != XFRM_OFFLOAD_INBOUND) {
- 		err = -EOPNOTSUPP;
- 		goto err_out;
- 	}
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 70ca4a5e330a..9a3786f33798 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1139,15 +1139,6 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
+ 	return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
+ }
+ 
+-static inline void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
+-{
+-	struct inet_connection_sock *icsk = inet_csk(sk);
+-
+-	if (icsk->icsk_ca_ops->set_state)
+-		icsk->icsk_ca_ops->set_state(sk, ca_state);
+-	icsk->icsk_ca_state = ca_state;
+-}
+-
+ static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
+ {
+ 	const struct inet_connection_sock *icsk = inet_csk(sk);
+@@ -1156,6 +1147,9 @@ static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
+ 		icsk->icsk_ca_ops->cwnd_event(sk, event);
+ }
+ 
++/* From tcp_cong.c */
++void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
++
+ /* From tcp_rate.c */
+ void tcp_rate_skb_sent(struct sock *sk, struct sk_buff *skb);
+ void tcp_rate_skb_delivered(struct sock *sk, struct sk_buff *skb,
+diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
+index 521059d8dc0a..69a68b01c1de 100644
+--- a/include/trace/events/tcp.h
++++ b/include/trace/events/tcp.h
+@@ -371,6 +371,51 @@ DEFINE_EVENT(tcp_event_skb, tcp_bad_csum,
+ 	TP_ARGS(skb)
+ );
+ 
++TRACE_EVENT(tcp_cong_state_set,
++
++	TP_PROTO(struct sock *sk, const u8 ca_state),
++
++	TP_ARGS(sk, ca_state),
++
++	TP_STRUCT__entry(
++		__field(const void *, skaddr)
++		__field(__u16, sport)
++		__field(__u16, dport)
++		__array(__u8, saddr, 4)
++		__array(__u8, daddr, 4)
++		__array(__u8, saddr_v6, 16)
++		__array(__u8, daddr_v6, 16)
++		__field(__u8, cong_state)
++	),
++
++	TP_fast_assign(
++		struct inet_sock *inet = inet_sk(sk);
++		__be32 *p32;
++
++		__entry->skaddr = sk;
++
++		__entry->sport = ntohs(inet->inet_sport);
++		__entry->dport = ntohs(inet->inet_dport);
++
++		p32 = (__be32 *) __entry->saddr;
++		*p32 = inet->inet_saddr;
++
++		p32 = (__be32 *) __entry->daddr;
++		*p32 =  inet->inet_daddr;
++
++		TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_daddr,
++			   sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
++
++		__entry->cong_state = ca_state;
++	),
++
++	TP_printk("sport=%hu dport=%hu saddr=%pI4 daddr=%pI4 saddrv6=%pI6c daddrv6=%pI6c cong_state=%u",
++		  __entry->sport, __entry->dport,
++		  __entry->saddr, __entry->daddr,
++		  __entry->saddr_v6, __entry->daddr_v6,
++		  __entry->cong_state)
++);
++
+ #endif /* _TRACE_TCP_H */
+ 
+ /* This part must be outside protection */
+diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+index dc95572163df..98b48bdb8be7 100644
+--- a/net/ipv4/tcp_cong.c
++++ b/net/ipv4/tcp_cong.c
+@@ -16,6 +16,7 @@
+ #include <linux/gfp.h>
+ #include <linux/jhash.h>
+ #include <net/tcp.h>
++#include <trace/events/tcp.h>
+ 
+ static DEFINE_SPINLOCK(tcp_cong_list_lock);
+ static LIST_HEAD(tcp_cong_list);
+@@ -33,6 +34,17 @@ struct tcp_congestion_ops *tcp_ca_find(const char *name)
+ 	return NULL;
+ }
+ 
++void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
++{
++	struct inet_connection_sock *icsk = inet_csk(sk);
++
++	trace_tcp_cong_state_set(sk, ca_state);
++
++	if (icsk->icsk_ca_ops->set_state)
++		icsk->icsk_ca_ops->set_state(sk, ca_state);
++	icsk->icsk_ca_state = ca_state;
++}
++
+ /* Must be called with rcu lock held */
+ static struct tcp_congestion_ops *tcp_ca_find_autoload(struct net *net,
+ 						       const char *name)
 -- 
-2.35.1
+2.15.0
 

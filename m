@@ -2,116 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110A54ED4F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0204ED4FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiCaHrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S232396AbiCaHso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiCaHrE (ORCPT
+        with ESMTP id S229924AbiCaHsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:47:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687FA1E8CF6;
-        Thu, 31 Mar 2022 00:45:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 31 Mar 2022 03:48:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A46C1D97C4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:46:55 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F318121900;
+        Thu, 31 Mar 2022 07:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648712814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MClpEQCEqNuvlVug+pSR2PKBVfdIgjYBgqwIpn2O7Gg=;
+        b=EiSTzvcBcwyt5d21/dSJyyFfU8OvvcT2KgT0DDTSOTwqTFtPB+VgnitdY9jIyVhlxRCI/d
+        AjKiThObJcEEVZ+GMmERBez8Z0qd3Dpkk5E71Z/UOTV+ZekG/Qm4Sl9Gz+agwV55lcHM37
+        bKv4SA1mfRBLGqhkjuf7XJwdK1aZ9KY=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18F1AB81FDC;
-        Thu, 31 Mar 2022 07:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198C6C340F0;
-        Thu, 31 Mar 2022 07:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648712714;
-        bh=8iqEELlQfidAWxPbSPnuzLLq+C/vvjNyUEt2aMmN8aA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gzrLLIkO73a3ko/CKONc+3yRFmcbMWKdX01oTL6GkxvzXvbt7Ikj0iXk8lEA9BJ9U
-         LQAjztQEIt9D+vj2nLVrVKYtT37xj0oGe3c16FBMJyfKDSiSHOBE/VPCvLYRb8r+yn
-         71coC207ai6tdIH0HT63mVXsp9afiYsSVU49mdjG42m9qbihUg5NbdktqOktrP6ApX
-         nQyLCiBNvPy9DpbkXosk2yEK5udJk4QaYJU4b1EJlnh9Cy0AwBkKt39+CwAXxSUHPM
-         8BWw6Nt9ayKjUawJPVWn3FFnqoCs40RZ+CEWNrnOFlLwgKl4pRK9egqcrvVLq8dYAx
-         R9OD+wbRYe8fA==
-Date:   Thu, 31 Mar 2022 10:45:10 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Shannon Nelson <snelson@pensando.io>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        intel-wired-lan@lists.osuosl.org,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>,
-        Shannon Nelson <shannon.nelson@oracle.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: Re: [PATCH net] ixgbe: ensure IPsec VF<->PF compatibility
-Message-ID: <YkVcBgac41VjNBd7@unreal>
-References: <3702fad8a016170947da5f3c521a9251cf0f4a22.1648637865.git.leonro@nvidia.com>
- <b201a3ed-5698-4e91-adc9-34c938e43668@pensando.io>
+        by relay2.suse.de (Postfix) with ESMTPS id 52242A3B82;
+        Thu, 31 Mar 2022 07:46:48 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 09:46:52 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v2] mm/list_lru: Fix possible race in
+ memcg_reparent_list_lru_node()
+Message-ID: <YkVcbElWjomA7ofF@dhcp22.suse.cz>
+References: <20220330191440.1cc1b2de2b849d1ba93d2ba7@linux-foundation.org>
+ <89B53D3A-FCC5-4107-8D49-81D5B9AE5172@linux.dev>
+ <20220331063956.5uqnab64cqnmcwyr@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b201a3ed-5698-4e91-adc9-34c938e43668@pensando.io>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220331063956.5uqnab64cqnmcwyr@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 09:13:21AM -0700, Shannon Nelson wrote:
-> On 3/30/22 4:01 AM, Leon Romanovsky wrote:
-> > From: Leon Romanovsky <leonro@nvidia.com>
+On Thu 31-03-22 06:39:56, Shakeel Butt wrote:
+> On Wed, Mar 30, 2022 at 07:48:45PM -0700, Roman Gushchin wrote:
 > > 
-> > The VF driver can forward any IPsec flags and such makes the function
-> > is not extendable and prone to backward/forward incompatibility.
 > > 
-> > If new software runs on VF, it won't know that PF configured something
-> > completely different as it "knows" only XFRM_OFFLOAD_INBOUND flag.
+> [...]
 > > 
-> > Fixes: eda0333ac293 ("ixgbe: add VF IPsec management")
-> > Reviewed-by: Raed Salem <raeds@nvidia.com>
-> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> > ---
-> > There is no simple fix for this VF/PF incompatibility as long as FW
-> > doesn't filter/decline unsupported options when convey mailbox from VF
-> > to PF.
-> > ---
-> >   drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
 > > 
-> > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-> > index e596e1a9fc75..236f244e3f65 100644
-> > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-> > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-> > @@ -903,7 +903,9 @@ int ixgbe_ipsec_vf_add_sa(struct ixgbe_adapter *adapter, u32 *msgbuf, u32 vf)
-> >   	/* Tx IPsec offload doesn't seem to work on this
-> >   	 * device, so block these requests for now.
-> >   	 */
-> > -	if (!(sam->flags & XFRM_OFFLOAD_INBOUND)) {
-> > +	sam->flags = sam->flags & ~XFRM_OFFLOAD_IPV6;
-> > +	if (!(sam->flags & XFRM_OFFLOAD_INBOUND) ||
-> > +	    sam->flags & ~XFRM_OFFLOAD_INBOUND) {
+> > But honestly, Iâ€™d drop the original optimization together with
+> > the fix, if only there is no _real world_ data on the problem and
+> > the improvement. It seems like it has started as a nice simple
+> > improvement, but the race makes it complex and probably not worth
+> > the added complexity and fragility.
 > 
-> So after stripping the IPV6 flag, you're checking to be sure that INBOUND is
-> the only flag enabled, right?
-> Could you use
->     if (sam->flags != XFRM_OFFLOAD_INBOUND) {
-> instead?
+> I agree with dropping the original optimization as it is not really
+> fixing an observed issue which may justify adding some complexity.
 
-Sure, I'll send new version soon.
-
-Thanks
-
-> 
-> sln
-> 
-> >   		err = -EOPNOTSUPP;
-> >   		goto err_out;
-> >   	}
-> 
+Completely agreed. The patch as it is proposed is not really acceptable
+IMHO and I have to say I am worried that this is not the first time we
+are in a situation when a follow up fixes or unrelated patches are
+growing in complexity to fit on top of a performance optimizations which
+do not refer to any actual numbers.
+-- 
+Michal Hocko
+SUSE Labs

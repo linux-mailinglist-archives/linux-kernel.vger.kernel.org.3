@@ -2,147 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0404EDA9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C003E4EDA9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236887AbiCaNgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S236898AbiCaNhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiCaNgg (ORCPT
+        with ESMTP id S234284AbiCaNhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:36:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8D9F329E;
-        Thu, 31 Mar 2022 06:34:49 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22VCtOjc000908;
-        Thu, 31 Mar 2022 13:34:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=iWmUhd2gzNOKTbvvfXdB5TlWUvlA8kYnUfYO55tAMHs=;
- b=oLSwMn+1v5SEUcvlfSKN4dYvOsBJaj6I62zaz92ilNhV/OvGX69AI2J9E4pbW2jZJt/I
- 2ofwgPoWtgqlegg/MFyRtLl4aQ66jKyfN7uln7nr8elFZDVEOmfU5sCWm8ospKpGJSl+
- 8W0RxrrfsRvANDVt44PQs1eXpjiuTcv/pREVEQJ72QEq6BUivYSyxnuM4plaQijoXcSk
- JuMrI3VSYSCkHDiUMFqfwc0jWUdRltbHbtusYheKpz9PE6/1xZCfoGKYxPkfYGVqBnPJ
- vB1/lFkbYKc13H2LnLqM0Gs50BwxAMURAqJVILZETWSS6Jh2X58OQpFAygdaGf2t6u4n 6g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f5a3k4h5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 13:34:48 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22VCgtDk030123;
-        Thu, 31 Mar 2022 13:34:48 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f5a3k4h52-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 13:34:48 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22VDTGwZ022039;
-        Thu, 31 Mar 2022 13:34:46 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3f1tf918kr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 13:34:46 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22VDMfBu49479964
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 31 Mar 2022 13:22:41 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F25AD11C04C;
-        Thu, 31 Mar 2022 13:34:42 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84C9B11C058;
-        Thu, 31 Mar 2022 13:34:42 +0000 (GMT)
-Received: from [9.145.159.108] (unknown [9.145.159.108])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 31 Mar 2022 13:34:42 +0000 (GMT)
-Message-ID: <a61d614f-df0a-d0a8-c1f1-45a915e26b23@linux.ibm.com>
-Date:   Thu, 31 Mar 2022 15:34:42 +0200
+        Thu, 31 Mar 2022 09:37:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCE7103D8F;
+        Thu, 31 Mar 2022 06:35:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DBFE61926;
+        Thu, 31 Mar 2022 13:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155CCC340EE;
+        Thu, 31 Mar 2022 13:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648733712;
+        bh=aCkusMvkesrwDSvmS3BLFtnpnJ8E1fFKa/EVcuQFOM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MdS05gEM0paDn3pjZwCJ9JM09dRKYhqJNi3J03JKqZP8No1NEfXyZZPNAaF89660e
+         NT76ADpnFMGIp+y8MimStntvwxZPM10eFEnLKgnll9dlAAfJu48ChBw81aamd+/Hmx
+         QTvd0a8gqDMpdsjExwJZVL4YwWgStgCgK4K2b6Ik=
+Date:   Thu, 31 Mar 2022 15:35:05 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>
+Subject: Re: [PATCH v5 06/20] rust: add `alloc` crate
+Message-ID: <YkWuCenvnvRBkv8V@kroah.com>
+References: <20220317181032.15436-1-ojeda@kernel.org>
+ <20220317181032.15436-7-ojeda@kernel.org>
+ <YkWhs1GffuUmZ4SC@kroah.com>
+ <CANiq72mxXY_4wXZPO5VCX76G168X0gynO=n=1xP2shVWBm+yeA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v9 11/18] s390/mm: KVM: pv: when tearing down, try to
- destroy protected pages
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220330122605.247613-1-imbrenda@linux.ibm.com>
- <20220330122605.247613-12-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220330122605.247613-12-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: d1_FrIPcBG4GJrJvYOIai_D9VtWzJJI2
-X-Proofpoint-ORIG-GUID: w1srTf2AW4TVtdnSQSKQSATQR7L2pL1I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-31_05,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- phishscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203310075
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiq72mxXY_4wXZPO5VCX76G168X0gynO=n=1xP2shVWBm+yeA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 14:25, Claudio Imbrenda wrote:
-> When ptep_get_and_clear_full is called for a mm teardown, we will now
-> attempt to destroy the secure pages. This will be faster than export.
+On Thu, Mar 31, 2022 at 03:19:51PM +0200, Miguel Ojeda wrote:
+> Hi Greg,
 > 
-> In case it was not a teardown, or if for some reason the destroy page
-> UVC failed, we try with an export page, like before.
+> On Thu, Mar 31, 2022 at 2:42 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is a huge patch.  Why not break it into 2, one that adds what is
+> > upstream, and then the second adds the "stuff on top" that you need for
+> > the kernel.  Otherwise it's hard to know what is, and is not, upstream
+> > for us to be able to review from a kernel point of view.
 > 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Acked-by: Janosch Frank <frankja@linux.ibm.com>
-> ---
->   arch/s390/include/asm/pgtable.h | 18 +++++++++++++++---
->   1 file changed, 15 insertions(+), 3 deletions(-)
+> That is a good idea, will do.
 > 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 23ca0d8e058a..72544a1b4a68 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -1118,9 +1118,21 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->   	} else {
->   		res = ptep_xchg_lazy(mm, addr, ptep, __pte(_PAGE_INVALID));
->   	}
-> -	/* At this point the reference through the mapping is still present */
-> -	if (mm_is_protected(mm) && pte_present(res))
-> -		uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
-> +	/* Nothing to do */
-> +	if (!mm_is_protected(mm) || !pte_present(res))
-> +		return res;
-> +	/*
-> +	 * At this point the reference through the mapping is still present.
+> There are some files from upstream that we do not need, so they are
+> already deleted here (e.g. collections), thus what I will do is send
+> the first patch without those already and then another patch with the
+> modifications/additions we did. If you prefer to see the deleted files
+> in an intermediate step, I can also do that.
 
-That's the case because we zap ptes within a mm that's still existing, 
-right? The mm will be deleted after we have unmapped the memory.
+Nah, I don't care about deleted files :)
 
+thanks,
 
-> +	 * The notifier should have destroyed all protected vCPUs at this
-> +	 * point, so the destroy should be successful.
-> +	 */
-> +	if (full && !uv_destroy_owned_page(pte_val(res) & PAGE_MASK))
-> +		return res;
-> +	/*
-> +	 * But if something went wrong and the pages could not be destroyed,
-> +	 * the slower export is used as fallback instead.
-> +	 */
-> +	uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
->   	return res;
->   }
->   
-
+greg k-h

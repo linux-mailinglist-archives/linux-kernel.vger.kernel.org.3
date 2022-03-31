@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0C94ED84B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015BA4ED84F
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiCaLSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S235006AbiCaLSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiCaLSh (ORCPT
+        with ESMTP id S233641AbiCaLSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:18:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E314205BC3;
-        Thu, 31 Mar 2022 04:16:49 -0700 (PDT)
+        Thu, 31 Mar 2022 07:18:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A093205BD4;
+        Thu, 31 Mar 2022 04:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648725409; x=1680261409;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QzehnQgNR3bN/3DlO10M+yxPq8+GnRut0NN7IPvEbLw=;
-  b=XuAcrnffM3PAUMKZI0X1JDmbsIcC4ekOLraqmuvia8XxMkCoFjPNHsFs
-   8CH4ottrEVmgwImSZGsJqXXiJ24QiLYhtY0gCMnUcDZgoW7FVpkbdIUus
-   s6Fj6fKAZ3Y/DbTrk0EyCsZTUNGQXFS1+gjSlKW3t15iXGwOVOFJmmvAD
-   moZXAulzbfPUVZuVPqj9JiqFSuA9/V2pVC9BVrYmPK1C15M6ld4pTkThz
-   1A2wMWODVjLlokuxcno3ixeLWbiGXvaTE21XmgeQGgKSsO8bljgwFKfkI
-   8mTztN6XgDGOPv92syLjzeta/cY/9oYFpCOGDnBnKFiNb9HQaoiph+EoX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="241950610"
+  t=1648725420; x=1680261420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pjCtimjt0fYKXCjngBoxtDwovUxjoMR1xDl1UMLmYmA=;
+  b=Hoj7jVyww/ALBn6MHGJ2fda05M4ruRXDUs5zyZOc9IWdeGGTxMbQ9hBj
+   r+4CiODAx93kFvE/fQ/QHImq5ROjAgMdZSDILHQyf9LetSiMGo/grdp4N
+   egyKXgnG+aQzOy5onej66DB0gqZ/9Zr3kqDA6nXK2STlpDRi4sBnw1ep0
+   VYE7GP8qiVZPaxYUJQR0X5nZQgcQLbMNhqQbZL7y9Z4BVBjhROHxPB52D
+   hKGjAN13xx/V3ExM0GRWZG8um1CpUpLiBGTA96inQGIF5MDyBGjPWV5ai
+   fl2FVMoIXyOCqwjEK434S/a0MfEO+8WFWlLe11bpEp8bq1rCp42ozMpdQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259778552"
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="241950610"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 04:16:45 -0700
+   d="scan'208";a="259778552"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 04:16:59 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="555038923"
-Received: from fpaolini-mobl2.ger.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.53.114])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 04:16:43 -0700
-Message-ID: <2b8038c17b85658a054191b362840240bd66e46b.camel@intel.com>
-Subject: Re: [RFC PATCH v5 033/104] KVM: x86: Add infrastructure for stolen
- GPA bits
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 01 Apr 2022 00:16:41 +1300
-In-Reply-To: <a21c1f9065cf27db54820b2b504db4e507835584.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <a21c1f9065cf27db54820b2b504db4e507835584.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+   d="scan'208";a="695451250"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 04:16:54 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 14:16:53 +0300
+Date:   Thu, 31 Mar 2022 14:16:53 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Message-ID: <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
+References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
+ <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
+ <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+ <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
+ <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
+ <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
+ <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
+ <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,308 +84,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Rick Edgecombe <rick.p.edgecombe@intel.com>
+On Wed, Mar 30, 2022 at 08:47:34PM +0300, Mathias Nyman wrote:
+> On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
+> > Hi Mathias,Heikki
+> > 
+> > On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
+> >> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
+> >>> On 25.3.2022 13.27, Heikki Krogerus wrote:
+> >>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
+> >>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
+> >>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
+> >>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
+> >>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
+> >>>>>>> suspend. When we run the below command the runtime_status still shows
+> >>>>>>> active.
+> >>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+> >>>>>>>
+> >>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
+> >>>>>>> HCD core by setting this quirk.
+> >>>>>>>
+> >>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> >>>>>>> ---
+> >>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
+> >>>>>>>   1 file changed, 13 insertions(+)
+> >>>>>>>
+> >>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> >>>>>>> index eda8719..d4fcf06 100644
+> >>>>>>> --- a/drivers/usb/dwc3/host.c
+> >>>>>>> +++ b/drivers/usb/dwc3/host.c
+> >>>>>>> @@ -13,6 +13,12 @@
+> >>>>>>>   #include <linux/platform_device.h>
+> >>>>>>>     #include "core.h"
+> >>>>>>> +#include <linux/usb/xhci-plat.h>
+> >>>>>>> +#include <linux/usb/xhci-quirks.h>
+> >>>>>>> +
+> >>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+> >>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
+> >>>>>>> +};
+> >>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> >>>>>>>                       int irq, char *name)
+> >>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+> >>>>>>>           }
+> >>>>>>>       }
+> >>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> >>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
+> >>>>>>> +    if (ret) {
+> >>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
+> >>>>>>> +        goto err;
+> >>>>>>> +    }
+> >>>>>>> +
+> >>>>>>>       ret = platform_device_add(xhci);
+> >>>>>>>       if (ret) {
+> >>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
+> >>>>>> I think you should just use device property:
+> >>>>>>
+> >>>>> This was suggested in an earlier series, but was rejected as it also added
+> >>>>> the property as a device tree parameter.
+> >>>>>
+> >>>>> I think adding more device properties can be messy in the long run, especially if we
+> >>>>> need to add them for many of the existing xhci quirks.
+> >>>>> We also end up with a mix where some device properties are listed as device tree
+> >>>>> parameters, and some not.
+> >>>>>
+> >>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
+> >>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
+> >>>>> callbacks.
+> >>>>>
+> >>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
+> >>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
+> >>>>> platform data structure.
+> >>>>>
+> >>>>> On the downside we add a couple xhci related header files to include/linux/usb/
+> >>>>> Let me know if you see any other issues I missed with this approach.
+> >>>> The problem here is that these drivers are now coupled together, and
+> >>>> that should not be taken lightly. We have a dependency hell in our
+> >>>> hands with a lot of drivers, and the culprit is always platform data.
+> >>>>
+> >>>> Build-in device properties may be messy, but I would still say they
+> >>>> are less messy than those quirk flags - you got to admit, they are a
+> >>>> mess. The benefit from build-in properties is in any case the fact
+> >>>> that they remove the need to couple these drivers together.
+> >>> Agree, quirk bits are messy. Any suggestion that would work with
+> >>> PCI xHCI devices, devicetree, and "pure" platform devices?
+> >> I think xHCI driver should always be able to rely on being able to
+> >> read this kind of information from the fwnode. If there is no actual
+> >> firmware node (DT or ACPI), or if it's missing some information, the
+> >> glue driver needs to populate software node for the xHCI.
+> >>
+> >> Right now I just want to avoid having to pass the quirks using
+> >> platform data from drivers such as drivers/usb/cdns3/host.c and
+> >> drivers/usb/dwc3/host.c to xHCI.
+> >>
+> >> One way we could do that is by defining compatibility ID for both of
+> >> them that we provide using a single device property (like I guess DT
+> >> does). Then based on that compatibility ID, xhci-plat.c can set the
+> >> actual "static" quirk flags. That we could already do easily. How
+> >> would that sound to you?
 > 
-> Add support in KVM's MMU for aliasing multiple GPAs (from a hardware
-> perspective) to a single GPA (from a memslot perspective). GPA aliasing
-> will be used to repurpose GPA bits as attribute bits, e.g. to expose an
-> execute-only permission bit to the guest. To keep the implementation
-> simple (relatively speaking), GPA aliasing is only supported via TDP.
+> Sounds good. 
 > 
-> Today KVM assumes two things that are broken by GPA aliasing.
->   1. GPAs coming from hardware can be simply shifted to get the GFNs.
->   2. GPA bits 51:MAXPHYADDR are reserved to zero.
+> > 
+> > This was my previous patch where I was using device tree property. Should we go ahead with this approach?
+> > 
+> > https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+> > 
+> > Any further changes to this ?
 > 
-> With GPA aliasing, translating a GPA to GFN requires masking off the
-> repurposed bit, and a repurposed bit may reside in 51:MAXPHYADDR.
+> By dropping the DT part of that series we get a similar built-in device property
+> solution as Heikki initially suggested.
 > 
-> To support GPA aliasing, introduce the concept of per-VM GPA stolen bits,
-> that is, bits stolen from the GPA to act as new virtualized attribute
-> bits. A bit in the mask will cause the MMU code to create aliases of the
-> GPA. It can also be used to find the GFN out of a GPA coming from a tdp
-> fault.
-> 
-> To handle case (1) from above, retain any stolen bits when passing a GPA
-> in KVM's MMU code, but strip them when converting to a GFN so that the
-> GFN contains only the "real" GFN, i.e. never has repurposed bits set.
-> 
-> GFNs (without stolen bits) continue to be used to:
->   - Specify physical memory by userspace via memslots
->   - Map GPAs to TDP PTEs via RMAP
->   - Specify dirty tracking and write protection
->   - Look up MTRR types
->   - Inject async page faults
-> 
-> Since there are now multiple aliases for the same aliased GPA, when
-> userspace memory backing the memslots is paged out, both aliases need to be
-> modified. Fortunately, this happens automatically. Since rmap supports
-> multiple mappings for the same GFN for PTE shadowing based paging, by
-> adding/removing each alias PTE with its GFN, kvm_handle_hva() based
-> operations will be applied to both aliases.
-> 
-> In the case of the rmap being removed in the future, the needed
-> information could be recovered by iterating over the stolen bits and
-> walking the TDP page tables.
-> 
-> For TLB flushes that are address based, make sure to flush both aliases
-> in the case of stolen bits.
-> 
-> Only support stolen bits in 64 bit guest paging modes (long, PAE).
-> Features that use this infrastructure should restrict the stolen bits to
-> exclude the other paging modes. Don't support stolen bits for shadow EPT.
-> 
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  2 ++
->  arch/x86/kvm/mmu.h              | 51 +++++++++++++++++++++++++++++++++
->  arch/x86/kvm/mmu/mmu.c          | 19 ++++++++++--
->  arch/x86/kvm/mmu/paging_tmpl.h  | 25 +++++++++-------
->  4 files changed, 84 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 208b29b0e637..d8b78d6abc10 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1235,7 +1235,9 @@ struct kvm_arch {
->  	spinlock_t hv_root_tdp_lock;
->  #endif
->  
-> +#ifdef CONFIG_KVM_MMU_PRIVATE
->  	gfn_t gfn_shared_mask;
-> +#endif
->  };
->  
->  struct kvm_vm_stat {
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index e9fbb2c8bbe2..3fb530359f81 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -365,4 +365,55 @@ static inline gpa_t kvm_translate_gpa(struct kvm_vcpu *vcpu,
->  		return gpa;
->  	return translate_nested_gpa(vcpu, gpa, access, exception);
->  }
-> +
-> +static inline gfn_t kvm_gfn_stolen_mask(struct kvm *kvm)
-> +{
-> +#ifdef CONFIG_KVM_MMU_PRIVATE
-> +	return kvm->arch.gfn_shared_mask;
-> +#else
-> +	return 0;
-> +#endif
-> +}
-> +
-> +static inline gpa_t kvm_gpa_stolen_mask(struct kvm *kvm)
-> +{
-> +	return gfn_to_gpa(kvm_gfn_stolen_mask(kvm));
-> +}
-> +
-> +static inline gpa_t kvm_gpa_unalias(struct kvm *kvm, gpa_t gpa)
-> +{
-> +	return gpa & ~kvm_gpa_stolen_mask(kvm);
-> +}
-> +
-> +static inline gfn_t kvm_gfn_unalias(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	return gfn & ~kvm_gfn_stolen_mask(kvm);
-> +}
-> +
-> +static inline gfn_t kvm_gfn_shared(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	return gfn | kvm_gfn_stolen_mask(kvm);
-> +}
-> +
-> +static inline gfn_t kvm_gfn_private(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	return gfn & ~kvm_gfn_stolen_mask(kvm);
-> +}
-> +
-> +static inline gpa_t kvm_gpa_private(struct kvm *kvm, gpa_t gpa)
-> +{
-> +	return gpa & ~kvm_gpa_stolen_mask(kvm);
-> +}
-> +
-> +static inline bool kvm_is_private_gfn(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	gfn_t mask = kvm_gfn_stolen_mask(kvm);
-> +
-> +	return mask && !(gfn & mask);
-> +}
-> +
-> +static inline bool kvm_is_private_gpa(struct kvm *kvm, gpa_t gpa)
-> +{
-> +	return kvm_is_private_gfn(kvm, gpa_to_gfn(gpa));
-> +}
+> How about adding the compatibility ID device property that was just suggested?
+> Then matching the Id in xhci-plat.c against a static table containing Ids and
+> xhci_plat_priv structures, with the needed quirks for dwc3.
 
-The patch title and commit message say nothing about private/shared, but only
-mention stolen bits in general.  It's weird to introduce those *private* related
-helpers here.
+There was a comment from Pavan. Is it still possible to get this
+detail from DT?
+I guess that would still be ideal, right?
 
-I think you can just ditch the concept of stolen bit infrastructure, but just
-adopt what TDX needs.
+I have another question. Can't we now just assume that if the sysdev
+is the parent (or grandparent), then the phy initialization should
+always be skipped? In that case we could just do something like this:
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd861b44e..1018b33488046 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -212,8 +212,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ #endif
+        }
+ 
+-       if (!sysdev)
++       if (sysdev) {
++               if (sysdev != &pdev->dev)
++                       hcd->skip_phy_initialization = 1;
++       } else {
+                sysdev = &pdev->dev;
++       }
+ 
+        if (WARN_ON(!sysdev->dma_mask))
+                /* Platform did not initialize dma_mask */
 
 
->  #endif
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 8e24f73bf60b..b68191aa39bf 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -276,11 +276,24 @@ static inline bool kvm_available_flush_tlb_with_range(void)
->  static void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
->  		struct kvm_tlb_range *range)
->  {
-> -	int ret = -ENOTSUPP;
-> +	int ret = -EOPNOTSUPP;
+I did not go through all the drivers that carefully, so I may have
+missed something, but it looks like the only drivers that can have the
+sysdev as the parent or grandparent are cdns3 and dwc3.
 
-Change doesn't belong to this patch.
+thanks,
 
-> +	u64 gfn_stolen_mask;
->  
-> -	if (range && kvm_x86_ops.tlb_remote_flush_with_range)
-> +	/*
-> +	 * Fall back to the big hammer flush if there is more than one
-> +	 * GPA alias that needs to be flushed.
-> +	 */
-> +	gfn_stolen_mask = kvm_gfn_stolen_mask(kvm);
-> +	if (hweight64(gfn_stolen_mask) > 1)
-> +		goto generic_flush;
-> +
-> +	if (range && kvm_available_flush_tlb_with_range()) {
-> +		/* Callback should flush both private GFN and shared GFN. */
-> +		range->start_gfn = kvm_gfn_unalias(kvm, range->start_gfn);
-
-This seems wrong.  It seems the intention of this function is to flush TLB for
-all aliases for a given GFN range.  Here it seems you are unconditionally change
-to range to always exclude the stolen bits.
-
->  		ret = static_call(kvm_x86_tlb_remote_flush_with_range)(kvm, range);
-> +	}
-
-And you always fall through to do big hammer flush, which is obviously not
-intended.
-
->  
-> +generic_flush:
->  	if (ret)
->  		kvm_flush_remote_tlbs(kvm);
->  }
-> @@ -4010,7 +4023,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->  	unsigned long mmu_seq;
->  	int r;
->  
-> -	fault->gfn = fault->addr >> PAGE_SHIFT;
-> +	fault->gfn = kvm_gfn_unalias(vcpu->kvm, gpa_to_gfn(fault->addr));
->  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
->  
->  	if (page_fault_handle_page_track(vcpu, fault))
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 5b5bdac97c7b..70aec31dee06 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -25,7 +25,8 @@
->  	#define guest_walker guest_walker64
->  	#define FNAME(name) paging##64_##name
->  	#define PT_BASE_ADDR_MASK GUEST_PT64_BASE_ADDR_MASK
-> -	#define PT_LVL_ADDR_MASK(lvl) PT64_LVL_ADDR_MASK(lvl)
-> +	#define PT_LVL_ADDR_MASK(vcpu, lvl) (~kvm_gpa_stolen_mask(vcpu->kvm) & \
-> +					     PT64_LVL_ADDR_MASK(lvl))
->  	#define PT_LVL_OFFSET_MASK(lvl) PT64_LVL_OFFSET_MASK(lvl)
->  	#define PT_INDEX(addr, level) PT64_INDEX(addr, level)
->  	#define PT_LEVEL_BITS PT64_LEVEL_BITS
-> @@ -44,7 +45,7 @@
->  	#define guest_walker guest_walker32
->  	#define FNAME(name) paging##32_##name
->  	#define PT_BASE_ADDR_MASK PT32_BASE_ADDR_MASK
-> -	#define PT_LVL_ADDR_MASK(lvl) PT32_LVL_ADDR_MASK(lvl)
-> +	#define PT_LVL_ADDR_MASK(vcpu, lvl) PT32_LVL_ADDR_MASK(lvl)
->  	#define PT_LVL_OFFSET_MASK(lvl) PT32_LVL_OFFSET_MASK(lvl)
->  	#define PT_INDEX(addr, level) PT32_INDEX(addr, level)
->  	#define PT_LEVEL_BITS PT32_LEVEL_BITS
-> @@ -58,7 +59,7 @@
->  	#define guest_walker guest_walkerEPT
->  	#define FNAME(name) ept_##name
->  	#define PT_BASE_ADDR_MASK GUEST_PT64_BASE_ADDR_MASK
-> -	#define PT_LVL_ADDR_MASK(lvl) PT64_LVL_ADDR_MASK(lvl)
-> +	#define PT_LVL_ADDR_MASK(vcpu, lvl) PT64_LVL_ADDR_MASK(lvl)
->  	#define PT_LVL_OFFSET_MASK(lvl) PT64_LVL_OFFSET_MASK(lvl)
->  	#define PT_INDEX(addr, level) PT64_INDEX(addr, level)
->  	#define PT_LEVEL_BITS PT64_LEVEL_BITS
-> @@ -75,7 +76,7 @@
->  #define PT_GUEST_ACCESSED_MASK (1 << PT_GUEST_ACCESSED_SHIFT)
->  
->  #define gpte_to_gfn_lvl FNAME(gpte_to_gfn_lvl)
-> -#define gpte_to_gfn(pte) gpte_to_gfn_lvl((pte), PG_LEVEL_4K)
-> +#define gpte_to_gfn(vcpu, pte) gpte_to_gfn_lvl(vcpu, pte, PG_LEVEL_4K)
->  
->  /*
->   * The guest_walker structure emulates the behavior of the hardware page
-> @@ -96,9 +97,9 @@ struct guest_walker {
->  	struct x86_exception fault;
->  };
->  
-> -static gfn_t gpte_to_gfn_lvl(pt_element_t gpte, int lvl)
-> +static gfn_t gpte_to_gfn_lvl(struct kvm_vcpu *vcpu, pt_element_t gpte, int lvl)
->  {
-> -	return (gpte & PT_LVL_ADDR_MASK(lvl)) >> PAGE_SHIFT;
-> +	return (gpte & PT_LVL_ADDR_MASK(vcpu, lvl)) >> PAGE_SHIFT;
->  }
->  
->  static inline void FNAME(protect_clean_gpte)(struct kvm_mmu *mmu, unsigned *access,
-> @@ -395,7 +396,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
->  		--walker->level;
->  
->  		index = PT_INDEX(addr, walker->level);
-> -		table_gfn = gpte_to_gfn(pte);
-> +		table_gfn = gpte_to_gfn(vcpu, pte);
->  		offset    = index * sizeof(pt_element_t);
->  		pte_gpa   = gfn_to_gpa(table_gfn) + offset;
->  
-> @@ -460,7 +461,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
->  	if (unlikely(errcode))
->  		goto error;
->  
-> -	gfn = gpte_to_gfn_lvl(pte, walker->level);
-> +	gfn = gpte_to_gfn_lvl(vcpu, pte, walker->level);
->  	gfn += (addr & PT_LVL_OFFSET_MASK(walker->level)) >> PAGE_SHIFT;
->  
->  	if (PTTYPE == 32 && walker->level > PG_LEVEL_4K && is_cpuid_PSE36())
-> @@ -555,12 +556,14 @@ FNAME(prefetch_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->  	gfn_t gfn;
->  	kvm_pfn_t pfn;
->  
-> +	WARN_ON(gpte & kvm_gpa_stolen_mask(vcpu->kvm));
-> +
->  	if (FNAME(prefetch_invalid_gpte)(vcpu, sp, spte, gpte))
->  		return false;
->  
->  	pgprintk("%s: gpte %llx spte %p\n", __func__, (u64)gpte, spte);
->  
-> -	gfn = gpte_to_gfn(gpte);
-> +	gfn = gpte_to_gfn(vcpu, gpte);
->  	pte_access = sp->role.access & FNAME(gpte_access)(gpte);
->  	FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
->  
-> @@ -656,6 +659,8 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->  	WARN_ON_ONCE(gw->gfn != base_gfn);
->  	direct_access = gw->pte_access;
->  
-> +	WARN_ON(fault->addr & kvm_gpa_stolen_mask(vcpu->kvm));
-> +
->  	top_level = vcpu->arch.mmu->root_level;
->  	if (top_level == PT32E_ROOT_LEVEL)
->  		top_level = PT32_ROOT_LEVEL;
-> @@ -1080,7 +1085,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
->  			continue;
->  		}
->  
-> -		gfn = gpte_to_gfn(gpte);
-> +		gfn = gpte_to_gfn(vcpu, gpte);
->  		pte_access = sp->role.access;
->  		pte_access &= FNAME(gpte_access)(gpte);
->  		FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
-
-In commit message you mentioned "Don't support stolen bits for shadow EPT" (you
-actually mean shadow MMU I suppose), yet there's bunch of code change to shadow
-MMU.
-
+-- 
+heikki

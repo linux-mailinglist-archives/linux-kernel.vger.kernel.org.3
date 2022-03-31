@@ -2,161 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3544E4ED7DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3694ED7DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbiCaKlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S234684AbiCaKmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiCaKlJ (ORCPT
+        with ESMTP id S232060AbiCaKma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:41:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1623419321A
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:39:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nZsCx-0005oA-6P; Thu, 31 Mar 2022 12:39:15 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-ffcf-bd2e-518f-8dbf.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:ffcf:bd2e:518f:8dbf])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CF48457B6A;
-        Thu, 31 Mar 2022 10:39:13 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 12:39:13 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Aurelien Jarno <aurelien@aurel32.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH] riscv: fix build with binutils 2.38
-Message-ID: <20220331103913.2vlneq6clnheuty6@pengutronix.de>
-References: <20220126171442.1338740-1-aurelien@aurel32.net>
- <20220331103247.y33wvkxk5vfbqohf@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2k7afhkrbbvlet4x"
+        Thu, 31 Mar 2022 06:42:30 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D94E1B9FFC
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:40:42 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22V8lOnG030433;
+        Thu, 31 Mar 2022 10:40:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=iU/8WI27d+FGehMF7egr669BRUoFu5789BKeccDcNt4=;
+ b=UTCdBUwfcTqbUDxqfUsS99u7kkSjogK6jdkOtg5Xy5HIl9zo7kTEBWA0/TIUARj7A/Ml
+ kkX8t6bHlMwiqZqWgmgNWHZ8pWz+pGutLeOuUAK1p8BS2oz/FdOLoLEDNZyp/twjAyCC
+ +KA70HhMSFyqmuQQoBDudOSoYSRyat5Q6rpT8aR8SguQJaz25QCVhM1QswMKPRyCSH8q
+ +qf7/wjHwLXuGGclwDGM9bNYpqqwA+S1zwjoAai68P3aHHeONEhayzX1GnWswwgxms3f
+ OS3QqZTLYGIai1/Y2kovwfG7vIW2CmBePTs30IlZ2fTOaCHOWSFdlYQQh8Rs4MTDCj3V 2Q== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1se0m08b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 10:40:34 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22VAVKcO009525;
+        Thu, 31 Mar 2022 10:40:34 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2042.outbound.protection.outlook.com [104.47.57.42])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f1s94mrg1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Mar 2022 10:40:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ceauAF/arQBiTwPBWcGv5yVhd5IP5USKWonfGXGvmKonmhmkY/3qo1MVhd1OjWvNtZ+GzJP6IZ5a/vk/Up3tZ5xa8TN/tySNV7hL01Zj0NAifecsjinJlHMyH1qRjWqVoueldwEVwEctvzh+D9KchUlcreuweMtEvOvkJ2ZDXNyV7tnlLrcMGY2h4YZVyccw0jstc0qhWzXwLqQSdeoPJsG2ma627u+s4O+3kveY/jWDDTW/4MtCoiQei+e/1fkJV6aRnL9hcBe5TpmCwQwH9bsIh1R5lqEl2nuaUDMz76m2KLN/jGafadKKnk8HJrQx7f38axk4t7A/goPVvUGFpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iU/8WI27d+FGehMF7egr669BRUoFu5789BKeccDcNt4=;
+ b=dj2GbRX4zxSAaSj3ffTecySekSAzlF5Mt1roqTdZkq92pAFuEDImuS1S+7QEeBJK6eOUs81XGKbK2XSinLkuQmQTgUjICFGR3E5gVgv5QBa/yMmR0RToJeQxnOkr3szdnxnX8tDQDhj1OrmKdMdhSGqrQnpPrYh8KaL5V534OAMUXYj/IP1Y/ulNPhAwkCLtW5mV8OuPq5ksG0QqWECqQSst85eqru/ISPO7zGRGnoBCy8FYkMZauYYAcWtEyu6IrkQhfTASwqKdj8KtrWI3iIJxYMIU4Em4TlRf7SBxws2hz5gVhgGJjUaoj+oAr/dspNtctoxQvtn6GzdLZTMUqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iU/8WI27d+FGehMF7egr669BRUoFu5789BKeccDcNt4=;
+ b=yY7wguvvPdVJX3Ghz8YRDRoUn7uIXmYOUXnleZe8ErzYU6gJHjPayXkgGJqj2wlWoa5D5EwbK+Q9QCSm8NZ+8BlD+SHHs1MM+1UyJNlXWWaa6R77nusv3xmkJa/4OtsHb6dVR3KaDqFSz03GPfgH/nFKBZ+hl90sg9MdAB7JKeg=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BLAPR10MB5042.namprd10.prod.outlook.com
+ (2603:10b6:208:30c::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.21; Thu, 31 Mar
+ 2022 10:40:32 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.025; Thu, 31 Mar 2022
+ 10:40:32 +0000
+Date:   Thu, 31 Mar 2022 13:40:12 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Alaa Mohamed' <eng.alaamohamedsoliman.am@gmail.com>,
+        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] staging: gdm724x: Fix Duplication of Side Effects
+Message-ID: <20220331104012.GM3293@kadam>
+References: <20220331101849.71046-1-eng.alaamohamedsoliman.am@gmail.com>
+ <ebbc4a14c30f492f8553e6ef572bbcbe@AcuMS.aculab.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331103247.y33wvkxk5vfbqohf@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ebbc4a14c30f492f8553e6ef572bbcbe@AcuMS.aculab.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0026.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::14)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4b0bc071-eac4-4353-6b27-08da1302e134
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5042:EE_
+X-Microsoft-Antispam-PRVS: <BLAPR10MB50429899732787F8B53A49C98EE19@BLAPR10MB5042.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7RApBep/xvqHyjdtBNAAEMb5wHpLiymPWQ0vEcgca4QZJX2h1ndISJgadchdPIdJguh4PFVlaA4DQUWb4NXsLbXAe2IAC9GL/x8mdTZJxj8ETccDa90I6FF4LsL9PBouiEPP0UktudUdTcCOkY1lBWOAB941a1qlrtePesq6R9lv1D8QuxulMilzsD9sZACU5tcAWQeAV71/CIM8S3eIK4Ajf1XLtmQ1RVMK+YDZ3Auqunm5QslydHYJRm1TSl2dK1O7XSr5CsFSQiPCDQ4uAuzpF1t9jVlz5DENBn3JU3S99GGvkmyMtom3Z2rZ/2NR/B3w+GIwhh9zMCNwnwJdKaFM49Osb3p9tjg3i+JPRTeSJ5HyZLc3hU/6FsLLEyxpZUYlVxx16NC7rGu9aB3GnIyazvSiSckABA27EE94JJqHEnwUekiv7lVbjkeh22/NiziquU1DgW+4d6BoSgRfivEGmPmoqiZ+fELvzCXbljPaPGBDC+NFKJTvdIzYFzAlRL/7VHmraQ4KfRWrk6cx/AvmNGZ6BH3RiMPrfHDihDyUMTxdJtKEnVyeqZIwy0z3ZOpwuyIe3OJeNyNsaFSF4NpD/dEuuYiLX2U0xoRDvGleSBu2Gha6aQB9iSkZhTKxauN4l9MgJy1wwuuUgwmh5RH40tdQBF8iFbFIA1Xs6pqN1X6wAF3wvcB8N8zISZsRhu7Z6SF7h553evdmQnIz0ba5kqiFm4YkV7FT/LrM86dpLZJvQgDrMg/hDRSEwO1LMJAxQJr/tWFr2XvofH0aBthluCArTANFpsMik0xgShlo1vsTKnn3kqE63nkpqRv5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66476007)(2906002)(66946007)(44832011)(8936002)(66556008)(966005)(508600001)(38350700002)(38100700002)(33716001)(54906003)(316002)(6916009)(6486002)(52116002)(9686003)(86362001)(186003)(26005)(1076003)(6506007)(6666004)(6512007)(33656002)(4326008)(83380400001)(8676002)(5660300002)(56340200001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FZxdK7BtJL6ix3nvROCQ3bCdBbvO8n5LGqE/d5ICk9M52tlmndDyE8NGlXPF?=
+ =?us-ascii?Q?XZO3sK1bHDu920pfX8GppvJUh3xwY8nUjCBybL6DVBWfYqtbwhoIkP99SWH7?=
+ =?us-ascii?Q?xKVot7Eh9Yz+CzKoWHmXnPjIroOHH6Nmocg+oAOiXMJ/g26NUnDqQUOAE8vn?=
+ =?us-ascii?Q?KOq3GnzCeILfc3Ns5wxEdzNJnuH3V2TTJFH+K9BjAIJgvDg5Lh+DW10gI8zo?=
+ =?us-ascii?Q?NtNneuh6/F1uloJSC86q6nvvlbpD76EHbTrioiHt4KRc6VCzP3nfbV1BF9hP?=
+ =?us-ascii?Q?W5PZ/wTf1y/YXLXY0v0pruaPkATl5kvAhzonNdjuKbSQ89eqERMUY2+8rVEJ?=
+ =?us-ascii?Q?3JZKbu1MD0T16E3pUh0ZHVhEufR1Nd5jOBh+bHM/o83xvVHQ95ZQWzIKfOc7?=
+ =?us-ascii?Q?yGH4ac3//LAlMgmXsjbU5q502q+YQ86kqXAGDJwdfpiLRwxFjdJhfgv7fZyQ?=
+ =?us-ascii?Q?pQvtLhJ+6p3rmtLAYqR4B/DS+U2+qibrcMPt2BDU6w1C0GtOjT45sJPPzioA?=
+ =?us-ascii?Q?+XsuHccfvphPWAhq073GJEn5GSkTiHXBntVPXhbblJIHq9xxUpZfodEc57Yj?=
+ =?us-ascii?Q?fM+27ngTgVlc+WeaoC+wJgLkc/DVgzHfMBFvWlu/X8mygsMRJKT8frtDTG9Z?=
+ =?us-ascii?Q?r1KnEfHj9J0e1M3E2d4GHR4uJ7/RAAkZVbaPX2sDztVbDiGogtD3XpCUFVtu?=
+ =?us-ascii?Q?jCnK7Ke7ANCk2B3iXsPdEwWjPgBIfq/HrNo9/E0v75JWa67r49mCQI9LduGW?=
+ =?us-ascii?Q?y2Y/Q+QGvZ05WYEn9u1GfJ1k4LytZhd2ctWICIk5VL41yFNE8HTuuHS4i0CI?=
+ =?us-ascii?Q?4rl1iAQDTN5Cosj0sucAta9ywDG9De16FkcWqbZPL2Zk9PwGOHKN2qQLHHcB?=
+ =?us-ascii?Q?aGyPQPJwxfbY0K6bxdcNZfzqP9YrMvwpIStMSraubM1wHkcBSuzUT1v6CH2e?=
+ =?us-ascii?Q?m47WHBwlsgpRqJC8OHz4qZ1guejKOYx0Is9/+CtDadwpF+GiALBFDnpbqKok?=
+ =?us-ascii?Q?MRWo7YHFuezaq2RFnKpkz/sMA4MAsaD4HDrgK78q3X9JduLSiJYEVpYG3n97?=
+ =?us-ascii?Q?RW7WrQJYCMce7OhHe0Oolzi1meYQTTkUPODEWQOilCaB07d7+c7Cpm8eXUEq?=
+ =?us-ascii?Q?euOfmQzN+zQT7KMOpKLoq1pOqyl2if731+0JbQiZawQ3u54FOR4j8Y8nZorV?=
+ =?us-ascii?Q?+WpJi/s5ZM9D4U1vjXr1j6Owb6VujHFUJqyFhWImYXbOPh3hYkLiB21M2uDn?=
+ =?us-ascii?Q?OFyT0CxZDm25LZEUtPK4v3rgtr87MT2EOSiB4zsRbgLZkJVeH/4G6V9neOj+?=
+ =?us-ascii?Q?QVXxRr+FNzpy9jSeRSzrRBjP26CH17/5H19mG15yXWkoPq9HIxgapEblnvuD?=
+ =?us-ascii?Q?7PpturPe2nuFCt6IF8x7RPKxJu3etlwPfIX3QavzvuL/P0U2ghAWwgsyYhdH?=
+ =?us-ascii?Q?qqSqZZYY7qRY5gdjxSCU95RVeZEluN2PtXlQ7JVTpiUj0lazISdq9xCzFCDP?=
+ =?us-ascii?Q?ZEwr+X5Qpfam0uMtWk8nYjlS/g8lT5SONAqEKCc83kMOex88b8EEvbsZkXbF?=
+ =?us-ascii?Q?qkZNf7gs5K98r1kNO1MynOxeqKUUkvUX+5ckOvUyKFoQwpHNHY+F2AGmgIXR?=
+ =?us-ascii?Q?2CTHldPeBNpDCaDUkFBYNer8bNQUA1sSM9nkx4IBDsuR0PpBI34gZR5Sl2/e?=
+ =?us-ascii?Q?1Nhyx3G0rms+hwbMwbDDzwJzJ/G4yUBXdCE+nmUv+T/z48iuv7P2dOgPIqh+?=
+ =?us-ascii?Q?lMZH31pIscp0Cj7yfhwhRGyKxG+MXHs=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b0bc071-eac4-4353-6b27-08da1302e134
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 10:40:32.0829
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HAMuDSnAsVqu51ze9Obzjq8PGkqUd6Vf1MxL276NPj1QJ+TTWCBj1wzeZ/6xMCGFwz3IR+NP3THRSx6XP+hkyAOqBYS9tOheegzpdFYhxj4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5042
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-03-31_03:2022-03-30,2022-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203310058
+X-Proofpoint-ORIG-GUID: G8AXzcOZekZlHTJvks1SBSG1z7tuaeRe
+X-Proofpoint-GUID: G8AXzcOZekZlHTJvks1SBSG1z7tuaeRe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---2k7afhkrbbvlet4x
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 31.03.2022 12:32:47, Marc Kleine-Budde wrote:
-> On 26.01.2022 18:14:42, Aurelien Jarno wrote:
-> > From version 2.38, binutils default to ISA spec version 20191213. This
-> > means that the csr read/write (csrr*/csrw*) instructions and fence.i
-> > instruction has separated from the `I` extension, become two standalone
-> > extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-> > this causes the following build failure:
-> >=20
-> >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler me=
-ssages:
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >=20
-> > The fix is to specify those extensions explicitely in -march. However as
-> > older binutils version do not support this, we first need to detect
-> > that.
-> >=20
-> > Cc: stable@vger.kernel.org # 4.15+
-> > Cc: Kito Cheng <kito.cheng@gmail.com>
-> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+On Thu, Mar 31, 2022 at 10:29:04AM +0000, David Laight wrote:
+> From: Alaa Mohamed
+> > Sent: 31 March 2022 11:19
+> > 
+> > Fix Duplication of Side Effects for GDM_TTY_READY(gdm) macro
+> > reported by checkpatch
+> > "CHECK: Macro argument reuse 'gdm' - possible side-effects?"
+> > 
+> > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
 > > ---
-> >  arch/riscv/Makefile | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >=20
-> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > index 8a107ed18b0d..7d81102cffd4 100644
-> > --- a/arch/riscv/Makefile
-> > +++ b/arch/riscv/Makefile
-> > @@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:=3D rv32ima
-> >  riscv-march-$(CONFIG_ARCH_RV64I)	:=3D rv64ima
-> >  riscv-march-$(CONFIG_FPU)		:=3D $(riscv-march-y)fd
-> >  riscv-march-$(CONFIG_RISCV_ISA_C)	:=3D $(riscv-march-y)c
-> > +
-> > +# Newer binutils versions default to ISA spec version 20191213 which m=
-oves some
-> > +# instructions from the I extension to the Zicsr and Zifencei extensio=
-ns.
-> > +toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(ris=
-cv-march-y)_zicsr_zifencei)
-> > +riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_zic=
-sr_zifencei
-> > +
-> >  KBUILD_CFLAGS +=3D -march=3D$(subst fd,,$(riscv-march-y))
-> >  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
->=20
-> I'm on current linus/master, this change breaks on current Debian
-> testing with:
->=20
-> | make: Leaving directory 'linux'
-> |   SYNC    include/config/auto.conf.cmd
-> |   GEN     Makefile
-> |   GEN     Makefile
-> |   CC      scripts/mod/empty.o
-> |   CHECK   linux/scripts/mod/empty.c
-      ^^^^^
-It's actually "sparse" that breaks
-     =20
-> | invalid argument to '-march': '_zicsr_zifencei'
+> >  drivers/staging/gdm724x/gdm_tty.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
+> > index 04df6f9f5403..6f0274470e69 100644
+> > --- a/drivers/staging/gdm724x/gdm_tty.c
+> > +++ b/drivers/staging/gdm724x/gdm_tty.c
+> > @@ -27,7 +27,9 @@
+> > 
+> >  #define MUX_TX_MAX_SIZE 2048
+> > 
+> > -#define GDM_TTY_READY(gdm) (gdm && gdm->tty_dev && gdm->port.count)
+> > +#define GDM_TTY_READY(_gdm) \
+> > +	({ typeof(_gdm) (gdm) = (_gdm); \
+> > +	(gdm && gdm->tty_dev && gdm->port.count); })
+> 
+> Did you test this?
+> 
+> see https://godbolt.org/z/cazPrrzPv
+> 
 
-| $ sparse --version
-| 0.6.4 (Debian: 0.6.4-2)
-
-Compiling without "C=3D1" for now.
+I don't understand the link.  The patch should work as far as I can see.
 
 regards,
-Marc
+dan carpenter
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---2k7afhkrbbvlet4x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJFhM8ACgkQrX5LkNig
-010hXwf/T/1eEthuho2MKoBL39szMK72TGK25V3LPzdwspQ7zz7B7iSo+SrwSeJl
-19WvjPgJvbqx0m9h4gQw+p/S5bUDOWAQMW+Jp/XaZi6/5+JhlKqKkaM4ylu8XjCV
-wAqbielmo2SwrW7gIFsIZOSukW2W5twi8SzSCywsLSR9JgWtMVFGxhyNlWnzYrU0
-iojtrHFhZsU/rMqkf3EdlWOHCcI4F5j48yWiscXV4afI0CmJxuRH2ed6oby8BzzL
-DMUahAh6pb6y0m1ql92kYPu+5ILaeTueP5HzNoT/cYMmgeF1dsBX9JB2rpWNfTF2
-MmtQWlhTUjwBBemCsTOsC3ivjcAAtA==
-=Zz4Y
------END PGP SIGNATURE-----
-
---2k7afhkrbbvlet4x--

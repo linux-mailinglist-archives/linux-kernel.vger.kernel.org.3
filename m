@@ -2,178 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3664EDB90
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFD24EDB92
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237432AbiCaOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S237441AbiCaOVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiCaOUY (ORCPT
+        with ESMTP id S231631AbiCaOVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:20:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A620205C4;
-        Thu, 31 Mar 2022 07:18:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2FCAB82118;
-        Thu, 31 Mar 2022 14:18:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED4DC340ED;
-        Thu, 31 Mar 2022 14:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648736311;
-        bh=esnRoKwPaWXl+mUZ11prb3bCZgCH28Gl04pKeuJeJMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OuVRxthYGIVQh8Qd+oZBXVLCkWmukm9g7G48c22SH+zMZmK4CgOQQ1QZLOFyGirn7
-         z5f8/KNpTNPt9XS1P+DZejUoEXH0pKG1wBg5AAFkj4H0hb9vhiy0k4fwWvH+5RxtXQ
-         NR+OtOYjGIyCmjIaSRoGB7gqRJXB8lf0PBGV0XxXY/+tPbC9eR+0VfDFyYBwh5Gscj
-         c1MXWPz0s3lV9X3gCvggzHJsZzumQlHX+awirVZ2MVFEcC5oP64r60gHNprKrI7gVa
-         hf02crrQRIR711tL5eEOYt4qr0m2j0Tbgo6CR2ggL9M+LXDKKO+n9TxxeGfSoPktKD
-         urORRDAKvxMbA==
-Date:   Thu, 31 Mar 2022 15:18:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-Message-ID: <YkW4MPh8VWc8eSGg@sirena.org.uk>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <YkWfziQzprEsWL72@sirena.org.uk>
- <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zQ72vPhT+YMlpKH0"
-Content-Disposition: inline
-In-Reply-To: <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
-X-Cookie: Reunite Gondwondaland!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 10:21:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081151BE0F9;
+        Thu, 31 Mar 2022 07:19:16 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9E8F4210E3;
+        Thu, 31 Mar 2022 14:19:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648736355; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sdmVjuGcsOmP1wXDqfnhb8kGq9fNtcyKRse3ANNJb1A=;
+        b=LaNVABZ8yeZxscWnWuKZsmWetcb3eIM1e8Wt2BNow3mlh2HWgTYhkCllYOAq3hw6NMHHD8
+        j5oBdeh934lAMxkG/uQXfgPA607ZGskyccjyQISrH8OTgJoiSqHo/8/tyrTshPK42O9MO2
+        SE82D/C/uSGDhaw/CF0dcp72Sg3Al1A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648736355;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sdmVjuGcsOmP1wXDqfnhb8kGq9fNtcyKRse3ANNJb1A=;
+        b=QVS5N5MPWtsiTWixBTD8f3Jy+rC1FlizW5fnNJHJhi8QIqT7OB3q2JtupEpLyw35wGuQG5
+        8XfqkO/uOWfcpbAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 891ECA3B82;
+        Thu, 31 Mar 2022 14:19:15 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 16:19:15 +0200
+Message-ID: <s5hzgl6ciho.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Won Chung <wonchung@google.com>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback function
+In-Reply-To: <s5h7d8adzdl.wl-tiwai@suse.de>
+References: <20220330211913.2068108-1-wonchung@google.com>
+        <s5hzgl6eg48.wl-tiwai@suse.de>
+        <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
+        <s5hr16ieb8o.wl-tiwai@suse.de>
+        <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
+        <s5hmth6eaiz.wl-tiwai@suse.de>
+        <YkV1rsq1SeTNd8Ud@kuha.fi.intel.com>
+        <s5hk0cae9pw.wl-tiwai@suse.de>
+        <s5h7d8adzdl.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 31 Mar 2022 15:29:10 +0200,
+Takashi Iwai wrote:
+> 
+> On Thu, 31 Mar 2022 11:45:47 +0200,
+> Takashi Iwai wrote:
+> > 
+> > On Thu, 31 Mar 2022 11:34:38 +0200,
+> > Heikki Krogerus wrote:
+> > > 
+> > > On Thu, Mar 31, 2022 at 11:28:20AM +0200, Takashi Iwai wrote:
+> > > > On Thu, 31 Mar 2022 11:25:43 +0200,
+> > > > Heikki Krogerus wrote:
+> > > > > 
+> > > > > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
+> > > > > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
+> > > > > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
+> > > > > > > >
+> > > > > > > > Can NULL dev->driver be really seen?  I thought the components are
+> > > > > > > > added by the drivers, hence they ought to have the driver field set.
+> > > > > > > > But there can be corner cases I overlooked.
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > thanks,
+> > > > > > > >
+> > > > > > > > Takashi
+> > > > > > > 
+> > > > > > > Hi Takashi,
+> > > > > > > 
+> > > > > > > When I try using component_add in a different driver (usb4 in my
+> > > > > > > case), I think dev->driver here is NULL because the i915 drivers do
+> > > > > > > not have their component master fully bound when this new component is
+> > > > > > > registered. When I test it, it seems to be causing a crash.
+> > > > > > 
+> > > > > > Hm, from where component_add*() is called?  Basically dev->driver must
+> > > > > > be already set before the corresponding driver gets bound at
+> > > > > > __driver_probe_deviec().  So, if the device is added to component from
+> > > > > > the corresponding driver's probe, dev->driver must be non-NULL.
+> > > > > 
+> > > > > The code that declares a device as component does not have to be the
+> > > > > driver of that device.
+> > > > > 
+> > > > > In our case the components are USB ports, and they are devices that
+> > > > > are actually never bind to any drivers: drivers/usb/core/port.c
+> > > > 
+> > > > OK, that's what I wanted to know.  It'd be helpful if it's more
+> > > > clearly mentioned in the commit log.
+> > > 
+> > > Agree.
+> > > 
+> > > > BTW, the same problem must be seen in MEI drivers, too.
+> > > 
+> > > Wasn't there a patch for those too? I lost track...
+> > 
+> > I don't know, I just checked the latest Linus tree.
+> > 
+> > And, looking at the HD-audio code, I still wonder how NULL dev->driver
+> > can reach there.  Is there any PCI device that is added to component
+> > without binding to a driver?  We have dev_is_pci() check at the
+> > beginning, so non-PCI devices should bail out there...
+> 
+> Further reading on, I'm really confused.  How data=NULL can be passed
+> to this function?  The data argument is the value passed from the
+> component_match_add_typed() call in HD-audio driver, hence it must be
+> always the snd_hdac_bus object.
+> 
+> And, I guess the i915 string check can be omitted completely, at
+> least, for HD-audio driver.  It already have a check of the parent of
+> the device and that should be enough.
 
---zQ72vPhT+YMlpKH0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That said, something like below (supposing data NULL check being
+superfluous), instead.
 
-On Thu, Mar 31, 2022 at 03:28:12PM +0200, Martin Povi=C5=A1er wrote:
-> > On 31. 3. 2022, at 14:34, Mark Brown <broonie@kernel.org> wrote:
 
-> > The broad issue here is that what you consider ridiculous someone else
-> > might have some bright ideas for configuring dynamically - if things are
-> > being exposed for dynamic configuration it's probably because someone
-> > wanted them, if the control is genuinely useless then it should just be
+Takashi
 
-> Well but these are codec drivers reused on different systems, it can both
-> be 'not genuinely useless=E2=80=99 on some system and ridiculous to leave=
- open on
-> the systems I am trying to write drivers for.
+--- a/sound/hda/hdac_i915.c
++++ b/sound/hda/hdac_i915.c
+@@ -102,18 +102,13 @@ static int i915_component_master_match(struct device *dev, int subcomponent,
+ 	struct pci_dev *hdac_pci, *i915_pci;
+ 	struct hdac_bus *bus = data;
+ 
+-	if (!dev_is_pci(dev))
++	if (subcomponent != I915_COMPONENT_AUDIO || !dev_is_pci(dev))
+ 		return 0;
+ 
+ 	hdac_pci = to_pci_dev(bus->dev);
+ 	i915_pci = to_pci_dev(dev);
+ 
+-	if (!strcmp(dev->driver->name, "i915") &&
+-	    subcomponent == I915_COMPONENT_AUDIO &&
+-	    connectivity_check(i915_pci, hdac_pci))
+-		return 1;
+-
+-	return 0;
++	return connectivity_check(i915_pci, hdac_pci);
+ }
+ 
+ /* check whether intel graphics is present */
 
-It wouldn't be the first time that we've had someone turn up with a new
-idea for how to configure an already existing bit of hardware, part of
-the reason for this approach is that people do get surprised by user
-creativity with their systems.
-
-> > The TDM swap thing you're mentioning looks like it's a left/right
-> > selection which people do use sometimes as a way of doing mono mixes and
-> > reorientation.  The ISENSE/VSENSE is less obvious, though it's possible
-> > there's issues with not having enough slots on a heavily used TDM bus or
-> > sometimes disabling the speaker protection processing for whatever
-> > reason.
-
-> Not only that. On TAS2770 the default value for =E2=80=98ASI1 Sel=E2=80=
-=99 is =E2=80=98I2C offset=E2=80=99
-> meaning the speaker amp driver ignores my set_tdm_slot calls. If you tell
-> me it=E2=80=99s okay to change that behaviour and it won=E2=80=99t be con=
-sidered backwards
-> compatibility breaking, that would be part of the solution I am seeking
-> here.
-
-Having the default state be muted or not routed is quite common, UCM
-files or equivalent are typically required for embedded style hardware
-like this.
-
-> But even then, what for example if the system has a single speaker (as it
-> does on the Mac mini to be covered by this driver) and the I2S bus is left
-> undriven for the duration of unused TDM slots? That may genuinely pose
-> a risk of people blowing their speakers by switching something in alsamix=
-er.
-
-Right, so that's a more sensible and valid use case.  We do have the
-platform_max feature available for precisely this reason - that's
-probably more appropriate here since if there's a danger of people
-blowing their speaker with a floating input they could also blow their
-speaker with just a very loud audio signal so limiting the volume people
-can set on the speaker driver seems sensible and would also cover them
-for misrouting.  Whatever the device might pick up from noise on an
-undriven bus could also be played as audio down the bus.  This does
-become a little fun with speaker protection as we'd want to raise the
-kernel limit so that userspace can dynamically manage the volume to
-contorl power (though that might be done with software control), but
-it's easy enoguh to raise limits later.
-
-On the other hand it seems like userspace might reasonably choose to do
-a mono mix for this output entirely in software, in which case telling
-the speaker amp to pick up one channel would make sense, or to just play
-out a stereo signal over I2S and have the amplifier do a mono mix and
-I'm not seeing why we'd force one or the other in the machine driver.
-
-> The ISENSE/VSENSE controls are also actually useless on these systems as =
-we
-> are not doing anything to pick up the measured values (which are sent back
-> over the I2S lines). I don=E2=80=99t know if there can be driver conflict=
- between
-
-Presumably someone might want to work on figuring that out though, and
-=66rom a hardware safety point of view it would be better if they did.
-
-> two speaker amps trying to drive the I2S lines at the same time should
-> the user happen to enable SENSE facilities on more than one of them.
-> Now I can grudgingly study that and rule it out but I would rather hide
-> the controls altogether.
-
-Yes, having two devices driving the bus at the same time wouldn't be
-great.  How is the TDM slot selection for the signals done in the
-hardware, I'm not seeing anything immediately obvious in the driver?
-I'd have thought that things would be implemented such that you could
-implement speaker protection on all speakers simultaneously but perhaps
-not.
-
-> That=E2=80=99s the reasoning anyway. To reiterate, seems to me the contro=
-ls
-> are useless/confusing at best and dangerous at worst.
-
-I'm just not seeing an issue for the slot selection.
-
---zQ72vPhT+YMlpKH0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJFuDAACgkQJNaLcl1U
-h9A9lwf/ddJhTaQ1UaqX3Bsb+GxAlui6cFVoONTfyUAR+vMtAaidhxfYhY8qmtt0
-pkQSmWdb1l8QtQ5pz0SQdW/ZhFi7CfdvDHLGtDCZHAUxCBrya28XC3ebn72jeGgK
-5vNs8vzfVvSpt7B7vseX89U1CvevM4iVkiu2paMQInPWGKjXAN/HtrELENEW20SE
-FV3WAR7m1aNrPc7sZ0d5Nvyr0QQsdTvUeDG48ZlPxy1Ta1SV2zX5qx5os9kXQE6K
-nTzwHh8cyH+t0kJASLEzsV28RBKGOUfCiNM8PSen/SfnsBAXEIeajIYeAGT7ZuJd
-r82cdFoj4At/BFUt9A/IvZMhqO36dQ==
-=YzFu
------END PGP SIGNATURE-----
-
---zQ72vPhT+YMlpKH0--

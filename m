@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A45C4EE4CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484EE4EE4BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243076AbiCaXd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
+        id S239770AbiCaXaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242886AbiCaXd5 (ORCPT
+        with ESMTP id S229576AbiCaXaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:33:57 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CF824F291
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:32:08 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i16so2343179ejk.12
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:32:08 -0700 (PDT)
+        Thu, 31 Mar 2022 19:30:05 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A038E166E03
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:28:17 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id g9so2142268ybf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:28:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UvSSaxHQfu4KzKOKApPWWxQRgS6ya5jprTe140uOq38=;
-        b=kRhrubUDhwfjRpRcH2joioz8ltkxfJNbJymSnvaltF2wfQaBrE1Vt07IDBgRkdEHXE
-         oyt/cLr6MOTdSRSYEb/qZXgAbgWmYV8v91sSnENZIrXOCOvtBY6eMgGQehbIw9f54vHH
-         Liv7tiuP7y9hjW7LHsjGWLQo+Eqrwsqz2awtg=
+        bh=MTu8jH0ZShl2CbVldPiTWqvXgwnANlKULqsotYtFTRg=;
+        b=ZR1If5nH/6ecvRCB/Dav9NrdwPSqpECdbXYkcoNbO6nYnNb3JKRwMo0TpWhs3uRhlM
+         xOWz8nBIIObsDZM7tTgHW3eE3STOckaybFbDLyQWtP1K3MTkuhaDjFTdclCB7LEFa7uJ
+         53kJsxcMJ8EWGr1KlNwOaZXGZ5qXCJ6/Wm7dhX0Pb9GtfGIXQSkTBa8vEckJwuQXeoW5
+         16XDwpYtZQqgn1h0ZCosj9nroMrtfdJDk7VLU9eDVnVRyNgcg9vPA1TUCJ6oCqOZyp5F
+         /nnSN3cZVQi5xfsx+MV+3KCEJu5xBSSsCMtAW9OdvU9EUy2sJuz3ZsKF8RqyQQJ4eAiI
+         D/ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UvSSaxHQfu4KzKOKApPWWxQRgS6ya5jprTe140uOq38=;
-        b=HXh9RTKjo51Yoj2uITkrahgP7s5JeEg5LwXSkM1SDsr6x12UhP9KdTiP7TylnXNd3x
-         thVnMw0uP0afBzjFUB89W2MRz9Y3DdrAUoEhxoYi2CVrx9EWytCDENB65QWLdwucFZ05
-         Pojo9Q1oYOp1WRVRMDeb1a6ZXURgrWAoRDX3dJPMp9KE8YpOBvDTbRvSsrYYftRI/dsU
-         XyvvzZppplwRjbx2AY2iljq2oksPAcrSW5/strrbDQISJB+EVuGd11CTQ43c9yk+PEUD
-         K9cdXFBuU/70+gbJnPaFy7Gw9bTUSgzevWRPCjSwxh0JI3/brbyFgnLBQfWTgxbMe6qq
-         Di/A==
-X-Gm-Message-State: AOAM531OiVeoqkLwwX6DEymPy46BK+BKLVxqMqktivI7Sk6lTzNQGmUB
-        M6LPF/1M22xFA2DJ2V+0URmQqGmuNRsUqOurDTI=
-X-Google-Smtp-Source: ABdhPJxbnLGJjBLaDjHyvT8SwYx+6O8+ESl07QrmAEDP/qFHe5p/sOKNJ8wXsKQuUcnf/O7EauPX5w==
-X-Received: by 2002:a17:906:68c2:b0:6b4:9f26:c099 with SMTP id y2-20020a17090668c200b006b49f26c099mr7057499ejr.41.1648769527251;
-        Thu, 31 Mar 2022 16:32:07 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm323119ejc.61.2022.03.31.16.32.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 16:32:06 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id a17so1024985edm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:32:06 -0700 (PDT)
-X-Received: by 2002:a5d:5551:0:b0:203:f916:e319 with SMTP id
- g17-20020a5d5551000000b00203f916e319mr5707669wrw.422.1648769060253; Thu, 31
- Mar 2022 16:24:20 -0700 (PDT)
+        bh=MTu8jH0ZShl2CbVldPiTWqvXgwnANlKULqsotYtFTRg=;
+        b=IJd4oWk4Pn0uCTtRAMr/RPyuVRFhLo0TQoNBrgGLNvEOpygb7ElA8HP0AblOu3r5f6
+         LA9wDZRNIpG70JNgge/wupMOh1KCQn+iB+eD+UX0G7p9kdn9u1kMJVXsEXweICJOrLvw
+         xegcvzP4qPUyk5gGiNsqotkdsqt557uCjOfwcJ5OlyrtEMBwbobGF8sEicg6hDsj6sVi
+         HjQTLvnEbu/B1RECptrfWBsmzp3ObeMjFJkErJCutGV69z+ymrgTkAxeWkbKY92F4OE9
+         y7BW2Wsk3V/XTIdV/hGFxcbCigPTATUGj/7RpiWknP9yxQPUqhJOgb8PAIFsQMV4B0k1
+         Kxrw==
+X-Gm-Message-State: AOAM5325cCOg1SEVCaZpsYXwpNjpz/0D9KM+IVQNhEO4ApfvI9p0aFzh
+        fZqvYJ/zlKkEVi2MHutHWsYslckZSS5ZFDbo2RsicYDG6/p5gw==
+X-Google-Smtp-Source: ABdhPJwIy7YhCQoa9iPfx9WGTlvbSCUXb1qUKLREuDTI4+R3RDjbQuJROzx+XBMXHt73o/6H0ztrr17MSdy4TwUeIZo=
+X-Received: by 2002:a5b:7c6:0:b0:60b:a0ce:19b with SMTP id t6-20020a5b07c6000000b0060ba0ce019bmr6161731ybq.407.1648769295831;
+ Thu, 31 Mar 2022 16:28:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-9-git-send-email-quic_sbillaka@quicinc.com>
- <CAA8EJprvE31ex3fCQHZ-=x+EWHK4UZ0qqHRh+rH4dk5TPhmVyw@mail.gmail.com> <MW4PR02MB71867220A90FCFED295830D0E1E19@MW4PR02MB7186.namprd02.prod.outlook.com>
-In-Reply-To: <MW4PR02MB71867220A90FCFED295830D0E1E19@MW4PR02MB7186.namprd02.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 31 Mar 2022 16:24:07 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VK0D_GzYBv+u+o6-ks-UAsw97__0mWsSn9OycX72LJFg@mail.gmail.com>
-Message-ID: <CAD=FV=VK0D_GzYBv+u+o6-ks-UAsw97__0mWsSn9OycX72LJFg@mail.gmail.com>
-Subject: Re: [PATCH v6 8/8] drm/msm/dp: Handle eDP mode_valid differently from dp
-To:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Cc:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "sean@poorly.run" <sean@poorly.run>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
+References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
+ <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1> <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
+ <CANn89iJaeBneeqiDBUh_ppEQGne_eyPp-BCVYjEyvoYkUxrDxg@mail.gmail.com> <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 31 Mar 2022 16:28:04 -0700
+Message-ID: <CANn89i+rfrkRrdYAq8Baq04n_ACq+VdB+UcsMoq7U-dB-2hKJA@mail.gmail.com>
+Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Mar 30, 2022 at 11:02 PM Sankeerth Billakanti (QUIC)
-<quic_sbillaka@quicinc.com> wrote:
+On Thu, Mar 31, 2022 at 4:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Hi Dmitry,
+> The initial setting of ->percpu_enqueue_shift forces all in-range CPU
+> IDs to shift down to zero.  The grace-period kthread is allowed to run
+> where it likes.  The callback lists are protected by locking, even in
+> the case of local access, so this should be safe.
 >
-> > On Wed, 30 Mar 2022 at 19:04, Sankeerth Billakanti
-> > <quic_sbillaka@quicinc.com> wrote:
-> > >
-> > > The panel-edp driver modes needs to be validated differently from DP
-> > > because the link capabilities are not available for EDP by that time.
-> > >
-> > > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> >
-> > This should not be necessary after
-> > https://patchwork.freedesktop.org/patch/479261/?series=101682&rev=1.
-> > Could you please check?
-> >
+> Or am I missing your point?
 >
-> The check for DP_MAX_PIXEL_CLK_KHZ is not necessary anymore but we need
-> to return early for eDP because unlike DP, eDP context will not have the information
-> about the number of lanes and link clock.
->
-> So, I will modify the patch to return after the DP_MAX_PIXEL_CLK_KHZ check if is_eDP is set.
 
-I haven't walked through all the relevant code but something you said
-above sounds strange. You say that for eDP we don't have info about
-the number of lanes? We _should_.
+In fact I have been looking at this code, because we bisected a
+regression back to this patch:
 
-It's certainly possible to have a panel that supports _either_ 1 or 2
-lanes but then only physically connect 1 lane to it. ...or you could
-have a panel that supports 2 or 4 lanes and you only connect 1 lane.
-See, for instance, ti_sn_bridge_parse_lanes. There we assume 4 lanes
-but if a "data-lanes" property is present then we can use that to know
-that fewer lanes are physically connected.
+4fe192dfbe5ba9780df699d411aa4f25ba24cf61 rcu-tasks: Shorten
+per-grace-period sleep for RCU Tasks Trace
 
-It's also possible to connect more lanes to a panel than it supports.
-You could connect 2 lanes to it but then it only supports 1. This case
-needs to be handled as well...
+It is very possible the regression comes because the RCU task thread
+is using more cpu cycles, from 'CPU 0'  where our system daemons are
+pinned.
 
+But I could not spot where the RCU task kthread is forced to run on CPU 0.
 
--Doug
+I attempted to backport to our kernel all related patches that were
+not yet backported,
+and we still see a regression in our tests.
+
+Please ignore the sha1 in this current patch series, this is only to
+show my current attempt to fix the regression in our tree.
+
+450b3244f29b rcu-tasks: Don't remove tasks with pending IPIs from holdout list
+5f88f7e9cc36 rcu-tasks: Create per-CPU callback lists
+1a943d0041dc rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic
+queue selection
+ea5289f12fce rcu-tasks: Convert grace-period counter to grace-period
+sequence number
+22efd5093c3b rcu/segcblist: Prevent useless GP start if no CBs to accelerate
+16dee1b3babf rcu: Implement rcu_segcblist_is_offloaded() config dependent
+8cafaadb6144 rcu: Add callbacks-invoked counters
+323234685765 rcu/tree: Make rcu_do_batch count how many callbacks were executed
+f48f3386a1cc rcu/segcblist: Add additional comments to explain smp_mb()
+4408105116de rcu/segcblist: Add counters to segcblist datastructure
+4a0b89a918d6 rcu/tree: segcblist: Remove redundant smp_mb()s
+38c0d18e8740 rcu: Add READ_ONCE() to rcu_do_batch() access to rcu_divisor
+0b5d1031b509 rcu/segcblist: Add debug checks for segment lengths
+8a82886fbf02 rcu_tasks: Convert bespoke callback list to rcu_segcblist structure
+cbd452a5c01f rcu-tasks: Use spin_lock_rcu_node() and friends
+073222be51f3 rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure
+5af10fb0f8fb rcu-tasks: Abstract checking of callback lists
+d3e8be598546 rcu-tasks: Abstract invocations of callbacks
+65784460a392 rcu-tasks: Use workqueues for multiple
+rcu_tasks_invoke_cbs() invocations
+dd6413e355f1 rcu-tasks: Make rcu_barrier_tasks*() handle multiple
+callback queues
+2499cb3c438e rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set
+initial queueing
+a859f409a503 rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention
+4ab253ca056e rcu-tasks: Avoid raw-spinlocked wakeups from
+call_rcu_tasks_generic()
+e9a3563fe76e rcu-tasks: Use more callback queues if contention encountered
+4023187fe31d rcu-tasks: Use separate ->percpu_dequeue_lim for callback
+dequeueing
+533be3bd47c3 rcu: Provide polling interfaces for Tree RCU grace periods
+f7e5a81d7953 rcu-tasks: Use fewer callbacks queues if callback flood ends
+bb7ad9078e1b rcu-tasks: Fix computation of CPU-to-list shift counts
+d9cebde55539 rcu-tasks: Use order_base_2() instead of ilog2()
+95606f1248f5 rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention

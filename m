@@ -2,184 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887BB4EDCC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6424EDCC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238250AbiCaP2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S238253AbiCaP3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbiCaP2I (ORCPT
+        with ESMTP id S233539AbiCaP3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:28:08 -0400
-Received: from out203-205-251-27.mail.qq.com (out203-205-251-27.mail.qq.com [203.205.251.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732D6214065
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648740376;
-        bh=6eNe0sCBAfB/Hcfduogy8j4fDGvYRi7JohyzMwaNYwc=;
-        h=From:To:Cc:Subject:Date;
-        b=JpISyFgjkY9ekyIBwFZaBXUpOFirDzI4eVKaJCW/DH/WxyAp30n4IO/frFXP1OOEr
-         gBB/Fl0sEuO6Q6HMdX8DOqF5rM8l8dqXV1vROqlRmaOBIadzzNwNG7kdTEzJrpYvLW
-         WMtGxPoo8KLDB1+H7MPw58hU4oxbZTyj5Uw7K2qE=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
-        id 68DB8661; Thu, 31 Mar 2022 23:26:13 +0800
-X-QQ-mid: xmsmtpt1648740373thyjaxjd9
-Message-ID: <tencent_0AE833E7E70272D4518084C72B05FE17810A@qq.com>
-X-QQ-XMAILINFO: N7h1OCCDntujP6ZwiqCqDasFNtR0GvcsI1nrPkLX6b36tQRgx8JFpF1v/39Xwb
-         7ccgrWcehKuTzSdNQS1f+Ep9OA+uXl4mucqtc4KNvoXuDsyWOjOkUtI9kZuItMmnooQxztrX09QR
-         hRh5GiNB32NIPIxvrmfNnoniks96XobZvyRQBeusGZotVrmLkPoHmrx24mI9Bmt/ahtdAOtWQcYu
-         834w8xHvRJR/cIklTr81l77/iK9HnOw4zm6KCEOlKNzSpy6b65KgPu83v2BRnP/22qC9CJ9+axJP
-         BOyxGFtQw6oBPyAwvcytfYB+NEhyELB6hhiuoyn2FV+4y9o0N000/641C+tvBdNvZje7vf3O0EP0
-         hR/PwyGIyV6Dl4deklwQfNF4oFvxTN0VPMQlWbMrDfcPAatl5mZwTJguA5QngCHRIE8+V1wHxvCf
-         3pAEQYTVX64NGZbP6w5CbGKw/alDJhcwJSBwHeEAro3GWn6l26wEV1H79EI+Bo52lG47huxxyLoN
-         jn1T5TnRoG5ubdZ1bSM2qbWXCsVAclYMzP2pr1Us5P8k16DcjIGT+y7QNUpjgMX7I2dG63kpuOmg
-         b2gQkQI1f25G2NA8BKnJHj98hxibd9bdrxVY+PdO7El+EX/DUdiRCAQVedP8A+AVa1HuVeP7/Zs+
-         hpWLYPQ7Y4eNx240jmfJYvwHw3CUwIbKhQEUWmfB+Tx0JRtTyictzJMDVumTNhOir4MGL3yzW+aQ
-         l+t6mDL6nnJbIq8zJr4nZbHHh7zyL75rIkxvJp5eISWaOOj1LhwgFkLqAfrHlWrDnO2qbeKkNMOh
-         Av3w9THovGFV3GqcQW98NECy4Co1ylnSs8NQRdJ7lqlhNiDn9aocOzyS6YT0dRXH98Wzrlq0eM2s
-         Tz/j/lpgT986M/0D8uiKGO+rFqVws5qZaTu3OHhutgnyYVMAzqpkvYVRdOS4icKjkq6kCyUEk6dt
-         jIa749J9twl1+pFoT8Ag==
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: rtl8723bs: fix potential memory leak in _rtw_init_xmit_priv()
-Date:   Thu, 31 Mar 2022 23:26:04 +0800
-X-OQ-MSGID: <20220331152604.8729-1-xkernel.wang@foxmail.com>
+        Thu, 31 Mar 2022 11:29:00 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DE221BC6C
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:27:12 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id f23so60651ybj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cx/jntd5MtnfHbFJ6wQ9WBx8f0jFn2F4QMSwBKsbTL4=;
+        b=mVdPagKPXbg/QhIYsGWCJRl0DmguSrdOwYYbfPnVMr1G3le8ZKSu5YjOddra9OGvI7
+         H9MV7C9xeMksTMeKlBwk8ErYL7URvVvdSuLRw2UkyQ+3z+/O/CkQoyU0eJvmk5hR9cnK
+         4WPPALU0TjTgMtGG4XODtRfqfxn6IWI+Nyd1X6vtR9Mr+tiZZkVmXliVn7kafwcCZtX2
+         hOboxmDzcDt3etSfNC8CVZF+ZAlam97F+dEOljJfqRohQB9bnHL3oj5SyOUYb0sfZ+3Q
+         sp3maiD42lL+bTsT89OqAzWD/e8MwLwGi77A/KNGlJnd8Tp7K0o32Wt9ZRt9GZTus2lh
+         ga1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cx/jntd5MtnfHbFJ6wQ9WBx8f0jFn2F4QMSwBKsbTL4=;
+        b=P4RtZhIzqiTFGpnwJEYpmanq/LSSXdGwqd2sZQ2K1zs7yKIdjVpp4f3PX3oSTMYPUW
+         Czu0ijDfzfXxzuPBBHNkb4wBKYsuPsH1sH/TaaIWWP+Fv4G2rjPS9swlAcOkDp8jG5vl
+         SljHgKw0Sx2c2TJnXEHFmajCAzB9mJ2hwDUAO1LjdhY+6gK8r9L5w5neodPo7BTGmrxG
+         oSV+vX/ma+Vp9shzVBnZVf1YCsTwW8tzPTlrATjy1V0Q/nV1etsVGGyBPI9aeFZI2w54
+         58YdtWDxeQBXX1mGE4756/3wUuNz/8IY0XlMtVwOiEhv8JrNWFiKDSqzosavZu1259JQ
+         ykrw==
+X-Gm-Message-State: AOAM531XjbMu67AwkN9LQu+CqHAMlmBIjKziJ94z81aGZcoRlCVueAvv
+        DFhdhDDTEjbXpF7GlC4gngxc30oHZKMU6/34ZL2KPw==
+X-Google-Smtp-Source: ABdhPJymbOBZrreddHigBujDJlMqXgN3WqeEPo+QbNHV7yN5YOS5zGWkPHsxrYDAlBtOVDuhB3tZPjTB/KwbHkmJyuc=
+X-Received: by 2002:a25:cdca:0:b0:633:c810:6ca with SMTP id
+ d193-20020a25cdca000000b00633c81006camr4561768ybf.261.1648740431209; Thu, 31
+ Mar 2022 08:27:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220330153745.20465-2-songmuchun@bytedance.com> <202203312010.ct30oFE6-lkp@intel.com>
+In-Reply-To: <202203312010.ct30oFE6-lkp@intel.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 31 Mar 2022 23:26:35 +0800
+Message-ID: <CAMZfGtU7ctporSD=U-MGFX7H+x=12ZSSOe-ds5qyFQakg4po0w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
+To:     kernel test robot <lkp@intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        kbuild-all@lists.01.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Thu, Mar 31, 2022 at 8:40 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Muchun,
+>
+> Thank you for the patch! Yet something to improve:
+>
+> [auto build test ERROR on hnaz-mm/master]
+> [also build test ERROR on mcgrof/sysctl-next linus/master next-20220331]
+> [cannot apply to v5.17]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220330-234018
+> base:   https://github.com/hnaz/linux-mm master
+> config: ia64-randconfig-s031-20220331 (https://download.01.org/0day-ci/archive/20220331/202203312010.ct30oFE6-lkp@intel.com/config)
+> compiler: ia64-linux-gcc (GCC) 11.2.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-dirty
+>         # https://github.com/intel-lab-lkp/linux/commit/5164c566d4fbdb808689ee4552ed95eab421522e
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Muchun-Song/add-hugetlb_free_vmemmap-sysctl/20220330-234018
+>         git checkout 5164c566d4fbdb808689ee4552ed95eab421522e
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 prepare
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from arch/ia64/include/asm/thread_info.h:10,
+>                     from include/linux/thread_info.h:60,
+>                     from include/asm-generic/preempt.h:5,
+>                     from ./arch/ia64/include/generated/asm/preempt.h:1,
+>                     from include/linux/preempt.h:78,
+>                     from include/linux/spinlock.h:55,
+>                     from include/linux/kref.h:16,
+>                     from include/linux/mm_types.h:8,
+>                     from mm/struct_page_size.c:10:
+> >> arch/ia64/include/asm/asm-offsets.h:1:10: fatal error: generated/asm-offsets.h: No such file or directory
+>        1 | #include <generated/asm-offsets.h>
+>          |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    compilation terminated.
+>    make[2]: *** [scripts/Makefile.build:127: mm/struct_page_size.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [Makefile:1261: prepare0] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:226: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
+>
 
-In _rtw_init_xmit_priv(), there are several error paths for allocation
-failures without releasing the resources.
-To properly release them, several error handling paths are added.
-
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_xmit.c | 50 +++++++++++++++++------
- 1 file changed, 37 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/staging/rtl8723bs/core/rtw_xmit.c b/drivers/staging/rtl8723bs/core/rtw_xmit.c
-index 528f920..b288b04 100644
---- a/drivers/staging/rtl8723bs/core/rtw_xmit.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_xmit.c
-@@ -112,7 +112,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmitbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_frame_buf;
- 	}
- 
- 	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmitbuf), 4);
-@@ -132,7 +132,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 			msleep(10);
- 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ), true);
- 			if (res == _FAIL)
--				goto exit;
-+				goto free_xmitbuf;
- 		}
- 
- 		pxmitbuf->phead = pxmitbuf->pbuf;
-@@ -162,7 +162,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 	if (!pxmitpriv->xframe_ext_alloc_addr) {
- 		pxmitpriv->xframe_ext = NULL;
- 		res = _FAIL;
--		goto exit;
-+		goto free_xmitbuf;
- 	}
- 	pxmitpriv->xframe_ext = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->xframe_ext_alloc_addr), 4);
- 	pxframe = (struct xmit_frame *)pxmitpriv->xframe_ext;
-@@ -195,7 +195,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmit_extbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_xframe_ext;
- 	}
- 
- 	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmit_extbuf), 4);
-@@ -210,10 +210,8 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 		pxmitbuf->buf_tag = XMITBUF_MGNT;
- 
- 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ, true);
--		if (res == _FAIL) {
--			res = _FAIL;
--			goto exit;
--		}
-+		if (res == _FAIL)
-+			goto free_xmit_extbuf;
- 
- 		pxmitbuf->phead = pxmitbuf->pbuf;
- 		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMIT_EXTBUF_SZ;
-@@ -240,10 +238,8 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 			pxmitbuf->buf_tag = XMITBUF_CMD;
- 
- 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, MAX_CMDBUF_SZ+XMITBUF_ALIGN_SZ, true);
--			if (res == _FAIL) {
--				res = _FAIL;
--				goto exit;
--			}
-+			if (res == _FAIL)
-+				goto free_cmd_xmitbuf;
- 
- 			pxmitbuf->phead = pxmitbuf->pbuf;
- 			pxmitbuf->pend = pxmitbuf->pbuf + MAX_CMDBUF_SZ;
-@@ -255,7 +251,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	res = rtw_alloc_hwxmits(padapter);
- 	if (res == _FAIL)
--		goto exit;
-+		goto free_cmd_xmitbuf;
- 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
- 
- 	for (i = 0; i < 4; i++)
-@@ -267,6 +263,34 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	rtw_hal_init_xmit_priv(padapter);
- 
-+	return res;
-+
-+free_cmd_xmitbuf:
-+	while (i-- > 0) {
-+		pxmitbuf = &pxmitpriv->pcmd_xmitbuf[i];
-+		if (pxmitbuf)
-+			rtw_os_xmit_resource_free(padapter, pxmitbuf, MAX_CMDBUF_SZ + XMITBUF_ALIGN_SZ, true);
-+	}
-+	i = NR_XMIT_EXTBUFF;
-+free_xmit_extbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-+	while (i-- > 0) {
-+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ), true);
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmit_extbuf);
-+free_xframe_ext:
-+	vfree(pxmitpriv->xframe_ext_alloc_addr);
-+	i = NR_XMITBUFF;
-+free_xmitbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
-+	while (i-- > 0) {
-+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ), true);
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmitbuf);
-+free_frame_buf:
-+	vfree(pxmitpriv->pallocated_frame_buf);
- exit:
- 	return res;
- }
--- 
+It is a circular dependency issue, I'll fix this in the next version.
+Thanks for your report.

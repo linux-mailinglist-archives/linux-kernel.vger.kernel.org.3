@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3144ED6C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1524ED6E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbiCaJ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S233437AbiCaJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiCaJ20 (ORCPT
+        with ESMTP id S234003AbiCaJ3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:28:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E71FDFE7;
-        Thu, 31 Mar 2022 02:26:39 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id p15so46767194ejc.7;
-        Thu, 31 Mar 2022 02:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=BQzqug6TtJon58Y75oLbeWdZudSqnMYJcFPXb4iBlFM=;
-        b=RlKkxDZ70JBAkNTyPnOmO2IvQitrUXmpPnHUjAl1X+RgZ2E0E5pAlt37R+CO+yVU6h
-         YuPM/Thd5c9b8PPpMXlIkT4L1vyo2u5dWryt14VnD0U+OpabTSX26POTY5nM0i5iC07t
-         F/dLI6CVKSPNHYQUm8MhnUbeucrduAE2MEp0RYa+UxA5VdPmhbUBrHSc9GowDatGv9na
-         0OIa8gYw6iAvacFzrGFuygF9+R3oVaACUExHX1pdTZQmYYiV9Ii9H+dQHVDDVmySH5P8
-         SAvjinnyqlmdwl9Xt90plyNjgKo3tfFDFdXSJyJuQLPinVVBi+31/X1BIhaMLNFj/UUn
-         0wJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=BQzqug6TtJon58Y75oLbeWdZudSqnMYJcFPXb4iBlFM=;
-        b=Dy8LUGyOF2Z0adRqBcVT4HK5FCAhjw9ZCY5orFtSHrS2SguZdXVpNyCO0CMn1YX9bb
-         cS4DYmFoDVA0C9/xRths9bp7/pOUkeV5zaEerSViMPnIj7oWrMj4MRTjsFmOMRJDMt0R
-         P1BTnntneJlDKxzuMcJcRHHpqIfru3iwn/SiNm6GsRfXkdbnl+J8it6qtkbUpmPy4LmL
-         vgyP4Y84Cp2JMShTiTK8ZwEfN8P/MSkz/ob1TS4kDDH0kRQZqHWs4MYxSwgg0LYxsUcU
-         lOZpLN8ByhCVuT+ry00NwWpGVvp7/152MlK81GE+P8lSC9dM5BJzj6UW2Ie6D+yYjXde
-         57wQ==
-X-Gm-Message-State: AOAM531NUmDJi7sYqgpoLMuKy5zldV6Xy0Qm8vqFA8aeEQJJsjWgqpK2
-        u625G0oAJzKc2cXw779ymL7/zxO3gyU+3g==
-X-Google-Smtp-Source: ABdhPJwnRuwMDTXeNBMaZuBHYcEVJ1bB/yBLYHXEvwulY4XOI28kspERTlLsQ8Sfr7h8qT1wkVOxSw==
-X-Received: by 2002:a17:906:144e:b0:6ce:6126:6a6d with SMTP id q14-20020a170906144e00b006ce61266a6dmr4070102ejc.662.1648718797808;
-        Thu, 31 Mar 2022 02:26:37 -0700 (PDT)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id y26-20020a1709063a9a00b006e0c272e263sm6764346ejd.71.2022.03.31.02.26.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Mar 2022 02:26:37 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH] taprio: replace usage of found with dedicated list
- iterator variable
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <87fsmz3uc6.fsf@intel.com>
-Date:   Thu, 31 Mar 2022 11:26:36 +0200
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A19238DC-24F8-4BD9-A6FA-C8019596F4A6@gmail.com>
-References: <20220324072607.63594-1-jakobkoschel@gmail.com>
- <87fsmz3uc6.fsf@intel.com>
-To:     Vinicius Costa Gomes <vinicius.gomes@intel.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 05:29:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3E91FF422;
+        Thu, 31 Mar 2022 02:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648718846; x=1680254846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mPcmSRFysKdQJULNHMdsCcsem8XlXgWIUxePX6FqmbU=;
+  b=e66tOk8W/E0fWH/7ffuke1+vLmGKS753EjTf+Sd7H3LTwjwjfFeP1Sdk
+   YPpDOxKDp9J3lm6ztf4Y2sZyok/q7i/5Mh27rz2dDbeibrWRSnxJfQEnQ
+   ybUq5UXSGsve3t1spi7ROQJmFLUpMPUMzAuvl24/6xG++3wUVwdB+YMe1
+   o8kjdbK31UAN0JFkzz13QVzhs/Bxi6pFzGr4V0qK0PCixxICLJo+ws0CT
+   qlKHibwceo1P53bs2hMoY0KKXPvuv/t6+fbjXs2aBnr2mY68zRo7LwQoE
+   HfRxHo6Wozc1ANd14UWLSntZEK+tRDYBWSNoFmKFBhhrQyxlS+tlgxhvo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="239705897"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="239705897"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 02:27:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="695423344"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 02:27:23 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 12:27:23 +0300
+Date:   Thu, 31 Mar 2022 12:27:23 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
+ functions
+Message-ID: <YkVz+1HkSeXcIux2@kuha.fi.intel.com>
+References: <20220331084918.2592699-1-wonchung@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331084918.2592699-1-wonchung@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Won,
 
+On Thu, Mar 31, 2022 at 08:49:18AM +0000, Won Chung wrote:
+> Component match callback functions need to check if expected data is
+> passed to them. Without this check, it can cause a NULL pointer
+> dereference when another driver registers a component before i915
+> drivers have their component master fully bind.
+> 
+> Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+> Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Won Chung <wonchung@google.com>
+> Cc: stable@vger.kernel.org
+> ---
+> Changes from v2:
+> - Correctly add "Suggested-by" tag
+> - Add "Cc: stable@vger.kernel.org"
+> 
+> Changes from v1:
+> - Add "Fixes" tag
+> - Send to stable@vger.kernel.org
 
-> On 31. Mar 2022, at 01:15, Vinicius Costa Gomes =
-<vinicius.gomes@intel.com> wrote:
->=20
-> Hi,
->=20
-> Jakob Koschel <jakobkoschel@gmail.com> writes:
->=20
->> To move the list iterator variable into the list_for_each_entry_*()
->> macro in the future it should be avoided to use the list iterator
->> variable after the loop body.
->>=20
->> To *never* use the list iterator variable after the loop it was
->> concluded to use a separate iterator variable instead of a
->> found boolean [1].
->>=20
->> This removes the need to use a found variable and simply checking if
->> the variable was set, can determine if the break/goto was hit.
->>=20
->> Link: =
-https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXPwr9Y7k9=
-sA6cWXJ6w@mail.gmail.com/
->> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
->> ---
->=20
-> Code wise, patch look good.
->=20
-> Just some commit style/meta comments:
-> - I think that it would make more sense that these were two separate
-> patches, but I haven't been following the fallout of the discussion
-> above to know what other folks are doing;
+You are sending these really fast. Before you send the next one,
+please wait for at least one day.
 
-Thanks for the input, I'll split them up.
+thanks,
 
-> - Please use '[PATCH net-next]' in the subject prefix of your =
-patch(es)
-> when you next propose this (net-next is closed for new submissions for
-> now, it should open again in a few days);
-
-I'll include that prefix, thanks.
-
-Paolo Abeni [CC'd] suggested to bundle all net-next patches in one =
-series [1].
-If that's the general desire I'm happy to do that.
-
-
-[1] =
-https://lore.kernel.org/linux-kernel/7393b673c626fd75f2b4f8509faa5459254fb=
-87c.camel@redhat.com/
-
->=20
->=20
-> Cheers,
-> --=20
-> Vinicius
-
+-- 
+heikki

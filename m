@@ -2,121 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBFD4ED159
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C494ED161
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352325AbiCaBhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 21:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
+        id S1352335AbiCaBqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 21:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiCaBhg (ORCPT
+        with ESMTP id S229497AbiCaBq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 21:37:36 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F002342A37;
-        Wed, 30 Mar 2022 18:35:49 -0700 (PDT)
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 22V1ZSmM018184;
-        Thu, 31 Mar 2022 10:35:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 22V1ZSmM018184
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1648690529;
-        bh=BhtUEXw72ErbRqB+ITo7H4qPfJkEmZoUPwgbzXJtchg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Dvq8CVo67lAp/7wZp/j1BbGwpKic3zdUm5FtBMaP0DYY8TVsFAW3a2ggiTZypX0oj
-         GSO6kL5X24rpmf42IDytQlxvuIEzPwo+YWJ1uK9tG/Ogh7/02V3/zVI0s6kSL9ISLB
-         AcVxUa8D50xgLHRhtAjaaAemYU/+rL+Gpgs8OIpZTvaeRkfAQf/eXdmt5J1nroX8rt
-         2i5lZs/l+aqp34btP9sj2U3Dmu99zwYQosWcxakESuR7/gYZWwkTqM9F6Y2sYWyfH8
-         4vqZ1AioNYs15NXHSY8acUucA178yj9FiIC8FY2JBx+f+bGpCrPa5DyoVw/yk0cGnF
-         xn3LcazcQTFMA==
-X-Nifty-SrcIP: [209.85.216.41]
-Received: by mail-pj1-f41.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso1302577pju.2;
-        Wed, 30 Mar 2022 18:35:29 -0700 (PDT)
-X-Gm-Message-State: AOAM532rQCDQI5U3MxIFdIx36gOS8GYVEvlRC7xeRqIEeB8tNr3eQcwc
-        sbyo5bx1ufhYgqT8i1jciReruL4UxJCljiSctqE=
-X-Google-Smtp-Source: ABdhPJy/rTr8PLYt7T5HvYzYI5JrEy23u7/kM6xdvtM7ukgecW0gPQ3QlmQatZ89IYAPfnWZDH1cjc0895hiPJ5yUMI=
-X-Received: by 2002:a17:90b:4d01:b0:1c9:ec79:1b35 with SMTP id
- mw1-20020a17090b4d0100b001c9ec791b35mr3002696pjb.77.1648690528528; Wed, 30
- Mar 2022 18:35:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
- <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com> <e55edf6f-2aac-87a5-c0f8-363a536b9f92@gmail.com>
-In-Reply-To: <e55edf6f-2aac-87a5-c0f8-363a536b9f92@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 31 Mar 2022 10:34:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmYdz5zgnoa_J4kgBP5qB4QViapp_UMXu4Now1jknMNQ@mail.gmail.com>
-Message-ID: <CAK7LNARmYdz5zgnoa_J4kgBP5qB4QViapp_UMXu4Now1jknMNQ@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
-To:     Ben Westover <kwestover.kw@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
+        Wed, 30 Mar 2022 21:46:29 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045AE483AD;
+        Wed, 30 Mar 2022 18:44:38 -0700 (PDT)
+X-UUID: ca2ca1f7ce0641319e9e23fe5e4d21e9-20220331
+X-UUID: ca2ca1f7ce0641319e9e23fe5e4d21e9-20220331
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 800871722; Thu, 31 Mar 2022 09:44:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 31 Mar 2022 09:44:30 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 31 Mar 2022 09:44:30 +0800
+Message-ID: <524f93ebeaa9c2ad74b0f5dbb2703afa4c8e0bac.camel@mediatek.com>
+Subject: Re: [PATCH v16 5/8] soc: mediatek: add mtk-mutex support for mt8195
+ vdosys0
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <hsinyi@chromium.org>, <fshao@chromium.org>,
+        <moudy.ho@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>, <nancy.lin@mediatek.com>,
+        <singo.chang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 31 Mar 2022 09:44:30 +0800
+In-Reply-To: <72e5b8ed21a796f6f756b0ee42b363c158f18cd3.camel@mediatek.com>
+References: <20220307032859.3275-1-jason-jh.lin@mediatek.com>
+         <20220307032859.3275-6-jason-jh.lin@mediatek.com>
+         <72e5b8ed21a796f6f756b0ee42b363c158f18cd3.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 3:40 AM Ben Westover <kwestover.kw@gmail.com> wrote:
->
-> Hello Masahiro,
->
-> On 3/30/22 11:31 AM, Masahiro Yamada wrote:
-> > On Wed, Mar 30, 2022 at 11:34 PM Ben Westover <kwestover.kw@gmail.com> wrote:
-> >>
-> >> When riscv64 or riscv32 are used as the value for ARCH during compilation, like
-> >> in tools that get the ARCH value from uname, set SRCARCH to riscv instead of
-> >> failing because the riscv64 and riscv32 targets don't exist.
-> >
-> > Can you refer to the code that really needs this?
-> Some software like DKMS compiles out-of-tree modules by running `uname -m`and
-> using that for the ARCH value. Without this patch, that compilation fails because
-> uname shows either riscv64 or riscv32 while riscv should be used.
+Hi CK,
 
-It is a bug in DKMS.
+Thanks for the reviews.
 
-The ARCH=* in linux kernel does not necessarily match to 'uname -m'.
+On Fri, 2022-03-18 at 15:21 +0800, CK Hu wrote:
+> Hi, Jason:
+> 
+> On Mon, 2022-03-07 at 11:28 +0800, jason-jh.lin wrote:
+> > Add mtk-mutex support for mt8195 vdosys0.
+> > 
+> > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> > Acked-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/soc/mediatek/mtk-mutex.c | 103
+> > ++++++++++++++++++++++++++++++-
+> >  1 file changed, 100 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-mutex.c
+> > b/drivers/soc/mediatek/mtk-mutex.c
+> > index aaf8fc1abb43..1c7ffcdadcea 100644
+> > --- a/drivers/soc/mediatek/mtk-mutex.c
+> > +++ b/drivers/soc/mediatek/mtk-mutex.c
+> > @@ -17,6 +17,9 @@
+> >  #define MT8183_MUTEX0_MOD0			0x30
+> >  #define MT8183_MUTEX0_SOF0			0x2c
+> >  
+> > +#define MT8195_DISP_MUTEX0_MOD0			0x30
+> > +#define MT8195_DISP_MUTEX0_SOF			0x2c
+> > +
+> >  #define DISP_REG_MUTEX_EN(n)			(0x20 + 0x20 *
+> > (n))
+> >  #define DISP_REG_MUTEX(n)			(0x24 + 0x20 * (n))
+> >  #define DISP_REG_MUTEX_RST(n)			(0x28 + 0x20 *
+> > (n))
+> > @@ -96,6 +99,36 @@
+> >  #define MT8173_MUTEX_MOD_DISP_PWM1		24
+> >  #define MT8173_MUTEX_MOD_DISP_OD		25
+> >  
 
-For example, we use ARCH=arm64 for arm 64-bit (so called aarch64),
-but it does not match "aarch64".
+[snip]
 
-The kernel has freedom to determine the supported string for ARCH=.
+> > > +#define MT8195_MUTEX_MOD_DISP_VPP_MERGE		20
+> > > +#define MT8195_MUTEX_MOD_DISP_DP_INTF0		21
+> > > +#define MT8195_MUTEX_MOD_DISP_VPP1_DL_RELAY0	22
+> > > 
+> > > Useless, remove.
+> > > 
+> > > > +#define MT8195_MUTEX_MOD_DISP_VPP1_DL_RELAY1	23
+> > > 
+> > > Ditto.
+> > > 
+> > > Regards,
+> > > CK
+> > 
+> > Although these definitions are not used, they represent the
+> > functionality provided by this register.
+> > 
+> > I think we can show that we have these capabilities by defining
+> them.
+> > 
+> > Can we keep these definitions?
+> 
+> OK, but add some information that we could know how to use it. What's
+> these DL_RELAY and when should we add these to mutex?
+> 
+> Regards,
+> CK
 
-DKMS must adjust to the kernel code.
+DL_RELAY is used for the cross mmsys mux settings.
+We won't use these setting currently, so I think
+I just remove these useless define.
+
+Thanks.
+
+Regards,
+Jason-JH.Lin
 
 
-
-
-> This code already exists for sparc and parisc, as well as x86 of course.
-
-This is because there is a historical reason.
-
-If you look at the old code  (e.g. 2.6.x,)
-arch/i386/ and arch/x86_64 were separate directories.
-
-They were unified into arch/x86/ now, but we still support
-ARCH=i386/x86_64.  It helps to choose a different defconfig.
-See arch/x86/Makefile.
-
-
-I do not see such code for riscv, where 32/64-bit is selected
-only by Kconfig.
-
-
-
-
->
-> Thanks,
-> --
-> Ben Westover
-
-
+[snip]
 
 -- 
-Best Regards
-Masahiro Yamada
+Jason-JH Lin <jason-jh.lin@mediatek.com>
+

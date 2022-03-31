@@ -2,139 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4DA4ED40A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70424ED40E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiCaGnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
+        id S231332AbiCaGoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiCaGnI (ORCPT
+        with ESMTP id S230284AbiCaGoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:43:08 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F8ABF5A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:41:22 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b15so27020267edn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vRVZfZhek/ld27PxqrvAQx7maxQWJQLXz5r4N00GOvw=;
-        b=Xi15f2aQFwUqwT9TRfxb1qLZvAF/UDB1Tt0O9qg5coX6j0xbBItJGn1yVFfRp2bGWs
-         CyISIlUzkJxbvKCdz+xyfNlp4GXb9ZaA2NELq4JW91qbOeZTPzWd4iZY6XL9JPC9P+1t
-         +TIQoHlEn5SxgLYrk4/UK4irrscHYYlOJOv5Fjm61PDQyTpJfOLjJ3VcMc2kAxBwETUO
-         xa8EE6m9WBm2PqMFCF6SMxNdalTNQzljyMoUOC/4BLfWqfeqjmyvoKfgHh2MtKAbJH9N
-         UWRqJLBk+Nvrn8+5LValSaXCvoxz9R0Usfvuhx3gKu9XNZI/16lDqDAdL6APKiLxTOZF
-         V9yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vRVZfZhek/ld27PxqrvAQx7maxQWJQLXz5r4N00GOvw=;
-        b=BkHagszybgYgWHeRvdL4XJmnnxhaTSOqMPjZ3P+dmR0QRQMTAZxIfmVnE/XbU8599C
-         E8gHYmIvWrmXXohMy5+K4tYG3P7fJx69cvu+Mktkuqq0PJjztD4Yll0NA2p/FkngTqPN
-         c7l/9CXLudmv8zXeHz2+nJCLUa5NVZZcwJ71la17HMpn8jjyjbu+F4tIHLr3JBsFFYc8
-         llWhGilu3LCS4P+aUIppb7OeQUl+bLUd/D6ijLPluyxqH6h7VIIcEeTiiqXvNnPLcpHj
-         twMOxPh6z+s5lABzZZGCqGiEco4FDz8IErc4cjPtaQN8PbjF4CPzn3y6vfrFhvVHKjHZ
-         CYSg==
-X-Gm-Message-State: AOAM531s5xlJ60duiwsISubx7mPMTfPzyhH8npQ/iYr6veOvIMIXacVq
-        rrtEWlPxmWcMJNQhExXeHBY=
-X-Google-Smtp-Source: ABdhPJzhFtKO5Fs8WACAacp4q9R9a24cKA+TW99SvZ81BfLY1EtflbXpMX6JRr/ibKETH7Zt2DpGMw==
-X-Received: by 2002:aa7:d58e:0:b0:419:c121:ea33 with SMTP id r14-20020aa7d58e000000b00419c121ea33mr14939013edq.256.1648708880560;
-        Wed, 30 Mar 2022 23:41:20 -0700 (PDT)
-Received: from localhost.localdomain (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm5368593edb.39.2022.03.30.23.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 23:41:18 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     David Kershner <david.kershner@unisys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] staging: unisys: Remove "struct dentry *eth_debugfs_dir"
-Date:   Thu, 31 Mar 2022 08:41:15 +0200
-Message-Id: <20220331064115.29345-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 31 Mar 2022 02:44:08 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC14316A6BF;
+        Wed, 30 Mar 2022 23:42:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V8hnGI3_1648708936;
+Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0V8hnGI3_1648708936)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 31 Mar 2022 14:42:17 +0800
+Date:   Thu, 31 Mar 2022 14:42:15 +0800
+From:   Tony Lu <tonylu@linux.alibaba.com>
+To:     syzbot <syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, kgraul@linux.ibm.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] memory leak in smc_create (2)
+Message-ID: <YkVNR/dKuTh9wYq4@TonyMac-Alibaba>
+Reply-To: Tony Lu <tonylu@linux.alibaba.com>
+References: <00000000000070bc9405db4d96b8@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000070bc9405db4d96b8@google.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need for "struct dentry *eth_debugfs_dir" which is used for
-debug / sysfs directories. Therefore, remove this "struct dentry" and
-everything related (i.e., creation, test, removal).
-
-As a side effect of this change, the code has no more need of the
-"cleanup_register_netdev" label, which can also be removed.
-
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/staging/unisys/visornic/visornic_main.c | 17 -----------------
- 1 file changed, 17 deletions(-)
-
-diff --git a/drivers/staging/unisys/visornic/visornic_main.c b/drivers/staging/unisys/visornic/visornic_main.c
-index 643432458105..bb7ec492503e 100644
---- a/drivers/staging/unisys/visornic/visornic_main.c
-+++ b/drivers/staging/unisys/visornic/visornic_main.c
-@@ -103,7 +103,6 @@ struct chanstat {
-  * @server_down:                    IOPART is down.
-  * @server_change_state:            Processing SERVER_CHANGESTATE msg.
-  * @going_away:                     device is being torn down.
-- * @struct *eth_debugfs_dir:
-  * @interrupts_rcvd:
-  * @interrupts_notme:
-  * @interrupts_disabled:
-@@ -157,7 +156,6 @@ struct visornic_devdata {
- 	bool server_down;
- 	bool server_change_state;
- 	bool going_away;
--	struct dentry *eth_debugfs_dir;
- 	u64 interrupts_rcvd;
- 	u64 interrupts_notme;
- 	u64 interrupts_disabled;
-@@ -1919,24 +1917,10 @@ static int visornic_probe(struct visor_device *dev)
- 		goto cleanup_napi_add;
- 	}
+On Mon, Mar 28, 2022 at 01:59:26PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    ed4643521e6a Merge tag 'arm-dt-5.18' of git://git.kernel.o..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14d17b99700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8414405fa34d7154
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6e29a053eb165bd50de5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16431151700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15f44cdb700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
  
--	/* create debug/sysfs directories */
--	devdata->eth_debugfs_dir = debugfs_create_dir(netdev->name,
--						      visornic_debugfs_dir);
--	if (!devdata->eth_debugfs_dir) {
--		dev_err(&dev->device,
--			"%s debugfs_create_dir %s failed\n",
--			__func__, netdev->name);
--		err = -ENOMEM;
--		goto cleanup_register_netdev;
--	}
--
- 	dev_info(&dev->device, "%s success netdev=%s\n",
- 		 __func__, netdev->name);
- 	return 0;
- 
--cleanup_register_netdev:
--	unregister_netdev(netdev);
--
- cleanup_napi_add:
- 	visorbus_disable_channel_interrupts(dev);
- 	netif_napi_del(&devdata->napi);
-@@ -2002,7 +1986,6 @@ static void visornic_remove(struct visor_device *dev)
- 	/* going_away prevents new items being added to the workqueues */
- 	cancel_work_sync(&devdata->timeout_reset);
- 
--	debugfs_remove_recursive(devdata->eth_debugfs_dir);
- 	/* this will call visornic_close() */
- 	unregister_netdev(netdev);
- 
--- 
-2.34.1
+__smc_release() does not handle it properly when it falls back and
+sk_state is SMC_CLOSED but not calls sock_put(). This makes sk leaks.
 
+I will fix it soon.
+
+Tony Lu

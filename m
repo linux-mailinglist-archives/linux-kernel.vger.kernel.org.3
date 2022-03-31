@@ -2,47 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B464ED3B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A604ED3B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 08:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiCaGF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 02:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S230371AbiCaGHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 02:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiCaGFy (ORCPT
+        with ESMTP id S230033AbiCaGHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 02:05:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF5D111
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 23:04:07 -0700 (PDT)
+        Thu, 31 Mar 2022 02:07:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81E81DC9A0;
+        Wed, 30 Mar 2022 23:05:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36376B81EA0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68D4AC340ED;
-        Thu, 31 Mar 2022 06:04:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648706644;
-        bh=hOXJMkseS08e01CeIVsti+iIcXcRTuNM0gHg+/pTb7M=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99D63B81EA0;
+        Thu, 31 Mar 2022 06:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2AFDC340ED;
+        Thu, 31 Mar 2022 06:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648706743;
+        bh=QQKn+Kv4FLipNOaxDBLqAUQ//ylLu2B/5Kt8RPNpRr4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mB8dpQdEYJ3yPLeN9gzkAvyY7gKX0Hto9KYiqC4hN9Ibp7cyqIAfw0ak2DggvEiRc
-         n4f76aBtc2qJnQITwcwaxAnLLIouYb7qn585VlD7VSmN3ONKLinOz1W3XUblqQcDHM
-         qFnHuSFwmXPZgzp7g6VpM9uiop7oq4N0CHvzIeL0=
-Date:   Thu, 31 Mar 2022 08:04:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     xkernel.wang@foxmail.com
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] staging: r8188eu: fix potential memory leak in
- _rtw_init_xmit_priv()
-Message-ID: <YkVEUnEh2tRev6EY@kroah.com>
-References: <tencent_12789CD2DEBF33C818B3542E170737854506@qq.com>
- <tencent_2F72CC5068850B2BEDFC2B8058303FE6520A@qq.com>
+        b=fbInko8+mnPe6uxn0w7FVcGvtXjG+NE7LfwKIopJqKNt8OPhQaDArQMOt0qc8ge/t
+         SLJoRK0tMmLrcbeSgGx6LtbRXc8qtzM/Be2+YkRBVmStrHi/VT2RMl8o14WGcwx1J1
+         zIDZcTJU56GTnvNNDIk5SSzqqRj2OoHAvFlc+Ikjj0lNDPH349iGDORgJ2OWtMJ6Xp
+         P4kxh8gOv+wANKWvGjqEzWIMsPOvxgiIapuvkjPBGGBJhdwDPwJpTiPXotmDdOjYKa
+         QG96BQbQl0Ih7K5swrwEPWAXi7Kv402R/xuxng8j/zVMCxB4oigcKrQP4ENgLueBlf
+         IUWluFcNjF4HQ==
+Date:   Thu, 31 Mar 2022 11:35:38 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: display: msm: dsi: remove address/size cells
+Message-ID: <YkVEsqiRamfTmNi0@matsya>
+References: <20220328152923.90623-1-krzysztof.kozlowski@linaro.org>
+ <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
+ <YkHtY9absUjmqmW7@matsya>
+ <12b0056b-8032-452b-f325-6f36037b5a80@linaro.org>
+ <CAL_Jsq+6rx0UU6ryH+z_8KLQqKKuhTCnh=Oft2F03bcze+EV0Q@mail.gmail.com>
+ <YkKmPSesQfS6RLCD@matsya>
+ <YkMrPnRbsl3FBig8@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_2F72CC5068850B2BEDFC2B8058303FE6520A@qq.com>
+In-Reply-To: <YkMrPnRbsl3FBig8@robh.at.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,52 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:29:22PM +0800, xkernel.wang@foxmail.com wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On 29-03-22, 10:52, Rob Herring wrote:
+> On Tue, Mar 29, 2022 at 12:01:52PM +0530, Vinod Koul wrote:
+> > On 28-03-22, 13:21, Rob Herring wrote:
+> > > On Mon, Mar 28, 2022 at 12:18 PM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > > >
+> > > > On 28/03/2022 19:16, Vinod Koul wrote:
+> > > > > On 28-03-22, 19:43, Dmitry Baryshkov wrote:
+> > > > >> On Mon, 28 Mar 2022 at 18:30, Krzysztof Kozlowski
+> > > > >> <krzysztof.kozlowski@linaro.org> wrote:
+> > > > >>>
+> > > > >>> The DSI node is not a bus and the children do not have unit addresses.
+> > > > >>>
+> > > > >>> Reported-by: Vinod Koul <vkoul@kernel.org>
+> > > > >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > >>
+> > > > >> NAK.
+> > > > >> DSI panels are children of the DSI device tree node with the reg = <0>; address.
+> > > > >> This is the convention used by other platforms too (see e.g.
+> > > > >> arch/arm64/boot/dts/freescale/imx8mq-evk.dts).
+> > > > >
+> > > > > So we should add reg = 0, i will update my dtsi fix
+> > > > >
+> > > >
+> > > > To "ports" node? No. The reg=0 is for children of the bus, so the
+> > > > panels. How to combine both without warnings - ports and panel@0 - I
+> > > > don't know yet...
+> > > 
+> > > I don't think that should case a warning. Or at least it's one we turn off.
+> > 
+> > Well in this case I think we might need a fix:
+> > Here is the example quoted in the binding. We have ports{} and then the
+> > two port@0 and port@1 underneath.
 > 
-> In _rtw_init_xmit_priv(), there are several error paths for allocation
-> failures without releasing the resources.
-> To properly release them, there are several error lables and some
-> modifications for rtw_os_xmit_resource_free().
-> The `for(; i >= 0; i--)` is to only release the explored items.
-> While the modifications for rtw_os_xmit_resource_free() is 
-> corresponding to the logic of rtw_os_xmit_resource_alloc() to break 
-> unintentional wrong operations. 
+> It's the #address-cells/#size-cells under 'ports' that applies to 'port' 
+> nodes. As 'ports' has no address (reg) itself, it doesn't need 
+> #address-cells/#size-cells in its parent node.
 > 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_xmit.c     | 41 ++++++++++++++++++---
->  drivers/staging/r8188eu/os_dep/xmit_linux.c |  8 +++-
->  2 files changed, 42 insertions(+), 7 deletions(-)
+> > 
+> > So it should be okay to drop #address-cells/#size-cells from dsi node
+> > but keep in ports node...
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> index 5888979..813bddf 100644
-> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> @@ -112,7 +112,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
->  
->  	if (!pxmitpriv->pallocated_xmitbuf) {
->  		res = _FAIL;
-> -		goto exit;
-> +		goto free_frame_buf;
->  	}
->  
->  	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
-> @@ -134,7 +134,12 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
->  			msleep(10);
->  			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
->  			if (res == _FAIL) {
-> -				goto exit;
-> +				pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
-> +				for (; i >= 0; i--) {
-> +					rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
-> +					pxmitbuf++;
-> +				}
+> Yes.
+> 
+> > Thoughts...?
+> 
+> But I thought a panel@0 node was being added? If so then you need to add 
+> them back.
 
-This logic should be at the end of the function, when you are exiting
-due to an error.  Don't duplicate it in multiple places, that way is
-ensured to get out of sync eventually.
+I guess we should make this optional, keep it when adding panel@0 node
+and skip for rest where not applicable..? Dmitry is that fine with you?
 
-thanks,
-
-greg k-h
+-- 
+~Vinod

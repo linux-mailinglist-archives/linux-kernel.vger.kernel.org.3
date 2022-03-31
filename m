@@ -2,213 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321054EDF5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584854EDF64
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240481AbiCaRJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
+        id S240491AbiCaRJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbiCaRI6 (ORCPT
+        with ESMTP id S234189AbiCaRJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:08:58 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5FC23213D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:07:09 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a30so561745ljq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fdSyI71UrcYnS9PD8/kYWAhaxlCUy9rY5QWg9D495Js=;
-        b=UMiK2/ok9F3Y1Vp/549u0DOVZzjViy3UwowNqil5I+8duJSK5VCjRULxz4DWNeqgZF
-         6LWHeeo8vrJHlW3B/3K4hzUWWJUG743p45kFw9pVv4k4JnBNVekIlq5NErSBvjU4WBCB
-         QBoZrq1eVRM/sDhtQi08Q0aeugFk2iLHm9a89lv0lHSOn/ZUatgl8TbFYqVxQjft6Vzu
-         YZEW0k6VyXfaLqJuQRIA6G5aLzK/iBpbDAc7gKNXoH1s2y4u8bk7OlBJTeCWPfMR3AEM
-         4Wnii3Vn49DrVPkfReZaI6eDJL4MhyJXiu4LzSZ653tkbAPZ0ct8tRQXLiWVX/YmHneu
-         netw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fdSyI71UrcYnS9PD8/kYWAhaxlCUy9rY5QWg9D495Js=;
-        b=KRI7SwUQzMxZo4ZDrmjMsbujZvU3kdzbSrXoiHi0qlookUkH7U8M95aVt1zfeBdb26
-         FLMr8+5sFO2Nd3b3ZLVDEp3tklq8zaXJfN4ZBmfaOXqa0G5NFIzyNNcT6+M3WPBKiCAA
-         YXE7HENh03C6nbDqKObanHQlzyn6NCGGUvgO2xops62tiGkfLdvlLUZFNgGQzIdw3Xkl
-         L0y7fMdEEV5vvs0TsbOOVLlXLbcdPxUXHyrQtn0qRFP7QB1wWBxq87u0KoYsFgJXrMTg
-         RFFa+667CB6zRs8dTinEygnDm/ynfJLZFXsx0iMWXNWbjbDKxRYSRhUWDBmdrsf/uZYU
-         M46w==
-X-Gm-Message-State: AOAM530LekPrHuclr/DumzQwjENOL5iJ2FbnAXbyWzvmytZtYvX+eKzw
-        sh7GzPma9dpeXWoOt+xtKYw9YdFcLS7c7sIDaf+6SA==
-X-Google-Smtp-Source: ABdhPJw8Q/b4RlaadBwVkJ1YfXzyuHazNx9rPS5OzaHjywsX8MEzE4ECP5Xy/jh7hykLR2YuO0IcIF80exL3DqZ36as=
-X-Received: by 2002:a2e:818f:0:b0:24a:7c17:7226 with SMTP id
- e15-20020a2e818f000000b0024a7c177226mr11014901ljg.472.1648746423660; Thu, 31
- Mar 2022 10:07:03 -0700 (PDT)
+        Thu, 31 Mar 2022 13:09:55 -0400
+Received: from out203-205-251-82.mail.qq.com (out203-205-251-82.mail.qq.com [203.205.251.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9491F0824
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648746486;
+        bh=ctWsvOCYw/Nk+/HVUYkGj4y3NFwJ5+znyibIFc9hryU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ix3cbYpJq7wD4bQn1V9sM79AQk5EAlSEvzgiK18muoULTWuF8NhD/4U6S1sCzPHly
+         13ivebdXLoebBYvoU3EyVe6jLaVGWyCofRV4GVT8gstyIOFQ7iEdCFDEIx/eaNCJ6x
+         Xu1kPDDBFzgqgg3xX9AagbBvt9s+mQMx/b8EomLg=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
+        id 2031D0A9; Fri, 01 Apr 2022 01:08:03 +0800
+X-QQ-mid: xmsmtpt1648746483t4hkxdb1g
+Message-ID: <tencent_3096E1464A73FF232014CC40B9001C551408@qq.com>
+X-QQ-XMAILINFO: OKkKo7I1HxIeMjOTVeXWC6Xr2HPJXf7Z1mIOravcX95UqAVizHoxIBVt3O1iMe
+         N+brrEucwxY9JjJAODjkJFI2Ml5/p7bi/oxa+K7Njk2I7SjR/CBb97B4tObAqxiMN9W8hyv9mDQL
+         SaBR1OILkXRb61xxFb73V7qPPVZITz4WCzXWnczl55vcknJ5DOJJmoy93s0VjORlIEoMA/MKymrL
+         gK1TZK4/RxMammsgvUERL8oR0vsJMN2wvfnu5MoLMDd06g0L6fIy/SX4uCSjEtv2pAdyoHEKk5+9
+         qbZHCYxaA/4XGHsMV2iyf1HOyt/WfWPaChRpNhO2CtVdB96AwVSJZr/x5fTOrDDKTxWwjL6VyqHE
+         qn28YT3AF4LFLWIQn8oINPt2eFTlUuhWInd24baVuxV+EUsBYGHcvQXK6NhX1x9VYpkfLuktt19k
+         LYKnrVcren0gtJYn3fe7cV27BZa605XX44MwDPhZibDNu7b99GdaMZRw5jrVvg1HRl2i9rlGqLfP
+         sNDFuqLI9Cy5WR4QO9/FjZLoU3DzPjlt3BP0Fu7yxrULuSLkh8CIVq9ikvOQeNbvvT71Xty2lH0b
+         lOk0Gp7cvUmQdyT/w9RSxBqtyPVtHL3Za58Wc803JA2t9YiZb0E+ZH0KlT+gc5bnjbVabN2DFKYr
+         IRK0Ad3Ll0Li9BDj2rhnCUTki7TcCPiH1npuH0NJKblHC9xl2S78af7VhQ1L7N0vs0JEMDkWTJeE
+         yaqo57re1eebFjxnOJAIatYpTstHZeY79ype4MzIsvgGGkki/r7qiqqRdT+eZ9ezExyHldxgfw4y
+         m6dCXmB5GKpAD6GfK8qDxqScbruxPDahim24iANlzPinT9R7PmIRxh2BItXhEX6EAGv3z38+1DaB
+         uo+WG/l+pmYN12/prFD7sqBXBL+hhY5PUVSdzmk0gZM8ANrhV9lDMWef86Wutsam7731RcWflaFg
+         XMLD30Tk4=
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH 2/3] staging: rtl8712: add two validation check in r8712_init_drv_sw()
+Date:   Fri,  1 Apr 2022 01:07:45 +0800
+X-OQ-MSGID: <20220331170745.9592-1-xkernel.wang@foxmail.com>
+In-Reply-To: <tencent_0A1273526E1E87150578F8B752CF7F178806@qq.com>
+References: <tencent_0A1273526E1E87150578F8B752CF7F178806@qq.com>
 MIME-Version: 1.0
-References: <202203301412.MZ7wQvQz-lkp@intel.com> <YkTP/+jhhAX6xlAQ@carbon.dhcp.thefacebook.com>
- <YkV3bCqtLaVH+mC7@linux.ibm.com> <YkXSv8exRRUbT/oM@dev-arch.thelio-3990X>
-In-Reply-To: <YkXSv8exRRUbT/oM@dev-arch.thelio-3990X>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 31 Mar 2022 10:06:52 -0700
-Message-ID: <CAKwvOdksByffbydecdy_buXSmzM6Fx9T90Jse+84dOYX=QQZgA@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 4036/5872] WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in
- reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
-To:     Tri Vo <trong@google.com>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@google.com>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        kernel test robot <lkp@intel.com>,
-        Roman Gushchin <guro@fb.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Minchan Kim <minchan@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 9:11 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Mar 31, 2022 at 12:42:04PM +0300, Mike Rapoport wrote:
-> > (added llvm folks)
-> >
-> > Hi,
-> >
-> > On Wed, Mar 30, 2022 at 02:47:43PM -0700, Roman Gushchin wrote:
-> > > On Wed, Mar 30, 2022 at 02:53:14PM +0800, kbuild test robot wrote:
-> > > > Hi Roman,
-> > > >
-> > > > FYI, the error/warning still remains.
-> > > >
-> > > > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-> > > > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-> > > > commit: 0e0bfc41fdf4d79d39ebe929844cdee44f97366d [4036/5872] UPSTREAM: mm: cma: allocate cma areas bottom-up
-> > > > config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220330/202203301412.MZ7wQvQz-lkp@intel.com/config)
-> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://github.com/ammarfaizi2/linux-block/commit/0e0bfc41fdf4d79d39ebe929844cdee44f97366d
-> > > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-> > > >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-> > > >         git checkout 0e0bfc41fdf4d79d39ebe929844cdee44f97366d
-> > > >         # save the config file to linux build tree
-> > > >         mkdir build_dir
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> > > >
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> > > >
-> > > > >> WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the variable .meminit.data:memblock
-> > > > The function memblock_bottom_up() references
-> > > > the variable __meminitdata memblock.
-> > > > This is often because memblock_bottom_up lacks a __meminitdata
-> > > > annotation or the annotation of memblock is wrong.
-> > >
-> > > I guess this patch should fix it, however I fail to reproduce the original issue.
-> > > Maybe it's up to the specific compiler version.
-> > >
-> > > --
-> > >
-> > > From b55a8dd19f4156d7e24ec39b18ede06965ce1c4f Mon Sep 17 00:00:00 2001
-> > > From: Roman Gushchin <roman.gushchin@linux.dev>
-> > > Date: Wed, 30 Mar 2022 14:42:12 -0700
-> > > Subject: [PATCH] memblock: fix memblock_bottom_up() and
-> > >  memblock_set_bottom_up() annotations
-> > >
-> > > memblock_bottom_up() and memblock_set_bottom_up() lack __meminitdata
-> > > annotations causing compiler warnings like:
-> > >   WARNING: modpost: vmlinux.o(.text+0x4111c4): Section mismatch in reference from the function memblock_bottom_up() to the
-> > >   variable .meminit.data:memblock
-> > >
-> > > Fix it by adding the missing annotation and removing the wrong
-> > > __meminit annotation.
-> > >
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > > ---
-> > >  include/linux/memblock.h | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> > > index 50ad19662a32..536bc2fc31e6 100644
-> > > --- a/include/linux/memblock.h
-> > > +++ b/include/linux/memblock.h
-> > > @@ -460,7 +460,7 @@ static inline void *memblock_alloc_node(phys_addr_t size,
-> > >  /*
-> > >   * Set the allocation direction to bottom-up or top-down.
-> > >   */
-> > > -static inline __init_memblock void memblock_set_bottom_up(bool enable)
-> > > +static inline __initdata_memblock void memblock_set_bottom_up(bool enable)
-> >
-> > I think putting __initdata_memlock won't help here, because there should be
-> > nothing wrong with __meminit function accessing __meminitdata data.
-> >
-> > My guesstimate would be that the compiler decided not to inline this and
-> > still dropped section attribute because of 'inline'.
-> >
-> > If this is the case we I think we should
-> >
-> >       s/inline __init_memblock/__always_inline/
-> >
-> > >  {
-> > >     memblock.bottom_up = enable;
-> > >  }
-> > > @@ -470,7 +470,7 @@ static inline __init_memblock void memblock_set_bottom_up(bool enable)
-> > >   * if this is true, that said, memblock will allocate memory
-> > >   * in bottom-up direction.
-> > >   */
-> > > -static inline __init_memblock bool memblock_bottom_up(void)
-> > > +static inline __initdata_memblock bool memblock_bottom_up(void)
-> > >  {
-> > >     return memblock.bottom_up;
-> > >  }
-> > > --
-> > > 2.30.2
-> > >
-> >
->
-> For the record, I cannot reproduce this on mainline, which has commits
-> 34dc2efb39a2 ("memblock: fix section mismatch warning") and a024b7c2850d
-> ("mm: memblock: fix section mismatch warning again"). That first commit
-> has the same exact warning as this report, which is against an Android
-> tree (android12-trusty-5.10).
->
-> While I do not see the commit that 34dc2efb39a2 claims to fix in
-> android12-trusty-5.10, I do see the three commits in android12-5.10:
->
-> a46e3fa13968 ("UPSTREAM: mm: memblock: drop __init from memblock functions to make it inline")
-> 5f7ec0f4c383 ("UPSTREAM: memblock: fix section mismatch warning")
-> 8cf5bb6946a2 ("UPSTREAM: mm: memblock: fix section mismatch warning again")
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-It sounds like trusty just needs to pull down from (or rebase onto)
-android12-5.10 into android12-trusty-5.10.
+_r8712_init_xmit_priv() or _r8712_init_recv_priv() returns -ENOMEM
+when some allocations inside it failed.
+So it is better to check the return status of them.
 
->
-> I think we can just discard this report for now, unless someone from
-> Google's trusty team wants to address it in that branch.
->
-> Cheers,
-> Nathan
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/staging/rtl8712/os_intfs.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-
-
+diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
+index 9502f6a..163baaa 100644
+--- a/drivers/staging/rtl8712/os_intfs.c
++++ b/drivers/staging/rtl8712/os_intfs.c
+@@ -308,8 +308,12 @@ int r8712_init_drv_sw(struct _adapter *padapter)
+ 	ret = r8712_init_mlme_priv(padapter);
+ 	if (ret)
+ 		return ret;
+-	_r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
+-	_r8712_init_recv_priv(&padapter->recvpriv, padapter);
++	ret = _r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
++	if (ret)
++		return ret;
++	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
++	if (ret)
++		return ret;
+ 	memset((unsigned char *)&padapter->securitypriv, 0,
+ 	       sizeof(struct security_priv));
+ 	timer_setup(&padapter->securitypriv.tkip_timer,
 -- 
-Thanks,
-~Nick Desaulniers

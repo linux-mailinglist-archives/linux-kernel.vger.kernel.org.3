@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAB84EE453
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929344EE456
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242663AbiCaWre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S242670AbiCaWs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241797AbiCaWrc (ORCPT
+        with ESMTP id S240324AbiCaWsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:47:32 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A0222FDAB;
-        Thu, 31 Mar 2022 15:45:44 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id o10so2306527ejd.1;
-        Thu, 31 Mar 2022 15:45:44 -0700 (PDT)
+        Thu, 31 Mar 2022 18:48:25 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7817B2325D6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:46:37 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso791812pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uF1iw34nBOmvCy+IoOEYEN0o0eVJME4dpDsIt52fKzo=;
-        b=aPycjAp/tX8nwU1bGGtaEufvaZd94yMHK81doo7beIqR8q2WqX8BY7UX+6EZVRXwMQ
-         00SGBYsfk785awB5L/QKJv2fB0ql5v9QmyLoW0vjZ4NKMWZU78W7l16L2E0niLeRF68h
-         u5KRICnBsaZMWvkB9j3suFj0XxGSxx4691BOfj5ft4TXd7A1AKMckpb87svdgFvXTZYH
-         oR2SN10Wt0HVLAPBqZgq1eD2jEKYznOydMBjeWd518IeaPZ6LE3aLr3Hujm0PvX+aeY2
-         bQZirIonhayIt7WuwLuQV897/vcBRMZ8jL6Q5Sh5P65EJ/oISQlRgQ8VG9JsDpF6SS06
-         H7KQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7uOUzZnbDEusnKR8cHWSyHd2FNHBMs+CYiJb4fGuX4g=;
+        b=saclz8jkvtOn9nSRzBPhcHPd3drlaDn9wlVl5p8YFykQOEoBBxA0XJkjgZ8cTCzPK6
+         FMl6af4M26t9yd66jXObaOKA7AYFMkXhp/zQ1E5cjs+Dc23ZC7Nq5jU/PHfe2U3imyNZ
+         hej+lIUS1XBxtRjX/eItimBO0l4FfZFjLqAwIOywtDOhEuP222M5iJalT5wFDvKu5hZM
+         NJmvlEz/gJYLDuI1NB0/xng2DUv7PxMs7r89lLIQpBgUHyhU7N2mCgfCOjxqp5xo5mNe
+         FH3Y02rsAJrnhoBxlMG+13CHQUkcVbCrlj1xEqWkzRqEYLxBDvivu8fTUEJwIxRgkwHy
+         /TMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uF1iw34nBOmvCy+IoOEYEN0o0eVJME4dpDsIt52fKzo=;
-        b=QyJ79dZZrKpo3XnsnlZpq6XiOIr9gzpT0ebjWIJR3DLpvqI66AojEmq4rH0q5kXSt4
-         TD60ERGAH5ijzdnNRXZ7ITvI3jHxXK9vgvtWd/4s8VxzF8p67zG8pQDIJs6CNNduQHNm
-         fW8xj60RCYsDGLP2zKMMD6gDgWM+5SnkbndhorzCnChPFyw5brLM3vfRIa9RsUJEkv2o
-         GWcCwfd7g+pxuX/VLby+pasA62LtshOECConnJmk0ve2fyxza/+Y8iEM4t2doNHYj2zz
-         iyqUTjgJpWzrf04lxU/AKUkL+DlqTDKEGziVQRu8TxyNfAB7musZO/Dd+LxDWQcP6YcF
-         blwA==
-X-Gm-Message-State: AOAM530KYW9TSnhy4P9NMI1RIbz8h7JI9nRrTEQ5tjxgId869tzbeqBN
-        1Q2YRmptvcqKpH0uYev2uyg=
-X-Google-Smtp-Source: ABdhPJzTNkbHeej/N8xjS5O7X32jfYc3HfvBboNDrNzRNf5JSoyElhkEcyRc0CjkT75X4oY78ltmZA==
-X-Received: by 2002:a17:906:7d83:b0:6ce:fee:9256 with SMTP id v3-20020a1709067d8300b006ce0fee9256mr6944062ejo.647.1648766743211;
-        Thu, 31 Mar 2022 15:45:43 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id do8-20020a170906c10800b006dfe4d1edc6sm285696ejc.61.2022.03.31.15.45.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7uOUzZnbDEusnKR8cHWSyHd2FNHBMs+CYiJb4fGuX4g=;
+        b=anI0FTL1FWQLpWPR5ADuxPArUeTu8pihd7dPQPTZy0ut/cJFNGFrUTnK+AMRsDc4VT
+         eKft6e6p2CnK917FlsjgguwFXGuLz/aG8Nz7sOLXJ0UdEc3FkOxzQlNqXfyBM3qT5Epu
+         YEufPfeSagHTnb7qyeUj79S5RWS787YUNkhp7CnDwtDPqxyQ3t9HyL1aErxv+u7veTGs
+         LlDXFxEqcyYj0GkTWp5VA5cpNCIjTTwG97FjNvbPDXeuOs/VMEHh6QBN+190SwyFXQ0i
+         /H6nNLCrTu7rjFk7nX72M7CaABrxMBkUmDY0J93+oZSyHXE4j9h17LZgsnZsQ9niFa3x
+         NIsw==
+X-Gm-Message-State: AOAM530kiHTm6YZrNIddJMhXfxXZa3AfaTGqViAZC4cg6T7sGKdK5Q6i
+        Loe60MiN7LhTHixdE747JZEGjA==
+X-Google-Smtp-Source: ABdhPJxhusEmkTGoR7eUlu5A0Ce5fMesefkDFwNmmHwbnSL8TStNtf2UnkB+Vztq7JGocGm/di0LAQ==
+X-Received: by 2002:a17:902:cccb:b0:156:4a0:a2e7 with SMTP id z11-20020a170902cccb00b0015604a0a2e7mr7427200ple.97.1648766796515;
+        Thu, 31 Mar 2022 15:46:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm324113pgc.91.2022.03.31.15.46.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:45:42 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Cc:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] IB/hfi1: remove check of list iterator against head past the loop body
-Date:   Fri,  1 Apr 2022 00:45:01 +0200
-Message-Id: <20220331224501.904039-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 31 Mar 2022 15:46:35 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 22:46:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Gao Chao <chao.gao@intel.com>,
+        Robert Hoo <robert.hu@linux.intel.com>
+Subject: Re: [PATCH v7 4/8] KVM: VMX: dump_vmcs() reports
+ tertiary_exec_control field as well
+Message-ID: <YkYvSHcIrhRgU93l@google.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+ <20220304080725.18135-5-guang.zeng@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304080725.18135-5-guang.zeng@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,69 +89,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When list_for_each_entry() completes the iteration over the whole list
-without breaking the loop, the iterator value will be a bogus pointer
-computed based on the head element.
+Nit, shortlog is funky, it'd read better as
 
-While it is safe to use the pointer to determine if it was computed
-based on the head element, either with list_entry_is_head() or
-&pos->member == head, using the iterator variable after the loop should
-be avoided.
+  KVM: VMX: Report tertiary_exec_control field in dump_vmcs()
 
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to point to the found element [1].
+On Fri, Mar 04, 2022, Zeng Guang wrote:
+> From: Robert Hoo <robert.hu@linux.intel.com>
+> 
+> Add tertiary_exec_control field report in dump_vmcs()
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/infiniband/hw/hfi1/tid_rdma.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+Please call out the shuffling of PinBased and provide a sample dump.  It's not
+mandatory to put that sort of info in the changelog, but it really does help
+reviewers, e.g. I remember discussing the shuffling and seeing the sample output,
+but other reviewers coming into this blind won't have that luxury.
 
-diff --git a/drivers/infiniband/hw/hfi1/tid_rdma.c b/drivers/infiniband/hw/hfi1/tid_rdma.c
-index 2a7abf7a1f7f..b12abf83a91c 100644
---- a/drivers/infiniband/hw/hfi1/tid_rdma.c
-+++ b/drivers/infiniband/hw/hfi1/tid_rdma.c
-@@ -1239,7 +1239,7 @@ static int kern_alloc_tids(struct tid_rdma_flow *flow)
- 	struct hfi1_ctxtdata *rcd = flow->req->rcd;
- 	struct hfi1_devdata *dd = rcd->dd;
- 	u32 ngroups, pageidx = 0;
--	struct tid_group *group = NULL, *used;
-+	struct tid_group *group = NULL, *used, *iter;
- 	u8 use;
- 
- 	flow->tnode_cnt = 0;
-@@ -1248,13 +1248,15 @@ static int kern_alloc_tids(struct tid_rdma_flow *flow)
- 		goto used_list;
- 
- 	/* First look at complete groups */
--	list_for_each_entry(group,  &rcd->tid_group_list.list, list) {
--		kern_add_tid_node(flow, rcd, "complete groups", group,
--				  group->size);
-+	list_for_each_entry(iter,  &rcd->tid_group_list.list, list) {
-+		kern_add_tid_node(flow, rcd, "complete groups", iter,
-+				  iter->size);
- 
--		pageidx += group->size;
--		if (!--ngroups)
-+		pageidx += iter->size;
-+		if (!--ngroups) {
-+			group = iter;
- 			break;
-+		}
- 	}
- 
- 	if (pageidx >= flow->npagesets)
-@@ -1277,7 +1279,7 @@ static int kern_alloc_tids(struct tid_rdma_flow *flow)
- 	 * However, if we are at the head, we have reached the end of the
- 	 * complete groups list from the first loop above
- 	 */
--	if (group && &group->list == &rcd->tid_group_list.list)
-+	if (!group)
- 		goto bail_eagain;
- 	group = list_prepare_entry(group, &rcd->tid_group_list.list,
- 				   list);
-
-base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
--- 
-2.25.1
-
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 8a5713d49635..7beba7a9f247 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -5891,6 +5891,7 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+>  	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>  	u32 vmentry_ctl, vmexit_ctl;
+>  	u32 cpu_based_exec_ctrl, pin_based_exec_ctrl, secondary_exec_control;
+> +	u64 tertiary_exec_control;
+>  	unsigned long cr4;
+>  	int efer_slot;
+>  
+> @@ -5904,9 +5905,16 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+>  	cpu_based_exec_ctrl = vmcs_read32(CPU_BASED_VM_EXEC_CONTROL);
+>  	pin_based_exec_ctrl = vmcs_read32(PIN_BASED_VM_EXEC_CONTROL);
+>  	cr4 = vmcs_readl(GUEST_CR4);
+> -	secondary_exec_control = 0;
+> +
+>  	if (cpu_has_secondary_exec_ctrls())
+>  		secondary_exec_control = vmcs_read32(SECONDARY_VM_EXEC_CONTROL);
+> +	else
+> +		secondary_exec_control = 0;
+> +
+> +	if (cpu_has_tertiary_exec_ctrls())
+> +		tertiary_exec_control = vmcs_read64(TERTIARY_VM_EXEC_CONTROL);
+> +	else
+> +		tertiary_exec_control = 0;
+>  
+>  	pr_err("VMCS %p, last attempted VM-entry on CPU %d\n",
+>  	       vmx->loaded_vmcs->vmcs, vcpu->arch.last_vmentry_cpu);
+> @@ -6006,9 +6014,10 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+>  		vmx_dump_msrs("host autoload", &vmx->msr_autoload.host);
+>  
+>  	pr_err("*** Control State ***\n");
+> -	pr_err("PinBased=%08x CPUBased=%08x SecondaryExec=%08x\n",
+> -	       pin_based_exec_ctrl, cpu_based_exec_ctrl, secondary_exec_control);
+> -	pr_err("EntryControls=%08x ExitControls=%08x\n", vmentry_ctl, vmexit_ctl);
+> +	pr_err("CPUBased=0x%08x SecondaryExec=0x%08x TertiaryExec=0x%016llx\n",
+> +	       cpu_based_exec_ctrl, secondary_exec_control, tertiary_exec_control);
+> +	pr_err("PinBased=0x%08x EntryControls=%08x ExitControls=%08x\n",
+> +	       pin_based_exec_ctrl, vmentry_ctl, vmexit_ctl);
+>  	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
+>  	       vmcs_read32(EXCEPTION_BITMAP),
+>  	       vmcs_read32(PAGE_FAULT_ERROR_CODE_MASK),
+> -- 
+> 2.27.0
+> 

@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872834ED842
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7084ED844
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234963AbiCaLMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S234982AbiCaLNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiCaLMM (ORCPT
+        with ESMTP id S233641AbiCaLNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:12:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A33404BB9C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648725024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gYiG+zrQ7bvd1JeHBYiSlrjQIazTX9E1fix0Lyjk3A4=;
-        b=WigqcBlA+sA25ivn7roJ9LoyGzz+5dTwqr8XnAuDGOiCv+F8GeK+oe/PJK3GWB1FmlclKe
-        cpVSX6dbKfQLl9NgNru8ElfSzloQy6Wt9SlHvlF9goaXPBIzgcj+XL3tlvNO657TotvF0a
-        uwo9oDUCeFTUANRI9MUIo2pZFLGfvwY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-ATMD9QDIOGagmWYxElrslw-1; Thu, 31 Mar 2022 07:10:21 -0400
-X-MC-Unique: ATMD9QDIOGagmWYxElrslw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A407E80159B;
-        Thu, 31 Mar 2022 11:10:20 +0000 (UTC)
-Received: from localhost (ovpn-13-26.pek2.redhat.com [10.72.13.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 57C4B40D0160;
-        Thu, 31 Mar 2022 11:10:19 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 19:10:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v5 8/8] x86/crash: Add x86 crash hotplug support for
- kexec_load
-Message-ID: <YkWMFzxJpkiTjKvL@MiWiFi-R3L-srv>
-References: <20220303162725.49640-1-eric.devolder@oracle.com>
- <20220303162725.49640-9-eric.devolder@oracle.com>
+        Thu, 31 Mar 2022 07:13:39 -0400
+Received: from out203-205-251-80.mail.qq.com (out203-205-251-80.mail.qq.com [203.205.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C48654BF
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648725108;
+        bh=elyHlnyePDXKN3P2xm16PGMA5PP2gZ61mI8T7iBUoRk=;
+        h=From:To:Cc:Subject:Date;
+        b=N6gOojrtwo8G4mXrmShY9gX2uuZHat9H6NXUBgYl9t3bv6uRufdPXmS/It9FyDXB8
+         CQvvdWZfd0YW99w/PEgk+yhYjvWyp3+IKCDOXv16PkAwSbyXlgCJZ6e9kPfbvCPn6P
+         9uNB01rpDdjpGJg0+LTcJN2S/PSo0/6WCd3ivCWs=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
+        id 2ECB38A4; Thu, 31 Mar 2022 19:11:44 +0800
+X-QQ-mid: xmsmtpt1648725104tagn79hsi
+Message-ID: <tencent_75E5FF1DC8353370AE0F4712454D78BC9206@qq.com>
+X-QQ-XMAILINFO: OZZSS56D9fAjTDt3SiOUav6tw+MCRYiTRtGQVKAlqhrPGowt5/T9fIFV60L30C
+         hrQw0RwamAI8GGfFPKVNA+WEw4T8imN7Jc11+Uq1At7F5LzV+7XlbeTULSE8hOzvheFKi89BndAS
+         iKDt+d5jeWoC9oU2vjCtKvAeJtNiEDL1GWKYniQF+rYZCy2Szun90dO0NLcC/LSXbOFBTg/DtVeU
+         6xDRS05bisNYZbZjO0sJ67UWrWvPsTT/ALRR249kNA1WtmjM21AUjIvjMTP7QKWy0azWF42GIYsW
+         YW5kiG4PHxKpsYS+3W6GGpSgClLvrqBF64lCZa+ob+au/KtrdAp70RvjeYTH2WGwmXg/nyWfTBpY
+         GIa4R2hSDK2cLQHMesO0SfAnAaV/sXDmZcM6xYC7fCokf/Y+kcov35wa26LU9vyV1I/Fa9HeRUYb
+         PlgY9ZP+H68LeJXIPTMw/NPu6e+kbBMhstxxNj1pGBMA+2yYCNLMOQ03vu+k07rZfP/yLcMj2GIA
+         MaaURYe2Drcd37di8xiDtyZULqxmZPniD1J9FuZ/VRNVRYZInb1LAp9Oki2pUif1KQdIv19czxxP
+         a2J5AwtrH+MbMf6xsD/qGzouFR5fcmzoXd7t5T2hUxo7MyQtk1W9s42Nmukuqu7V5bZqohg0VCEg
+         3TCbTeiCj+pAiiuZ5a/SuKrdsH7doK99siknVfCN0Ol9FXLyfpE9NeDL+7JaVtw+THPWE9cNosmZ
+         tReJrKtemhr6jyRNMD/7sc/3zpUkAbJTdcroensdBYNxCrKIPD6qeyvmVw3RS/8Os5RYAwCCs7ti
+         c8vUdF5SAfceXkhRiay446lDL18nylOBW9Or8uLL+MaZ7B5htQXGEgb5j3YpXLCWs/RGx4ypkvAZ
+         7oo2065STSBx5KSvrC826l33GXH+BU/YWCKW+QZsxg4AYRzR6w1fab1S6pZ0uVAdjIgaIwCi77bL
+         D9yMeEBgDVA1/rEEQSsw==
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] staging: r8188eu: fix potential memory leak in rtw_os_xmit_resource_alloc()
+Date:   Thu, 31 Mar 2022 19:11:23 +0800
+X-OQ-MSGID: <20220331111123.8113-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303162725.49640-9-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/22 at 11:27am, Eric DeVolder wrote:
-> For kexec_file_load support, the loading of the crash kernel occurs
-> entirely within the kernel, and as such the elfcorehdr is readily
-> identified (so that it can be modified upon hotplug events).
-> 
-> This change enables support for kexec_load by identifying the
-> elfcorehdr segment in the arch_crash_hotplug_handler(), if it has
-> not already been identified.
-> 
-> In general, support for kexec_load requires corresponding changes
-> to the userspace kexec-tools utility. It is the responsibility of
-> the userspace kexec utility to ensure that:
->  - the elfcorehdr segment is sufficiently large enough to accommodate
->    hotplug changes, ala CRASH_HOTPLUG_ELFCOREHDR_SZ.
->  - provides a purgatory that excludes the elfcorehdr from its list of
->    run-time segments to check.
-> These changes to the userspace kexec utility are available, but not
-> yet accepted upstream.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-These backgroud information should be put in cover letter, or in patch
-where they won't be grabbed into the final commit log. 
+in rtw_os_xmit_resource_alloc(), if `pxmitbuf->pxmit_urb[i]` is
+allocated in failure, the other resources allocated by this function are
+not properly released.
+This patch is to free them.
 
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
-Here, if you want to put some status or backgroud information and expect
-they are not got into log, this is a appropriate place.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/staging/r8188eu/os_dep/xmit_linux.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-
->  arch/x86/kernel/crash.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 5da30e2bc780..45cc6e3af63e 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -486,6 +486,32 @@ void arch_crash_hotplug_handler(struct kimage *image,
->  	void *elfbuf = NULL;
->  	unsigned long mem, memsz;
->  
-> +	/*
-> +	 * When the struct kimage is alloced, it is wiped to zero, so
-> +	 * the elf_index_valid defaults to false. It is set on the
-> +	 * kexec_file_load path, or here for kexec_load.
-
-         I would make the last line as:
-	 kexec_file_load path, or here for kexec_load if not already
-         identified..
-
-> +	 */
-> +	if (!image->elf_index_valid) {
-> +		unsigned int n;
-> +
-> +		for (n = 0; n < image->nr_segments; n++) {
-> +			mem = image->segment[n].mem;
-> +			memsz = image->segment[n].memsz;
-> +			ptr = map_crash_pages(mem, memsz);
-> +			if (ptr) {
-> +				/* The segment containing elfcorehdr */
-> +				if ((ptr[0] == 0x7F) &&
-> +					(ptr[1] == 'E') &&
-> +					(ptr[2] == 'L') &&
-> +					(ptr[3] == 'F')) {
-
-Can it be like memcmp(ptr, ELFMAG, SELFMAG) as we have done in
-parse_crash_elf_headers()? With that, one line is taken.
-
-> +					image->elf_index = (int)n;
-> +					image->elf_index_valid = true;
-> +				}
-> +			}
-> +			unmap_crash_pages((void **)&ptr);
-> +		}
-> +	}
-> +
->  	/* Must have valid elfcorehdr index */
->  	if (!image->elf_index_valid) {
->  		pr_err("crash hp: unable to locate elfcorehdr segment");
-> -- 
-> 2.27.0
-> 
-
+diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
+index 8c3f8f0..5a59f62 100644
+--- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
++++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
+@@ -78,8 +78,12 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitb
+ 
+ 	for (i = 0; i < 8; i++) {
+ 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
+-		if (!pxmitbuf->pxmit_urb[i])
++		if (!pxmitbuf->pxmit_urb[i]) {
++			while (i-- > 0)
++				usb_free_urb(pxmitbuf->pxmit_urb[i]);
++			kfree(pxmitbuf->pallocated_buf);
+ 			return _FAIL;
++		}
+ 	}
+ 	return _SUCCESS;
+ }
+-- 

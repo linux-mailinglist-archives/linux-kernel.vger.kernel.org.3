@@ -2,595 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D244ED2DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A9D4ED2B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiCaEb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S230373AbiCaE1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiCaE0v (ORCPT
+        with ESMTP id S230289AbiCaE1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:26:51 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B39718F206;
-        Wed, 30 Mar 2022 21:17:47 -0700 (PDT)
+        Thu, 31 Mar 2022 00:27:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F54175853
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 21:20:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648700267; x=1680236267;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yiX9Jst12wRHpokEOz+YLEljPaTT0Ks0a8+Jm8oe6/0=;
-  b=kR/u5ftWEKTwiMPw00zRDY3toF3TT2v5dJRSPae6MsnENq+2dbvB9Pus
-   5Ut6beD1h6QeVeHZthIi9DLBEf2nQcJ+DWHeZQ4jrY9n8Y5kPXSUAxa7e
-   TAS7MSvtDLc9LI1DuCs4T2/j8xpJg+Si+lu5xX4nJel9fMd6562c/B9x4
-   FBgU5haZF8hPSjxBSiyRL9wYtkEkNW6swhrg9woS9nd06W7oj0BFs2a2u
-   RFrvJSN3mxofo81rFiCzZnmdGJrbSVk7OxW9F5IWK0NyHZxYxuL0JFCYF
-   8RUM/gMzIrq6GUEuordTYu5HtCg6iWTVlEcWOyruRryTMuWZDiooqf0t8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="240309585"
+  t=1648700400; x=1680236400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=50sNcqzUuA+uRaq38aLqLEgiiWhWq47ZuN3yHz7b8J0=;
+  b=WsjzJ3qA0gKzV38NoajvKurhxy2iEV8Jzu+C4IOUkErWLZQe4TImNDvc
+   /11IXAAcQGTSBMpMBN6SaFMrPE/kEfvyJMKD3/ukJjGRBZmsWQHeXZaNM
+   6vpvcXBO20oiX8QltCFR6ANJGAbS1ScNKLtLxy6tB9J/sMYCAWg+2dUoH
+   iUAbEaW8E4bTGLFPzWorUbJUYFpSELAMhhBBIKGHMDsVi8xAITTWuctXt
+   nYIBZfIPf3qpx6JpGKhIL6UHU8yLk08U4HdEkWwwinSMYZJRSJoikO+cD
+   1t/rKIY0EKqTE+Nrac+JSe+eXEaDTFAQ2gX4DgbkI8rtgF+FAXetDxuOV
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="239644009"
 X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="240309585"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 21:17:42 -0700
+   d="scan'208";a="239644009"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 21:19:59 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="520187263"
-Received: from dhathawa-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.53.226])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 21:17:39 -0700
-Message-ID: <fedfdfbc26965145dcbf4aa893328cce172f2f3b.camel@intel.com>
-Subject: Re: [RFC PATCH v5 024/104] KVM: TDX: create/destroy VM structure
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Thu, 31 Mar 2022 17:17:37 +1300
-In-Reply-To: <36805b6b6b668669d5205183c338a4020df584dd.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <36805b6b6b668669d5205183c338a4020df584dd.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+   d="scan'208";a="720289041"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2022 21:19:58 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZmHt-0000sI-LG;
+        Thu, 31 Mar 2022 04:19:57 +0000
+Date:   Thu, 31 Mar 2022 12:19:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect
+ type in argument 1 (different address spaces)
+Message-ID: <202203311231.qRJRy6tp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> As the first step to create TDX guest, create/destroy VM struct.  Assign
-> Host Key ID (HKID) to the TDX guest for memory encryption and allocate
-> extra pages for the TDX guest. On destruction, free allocated pages, and
-> HKID.
-> 
-> Add a second kvm_x86_ops hook in kvm_arch_vm_destroy() to support TDX's
-> destruction path, which needs to first put the VM into a teardown state,
-> then free per-vCPU resources, and finally free per-VM resources.
-> 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/vmx/main.c      |  16 +-
->  arch/x86/kvm/vmx/tdx.c       | 312 +++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/tdx.h       |   2 +
->  arch/x86/kvm/vmx/tdx_errno.h |   2 +-
->  arch/x86/kvm/vmx/tdx_ops.h   |   8 +
->  arch/x86/kvm/vmx/x86_ops.h   |   8 +
->  6 files changed, 346 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index 6111c6485d8e..5c3a904a30e8 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -39,12 +39,24 @@ static int vt_vm_init(struct kvm *kvm)
->  		ret = tdx_module_setup();
->  		if (ret)
->  			return ret;
-> -		return -EOPNOTSUPP;	/* Not ready to create guest TD yet. */
-> +		return tdx_vm_init(kvm);
->  	}
->  
->  	return vmx_vm_init(kvm);
->  }
->  
-> +static void vt_mmu_prezap(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		return tdx_mmu_prezap(kvm);
-> +}
-> +
-> +static void vt_vm_free(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		return tdx_vm_free(kvm);
-> +}
-> +
->  struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.name = "kvm_intel",
->  
-> @@ -58,6 +70,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.is_vm_type_supported = vt_is_vm_type_supported,
->  	.vm_size = sizeof(struct kvm_vmx),
->  	.vm_init = vt_vm_init,
-> +	.mmu_prezap = vt_mmu_prezap,
-> +	.vm_free = vt_vm_free,
->  
->  	.vcpu_create = vmx_vcpu_create,
->  	.vcpu_free = vmx_vcpu_free,
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 1c8222f54764..702953fd365f 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -31,14 +31,324 @@ struct tdx_capabilities {
->  	struct tdx_cpuid_config cpuid_configs[TDX_MAX_NR_CPUID_CONFIGS];
->  };
->  
-> +/* KeyID used by TDX module */
-> +static u32 tdx_global_keyid __read_mostly;
-> +
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   74164d284b2909de0ba13518cc063e9ea9334749
+commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+date:   6 weeks ago
+config: arm64-randconfig-s031-20220330 (https://download.01.org/0day-ci/archive/20220331/202203311231.qRJRy6tp-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/firmware/meson/
 
-It's really not clear why you need to know tdx_global_keyid in the context of
-creating/destroying a TD.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  /* Capabilities of KVM + the TDX module. */
->  struct tdx_capabilities tdx_caps;
->  
-> +static DEFINE_MUTEX(tdx_lock);
->  static struct mutex *tdx_mng_key_config_lock;
->  
->  static u64 hkid_mask __ro_after_init;
->  static u8 hkid_start_pos __ro_after_init;
->  
-> +static __always_inline hpa_t set_hkid_to_hpa(hpa_t pa, u16 hkid)
-> +{
-> +	pa &= ~hkid_mask;
-> +	pa |= (u64)hkid << hkid_start_pos;
-> +
-> +	return pa;
-> +}
-> +
-> +static inline bool is_td_created(struct kvm_tdx *kvm_tdx)
-> +{
-> +	return kvm_tdx->tdr.added;
-> +}
-> +
-> +static inline void tdx_hkid_free(struct kvm_tdx *kvm_tdx)
-> +{
-> +	tdx_keyid_free(kvm_tdx->hkid);
-> +	kvm_tdx->hkid = -1;
-> +}
-> +
-> +static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
-> +{
-> +	return kvm_tdx->hkid > 0;
-> +}
-> +
-> +static void tdx_clear_page(unsigned long page)
-> +{
-> +	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> +	unsigned long i;
-> +
-> +	/* Zeroing the page is only necessary for systems with MKTME-i. */
 
-"only necessary for systems  with MKTME-i" because of what?
+sparse warnings: (new ones prefixed by >>)
+   drivers/firmware/meson/meson_sm.c:85:24: sparse: sparse: Using plain integer as NULL pointer
+   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
+   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
+   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
+>> drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_in_base @@
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
+>> drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_in_base @@
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
+   drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *sm_shmem_in_base @@
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void *
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
 
-Please be more clear that on MKTME-i system, when re-assign one page from old
-keyid to a new keyid, MOVDIR64B is required to clear/write the page with new
-keyid to prevent integrity error when read on the page with new keyid.
+vim +206 drivers/firmware/meson/meson_sm.c
 
-However, the new keyid is essentially 0, but in practice integrity check for
-keyid 0 is disabled in current generation of MKTME-i, so I guess we are also
-safe even we don't use MOVDIR64B to clear page for TDX here.  But I agree it's
-better to do.
+2c4ddb215521d5 Carlo Caione 2016-08-27  175  
+2c4ddb215521d5 Carlo Caione 2016-08-27  176  /**
+2c4ddb215521d5 Carlo Caione 2016-08-27  177   * meson_sm_call_write - send data to secure-monitor
+2c4ddb215521d5 Carlo Caione 2016-08-27  178   *
+8cde3c2153e8f5 Carlo Caione 2019-07-31  179   * @fw:		Pointer to secure-monitor firmware
+2c4ddb215521d5 Carlo Caione 2016-08-27  180   * @buffer:	Buffer containing data to send
+2c4ddb215521d5 Carlo Caione 2016-08-27  181   * @size:	Size of the data to send
+2c4ddb215521d5 Carlo Caione 2016-08-27  182   * @cmd_index:	Index of the SMC32 function ID
+2c4ddb215521d5 Carlo Caione 2016-08-27  183   * @arg0:	SMC32 Argument 0
+2c4ddb215521d5 Carlo Caione 2016-08-27  184   * @arg1:	SMC32 Argument 1
+2c4ddb215521d5 Carlo Caione 2016-08-27  185   * @arg2:	SMC32 Argument 2
+2c4ddb215521d5 Carlo Caione 2016-08-27  186   * @arg3:	SMC32 Argument 3
+2c4ddb215521d5 Carlo Caione 2016-08-27  187   * @arg4:	SMC32 Argument 4
+2c4ddb215521d5 Carlo Caione 2016-08-27  188   *
+2c4ddb215521d5 Carlo Caione 2016-08-27  189   * Return:	size of sent data on success, a negative value on error
+2c4ddb215521d5 Carlo Caione 2016-08-27  190   */
+8cde3c2153e8f5 Carlo Caione 2019-07-31  191  int meson_sm_call_write(struct meson_sm_firmware *fw, void *buffer,
+8cde3c2153e8f5 Carlo Caione 2019-07-31  192  			unsigned int size, unsigned int cmd_index, u32 arg0,
+8cde3c2153e8f5 Carlo Caione 2019-07-31  193  			u32 arg1, u32 arg2, u32 arg3, u32 arg4)
+2c4ddb215521d5 Carlo Caione 2016-08-27  194  {
+2c4ddb215521d5 Carlo Caione 2016-08-27  195  	u32 written;
+2c4ddb215521d5 Carlo Caione 2016-08-27  196  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  197  	if (!fw->chip)
+2c4ddb215521d5 Carlo Caione 2016-08-27  198  		return -ENOENT;
+2c4ddb215521d5 Carlo Caione 2016-08-27  199  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  200  	if (size > fw->chip->shmem_size)
+2c4ddb215521d5 Carlo Caione 2016-08-27  201  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  202  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  203  	if (!fw->chip->cmd_shmem_in_base)
+2c4ddb215521d5 Carlo Caione 2016-08-27  204  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  205  
+8cde3c2153e8f5 Carlo Caione 2019-07-31 @206  	memcpy(fw->sm_shmem_in_base, buffer, size);
+2c4ddb215521d5 Carlo Caione 2016-08-27  207  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  208  	if (meson_sm_call(fw, cmd_index, &written, arg0, arg1, arg2, arg3, arg4) < 0)
+2c4ddb215521d5 Carlo Caione 2016-08-27  209  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  210  
+2c4ddb215521d5 Carlo Caione 2016-08-27  211  	if (!written)
+2c4ddb215521d5 Carlo Caione 2016-08-27  212  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  213  
+2c4ddb215521d5 Carlo Caione 2016-08-27  214  	return written;
+2c4ddb215521d5 Carlo Caione 2016-08-27  215  }
+2c4ddb215521d5 Carlo Caione 2016-08-27  216  EXPORT_SYMBOL(meson_sm_call_write);
+2c4ddb215521d5 Carlo Caione 2016-08-27  217  
 
-> +	if (!static_cpu_has(X86_FEATURE_MOVDIR64B))
-> +		return;
-> +
-> +	for (i = 0; i < 4096; i += 64)
-> +		/* MOVDIR64B [rdx], es:rdi */
-> +		asm (".byte 0x66, 0x0f, 0x38, 0xf8, 0x3a"
-> +		     : : "d" (zero_page), "D" (page + i) : "memory");
-> +}
-> +
-> +static int __tdx_reclaim_page(unsigned long va, hpa_t pa, bool do_wb, u16 hkid)
-> +{
-> +	struct tdx_module_output out;
-> +	u64 err;
-> +
-> +	err = tdh_phymem_page_reclaim(pa, &out);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_PHYMEM_PAGE_RECLAIM, err, &out);
-> +		return -EIO;
-> +	}
-> +
-> +	if (do_wb) {
+:::::: The code at line 206 was first introduced by commit
+:::::: 8cde3c2153e8f57be884c0e73f18bc4de150e870 firmware: meson_sm: Rework driver as a proper platform driver
 
-In the callers, please add some comments explaining why do_wb is needed, and why
-is not needed.
+:::::: TO: Carlo Caione <ccaione@baylibre.com>
+:::::: CC: Kevin Hilman <khilman@baylibre.com>
 
-> +		err = tdh_phymem_page_wbinvd(set_hkid_to_hpa(pa, hkid));
-> +		if (WARN_ON_ONCE(err)) {
-> +			pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
-> +			return -EIO;
-> +		}
-> +	}
-> +
-> +	tdx_clear_page(va);
-> +	return 0;
-> +}
-> +
-> +static int tdx_reclaim_page(unsigned long va, hpa_t pa)
-> +{
-> +	return __tdx_reclaim_page(va, pa, false, 0);
-> +}
-> +
-> +static int tdx_alloc_td_page(struct tdx_td_page *page)
-> +{
-> +	page->va = __get_free_page(GFP_KERNEL_ACCOUNT);
-> +	if (!page->va)
-> +		return -ENOMEM;
-> +
-> +	page->pa = __pa(page->va);
-> +	return 0;
-> +}
-> +
-> +static void tdx_mark_td_page_added(struct tdx_td_page *page)
-> +{
-> +	WARN_ON_ONCE(page->added);
-> +	page->added = true;
-> +}
-> +
-> +static void tdx_reclaim_td_page(struct tdx_td_page *page)
-> +{
-> +	if (page->added) {
-> +		if (tdx_reclaim_page(page->va, page->pa))
-> +			return;
-> +
-> +		page->added = false;
-> +	}
-> +	free_page(page->va);
-> +}
-> +
-> +static int tdx_do_tdh_phymem_cache_wb(void *param)
-> +{
-> +	u64 err = 0;
-> +
-> +	/*
-> +	 * We can destroy multiple the guest TDs simultaneously.  Prevent
-> +	 * tdh_phymem_cache_wb from returning TDX_BUSY by serialization.
-> +	 */
-> +	mutex_lock(&tdx_lock);
-> +	do {
-> +		err = tdh_phymem_cache_wb(!!err);
-> +	} while (err == TDX_INTERRUPTED_RESUMABLE);
-> +	mutex_unlock(&tdx_lock);
-> +
-> +	/* Other thread may have done for us. */
-> +	if (err == TDX_NO_HKID_READY_TO_WBCACHE)
-> +		err = TDX_SUCCESS;
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_PHYMEM_CACHE_WB, err, NULL);
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void tdx_mmu_prezap(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	cpumask_var_t packages;
-> +	bool cpumask_allocated;
-> +	u64 err;
-> +	int ret;
-> +	int i;
-> +
-> +	if (!is_hkid_assigned(kvm_tdx))
-> +		return;
-> +
-> +	if (!is_td_created(kvm_tdx))
-> +		goto free_hkid;
-> +
-> +	mutex_lock(&tdx_lock);
-> +	err = tdh_mng_key_reclaimid(kvm_tdx->tdr.pa);
-> +	mutex_unlock(&tdx_lock);
-
-Please add a comment explaining why the mutex is needed.
-
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_KEY_RECLAIMID, err, NULL);
-> +		return;
-> +	}
-> +
-> +	cpumask_allocated = zalloc_cpumask_var(&packages, GFP_KERNEL);
-> +	for_each_online_cpu(i) {
-> +		if (cpumask_allocated &&
-> +			cpumask_test_and_set_cpu(topology_physical_package_id(i),
-> +						packages))
-> +			continue;
-> +
-> +		ret = smp_call_on_cpu(i, tdx_do_tdh_phymem_cache_wb, NULL, 1);
-> +		if (ret)
-> +			break;
-> +	}
-> +	free_cpumask_var(packages);
-> +
-> +	mutex_lock(&tdx_lock);
-> +	err = tdh_mng_key_freeid(kvm_tdx->tdr.pa);
-> +	mutex_unlock(&tdx_lock);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_KEY_FREEID, err, NULL);
-> +		return;
-> +	}
-> +
-> +free_hkid:
-> +	tdx_hkid_free(kvm_tdx);
-> +}
-> +
-> +void tdx_vm_free(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	int i;
-> +
-> +	/* Can't reclaim or free TD pages if teardown failed. */
-> +	if (is_hkid_assigned(kvm_tdx))
-> +		return;
-> +
-> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++)
-> +		tdx_reclaim_td_page(&kvm_tdx->tdcs[i]);
-> +	kfree(kvm_tdx->tdcs);
-> +
-> +	if (kvm_tdx->tdr.added &&
-> +		__tdx_reclaim_page(kvm_tdx->tdr.va, kvm_tdx->tdr.pa, true,
-> +				tdx_global_keyid))
-> +		return;
-> +
-> +	free_page(kvm_tdx->tdr.va);
-> +}
-> +
-> +static int tdx_do_tdh_mng_key_config(void *param)
-> +{
-> +	hpa_t *tdr_p = param;
-> +	int cpu, cur_pkg;
-> +	u64 err;
-> +
-> +	cpu = raw_smp_processor_id();
-> +	cur_pkg = topology_physical_package_id(cpu);
-> +
-> +	mutex_lock(&tdx_mng_key_config_lock[cur_pkg]);
-> +	do {
-> +		err = tdh_mng_key_config(*tdr_p);
-> +	} while (err == TDX_KEY_GENERATION_FAILED);
-> +	mutex_unlock(&tdx_mng_key_config_lock[cur_pkg]);
-
-Why not squashing patch 20 ("KVM: TDX: allocate per-package mutex") into this
-patch?  
-
-> +
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_KEY_CONFIG, err, NULL);
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int tdx_vm_init(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	cpumask_var_t packages;
-> +	int ret, i;
-> +	u64 err;
-> +
-> +	/* vCPUs can't be created until after KVM_TDX_INIT_VM. */
-> +	kvm->max_vcpus = 0;
-> +
-> +	kvm_tdx->hkid = tdx_keyid_alloc();
-> +	if (kvm_tdx->hkid < 0)
-> +		return -EBUSY;
-> +
-> +	ret = tdx_alloc_td_page(&kvm_tdx->tdr);
-> +	if (ret)
-> +		goto free_hkid;
-> +
-> +	kvm_tdx->tdcs = kcalloc(tdx_caps.tdcs_nr_pages, sizeof(*kvm_tdx->tdcs),
-> +				GFP_KERNEL_ACCOUNT);
-> +	if (!kvm_tdx->tdcs)
-> +		goto free_tdr;
-> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
-> +		ret = tdx_alloc_td_page(&kvm_tdx->tdcs[i]);
-> +		if (ret)
-> +			goto free_tdcs;
-> +	}
-> +
-> +	mutex_lock(&tdx_lock);
-> +	err = tdh_mng_create(kvm_tdx->tdr.pa, kvm_tdx->hkid);
-> +	mutex_unlock(&tdx_lock);
-
-Please add comment explaining why locking is needed.
-
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_CREATE, err, NULL);
-> +		ret = -EIO;
-> +		goto free_tdcs;
-> +	}
-> +	tdx_mark_td_page_added(&kvm_tdx->tdr);
-> +
-> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL)) {
-> +		ret = -ENOMEM;
-> +		goto free_tdcs;
-> +	}
-> +	for_each_online_cpu(i) {
-> +		if (cpumask_test_and_set_cpu(topology_physical_package_id(i),
-> +						packages))
-> +			continue;
-> +
-> +		ret = smp_call_on_cpu(i, tdx_do_tdh_mng_key_config,
-> +				&kvm_tdx->tdr.pa, 1);
-> +		if (ret)
-> +			break;
-> +	}
-> +	free_cpumask_var(packages);
-> +	if (ret)
-> +		goto teardown;
-> +
-> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
-> +		err = tdh_mng_addcx(kvm_tdx->tdr.pa, kvm_tdx->tdcs[i].pa);
-> +		if (WARN_ON_ONCE(err)) {
-> +			pr_tdx_error(TDH_MNG_ADDCX, err, NULL);
-> +			ret = -EIO;
-> +			goto teardown;
-> +		}
-> +		tdx_mark_td_page_added(&kvm_tdx->tdcs[i]);
-> +	}
-> +
-> +	/*
-> +	 * Note, TDH_MNG_INIT cannot be invoked here.  TDH_MNG_INIT requires a dedicated
-> +	 * ioctl() to define the configure CPUID values for the TD.
-> +	 */
-> +	return 0;
-> +
-> +	/*
-> +	 * The sequence for freeing resources from a partially initialized TD
-> +	 * varies based on where in the initialization flow failure occurred.
-> +	 * Simply use the full teardown and destroy, which naturally play nice
-> +	 * with partial initialization.
-> +	 */
-> +teardown:
-> +	tdx_mmu_prezap(kvm);
-> +	tdx_vm_free(kvm);
-> +	return ret;
-> +
-> +free_tdcs:
-> +	/* @i points at the TDCS page that failed allocation. */
-> +	for (--i; i >= 0; i--)
-> +		free_page(kvm_tdx->tdcs[i].va);
-> +	kfree(kvm_tdx->tdcs);
-> +free_tdr:
-> +	free_page(kvm_tdx->tdr.va);
-> +free_hkid:
-> +	tdx_hkid_free(kvm_tdx);
-> +	return ret;
-> +}
-> +
->  static int __tdx_module_setup(void)
->  {
->  	const struct tdsysinfo_struct *tdsysinfo;
-> @@ -59,6 +369,8 @@ static int __tdx_module_setup(void)
->  		return ret;
->  	}
->  
-> +	tdx_global_keyid = tdx_get_global_keyid();
-> +
-
-Again, really confusing why this is needed.
-
->  	tdsysinfo = tdx_get_sysinfo();
->  	if (tdx_caps.nr_cpuid_configs > TDX_MAX_NR_CPUID_CONFIGS)
->  		return -EIO;
-> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> index e4bb8831764e..860136ed70f5 100644
-> --- a/arch/x86/kvm/vmx/tdx.h
-> +++ b/arch/x86/kvm/vmx/tdx.h
-> @@ -19,6 +19,8 @@ struct kvm_tdx {
->  
->  	struct tdx_td_page tdr;
->  	struct tdx_td_page *tdcs;
-> +
-> +	int hkid;
->  };
->  
->  struct vcpu_tdx {
-> diff --git a/arch/x86/kvm/vmx/tdx_errno.h b/arch/x86/kvm/vmx/tdx_errno.h
-> index 5c878488795d..590fcfdd1899 100644
-> --- a/arch/x86/kvm/vmx/tdx_errno.h
-> +++ b/arch/x86/kvm/vmx/tdx_errno.h
-> @@ -12,11 +12,11 @@
->  #define TDX_SUCCESS				0x0000000000000000ULL
->  #define TDX_NON_RECOVERABLE_VCPU		0x4000000100000000ULL
->  #define TDX_INTERRUPTED_RESUMABLE		0x8000000300000000ULL
-> -#define TDX_LIFECYCLE_STATE_INCORRECT		0xC000060700000000ULL
->  #define TDX_VCPU_NOT_ASSOCIATED			0x8000070200000000ULL
->  #define TDX_KEY_GENERATION_FAILED		0x8000080000000000ULL
->  #define TDX_KEY_STATE_INCORRECT			0xC000081100000000ULL
->  #define TDX_KEY_CONFIGURED			0x0000081500000000ULL
-> +#define TDX_NO_HKID_READY_TO_WBCACHE		0x0000082100000000ULL
->  #define TDX_EPT_WALK_FAILED			0xC0000B0000000000ULL
->  
->  /*
-> diff --git a/arch/x86/kvm/vmx/tdx_ops.h b/arch/x86/kvm/vmx/tdx_ops.h
-> index 0bed43879b82..3dd5b4c3f04c 100644
-> --- a/arch/x86/kvm/vmx/tdx_ops.h
-> +++ b/arch/x86/kvm/vmx/tdx_ops.h
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/compiler.h>
->  
-> +#include <asm/cacheflush.h>
->  #include <asm/asm.h>
->  #include <asm/kvm_host.h>
->  
-> @@ -15,8 +16,14 @@
->  
->  #ifdef CONFIG_INTEL_TDX_HOST
->  
-> +static inline void tdx_clflush_page(hpa_t addr)
-> +{
-> +	clflush_cache_range(__va(addr), PAGE_SIZE);
-> +}
-> +
->  static inline u64 tdh_mng_addcx(hpa_t tdr, hpa_t addr)
->  {
-> +	tdx_clflush_page(addr);
-
-Please add comment to explain why clflush is needed.
-
-And you don't need the tdx_clflush_page() wrapper -- it's not a TDX specific
-ops.  You can just use clflush_cache_range().
-
->  	return kvm_seamcall(TDH_MNG_ADDCX, addr, tdr, 0, 0, 0, NULL);
->  }
->  
-> @@ -56,6 +63,7 @@ static inline u64 tdh_mng_key_config(hpa_t tdr)
->  
->  static inline u64 tdh_mng_create(hpa_t tdr, int hkid)
->  {
-> +	tdx_clflush_page(tdr);
->  	return kvm_seamcall(TDH_MNG_CREATE, tdr, hkid, 0, 0, 0, NULL);
->  }
->  
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index da32b4b86b19..2b2738c768d6 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -132,12 +132,20 @@ void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
->  bool tdx_is_vm_type_supported(unsigned long type);
->  void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
->  void tdx_hardware_unsetup(void);
-> +
-> +int tdx_vm_init(struct kvm *kvm);
-> +void tdx_mmu_prezap(struct kvm *kvm);
-> +void tdx_vm_free(struct kvm *kvm);
->  #else
->  static inline void tdx_pre_kvm_init(
->  	unsigned int *vcpu_size, unsigned int *vcpu_align, unsigned int *vm_size) {}
->  static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
->  static inline void tdx_hardware_setup(struct kvm_x86_ops *x86_ops) {}
->  static inline void tdx_hardware_unsetup(void) {}
-> +
-> +static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
-> +static inline void tdx_mmu_prezap(struct kvm *kvm) {}
-> +static inline void tdx_vm_free(struct kvm *kvm) {}
->  #endif
->  
->  #endif /* __KVM_X86_VMX_X86_OPS_H */
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,93 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AB24EDAE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA73F4EDADD
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 15:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237019AbiCaNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 09:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        id S237004AbiCaNuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 09:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237008AbiCaNuK (ORCPT
+        with ESMTP id S236991AbiCaNuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 09:50:10 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39D71DA60;
-        Thu, 31 Mar 2022 06:48:19 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g22so17155064edz.2;
-        Thu, 31 Mar 2022 06:48:19 -0700 (PDT)
+        Thu, 31 Mar 2022 09:50:02 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3CD10CF12
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:48:12 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id q19so20031131pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 06:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1FmWFtFPrGFw3jPfN32jgX8K91mK4Fw6kVZq2e3W06A=;
-        b=GuBynw1bR30DfiMh5e8Nh5WD+dkT0noit+4UtYMJK3iKZ35qa0dPkAbev0Ox7RYOms
-         3dBIoSRbPCMsJy1VhC68ogz6X3AZc3fGy3Bps2B4GzDsKbcccaO9aFOV7Xfrl/AJfwOL
-         Lf54fxuRDFulTu4JdbLWUzLAhvd9LSrSizfBOGHs8NE+MDdhNX2w/W2kdJ4TdpWS9DBO
-         KR/oQpoQRKLEiJYlThLZXpJ95lZRtKRA0zscywXTz9B7D+9HhuaCLPhf7O83sgaEeWH1
-         AWbglg8K0D4RQ/zFbM2+L4koc/6hHCvbtiRVXLetfX+GXEtcDjosdBlNbdwGNCckPyhV
-         Tkyg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WIjS4hHkncWnADQSguPcZ9yDRhMIIgfXbDG/5koXL+M=;
+        b=8JdtJA3KoB9+DGVHgZEvfjxJgMQB8AJ3+FSa/hLLh59tuXtTzMTYqls626HhE0Xx60
+         M8oCxHsUeiyFnCM6zqv7RaiC1o3cURHKKd8TiUDajJIKwDH91uIAhjAWsRucpfdjRjaL
+         MNyNzgTZVBriuzx0dA4ay60uAVu43DYTvPKr2G0XVXQ8KissoueE1rxxZFNyFbs4ES5/
+         j4bv8lJfqwpnH0vwKGlzFRvcN1mAMxs4MPKKIb6qB3gRrEdaWRmCGB31IUaoOfyPhuIW
+         RShLIX/p6TZP2ZhVRV6PkG5Qw+d9y/FGgpiUFEywgccI3/V+ah8sVNYNy6QbTu0k9Ed1
+         DeDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1FmWFtFPrGFw3jPfN32jgX8K91mK4Fw6kVZq2e3W06A=;
-        b=vZkfZJtLRgNe5kgMuVGeGC09rMKxzqSPHxUyH7jZqAmeMvRLlmpD2qM8m22eGQUqlr
-         lm0QaUKPITkmp0SF+3uYmVrz+vmFRgMM5mVhNoaymn1tIsoS9ewddvTD7u+PThVbxqL/
-         vOYTDqqGXlHyxJtMF2ghUtYupB8B1PMq+x8oz+OATgly5uk12fNuUPGD1eV5sRXrwoEB
-         mrddtTwySsT8fuK1yEgBwE6QTyFhnKmo2wMjBLf6bnfbvf3tfaA9/Z4f/pK+6C8QfyOI
-         J7p49ZMVmURoQUv8bcnHOavvgAEDJxjJhiyS8cwajj4ZLwo2e1zPWjJbgP7HwMSzLryL
-         vUMw==
-X-Gm-Message-State: AOAM530vBUsKwjoVHS5d35ACVT66imREBnjt4S3cnz0V2MdJUYDuj/yJ
-        8ZZU7K4WSlLCxi3TivZlFPd6riAAfVVEbG7oyyg=
-X-Google-Smtp-Source: ABdhPJzgmF3q9RuLnrcHquNydyMYB8kqL9v5TvHww44KBOahY3umU53CaQRZK2bfteXGp/QRBvjn0bir8PkTUp3+a1k=
-X-Received: by 2002:a05:6402:27d4:b0:419:5105:f7e7 with SMTP id
- c20-20020a05640227d400b004195105f7e7mr16672565ede.356.1648734498411; Thu, 31
- Mar 2022 06:48:18 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WIjS4hHkncWnADQSguPcZ9yDRhMIIgfXbDG/5koXL+M=;
+        b=umCDcJqfEBqoi3tPZqoo2gkFoGq95tvO9yrLZoLuy5A6MJ4jTVHWbdk2jJsfXGqGzO
+         xKqrgPoivomtUVHaMn1mllss67b+H3A3WDIVgGQv3ZG/re0nJpagZ1bh2FJsVxlsbx1x
+         Oga3Z6gfl7hFclSgopyimdnxtG5nUkLMvDli11dxdT0pc9UErlwrIWvmJ8OY5bY4iKHO
+         WJ0qzSINzab7B9rtI36BI7MJAI0y4xCMQZs3xSKipYOhI0T+6Mz6GljWZb1WoIshfF+Z
+         SnTeD00ZlHlbL0YBwfVa4SsPvGAYAF9HQg0XCtzSFpAFI6zOTWxN27OhAg9hROfyFA++
+         c8XQ==
+X-Gm-Message-State: AOAM533rcpDe0pDneC6gPFWbvgSeKRL2UDSRzJTORHGxBWDuOsTFWMf5
+        8J79/Km3MTqkQPm7xSeeLPI/fQ==
+X-Google-Smtp-Source: ABdhPJx1JWwl3z3vLqKxPFPwBAUbmruyet8e5XAqvGozXt0cKP0NQz5DfjALnTIZvovc9OIbpJ01HQ==
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id bk3-20020a056a02028300b00342703e1434mr10853784pgb.74.1648734492091;
+        Thu, 31 Mar 2022 06:48:12 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id lw4-20020a17090b180400b001c7327d09c3sm10037155pjb.53.2022.03.31.06.48.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 06:48:11 -0700 (PDT)
+Message-ID: <8dbb5fc7-7170-d190-ba24-2ef13dc73623@kernel.dk>
+Date:   Thu, 31 Mar 2022 07:48:10 -0600
 MIME-Version: 1.0
-References: <20220323135601.42435-1-ariel.dalessandro@collabora.com>
- <CAOMZO5D4_WboF4S0dgSLD1m15a13c2irK2yjDV4C77_Wb15=2w@mail.gmail.com>
- <d9f14221-b0ad-9853-e9c8-a35d9111549b@collabora.com> <3e3b223f-7d05-f439-625a-a15afb44b95f@collabora.com>
-In-Reply-To: <3e3b223f-7d05-f439-625a-a15afb44b95f@collabora.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 31 Mar 2022 10:48:07 -0300
-Message-ID: <CAOMZO5D8UHkkyJE9uJ4yBmf+ajjbzJOrLM57OHpyAiATvMNXcw@mail.gmail.com>
-Subject: Re: [PATCH v4] arm64: dts: imx8mn-bsh-smm-s2pro: Add tlv320aic31xx
- audio card node
-To:     "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Sascha Hauer <kernel@pengutronix.de>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] MAINTAINERS: add drbd co-maintainer
+Content-Language: en-US
+To:     =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org
+References: <20220331134236.776524-1-christoph.boehmwalder@linbit.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220331134236.776524-1-christoph.boehmwalder@linbit.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ariel,
+On 3/31/22 7:42 AM, Christoph Böhmwalder wrote:
+> In light of the recent controversy surrounding the (lack of)
+> maintenance of the in-tree DRBD driver, we have decided to add myself
+> as co-maintainer. This allows us to better distribute the workload and
+> reduce the chance of patches getting lost.
+> 
+> I will be keeping an eye on the mailing list in order to ensure that all
+> patches get the attention they need.
 
-On Thu, Mar 31, 2022 at 10:35 AM Ariel D'Alessandro
-<ariel.dalessandro@collabora.com> wrote:
->
-> Hi Fabio, Shawn,
->
-> Can we merge this please?
+Can you go over the ones I already listed? That'd be a good start.
 
-Shawn will probably start picking the patches for the next cycle after
-5.18-rc1 is released.
+-- 
+Jens Axboe
+

@@ -2,73 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE3E4ED462
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F3C4ED467
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiCaHJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S231691AbiCaHL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiCaHJL (ORCPT
+        with ESMTP id S230243AbiCaHLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:09:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873E1EF5F1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:07:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 64B9C21900;
-        Thu, 31 Mar 2022 07:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648710442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lBByCN7eGuwKWqTS3/a1dt/69JwaNc8z6byhKZd0EBM=;
-        b=l/1VduBlcCYS5rdYCkeGPE6DbhXYH+bzGajC3UdTBHt7ssr8apFcSLQqBk/J6XYea0PFQf
-        1c74gAfqUbYzebP2MdAOeNq/Sir2Zywa1x0X+cYP+WGwNQcjFC+46tdcEPcB5c3pUD0cad
-        mF4KRQybnF2FQrM2V8TdnMaZY3fYyGI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648710442;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lBByCN7eGuwKWqTS3/a1dt/69JwaNc8z6byhKZd0EBM=;
-        b=9byARZ+mFnTWbcR93gxolC6q2xO5kKByp2C0MbN2xlm+OMBnH5cQZBzuPfGd+RIX3c3Jwb
-        6rEDcB5u3281GdCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3158C139C2;
-        Thu, 31 Mar 2022 07:07:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FnXpCipTRWIrWQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 31 Mar 2022 07:07:22 +0000
-Message-ID: <787d309d-f0b6-4f27-ed31-6811fd7c9293@suse.de>
-Date:   Thu, 31 Mar 2022 09:07:21 +0200
+        Thu, 31 Mar 2022 03:11:55 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AA451E3FF;
+        Thu, 31 Mar 2022 00:10:07 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 35F8992009C; Thu, 31 Mar 2022 09:10:06 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 339DB92009B;
+        Thu, 31 Mar 2022 08:10:06 +0100 (BST)
+Date:   Thu, 31 Mar 2022 08:10:06 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+cc:     x86@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND][PATCH v2 0/4] x86/PCI: Odd generic PIRQ router
+ improvements
+Message-ID: <alpine.DEB.2.21.2203301527270.22465@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: regression: NULL pointer dereference due to 27599aacbaef ("fbdev:
- Hot-unplug firmware fb devices on forced removal")
-Content-Language: en-US
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        torvalds@linux-foundation.org, LKML <linux-kernel@vger.kernel.org>
-References: <YkHXO6LGHAN0p1pq@debian>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <YkHXO6LGHAN0p1pq@debian>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Wsc7zfURiFEDokuUK9w8x0bk"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HDRS_LCASE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,215 +43,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Wsc7zfURiFEDokuUK9w8x0bk
-Content-Type: multipart/mixed; boundary="------------66y7tuaOFiUXRsVdYbYEFTQt";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Javier Martinez Canillas <javierm@redhat.com>,
- Zack Rusin <zackr@vmware.com>, Hans de Goede <hdegoede@redhat.com>,
- torvalds@linux-foundation.org, LKML <linux-kernel@vger.kernel.org>
-Message-ID: <787d309d-f0b6-4f27-ed31-6811fd7c9293@suse.de>
-Subject: Re: regression: NULL pointer dereference due to 27599aacbaef ("fbdev:
- Hot-unplug firmware fb devices on forced removal")
-References: <YkHXO6LGHAN0p1pq@debian>
-In-Reply-To: <YkHXO6LGHAN0p1pq@debian>
+Hi,
 
---------------66y7tuaOFiUXRsVdYbYEFTQt
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+ This series was dropped from x86/irq due to a bug in a follow-up patch, 
+so resending verbatim after re-verification.
 
-DQoNCkFtIDI4LjAzLjIyIHVtIDE3OjQxIHNjaHJpZWIgU3VkaXAgTXVraGVyamVlOg0KPiBI
-aSBUaG9tYXMsDQo+IA0KPiBXZSB1c3VhbGx5IHJ1biBib290IHRlc3RzIHdpdGggbGludXgg
-bWFpbmxpbmUgSEVBRCBjb21taXQgYWxtb3N0IGV2ZXJ5DQo+IG5pZ2h0IG9uIHBwYzY0IHFl
-bXUuIEFuZCBteSB0ZXN0cyBoYWQgYmVlbiBmYWlsaW5nIGZvciBsYXN0IGZldyBkYXlzLg0K
-DQpDb3VsZCB5b3UgcGxlYXNlIHByb3ZpZGUgeW91ciBrZXJuZWwncyBjb25maWcgZmlsZT8N
-Cg0KPiBUZXN0aW5nIGxvY2FsbHkgZ2F2ZSBtZToNCj4gDQo+IE1hciAyOCAxMzoxNjozNiBk
-ZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDM4NzkxXSBCVUc6IEtlcm5lbCBOVUxMIHBv
-aW50ZXIgZGVyZWZlcmVuY2Ugb24gcmVhZCBhdCAweDAwMDAwMDYwDQo+IE1hciAyOCAxMzox
-NjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDM4OTk1XSBGYXVsdGluZyBpbnN0
-cnVjdGlvbiBhZGRyZXNzOiAweGMwMDAwMDAwMDA4MGRmYTQNCj4gTWFyIDI4IDEzOjE2OjM2
-IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wMzk1NzJdIE9vcHM6IEtlcm5lbCBhY2Nl
-c3Mgb2YgYmFkIGFyZWEsIHNpZzogMTEgWyMxXQ0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFu
-LXBwYzY0IGtlcm5lbDogWyAgIDExLjAzOTcyM10gTEUgUEFHRV9TSVpFPTY0SyBNTVU9SGFz
-aCBTTVAgTlJfQ1BVUz0yMDQ4IE5VTUEgcFNlcmllcw0KPiBNYXIgMjggMTM6MTY6MzYgZGVi
-aWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0MDAxMl0gTW9kdWxlcyBsaW5rZWQgaW46IGJv
-Y2hzKCspIGRybV92cmFtX2hlbHBlciB4aGNpX3BjaSBkcm1fa21zX2hlbHBlciBzeXNjb3B5
-YXJlYSBzeXNmaWxscmVjdCBzeXNpbWdibHQgZmJfc3lzX2ZvcHMgZHJtX3R0bV9oZWxwZXIg
-c3JfbW9kIHR0bSBjZHJvbSB4aGNpX2hjZCB2aXJ0aW9fbmV0IHZpcnRpb19jb25zb2xlIG5l
-dF9mYWlsb3ZlciB2aXJ0aW9fYmxrIHZpcnRpb19zY3NpIGZhaWxvdmVyIGlibXZzY3NpIHNj
-c2lfdHJhbnNwb3J0X3NycCB2aXJ0aW9fcGNpIHZpcnRpbyB2aXJ0aW9fcGNpX2xlZ2FjeV9k
-ZXYgdmlydGlvX3BjaV9tb2Rlcm5fZGV2IHVzYmNvcmUgZHJtIGRybV9wYW5lbF9vcmllbnRh
-dGlvbl9xdWlya3MgdmlydGlvX3JpbmcgdXNiX2NvbW1vbg0KPiBNYXIgMjggMTM6MTY6MzYg
-ZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0MDkxOF0gQ1BVOiAyIFBJRDogMTM5IENv
-bW06IHN5c3RlbWQtdWRldmQgTm90IHRhaW50ZWQgNS4xNy4wLWFlMDg1ZDdmOTM2NSAjMQ0K
-PiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0MTI0NV0g
-TklQOiAgYzAwMDAwMDAwMDgwZGZhNCBMUjogYzAwMDAwMDAwMDgwZGY5YyBDVFI6IGMwMDAw
-MDAwMDA3OTc0MzANCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsg
-ICAxMS4wNDEzNzZdIFJFR1M6IGMwMDAwMDAwMDQxMzJmZTAgVFJBUDogMDMwMCAgIE5vdCB0
-YWludGVkICAoNS4xNy4wLWFlMDg1ZDdmOTM2NSkNCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlh
-bi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNDE1MjhdIE1TUjogIDgwMDAwMDAwMDIwMDkwMzMg
-PFNGLFZFQyxFRSxNRSxJUixEUixSSSxMRT4gIENSOiAyODIyODI4MiAgWEVSOiAyMDAwMDAw
-MA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0MjAx
-N10gQ0ZBUjogYzAwMDAwMDAwMDAwYzgwYyBEQVI6IDAwMDAwMDAwMDAwMDAwNjAgRFNJU1I6
-IDQwMDAwMDAwIElSUU1BU0s6IDANCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBr
-ZXJuZWw6IFsgICAxMS4wNDIwMTddIEdQUjAwOiBjMDAwMDAwMDAwODBkZjljIGMwMDAwMDAw
-MDQxMzMyODAgYzAwMDAwMDAwMTY5ZDIwMCAwMDAwMDAwMDAwMDAwMDI5DQo+IE1hciAyOCAx
-MzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQyMDE3XSBHUFIwNDogMDAw
-MDAwMDBmZmZmZWZmZiBjMDAwMDAwMDA0MTMyZjkwIGMwMDAwMDAwMDQxMzJmODggMDAwMDAw
-MDAwMDAwMDAwMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAg
-IDExLjA0MjAxN10gR1BSMDg6IGMwMDAwMDAwMDE1NjU4ZjggYzAwMDAwMDAwMTVjZDIwMCBj
-MDAwMDAwMDAxNGY1N2QwIDAwMDAwMDAwNDgyMjgyODMNCj4gTWFyIDI4IDEzOjE2OjM2IGRl
-Ymlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNDIwMTddIEdQUjEyOiAwMDAwMDAwMDAwMDAw
-MDAwIGMwMDAwMDAwM2ZmZmUzMDAgMDAwMDAwMDAyMDAwMDAwMCAwMDAwMDAwMDAwMDAwMDAw
-DQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQyMDE3
-XSBHUFIxNjogMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMTEzZmM0YTQwIDAwMDAwMDAwMDAw
-MDAwMDUgMDAwMDAwMDExM2ZjZmI4MA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0
-IGtlcm5lbDogWyAgIDExLjA0MjAxN10gR1BSMjA6IDAwMDAwMTAwMGY3MjgzYjAgMDAwMDAw
-MDAwMDAwMDAwMCBjMDAwMDAwMDAwZTRhNTg4IGMwMDAwMDAwMDBlNGE1YjANCj4gTWFyIDI4
-IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNDIwMTddIEdQUjI0OiAw
-MDAwMDAwMDAwMDAwMDAxIDAwMDAwMDAwMDAwYTAwMDAgYzAwODAwMDAwMGRiMDE2OCBjMDAw
-MDAwMDAyMWY2ZWMwDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBb
-ICAgMTEuMDQyMDE3XSBHUFIyODogYzAwMDAwMDAwMTZkNjVhOCBjMDAwMDAwMDA0YjM2NDYw
-IDAwMDAwMDAwMDAwMDAwMDAgYzAwMDAwMDAwMTZkNjRiMA0KPiBNYXIgMjggMTM6MTY6MzYg
-ZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0MzE4NF0gTklQIFtjMDAwMDAwMDAwODBk
-ZmE0XSBkb19yZW1vdmVfY29uZmxpY3RpbmdfZnJhbWVidWZmZXJzKzB4MTg0LzB4MWQwDQo+
-IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQzNzQ4XSBM
-UiBbYzAwMDAwMDAwMDgwZGY5Y10gZG9fcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVy
-cysweDE3Yy8weDFkMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDog
-WyAgIDExLjA0Mzk4Ml0gQ2FsbCBUcmFjZToNCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1w
-cGM2NCBrZXJuZWw6IFsgICAxMS4wNDQxMDhdIFtjMDAwMDAwMDA0MTMzMjgwXSBbYzAwMDAw
-MDAwMDgwZGY5Y10gZG9fcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVycysweDE3Yy8w
-eDFkMCAodW5yZWxpYWJsZSkNCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJu
-ZWw6IFsgICAxMS4wNDQzMzVdIFtjMDAwMDAwMDA0MTMzMzUwXSBbYzAwMDAwMDAwMDgwZTRk
-MF0gcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVycysweDYwLzB4MTUwDQo+IE1hciAy
-OCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQ0NDY4XSBbYzAwMDAw
-MDAwNDEzMzNhMF0gW2MwMDAwMDAwMDA4MGU2ZjRdIHJlbW92ZV9jb25mbGljdGluZ19wY2lf
-ZnJhbWVidWZmZXJzKzB4MTM0LzB4MWIwDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBj
-NjQga2VybmVsOiBbICAgMTEuMDQ0NTg4XSBbYzAwMDAwMDAwNDEzMzQ1MF0gW2MwMDgwMDAw
-MDBlNzA0MzhdIGRybV9hcGVydHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfcGNpX2ZyYW1lYnVm
-ZmVycysweDkwLzB4MTAwIFtkcm1dDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQg
-a2VybmVsOiBbICAgMTEuMDQ1NDQzXSBbYzAwMDAwMDAwNDEzMzQ5MF0gW2MwMDgwMDAwMDBk
-YTBjZTRdIGJvY2hzX3BjaV9wcm9iZSsweDZjLzB4YTY0IFtib2Noc10NCj4gTWFyIDI4IDEz
-OjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNDU2MjRdIFtjMDAwMDAwMDA0
-MTMzNTcwXSBbYzAwMDAwMDAwMDdjYTUxOF0gbG9jYWxfcGNpX3Byb2JlKzB4NjgvMHgxMTAN
-Cj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNDU3MzBd
-IFtjMDAwMDAwMDA0MTMzNWYwXSBbYzAwMDAwMDAwMDdjYjQzOF0gcGNpX2NhbGxfcHJvYmUr
-MHg4OC8weDFhMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAg
-IDExLjA0NTgzMF0gW2MwMDAwMDAwMDQxMzM3NTBdIFtjMDAwMDAwMDAwN2NjNmFjXSBwY2lf
-ZGV2aWNlX3Byb2JlKzB4YmMvMHgxYTANCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2
-NCBrZXJuZWw6IFsgICAxMS4wNDU5MjhdIFtjMDAwMDAwMDA0MTMzNzkwXSBbYzAwMDAwMDAw
-MDg5NjllMF0gcmVhbGx5X3Byb2JlKzB4MTAwLzB4NWUwDQo+IE1hciAyOCAxMzoxNjozNiBk
-ZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQ2MDI1XSBbYzAwMDAwMDAwNDEzMzgxMF0g
-W2MwMDAwMDAwMDA4OTcwNGNdIF9fZHJpdmVyX3Byb2JlX2RldmljZSsweDE4Yy8weDI1MA0K
-PiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0NjEyNV0g
-W2MwMDAwMDAwMDQxMzM4OTBdIFtjMDAwMDAwMDAwODk3MTZjXSBkcml2ZXJfcHJvYmVfZGV2
-aWNlKzB4NWMvMHgxNDANCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6
-IFsgICAxMS4wNDYyMjVdIFtjMDAwMDAwMDA0MTMzOGQwXSBbYzAwMDAwMDAwMDg5N2NmOF0g
-X19kcml2ZXJfYXR0YWNoKzB4MTE4LzB4MjkwDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4t
-cHBjNjQga2VybmVsOiBbICAgMTEuMDQ2MzIyXSBbYzAwMDAwMDAwNDEzMzk1MF0gW2MwMDAw
-MDAwMDA4OTJkMzhdIGJ1c19mb3JfZWFjaF9kZXYrMHhhOC8weDEzMA0KPiBNYXIgMjggMTM6
-MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0NjQyNV0gW2MwMDAwMDAwMDQx
-MzM5YjBdIFtjMDAwMDAwMDAwODk1YzI0XSBkcml2ZXJfYXR0YWNoKzB4MzQvMHg1MA0KPiBN
-YXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA0NjUyMV0gW2Mw
-MDAwMDAwMDQxMzM5ZDBdIFtjMDAwMDAwMDAwODk1MzA4XSBidXNfYWRkX2RyaXZlcisweDFi
-OC8weDJlMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDEx
-LjA0NjYxOF0gW2MwMDAwMDAwMDQxMzNhNjBdIFtjMDAwMDAwMDAwODk4ZWE0XSBkcml2ZXJf
-cmVnaXN0ZXIrMHhiNC8weDFjMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtl
-cm5lbDogWyAgIDExLjA0NjcxNF0gW2MwMDAwMDAwMDQxMzNhZDBdIFtjMDAwMDAwMDAwN2M5
-ZDI4XSBfX3BjaV9yZWdpc3Rlcl9kcml2ZXIrMHg2OC8weDgwDQo+IE1hciAyOCAxMzoxNjoz
-NiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQ2ODE1XSBbYzAwMDAwMDAwNDEzM2Fm
-MF0gW2MwMDgwMDAwMDBkYTE3NGNdIGJvY2hzX3BjaV9kcml2ZXJfaW5pdCsweDcwLzB4OTgg
-W2JvY2hzXQ0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDEx
-LjA0NjkzMV0gW2MwMDAwMDAwMDQxMzNiMjBdIFtjMDAwMDAwMDAwMDExZmQwXSBkb19vbmVf
-aW5pdGNhbGwrMHg2MC8weDJkMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtl
-cm5lbDogWyAgIDExLjA0NzAzM10gW2MwMDAwMDAwMDQxMzNjMDBdIFtjMDAwMDAwMDAwMjI5
-ZDM4XSBkb19pbml0X21vZHVsZSsweDY4LzB4MzYwDQo+IE1hciAyOCAxMzoxNjozNiBkZWJp
-YW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQ3MTM2XSBbYzAwMDAwMDAwNDEzM2M5MF0gW2Mw
-MDAwMDAwMDAyMmRjM2NdIF9fZG9fc3lzX2Zpbml0X21vZHVsZSsweGRjLzB4MTgwDQo+IE1h
-ciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDQ3MjM5XSBbYzAw
-MDAwMDAwNDEzM2RiMF0gW2MwMDAwMDAwMDAwMmFhYTBdIHN5c3RlbV9jYWxsX2V4Y2VwdGlv
-bisweDE3MC8weDJkMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDog
-WyAgIDExLjA1MDgzOV0gW2MwMDAwMDAwMDQxMzNlMTBdIFtjMDAwMDAwMDAwMDBjM2NjXSBz
-eXN0ZW1fY2FsbF9jb21tb24rMHhlYy8weDI1MA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFu
-LXBwYzY0IGtlcm5lbDogWyAgIDExLjA1MzEyN10gLS0tIGludGVycnVwdDogYzAwIGF0IDB4
-N2ZmZmE0MzEwMGM0DQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBb
-ICAgMTEuMDU1NjE2XSBOSVA6ICAwMDAwN2ZmZmE0MzEwMGM0IExSOiAwMDAwN2ZmZmE0NTdm
-ZTJjIENUUjogMDAwMDAwMDAwMDAwMDAwMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBw
-YzY0IGtlcm5lbDogWyAgIDExLjA1ODA3M10gUkVHUzogYzAwMDAwMDAwNDEzM2U4MCBUUkFQ
-OiAwYzAwICAgTm90IHRhaW50ZWQgICg1LjE3LjAtYWUwODVkN2Y5MzY1KQ0KPiBNYXIgMjgg
-MTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA2MDU2M10gTVNSOiAgODAw
-MDAwMDAwMDAwZjAzMyA8U0YsRUUsUFIsRlAsTUUsSVIsRFIsUkksTEU+ICBDUjogMjQyMjI4
-MjQgIFhFUjogMDAwMDAwMDANCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJu
-ZWw6IFsgICAxMS4wNjMwNDhdIElSUU1BU0s6IDANCj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlh
-bi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNjMwNDhdIEdQUjAwOiAwMDAwMDAwMDAwMDAwMTYx
-IDAwMDA3ZmZmZTg5MzA3MTAgMDAwMDdmZmZhNDNmNzEwMCAwMDAwMDAwMDAwMDAwMDE1DQo+
-IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMDYzMDQ4XSBH
-UFIwNDogMDAwMDdmZmZhNDU4YjQ0OCAwMDAwMDAwMDAwMDAwMDAwIDAwMDAwMDAwMDAwMDAw
-MDAgMDAwMDAwMDAwMDAwMDAwMA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtl
-cm5lbDogWyAgIDExLjA2MzA0OF0gR1BSMDg6IDAwMDAwMDAwMDAwMDAwMDAgMDAwMDAwMDAw
-MDAwMDAwMCAwMDAwMDAwMDAwMDAwMDAwIDAwMDAwMDAwMDAwMDAwMDANCj4gTWFyIDI4IDEz
-OjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNjMwNDhdIEdQUjEyOiAwMDAw
-MDAwMDAwMDAwMDAwIDAwMDA3ZmZmYTQ2NWRkZDAgMDAwMDAwMDAyMDAwMDAwMCAwMDAwMDAw
-MDAwMDAwMDAwDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAg
-MTEuMDYzMDQ4XSBHUFIxNjogMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMTEzZmM0YTQwIDAw
-MDAwMDAwMDAwMDAwMDUgMDAwMDAwMDExM2ZjZmI4MA0KPiBNYXIgMjggMTM6MTY6MzYgZGVi
-aWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA2MzA0OF0gR1BSMjA6IDAwMDAwMTAwMGY3Mjgz
-YjAgMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMTEzZmNmYjY4IDAwMDAwMTAwMGY3Mjk1NzAN
-Cj4gTWFyIDI4IDEzOjE2OjM2IGRlYmlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4wNjMwNDhd
-IEdQUjI0OiAwMDAwMDAwMDAwMDAwMDAwIDAwMDAwMTAwMGY3MjgzYjAgMDAwMDAwMDAwMDAy
-MDAwMCAwMDAwMDEwMDBmNzI4MmYwDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQg
-a2VybmVsOiBbICAgMTEuMDYzMDQ4XSBHUFIyODogMDAwMDdmZmZhNDU4YjQ0OCAwMDAwMDAw
-MDAwMDIwMDAwIDAwMDAwMDAwMDAwMDAwMDAgMDAwMDAxMDAwZjcyODNiMA0KPiBNYXIgMjgg
-MTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjA4NjY1OF0gTklQIFswMDAw
-N2ZmZmE0MzEwMGM0XSAweDdmZmZhNDMxMDBjNA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFu
-LXBwYzY0IGtlcm5lbDogWyAgIDExLjA5MTg1M10gTFIgWzAwMDA3ZmZmYTQ1N2ZlMmNdIDB4
-N2ZmZmE0NTdmZTJjDQo+IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBb
-ICAgMTEuMDk3Mjk0XSAtLS0gaW50ZXJydXB0OiBjMDANCj4gTWFyIDI4IDEzOjE2OjM2IGRl
-Ymlhbi1wcGM2NCBrZXJuZWw6IFsgICAxMS4xMDMxMjRdIEluc3RydWN0aW9uIGR1bXA6DQo+
-IE1hciAyOCAxMzoxNjozNiBkZWJpYW4tcHBjNjQga2VybmVsOiBbICAgMTEuMTEyOTEyXSA3
-ZDcxMDEyMCA3ZDcwODEyMCA0ZTgwMDAyMCBlOGRmMDAwMCA3ZmM0MDdiNCA3ZjQ1ZDM3OCA3
-ZWMzYjM3OCBmODgxMDA2OA0KPiBNYXIgMjggMTM6MTY6MzYgZGViaWFuLXBwYzY0IGtlcm5l
-bDogWyAgIDExLjExOTE2NV0gMzhjNjAwZjAgNGI5YjljN2QgNjAwMDAwMDAgM2QyMmZmZjMg
-PGU5NTUwMDYwPiAzOTI5NzllOCBlODgxMDA2OCA3YzJhNDgwMA0KPiBNYXIgMjggMTM6MTY6
-MzYgZGViaWFuLXBwYzY0IGtlcm5lbDogWyAgIDExLjEyMzU3M10gLS0tWyBlbmQgdHJhY2Ug
-MDAwMDAwMDAwMDAwMDAwMCBdLS0tDQo+IA0KPiBNeSBsYXN0IGdvb2QgdGVzdCB3YXMgd2l0
-aCA1LjE3LjAtM2JmMDNiOWEwODM5IGFuZCBjYW4gYmUgc2VlbiBhdDoNCj4gaHR0cHM6Ly9v
-cGVucWEucWEuY29kZXRoaW5rLmNvLnVrL3Rlc3RzLzkzMg0KPiANCj4gQSBmYWlsdXJlIHRl
-c3Qgd2l0aCA1LjE3LjAtNTJkNTQzYjU0OTdjIGNhbiBiZSBzZWVuIGF0OiBodHRwczovL29w
-ZW5xYS5xYS5jb2RldGhpbmsuY28udWsvdGVzdHMvOTM3DQo+IA0KPiBBZnRlciByZXZlcnRp
-bmcgMjc1OTlhYWNiYWVmICgiZmJkZXY6IEhvdC11bnBsdWcgZmlybXdhcmUgZmIgZGV2aWNl
-cyBvbg0KPiBmb3JjZWQgcmVtb3ZhbCIpIG9uIHRvcCBvZiBsYXRlc3QgTGludXggbWFpbmxp
-bmUgSEVBRCBmaXhlcyB0aGUgcHJvYmxlbQ0KPiBhbmQgSSBjYW4gc2VlIHFlbXUgYm9vdGlu
-ZyBhZ2Fpbi4NCj4gDQo+IEkgd2lsbCBiZSBoYXBweSB0byB0ZXN0IGFueSBwYXRjaCBmaXhp
-bmcgdGhlIHByb2JsZW0uDQo+IA0KPiANCj4gLS0NCj4gUmVnYXJkcw0KPiBTdWRpcA0KDQot
-LSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNF
-IFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5
-IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jD
-pGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+ While working on the SiS85C497 PIRQ router I have noticed an odd
+phenomenon with my venerable Tyan Tomcat IV S1564D board, where the PCI 
+INTD# line of the USB host controller included as function 3 of the PIIX3 
+southbridge cannot be routed in the `noapic' mode.  As it turns out the 
+reason for this is the BIOS has two individual entries in its PIRQ table 
+for two of its three functions, and the wrong one is chosen for routing 
+said line.
 
---------------66y7tuaOFiUXRsVdYbYEFTQt--
+ Strictly speaking this violates the PCI BIOS specification, but it can be 
+easily worked around while preserving the semantics for compliant systems.
 
---------------Wsc7zfURiFEDokuUK9w8x0bk
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ Therefore I have come up with this patch series, which addresses this 
+problem with 3/4, adds function reporting to the debug PIRQ table dump 
+with 2/4 and also prints a usable physical memory address of the PIRQ 
+table in a debug message with 1/4.
 
------BEGIN PGP SIGNATURE-----
+ Then 4/4 follows, addressing the inability to use a PIRQ table to route 
+interrupts for devices placed behind PCI-to-PCI bridges on option cards, 
+and especially where the BIOS has failed to enumerate the whole bus tree 
+in the first place.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJFUykFAwAAAAAACgkQlh/E3EQov+Co
-GA//YqASPM2vfVFI8+GRAvRFdz0PbJYQuo/obcZc8egw/wZj+hHCwm9aW5Iab+ZTQoXDRnQpsFSz
-0KFJ+TrhiY2QjaonFrHiKwI4SqWsU7he4HM9NZZJ27fj869gMAnjTpxpNgywissEqaFACZTmjZIr
-MvVlGFxIXVkazf7p+j5oBC8LcNFZTX1HxdqRojo+oiBmeulkevBwiGJ83KGgvwLEnUtTZK3pKULn
-UvP3WAvYUo49kJo21Nx/xIy80you21uZaS5k09zRyqnh4N27NVY1CmCjvooPDYwZfGEIyuv3YThw
-GrTrwhmwp5Xj82m5MxQLJ0ff2ksnywVCnqjCJTblc1BuViHlOCGMCsrCP1dBjLusgX0XNxY6VKRI
-i6IOLZtJ4/NFZ1qlRenilizB/ja7MW56FvLS9yzmRbtaslQXraZacvJHWkWCpQZ4EwoBeHLCdziX
-PunTmpwYpsnqaRKhnOQoHLX8C9RqTw4WHUn8Q75GNIQincdfe7A5StDMVhVytSZJ2wnE2uZkyqr/
-6MQu3AlvwUbDWPr5IkteQz2H7JXrGsN4jfKg0XXHgizUttuKH7o15zO+mQnGFlhwKngxP1DSLuav
-SlQA4m2uAs/N3R015Pb/HpWvFr8D0QrDGjAquULxG8oFKYov/gmnmijU107Ml8Pchz5pH7Ooqn5Q
-5VA=
-=0OBx
------END PGP SIGNATURE-----
+ See individual change descriptions for further details.
 
---------------Wsc7zfURiFEDokuUK9w8x0bk--
+ Please apply.
+
+  Maciej

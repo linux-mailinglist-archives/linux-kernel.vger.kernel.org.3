@@ -2,53 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17154EE247
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713CD4EE24A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241177AbiCaUF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        id S241212AbiCaUFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241153AbiCaUF0 (ORCPT
+        with ESMTP id S241182AbiCaUFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:05:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96222A76DA;
-        Thu, 31 Mar 2022 13:03:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26B9561AB0;
-        Thu, 31 Mar 2022 20:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69892C340F2;
-        Thu, 31 Mar 2022 20:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648757017;
-        bh=RNm5ixSvqvoJM5egiB6aLaJgZgoCMTyAXibips4aPYA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qSL84hsWrM6G1VU6c+mRbzUfY8ez+m105kXdrwcKZqBibvT6DcO2IyWSR75HCFOFT
-         koWNW+Km8gm7rgXNF30zBxg2lo5nuywwPwM+5Vb7tVJurCeAXA861VhmEYe2X1B+4g
-         mQdK9WxcQlpCjEFBMBHJoNY9ty7Cqqh3cKN+RNGVZoVbuVR92iEpP+QxIYJvb/zYRh
-         lFp95lUKY28Zc0JX4khuled4gRJ8n16lICB9JYqnaNOWfEJz3cD4Nmty2dlII0tH5N
-         GP5+lnvnXFFThHHjuAkmOHuFq6U8H9OpwDXCZ1wez5HIGOuu07T0O7aCeXDctNUX4v
-         kX8WDgkH9vsCA==
-Date:   Thu, 31 Mar 2022 20:03:35 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     ceph-devel@vger.kernel.org, xiubli@redhat.com, idryomov@gmail.com,
-        lhenriques@suse.de, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 08/54] ceph: add a has_stable_inodes operation for
- ceph
-Message-ID: <YkYJF07WdQZoucQ5@gmail.com>
-References: <20220331153130.41287-1-jlayton@kernel.org>
- <20220331153130.41287-9-jlayton@kernel.org>
+        Thu, 31 Mar 2022 16:05:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B46C1905B0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:04:01 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bh17so1536064ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:04:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z2EGtbaUSdZqJdfHjTh9+r3ua+pSh9uHmfL1sOZD5QM=;
+        b=HKF4UdRl+O0WSsymoX6w2BXJfg7HGXHE6hHgkyPszGlcZXlymHI3mC7nt7d91lCR13
+         qqm1RjMspBXVqwPlQ+ZdMSuXRrI7vrNeLp8lWx7kwbBmceRfk8Is0n7eAEgvzJ2o0p45
+         9Og1U9P0y+aYJV6v2RIg1ZSFmGI/1qXdEK9mTKvdVVtINthUR+8UW4NmNJHPScCltRug
+         isQjTz9oZvGEmZdlE//NMg1bDmmkZ03Htu8wqpxoA6rFPzOIo/8A6m50jAAHsaSxAH4Y
+         o4NnTzNNu4sx/lpn7FhhoDaufYAoDYsOM0XoCVG9rst2AWLsXqD0z0kYQaUcIw3o2ZbW
+         n25g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z2EGtbaUSdZqJdfHjTh9+r3ua+pSh9uHmfL1sOZD5QM=;
+        b=j1BPFlAMINxh0lWjXDevfzbG3nrdaXJb5wz6wDAoLqe8CsCmZGaUB7L/2MysVP9t7E
+         117o6e7xNwXAlODq5/3Jj8dYWPfDRYQs7b/2s/0mFc8elhvENlCa+W7gtlQSKMGnmMyA
+         Ro1dUULe+tG8yoIiXdxaa7yMQhuE9dQ/6cwxt9plLN1AdPpt2Wwj8ll0pLIVangg/GEZ
+         L37BBnJsx/HRizBppl/xaLJJseV94YeFOE+Oph9ohH0AHtMFMEgdEaSWro4pYKS/WHgo
+         pXPnVE51sUpSGOp+CI8pYxpMzANry+/Z9t/ta+ytemFqQYN7tkak+eYd4D/G2TeZflKz
+         yUVQ==
+X-Gm-Message-State: AOAM530qp1Cb04A9HVhvKL2q0Yh0YutwecAdCoDJHIrplI8N2aixIvE+
+        MTCfQNVp1TEwyWJPjwlb1bqvnQ==
+X-Google-Smtp-Source: ABdhPJzZ1JZCjRL24uzjb3wZLU0ZX28TmA+40iLJYWlpIPLhIfzvlPJ4Rv8WnVcGGMisztOOrsRCxw==
+X-Received: by 2002:a17:907:d89:b0:6df:e54d:2462 with SMTP id go9-20020a1709070d8900b006dfe54d2462mr6492434ejc.97.1648757039749;
+        Thu, 31 Mar 2022 13:03:59 -0700 (PDT)
+Received: from [192.168.0.167] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id jv19-20020a170907769300b006e095c047d6sm150889ejc.109.2022.03.31.13.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 13:03:59 -0700 (PDT)
+Message-ID: <6de0f1f6-2096-28fa-e213-907aeea4f703@linaro.org>
+Date:   Thu, 31 Mar 2022 22:03:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331153130.41287-9-jlayton@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RFC net-next 1/3] dt-bindings: net: convert mscc-miim to
+ YAML format
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220331151440.3643482-1-michael@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220331151440.3643482-1-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,34 +84,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:30:44AM -0400, Jeff Layton wrote:
->  static struct fscrypt_operations ceph_fscrypt_ops = {
->  	.key_prefix		= "ceph:",
->  	.get_context		= ceph_crypt_get_context,
->  	.set_context		= ceph_crypt_set_context,
->  	.empty_dir		= ceph_crypt_empty_dir,
-> +	.has_stable_inodes	= ceph_crypt_has_stable_inodes,
->  };
+On 31/03/2022 17:14, Michael Walle wrote:
+> Convert the mscc-miim device tree binding to the new YAML format.
+> 
+> The original binding don't mention if the interrupt property is optional
+> or not. But on the SparX-5 SoC, for example, the interrupt property isn't
+> used, thus in the new binding that property is optional. FWIW the driver
+> doesn't use interrupts at all.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  .../devicetree/bindings/net/mscc,miim.yaml    | 55 +++++++++++++++++++
+>  .../devicetree/bindings/net/mscc-miim.txt     | 26 ---------
+>  2 files changed, 55 insertions(+), 26 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/mscc,miim.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/mscc-miim.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/net/mscc,miim.yaml b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+> new file mode 100644
+> index 000000000000..b52bf1732755
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/mscc,miim.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microsemi MII Management Controller (MIIM)
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +allOf:
+> +  - $ref: "mdio.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mscc,ocelot-miim
+> +      - microchip,lan966x-miim
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  reg:
+> +    items:
+> +      - description: base address
+> +      - description: associated reset register for internal PHYs
+> +    minItems: 1
+> +
+> +  interrupts: true
 
-What is the use case for implementing this?  Note the comment in the struct
-definition:
+how many? maxItems
 
-       /*
-         * Check whether the filesystem's inode numbers and UUID are stable,
-         * meaning that they will never be changed even by offline operations
-         * such as filesystem shrinking and therefore can be used in the
-         * encryption without the possibility of files becoming unreadable.
-         *
-         * Filesystems only need to implement this function if they want to
-         * support the FSCRYPT_POLICY_FLAG_IV_INO_LBLK_{32,64} flags.  These
-         * flags are designed to work around the limitations of UFS and eMMC
-         * inline crypto hardware, and they shouldn't be used in scenarios where
-         * such hardware isn't being used.
-         *
-         * Leaving this NULL is equivalent to always returning false.
-         */
-        bool (*has_stable_inodes)(struct super_block *sb);
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mdio@107009c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      compatible = "mscc,ocelot-miim";
+> +      reg = <0x107009c 0x36>, <0x10700f0 0x8>;
 
-I think you should just leave this NULL for now.
+Please put the compatible followed by reg at the beginning (first
+properties).
 
-- Eric
+Best regards,
+Krzysztof

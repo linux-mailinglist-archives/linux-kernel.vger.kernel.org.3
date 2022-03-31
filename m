@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCEB4EDFB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C653D4EDFBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiCaRgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
+        id S231842AbiCaRgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiCaRg3 (ORCPT
+        with ESMTP id S231633AbiCaRgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:36:29 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4228161A38;
-        Thu, 31 Mar 2022 10:34:38 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c15so702049ljr.9;
-        Thu, 31 Mar 2022 10:34:37 -0700 (PDT)
+        Thu, 31 Mar 2022 13:36:37 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076A960D90;
+        Thu, 31 Mar 2022 10:34:43 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id t25so422239lfg.7;
+        Thu, 31 Mar 2022 10:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7qM824sS6qaLgSDzZBkMu0728+GM94bEbKxid0FDaSw=;
-        b=ans9cQPDD/Bcxy8c6SvWao1RjIHo6wajUKKZOpjeeOnhiAnXXssLYPDwf/e3M9D5Mq
-         Bo69mhH6rhiRYVtrNQV7Lst9UewuihSsjNJe5anLqbcSAGftyWr2LT6h9qVV1nzXz68K
-         0QUZ7jfJaldu9N6lMlaTTtYfubkesA9xLlif0NSWBnFzdLFbmtD7Y4oejabNNRkcL+IM
-         t2uORsApDGoVOz+FxcoF7xQkgJVFZvBtPLLTG7bPZwvfblT1U1zdbd20sUHZrSyO1554
-         aBexCtyS5lKBelKrZ/MPGcbOT9IR4isXNC+au+aFJMfCFTutn4uw8kr8i/dxYkffZC7G
-         bXyw==
+        bh=uGpI0S583UU/uYnq20CAy/qk3XmWiJWZUHQ3a1WXMdM=;
+        b=PYSG8ddN405RCUgLDBXXCtCIC6HpTYluXuPt/057e2V4DclMUqXQwQvJ0zMbZvfFyr
+         aAm/PuvMFBfbtSrsvGUc2lHct1QOsEFwfq27OlMtn1ImHgMdPZQFrwWqsuyt4gPuCSgD
+         g82mLZH8LMMC4oBTmrxinWyAqshonbOqJAsrcaa69OwwsB3ec8O2SHYBv54oD45/77uu
+         qapIbXjqKW3jTv13KLf0DfBWoItNI6OgItAEQI/DRV71d7Ck8pEvzrTrydLLX1/mLUI7
+         bg8YVAzg8KBNzs4Awq2Aw6lpjpg/CuTtzqfwQ/mF9qHR5DmVi3EbO38PuKPazR3/a3fO
+         m38A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7qM824sS6qaLgSDzZBkMu0728+GM94bEbKxid0FDaSw=;
-        b=HpJGEINr25JzUNi2cMnlC6dQYuonRQ75+vaN5SvV7V2aqVytG0Q8nIgap3J7XAB82w
-         E1Rak/ZghE6fglQ8TzeseqTNEQEN8GR378lH2MGfoXaqb9qpThiiHIVo3E338UqNhZlI
-         7wqmu3m+XyrsmRrFuqftywqtT0zSrO1xPwxC+o8LCjQkLV1AAwYWUabL432d2RMino8a
-         lXx6wKMxQzLEgx5nldScWrmyMKjXBdbifJWx906dkIQ3EmLqm502H/3+IVXwMd4pdwfl
-         IdAL/WP8y3DF+17zq4/gqocVxmf1Xiv6tVIJKeyT3fr9u/RDPzLmMl9Kin+EDNCZmqSy
-         S/Hg==
-X-Gm-Message-State: AOAM5318ePYAGSj8RuICogd65p0nAi1MD++9cD2Gvt0WJ6tyDk3wX65/
-        vzEsfLfN1OfOC6Aoqv3KaX0=
-X-Google-Smtp-Source: ABdhPJzT+D0LszikZlweoZjrGWaHhUe+vXIeV9Rkh43UlrBK+TBFxLpNPv92lCgOKGYSvZduQJEDdA==
-X-Received: by 2002:a2e:8189:0:b0:249:7d3a:ceb0 with SMTP id e9-20020a2e8189000000b002497d3aceb0mr10387568ljg.367.1648748073357;
-        Thu, 31 Mar 2022 10:34:33 -0700 (PDT)
+        bh=uGpI0S583UU/uYnq20CAy/qk3XmWiJWZUHQ3a1WXMdM=;
+        b=6KlnOnwJ6xZkiJB+PuFJEjL7yY6CTU1Rdemox+Z+B3kMi/2DleTlYkqrCOMw/jlEhX
+         7Xbw3fPElfWKYNLGmQp+seM7m7th23CoI0UOezLceTSFnPFoIN5CYaQ2XUsKgVGDzVJJ
+         tpmogzJlm5JijX4BP2nSNFIEBZajk9k3jY7p+EJor0xj5lXiEUZsc8QX72ntg+Y37UnM
+         hfeu86Rcv5HGTMSyNHbZicVTPlAKuQo03wspbAU/m3imLeR9r9OBKNyYS2vN9VlS+jlX
+         Qced4gDxULmJSX3Btijh83wkWPzuJ5F1xTTFV87fvm9d9O5SAxzd85EOqcTkaVDlCgPv
+         Gnkw==
+X-Gm-Message-State: AOAM530O6YbPaC6/TUU6KumvMScT2oH2KuCUpzf6ql8OSkPpl315au0S
+        H5ZMYQnNRas5RF1HtGkukA4=
+X-Google-Smtp-Source: ABdhPJzoCjHE9997aLT2xV1HstS47RUvZQXYjAqGmUzjBaX4scHX8SyADAAdRpFMv7hEnouPfjryZw==
+X-Received: by 2002:a05:6512:3186:b0:44a:c200:61e1 with SMTP id i6-20020a056512318600b0044ac20061e1mr6120837lfe.534.1648748077558;
+        Thu, 31 Mar 2022 10:34:37 -0700 (PDT)
 Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b00247fe29d83csm2746992ljb.73.2022.03.31.10.34.31
+        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b00247fe29d83csm2746992ljb.73.2022.03.31.10.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 10:34:33 -0700 (PDT)
+        Thu, 31 Mar 2022 10:34:37 -0700 (PDT)
 From:   Michal Orzel <michalorzel.eng@gmail.com>
-To:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
+To:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Orzel <michalorzel.eng@gmail.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+Cc:     Michal Orzel <michalorzel.eng@gmail.com>, selinux@vger.kernel.org,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 3/5] keys: Remove redundant assignments
-Date:   Thu, 31 Mar 2022 19:33:56 +0200
-Message-Id: <20220331173358.40939-3-michalorzel.eng@gmail.com>
+Subject: [PATCH 4/5] selinux: Remove redundant assignments
+Date:   Thu, 31 Mar 2022 19:33:57 +0200
+Message-Id: <20220331173358.40939-4-michalorzel.eng@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220331173358.40939-1-michalorzel.eng@gmail.com>
 References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
@@ -83,46 +81,57 @@ Reported by clang-tidy [deadcode.DeadStores]
 
 Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 ---
- security/keys/process_keys.c | 1 -
- security/keys/request_key.c  | 6 ++----
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ security/selinux/avc.c         | 4 ++--
+ security/selinux/hooks.c       | 1 -
+ security/selinux/ss/services.c | 1 -
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/security/keys/process_keys.c b/security/keys/process_keys.c
-index b5d5333ab330..8bdd6410f79a 100644
---- a/security/keys/process_keys.c
-+++ b/security/keys/process_keys.c
-@@ -92,7 +92,6 @@ int look_up_user_keyrings(struct key **_user_keyring,
- 		return PTR_ERR(reg_keyring);
+diff --git a/security/selinux/avc.c b/security/selinux/avc.c
+index abcd9740d10f..874c1c6fe10b 100644
+--- a/security/selinux/avc.c
++++ b/security/selinux/avc.c
+@@ -1059,7 +1059,7 @@ int avc_has_extended_perms(struct selinux_state *state,
  
- 	down_write(&user_ns->keyring_sem);
--	ret = 0;
+ 	node = avc_lookup(state->avc, ssid, tsid, tclass);
+ 	if (unlikely(!node)) {
+-		node = avc_compute_av(state, ssid, tsid, tclass, &avd, xp_node);
++		avc_compute_av(state, ssid, tsid, tclass, &avd, xp_node);
+ 	} else {
+ 		memcpy(&avd, &node->ae.avd, sizeof(avd));
+ 		xp_node = node->ae.xp_node;
+@@ -1151,7 +1151,7 @@ inline int avc_has_perm_noaudit(struct selinux_state *state,
  
- 	/* Get the user keyring.  Note that there may be one in existence
- 	 * already as it may have been pinned by a session, but the user_struct
-diff --git a/security/keys/request_key.c b/security/keys/request_key.c
-index 2da4404276f0..ad29023c9518 100644
---- a/security/keys/request_key.c
-+++ b/security/keys/request_key.c
-@@ -116,7 +116,7 @@ static int call_sbin_request_key(struct key *authkey, void *aux)
- {
- 	static char const request_key[] = "/sbin/request-key";
- 	struct request_key_auth *rka = get_request_key_auth(authkey);
--	const struct cred *cred = current_cred();
-+	const struct cred *cred;
- 	key_serial_t prkey, sskey;
- 	struct key *key = rka->target_key, *keyring, *session, *user_session;
- 	char *argv[9], *envp[3], uid_str[12], gid_str[12];
-@@ -506,9 +506,7 @@ static struct key *construct_key_and_link(struct keyring_search_context *ctx,
- 			kdebug("cons failed");
- 			goto construction_failed;
- 		}
--	} else if (ret == -EINPROGRESS) {
--		ret = 0;
--	} else {
-+	} else if (ret != -EINPROGRESS) {
- 		goto error_put_dest_keyring;
+ 	node = avc_lookup(state->avc, ssid, tsid, tclass);
+ 	if (unlikely(!node))
+-		node = avc_compute_av(state, ssid, tsid, tclass, avd, &xp_node);
++		avc_compute_av(state, ssid, tsid, tclass, avd, &xp_node);
+ 	else
+ 		memcpy(avd, &node->ae.avd, sizeof(*avd));
+ 
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index e9e959343de9..f792835b3fb6 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -6487,7 +6487,6 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+ 			goto abort_change;
+ 
+ 		/* Only allow single threaded processes to change context */
+-		error = -EPERM;
+ 		if (!current_is_single_threaded()) {
+ 			error = security_bounded_transition(&selinux_state,
+ 							    tsec->sid, sid);
+diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+index 6901dc07680d..802a80648c6c 100644
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@ -2980,7 +2980,6 @@ int security_fs_use(struct selinux_state *state, struct super_block *sb)
  	}
  
+ retry:
+-	rc = 0;
+ 	rcu_read_lock();
+ 	policy = rcu_dereference(state->policy);
+ 	policydb = &policy->policydb;
 -- 
 2.25.1
 

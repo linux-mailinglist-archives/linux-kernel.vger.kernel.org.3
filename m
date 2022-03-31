@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1E64ED85B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2954ED864
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbiCaLZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S235121AbiCaLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiCaLZ2 (ORCPT
+        with ESMTP id S235094AbiCaLZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:25:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF1260F6;
-        Thu, 31 Mar 2022 04:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648725821; x=1680261821;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mS6zbhaYlg/QLdlCSwj4lOoyZGKeWBXdfcvpQAxVnVw=;
-  b=SgSmocZcMQZ6rCeu1GpDRINs1YjGaNQyRCMtA8Lbq7Y3Nx9aTnADQEIh
-   WQRCLzb93DrdKloWWEedDQ3C/AVgEqo9GPrchZC0TuLi0zLFMewJBmg/G
-   5PWmRIM6Md1WlMbOuG1W65kwaAu1yyIuxODQOhmtInjdhDczZmIUPEd/+
-   t9RiNfD8D9dP13kCLzTgPuFPi5ZJheTqHTrKe532G/BbEMkoSeaFtQ2Ow
-   JwGkdLDtKcRa5mXnM7761lf3WaJ420uw7xzk8faz6jiATQSz7sNWQJ8sE
-   l+ASlT0Vk7hN98X4EaXDS+oZ1B5axTiZoi8bx5G6uPubM03y5c0gVWsKx
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="258632162"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="258632162"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 04:23:32 -0700
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="640096005"
-Received: from fpaolini-mobl2.ger.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.53.114])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 04:23:30 -0700
-Message-ID: <55fa888b31bae80bf72cbdbdf6f27401ea4ccc5c.camel@intel.com>
-Subject: Re: [RFC PATCH v5 032/104] KVM: x86/mmu: introduce config for
- PRIVATE KVM MMU
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 01 Apr 2022 00:23:28 +1300
-In-Reply-To: <770235e7fed04229b81c334e2477374374cea901.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <770235e7fed04229b81c334e2477374374cea901.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 31 Mar 2022 07:25:44 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7F763FB
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 04:23:51 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KTgsZ6D8tz1GCx2;
+        Thu, 31 Mar 2022 19:23:30 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 31 Mar 2022 19:23:49 +0800
+Received: from [10.174.179.19] (10.174.179.19) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 31 Mar 2022 19:23:48 +0800
+Message-ID: <b4d3cfee-9364-3315-652e-7f8b156306eb@huawei.com>
+Date:   Thu, 31 Mar 2022 19:23:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] hugetlb: Fix hugepages_setup when deal with pernode
+Content-Language: en-US
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        <akpm@linux-foundation.org>, <yaozhenguo1@gmail.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <rdunlap@infradead.org>
+References: <20220324074037.2024608-1-liupeng256@huawei.com>
+ <361111c6-921b-e129-edf3-367748f6497e@oracle.com>
+ <ec312492-fea9-7130-8be4-1c362c2e84a6@huawei.com>
+ <e94ea60f-9da7-98b7-7d47-1183c0fd2ddc@oracle.com>
+ <d992f076-5eba-929b-e284-57bd5471cd85@huawei.com>
+ <c33ab0c1-6b73-2489-efab-972c8d7fa80b@oracle.com>
+From:   "liupeng (DM)" <liupeng256@huawei.com>
+In-Reply-To: <c33ab0c1-6b73-2489-efab-972c8d7fa80b@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.19]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> To Keep the case of non TDX intact, introduce a new config option for
-> private KVM MMU support.  At the moment, this is synonym for
-> CONFIG_INTEL_TDX_HOST && CONFIG_KVM_INTEL.  The new flag make it clear
-> that the config is only for x86 KVM MMU.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/Kconfig | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index 2b1548da00eb..2db590845927 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -136,4 +136,8 @@ config KVM_MMU_AUDIT
->  config KVM_EXTERNAL_WRITE_TRACKING
->  	bool
->  
-> +config KVM_MMU_PRIVATE
-> +	def_bool y
-> +	depends on INTEL_TDX_HOST && KVM_INTEL
-> +
->  endif # VIRTUALIZATION
+On 2022/3/30 1:43, Mike Kravetz wrote:
+> On 3/28/22 20:59, liupeng (DM) wrote:
+>> On 2022/3/29 10:46, Mike Kravetz wrote:
+>>> Yes, I agree that the change is needed and the current behavior is
+>>> unacceptable.
+>>>
+>>> One remaining question is the change from returning '0' to '1' in the case
+>>> of error.  I do understand this is to prevent the invalid parameter string
+>>> from being passed to init.  It may not be correct/right, but in every other
+>>> case where an invalid parameter in encountered in hugetlb command line
+>>> processing we return "0".  Should we perhaps change all these other places
+>>> to be consistent?  I honestly do not know what is the appropriate behavior
+>>> in these situations.
+>> Thank you for your carefulness and question.
+>>
+>> I have checked default_hugepagesz_setup and hugepages_setup will both print
+>> some information before return '0', so there is no need to print again in
+>> "Unknown kernel command line parameters".
+>>
+>> Should I send another patch to repair the rest "return 0" in hugetlb?
+> I would suggest two patches:
+>
+> 1) Fix the issue with invalid nodes specified.  However, leave the "return 0"
+>     behavior in hugepages_setup to be consistent with the rest of the code.
+>     This patch can be sent to stable with "Fixes: b5389086ad7b" tag as it
+>     addresses an existing issue.
+> 2) Clean up the places where we return 0 and it would be better to return 1.
+>     No cc stable here and just let the changes target future releases.
+I have tried to write a patch as your suggestion, but the best way I can 
+carry it
+out is the original patch. To meet "Fix invalid nodes issue and leave 
+thereturn
+0 behavior", I have to add the following redundant code:
 
-I am really not sure why need this.  Roughly looking at MMU related patches this
-new config option is hardly used.  You have many code changes related to
-handling private/shared but they are not under this config option.
+  invalid:
+         pr_warn("HugeTLB: Invalid hugepages parameter %s\n", p);
++
++       /* Allocate gigantic hstates for successfully parsed parameters*/
++       if (hugetlb_max_hstate && hstate_is_gigantic(parsed_hstate))
++ hugetlb_hstate_alloc_pages(parsed_hstate);
++       last_mhp = mhp;
+return 0;
 
--- 
-Thanks,
--Kai
-
+Any ideas?
 

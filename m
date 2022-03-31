@@ -2,177 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33F04EDE14
+	by mail.lfdr.de (Postfix) with ESMTP id 27A864EDE12
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbiCaP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S239445AbiCaP6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234112AbiCaP5n (ORCPT
+        with ESMTP id S233278AbiCaP6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:57:43 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD80F101F0F;
-        Thu, 31 Mar 2022 08:55:55 -0700 (PDT)
+        Thu, 31 Mar 2022 11:58:44 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77A51F0837;
+        Thu, 31 Mar 2022 08:56:55 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 17so350469ljw.8;
+        Thu, 31 Mar 2022 08:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648742155; x=1680278155;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7FgYWF4J7bdb/TBEmXiYCMO6B69KOL67kC6P7Wxf7pg=;
-  b=DnTHvkugBg0y9BywYnlbyszj4LrmCy/YHgR31TNc75XfbikWCGHc1bHF
-   jJ3Zz7uuSBtmcaFaOxnp+fMTY1DzAQ/IioHvbGTmooow6mLWyOC3UOsIe
-   eBHAlejMxCCb+PM8eZJwRui+4rJj31lNmuG/rlgKKFZY+lXjldxgy13pi
-   k=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 Mar 2022 08:55:55 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 08:55:53 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 31 Mar 2022 08:55:53 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 31 Mar
- 2022 08:55:49 -0700
-Date:   Thu, 31 Mar 2022 11:55:47 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     <dan.j.williams@intel.com>, <willy@infradead.org>, <jack@suse.cz>,
-        <viro@zeniv.linux.org.uk>, <akpm@linux-foundation.org>,
-        <apopple@nvidia.com>, <shy828301@gmail.com>,
-        <rcampbell@nvidia.com>, <hughd@google.com>,
-        <xiyuyang19@fudan.edu.cn>, <kirill.shutemov@linux.intel.com>,
-        <zwisler@kernel.org>, <hch@infradead.org>,
-        <linux-fsdevel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <duanxiongchun@bytedance.com>, <smuchun@gmail.com>
-Subject: Re: [PATCH v5 0/6] Fix some bugs related to ramp and dax
-Message-ID: <YkXPA69iLBDHFtjn@qian>
-References: <20220318074529.5261-1-songmuchun@bytedance.com>
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=KxvZgz6hL7VJSgBkUh68HmLUc6RrDFibKDprz5pS9ck=;
+        b=XmgzZVBW/FQUUWM2JyAFM5UgAwSSkAaAFRZ23B29xwV3qEosExNQ9XFdUueqgRmceV
+         mYagYUESyK8stPscP97WnWXl9FhkpHIIgO2rpRDd4eEaDhpAY99XRHJqP8JqQl7Bu2P/
+         /CEPqo7gVlJehBHWq1WO9MVVhU3wYr3dGJ5CLkSfUc9mWG3pvJEnEDAKDnF90KNNYwQ7
+         0HejRLZGYDuNiEdOdWq427V2DmOvqXmc3Pp+PjA2pD229xmQITOZlHhucn1K6+Gy7vMS
+         Unw2/keqtK/QwnFHjeU68i8KRyLyQ06GJ2sTNdYWcC3zcbOy6gFA86g1DWLKzFWWdwCe
+         3KGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=KxvZgz6hL7VJSgBkUh68HmLUc6RrDFibKDprz5pS9ck=;
+        b=D7leKF2xF6HTcu1FyQ5wO/F4h7C8iSSOsM+hqVHITM6ACN+L45S545SMpwNyZl72u2
+         ERor84qEiqM4xSfPaXCkymSruinVPP0Y8RxGFrw3jp1qlbCmF/+K69KLrmQH2ufDNMuk
+         tg3x8Z8xaa9kSEv/97JwwvjGlLHzFLycSsmDXwIGwDoH88A+rTqX48ztmfuaBP8ggSMC
+         57HQRTTGmXdXsDK3GBMha6xzD4T7Rt8iSveILWKMeu+u8jTg9s8BRDLoWMPPXeQysbRO
+         BgWwguAdPJ0ZJgAkPa8UWTeD0HAhu6ZGCVeor1HNXjAaLZCuY2IE6UpLmwRZlAb4bPw3
+         4b1g==
+X-Gm-Message-State: AOAM532dp9hk1DlMV4yEAgRlsPql9XlWFKimd4AsNrq+26qr3efuDoUv
+        5GO4BuzoYnHBi7CWBAG3fUQ=
+X-Google-Smtp-Source: ABdhPJxiQKBkYN+HEsqJ45zmL5AhTq/ELypDRrWwMspKq8v1XmnxdyMNAp7obKvq+eIDx+R1K+y16g==
+X-Received: by 2002:a2e:a602:0:b0:249:93f8:b0f0 with SMTP id v2-20020a2ea602000000b0024993f8b0f0mr10865404ljp.10.1648742209343;
+        Thu, 31 Mar 2022 08:56:49 -0700 (PDT)
+Received: from [192.168.1.2] (235.132.246.94.ip4.artcom.pl. [94.246.132.235])
+        by smtp.googlemail.com with ESMTPSA id u12-20020a056512128c00b00446499f855dsm2705605lfs.78.2022.03.31.08.56.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 08:56:48 -0700 (PDT)
+Message-ID: <c4bcaff8-fbad-969e-ad47-e2c487ac02a1@gmail.com>
+Date:   Thu, 31 Mar 2022 17:55:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220318074529.5261-1-songmuchun@bytedance.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Robert Schlabbach <robert_s@gmx.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LMML <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Antti Palosaari <crope@iki.fi>
+From:   Piotr Chmura <chmooreck@gmail.com>
+Subject: [PATCH v3] si2157: unknown chip version Si2147-A30 ROM 0x50
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 03:45:23PM +0800, Muchun Song wrote:
-> This series is based on next-20220225.
-> 
-> Patch 1-2 fix a cache flush bug, because subsequent patches depend on
-> those on those changes, there are placed in this series.  Patch 3-4
-> are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
-> since the previous patch remove the usage of follow_invalidate_pte().
+Fix firmware file names assignment in si2157 tuner, allow for running 
+devices without firmware files needed.
 
-Reverting this series fixed boot crashes.
 
- KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
- Mem abort info:
-   ESR = 0x96000004
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
-   FSC = 0x04: level 0 translation fault
- Data abort info:
-   ISV = 0, ISS = 0x00000004
-   CM = 0, WnR = 0
- [dfff800000000003] address between user and kernel address ranges
- Internal error: Oops: 96000004 [#1] PREEMPT SMP
- Modules linked in: cdc_ether usbnet ipmi_devintf ipmi_msghandler cppc_cpufreq fuse ip_tables x_tables ipv6 btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq zstd_compress dm_mod nouveau crct10dif_ce drm_ttm_helper mlx5_core ttm drm_dp_helper drm_kms_helper nvme mpt3sas nvme_core xhci_pci raid_class drm xhci_pci_renesas
- CPU: 3 PID: 1707 Comm: systemd-udevd Not tainted 5.17.0-next-20220331-00004-g2d550916a6b9 #51
- pstate: 104000c9 (nzcV daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : __lock_acquire
- lr : lock_acquire.part.0
- sp : ffff800030a16fd0
- x29: ffff800030a16fd0 x28: ffffdd876c4e9f90 x27: 0000000000000018
- x26: 0000000000000000 x25: 0000000000000018 x24: 0000000000000000
- x23: ffff08022beacf00 x22: ffffdd8772507660 x21: 0000000000000000
- x20: 0000000000000000 x19: 0000000000000000 x18: ffffdd8772417d2c
- x17: ffffdd876c5bc2e0 x16: 1fffe100457d5b06 x15: 0000000000000094
- x14: 000000000000f1f1 x13: 00000000f3f3f3f3 x12: ffff08022beacf08
- x11: 1ffffbb0ee482fa5 x10: ffffdd8772417d28 x9 : 0000000000000000
- x8 : 0000000000000003 x7 : ffffdd876c4e9f90 x6 : 0000000000000000
- x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
- x2 : 0000000000000000 x1 : 0000000000000003 x0 : dfff800000000000
- Call trace:
-  __lock_acquire
-  lock_acquire.part.0
-  lock_acquire
-  _raw_spin_lock
-  page_vma_mapped_walk
-  try_to_migrate_one
-  rmap_walk_anon
-  try_to_migrate
-  __unmap_and_move
-  unmap_and_move
-  migrate_pages
-  migrate_misplaced_page
-  do_huge_pmd_numa_page
-  __handle_mm_fault
-  handle_mm_fault
-  do_translation_fault
-  do_mem_abort
-  el0_da
-  el0t_64_sync_handler
-  el0t_64_sync
- Code: d65f03c0 d343ff61 d2d00000 f2fbffe0 (38e06820)
- ---[ end trace 0000000000000000 ]---
- Kernel panic - not syncing: Oops: Fatal exception
- SMP: stopping secondary CPUs
- Kernel Offset: 0x5d8763da0000 from 0xffff800008000000
- PHYS_OFFSET: 0x80000000
- CPU features: 0x000,00085c0d,19801c82
- Memory Limit: none
- ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
-> 
-> v5:
-> - Collect Reviewed-by from Dan Williams.
-> - Fix panic reported by kernel test robot <oliver.sang@intel.com>.
-> - Remove pmdpp parameter from follow_invalidate_pte() and fold it into follow_pte().
-> 
-> v4:
-> - Fix compilation error on riscv.
-> 
-> v3:
-> - Based on next-20220225.
-> 
-> v2:
-> - Avoid the overly long line in lots of places suggested by Christoph.
-> - Fix a compiler warning reported by kernel test robot since pmd_pfn()
->   is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
-> - Split a new patch 4 for preparation of fixing the dax bug.
-> 
-> Muchun Song (6):
->   mm: rmap: fix cache flush on THP pages
->   dax: fix cache flush on PMD-mapped pages
->   mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
->   mm: pvmw: add support for walking devmap pages
->   dax: fix missing writeprotect the pte entry
->   mm: simplify follow_invalidate_pte()
-> 
->  fs/dax.c             | 82 +++++-----------------------------------------------
->  include/linux/mm.h   |  3 --
->  include/linux/rmap.h |  3 ++
->  mm/internal.h        | 26 +++++++++++------
->  mm/memory.c          | 81 +++++++++++++++------------------------------------
->  mm/page_vma_mapped.c | 16 +++++-----
->  mm/rmap.c            | 68 +++++++++++++++++++++++++++++++++++--------
->  7 files changed, 114 insertions(+), 165 deletions(-)
-> 
-> -- 
-> 2.11.0
-> 
+It's regression in kernel 5.17.0, worked fine in 5.16 series.
+
+device: 07ca:1871 AVerMedia Technologies, Inc. TD310 DVB-T/T2/C dongle
+modprobe gives error: unknown chip version Si2147-A30 ROM 0x50
+Device initialization is interrupted.
+
+caused by:
+1. table si2157_tuners has swapped fields rom_id and required vs struct 
+si2157_tuner_info.
+2. both firmware file names can be null for devices with required == 
+false - device uses build-in firmware in this case
+
+Fix:
+1. Rearrange fields in table si2157_tuners
+2. Allow both firmware file names be NULL for devices defined with 
+required == false
+
+
+Fixes: 1c35ba3bf972 ("media: si2157: use a different namespace for 
+firmware")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215726
+Link: 
+https://lore.kernel.org/lkml/5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info/ 
+
+Cc: stable@vger.kernel.org # 5.17.x
+Signed-off-by: Piotr Chmura <chmooreck@gmail.com>
+Tested-by: Robert Schlabbach <robert_s@gmx.net>
+
+---
+
+--- a/drivers/media/tuners/si2157.c    2022-03-20 21:14:17.000000000 +0100
++++ b/drivers/media/tuners/si2157.c    2022-03-22 23:48:05.604408331 +0100
+@@ -77,16 +77,16 @@ err_mutex_unlock:
+  }
+
+  static const struct si2157_tuner_info si2157_tuners[] = {
+-    { SI2141, false, 0x60, SI2141_60_FIRMWARE, SI2141_A10_FIRMWARE },
+-    { SI2141, false, 0x61, SI2141_61_FIRMWARE, SI2141_A10_FIRMWARE },
+-    { SI2146, false, 0x11, SI2146_11_FIRMWARE, NULL },
+-    { SI2147, false, 0x50, SI2147_50_FIRMWARE, NULL },
+-    { SI2148, true,  0x32, SI2148_32_FIRMWARE, SI2158_A20_FIRMWARE },
+-    { SI2148, true,  0x33, SI2148_33_FIRMWARE, SI2158_A20_FIRMWARE },
+-    { SI2157, false, 0x50, SI2157_50_FIRMWARE, SI2157_A30_FIRMWARE },
+-    { SI2158, false, 0x50, SI2158_50_FIRMWARE, SI2158_A20_FIRMWARE },
+-    { SI2158, false, 0x51, SI2158_51_FIRMWARE, SI2158_A20_FIRMWARE },
+-    { SI2177, false, 0x50, SI2177_50_FIRMWARE, SI2157_A30_FIRMWARE },
++    { SI2141, 0x60, false, SI2141_60_FIRMWARE, SI2141_A10_FIRMWARE },
++    { SI2141, 0x61, false, SI2141_61_FIRMWARE, SI2141_A10_FIRMWARE },
++    { SI2146, 0x11, false, SI2146_11_FIRMWARE, NULL },
++    { SI2147, 0x50, false, SI2147_50_FIRMWARE, NULL },
++    { SI2148, 0x32, true,  SI2148_32_FIRMWARE, SI2158_A20_FIRMWARE },
++    { SI2148, 0x33, true,  SI2148_33_FIRMWARE, SI2158_A20_FIRMWARE },
++    { SI2157, 0x50, false, SI2157_50_FIRMWARE, SI2157_A30_FIRMWARE },
++    { SI2158, 0x50, false, SI2158_50_FIRMWARE, SI2158_A20_FIRMWARE },
++    { SI2158, 0x51, false, SI2158_51_FIRMWARE, SI2158_A20_FIRMWARE },
++    { SI2177, 0x50, false, SI2177_50_FIRMWARE, SI2157_A30_FIRMWARE },
+  };
+
+  static int si2157_load_firmware(struct dvb_frontend *fe,
+@@ -178,7 +178,7 @@ static int si2157_find_and_load_firmware
+          }
+      }
+
+-    if (!fw_name && !fw_alt_name) {
++    if (required && !fw_name && !fw_alt_name) {
+          dev_err(&client->dev,
+              "unknown chip version Si21%d-%c%c%c ROM 0x%02x\n",
+              part_id, cmd.args[1], cmd.args[3], cmd.args[4], rom_id);
+

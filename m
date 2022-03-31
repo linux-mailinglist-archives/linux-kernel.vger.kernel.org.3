@@ -2,43 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F2D4ED485
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2DA4ED48E
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiCaHNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S231782AbiCaHOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbiCaHNE (ORCPT
+        with ESMTP id S231919AbiCaHNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:13:04 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DA30C6808;
-        Thu, 31 Mar 2022 00:11:06 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 007DF92009C; Thu, 31 Mar 2022 09:11:05 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id F125F92009B;
-        Thu, 31 Mar 2022 08:11:05 +0100 (BST)
-Date:   Thu, 31 Mar 2022 08:11:05 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-cc:     Arnd Bergmann <arnd@kernel.org>, Nikolai Zhubr <zhubr.2@gmail.com>,
-        Michal Necasek <mnecasek@yahoo.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/5] x86/PCI: Add $IRT PIRQ routing table support
-In-Reply-To: <alpine.DEB.2.21.2203301619340.22465@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2203302228410.9038@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2203301619340.22465@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 31 Mar 2022 03:13:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67515A76DA
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648710676; x=1680246676;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=6CabVoNmwAEsd554MEhEvFfgqk3O/jW7gNpjchS/f0Q=;
+  b=juf6+8oYVhpaS+av/ZbSB9DG7P93R3KwHcO08Z/fyDMlxF1hpgb+eXhm
+   dX/Hi5dcbZNzikT+WQ7nlEhG+JZ7ZD4dvWzFTMelNJnwdLDXW0zwSYbAi
+   RoqoxQCcJSkV+SKmWGO05PPKyU8Pufr/fC8AxA+/R9adbWAoTHcxeB52H
+   InMG4fid5oRWRJqyNxjr4XXUj2pp7w/Eeky8kM/EUTIBTNKa06kQnIPhP
+   UxYlKQ0HAbU8RBRrWHumNocLFs3HQcqGooRF07ZZIzCr69IN2BBcPR+ic
+   bb1R/e+9mp82+S75ML5QlpZhk/P7V/O1tdL6xdLVd/IzEjliXyu5pUtlv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="247239501"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="247239501"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 00:11:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="720330071"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2022 00:11:10 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 31 Mar 2022 00:11:10 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 31 Mar 2022 00:11:09 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 31 Mar 2022 00:11:09 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 31 Mar 2022 00:11:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RLvgrzYAvQ3LJv7gmkHMN/BFBYK69CqD5rJVeJlwvThIcJpM1/fUjUbxo4KS+vygtBiKCiOK9LGsIpdm7n83UP3gQFUyqa86FWZh5qxBeHerQ68r8SQ8YJRQjW6W4PhUBHB5wTGBEETs6CiTZCX9sNG4uDwYE4x+H+xj3/YxfAIy6Tw7o8mknxl+RMXt1iExKOE0hOg5lKeGWSJSpgtQmRsWAjy8IwqGONa8Omc+U2wNltjzhILgChhcxYSnozL7K3J9aAW223DtXJFzeiEJgXu1mgMMVLL3m7Fe/cOXbb8wpzJFpMbs1jxGzKK9+D6sp/nKycv0KR0b48IRt1eZrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6CabVoNmwAEsd554MEhEvFfgqk3O/jW7gNpjchS/f0Q=;
+ b=MWDUFCS4gqgrpTP4R1/ONl+PtzEAVqi/Jk76xJYLSdadrYO7SmjHaJt3r/kebuiwZvyopNNoVpGeN7/4rsh156UMNekm756ECby7WABNB+oOS2OoqJ0jVwColb7j9NV5Cqho2YFm8GRQmUcfTFaATnD+dyXdZyySJd2fl3hoehBW4zU+9dhOZQiWpjx+c/kLc6TurVaaLXMjnPpLyS0NgZJ3w877DVbJDJ3cWdGUQYJmQxs7yz/3u2Kjw1JxbvXB32jRfu5HoKnq8pzfLAlNJXcRMie46xM3fpew7ePdkX4CinKY9mh9EaLjHCSP1VeUcqyFR5wVJm75eK6flrD99w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
+ DM6PR11MB3563.namprd11.prod.outlook.com (2603:10b6:5:13e::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5123.18; Thu, 31 Mar 2022 07:11:07 +0000
+Received: from DM4PR11MB5549.namprd11.prod.outlook.com
+ ([fe80::6807:ff2e:9ac6:4d3c]) by DM4PR11MB5549.namprd11.prod.outlook.com
+ ([fe80::6807:ff2e:9ac6:4d3c%5]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
+ 07:11:07 +0000
+From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
+To:     Christoph Hellwig <hch@lst.de>, Zhi Wang <zhi.wang.linux@gmail.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        Zhi Wang <zhi.a.wang@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Jani Nikula" <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>
+Subject: Re: [PATCH v7 1/3] i915/gvt: Separate the MMIO tracking table from
+ GVT-g
+Thread-Topic: [PATCH v7 1/3] i915/gvt: Separate the MMIO tracking table from
+ GVT-g
+Thread-Index: AQHYQHGFbzTs9dpVNkulZ3C9zD1FsKzUXz0AgAS82gA=
+Date:   Thu, 31 Mar 2022 07:11:07 +0000
+Message-ID: <4af59d97-b583-4022-3ec3-360e7df43689@intel.com>
+References: <20220325175251.167164-1-zhi.a.wang@intel.com>
+ <20220328065008.GA29798@lst.de>
+In-Reply-To: <20220328065008.GA29798@lst.de>
+Accept-Language: en-FI, en-US
+Content-Language: aa
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 78f8422c-c4b9-4391-75f7-08da12e5a090
+x-ms-traffictypediagnostic: DM6PR11MB3563:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR11MB35639E438CE8168740F296E5CAE19@DM6PR11MB3563.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qytf5akx06EYdPJpubIt/3L5sY3pQsuDEj/ct+TbXKiaOK8uSojTPv38+6gpNSYthOQoXhNMY6Zri3S1BMcOgaIdtbOJC7iHwxOXPCwnuyB+Z4dwbspGTJ1N52V0Oou7kitdP5y1PfPwy2oF/ni9g9MS9U8ISDmkIFeaLz7T352M4kAkRTb+8G6aSJYIaKpQMzkjo95F/pPC6KKh4rV/xBhBzKvK99GJughjHl+OdEpMelSF/NSTPw1oClzJ1IHnTQfvy6Zl3czl5Kx7Zwyc/xgbAhLfbdjDvVHLIpQJkLb0Ke0bxilecAtz42Xtt/yHuKm1sJigtMcwXf81v5KUXXYuzfgAasWbTQw4npsibVqheTlOtFyJ1V+2yWsrOxtBXu6wdu/lnzHD6keZFF2Vd5A946fhM0TRNV6iQ+ig69RpCQ4Hz6KDpdHned8O2B4w3omgFCFySGe5KkdHtRgWLhyuMmMfmWXGsTOew1agNOqDN2iYqZPxU8+6qqjFidafg2309eMdZybHuiQxkKYxon5Ar87gDn29dYhAEYZBqscUN39b9cSjuGiAAKbSbBe1NpfL50o/cgv7PLCm7ZAPX0o2zJw3Qwr0aiHGybdU9qp6HbOTeoCJ1HRbs6SBuTjuXGgEDMHV6fjni3x8fqsNQ221a4oki9u6CFMm/2jPtZjHCNWwcjC+E6708YIWACRjupAoMAy+eUcpexLWhPY9k5e44N3QwLyLWD5Cm6gRecLv+E+uu41D/Ld3CCHSQ0sf9dlyXvhwUq7WaZXAj5eYTw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(122000001)(71200400001)(38100700002)(5660300002)(8936002)(7416002)(186003)(26005)(6486002)(86362001)(6512007)(6506007)(31686004)(53546011)(82960400001)(4744005)(36756003)(508600001)(38070700005)(83380400001)(54906003)(2616005)(316002)(66476007)(8676002)(4326008)(110136005)(76116006)(91956017)(31696002)(66556008)(64756008)(2906002)(66946007)(66446008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?+F/+oJ6491uBz1WryMuBO7xicFMlCyDrB4wYG6iIfYdNqvABodxbNE70?=
+ =?Windows-1252?Q?mHw6xU7vYzVK/gz6Ve1fJ4YAmgvkH4WokHVKBTF8VJwI6BRh6KFzeL2c?=
+ =?Windows-1252?Q?AAKJfOXSi49i1VWi5TkqiiDCT1SAu1pOSG26v22SHtFjGCysOl9h8N1O?=
+ =?Windows-1252?Q?MWlQeQdeErpuH3Fue9ECN+uk5UrgFxEej4YmPoXo9fGiekjmtjT34GyP?=
+ =?Windows-1252?Q?839+BrreuiRJYr/+U8kTTnguh8dfwjjTdESCRN+VZKqEZxIPTI2eYJZI?=
+ =?Windows-1252?Q?+kOluHugZ1Qv4k3jdjpBznMkw6GtIHz28U1u/eJvk7Dy9nk5C88MFpg6?=
+ =?Windows-1252?Q?A+GEaM2+nm/OL5iiwpBDbVan09oFUmdygKqAG50T5RUmIsKxHOkVozdq?=
+ =?Windows-1252?Q?9Qpoa4CIP6P5jMa158fThxUGE0vDfF2MyaJVXWhPTMWvc7AcjxqAAdb+?=
+ =?Windows-1252?Q?4fMjt6pYm6bE0WRst1vNxJeCVc8mtkaK+FvMZvQrIC8H68pziHpGWEGr?=
+ =?Windows-1252?Q?Ul6CU3USROMqnehocJaxOf5015bLigzfNesRm9erSC4vYXPs6ZOjjKR5?=
+ =?Windows-1252?Q?Wc65zR+aTpAp1zAmevtQgwSeggT6AEpX1AzrU8sAGFnJQlYKgvm3RZGB?=
+ =?Windows-1252?Q?jUsW03pRsFAzCH+nlj6kpKlnLD4X3ac0eVWxOakAC9NtXhGcCQKFhrhd?=
+ =?Windows-1252?Q?iFszs4Zc7ISchb1h7CuJFucqvL17qMwko0ASTFqBjyqcunzS5zdUxnMH?=
+ =?Windows-1252?Q?lG7UK16Q3LFUA31ltnvHJ0yp/oUmrituxvZiAUTYKlfcJoEsO2cGBZB6?=
+ =?Windows-1252?Q?oHy5CfuvcaGNMO9i6dQ81i1r5YkJGDHAwBL4+WzN9Vy15QEyHZidh0Qr?=
+ =?Windows-1252?Q?Cx4cK/3U9o1oly0sHaDo2YASqOGN2ztVMvWDipmZR5T1RULxbYXEIu1/?=
+ =?Windows-1252?Q?0B5xOXoEQRbjgfkWlRiftmhGICzdUm/TdhJrMZJmPXQzFgd3hD50LDLQ?=
+ =?Windows-1252?Q?pd5d9wE4nBIFKW+rTom83P6tCuseoY4xlSbk4ZP+9WFFxciHTd6BlJHx?=
+ =?Windows-1252?Q?y43nP0F9zrY+XsA3e5kh+/vz3xFEBPN3Dykpq+SDPveZDWSr6Ola4p0F?=
+ =?Windows-1252?Q?AeETyl1YWTV4VKJA5sqn6uSybPpjHinlVz8bDp1SPefes5tQxsIPZL4+?=
+ =?Windows-1252?Q?TWSD48755eNIfG5HVHWkXEraj1+EfRTb9gSaEgrsfRuMAPlX26Pd/xrt?=
+ =?Windows-1252?Q?k0h2yGlDhHxvguocn6OWyeaV0sateNtPEsHyXMGY0uF+ZKuTL7DKR/dF?=
+ =?Windows-1252?Q?9JPb6kkRuipZbfYkVNGNoaoSemmeOcBr1RhKoY3pPYESEvi03qAdHkY1?=
+ =?Windows-1252?Q?6hIwXSkHxW0t9/h9uNpMt90VhCUe7H64glvryCXCzwkdjaW4lt6gESsk?=
+ =?Windows-1252?Q?LahbnSuJtkiUYHR5NsF/UIxBbrTukv1XEa4BwZQt10CQsZThJr7mc8dB?=
+ =?Windows-1252?Q?xWCQWzJe9m1FB6UJht7LDRjWsD5gJKr3w/AJsv5WLr3e5jqw+dVVEvhR?=
+ =?Windows-1252?Q?C7qrtuY1NCt3Qzi0Rc17c4m3jn0FH2YbMx6eDkThw4AJrVb03frFTQOb?=
+ =?Windows-1252?Q?kZqvjh9EDTP3yK4MJsWeAQR9Te8XL82b3QDIKGCaTEBQspNyBWB3osIp?=
+ =?Windows-1252?Q?zPHdODOCH8xQyTWsfMUkaJNli8wUk8bIehz2XgdPpHRwNeYEJs+kM/J2?=
+ =?Windows-1252?Q?VHj8sfWN2wJo6zcf/bUMk21HLk0lRm6UPemOP7ynRq/oKSfKd6oqI4lf?=
+ =?Windows-1252?Q?NErBKKRoCtK8j0dxeYUxFn8TEln4U9DneBMRhfud5NckBiWGLtOACWKX?=
+ =?Windows-1252?Q?QZ/FMbu/xCcMPw=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <DF50EA2E7CE7304B8FD1F8DF3287D56F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78f8422c-c4b9-4391-75f7-08da12e5a090
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2022 07:11:07.6353
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FsK68QMXjWt3dk2FUm1HU8rTBbw/N8Rwx2A3b8uIKrGEzVXwJRa91AFQbiZSs9rbkULoOpCVeecpSYby6nOBeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3563
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,165 +173,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handle the $IRT PCI IRQ Routing Table format used by AMI for its BCP 
-(BIOS Configuration Program) external tool meant for tweaking BIOS 
-structures without the need to rebuild it from sources[1].
+Hi Jani and Joonas:
 
-The $IRT format has been invented by AMI before Microsoft has come up 
-with its $PIR format and a $IRT table is therefore there in some systems 
-that lack a $PIR table, such as the DataExpert EXP8449 mainboard based 
-on the ALi FinALi 486 chipset (M1489/M1487), which predates DMI 2.0 and 
-cannot therefore be easily identified at run time.
+Are you OK with these patches? I noticed I need to change the license of th=
+e new file. Will do that when check-in if you are OK with these.
 
-Unlike with the $PIR format there is no alignment guarantee as to the 
-placement of the $IRT table, so scan the whole BIOS area bytewise.
+Thanks,
+Zhi.
 
-Credit to Michal Necasek for helping me chase documentation for the 
-format.
+On 3/28/22 6:50 AM, Christoph Hellwig wrote:
+> On Fri, Mar 25, 2022 at 01:52:49PM -0400, Zhi Wang wrote:
+>>
+>> v7:
+>>
+>> - Keep the marcos of device generation in GVT-g. (Christoph, Jani)
+>=20
+> The changelog go under the "---" line (also for the other patches).
+>=20
+> Otherwise looks good:
+>=20
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>=20
 
-References:
-
-[1] "What is BCP? - AMI", <https://www.ami.com/what-is-bcp/>
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: Michal Necasek <mnecasek@yahoo.com>
----
-Changes from v3:
-
-- Correct the BIOS memory scan such as to verify that the PCI IRQ Routing
-  Table header as well as individual slot entries are all wholly contained 
-  within the BIOS memory area.
-
-- Following commit 5224f7909617 ("treewide: Replace zero-length arrays 
-  with flexible-array members") also make `slots' in `irt_routing_table' a 
-  flexible-array member.
-
-New change in v3.
----
- arch/x86/include/asm/pci_x86.h |    9 ++++
- arch/x86/pci/irq.c             |   76 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 85 insertions(+)
-
-linux-x86-pirq-irt.diff
-Index: linux-macro/arch/x86/include/asm/pci_x86.h
-===================================================================
---- linux-macro.orig/arch/x86/include/asm/pci_x86.h
-+++ linux-macro/arch/x86/include/asm/pci_x86.h
-@@ -93,6 +93,15 @@ struct irq_routing_table {
- 	struct irq_info slots[];
- } __attribute__((packed));
- 
-+struct irt_routing_table {
-+	u32 signature;			/* IRT_SIGNATURE should be here */
-+	u8 size;			/* Number of entries provided */
-+	u8 used;			/* Number of entries actually used */
-+	u16 exclusive_irqs;		/* IRQs devoted exclusively to
-+					   PCI usage */
-+	struct irq_info slots[];
-+} __attribute__((packed));
-+
- extern unsigned int pcibios_irq_mask;
- 
- extern raw_spinlock_t pci_config_lock;
-Index: linux-macro/arch/x86/pci/irq.c
-===================================================================
---- linux-macro.orig/arch/x86/pci/irq.c
-+++ linux-macro/arch/x86/pci/irq.c
-@@ -25,6 +25,8 @@
- #define PIRQ_SIGNATURE	(('$' << 0) + ('P' << 8) + ('I' << 16) + ('R' << 24))
- #define PIRQ_VERSION 0x0100
- 
-+#define IRT_SIGNATURE	(('$' << 0) + ('I' << 8) + ('R' << 16) + ('T' << 24))
-+
- static int broken_hp_bios_irq9;
- static int acer_tm360_irqrouting;
- 
-@@ -93,7 +95,74 @@ static inline struct irq_routing_table *
- 	return NULL;
- }
- 
-+/*
-+ * Handle the $IRT PCI IRQ Routing Table format used by AMI for its BCP
-+ * (BIOS Configuration Program) external tool meant for tweaking BIOS
-+ * structures without the need to rebuild it from sources.  The $IRT
-+ * format has been invented by AMI before Microsoft has come up with its
-+ * $PIR format and a $IRT table is therefore there in some systems that
-+ * lack a $PIR table.
-+ *
-+ * It uses the same PCI BIOS 2.1 format for interrupt routing entries
-+ * themselves but has a different simpler header prepended instead,
-+ * occupying 8 bytes, where a `$IRT' signature is followed by one byte
-+ * specifying the total number of interrupt routing entries allocated in
-+ * the table, then one byte specifying the actual number of entries used
-+ * (which the BCP tool can take advantage of when modifying the table),
-+ * and finally a 16-bit word giving the IRQs devoted exclusively to PCI.
-+ * Unlike with the $PIR table there is no alignment guarantee.
-+ *
-+ * Given the similarity of the two formats the $IRT one is trivial to
-+ * convert to the $PIR one, which we do here, except that obviously we
-+ * have no information as to the router device to use, but we can handle
-+ * it by matching PCI device IDs actually seen on the bus against ones
-+ * that our individual routers recognise.
-+ *
-+ * Reportedly there is another $IRT table format where a 16-bit word
-+ * follows the header instead that points to interrupt routing entries
-+ * in a $PIR table provided elsewhere.  In that case this code will not
-+ * be reached though as the $PIR table will have been chosen instead.
-+ */
-+static inline struct irq_routing_table *pirq_convert_irt_table(u8 *addr,
-+							       u8 *limit)
-+{
-+	struct irt_routing_table *ir;
-+	struct irq_routing_table *rt;
-+	u16 size;
-+	u8 sum;
-+	int i;
-+
-+	ir = (struct irt_routing_table *)addr;
-+	if (ir->signature != IRT_SIGNATURE || !ir->used || ir->size < ir->used)
-+		return NULL;
-+
-+	size = sizeof(*ir) + ir->used * sizeof(ir->slots[0]);
-+	if (size > limit - addr)
-+		return NULL;
-+
-+	DBG(KERN_DEBUG "PCI: $IRT Interrupt Routing Table found at 0x%lx\n",
-+	    __pa(ir));
-+
-+	size = sizeof(*rt) + ir->used * sizeof(rt->slots[0]);
-+	rt = kzalloc(size, GFP_KERNEL);
-+	if (!rt)
-+		return NULL;
-+
-+	rt->signature = PIRQ_SIGNATURE;
-+	rt->version = PIRQ_VERSION;
-+	rt->size = size;
-+	rt->exclusive_irqs = ir->exclusive_irqs;
-+	for (i = 0; i < ir->used; i++)
-+		rt->slots[i] = ir->slots[i];
-+
-+	addr = (u8 *)rt;
-+	sum = 0;
-+	for (i = 0; i < size; i++)
-+		sum += addr[i];
-+	rt->checksum = -sum;
- 
-+	return rt;
-+}
- 
- /*
-  *  Search 0xf0000 -- 0xfffff for the PCI IRQ Routing Table.
-@@ -120,6 +189,13 @@ static struct irq_routing_table * __init
- 		if (rt)
- 			return rt;
- 	}
-+	for (addr = bios_start;
-+	     addr < bios_end - sizeof(struct irt_routing_table);
-+	     addr++) {
-+		rt = pirq_convert_irt_table(addr, bios_end);
-+		if (rt)
-+			return rt;
-+	}
- 	return NULL;
- }
- 

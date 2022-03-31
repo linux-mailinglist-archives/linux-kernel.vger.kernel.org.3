@@ -2,119 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832DC4ED894
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245734ED899
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbiCaLhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S235241AbiCaLj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiCaLhG (ORCPT
+        with ESMTP id S232097AbiCaLjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:37:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0363A206EDC;
-        Thu, 31 Mar 2022 04:35:20 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B479E1F37D;
-        Thu, 31 Mar 2022 11:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648726518; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0iGRqDVWtIbClXX9jVOMp8RjR3wfp+eidE5p7MXuygs=;
-        b=eSREMlixUKn6FkfFx7u1sXdAW8YfxbXQ50cR770VPYQGAn1vhhuQOVHNRs+0p7rOT0z1z2
-        eAxqWj82Yt9i2/1Wl6gtsjymIYuNLpYZFT5Qv7KDDzAcVu+uwKE5w0U4rTjh0KYXb0G3gF
-        vcqGFJUs6orzHF0kMWDD30ruR+xl34s=
-Received: from suse.cz (unknown [10.100.201.86])
+        Thu, 31 Mar 2022 07:39:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52B0208247;
+        Thu, 31 Mar 2022 04:38:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4B8B2A3B87;
-        Thu, 31 Mar 2022 11:35:18 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 13:35:14 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, cgroups@vger.kernel.org,
-        Ke Wang <ke.wang@unisoc.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-Message-ID: <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz>
- <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8015961534;
+        Thu, 31 Mar 2022 11:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A86DC340ED;
+        Thu, 31 Mar 2022 11:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648726686;
+        bh=/jI8Y2KnjFMiq0vz5kPkp3upN5zf40lZ63WmlzK4JIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QmbXyl3x9opWS5I5HuQOfmYLg/S2gTYFf+btlwjkEb6OYK9x2eOjky/1VGHzeV3Yg
+         5Mht1VcgA+iUjho9ZlpOTynkhLoXqf2kWZAGWR1VZkMW4XqbdC9P5yRYlodsLrzAye
+         +yGquo1sdj/0AF0xWrDn/7acj7s1L23ljSAYStSM=
+Date:   Thu, 31 Mar 2022 13:38:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Won Chung <wonchung@google.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] misc/mei: Add NULL check to component match callback
+ functions
+Message-ID: <YkWSmvrEevLsyDH5@kroah.com>
+References: <20220331084918.2592699-1-wonchung@google.com>
+ <YkVtvhC0n9B994/A@kroah.com>
+ <YkV1KK8joyDAgf50@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YkV1KK8joyDAgf50@kuha.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > >
-> > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > by loading an special algorithm into its virtual address space and make it hard
-> > > to protect the expanded usage without userspace's interaction.
-> >
-> > Do I get it correctly that the concern you have is that you do not know
-> > how much memory your workload will need because that depends on some
-> > parameters?
-> right. such as a camera APP will expand the usage from 50MB to 500MB
-> because of launching a special function(face beauty etc need special
-> algorithm)
-> >
-> > > Furthermore, fixed
-> > > memory.low is a little bit against its role of soft protection as it will response
-> > > any system's memory pressure in same way.
-> >
-> > Could you be more specific about this as well?
-> As the camera case above, if we set memory.low as 200MB to keep the
-> APP run smoothly, the system will experience high memory pressure when
-> another high load APP launched simultaneously. I would like to have
-> camera be reclaimed under this scenario.
+On Thu, Mar 31, 2022 at 12:32:24PM +0300, Heikki Krogerus wrote:
+> On Thu, Mar 31, 2022 at 11:00:46AM +0200, Greg KH wrote:
+> > On Thu, Mar 31, 2022 at 08:49:18AM +0000, Won Chung wrote:
+> > > Component match callback functions need to check if expected data is
+> > > passed to them. Without this check, it can cause a NULL pointer
+> > > dereference when another driver registers a component before i915
+> > > drivers have their component master fully bind.
+> > 
+> > How can that happen in a real system?  Or does this just happen for when
+> > you are doing development and testing?
+> > 
+> > > 
+> > > Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+> > > Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+> > > Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Signed-off-by: Won Chung <wonchung@google.com>
+> > > Cc: stable@vger.kernel.org
+> > 
+> > Why does this need to go to stable?  How can this be triggered in older
+> > kernels?
+> > 
+> > > ---
+> > > Changes from v2:
+> > > - Correctly add "Suggested-by" tag
+> > > - Add "Cc: stable@vger.kernel.org"
+> > > 
+> > > Changes from v1:
+> > > - Add "Fixes" tag
+> > > - Send to stable@vger.kernel.org
+> > > 
+> > >  drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+> > >  drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+> > > index ec2a4fce8581..843dbc2b21b1 100644
+> > > --- a/drivers/misc/mei/hdcp/mei_hdcp.c
+> > > +++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+> > > @@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+> > >  {
+> > >  	struct device *base = data;
+> > >  
+> > > -	if (strcmp(dev->driver->name, "i915") ||
+> > > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+> > 
+> > How can base be NULL?
+> > 
+> > 
+> > >  	    subcomponent != I915_COMPONENT_HDCP)
+> > >  		return 0;
+> > >  
+> > > diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+> > > index f7380d387bab..e32a81da8af6 100644
+> > > --- a/drivers/misc/mei/pxp/mei_pxp.c
+> > > +++ b/drivers/misc/mei/pxp/mei_pxp.c
+> > > @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+> > >  {
+> > >  	struct device *base = data;
+> > >  
+> > > -	if (strcmp(dev->driver->name, "i915") ||
+> > > +	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+> > 
+> > Same here, shouldn't this be caught by the driver core or bus and match
+> > should not be called?
+> > 
+> > Why not fix this in the component/driver core instead?
+> 
+> A component is just a device that is declared to be a "component", and
+> the code that declares it as component does not have to be the driver
+> of that device. You simply can't assume that it's bind to a driver
+> like this function does.
+> 
+> In our case the "components" are USB ports, so devices that are never
+> bind to drivers.
 
-OK, so you effectivelly want to keep the memory protection when there is
-a "normal" memory pressure but want to relax the protection on other
-high memory utilization situations?
+And going off of the driver name is sane?  That feels ripe for bugs and
+problems in the future, but hey, I don't understand the need for this
+driver to care about another driver at all.
 
-How do you exactly tell a difference between a steady memory pressure
-(say stream IO on the page cache) from "high load APP launched"? Should
-you reduce the protection on the stram IO situation as well?
+And why is a USB device being passed to something that it thinks is a
+PCI device?  That too feels really wrong and ripe for problems.
 
-[...]
-> > One very important thing that I am missing here is the overall objective of this
-> > tuning. From the above it seems that you want to (ab)use memory->low to
-> > protect some portion of the charged memory and that the protection
-> > shrinks over time depending on the the global PSI metrict and time.
-> > But why this is a good thing?
-> 'Good' means it meets my original goal of keeping the usage during a
-> period of time and responding to the system's memory pressure. For an
-> android like system, memory is almost forever being in a tight status
-> no matter how many RAM it has. What we need from memcg is more than
-> control and grouping, we need it to be more responsive to the system's
-> load and could  sacrifice its usage  under certain criteria.
+thanks,
 
-Why existing tools/APIs are insufficient for that? You can watch for
-both global and memcg memory pressure including PSI metrics and update
-limits dynamically. Why is it necessary to put such a logic into the
-kernel?
-
--- 
-Michal Hocko
-SUSE Labs
+greg k-h

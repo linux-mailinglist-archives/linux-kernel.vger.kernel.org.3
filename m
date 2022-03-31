@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B59C4ED099
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0694ED0A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350294AbiCaAFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S1351969AbiCaAHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239470AbiCaAFK (ORCPT
+        with ESMTP id S229471AbiCaAHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:05:10 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95793B23
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:03:20 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso1880225pjh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eK3xgJsSbOj4248lrzJGbFEJ5CxyDIG0aIJkQ/5Fx3I=;
-        b=hjmOY7ws3z6W+WChFER7xW75B/O15SGRzs2GdsWRKER/RGDhs2J3uNG0K+gFINWJ0u
-         9eLaS7137Hc12CYSRt2eD0A+htyallhS2P+eh7M7C8a396pvzpEZYKqD9R6+9cvHNcCj
-         LG1wyJp288R7FfwIJsgdlrVSFKb1yk6ydvElVx+O/e/x4DTV8Q3yg76CG1qYzc95mlA4
-         YpTONsqY9K4aDKA8aKYIxaJ6cmKiX6qm9GnPQPCwRHya1xvVrxTtCpYtUxZIutHRf9Nc
-         B31bT/0tDe2j1rx7JLP43kUtpg68prkawVNJomrpgChAhndEv7sGJNrcm9KbrBo/ogjn
-         4CHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eK3xgJsSbOj4248lrzJGbFEJ5CxyDIG0aIJkQ/5Fx3I=;
-        b=3xLa1z73Qv7NZZDg9hwphaZa7awVyQ3CLKhKefvHLEoMRO4vApXuEAnpC94aEAXxIq
-         Op+pF+VL1/vFU/ExKAuJ2rMBL71loojCkNkn9zNnCZjnMq5C2FqsUf6+d93RtiZ+3HiI
-         KYmb1HwVDM3hnO9yZuglYYPewPXGwGwUpCKiP+dJMj3v7RGDyzhGKzY9GEElmNE3UX7T
-         LVuWiK0sipG1CKa7yUQCY4h1+76ZXDDp1fVKAkvWCmH3EjVfFnblN1B2tMJl/5RCXdTK
-         APS25NdF6GA4p9WXDvaW/YGsLPfm360xuQNKPnA1d/7RWGw0yuPO5KQ4juvvIIPp+8/y
-         KtPw==
-X-Gm-Message-State: AOAM530P5t8frPXmL1ytS/SPOD3lSYtcJQD+lABkhdkHPrNLMWsqB81i
-        UeL9lyWAxs2i0Ja4+Mqg7eHe5w==
-X-Google-Smtp-Source: ABdhPJwN8lzxcvtEVo0aBOLKhLyP+tIh/WZx3bv4PUw2Mm70wcCv0Dsb3UEsLqtSfYT+U4DQx5bBcQ==
-X-Received: by 2002:a17:902:d88a:b0:156:1609:1e62 with SMTP id b10-20020a170902d88a00b0015616091e62mr16346514plz.143.1648684999806;
-        Wed, 30 Mar 2022 17:03:19 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056a001a0300b004fa65cbbf4esm25563516pfv.63.2022.03.30.17.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 17:03:19 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 00:03:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
- TDX module
-Message-ID: <YkTvw5OXTTFf7j4y@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
- <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
- <20220314194513.GD1964605@ls.amr.corp.intel.com>
+        Wed, 30 Mar 2022 20:07:21 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2313313CF0;
+        Wed, 30 Mar 2022 17:05:33 -0700 (PDT)
+From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1648685129; bh=HXScMbGBfgV0fbImwE4gIcpKqpz7fQkb4L1fzYH+Fso=;
+        h=From:To:Cc:Subject:Date;
+        b=B0fRJWdALfz7GcETLruf1Gh/cLy3aSP/crDVyreGkMZfOtu6HnzaB4V9e/4lj23u6
+         ZaoczdY+elmFiZNsL+VSd+ioKCPFA5vbBqWIhIWskd4YdNeOjyMbdwvFsVgHEZr74/
+         JpiuhFfXnbAsgIxgDJvcF2+TMHBIyOzTwF6hFDMQ=
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
+Date:   Thu, 31 Mar 2022 02:04:44 +0200
+Message-Id: <20220331000449.41062-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314194513.GD1964605@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022, Isaku Yamahata wrote:
-> On Sun, Mar 13, 2022 at 03:03:40PM +0100,
-> Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
-> > On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> > > +
-> > > +	if (!tdx_module_initialized) {
-> > > +		if (enable_tdx) {
-> > > +			ret = __tdx_module_setup();
-> > > +			if (ret)
-> > > +				enable_tdx = false;
-> > 
-> > "enable_tdx = false" isn't great to do only when a VM is created.  Does it
-> > make sense to anticipate this to the point when the kvm_intel.ko module is
-> > loaded?
-> 
-> It's possible.  I have the following two reasons to chose to defer TDX module
-> initialization until creating first TD.  Given those reasons, do you still want
-> the initialization at loading kvm_intel.ko module?  If yes, I'll change it.
+Hi,
 
-Yes, TDX module setup needs to be done at load time.  The loss of memory is
-unfortunate, e.g. if the host is part of a pool that _might_ run TDX guests, but
-the alternatives are worse.  If TDX fails to initialize, e.g. due to low mem,
-then the host will be unable to run TDX guests despite saying "I support TDX".
-Or this gem :-)
+I put together a machine-level ASoC driver for recent Apple Macs (the
+ones with ARM64 SoCs) and want to gauge opinions.
 
-	/*
-	 * TDH.SYS.KEY.CONFIG may fail with entropy error (which is
-	 * a recoverable error).  Assume this is exceedingly rare and
-	 * just return error if encountered instead of retrying.
-	 */
+Commit 1 is the binding. It is some subset of simple-audio-card with
+the extra distinction of allowing multiple CPU/CODEC DAIs per a DAI
+link. I want to draw special attention to the issue of describing
+speaker topologies. The way it now works is that the driver expects
+the speakers to be declared in a fixed order in the sound-dai= list.
+This populates a topology the driver expects on a particular machine
+model. Mark (in CC) has made the suggestion of keeping the topology
+descriptions with the codec nodes themselves in some generic manner,
+akin to how sound-name-prefix= already helps identify codecs to the
+user.
 
-The CPU overhead of initializing the TDX module is also non-trivial, and it
-doesn't affect just this CPU, e.g. all CPUs need to do certain SEAMCALLs and at
-least one WBINVD.  The can cause noisy neighbor problems.
+Commit 2 adds a new ASoC card method (filter_controls) to let the card
+prevent some codec kcontrols from being visible to userspace. For example
+the TAS2770 speaker amp driver would be happy to expose TDM slot selection
+and ISENSE/VSENSE enables which is ridiculous. I am all ears on how to
+make the patch acceptable to upstream.
 
-> - memory over head: The initialization of TDX module requires to allocate
-> physically contiguous memory whose size is about 0.43% of the system memory.
-> If user don't use TD, it will be wasted.
-> 
-> - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
-> (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
-> guest does it.  It naturally fits with the TDX module initialization at creating
-> first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
+Commit 3 makes ASoC tolerate N-to-M DAI links, not sure what the right
+(simple) approach should be there. Commit 4 adds some utility function
+and commit 5 is the driver itself.
 
-That's a solvable problem, though making it work without exporting hardware_enable_all()
-could get messy.
+Let me know what you think.
+
+Martin
+
+Martin Povišer (5):
+  dt-bindings: sound: Add Apple Macs sound system
+  HACK: ASoC: Add card->filter_controls hook
+  HACK: ASoC: Tolerate N-cpus-to-M-codecs links
+  ASoC: Introduce snd_soc_of_get_dai_link_cpus
+  ASoC: Add macaudio machine driver
+
+ .../bindings/sound/apple,macaudio.yaml        | 103 +++
+ include/sound/soc.h                           |   7 +
+ sound/soc/apple/Kconfig                       |  10 +
+ sound/soc/apple/Makefile                      |   3 +
+ sound/soc/apple/macaudio.c                    | 597 ++++++++++++++++++
+ sound/soc/soc-core.c                          | 125 +++-
+ sound/soc/soc-dapm.c                          |  34 +-
+ sound/soc/soc-pcm.c                           |   3 +
+ 8 files changed, 860 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/apple,macaudio.yaml
+ create mode 100644 sound/soc/apple/Kconfig
+ create mode 100644 sound/soc/apple/Makefile
+ create mode 100644 sound/soc/apple/macaudio.c
+
+-- 
+2.33.0
+

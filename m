@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027A14EE376
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB024EE377
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241987AbiCaVvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S241794AbiCaVyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241969AbiCaVvh (ORCPT
+        with ESMTP id S233991AbiCaVyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:51:37 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FD15EBE0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:49:49 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so2042990ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:49:49 -0700 (PDT)
+        Thu, 31 Mar 2022 17:54:44 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D58231AC1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:52:56 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id j15so2003607eje.9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:52:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=M+AgZQKUqsq1+AnGBtVl0q4kI8qPtf+1eQPHxbS6XOY=;
-        b=a8QlGEuODtv7dv6tAXvEwp/hJmqzAXzu3j8YvyRaRz+AGeH4Ax4n7TL8vntDeIee1T
-         nvp8i8+M7TMbyEv/5n9PURopEXrSB4OEgv6cu0VMMubbQSgnU4tt+6wg3IVam5gMyLID
-         gObWZhKryebIn9UjSVEPp8764IumrJQi/+zy0QPzAaz7EjkZGgF4dDu/5ep2a7Tqty1i
-         fDvCq1nljLV/mhqmBz2NWO5J29QjoaouoQYEPnofuI1AfbDTorotYY6+Ppk6aGwE1YT0
-         /hcQyFxogsc31xpTXYKAAoPGIVKE2+JBXY64uVMNBdyMe+o7RcJEbz2uDgqisO5Tv6ig
-         6KLg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7WvWGnp8e2+ZYg4JNgLcns/TOfiaFHz5BOyp+VBRH4=;
+        b=lTyVqB+Zc0e84QnpugtFoYsU6sl7K9xjMJMkDzI/2MY0BSJekhavkyJQoQveEAWCdU
+         U/29yUBVpmdYDctiBtXhoEYWP97aqmJaRfvJx/8zju1ldkj8caD+VGEQPmdRLcJPDfN3
+         TzTBYCAxHgI0B99roIcLtlO2DXlv/SBgb11EHj0mpaudvCBRHBjt5HznTGbG92ak7BsM
+         G6+xpDaBUobsstl3W8YTkgsQgbjsRot9Mkm4cRA8sWE2qbZPxCRxM6BqHi6Y/Tegc2Xa
+         etQ78axO6I3D6qHS40dFndrk8PBpMN7wIudlaPGoTn/5TpyC4bAis2zdx9DTjQURPGeZ
+         AR7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=M+AgZQKUqsq1+AnGBtVl0q4kI8qPtf+1eQPHxbS6XOY=;
-        b=ICS2AMvBTOvGoZHCAuwrtPUrSZeDe/AgikxpDQ+M5t9045TCe33ZJgFtBLZI+69zRA
-         Ub8hVbbkNSjs0Jtu0F14/Kq9fMin2zRgbCU9u9rFr/80hy4ZZdoT2kEWnBgJg4nZMHDe
-         VOVmycVroY3Cl/VvBYn4vF96tl2NCfJk8UlHcpWp5HicFw/qdd/3tiekb4/RCw4YXqIN
-         PyD4q7QtMRnI4jrYKvHIhoNReR98VkKlG1VJi9PGr3gjVRgopLmuRbCmqtauy8gLNo9J
-         2k2cpv20mNM2RGQC4BoEUs2oKM8Jbj9AVqTnnquGKqF46P0buTKNtG3xMaAxXynSdDG9
-         mahA==
-X-Gm-Message-State: AOAM530bq4WZdNlqLiPYRPd82N5DdEe+l5PW5zY/3X7VuGCmE5NUfSFe
-        EUBIF9TSAYuTwzR9eJbGfwU=
-X-Google-Smtp-Source: ABdhPJy3q6eQ1vwita+F9yugcGNCCiJ/l7XGlqcR9ZMt4+x3aGUEAtAQsxv2gnBH05HSNmNDlAqSzA==
-X-Received: by 2002:a17:907:da7:b0:6df:9ff4:10c7 with SMTP id go39-20020a1709070da700b006df9ff410c7mr6609920ejc.106.1648763387998;
-        Thu, 31 Mar 2022 14:49:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7WvWGnp8e2+ZYg4JNgLcns/TOfiaFHz5BOyp+VBRH4=;
+        b=R6rgO5NWHp38IaHXvZxaGc/eH3vgHqV8oTZGH0CCUUVio42M6QDEalwcNuUWw8bp36
+         2UcdRFfOzUKpPt7/tmh2Gl2MRlv6kBkN4eXMw9xYtLPx58AAqag2HIG7XG29IdA5WELj
+         ztXhZx7XjEjElLfBtvThp2yiFX7h4W+ruBTPTjvRW2rE0z2FUUc7U8FGiQmZ3gA5S88l
+         kp+l4q9ak+T7eQXGYRDU8BXacX6cIIvcUrMUGV/yisiTTCooXduC5MvFlrW8L2KADi2M
+         kwMjxLxfnKUv8XMwjF30PDl1XIscxwDIbpHKQaq8vn5Kk3RaN5SbosHp6v8Zrpvk5vrT
+         TRPg==
+X-Gm-Message-State: AOAM531AzDRXxqJ1b0HBtgZ2UHtNnt9cdwC3MvQKs2+PA9gLTeOWPrRk
+        a8F3+tP1tcuyMIrYCO+arus=
+X-Google-Smtp-Source: ABdhPJwI7ID3mvkG8QYmKxcyThluj0R006fho7SSsOjVN+yoz3BWnxu+1Aod9ibwGRMZdf+o4SIDLg==
+X-Received: by 2002:a17:906:e4c:b0:6e0:b002:2b2e with SMTP id q12-20020a1709060e4c00b006e0b0022b2emr6627609eji.690.1648763575022;
+        Thu, 31 Mar 2022 14:52:55 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id b8-20020a056402350800b00419407f0dd9sm311698edd.0.2022.03.31.14.49.47
+        by smtp.googlemail.com with ESMTPSA id g20-20020aa7c594000000b004194b07bbfasm299980edq.10.2022.03.31.14.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 14:49:47 -0700 (PDT)
+        Thu, 31 Mar 2022 14:52:54 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Mike Rapoport <rppt@kernel.org>,
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH 3/3] ARM: mmp: remove check of list iterator against head past the loop body
-Date:   Thu, 31 Mar 2022 23:47:19 +0200
-Message-Id: <20220331214719.881886-3-jakobkoschel@gmail.com>
+Subject: [PATCH 1/3] ASoC: Intel: catpt: remove check of list iterator against head past the loop body
+Date:   Thu, 31 Mar 2022 23:50:01 +0200
+Message-Id: <20220331215003.882143-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220331214719.881886-1-jakobkoschel@gmail.com>
-References: <20220331214719.881886-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,45 +96,50 @@ based on the head element, either with list_entry_is_head() or
 &pos->member == head, using the iterator variable after the loop should
 be avoided.
 
-In preparation to limit the scope of a list iterator to the list
+In preparation to limiting the scope of a list iterator to the list
 traversal loop, use a dedicated pointer to point to the found element [1].
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- arch/arm/mach-mmp/sram.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ sound/soc/intel/catpt/pcm.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
-index ecc46c31004f..f0c175903c41 100644
---- a/arch/arm/mach-mmp/sram.c
-+++ b/arch/arm/mach-mmp/sram.c
-@@ -39,19 +39,22 @@ static LIST_HEAD(sram_bank_list);
- struct gen_pool *sram_get_gpool(char *pool_name)
+diff --git a/sound/soc/intel/catpt/pcm.c b/sound/soc/intel/catpt/pcm.c
+index a26000cd5ceb..b103b2d4026e 100644
+--- a/sound/soc/intel/catpt/pcm.c
++++ b/sound/soc/intel/catpt/pcm.c
+@@ -330,7 +330,8 @@ static int catpt_dai_apply_usettings(struct snd_soc_dai *dai,
+ 				     struct catpt_stream_runtime *stream)
  {
- 	struct sram_bank_info *info = NULL;
-+	struct sram_bank_info *iter;
+ 	struct snd_soc_component *component = dai->component;
+-	struct snd_kcontrol *pos;
++	struct snd_kcontrol *pos = NULL;
++	struct snd_kcontrol *iter;
+ 	struct catpt_dev *cdev = dev_get_drvdata(dai->dev);
+ 	const char *name;
+ 	int ret;
+@@ -354,12 +355,14 @@ static int catpt_dai_apply_usettings(struct snd_soc_dai *dai,
+ 		return 0;
+ 	}
  
- 	if (!pool_name)
- 		return NULL;
- 
- 	mutex_lock(&sram_lock);
- 
--	list_for_each_entry(info, &sram_bank_list, node)
--		if (!strcmp(pool_name, info->pool_name))
-+	list_for_each_entry(iter, &sram_bank_list, node)
-+		if (!strcmp(pool_name, iter->pool_name)) {
-+			info = iter;
+-	list_for_each_entry(pos, &component->card->snd_card->controls, list) {
+-		if (pos->private_data == component &&
+-		    !strncmp(name, pos->id.name, sizeof(pos->id.name)))
++	list_for_each_entry(iter, &component->card->snd_card->controls, list) {
++		if (iter->private_data == component &&
++		    !strncmp(name, iter->id.name, sizeof(iter->id.name))) {
++			pos = iter;
  			break;
 +		}
+ 	}
+-	if (list_entry_is_head(pos, &component->card->snd_card->controls, list))
++	if (!pos)
+ 		return -ENOENT;
  
- 	mutex_unlock(&sram_lock);
- 
--	if (&info->node == &sram_bank_list)
-+	if (!info)
- 		return NULL;
- 
- 	return info->gpool;
+ 	if (stream->template->type != CATPT_STRM_TYPE_LOOPBACK)
+
+base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
 -- 
 2.25.1
 

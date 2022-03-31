@@ -2,72 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DF94EE15D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38F84EE163
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235041AbiCaTIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        id S239582AbiCaTJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239928AbiCaTIC (ORCPT
+        with ESMTP id S234157AbiCaTJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:08:02 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD82220FC8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:06:14 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id w28-20020a05660205dc00b00645d3cdb0f7so320093iox.10
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:06:14 -0700 (PDT)
+        Thu, 31 Mar 2022 15:09:49 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B709821C727
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:08:00 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id ke15so303401qvb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3OVG7rRs2TdxNhin07a4J/J4tSbwW3zVKWCQEqpy4T0=;
+        b=RG4lduE77Jx8ZvyFt0EEudaFQPE1BG1QemD1WbZ9kW59cgVUqy0SCXMOSppS+G6cVf
+         cxktuXi0BZS0Tx2g7D5YSybqxaGh43sibMhPHWEp+pI1F9ZrBxIKh8ykoQvHOKyatXvi
+         O83/FHYqSuuR0U8E17Cc4cdXkpTR6pEf2jFCoCT7d88iTIOd+dNKFkCcAYW9QHVsQFtZ
+         K7yZlpPoEdc/+L/xsgIOY3A4kPPItFYk+hrCwGpVsIebdDQErh3Bi962ANb6E/rDZx2o
+         Rp+I8NRtEKfZAPWAMQpiN91TqH2SD1pTEFUNOiyi1jSOg0G78Ifnrn76h8iD1lTxDKk2
+         ZFDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=r/0Q/v7LxnQii6Wat+1eXZLZ1gIDdS2hR5mCVVjGKVU=;
-        b=iwCKKCzo/n7DAzb8RvWrbmQoCKd8lG7d9fC3DXS7KKgWKChVX/ATM+clWEoCnUcVgS
-         DeSXBAz8dnvQPUsKvstiIxkiDlu+qYlSVaVshwLernFgwaxrf5Bi7fHyVH6doXoCOPII
-         cSmWUIYypvAYqDaGnb7+pGiEdHpCQZLT8VNqX6wlSQ3wQ34A2J/ixFrimtBwCWl4xUIk
-         oQ+0an7fy9uGP48bDcG2uZxR8BCVQoFxS/DjGD0+RNp+s/qcfz+hooA8Qo+GF/jEc1So
-         7XlmKSV843FdbPNTMGpziny2Jrt0eppCyGx6J2chjwsr45EuzgYPJ6wh7jUL/7hoqo2p
-         heCw==
-X-Gm-Message-State: AOAM531giv0vUjVJJNxJG1mm4vM0BSpBlURYHocHwZE7ARNbVFs+vvG7
-        Ca+G63WJwkkY6GPUJLIsF4u1g1/4D3cCnKKgUb/vndG4DJwX
-X-Google-Smtp-Source: ABdhPJxhLwKFZ45jya0LVhjew/uXFv5NxVPTM0yGlD2OYJVrGpYWtkpe4WTktB5ooY57V7udWcsSpk1vZJPjYdvTK/6ygZ7oJpx1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3OVG7rRs2TdxNhin07a4J/J4tSbwW3zVKWCQEqpy4T0=;
+        b=0OQjeMls1ZMPIsQQ8DeqQQxXhm+7PnHCOPSXDYKijfhIt23+hSFscPzvNGvsXkIvON
+         fZUEM3QkEcGSmwrrP7X65His9TETeCWT4PzA/yfT1DylNBVglNYUAdf3SB2f+qKo11y+
+         7U5yw+QJKBcikpM6tvCFgZpMrkvzCsO7aO76ya7pooko09NEBYMizyQ4F5EhTGqbL6l8
+         qaprcao1M3MtinAmKryKLHxMwtQR8la3WYNtzdWDz/W/wvGrwMfSpJzULsl/rn2X+oNa
+         3snAdDpQ9ck2K/G2dFS3D0wCB14gUAvajt4/4P1CVwi89c9MbB+3Mmfh1/BfMjBTz085
+         b6rg==
+X-Gm-Message-State: AOAM530Qgwt6KVziIKDD8wL0Vj4rVQpt6kAkTegtHnkuflGLD4TJ3Rok
+        fZ8K3BdoPy+lvy4JlXuRgTvV8A==
+X-Google-Smtp-Source: ABdhPJyZsiZ6vcPqXb9JIU/bdKv1RqimR5mlcEfT2c6Phpz4SDQIQ6ZLZZoYSIFpXtcU9pAJJXVoNg==
+X-Received: by 2002:a05:6214:766:b0:441:a5df:8ace with SMTP id f6-20020a056214076600b00441a5df8acemr5388121qvz.87.1648753679514;
+        Thu, 31 Mar 2022 12:07:59 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id b29-20020a05620a271d00b0067e0c273331sm78539qkp.111.2022.03.31.12.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:07:58 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 15:07:58 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     CGEL <cgel.zte@gmail.com>, axboe@kernel.dk,
+        viro@zeniv.linux.org.uk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        akpm@linux-foundation.org, Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
+ for file pages
+Message-ID: <YkX8DvWkYhBoSv+m@cmpxchg.org>
+References: <623938d1.1c69fb81.52716.030f@mx.google.com>
+ <YjnO3p6vvAjeMCFC@cmpxchg.org>
+ <20220323061058.GA2343452@cgel.zte@gmail.com>
+ <62441603.1c69fb81.4b06b.5a29@mx.google.com>
+ <YkRUfuT3jGcqSw1Q@cmpxchg.org>
+ <YkRVSIG6QKfDK/ES@infradead.org>
+ <YkR7NPFIQ9h2AK9h@cmpxchg.org>
+ <YkR9IW1scr2EDBpa@infradead.org>
+ <YkSChWxuBzEB3Fqn@cmpxchg.org>
+ <YkU49BQ4rPheOG0f@infradead.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b10f:0:b0:323:9bba:a956 with SMTP id
- r15-20020a02b10f000000b003239bbaa956mr3701828jah.313.1648753574205; Thu, 31
- Mar 2022 12:06:14 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 12:06:14 -0700
-In-Reply-To: <7f56f140-ecf0-d72b-b891-171a0aaf21ca@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ce19705db885baa@google.com>
-Subject: Re: [syzbot] KASAN: null-ptr-deref Write in io_file_get_normal
-From:   syzbot <syzbot+c4b9303500a21750b250@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkU49BQ4rPheOG0f@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 30, 2022 at 10:15:32PM -0700, Christoph Hellwig wrote:
+> On Wed, Mar 30, 2022 at 12:17:09PM -0400, Johannes Weiner wrote:
+> > It's add_to_page_cache_lru() that sets the flag.
+> > 
+> > Basically, when a PageWorkingset (hot) page gets reclaimed, the bit is
+> > stored in the vacated tree slot. When the entry is brought back in,
+> > add_to_page_cache_lru() transfers it to the newly allocated page.
+> 
+> Ok.  In this case my patch didn't quite do the right thing for readahead
+> either.  But that does leave a question for the btrfs compressed
+> case, which only adds extra pages to a read to readahad a bigger
+> cluster size - that is these pages are not read at the request of the
+> VM.  Does it really make sense to do PSI accounting for them in that
+> case?
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+I think it does.
 
-Reported-and-tested-by: syzbot+c4b9303500a21750b250@syzkaller.appspotmail.com
+I suppose it's an argument about readahead pages in general, which
+technically the workload itself doesn't commission explicitly. But
+those pages are still triggered by a nearby access, their reads
+contribute to device utilization, and if they're PageWorkingset it
+means they're only being read because there is a lack of memory.
 
-Tested on:
-
-commit:         9570a845 Merge branch 'for-5.18/io_uring' into for-next
-git tree:       git://git.kernel.dk/linux-block for-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6a82c1abd4cbb9ee
-dashboard link: https://syzkaller.appspot.com/bug?extid=c4b9303500a21750b250
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+In a perfect world, readahead would stop when memory or IO are
+contended. But it doesn't, and the stalls it can inject into the
+workload are as real as stalls from directly requested reads.

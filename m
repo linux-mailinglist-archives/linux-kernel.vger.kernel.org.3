@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4A14ED10C
+	by mail.lfdr.de (Postfix) with ESMTP id 923C74ED10D
 	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352145AbiCaAwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S1352157AbiCaAwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiCaAwk (ORCPT
+        with ESMTP id S1352142AbiCaAwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:52:40 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36032E005;
-        Wed, 30 Mar 2022 17:50:52 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 31 Mar 2022 09:50:52 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 7C28D2058443;
-        Thu, 31 Mar 2022 09:50:52 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 31 Mar 2022 09:50:52 +0900
-Received: from [10.212.183.63] (unknown [10.212.183.63])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 9083BB62B7;
-        Thu, 31 Mar 2022 09:50:51 +0900 (JST)
-Subject: Re: [PATCH v3 5/5] dt-bindings: phy: uniphier: Clean up clocks,
- resets, and their names using compatible string
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648637715-19262-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648637715-19262-6-git-send-email-hayashi.kunihiko@socionext.com>
- <a784ed61-965a-5c68-c2dd-3340cf18c7b5@linaro.org>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <d32191fc-1302-89e4-8b24-40fe33867b98@socionext.com>
-Date:   Thu, 31 Mar 2022 09:50:51 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <a784ed61-965a-5c68-c2dd-3340cf18c7b5@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 30 Mar 2022 20:52:41 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C66059A64;
+        Wed, 30 Mar 2022 17:50:55 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-df0940c4eeso10355981fac.8;
+        Wed, 30 Mar 2022 17:50:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=A66b4EUBSg5Uy8yfSHgRx+FsA0tOVWffGvkQxaTSXa4=;
+        b=WmRm68LeHN10i8196Y/jNuk251oR07iYWyACCbDS3j4GKdDBhduUb7DvcbA4DEQ3Zb
+         plZoyiWe2vterHZUZqxWeW600442easL6+IWX2WXsP9B/vHpfb7K8i8bqGuW74zEibGQ
+         8SVS7aLRagDtM6kW5WfnxwGmMfi8vHrID3c3LnTdOyESbJ5io6PmrqdeqNyQjZ+Hkv8c
+         q+nu+8q+r4Ml4JkW0Ml8FlRmS4FGRghfnz6Ea2OtB4DpFT9Y9Ti+kGn8kOUP+FNR1Tro
+         80wvXwvW518peULjj8/rpxbnG8boXZ0E2gJ0xb/2JjKNRrXPmIRSzZZPW3eQQlOCSl8h
+         YOAw==
+X-Gm-Message-State: AOAM532RsCpl5bk3s1H0QJNvkpdeGrbA5mWl2oUcJcqa2NlSdQbpB0h7
+        akQSYfBZuZuZ8PcLtOGVKvKYNB5yHQ==
+X-Google-Smtp-Source: ABdhPJy+MIlGWczbPgmzwI4IOf+RWSip/f9hsK3bXG7yz7sjaQp7VehJM3ItEfIvE3um0TqWR73I2A==
+X-Received: by 2002:a05:6870:c58f:b0:da:b3f:2b69 with SMTP id ba15-20020a056870c58f00b000da0b3f2b69mr1386894oab.264.1648687854353;
+        Wed, 30 Mar 2022 17:50:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a15-20020a056870000f00b000de1ab6364dsm10660771oaa.49.2022.03.30.17.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 17:50:53 -0700 (PDT)
+Received: (nullmailer pid 3984300 invoked by uid 1000);
+        Thu, 31 Mar 2022 00:50:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     sanjayc@nvidia.com, devicetree@vger.kernel.org,
+        ksitaraman@nvidia.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, linux-tegra@vger.kernel.org,
+        krzk+dt@kernel.org, rafael@kernel.org, jonathanh@nvidia.com,
+        linux-pm@vger.kernel.org, bbasu@nvidia.com, treding@nvidia.com,
+        viresh.kumar@linaro.org
+In-Reply-To: <20220330143819.27476-3-sumitg@nvidia.com>
+References: <20220330143819.27476-1-sumitg@nvidia.com> <20220330143819.27476-3-sumitg@nvidia.com>
+Subject: Re: [Patch v2 2/4] dt-bindings: arm: tegra: Add bindins for nvidia,tegra-ccplex-cluster
+Date:   Wed, 30 Mar 2022 19:50:53 -0500
+Message-Id: <1648687853.036468.3984299.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,267 +63,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 2022/03/31 2:40, Krzysztof Kozlowski wrote:
-> On 30/03/2022 12:55, Kunihiko Hayashi wrote:
->> Instead of "oneOf:" choices, use "allOf:" and "if:" to define clocks,
->> clock-names, resets, and reset-names that can be taken by the compatible
->> string.
->>
->> The order of clock-names and reset-names doesn't change here.
->>
->> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> ---
->>   .../phy/socionext,uniphier-ahci-phy.yaml      | 90 +++++++++++++-----
->>   .../phy/socionext,uniphier-pcie-phy.yaml      | 47 ++++++---
->>   .../phy/socionext,uniphier-usb3hs-phy.yaml    | 93 ++++++++++++++----
->>   .../phy/socionext,uniphier-usb3ss-phy.yaml    | 95 +++++++++++++++----
->>   4 files changed, 251 insertions(+), 74 deletions(-)
->>
+On Wed, 30 Mar 2022 20:08:17 +0530, Sumit Gupta wrote:
+> The Tegra CCPLEX_CLUSTER area contains memory-mapped
+> registers that initiate CPU frequency/voltage transitions.
 > 
-> (...)
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
 > 
->> diff --git
->> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->> index 1bbd164f2527..21e4414eea60 100644
->> ---
->> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->> +++
->> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->> @@ -34,30 +34,12 @@ properties:
->>       minItems: 2
->>       maxItems: 3
->>
->> -  clock-names:
->> -    oneOf:
->> -      - items:               # for Pro5
->> -          - const: gio
->> -          - const: link
->> -      - items:               # for PXs3 with phy-ext
->> -          - const: link
->> -          - const: phy
->> -          - const: phy-ext
->> -      - items:               # for others
->> -          - const: link
->> -          - const: phy
->> +  clock-names: true
->>
->>     resets:
->>       maxItems: 2
->>
->> -  reset-names:
->> -    oneOf:
->> -      - items:               # for Pro5
->> -          - const: gio
->> -          - const: link
->> -      - items:               # for others
->> -          - const: link
->> -          - const: phy
->> +  reset-names: true
->>
->>     vbus-supply:
->>       description: A phandle to the regulator for USB VBUS
->> @@ -80,6 +62,77 @@ properties:
->>         required for each port, if any one is omitted, the trimming data
->>         of the port will not be set at all.
->>
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: socionext,uniphier-pro5-usb3-hsphy
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 2
->> +          maxItems: 2
->> +        clock-names:
->> +          items:
->> +            - const: gio
->> +            - const: link
->> +        resets:
->> +          minItems: 2
->> +          maxItems: 2
->> +        reset-names:
->> +          items:
->> +            - const: gio
->> +            - const: link
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - socionext,uniphier-pxs2-usb3-hsphy
->> +              - socionext,uniphier-ld20-usb3-hsphy
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 2
->> +          maxItems: 2
->> +        clock-names:
->> +          items:
->> +            - const: link
->> +            - const: phy
->> +        resets:
->> +          minItems: 2
->> +          maxItems: 2
->> +        reset-names:
->> +          items:
->> +            - const: link
->> +            - const: phy
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - socionext,uniphier-pxs3-usb3-hsphy
->> +              - socionext,uniphier-nx1-usb3-hsphy
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 2
-> 
-> Why minItems:2? Is the last phy-ext clock optional?
 
-In an SoC with two controllers, there is a controller that requires extra
-clock and a controller that does not. For example, PXs3 USB3 controller 1
-needs "phy-ext" clock, but the controller 0 doesn't.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-This difference is related to the phy configuration, where the controller 1
-requires more clocks because it shares the phy with other subsystems.
+yamllint warnings/errors:
 
-So I think the last phy-ext clock should be optional.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.example.dt.yaml: example-0: ccplex@e000000:reg:0: [0, 234881024, 0, 393215] is too long
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
 
-> 
->> +          maxItems: 3
->> +        clock-names:
->> +          minItems: 2
->> +          items:
->> +            - const: link
->> +            - const: phy
->> +            - const: phy-ext
->> +        resets:
->> +          minItems: 2
->> +          maxItems: 2
->> +        reset-names:
->> +          items:
->> +            - const: link
->> +            - const: phy
->> +
->>   required:
->>     - compatible
->>     - reg
->> diff --git
->> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
->> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
->> index 06c957d52d23..4c26d2d2303d 100644
->> ---
->> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
->> +++
->> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
->> @@ -35,34 +35,89 @@ properties:
->>       minItems: 2
->>       maxItems: 3
->>
->> -  clock-names:
->> -    oneOf:
->> -      - items:             # for Pro4, Pro5
->> -          - const: gio
->> -          - const: link
->> -      - items:             # for PXs3 with phy-ext
->> -          - const: link
->> -          - const: phy
->> -          - const: phy-ext
->> -      - items:             # for others
->> -          - const: link
->> -          - const: phy
->> +  clock-names: true
->>
->>     resets:
->>       maxItems: 2
->>
->> -  reset-names:
->> -    oneOf:
->> -      - items:              # for Pro4,Pro5
->> -          - const: gio
->> -          - const: link
->> -      - items:              # for others
->> -          - const: link
->> -          - const: phy
->> +  reset-names: true
->>
->>     vbus-supply:
->>       description: A phandle to the regulator for USB VBUS, only for USB
->> host
->>
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - socionext,uniphier-pro4-usb3-ssphy
->> +              - socionext,uniphier-pro5-usb3-ssphy
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 2
->> +          maxItems: 2
->> +        clock-names:
->> +          items:
->> +            - const: gio
->> +            - const: link
->> +        resets:
->> +          minItems: 2
->> +          maxItems: 2
->> +        reset-names:
->> +          items:
->> +            - const: gio
->> +            - const: link
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - socionext,uniphier-pxs2-usb3-ssphy
->> +              - socionext,uniphier-ld20-usb3-ssphy
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 2
->> +          maxItems: 2
->> +        clock-names:
->> +          items:
->> +            - const: link
->> +            - const: phy
->> +        resets:
->> +          minItems: 2
->> +          maxItems: 2
->> +        reset-names:
->> +          items:
->> +            - const: link
->> +            - const: phy
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - socionext,uniphier-pxs3-usb3-ssphy
->> +              - socionext,uniphier-nx1-usb3-ssphy
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 2
-> 
-> Same question as above.
+doc reference errors (make refcheckdocs):
 
-This is also the same reason.
+See https://patchwork.ozlabs.org/patch/
 
-Thank you,
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
----
-Best Regards
-Kunihiko Hayashi
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

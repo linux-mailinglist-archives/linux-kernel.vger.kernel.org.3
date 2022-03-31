@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B986A4EDF05
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6508D4EDF08
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240154AbiCaQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S240168AbiCaQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240171AbiCaQoK (ORCPT
+        with ESMTP id S236346AbiCaQok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:44:10 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0402128D6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:42:19 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so91791iox.1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:42:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=85LgQrm0KTrehU7vWZ2mnUqIZnm70JfcVFObJFvtvz4=;
-        b=UgJcozK1ElTatcQDpAIZZWInsGxJzSEuCF1P+orV5xW+aKraI1fMHgiIDb0uPXYU+V
-         yD5/MuDnotZ2R9WrYbp8svz7zxgno3n1mPiiWSeHss3sp8jWmAhim/7dBJXi1eH24CO4
-         EcP9aVO0/Y1F5GBZXehU/LZt5JcsLGTvf5PhvqqiscmspmTVW2cTM2/Rh/KavXpBXdKa
-         BhL4TS3v9MoyILb61cOeuNOgpv/d/DgD6xX+P3fALF6aAA/ABf2fAA4lGCFQXg6NlN4F
-         An166VEAH1P36LXMLB3taIaZsc5rOPW9Io9r0Hai3yEzvY85b2pAXCgRj6aUFSSjmcym
-         94xg==
-X-Gm-Message-State: AOAM530yiR0IuHj7EcfHS0WRHE4vGPqjCmelkDubxk+d39ESzYqsSIb8
-        WajdTfKQzmdxo/kDWXi5QOBwkK6ahhpJ8PrglBao0rUS4WLU
-X-Google-Smtp-Source: ABdhPJwHRT/7EQvMxI7sRTu5JdTKoXtJGtFMWbhthbIbVYWNBOGSrOC8FKnk0OUztuJViGIsBeMGw6ae6JFzo5wMEfK/SEArH3aY
+        Thu, 31 Mar 2022 12:44:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA8B2128C0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:42:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 37B131F46FA3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648744970;
+        bh=URWjFVGuhj7D7yW7QoQujZTyYenlCr2X2sTuRt6fC3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RO54O5YSsWYUptq1X3xB04zFY9DhyE83AizRRkWUHoeb9a9jg2LqinfrF9WaracUH
+         +A49n9g8myP2zuvmWtifEQh4cG4OLcJtjeUU3D8V7kMYFGF6Ej17/e1uQNRI5g3zLf
+         yKLl+lMqebNRVTz7lIv7MDkVzoDHbLvM3qNCF06SgDxswDVrDkeLo43uIycl1BynOf
+         4+rq4yCEw68PUAICcxEZ4yNy07haEu2QydCt/RmZ4vQolzoOmqC+aIpfTAKRIIjbqH
+         j9gxj9vT3MboEarZLOO24PweRlRuvjlnzSP7h9KPSeukkCKfG+BsnRg7dNR55UB0Zb
+         Amy6QzfvWapHQ==
+Date:   Thu, 31 Mar 2022 12:42:46 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] soc: mediatek: pwrap: Use readx_poll_timeout()
+ instead of custom function
+Message-ID: <20220331164246.qwi3xqvunesxnexy@notapiano>
+References: <20220331075817.7122-1-angelogioacchino.delregno@collabora.com>
+ <20220331075817.7122-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:7d08:0:b0:2c2:d72c:62bf with SMTP id
- y8-20020a927d08000000b002c2d72c62bfmr14480741ilc.167.1648744939176; Thu, 31
- Mar 2022 09:42:19 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 09:42:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006cc9ec05db8658be@google.com>
-Subject: [syzbot] WARNING in bio_free
-From:   syzbot <syzbot+e08de3db8be67b2a01b0@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220331075817.7122-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,89 +55,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Mar 31, 2022 at 09:58:15AM +0200, AngeloGioacchino Del Regno wrote:
+> Function pwrap_wait_for_state() is a function that polls an address
+> through a helper function, but this is the very same operation that
+> the readx_poll_timeout macro means to do.
+> Convert all instances of calling pwrap_wait_for_state() to instead
+> use the read_poll_timeout macro.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-syzbot found the following issue on:
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-HEAD commit:    fdcbcd1348f4 Add linux-next specific files for 20220331
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c815bb700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=366ab475940a4177
-dashboard link: https://syzkaller.appspot.com/bug?extid=e08de3db8be67b2a01b0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=131015d7700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14807cf7700000
+(tested on mt8192-asurada-spherion)
 
-The issue was bisected to:
-
-commit 57c47b42f4545b5f8fa288f190c0d68f96bc477f
-Author: Christoph Hellwig <hch@lst.de>
-Date:   Tue Mar 8 06:15:50 2022 +0000
-
-    block: turn bio_kmalloc into a simple kmalloc wrapper
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1567f79b700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1767f79b700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1367f79b700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e08de3db8be67b2a01b0@syzkaller.appspotmail.com
-Fixes: 57c47b42f454 ("block: turn bio_kmalloc into a simple kmalloc wrapper")
-
-loop0: detected capacity change from 0 to 8
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3587 at block/bio.c:229 bio_free+0xe8/0x120 block/bio.c:229
-Modules linked in:
-CPU: 1 PID: 3587 Comm: syz-executor393 Not tainted 5.17.0-next-20220331-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:bio_free+0xe8/0x120 block/bio.c:229
-Code: fa 48 c1 ea 03 0f b6 04 02 84 c0 74 04 3c 03 7e 20 8b 45 08 48 83 c4 08 48 29 c3 48 89 df 5b 5d e9 fd be cb fd e8 a8 af a3 fd <0f> 0b e9 51 ff ff ff 48 89 34 24 e8 e8 57 ef fd 48 8b 34 24 eb d1
-RSP: 0018:ffffc900038efac0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8880241c7f00 RCX: 0000000000000000
-RDX: ffff888019410000 RSI: ffffffff83d57848 RDI: ffff8880241c7f80
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff83d57915 R11: 0000000000000000 R12: 0000000000000060
-R13: 0000000000000060 R14: 0000000000001000 R15: 0000000000000060
-FS:  0000555556045300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc4e7ecd20 CR3: 000000007554f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- bio_put+0x20e/0x3b0 block/bio.c:754
- squashfs_read_data+0x2ce/0xed0 fs/squashfs/block.c:221
- squashfs_read_table+0x184/0x1f0 fs/squashfs/cache.c:432
- squashfs_fill_super+0x337/0x2690 fs/squashfs/super.c:184
- get_tree_bdev+0x440/0x760 fs/super.c:1292
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f5ae6a070da
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe7a847f68 EFLAGS: 00000282 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffe7a847fc0 RCX: 00007f5ae6a070da
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffe7a847f80
-RBP: 00007ffe7a847f80 R08: 00007ffe7a847fc0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000282 R12: 0000000020000218
-R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000001
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> ---
+>  drivers/soc/mediatek/mtk-pmic-wrap.c | 60 +++++++++++++++-------------
+>  1 file changed, 33 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> index bf39a64f3ecc..54a5300ab72b 100644
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -13,6 +13,9 @@
+>  #include <linux/regmap.h>
+>  #include <linux/reset.h>
+>  
+> +#define PWRAP_POLL_DELAY_US	10
+> +#define PWRAP_POLL_TIMEOUT_US	10000
+> +
+>  #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN		0x4
+>  #define PWRAP_MT8135_BRIDGE_WACS3_EN		0x10
+>  #define PWRAP_MT8135_BRIDGE_INIT_DONE3		0x14
+> @@ -1241,27 +1244,14 @@ static bool pwrap_is_fsm_idle_and_sync_idle(struct pmic_wrapper *wrp)
+>  		(val & PWRAP_STATE_SYNC_IDLE0);
+>  }
+>  
+> -static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
+> -		bool (*fp)(struct pmic_wrapper *))
+> -{
+> -	unsigned long timeout;
+> -
+> -	timeout = jiffies + usecs_to_jiffies(10000);
+> -
+> -	do {
+> -		if (time_after(jiffies, timeout))
+> -			return fp(wrp) ? 0 : -ETIMEDOUT;
+> -		if (fp(wrp))
+> -			return 0;
+> -	} while (1);
+> -}
+> -
+>  static int pwrap_read16(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>  {
+> +	bool tmp;
+>  	int ret;
+>  	u32 val;
+>  
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle);
+> +	ret = readx_poll_timeout(pwrap_is_fsm_idle, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		pwrap_leave_fsm_vldclr(wrp);
+>  		return ret;
+> @@ -1273,7 +1263,8 @@ static int pwrap_read16(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>  		val = (adr >> 1) << 16;
+>  	pwrap_writel(wrp, val, PWRAP_WACS2_CMD);
+>  
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_vldclr);
+> +	ret = readx_poll_timeout(pwrap_is_fsm_vldclr, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1290,11 +1281,14 @@ static int pwrap_read16(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>  
+>  static int pwrap_read32(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>  {
+> +	bool tmp;
+>  	int ret, msb;
+>  
+>  	*rdata = 0;
+>  	for (msb = 0; msb < 2; msb++) {
+> -		ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle);
+> +		ret = readx_poll_timeout(pwrap_is_fsm_idle, wrp, tmp, tmp,
+> +					 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+> +
+>  		if (ret) {
+>  			pwrap_leave_fsm_vldclr(wrp);
+>  			return ret;
+> @@ -1303,7 +1297,8 @@ static int pwrap_read32(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>  		pwrap_writel(wrp, ((msb << 30) | (adr << 16)),
+>  			     PWRAP_WACS2_CMD);
+>  
+> -		ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_vldclr);
+> +		ret = readx_poll_timeout(pwrap_is_fsm_vldclr, wrp, tmp, tmp,
+> +					 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  		if (ret)
+>  			return ret;
+>  
+> @@ -1323,9 +1318,11 @@ static int pwrap_read(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>  
+>  static int pwrap_write16(struct pmic_wrapper *wrp, u32 adr, u32 wdata)
+>  {
+> +	bool tmp;
+>  	int ret;
+>  
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle);
+> +	ret = readx_poll_timeout(pwrap_is_fsm_idle, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		pwrap_leave_fsm_vldclr(wrp);
+>  		return ret;
+> @@ -1344,10 +1341,12 @@ static int pwrap_write16(struct pmic_wrapper *wrp, u32 adr, u32 wdata)
+>  
+>  static int pwrap_write32(struct pmic_wrapper *wrp, u32 adr, u32 wdata)
+>  {
+> +	bool tmp;
+>  	int ret, msb, rdata;
+>  
+>  	for (msb = 0; msb < 2; msb++) {
+> -		ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle);
+> +		ret = readx_poll_timeout(pwrap_is_fsm_idle, wrp, tmp, tmp,
+> +					 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  		if (ret) {
+>  			pwrap_leave_fsm_vldclr(wrp);
+>  			return ret;
+> @@ -1388,6 +1387,7 @@ static int pwrap_regmap_write(void *context, u32 adr, u32 wdata)
+>  
+>  static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
+>  {
+> +	bool tmp;
+>  	int ret, i;
+>  
+>  	pwrap_writel(wrp, 0, PWRAP_HIPRIO_ARB_EN);
+> @@ -1407,7 +1407,8 @@ static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
+>  		pwrap_writel(wrp, wrp->master->spi_w | PWRAP_MAN_CMD_OP_OUTS,
+>  				PWRAP_MAN_CMD);
+>  
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_sync_idle);
+> +	ret = readx_poll_timeout(pwrap_is_sync_idle, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		dev_err(wrp->dev, "%s fail, ret=%d\n", __func__, ret);
+>  		return ret;
+> @@ -1458,14 +1459,15 @@ static int pwrap_init_sidly(struct pmic_wrapper *wrp)
+>  static int pwrap_init_dual_io(struct pmic_wrapper *wrp)
+>  {
+>  	int ret;
+> +	bool tmp;
+>  	u32 rdata;
+>  
+>  	/* Enable dual IO mode */
+>  	pwrap_write(wrp, wrp->slave->dew_regs[PWRAP_DEW_DIO_EN], 1);
+>  
+>  	/* Check IDLE & INIT_DONE in advance */
+> -	ret = pwrap_wait_for_state(wrp,
+> -				   pwrap_is_fsm_idle_and_sync_idle);
+> +	ret = readx_poll_timeout(pwrap_is_fsm_idle_and_sync_idle, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		dev_err(wrp->dev, "%s fail, ret=%d\n", __func__, ret);
+>  		return ret;
+> @@ -1570,6 +1572,7 @@ static bool pwrap_is_pmic_cipher_ready(struct pmic_wrapper *wrp)
+>  static int pwrap_init_cipher(struct pmic_wrapper *wrp)
+>  {
+>  	int ret;
+> +	bool tmp;
+>  	u32 rdata = 0;
+>  
+>  	pwrap_writel(wrp, 0x1, PWRAP_CIPHER_SWRST);
+> @@ -1624,14 +1627,16 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
+>  	}
+>  
+>  	/* wait for cipher data ready@AP */
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_cipher_ready);
+> +	ret = readx_poll_timeout(pwrap_is_cipher_ready, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		dev_err(wrp->dev, "cipher data ready@AP fail, ret=%d\n", ret);
+>  		return ret;
+>  	}
+>  
+>  	/* wait for cipher data ready@PMIC */
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_pmic_cipher_ready);
+> +	ret = readx_poll_timeout(pwrap_is_pmic_cipher_ready, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		dev_err(wrp->dev,
+>  			"timeout waiting for cipher data ready@PMIC\n");
+> @@ -1640,7 +1645,8 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
+>  
+>  	/* wait for cipher mode idle */
+>  	pwrap_write(wrp, wrp->slave->dew_regs[PWRAP_DEW_CIPHER_MODE], 0x1);
+> -	ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle_and_sync_idle);
+> +	ret = readx_poll_timeout(pwrap_is_fsm_idle_and_sync_idle, wrp, tmp, tmp,
+> +				 PWRAP_POLL_DELAY_US, PWRAP_POLL_TIMEOUT_US);
+>  	if (ret) {
+>  		dev_err(wrp->dev, "cipher mode idle fail, ret=%d\n", ret);
+>  		return ret;
+> -- 
+> 2.35.1
+> 

@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B5D4EDD78
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5714EDD97
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239158AbiCaPlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S238950AbiCaPol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239667AbiCaPik (ORCPT
+        with ESMTP id S239448AbiCaPnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:38:40 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462E422E960
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:33:13 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b15so22413434pfm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yEmz/8cQT/z4or8puaY3Kz/sgiUXMKjLnb73DP8zXB4=;
-        b=EUaUZPcfweDaGz+UYp+NStA0BmInTkma7npoGLJMmcEUZ2iZGKPVT0+1BPCXfIV/O8
-         GHiyc4aFGoWyoq2lqSIwPwUDFYVXIcSY2xPOR5kLVOO0Nw/3hOD+cFlTZ3OSV9p7Z6/e
-         VKNu4WxdQMhT7e56+GQ03nSGh5F2m6eQY0twspHOfdqpr70xwKPF+Qx/z00v+9m02tek
-         T30KRjehWG7I+iyZa4TP8flH5HEiXZViIehPikpfDcxXxtUW8xeWmelVkRCIrXo9YZ5f
-         qPrKlIet7jM6gLIXNY0RvIyNrR8ZOJWRcbN9ZR7H74+0VbHub/iVtv77tu8OwrAN0ek+
-         FFNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yEmz/8cQT/z4or8puaY3Kz/sgiUXMKjLnb73DP8zXB4=;
-        b=JUD+W1o1zUrd6lYvUPdQ/Ds/82pxb++hAexV8dpQgCdcXWK7cJP4OZfXmjqzNBAfL1
-         AugvfukoZo7rq2EsnMkf9k9DJcINo+odsr76isdVE+wM2ujJMA6slU3Yf/UduNmMEyKY
-         LnQqusqduCFsjq5ZYZSmm1ahUyx9WmuYBJugz8F7BUPZHywvmTX12fOBUhPrdaryoYcX
-         6d8BsKIawfj8O1MgfkosKtJn+VwysvvLXHri4HV85DSwy9G274P0bpNaZEyA/yj90EoD
-         LLNeJqT79OHHlAGHSYGhcJRtsNN2Fr8KbsQ5KM86b3LTvAVi6zu7t/G935F2e/Jz+E4h
-         jSYQ==
-X-Gm-Message-State: AOAM532Mp1iqXvZ1Dx8sbfzAL5W2HBrseL15VamuavuPyr4qTliNLvsK
-        LcpUODCaFvx5bY3NJjSB+vK7lw==
-X-Google-Smtp-Source: ABdhPJw0VfksheIzQpwF1rgGRvosu0Ldg1XtQsVA5AYA5VbOz1eqJHbzzU9YuQ5DQU5VooERtMGbMA==
-X-Received: by 2002:a05:6a02:193:b0:375:65a5:2fcd with SMTP id bj19-20020a056a02019300b0037565a52fcdmr10929563pgb.288.1648740791608;
-        Thu, 31 Mar 2022 08:33:11 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a082:a097:a7d8:d309])
-        by smtp.gmail.com with ESMTPSA id z23-20020a056a001d9700b004fa8f24702csm24543241pfw.85.2022.03.31.08.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 08:33:10 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 08:33:03 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Won Chung <wonchung@google.com>,
+        Thu, 31 Mar 2022 11:43:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797D11C349C;
+        Thu, 31 Mar 2022 08:37:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E22461B69;
+        Thu, 31 Mar 2022 15:37:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CFA0C340F3;
+        Thu, 31 Mar 2022 15:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648741026;
+        bh=A3+v8YN4rZULqKlHdCnvknCSKLUBvOtgJ5S9ze+1pS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MPYVFwpro7nv+TrxY/Ol74fPO7Kpia4LPytfCElQLa5f+AGA1Ay4j3uZsLGsmMzHN
+         vDVc7PuOwjuXTxw6vvgKnuXRpxVZu7NhcCfsrXY5tgcQdSyRzGitbd9oM2ZWatCkGe
+         2pCtvn+05nk8OSk3uHZEvqcAg/SQ460mhWL94UcHDGfggJJZ/pXp4dlvbhfUKmGzE7
+         b8XXVBnO2o1VMLtLOD5NYLnd3DSUjYfpEQYVxknDOp2bapAymuFpW2yRz6EIwxFqqd
+         Nn47dg6HJ/RM6GvC3JnL+k08j9ZuLIO1yD8OodZNO250xNefMYKKrpy2dini9C5DRH
+         4S8bqLA0G17dw==
+Date:   Thu, 31 Mar 2022 16:36:59 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
+Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
- function
-Message-ID: <YkXJr2KhSzHJHxRF@google.com>
-References: <20220330211913.2068108-1-wonchung@google.com>
- <s5hzgl6eg48.wl-tiwai@suse.de>
- <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de>
- <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
- <s5hmth6eaiz.wl-tiwai@suse.de>
- <YkV1rsq1SeTNd8Ud@kuha.fi.intel.com>
- <s5hk0cae9pw.wl-tiwai@suse.de>
- <s5h7d8adzdl.wl-tiwai@suse.de>
- <s5hzgl6ciho.wl-tiwai@suse.de>
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
+Message-ID: <YkXKmxJ0R3qpUoH4@sirena.org.uk>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <YkWfziQzprEsWL72@sirena.org.uk>
+ <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
+ <YkW4MPh8VWc8eSGg@sirena.org.uk>
+ <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qZ1ZF7vfmh9I4Bit"
+        protocol="application/pgp-signature"; boundary="X2ThHCiFHNtahL7d"
 Content-Disposition: inline
-In-Reply-To: <s5hzgl6ciho.wl-tiwai@suse.de>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
+X-Cookie: Reunite Gondwondaland!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,161 +69,66 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---qZ1ZF7vfmh9I4Bit
-Content-Type: text/plain; charset=us-ascii
+--X2ThHCiFHNtahL7d
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Takashi,
+On Thu, Mar 31, 2022 at 05:04:32PM +0200, Martin Povi=C5=A1er wrote:
+> > On 31. 3. 2022, at 16:18, Mark Brown <broonie@kernel.org> wrote:
 
-On Thu, Mar 31, 2022 at 04:19:15PM +0200, Takashi Iwai wrote:
-> On Thu, 31 Mar 2022 15:29:10 +0200,
-> Takashi Iwai wrote:
-> >=20
-> > On Thu, 31 Mar 2022 11:45:47 +0200,
-> > Takashi Iwai wrote:
-> > >=20
-> > > On Thu, 31 Mar 2022 11:34:38 +0200,
-> > > Heikki Krogerus wrote:
-> > > >=20
-> > > > On Thu, Mar 31, 2022 at 11:28:20AM +0200, Takashi Iwai wrote:
-> > > > > On Thu, 31 Mar 2022 11:25:43 +0200,
-> > > > > Heikki Krogerus wrote:
-> > > > > >=20
-> > > > > > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i9=
-15") &&
-> > > > > > > > >
-> > > > > > > > > Can NULL dev->driver be really seen?  I thought the compo=
-nents are
-> > > > > > > > > added by the drivers, hence they ought to have the driver=
- field set.
-> > > > > > > > > But there can be corner cases I overlooked.
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > thanks,
-> > > > > > > > >
-> > > > > > > > > Takashi
-> > > > > > > >=20
-> > > > > > > > Hi Takashi,
-> > > > > > > >=20
-> > > > > > > > When I try using component_add in a different driver (usb4 =
-in my
-> > > > > > > > case), I think dev->driver here is NULL because the i915 dr=
-ivers do
-> > > > > > > > not have their component master fully bound when this new c=
-omponent is
-> > > > > > > > registered. When I test it, it seems to be causing a crash.
-> > > > > > >=20
-> > > > > > > Hm, from where component_add*() is called?  Basically dev->dr=
-iver must
-> > > > > > > be already set before the corresponding driver gets bound at
-> > > > > > > __driver_probe_deviec().  So, if the device is added to compo=
-nent from
-> > > > > > > the corresponding driver's probe, dev->driver must be non-NUL=
-L.
-> > > > > >=20
-> > > > > > The code that declares a device as component does not have to b=
-e the
-> > > > > > driver of that device.
-> > > > > >=20
-> > > > > > In our case the components are USB ports, and they are devices =
-that
-> > > > > > are actually never bind to any drivers: drivers/usb/core/port.c
-> > > > >=20
-> > > > > OK, that's what I wanted to know.  It'd be helpful if it's more
-> > > > > clearly mentioned in the commit log.
-> > > >=20
-> > > > Agree.
-> > > >=20
-> > > > > BTW, the same problem must be seen in MEI drivers, too.
-> > > >=20
-> > > > Wasn't there a patch for those too? I lost track...
-> > >=20
-> > > I don't know, I just checked the latest Linus tree.
-> > >=20
-> > > And, looking at the HD-audio code, I still wonder how NULL dev->driver
-> > > can reach there.  Is there any PCI device that is added to component
-> > > without binding to a driver?  We have dev_is_pci() check at the
-> > > beginning, so non-PCI devices should bail out there...
-> >=20
-> > Further reading on, I'm really confused.  How data=3DNULL can be passed
-> > to this function?  The data argument is the value passed from the
-> > component_match_add_typed() call in HD-audio driver, hence it must be
-> > always the snd_hdac_bus object.
-> >=20
-> > And, I guess the i915 string check can be omitted completely, at
-> > least, for HD-audio driver.  It already have a check of the parent of
-> > the device and that should be enough.
->=20
-> That said, something like below (supposing data NULL check being
-> superfluous), instead.
->=20
->=20
-> Takashi
->=20
-> --- a/sound/hda/hdac_i915.c
-> +++ b/sound/hda/hdac_i915.c
-> @@ -102,18 +102,13 @@ static int i915_component_master_match(struct devic=
-e *dev, int subcomponent,
->  	struct pci_dev *hdac_pci, *i915_pci;
->  	struct hdac_bus *bus =3D data;
-> =20
-> -	if (!dev_is_pci(dev))
-> +	if (subcomponent !=3D I915_COMPONENT_AUDIO || !dev_is_pci(dev))
->  		return 0;
-> =20
+> > Yes, having two devices driving the bus at the same time wouldn't be
+> > great.  How is the TDM slot selection for the signals done in the
+> > hardware, I'm not seeing anything immediately obvious in the driver?
+> > I'd have thought that things would be implemented such that you could
+> > implement speaker protection on all speakers simultaneously but perhaps
+> > not.
 
-If I recall this bug correctly, it's not the usb port perse that is falling
-through this !dev_is_pci(dev) check, it's actually the usb4-port in a new
-proposed patch by Heikki and Mika to extend the usb type-c component to
-encompass the usb4 specific pieces too. Is it possible usb4 ports are consi=
-dered
-pci devices, and that's how we got into this situation?
+> I don=E2=80=99t know. I would have to go study the details of this. Shoul=
+d I see
+> if I can find a combination of =E2=80=98ASI1 Sel=E2=80=99 =E2=80=98VSENSE=
+=E2=80=99 =E2=80=98ISENSE=E2=80=99 settings
+> that would lead to driver conflict on one of the models, or is there
+> a chance we could hide those controls just on the basis of =E2=80=98it do=
+esn=E2=80=99t
+> do anything usable and is possibly dangerous=E2=80=99?
 
-Also, a little more background information: This crash happens because in
-our kernel configs, we config'd the usb4 driver as =3Dy (built in) instead =
-of
-=3Dm module, which meant that the usb4 port's driver was adding a component
-likely much earlier than hdac_i915.
+If ISENSE and VSENSE output are controlled by the same mux as routing
+then we should lock one of the controls out for at least stereo devices
+(it might be a good idea to check if the output is actually high Z when
+ISENSE and VSENSE are off rather than just driving zeros, if not it
+definitely has to be the routing control).  My instinct is that it's
+better to preserve the ability to implement speaker protection in future
+since that is something that'd be broadly useful, especially if someone
+comes up with a generic speaker protection implementation in which case
+there should be an awful lot of systems out there which could benefit.=20
 
-Thanks,
-Benson
+> >> That=E2=80=99s the reasoning anyway. To reiterate, seems to me the con=
+trols
+> >> are useless/confusing at best and dangerous at worst.
 
->  	hdac_pci =3D to_pci_dev(bus->dev);
->  	i915_pci =3D to_pci_dev(dev);
-> =20
-> -	if (!strcmp(dev->driver->name, "i915") &&
-> -	    subcomponent =3D=3D I915_COMPONENT_AUDIO &&
-> -	    connectivity_check(i915_pci, hdac_pci))
-> -		return 1;
-> -
-> -	return 0;
-> +	return connectivity_check(i915_pci, hdac_pci);
->  }
-> =20
->  /* check whether intel graphics is present */
->=20
+> > I'm just not seeing an issue for the slot selection.
 
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+> Yeah, agreed there=E2=80=99s no (damage) issue as we should to proper vol=
+ume
+> caps anyway.
 
---qZ1ZF7vfmh9I4Bit
+Though see above about how ISENSE/VSENSE output slot is controlled I guess =
+:/
+
+--X2ThHCiFHNtahL7d
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYkXJrwAKCRBzbaomhzOw
-wpDWAP4u9qZ1yLO4Vtblx/ZmitMRfRXqpqZ1xkZTr3wjUV3NXgD8DQBQxF/RIz2w
-F727wkBDJO7uAqp8N1cVAtvwIUCSSg4=
-=Nqgb
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJFypoACgkQJNaLcl1U
+h9BYrAf8C7WJfY+2miJ9ldjr+FjB/DEti4NLZQsx4VaqpU/qCJnw+5ZKmLLu00y9
+4EfS72t3bFJMYm0MuqUrCnlQmZRAJIeQ3Lu2JU5fYm2AbvsSdWSv5zvXLJuWuJG5
+FlRz9lUIRdLoAXWtI1QyHjG3WvW7JtGMulEVhj9AVEa+9SMpRmEmajmbxCoDyQ8i
+Kr6TAeKpIvhKxty0x4n+oDQBMjs3uYxNwu28h4wqeiVwb4KSO9DAr1/zOA6R1M9C
+dlLJxBBTakNkp3UnQhDPJBjhIyDy3kb1ceQAuCanMbmo+veWMTWstNmqF8FCXXLQ
+d3r8Z8ZAaeSy/6DXESctad+u9DDtYA==
+=SUgL
 -----END PGP SIGNATURE-----
 
---qZ1ZF7vfmh9I4Bit--
+--X2ThHCiFHNtahL7d--

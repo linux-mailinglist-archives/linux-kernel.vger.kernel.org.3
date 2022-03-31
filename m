@@ -2,196 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731594EDF42
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B654EDF46
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbiCaRAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S240408AbiCaRBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238759AbiCaRAp (ORCPT
+        with ESMTP id S240405AbiCaRAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:00:45 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA33C30548
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:58:56 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j15so580539eje.9
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:58:56 -0700 (PDT)
+        Thu, 31 Mar 2022 13:00:55 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4132F4F453
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:59:03 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso2090335wma.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vAUEMGVmv3luLDWumw9EYzVQpWz4Yr1CWqgaSqnZceQ=;
-        b=NxK1KH708VkNCN6yrS/zDO82xolgnN7kkPj7X1YytO28mDVTKJBEFJx3VvaL3d1fdP
-         qxw5cXxAfhhwYD/F+PcdC4velYOARzlkSV6AhhZpCmVoKdzRsDm57fvefERVft6Z6nyZ
-         A9dWNcLRQL9aFMDsrfGMmT6U5iHlWRtp+7BnOv1iuslsPDeDu88VVxmZFk1dKX8uNb1m
-         FhHTW6gn+ffW2U8DZmSYMOYiByBFAWmFCbdQl0pjZrAAW5ZrODCUAJtRs4Nk3UYV1+EX
-         dcEnYy0enLNH5/JyRaNj099cAyFym2ZbSpjEhjbA/EJGLGe72trgGF5kWqWaOOkjGiLB
-         HYAg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vrgHRAcGFYBW5//Px3FPaIXJFM+ziIQctDRECHM/5Yc=;
+        b=L5mcU8fek7ltwjMyOO8VtBdjLOs6rCjrIcH1SxftOcNUCue44IkMbLx0FutOlIy9Gy
+         678tQasKLTf8JXDUXlAw+pdCKki/CSbvtJcQYLW9o4sZs9wlmwzgAzh99PpGut4nG4Nr
+         RdmGICjFxuXuEu/eaCSkEN2vfeWihguDKUEgDseKIZ2x+ENnyf4eFeJCik5OZYUGB0O0
+         ihJudIy+wwooJad80VmxU4sXePSaQ2LDxtDBF6lQ5poJNMC77F7VM3VH+0TdzQsdAhFO
+         LYXb2xvRsHAsnQudaJJNKBXt6HIXmpgu8aKngWU32vZwTEpwWepfIbmNH7s8IdlBe1v5
+         0ZXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vAUEMGVmv3luLDWumw9EYzVQpWz4Yr1CWqgaSqnZceQ=;
-        b=CzT8Z5GvWTgqbYlJwFNuo1x6g0ARY2keo2z2gE0vQK7ipwG8F/dXW33DKcuHDzN1dI
-         iglXeAWzFYne2ALfOuG/qR1b/JlMTnG1mfrDkxkMZyGkzmxQQhauODI2aB/GezN5gnTO
-         g/l6cCeENU/YofG3Em4/v1L+I67YcUpx0OPxgBoAonTcnGieudhnTWo6Fik6gV6OckZ3
-         FSSJZco+bwZN+3nmgsuyW9eTc67Fi54hbOozOy0GJVLpIIK+TR/byd1XPVD56mjDIP87
-         442Q8qUKYW3KcSzTMv6CzAM5ozobDYSrKsb6Jbzfo3VOE5e8KEkRHMr7hUwo52wHvPpU
-         4pRA==
-X-Gm-Message-State: AOAM533/w0hstMxzyQT5Gr7I5M6xYLEcwdZE9YWcxf+Ms1tCdbCJSnnL
-        wceR8+IvKU+fkHMAyX3gSoSp3Vx4oTSZP9Bc+2Juow==
-X-Google-Smtp-Source: ABdhPJzlsEiL7iyx6CgmS5USAoYj8u3Wgu6jjZ5NhLYttjza0jDurzKAWjmvDD+8OeKKX0RMBEERdLYlUzWb3c2g7Hw=
-X-Received: by 2002:a17:907:1606:b0:6df:f528:4033 with SMTP id
- hb6-20020a170907160600b006dff5284033mr5784411ejc.433.1648745935000; Thu, 31
- Mar 2022 09:58:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vrgHRAcGFYBW5//Px3FPaIXJFM+ziIQctDRECHM/5Yc=;
+        b=OZQBP//E0Z8vvtF3eI0V7p8H7zrpvLJYhbyushh+RzEoE1RwtSMBTqpIAlYKxadNeM
+         wWMz/mEMB9fmM6tdJfOutzDpZLtteO10ZM6ufmdFIuNaHGem0hC6hvJDV1YoCObGbK14
+         eF25uwUw8KQmQsopxmEaYsj11dmevNGtbnfssBlr4lapj6vaIA/Z4CVGLDDJoxNNHEJA
+         d/aeH9tJ5LOJ3NOz4Y78jhsive8EPeZf310cRLX+IiegNOirpoAWtAuA9XYvh8d9Bjvs
+         AzZO0/dOjrRZuaMCZAkjw3Ua+hPcIIrhZPeV3HPgwCgnniEQRXKw9gkGoePvKn/kUpNn
+         OJ/g==
+X-Gm-Message-State: AOAM533/0r01qE/d5VAH8qjeF3cZg8nY4qMp2CE0wA6tCyM7GSJpNMZK
+        tNuoL463kroJx1CFUfnzH/Q=
+X-Google-Smtp-Source: ABdhPJyY9VFEb1OxfOzeK9H/V3w75Pxss7kmhEAc3nqyEsc2M5BH0HyOboimDEnBmqGNI8ZTgrH3CA==
+X-Received: by 2002:a1c:4e18:0:b0:38c:bd8d:6bd9 with SMTP id g24-20020a1c4e18000000b0038cbd8d6bd9mr5410289wmh.94.1648745941467;
+        Thu, 31 Mar 2022 09:59:01 -0700 (PDT)
+Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id d5-20020adfef85000000b00205b3945fdasm13858693wro.92.2022.03.31.09.58.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 09:59:00 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] staging: unisys: Remove "struct dentry *eth_debugfs_dir"
+Date:   Thu, 31 Mar 2022 18:58:58 +0200
+Message-ID: <5558288.DvuYhMxLoT@leap>
+In-Reply-To: <20220331082202.GZ12805@kadam>
+References: <20220331064751.29634-1-fmdefrancesco@gmail.com> <20220331082202.GZ12805@kadam>
 MIME-Version: 1.0
-References: <s5hzgl6eg48.wl-tiwai@suse.de> <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de> <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
- <s5hmth6eaiz.wl-tiwai@suse.de> <YkV1rsq1SeTNd8Ud@kuha.fi.intel.com>
- <s5hk0cae9pw.wl-tiwai@suse.de> <s5h7d8adzdl.wl-tiwai@suse.de>
- <s5hzgl6ciho.wl-tiwai@suse.de> <YkXJr2KhSzHJHxRF@google.com> <YkXY730wWhgJkRUy@kroah.com>
-In-Reply-To: <YkXY730wWhgJkRUy@kroah.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Thu, 31 Mar 2022 09:58:43 -0700
-Message-ID: <CAOvb9yiHXAWMn2_GcOnx5FYzfbp-2TmtN-OH90r31OqgbXQ3yQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback function
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Benson Leung <bleung@google.com>, Takashi Iwai <tiwai@suse.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 9:38 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Mar 31, 2022 at 08:33:03AM -0700, Benson Leung wrote:
-> > Hi Takashi,
-> >
-> > On Thu, Mar 31, 2022 at 04:19:15PM +0200, Takashi Iwai wrote:
-> > > On Thu, 31 Mar 2022 15:29:10 +0200,
-> > > Takashi Iwai wrote:
-> > > >
-> > > > On Thu, 31 Mar 2022 11:45:47 +0200,
-> > > > Takashi Iwai wrote:
-> > > > >
-> > > > > On Thu, 31 Mar 2022 11:34:38 +0200,
-> > > > > Heikki Krogerus wrote:
-> > > > > >
-> > > > > > On Thu, Mar 31, 2022 at 11:28:20AM +0200, Takashi Iwai wrote:
-> > > > > > > On Thu, 31 Mar 2022 11:25:43 +0200,
-> > > > > > > Heikki Krogerus wrote:
-> > > > > > > >
-> > > > > > > > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > > > > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > > > > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
-> > > > > > > > > > >
-> > > > > > > > > > > Can NULL dev->driver be really seen?  I thought the components are
-> > > > > > > > > > > added by the drivers, hence they ought to have the driver field set.
-> > > > > > > > > > > But there can be corner cases I overlooked.
-> > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > thanks,
-> > > > > > > > > > >
-> > > > > > > > > > > Takashi
-> > > > > > > > > >
-> > > > > > > > > > Hi Takashi,
-> > > > > > > > > >
-> > > > > > > > > > When I try using component_add in a different driver (usb4 in my
-> > > > > > > > > > case), I think dev->driver here is NULL because the i915 drivers do
-> > > > > > > > > > not have their component master fully bound when this new component is
-> > > > > > > > > > registered. When I test it, it seems to be causing a crash.
-> > > > > > > > >
-> > > > > > > > > Hm, from where component_add*() is called?  Basically dev->driver must
-> > > > > > > > > be already set before the corresponding driver gets bound at
-> > > > > > > > > __driver_probe_deviec().  So, if the device is added to component from
-> > > > > > > > > the corresponding driver's probe, dev->driver must be non-NULL.
-> > > > > > > >
-> > > > > > > > The code that declares a device as component does not have to be the
-> > > > > > > > driver of that device.
-> > > > > > > >
-> > > > > > > > In our case the components are USB ports, and they are devices that
-> > > > > > > > are actually never bind to any drivers: drivers/usb/core/port.c
-> > > > > > >
-> > > > > > > OK, that's what I wanted to know.  It'd be helpful if it's more
-> > > > > > > clearly mentioned in the commit log.
-> > > > > >
-> > > > > > Agree.
-> > > > > >
-> > > > > > > BTW, the same problem must be seen in MEI drivers, too.
-> > > > > >
-> > > > > > Wasn't there a patch for those too? I lost track...
-> > > > >
-> > > > > I don't know, I just checked the latest Linus tree.
-> > > > >
-> > > > > And, looking at the HD-audio code, I still wonder how NULL dev->driver
-> > > > > can reach there.  Is there any PCI device that is added to component
-> > > > > without binding to a driver?  We have dev_is_pci() check at the
-> > > > > beginning, so non-PCI devices should bail out there...
-> > > >
-> > > > Further reading on, I'm really confused.  How data=NULL can be passed
-> > > > to this function?  The data argument is the value passed from the
-> > > > component_match_add_typed() call in HD-audio driver, hence it must be
-> > > > always the snd_hdac_bus object.
-> > > >
-> > > > And, I guess the i915 string check can be omitted completely, at
-> > > > least, for HD-audio driver.  It already have a check of the parent of
-> > > > the device and that should be enough.
-> > >
-> > > That said, something like below (supposing data NULL check being
-> > > superfluous), instead.
-> > >
-> > >
-> > > Takashi
-> > >
-> > > --- a/sound/hda/hdac_i915.c
-> > > +++ b/sound/hda/hdac_i915.c
-> > > @@ -102,18 +102,13 @@ static int i915_component_master_match(struct device *dev, int subcomponent,
-> > >     struct pci_dev *hdac_pci, *i915_pci;
-> > >     struct hdac_bus *bus = data;
-> > >
-> > > -   if (!dev_is_pci(dev))
-> > > +   if (subcomponent != I915_COMPONENT_AUDIO || !dev_is_pci(dev))
-> > >             return 0;
-> > >
-> >
-> > If I recall this bug correctly, it's not the usb port perse that is falling
-> > through this !dev_is_pci(dev) check, it's actually the usb4-port in a new
-> > proposed patch by Heikki and Mika to extend the usb type-c component to
-> > encompass the usb4 specific pieces too. Is it possible usb4 ports are considered
-> > pci devices, and that's how we got into this situation?
-> >
-> > Also, a little more background information: This crash happens because in
-> > our kernel configs, we config'd the usb4 driver as =y (built in) instead of
-> > =m module, which meant that the usb4 port's driver was adding a component
-> > likely much earlier than hdac_i915.
->
-> So is this actually triggering on 5.17 right now?  Or is it due to some
-> other not-applied changes you are testing at the moment?
->
-> confused,
->
-> greg k-h
+On gioved? 31 marzo 2022 10:22:02 CEST Dan Carpenter wrote:
+> On Thu, Mar 31, 2022 at 08:47:51AM +0200, Fabio M. De Francesco wrote:
+> > There is no need for "struct dentry *eth_debugfs_dir" which is used for
+> > debug / sysfs directories. Therefore, remove this "struct dentry" and
+> > everything related (i.e., creation and removal).
+> > 
+> > As a side effect of this change, the code has no more need of the
+> > "cleanup_register_netdev" label, which can also be removed.
+> > 
+> > Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> > 
+> > v1 - v2: Add a couple of "Suggested-by" tags which were forgotten. 
+> > Thanks to Dan Carpenter and Greg Kroah-Hartman.
+> > 
+> 
+> Thanks!
+> 
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> regards,
+> dan carpenter
+> 
+I've just noticed that visornic and visorhba do other calls to 
+debugfs_create_dir() and debugfs_create_file() functions.
 
-Hi Greg,
+I'm not sure whether or not this driver still needs those other calls.
 
-I believe it is not causing an issue in 5.17 at the moment. It is
-triggered when we try to apply new changes and test it locally.
-(registering a component for usb4_port)
+Do you think that they should be removed as well as it has been done 
+in the patch above?
 
 Thanks,
-Won
+
+Fabio M. De Francesco
+
+
+

@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA944EE138
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A394EE13A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiCaTBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S237987AbiCaTCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbiCaTB2 (ORCPT
+        with ESMTP id S237948AbiCaTCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:01:28 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797C41BD821
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:59:41 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id g21so555710iom.13
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:59:41 -0700 (PDT)
+        Thu, 31 Mar 2022 15:02:05 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7768C1BD9A6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:00:16 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id s11so404972pfu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=AJKpCjO3bIrdj5jwaRPJiTmBZzr0mwlOsxgUl6rGmbw=;
-        b=TuTRI5CCImBv0SnoqzL8kyVBO4Gzi12A/T8N+73TESZvvg86KAR0bZDtj/rslsSUwc
-         nqMTC6ATPx8ZCMJ41jr2+Xz4dm1XOZy3o1Pyd1fE0nOHO1Wyry3gLM4pDShxpzJUi75+
-         vROsQYNcIaY4Ol/TAxJMB6YZk1+mPhzOzzjjheztkiF3oSPMXAFiqIVgAPH9aYDiKGZw
-         jUZ7PIZusx0GmJesSR9z3cvFEgUoDtT69ZGVj7xvz3o1ub0v3L0hSDa/yV2WDZeoSD27
-         CiFdce8xKR5UGVPV+9ibc6oBynqDuxTL5ERLHs20DufjdbPj5Xlr9q/iBG1glNrqI9mW
-         mowA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YCOslDIO/0W733/ujDklGbRX/ha6VpRvkSSUEoU714s=;
+        b=nzw9o0AJLtRqnDYEvjxXTLiWlKWPs/MTqSc49MT79Nvi0jxqks7k/DYO3nbr+/O2MV
+         xdNUqABzyfe3o+DPmH2ee8ccnTZyBR2yPKjOjzJpGF6TF5zLrLnHm/B5RXRf3HkkOcer
+         p/YeAjvZaGsKXrWiKaqcsc3srAIykbXCJBxXA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=AJKpCjO3bIrdj5jwaRPJiTmBZzr0mwlOsxgUl6rGmbw=;
-        b=XLsjirrLO58lp4lJRk1Rpp0s1AskkIuMB6xPq+9MRJUv53u6OJHCA+MW/fecLCiK9W
-         ysKLUa6oppXJqC5vwatrYkrw8J+qcnPYnIs5pRL1X7BFjOWgCBy58E/ZLXiWHAMLdDMg
-         BQkdEQycn8t80OhXhGOa+bp0wwKQNt8zOLMDYSi15dih2GmQPqVsnYYRWAPZ55CmIig3
-         cjpr+hJqYxYVSRU0SHKXskbixtMWdUVSRpp5hYI7NdYJlhNmF7vL+KsdmpGuQBjKQQ5H
-         lheAD0vDO7as+QCEvZUWraIcETK3hspL/WFu6PMnzdj6VxjnhgrCII7rUPqjt15dQRSV
-         sjrA==
-X-Gm-Message-State: AOAM530SIO58k+GhhXb8zwZyvvqvgHlKjqfhUPPVK7mLw6SUt7NeGIS9
-        BOqjgVomB/YGFRpedXqblLsduGYXAePYdelX
-X-Google-Smtp-Source: ABdhPJzXTE03DOQiXIxoEpnpZrfQ7YBC2mFfy9hkCkipcDwqB9ra5bQO0RH2PTMXLrcdMWK3ELtPtg==
-X-Received: by 2002:a05:6602:122a:b0:649:5df1:36f0 with SMTP id z10-20020a056602122a00b006495df136f0mr14629715iot.214.1648753180239;
-        Thu, 31 Mar 2022 11:59:40 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id f3-20020a056e0204c300b002c9fc68d9b8sm126537ils.51.2022.03.31.11.59.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YCOslDIO/0W733/ujDklGbRX/ha6VpRvkSSUEoU714s=;
+        b=uQFe68lLJmEDKLjRUEqWzv2mOn03oNzzhd7LIJScZ8qnWVDuojvbfoiyU5yUaEd21M
+         wjSWecNf4md/X1klat1WhAWwfwEpG5GPz9/VOLLeMFOY4pUsrK+AltiY+9SbRFIcDziR
+         G5QK2MF8n4Fc/QMcsBeErwm0ZXO5UIES3bgRSkwcyKg1w5S/NvgGLDsZprnaOwukELHz
+         ycuknE6lw2aDqbC1Naa24FzCLWsJv+4Z0jHKCNLp3nchjvWCJGAQkcgfqaA7UpvVx7VV
+         Hi9btaFM8LKvPhJAFmgsfzooeED+HqAy7vUgvkZWorIDik/QdiIl1E5oCMUD9glYkeBm
+         8J8Q==
+X-Gm-Message-State: AOAM5331ohJ3mb4rc+46jLRUh5iMud+UgcW58Ejm9tAqps6j2slIGFdR
+        ybnq1K3AFZfur5q39OhYXv1MSg==
+X-Google-Smtp-Source: ABdhPJwPAbG0pC/w9f4u+f4/nphD+UfXfd7YySe+QBeu9aUDnnXE9J1pLUD5Y3njX+cudadqUA6UPA==
+X-Received: by 2002:a05:6a00:188f:b0:4fa:ece9:15d9 with SMTP id x15-20020a056a00188f00b004faece915d9mr7009932pfh.28.1648753215947;
+        Thu, 31 Mar 2022 12:00:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm222905pfk.88.2022.03.31.12.00.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 11:59:39 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     trix@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-In-Reply-To: <20220331185458.3427454-1-trix@redhat.com>
-References: <20220331185458.3427454-1-trix@redhat.com>
-Subject: Re: [PATCH] blk-wbt: remove wbt_track stub
-Message-Id: <164875317962.302830.17951664243355363241.b4-ty@kernel.dk>
-Date:   Thu, 31 Mar 2022 12:59:39 -0600
+        Thu, 31 Mar 2022 12:00:15 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 12:00:15 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        David Hildenbrand <david@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zi Yan <ziy@nvidia.com>
+Subject: Re: [GIT PULL] hardening fixes for v5.18-rc1
+Message-ID: <202203311157.F7FA779@keescook>
+References: <202203311127.503A3110@keescook>
+ <CAHk-=wjQ0+9jBy6bm850h1jms1tja8xnon4X5v0LSO4biLhFGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjQ0+9jBy6bm850h1jms1tja8xnon4X5v0LSO4biLhFGg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 11:54:58 -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Thu, Mar 31, 2022 at 11:49:42AM -0700, Linus Torvalds wrote:
+> On Thu, Mar 31, 2022 at 11:35 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Please pull these hardening fixes for v5.18-rc1. This addresses an
+> > -Warray-bounds warning found under a few ARM defconfigs, and disables
+> > long-broken CONFIG_HARDENED_USERCOPY_PAGESPAN.
 > 
-> cppcheck returns this warning
-> [block/blk-wbt.h:104] -> [block/blk-wbt.c:592]:
->   (warning) Function 'wbt_track' argument order different:
->   declaration 'rq, flags, ' definition 'rqos, rq, bio'
+> Can't we just remove that HARDENED_USERCOPY_PAGESPAN thing entirely?
 > 
-> [...]
+> Yes, yes, I know Matthew did that as part of other patches that is too
+> late to go in any more in this merge window, but just the removal
+> patch is a no-brainer.
 
-Applied, thanks!
+I can do that, but it seemed like more work for folks: a larger diff to
+look at, and a rebase for Matthew or me. It's not MUCH more work, but
+given the timing of the merge window, I wanted to have a minimal diff.
 
-[1/1] blk-wbt: remove wbt_track stub
-      commit: 8d7829ebc1e48208b3c02c2a10c5f8856246033c
+> IOW, why not just do the attached?
 
-Best regards,
+But I can certainly respin it, if you'd prefer?
+
 -- 
-Jens Axboe
-
-
+Kees Cook

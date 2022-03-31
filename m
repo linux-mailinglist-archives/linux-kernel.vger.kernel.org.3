@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93B14EDF65
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454AC4EDF6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240521AbiCaRKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
+        id S234526AbiCaRNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240498AbiCaRKd (ORCPT
+        with ESMTP id S234323AbiCaRNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:10:33 -0400
-Received: from out203-205-251-80.mail.qq.com (out203-205-251-80.mail.qq.com [203.205.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D394B10FC
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648746519;
-        bh=2BDky/aXZPoSGgr2B6zDkv68+SbUOKwLUyizxNTRazM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=wAl5rNVS9UhMETjJOPBUYlLF/YLkdYvudC3OIwGF3d9bwUTYdoq7DEeAcQeYq2OIT
-         W0lNzozCM5CjuQVekPHjcRB9rT6PzxsO5qCHn2etDzlgNgubNaJbh3hnVT1kS4aVpr
-         z6ikLYsKnl4/aie4VMRbOWfCkL4ack/+na+MtTgM=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
-        id 22424C5F; Fri, 01 Apr 2022 01:08:36 +0800
-X-QQ-mid: xmsmtpt1648746516tf40y674s
-Message-ID: <tencent_F3B552EEBF1CC810B36CEE23070BC54BF806@qq.com>
-X-QQ-XMAILINFO: NC/J3CrDtaBbdPm4764oEE1R0IkljAkzU/G2Yi6VZGaSvo6+2Pd/ApBFM42NCS
-         tajZdW9Ws+VCHRYctN5pVxNTVhDqOWrCzXnWYc90iGxmmG81LEh2JoAhLVmNU0dk8DZXELqIJFOV
-         u0wU9cqKuX3nKYL1+82K6/OQqWOlW9CyhIOPnYcIGQ/J44zpPo0Y4FLsqaYJUzjh11TbrjvAwOHg
-         4EoDAWVHG4PKF0k/ORbA57cjE939lGeU2n8IzCAEunbWEZV/WM/aZqG781IrHGR3hNaOtRvAPaJb
-         UYtEFR3TWG0OKJAH0PXX7yNAay/WYBWsB9AMPOeZr5MEATlKoAlHaHI58KlAOjHtNO86/SRLhrgT
-         UM6yvtsbiSE7QUJMaQa7rArpzOAyBMBjaecmEuFdsZrUjfCQ+iAYkV6Siks63tRBf1U4bY9A7Sup
-         SETpfhT1uNXA7+tXg9Acp1BYRWafB9Zn/OFgCZE2u5cnpRONHVcPiI5jPUBapdw36Z+3UmpFUVr7
-         8BBIPu3i1oo9MnYo1HhuS00t0ClBLVMBhiVY0+Q5ZO7uSDsezlTzS9wG0qd8TnzBJFphddW7/PS7
-         z3uxY7eGYSXSO0g8xc2Xe+XDQPW2b8Xocn8WGCwRtIehpJpXy4DCbJ8tKQo5JQE58OOoiNF3xzbR
-         oZyvsxGzLlKMs9fn4al02Wn7w58zrz7ijlMtnL2ZKApcW9aSHXGkVM/yjAXeHmbduh5DEmC5MjvB
-         qKFJaEBVJKDZBpACieZD47CtFbI/OVeSG2iJgpbp/RvoHRQ9VNv2shqWdoDPRHGsLyhzEd5Sso7q
-         s7HzqiB9nLk6WALF8Zy5lcrPfyaG+gbHcZ5hgtuTqc7jbDCrwDo6ThUm8+hDGX/w5KH9Fz9iSj2N
-         NK72e4Vg6i/EdN74UTb7k+mvEdADoE2y9QAMYTivndb09RjGC8rx6/0woMEkOKA3wb1RZgDQPN
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 3/3] staging: rtl8712: fix potential memory leak in r8712_init_drv_sw()
-Date:   Fri,  1 Apr 2022 01:08:19 +0800
-X-OQ-MSGID: <20220331170819.9613-1-xkernel.wang@foxmail.com>
-In-Reply-To: <tencent_0A1273526E1E87150578F8B752CF7F178806@qq.com>
-References: <tencent_0A1273526E1E87150578F8B752CF7F178806@qq.com>
+        Thu, 31 Mar 2022 13:13:14 -0400
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F601F0824
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:11:26 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id AF29A964A4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:11:25 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZyKTn4xcGdx86ZyKTncJZ0; Thu, 31 Mar 2022 12:11:25 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aI+bV8VGhtRiaWJK4Xog9eYqwu1fuRPuRDubJJk73ag=; b=c0sezV+TbXC1QwszWGrATQAgiE
+        0jgkWUUd6BbxqDO+EjXgTMimyq86tP0QHgrkwh/fdgv2dcoCizLW9iQY3UjATcpTyQGemT1pF/nnX
+        tbRNrf86txWyX+N4V/p5CVbqCC0ShTYTKybgmUM18V2HM3cUIOpmHsTs28WbH8IFCv4KEkYOUlJZf
+        RdRTlWgP6Ouq75QBvgVEZuftBnRcyOa3uTIweNHxc866NyynaZOJZYEg3GCDT27yQyHipY/pR5jWM
+        +xFR+50w4G4UxqwHji7U57A8oTvRngZH8DD9sf46URRBQbi+iRz/h4RRPZYRhlJmTQ4xGihNjlE/W
+        IWfLcSrw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54590)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZyKS-002ePL-N9; Thu, 31 Mar 2022 17:11:24 +0000
+Message-ID: <68f0b4b6-59ed-34ac-bc69-810668a979de@roeck-us.net>
+Date:   Thu, 31 Mar 2022 10:11:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Michael Walle <michael@walle.cc>
+Cc:     Xu Yilun <yilun.xu@intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+ <20220330065047.GA212503@yilunxu-OptiPlex-7050>
+ <5029cf18c9df4fab96af13c857d2e0ef@AcuMS.aculab.com>
+ <20220330145137.GA214615@yilunxu-OptiPlex-7050>
+ <4973276f-ed1e-c4ed-18f9-e8078c13f81a@roeck-us.net>
+ <YkW+kWXrkAttCbsm@shell.armlinux.org.uk>
+ <7b3edeabb66e50825cc42ca1edf86bb7@walle.cc>
+ <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+In-Reply-To: <YkXBgTXRIFpE+YDL@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZyKS-002ePL-N9
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54590
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On 3/31/22 07:58, Russell King (Oracle) wrote:
+> On Thu, Mar 31, 2022 at 04:51:47PM +0200, Michael Walle wrote:
+>> Am 2022-03-31 16:45, schrieb Russell King (Oracle):
+>>> On Wed, Mar 30, 2022 at 08:23:35AM -0700, Guenter Roeck wrote:
+>>>> Michael, let's just drop the changes outside drivers/hwmon from
+>>>> the series, and let's keep hwmon_is_bad_char() in the include file.
+>>>> Let's just document it, explaining its use case.
+>>>
+>>> Why? There hasn't been any objection to the change. All the discussion
+>>> seems to be around the new function (this patch) rather than the actual
+>>> conversions in drivers.
+>>>
+>>> I'm entirely in favour of cleaning this up - it irks me that we're doing
+>>> exactly the same cleanup everywhere we have a hwmon.
+>>>
+>>> At the very least, I would be completely in favour of keeping the
+>>> changes in the sfp and phy code.
+>>
+>> FWIW, my plan was to send the hwmon patches first, by then my other
+>> series (the polynomial_calc() one) will also be ready to be picked.
+>> Then I'd ask Guenter for a stable branch with these two series which
+>> hopefully get merged into net-next. Then I can repost the missing
+>> patches on net-next along with the new sensors support for the GPY
+>> and LAN8814 PHYs.
+> 
+> Okay, that's fine. It just sounded like the conversion of other drivers
+> outside drivers/hwmon was being dropped.
+> 
 
-In r8712_init_drv_sw(), all the error paths do not properly release the
-resources allocated by its callees.
-This patch is to free them.
+Not dropped, just disconnected. From hwmon perspective, we want a certain
+set of characters to be dropped or replaced. Also, from hwmon perspective,
+it makes sense to have the helper function allocate the replacement data.
+There was disagreement about which characters should be replaced, and if
+the helper function should allocate the replacement string or not.
+I have no intention to change the set of characters without good reason,
+and I feel quite strongly about allocating the replacement in the helper
+function. Since potential callers don't _have_ to use the helper and don't
+_have_ to provide valid names (and are responsible for the consequences),
+I would like that discussion to be separate from hwmon changes.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/rtl8712/os_intfs.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+> Note that there's another "sanitisation" of hwmon names in
+> drivers/net/phy/marvell.c - that converts any non-alnum character to
+> an underscore. Not sure why the different approach was chosen there.
+> 
 
-diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
-index 163baaa..28b1684 100644
---- a/drivers/staging/rtl8712/os_intfs.c
-+++ b/drivers/staging/rtl8712/os_intfs.c
-@@ -304,23 +304,23 @@ int r8712_init_drv_sw(struct _adapter *padapter)
- 	padapter->cmdpriv.padapter = padapter;
- 	ret = r8712_init_evt_priv(&padapter->evtpriv);
- 	if (ret)
--		return ret;
-+		goto free_cmd_priv;
- 	ret = r8712_init_mlme_priv(padapter);
- 	if (ret)
--		return ret;
-+		goto free_evt_priv;
- 	ret = _r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
- 	if (ret)
--		return ret;
-+		goto free_mlme_priv;
- 	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
- 	if (ret)
--		return ret;
-+		goto free_xmit_priv;
- 	memset((unsigned char *)&padapter->securitypriv, 0,
- 	       sizeof(struct security_priv));
- 	timer_setup(&padapter->securitypriv.tkip_timer,
- 		    r8712_use_tkipkey_handler, 0);
- 	ret = _r8712_init_sta_priv(&padapter->stapriv);
- 	if (ret)
--		return ret;
-+		goto free_recv_priv;
- 	padapter->stapriv.padapter = padapter;
- 	r8712_init_bcmc_stainfo(padapter);
- 	r8712_init_pwrctrl_priv(padapter);
-@@ -328,6 +328,18 @@ int r8712_init_drv_sw(struct _adapter *padapter)
- 	init_default_value(padapter);
- 	r8712_InitSwLeds(padapter);
- 	return ret;
-+
-+free_recv_priv:
-+	_r8712_free_recv_priv(&padapter->recvpriv);
-+free_xmit_priv:
-+	_free_xmit_priv(&padapter->xmitpriv);
-+free_mlme_priv:
-+	r8712_free_mlme_priv(&padapter->mlmepriv);
-+free_evt_priv:
-+	r8712_free_evt_priv(&padapter->evtpriv);
-+free_cmd_priv:
-+	r8712_free_cmd_priv(&padapter->cmdpriv);
-+	return ret;
- }
- 
- void r8712_free_drv_sw(struct _adapter *padapter)
--- 
+It actually drops non-alphanumeric characters. The name is derived
+from the phy device name, which I think is derived from the name field
+in struct phy_driver. That includes spaces and '(', ')'. I honestly
+have no idea what libsensors would do with '(' and ')'. Either case,
+even if that would create a hiccup in libsensors and we would add
+'(' and ')' to the 'forbidden' list of characters, the fact that the
+code doesn't replace but drop non-alphanumeric characters means
+it won't be able to use a helper anyway since that would result
+in a hwmon 'name' attribute change and thus not be backward
+compatible. Besides, "Marvell_88E1111__Finisar_" would look a bit
+odd anyway, and "Marvell88E1111Finisar" may be at least slightly
+better.
+
+Guenter

@@ -2,142 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9A84EDB7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20BC4EDB85
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237374AbiCaONG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        id S237387AbiCaOPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237342AbiCaONC (ORCPT
+        with ESMTP id S233212AbiCaOPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:13:02 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453971AA4A1;
-        Thu, 31 Mar 2022 07:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1648735875; x=1680271875;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=s14Q9frxV/DdiV00e2n8rH5uoNNzzoof8snfleEcI58=;
-  b=xD+IVauBKfNNeVcAZt82mhrwq5S8MaiMyYJgD0FuoQ8lGR3DE/D7ckOR
-   M5lDaEjlTwNUJjWtmcHiaDrDxXG7+iRj/aHKQGYS8BkoAJ144djmR7eSF
-   3bmF6Y3SITw+pxRgbxWgRjSYc1G8Jn7MtAN7FGmAmVMueXhdG75ZBvce1
-   9ffkD1ZlwOsiRD7eiKlSuViH7s1TEMF+td7xwy0e2O6thjfsT30Yn6poZ
-   2rHqegfpfZ+jVk0qIjc1UA06TLSMYRvDZSEOAQODb2vcLlJpPhz4rmzwC
-   fv/5Y/H66/HSYWLk4SKzyzkAgECjnkKRwmBAmsSKmwdrqLBB1H0twvqP6
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,225,1643698800"; 
-   d="scan'208";a="158386519"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2022 07:11:15 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 31 Mar 2022 07:11:14 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 31 Mar 2022 07:11:12 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ajay Kathat <ajay.kathat@microchip.com>
-Subject: [PATCH 2/2] ARM: dts: at91: fix pinctrl phandles
-Date:   Thu, 31 Mar 2022 17:13:23 +0300
-Message-ID: <20220331141323.194355-2-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220331141323.194355-1-claudiu.beznea@microchip.com>
-References: <20220331141323.194355-1-claudiu.beznea@microchip.com>
+        Thu, 31 Mar 2022 10:15:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6A74199E;
+        Thu, 31 Mar 2022 07:13:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A9F06199F;
+        Thu, 31 Mar 2022 14:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B82C340ED;
+        Thu, 31 Mar 2022 14:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648736005;
+        bh=60nh5Gko10VkTAze7+WzVDlod2DwO5XxCr0jcHueyIA=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=cGVhPcelSRgTfKEi88H+4LFdWxgOvwOae9LJUZd1Nw1eqOUloO0f039JlKesxSGks
+         0dEy0N1ZzsMgg6M+oyE/lrrR8GUM/Y/vf3g/GrRFR4CEQMeITu0gyjGW+X14LXLMos
+         GqdKpQFXA40UlYNEJpceO5gfGsNeLRzNalNB4vKTcPBGAGetT/2AN/M2h0qCsC0uHz
+         Y84uPXzndSvJjtWCwfVzNCDgDXDqMKy9PIK7zMeUzOeuEDntugA4KEB8yVzcXEev1K
+         0EpMGqtzqD23VCvety8Ljos6J4/xJjUCXz8WJUCvxVOU4PR/W1dZxbr3yFxz2sfDkz
+         EWiOI8uzvvLHw==
+Message-ID: <47987a0e-0626-04f8-b181-ff3bc257a269@kernel.org>
+Date:   Thu, 31 Mar 2022 08:13:24 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: This counter "ip6InNoRoutes" does not follow the RFC4293
+ specification implementation
+Content-Language: en-US
+To:     "Pudak, Filip" <Filip.Pudak@windriver.com>,
+        "Xiao, Jiguang" <Jiguang.Xiao@windriver.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <SJ0PR11MB51207CBDB5145A89B8A0A15393359@SJ0PR11MB5120.namprd11.prod.outlook.com>
+ <SJ0PR11MB51202FA2365341740048A64593359@SJ0PR11MB5120.namprd11.prod.outlook.com>
+ <SJ0PR11MB51209200786235187572EE0D93359@SJ0PR11MB5120.namprd11.prod.outlook.com>
+ <SJ0PR11MB5120426D474963E08936DD2493359@SJ0PR11MB5120.namprd11.prod.outlook.com>
+ <bcc98227-b99f-5b2f-1745-922c13fe6089@kernel.org>
+ <SJ0PR11MB5120EBCF140B940C8FF712B9933D9@SJ0PR11MB5120.namprd11.prod.outlook.com>
+ <SJ0PR11MB51209DA3F7CAAB45A609633A930A9@SJ0PR11MB5120.namprd11.prod.outlook.com>
+ <3f6540b8-aeab-02f8-27bc-d78c9eba588c@kernel.org>
+ <PH0PR11MB5096F84F64CF00C996F219DAE4E19@PH0PR11MB5096.namprd11.prod.outlook.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <PH0PR11MB5096F84F64CF00C996F219DAE4E19@PH0PR11MB5096.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit bf781869e5cf ("ARM: dts: at91: add pinctrl-{names, 0} for all
-gpios") introduces pinctrl phandles for pins used by individual
-controllers to avoid failures due to commit 2ab73c6d8323 ("gpio:
-Support GPIO controllers without pin-ranges"). For SPI controllers
-available on SAMA5D4 and SAMA5D3 some of the pins are defined in
-SoC specific dtsi on behalf of pinctrl-0. Adding extra pinctrl phandles
-on board specific dts also on behalf of pinctrl-0 overwrite the pinctrl-0
-phandle specified in SoC specific dtsi. Thus add the board specific
-pinctrl to pinctrl-1.
+On 3/31/22 3:13 AM, Pudak, Filip wrote:
+> Hi David,
+> 
+> So we end up in ip6_pkt_discard -> ip6_pkt_drop :
+> 
+> ---
+> if (netif_is_l3_master(skb->dev) &&
+> 	    dst->dev == net->loopback_dev)
 
-Fixes: bf781869e5cf ("ARM: dts: at91: add pinctrl-{names, 0} for all gpios")
-Depends-on: e8042102d11e ("ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name")
-Reported-by: Ajay Kathat <ajay.kathat@microchip.com>
-Co-developed-by: Ajay Kathat <ajay.kathat@microchip.com>
-Signed-off-by: Ajay Kathat <ajay.kathat@microchip.com>
-Tested-by: Ajay Kathat <ajay.kathat@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
+That's a bug. I can not think of a case where those 2 conditions will
+ever be true at the same time. I think that should '||'
 
-Hi, Nicolas,
 
-If all good with this patches please update the SHA1 on "Depends-on"
-tag.
-
-Thank you,
-Claudiu Beznea
-
- arch/arm/boot/dts/at91-sama5d3_xplained.dts | 8 ++++----
- arch/arm/boot/dts/at91-sama5d4_xplained.dts | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm/boot/dts/at91-sama5d3_xplained.dts b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
-index d72c042f2850..a49c2966b41e 100644
---- a/arch/arm/boot/dts/at91-sama5d3_xplained.dts
-+++ b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
-@@ -57,8 +57,8 @@ slot@0 {
- 			};
- 
- 			spi0: spi@f0004000 {
--				pinctrl-names = "default";
--				pinctrl-0 = <&pinctrl_spi0_cs>;
-+				pinctrl-names = "default", "cs";
-+				pinctrl-1 = <&pinctrl_spi0_cs>;
- 				cs-gpios = <&pioD 13 0>, <0>, <0>, <&pioD 16 0>;
- 				status = "okay";
- 			};
-@@ -171,8 +171,8 @@ slot@0 {
- 			};
- 
- 			spi1: spi@f8008000 {
--				pinctrl-names = "default";
--				pinctrl-0 = <&pinctrl_spi1_cs>;
-+				pinctrl-names = "default", "cs";
-+				pinctrl-1 = <&pinctrl_spi1_cs>;
- 				cs-gpios = <&pioC 25 0>;
- 				status = "okay";
- 			};
-diff --git a/arch/arm/boot/dts/at91-sama5d4_xplained.dts b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
-index accb92cfac44..e519d2747936 100644
---- a/arch/arm/boot/dts/at91-sama5d4_xplained.dts
-+++ b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
-@@ -81,8 +81,8 @@ usart4: serial@fc010000 {
- 			};
- 
- 			spi1: spi@fc018000 {
--				pinctrl-names = "default";
--				pinctrl-0 = <&pinctrl_spi1_cs>;
-+				pinctrl-names = "default", "cs";
-+				pinctrl-1 = <&pinctrl_spi1_cs>;
- 				cs-gpios = <&pioB 21 0>;
- 				status = "okay";
- 			};
--- 
-2.32.0
+> 		idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
+> 	else
+> 		idev = ip6_dst_idev(dst);
+> 
+> 	switch (ipstats_mib_noroutes) {
+> 	case IPSTATS_MIB_INNOROUTES:
+> 		type = ipv6_addr_type(&ipv6_hdr(skb)->daddr);
+> 		if (type == IPV6_ADDR_ANY) {
+> 			IP6_INC_STATS(net, idev, IPSTATS_MIB_INADDRERRORS);
+> 			break;
+> 		}
+> 		fallthrough;
+> 	case IPSTATS_MIB_OUTNOROUTES:
+> 		IP6_INC_STATS(net, idev, ipstats_mib_noroutes);
+> 		break;
+> 	}
+> 
+> ---
+> What happens in the case where the l3mdev is not used, is that we go into the else branch(idev = ip6_dst_idev(dst);) and then we can see that the counter is incremented on the loopback IF.
+> 
+> So is the only option that l3mdev should be used or is it strange to expect that the idev where the INNOROUTES should increment is the ingress device by default in this case?
+> 
 

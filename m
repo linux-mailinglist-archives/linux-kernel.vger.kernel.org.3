@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7E14EE398
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9924EE3A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238817AbiCaV6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S242163AbiCaV74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242162AbiCaV6t (ORCPT
+        with ESMTP id S235281AbiCaV7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:58:49 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04542467D6;
-        Thu, 31 Mar 2022 14:56:56 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d5so1518695lfj.9;
-        Thu, 31 Mar 2022 14:56:56 -0700 (PDT)
+        Thu, 31 Mar 2022 17:59:52 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EA4242235
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:58:04 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id p15so2048190ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=C5/V3Ppw/qitPursR+7CAkeFCCgQmdXdvGMRe0ZnPWU=;
-        b=e1FFrPkG1ZIU2AnelJMZJj26kfEzrzR5n811c5f5YJue2DqnotZS7FtJ4wIuEDJj48
-         nX9VHMGo+Nb9F5OzpYx2GZ5mmUmz6YOCPx6ms//qFi3D5PLCAGdSry589Q1lr1wtc5Xr
-         A1vLmhtsrSYo0k0QTOShbXCE0PqeKdtJKEAE7nmhdbeBOy60FjRMOAvMTs81PvFMT4dX
-         cobkI6Al2+i6DkCHhSDYA5Ec884E+ld7PvoMIXWdDyFrYI0xCZRU2y6ATzWjeEXvEaDx
-         YJOa35UeitLPhclE2stlTQHTZl5lLtWQcgl4BiTRl0S+V+OoWVsS8yigFCfr+ecg0TYX
-         I7hQ==
+        bh=SnKWR36qXN9DPKW78CAJffMBb1k2kT9rbH8v1Mt42bo=;
+        b=L/xJXN/RhDZBW63j0nY789Dsf2UOZlqvxpAB1rQGvoQA/GqLDoAY0DhI3ZBKQiOotL
+         XNeESpX4Qs0dj1uVvuobCtU9cQJHY4PDNS5j0ByL/atlKvlZgwlbpFRFwoaNEft/zEpL
+         NxaU8ObrHcM2lQ6waRhXe4rW7MKQs4fEAWluACSW2zjZTMUOQKIgKgFXxdoMru2CqPgJ
+         Owhb/XZXqYnp8cRlO19wRN5Pc4vnSPTQGw+UhyG2uCXv4LfxOxirMcCSHFt+opO1ucuS
+         MtjgxDkdvYCIHx2feJ06dL5NEcdt3RXNY57PNNzzVI2qmqruFg6Za4r9iprkhjLnguSb
+         3pow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=C5/V3Ppw/qitPursR+7CAkeFCCgQmdXdvGMRe0ZnPWU=;
-        b=56ApMGmOxTEJEI88u0g1dCNXjkItFGXwq+uD7+XWpohQndgZJaIiwq3N2xWUCAZaB1
-         wGuvs8dT4mUYwzwA7aDM/5dP5n8lZdW9X48pPRD8tpHtCGf3kdZUcn53fTl1vhVtIrLI
-         IX+QuwpDqc/RHG1NmDtkFTXKmv6/MuQMM86Gu0M5LWU8BA6Km1HFbAk3VMVf/37mSUZ5
-         vT63noQAqMdA8gGLKQAvi5pTUEDDhlEg60zpRwX7D91DMI9mTUSEby/RMDfT5At9gcSQ
-         SgpGREJHc8k+IR140sUcQILXUOI/UGN5EQx0c5B9b8KZzXfD82ou6p74pMOoAJNXZJeG
-         Zp6g==
-X-Gm-Message-State: AOAM530br40S7x5QnZF0PptPonumCbH0zsKPQJInPkmIejvr/r2AMVez
-        902pbTtGJG2epO0QWF4Jw5k=
-X-Google-Smtp-Source: ABdhPJzy4Bqt3mhcetavw7lWOhsd6LFjmLJaxselo/aO+36hXhoXXJBjdmcJCVeE8bZDC8IkH3JXTQ==
-X-Received: by 2002:a05:6512:2214:b0:44a:348a:d72 with SMTP id h20-20020a056512221400b0044a348a0d72mr12190683lfu.416.1648763815000;
-        Thu, 31 Mar 2022 14:56:55 -0700 (PDT)
-Received: from noname.. ([2a02:2698:8c2a:31b:6d9:f5ff:fecb:a8ab])
-        by smtp.googlemail.com with ESMTPSA id u2-20020a2e9f02000000b0024af5f27771sm38800ljk.32.2022.03.31.14.56.53
+        bh=SnKWR36qXN9DPKW78CAJffMBb1k2kT9rbH8v1Mt42bo=;
+        b=hAnqowrtdX0eFxNEvlkBRzuNj6Q55ByYlJcHUGKqRY9G4dIBd/m2MxCitG3bFYQWLe
+         zSDeoboLgZ1egRlCTsldiLL4uMTk1RB0EiL+EiEOKt1z6/pRW9WOGyWgEWg677GhEimm
+         fyz9sdrY493sCBa8zZOAXIMZGutuGtXDSpxjX/fo/TnYCP7BLRuwiBPiQa3sTSHihbx9
+         qxtco2Qn0jYVYzIEDegSklMlHXfnJI32/oGOcFRd6fOmuAzGoH/TA24w4MjWFJmgGg6s
+         G5lKBNi1LrdWtTfpV1i+ABS8e+mrRC9yHvI8ZAJZQRcwse41RuAJpA12LDoyaSAHKEgp
+         Uizw==
+X-Gm-Message-State: AOAM532vZwKJC3ueSU12C2i0adcbYqAXLdtpuDfzaChTua2ZZ+gQ7Vtl
+        SGLibfm40dbnJ/YUBUDJhxk=
+X-Google-Smtp-Source: ABdhPJxdWKfmberRVzeq0deUU2sbCsLrtXf2QTvX91wCX0YIE3clMY9PAFVGN7Z+BXyR4yvT8tlFMQ==
+X-Received: by 2002:a17:906:d789:b0:6e0:bdd5:a884 with SMTP id pj9-20020a170906d78900b006e0bdd5a884mr6561407ejb.201.1648763882802;
+        Thu, 31 Mar 2022 14:58:02 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id do8-20020a170906c10800b006dfe680dbfcsm254109ejc.43.2022.03.31.14.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 14:56:54 -0700 (PDT)
-From:   Grigory Vasilyev <h0tc0d3@gmail.com>
-Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yury Norov <yury.norov@gmail.com>, Yonghong Song <yhs@fb.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] Fix kernel build with LLVM=1
-Date:   Fri,  1 Apr 2022 00:56:58 +0300
-Message-Id: <20220331215659.3800-1-h0tc0d3@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 31 Mar 2022 14:58:02 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH] clockevents: use dedicated list iterator variable
+Date:   Thu, 31 Mar 2022 23:57:07 +0200
+Message-Id: <20220331215707.883957-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wrong logic is using 1 as a suffix instead of -1.
-So the build script tries to find clang1 file instead of clang.
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-GEN     Makefile
-HOSTCC  scripts/basic/fixdep
-/bin/sh: line 1: clang1: command not found
-make[2]: *** [/build/linux/scripts/Makefile.host:95: scripts/basic/fixdep] Error 127
-make[1]: *** [/build/linux/Makefile:564: scripts_basic] Error 2
-make: *** [Makefile:219: __sub-make] Error 2
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable [1].
 
-Fixes: b8321ed4a40c("Merge tag 'kbuild-v5.18-v2'")
-
-Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-Reported-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- Makefile                       | 4 ++--
- tools/scripts/Makefile.include | 4 ++--
- tools/testing/selftests/lib.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ kernel/time/clockevents.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 18ecb49f1af6..efca890d4ea3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -426,8 +426,8 @@ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
- ifneq ($(LLVM),)
- ifneq ($(filter %/,$(LLVM)),)
- LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
-+else ifneq (,$(findstring -, $(LLVM)))
-+LLVM_SUFFIX := $(filter -%, $(LLVM))
- endif
+diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
+index 003ccf338d20..5d85014d59b5 100644
+--- a/kernel/time/clockevents.c
++++ b/kernel/time/clockevents.c
+@@ -690,7 +690,7 @@ static ssize_t unbind_device_store(struct device *dev,
+ {
+ 	char name[CS_NAME_LEN];
+ 	ssize_t ret = sysfs_get_uname(buf, name, count);
+-	struct clock_event_device *ce;
++	struct clock_event_device *ce = NULL, *iter;
  
- HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 0efb8f2b33ce..c7a56d7f0bad 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -54,8 +54,8 @@ endef
- ifneq ($(LLVM),)
- ifneq ($(filter %/,$(LLVM)),)
- LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
-+else ifneq (,$(findstring -, $(LLVM)))
-+LLVM_SUFFIX := $(filter -%, $(LLVM))
- endif
- 
- $(call allow-override,CC,$(LLVM_PREFIX)clang$(LLVM_SUFFIX))
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 2a2d240cdc1b..42af066cf39e 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -3,8 +3,8 @@
- ifneq ($(LLVM),)
- ifneq ($(filter %/,$(LLVM)),)
- LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
-+else ifneq (,$(findstring -, $(LLVM)))
-+LLVM_SUFFIX := $(filter -%, $(LLVM))
- endif
- 
- CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+ 	if (ret < 0)
+ 		return ret;
+@@ -698,9 +698,10 @@ static ssize_t unbind_device_store(struct device *dev,
+ 	ret = -ENODEV;
+ 	mutex_lock(&clockevents_mutex);
+ 	raw_spin_lock_irq(&clockevents_lock);
+-	list_for_each_entry(ce, &clockevent_devices, list) {
+-		if (!strcmp(ce->name, name)) {
+-			ret = __clockevents_try_unbind(ce, dev->id);
++	list_for_each_entry(iter, &clockevent_devices, list) {
++		if (!strcmp(iter->name, name)) {
++			ret = __clockevents_try_unbind(iter, dev->id);
++			ce = iter;
+ 			break;
+ 		}
+ 	}
+
+base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
 -- 
-2.35.1
+2.25.1
 

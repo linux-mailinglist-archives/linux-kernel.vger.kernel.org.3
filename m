@@ -2,128 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BE84EE307
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD95F4EE30A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241623AbiCaVGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S241632AbiCaVGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241622AbiCaVGJ (ORCPT
+        with ESMTP id S241629AbiCaVGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:06:09 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F8863BD2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:04:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id B2D1E609B3CB;
-        Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id KXq5bdCwI6eH; Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 4380A614E2F4;
-        Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qpofYdCL9ADw; Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 2A640609B3CB;
-        Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
-Date:   Thu, 31 Mar 2022 23:04:20 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>
-Message-ID: <678407645.204324.1648760660133.JavaMail.zimbra@nod.at>
-Subject: [GIT PULL] JFFS2, UBI and UBIFS fixes for 5.18
+        Thu, 31 Mar 2022 17:06:18 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A4B8212
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:04:28 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso3496674pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cXtJh38aI7rFhwSkhNj8FWqiXd2HNKnAb8Z05DuJmvg=;
+        b=VU+HkxENuiBH0omyCyOgv/F8rvOeDdoiIUYe707WQABTk/xZLcJcetc8hqCQqdZqBf
+         dX5MUqN0Z8PmbJEgBLdPTk9Pidg03XZTQdyPGtKLA7epdfp1mS9JhwXc+gB3uyf7n7WJ
+         mBQfXZzPOJ05Rp9t13bvxEJYECXHCQit9mJJQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cXtJh38aI7rFhwSkhNj8FWqiXd2HNKnAb8Z05DuJmvg=;
+        b=Zf3mbJAinwdqtzGj5au0AfB6nhD0NAkVKs9hyi2HrYIjtZr8pB8e6NxaUOBXGVzxXO
+         pplPAyKAtqKvf4k+auoLXoL1GGmb/cuHQZJGKJF+XG+hfYKTiNXTZ4+Y1v2lYhUaAqMD
+         aAkUlOZtBSvs5cKNyY4kyEtDiTMFCRGIYyXroxiyx9jXZigOJy9sVUaObxyQVbNLhU1f
+         +1FWund+tfiOxPejGxPJHi3aYTiILqrGLvMjq9dv3rxOBIwJ60Kuc+gH2ClCCIZQtEeo
+         ug+HvZp7pFQGOpDIMpIxTxuRaBpIF3uIAZwILqtHrPIpjsZWbrMfb9sYGFSiXA1e0XBz
+         b6fg==
+X-Gm-Message-State: AOAM531Im0kUuDPoFS0ZJ3WBXQJMmfWXw8igNy01cR/PWm6UaQj97eym
+        dxZa7WxaZZ+9lPYwcItCznJIhw==
+X-Google-Smtp-Source: ABdhPJzGO+ht/Ae+Vv6wSxnABo8FauouW9END+e7QuZYMsr9TxK82jlGU047uC4bDOa7QhQPMGLMBQ==
+X-Received: by 2002:a17:90b:314b:b0:1c7:4a4f:6740 with SMTP id ip11-20020a17090b314b00b001c74a4f6740mr8137766pjb.145.1648760667609;
+        Thu, 31 Mar 2022 14:04:27 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:f6f:d194:b010:bb5f])
+        by smtp.gmail.com with ESMTPSA id d10-20020a056a0024ca00b004fd90388a86sm381426pfv.173.2022.03.31.14.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 14:04:27 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Gwendal Grignou <gwendal@chromium.org>
+Subject: [PATCH] iio:proximity:sx_common: Fix device property parsing on DT systems
+Date:   Thu, 31 Mar 2022 14:04:25 -0700
+Message-Id: <20220331210425.3908278-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Index: dHWwhMT9Bg43NSBogJ+HKHdWxxbsHQ==
-Thread-Topic: JFFS2, UBI and UBIFS fixes for 5.18
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+After commit 7a3605bef878 ("iio: sx9310: Support ACPI property") we
+started using the 'indio_dev->dev' to extract device properties for
+various register settings in sx9310_get_default_reg(). This broke DT
+based systems because dev_fwnode() used in the device_property*() APIs
+can't find an 'of_node'. That's because the 'indio_dev->dev.of_node'
+pointer isn't set until iio_device_register() is called. Set the pointer
+earlier, next to where the ACPI companion is set, so that the device
+property APIs work on DT systems.
 
-The following changes since commit aa39cc675799bc92da153af9a13d6f969c348e82:
+Cc: Gwendal Grignou <gwendal@chromium.org>
+Fixes: 7a3605bef878 ("iio: sx9310: Support ACPI property")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/iio/proximity/sx_common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-  jffs2: GC deadlock reading a page that is used in jffs2_write_begin() (2021-12-23 22:33:41 +0100)
+diff --git a/drivers/iio/proximity/sx_common.c b/drivers/iio/proximity/sx_common.c
+index a7c07316a0a9..8ad814d96b7e 100644
+--- a/drivers/iio/proximity/sx_common.c
++++ b/drivers/iio/proximity/sx_common.c
+@@ -521,6 +521,7 @@ int sx_common_probe(struct i2c_client *client,
+ 		return dev_err_probe(dev, ret, "error reading WHOAMI\n");
+ 
+ 	ACPI_COMPANION_SET(&indio_dev->dev, ACPI_COMPANION(dev));
++	indio_dev->dev.of_node = client->dev.of_node;
+ 	indio_dev->modes = INDIO_DIRECT_MODE;
+ 
+ 	indio_dev->channels =  data->chip_info->iio_channels;
+-- 
+https://chromeos.dev
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/for-linus-5.18-rc1
-
-for you to fetch changes up to 705757274599e2e064dd3054aabc74e8af31a095:
-
-  ubifs: rename_whiteout: correct old_dir size computing (2022-03-17 23:34:07 +0100)
-
-
-Please note that there is a minor merge conflict with the folio tree tree
-between commits
-3b67db8a6ca8 ("ubifs: Fix to add refcount once page is set private")
-and
-c337f2f4f746 ("ubifs: Convert from invalidatepage to invalidate_folio").
-
-I'll happily review your merge resolution.
-
-----------------------------------------------------------------
-This pull request contains fixes for JFFS2, UBI and UBIFS
-
-JFFS2:
-        - Fixes for various memory issues
-
-UBI:
-        - Fix for a race condition in cdev ioctl handler
-
-UBIFS:
-	- Fixes for O_TMPFILE and whiteout handling
-	- Fixes for various memory issues
-
-----------------------------------------------------------------
-Baokun Li (5):
-      ubi: Fix race condition between ctrl_cdev_ioctl and ubi_cdev_ioctl
-      jffs2: fix use-after-free in jffs2_clear_xattr_subsystem
-      jffs2: fix memory leak in jffs2_do_mount_fs
-      jffs2: fix memory leak in jffs2_scan_medium
-      ubifs: rename_whiteout: correct old_dir size computing
-
-Zhihao Cheng (11):
-      ubifs: rename_whiteout: Fix double free for whiteout_ui->data
-      ubifs: Fix deadlock in concurrent rename whiteout and inode writeback
-      ubifs: Fix wrong number of inodes locked by ui_mutex in ubifs_inode comment
-      ubifs: Add missing iput if do_tmpfile() failed in rename whiteout
-      ubifs: Rename whiteout atomically
-      ubifs: Fix 'ui->dirty' race between do_tmpfile() and writeback work
-      ubifs: Rectify space amount budget for mkdir/tmpfile operations
-      ubifs: setflags: Make dirtied_ino_d 8 bytes aligned
-      ubifs: Fix read out-of-bounds in ubifs_wbuf_write_nolock()
-      ubifs: Fix to add refcount once page is set private
-      ubi: fastmap: Return error code if memory allocation fails in add_aeb()
-
-hongnanli (1):
-      fs/jffs2: fix comments mentioning i_mutex
-
- drivers/mtd/ubi/build.c   |   9 +-
- drivers/mtd/ubi/fastmap.c |  28 ++++--
- drivers/mtd/ubi/vmt.c     |   8 +-
- fs/jffs2/build.c          |   4 +-
- fs/jffs2/fs.c             |   2 +-
- fs/jffs2/jffs2_fs_i.h     |   4 +-
- fs/jffs2/scan.c           |   6 +-
- fs/ubifs/dir.c            | 238 ++++++++++++++++++++++++++++------------------
- fs/ubifs/file.c           |  14 +--
- fs/ubifs/io.c             |  34 ++++++-
- fs/ubifs/ioctl.c          |   2 +-
- fs/ubifs/journal.c        |  52 ++++++++--
- fs/ubifs/ubifs.h          |   2 +-
- 13 files changed, 259 insertions(+), 144 deletions(-)

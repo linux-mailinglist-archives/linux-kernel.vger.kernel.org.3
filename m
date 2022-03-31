@@ -2,229 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787514ED702
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5020E4ED70C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 11:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbiCaJeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 05:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S234125AbiCaJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 05:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiCaJeP (ORCPT
+        with ESMTP id S232276AbiCaJga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 05:34:15 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE68D1BD994
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:32:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V8iK6V7_1648719143;
-Received: from 30.32.67.149(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V8iK6V7_1648719143)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 31 Mar 2022 17:32:24 +0800
-Message-ID: <ef5ab5e9-e503-771f-a141-dffcef886256@linux.alibaba.com>
-Date:   Thu, 31 Mar 2022 17:33:15 +0800
+        Thu, 31 Mar 2022 05:36:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EEBAA94CB
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648719281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x4I67CcKiPUobplhi0H/iEbbjb5B4T/bEaOV1iH1XyI=;
+        b=Q7ZGzN6YChX2745cuj2B2d7WMQZR4aeUOEUsZQ6CfUCjwF5BVbsd2VfXcBMT7PzGyDOXwN
+        exDc5M+J0xV9Q1FAu/VkZC5pO9QuwtE7xjNQENGtDNQOkJUJRHCwgn7u+wKDjcgqzDk5f+
+        UL0lj1RCowLFd8Z459VUCAMqB7AEsJE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-NvcI1196Nwqcw03NahSbCQ-1; Thu, 31 Mar 2022 05:34:39 -0400
+X-MC-Unique: NvcI1196Nwqcw03NahSbCQ-1
+Received: by mail-ed1-f72.google.com with SMTP id s9-20020a50d489000000b00418d556edbdso14600608edi.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 02:34:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x4I67CcKiPUobplhi0H/iEbbjb5B4T/bEaOV1iH1XyI=;
+        b=0Z31OYs9/xyYjCeYV6Ph2Ytq8GTTaS3ZLTxwnN4d/FJI7vg78WNMq/s9J5dd8iJuEt
+         UCUXh7PdRbb1TfUCDlj7C1NEkJayslknFg9K+FKvkSnzlg+SYVRYMHbBSW+sy2Ftw/BT
+         b06jWE9RUjnBPEiftS6IGguXNjvSCXRCDWW20WjQ1wY94vjEfUvCzPyIEYfvccZ6mVE6
+         FscvrO35QEDd9aAj0RoQMzCKPOsZ46JIqtnm53TLoGTHZx/kzDBSR86olx1N0zGf6155
+         o0GZa3ojqsJcN9D8umjb3FmIsgy6Nx2btB/YqSzXLp+I1STZcmgsRAmwTcRJdiaZbIpm
+         6RCQ==
+X-Gm-Message-State: AOAM5318qHPr0s9hEzhWzyI/UGcHMdnvuoKBOsblMhmDYEZ+rt0XuUGf
+        bDAWhYl7n98uuz762+iAE3Au/yCxSlodHZkbi88NdPCjDeji4JzVUtd7gC8bVuVRuISFEgbs2O8
+        dcfA3sVrgoVMOXX3fG+stdb+a
+X-Received: by 2002:a17:907:8690:b0:6da:8436:2b94 with SMTP id qa16-20020a170907869000b006da84362b94mr4216995ejc.33.1648719278050;
+        Thu, 31 Mar 2022 02:34:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwmm5TucDYC0IjZ8wd1Hy41fioPOMEJ4xib5m76/cqdidZM+ZlL/DDuWUQ92fIGN689dzwERg==
+X-Received: by 2002:a17:907:8690:b0:6da:8436:2b94 with SMTP id qa16-20020a170907869000b006da84362b94mr4216982ejc.33.1648719277816;
+        Thu, 31 Mar 2022 02:34:37 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:8ca6:a836:a237:fed1? ([2001:b07:6468:f312:8ca6:a836:a237:fed1])
+        by smtp.googlemail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm11202939edt.80.2022.03.31.02.34.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 02:34:36 -0700 (PDT)
+Message-ID: <0c830e36-fcf2-fab6-aed9-7b6a6736140f@redhat.com>
+Date:   Thu, 31 Mar 2022 11:34:35 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] mm: migrate: set demotion targets differently
-To:     "Huang, Ying" <ying.huang@intel.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        dave.hansen@linux.intel.com, Fan Du <fan.du@intel.com>
-References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
- <87pmm4c4ys.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87lewrxsv1.fsf@linux.ibm.com>
- <878rsrc672.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87ilruy5zt.fsf@linux.ibm.com>
- <87h77ebn6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87fsmyy1a0.fsf@linux.ibm.com>
- <8735iybisn.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <8735iybisn.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Subject: Re: [PATCH] KVM: MMU: propagate alloc_workqueue failure
+Content-Language: en-US
+To:     David Matlack <dmatlack@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220330165510.213111-1-pbonzini@redhat.com>
+ <YkTs5BU24zrw30hK@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YkTs5BU24zrw30hK@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/31/22 01:51, David Matlack wrote:
+>> -void kvm_mmu_init_vm(struct kvm *kvm)
+>> +int kvm_mmu_init_vm(struct kvm *kvm)
+>>   {
+>>   	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
+>> +	int r;
+>>   
+>> +	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
+>> +	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
+>> +	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
+> 
+> I agree with moving these but that should probably be done in a separate
+> commit.
 
+Ok.
 
-On 3/31/2022 4:58 PM, Huang, Ying wrote:
-> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>> -	kvm->arch.tdp_mmu_zap_wq =
+>> -		alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
+>> -
+>> -	return true;
+>> +	kvm->arch.tdp_mmu_zap_wq = wq;
 > 
->> "Huang, Ying" <ying.huang@intel.com> writes:
->>
->>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>
->>>> "Huang, Ying" <ying.huang@intel.com> writes:
->>>>
->>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>
->>>>>> "Huang, Ying" <ying.huang@intel.com> writes:
->>>>>>
->>>>>>> Hi, Jagdish,
->>>>>>>
->>>>>>> Jagdish Gediya <jvgediya@linux.ibm.com> writes:
->>>>>>>
->>>>>>
->>>>>> ...
->>>>>>
->>>>>>>> e.g. with below NUMA topology, where node 0 & 1 are
->>>>>>>> cpu + dram nodes, node 2 & 3 are equally slower memory
->>>>>>>> only nodes, and node 4 is slowest memory only node,
->>>>>>>>
->>>>>>>> available: 5 nodes (0-4)
->>>>>>>> node 0 cpus: 0 1
->>>>>>>> node 0 size: n MB
->>>>>>>> node 0 free: n MB
->>>>>>>> node 1 cpus: 2 3
->>>>>>>> node 1 size: n MB
->>>>>>>> node 1 free: n MB
->>>>>>>> node 2 cpus:
->>>>>>>> node 2 size: n MB
->>>>>>>> node 2 free: n MB
->>>>>>>> node 3 cpus:
->>>>>>>> node 3 size: n MB
->>>>>>>> node 3 free: n MB
->>>>>>>> node 4 cpus:
->>>>>>>> node 4 size: n MB
->>>>>>>> node 4 free: n MB
->>>>>>>> node distances:
->>>>>>>> node   0   1   2   3   4
->>>>>>>>    0:  10  20  40  40  80
->>>>>>>>    1:  20  10  40  40  80
->>>>>>>>    2:  40  40  10  40  80
->>>>>>>>    3:  40  40  40  10  80
->>>>>>>>    4:  80  80  80  80  10
->>>>>>>>
->>>>>>>> The existing implementation gives below demotion targets,
->>>>>>>>
->>>>>>>> node    demotion_target
->>>>>>>>   0              3, 2
->>>>>>>>   1              4
->>>>>>>>   2              X
->>>>>>>>   3              X
->>>>>>>>   4		X
->>>>>>>>
->>>>>>>> With this patch applied, below are the demotion targets,
->>>>>>>>
->>>>>>>> node    demotion_target
->>>>>>>>   0              3, 2
->>>>>>>>   1              3, 2
->>>>>>>>   2              3
->>>>>>>>   3              4
->>>>>>>>   4		X
->>>>>>>
->>>>>>> For such machine, I think the perfect demotion order is,
->>>>>>>
->>>>>>> node    demotion_target
->>>>>>>   0              2, 3
->>>>>>>   1              2, 3
->>>>>>>   2              4
->>>>>>>   3              4
->>>>>>>   4              X
->>>>>>
->>>>>> I guess the "equally slow nodes" is a confusing definition here. Now if the
->>>>>> system consists of 2 1GB equally slow memory and the firmware doesn't want to
->>>>>> differentiate between them, firmware can present a single NUMA node
->>>>>> with 2GB capacity? The fact that we are finding two NUMA nodes is a hint
->>>>>> that there is some difference between these two memory devices. This is
->>>>>> also captured by the fact that the distance between 2 and 3 is 40 and not 10.
->>>>>
->>>>> Do you have more information about this?
->>>>
->>>> Not sure I follow the question there. I was checking shouldn't firmware
->>>> do a single NUMA node if two memory devices are of the same type? How will
->>>> optane present such a config? Both the DIMMs will have the same
->>>> proximity domain value and hence dax kmem will add them to the same NUMA
->>>> node?
->>>
->>> Sorry for confusing.  I just wanted to check whether you have more
->>> information about the machine configuration above.  The machines in my
->>> hand have no complex NUMA topology as in the patch description.
->>
->>
->> Even with simple topologies like below
->>
->> available: 3 nodes (0-2)
->> node 0 cpus: 0 1
->> node 0 size: 4046 MB
->> node 0 free: 3478 MB
->> node 1 cpus: 2 3
->> node 1 size: 4090 MB
->> node 1 free: 3430 MB
->> node 2 cpus:
->> node 2 size: 4074 MB
->> node 2 free: 4037 MB
->> node distances:
->> node   0   1   2
->>    0:  10  20  40
->>    1:  20  10  40
->>    2:  40  40  10
->>
->> With current code we get demotion targets assigned as below
->>
->> [    0.337307] Demotion nodes for Node 0: 2
->> [    0.337351] Demotion nodes for Node 1:
->> [    0.337380] Demotion nodes for Node 2:
->>
->> I guess we should fix that to be below?
->>
->> [    0.344554] Demotion nodes for Node 0: 2
->> [    0.344605] Demotion nodes for Node 1: 2
->> [    0.344638] Demotion nodes for Node 2:
-> 
-> If the cross-socket link has enough bandwidth to accommodate the PMEM
-> throughput, the new one is better.  If it hasn't, the old one may be
-> better.  So, I think we need some kind of user space overridden support
-> here.  Right?
-> 
->> Most of the tests we are doing are using Qemu to simulate this. We
->> started looking at this to avoid using demotion completely when slow
->> memory is not present. ie, we should have a different way to identify
->> demotion targets other than node_states[N_MEMORY]. Virtualized platforms
->> can have configs with memory only NUMA nodes with DRAM and we don't
->> want to consider those as demotion targets.
-> 
-> Even if the demotion targets are set for some node, the demotion will
-> not work before enabling demotion via sysfs
-> (/sys/kernel/mm/numa/demotion_enabled).  So for system without slow
-> memory, just don't enable demotion.
-> 
->> While we are at it can you let us know how topology will look on a
->> system with two optane DIMMs? Do both appear with the same
->> target_node?
-> 
-> In my test system, multiple optane DIMMs in one socket will be
-> represented as one NUMA node.
-> 
-> I remember Baolin has different configuration.
-> 
-> Hi, Baolin,  Can you provide some information about this?
+> Suggest moving this to just after checking the return value of
+> alloc_workqueue().
 
-Sure. We have real machines with 2 optane DIMMs, and they are 
-represented as 2 numa nodes. So we want to support the target demotion 
-nodes can be multiple.
+This is intentional, in case we have other future allocations, to avoid 
+having to NULL out the field in the unwind path.  It's a matter of taste 
+I guess.
 
-available: 3 nodes (0-2)
-node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-node 0 size: 62153 MB
-node 0 free: 447 MB
-node 1 cpus:
-node 1 size: 126969 MB
-node 1 free: 84099 MB
-node 2 cpus:
-node 2 size: 127006 MB
-node 2 free: 126925 MB
-node distances:
-node   0   1   2
-   0:  10  20  20
-   1:  20  10  20
-   2:  20  20  10
+>> +	return 1;
+> 
+> Perhaps return 0 until we have a reason to differentiate the 2 cases.
+
+Yeah, though I wanted to preserve the previous behavior.
+
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index fe2171b11441..89b6efb7f504 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -11629,12 +11629,13 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+>>   
+>>   	ret = kvm_page_track_init(kvm);
+>>   	if (ret)
+>> -		return ret;
+>> +		goto out;
+> 
+> nit: This goto is unnecessary.
+
+True, but I prefer to be consistent in using "goto" so that any future 
+additions are careful about preserving the chain.
+
+Paolo
 

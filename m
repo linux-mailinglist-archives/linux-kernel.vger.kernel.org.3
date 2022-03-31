@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1754ED885
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9964ED888
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 13:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiCaLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 07:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S235180AbiCaLeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 07:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbiCaLdt (ORCPT
+        with ESMTP id S235158AbiCaLeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 07:33:49 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9AB16BCF6;
-        Thu, 31 Mar 2022 04:32:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=is2hfnm658tQQV/yE96Ye3wvp2HVc9uQBLKKmPWpOMc=; b=dpVa/bTWDFWOCs6jBoHfle55D+
-        KFgmOlVmklNh2Krrqrwi8hqvDEDithDC4lS2WeEOjbS8nTPidVm4/N3HHWt3tuRWSnUBsdwvRxnrt
-        vD4zxHsyvsTPHLPrcIVyESd0xvDjncd2grKUTEtAqIzilhbPMaqbDcqELHWZY+cRhCOgYb08GXvVe
-        kgJzPxauCblhGjHEzWfpH/pnMMUkLYpfxTx3oxr5j4r7WIgAKLECyMUbmeBgTuxKCyMafqJs/MCK4
-        8Uf1ZMukEph7Z0fmGFwps3MOP86NwMsukf7XnmAoTh2+HzOlbIzvGB88jcoMo+FENK9fj7SRxeuZ/
-        HkTjIXpQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58048)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZt1s-0004iK-6d; Thu, 31 Mar 2022 12:31:51 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZt1p-0007Zh-Hh; Thu, 31 Mar 2022 12:31:49 +0100
-Date:   Thu, 31 Mar 2022 12:31:49 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Walle <michael@walle.cc>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
-Message-ID: <YkWRJc6wubOaiFll@shell.armlinux.org.uk>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-5-michael@walle.cc>
- <Yjt99k57mM5PQ8bT@lunn.ch>
- <8304fb3578ee38525a158af768691e75@walle.cc>
- <Yju+SGuZ9aB52ARi@lunn.ch>
+        Thu, 31 Mar 2022 07:34:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3BE182DAE;
+        Thu, 31 Mar 2022 04:32:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 875ED615DB;
+        Thu, 31 Mar 2022 11:32:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D67C340F3;
+        Thu, 31 Mar 2022 11:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648726331;
+        bh=t0lC1RQIMJQ9wmY9jq+yTfW7RjoXXGVpdb/3uZ0FJ0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fNHj4AGDpAZrOi7HiVrnjfUu7pjzWkaPko+JNLbcKZCq1IcQNPbnZI3QbEQF8yvRD
+         Rvk9BPTAwt7es2EjGzdbFqgtTVi8dudTKL5PzhagULHwH7Fd7NF7hUGYl/TkAaJfQP
+         HfvLROs/ZB3GYsvWt/+ImhAkzMugwhVX4fBop67k=
+Date:   Thu, 31 Mar 2022 13:32:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nas Chung <nas.chung@chipsnmedia.com>
+Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "dafna3@gmail.com" <dafna3@gmail.com>,
+        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
+        "kiril.bicevski@collabora.com" <kiril.bicevski@collabora.com>,
+        "lafley.kim" <lafley.kim@chipsnmedia.com>,
+        Scott Woo <scott.woo@chipsnmedia.com>,
+        "olivier.crete@collabora.com" <olivier.crete@collabora.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "daniel@0x0f.com" <daniel@0x0f.com>
+Subject: Re: [PATCH v6 4/6] staging: media: wave5: Add TODO file
+Message-ID: <YkWRN4ac0ivRn4aB@kroah.com>
+References: <SL2P216MB12463DE2E1E100E2498A5C33FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+ <SL2P216MB1246D7900A0B9620F1E1A038FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yju+SGuZ9aB52ARi@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <SL2P216MB1246D7900A0B9620F1E1A038FBE19@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 01:41:44AM +0100, Andrew Lunn wrote:
-ydev->c45_over_c22 we are currently in a bad shape for. We cannot
-> reliably say the bus master supports C45. If the bus capabilities say
-> C22 only, we can set phydev->c45_over_c22. If the bus capabilities
-> list C45, we can set it false. But that only covers a few busses, most
-> don't have any capabilities set. We can try a C45 access and see if we
-> get an -EOPNOTSUPP, in which case we can set phydev->c45_over_c22. But
-> the bus driver could also do the wrong thing, issue a C22 transfer and
-> give us back rubbish.
+On Thu, Mar 31, 2022 at 09:55:10AM +0000, Nas Chung wrote:
+> From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> 
+> Add a TODO file listing all that is need for destaging.
+> 
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> ---
+>  drivers/staging/media/wave5/TODO | 64 ++++++++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 drivers/staging/media/wave5/TODO
+> 
+> diff --git a/drivers/staging/media/wave5/TODO b/drivers/staging/media/wave5/TODO
+> new file mode 100644
+> index 000000000000..425ed42a234c
+> --- /dev/null
+> +++ b/drivers/staging/media/wave5/TODO
+> @@ -0,0 +1,64 @@
+> +* Test on real silicon once available
+> +
+> +  This driver has so far been tested on pre-silicon FPGA and on the beta BeagleV
+> +  board which uses the StarFive JH7100 beta SoC.
+> +
+> +  Testing on FPGA shows it working fine, though the FPGA uses polled interrupts
+> +  and copied buffers between the host and it's on board RAM.
+> +
+> +  Testing on BeagleV shows buffer corruption that is currently attributed to a
+> +  known silicon issue in the SoC that makes the cache coherent interconnect not
+> +  so coherent.
+> +  This can likely be solved when the riscv non-coherent dma support lands and
+> +  provide optional v4l2 non-contiguous allocator, though it remains to be seen
+> +  whether support non-coherent use cases will be useful in real world hw.
+> +
+> +  Until we can test and resolve any issues on final silicon (due 2H 2021)
+> +  this driver should remain in staging.
 
-Unfortunately, trying a C45 access will be very hit and miss - we
-need to fix all the MDIO drivers before we do that to check the
-access type. Many don't, and worse, many assume a C22 formatted
-access request, and just try throwing the PHY address and register
-address into the register fields without any masking. The result is
-that a C45 access will set random bits in the register.
+Then why not just wait?  Why merge this now?  What is the benifit of us
+taking this code at this point in time for hardware that is no one has
+as it is not even created?
 
-For example:
-drivers/net/mdio/mdio-bcm-iproc.c (no bus capability):
+thanks,
 
-        /* Prepare the read operation */
-        cmd = (MII_DATA_TA_VAL << MII_DATA_TA_SHIFT) |
-                (reg << MII_DATA_RA_SHIFT) |
-                (phy_id << MII_DATA_PA_SHIFT) |
-                BIT(MII_DATA_SB_SHIFT) |
-                (MII_DATA_OP_READ << MII_DATA_OP_SHIFT);
-
-        writel(cmd, priv->base + MII_DATA_OFFSET);
-
-Similar is true for:
-drivers/net/mdio/mdio-bcm-unimac.c (no bus capability)
-drivers/net/mdio/mdio-hisi-femac.c (no bus capability)
-drivers/net/mdio/mdio-moxart.c (no bus capability)
-drivers/net/mdio/mdio-mscc-miim.c (no bus capability)
-drivers/net/mdio/mdio-mux-bcm6368.c (no bus capability)
-drivers/net/mdio/mdio-mux-bcm-iproc.c (no bus capability)
-drivers/net/mdio/mdio-sun4i.c (no bus capability)
-
-These truncate the fields, and fwics they don't set the bus type:
-drivers/net/mdio/mdio-xgene.c (for the "rgmii" only bus and no bus capability)
-
-So all of the above need at the very least code added to reject a C45
-"dev" or "phy_id" address, or they need to set the bus capability
-correctly.
-
-My feeling is that the introduction of the bus capability hasn't done
-much to improve this situation; it was introduced to hint at whether a
-bus is safe for clause 45 accesses, but it hasn't actually solved this
-problem because we patently still have this same issue today.
-
-I think we just need to bite the bullet and audit all the MDIO drivers
-we currently have, checking what the results would be if they were
-passed a C45 access request, and make them reject such a request if
-the register address or phy address obviously overflows into different
-register fields and also mark them as C22-only.
-
-I can't see any other reasonable option.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+greg k-h

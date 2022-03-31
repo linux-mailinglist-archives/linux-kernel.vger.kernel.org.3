@@ -2,146 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D6E4ED286
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A33B4ED2EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiCaEOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S229773AbiCaEP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiCaEOT (ORCPT
+        with ESMTP id S230145AbiCaEPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:14:19 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE912A046D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648698658; x=1680234658;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ywsd5TczOlk5hhmei9XyZgtcABww4n4fQ4XaXobWeWo=;
-  b=aGBYqhvoaGdPS4TraHHsP2/goKeWuBUBx8OfoMXvtKz34VQ84G5Kfvhw
-   E1RQq+nr/INtny15AbTe+aXbrKBUSgRvWIpaOzUhNd0owskNwc9YWwMZd
-   e7fL+7Q9TD3Ld/OcgdQpMneUux0EumVC7tGo0Qk3BKWQqFC8Q6SVj0/yN
-   sf74LKaipE+Mso7idpghoSacEo0mHbAnxm9/koSpSOhOZCdSphePCHxL/
-   mFHTZV0vXWJKIighMPS52DWkUnFtSVFgzFQ7uCOlUT8T5VNh6kOQhkiR8
-   RxkdSfW+9kI7cwZRJNWiUvGLDrwm+9N3nA5k/p4RY9B7N7oDOQLIp1WsN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="257291100"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="257291100"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 20:28:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="503570632"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2022 20:28:53 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZlUS-0000oS-IN;
-        Thu, 31 Mar 2022 03:28:52 +0000
-Date:   Thu, 31 Mar 2022 11:28:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Armelle Laine <armellel@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 5860/5872] drivers/trusty/trusty-log.c:354:21: warning: left shift count >=
- width of type
-Message-ID: <202203311133.4BHUMmsV-lkp@intel.com>
+        Thu, 31 Mar 2022 00:15:06 -0400
+X-Greylist: delayed 247 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 20:48:12 PDT
+Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D352976F0;
+        Wed, 30 Mar 2022 20:48:11 -0700 (PDT)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-05.nifty.com with ESMTP id 22V3TdnN022336;
+        Thu, 31 Mar 2022 12:29:39 +0900
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 22V3SnTf021405;
+        Thu, 31 Mar 2022 12:28:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 22V3SnTf021405
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648697329;
+        bh=ebHiMyRXav+yYbj4YhCL/RfqMUHBooyu6ftffopVXqQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=ZGlny3DA71k8ikJLnGyRECTgQyO7xB3etGAcHL4IWMO2Ll4b1J0pvlKnJM6AWNI/S
+         vehegfWxV6DWJKljebu7hHx/yBy9HapwmdQFKVXH1vMK1S1tG7vvjNshvcQ3MV01dZ
+         sgeWR0KJJfkyuqGs5cIduOFXEjYAScCNprr0D9KZJ+t84TRxO6vcayUiX7EFvKskrZ
+         el+I+pNisq47KJy//MUN31nF4DYYOAoYdfPbJG4DCoazZMpyTv9PPXToP0kI0IrFiM
+         Jp9qzvuPHejQroq+g7vy2v5GWh18a1Gb/0ojfp5VA6Jmaq+hsu078C2rqfsQC2sJ3/
+         5dyf7fD8EwWMA==
+X-Nifty-SrcIP: [209.85.214.174]
+Received: by mail-pl1-f174.google.com with SMTP id x2so22249710plm.7;
+        Wed, 30 Mar 2022 20:28:49 -0700 (PDT)
+X-Gm-Message-State: AOAM531+3HbmcqDSOE5+ATyjEQKbPeMoGSO27dzEpnosi7tjKWvLt/+a
+        ma2aPaSiZb0eUCQ9cfe+Pc3yYBjHSJ121+6EbKM=
+X-Google-Smtp-Source: ABdhPJy9ZE47MB+xD259EDGtBKxUDhqoi9uMl1Rs9lqYW9wobU0i+Q3DHJM1+HZ9gz0lLLrx7ELC6Su6RTCswDVVQZ8=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr3171203plp.162.1648697328481; Wed, 30
+ Mar 2022 20:28:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 31 Mar 2022 12:28:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ1OPH-WFLyUfmVMUE4in7tbcdNME-Cp=OvJfUAJAPZ9g@mail.gmail.com>
+Message-ID: <CAK7LNAQ1OPH-WFLyUfmVMUE4in7tbcdNME-Cp=OvJfUAJAPZ9g@mail.gmail.com>
+Subject: [GIT PULL v2] Kbuild updates for v5.18-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Armelle,
+Hi Linus,
 
-FYI, the error/warning still remains.
+This is v2 for the remaining Kbuild changes.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-commit: bf9d994a65a2941d96b58769d79c256f7d8862c0 [5860/5872] ANDROID: trusty-log: Complement logging sink with unthrottled virtual file
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220331/202203311133.4BHUMmsV-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/bf9d994a65a2941d96b58769d79c256f7d8862c0
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-        git checkout bf9d994a65a2941d96b58769d79c256f7d8862c0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+I dropped the
+"# CONFIG_FOO is not set"   to CONFIG_FOO=n
+change in Kconfig.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/trusty/trusty-log.c: In function 'trusty_log_seq_next':
->> drivers/trusty/trusty-log.c:354:21: warning: left shift count >= width of type [-Wshift-count-overflow]
-     354 |         *pos = (1UL << 32) + log_sfile_sink->get;
-         |                     ^~
+Thank you.
 
 
-vim +354 drivers/trusty/trusty-log.c
 
-   323	
-   324	static void *trusty_log_seq_next(struct seq_file *sfile, void *v, loff_t *pos)
-   325	{
-   326		struct trusty_log_sfile *lb;
-   327		struct trusty_log_state *s;
-   328		struct trusty_log_sink_state *log_sfile_sink = v;
-   329		int rc = 0;
-   330	
-   331		if (WARN_ON(!log_sfile_sink))
-   332			return ERR_PTR(-EINVAL);
-   333	
-   334		lb = sfile->private;
-   335		if (WARN_ON(!lb)) {
-   336			rc = -EINVAL;
-   337			goto end_of_iter;
-   338		}
-   339		s = container_of(lb, struct trusty_log_state, log_sfile);
-   340	
-   341		if (WARN_ON(!pos)) {
-   342			rc = -EINVAL;
-   343			goto end_of_iter;
-   344		}
-   345		/*
-   346		 * When starting a virtual file sink, the start function is invoked
-   347		 * with a pos argument which value is set to zero.
-   348		 * Subsequent starts are invoked with pos being set to
-   349		 * the unwrapped read index (get).
-   350		 * Upon u32 wraparound, the get index could be reset to zero.
-   351		 * Thus a msb is used to distinguish the `get` zero value
-   352		 * from the `start of file` zero value.
-   353		 */
- > 354		*pos = (1UL << 32) + log_sfile_sink->get;
-   355		if (!trusty_log_has_data(s, log_sfile_sink))
-   356			goto end_of_iter;
-   357	
-   358		return log_sfile_sink;
-   359	
-   360	end_of_iter:
-   361		pr_debug("%s kfree\n", __func__);
-   362		kfree(log_sfile_sink);
-   363		return rc < 0 ? ERR_PTR(rc) : NULL;
-   364	}
-   365	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
+
+  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-v5.18-v2
+
+for you to fetch changes up to e9c281928c24dfeb86b11c31b53757b6a127f8aa:
+
+  kbuild: Make $(LLVM) more flexible (2022-03-31 12:03:46 +0900)
+
+----------------------------------------------------------------
+Kbuild updates for v5.18
+
+ - Add new environment variables, USERCFLAGS and USERLDFLAGS to allow
+   additional flags to be passed to user-space programs.
+
+ - Fix missing fflush() bugs in Kconfig and fixdep
+
+ - Fix a minor bug in the comment format of the .config file
+
+ - Make kallsyms ignore llvm's local labels, .L*
+
+ - Fix UAPI compile-test for cross-compiling with Clang
+
+ - Extend the LLVM= syntax to support LLVM=<suffix> form for using a
+   particular version of LLVm, and LLVM=<prefix> form for using custom
+   LLVM in a particular directory path.
+
+ - Clean up Makefiles
+
+----------------------------------------------------------------
+Changbin Du (1):
+      kallsyms: ignore all local labels prefixed by '.L'
+
+Elliot Berman (1):
+      kbuild: Add environment variables for userprogs flags
+
+Masahiro Yamada (10):
+      kbuild: unify cmd_copy and cmd_shipped
+      kbuild: replace $(if A,A,B) with $(or A,B)
+      kconfig: add fflush() before ferror() check
+      kconfig: fix missing '# end of' for empty menu
+      certs: include certs/signing_key.x509 unconditionally
+      certs: simplify empty certs creation in certs/Makefile
+      usr/include: replace extra-y with always-y
+      arch: syscalls: simplify uapi/kapi directory creation
+      fixdep: use fflush() and ferror() to ensure successful write to files
+      kbuild: add --target to correctly cross-compile UAPI headers with Clang
+
+Nathan Chancellor (1):
+      kbuild: Make $(LLVM) more flexible
+
+ Documentation/kbuild/kbuild.rst             | 11 +++++++++++
+ Documentation/kbuild/llvm.rst               | 31
++++++++++++++++++++++++++------
+ Documentation/kbuild/makefiles.rst          |  2 ++
+ Makefile                                    | 44
+++++++++++++++++++++++++++------------------
+ arch/alpha/kernel/syscalls/Makefile         |  3 +--
+ arch/arm/tools/Makefile                     |  3 +--
+ arch/ia64/kernel/syscalls/Makefile          |  3 +--
+ arch/m68k/kernel/syscalls/Makefile          |  3 +--
+ arch/microblaze/boot/Makefile               |  2 +-
+ arch/microblaze/boot/dts/Makefile           |  2 +-
+ arch/microblaze/kernel/syscalls/Makefile    |  3 +--
+ arch/mips/kernel/syscalls/Makefile          |  3 +--
+ arch/parisc/kernel/syscalls/Makefile        |  3 +--
+ arch/powerpc/kernel/syscalls/Makefile       |  3 +--
+ arch/s390/kernel/syscalls/Makefile          |  3 +--
+ arch/sh/kernel/syscalls/Makefile            |  3 +--
+ arch/sparc/kernel/syscalls/Makefile         |  3 +--
+ arch/x86/entry/syscalls/Makefile            |  3 +--
+ arch/xtensa/kernel/syscalls/Makefile        |  3 +--
+ certs/Makefile                              | 37
++++++++++++--------------------------
+ certs/system_certificates.S                 |  3 ---
+ fs/unicode/Makefile                         |  2 +-
+ init/Kconfig                                |  8 ++++----
+ scripts/Makefile.build                      |  3 +--
+ scripts/Makefile.clean                      |  2 +-
+ scripts/Makefile.lib                        | 16 ++++++----------
+ scripts/basic/fixdep.c                      | 46
++++++++++++++++++++---------------------------
+ scripts/kallsyms.c                          |  2 +-
+ scripts/kconfig/confdata.c                  | 27 +++++++++++++++------------
+ tools/bpf/bpftool/Makefile                  |  4 ++--
+ tools/build/Makefile                        |  2 +-
+ tools/counter/Makefile                      |  2 +-
+ tools/gpio/Makefile                         |  2 +-
+ tools/hv/Makefile                           |  2 +-
+ tools/iio/Makefile                          |  2 +-
+ tools/lib/api/Makefile                      |  2 +-
+ tools/lib/bpf/Makefile                      |  2 +-
+ tools/lib/perf/Makefile                     |  2 +-
+ tools/lib/subcmd/Makefile                   |  2 +-
+ tools/objtool/Makefile                      |  2 +-
+ tools/pci/Makefile                          |  2 +-
+ tools/perf/Makefile.perf                    |  4 ++--
+ tools/power/x86/intel-speed-select/Makefile |  2 +-
+ tools/scripts/Makefile.include              | 22 ++++++++++++++--------
+ tools/scripts/utilities.mak                 |  2 +-
+ tools/spi/Makefile                          |  6 +++---
+ tools/testing/selftests/lib.mk              |  8 +++++++-
+ tools/tracing/rtla/Makefile                 |  2 +-
+ tools/usb/Makefile                          |  2 +-
+ usr/Makefile                                |  4 ++--
+ usr/include/Makefile                        |  7 +++++--
+ 51 files changed, 188 insertions(+), 174 deletions(-)
+
+
+--
+Best Regards
+Masahiro Yamada

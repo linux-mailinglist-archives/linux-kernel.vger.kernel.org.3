@@ -2,108 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2C74EDF86
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6C14EDF8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiCaRUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S229786AbiCaRXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiCaRU3 (ORCPT
+        with ESMTP id S229823AbiCaRXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:20:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9D9A197;
-        Thu, 31 Mar 2022 10:18:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9E5AB8219B;
-        Thu, 31 Mar 2022 17:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33390C340EE;
-        Thu, 31 Mar 2022 17:18:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648747118;
-        bh=bX62gS64xvApsIu17dQYecs3RAVYxvOTGCX0wgPFvLE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T1EAPTy2SLpjWFEUjuNPi92OE1y0q/0JRyCZhbiyopJjIYxJsaCJDmIm4i/6oAT28
-         SONVP/BEPr/y57Wleq4Ybaoc/OYFD+KDq+lBeihRRr+kooKzUtub13qzSXRfqlR0ab
-         fke/Tfix989ZWISqNuNZNkNSrxs6Sncy1tbLlzOQxjDXhGEXyeBZaGOQl2hf5K7gtx
-         Pjt0WVdbk0J5Vi5yYcGEPIisWKAXHQGwLEFCm//fs7HXqFebJIV7MUis33R4yyiVDL
-         ql2eSQ34ZhXQj3iGxI0okVBaTkewtnVgs1re7kh+pk4JATXJv7QA1jn8RX6bgVtb+o
-         sNo/nIPx3CCRw==
-Received: by wens.tw (Postfix, from userid 1000)
-        id 535005FC12; Fri,  1 Apr 2022 01:18:33 +0800 (CST)
-From:   Chen-Yu Tsai <wens@kernel.org>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Russell King <linux@armlinux.org.uk>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: stmmac: Fix unset max_speed difference between DT and non-DT platforms
-Date:   Fri,  1 Apr 2022 01:18:27 +0800
-Message-Id: <20220331171827.12483-1-wens@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 31 Mar 2022 13:23:06 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D361F0824;
+        Thu, 31 Mar 2022 10:21:18 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so81035wme.0;
+        Thu, 31 Mar 2022 10:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+UVRHxpu5eAfZsEs5HfhLN004uIPJF3dGsymXwYvqE0=;
+        b=LNUVKXrv51q/DMVQ860JVj9trLzFV/zwqf6kbU1eIcKzFyN42aHz1+BBprVSkJ9n4D
+         wDJDO/+r6UGXeIFsZx4I5xkVuCUEqYEM4wKnq9llbQX8dQpznyhHf50XTEMZdWcK23RZ
+         iBWy/hiiaNOKW188/GaypOGFunHUm5wB3VAzu9KajZ8d4HsSdis+TQ/DkIW0Z9ooMnWG
+         Jb/XiCsZg4rNYn7bPe5mm+fizG7LJGW4LoLMiuENFUpE6DP6SSSo8CM5twNT/nI7cSt4
+         b2944laRAYHdWIm9fmq1JFdIQabTy2/8PpKig1IcLTw4Pgob6wUwIvtWP4H8Kurwnfo/
+         28TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+UVRHxpu5eAfZsEs5HfhLN004uIPJF3dGsymXwYvqE0=;
+        b=QxIykZVGCuhYKCvABblfgrC71eV1uF2tYhTiYr768dYAl8ylKk8rOJeGXPZVn5FxIq
+         So2m8BmesogrPE1/IMKz+Eqp2llUaHTjTe1DvMpM/NHsbKeTluy+mBB6AcSZt0JuEzeF
+         Ip1jlPGPrxrXEuNU8Bf1QYnHS9TZNViT2fdvSWw71diCJ6vj1Jf+WKv9k9EAnjooWdKN
+         tzUwWE9eUBTSERAyWeXd52b1/ID1ZWYl0dQGKu76UJCzfqIXe54uXoZNoTqLU6SewBM/
+         mzyQ+qOzP1Cp2OKLnrmcVgbYaQS59rCdXzW41epISB7UzrpNq3aCtJnz1MnW+Bg0IzYn
+         nI5w==
+X-Gm-Message-State: AOAM533hMoGoSmp+FV0qU/bUkqhJbWhhaRxGZqHFHO9N5gHCq6BeRpVT
+        Wm9c0WSnxAJeMYZ+AW0wmSQ=
+X-Google-Smtp-Source: ABdhPJzq3nr8QvRZ+mF96/wzGEaUKNuBxFHKqbGBuOjhVXW3zpe6yfAWUncBSibI3awJmqeY6frabA==
+X-Received: by 2002:a05:600c:35d4:b0:38c:9933:41c0 with SMTP id r20-20020a05600c35d400b0038c993341c0mr5593964wmq.149.1648747276628;
+        Thu, 31 Mar 2022 10:21:16 -0700 (PDT)
+Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b0038cc9aac1a3sm8571435wmq.23.2022.03.31.10.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 10:21:15 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Wenchao Hao <haowenchao@huawei.com>,
+        syzkaller-bugs@googlegroups.com, axboe@kernel.dk,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com,
+        syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com,
+        linfeilong@huawei.com
+Subject: Re: [PATCH] scsi: sd: call device_del() if device_add_disk() fails
+Date:   Thu, 31 Mar 2022 19:21:13 +0200
+Message-ID: <3427592.iIbC2pHGDl@leap>
+In-Reply-To: <20220331162416.GI12805@kadam>
+References: <20220329154948.10350-1-fmdefrancesco@gmail.com> <1787706.atdPhlSkOF@leap> <20220331162416.GI12805@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wens@csie.org>
+On gioved? 31 marzo 2022 18:24:16 CEST Dan Carpenter wrote:
+> On Thu, Mar 31, 2022 at 06:14:27PM +0200, Fabio M. De Francesco wrote:
+> > On gioved? 31 marzo 2022 15:42:10 CEST Dan Carpenter wrote:
+> > > Wenchao Hao, what you're saying makes a lot of sense but it raises a lot
+> > > of questions in turn.
+> > > 
+> > > Fabio, did you test your patch?
+> > 
+> > Yes, I did, Dan. I tested it the usual way with the "#syz test:" command.
+> > Obviously I have not the hardware to test code on it.
+> > 
+> 
+> Yeah.  What a nightmare.  You posted a link to the first test.  It said
+> passed but definitely introduced some use after frees but how was anyone
+> supposed to know?
 
-In commit 9cbadf094d9d ("net: stmmac: support max-speed device tree
-property"), when DT platforms don't set "max-speed", max_speed is set to
--1; for non-DT platforms, it stays the default 0.
+Maybe that a "spare-time Linux developer" like me should leave these 
+kinds of bug fixes to more experienced people. But we should also note 
+that I tried two or three different patches and _all_ of them passed
+the tests. 
 
-Prior to commit eeef2f6b9f6e ("net: stmmac: Start adding phylink support"),
-the check for a valid max_speed setting was to check if it was greater
-than zero. This commit got it right, but subsequent patches just checked
-for non-zero, which is incorrect for DT platforms.
+> 
+> No way we would have figured this out.
 
-In commit 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-the conversion switched completely to checking for non-zero value as a
-valid value, which caused 1000base-T to stop getting advertised by
-default.
+I think that something should change about the way Syzbot tests patches 
+and about how it provides the results. The other four or five bugs that 
+I have fixed were based mainly to the fact that they passed the Syzbot 
+tests. 
 
-Instead of trying to fix all the checks, simply leave max_speed alone if
-DT property parsing fails.
+Perhaps I've been lucky but my patches were good and they were merged. 
 
-Fixes: 9cbadf094d9d ("net: stmmac: support max-speed device tree property")
-Fixes: 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
----
+However, I began to trust Syzbot too much. This is not how I should 
+approach and try to solve bugs.
 
-This was first noticed on ROC-RK3399-PC, and also observed on ROC-RK3328-CC.
-The fix was tested on ROC-RK3328-CC and Libre Computer ALL-H5-ALL-CC.
+> I'm working to make Smatch
+> understand device_put() better but this one is way difficult.
+> 
+> Sorry that you went through this.
 
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Please don't be sorry :)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 5d29f336315b..11e1055e8260 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -431,8 +431,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
- 	plat->phylink_node = np;
- 
- 	/* Get max speed of operation from device tree */
--	if (of_property_read_u32(np, "max-speed", &plat->max_speed))
--		plat->max_speed = -1;
-+	of_property_read_u32(np, "max-speed", &plat->max_speed);
- 
- 	plat->bus_id = of_alias_get_id(np, "ethernet");
- 	if (plat->bus_id < 0)
--- 
-2.34.1
+Believe me when I say that I cannot explain how many things I have 
+learned during these days while working on this issue. I see no 
+problems at all but only opportunities for learning.
+
+Thank you very much!
+
+Fabio M. De Francesco
+
+> 
+> regards,
+> dan carpenter
+> 
+> 
+
+
+
 

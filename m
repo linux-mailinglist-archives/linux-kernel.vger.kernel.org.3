@@ -2,164 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BFA4ED7C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD1E4ED7C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiCaKeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S234602AbiCaKex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiCaKes (ORCPT
+        with ESMTP id S232547AbiCaKeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:34:48 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00081.outbound.protection.outlook.com [40.107.0.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6D31EDA30;
-        Thu, 31 Mar 2022 03:32:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nlyblrfTqS+OKBtl3CWBJRtDH7XM9WK/xVMujZVQxstVztK3x2cbg0A4C8jldxhFOlG37BOEhVf/kqupuTvx1P/quw9bi71mjJRMgAhXhx1rIekebD29dgra6PjWDJs1RPgJRPm5aX71jpGjgKSNRUdSyNq4SCs+KGNB+6Q7/PFlEN5Dz9j/fkgJwGmogFGBbPiSa1uuB/SEeRmUbQStPufzKU6lYIULm8FQQgMjx/QaZBFaEdINWEX72/aSbKifi4XNqVfDwXpTmb/e6YNNLgxMUrHQmvEgQnVl5Da8I988sM6uDUsUPPTTc8B8A7AZdU/IuRDOrPtJMBaEarxh2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CBl6S7O1KPkuv/nBrKr7G5FEj4H0sPIBb+CUEOHg/q0=;
- b=TsBKr598fM7QqH9s0MfNUi/1F/CSh3rhl9oHXLvhetUNO3onw6i4hxxG2i6/0O3DgqWQz09UULvwJzki8jdnNPLE4euiOdgqqMyw7b89i4SKTNu9Q6eBSH4u8e/rSoGrj+FZgIFS7oGcmX0GKQu3YH/5FMtpZ01Alf8PoTB5KXm4ndNjRs1JtgYG/uUmEWKFEyS9Uzvyexruh0svwUkGqkmwgbWVumSkPYJthtliS+BTV5ni8G0neBlxGpedkSi4tM9kdIJ5LfpN7/aeVlktYAAeiXx2P+Kx2G+hlv/wpOipEOkU3W4Kd+vYjguH3HsLGOzWHSP1G5X3DanO6k2c3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CBl6S7O1KPkuv/nBrKr7G5FEj4H0sPIBb+CUEOHg/q0=;
- b=hiZL+gO1lV1vcSvZ78gs2lX16rOuMb/mIakyiy95fM947Rk/jkC5v4LaTGutZEHmJxDAtEhWCcEj8kgtZAoKr8qu+AZq3SGYMj3+CX7IHmBjNWXk2xXx5zxeXiz9YmsJeTuEqmIZmrp2RpVEO44+ySjw7og/1IQHec0K3hxVFrY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR04MB5151.eurprd04.prod.outlook.com (2603:10a6:803:61::28)
- by DB7PR04MB4171.eurprd04.prod.outlook.com (2603:10a6:5:26::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.21; Thu, 31 Mar
- 2022 10:32:52 +0000
-Received: from VI1PR04MB5151.eurprd04.prod.outlook.com
- ([fe80::bd5e:bb79:2c17:302e]) by VI1PR04MB5151.eurprd04.prod.outlook.com
- ([fe80::bd5e:bb79:2c17:302e%7]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
- 10:32:52 +0000
-From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
-To:     linux-remoteproc@vger.kernel.org, mathieu.poirier@linaro.org,
-        bjorn.andersson@linaro.org
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        shengjiu.wang@nxp.com, daniel.baluta@gmail.com,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Subject: [PATCH] remoteproc: imx_dsp_rproc: Make rsc_table optional
-Date:   Thu, 31 Mar 2022 13:32:37 +0300
-Message-Id: <20220331103237.340796-1-daniel.baluta@oss.nxp.com>
-X-Mailer: git-send-email 2.27.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR08CA0235.eurprd08.prod.outlook.com
- (2603:10a6:802:15::44) To VI1PR04MB5151.eurprd04.prod.outlook.com
- (2603:10a6:803:61::28)
+        Thu, 31 Mar 2022 06:34:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CF0204282
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:33:02 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nZs6k-000591-1J; Thu, 31 Mar 2022 12:32:50 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-ffcf-bd2e-518f-8dbf.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:ffcf:bd2e:518f:8dbf])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A858C57B54;
+        Thu, 31 Mar 2022 10:32:47 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 12:32:47 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Aurelien Jarno <aurelien@aurel32.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kito Cheng <kito.cheng@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH] riscv: fix build with binutils 2.38
+Message-ID: <20220331103247.y33wvkxk5vfbqohf@pengutronix.de>
+References: <20220126171442.1338740-1-aurelien@aurel32.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c5955d00-2ff5-42bd-2742-08da1301cf1c
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4171:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DB7PR04MB417142A198C93CFB34AC1E55B8E19@DB7PR04MB4171.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gD5cj7yT79rEZYm6jDDD6RCJHoqOfUc9E0eho4jzqZ2MD/jUkX1JMy181soiy4V1ANdMPe23hHKPVFcGQnjXki0b21+bV0RddxNlj9HIi0yaaIht9pD09iDrjyC2to1INMd0xmUCjL5St0fuq015Thy7iPcLRLS73YVeoB4CMqTv4KprjQhzfFV0D/OU2RIKuC6RK4uZAxqyCpgvrsZQ39beP6vAiuJr2v5hJ8FX+tq6271XefjP8QHtETuG9wEBjT9HruTeCe4uEcCiQzNKnWJgVJUiM9RMQmLwztvaba7nCoogRnfm/fGLikYGigMTIxWgoQ5Ph2UF4dOcLASaj3jQkojXgOHsPyJy3L79pB8lG7Hzz/EvzXpkTU4k5C8mVUsWbXtcoSx11HmYAM+uEEbJY4GKNhQ16Oia1tMu4ig2DgZvmc/WK2QmonbLWCZkjRNERQzuVOeTAMleYmaGMaKuuXovVNy2JYRkKkgAZLOlejVdXrIq01FXPgVQkF+zlkH6RrcQTNuLkr1VEGnkWIkFDnIB8sqZ2KESq2vYVv8t6baxy6aRJziGODyGScWxgyAyJFlFrujM1CJk402bMbFjNVfbh2egaVCVACAjT0WhVLPRK/xWA8uZCNfhVi3raTbksAOrK5f7fUBVUaUkl06MoqeB4kssEfuyfzMjwkOmkKexomyOnfAvV3hGo75ig7sw+ekrYXR2g5DW6it1LA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(8676002)(86362001)(26005)(186003)(1076003)(66476007)(66556008)(83380400001)(66946007)(38100700002)(316002)(38350700002)(44832011)(5660300002)(508600001)(6666004)(6512007)(6506007)(52116002)(2616005)(2906002)(6486002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sj+nmsipTfQP2ZWBsWWq7rKr7EQs4qQ9zeMewZ2QiRoJ1ayrIKE3XS6fhxzw?=
- =?us-ascii?Q?PwihAWYm77Dk4W8R4EzwM2ar4uLENU7VBJVoj60859XF8gneG9+09VS4uWt2?=
- =?us-ascii?Q?zDhK+oBwzr7xA0ZD39ia4B0FHPtX8AeS/8TV3Ph6smijT/9F5aS+v68L1YfW?=
- =?us-ascii?Q?0w1Kg+cCKWO719efMfPAoyFfV5Z6FpYWa8xk1M51FJkWxCNu8Z/CJjdlOk3F?=
- =?us-ascii?Q?cQzoaqQp/CFE0n+O64Vn3fTf12fw0pCA4DMqo5W9C2qEHWtM6uNWXCQSBl+H?=
- =?us-ascii?Q?bVK93ByKvD1hN+XYohem0fRivhry9abZSUJVk7ituS0wal/n9WjqLcxt+zkh?=
- =?us-ascii?Q?HMK9wgIH/Y5LLxjRJDwA/b97uhg3wIwjo6zKUURu68FNAzj+t9U7BpDh+pne?=
- =?us-ascii?Q?ugshtRsPKufeZ9+H0ni6QyG9IsPi4UklgqlaRZHjHiGwsUK9UbidSBnqH0Da?=
- =?us-ascii?Q?Qostr3CxR0LQyeXiNB+B72HPGvI/ICeq3VGNN0tumaBfHqRh/dWL1UPV4BYD?=
- =?us-ascii?Q?RzqxjLwpPzRMiiE7P/wpslcjq81g102D549gGlP+n4r3sEUwVTLLHtgWpvWX?=
- =?us-ascii?Q?jQN/7KXsX6q8/msw37X1ggvCgFW1BP9Z18SHVuLohJBzpUxzEFI+DvXvBwcM?=
- =?us-ascii?Q?DINmrkHWtEA/746xnzwVuME0IqOAkQFMJFkh1hes19VauM0t4lPaDaz1te5p?=
- =?us-ascii?Q?t12Xj63cBJvYGurX4HiELhTQkyr4KsBe5zKbx+KGbi7v8QdI62ArHZZZxcJ5?=
- =?us-ascii?Q?J2p2Ex1yTC1A7qRQb4SBOTcdtFvAO+wnVTPtGcGJw4IE+kPIXj+avViz+Zfh?=
- =?us-ascii?Q?tNoCzhDXn+NKpExr/Il53xKmUIJmenFRsGEtf8nAnHfMggUZ7dwTaQsCQUgC?=
- =?us-ascii?Q?IeaU70g3nrmcRrr9Ml86xX6RaPvDAro0l/fnkcJWY5pcK031Z1jJZMJUzk1W?=
- =?us-ascii?Q?76CCMnb8OsbG08xKLUtvbxhBisjhk1wIwUtyTIR3nukb3+mOLL4KFKz+8IKG?=
- =?us-ascii?Q?HnL7WMMX8lGkm44760cK3J+NPCZ7Cw8QFA8DL2yrMGlvLo3S2LnYTS/91mlQ?=
- =?us-ascii?Q?8SYfBPF+91e7mV2a5CUZiMTu75BQAEbi/0R5v2cOk5JDRs/IynjOdY3iPCYK?=
- =?us-ascii?Q?m2cmuNu2xWk4jpEnuiRRgJ8FUOOltYjL20xew+AO1yk36cGTg4p7BDLd9bbu?=
- =?us-ascii?Q?8O2g3oNYFueKZkZg7Uq7W9SDQFo2GOWuXyDLk3WoGxqd3DnxhuFQTrrCh+nx?=
- =?us-ascii?Q?FDROmny//NPnosa0enFv41CZttbBD6azxFDuGn0AreGnHeb6ArNv8L1Bue1U?=
- =?us-ascii?Q?Z0e7WuRImh2FjleUd78ggdo1qwzj3IwL3Ma0dRgapW0f6q+YiEQU4WsLKwDp?=
- =?us-ascii?Q?3yRZe2nqYoDUg77P9h/KwhpwAQ680xWDGDWwJqbbsXRbfXMUCqoAh2PanQmi?=
- =?us-ascii?Q?rW0LK1J4ijixcb+TGJTo9+PesOuYVwZyq8jUgefHawCw7v5MmDeZgW5JRwFg?=
- =?us-ascii?Q?SINGxyfATthmFbcyf9o2u6kggmIFNhcJBxVX6Pm4C1XpXg7534Bf8X2NLHA5?=
- =?us-ascii?Q?TZQfo1eb7ZgiERtQmjhFvib1P5YHwQTe8t+N66geJp1DXAeHKKyToEwKeaKt?=
- =?us-ascii?Q?Bq8Y2VNnjMMtjUUp1dKFq96XOF+In7l+wsu4BabEKTaUvb0Jfw2GD23+EHrr?=
- =?us-ascii?Q?nHt63SxjmomQqUbDQwb9+vZYY9/8Lt10NsMqQvnAbQM0oPySovcJir4g5W9e?=
- =?us-ascii?Q?IyCpAECefg=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5955d00-2ff5-42bd-2742-08da1301cf1c
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5151.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 10:32:52.1813
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7MNh+yiBIm1BEG67/v8H8YqGPmFGsYSsdAQLigFU+0+BnTOqlu8GEQj4vME/NP0fWHAeLxjsmUpKExDItM9ElA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4171
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vglrjwx3za2fhczz"
+Content-Disposition: inline
+In-Reply-To: <20220126171442.1338740-1-aurelien@aurel32.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Baluta <daniel.baluta@nxp.com>
 
-There are cases when we want to test a simple "hello world"
-app on the DSP and we do not need a resource table.
+--vglrjwx3za2fhczz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-remoteproc core allows us having an optional rsc_table.
+On 26.01.2022 18:14:42, Aurelien Jarno wrote:
+> From version 2.38, binutils default to ISA spec version 20191213. This
+> means that the csr read/write (csrr*/csrw*) instructions and fence.i
+> instruction has separated from the `I` extension, become two standalone
+> extensions: Zicsr and Zifencei. As the kernel uses those instruction,
+> this causes the following build failure:
+>=20
+>   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+>   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler mess=
+ages:
+>   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unre=
+cognized opcode `csrr a5,0xc01'
+>   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unre=
+cognized opcode `csrr a5,0xc01'
+>   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unre=
+cognized opcode `csrr a5,0xc01'
+>   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unre=
+cognized opcode `csrr a5,0xc01'
+>=20
+> The fix is to specify those extensions explicitely in -march. However as
+> older binutils version do not support this, we first need to detect
+> that.
+>=20
+> Cc: stable@vger.kernel.org # 4.15+
+> Cc: Kito Cheng <kito.cheng@gmail.com>
+> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> ---
+>  arch/riscv/Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 8a107ed18b0d..7d81102cffd4 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:=3D rv32ima
+>  riscv-march-$(CONFIG_ARCH_RV64I)	:=3D rv64ima
+>  riscv-march-$(CONFIG_FPU)		:=3D $(riscv-march-y)fd
+>  riscv-march-$(CONFIG_RISCV_ISA_C)	:=3D $(riscv-march-y)c
+> +
+> +# Newer binutils versions default to ISA spec version 20191213 which mov=
+es some
+> +# instructions from the I extension to the Zicsr and Zifencei extensions.
+> +toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(riscv=
+-march-y)_zicsr_zifencei)
+> +riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_zicsr=
+_zifencei
+> +
+>  KBUILD_CFLAGS +=3D -march=3D$(subst fd,,$(riscv-march-y))
+>  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
 
-Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
----
- drivers/remoteproc/imx_dsp_rproc.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+I'm on current linus/master, this change breaks on current Debian
+testing with:
 
-diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-index 2abee78df96e..987ab1add761 100644
---- a/drivers/remoteproc/imx_dsp_rproc.c
-+++ b/drivers/remoteproc/imx_dsp_rproc.c
-@@ -802,6 +802,14 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
- 		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
- }
- 
-+static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
-+{
-+	if (rproc_elf_load_rsc_table(rproc, fw))
-+		dev_warn(&rproc->dev, "no resource table found for this firmware\n");
-+
-+	return 0;
-+}
-+
- static const struct rproc_ops imx_dsp_rproc_ops = {
- 	.prepare	= imx_dsp_rproc_prepare,
- 	.unprepare	= imx_dsp_rproc_unprepare,
-@@ -809,7 +817,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
- 	.stop		= imx_dsp_rproc_stop,
- 	.kick		= imx_dsp_rproc_kick,
- 	.load		= imx_dsp_rproc_elf_load_segments,
--	.parse_fw	= rproc_elf_load_rsc_table,
-+	.parse_fw	= imx_dsp_rproc_parse_fw,
- 	.sanity_check	= rproc_elf_sanity_check,
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
--- 
-2.27.0
+| make: Leaving directory 'linux'
+|   SYNC    include/config/auto.conf.cmd
+|   GEN     Makefile
+|   GEN     Makefile
+|   CC      scripts/mod/empty.o
+|   CHECK   linux/scripts/mod/empty.c
+| invalid argument to '-march': '_zicsr_zifencei'
 
+Used components:
+
+| $ riscv64-linux-gnu-gcc -v
+| Using built-in specs.
+| COLLECT_GCC=3D/usr/bin/riscv64-linux-gnu-gcc
+| COLLECT_LTO_WRAPPER=3D/usr/lib/gcc-cross/riscv64-linux-gnu/11/lto-wrapper
+| Target: riscv64-linux-gnu
+| Configured with: ../src/configure -v --with-pkgversion=3D'Debian 11.2.0-9=
+' --with-bugurl=3Dfile:///usr/share/doc/gcc-11/README.Bugs --enable-languag=
+es=3Dc,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix=3D/usr --with-gcc-majo=
+r-version-only --program-suffix=3D-11 --enable-shared --enable-linker-build=
+-id --libexecdir=3D/usr/lib --without-included-gettext --enable-threads=3Dp=
+osix --libdir=3D/usr/lib --enable-nls --with-sysroot=3D/ --enable-clocale=
+=3Dgnu --enable-libstdcxx-debug --enable-libstdcxx-time=3Dyes --with-defaul=
+t-libstdcxx-abi=3Dnew --enable-gnu-unique-object --disable-libitm --disable=
+-libquadmath --disable-libquadmath-support --enable-plugin --enable-default=
+-pie --with-system-zlib --enable-libphobos-checking=3Drelease --without-tar=
+get-system-zlib --enable-multiarch --disable-werror --disable-multilib --wi=
+th-arch=3Drv64imafdc --with-abi=3Dlp64d --enable-checking=3Drelease --build=
+=3Dx86_64-linux-gnu --host=3Dx86_64-linux-gnu --target=3Driscv64-linux-gnu =
+--program-prefix=3Driscv64-linux-gnu- --includedir=3D/usr/riscv64-linux-gnu=
+/include --with-build-config=3Dbootstrap-lto-lean --enable-link-serializati=
+on=3D2
+| Thread model: posix
+| Supported LTO compression algorithms: zlib zstd
+| gcc version 11.2.0 (Debian 11.2.0-9)=20
+| $ riscv64-linux-gnu-ld -v
+| GNU ld (GNU Binutils for Debian) 2.38
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--vglrjwx3za2fhczz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJFg0wACgkQrX5LkNig
+010Pvgf/ZoWGG7K/5FYXrD6DqvRxaZGgXBUeIVFePKiNNRXC82F6VNIytbqSEg09
+9LcT0qzh51lGHAI9n+ur77Hmiit//P0M3GYLxigpabDMtBoYN5iWwZpobYMP42ox
+DCZ4ECYfzj/Hhtm++McTEGMW+EMCaKOf+53R3hS6Z7vmgfltDoT/Y6bmTNs9Vjue
+bvxT9UN8iVhNiPgSwmA4VVaNAHoTyzYS+Axck6ndKq2qWLh6Rbu45MYaNMtWgz7l
+Qfptz5E9TOaGItBnV47952dz2U6tsIvqNZBXdsqgQ501oeZMfk3jTvP+agrekeal
+GDu+6B+/oPYD13DvqdchERnZaYNJLw==
+=Jfvd
+-----END PGP SIGNATURE-----
+
+--vglrjwx3za2fhczz--

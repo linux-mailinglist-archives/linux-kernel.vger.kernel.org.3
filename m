@@ -2,176 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0931F4ED17D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 04:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8EC4ED0D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352445AbiCaCCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 22:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S1352097AbiCaA3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352438AbiCaCCP (ORCPT
+        with ESMTP id S1352091AbiCaA3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 22:02:15 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A965859A55
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:00:29 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so891477wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 19:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e1Po5qC3Q3c0yObkkm28UonpuS5bMxmyIhuDfuJ6G0k=;
-        b=QxKmQ8c9oUDAwlApZtTOb/QA4YFhjIzje/zHifmcwaxM5qta6cndVn/IcDDKRGOD+2
-         od7/XISAYayz9jsIUiQaw4POXTlRdc6Z2Uzg0K0+vQb6I24RUmFhx8BINqM9VoeekSQ+
-         MdctGQSVe1bhfOXQDk11HzykYxlwUjGgQ4rqmTz5ZvTz8TQzPUMRSNcYeDk+E1GfqEqF
-         cKkZqBeuvg+ZQASZAzvFJP9I39N915bznKdTG0Y1Z61O2H0vkxKZuPg0y4Ef1yyeOi5U
-         JZLmykBb2ltaAF33qrB+lZGEJm8tOuawr72oUjdFPLEyE+JSPI86GWPZZPYPYLAxqkOl
-         oLUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e1Po5qC3Q3c0yObkkm28UonpuS5bMxmyIhuDfuJ6G0k=;
-        b=BmcV7PuUcMfb9uCc5+tVgKw/AklG+aCtH1X/VRykfvGPClqrHjVGdfsdWpXeFRSAfe
-         FO5DB4WeP3qEJLACYbyY5ITB8kaLyc4yQW12m0p6ar6WgRXUpSgBAoPLSAi4c6pSm+ax
-         8zALeHQ5bcaFrw7by/M5zHy6XqqluY59U0LtGiha2dJqoSqUS21/PZzjhWtq3uFiI/KI
-         amDqLRnDbmTOU3JrkK4MmgWqcG0UtwFJfrq0d8srgqt2WcryZP8fb35gSCZ1AXWP4OCZ
-         VvWlT+perZD9L5X/7MBHsIN3AiVxXennoohz/qxjQzrX1vlAvWeau1uAN6CecU/1FUzp
-         rQOA==
-X-Gm-Message-State: AOAM531wiSbfIR+ipdWoE2Fuyl+bKWzzIYAQBxpRHyKWqgm0Bu9iwecL
-        Kv4f8MdsUeq7R4Gb0eCnXntXe189AIAK0DiQ+tjBXA==
-X-Google-Smtp-Source: ABdhPJwc7cIZrbcDtT8oN3Uc/i8d7OuUgxfn6/gsSmmOZtKtUns5P8AZUjMI9YJfo8Xv3zrLvlgeH46KQa1wtE9NM+0=
-X-Received: by 2002:a1c:7906:0:b0:38c:8cfa:cbb0 with SMTP id
- l6-20020a1c7906000000b0038c8cfacbb0mr2445694wme.163.1648692028147; Wed, 30
- Mar 2022 19:00:28 -0700 (PDT)
+        Wed, 30 Mar 2022 20:29:36 -0400
+X-Greylist: delayed 416 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 17:27:48 PDT
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BABE4C429;
+        Wed, 30 Mar 2022 17:27:48 -0700 (PDT)
+Received: from mxde.zte.com.cn (unknown [10.35.8.63])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4KTP8y6gtgzvgMn;
+        Thu, 31 Mar 2022 08:20:50 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4KTP8g3ctzzCTpfd;
+        Thu, 31 Mar 2022 08:20:35 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4KTP8b5vvrz9wMSh;
+        Thu, 31 Mar 2022 08:20:31 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4KTP8X1fycz7jZxQ;
+        Thu, 31 Mar 2022 08:20:28 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 22V0KOVe048101;
+        Thu, 31 Mar 2022 08:20:24 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from fox-cloudhost8.localdomain (unknown [10.234.72.110])
+        by smtp (Zmail) with SMTP;
+        Thu, 31 Mar 2022 08:20:24 +0800
+X-Zmail-TransId: 3e816244f3c7004-b9eba
+From:   Yi Wang <wang.yi59@zte.com.cn>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
+        wang.liang82@zte.com.cn, Cheng Lin <cheng.lin130@zte.com.cn>
+Subject: [PATCH] xfs: getattr ignore blocks beyond eof
+Date:   Thu, 31 Mar 2022 16:02:56 +0800
+Message-Id: <20220331080256.1874-1-wang.yi59@zte.com.cn>
+X-Mailer: git-send-email 2.33.0.rc0.dirty
 MIME-Version: 1.0
-References: <20220330234528.1426991-1-nathan@kernel.org> <20220330234528.1426991-3-nathan@kernel.org>
-In-Reply-To: <20220330234528.1426991-3-nathan@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 31 Mar 2022 10:00:17 +0800
-Message-ID: <CABVgOSnX+bYKvGeJDeKpM8tCe_fCzYC4=6Eh3EUV54SK2SC7Bg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Revert "um: clang: Strip out -mno-global-merge from USER_CFLAGS"
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b3572005db7a0607"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 22V0KOVe048101
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 6244F3E1.000 by FangMail milter!
+X-FangMail-Envelope: 1648686051/4KTP8y6gtgzvgMn/6244F3E1.000/10.35.8.63/[10.35.8.63]/mxde.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6244F3E1.000/4KTP8y6gtgzvgMn
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000b3572005db7a0607
-Content-Type: text/plain; charset="UTF-8"
+From: Cheng Lin <cheng.lin130@zte.com.cn>
 
-On Thu, Mar 31, 2022 at 7:46 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> This reverts commit 6580c5c18fb3df2b11c5e0452372f815deeff895.
->
-> This patch is buggy, as noted in the patch linked below. The root cause
-> has been solved by removing '-mno-global-merge' for the entire kernel.
->
-> Link: https://lore.kernel.org/r/20220322173547.677760-1-nathan@kernel.org/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+Blocks beyond EOF, which preallocated, will be reclaimed at some time.
+These blocks can be ignored when getattr.
 
-Looks good to me: getting rid of -mno-global-merge entirely is nicer, anyway.
+This patch will optimize query accuracy for getattr blocks.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Cheng Lin <cheng.lin130@zte.com.cn>
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+---
+ fs/xfs/xfs_bmap_util.c |  1 +
+ fs/xfs/xfs_icache.c    |  1 +
+ fs/xfs/xfs_inode.h     |  1 +
+ fs/xfs/xfs_iomap.c     |  5 +++++
+ fs/xfs/xfs_iops.c      | 19 ++++++++++++++++++-
+ 5 files changed, 26 insertions(+), 1 deletion(-)
 
-Cheers,
--- David
-
---000000000000b3572005db7a0607
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD9
-dTJ3C1ML/jXUB2jWCjpYGFbLWDtAavKA8DvwSr7e/TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAzMzEwMjAwMjhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAJCySVqF1qIZbPhMhq6+/
-BvcbQuYwUKMwe64ZdWNCNfa8ZM1DhEk/gwp5+lnmAeIYSuDIwql+RplAPAn1+nQPWh2nP7kT5Bpa
-pjACyaLX21TYfsQe4ctBRsdJKikKu1t+TQRRen4a7xOEM+jk7l04bEbSPiyEULQFodzPKYw6Xhd6
-YS2MX0OPOuLS4ACybo1cm8MgAxyVC3O8SrIUPTSVHHFIkhTxjOrto/H2ubz9FEbWzH9gVVKzc56b
-zK46MsKKeULiygPXgY4ta1HTm3NG2hQfhFF/FVu4TOsq4eJpuk0A/8g71GH8OWeBs97pubzKg3Sx
-NBPCKJ7ivys9Vbi1zA==
---000000000000b3572005db7a0607--
+diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
+index eb2e387..9f4081d 100644
+--- a/fs/xfs/xfs_bmap_util.c
++++ b/fs/xfs/xfs_bmap_util.c
+@@ -753,6 +753,7 @@
+ 	if (error)
+ 		goto out_unlock;
+ 
++	ip->i_last_fsb = end_fsb;
+ 	xfs_inode_clear_eofblocks_tag(ip);
+ 	goto out_unlock;
+ 
+diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+index 9644f93..43ffb9e 100644
+--- a/fs/xfs/xfs_icache.c
++++ b/fs/xfs/xfs_icache.c
+@@ -102,6 +102,7 @@ struct xfs_inode *
+ 	memset(&ip->i_df, 0, sizeof(ip->i_df));
+ 	ip->i_flags = 0;
+ 	ip->i_delayed_blks = 0;
++	ip->i_last_fsb = 0;
+ 	ip->i_diflags2 = mp->m_ino_geo.new_diflags2;
+ 	ip->i_nblocks = 0;
+ 	ip->i_forkoff = 0;
+diff --git a/fs/xfs/xfs_inode.h b/fs/xfs/xfs_inode.h
+index b7e8f14..56fc41b 100644
+--- a/fs/xfs/xfs_inode.h
++++ b/fs/xfs/xfs_inode.h
+@@ -55,6 +55,7 @@
+ 	unsigned long		i_flags;	/* see defined flags below */
+ 	uint64_t		i_delayed_blks;	/* count of delay alloc blks */
+ 	xfs_fsize_t		i_disk_size;	/* number of bytes in file */
++	xfs_fileoff_t		i_last_fsb;	/* last fsb preallocated */
+ 	xfs_rfsblock_t		i_nblocks;	/* # of direct & btree blocks */
+ 	prid_t			i_projid;	/* owner's project id */
+ 	xfs_extlen_t		i_extsize;	/* basic/minimum extent size */
+diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
+index e552ce5..bd9266e 100644
+--- a/fs/xfs/xfs_iomap.c
++++ b/fs/xfs/xfs_iomap.c
+@@ -881,6 +881,7 @@
+ 	bool			eof = false, cow_eof = false, shared = false;
+ 	int			allocfork = XFS_DATA_FORK;
+ 	int			error = 0;
++	xfs_fileoff_t		prealloc_last_fsb = 0;
+ 
+ 	if (xfs_is_shutdown(mp))
+ 		return -EIO;
+@@ -1024,6 +1025,7 @@
+ 				XFS_B_TO_FSB(mp, mp->m_super->s_maxbytes));
+ 			ASSERT(p_end_fsb > offset_fsb);
+ 			prealloc_blocks = p_end_fsb - end_fsb;
++			prealloc_last_fsb = p_end_fsb;
+ 		}
+ 	}
+ 
+@@ -1049,6 +1051,9 @@
+ 		goto out_unlock;
+ 	}
+ 
++	if (prealloc_last_fsb && prealloc_blocks)
++		ip->i_last_fsb = prealloc_last_fsb;
++
+ 	if (allocfork == XFS_COW_FORK) {
+ 		trace_xfs_iomap_alloc(ip, offset, count, allocfork, &cmap);
+ 		goto found_cow;
+diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
+index b79b384..ca0372c 100644
+--- a/fs/xfs/xfs_iops.c
++++ b/fs/xfs/xfs_iops.c
+@@ -559,8 +559,14 @@
+ 	struct xfs_inode	*ip = XFS_I(inode);
+ 	struct xfs_mount	*mp = ip->i_mount;
+ 
++	xfs_off_t		fsb_beyond_eof;
++	xfs_fileoff_t		end_fsb;
++
+ 	trace_xfs_getattr(ip);
+ 
++	end_fsb = XFS_B_TO_FSB(mp, (xfs_ufsize_t)XFS_ISIZE(ip));
++	fsb_beyond_eof = ip->i_last_fsb - end_fsb;
++
+ 	if (xfs_is_shutdown(mp))
+ 		return -EIO;
+ 
+@@ -574,7 +580,15 @@
+ 	stat->atime = inode->i_atime;
+ 	stat->mtime = inode->i_mtime;
+ 	stat->ctime = inode->i_ctime;
+-	stat->blocks = XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks);
++
++	if (fsb_beyond_eof > 0) {
++		stat->blocks =
++		XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks)
++				  - fsb_beyond_eof;
++	} else {
++		stat->blocks =
++		XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks);
++	}
+ 
+ 	if (xfs_has_v3inodes(mp)) {
+ 		if (request_mask & STATX_BTIME) {
+@@ -988,6 +1002,9 @@
+ 	ip->i_disk_size = newsize;
+ 	xfs_trans_log_inode(tp, ip, XFS_ILOG_CORE);
+ 
++	/* update i_last_fsb to newsize when truncate.*/
++	ip->i_last_fsb = XFS_B_TO_FSB(mp, newsize);
++
+ 	if (newsize <= oldsize) {
+ 		error = xfs_itruncate_extents(&tp, ip, XFS_DATA_FORK, newsize);
+ 		if (error)
+-- 
+1.8.3.1

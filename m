@@ -2,109 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7484EE450
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF56D4EE451
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242651AbiCaWoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S242658AbiCaWqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242648AbiCaWoO (ORCPT
+        with ESMTP id S241816AbiCaWqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:44:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A948A23EC55
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:42:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A672B82250
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30878C340EE;
-        Thu, 31 Mar 2022 22:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648766543;
-        bh=8hmaQ8bK0qDSdukzI7NQ+DyrV1swRkMPVgfng2e6haI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=bU43DUZW9qxj0O2Iru6CzIBjtgq5G1zbBtuVMDvmsOriaLvdwk1KIOZ1QFh9n6Y5e
-         B+g8m3YHqi78woX177JQQ65MHdg4um1j9PgfZd+gyGxGYKOiQjn+SMKotNtJOQVvS4
-         huThatyJHMcluD2L+bsyJTiIkEmPugtw1SN1WAXh0NBbC1yZRv8AoRYWkRGk/ujaR8
-         /KnFH1Jdgh5KQR0VCXnS6SJck5l9PXjvKaw56xHjO1j+yG9UdTMIt6MLr5JPGQJLCy
-         fe3UEgk6nF7WbDo7DSKgrOEDi9/9JFy5cJtN6j9sKMmVIDPgyc9qD+cmNOP+6JCPEy
-         uUmfZ3BSS6frg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C311B5C0A0E; Thu, 31 Mar 2022 15:42:22 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 15:42:22 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
-Message-ID: <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
+        Thu, 31 Mar 2022 18:46:42 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B0713F93
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:44:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id p15so2232410ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kBnAVbpNqoCSWYSx8Ql1qE8bBicsUKv/dG3nqRT3QLE=;
+        b=My5YOtImdr7UEoWwDcs2sJJgmp/EYwERA/O451PPXh6jdxmfilUqBiLjSyc2fw374C
+         QUWiMmlQHOitjuPFMIL05o4gy0/dwlsmxQhjHKq4WFM3RDE1rbHe4T54t+cDCLl/Tzmd
+         SilQQqAKstEEuboM7Xz8FwgkEcYYyOpkXhzYznRRbkJzt+M41ovHbuOX3wkz0pnAgbGh
+         QzXy/nFkOmySoEXuzC6aMZX6K6b0OtKfjFC1VOTfnLpwCLCK6M9UgP1VBfITzNZXhuta
+         cKhPXnXwMwNq4GqDBdgRTnd6SoI2zV5KI3FSzl7gerqzy3t0HLyB/rOS/QhY8IBv9DWM
+         p9fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kBnAVbpNqoCSWYSx8Ql1qE8bBicsUKv/dG3nqRT3QLE=;
+        b=UnqYNXYk9Wrgf/lhDzaeOyci4zS24aC+Guf1lfh9WG0kNqaI/Mb/Pth4ALKewrXy1D
+         h6Ry0zZ/GraK5f9wmU5R3mPOv7nManEVW64WndNBcTIvWQLKlMEJKg5LmNUKg/pmw6Dv
+         7qcfyx120CK9DzVcQ7xvQh/3SW7iPoFgoDuy85KPprcCkgfJf9Wq9Ip1dEy0BGKPdEn6
+         Xpn25n+N3EAViPxWBjOv/qS4DerIqxzCTQoSsZRZ70t89iAqJKjnCbBBJesDjDoMZWrq
+         28LKVGMGYMITmUhhVPyUvRiLahwQbi+RUjuMyo3ySLAwzRzvqlnnDoLWBOSd1pPm9H3c
+         FXvA==
+X-Gm-Message-State: AOAM530SDNCfFUAsbPRvQNmQ+x6gtkcsTXMlSIWEVXKgcfuF64+Oswnn
+        PZAoOnv9LGw/8mCqcE9aCMI=
+X-Google-Smtp-Source: ABdhPJypkvOUIsmp4p7ZZmma10hTeATGviLbd10EbEyAfGvQ538gSlqmRsbB+hEE1DATtqOx7Ml4ag==
+X-Received: by 2002:a17:906:9acd:b0:6e0:b74d:d932 with SMTP id ah13-20020a1709069acd00b006e0b74dd932mr6806151ejc.695.1648766692559;
+        Thu, 31 Mar 2022 15:44:52 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id b12-20020a056402278c00b004195a50759fsm332229ede.84.2022.03.31.15.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 15:44:52 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH] hugetlb: remove use of list iterator variable after loop
+Date:   Fri,  1 Apr 2022 00:43:23 +0200
+Message-Id: <20220331224323.903842-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 02:45:25PM -0700, Eric Dumazet wrote:
-> Hi Paul
-> 
-> It seems you assume per cpu ptr for arbitrary indexes (< nr_cpu_ids) are valid.
+In preparation to limit the scope of the list iterator to the list
+traversal loop, use a dedicated pointer to iterate through the list [1].
 
-Gah!  I knew I was forgetting something...
+Before hugetlb_resv_map_add() was expecting a file_region struct, but
+in case the list iterator in add_reservation_in_range() did not exit
+early, the variable passed in, is not actually a valid structure.
 
-But just to check, is this a theoretical problem or something you hit
-on real hardware?  (For the rest of this email, I am assuming the latter.)
+In such a case 'rg' is computed on the head element of the list and
+represents an out-of-bounds pointer. This still remains safe *iff* you
+only use the link member (as it is done in hugetlb_resv_map_add()).
 
-> What do you think of the (untested) following patch ?
+To avoid the type-confusion altogether and limit the list iterator to
+the loop, only a list_head pointer is kept to pass to
+hugetlb_resv_map_add().
 
-One issue with this patch is that the contention could be unpredictable,
-or worse, vary among CPU, especially if the cpu_possible_mask was oddly
-distributed.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ mm/hugetlb.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-So might it be better to restrict this to all on CPU 0 on the one hand
-and completely per-CPU on the other?  (Or all on the boot CPU, in case
-I am forgetting some misbegotten architecture that can run without a
-CPU 0.)
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index b34f50156f7e..bb0cac980a0f 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -370,7 +370,7 @@ static void coalesce_file_region(struct resv_map *resv, struct file_region *rg)
+ }
+ 
+ static inline long
+-hugetlb_resv_map_add(struct resv_map *map, struct file_region *rg, long from,
++hugetlb_resv_map_add(struct resv_map *map, struct list_head *rg, long from,
+ 		     long to, struct hstate *h, struct hugetlb_cgroup *cg,
+ 		     long *regions_needed)
+ {
+@@ -379,7 +379,7 @@ hugetlb_resv_map_add(struct resv_map *map, struct file_region *rg, long from,
+ 	if (!regions_needed) {
+ 		nrg = get_file_region_entry_from_cache(map, from, to);
+ 		record_hugetlb_cgroup_uncharge_info(cg, h, map, nrg);
+-		list_add(&nrg->link, rg->link.prev);
++		list_add(&nrg->link, rg);
+ 		coalesce_file_region(map, nrg);
+ 	} else
+ 		*regions_needed += 1;
+@@ -402,47 +402,52 @@ static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+ 	long add = 0;
+ 	struct list_head *head = &resv->regions;
+ 	long last_accounted_offset = f;
+-	struct file_region *rg = NULL, *trg = NULL;
++	struct file_region *iter, *trg = NULL;
++	struct list_head *rg = NULL;
+ 
+ 	if (regions_needed)
+ 		*regions_needed = 0;
+ 
+ 	/* In this loop, we essentially handle an entry for the range
+-	 * [last_accounted_offset, rg->from), at every iteration, with some
++	 * [last_accounted_offset, iter->from), at every iteration, with some
+ 	 * bounds checking.
+ 	 */
+-	list_for_each_entry_safe(rg, trg, head, link) {
++	list_for_each_entry_safe(iter, trg, head, link) {
+ 		/* Skip irrelevant regions that start before our range. */
+-		if (rg->from < f) {
++		if (iter->from < f) {
+ 			/* If this region ends after the last accounted offset,
+ 			 * then we need to update last_accounted_offset.
+ 			 */
+-			if (rg->to > last_accounted_offset)
+-				last_accounted_offset = rg->to;
++			if (iter->to > last_accounted_offset)
++				last_accounted_offset = iter->to;
+ 			continue;
+ 		}
+ 
+ 		/* When we find a region that starts beyond our range, we've
+ 		 * finished.
+ 		 */
+-		if (rg->from >= t)
++		if (iter->from >= t) {
++			rg = iter->link.prev;
+ 			break;
++		}
+ 
+-		/* Add an entry for last_accounted_offset -> rg->from, and
++		/* Add an entry for last_accounted_offset -> iter->from, and
+ 		 * update last_accounted_offset.
+ 		 */
+-		if (rg->from > last_accounted_offset)
+-			add += hugetlb_resv_map_add(resv, rg,
++		if (iter->from > last_accounted_offset)
++			add += hugetlb_resv_map_add(resv, iter->link.prev,
+ 						    last_accounted_offset,
+-						    rg->from, h, h_cg,
++						    iter->from, h, h_cg,
+ 						    regions_needed);
+ 
+-		last_accounted_offset = rg->to;
++		last_accounted_offset = iter->to;
+ 	}
+ 
+ 	/* Handle the case where our range extends beyond
+ 	 * last_accounted_offset.
+ 	 */
++	if (!rg)
++		rg = head->prev;
+ 	if (last_accounted_offset < t)
+ 		add += hugetlb_resv_map_add(resv, rg, last_accounted_offset,
+ 					    t, h, h_cg, regions_needed);
 
-							Thanx, Paul
+base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+-- 
+2.25.1
 
-> Thanks.
-> 
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index 99cf3a13954cfb17828fbbeeb884f11614a526a9..df3785be4022e903d9682dd403464aa9927aa5c2
-> 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -273,13 +273,17 @@ static void call_rcu_tasks_generic(struct
-> rcu_head *rhp, rcu_callback_t func,
->         bool needadjust = false;
->         bool needwake;
->         struct rcu_tasks_percpu *rtpcp;
-> +       int ideal_cpu, chosen_cpu;
-> 
->         rhp->next = NULL;
->         rhp->func = func;
->         local_irq_save(flags);
->         rcu_read_lock();
-> -       rtpcp = per_cpu_ptr(rtp->rtpcpu,
-> -                           smp_processor_id() >>
-> READ_ONCE(rtp->percpu_enqueue_shift));
-> +
-> +       ideal_cpu = smp_processor_id() >> READ_ONCE(rtp->percpu_enqueue_shift);
-> +       chosen_cpu = cpumask_next(ideal_cpu - 1, cpu_online_mask);
-> +
-> +       rtpcp = per_cpu_ptr(rtp->rtpcpu, chosen_cpu);
->         if (!raw_spin_trylock_rcu_node(rtpcp)) { // irqs already disabled.
->                 raw_spin_lock_rcu_node(rtpcp); // irqs already disabled.
->                 j = jiffies;

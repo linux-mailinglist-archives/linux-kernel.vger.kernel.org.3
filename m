@@ -2,144 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1854EDF93
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323FA4EDF96
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiCaRXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S230029AbiCaRZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiCaRXe (ORCPT
+        with ESMTP id S229719AbiCaRZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:23:34 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFD61DEAAF;
-        Thu, 31 Mar 2022 10:21:46 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id q129so221871oif.4;
-        Thu, 31 Mar 2022 10:21:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nsenYJDFXdH82jpjiqunff4Tj/nrgLEIwwTNVx3c7KA=;
-        b=IpNQyL+iL3z4TYEEHvoBFfdo87GdoZ0FD/jpEvHvDhc2QyAsp1+Nrv3DGFkA7J2Uz1
-         riylqVozQnr2znIZ9/ks8dtd0X0BZpfAxtYN1E2B/phG9lzc66cCm85FmMl+DgldljCg
-         0/csav/Aa5hyWXIIOI0S2+zHzO1h7c4yqbdVHRLHV5WoRhtWLf2GJxWS77pb11z2yBGB
-         RMzKPEwZzOrPn/qe1RxZ7PWLh0yAS+Fkf8Zb9SCEsCGMKH8MBRsZuXTJbSXlO+hVo/0E
-         ft9qcWON9mkWYApqly6sfWO3aiJFZsnD4ERnIRqy/WAPPSORFY03rYXj0FTztScrSU9F
-         WKlA==
-X-Gm-Message-State: AOAM533mHYcXzX53THcyWVBrLpHE9nWbh0b5SYFHva1SIlwP9OZfD8a1
-        /ci5JfUKZBI1MzjVlD4aDg==
-X-Google-Smtp-Source: ABdhPJwnl2uSafHwFjFXClVThGjT6z4BqxQOEpHGBmTRRQm3pFwVVUFoxpHVcYXm7rCBrefSq1tsJA==
-X-Received: by 2002:a05:6808:118f:b0:2d4:13f1:8504 with SMTP id j15-20020a056808118f00b002d413f18504mr2962544oil.90.1648747305999;
-        Thu, 31 Mar 2022 10:21:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a4ace88000000b00321598cd45dsm12006oos.33.2022.03.31.10.21.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 10:21:44 -0700 (PDT)
-Received: (nullmailer pid 1168272 invoked by uid 1000);
-        Thu, 31 Mar 2022 17:21:43 -0000
-Date:   Thu, 31 Mar 2022 12:21:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>
-Subject: Re: [PATCH 1/2] dt-bindings: dma: Add Apple ADMAC
-Message-ID: <YkXjJ2gtX4sL000U@robh.at.kernel.org>
-References: <20220330164458.93055-1-povik+lin@cutebit.org>
- <20220330164458.93055-2-povik+lin@cutebit.org>
- <YkU6yvUQ6v4VdXiJ@matsya>
- <C2D8BDAF-0ACF-4756-B10F-B5097BC93670@cutebit.org>
- <265B2992-06E5-4E45-A971-B170A385EFD4@cutebit.org>
- <YkW2OG3dU4YFYJEZ@matsya>
- <B75EEC8B-FE88-47EA-8F56-0DD7EDE0DB77@cutebit.org>
+        Thu, 31 Mar 2022 13:25:56 -0400
+Received: from out203-205-251-53.mail.qq.com (out203-205-251-53.mail.qq.com [203.205.251.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C586A506D9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 10:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648747446;
+        bh=uQyvWk8WVby12Khs4f9ZXuKCjtAh/gaIq5J8Oj1XX/E=;
+        h=From:To:Cc:Subject:Date;
+        b=lIm/dqqxd2z6VAhSRktl6iE8tnUenslzEz7NxbIwP+IUFaOW1cQsOzq1Hu4NcXqvq
+         n5GqiZ1jhas/45dhEWW7VKeJD771MYHiaET0/1YBvqvbXYx5KzcTE0t0cfI2Hi7Zj7
+         IxI/tnURxPGkNg5ZstbGorxkPV/dGZcq08cVddZQ=
+Received: from localhost.localdomain ([43.227.136.188])
+        by newxmesmtplogicsvrszc8.qq.com (NewEsmtp) with SMTP
+        id 60303088; Fri, 01 Apr 2022 01:24:03 +0800
+X-QQ-mid: xmsmtpt1648747443twi3h0k1b
+Message-ID: <tencent_95EE7F100488393717982391C22EBC526905@qq.com>
+X-QQ-XMAILINFO: MtZ6QPwsmM9Xb0LZKzUOwz1UnfZP6lhahiHe/qeNuF5HEeIioIbd5VwhkSp0qu
+         MH6sAcpf8cuEnTAqUc+uMxaJEauzR3rj1Bi00euu5CeOe8zQaed0w+PgQQpIuDcnVpo5n03/2ZOP
+         zfLizwiVxwcehXEwi3un69UnyMyQ5GqDRO/ngeHlLtLWCcwdzJFhL3XCpbBtdYxVyW5PEKXNst4b
+         baripEtp7T3WJAM2O0fPhEV8Ng2U3SZO4T6STS1q7+X8tfI+VcNMKaxiWZj7tCd8p1qnGD+cvVfa
+         WAY7xwL9bZKF410M4td33jsm0JuT8uHXE4XVexrvAkF0ZIKPRbKVvQvKFcLCm9BleoixL7/Q9ZK/
+         ohaG/KMQylmS59Uv9Y4AH+9K3T4KdocBQ2UVZb9EL9I5yBsKSRz18KW1ahlnGJCBSOxvQNKehPda
+         tcq/0IwohYFes8l8slX4+NEANoH2+m5S3U2IHX7oxo4m1Xsp88/qcxTKYTG31LmQWC/xpfFIY3Hx
+         6KJccifIVzk/hnbx5/mXiBfZCLv+YIHLD4s42coRVK1x1PNbAjf7i9jJRpOSeXFeCm6BXO6eL5b/
+         0sg4D9LVfm5fabANlH6gR/EqZPzvBEdvlWyjcNk20bKOJXNcxujVZA1nC6aQKJX9PA6FOwlUpinx
+         44qipYd2537Yv2GkBjj5rA4RpyGSh2zcglhoae4uVuGT0RjcWlug53IialzWeS8dJPRkVaFFm2AX
+         csESjMPTIXLRxp7N3v2CqmYAGK7xI0d6ikk3mBolm3BPL8uncHqxaiyj61085lkrQt3Lty9cBP5d
+         Ewwc5F8kNwwThu20/8aBjG/2QdHGNTRhbjr0jM7KfLtfq+QfnYkuySttiYA/+j83xlJsFGBYUDdt
+         ZO4CvbpTs4s702xDVPE4mBH8C1pg23Ent+nNhF5N2aha5H0J/rdIxCb36EqUxUPmF18uMwszGd3l
+         Kf90gx1XxsYzSnB0Hr0A==
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] staging: rtl8712: fix potential memory leak in _r8712_init_xmit_priv()
+Date:   Fri,  1 Apr 2022 01:23:50 +0800
+X-OQ-MSGID: <20220331172350.9779-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <B75EEC8B-FE88-47EA-8F56-0DD7EDE0DB77@cutebit.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 06:13:53PM +0200, Martin Povišer wrote:
-> 
-> > On 31. 3. 2022, at 16:10, Vinod Koul <vkoul@kernel.org> wrote:
-> > 
-> > On 31-03-22, 09:06, Martin Povišer wrote:
-> >> 
-> >>> On 31. 3. 2022, at 8:50, Martin Povišer <povik@cutebit.org> wrote:
-> >>>> 
-> >>>> On 31. 3. 2022, at 7:23, Vinod Koul <vkoul@kernel.org> wrote:
-> >>>> 
-> >>>> On 30-03-22, 18:44, Martin Povišer wrote:
-> >>>>> Apple's Audio DMA Controller (ADMAC) is used to fetch and store audio
-> >>>>> samples on Apple SoCs from the "Apple Silicon" family.
-> >>>>> 
-> >>>>> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-> >>>>> ---
-> >>>>> .../devicetree/bindings/dma/apple,admac.yaml  | 73 +++++++++++++++++++
-> >>>>> 1 file changed, 73 insertions(+)
-> >>>>> create mode 100644 Documentation/devicetree/bindings/dma/apple,admac.yaml
-> >>>>> 
-> >>>>> diff --git a/Documentation/devicetree/bindings/dma/apple,admac.yaml b/Documentation/devicetree/bindings/dma/apple,admac.yaml
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..34f76a9a2983
-> >>>>> --- /dev/null
-> >>>>> +++ b/Documentation/devicetree/bindings/dma/apple,admac.yaml
-> >>> 
-> >>>>> +  apple,internal-irq-destination:
-> >>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>>>> +    description: Index influencing internal routing of the IRQs
-> >>>>> +      within the peripheral.
-> >>>> 
-> >>>> do you have more details for this, is this for peripheral and if so
-> >>>> suited to be in dam-cells?
-> >>> 
-> >>> By peripheral I meant the DMA controller itself here. 
-> > 
-> > Dmaengine convention is that peripheral is device which we are doing dma
-> > to/from, like audio controller/fifo here
-> > 
-> >>> Effectively the controller has four independent IRQ outputs and the driver
-> >>> needs to know which one we are using. (It need not be the same output even
-> >>> for different ADMAC instances on one die.)
-> > 
-> > That smells like a mux to me.. why not use dma-requests for this?
-> 
-> I am not sure that’s right. Reading the dmaengine docs, DMA requests seem to have
-> to do with the DMA-controller-to-peripheral connection, but the proposed property
-> tells us which of four independent IRQ outputs of the DMA controller we actually
-> have in the interrupts= property. That is, it has to do with the DMA-controller-to-CPU
-> connection.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Why do they have to be different? IRQF_SHARED doesn't work?
+In _r8712_init_xmit_priv(), there are two error paths do not properly
+release the resources allocated by it.
+This patch is to free them.
 
-Why can't you request each IRQ until it succeeds?
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/staging/rtl8712/rtl871x_xmit.c | 27 ++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-What happens when there are 5 DMA controllers?
-
-If using more than 1 interrupt will never work or be needed, then I'm 
-inclined to say just describe that 1 interrupt. Yes, that goes against 
-'describe all the h/w', but there's always exceptions. I suppose you 
-need to know which 'interrupts' index (output) you are using. If so, you 
-can do something like this:
-
-interrupts = <-1>, <-1>, <3 0>, <-1>;
-
-Rob
+diff --git a/drivers/staging/rtl8712/rtl871x_xmit.c b/drivers/staging/rtl8712/rtl871x_xmit.c
+index 090345b..dcf3f76 100644
+--- a/drivers/staging/rtl8712/rtl871x_xmit.c
++++ b/drivers/staging/rtl8712/rtl871x_xmit.c
+@@ -117,11 +117,8 @@ int _r8712_init_xmit_priv(struct xmit_priv *pxmitpriv,
+ 	_init_queue(&pxmitpriv->pending_xmitbuf_queue);
+ 	pxmitpriv->pallocated_xmitbuf =
+ 		kmalloc(NR_XMITBUFF * sizeof(struct xmit_buf) + 4, GFP_ATOMIC);
+-	if (!pxmitpriv->pallocated_xmitbuf) {
+-		kfree(pxmitpriv->pallocated_frame_buf);
+-		pxmitpriv->pallocated_frame_buf = NULL;
+-		return -ENOMEM;
+-	}
++	if (!pxmitpriv->pallocated_xmitbuf)
++		goto free_frame_buf;
+ 	pxmitpriv->pxmitbuf = pxmitpriv->pallocated_xmitbuf + 4 -
+ 			      ((addr_t)(pxmitpriv->pallocated_xmitbuf) & 3);
+ 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
+@@ -130,12 +127,14 @@ int _r8712_init_xmit_priv(struct xmit_priv *pxmitpriv,
+ 		pxmitbuf->pallocated_buf =
+ 			kmalloc(MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ, GFP_ATOMIC);
+ 		if (!pxmitbuf->pallocated_buf)
+-			return -ENOMEM;
++			goto free_xmitbuf;
+ 		pxmitbuf->pbuf = pxmitbuf->pallocated_buf + XMITBUF_ALIGN_SZ -
+ 				 ((addr_t) (pxmitbuf->pallocated_buf) &
+ 				 (XMITBUF_ALIGN_SZ - 1));
+-		if (r8712_xmit_resource_alloc(padapter, pxmitbuf))
+-			return -ENOMEM;
++		if (r8712_xmit_resource_alloc(padapter, pxmitbuf)) {
++			kfree(pxmitbuf->pallocated_buf);
++			goto free_xmitbuf;
++		}
+ 		list_add_tail(&pxmitbuf->list,
+ 				 &(pxmitpriv->free_xmitbuf_queue.queue));
+ 		pxmitbuf++;
+@@ -146,6 +145,18 @@ int _r8712_init_xmit_priv(struct xmit_priv *pxmitpriv,
+ 	init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+ 	tasklet_setup(&pxmitpriv->xmit_tasklet, r8712_xmit_bh);
+ 	return 0;
++
++free_xmitbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
++	while (i-- > 0) {
++		r8712_xmit_resource_free(padapter, pxmitbuf);
++		kfree(pxmitbuf->pallocated_buf);
++		pxmitbuf++;
++	}
++	kfree(pxmitpriv->pallocated_xmitbuf);
++free_frame_buf:
++	kfree(pxmitpriv->pallocated_frame_buf);
++	return -ENOMEM;
+ }
+ 
+ void _free_xmit_priv(struct xmit_priv *pxmitpriv)
+-- 

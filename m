@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024234ED124
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98C04ED126
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 03:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352210AbiCaBCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 21:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S1352218AbiCaBEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 21:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346065AbiCaBCE (ORCPT
+        with ESMTP id S1346065AbiCaBEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 21:02:04 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6783365D10;
-        Wed, 30 Mar 2022 18:00:18 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id e4so23845966oif.2;
-        Wed, 30 Mar 2022 18:00:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MA12qnKm1ceMQI3Fku8u66b+ikv0ibJvyYHXba44Nq8=;
-        b=U07Mn0D+6UH6qqY6lMvvO+Z22kBhnneLOWC0zkc61EpAbaDzrQszQ8SFtd4JG7hFPA
-         beilO7wepZAbhLQBrSaSqXvKpYQ+2A4NypRwqvrSK+2bEMCM0HJ79rcCdY8McXf4+JQB
-         ZiNnl2Q5O6hc45wYPDpOEHl8rZZWdWYEPmEzJ0LYqEn4gP9toU4ONP8B5xLbJ6scFi/L
-         p0Sf1AoX0BeYl0K06yN1tvPVIvmaAAIIO/7kIfZm0gONqK4YT2YSzuQRl6SPZ26lvGbe
-         +aRxBXdENBppgNuCjW1jrKcxr6MqeheDXXz5GbKFwjzgt8mPWmldDGH+XAr8iSILHeJ2
-         HY0g==
-X-Gm-Message-State: AOAM5326xyKpuE07jQL/avrr1K327SDF9ytVayZXtkIPLbEJb3f5+3lU
-        U3/fFUxDTR25K7EmCR4IYKOR2Sk9Iw==
-X-Google-Smtp-Source: ABdhPJxE68EL8aL8GTYB+UYnBt/e2Dr9E24iTCHNTEL6ZagdmVa1T4AzTMpCaLD/ziMuzcoHKH1Qnw==
-X-Received: by 2002:a05:6808:55:b0:2ec:a4ae:fdde with SMTP id v21-20020a056808005500b002eca4aefddemr1547529oic.106.1648688417736;
-        Wed, 30 Mar 2022 18:00:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 38-20020a9d0da9000000b005cb437ac0e2sm11538034ots.44.2022.03.30.18.00.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 18:00:17 -0700 (PDT)
-Received: (nullmailer pid 4000825 invoked by uid 1000);
-        Thu, 31 Mar 2022 01:00:16 -0000
-Date:   Wed, 30 Mar 2022 20:00:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power: renesas,apmu: Fix cpus property
- limits
-Message-ID: <YkT9IFHc1k3uiUW+@robh.at.kernel.org>
-References: <9ece1a07bbcb95abc9d80e6a6ecc95806a294a11.1648645279.git.geert+renesas@glider.be>
+        Wed, 30 Mar 2022 21:04:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885E165D31;
+        Wed, 30 Mar 2022 18:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648688536; x=1680224536;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1dlEDgQKh23w/zXDxJY2KzGHeDnj9hNUwJGYdrUoU24=;
+  b=O9FR3XY9HKZUsnbRXtOpPvfWryXx/4HX5AR2rz1o/xXol8pkRjIEM9pE
+   eHkU4k2PiMCLERjW4shTRiIVMul79BU3DQZS92zs+iBnUe9/IDtzv7h6S
+   6NogvLY2Fh6C5N+06s6H/Iq18rvotBRWyEhH+BOURjOWeWwisLHevRrYJ
+   rXJRefy1Sd2tiiDv8aVKkQuuX+/UpZlfmSwvLdJglnJtlY62g1YpxUu3h
+   N+CXEH8JP6oxCWKvNW8Ew1yq/J1ysyvhYuM09mNJFP1UF/D0IMl5CQnr+
+   vWWomJXAIosUuNrZsrmhaBAbgeKG8AZ6sVOtSqotfkI3hpyYYfDfK/kPN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259656694"
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="259656694"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 18:02:15 -0700
+X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
+   d="scan'208";a="554867541"
+Received: from dhathawa-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.53.226])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 18:02:13 -0700
+Message-ID: <b2a1b80f9f7779ddcfcda50ca3ce08df000b2f1b.camel@intel.com>
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
+ TDX module
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Date:   Thu, 31 Mar 2022 14:02:11 +1300
+In-Reply-To: <YkTvw5OXTTFf7j4y@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+         <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
+         <20220314194513.GD1964605@ls.amr.corp.intel.com>
+         <YkTvw5OXTTFf7j4y@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ece1a07bbcb95abc9d80e6a6ecc95806a294a11.1648645279.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,20 +68,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 15:04:16 +0200, Geert Uytterhoeven wrote:
-> "make dtbs_check":
-> 
->     arch/arm/boot/dts/r8a7791-koelsch.dtb: apmu@e6152000: cpus:0: [6, 7] is too long
-> 	    From schema: Documentation/devicetree/bindings/power/renesas,apmu.yaml
-> 
-> Correct the minimum and maximum number of CPUs controlled by a single
-> APMU instance.
-> 
-> Fixes: 39bd2b6a3783b899 ("dt-bindings: Improve phandle-array schemas")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/devicetree/bindings/power/renesas,apmu.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
 
-Applied, thanks!
+> > 
+> > - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
+> > (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
+> > guest does it.  It naturally fits with the TDX module initialization at creating
+> > first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
+> 
+> That's a solvable problem, though making it work without exporting hardware_enable_all()
+> could get messy.
+
+Could you elaborate a little bit on how to resolve?
+
+-- 
+Thanks,
+-Kai
+
+

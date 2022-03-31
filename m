@@ -2,79 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E214EE286
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAFC4EE293
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241365AbiCaUVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S241374AbiCaUXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiCaUVk (ORCPT
+        with ESMTP id S233216AbiCaUXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:21:40 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23447C6ED6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:19:52 -0700 (PDT)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id a1Gln3Kfl9eePa1GmnadrV; Thu, 31 Mar 2022 22:19:49 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 31 Mar 2022 22:19:49 +0200
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        alsa-devel@alsa-project.org
-Subject: [PATCH] ASoC: soc-pcm: use GFP_KERNEL when the code is sleepable
-Date:   Thu, 31 Mar 2022 22:19:44 +0200
-Message-Id: <e740f1930843060e025e3c0f17ec1393cfdafb26.1648757961.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Thu, 31 Mar 2022 16:23:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E134241B56
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:21:27 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bg10so1657431ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ILnXUCualFGuYlaEUrjI+Jt4xkDksiZWcqq6tSgI9Zw=;
+        b=ZW1CjLONxlLC58VYQbdnqzQGqdnzwh/8Jk3XX/BhEOsvEfvlBmszlJ6XyM5eEnPruf
+         ZCS8+Ef8Fm7zTkrvkaUmsNd6yxjOHKT5fuo3aqu44qhaFhWNSf+NvGqvZSxcTwKRqAJt
+         stYv5p90mRuHeOp9QCy1vKheAwT2tNH0T/7A49oA9r8ou4/MZhQRUAbba+aYebPwm3H1
+         LbMszmPMllWpW6qAwEni1zTUW9XoV2j3Tq5S61bi7W5yoTRzi5A6EiMa8Gvqfjk1+TH5
+         2f8UPKADYzfeRb/r8i3KIDWkZ1EIgq22lpKipKLiaRyn4LdTQtDXpiUwQjBvRvwhdYOC
+         P8Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ILnXUCualFGuYlaEUrjI+Jt4xkDksiZWcqq6tSgI9Zw=;
+        b=xEmqFch6SgCotUKnGbkkk1y03yf5rZWVv97mJbxqqcw6TbExHT8rASVUJ0pSdC2Bcp
+         /JVDkly6bJz5sPhGTvcTMrommPov/ER3CglWlNctQlKGX4h4qvJqgLx+oDcBciM8j5iM
+         x7bSoubJ2YNxwcRFCrDz8zGsK8mf0pEe7KN4h3lKwnjytzV6ampbdixqsJUoyiC9hOpq
+         MIgcs0TUN20Yxib5e7S8B6ko7BMm4pDaPpKT/rrEDlTgjjxAwG2QMXC2LH7JCqO9umP3
+         X+b4Z6Lm5FozDT51u22cgrHfBk/IKCCYIUuUjzpsKB9SJZ5U18fTEgshNX39izosr3h7
+         iGFQ==
+X-Gm-Message-State: AOAM530r1aE7RT7jPT1zvhcHhL8TqSiSuqbgHczbEd857Y2C3Obyzsh8
+        AEcuxy7jhW0ujjgcoXVNGrJiLQ==
+X-Google-Smtp-Source: ABdhPJwThRh2Gmkgw1Udsp9CkVtNz9RvwQbVrpKMO/HzmZ5TUdL2hXfqZOSOSrdGFCizgq6F8zT8BA==
+X-Received: by 2002:a17:907:9705:b0:6e4:b769:286f with SMTP id jg5-20020a170907970500b006e4b769286fmr2781454ejc.728.1648758085933;
+        Thu, 31 Mar 2022 13:21:25 -0700 (PDT)
+Received: from [192.168.0.168] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id ch26-20020a0564021bda00b00418f99695f0sm202380edb.23.2022.03.31.13.21.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 13:21:25 -0700 (PDT)
+Message-ID: <84d1e5b6-caa5-cf98-a4b2-2f1ca738b795@linaro.org>
+Date:   Thu, 31 Mar 2022 22:21:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v12 4/9] dt-bindings: clock: Add bindings for SP7021 clock
+ driver
+Content-Language: en-US
+To:     Qin Jian <qinjian@cqplus1.com>, krzysztof.kozlowski@canonical.com
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1648714851.git.qinjian@cqplus1.com>
+ <c535be1e977098993850789faceea1db605df81d.1648714851.git.qinjian@cqplus1.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c535be1e977098993850789faceea1db605df81d.1648714851.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the kzalloc() call in dpcm_be_connect(), there is no spin lock involved.
-It's merely protected by card->pcm_mutex, instead.  The spinlock is applied
-at the later call with snd_soc_pcm_stream_lock_irq() only for the list
-manipulations.  (See it's *_irq(), not *_irqsave(); that means the context
-being sleepable at that point.)  So, we can use GFP_KERNEL safely there.
+On 31/03/2022 10:29, Qin Jian wrote:
+> Add documentation to describe Sunplus SP7021 clock driver bindings.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+> Move 'reg' after 'compatible'
+> ---
+>  .../bindings/clock/sunplus,sp7021-clkc.yaml   |  39 ++++++
+>  MAINTAINERS                                   |   2 +
+>  include/dt-bindings/clock/sp-sp7021.h         | 112 ++++++++++++++++++
+>  3 files changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/sp-sp7021.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+> new file mode 100644
+> index 000000000..41e73a088
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/sunplus,sp7021-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SP7021 SoC Clock Controller Binding
+> +
+> +maintainers:
+> +  - Qin Jian <qinjian@cqplus1.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-clkc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    clkc: clock-controller@9c000000 {
+> +      compatible = "sunplus,sp7021-clkc";
+> +      reg = <0x9c000000 0x280>;
+> +      #clock-cells = <1>;
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 26066f199..5d8b420d0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2744,8 +2744,10 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for mon-subscribers)
+>  S:	Maintained
+>  W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+>  F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+> +F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+>  F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+>  F:	drivers/reset/reset-sunplus.c
+> +F:	include/dt-bindings/clock/sp-sp7021.h
+>  F:	include/dt-bindings/reset/sp-sp7021.h
+>  
+>  ARM/Synaptics SoC support
+> diff --git a/include/dt-bindings/clock/sp-sp7021.h b/include/dt-bindings/clock/sp-sp7021.h
+> new file mode 100644
+> index 000000000..45dac6de8
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/sp-sp7021.h
+> @@ -0,0 +1,112 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (C) Sunplus Technology Co., Ltd.
+> + *       All rights reserved.
+> + */
+> +#ifndef _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
+> +#define _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
+> +
+> +#define XTAL			27000000
+> +
+> +/* plls */
+> +#define PLL_A			0
+> +#define PLL_E			1
+> +#define PLL_E_2P5		2
+> +#define PLL_E_25		3
+> +#define PLL_E_112P5		4
+> +#define PLL_F			5
+> +#define PLL_TV			6
+> +#define PLL_TV_A		7
+> +#define PLL_SYS			8
+> +
+> +/* gates: mo_clken0 ~ mo_clken9 */
+> +#define CLK_SYSTEM		0x10
+> +#define CLK_RTC			0x12
 
-This patch revert commit d8a9c6e1f676 ("ASoC: soc-pcm: use GFP_ATOMIC for
-dpcm structure") which is no longer needed since commit b7898396f4bb
-("ASoC: soc-pcm: Fix and cleanup DPCM locking").
+YAML looks ok, but here comment from Arnd also applies. These should be
+regular decimal numbers incremented by one.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-See discussion in the thread at:
-   https://lore.kernel.org/all/ed322b8821fa787907c1a4cce879564d1281b69d.1642331884.git.christophe.jaillet@wanadoo.fr/
----
- sound/soc/soc-pcm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-index 9a954680d492..11c9853e9e80 100644
---- a/sound/soc/soc-pcm.c
-+++ b/sound/soc/soc-pcm.c
-@@ -1214,7 +1214,7 @@ static int dpcm_be_connect(struct snd_soc_pcm_runtime *fe,
- 		be_substream->pcm->nonatomic = 1;
- 	}
- 
--	dpcm = kzalloc(sizeof(struct snd_soc_dpcm), GFP_ATOMIC);
-+	dpcm = kzalloc(sizeof(struct snd_soc_dpcm), GFP_KERNEL);
- 	if (!dpcm)
- 		return -ENOMEM;
- 
--- 
-2.32.0
-
+Best regards,
+Krzysztof

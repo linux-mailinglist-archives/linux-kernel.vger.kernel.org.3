@@ -2,202 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3C54EDE95
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3477A4EDE98
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239774AbiCaQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
+        id S239791AbiCaQUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbiCaQTa (ORCPT
+        with ESMTP id S236949AbiCaQUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:19:30 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E9C8EB6A
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:17:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d5so34255lfj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XvOQiTxrSkDE1O7y9Nnnhxp/qhEKorlXOf3Z2Rjc3+Q=;
-        b=CZq9cQspPXzmbUE3s0DkhpzbWQVXdbi4fuiFGL/Rh1tDQAnwJyVsKM9eAOr6KeA1uO
-         aOeP7VLuYzWXOEwFRT0SsN6v8ebYrzVDnNxrMOd01NivrLK1Qj5XvXBjOlC2C6aNYJeJ
-         5MUbI9z6Hq+EQw9f4gGnzjHBBkGhRnKrDhI1ea3iUic6u47BOcIoQu/4pTiLacnwUwSZ
-         J7kyUBgSujvFh9L2V6EHJ+PPMmyFHgwcwwZnwQmYkieJ3+qzdSQGIh8roiTz40uYXhbw
-         YbppkGon0l+pxrP7ET43mtovPVI48DUqTkmnKFQ0hL5RJlenajcti6B2Q7Z8ha6QH3iX
-         UPkQ==
+        Thu, 31 Mar 2022 12:20:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5533B5D5E7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648743529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RJRxio+KIRDJC4gehWMvPkl27dePwLPglqNmIITje9s=;
+        b=YASjjtey1pm/GCyhMy5O/yHdXmrIihmBKQYhaAFQWU0L4aDnb0vJkIUqbja8VJIJ1XSuQA
+        ZmHKz68l39xV66eFTmASDRj8ICrvuhW28sFV1RQAwBUZMUbJNpbgxaVi1TF3UTiaKYth2i
+        A8Xx5mtqptBsz6DiogQ+jsMfPoia9BA=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-Wr6Ut3shPDmCpstYRkz3qg-1; Thu, 31 Mar 2022 12:18:46 -0400
+X-MC-Unique: Wr6Ut3shPDmCpstYRkz3qg-1
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-2e689dfe112so2181417b3.20
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:18:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XvOQiTxrSkDE1O7y9Nnnhxp/qhEKorlXOf3Z2Rjc3+Q=;
-        b=3Sa4AYG8nSDgbl8PLf8mMZIxh+tYOlRVglC3zqcl1jhAw5Sc5PeJtl88TpKgAtmpw7
-         WJ+o+220geJhhzXO40k3f/Grp/9fm6534wrLTThZUXlihuScVAPj38LlzJqX9C3yMeFX
-         pgkdJTywS5J/hyA7+G07MBGdfwJ/WJZLeC/54flpg/n2/mxXEJKjaTyWb2nhpSwmd6n1
-         +CBkWHHthC3MpG9dzwAo9K+jfD8vhlBtRU9CLFw27eUaeD5ja/G0bBGGDVCJZZMaoXhM
-         rMOeU8kzHStQlwQHij/jtG+BgfCxGKs/+YJvRu57Z9tKBQ4o+5vc48L6qw5/ckhbSwqD
-         MZiA==
-X-Gm-Message-State: AOAM533/+pTtBQDRyuwl85r7+0A/kpyBLZaMi6dFPVjh2uEtB58Pq4pM
-        F6UuYBi7tGTpKwmmvC/TUH4ZnqYlS+PQPm2RlAgJRA==
-X-Google-Smtp-Source: ABdhPJwd4NdUxu5fCQXYydDZqM5jgGL7W8viaSPnRdGR9bff6fLWNRVHPMfv8oQIBMHP2xcRv0IXEfqLNgkt3iwstSc=
-X-Received: by 2002:a05:6512:6cf:b0:44a:25d1:a27 with SMTP id
- u15-20020a05651206cf00b0044a25d10a27mr11152267lff.18.1648743457998; Thu, 31
- Mar 2022 09:17:37 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=RJRxio+KIRDJC4gehWMvPkl27dePwLPglqNmIITje9s=;
+        b=ANF9J580+gfrgfRpSPUE2wyTRlTCn+GJW9p8OT8NwwpFLwQnJbvYtE7joqDDl+dS6m
+         vSTpdIccgOlsrhoCo6XJKYZ/Y6BXyn3XUDho0g63D4328vC8xSFRmjHdf6Qz0rw6GrOW
+         CJA57ZJxYKFbBpn4MIpGKLmXWALrXGOCRfTvJTJG0GOb1VFEBqzQ0p2I2zX90K/LzKJt
+         +7YM8TuNcjVkqm6vsBGgTql7NMcd3eyzDqZX1jLp8I6pkaJsBykLApTGdlVfjR6+aDRa
+         fYZM9xb5Ry6wmBC1Ux9HcNXSb+KYk0qru/1mS1Ul8fU18STJvkP4yQuw+Drsbj1Tgsr/
+         2BzQ==
+X-Gm-Message-State: AOAM531AKZNl5fCm5vek/7VtRdXJ/0Dn5Ndm+NQDDKy4qm9+dl1gtTa5
+        5cUUMxDmFl61RztKZkxYtRnzM//axKKptpDLhKsIiUWSU8uIGZC7GG2+O0ie0ioFphU5aI0znYv
+        uMXEXYq7mdIdS4CVypsa3Kq1u1P3V6vLzmolFyHV8
+X-Received: by 2002:a25:8887:0:b0:622:77:ecad with SMTP id d7-20020a258887000000b006220077ecadmr4587950ybl.30.1648743520645;
+        Thu, 31 Mar 2022 09:18:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzxZg1anSJTdhph3/xJcVDhJ2tq47NnQMnESKJyR3w4f1I6MNo8Ncsjm4XlLjGgIQns9utOPSSLfxoMvaAdibg=
+X-Received: by 2002:a25:8887:0:b0:622:77:ecad with SMTP id d7-20020a258887000000b006220077ecadmr4587926ybl.30.1648743520252;
+ Thu, 31 Mar 2022 09:18:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220204141941.GE4077@xsang-OptiPlex-9020> <CADjb_WT0fcP2QBjYpsCAJEcVYWKNw1rQ6XZNz33i+KCbD8jB-A@mail.gmail.com>
-In-Reply-To: <CADjb_WT0fcP2QBjYpsCAJEcVYWKNw1rQ6XZNz33i+KCbD8jB-A@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 31 Mar 2022 18:17:26 +0200
-Message-ID: <CAKfTPtDFhORUyOfqr==ZrOSgBd8=vzvYgWMxw87bvq3pQmq7DQ@mail.gmail.com>
-Subject: Re: [sched/pelt] 2d02fa8cc2: stress-ng.pipeherd.ops_per_sec -9.7% regression
-To:     Chen Yu <yu.chen.surf@gmail.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, Huang Ying <ying.huang@intel.com>,
-        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Aubrey Li <aubrey.li@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>
+References: <CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com>
+ <536eca11-b4b9-c1a8-6e6b-fcd0c339a3ec@leemhuis.info> <CAE4VaGBZk2NL6Tn2fGxmGMR-n8KFNqgPOktY_sQ1vjViLDNhhg@mail.gmail.com>
+ <CAE4VaGB4=aCd8iDb4EduR+-5QTSgVWd5sxrnBA4e3g9dPrnuBg@mail.gmail.com>
+ <YkTxox8ZQIDtojfU@google.com> <CAFxkdAq6r2WnwML-pPfdZiajaYZCEcUU3GrXW=+wsA7CxGnJdQ@mail.gmail.com>
+In-Reply-To: <CAFxkdAq6r2WnwML-pPfdZiajaYZCEcUU3GrXW=+wsA7CxGnJdQ@mail.gmail.com>
+From:   Jirka Hladky <jhladky@redhat.com>
+Date:   Thu, 31 Mar 2022 18:18:28 +0200
+Message-ID: <CAE4VaGBchOMWeHQ8GKiGFv_aCaNGLEvSdLWXZTpE+qC=0bgM3A@mail.gmail.com>
+Subject: Re: PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" starting from 5.17 on
+ dual socket Intel Xeon Gold servers
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     tj@kernel.org, linux-kernel <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Justin Forbes <jforbes@fedoraproject.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 at 16:19, Chen Yu <yu.chen.surf@gmail.com> wrote:
+> So, do you mean you hit the bug with the additional fix?
+
+Yes, exactly. We have been hitting this issue since v5.17-rc1. I have
+now specifically tested the "555a0ce4558d kernfs: prevent early
+freeing of root node" commit and it does not resolve the issue.
+
+> Do you have any reproducer?
+Yes. It happens in various places when preparing a NAS parallel
+benchmark for the execution. Sometimes during compilation, sometimes
+with the first trial run. It takes 1 or 2 minutes to hit that issue.
+
+@Michan - the tarball with the reproducer has ~170kB. How can I send
+it to you? (I have been trying to create a simple reproducer but
+without success).
+
+Thanks
+Jirka
+
+
+On Thu, Mar 31, 2022 at 4:55 PM Justin Forbes <jforbes@fedoraproject.org> wrote:
 >
-> Hi Vincent,
+> On Wed, Mar 30, 2022 at 7:11 PM Minchan Kim <minchan@kernel.org> wrote:
+> >
+> > On Thu, Mar 31, 2022 at 12:24:12AM +0200, Jirka Hladky wrote:
+> > > Adding Minchan Kim on Cc.
+> > >
+> > > @Minchan - commit 393c3714081a53795bbff0e985d24146def6f57f authored by
+> > > you is causing BUG: kernel NULL pointer dereference, address:
+> > > 0000000000000008
+> > >
+> > > Could you please have a look at what might be wrong?
+> >
+> > There was one follow-up patch to fix some issue at that time.
+> >
+> > 555a0ce4558d kernfs: prevent early freeing of root node
+> >
+> > So, do you mean you hit the bug with the additional fix?
+> > Do you have any reproducer?
+> >
+> > Ccing Tejun to borrow kernfs expertise.
 >
-> On Wed, Feb 9, 2022 at 1:17 PM kernel test robot <oliver.sang@intel.com> =
-wrote:
-> >
-> >
-> >
-> > Greeting,
-> >
-> > FYI, we noticed a -9.7% regression of stress-ng.pipeherd.ops_per_sec du=
-e to commit:
-> >
-> >
-> > commit: 2d02fa8cc21a93da35cfba462bf8ab87bf2db651 ("sched/pelt: Relax th=
-e sync of load_sum with load_avg")
-> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> >
-> > in testcase: stress-ng
-> > on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Platinum 8358 C=
-PU @ 2.60GHz with 128G memory
-> > with following parameters:
-> >
-> >         nr_threads: 100%
-> >         testtime: 60s
-> >         class: memory
-> >         test: pipeherd
-> >         cpufreq_governor: performance
-> >         ucode: 0xd000280
-> >
-> This week we have re-run the test result and it seems that this
-> regression is still there.
-> As we are evaluating whether this report is valid or if the
-> downgrading is expected, appreciated
-> if you could give suggestion on further steps:
+> That patch was included in v5.17-rc1, so yes, it does reproduce with
+> that patch included.
 >
-> 1.  If I understand correctly,
-> 2d02fa8cc21a93da35cfba462bf8ab87bf2db651 ("sched/pelt: Relax the sync
-> of load_sum with load_avg")
->      fixed the calculating of  load_sum.  Before this patch  the
-> contribution part would be 'skipped' and caused the load_sum
->      to be lower than expected.
-
-Yes, you understand it correctly
-
-> 2. If above is true, after this patch, the load_sum becomes higher. Is
-> there a scenario that higher load_sum added to 1 cfs_rq brings
->     more imbalance between this group and other sched_group, thus
-> brings more task migration/wake up? (because in below perf result,
->     it seems that, with this patch applied, there are slightly more
-> take wake up)
-
-This change should not impact load balance as it only does comparison
-and I expect the load increase to happen on all cfs rq.
-The only place that could be impacted, would be wake_affine_weight()
-because it removes task load from previous cfs rq load before
-comparing.
-The task's load was not impacted by the underestimate which means that
-the load of prev cfs  might be seen lower than current cfs after
-subtracting the task's load whereas both cfs rqs were similarly
-underestimated.
-Now the load of prev cfs rq is not underestimated and becomes
-comparable or slightly higher than the current cfs and the task
-migrate on current cfs instead of staying on prev one at wakeup
-
-One possible test would be to run the test with WA_WEIGHT features
-disable and check if there is still a difference
-
-> 3.  Consider the 9.7% downgrading is not that high,  do you think if
-> lkp team should continue track this issue or just close it
->     as documented?
+> Justin
 >
-> Best,
-> Yu
-> >
-> > commit:
-> >   95246d1ec8 ("sched/pelt: Relax the sync of runnable_sum with runnable=
-_avg")
-> >   2d02fa8cc2 ("sched/pelt: Relax the sync of load_sum with load_avg")
-> >
-> > 95246d1ec80b8d19 2d02fa8cc21a93da35cfba462bf
-> > ---------------- ---------------------------
-> >          %stddev     %change         %stddev
-> >              \          |                \
-> >       0.21           +11.0%       0.24 =C4=85  2%  stress-ng.pipeherd.c=
-ontext_switches_per_bogo_op
-> >  3.869e+09            -9.7%  3.494e+09        stress-ng.pipeherd.ops
-> >   64412021            -9.7%   58171101        stress-ng.pipeherd.ops_pe=
-r_sec
-> >     442.37            -7.2%     410.54        stress-ng.time.user_time
-> >       5.49 =C4=85  2%      -0.5        4.94 =C4=85  4%  mpstat.cpu.all.=
-usr%
-> >      80705 =C4=85  7%     +26.7%     102266 =C4=85 17%  numa-meminfo.no=
-de1.Active
-> >      80705 =C4=85  7%     +26.7%     102266 =C4=85 17%  numa-meminfo.no=
-de1.Active(anon)
-> >      12324 =C4=85  3%     -22.1%       9603 =C4=85 25%  softirqs.CPU106=
-.RCU
-> >      12703 =C4=85  4%     -23.1%       9769 =C4=85 24%  softirqs.CPU27.=
-RCU
-> >      15.96            +1.0       16.95        perf-profile.calltrace.cy=
-cles-pp.prepare_to_wait_event.pipe_read.new_sync_read.vfs_read.ksys_read
-> >       6.67            +1.0        7.68 =C4=85  2%  perf-profile.calltra=
-ce.cycles-pp.enqueue_task_fair.ttwu_do_activate.try_to_wake_up.autoremove_w=
-ake_function.__wake_up_common
-> >       6.77            +1.0        7.79 =C4=85  2%  perf-profile.calltra=
-ce.cycles-pp.ttwu_do_activate.try_to_wake_up.autoremove_wake_function.__wak=
-e_up_common.__wake_up_common_lock
-> >      14.46            +1.0       15.48 =C4=85  2%  perf-profile.calltra=
-ce.cycles-pp._raw_spin_lock_irqsave.prepare_to_wait_event.pipe_read.new_syn=
-c_read.vfs_read
-> >      13.73            +1.1       14.79 =C4=85  2%  perf-profile.calltra=
-ce.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock_irqsave.prepar=
-e_to_wait_event.pipe_read.new_sync_read
-> >      26.95            +1.4       28.34        perf-profile.calltrace.cy=
-cles-pp.__wake_up_common_lock.pipe_write.new_sync_write.vfs_write.ksys_writ=
-e
-> >      25.85            +1.5       27.32        perf-profile.calltrace.cy=
-cles-pp.__wake_up_common.__wake_up_common_lock.pipe_write.new_sync_write.vf=
-s_write
-> >      25.18            +1.5       26.69        perf-profile.calltrace.cy=
-cles-pp.autoremove_wake_function.__wake_up_common.__wake_up_common_lock.pip=
-e_write.new_sync_write
-> >      24.61            +1.5       26.14        perf-profile.calltrace.cy=
-cles-pp.try_to_wake_up.autoremove_wake_function.__wake_up_common.__wake_up_=
-common_lock.pipe_write
+> > >
+> > > Thank you!
+> > > Jirka
+> > >
+> > > On Thu, Mar 31, 2022 at 12:16 AM Jirka Hladky <jhladky@redhat.com> wrote:
+> > > >
+> > > > Hi Thorsten,
+> > > >
+> > > > thanks for adding this to the regzbot bot.
+> > > >
+> > > > Hi Greg and all,
+> > > >
+> > > > I did bisecting and I have found the commit causing this issue [1].
+> > > > Could you please have a look at the code how to fix it?
+> > > >
+> > > > Thanks a lot
+> > > > Jirka
+> > > >
+> > > > [1]
+> > > > =========================================================
+> > > > $ git bisect visualize
+> > > > commit 393c3714081a53795bbff0e985d24146def6f57f (refs/bisect/bad)
+> > > > Author: Minchan Kim <minchan@kernel.org>
+> > > > Date:   Thu Nov 18 15:00:08 2021 -0800
+> > > >
+> > > >    kernfs: switch global kernfs_rwsem lock to per-fs lock
+> > > >
+> > > >    The kernfs implementation has big lock granularity(kernfs_rwsem) so
+> > > >    every kernfs-based(e.g., sysfs, cgroup) fs are able to compete the
+> > > >    lock. It makes trouble for some cases to wait the global lock
+> > > >    for a long time even though they are totally independent contexts
+> > > >    each other.
+> > > >
+> > > >    A general example is process A goes under direct reclaim with holding
+> > > >    the lock when it accessed the file in sysfs and process B is waiting
+> > > >    the lock with exclusive mode and then process C is waiting the lock
+> > > >    until process B could finish the job after it gets the lock from
+> > > >    process A.
+> > > >
+> > > >    This patch switches the global kernfs_rwsem to per-fs lock, which
+> > > >    put the rwsem into kernfs_root.
+> > > >
+> > > >    Suggested-by: Tejun Heo <tj@kernel.org>
+> > > >    Acked-by: Tejun Heo <tj@kernel.org>
+> > > >    Signed-off-by: Minchan Kim <minchan@kernel.org>
+> > > >    Link: https://lore.kernel.org/r/20211118230008.2679780-1-minchan@kernel.org
+> > > >    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > =========================================================
+> > > >
+> > > > The bug is triggered by running NAS Parallel benchmark suite on
+> > > > SuperMicro servers with 2x Xeon(R) Gold 6126 CPU. Here is the error
+> > > > log:
+> > > >
+> > > > [  247.035564] BUG: kernel NULL pointer dereference, address: 0000000000000008
+> > > > [  247.036009] #PF: supervisor read access in kernel mode
+> > > > [  247.036009] #PF: error_code(0x0000) - not-present page
+> > > > [  247.036009] PGD 0 P4D 0
+> > > > [  247.036009] Oops: 0000 [#1] PREEMPT SMP PTI
+> > > > [  247.058060] CPU: 1 PID: 6546 Comm: umount Not tainted
+> > > > 5.16.0393c3714081a53795bbff0e985d24146def6f57f+ #16
+> > > > [  247.058060] Hardware name: Supermicro Super Server/X11DDW-L, BIOS
+> > > > 2.0b 03/07/2018
+> > > > [  247.058060] RIP: 0010:kernfs_remove+0x8/0x50
+> > > > [  247.058060] Code: 4c 89 e0 5b 5d 41 5c 41 5d 41 5e c3 49 c7 c4 f4
+> > > > ff ff ff eb b2 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 0f 1f 44 00 00
+> > > > 41 54 55 <48> 8b 47 08 48 89 fd 48 85 c0 48 0f 44 c7 4c 8b 60 50 49 83
+> > > > c4 60
+> > > > [  247.058060] RSP: 0018:ffffbbfa48a27e48 EFLAGS: 00010246
+> > > > [  247.058060] RAX: 0000000000000001 RBX: ffffffff89e31f98 RCX: 0000000080200018
+> > > > [  247.058060] RDX: 0000000080200019 RSI: fffff6760786c900 RDI: 0000000000000000
+> > > > [  247.058060] RBP: ffffffff89e31f98 R08: ffff926b61b24d00 R09: 0000000080200018
+> > > > [  247.122048] R10: ffff926b61b24d00 R11: ffff926a8040c000 R12: ffff927bd09a2000
+> > > > [  247.122048] R13: ffffffff89e31fa0 R14: dead000000000122 R15: dead000000000100
+> > > > [  247.122048] FS:  00007f01be0a8c40(0000) GS:ffff926fa8e40000(0000)
+> > > > knlGS:0000000000000000
+> > > > [  247.122048] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > [  247.122048] CR2: 0000000000000008 CR3: 00000001145c6003 CR4: 00000000007706e0
+> > > > [  247.122048] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > [  247.122048] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > [  247.122048] PKRU: 55555554
+> > > > [  247.122048] Call Trace:
+> > > > [  247.122048]  <TASK>
+> > > > [  247.122048]  rdt_kill_sb+0x29d/0x350
+> > > > [  247.122048]  deactivate_locked_super+0x36/0xa0
+> > > > [  247.122048]  cleanup_mnt+0x131/0x190
+> > > > [  247.122048]  task_work_run+0x5c/0x90
+> > > > [  247.122048]  exit_to_user_mode_prepare+0x229/0x230
+> > > > [  247.122048]  syscall_exit_to_user_mode+0x18/0x40
+> > > > [  247.122048]  do_syscall_64+0x48/0x90
+> > > > [  247.122048]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > > [  247.122048] RIP: 0033:0x7f01be2d735b
+> > > > [  247.122048] Code: 2b 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 90 f3
+> > > > 0f 1e fa 31 f6 e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00
+> > > > 00 0f 05 <48> 3d 00 f0 ff ff 77 05 c3 0f 1f 40 00 48 8b 15 e9 2a 0c 00
+> > > > f7 d8
+> > > > [  247.122048] RSP: 002b:00007ffde1021e08 EFLAGS: 00000202 ORIG_RAX:
+> > > > 00000000000000a6
+> > > > [  247.122048] RAX: 0000000000000000 RBX: 0000560c012bf5a0 RCX: 00007f01be2d735b
+> > > > [  247.122048] RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000560c012c33a0
+> > > > [  247.259079] RBP: 0000560c012bf370 R08: 0000000000000001 R09: 00007ffde1020b90
+> > > > [  247.267058] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000001
+> > > > [  247.271055] R13: 0000560c012c33a0 R14: 0000560c012bf480 R15: 0000560c012bf370
+> > > > [  247.279066]  </TASK>
+> > > > [  247.283054] Modules linked in: rfkill sunrpc intel_rapl_msr
+> > > > intel_rapl_common isst_if_common skx_edac nfit libnvdimm
+> > > > x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel irdma kvm ice
+> > > > iTCO_wdt intel_pmc_bxt iTCO_vendor_support i
+> > > > rqbypass ib_uverbs ipmi_ssif rapl intel_cstate ib_core mei_me joydev
+> > > > intel_uncore i2c_i801 ioatdma acpi_ipmi lpc_ich mei pcspkr i2c_smbus
+> > > > intel_pch_thermal dca ipmi_si acpi_power_meter acpi_pad zram ip_tables
+> > > > xfs ast i2c_algo_bit drm_v
+> > > > ram_helper drm_kms_helper cec drm_ttm_helper ttm drm i40e
+> > > > crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel wmi
+> > > > fuse ipmi_devintf ipmi_msghandler
+> > > > [  247.335054] CR2: 0000000000000008
+> > > > [  247.339041] ---[ end trace d8ccdb6c2d272688 ]---
+> > > > [  247.355057] RIP: 0010:kernfs_remove+0x8/0x50
+> > > > [  247.359059] Code: 4c 89 e0 5b 5d 41 5c 41 5d 41 5e c3 49 c7 c4 f4
+> > > > ff ff ff eb b2 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 0f 1f 44 00 00
+> > > > 41 54 55 <48> 8b 47 08 48 89 fd 48 85 c0 48 0f 44 c7 4c 8b 60 50 49 83
+> > > > c4 60
+> > > > [  247.379054] RSP: 0018:ffffbbfa48a27e48 EFLAGS: 00010246
+> > > > [  247.383056] RAX: 0000000000000001 RBX: ffffffff89e31f98 RCX: 0000000080200018
+> > > > [  247.391053] RDX: 0000000080200019 RSI: fffff6760786c900 RDI: 0000000000000000
+> > > > [  247.395047] RBP: ffffffff89e31f98 R08: ffff926b61b24d00 R09: 0000000080200018
+> > > > [  247.403055] R10: ffff926b61b24d00 R11: ffff926a8040c000 R12: ffff927bd09a2000
+> > > > [  247.411046] R13: ffffffff89e31fa0 R14: dead000000000122 R15: dead000000000100
+> > > > [  247.419055] FS:  00007f01be0a8c40(0000) GS:ffff926fa8e40000(0000)
+> > > > knlGS:0000000000000000
+> > > > [  247.427055] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > [  247.431055] CR2: 0000000000000008 CR3: 00000001145c6003 CR4: 00000000007706e0
+> > > > [  247.439055] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > [  247.443055] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > [  247.455060] PKRU: 55555554
+> > > >
+> > > > On Thu, Mar 24, 2022 at 12:49 PM Thorsten Leemhuis
+> > > > <regressions@leemhuis.info> wrote:
+> > > > >
+> > > > > [TLDR: I'm adding the regression report below to regzbot, the Linux
+> > > > > kernel regression tracking bot; all text you find below is compiled from
+> > > > > a few templates paragraphs you might have encountered already already
+> > > > > from similar mails.]
+> > > > >
+> > > > > Hi, this is your Linux kernel regression tracker. Top-posting for once,
+> > > > > to make this easily accessible to everyone.
+> > > > >
+> > > > > To be sure below issue doesn't fall through the cracks unnoticed, I'm
+> > > > > adding it to regzbot, my Linux kernel regression tracking bot:
+> > > > >
+> > > > > #regzbot ^introduced v5.16..v5.17
+> > > > > #regzbot ignore-activity
+> > > > >
+> > > > > If it turns out this isn't a regression, free free to remove it from the
+> > > > > tracking by sending a reply to this thread containing a paragraph like
+> > > > > "#regzbot invalid: reason why this is invalid" (without the quotes).
+> > > > >
+> > > > > Reminder for developers: when fixing the issue, please add a 'Link:'
+> > > > > tags pointing to the report (the mail quoted above) using
+> > > > > lore.kernel.org/r/, as explained in
+> > > > > 'Documentation/process/submitting-patches.rst' and
+> > > > > 'Documentation/process/5.Posting.rst'. Regzbot needs them to
+> > > > > automatically connect reports with fixes, but they are useful in
+> > > > > general, too.
+> > > > >
+> > > > > I'm sending this to everyone that got the initial report, to make
+> > > > > everyone aware of the tracking. I also hope that messages like this
+> > > > > motivate people to directly get at least the regression mailing list and
+> > > > > ideally even regzbot involved when dealing with regressions, as messages
+> > > > > like this wouldn't be needed then. And don't worry, if I need to send
+> > > > > other mails regarding this regression only relevant for regzbot I'll
+> > > > > send them to the regressions lists only (with a tag in the subject so
+> > > > > people can filter them away). With a bit of luck no such messages will
+> > > > > be needed anyway.
+> > > > >
+> > > > > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> > > > >
+> > > > > P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> > > > > reports on my table. I can only look briefly into most of them and lack
+> > > > > knowledge about most of the areas they concern. I thus unfortunately
+> > > > > will sometimes get things wrong or miss something important. I hope
+> > > > > that's not the case here; if you think it is, don't hesitate to tell me
+> > > > > in a public reply, it's in everyone's interest to set the public record
+> > > > > straight.
+> > > > >
+> > > > >
+> > > > > On 22.03.22 00:29, Jirka Hladky wrote:
+> > > > > > Starting from kernel 5.17 (tested with rc2, rc4, rc7, rc8) we
+> > > > > > experience kernel oops on Intel Xeon Gold dual-socket servers (2x Xeon
+> > > > > > Gold 6126 CPU)
+> > > > > >
+> > > > > > Bellow is a backtrace and the dmesg log.
+> > > > > >
+> > > > > > I have trouble creating a simple reproducer - it happens at random
+> > > > > > places when preparing the NAS benchmark to be run. The script creates
+> > > > > > a bunch of directories, compiles the benchmark a start trial runs.
+> > > > > >
+> > > > > > Could you please help to narrow down the problem?
+> > > > > >
+> > > > > > Reports bellow were created with kernel 5.17 rc8 and with
+> > > > > > echo 1 > /proc/sys/kernel/panic_on_oops
+> > > > > > setting.
+> > > > > >
+> > > > > > crash> sys
+> > > > > >       KERNEL: /usr/lib/debug/lib/modules/5.17.0-0.rc8.123.fc37.x86_64/vmlinux
+> > > > > >     DUMPFILE: vmcore  [PARTIAL DUMP]
+> > > > > >         CPUS: 48
+> > > > > >         DATE: Thu Mar 17 02:49:40 CET 2022
+> > > > > >       UPTIME: 00:02:50
+> > > > > > LOAD AVERAGE: 0.32, 0.10, 0.03
+> > > > > >        TASKS: 608
+> > > > > >     NODENAME: gold-2s-c
+> > > > > >      RELEASE: 5.17.0-0.rc8.123.fc37.x86_64
+> > > > > >      VERSION: #1 SMP PREEMPT Mon Mar 14 18:11:49 UTC 2022
+> > > > > >      MACHINE: x86_64  (2600 Mhz)
+> > > > > >       MEMORY: 94.7 GB
+> > > > > >        PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" (check log for details)
+> > > > > >
+> > > > > >
+> > > > > > crash> bt
+> > > > > > PID: 2480   TASK: ffff9e8f76cb8000  CPU: 26  COMMAND: "umount"
+> > > > > > #0 [ffffae00cacbfbb8] machine_kexec at ffffffffbb068980
+> > > > > > #1 [ffffae00cacbfc08] __crash_kexec at ffffffffbb1a300a
+> > > > > > #2 [ffffae00cacbfcc8] crash_kexec at ffffffffbb1a4045
+> > > > > > #3 [ffffae00cacbfcd0] oops_end at ffffffffbb02c410
+> > > > > > #4 [ffffae00cacbfcf0] page_fault_oops at ffffffffbb076a38
+> > > > > > #5 [ffffae00cacbfd68] exc_page_fault at ffffffffbbd0b7c1
+> > > > > > #6 [ffffae00cacbfd90] asm_exc_page_fault at ffffffffbbe00ace
+> > > > > >    [exception RIP: kernfs_remove+7]
+> > > > > >    RIP: ffffffffbb421f67  RSP: ffffae00cacbfe48  RFLAGS: 00010246
+> > > > > >    RAX: 0000000000000001  RBX: ffffffffbce31e58  RCX: 0000000080200018
+> > > > > >    RDX: 0000000080200019  RSI: ffffdfbd44161640  RDI: 0000000000000000
+> > > > > >    RBP: ffffffffbce31e58   R8: 0000000000000000   R9: 0000000080200018
+> > > > > >    R10: ffff9e8f05859e80  R11: ffff9e9443b1bd98  R12: ffff9ea057f1d000
+> > > > > >    R13: ffffffffbce31e60  R14: dead000000000122  R15: dead000000000100
+> > > > > >    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+> > > > > > #7 [ffffae00cacbfe58] rdt_kill_sb at ffffffffbb05074b
+> > > > > > #8 [ffffae00cacbfea8] deactivate_locked_super at ffffffffbb36ce1f
+> > > > > > #9 [ffffae00cacbfec0] cleanup_mnt at ffffffffbb39176e
+> > > > > > #10 [ffffae00cacbfee8] task_work_run at ffffffffbb10703c
+> > > > > > #11 [ffffae00cacbff08] exit_to_user_mode_prepare at ffffffffbb17a399
+> > > > > > #12 [ffffae00cacbff28] syscall_exit_to_user_mode at ffffffffbbd0bde8
+> > > > > > #13 [ffffae00cacbff38] do_syscall_64 at ffffffffbbd071a6
+> > > > > > #14 [ffffae00cacbff50] entry_SYSCALL_64_after_hwframe at ffffffffbbe0007c
+> > > > > >    RIP: 00007f442c75126b  RSP: 00007ffc82d66fe8  RFLAGS: 00000202
+> > > > > >    RAX: 0000000000000000  RBX: 000055bd4cc37090  RCX: 00007f442c75126b
+> > > > > >    RDX: 0000000000000001  RSI: 0000000000000001  RDI: 000055bd4cc3b950
+> > > > > >    RBP: 000055bd4cc371a8   R8: 0000000000000000   R9: 0000000000000073
+> > > > > >    R10: 0000000000000000  R11: 0000000000000202  R12: 0000000000000001
+> > > > > >    R13: 000055bd4cc3b950  R14: 000055bd4cc372c0  R15: 000055bd4cc37090
+> > > > > >    ORIG_RAX: 00000000000000a6  CS: 0033  SS: 002b
+> > > > > >
+> > > > > > [2] dmesg
+> > > > > > [  172.776553] BUG: kernel NULL pointer dereference, address: 0000000000000008
+> > > > > > [  172.783513] #PF: supervisor read access in kernel mode
+> > > > > > [  172.788652] #PF: error_code(0x0000) - not-present page
+> > > > > > [  172.793793] PGD 0 P4D 0
+> > > > > > [  172.796330] Oops: 0000 [#1] PREEMPT SMP PTI
+> > > > > > [  172.800519] CPU: 26 PID: 2480 Comm: umount Kdump: loaded Not
+> > > > > > tainted 5.17.0-0.rc8.123.fc37.x86_64 #1
+> > > > > > [  172.809645] Hardware name: Supermicro Super Server/X11DDW-L, BIOS
+> > > > > > 2.0b 03/07/2018
+> > > > > > [  172.817123] RIP: 0010:kernfs_remove+0x7/0x50
+> > > > > > [  172.821397] Code: e8 be e7 2c 00 48 89 df e8 b6 8c f0 ff 48 c7 c3
+> > > > > > f4 ff ff ff 48 89 d8 5b 5d 41 5c 41 5d 41 5e c3 cc 66 90 0f 1f 44 00
+> > > > > > 00 55 53 <48> 8b 47 08 48 89 fb 48 85 c0 48 0f 44 c7 48 8b 68 50 48 83
+> > > > > > c5 60
+> > > > > > [  172.840141] RSP: 0018:ffffae00cacbfe48 EFLAGS: 00010246
+> > > > > > [  172.845367] RAX: 0000000000000001 RBX: ffffffffbce31e58 RCX: 0000000080200018
+> > > > > > [  172.852501] RDX: 0000000080200019 RSI: ffffdfbd44161640 RDI: 0000000000000000
+> > > > > > [  172.859632] RBP: ffffffffbce31e58 R08: 0000000000000000 R09: 0000000080200018
+> > > > > > [  172.866764] R10: ffff9e8f05859e80 R11: ffff9e9443b1bd98 R12: ffff9ea057f1d000
+> > > > > > [  172.873899] R13: ffffffffbce31e60 R14: dead000000000122 R15: dead000000000100
+> > > > > > [  172.881033] FS:  00007f442c53c800(0000) GS:ffff9e9429000000(0000)
+> > > > > > knlGS:0000000000000000
+> > > > > > [  172.889117] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > > > [  172.894861] CR2: 0000000000000008 CR3: 000000010ba96006 CR4: 00000000007706e0
+> > > > > > [  172.901997] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > > > [  172.909127] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > > > [  172.916261] PKRU: 55555554
+> > > > > > [  172.918974] Call Trace:
+> > > > > > [  172.921427]  <TASK>
+> > > > > > [  172.923533]  rdt_kill_sb+0x29b/0x350
+> > > > > > [  172.927112]  deactivate_locked_super+0x2f/0xa0
+> > > > > > [  172.931559]  cleanup_mnt+0xee/0x180
+> > > > > > [  172.935051]  task_work_run+0x5c/0x90
+> > > > > > [  172.938629]  exit_to_user_mode_prepare+0x229/0x230
+> > > > > > [  172.943424]  syscall_exit_to_user_mode+0x18/0x40
+> > > > > > [  172.948043]  do_syscall_64+0x46/0x80
+> > > > > > [  172.951623]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > > > > [  172.956675] RIP: 0033:0x7f442c75126b
+> > > > > > [  172.960271] Code: cb 1b 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 90 f3
+> > > > > > 0f 1e fa 31 f6 e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00
+> > > > > > 00 0f 05 <48> 3d 00 f0 ff ff 77 05 c3 0f 1f 40 00 48 8b 15 91 1b 0e 00
+> > > > > > f7 d8
+> > > > > > [  172.979017] RSP: 002b:00007ffc82d66fe8 EFLAGS: 00000202 ORIG_RAX:
+> > > > > > 00000000000000a6
+> > > > > > [  172.986584] RAX: 0000000000000000 RBX: 000055bd4cc37090 RCX: 00007f442c75126b
+> > > > > > [  172.993715] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 000055bd4cc3b950
+> > > > > > [  173.000849] RBP: 000055bd4cc371a8 R08: 0000000000000000 R09: 0000000000000073
+> > > > > > [  173.007980] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000001
+> > > > > > [  173.015115] R13: 000055bd4cc3b950 R14: 000055bd4cc372c0 R15: 000055bd4cc37090
+> > > > > > [  173.022249]  </TASK>
+> > > > > > [  173.024440] Modules linked in: rfkill intel_rapl_msr
+> > > > > > intel_rapl_common isst_if_common irdma skx_edac nfit libnvdimm ice
+> > > > > > x86_pkg_temp_thermal intel_powerclamp coretemp ib_uverbs iTCO_wdt
+> > > > > > intel_pmc_bxt ib_core iTCO_vendor_support kvm_
+> > > > > > intel ipmi_ssif kvm irqbypass rapl acpi_ipmi intel_cstate i40e joydev
+> > > > > > mei_me ioatdma i2c_i801 intel_uncore lpc_ich i2c_smbus mei
+> > > > > > intel_pch_thermal dca ipmi_si ipmi_devintf ipmi_msghandler acpi_pad
+> > > > > > acpi_power_meter fuse zram xfs crct10d
+> > > > > > if_pclmul ast crc32_pclmul crc32c_intel drm_vram_helper drm_ttm_helper
+> > > > > > ttm wmi ghash_clmulni_intel
+> > > > > > [  173.073900] CR2: 0000000000000008
+> > > > > >
+> > > > >
+> > > > > --
+> > > > > Additional information about regzbot:
+> > > > >
+> > > > > If you want to know more about regzbot, check out its web-interface, the
+> > > > > getting start guide, and the references documentation:
+> > > > >
+> > > > > https://linux-regtracking.leemhuis.info/regzbot/
+> > > > > https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+> > > > > https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+> > > > >
+> > > > > The last two documents will explain how you can interact with regzbot
+> > > > > yourself if your want to.
+> > > > >
+> > > > > Hint for reporters: when reporting a regression it's in your interest to
+> > > > > CC the regression list and tell regzbot about the issue, as that ensures
+> > > > > the regression makes it onto the radar of the Linux kernel's regression
+> > > > > tracker -- that's in your interest, as it ensures your report won't fall
+> > > > > through the cracks unnoticed.
+> > > > >
+> > > > > Hint for developers: you normally don't need to care about regzbot once
+> > > > > it's involved. Fix the issue as you normally would, just remember to
+> > > > > include 'Link:' tag in the patch descriptions pointing to all reports
+> > > > > about the issue. This has been expected from developers even before
+> > > > > regzbot showed up for reasons explained in
+> > > > > 'Documentation/process/submitting-patches.rst' and
+> > > > > 'Documentation/process/5.Posting.rst'.
+> > > > >
+> > > >
+> > > >
+> > > > --
+> > > > -Jirka
+> > >
+> > >
+> > >
+> > > --
+> > > -Jirka
+> > >
+>
+
+
+-- 
+-Jirka
+

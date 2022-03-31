@@ -2,144 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3BA4ED931
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866494ED93D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbiCaME3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        id S235464AbiCaMGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235780AbiCaMEX (ORCPT
+        with ESMTP id S234662AbiCaMF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:04:23 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B729208C26;
-        Thu, 31 Mar 2022 05:02:14 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id h23so33469491wrb.8;
-        Thu, 31 Mar 2022 05:02:14 -0700 (PDT)
+        Thu, 31 Mar 2022 08:05:59 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E613E5ED
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:04:10 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y142so41861577ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A4Zjm/xBLp9YxmFT/DNtR5IxUCWdPvGVNi6dsCwjlvs=;
-        b=hs1mRpoxuE6ZpUUnB6ufTgWOqqKRMlwZk7UDkYvnKGNfNaFa5kiy2kivZyhLrqXN+M
-         iLOmA6pRfoJPDsUf+L9H95Xeuta15xztQkd5PxNID2AvHYeyyMv1+wwW3Ki/AdU6rWcQ
-         orKBN+Jv70ZNVgEoCHvXATcpAbHpggbrtJmj4ZxX8Uk8YqJ76WlPyDodhGFbgTsFMUf+
-         ozqSH5sd2hMaFTclgBsW8y9A4uYFYLZ9qSM0do8pJlrCcowHx1LDo1925nd/cFiTuWci
-         x+pIBkfqWBSnFCPCAZCoT3ZYwCOhLWBoo3Xe/de4TTJUj/gFHDuXfWK9B9qn+53yL7FZ
-         Nt6w==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=vVg2+GBr03vvdC1xuzhWdwYhm3SEo/ZuYCT/xeS6niE=;
+        b=XNIiZdqQuTo9cCA9QknJGojKVZIDaKhcCSFvqVYy8YyUk0bpVsdrbTjVTg7Lp1nLew
+         IY5YwQesdZeJO98Wtkf0gJDBPUKL0m9+Wn0YFc7j2yQlVMrw9N4nJUZZN9iaJHSGV8GE
+         wIfWgiVS8+lJwlFzJnR0mXEnPFYJwx9CWMy5YXQ7WbWrfvP429nyRcq2mne7+JpnESyV
+         cqRzfXEOIrPHo33blb3UFUEL2zzeQB+/vqt3oqOIJcbDGv83tPNxRMjYKdFa9Z7k33Cp
+         /ihZLKJMJerWNVDj3vJ38u2daHkYQUbIR7pwbvAk49sNYBMw23xdUWia+PkY7jqErTnZ
+         OdZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A4Zjm/xBLp9YxmFT/DNtR5IxUCWdPvGVNi6dsCwjlvs=;
-        b=MypxIpZze4LhD57iPE5TKi0FnZBCrwwknhWVhY8jMJ6pZ5Im8zCEPQGYe4V5om9LRo
-         +NR9BOT4QkO+uPNUzHKDI8xVKFJ+NBS/HJ84J64dMEPtF9wVS4ZfYYZk09jEiD42GR12
-         yt04H3kOmp3t0cRICinoLMVoSqJwheKk4ag0nWoXnT0z1HiVnXS4Xb7b1fajieZ5811P
-         k4S3YuaHIA3ovwwj2alBPVsvohU0PRQGUhrYrFebMCBsjH/3Hl4cPfzRyCSK/eCLg3NH
-         I+xAbMMgw3RIVau/sMvhW/jmbQvOpFdhhuv5teNE/TQPC0TzBsWEw7+cbN+kJG1dPjTn
-         bN2g==
-X-Gm-Message-State: AOAM531NVYQT0SCW0GfhrOTH2AhqITIHtAazZMfkWWmp/1pb7PF8PijA
-        y40h2FQjLzrOLtdq0tKHpeI=
-X-Google-Smtp-Source: ABdhPJy1pwWwEsM0zqdfSBXpyPAD0/x0pcEIXNpZNqEniEbmMNwfmK6IiIHr/hlxLOMYZdRzHxD8rw==
-X-Received: by 2002:a05:6000:1:b0:205:e7cd:2a5 with SMTP id h1-20020a056000000100b00205e7cd02a5mr2498122wrx.485.1648728132726;
-        Thu, 31 Mar 2022 05:02:12 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1cf608000000b0038c8fdc93d6sm6881237wmc.28.2022.03.31.05.02.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 05:02:12 -0700 (PDT)
-Message-ID: <4cd1c5fa-0982-0355-d5b6-7025b82174a4@gmail.com>
-Date:   Thu, 31 Mar 2022 14:02:09 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=vVg2+GBr03vvdC1xuzhWdwYhm3SEo/ZuYCT/xeS6niE=;
+        b=WnnANkWdtUTENfJKvbNrWP8fHeJhXXcdu7YpeBBNIg0qOw0IKwjpoS7TYZPezmn3vp
+         Xn5HeimfEo1OuKaz1zjJ51uTIo5QD/pqxKgI68m/JFIb0dbpPrCxshVVowI1RtqjBoEw
+         27VMn9tkjvW19xUNt688FSK5Oav/TT+frqcHc7DYLd79Ug4YNV+tHpC/39yUrNL1zTxA
+         YJLpDxBbXSLXalJDmD2ma5p9Y3xZQnoaw0mdLTrNtbReHJ7knVGi6uCqaPIr06T5ka/l
+         VWC6U7w4IEiwiZ47L2SmqOeiTKZTAM73GJZcg0Av0SzgICO5yctSmV82MITVAVCu21fY
+         /gFQ==
+X-Gm-Message-State: AOAM532pLw3+rbloo2j7fPoGnMMV7Yf7drx/8pL0wucJPXVUciXz2mjw
+        6AbUdQgMzoN4u19UY678S69QeSucrBiQjf44GfwTxKKZLgk4Jxw+
+X-Google-Smtp-Source: ABdhPJyuBIMuDDH57X67oIQx5rSGcAvWFmiQQo2st/DsFD9hZKNBoW+8nuJ7Dfs4pq8CE5AAmKpXj6tqdVl0JB0YC4I=
+X-Received: by 2002:a25:548:0:b0:633:81bd:e319 with SMTP id
+ 69-20020a250548000000b0063381bde319mr3993613ybf.603.1648728248547; Thu, 31
+ Mar 2022 05:04:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 2/4] arm64: dts: mt8192: Add mmc device nodes
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 31 Mar 2022 17:33:57 +0530
+Message-ID: <CA+G9fYuqU45hHmK4WMUNEXQbmBucE+9fB=S9wcHEfEHaZ2jgcQ@mail.gmail.com>
+Subject: [next] db845c: WARNING: CPU: 5 PID: 8 at drivers/clk/clk-divider.c:139
+ divider_recalc_rate
+To:     linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
+Cc:     gabriel.fernandez@foss.st.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220330133816.30806-1-allen-kh.cheng@mediatek.com>
- <20220330133816.30806-3-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220330133816.30806-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Following kernel warning noticed on db845c while booting linux next-20220331.
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: fdcbcd1348f4ef713668bae1b0fa9774e1811205
+  git_describe: next-20220331
+  kernel_version: 5.17.0
+  kernel-config: https://builds.tuxbuild.com/278RLnhgJL7XdlJbcbv07jiwbYB/config
+
+Boot log:
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x517f803c]
+[    0.000000] Linux version 5.17.0-next-20220331 (tuxmake@tuxmake)
+(aarch64-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0, GNU ld (GNU Binutils
+for Debian) 2.38) #1 SMP PREEMPT @1648699852
+[    0.000000] Machine model: Thundercomm Dragonboard 845c
+<trim>
+[    8.131366] ------------[ cut here ]------------
+[    8.131374] dsi0_pll_bit_clk: Zero divisor and CLK_DIVIDER_ALLOW_ZERO not set
+[    8.131387] WARNING: CPU: 5 PID: 8 at drivers/clk/clk-divider.c:139
+divider_recalc_rate+0x8c/0xc0
+[    8.131398] Modules linked in: qcom_spmi_adc5 snd_soc_sdm845
+qcom_vadc_common qcom_spmi_temp_alarm qcom_pon crct10dif_ce rtc_pm8xxx
+snd_soc_rt5663 msm snd_soc_qcom_common gpu_sched snd_soc_rl6231
+soundwire_bus reset_qcom_pdc drm_dp_helper qcom_camss hci_uart
+videobuf2_dma_sg btqca v4l2_fwnode venus_core ath10k_snoc v4l2_async
+btbcm ath10k_core i2c_qcom_geni v4l2_mem2mem videobuf2_memops
+videobuf2_v4l2 ath bluetooth camcc_sdm845 videobuf2_common
+spi_geni_qcom i2c_qcom_cci qcom_rng mac80211 xhci_pci qcom_q6v5_mss
+xhci_pci_renesas cfg80211 icc_osm_l3 slim_qcom_ngd_ctrl qcom_wdt
+rfkill qrtr lmh pdr_interface display_connector slimbus qcom_q6v5_pas
+drm_kms_helper qcom_pil_info qcom_q6v5 qcom_sysmon qcom_common
+qcom_glink_smem qmi_helpers drm mdt_loader socinfo rmtfs_mem fuse
+[    8.131462] CPU: 5 PID: 8 Comm: kworker/u16:0 Not tainted
+5.17.0-next-20220331 #1
+[    8.131465] Hardware name: Thundercomm Dragonboard 845c (DT)
+[    8.131467] Workqueue: events_unbound deferred_probe_work_func
+[    8.131475] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    8.131477] pc : divider_recalc_rate+0x8c/0xc0
+[    8.131479] lr : divider_recalc_rate+0x8c/0xc0
+[    8.131481] sp : ffff8000080936c0
+[    8.131482] x29: ffff8000080936c0 x28: ffff781940e58d00 x27: ffffa7f3f1bc6d38
+[    8.131485] x26: ffffa7f3f1bc6cf8 x25: 0000000000000000 x24: ffffffffffffffff
+[    8.131488] x23: ffff781947e8a400 x22: 000000003b9aca50 x21: ffff781940be0800
+[    8.131491] x20: ffff781947e8a800 x19: 000000003b9aca50 x18: 0000000000000000
+[    8.131494] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[    8.131497] x14: ffff7819bd718000 x13: 0a74657320746f6e x12: 204f52455a5f574f
+[    8.131500] x11: 4c4c415f52454449 x10: 5649445f4b4c4320 x9 : ffffa7f3f011de84
+[    8.131502] x8 : 445f4b4c4320646e x7 : 6120726f73697669 x6 : 0000000000000001
+[    8.131505] x5 : ffffa7f3f288f000 x4 : ffffa7f3f288f2d0 x3 : 0000000000000000
+[    8.131508] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff7819402c7000
+[    8.131511] Call trace:
+[    8.131512]  divider_recalc_rate+0x8c/0xc0
+[    8.131513]  clk_divider_recalc_rate+0x64/0x90
+[    8.131515]  clk_recalc+0x40/0xb0
+[    8.131519]  clk_calc_subtree+0x58/0x90
+[    8.131521]  clk_calc_subtree+0x70/0x90
+[    8.131523]  clk_calc_new_rates+0x150/0x290
+[    8.131526]  clk_calc_new_rates+0x100/0x290
+[    8.131528]  clk_calc_new_rates+0x100/0x290
+[    8.131530]  clk_calc_new_rates+0x100/0x290
+[    8.131533]  clk_core_set_rate_nolock+0xa0/0x2a4
+[    8.131535]  clk_set_rate_range_nolock.part.0+0xbc/0x2a0
+[    8.131538]  __clk_put+0x70/0x140
+[    8.131540]  clk_put+0x1c/0x30
+[    8.131543]  of_clk_set_defaults+0x140/0x3c0
+[    8.131546]  platform_probe+0x48/0xf0
+[    8.131548]  really_probe+0x184/0x3d0
+[    8.131550]  __driver_probe_device+0x11c/0x190
+[    8.131553]  driver_probe_device+0x44/0xf4
+[    8.131556]  __device_attach_driver+0xa4/0x140
+[    8.131558]  bus_for_each_drv+0x84/0xe0
+[    8.131561]  __device_attach+0xe4/0x1c0
+[    8.131563]  device_initial_probe+0x20/0x30
+[    8.131565]  bus_probe_device+0xa4/0xb0
+[    8.131567]  deferred_probe_work_func+0xa8/0xfc
+[    8.131570]  process_one_work+0x1dc/0x450
+[    8.131575]  worker_thread+0x154/0x450
+[    8.131577]  kthread+0x100/0x110
+[    8.131579]  ret_from_fork+0x10/0x20
+[    8.131584] ---[ end trace 0000000000000000 ]---
+[    8.131588] ------------[ cut here ]------------
+[    8.131589] dsi0_phy_pll_out_dsiclk: Zero divisor and
+CLK_DIVIDER_ALLOW_ZERO not set
+[    8.131596] WARNING: CPU: 5 PID: 8 at drivers/clk/clk-divider.c:139
+divider_recalc_rate+0x8c/0xc0
+[    8.131599] Modules linked in: qcom_spmi_adc5 snd_soc_sdm845 qcom_vadc_commo#
+n qcom_spmi_temp_alarm qcom_pon crct10dif_ce rtc_pm8xxx snd_soc_rt5663
+msm snd_soc_qcom_common gpu_sched snd_soc_rl6231 soundwire_bus
+reset_qcom_pdc drm_dp_helper qcom_camss hci_uart videobuf2_dma_sg
+btqca v4l2_fwnode venus_core ath10k_snoc v4l2_async btbcm ath10k_core
+i2c_qcom_geni v4l2_mem2mem videobuf2_memops videobuf2_v4l2 ath
+bluetooth camcc_sdm845 videobuf2_common spi_geni_qcom i2c_qcom_cci
+qcom_rng mac80211 xhci_pci qcom_q6v5_mss xhci_pci_renesas cfg80211
+icc_osm_l3 slim_qcom_ngd_ctrl qcom_wdt rfkill qrtr lmh pdr_interface
+display_connector slimbus qcom_q6v5_pas drm_kms_helper qcom_pil_info
+qcom_q6v5 qcom_sysmon qcom_common qcom_glink_smem qmi_helpers drm
+mdt_loader socinfo rmtfs_mem fuse
+[    8.131637] CPU: 5 PID: 8 Comm: kworker/u16:0 Tainted: G        W
+      5.17.0-next-20220331 #1
+[    8.131639] Hardware name: Thundercomm Dragonboard 845c (DT)
+[    8.131640] Workqueue: events_unbound deferred_probe_work_func
+[    8.131643] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    8.131645] pc : divider_recalc_rate+0x8c/0xc0
+[    8.131647] lr : divider_recalc_rate+0x8c/0xc0
+[    8.131648] sp : ffff800008093680
+[    8.131649] x29: ffff800008093680 x28: ffff781940e58d00 x27: ffffa7f3f1bc6d38
+[    8.131652] x26: ffffa7f3f1bc6cf8 x25: 0000000000000000 x24: ffffffffffffffff
+[    8.131655] x23: ffff781947e8a400 x22: 000000003b9aca50 x21: ffff781940be0800
+[    8.131657] x20: ffff781947e8b300 x19: 000000003b9aca50 x18: 0000000000000000
+[    8.131660] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[    8.131663] x14: ffff7819bd718000 x13: 0a74657320746f6e x12: 204f52455a5f574f
+[    8.131666] x11: 4c4c415f52454449 x10: 5649445f4b4c4320 x9 : ffffa7f3f011de84
+[    8.131669] x8 : 445f4b4c4320646e x7 : 6120726f73697669 x6 : 0000000000000001
+[    8.131671] x5 : ffffa7f3f288f000 x4 : ffffa7f3f288f2d0 x3 : 0000000000000000
+[    8.131674] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff7819402c7000
+[    8.131677] Call trace:
+[    8.131677]  divider_recalc_rate+0x8c/0xc0
+[    8.131679]  clk_divider_recalc_rate+0x64/0x90
+[    8.131680]  clk_recalc+0x40/0xb0
+[    8.131683]  clk_calc_subtree+0x58/0x90
+[    8.131685]  clk_calc_subtree+0x70/0x90
+[    8.131687]  clk_calc_subtree+0x70/0x90
+[    8.131690]  clk_calc_subtree+0x70/0x90
+[    8.131692]  clk_calc_new_rates+0x150/0x290
+[    8.131694]  clk_calc_new_rates+0x100/0x290
+[    8.131697]  clk_calc_new_rates+0x100/0x290
+[    8.131699]  clk_calc_new_rates+0x100/0x290
+[    8.131701]  clk_core_set_rate_nolock+0xa0/0x2a4
+[    8.131704]  clk_set_rate_range_nolock.part.0+0xbc/0x2a0
+[    8.131707]  __clk_put+0x70/0x140
+[    8.131708]  clk_put+0x1c/0x30
+[    8.131710]  of_clk_set_defaults+0x140/0x3c0
+[    8.131712]  platform_probe+0x48/0xf0
+[    8.131714]  really_probe+0x184/0x3d0
+[    8.131716]  __driver_probe_device+0x11c/0x190
+[    8.131719]  driver_probe_device+0x44/0xf4
+[    8.131722]  __device_attach_driver+0xa4/0x140
+[    8.131723]  bus_for_each_drv+0x84/0xe0
+[    8.131726]  __device_attach+0xe4/0x1c0
+[    8.131728]  device_initial_probe+0x20/0x30
+[    8.131730]  bus_probe_device+0xa4/0xb0
+[    8.131732]  deferred_probe_work_func+0xa8/0xfc
+[    8.131735]  process_one_work+0x1dc/0x450
+[    8.131737]  worker_thread+0x154/0x450
+[    8.131739]  kthread+0x100/0x110
+[    8.131741]  ret_from_fork+0x10/0x20
+[    8.131743] ---[ end trace 0000000000000000 ]---
+[    8.131756] ------------[ cut here ]#
+------------
+[    8.131757] dsi0_pll_bit_clk: Zero divisor and CLK_DIVIDER_ALLOW_ZERO not set
 
 
-On 30/03/2022 15:38, Allen-KH Cheng wrote:
-> Add mmc nodes for mt8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-You forgot to disable the msdc clock node, which I understood we agreed on in in 
-v4. I would consider this change as an substantial one, so in this case please 
-delete the reviewed-by tags.
+--
+Linaro LKFT
+https://lkft.linaro.org
 
-Regards,
-Matthias
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 32 ++++++++++++++++++++++++
->   1 file changed, 32 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 69e8d1934d53..c1057878e2c6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -991,6 +991,38 @@
->   			#clock-cells = <1>;
->   		};
->   
-> +		mmc0: mmc@11f60000 {
-> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0 0x1000>;
-> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
-> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
-> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>,
-> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
-> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
-> +				      "pclk_cg", "axi_cg", "ahb_cg";
-> +			status = "disabled";
-> +		};
-> +
-> +		mmc1: mmc@11f70000 {
-> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11f70000 0 0x1000>, <0 0x11c70000 0 0x1000>;
-> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
-> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
-> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>,
-> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>;
-> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
-> +				      "pclk_cg", "axi_cg", "ahb_cg";
-> +			status = "disabled";
-> +		};
-> +
->   		mfgcfg: clock-controller@13fbf000 {
->   			compatible = "mediatek,mt8192-mfgcfg";
->   			reg = <0 0x13fbf000 0 0x1000>;
+[1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220331/testrun/8808185/suite/linux-log-parser/test/check-kernel-exception-4814166/log

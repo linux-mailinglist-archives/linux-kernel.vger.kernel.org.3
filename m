@@ -2,101 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348CD4EDFB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486064EDFCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 19:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiCaRgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 13:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S231908AbiCaRlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 13:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiCaRgi (ORCPT
+        with ESMTP id S229718AbiCaRlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 13:36:38 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75286212A;
-        Thu, 31 Mar 2022 10:34:45 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id c15so702461ljr.9;
-        Thu, 31 Mar 2022 10:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O2yUjqyfP6+h+Mes/kvWfMJGMKSWOnhuqw368qWMi+A=;
-        b=KtCpp8D//XHdYHlTlc/9tVmnBQuT0b8Nsp16rK9T7MsX/94S/9FjQvlz8ChWz35cLW
-         e+9yYcmeao2VYcJHb1EhNJ2xjYbA5TpiOCR9QoKq+FY+sR8HwWpmJExLQxCBCJXkvBMK
-         Dxc/ZUx2t9dPIkedXA1H8FkwQMx0ncZYGwY8JTirazwscEjRV9pFe3f1+H0vWGSzXUK7
-         qo0L2hVtppzk/tjzlxwmxhdhXHr9eVXtOLFZKlo2BFEtF3aqqUuQgdqCVEiuZf3tPux/
-         z/TUDvSiIr1hynrWg2LM+vyI8EKSLgFJjmUQ0lNtTS2t+guNX06kO4z7w+XR6K/wQSq3
-         h/wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O2yUjqyfP6+h+Mes/kvWfMJGMKSWOnhuqw368qWMi+A=;
-        b=0hRdtMuXSeHbjUfMZma8KTs7XK5DvgyXBS8HPGQmK+SgjrP8c6q6l33x+WF/QioXsH
-         b4bidjxQreXCrxFJCS5dfbheQ/sK1+O3OHkv3zDluNVEfgDFGwkb90FLw6V31reyBpS/
-         YdkTIGaoCwIsVrtyIyp5+t03daQehkCBs6Mua61RRfeIX+gi9h/5jpNmKCj+Gn+N8LJ2
-         9sRk8naKttrY1PsIjq+AoH5pTKFAZPORLu/3pmzb61ENjDW/vWau+04mzBiKF3sfDGpH
-         DrN3TzRcxQbbPFt1Cfd5Pq6jfFmPfJBqjHnyGDpQruO/SsvsyjrYBPjrnF2YnpqIxwlq
-         6r6w==
-X-Gm-Message-State: AOAM5325oxd4mkXPYiax1ThogQyOFcF9ix/dFc/cEEN2M/bGVMzghMq8
-        vh0aw3GT7c0DO0CpZ5NC6/g=
-X-Google-Smtp-Source: ABdhPJwYonmMN1vUChjs1jBBB/Dd7M1us26z7440MKCuJVGcRWRU7iJmG1lNC0cu0ITx+Nn7h29YJg==
-X-Received: by 2002:a2e:bf22:0:b0:247:da0b:e091 with SMTP id c34-20020a2ebf22000000b00247da0be091mr11141258ljr.489.1648748080313;
-        Thu, 31 Mar 2022 10:34:40 -0700 (PDT)
-Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id bd10-20020a05651c168a00b00247fe29d83csm2746992ljb.73.2022.03.31.10.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 10:34:40 -0700 (PDT)
-From:   Michal Orzel <michalorzel.eng@gmail.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Orzel <michalorzel.eng@gmail.com>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 5/5] smack: Remove redundant assignments
-Date:   Thu, 31 Mar 2022 19:33:58 +0200
-Message-Id: <20220331173358.40939-5-michalorzel.eng@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220331173358.40939-1-michalorzel.eng@gmail.com>
-References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
+        Thu, 31 Mar 2022 13:41:13 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79FF15280A;
+        Thu, 31 Mar 2022 10:39:25 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A5E201F7AC;
+        Thu, 31 Mar 2022 17:39:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648748364;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNcgLh6DoJ9DDbDIFiiw9A3K3hiKEzb8GtkO14hUjeY=;
+        b=EV3xXJjoDGHZ28OkkQp9sGfXg5wy7n0OaVmEqkhYgaC2CTkunPsB6KyFMyXCVafNYGUg4W
+        CSvtIKY5Q69+vH4SWH1S6zBsdm3aA51AlwlEBckIlbOPi37lqnxUJzAHyaZcOkhnr5uijP
+        RXy4Ie629fUKCjoUNeUw7Lu7pMq74lM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648748364;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNcgLh6DoJ9DDbDIFiiw9A3K3hiKEzb8GtkO14hUjeY=;
+        b=sWxHHqfJb1nrDnuP02nLZPtpfBAE77ZyOnC22F2O32YZzIvxyekpvs6yogd+ZVGmDpXCtJ
+        VqtI3dkCsP5aGYBw==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 9A0F9A3B83;
+        Thu, 31 Mar 2022 17:39:24 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 0F8D7DA7F3; Thu, 31 Mar 2022 19:35:25 +0200 (CEST)
+Date:   Thu, 31 Mar 2022 19:35:25 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
+        Nikolay Borisov <nborisov@suse.com>
+Subject: Re: [PATCH v3 2/2] btrfs: allocate page arrays using bulk page
+ allocator
+Message-ID: <20220331173525.GF15609@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        kernel-team@fb.com, Nikolay Borisov <nborisov@suse.com>
+References: <cover.1648669832.git.sweettea-kernel@dorminy.me>
+ <ede1d39f7878ee2ed12c1526cc2ec358a2d862cf.1648669832.git.sweettea-kernel@dorminy.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ede1d39f7878ee2ed12c1526cc2ec358a2d862cf.1648669832.git.sweettea-kernel@dorminy.me>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get rid of redundant assignments which end up in values not being
-read either because they are overwritten or the function ends.
+On Wed, Mar 30, 2022 at 04:11:23PM -0400, Sweet Tea Dorminy wrote:
+> While calling alloc_page() in a loop is an effective way to populate an
+> array of pages, the kernel provides a method to allocate pages in bulk.
+> alloc_pages_bulk_array() populates the NULL slots in a page array, trying to
+> grab more than one page at a time.
+> 
+> Unfortunately, it doesn't guarantee allocating all slots in the array,
+> but it's easy to call it in a loop and return an error if no progress
+> occurs. Similar code can be found in xfs/xfs_buf.c:xfs_buf_alloc_pages().
+> 
+> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+> Reviewed-by: Nikolay Borisov <nborisov@suse.com>
+> ---
+> Changes in v3:
+>  - Added a newline after variable declaration
+> Changes in v2:
+>  - Moved from ctree.c to extent_io.c
+> ---
+>  fs/btrfs/extent_io.c | 24 +++++++++++++++---------
+>  1 file changed, 15 insertions(+), 9 deletions(-)
+> 
+> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+> index ab4c1c4d1b59..b268e47aa2b7 100644
+> --- a/fs/btrfs/extent_io.c
+> +++ b/fs/btrfs/extent_io.c
+> @@ -3144,19 +3144,25 @@ static void end_bio_extent_readpage(struct bio *bio)
+>   */
+>  int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
+>  {
+> -	int i;
+> +	long allocated = 0;
+> +
+> +	for (;;) {
+> +		long last = allocated;
+>  
+> -	for (i = 0; i < nr_pages; i++) {
+> -		struct page *page;
+> +		allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages,
+> +						   page_array);
+> +		if (allocated == nr_pages)
+> +			return 0;
+>  
+> -		if (page_array[i])
+> +		if (allocated != last)
+>  			continue;
+> -		page = alloc_page(GFP_NOFS);
+> -		if (!page)
+> -			return -ENOMEM;
+> -		page_array[i] = page;
+> +		/*
+> +		 * During this iteration, no page could be allocated, even
+> +		 * though alloc_pages_bulk_array() falls back to alloc_page()
+> +		 * if  it could not bulk-allocate. So we must be out of memory.
+> +		 */
+> +		return -ENOMEM;
+>  	}
 
-Reported by clang-tidy [deadcode.DeadStores]
+I find the way the loop is structured a bit cumbersome so I'd suggest to
+rewrite it as:
 
-Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
----
- security/smack/smackfs.c | 1 -
- 1 file changed, 1 deletion(-)
+int btrfs_alloc_page_array(unsigned int nr_pages, struct page **page_array)
+{
+        unsigned int allocated;
 
-diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 658eab05599e..9e61014073cc 100644
---- a/security/smack/smackfs.c
-+++ b/security/smack/smackfs.c
-@@ -1192,7 +1192,6 @@ static ssize_t smk_write_net4addr(struct file *file, const char __user *buf,
- 			rc = -EINVAL;
- 			goto free_out;
- 		}
--		m = BEBITS;
- 		masks = 32;
- 	}
- 	if (masks > BEBITS) {
--- 
-2.25.1
+        for (allocated = 0; allocated < nr_pages;) {
+                unsigned int last = allocated;
 
+                allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages, page_array);
+
+                /*
+                 * During this iteration, no page could be allocated, even
+                 * though alloc_pages_bulk_array() falls back to alloc_page()
+                 * if  it could not bulk-allocate. So we must be out of memory.
+                 */
+                if (allocated == last)
+                        return -ENOMEM;
+        }
+        return 0;
+}
+
+Also in the xfs code there's memalloc_retry_wait() which is supposed to be
+called when repeated memory allocation is retried. What was the reason
+you removed it?

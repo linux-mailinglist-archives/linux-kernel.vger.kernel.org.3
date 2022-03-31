@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9EA4EDBC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233884EDBC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 16:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbiCaOgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 10:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
+        id S237658AbiCaOid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 10:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbiCaOgD (ORCPT
+        with ESMTP id S235940AbiCaOid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 10:36:03 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB120118F42
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:34:16 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id i11so23622226plr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=1XVqi4Ib1eRyRv1oXeeUNUCcAwlXPZRFfU2ywy6AHVM=;
-        b=RmkqI6sZ5YtSysRCO7BsHUN7kt1Kq7AfRuhZkuZfwB1oCf/hTwcOMfEqDO/utOQ7Wc
-         oZJReHBgFTClL5RZP+00rtyizUBvy5sc24jAT1XhbNUZUp+SkdSEliECZ7wfUm3KMrLf
-         2elb2q1BteWWAfXngj1B0Z2Eh/BlHN32x2VdTDSd637RRW0YBEI+W06JAgBRxWzY6d8y
-         ndk0yPG/6r8somJuomIPEWH1EHrDxnGMb7ktASmsD/0zmbjx/qKXlmuKHzJ5yPsBo/Wu
-         94RpAA4Nv6JK48Qx/10K9I+ML5iVr1VwXbHuYnMe3EyuKTJBcPQmZ4D4dl/O5NPcvKv8
-         YC6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=1XVqi4Ib1eRyRv1oXeeUNUCcAwlXPZRFfU2ywy6AHVM=;
-        b=3itxwHZH6yXbrVwoMqn5zloOjMaPj3wY9Z0y4gcgv7ShRW9DEcZ1ZUC/y04ZAz8Br3
-         VHrD8yldsGn1/LQfrZ1o3vBPuvkUHrk20qto/M983Wv906EdQm5C8H5XUQGmKISpvha2
-         SspgOQHk3htbKP0oIQcsv8soDSol25G7brpdKtVPWUkTtHYoOUjDKwE/FXPq5nFDZb5U
-         P2zSnw2tSKA/2/SLTuPJ9lzmYXWlVn2EFZrWaOB3DVIztPiljJYpnrsb2Y4KjPytqHM1
-         JBBuQT8nKONq7sjVdJiqmqGlwF4zRuBycfA4khnCBowNAmmYv6GDeivFJmUClEei/lfk
-         Z31Q==
-X-Gm-Message-State: AOAM530NgZxVipEkOCj+/j9OwWAV8AxpS234t9kFVSysjMohVYrUoff2
-        imLHFC9TgeGOfohuOpJbmHGoGBPNaXeUKDgt9gg=
-X-Google-Smtp-Source: ABdhPJz5+lPDRKDNE9tFoLcbGF/oJV0JE+ltWs74dd3bgfK0gV4otudgb4akWkrVfBx6muFWq3VTfsiS8Nf8z1Gy1gY=
-X-Received: by 2002:a17:90b:38c9:b0:1c7:1ffb:533b with SMTP id
- nn9-20020a17090b38c900b001c71ffb533bmr6586813pjb.220.1648737256226; Thu, 31
- Mar 2022 07:34:16 -0700 (PDT)
+        Thu, 31 Mar 2022 10:38:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A2D1F2DCE;
+        Thu, 31 Mar 2022 07:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UGRMOLjwh8wFQwrWEciThniTblcQYyyZ5Zuat0kWF2k=; b=vT/Khf0Emk8pujLkmWbN5i3gLt
+        MkldrB9B3A498Acx1KdF5UJpwvpebOOADBSNlvOf284u22s8GpuaHezuOl0/FIfsuzcC49XFVhvaX
+        Ff0lPy4HhpSBegK52jRjPu/kPRtdvUUotQsEUkDxJJMTjfGZlV4J9A0jK2JbrK9ET5wbUmH+LwIB2
+        evrzLI1KRPm0x3jt3Qam9yXxR5KXn8wrAcl15HHA5G5cxU+JBfNZiYPbggH+yiA2D1qngvOdmLYbB
+        x3Wtrr9J9LaoB9UK0APeoe7s3F7JAyGmNntF0tpRVZmq0eFkkK86yaZw8vEGbsDlRfT1W4MI8vhiG
+        zRQEsLfg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZvuh-002KH2-9f; Thu, 31 Mar 2022 14:36:39 +0000
+Date:   Thu, 31 Mar 2022 15:36:39 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org, yangtiezhu@loongson.cn,
+        amit.kachhap@arm.com, hch@lst.de, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v4 0/4] Convert vmcore to use an iov_iter
+Message-ID: <YkW8d/HuXewjSuXs@casper.infradead.org>
+References: <20220318093706.161534-1-bhe@redhat.com>
+ <YkWPrWOe1hlfqGdy@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:9c0e:0:0:0:0 with HTTP; Thu, 31 Mar 2022 07:34:15
- -0700 (PDT)
-From:   Eleanor Taylor <diegosandra357@gmail.com>
-Date:   Thu, 31 Mar 2022 07:34:15 -0700
-Message-ID: <CAPsXh01L0tub37GEpTKJ9p43ari5w5+GB3SGT3O3DewT=OTQuw@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkWPrWOe1hlfqGdy@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
+On Thu, Mar 31, 2022 at 07:25:33PM +0800, Baoquan He wrote:
+> Hi Andrew,
+> 
+> On 03/18/22 at 05:37pm, Baoquan He wrote:
+> > Copy the description of v3 cover letter from Willy:
+> 
+> Could you pick this series into your tree? I reviewed the patches 1~3
+> and tested the whole patchset, no issue found.
 
-I would like to talk to you
-
-Eleanor
+... I'd fold patch 4 into patch 1, but yes, Andrew, please take these
+patches.

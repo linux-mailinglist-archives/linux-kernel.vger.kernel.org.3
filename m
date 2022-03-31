@@ -2,143 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED254EDED6
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512CE4EDEE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239975AbiCaQec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S240040AbiCaQgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239969AbiCaQe3 (ORCPT
+        with ESMTP id S240022AbiCaQgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:34:29 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57751FF433
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:32:41 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t25so127926lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:32:41 -0700 (PDT)
+        Thu, 31 Mar 2022 12:36:51 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850411BBF62;
+        Thu, 31 Mar 2022 09:35:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b5EuL+gbnNFQ87YRYoAKBwPNNldsvEmstfa9tdC1Qjw=;
-        b=sxdbgUE2Kaq4uw7gb73QHsWD6/kz3qaXOp4jtlQQ8zCWOGZchRXoS9h1kgGVgmwHMi
-         0ovyZTnHlEv8jIe/t0cC86uBkO99V4EO8Uz5f6uPSjIGlmCW5dfk1M/WMMgmw59b/Vmr
-         UaAH/7kYp3jq0L4a5oBQkDjGGm033na3bYjkJ0PSfFUGgdKTwJTImQPUAtxcu7+XlXvz
-         2OjxZNPuXaMG+w58a5/U0wluu/5+wyuuUTsalUysgAJrKHCGhlMohRLo/Ao6Rozoy4M7
-         vVa7GkNVeu1ikZU3b0NanTzbgz4haCidvDdbWRXlged7lJSNBHh2Wh1Z5C1S+UV2V2iS
-         oshA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b5EuL+gbnNFQ87YRYoAKBwPNNldsvEmstfa9tdC1Qjw=;
-        b=qG9eUuNW6djChbqPB37lcqmFR4CQ8c/J86VmtXpw/74iVFR+4mkIpeCEzXdokHKoE/
-         LKm8ajjFyAMgQEwn745M+8+PqlnmCg4z1VgdwQjqHBoaKZdaZARJsRGWBusDLNDFa0Ij
-         cS/xeA4LpoyS6dAPNi44IZit1E3gkTyyNsDLUDNszkZHDVICzQ/UvVjtDDt8ZtZgsQa+
-         RP7QWAW2MryMAlsNpMQNnfkGvW5EtJxrguTpJm5Pjk1nLch3Ce8ly/sfC4gp4I/V/sEP
-         Ceh9qF5hiT2npuvHNDLUNG0LkPOQB5cAV6oPcHXcs70GNiUC6OGGTbBnkdrMcZDF4lRq
-         CrIA==
-X-Gm-Message-State: AOAM533I60CRv/VDTRCLswCAl0IIPw96hEpiLB1j64oVmcEfE9pfvU4v
-        HJbhLiETSb5C5pf2/oOf7dMymONxGhDTrJZbCg8qfg==
-X-Google-Smtp-Source: ABdhPJzDKroUOn9WqA656ToUno9/DwyrFz+qIKbK639QDjkL6PIrlSnozMRN4BUf4+XJE6GzN91N3kg09SPyqja93/0=
-X-Received: by 2002:ac2:4ed4:0:b0:44a:212e:fa1a with SMTP id
- p20-20020ac24ed4000000b0044a212efa1amr11109703lfr.372.1648744360087; Thu, 31
- Mar 2022 09:32:40 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648744503; x=1680280503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vcu31rMS0yn2EqzHi27wb6PxKwLH34tTd/+ys8ECp/A=;
+  b=ADDuc88FzNWZGKBrIk06zzzX+k6YSxqk27uWQNihSUCGuZ1GtMpxcMlV
+   xTEWa75dpfcsFQw+mC064HKR7W4MWXLYRVTC8926TBwzR2AQWBCbndTjo
+   VEkv7SFykl4Py4aMRGoIAena380+aMTSMqaNCRjn7CsXqgUcJlMFOvVOW
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 31 Mar 2022 09:35:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 09:35:02 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 31 Mar 2022 09:35:02 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 31 Mar
+ 2022 09:34:58 -0700
+Date:   Thu, 31 Mar 2022 12:34:56 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
+        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "David Sterba" <dsterba@suse.com>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        <linux-block@vger.kernel.org>, <dm-devel@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linux-bcache@vger.kernel.org>,
+        <linux-raid@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        <linux-btrfs@vger.kernel.org>
+Subject: Re: cleanup bio_kmalloc v2
+Message-ID: <YkXYMGGbk/ZTbGaA@qian>
+References: <20220308061551.737853-1-hch@lst.de>
 MIME-Version: 1.0
-References: <20220331105005.2580771-1-ivecera@redhat.com> <YkWpNVXYEBo/u3dm@boxer>
- <YkWp5JJ9Sp6UCTw7@boxer>
-In-Reply-To: <YkWp5JJ9Sp6UCTw7@boxer>
-From:   Brett Creeley <brett@pensando.io>
-Date:   Thu, 31 Mar 2022 09:32:31 -0700
-Message-ID: <CAFWUkrTzE87bduD431nu11biHi78XFitUWQfiwcU6_4UPU9FBg@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH net] ice: Fix incorrect locking in ice_vc_process_vf_msg()
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>, mschmidt@redhat.com,
-        open list <linux-kernel@vger.kernel.org>, poros@redhat.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>, jacob.e.keller@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220308061551.737853-1-hch@lst.de>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 6:17 AM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Thu, Mar 31, 2022 at 03:14:32PM +0200, Maciej Fijalkowski wrote:
-> > On Thu, Mar 31, 2022 at 12:50:04PM +0200, Ivan Vecera wrote:
-> > > Usage of mutex_trylock() in ice_vc_process_vf_msg() is incorrect
-> > > because message sent from VF is ignored and never processed.
-> > >
-> > > Use mutex_lock() instead to fix the issue. It is safe because this
-> >
-> > We need to know what is *the* issue in the first place.
-> > Could you please provide more context what is being fixed to the readers
-> > that don't have an access to bugzilla?
-> >
-> > Specifically, what is the case that ignoring a particular message when
-> > mutex is already held is a broken behavior?
->
-> Uh oh, let's
-> CC: Brett Creeley <brett@pensando.io>
+On Tue, Mar 08, 2022 at 07:15:46AM +0100, Christoph Hellwig wrote:
+> Hi Jens,
+> 
+> this series finishes off the bio allocation interface cleanups by dealing
+> with the weirdest member of the famility.  bio_kmalloc combines a kmalloc
+> for the bio and bio_vecs with a hidden bio_init call and magic cleanup
+> semantics.
+> 
+> This series moves a few callers away from bio_kmalloc and then turns
+> bio_kmalloc into a simple wrapper for a slab allocation of a bio and the
+> inline biovecs.  The callers need to manually call bio_init instead with
+> all that entails and the magic that turns bio_put into a kfree goes away
+> as well, allowing for a proper debug check in bio_put that catches
+> accidental use on a bio_init()ed bio.
 
-My concern here is that we don't want to handle messages
-from the context of the "previous" VF configuration if that
-makes sense.
+Reverting this series fixed boot crashes.
 
-It might be best to grab the cfg_lock before doing any
-message/VF validating in ice_vc_process_vf_msg() to
-make sure all of the checks are done under the cfg_lock.
-
-CC'ing Jake so he can provide some input as
-well.
-
->
-> >
-> > > mutex is used to prevent races between VF related NDOs and
-> > > handlers processing request messages from VF and these handlers
-> > > are running in ice_service_task() context.
-> > >
-> > > Fixes: e6ba5273d4ed ("ice: Fix race conditions between virtchnl handling and VF ndo ops")
-> > > Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> > > ---
-> > >  drivers/net/ethernet/intel/ice/ice_virtchnl.c | 10 +---------
-> > >  1 file changed, 1 insertion(+), 9 deletions(-)
-> > >
-> > > diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl.c b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
-> > > index 3f1a63815bac..9bf5bb008128 100644
-> > > --- a/drivers/net/ethernet/intel/ice/ice_virtchnl.c
-> > > +++ b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
-> > > @@ -3660,15 +3660,7 @@ void ice_vc_process_vf_msg(struct ice_pf *pf, struct ice_rq_event_info *event)
-> > >             return;
-> > >     }
-> > >
-> > > -   /* VF is being configured in another context that triggers a VFR, so no
-> > > -    * need to process this message
-> > > -    */
-> > > -   if (!mutex_trylock(&vf->cfg_lock)) {
-> > > -           dev_info(dev, "VF %u is being configured in another context that will trigger a VFR, so there is no need to handle this message\n",
-> > > -                    vf->vf_id);
-> > > -           ice_put_vf(vf);
-> > > -           return;
-> > > -   }
-> > > +   mutex_lock(&vf->cfg_lock);
-> > >
-> > >     switch (v_opcode) {
-> > >     case VIRTCHNL_OP_VERSION:
-> > > --
-> > > 2.34.1
-> > >
-> > > _______________________________________________
-> > > Intel-wired-lan mailing list
-> > > Intel-wired-lan@osuosl.org
-> > > https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
+ WARNING: CPU: 1 PID: 2622 at block/bio.c:229 bio_free
+ Modules linked in: cdc_ether usbnet ipmi_devintf ipmi_msghandler cppc_cpufreq fuse ip_tables x_tables ipv6 btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq zstd_compress dm_mod nouveau crct10dif_ce drm_ttm_helper mlx5_core ttm drm_dp_helper drm_kms_helper nvme mpt3sas xhci_pci nvme_core raid_class drm xhci_pci_renesas
+ CPU: 1 PID: 2622 Comm: mount Not tainted 5.17.0-next-20220331 #50
+ pstate: 10400009 (nzcV daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : bio_free
+ lr : bio_put
+ sp : ffff8000371b7760
+ x29: ffff8000371b7760 x28: 0000000000000000 x27: dfff800000000000
+ x26: ffff08028f93a600 x25: 0000000000000000 x24: ffff08028f92f600
+ x23: 1ffff00006e36f10 x22: ffff08028fa18510 x21: 1fffe10051f430a2
+ x20: 0000000000000000 x19: ffff08028fa18500 x18: ffffde03db3e7d2c
+ x17: ffffde03d55f8bc4 x16: 1fffe10051e75129 x15: 1fffe106cfcfbb46
+ x14: 1fffe10051e7511c x13: 0000000000000004 x12: ffff700006e36eab
+ x11: 1ffff00006e36eaa x10: ffff700006e36eaa x9 : ffffde03d5cb9fec
+ x8 : ffff8000371b7557 x7 : 0000000000000001 x6 : ffff700006e36eaa
+ x5 : 1ffff00006e36ea9 x4 : 1ffff00006e36ebe x3 : 1fffe10051f430a2
+ x2 : 1fffe10051f430ae x1 : 0000000000000000 x0 : ffff08028fa18570
+ Call trace:
+  bio_free
+  bio_put
+  squashfs_read_data
+  squashfs_read_table
+  squashfs_fill_super
+  get_tree_bdev
+  squashfs_get_tree
+  vfs_get_tree
+  do_new_mount
+  path_mount
+  __arm64_sys_mount
+  invoke_syscall
+  el0_svc_common.constprop.0
+  do_el0_svc
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync
+ irq event stamp: 33146
+ hardirqs last  enabled at (33145):  free_unref_page
+ hardirqs last disabled at (33146):  el1_dbg
+ softirqs last  enabled at (33122):  __do_softirq
+ softirqs last disabled at (33111):  __irq_exit_rcu
+ ---[ end trace 0000000000000000 ]---
+ Unable to handle kernel paging request at virtual address dfff800000000001
+ KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+ Mem abort info:
+   ESR = 0x96000004
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x04: level 0 translation fault
+ Data abort info:
+   ISV = 0, ISS = 0x00000004
+   CM = 0, WnR = 0
+ [dfff800000000001] address between user and kernel address ranges
+ Internal error: Oops: 96000004 [#1] PREEMPT SMP
+ Modules linked in: cdc_ether usbnet ipmi_devintf ipmi_msghandler cppc_cpufreq fuse ip_tables x_tables ipv6 btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq zstd_compress dm_mod nouveau crct10dif_ce
+drm_ttm_helper mlx5_core ttm drm_dp_helper drm_kms_helper nvme mpt3sas xhci_pci nvme_core raid_class drm xhci_pci_renesas
+ CPU: 1 PID: 2622 Comm: mount Tainted: G        W         5.17.0-next-20220331 #50
+ pc : bio_free
+ lr : bio_free
+ sp : ffff8000371b7760
+ x29: ffff8000371b7760 x28: 0000000000000000 x27: dfff800000000000
+ x26: ffff08028f93a600 x25: 0000000000000000 x24: ffff08028f92f600
+ x23: 1ffff00006e36f10 x22: ffff08028fa18548 x21: 00000000000000d0
+ x20: 0000000000000000 x19: ffff08028fa18500 x18: ffffde03db3e7d2c
+ x17: ffffde03d55f8bc4 x16: 1fffe10051e75129 x15: 1fffe106cfcfbb46
+ x14: 1fffe10051e7511c x13: 0000000000000004 x12: ffff700006e36eab
+ x11: 1ffff00006e36eaa x10: ffff700006e36eaa x9 : ffffde03d5cb9c78
+ x8 : ffff8000371b7557 x7 : 0000000000000001 x6 : ffff700006e36eaa
+ x5 : 1ffff00006e36ea9 x4 : 1fffe10051f430ac x3 : 0000000000000001
+ x2 : 0000000000000003 x1 : dfff800000000000 x0 : 0000000000000008
+ Call trace:
+  bio_free
+  bio_put
+  squashfs_read_data
+  squashfs_read_table
+  squashfs_fill_super
+  get_tree_bdev
+  squashfs_get_tree
+  vfs_get_tree
+  do_new_mount
+  path_mount
+  __arm64_sys_mount
+  invoke_syscall
+  el0_svc_common.constprop.0
+  do_el0_svc
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync
+ Code: d2d00001 f2fbffe1 52800062 d343fc03 (38e16861)
+ ---[ end trace 0000000000000000 ]---
+ SMP: stopping secondary CPUs
+ Kernel Offset: 0x5e03ccd70000 from 0xffff800008000000
+ PHYS_OFFSET: 0x80000000
+ CPU features: 0x000,00085c0d,19801c82
+ Memory Limit: none
+ ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
+> 
+> Changes since v1:
+>  - update a pre-existing comment per maintainer suggestion
+> 
+> Diffstat:
+>  block/bio.c                        |   47 ++++++++++++++-----------------------
+>  block/blk-crypto-fallback.c        |   14 ++++++-----
+>  block/blk-map.c                    |   42 +++++++++++++++++++++------------
+>  drivers/block/pktcdvd.c            |   34 +++++++++++---------------
+>  drivers/md/bcache/debug.c          |   10 ++++---
+>  drivers/md/dm-bufio.c              |    9 +++----
+>  drivers/md/raid1.c                 |   12 ++++++---
+>  drivers/md/raid10.c                |   21 +++++++++++-----
+>  drivers/target/target_core_pscsi.c |   36 ++++------------------------
+>  fs/btrfs/disk-io.c                 |    8 +++---
+>  fs/btrfs/volumes.c                 |   11 --------
+>  fs/btrfs/volumes.h                 |    2 -
+>  fs/squashfs/block.c                |   14 +++--------
+>  include/linux/bio.h                |    2 -
+>  14 files changed, 116 insertions(+), 146 deletions(-)

@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F414ED7B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11094ED7E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiCaKSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S234721AbiCaKp6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 31 Mar 2022 06:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiCaKSv (ORCPT
+        with ESMTP id S234703AbiCaKpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:18:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD1511A9B6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648721824; x=1680257824;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RbQW+n/+6PJw9BWCQAk1SdFbKP5uCEhi+CcdW4GzQ9s=;
-  b=Y5fO/yGZ5aX3RlZa43qhgpQrYjNU98BTuZkmLDsSB1mHiC5wz3uYat7Q
-   oQkBj67GyZ+ewhj/Dwhio5Pg/fUDaZ2nhIzmkRL0atuFdzsROwMEiY9F8
-   jtcvmU0wCzMwo7G37MC7bWn4Vi8yv2p5VtWiFMPU0ds/wzJZk0/tyDsCJ
-   fCfZ64JvlOedw5XixKTRCXhIoZySd8BPAWrPPkjY/LuVrHX03t0IGhnEl
-   Sc7haS3zh2mc1zfxr+tiSoJh3H60/enCOQpmqatNkMfXO/LzQ1rRRH6pr
-   B4yT84MH4pjAq66PZmTq60s5/nUiB2MFjMHMYU/TpNVxVyccKWWF7lkjy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259969468"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="259969468"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 03:17:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="503683920"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 31 Mar 2022 03:17:02 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZrrR-00009g-LK;
-        Thu, 31 Mar 2022 10:17:01 +0000
-Date:   Thu, 31 Mar 2022 18:16:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sudarshan Rajagopalan <sudaraja@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 1060/5872] arch/arm64/mm/mmu.c:1499:5: warning: no previous prototype for
- 'check_range_driver_managed'
-Message-ID: <202203311842.wFWvHrHn-lkp@intel.com>
+        Thu, 31 Mar 2022 06:45:54 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0A03DDD3;
+        Thu, 31 Mar 2022 03:44:04 -0700 (PDT)
+Received: from mail-lj1-f173.google.com ([209.85.208.173]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M9WqY-1ndBfK2fES-005WBS; Thu, 31 Mar 2022 12:44:02 +0200
+Received: by mail-lj1-f173.google.com with SMTP id q5so31416863ljb.11;
+        Thu, 31 Mar 2022 03:44:02 -0700 (PDT)
+X-Gm-Message-State: AOAM5323KREuaVHS2c7IL/So/5JqmC4FfoC8xn5v6/9DcCl67dMXy9r/
+        5xMJCBbMTxxtWaCmRkAbJafU6oj1vRoiYNGUiOw=
+X-Google-Smtp-Source: ABdhPJxSLzSPG469rbBjqUgenc7GqtDg1G59o6eI2kBV31nJzx0w1XbePWgcX9pqw/Nc6/av9pIeO+axzqEg7/x2jpQ=
+X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
+ k10-20020a5d66ca000000b00203fb72a223mr3507386wrw.12.1648721862625; Thu, 31
+ Mar 2022 03:17:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <cover.1648551070.git.tonyhuang.sunplus@gmail.com>
+ <46aad49867912fc57b669fc54fdb28638cccfcd9.1648551070.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a0CLA33CTerXJ=bK+myhyHp_utoLnTX-NzMgjeb7icAGg@mail.gmail.com> <7c4b66f7fe4940cba1b0158803767f6e@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <7c4b66f7fe4940cba1b0158803767f6e@sphcmbx02.sunplus.com.tw>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 31 Mar 2022 12:17:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3edkGMyypwchiJjHDvO4ro6RsOvrhUbEDmP1Obs94mXw@mail.gmail.com>
+Message-ID: <CAK8P3a3edkGMyypwchiJjHDvO4ro6RsOvrhUbEDmP1Obs94mXw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] mmc: Add mmc driver for Sunplus SP7021
+To:     =?UTF-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:xpTDZlbZOwasZwLrLnRYa79iGksGPPPYKzdPgLjVKaYMjt/vsPC
+ oyEIPYjVRFcQyA4PNZJX/xnG+oJDhVU702bzgqxl3euj/jeXIfmG35z5+RqQjAUD1N6BA14
+ RLirJQdaGCss6LkjeGsHKBdoFFnUUwdd5MD3AQ1YSn+QY4wqIDYO4X8KAFUpU1WVZYzQVrs
+ 37JuybXcKR6lNq6ADMJVQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:b5BZ0dW7EXs=:8DuCFhVrpT8d+PbDr/wvOp
+ PZWDHl1XQCObIZ6FlNwQua/oX9HSOrI6HZhcmyYxgsvx8w0KBV6atFGff9Np2qfM2QJfaLLWj
+ h9lOC8FgrugUr9IaA9GuelIdkRlY4RvElr59c33Yc0dSrKx5/MggDSjFXEqxW4L2uAorw+y/y
+ KGebJt1F5nYspINknuufq9pRqX6DE7M1Lo7GLTLJPgTgasZphjgL0sNpkQ9uSZTbdYrZ1wafZ
+ 33fqm/6UFfRMRspdWshZ629nHXAWSJSW5M5mwYVWGpWj5rQuNLk0vhcqCnJcMztsI+TlKaf/3
+ /3749RSKzSFYYMLfQa7Cmha4HEdMSMH9FUzOOvxowTECv+VbGNMEqmsZyLbaYL57efMUtNKpY
+ AwzN0UyMtEwXyoE4CcAVU/Je02d4EZRRTHqY+mC97k6geEPbwidGyCHm4M/CU6UHGWWZxSeYE
+ i4vZtd1kSb2gyVjws216tl+5ibZLyb6aKq2swCPgLm2ebDPXR8193TCz3Bck7kOwlXBZOkBy6
+ FBU7c+JRvxFeoR9HpQHfr/IcY8LwtkQf6ymGvQLEbHcdWh3flmu9YtjiV8xc/aGZbkgVQCpld
+ mt0rzgY6o40rKeklPFCoNwVZIy3+gpdZBmlBXn5G9MzN1Y41ztahzpgyXZFDPxSlhFvF52wMm
+ jfPZNGXAyIYgMWsp5NLUdz3JmliK5g2dT0kcfykJ9Xbiq4KFhIom3Y0Xw4zFFFuWXIXKzFy5h
+ PErpGfMG8DgyjscU9WQpdrq+tpm7X/Hi0UhWLcFa6zC9OvFTDT1y7iZNnH29xDQ7L1qoyP8cS
+ /ureQvGAcdTPhlNMVuI8AOS7YnivdZDj5h9Nym4r1Tqqu94Ve0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,86 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudarshan,
+On Thu, Mar 31, 2022 at 11:27 AM Tony Huang 黃懷厚 <tony.huang@sunplus.com> wrote:
+> > > +static void spmmc_request(struct mmc_host *mmc, struct mmc_request
+> > > +*mrq) {
+> > > +       struct spmmc_host *host = mmc_priv(mmc);
+> > > +       struct mmc_data *data;
+> > > +       struct mmc_command *cmd;
+> > > +       int ret;
+> > > +
+> > > +       ret = mutex_lock_interruptible(&host->mrq_lock);
+> > > +       if (ret)
+> > > +               return;
+> >
+> > I don't think it's valid to just return here when you get a signal. If nothing can
+> > handle the signal, doesn't it just hang?
+> >
+> > It also appears that you don't release the mutex until the tasklet runs, but it is
+> > not valid to release a mutex from a different context.
+> >
+> > You should get a warning about this when running a kernel with lockdep
+> > enabled at compile time. Please rework the locking to make this work.
+> >
+>         Reomve code:
+>     ret = mutex_lock_interruptible(&host->mrq_lock);
+>     if (ret)
+>          return;
+>
+>         Below is my modification:
+> .    mutex_lock(&host->mrq_lock);
 
-FYI, the error/warning still remains.
+That addresses the problem with the signal handling, but not the lock
+imbalance. Please fix that as well.
+> >
+> > It's better to use SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS instead of the
+> > SET_ version, then you can remove all the #ifdef checks.
+> >
+>
+>         I use SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS.
+>         Compile shows error. Error: implicit declaration of function ? ? SYSTEM_SLEEP_PM_OPS? ? Did you mean ? ? SET_SYSTEM_SLEEP_PM_OPS? ?             [-Werror=implicit-function-declaration]
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
-head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-commit: 1b4aca7d82ae9b40145484fa09ceab38a6a06062 [1060/5872] ANDROID: arm64/mm: implement {populate/depopulate}_range_driver_managed
-config: arm64-buildonly-randconfig-r005-20220331 (https://download.01.org/0day-ci/archive/20220331/202203311842.wFWvHrHn-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/1b4aca7d82ae9b40145484fa09ceab38a6a06062
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
-        git checkout 1b4aca7d82ae9b40145484fa09ceab38a6a06062
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/ drivers/gpu/drm/hisilicon/kirin/
+Maybe you are on an old kernel release?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>         I reference other mmc driver.
+>         Below is my modification:
+>     Compiler is pass.
+>
+>         #ifdef CONFIG_PM_SLEEP
+>         static int spmmc_pm_suspend(struct device *dev)
+>         {
+>                 pm_runtime_force_suspend(dev);
+>
+>                 return 0;
+>         }
 
-All warnings (new ones prefixed by >>):
+We should fix the other drivers as well. For the moment, just do it
+the right way now
+instead of copying the #ifdefs.
 
->> arch/arm64/mm/mmu.c:1499:5: warning: no previous prototype for 'check_range_driver_managed' [-Wmissing-prototypes]
-    1499 | int check_range_driver_managed(u64 start, u64 size, const char *resource_name)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/printk.h:7,
-                    from include/linux/kernel.h:16,
-                    from arch/arm64/mm/mmu.c:11:
-   arch/arm64/mm/mmu.c: In function 'check_range_driver_managed':
-   include/linux/kern_levels.h:5:25: warning: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
-      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-         |                         ^~~~~~~~
-   include/linux/printk.h:343:16: note: in expansion of macro 'KERN_ERR'
-     343 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                ^~~~~~~~
-   arch/arm64/mm/mmu.c:1509:17: note: in expansion of macro 'pr_err'
-    1509 |                 pr_err("%s: couldn't find memory resource for start 0x%lx\n",
-         |                 ^~~~~~
-
-
-vim +/check_range_driver_managed +1499 arch/arm64/mm/mmu.c
-
-  1498	
-> 1499	int check_range_driver_managed(u64 start, u64 size, const char *resource_name)
-  1500	{
-  1501		struct mem_section *ms;
-  1502		unsigned long pfn = __phys_to_pfn(start);
-  1503		unsigned long end_pfn = __phys_to_pfn(start + size);
-  1504		struct resource *res;
-  1505		unsigned long flags;
-  1506	
-  1507		res = lookup_resource(&iomem_resource, start);
-  1508		if (!res) {
-  1509			pr_err("%s: couldn't find memory resource for start 0x%lx\n",
-  1510				   __func__, start);
-  1511			return -EINVAL;
-  1512		}
-  1513	
-  1514		flags = res->flags;
-  1515	
-  1516		if (!(flags & IORESOURCE_SYSRAM_DRIVER_MANAGED) ||
-  1517		    strstr(resource_name, "System RAM (") != resource_name)
-  1518			return -EINVAL;
-  1519	
-  1520		for (; pfn < end_pfn; pfn += PAGES_PER_SECTION) {
-  1521			ms = __pfn_to_section(pfn);
-  1522			if (early_section(ms))
-  1523				return -EINVAL;
-  1524		}
-  1525	
-  1526		return 0;
-  1527	}
-  1528	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        Arnd

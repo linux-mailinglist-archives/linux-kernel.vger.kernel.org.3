@@ -2,94 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225044EE49F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA384EE4C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242845AbiCaXYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S242886AbiCaXbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiCaXYC (ORCPT
+        with ESMTP id S229576AbiCaXbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:24:02 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017C749685
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:22:13 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 23:22:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=michaelmarod.com;
-        s=protonmail; t=1648768931;
-        bh=H/HIIOtE6ezWt3oBMOEbUNvqPRvMS/qhwtcdJgLLn40=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=QFUpB8Mf5Yo249YgcpZ2mBq/kbYlExC4LlzZC9jN5oobhUwMNnV3yPX5RgUtdCQV9
-         stnloZ02HxUnlbbDG8BgBswAfG4aNxP0QPBTKspeZSh5CwVkzzoPq1wY2p8tuo/Jxf
-         FPUqDsTIhOGhqZwXivTEpSjnx3bJKQpAm64p14zk=
-To:     Christoph Hellwig <hch@infradead.org>
-From:   Michael Marod <michael@michaelmarod.com>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Reply-To: Michael Marod <michael@michaelmarod.com>
-Subject: Re: NVME performance regression in Linux 5.x due to lack of block level IO queueing
-Message-ID: <4034AD9F-2A6A-4AE6-B5FC-58FC2BC238F5@michaelmarod.com>
-In-Reply-To: <YkUvgu6VxNORv8M6@infradead.org>
-References: <51E3A396-F68B-496D-AE36-B0457A3B0968@michaelmarod.com> <847D3821-1D92-468C-88C3-34284BA7922E@michaelmarod.com> <C06B8EF0-BF3B-4F14-994F-F80B5102D538@michaelmarod.com> <YkUvgu6VxNORv8M6@infradead.org>
+        Thu, 31 Mar 2022 19:31:15 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B8B154496
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:29:26 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id w25so1011458edi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=avSGMtSz4ymacyl7GdMhd9/3YRX9NuWMZI8WC7CMKV0=;
+        b=RB7qN+1nHYmA5Ki3RYQ5cOwMq+8+ec2V05lMPrIjOE0+2UCFYYM2uKN8wEUMfprHJd
+         ber657p1Z3CwyukZldarn6sF9qZcZhzTh9Y/Nr6kgjdUGxUXyW3xmTRVYJOBuVfSKLTL
+         qWjEu993x0lx2WpR1RPuyTpar5XfsrMV/EV58=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=avSGMtSz4ymacyl7GdMhd9/3YRX9NuWMZI8WC7CMKV0=;
+        b=UsgXDGxfFrdBgfFGKTjws3SgxavrvFc3V1tB+nuZVRuGJ4oUAf9d2Y2QYoldXDO5w2
+         5UqyJels4vvuXWZ6SmYO3x0YNH/JLXqLI6wFZhXCM96+GUpvE4smkmI9JWSqhiCF1cqt
+         vMlG+kHSQlKcKhVKVbp7T7Cogv1krlIjdssFD5fp+uJtxRT3u+DC9a3cejdukBOpc2St
+         bEIF4oh8MVUxKdmoQ/H1GsJcxAu6SSOXyHW7UFN7dxZgzXfDP3xZiSGNGSR9/ruITlhG
+         4vhwwksuGVe/Z/tO38aFkMs7ENgvZs07EcXgTm1ZJFomeNKhMTUgqtjU8gXGb3jUI3Hl
+         ca9A==
+X-Gm-Message-State: AOAM5332ZUZ+3Sr3E2Lrt9CEaAx9Y74aJmY2nxeKyXPqty+nBco+LjDX
+        Y5lQwJgVNJMUpzm6H15XWx/xnDC8zCiA/Gs8bX0=
+X-Google-Smtp-Source: ABdhPJzqzlWhIPtyuMGXAqIOnzNSY2V6NNL2BS6IXYbilLo9JjqfW0DrHWwL803ueMv9syqj66fqTA==
+X-Received: by 2002:aa7:cd81:0:b0:410:d64e:aa31 with SMTP id x1-20020aa7cd81000000b00410d64eaa31mr18763298edv.167.1648769364473;
+        Thu, 31 Mar 2022 16:29:24 -0700 (PDT)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id i11-20020a50fd0b000000b0041936bc0f7esm389398eds.52.2022.03.31.16.29.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 16:29:24 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so2541773wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:29:23 -0700 (PDT)
+X-Received: by 2002:a05:600c:2e02:b0:38c:8390:d8ca with SMTP id
+ o2-20020a05600c2e0200b0038c8390d8camr6452311wmf.15.1648768957118; Thu, 31 Mar
+ 2022 16:22:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com> <1648656179-10347-3-git-send-email-quic_sbillaka@quicinc.com>
+In-Reply-To: <1648656179-10347-3-git-send-email-quic_sbillaka@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 31 Mar 2022 16:22:24 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UtnNTWmMPYPkSJ5qceWspXtZ+hL6UTgSn=rHzd39Y42g@mail.gmail.com>
+Message-ID: <CAD=FV=UtnNTWmMPYPkSJ5qceWspXtZ+hL6UTgSn=rHzd39Y42g@mail.gmail.com>
+Subject: Re: [PATCH v6 2/8] drm/msm/dp: wait for hpd high before aux transaction
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        quic_aravindh@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good call -- Turns out that that cache issue is resolved in 5.17. I tried a=
- number of kernels and narrowed it down to a problem that started after 4.9=
- and before 4.15, and ended some time after 5.13. Namely, 4.9 is good, 4.15=
- is bad, 5.13 is bad, and 5.17 is good. I did not bisect it all the way dow=
-n to the specific versions where the behaviors changed.
+Hi,
 
-Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm =
- %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-nvme1n1       2758.00 2783.00  11032.00  11132.00     0.00     0.00   0.00 =
-  0.00    0.10    0.03   0.36     4.00     4.00   0.18 100.00
-nvme0n1       2830.00 2875.00  11320.00  11500.00     0.00     0.00   0.00 =
-  0.00    0.10    0.03   0.39     4.00     4.00   0.18 100.00
+On Wed, Mar 30, 2022 at 9:03 AM Sankeerth Billakanti
+<quic_sbillaka@quicinc.com> wrote:
+>
+> The source device should ensure the sink is ready before proceeding to
+> read the sink capability or performing any aux transactions. The sink
 
-With regards to the performance between 4.4.0 and 5.17, for a single thread=
-, 4.4.0 still had better performance over 5.17. However, the 5.17 kernel wa=
-s significantly better at multiple threads. In fact, it is so much better I=
- don't believe the results (10x improvement!). Is this to be expected that =
-a single thread would be slower in 5.17, but recent improvements make it po=
-ssible to run many of them in parallel more efficiently?
+s/performing/perform
 
-# /usr/local/bin/fio -name=3Drandrw -filename=3D/opt/foo -direct=3D1 -iodep=
-th=3D1 -thread -rw=3Drandrw -ioengine=3Dpsync -bs=3D4k -size=3D10G -numjobs=
-=3D16 -group_reporting=3D1 -runtime=3D120
+> will indicate its readiness by asserting the HPD line. The controller
+> driver needs to wait for the hpd line to be asserted by the sink before
+> performing any aux transactions.
+>
+> The eDP sink is assumed to be always connected. It needs power from the
+> source and its HPD line will be asserted only after the panel is powered
+> on. The panel power will be enabled from the panel-edp driver and only
+> after that, the hpd line will be asserted.
+>
+> Whereas for DP, the sink can be hotplugged and unplugged anytime. The hpd
+> line gets asserted to indicate the sink is connected and ready. Hence
+> there is no need to wait for the hpd line to be asserted for a DP sink.
+>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> ---
+>
+> Changes in v6:
+>   - Wait for hpd high only for eDP
+>   - Split into smaller patches
+>
+>  drivers/gpu/drm/msm/dp/dp_aux.c     | 13 ++++++++++++-
+>  drivers/gpu/drm/msm/dp/dp_aux.h     |  3 ++-
+>  drivers/gpu/drm/msm/dp/dp_catalog.c | 13 +++++++++++++
+>  drivers/gpu/drm/msm/dp/dp_catalog.h |  1 +
+>  drivers/gpu/drm/msm/dp/dp_display.c |  3 ++-
+>  5 files changed, 30 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
+> index 6d36f63..a217c80 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
+> @@ -36,6 +36,7 @@ struct dp_aux_private {
+>         bool initted;
+>         u32 offset;
+>         u32 segment;
+> +       bool is_edp;
+>
+>         struct drm_dp_aux dp_aux;
+>  };
+> @@ -337,6 +338,14 @@ static ssize_t dp_aux_transfer(struct drm_dp_aux *dp_aux,
+>                 goto exit;
+>         }
+>
+> +       if (aux->is_edp) {
 
-// Ubuntu 16.04 / Linux 4.4.0:
-Run status group 0 (all jobs):
-   READ: bw=3D54.5MiB/s (57.1MB/s), 54.5MiB/s-54.5MiB/s (57.1MB/s-57.1MB/s)=
-, io=3D6537MiB (6854MB), run=3D120002-120002msec
-  WRITE: bw=3D54.5MiB/s (57.2MB/s), 54.5MiB/s-54.5MiB/s (57.2MB/s-57.2MB/s)=
-, io=3D6544MiB (6862MB), run=3D120002-120002msec
+Adding a comment about _why_ you're doing this just for eDP would
+probably be a good idea. Like maybe:
 
-// Ubuntu 18.04 / Linux 5.4.0:
-Run status group 0 (all jobs):
-   READ: bw=3D23.5MiB/s (24.7MB/s), 23.5MiB/s-23.5MiB/s (24.7MB/s-24.7MB/s)=
-, io=3D2821MiB (2959MB), run=3D120002-120002msec
-  WRITE: bw=3D23.5MiB/s (24.6MB/s), 23.5MiB/s-23.5MiB/s (24.6MB/s-24.6MB/s)=
-, io=3D2819MiB (2955MB), run=3D120002-120002msec
+/*
+ * For eDP it's important to give a reasonably long wait here for HPD
+ * to be asserted. This is because the panel driver may have _just_
+ * turned on the panel and then tried to do an AUX transfer. The panel
+ * driver has no way of knowing when the panel is ready, so it's up
+ * to us to wait. For DP we never get into this situation so let's
+ * avoid ever doing the extra long wait for DP.
+ */
 
-// Ubuntu 18.04 / Linux 5.17:
-Run status group 0 (all jobs):
-   READ: bw=3D244MiB/s (255MB/s), 244MiB/s-244MiB/s (255MB/s-255MB/s), io=
-=3D28.6GiB (30.7GB), run=3D120001-120001msec
-  WRITE: bw=3D244MiB/s (256MB/s), 244MiB/s-244MiB/s (256MB/s-256MB/s), io=
-=3D28.6GiB (30.7GB), run=3D120001-120001msec
 
-Thanks,
-Michael
+> @@ -491,7 +500,8 @@ void dp_aux_unregister(struct drm_dp_aux *dp_aux)
+>         drm_dp_aux_unregister(dp_aux);
+>  }
+>
+> -struct drm_dp_aux *dp_aux_get(struct device *dev, struct dp_catalog *catalog)
+> +struct drm_dp_aux *dp_aux_get(struct device *dev, struct dp_catalog *catalog,
+> +                               bool is_edp)
+
+nit: I think your indentation of the 2nd line isn't quite right.
+
+
+> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.h b/drivers/gpu/drm/msm/dp/dp_aux.h
+> index 82afc8d..c99aeec 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_aux.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_aux.h
+> @@ -16,7 +16,8 @@ void dp_aux_init(struct drm_dp_aux *dp_aux);
+>  void dp_aux_deinit(struct drm_dp_aux *dp_aux);
+>  void dp_aux_reconfig(struct drm_dp_aux *dp_aux);
+>
+> -struct drm_dp_aux *dp_aux_get(struct device *dev, struct dp_catalog *catalog);
+> +struct drm_dp_aux *dp_aux_get(struct device *dev, struct dp_catalog *catalog,
+> +                               bool is_edp);
+
+nit: I think your indentation of the 2nd line isn't quite right.
+
+
+Things are pretty much nits, so FWIW:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

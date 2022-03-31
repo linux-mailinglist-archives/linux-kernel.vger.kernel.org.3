@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149694EE3BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C814EE3BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242265AbiCaWFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S242247AbiCaWFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242234AbiCaWFK (ORCPT
+        with ESMTP id S242231AbiCaWFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 31 Mar 2022 18:05:10 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC9F55229
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:03:20 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id g20so863858edw.6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:03:20 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7389D43391
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:03:21 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b15so874794edn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TIkpZXU6eDpzo3cMVd1sBQyW2EHQ/n+w+rqxQP5ETUw=;
-        b=fZMZ8TDchV6kJBU+jOU/iyBddQaCPhq03VYavivWD1Yd3m+uKrqWO4s4YynLAlK+7W
-         YDHgc6RsxdM9VBytXwRuiMiIzljeti2SmDFfnul8Cjb3Jj0NSSs++5Xe33aj/sEAqhW7
-         rdcpwEOj0jlgba9l1B6ej+r88CWwZQVst+9PFXz8lJXOd4J82Yh7zW+rrxH4QQoWkR/k
-         hEAHg6rHmdtgvdOZ2tfeFI13ZepqSs3owaK5mBM+jK3OWtNi7FI4pIPfHwcACiA7C1ew
-         CuDxFKRDmi8dorjguUh7DvCLVWd3zrzZ1DqHDY/NsrbFAqzVOOqLbkf5m93bYmUy0xuB
-         P63A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=g06L8lJBLjLYpTtLuAhJfyTVoQvqpjZZgd66GLledb8=;
+        b=kFo+esT7qNOBc9YXt4W8NoFYL/ltieWci209TPLEWjxH33b72tGFTvanL7qy3G+qtQ
+         St+gfSTzh2TVucNnXZTfMRLGUW+Pqw2RB3DBuQeLhpqmxKmzls3ph1O5V4zuGew+BdZ2
+         xkXv8fkmVhs9zucE66AM5ajmgxafkqRRSUoMWa4bOd48nvtxN1ZSPUFuhUyBCDTqLagA
+         y/GBzIhKPkkExOfPTQdEUbDhRGgE0fOqNpkGsYxRzM+/DEvlvnx168rBT/9YWPsym8f6
+         sg8pFiB+vcDuP62PlshwT8TKfxnsOHZCdweA55g2Ji8cU2CH7tHuTn304Rj1EKnENmmC
+         MeNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TIkpZXU6eDpzo3cMVd1sBQyW2EHQ/n+w+rqxQP5ETUw=;
-        b=oh3YStmRio8Zw2hM5vT6xi8OOgVNHqgwPUogy/X7ezzl/5XEn0FTFu4OHl/utVmr3g
-         0DOeALONZLJyD6nS0GvtJXsEMpmdTsuVAayEwP+wCu47wz0nLMM0Ye028xWpO72z1v1U
-         /WW0NMmaPNFQdiH7x9G7/Hzz7aRyECUwPRYCkZFKjquw0G1XHdbclN154dc1TpM55KnQ
-         gm4Cj55A1Z7e2kQTXrSLoa9aqPA+KmOdQghh3YL0khR6W3JPnN/vJTFzBEtYsJ9akxtf
-         5YtnJz7t86QUD1+f69TSqFP2PyBofKGApVRAuhEQptw1GhJjZ4uc7SptY3O7fasQOjI7
-         LJOw==
-X-Gm-Message-State: AOAM531PDAnFHmkt95OJEdHVd1AWqQ4IWVWyzT/xAO3379JZsu9qafF2
-        SHprTihoQMkEQRD3cw+sxaw=
-X-Google-Smtp-Source: ABdhPJwrocf5wfA3uY8P68HIYW1QfY4wsiYuxLMBN3abwaj3bbyno9YqIO5Vdj98GczqduyWM46BQw==
-X-Received: by 2002:aa7:c64c:0:b0:418:ecf7:afaa with SMTP id z12-20020aa7c64c000000b00418ecf7afaamr18660269edr.38.1648764199045;
-        Thu, 31 Mar 2022 15:03:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=g06L8lJBLjLYpTtLuAhJfyTVoQvqpjZZgd66GLledb8=;
+        b=YG4gw34IlHWZvvZUbQM+183aXHnU+EIoIhpEZmz9JYSFaTidOhUve2Waogm5oglj2Q
+         RsDcvwk6aez8A/JMSc/MUQvbXgRJbo16CStapAbYjPCtvInzE/58LhVVzOMzi2TwNkpy
+         qE3yAVaDAjX4YQjghz6Foz5Tj7DW7hiIbakQUTWGfaaRPDliIQ4i5M1uLDag95KP6ZiF
+         2cO09Wha+m74LzSEZvUWzCqt3IorNT8Ryb2PdrbkhpQxkZVnmzu6d53XO3twYX6EokdA
+         reL+zJ9sSWPBzN7lxI3halDYTXnz8Syc7axjqmft1KO438jTL74617EPWhf/30NE8XC3
+         i7TA==
+X-Gm-Message-State: AOAM531NhWuXk15LaITXVTunVlmgXkaxvy/PxI4CXDvQrzAHUvJOIfzL
+        ql9G5qHc6HDJajafO9ForUc=
+X-Google-Smtp-Source: ABdhPJwCH+OkQyo2XKVNWbEL35S6WpC2JL9Zv8VMjXcUGl4e9aJJrg5dIUbzSnOjO+lbBJjllHNdBQ==
+X-Received: by 2002:a05:6402:1742:b0:419:2707:747a with SMTP id v2-20020a056402174200b004192707747amr18500745edx.238.1648764200063;
+        Thu, 31 Mar 2022 15:03:20 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm247312ejc.95.2022.03.31.15.03.17
+        by smtp.googlemail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm247312ejc.95.2022.03.31.15.03.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:03:18 -0700 (PDT)
+        Thu, 31 Mar 2022 15:03:19 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Alasdair Kergon <agk@redhat.com>
 Cc:     Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
@@ -55,10 +55,12 @@ Cc:     Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH 1/2] dm snapshot: remove usage of list iterator for list_add() after the loop body
-Date:   Fri,  1 Apr 2022 00:02:35 +0200
-Message-Id: <20220331220236.884887-1-jakobkoschel@gmail.com>
+Subject: [PATCH 2/2] dm: replace usage of found with dedicated list iterator variable
+Date:   Fri,  1 Apr 2022 00:02:36 +0200
+Message-Id: <20220331220236.884887-2-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220331220236.884887-1-jakobkoschel@gmail.com>
+References: <20220331220236.884887-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,49 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to point to the found element
-[1].
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Before, the code implicitly used the head when no element was found
-when using &pos->list. Since the new variable is only set if an
-element was found, the list_add() is performed within the loop
-and only done after the loop if it is done on the list head directly.
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
+
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/md/dm-snap.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/md/dm-table.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/md/dm-snap.c b/drivers/md/dm-snap.c
-index 0d336b5ec571..23386a6e67e7 100644
---- a/drivers/md/dm-snap.c
-+++ b/drivers/md/dm-snap.c
-@@ -528,13 +528,17 @@ static int __validate_exception_handover(struct dm_snapshot *snap)
- 
- static void __insert_snapshot(struct origin *o, struct dm_snapshot *s)
+diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+index 03541cfc2317..9cf87954c05a 100644
+--- a/drivers/md/dm-table.c
++++ b/drivers/md/dm-table.c
+@@ -424,17 +424,16 @@ static int dm_set_device_limits(struct dm_target *ti, struct dm_dev *dev,
+  */
+ void dm_put_device(struct dm_target *ti, struct dm_dev *d)
  {
--	struct dm_snapshot *l;
-+	struct dm_snapshot *l = NULL, *iter;
+-	int found = 0;
+ 	struct list_head *devices = &ti->table->devices;
+-	struct dm_dev_internal *dd;
++	struct dm_dev_internal *dd = NULL, *iter;
  
- 	/* Sort the list according to chunk size, largest-first smallest-last */
--	list_for_each_entry(l, &o->snapshots, list)
--		if (l->store->chunk_size < s->store->chunk_size)
-+	list_for_each_entry(iter, &o->snapshots, list)
-+		if (iter->store->chunk_size < s->store->chunk_size) {
-+			l = iter;
-+			list_add_tail(&s->list, &iter->list);
+-	list_for_each_entry(dd, devices, list) {
+-		if (dd->dm_dev == d) {
+-			found = 1;
++	list_for_each_entry(iter, devices, list) {
++		if (iter->dm_dev == d) {
++			dd = iter;
  			break;
--	list_add_tail(&s->list, &l->list);
-+		}
-+	if (!l)
-+		list_add_tail(&s->list, &o->snapshots);
- }
- 
- /*
-
-base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+ 		}
+ 	}
+-	if (!found) {
++	if (!dd) {
+ 		DMWARN("%s: device %s not in table devices list",
+ 		       dm_device_name(ti->table->md), d->name);
+ 		return;
 -- 
 2.25.1
 

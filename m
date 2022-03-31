@@ -2,172 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5D54ED2AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A404ED279
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiCaERg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S229943AbiCaEL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiCaEQp (ORCPT
+        with ESMTP id S229687AbiCaELM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:16:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566A5B0D09;
-        Wed, 30 Mar 2022 21:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648699267; x=1680235267;
+        Thu, 31 Mar 2022 00:11:12 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCDE15D3BB;
+        Wed, 30 Mar 2022 20:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648698897; x=1680234897;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OrABZZQsphOZMKOKeJf4BcfF52I9DRZYnIsBfmD8D2Q=;
-  b=aTX0p1JLPgGoKYLT2dpsiGWsOvFbGbn0C2F4ynn8qBwX7YS7lWUHTRVG
-   8bdIFXfkD9CeXjwBkinBaGXGHi2HYx1sLXZvzqnPCoVMZCbbxUpkVaMz5
-   6xxpcZffsYhSJm0nUxv7VHp3f1XSigE3BHOl6bwFFBVf1q/OTnimIqK6e
-   0Jg8HarnsfKqxS4dhbbdtgjRaKXiEzmj+yV8NKKCE8NN4wqcxo4c39DuR
-   ZKEG3tTAbRUib4giCnJIGeKguFuAB7EvVFBaasBqebAWDwK1KW7jcRJAO
-   MVFk3v7lfX+xyoWqbQmM246I0B2MX0QPAyxOirZJys8F/hKs2d5hMUcAT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="258539615"
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="258539615"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 20:07:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,224,1643702400"; 
-   d="scan'208";a="547118109"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 30 Mar 2022 20:07:51 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZlA6-0000nI-O1;
-        Thu, 31 Mar 2022 03:07:50 +0000
-Date:   Thu, 31 Mar 2022 11:07:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yi Wang <wang.yi59@zte.com.cn>, djwong@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
-        wang.yi59@zte.com.cn, wang.liang82@zte.com.cn,
-        Cheng Lin <cheng.lin130@zte.com.cn>
-Subject: Re: [PATCH] xfs: getattr ignore blocks beyond eof
-Message-ID: <202203311022.9gnVNhj6-lkp@intel.com>
-References: <20220331080256.1874-1-wang.yi59@zte.com.cn>
+  bh=uR3FyW+rWjgDurFic+3oDkLuErztdR2t/QdiDkTnpnA=;
+  b=mDcyG2KaFe8833nV8XoeDrAb8Zjq0854c6ZiyFmRXpcjWYa2AZGLqHph
+   OmGJO4xTHoEDQIQ6e3lqcgl4AVhZvwA4O3+wCprNgCTpcO4rJCoJjsXtW
+   8IYkaoEev9X2FGFPNDE3aXTit7n7tqqSXPAQKgg4DiTYSounUuIh4+ylM
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Mar 2022 20:14:54 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 20:14:46 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 30 Mar 2022 20:14:45 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 30 Mar 2022 20:14:40 -0700
+Date:   Thu, 31 Mar 2022 08:44:36 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
+Subject: Re: [PATCH v11 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <20220331031436.GD29680@hu-pkondeti-hyd.qualcomm.com>
+References: <1647932876-23249-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1647932876-23249-3-git-send-email-quic_c_sanm@quicinc.com>
+ <YjthzwUldu2+31Pm@google.com>
+ <b044f873-c20a-c666-0bd3-8d67c3337b03@quicinc.com>
+ <20220330040318.GB29680@hu-pkondeti-hyd.qualcomm.com>
+ <YkSJbLRL1QbINedE@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220331080256.1874-1-wang.yi59@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YkSJbLRL1QbINedE@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yi,
+Hi Matthias,
 
-Thank you for the patch! Yet something to improve:
+On Wed, Mar 30, 2022 at 09:46:36AM -0700, Matthias Kaehlcke wrote:
+> On Wed, Mar 30, 2022 at 09:33:18AM +0530, Pavan Kondeti wrote:
+> > Hi Sandeep/Matthias,
+> > 
+> > On Thu, Mar 24, 2022 at 10:24:55AM +0530, Sandeep Maheswaram (Temp) wrote:
+> > > 
+> > > On 3/23/2022 11:37 PM, Matthias Kaehlcke wrote:
+> > > >On Tue, Mar 22, 2022 at 12:37:53PM +0530, Sandeep Maheswaram wrote:
+> > > >>During suspend read the status of all port and make sure the PHYs
+> > > >>are in the correct mode based on current speed.
+> > > >>Phy interrupt masks are set based on this mode. Keep track of the mode
+> > > >>of the HS PHY to be able to configure wakeup properly.
+> > > >>
+> > > >>Also check during suspend if any wakeup capable devices are
+> > > >>connected to the controller (directly or through hubs), if there
+> > > >>are none set a flag to indicate that the PHY is powered
+> > > >>down during suspend.
+> > > >>
+> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>---
+> > > >>  drivers/usb/dwc3/core.c | 54 ++++++++++++++++++++++++++++++++++++++++---------
+> > > >>  1 file changed, 45 insertions(+), 9 deletions(-)
+> > > >>
+> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > >>index 1170b80..232a734 100644
+> > > >>--- a/drivers/usb/dwc3/core.c
+> > > >>+++ b/drivers/usb/dwc3/core.c
+> > > >>@@ -32,12 +32,14 @@
+> > > >>  #include <linux/usb/gadget.h>
+> > > >>  #include <linux/usb/of.h>
+> > > >>  #include <linux/usb/otg.h>
+> > > >>+#include <linux/usb/hcd.h>
+> > > >>  #include "core.h"
+> > > >>  #include "gadget.h"
+> > > >>  #include "io.h"
+> > > >>  #include "debug.h"
+> > > >>+#include "../host/xhci.h"
+> > > >>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+> > > >>@@ -1861,10 +1863,36 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
+> > > >>  	return ret;
+> > > >>  }
+> > > >>+static void dwc3_set_phy_speed_mode(struct dwc3 *dwc)
+> > > >>+{
+> > > >>+
+> > > >>+	int i, num_ports;
+> > > >>+	u32 reg;
+> > > >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> > > >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> > > >>+
+> > > >>+	dwc->hs_phy_mode = 0;
+> > > >>+
+> > > >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+> > > >>+
+> > > >>+	num_ports = HCS_MAX_PORTS(reg);
+> > > >>+	for (i = 0; i < num_ports; i++) {
+> > > >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * 0x04);
+> > > >s/0x04/NUM_PORT_REGS/
+> > > Okay. Will update in next version.
+> > > >
+> > > >>+		if (reg & PORT_PE) {
+> > > >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
+> > > >>+			else if (DEV_LOWSPEED(reg))
+> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
+> > > >>+		}
+> > > >>+	}
+> > > >>+	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_mode);
+> > > >>+}
+> > > >>+
+> > > >>  static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  {
+> > > >>  	unsigned long	flags;
+> > > >>  	u32 reg;
+> > > >>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+> > > >>  	switch (dwc->current_dr_role) {
+> > > >>  	case DWC3_GCTL_PRTCAP_DEVICE:
+> > > >>@@ -1877,10 +1905,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		dwc3_core_exit(dwc);
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
+> > > >>-		if (!PMSG_IS_AUTO(msg)) {
+> > > >>-			dwc3_core_exit(dwc);
+> > > >>-			break;
+> > > >>-		}
+> > > >>+		dwc3_set_phy_speed_mode(dwc);
+> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > >>  		if (dwc->dis_u2_susphy_quirk ||
+> > > >>@@ -1896,6 +1921,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > >>+
+> > > >>+		if (!PMSG_IS_AUTO(msg)) {
+> > > >>+			if (device_may_wakeup(&dwc->xhci->dev) &&
+> > > >Does the xHCI actually provide the correct information? I think Brian brought
+> > > >up earlier that xhci-plat always marks the xHCI as wakeup capable, regardless
+> > > >of whether the specific implementation actually supports wakeup. So a dwc3
+> > > >without wakeup support would keep the PHY and the dwc3 active during suspend
+> > > >if wakeup capable devices are connected (unless the admin disabled wakeup),
+> > > >even though wakeup it doesn't support wakeup.
+> > > >
+> > > >Using the wakeup capability/policy of the xHCI to make decisions in the dwc3
+> > > >driver might still be the best we can do with the weird driver split over 3
+> > > >drivers for dwc3. Maybe the dwc3 could pass the actual capability to wake up
+> > > >to the xHCI through a property_entry? Then again, it's actually the 'glue'
+> > > >driver (dwc3-qcom) who knows about the actual wakeup capability, and not the
+> > > >dwc3 core/host ...
+> > > Will check if we can do something regarding this.
+> > 
+> > Can we introduce a device tree param to xhci-plat to specify if the underlying
+> > device is wakeup capable or not. Based on this xhci-plat can call
+> > device_set_wakeup_capable() with correct argument.
+> 
+> This also came to my mind, the existing 'wakeup-source' property could be an
+> option, I share your concern about breaking existing use cases though ...
+> 
+> > One immediate problem is that current code unconditionally calls
+> > device_set_wakeup_capable(&pdev->dev, true). So we may break existing use
+> > cases also.
+> 
+> > Given that xHC assumes that the undelying device is wakeup capable but dwc3
+> > tearing the stack during PM suspend does not make any sense. can we atleast
+> > create a device tree param for dwc3 not to do this?
+> 
+> I'm not sure I fully understand what you have in mind. Are you thinking about
+> a parameter/property to indicate whether wakeup should be enabled for the dwc3?
+> 'wakeup_source' could serve that purpose, it is also used by xhci-mtk.c and
+> mtu3_host.c.
 
-[auto build test ERROR on xfs-linux/for-next]
-[also build test ERROR on v5.17 next-20220330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Yes, I was suggesting we can have a device tree param for dwc3 node to decide
+instead of relying on device_may_wakeup() checks in this patch. 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yi-Wang/xfs-getattr-ignore-blocks-beyond-eof/20220331-082944
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: sparc-randconfig-r005-20220330 (https://download.01.org/0day-ci/archive/20220331/202203311022.9gnVNhj6-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e560188227f8fed285a1bd736e5708de984f0596
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yi-Wang/xfs-getattr-ignore-blocks-beyond-eof/20220331-082944
-        git checkout e560188227f8fed285a1bd736e5708de984f0596
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash fs/xfs/
+Thanks for pointing out wakeup-source property. That sounds perfect here to
+me.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   fs/xfs/xfs_bmap_util.c: In function 'xfs_free_eofblocks':
->> fs/xfs/xfs_bmap_util.c:756:26: error: 'end_fsb' undeclared (first use in this function)
-     756 |         ip->i_last_fsb = end_fsb;
-         |                          ^~~~~~~
-   fs/xfs/xfs_bmap_util.c:756:26: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/end_fsb +756 fs/xfs/xfs_bmap_util.c
-
-   710	
-   711	/*
-   712	 * This is called to free any blocks beyond eof. The caller must hold
-   713	 * IOLOCK_EXCL unless we are in the inode reclaim path and have the only
-   714	 * reference to the inode.
-   715	 */
-   716	int
-   717	xfs_free_eofblocks(
-   718		struct xfs_inode	*ip)
-   719	{
-   720		struct xfs_trans	*tp;
-   721		struct xfs_mount	*mp = ip->i_mount;
-   722		int			error;
-   723	
-   724		/* Attach the dquots to the inode up front. */
-   725		error = xfs_qm_dqattach(ip);
-   726		if (error)
-   727			return error;
-   728	
-   729		/* Wait on dio to ensure i_size has settled. */
-   730		inode_dio_wait(VFS_I(ip));
-   731	
-   732		error = xfs_trans_alloc(mp, &M_RES(mp)->tr_itruncate, 0, 0, 0, &tp);
-   733		if (error) {
-   734			ASSERT(xfs_is_shutdown(mp));
-   735			return error;
-   736		}
-   737	
-   738		xfs_ilock(ip, XFS_ILOCK_EXCL);
-   739		xfs_trans_ijoin(tp, ip, 0);
-   740	
-   741		/*
-   742		 * Do not update the on-disk file size.  If we update the on-disk file
-   743		 * size and then the system crashes before the contents of the file are
-   744		 * flushed to disk then the files may be full of holes (ie NULL files
-   745		 * bug).
-   746		 */
-   747		error = xfs_itruncate_extents_flags(&tp, ip, XFS_DATA_FORK,
-   748					XFS_ISIZE(ip), XFS_BMAPI_NODISCARD);
-   749		if (error)
-   750			goto err_cancel;
-   751	
-   752		error = xfs_trans_commit(tp);
-   753		if (error)
-   754			goto out_unlock;
-   755	
- > 756		ip->i_last_fsb = end_fsb;
-   757		xfs_inode_clear_eofblocks_tag(ip);
-   758		goto out_unlock;
-   759	
-   760	err_cancel:
-   761		/*
-   762		 * If we get an error at this point we simply don't
-   763		 * bother truncating the file.
-   764		 */
-   765		xfs_trans_cancel(tp);
-   766	out_unlock:
-   767		xfs_iunlock(ip, XFS_ILOCK_EXCL);
-   768		return error;
-   769	}
-   770	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Pavan

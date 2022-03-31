@@ -2,132 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15824EE44B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2601B4EE44F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241797AbiCaWnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S242644AbiCaWnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242605AbiCaWnL (ORCPT
+        with ESMTP id S242636AbiCaWnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:43:11 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C02215910
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:41:23 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id s72so905964pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:41:23 -0700 (PDT)
+        Thu, 31 Mar 2022 18:43:50 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD122D645
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:42:02 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id i11so864435plg.12
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wzx4h3J831JsKYMNZGvkQ7llH9BK5twqJrLQ0USMFVk=;
-        b=Xtf7XTzhWR7t6NfeN54sWEY1W81DT0Gvy7A/N6JbR+VzgSteQDCd+Eugmmt6WCB6+P
-         E+XQ0MaZx6Lj2Ys2HNhcglwFGBUo9wqKD0Dvgrsl59FE1qIX2xpGOID432kT3n9a93aV
-         d83ZRxxrHb0yEb09xo36wb0eYO5yAIZO+lZUgddfw0XJUNEso3gcGu7PIWjpiHkMpH8D
-         du/IZ88kpi+3TI64iacCrGrfWOQ6B+xi71Vb73/2RvnVNaWVfYrQmx0FkxVXIIyJCi9Q
-         B79APqR3zMtDg6/y7UaP/fzHKU/waClPQQwtxbc0N28zAK9q39hW2B0SYMexRs6sGEAB
-         XMUw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yv9Wzw03+NukkaSaVZZG3A+e/UbaRsd8qeLIgoxYYGI=;
+        b=aLtSxaTzBBfLrrs6Yqf07PKFqBsmzaPzZr4oCPxsKElf8kiRNH12fyraf+9osQPlA6
+         nWW0TdKR12qeZa5fqH+vC9HP/3odKQ6hI1oAxbayxR9vaf3F1KGyttkH5lX4i6VksxXu
+         0xTvzKY3GYCmzhee9Cl/y5RMFqT1DmqCZRziWA8NF3naBvhnmTQWsjPxf6EmQPRB3k44
+         yPQc8Z2d9rbZTnN7tnNdq3BqES9JSP/Gno/o8Rc1w4eD3F0uNfqj6mCScR/H9U9Xbbes
+         e0CBI6ZpomHJG4s4WiA4H1eBQuW+kw1whOvqnA0jEoZ7imEhea5GKa5Uo6qClnjrplAr
+         vJyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wzx4h3J831JsKYMNZGvkQ7llH9BK5twqJrLQ0USMFVk=;
-        b=7cvKHnzojs5qU7D6zfsJ63vKo3xLR6KKq4h6m6eqKifJTPl05t4HGjwtgu+2UBqdZu
-         nsQsVLcrYbyre0vr3Dq/qeN5PvJy1/ypEbnn5RWXfrsKxafiYyis3F1S/e9wNr2ZsUIg
-         tQJYpo13hXYGY3HhENCI9DYAhonZ3d6U+JdIhawk7K4mXKbw1bCMFBwOD/CgBgE412f1
-         ae41cMeNG3ihuWEbbSUIxF0ZsjWx8GKqRIEKCVdSFmZb/WLejMaVIGRkQpBq9iDEEmpG
-         MOf+xjLNzTseanwQfkhk9QoGrBbs4zjh8trjHUfnNrUZsj/YJ+Iabu9VWZnKxSSzZeLg
-         WmNw==
-X-Gm-Message-State: AOAM532+v69H8t4oWK65Yo1/SmRCjClCJWSpu2KX2EIy+AxxfgoEoXtS
-        LRXNoZpFwqK6452MdOlEPLyyTQ==
-X-Google-Smtp-Source: ABdhPJxL82J4VYKL/M6pm3nZqC+OeNw+8EDVWpdCQZQ602X+PjVzW1QMB5xJ6HUvY3y5dvW5D5bQDg==
-X-Received: by 2002:a63:4005:0:b0:373:9ac7:fec1 with SMTP id n5-20020a634005000000b003739ac7fec1mr12512800pga.12.1648766482539;
-        Thu, 31 Mar 2022 15:41:22 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm508170pfi.170.2022.03.31.15.41.21
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=yv9Wzw03+NukkaSaVZZG3A+e/UbaRsd8qeLIgoxYYGI=;
+        b=VwL4oQqagXi5ThG/2m7HzVbPx2arePDt/eRquy22Fa/E1BQSeg2GZO9q3AkZFELTlK
+         oWlZLm3RHxe2OjEWn2ylDsNkThYmN1Kn4oWDwGhOZ7tgzMaBXryRB46/ugeQmYzdDiKi
+         vfYdEDsPbOUIWcgG2M9os8oeedjAuQg763um00JU76ZPtMZnkTBywmLMcbz16Q9cOw0+
+         wtvC8QsVi2v7Jum4JxpBZ0ox4rLTa/Z5XufCFu9FBVVo8RvK7syTriRpED1lAQ3EM330
+         Yig1Vse8chDCO6Pz4AAgXs++xjxmXYYkzofL2NiXN6OwGy0Wjp1QrTjiZeVtPA6Blukn
+         gSkA==
+X-Gm-Message-State: AOAM531Kp5mkffAF0SBh4ekq3BvkrfWSJ/HfB+k3vQEstXZMwsoUguFa
+        greSlrCOwlvT0Q31r4G/3qfTbw==
+X-Google-Smtp-Source: ABdhPJxnnPsasTSwvvvGeMWLk7XXYDekjDntq0m5UMM6IsliYxKEdKVMexqOiT84oCZZ+WVMGKn/sg==
+X-Received: by 2002:a17:903:18c:b0:154:9ee:cedc with SMTP id z12-20020a170903018c00b0015409eecedcmr44211037plg.123.1648766522196;
+        Thu, 31 Mar 2022 15:42:02 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id u11-20020a056a00158b00b004fb07effe2esm510368pfk.130.2022.03.31.15.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:41:21 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 22:41:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Gao Chao <chao.gao@intel.com>,
-        Robert Hoo <robert.hu@linux.intel.com>
-Subject: Re: [PATCH v7 3/8] KVM: VMX: Detect Tertiary VM-Execution control
- when setup VMCS config
-Message-ID: <YkYuDo3hOmcwA1iF@google.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-4-guang.zeng@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304080725.18135-4-guang.zeng@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 15:42:00 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 15:42:00 -0700 (PDT)
+X-Google-Original-Date: Thu, 31 Mar 2022 15:41:57 PDT (-0700)
+Subject:     Re: [PATCH v8 0/4] Determine the number of DMA channels by 'dma-channels' property
+In-Reply-To: <mhng-c6a04a4f-1e85-49e9-baee-b56b0e78c602@palmer-ri-x1c9>
+CC:     zong.li@sifive.com, robh+dt@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        conor.dooley@microchip.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, green.wan@sifive.com,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     vkoul@kernel.org
+Message-ID: <mhng-5afad1be-9b06-4cd1-95e3-c21605b9086a@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022, Zeng Guang wrote:
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c569dc2b9192..8a5713d49635 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2422,6 +2422,21 @@ static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
->  	return 0;
->  }
->  
-> +static __init int adjust_vmx_controls_64(u64 ctl_min, u64 ctl_opt,
+On Wed, 30 Mar 2022 22:54:47 PDT (-0700), Palmer Dabbelt wrote:
+> On Wed, 30 Mar 2022 22:21:56 PDT (-0700), vkoul@kernel.org wrote:
+>> On 30-03-22, 20:15, Palmer Dabbelt wrote:
+>>> On Mon, 28 Mar 2022 02:52:21 PDT (-0700), zong.li@sifive.com wrote:
+>>> > The PDMA driver currently assumes there are four channels by default, it
+>>> > might cause the error if there is actually less than four channels.
+>>> > Change that by getting number of channel dynamically from device tree.
+>>> > For backwards-compatible, it uses the default value (i.e. 4) when there
+>>> > is no 'dma-channels' information in dts.
+>>> >
+>>> > This patch set contains the dts and dt-bindings change.
+>>> >
+>>> > Changed in v8:
+>>> >  - Rebase on master
+>>> >  - Remove modification of microchip-mpfs.dtsi
+>>> >  - Rename DMA node name of fu540-c000.dtsi
+>>> >
+>>> > Changed in v7:
+>>> >  - Rebase on tag v5.17-rc7
+>>> >  - Modify the subject of patch
+>>> >
+>>> > Changed in v6:
+>>> >  - Rebase on tag v5.17-rc6
+>>> >  - Change sf_pdma.chans[] to a flexible array member.
+>>> >
+>>> > Changed in v5:
+>>> >  - Rebase on tag v5.17-rc3
+>>> >  - Fix typo in dt-bindings and commit message
+>>> >  - Add PDMA versioning scheme for compatible
+>>> >
+>>> > Changed in v4:
+>>> >  - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
+>>> >
+>>> > Changed in v3:
+>>> >  - Fix allocating wrong size
+>>> >  - Return error if 'dma-channels' is larger than maximum
+>>> >
+>>> > Changed in v2:
+>>> >  - Rebase on tag v5.16
+>>> >  - Use 4 as default value of dma-channels
+>>> >
+>>> > Zong Li (4):
+>>> >   dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
+>>> >     modify compatible
+>>> >   riscv: dts: Add dma-channels property and modify compatible
+>>> >   riscv: dts: rename the node name of dma
+>>> >   dmaengine: sf-pdma: Get number of channel by device tree
+>>> >
+>>> >  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
+>>> >  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
+>>> >  drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
+>>> >  drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
+>>> >  4 files changed, 38 insertions(+), 18 deletions(-)
+>>>
+>>> Thanks, these are on for-next.
+>>
+>> The drivers/dma/ should go thru dmaengine tree. During merge window I
+>> dont apply the patches
+>
+> OK, I can drop this from my tree if you'd like?
 
-I slightly prefer controls64 over controls_64.  As usual, KVM is inconsistent as
-a whole, but vmcs_read/write64 omit the underscore, so we can at least be somewhat
-consistent within VMX.
-
-> +					 u32 msr, u64 *result)
-> +{
-> +	u64 allowed1;
-> +
-> +	rdmsrl(msr, allowed1);
-> +
-> +	/* Ensure minimum (required) set of control bits are supported. */
-> +	if (ctl_min & ~allowed1)
-
-Eh, just drop @ctl_min.  Practically speaking, there is zero chance tertiary
-controls or any other control of this nature will ever be mandatory.  Secondary
-controls would fall into the same boat, but specifying min=0 allows it to share
-helpers, so it's the lesser of evils.
-
-With the error return gone, this can be
-
-  static __init u64 adjust_vmx_controls64(u64 ctl_opt, u32 msr)
-  {
-	u64 allowed;
-
-	rdmsrl(msr, allowed);
-
-	return ctl_opt & allowed;
-  }
-
-Alternatively, we could take the control-to-modify directly and have no return,
-but I like having the "u64 opt = ..." in the caller.
+Just to follow up from IRC: I'm dropping these from my tree.

@@ -2,213 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0FF4ED0B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7B34ED0B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 02:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352023AbiCaAMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 20:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S1352033AbiCaAMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 20:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343702AbiCaAML (ORCPT
+        with ESMTP id S1343702AbiCaAMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:12:11 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2043.outbound.protection.outlook.com [40.107.102.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151A9B0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 17:10:24 -0700 (PDT)
+        Wed, 30 Mar 2022 20:12:30 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8341C13B;
+        Wed, 30 Mar 2022 17:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648685444; x=1680221444;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=1gCspvQbklnz6NRKyvp6wQHk8AtQMSKNOYlMnemrmJc=;
+  b=RQjgL+Ea/w+u8k1C8mIfqLGH86kTcQCFL70Gh9Nt5F+HJXjqsI1VjWOn
+   TbchDz630jzJqehhzA7FN4hRMjqGMNO08dfTBLd7pjWBHX51gODhI1FcJ
+   0/sf5mnxQxZhOGdKi6Nz8A5Fp0blIGjwAG1Az5weMLDv93i6YgREuys1M
+   2W+BdpKJeGk2anjWm9kw8bVbRq/m2YhwGLJeUZryMtbwR6LffKttlbsSR
+   I8u865EqMg6e6M8GFD9CqTaQY9VQJ8PyfN64KZCK/VFtieMhu2YTGJHmf
+   IH0QIbPUHlKTfD9XdBFUn/gB81iHirbpnOFtmdXrFu2VJdLpSk9LJS00k
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322857223"
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="322857223"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 17:10:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
+   d="scan'208";a="639913072"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2022 17:10:43 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 30 Mar 2022 17:10:42 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 30 Mar 2022 17:10:42 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Wed, 30 Mar 2022 17:10:42 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q0SxP790mFjwDGE0qk1HRSG2vuYZm5mhqpQRyjQ0RLXgP0mWZuVZtevrvshR6RQAiUsWVtBl6hkCV3VN+Gqlcg5SvJq8x5Kk6NjkHVDBVLK/d463UVe3ap3cxNSAj+52LPl3rqlM9uUTLeW5+LkwyxChClGvtDhd94TgSo8GquI49xxMtr0fIETojx5PYcbQaBBF8ceu/14lII3ZIS9ZyqX3EGsEkktVOfSjomVjQ5OWlz1dM6jxvcXrEuZaeV+CR19RAqqxzRJ3Ea2F9EhtCZrj6g1r5dZXVTW09KzNtFmPBohEIso41WAeW0Tcrym1ns1YnQel9Q8QnZxC5t8jpw==
+ b=oc82McB6141MS856Q2h1Rbw52EeCEmBsBkI81O95ynN/n9l2ulF8ffwSqEZKX2ZRX8cZpNENcz9O5FgMWqrLppWa27mUibNMPgjU6plvNxkpHzJxgrYUrBGzvslfBs9Qn9+hcc7+VxA5nORHRnDyLJyghpgHnnAWIxMU3UTMxxmjJwIoyVieY4EjmOtENZEXVYZhYcHjxX0jGVb9R28+PqvnyTSqHhBeXSIsb5JpYe317qaI2KGcxImurthk0WQ7aYBnWZK/+ywV1M1OcK6XDoRAd3wMdWqdyeYqV0s1yDFtuEa9PoazuMZLwkw6dhsRAYUpf4Pe6VO5w4Bvh82yWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lMEJ7Aw8bsnE57clCzDuBJonrMViRbIBixrzUmoYQeY=;
- b=EmRu/uk4+AvnOeQIUaS7o0s50LxuqClh4Vq6rUhXhe+1hE70RWtmRKGwVBpbRXh+3SsRFiW8izLusYfpu0rfavXlRZU4v6BTiEEYBA6v8mnyJnaK0J2KIht8sqigUQH/8YlcKvSCURe/wBbwxvcq7xjlrOc5fCFGqTZwOB+On7RFTx/4/7qQFDPfXi+GZ2whid1uJ7/pT9GDHUJrzpX1yobeCGX4684dL1OaeoVo7etGXvSQjrdcO6nQ/cHk1D2GH4UaKRP2754pEu7GjLOkKOCi/V9yz+3RSbD0NGryUn5xRuWRWpADYsnrDfcRRSMYLc2+XERdDRp0WyTmKLaN0g==
+ bh=WdmJ1FLqZEf0/nby/5T+6WKId7HIyrXfxo9PEJR8RhI=;
+ b=DYNBwbWQSJQM3tcteoSb4bbZBulY8z/EycA9ks1FcUegYSEF56cXg8Tgh/yNns/LZL71rxHzya2/r86xu5yRJp3En6JCe1OJviZa9Ih4M+uornUTM2LzHB39l8SVpON/BNL4bDCrOD5YUneA/a9dTIR6eLTsICGRszGn2YHzLX3PXTqyL5UhshbWalSw2V1INrhURlddzjKVE8XnkjUYzatHKBHCVdr22h4ugcZFpIVYFHgVdHF33m01fdshgtQmYdFulvTWrw7DqGmItPOAPhdWRiEWv6EA+9gg/2uUVppsXoWoNXQqRygNh9onpdW/xi5uRbw4INZXkf9W/VjSEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lMEJ7Aw8bsnE57clCzDuBJonrMViRbIBixrzUmoYQeY=;
- b=GExYPzIyFjj2f889EOXocYuCZjFrJTfzrTuglJ+WOsvF0EQ5WQhp6TMowhfRm5ieTJMmbgBjMYwqTizHi3KdYAPmBR2nQkAKkVAQ4vZtZEqn94n12HJaY+26VIuM7UxPnycuXSOAQ6R0S2JnOWAr2afhAojJWa/fJtyYc4XqZVsa76jiruEhqzH6YmbTsbgqY+o6HeqUNrw3FZAmIMZbGMisHeojNoD+XXzOUa9efSe2m9Frvin6aD53MtWw/uO861eebHeSytgfMwJJ0ntoGSDqlbvpC89M7leyFo4Vxq/ErR8X9RXcSKntyen32pa0CKoCw8YI30L2VFvb5I/r3g==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by SA0PR12MB4350.namprd12.prod.outlook.com (2603:10b6:806:92::15) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by MN2PR11MB4318.namprd11.prod.outlook.com (2603:10b6:208:17a::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.20; Thu, 31 Mar
- 2022 00:10:22 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::69f1:dff6:826b:7d9c]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::69f1:dff6:826b:7d9c%5]) with mapi id 15.20.5102.023; Thu, 31 Mar 2022
- 00:10:22 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: page_alloc: validate buddy before check its migratetype.
-Date:   Wed, 30 Mar 2022 20:10:20 -0400
-X-Mailer: MailMate (1.14r5870)
-Message-ID: <7586AEB3-FE81-4D51-ADAE-737E74625444@nvidia.com>
-In-Reply-To: <63234E12-AF64-4D85-A2BF-8A4EF5359F91@nvidia.com>
-References: <20220330221238.396357-1-zi.yan@sent.com>
- <CAHk-=whZ7d8Z4rv5oV9+FLEEk_1A1X=JsJaeAmFZzhDxLqDLFg@mail.gmail.com>
- <63234E12-AF64-4D85-A2BF-8A4EF5359F91@nvidia.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1P221CA0026.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::27) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Thu, 31 Mar
+ 2022 00:10:41 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::918d:6022:8ee6:3e36]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::918d:6022:8ee6:3e36%2]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
+ 00:10:41 +0000
+Message-ID: <3aa93449-6951-8085-f6a1-6739b6d515d9@intel.com>
+Date:   Wed, 30 Mar 2022 17:10:36 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v2] selftests/sgx: Use rip relative addressing for
+ encl_stack
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, Shuah Khan <shuah@kernel.org>
+CC:     <linux-sgx@vger.kernel.org>, <nathaniel@profian.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220330222834.139769-1-jarkko@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20220330222834.139769-1-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0210.namprd03.prod.outlook.com
+ (2603:10b6:303:b8::35) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eb01ef21-9862-4521-5a49-08da12aad8e2
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4350:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB435076B0330A652500C9217AC2E19@SA0PR12MB4350.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 2025274b-d56a-447c-8776-08da12aae414
+X-MS-TrafficTypeDiagnostic: MN2PR11MB4318:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR11MB4318549B99E899D4983ED006F8E19@MN2PR11MB4318.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QttlME4BHFoN5dlTBzM7ocm0LMzKWJdWu7XW5fA8YUiATtEJzrKNAg4YB0kBC8HtSt4ZnTkwzq0kiWu0aGHh11tqTjFjrbhmUlxWZJHa0aq5BzMG1AkWGK5DbbH3ehiVCJD1lY/ftWvNyCTlXueuiPH5whAH2xnEk/BzRvtCyT3RaP+oz+oSDpfCkqDd+eqVDbGJMseJ/yEa9DnsrCHsyW0b59H0K7U7u/1PxnxCOO9n3sHF6lXTco988YDBVDKMKXUPB3SQc/ae9hZ+/u5/sqOXuX4qjj4b3lXOVWq760wUi3cuOD8qZgjajF7NukhNo7YGvAVy/Z/Nn2XjorYwJibz6clPZKCj4x1wGkez2WKVqJPo4LbChdpkaVJTGQMWgCwztTlr84rjRstF94QjrBrbmxaMmAWFEKmnuQqx9r2KG7VbcxDrpoy0SJb1mlZJn9YpdpC0WiHPfztZAayMXXA9ejkvOScAy4UJrGT3cK24z4yPIT5/rQe2LvRHri+TzO/LhpF02M5aZcKMoZDGq0a37kEZbbO+XkgADRsdUOe6/K2KIs3X/xec2oPF8BfGXp4IU3BL4vMQPvuVMS9CjTtO1jdkWNmWkUuayoI+qhbD2S/QJi7FY/JWa6mmy+DgDbop44J6RCQU+AIsml+7T2iPfSCHDmZG2MG1KMCJxwP+OFiQzKRtU50b5zGTxe4VoW79iHlC33STqtAi5BlTFcfaT50w04gSrcBoyadoYCI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(5660300002)(2616005)(316002)(2906002)(6916009)(38100700002)(36756003)(86362001)(6506007)(508600001)(6512007)(66556008)(66946007)(8676002)(4326008)(6486002)(66476007)(186003)(7416002)(83380400001)(235185007)(21480400003)(8936002)(26005)(54906003)(33656002)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 92cBa9YWgcOxw+JIokJV8Z1JbGrI2e8MTwe1T7ymNJVd6MFzvoi7Ii5iorcqg/9ZTr77H11c2n0hYmxOU84tcc+GpTQBIs56fPJHA84smk7oR2PHwUS3sNEM/4r3BtqnNn1oyYh/zy2N5M1coIn1xa/xI1ixFwUluYfJKDFHrhwNIaed0qluV1iv96tUsbvuC+vd4rQdjsJp8sDORAvLauK9DzTPJh9I0pJF9Lug4DrZI3t+UW9kcbgENjRd7GlBZIdpNXCrpOZOyd1sC1wrcKdHu/v3U6qYwUFaO1ofxADV0fvr4i+rwytauczk+2L/wO0/F3Ojv+J+sDtBOHwYH0drIwp6s6/x2f9tTRy4XoptG+heZj38U3+6sBI/Qkx85YXP3YDyKqzT1mPdBrzqBYOPlGUojInpmTEzgyEQewJtSqcQk2wqt4PSyY/DvvYoSrn2w13UohpuxufQcwWF6oegK8XgRsH5vxaTm4Sp5NIFitRxYK+zMxjxtwJWd18vVbkZhMLxMieUmN0QWR87kr0INP2XN2Sqnk8e9pnNccJBdtXzTFtESoescxCPwg3KTAtLQNWLC4IlGNVLjCVhXrb4QFIZDYh/ydP7xGAZaMz90wC/nuu68sOVxtAiQLvjpt2s9GCDFa4W2dSOsZ4u+lgylVLEAuFydZrcO9zCeKcTqFQmcmbTAEf2Sg1D61i73jv8GlWTPX1emf7JxCovHsenIT+fd0R34dbYneHeBti6zoTNo4eYhq7EC8tGL++b
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(8936002)(110136005)(44832011)(54906003)(31696002)(5660300002)(66476007)(8676002)(66946007)(4326008)(66556008)(82960400001)(316002)(86362001)(2616005)(83380400001)(26005)(186003)(6666004)(2906002)(6486002)(53546011)(6506007)(508600001)(6512007)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lQRCb1ZqOhfLnjuDUJ+pPwT32VEjbjD3bQvIgeP0LSMbvni1dnauac1wsRwp?=
- =?us-ascii?Q?j4m1VMPUS8KReSMBPFGzb1CtSw8L3gfstulhMbjkjkRHWlf0t/BSC/N3C/YD?=
- =?us-ascii?Q?KOcTiznMRJnJjoSkD1LTNFomrzD+0JwLAkI5KB4BSV94qPJoodyQzTWRvkH+?=
- =?us-ascii?Q?HoVToXaRVLk5RncqiNPHkAPmUjWUb05ZoCEMm4vN7eeuLAQGR4GJufVJhmDU?=
- =?us-ascii?Q?K7CShH/v2vqUGunwOH53U7l2yipp1Uo9Qt6LdAyHteOCrdfE5amDng6BA9Vf?=
- =?us-ascii?Q?zG7vtkALSHA6O6ZKCAORXRQgS4/u882cLHnkb7uTqpijJGT1Bsgv7NKUXxl7?=
- =?us-ascii?Q?8RYM7SJtJexKW9yM/HCK6Q7QzJWdqGMhrPLQvGxf/INx65lRTAKx20zrhRZi?=
- =?us-ascii?Q?kxvzoW3hqH2QyWwy/4hXnKBQb/jRMiMP+7N545F6mVIieY/NEpKRmRl/k8C5?=
- =?us-ascii?Q?FDwGTNoGFV2S8sbMrYAHQqeJrJX8ZNACr/KhjcoP1P1bAJw0NX1kPKl+6MJB?=
- =?us-ascii?Q?FfkQzxndoQy10OTalzxzBOeqyoJWW1rYq+0h9ZafgSKNzYGmUW+2pfhrKJec?=
- =?us-ascii?Q?th1Tubfk0/fIVJMHpwxCPfqg4GHiBG/qZFAr5MvXqO92v6+Uys23f58hcC9E?=
- =?us-ascii?Q?WPOGr3Ew8mPuwRyWaAiX8rx8D2+aLJdn5d4kbhWtRVaa/f81AR8N3KEOD3qi?=
- =?us-ascii?Q?NyqHj9b+tTAi+QYKBs1+NT7FEsPosnWsUL1MHcRZMwwXJebXxuFxzWS23S5m?=
- =?us-ascii?Q?c9Vd11g8mMzYK8AgduzeuEZWMcmJp52eVjVQYUcO2UCJ+XQvG+RK8cw/s9ub?=
- =?us-ascii?Q?+SSc8739su/ArbZdunMAiDNML6nCRpiuu947agBlz9X7fl9oHYsRQELS+yjN?=
- =?us-ascii?Q?0Vozyswq7l8DCZ3DeClRJbGPzqL7QwYw55JyiCbBj4oH8nQ3qgHrtfHIBGRX?=
- =?us-ascii?Q?vZzcc9X95ZE208ahBsQVrvqCfkhAv7S2sTNXzDEjrZXjWTZFSIZjWWBAEDwM?=
- =?us-ascii?Q?+kfgJ0qIZHr+zUmoVD67bAtZMu9Pk/SZtlDKqbPUU9rsSxTpQPkkNQ3jB8wB?=
- =?us-ascii?Q?UGSzN1IjSmJ3KDOHpN3n7Oku2tIxCw9zK0Lip3vVK/a8Tc0ikADyURcDW4pT?=
- =?us-ascii?Q?xpjoBQZVQY8Ji15T+vlRwZ/SAg8QJjKkKATlOH1c03fUhd6wci9kjENulsEF?=
- =?us-ascii?Q?yXBRQmk9bsH3XXxICuCPrFRriO7VZrx2Bb5znhvr28SPVfOVQ0SzuKeXYfmz?=
- =?us-ascii?Q?/ee3hEbVYgFQa5sUpTDAmGevRuKxsc5t6Aj7YJcQ/IK6yo//m+/Voy0N8Fkb?=
- =?us-ascii?Q?d3xDYOSKb5+N6zwvdOzPkUm5yg27wTmy3Pb0tIpJElMJvAOjq4Z22wYSUqsr?=
- =?us-ascii?Q?eYjYFk/NQrGaMORx89SvmfzvnyoWwUS/Q3oW/MtCMF0JBH2KA74dObhV6Ab0?=
- =?us-ascii?Q?BGQDHSxAZfPdekfmEqW+fA7+bu5jZ3lcaRNibx1Cx9Xpnlg90AEB8c+ophZA?=
- =?us-ascii?Q?xcpjQ7jzAAvFhyfH4Zz8iY4+EQpczwa7oSOcxATOtvjuDJntcRavFF2n+Nai?=
- =?us-ascii?Q?vXyryNQeAAQC035b3UOTlA0VMDmon2HYpIzhlZklSNWs9LMXQEhSstChDVMZ?=
- =?us-ascii?Q?AthZaOcCh1M6aXCYuCDFMNilq/B4lL2W8YJiLcvInPao4jwhlGK54Kt2x3jS?=
- =?us-ascii?Q?7o33iH6Em1WCKmXFTn5f1IZyqlITH37kja3BY8BYhZdXgmh4GYSs54O6UfiN?=
- =?us-ascii?Q?mAc2TIHcBw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb01ef21-9862-4521-5a49-08da12aad8e2
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZWpsRGQ0SVRBbldxRk1lSkNpYnZEcVNRTlQ0UlhFa3REek92ODRuOUNoN0xZ?=
+ =?utf-8?B?dWJoUmUxMitURno5aFJ2YTZjNW5uelozQjd4TmE2dDByMER0ZDZFSGpuWlVm?=
+ =?utf-8?B?MEdWT2UyWGZ0WFBuVE5UV1JRTmlsQUlxZmpGNTBQcHhiaUE3LzU0UEYxd0Vy?=
+ =?utf-8?B?MkdSbEdGQWRubXhDYlJNbjNTanVMcFhMQ0tSUzhsMmJBejhMZkY3TlpneUJM?=
+ =?utf-8?B?eU9JTFR2cDdSUlZCWkRWNjUxVTNtTnFrUzB4dm54OHZIZnY4QWsyd2pSYjhB?=
+ =?utf-8?B?M0ZackNYakVjeEtod25sbDB3TGJSdEJubG5wV0NnU29XbHZ4ckJ4VjRSN0cz?=
+ =?utf-8?B?YTRNUG0vMzRvT00yOElxN01tQzduM1BmWVhFRHlVbm0wQ3RkU2NyaDN1T3hG?=
+ =?utf-8?B?RFczbWNlWDU0N25rbGRoaFVHTTZnNDVoT0JDWVFyaHM1OWp0STZTcUlPaGRC?=
+ =?utf-8?B?bVB0NnR6Z2JlZHhhR3BKRnlkRlN2YldXeWxSMnpma3BFN2E5NU91M0Z3MHBV?=
+ =?utf-8?B?R0xHbExIQ1BRMlpES3JndnRRcDFrSkllald5M3BhM2tFZzJaLzFIa2Fwcy9U?=
+ =?utf-8?B?L05VMGxYZmdNVHYvcnJpL0ZnbzllYWNNejNQZ3I0VklISU8vWGpNYmkzemFI?=
+ =?utf-8?B?MGh6QW9TY2ZDNHFiLzFmZEpTQXR4T01WYnQvMkNoaThIUUR1K0FseEJuaVp2?=
+ =?utf-8?B?bk1PeUdPaUVaMEpvcjFvZWxoRHErYTN6VHhUT2FoajEyd1UxRGloMzRXTDFF?=
+ =?utf-8?B?Vk41VGFROGhOejVDS3lkT3FBeEpGSWg0bGpHb0pnODBRVDRoMWVtNmRjdTZI?=
+ =?utf-8?B?RGFSWWpSMStaVElPVkpnTFdLZmhRMU1FVEJQeCt2Z2dBeEVNTS9ZY3JxY2h2?=
+ =?utf-8?B?MEdHTUR3YTFUcU8vMlFpQWRFZzk0TEl0UjJINkZjc01CSG9rUDM4c29UNlN2?=
+ =?utf-8?B?OVNYcFVhZ25QU3BnUkluQXNKU2lidklDaU1MV0pEdVcrTHJqb2xST013Yjhz?=
+ =?utf-8?B?RVRoMktRYjRhVDQ3L1J3dE1MY200SFB6dCtVRGZhY3l4TEtrSGVoYUgwTTVY?=
+ =?utf-8?B?dkQrZWJuTUJ6YXZ0V2pNNGxjQ0w1QWNTQWw5SEVpc0dXRzQ1Z3VhbFdlbmJ5?=
+ =?utf-8?B?QktvQWZZcTAxSzQ3czlBUFp4ZC9JUVFBWHBKcC9TZFphUGxGVWNnSTE0NktL?=
+ =?utf-8?B?L0F0MkM5N2xqdFJlRStNY1lWeEtkWjVsYWtheURTUHdUbFNmVlJqNVdBYUV3?=
+ =?utf-8?B?UHEwUkRrN3BjSjdrMVdOd1NIZVY3b212LzVhWWNxdTVzdnBPMDgzdFhOZFcr?=
+ =?utf-8?B?OENQOUJOWTdKWFoxRHJxRmwxOXl0eFhJajRQQ3RmTFhKVjVTK1FZdXdGQ2px?=
+ =?utf-8?B?cDhxQjZZaGJEcEEzalEyOWNjT3RISWc4ZllsZlg2bzhOVTdsNEc3dXhVT25n?=
+ =?utf-8?B?Ty9DUFhGNGpENzZFN29HRDNMNGFmR1drcmZpZE5CZGV5anJFc0xKaWF5Qytv?=
+ =?utf-8?B?Nk1uY21IRzhYd2FpQUpVUDlSSHhPS3MxUkg1ZzM5V1RWNjFhVE5oNllkRWlC?=
+ =?utf-8?B?YWhRb25ZaWk5UmVQZUtFc3NLWnJ6eFZTV2lrOFp5ZWlVSzdpcXF4a1NSbmMr?=
+ =?utf-8?B?a0RtUTBYbS8vZmVBVk9SYW1SWUxNZWp4WllLYUV6bzdvSEM4dkQvc3pzQ3h6?=
+ =?utf-8?B?bHpNTjBZVm80emd4VFZXRWFYR1lqTlp2UXFhUUkwVE1BSkt1aWRiaGx2ZnZL?=
+ =?utf-8?B?UVFRbzAzNXlaRWhxNnltRFNuMXFVMkxyRGpUS3g3aEo4VFlvMG5vcG5uVHlK?=
+ =?utf-8?B?TjVXSWl1cElDK3hSQjRQQURHOHgzYXRVb3RERXBGWW5sbzFrRHV0b2hTQi9T?=
+ =?utf-8?B?Q0pnZStLa0YzRTdRSlRMU092bWFmR25zdXJmWXIyMTk2VlZVam96V0ZleVVQ?=
+ =?utf-8?B?dmsxUGNRaGJjcE95clJ2bzlvSTd2Tll0Sk9QakFpSXIrZ1hRcFFjZHFiR3VZ?=
+ =?utf-8?B?QjNlbWxoeU82YmdPR1czd2oxV3VwVWtwUUJBY3I5dFFrTm1URTByS2VDbUdT?=
+ =?utf-8?B?ck0weFd3bDMzRFFNeFljdVNOdkNQUUxwZG96emVhRzdHZENCVFhSOWVJVzhV?=
+ =?utf-8?B?OEx5ODR6T09Qa1FPZXZJUm1RMDlWYkl6Z3crL3BLWnZyeXFUZHdLNmMvcjho?=
+ =?utf-8?B?OGRSSWhGMEI0UlBuaVJRQmpJMy9ubXZ2U0R6c09FcE50Q2VsTmJMeHNrWmRl?=
+ =?utf-8?B?YmhjbWwycmJwM1A5d3JBUWhWalA4TjVOajJCWkl5UjJxRDdZUk5KL0dxNFB4?=
+ =?utf-8?B?MUVWbEFtem52SGpnaE5SWkFPdmlGTjF0enBGR1k3YURFTDU0TFNGNXN5dk5E?=
+ =?utf-8?Q?f0ueuy0FbfLu7muM=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2025274b-d56a-447c-8776-08da12aae414
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 00:10:22.3643
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 00:10:40.9761
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cXOFE3a7cXYoZDeU4j0fo5RlXUM7nwrabHdQPZjH1tNmUx3jeKh4Oi3KF/gVTvNF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4350
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: m/WklIDdE8DPOy1LUKt/zV4GR3Px67FOXdMUzF5rYldiCVhIwPp1Yrpd9GscHiXLjtEBB9tXv7Q6B7q/OkxKlywHjovsuRHFzvwyVK/DNqY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4318
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Jarkko,
 
-On 30 Mar 2022, at 19:48, Zi Yan wrote:
+On 3/30/2022 3:28 PM, Jarkko Sakkinen wrote:
+> Simplify the test_encl_bootstrap.S flow by using RIP-relative addressing.
 
-> On 30 Mar 2022, at 19:03, Linus Torvalds wrote:
->
->> On Wed, Mar 30, 2022 at 3:12 PM Zi Yan <zi.yan@sent.com> wrote:
->>>
->>> Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable =
-pageblocks with others")
->>
->> Oh, btw - should this perhaps be backported further back than that
->> alleged "fixes" commit?
->>
->> It does look like maybe the problem potentially existed before too,
->> and was just much harder to trigger.
->>
->> That said, google doesn't find any other reports that look like
->> Steven's oops, so maybe it really never happened and backporting isn't=
+It is not clear to me how this is simpler. At this point there is no
+functional change (except for what appears to be an unintended bug - more below).
+At this time the change seems more code utilizing subtle compiler features
+to accomplish the same.
 
->> called for.
->>
->> Or possibly my google-fu is just bad.
->>
->
-> There might not be any issue with the original code because this bug
-> could only be triggered when CONFIG_FLATMEM and CONFIG_MEMORY_ISOLATION=
+Could you please share more about your plans following this change? I need
+to understand this better since it is also an area changed by the SGX2 testing
+code.
 
-> are both set, which never happens, since CONFIG_MEMORY_ISOLATION
-> depends on CONFIG_SPARSEMEM.
->
-> By checking Steven's boot log, it should be PFN 0x21ee00 that triggers
-> the bug, since the physical memory range ends at PFN 0x21edff.
-> PFN 0x21ee00 is 2MB aligned instead of MAX_ORDER-1 (4MB) aligned.
-> The original code assumes all physical memory ranges are at least
-> MAX_ORDER-1 aligned, which is true when CONFIG_SPARSEMEM is set
-> (CONFIG_MEMORY_ISOLATION depends on it), since CONFIG_SPARSEMEM
-> allocates pageblock_flags array (the NULL-deferenced bitmap points
-> to) at section size granularity (128MB > 4MB). However, CONFIG_FLATMEM
-> does not do this. It allocates pageblock_flags array at the exact size
-> of the physical memory. So checking 0x21ee00 will not cause NULL
-> dereferencing when CONFIG_MEMORY_ISOLATION is set and the original
-> if statement can be true.
->
-> Now I am wondering if the page_is_buddy() check is correct for
-> CONFIG_FLATMEM. Is mem_map allocation aligned to MAX_ORDER-1
-> or just the present physical memory range? Is PageBuddy(0x21ee00)
-> accessing some random memory location?
+> The compiler automatically puts relative addresses for RIP index addresses.
 
-OK. mem_map seems to be MAX_ORDER-1 aligned, so there is no
-problem with PageBuddy(0x21ee00).
+I was not aware of this. A comment would be helpful to understand the implementation.
 
+> 
+> In order to get a clean and tweakless solution, define separate entry point
+> for each TCS.
+> 
+> Cc: Reinette Chatre <reinette.chatre@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v2:
+> * Based on Reinette's example, make proper structuring with separate
+>   entry points for each TCS.
+> ---
+>  .../selftests/sgx/test_encl_bootstrap.S       | 30 +++++++++++--------
+>  1 file changed, 18 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> index 82fb0dfcbd23..cc2353f38bcc 100644
+> --- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> +++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> @@ -10,12 +10,13 @@
+>  	.section ".tcs", "aw"
+>  	.balign	4096
+>  
+> +encl_tcs1:
+>  	.fill	1, 8, 0			# STATE (set by CPU)
+>  	.fill	1, 8, 0			# FLAGS
+>  	.quad	encl_ssa_tcs1		# OSSA
+>  	.fill	1, 4, 0			# CSSA (set by CPU)
+>  	.fill	1, 4, 1			# NSSA
+> -	.quad	encl_entry		# OENTRY
+> +	.quad	encl_entry1		# OENTRY
+>  	.fill	1, 8, 0			# AEP (set by EENTER and ERESUME)
+>  	.fill	1, 8, 0			# OFSBASE
+>  	.fill	1, 8, 0			# OGSBASE
+> @@ -23,13 +24,13 @@
+>  	.fill	1, 4, 0xFFFFFFFF	# GSLIMIT
+>  	.fill	4024, 1, 0		# Reserved
+>  
+> -	# TCS2
+> +encl_tcs2:
+>  	.fill	1, 8, 0			# STATE (set by CPU)
+>  	.fill	1, 8, 0			# FLAGS
+>  	.quad	encl_ssa_tcs2		# OSSA
+>  	.fill	1, 4, 0			# CSSA (set by CPU)
+>  	.fill	1, 4, 1			# NSSA
+> -	.quad	encl_entry		# OENTRY
+> +	.quad	encl_entry2		# OENTRY
+>  	.fill	1, 8, 0			# AEP (set by EENTER and ERESUME)
+>  	.fill	1, 8, 0			# OFSBASE
+>  	.fill	1, 8, 0			# OGSBASE
+> @@ -39,15 +40,19 @@
+>  
+>  	.text
+>  
+> -encl_entry:
+> -	# RBX contains the base address for TCS, which is the first address
+> -	# inside the enclave for TCS #1 and one page into the enclave for
+> -	# TCS #2. By adding the value of encl_stack to it, we get
+> -	# the absolute address for the stack.
+> -	lea	(encl_stack)(%rbx), %rax
+> +encl_entry1:
+> +	lea	(encl_stack1)(%rip), %rax
+>  	xchg	%rsp, %rax
+>  	push	%rax
+> +	jmp	encl_continue
+>  
+> +encl_entry2:
+> +	lea	(encl_stack2)(%rip), %rax
+> +	xchg	%rsp, %rax
+> +	push	%rax
+> +	jmp	encl_continue
+> +
 
+The code duplication (xchg and push) is not needed.
 
---
-Best Regards,
-Yan, Zi
+> +encl_continue:
+>  	push	%rcx # push the address after EENTER
+>  	push	%rbx # push the enclave base address
+>  
+> @@ -84,13 +89,14 @@ encl_entry:
+>  
+>  encl_ssa_tcs1:
+>  	.space 4096
+> +
+>  encl_ssa_tcs2:
+>  	.space 4096
+>  
+> +encl_stack1:
 
---=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
+Stack grows the other way so by placing the entry here the stack of
+TCS #1 will clobber the SSA of TCS #2.
 
------BEGIN PGP SIGNATURE-----
+>  	.balign 4096
+> -	# Stack of TCS #1
+>  	.space 4096
+> -encl_stack:
+> +
+> +encl_stack2:
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmJE8WwPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUo5EP/1uZdo4IZmuPAvIZlJRyq+6T++2x/ao/GJFz
-Y5XKRsgro3Z63MPvSWwgLYXVsYxl/7/S3JgSc+5Xx/Hyevhw/zct7IYvLQ9/Cm2y
-/WXG0C/Br6s6WIKBmB6CQrtXwhzuatuZs/SxWD0VX5oUCbGj8eSUjDEWVuUWqeYJ
-LnY7WBq07C2wH6tnY56HVgGGGWJOEpxtGOWwuO4Dc6z24N2u0gwk3y5nxpguG02q
-5O4pZq4OnjwflIW8LI/tE0g8kt2jw7X8XToVOr0zrq9ZLwFZXwGqG+NXsY1tp8+w
-LKoi76m0PUtUXxs+v4z56eOSFu1NPTiUX3NebiDuDYiI5Zjn4NpKqPd5G7a+U9Oe
-5Ml8U6IBJewdEsjhdCu1ubuWr8vU/kgDC8tXz2NzvyjCVCluR84Zz0nOVXPMpzcv
-Amibbpbals46lEi3lkvpscZaF7xGPWnLGFYkXo206mYkqLZhsBTTXkbT4lZyc2s+
-FlUcRu2mSmTwyXJd+fdeE7q63VGXJ837A03oWCFQO8RWNYkJrY6uJI+jMiQLGEJP
-rt1oSopML1GvwdSU42Jry3vDSe2ENXqGzs5taaiy339pQ2NBK0zto0LH4cIXB2Cb
-USFIoysN45GxXWxpy/mUJRsoh36/sIJr09Mxft4Ipdt4PX1etLT56dMLbZTb6SBt
-Soky0r1W
-=UatY
------END PGP SIGNATURE-----
+Here the stack of TCS #2 will actually use the stack of TCS #1.
 
---=_MailMate_6BF551C9-2F66-4F24-8894-52350FA3B962_=--
+>  	.balign 4096
+> -	# Stack of TCS #2
+>  	.space 4096
+
+Last page will be unused.
+
+Reinette

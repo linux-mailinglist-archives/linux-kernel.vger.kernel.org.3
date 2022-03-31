@@ -2,134 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04354EE03D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B414EE046
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiCaSTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S234128AbiCaSVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbiCaSTG (ORCPT
+        with ESMTP id S229603AbiCaSVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:19:06 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF52B1E6E9C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:17:17 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t25so618502lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gADLe4HDBmNTTRadD9I18Eo59xDMA1VeRyu9AlQVupI=;
-        b=crQ0nfYz9r5y0LNjvAz6Kl9GkH8VcN7+M3IRO0/MHMSfuwZ3QQbJPMFmMEChGOGuRi
-         lgQsMapR+mH3g1uSCfkahgw35sLDQIFcmdfsSdI3qkJ8Vg8TWDA8dUjlprf7JcAT2Psh
-         pjWsZFv1Yzq1yQ6rqecDWGyO9u5lr3MHZuD6Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gADLe4HDBmNTTRadD9I18Eo59xDMA1VeRyu9AlQVupI=;
-        b=YDWVu4NLDPu2fFybT8YirFs/Zz7s+qQyGCi9sT/uQjhr4Ppa82psspMjbKssqzBjfy
-         DNv8Ii/B8X6KekbnohH0g0RG75pEPd1nu0T65kuxhrfH1BQ5x0U7YKAstrna0m4MPW5s
-         Tc56lR6sl8A48YrqphMt1JKUD4Blb90XE0p+vY7vQDi/4RaWwhU1v8E03hZzO0ejn7Yt
-         6SVA6gLR6RIXVXok/Goktgvl2InGtU4jvoE1XlDOyiaPcc4CXgdvkbNyeIwFyPM98ggr
-         z21WyZ04g8wm0wAdyw/RHUCragKqdHRYqrbdxo4FAbDJ4J0kvmb06Gr462x4H0x5prT4
-         kebA==
-X-Gm-Message-State: AOAM533Za2mUOflNjuF4AdSbRRSbpSFvkfB2hJSG2LWK7ty12OlmcZIz
-        oVithAleZwTUGeJgTeJIO5wu4nkURwe+Yh+6
-X-Google-Smtp-Source: ABdhPJz6sZ5uKX8JlbuVduNYhZf7DqrkzT2K8JIOKOD56j3NV7Fr8CaCoaz6bY8Bq8ZVA6qeF+NTYA==
-X-Received: by 2002:a05:6512:ad3:b0:44a:614e:9d4d with SMTP id n19-20020a0565120ad300b0044a614e9d4dmr11297345lfu.557.1648750632100;
-        Thu, 31 Mar 2022 11:17:12 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id k2-20020a056512330200b0044a096ea7absm10846lfe.54.2022.03.31.11.17.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 11:17:10 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id h11so902195ljb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:17:10 -0700 (PDT)
-X-Received: by 2002:a2e:9041:0:b0:24a:ce83:dcb4 with SMTP id
- n1-20020a2e9041000000b0024ace83dcb4mr11242362ljg.291.1648750629685; Thu, 31
- Mar 2022 11:17:09 -0700 (PDT)
+        Thu, 31 Mar 2022 14:21:00 -0400
+Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC2E35875;
+        Thu, 31 Mar 2022 11:19:10 -0700 (PDT)
+Received: from authenticated-user (box.fidei.email [71.19.144.250])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by box.fidei.email (Postfix) with ESMTPSA id 8F5EF80746;
+        Thu, 31 Mar 2022 14:19:08 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
+        t=1648750749; bh=KNvxQYBQic9pofn0PgmzAb/owVTqsgyVDZW5db+ph54=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=B07JMpme9jYQkYdbyeZY2FZqP95dA2Y55gjKO2qxqYE6oiStVB2ws9p7vIynjfoPz
+         J7eTX4vAIm29u38CfYomjHXabQHqRbr0riMGFiEoSTmwsbMp11VlqX1VdKcyCmrf65
+         0lgZejODuy4FHKBpOaRHSu18+YnKTs6Gtqxk3FYFv37ICJYxt9BJhuGXosfbVW89Fp
+         nozvoEuKN9H837hav9zeG/sMgZjpqdHWDVoGnzRjKeNF2UOwMzAEF1Bz/vypUlGh7F
+         nS7S4AM5a1pN7H57KcYNcfCqCxqR6whS7mjGkcd2szBFIAE0038zsm9B525BVHHGWt
+         hRpoGHfmKbodw==
+Message-ID: <f9493291-9981-d684-bf49-a551aaf08061@dorminy.me>
+Date:   Thu, 31 Mar 2022 14:19:07 -0400
 MIME-Version: 1.0
-References: <20220126171442.1338740-1-aurelien@aurel32.net>
- <20220331103247.y33wvkxk5vfbqohf@pengutronix.de> <20220331103913.2vlneq6clnheuty6@pengutronix.de>
- <20220331105112.7t3qgtilhortkiq4@pengutronix.de>
-In-Reply-To: <20220331105112.7t3qgtilhortkiq4@pengutronix.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 31 Mar 2022 11:16:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjnuMD091mNbY=fRm-qFyhMjbtfiwkAFKyFehyR8bPB5A@mail.gmail.com>
-Message-ID: <CAHk-=wjnuMD091mNbY=fRm-qFyhMjbtfiwkAFKyFehyR8bPB5A@mail.gmail.com>
-Subject: Re: [PATCH] riscv: fix build with binutils 2.38
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Aurelien Jarno <aurelien@aurel32.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        Sparse Mailing-list <linux-sparse@vger.kernel.org>,
-        ukl@pengutronix.de,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Content-Type: multipart/mixed; boundary="0000000000009b482f05db87ab14"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 2/2] btrfs: allocate page arrays using bulk page
+ allocator
+Content-Language: en-US
+To:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
+        Nikolay Borisov <nborisov@suse.com>
+References: <cover.1648669832.git.sweettea-kernel@dorminy.me>
+ <ede1d39f7878ee2ed12c1526cc2ec358a2d862cf.1648669832.git.sweettea-kernel@dorminy.me>
+ <20220331173525.GF15609@twin.jikos.cz>
+From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+In-Reply-To: <20220331173525.GF15609@twin.jikos.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009b482f05db87ab14
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 31, 2022 at 3:51 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> Cc += linux-sparse, Uwe, Luc Van Oostenryck
->
-> tl;dr:
->
-> A recent change in the kernel regarding the riscv -march handling breaks
-> current sparse.
 
-Gaah. Normally sparse doesn't even look at the -march flag, but for
-riscv it does, because it's meaningful for the predefined macros.
+On 3/31/22 13:35, David Sterba wrote:
+> On Wed, Mar 30, 2022 at 04:11:23PM -0400, Sweet Tea Dorminy wrote:
+>> While calling alloc_page() in a loop is an effective way to populate an
+>> array of pages, the kernel provides a method to allocate pages in bulk.
+>> alloc_pages_bulk_array() populates the NULL slots in a page array, trying to
+>> grab more than one page at a time.
+>>
+>> Unfortunately, it doesn't guarantee allocating all slots in the array,
+>> but it's easy to call it in a loop and return an error if no progress
+>> occurs. Similar code can be found in xfs/xfs_buf.c:xfs_buf_alloc_pages().
+>>
+>> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+>> Reviewed-by: Nikolay Borisov <nborisov@suse.com>
+>> ---
+>> Changes in v3:
+>>   - Added a newline after variable declaration
+>> Changes in v2:
+>>   - Moved from ctree.c to extent_io.c
+>> ---
+>>   fs/btrfs/extent_io.c | 24 +++++++++++++++---------
+>>   1 file changed, 15 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+>> index ab4c1c4d1b59..b268e47aa2b7 100644
+>> --- a/fs/btrfs/extent_io.c
+>> +++ b/fs/btrfs/extent_io.c
+>> @@ -3144,19 +3144,25 @@ static void end_bio_extent_readpage(struct bio *bio)
+>>    */
+>>   int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
+>>   {
+>> -	int i;
+>> +	long allocated = 0;
+>> +
+>> +	for (;;) {
+>> +		long last = allocated;
+>>   
+>> -	for (i = 0; i < nr_pages; i++) {
+>> -		struct page *page;
+>> +		allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages,
+>> +						   page_array);
+>> +		if (allocated == nr_pages)
+>> +			return 0;
+>>   
+>> -		if (page_array[i])
+>> +		if (allocated != last)
+>>   			continue;
+>> -		page = alloc_page(GFP_NOFS);
+>> -		if (!page)
+>> -			return -ENOMEM;
+>> -		page_array[i] = page;
+>> +		/*
+>> +		 * During this iteration, no page could be allocated, even
+>> +		 * though alloc_pages_bulk_array() falls back to alloc_page()
+>> +		 * if  it could not bulk-allocate. So we must be out of memory.
+>> +		 */
+>> +		return -ENOMEM;
+>>   	}
+> 
+> I find the way the loop is structured a bit cumbersome so I'd suggest to
+> rewrite it as:
+> 
+> int btrfs_alloc_page_array(unsigned int nr_pages, struct page **page_array)
+> {
+>          unsigned int allocated;
+> 
+>          for (allocated = 0; allocated < nr_pages;) {
+>                  unsigned int last = allocated;
+> 
+>                  allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages, page_array);
+> 
+>                  /*
+>                   * During this iteration, no page could be allocated, even
+>                   * though alloc_pages_bulk_array() falls back to alloc_page()
+>                   * if  it could not bulk-allocate. So we must be out of memory.
+>                   */
+>                  if (allocated == last)
+>                          return -ENOMEM;
+>          }
+>          return 0;
+> }
+Sounds good, I'll amend it that way.
 
-Maybe that 'die()' shouldn't be so fatal. And maybe add a few more
-extensions (but ignore them) to the parsing.
+> 
+> Also in the xfs code there's memalloc_retry_wait() which is supposed to be
+> called when repeated memory allocation is retried. What was the reason
+> you removed it?
 
-Something ENTIRELY UNTESTED like the attached.
+Trying to keep the behavior as close as possible to the existing behavior.
 
-               Linus
+The current behavior of each alloc_page loop is to fail if alloc_page() 
+fails; in the worst case, alloc_pages_bulk_array() calls alloc_page() 
+after trying to get a batch, so I figured the worst case is still 
+basically a loop calling alloc_page() and failing if it ever fails.
 
---0000000000009b482f05db87ab14
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l1fbjlbv0>
-X-Attachment-Id: f_l1fbjlbv0
+Reading up on it, though, arguably the memalloc_retry_wait() should 
+already be in all the callsites, so maybe I should insert a patch in the 
+middle that just adds the memalloc_retry_wait() into 
+btrfs_alloc_page_array()? Since it's an orthogonal fixup to either the 
+refactoring or the conversion to alloc_pages_bulk_array()?
 
-IHRhcmdldC1yaXNjdi5jIHwgMTQgKysrKysrKysrKysrLS0KIDEgZmlsZSBjaGFuZ2VkLCAxMiBp
-bnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3RhcmdldC1yaXNjdi5j
-IGIvdGFyZ2V0LXJpc2N2LmMKaW5kZXggNmQ5MTEzYzEuLjIwMWFjMzc1IDEwMDY0NAotLS0gYS90
-YXJnZXQtcmlzY3YuYworKysgYi90YXJnZXQtcmlzY3YuYwpAQCAtMyw2ICszLDcgQEAKICNpbmNs
-dWRlICJ0YXJnZXQuaCIKICNpbmNsdWRlICJtYWNoaW5lLmgiCiAjaW5jbHVkZSA8c3RyaW5nLmg+
-CisjaW5jbHVkZSA8c3RkaW8uaD4KIAogI2RlZmluZSBSSVNDVl8zMkJJVAkoMSA8PCAwKQogI2Rl
-ZmluZSBSSVNDVl82NEJJVAkoMSA8PCAxKQpAQCAtNDcsNiArNDgsMTIgQEAgc3RhdGljIHZvaWQg
-cGFyc2VfbWFyY2hfcmlzY3YoY29uc3QgY2hhciAqYXJnKQogCQl7ICJuIiwJCTAgfSwKIAkJeyAi
-aCIsCQkwIH0sCiAJCXsgInMiLAkJMCB9LAorCQl7ICJpIiwJCTAgfSwKKwkJeyAiZSIsCQkwIH0s
-CisJCXsgIl8iLAkJMCB9LAorCQl7ICJDb3VudGVycyIsCTAgfSwKKwkJeyAiWmljc3IiLAkwIH0s
-CisJCXsgIlppZmVuY2VpIiwJMCB9LAogCX07CiAJaW50IGk7CiAKQEAgLTYwLDcgKzY3LDEwIEBA
-IHN0YXRpYyB2b2lkIHBhcnNlX21hcmNoX3Jpc2N2KGNvbnN0IGNoYXIgKmFyZykKIAkJCWdvdG8g
-ZXh0OwogCQl9CiAJfQotCWRpZSgiaW52YWxpZCBhcmd1bWVudCB0byAnLW1hcmNoJzogJyVzJ1xu
-IiwgYXJnKTsKKwordW5rbm93bjoKKwlmcHJpbnRmKHN0ZGVyciwgIldBUk5JTkc6IGludmFsaWQg
-YXJndW1lbnQgdG8gJy1tYXJjaCc6ICclcydcbiIsIGFyZyk7CisJcmV0dXJuOwogCiBleHQ6CiAJ
-Zm9yIChpID0gMDsgaSA8IEFSUkFZX1NJWkUoZXh0ZW5zaW9ucyk7IGkrKykgewpAQCAtNzMsNyAr
-ODMsNyBAQCBleHQ6CiAJCX0KIAl9CiAJaWYgKGFyZ1swXSkKLQkJZGllKCJpbnZhbGlkIGFyZ3Vt
-ZW50IHRvICctbWFyY2gnOiAnJXMnXG4iLCBhcmcpOworCQlnb3RvIHVua25vd247CiB9CiAKIHN0
-YXRpYyB2b2lkIGluaXRfcmlzY3YoY29uc3Qgc3RydWN0IHRhcmdldCAqc2VsZikK
---0000000000009b482f05db87ab14--
+Thanks!
+
+Sweet Tea

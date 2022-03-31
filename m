@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2D34ED9F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8C54EDA00
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbiCaM6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S236421AbiCaM6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234217AbiCaM6f (ORCPT
+        with ESMTP id S236420AbiCaM6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:58:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69432128D9;
-        Thu, 31 Mar 2022 05:56:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8AA23CE21CA;
-        Thu, 31 Mar 2022 12:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5FFC340F2;
-        Thu, 31 Mar 2022 12:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648731404;
-        bh=IJMv8QRbmsZe6PkwmtIOo18HaNy2h/hxvfgNjsECIdM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pxX4SEJLNXuMz+TwGcWZxflUuhMTVMnz2lbN5MlgXp/LT4OgVjKg/U205ilgAcW0J
-         qsH34tY1EjGKDg0iMUstTI4Xg2P07WxraC9s7VFRQZBtsxbpke83WsPNArI45RRXak
-         JPPjFQVYIU60zciozYRj2SmBRRpO1Lk2xDWNlIPM=
-Date:   Thu, 31 Mar 2022 14:56:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, Won Chung <wonchung@google.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] sound/hda: Add NULL check to component match callback
- function
-Message-ID: <YkWlCTBtcq4DOyiV@kroah.com>
-References: <20220330211913.2068108-1-wonchung@google.com>
- <s5hzgl6eg48.wl-tiwai@suse.de>
- <CAOvb9yiO_n48JPZ3f0+y-fQ_YoOmuWF5c692Jt5_SKbxdA4yAw@mail.gmail.com>
- <s5hr16ieb8o.wl-tiwai@suse.de>
- <YkVzl4NEzwDAp/Zq@kuha.fi.intel.com>
- <YkWTBwAB1HrxcUR3@kroah.com>
- <YkWj/vmjohNo0r2c@kuha.fi.intel.com>
+        Thu, 31 Mar 2022 08:58:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34442128ED;
+        Thu, 31 Mar 2022 05:56:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id r13so47921327ejd.5;
+        Thu, 31 Mar 2022 05:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UccPI0Vs3BzsfOsGfndf21BCZr1jQY6N7hAg1waRF/s=;
+        b=HfBw6vWTgOJCYdKg8YHaESl+8G04ToxxeF63XQSjns6Dk+LBjFpbBsyMKo8RR9icBD
+         +YR4nv9rtSCx5OGsTlaCwev6n1dE1syjwnmouQztZ2cmWQoA8hQrchrcjb/ebU9JgXOa
+         lIlY/nrjEoeJG5A+IvN9TEgvVoSUeyGUzsJd71GFxt6/tJkDuZgBTqMid0URZoE4V7Tk
+         H0mU6yhuHBdRwqlJ25JgCMpKt3BCBU4CCSkJAenBdHODIxshDWGsgjoLNQR32LvIoNwa
+         L31o07H/PXupHDCPC5pHjrI3doD7IcnH6SbMgZBSh9W0WAbk7K0YN5I/0HpeXO+fPN8p
+         BBFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UccPI0Vs3BzsfOsGfndf21BCZr1jQY6N7hAg1waRF/s=;
+        b=c2OXo4F1z57WD3KNVqnCTMJT3BuHvIEKWHhfHFV0qxoyOnJ1gi4QdQA7xX4213nja0
+         EHhx7Pu9OYPCvxuDnRcWnseXgQAWpd+GiydQMlSFYdUbgsW37F1ncD/jVTp+pO6f0CBm
+         oTBW49Tokvn5Kw3+NIHTvnD7PS0m85rtxjfcCvm/RgVwePjwd0y+rLm0EYs8Nf8OGsRW
+         TEH2lOZIpQCY3BvHLu71aWOX5MH95kucH39DKSJmJKpiehL1iMrV9Q0nrxQhQI0LFveq
+         4fFmfF/UHOijiZwI0/YFqtaTSfv/a+/tlGJcX9bNvehtEjhb7WRne2BXG4KYpKu1GJQB
+         aunQ==
+X-Gm-Message-State: AOAM533+p8wd8HgSljJ0lQcSyBQKtgKxFJTWYoB2UKZ77Id16nqO69kc
+        6YFqRdUH7sO5JRgox09AGhGBdsqAlYc=
+X-Google-Smtp-Source: ABdhPJwB1bY+CLWE7b4PuZ+68hjf+J3CT+jsxTI7VrbqdpniDeNCJLs0u5gD62CZ6M9aKGk6OHNNVQ==
+X-Received: by 2002:a17:907:1606:b0:6df:f528:4033 with SMTP id hb6-20020a170907160600b006dff5284033mr4847028ejc.433.1648731413350;
+        Thu, 31 Mar 2022 05:56:53 -0700 (PDT)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm11203745edt.70.2022.03.31.05.56.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 05:56:52 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ARM: dts: rockchip: use generic node name for dma rk3036/rk322x
+Date:   Thu, 31 Mar 2022 14:56:44 +0200
+Message-Id: <20220331125644.6841-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkWj/vmjohNo0r2c@kuha.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 03:52:14PM +0300, Heikki Krogerus wrote:
-> Hi Greg,
-> 
-> On Thu, Mar 31, 2022 at 01:39:51PM +0200, Greg KH wrote:
-> > On Thu, Mar 31, 2022 at 12:25:43PM +0300, Heikki Krogerus wrote:
-> > > On Thu, Mar 31, 2022 at 11:12:55AM +0200, Takashi Iwai wrote:
-> > > > > > > -     if (!strcmp(dev->driver->name, "i915") &&
-> > > > > > > +     if (dev->driver && !strcmp(dev->driver->name, "i915") &&
-> > > > > >
-> > > > > > Can NULL dev->driver be really seen?  I thought the components are
-> > > > > > added by the drivers, hence they ought to have the driver field set.
-> > > > > > But there can be corner cases I overlooked.
-> > > > > >
-> > > > > >
-> > > > > > thanks,
-> > > > > >
-> > > > > > Takashi
-> > > > > 
-> > > > > Hi Takashi,
-> > > > > 
-> > > > > When I try using component_add in a different driver (usb4 in my
-> > > > > case), I think dev->driver here is NULL because the i915 drivers do
-> > > > > not have their component master fully bound when this new component is
-> > > > > registered. When I test it, it seems to be causing a crash.
-> > > > 
-> > > > Hm, from where component_add*() is called?  Basically dev->driver must
-> > > > be already set before the corresponding driver gets bound at
-> > > > __driver_probe_deviec().  So, if the device is added to component from
-> > > > the corresponding driver's probe, dev->driver must be non-NULL.
-> > > 
-> > > The code that declares a device as component does not have to be the
-> > > driver of that device.
-> > > 
-> > > In our case the components are USB ports, and they are devices that
-> > > are actually never bind to any drivers: drivers/usb/core/port.c
-> > 
-> > Why is a USB device being passed to this code that assumes it is looking
-> > for a PCI device with a specific driver name?  As I mentioned on the
-> > mei patch, triggering off of a name is really a bad idea, as is assuming
-> > the device type without any assurance it is such a device (there's a
-> > reason we didn't provide device type identification in the driver core,
-> > don't abuse that please...)
-> 
-> I totally agree. This driver is making a whole bunch of assumptions
-> when it should not make any assumptions. And yes, one of those
-> assumptions is that the driver of the device has a specific name, and
-> that is totally crazy. So why is it making those assumptions? I have
-> no idea, but is does, and they are now causing the first problem -
-> NULL pointer dereference.
-> 
-> This patch (and that other) is only proposing a simple way to solve
-> that NULL pointer dereference issue by adding some sanity checks. If
-> that's no OK, and the whole driver should be refactored instead, then
-> that is perfectly OK by me, but that has to be done by somebody who
-> understands what exactly is the driver and the device it's controlling
-> doing (and for).
+The node names should be generic, so fix this for the rk3036 and
+rk322x dma node and rename it to "dma-controller".
 
-This all needs to be refactored to not do this at all.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ arch/arm/boot/dts/rk3036.dtsi | 2 +-
+ arch/arm/boot/dts/rk322x.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
+index 24f868d06..9b0f04975 100644
+--- a/arch/arm/boot/dts/rk3036.dtsi
++++ b/arch/arm/boot/dts/rk3036.dtsi
+@@ -558,7 +558,7 @@
+ 		status = "disabled";
+ 	};
+ 
+-	pdma: pdma@20078000 {
++	pdma: dma-controller@20078000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x20078000 0x4000>;
+ 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm/boot/dts/rk322x.dtsi b/arch/arm/boot/dts/rk322x.dtsi
+index 2547f46fe..ffc16d6b9 100644
+--- a/arch/arm/boot/dts/rk322x.dtsi
++++ b/arch/arm/boot/dts/rk322x.dtsi
+@@ -503,7 +503,7 @@
+ 			<75000000>;
+ 	};
+ 
+-	pdma: pdma@110f0000 {
++	pdma: dma-controller@110f0000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x110f0000 0x4000>;
+ 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+-- 
+2.20.1
 
-greg k-h

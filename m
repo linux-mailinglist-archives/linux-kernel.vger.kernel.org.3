@@ -2,109 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6304EE343
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2509B4EE352
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 23:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237104AbiCaVYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 17:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S241545AbiCaVY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 17:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237536AbiCaVYH (ORCPT
+        with ESMTP id S237536AbiCaVYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:24:07 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4983723D75F
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:22:18 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id bc27so783040pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 14:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x3SePf6cYyzJ/sV6xHzMCnP/4ErKQDoUNlfoUc3FU/o=;
-        b=pbUrFWcZ2skLn6FAZKUppr3B/0KcKYvs7TVqCpR/V/wpljp0wGqVFJrj7vRAyJlZaG
-         N0rqPpfA6Eyg0swWL6TZQ2Ao2/Gs7zjCBpYKtGgeftbX9wZo5RutaAIdeBlBMTpypBzx
-         TGel8IyxgFZbX40O+FfItMq6FYmWpwXK95ZvQAB+ZeW7GfasepxJTsDFJwiOIPDzRraq
-         2L0hLd+MVFTJd98uB0m2smroBZU8rq8LJ+t/lj+n8QZvP6ZooUOk2UUyhrV3IJrm+6tP
-         Zl+ZU+WwG6a53qFjsvhKcgbDV5Sb6n1XbUYHqQhzrdurBPG4yfswzxy4qsxPu50Vppzu
-         xLQQ==
+        Thu, 31 Mar 2022 17:24:55 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791B0236BB8;
+        Thu, 31 Mar 2022 14:23:07 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so755358otq.13;
+        Thu, 31 Mar 2022 14:23:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x3SePf6cYyzJ/sV6xHzMCnP/4ErKQDoUNlfoUc3FU/o=;
-        b=g6jHt8IQ/JwXhTIabFafssLKSwWAfY/KHVS32cBLQF4r9gY9n9tjao/c8Y+k/qLBdl
-         eSbwLA4w5On53Rj4Sa+ksya5iq/iv0GPlv00tbIYNXjJ8xIqxzlgilCn0YizQdUobYJP
-         lpbXTIneNFekkRdVgvxdKJeWcXCp38SsfOXjugbPIOVpcP9vRBhYXfcBi0/EhEVvIrY9
-         IR4zWU0jwyhVQ4ZiNEp8h/HwkPSuOjMLXwoceiU9sSIcvZHFKWuy7wHxe06dXJz9vrWT
-         5cDGBjpNpUoMUc7yHwFavv9K6qAeSMiMxCI+eLsehm6Hb5I2fr4Y8o54wTxj0o270HP8
-         PJbw==
-X-Gm-Message-State: AOAM530yLL+0m7oa7DFb1uQsrYeihG62OrritBzDZJgFbhn3Vf/X/9tW
-        y7xVHBEo1xWelEjB/Urz/IODJA==
-X-Google-Smtp-Source: ABdhPJwYnU9r41ORdf19G02EFb5yhsyLJV8xzLTtxC7Sx8NiXMpF/1DkwJ2vuON7bztWgA+FZZylpQ==
-X-Received: by 2002:a05:6a00:328f:b0:4fa:95b5:e1ff with SMTP id ck15-20020a056a00328f00b004fa95b5e1ffmr7412958pfb.60.1648761737704;
-        Thu, 31 Mar 2022 14:22:17 -0700 (PDT)
-Received: from ?IPV6:2600:380:772e:9a93:98d9:fd90:ab06:5943? ([2600:380:772e:9a93:98d9:fd90:ab06:5943])
-        by smtp.gmail.com with ESMTPSA id j7-20020a056a00130700b004b9f7cd94a4sm410220pfu.56.2022.03.31.14.22.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 14:22:17 -0700 (PDT)
-Message-ID: <1eb268c5-3420-0263-3f0c-7d3982f8f512@kernel.dk>
-Date:   Thu, 31 Mar 2022 15:22:14 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vzLcBKO/XDK59tDp87Wl8eFLtQUNXGUQdW4J6/vdSnM=;
+        b=sJnOoIoNnpCOpcojn3p+SMLCY579fG5qEOCu5bcLF9q4hdZsy/SYOEK9pNdo6y6+si
+         gxAafF3F66JLNwIDfohbH+FEz0Zn4RbvZQaRibfdpOPZnYoILsXlVEUyXgC27+mVN975
+         rc3nl7L+MFGtP3z2p30pQUvfMzodOKn5XMDYWV+z9pte8ljZudkcY5iwLE87rxvzg8b1
+         +u+wu85AvkRkrtQ3ivs43rPc/oEtMM4usXuzxAjGFlsfnMwhnLpyX6fNtdQNID7jTXUD
+         HKE3LuqIGX/g6GVVtfUUuogKvD5Z5OB6IDYNR2Ju6EahSOofxDkZXoyW44No5R/GFuWG
+         Y0kw==
+X-Gm-Message-State: AOAM533QFlX4kc2+PdeS7LATpy1/IT9z/TJS19fAp9UBum8Q/dKt1h/P
+        BQh4tyN87VuQTfMYnz0/kQ==
+X-Google-Smtp-Source: ABdhPJwseFEEdKZk3qwsEVG8HRLBOBuwND9QrZ5NLEH5I03RtbXWF+Qpo07hT4Xv0inLxP4ssIR7fw==
+X-Received: by 2002:a05:6830:2099:b0:5c9:4715:2c80 with SMTP id y25-20020a056830209900b005c947152c80mr6518629otq.244.1648761786754;
+        Thu, 31 Mar 2022 14:23:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x18-20020a056830245200b005ce01c28c77sm333676otr.1.2022.03.31.14.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 14:23:06 -0700 (PDT)
+Received: (nullmailer pid 1522501 invoked by uid 1000);
+        Thu, 31 Mar 2022 21:23:05 -0000
+Date:   Thu, 31 Mar 2022 16:23:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 1/9] dt-bindings: soc: apple: Add Apple SART
+Message-ID: <YkYbubNBD+J2XUCg@robh.at.kernel.org>
+References: <20220321165049.35985-1-sven@svenpeter.dev>
+ <20220321165049.35985-2-sven@svenpeter.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 4/5] block: turn bio_kmalloc into a simple kmalloc wrapper
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <20220308061551.737853-1-hch@lst.de>
- <20220308061551.737853-5-hch@lst.de>
- <CGME20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42@eucas1p2.samsung.com>
- <6696cc6a-3e3f-035e-5b8c-05ea361383f3@samsung.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <6696cc6a-3e3f-035e-5b8c-05ea361383f3@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321165049.35985-2-sven@svenpeter.dev>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 3:18 PM, Marek Szyprowski wrote:
-> Hi Christoph,
+On Mon, Mar 21, 2022 at 05:50:41PM +0100, Sven Peter wrote:
+> Apple SoCs such as the M1 come with a simple DMA address filter called
+> SART. Unlike a real IOMMU no pagetables can be configured but instead
+> DMA transactions can be allowed for up to 16 paddr regions.
 > 
-> On 08.03.2022 07:15, Christoph Hellwig wrote:
->> Remove the magic autofree semantics and require the callers to explicitly
->> call bio_init to initialize the bio.
->>
->> This allows bio_free to catch accidental bio_put calls on bio_init()ed
->> bios as well.
->>
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>  .../bindings/soc/apple/apple,sart.yaml        | 52 +++++++++++++++++++
+
+Close enough to an IOMMU in terms of its purpose, so put in 
+bindings/iommu/
+
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/apple/apple,sart.yaml
 > 
-> This patch, which landed in today's next-20220331 as commit 57c47b42f454 
-> ("block: turn bio_kmalloc into a simple kmalloc wrapper"), breaks badly 
-> all my test systems, which use squashfs initrd:
-
-The series has been reverted on the block side, so next linux-next should
-be fine again. We'll try again for 5.19.
-
--- 
-Jens Axboe
-
+> diff --git a/Documentation/devicetree/bindings/soc/apple/apple,sart.yaml b/Documentation/devicetree/bindings/soc/apple/apple,sart.yaml
+> new file mode 100644
+> index 000000000000..d8177b3a3fba
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/apple/apple,sart.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/apple/apple,sart.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple SART DMA address filter
+> +
+> +maintainers:
+> +  - Sven Peter <sven@svenpeter.dev>
+> +
+> +description:
+> +  Apple SART is a simple address filter for DMA transactions. Regions of
+> +  physical memory must be added to the SART's allow list before any
+> +  DMA can target these. Unlike a proper IOMMU no remapping can be done and
+> +  special support in the consumer driver is required since not all DMA
+> +  transactions of a single device are subject to SART filtering.
+> +
+> +  SART1 has first been used since at least the A11 (iPhone 8 and iPhone X)
+> +  and allows 36 bit of physical address space and filter entries with sizes
+> +  up to 24 bit.
+> +
+> +  SART2, first seen in A14 and M1, allows 36 bit of physical address space
+> +  and filter entry size up to 36 bit.
+> +
+> +  SART3, first seen in M1 Pro/Max, extends both the address space and filter
+> +  entry size to 42 bit.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - apple,t6000-sart
+> +      - apple,t8103-sart
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    sart@7bc50000 {
+> +      compatible = "apple,t8103-sart";
+> +      reg = <0x7bc50000 0x4000>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cd0f68d4a34a..027c3b4ad61c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1774,6 +1774,7 @@ F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+>  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+>  F:	Documentation/devicetree/bindings/power/apple*
+> +F:	Documentation/devicetree/bindings/soc/apple/*
+>  F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+>  F:	arch/arm64/boot/dts/apple/
+>  F:	drivers/i2c/busses/i2c-pasemi-core.c
+> -- 
+> 2.25.1
+> 
+> 

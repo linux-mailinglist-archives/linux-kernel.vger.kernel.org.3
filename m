@@ -2,104 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E270A4EE221
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00834EE228
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240788AbiCaTyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S239166AbiCaT4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiCaTyF (ORCPT
+        with ESMTP id S234828AbiCaT4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:54:05 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EFB54BE1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:52:16 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 7760 invoked from network); 31 Mar 2022 21:52:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1648756333; bh=9DW+eSPUjcl4P7CH+RNH4XhlOlBnvOKNXj68YTnQ38U=;
-          h=Subject:To:Cc:From;
-          b=Ut2O/BMD03xK94n/BRPNygjHuhHC22WkujejJKrnvIX7AH9mHmxvgpBNaYYGx3W7k
-           DGdrOQYHrPkn7ecXTg5ttN3j+KepXE7ttl6PZcx6fTF7Mlocn6L2jBI3zw5BI/XXdR
-           qDQQbawSJIGnDUlagNYtVj5fvbXEc6khbBBj3Dco=
-Received: from aaew62.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.126.62])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <alexandre.belloni@bootlin.com>; 31 Mar 2022 21:52:13 +0200
-Message-ID: <2d139619-455d-412f-d60b-e8d9259ed7e7@o2.pl>
-Date:   Thu, 31 Mar 2022 21:52:09 +0200
+        Thu, 31 Mar 2022 15:56:07 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A2960A84;
+        Thu, 31 Mar 2022 12:54:19 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id c7so1335542wrd.0;
+        Thu, 31 Mar 2022 12:54:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y+woCqSRN/iPJPDhXido2RTys7AhCgzJm7RlMHPDtp4=;
+        b=L8zzTUHI02LY2DUF6K1iFRY9ZUoFqty0Mfod+IdwlXRT49VTPLlTNtr6gUjNfio+lH
+         UeIfRaTUOb8BICGNlKrumSq8EjzTMrf9tTcPciDWG0CFitmHeCl3gLLQNaG4q8KmCjZv
+         UYcLumBp3/XXoj4KVE3vnJ1N8Bf1HAqnNFxUXcnB/xir0UFlooFLKIAOhS/FY59k1jLi
+         7sYFTZSWsLgeaxm6RJ/8EKZtiJSEc8bJI1AwxAOJqIoG2AXOIRoFoWDZC2TSDfXYgbyZ
+         0ukisy7tdPxLp4C0VX04Hg3zt0igZbMvSCezV/rV2akbZBgoL4XBJucJBGMO0FXseGb1
+         5Qhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y+woCqSRN/iPJPDhXido2RTys7AhCgzJm7RlMHPDtp4=;
+        b=epphDhGNKZMrSo5lEATJY17jEAR9aruTdh2wqofI6WguOK9+yJ6bIubzAem/eGKEW4
+         yn+ifRJeGYv4GngkphBV3lQy6bkq9PTplXHtAOmAV6xIPgjklKAf53+eKuvTb1aTcNNI
+         hp1Bp8UKWMH1h4zwAxfwH7u0ptQdDlGH3rQF2ngPiVHbseo+S2GoFRoNlRf23iMu1y0/
+         FpUxSLz4JG0LxNixYJ2FaCv3ywJ590y9yRmc3cmY34E255sN8WFKNGZm9IDsCqa9nuDY
+         NoCAOuhvDFvx2Tkb58gQfVJ+kkmaMY7CHqXcGgEr/7awkewh7L6WZyNqDAwfl1NQ33wQ
+         pXwg==
+X-Gm-Message-State: AOAM531k0BHYztW2S3b9WJUh/0wJF2gYkrkrgP41A80QCtaMHnsSQagJ
+        gTJWhjHYGkuFjtZcoBWu4d/4TJ1W3Jk5mFYgM5s=
+X-Google-Smtp-Source: ABdhPJxCn8bZA1ok0IRYryEvFh8skfsiOCJwEL2rMyo66Je1AvtOILxEmYjajETgMg9CBpv8K4ncluCui4jKiXIE0Yo=
+X-Received: by 2002:adf:f20f:0:b0:203:fc73:a9a0 with SMTP id
+ p15-20020adff20f000000b00203fc73a9a0mr5302332wro.418.1648756458095; Thu, 31
+ Mar 2022 12:54:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm
- time in debugfs
-Content-Language: en-GB
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220331190612.22162-1-mat.jonczyk@o2.pl>
- <YkYCqI0HEJvi2VjV@piout.net>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <YkYCqI0HEJvi2VjV@piout.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: a15a250fb30b6f30de58fc64e21921f2
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [0SMU]                               
+References: <20220330204804.660819-1-robdclark@gmail.com> <20220330204804.660819-11-robdclark@gmail.com>
+ <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com> <CAF6AEGvZqM1OT_n1C+x+C1GTd4PbFkH4c7P-BseDOUGj7yj3Eg@mail.gmail.com>
+ <22d9a9ff-1c44-ed41-6ae1-59a1f965ab6c@collabora.com>
+In-Reply-To: <22d9a9ff-1c44-ed41-6ae1-59a1f965ab6c@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 31 Mar 2022 12:54:06 -0700
+Message-ID: <CAF6AEGuX0EKU+XqvkhwNBgR733pa4ZPr2+i51uTQz85mjxh-2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] drm/msm: Add a way for userspace to allocate GPU iova
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Emma Anholt <emma@anholt.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 31.03.2022 o 21:36, Alexandre Belloni pisze:
-> Hello,
+On Thu, Mar 31, 2022 at 12:41 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
 >
-> On 31/03/2022 21:06:11+0200, Mateusz Jończyk wrote:
->> Before Linux 5.17, there was a problem with the CMOS RTC driver:
->> cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
->> in progress) bit, which could have caused it to sometimes fail silently
->> and read bogus values or do not set the alarm correctly.
->> Luckily, this issue was masked by cmos_read_time() invocations in core
->> RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
->>
->> To avoid such a problem in the future in some other driver, I wrote a
->> test unit that reads the alarm time many times in a row. As the alarm
->> time is usually read once and cached by the RTC core, this requires a
->> way for userspace to trigger direct alarm time read from hardware. I
->> think that debugfs is the natural choice for this.
->>
->> So, introduce /sys/kernel/debug/rtc/rtcX/wakealarm_raw. This interface
->> as implemented here does not seem to be that useful to userspace, so
->> there is little risk that it will become kernel ABI.
->>
->> Is this approach correct and worth it?
->>
-> I'm not really in favor of adding another interface for very little
-> gain, you want to use this interface to exercise the API in a way that
-> will never happen in the real world, especially since __rtc_read_alarm
-> is only called once, at registration time.
+> On 3/31/22 22:02, Rob Clark wrote:
+> > On Thu, Mar 31, 2022 at 11:52 AM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
+> >>
+> >> ...
+> >>> +/*
+> >>> + * Get the requested iova but don't pin it.  Fails if the requested iova is
+> >>> + * not available.  Doesn't need a put because iovas are currently valid for
+> >>> + * the life of the object.
+> >>> + *
+> >>> + * Setting an iova of zero will clear the vma.
+> >>> + */
+> >>> +int msm_gem_set_iova(struct drm_gem_object *obj,
+> >>> +                  struct msm_gem_address_space *aspace, uint64_t iova)
+> >>> +{
+> >>> +     int ret = 0;
+> >>
+> >> nit: No need to initialize the ret
+> >
+> > actually, we do
 >
-> I'm not sure the selftest is worth it then. You should better improve
-> the existing unit tests by exercising the ioctls a bit more. syzbot did
-> report interesting race conditions that were more severe.
+> Indeed, sorry :)
+>
+> ...
+> >>>  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
+> >>>               struct msm_gem_address_space *aspace, uint64_t *iova,
+> >>>               u64 range_start, u64 range_end);
+> >> nit: There is an odd mix of uint64_t and u64 (and alike) in the MSM code
+> >> :) The uint64_t variant shouldn't be used by kernel code in general and
+> >> checkpatch should want about it.
+> >
+> > one of many things that I disagree with checkpatch about ;-)
+> >
+> > I prefer standard types to custom ones.  I _kinda_ get the argument in
+> > case of uapi (but IMHO that doesn't apply to how drm uapi headers are
+> > used)
+>
+> I'd understand if it was all either uint64_t or u64, but the mix.. hm.
 
-OK, I did not know if other RTC drivers are likely to suffer from this kind of bugs.
-I also thought that the bugs in cmos_read_alarm() / cmos_set_alarm() were more severe and
-likely to affect existing users.
+yeah, fair, we could be a bit more consistent
 
-I had doubts if it's worth it, so I didn't finish the patches and sent it as RFC. It was a nice project, though.
-
-Would you point to these race conditions reported by syzbot? I cannot find them.
-
-Greetings,
-
-Mateusz
-
+BR,
+-R

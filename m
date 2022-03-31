@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BF94EDE07
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288D04EDE0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239395AbiCaP4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S239423AbiCaP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239343AbiCaP4U (ORCPT
+        with ESMTP id S239387AbiCaP4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:56:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13E089CFC
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:32 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bg10so265656ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:32 -0700 (PDT)
+        Thu, 31 Mar 2022 11:56:22 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A538A6F6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:33 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id o10so302575ejd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oeY2VwpzFpq+ahpdKff0SvoKtIxVNW39tqhBA+XG7Pw=;
-        b=MJaMUe/qk1yjvbCPQ3Q772bMz2lvQP82/qsJ9wOFrzbbEd8YtiNmq+mJCHWvYiRcn7
-         /glNg+V1E18tiftfxtU2Mwaqz6EPl6zucFqo4Vtv/e641N1JbzuMDveldWn5RDT+Bnci
-         OaMsxZpqIIwrO+xT2GmoRYsIBUUH8CviF/01OLw9kLLFWJOlYPkZebZWMzupzofwqDPG
-         eDU4/ClQHf1BdOP0DWO0pfoE6nPHuYZD6Nqc/fGwS7vufkf+5T0PVmKQsuOWRZeg+YPe
-         l571+rdhqUelnaGyZ62oKBFeFCtxexSuc0TY4Ce68pw7RmPggF46Q8pqGdY3CpByBc6G
-         qSrQ==
+        bh=rQA1SC+5wILa0uCwjAsPana/VKgoWviK4j2duLrJTD8=;
+        b=w3eHKH0pjg8+QJSTQah2m/by+H1ypvZRiClXatkSgcIfBQotlQ1tEm9yimzoiL+1l+
+         0jyilQ3EmoCivzI8yQmVis9hhodzkGfcjtdLhlpPe/zZOdPRrIvsxpYnhwrlJW4+ip11
+         31VlkC4OHiFhphl/RMu0nesLMlRsjicQhygxTRLJwjjED02+f19sz1pDeLdI117gw+9y
+         pYhpHK7AXxsTmoP3yxsXNebJNJx2bkJksT/W6eSq1HBdYhxaXppjZwPMN4EQk83rvsFD
+         8nqvs/AjtRJvejYgpkrwxX6oAa46D1wa0DSjm33xQRrCd0XHPIb44neIduSwaSFkbLwG
+         U+5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oeY2VwpzFpq+ahpdKff0SvoKtIxVNW39tqhBA+XG7Pw=;
-        b=u9qubo4NtNtg3fyy7/2ujp7ze8IRqX3rWfrZYY6Iazx+1wz6erJ6R/6rSDexS62qJP
-         LukY/HZpcsCEYla0NRzO8ngJE9KeBLO+Ocl6lNs9lnPikYSzpYpM2YffHBEJejSvNswS
-         YAO/WunRPv3upy0K/VzxL4ExxFfP0kSIo+OSb/jwgaH7nRxfh30gi/kjEcrF561l3IlO
-         XdkgUoGKM0xLoBxYAbnpZ0ZqHgPDdZC7QpCtve3ivm8f6j4KSWfJbaLcbTfepeu4VJ51
-         lOUd5OQ+MPckKg+BChReSXyzKuPlsVMzTcJ2JZq44qfZtEJA4Yihf/uA+lMwkJa51uxa
-         6b/Q==
-X-Gm-Message-State: AOAM533jReBITgxpAqS8YVzpYX9x3Lfbj64nTmkQ1UK5H3441ZXAnlur
-        YP9CIoZsT2O8AqOMozcXrKgYjympYutzMDpi
-X-Google-Smtp-Source: ABdhPJyXRh/6gAuPw0hxbQ4ICnzBwAKYOmY9mCFfwJ1sp9IpmF7sj3LjBeuqSbJFPnE6GHMoOwqDuA==
-X-Received: by 2002:a17:907:6e03:b0:6e0:15ce:77ba with SMTP id sd3-20020a1709076e0300b006e015ce77bamr5564247ejc.67.1648742071348;
-        Thu, 31 Mar 2022 08:54:31 -0700 (PDT)
+        bh=rQA1SC+5wILa0uCwjAsPana/VKgoWviK4j2duLrJTD8=;
+        b=LuuN4+EkXQS0jR6y5YHBp1LNlEeA4ArAqPT03imd/jwCgl9CbE9WMTH5YrPbTd0wAo
+         zGSKq4eSmtcc/UksXNPe9zXvyc0xDJGGk55QXHpYZ3iNugTtQ4vQNHusahPPdWczfe0L
+         ABvCsX2GTNEeqsLLwcNYwADy3vUp2gPk9jAfYDos9HeZwFHiXXs5iF9b5ic4xcHtddh6
+         3QDLtpEjDoFDvNDxBC9TmaDUTUdGPEiFw1O9H91m4lQBLqo7SbIWp9rjzyk222QgPZA0
+         G+jWMYN3/WMzHhrRELZ3iQOMyDyanr8KyeDNERxIvl/ileZ4iIVtYFTphjtGRMEZGWGU
+         hKbw==
+X-Gm-Message-State: AOAM533AslbxW/XJac+/+BRsl2X75jQNvHT9BYToyPJO7zPabxB7Kf+2
+        dNiNjfsZJAZGj6hbdJsQpP5B2g==
+X-Google-Smtp-Source: ABdhPJxLcMCFjLOjURdPLVnXA7gZzUXnu+UmM9XZy0EXNkbb3DXwJVD0rn4NodHDJOF0AQM91pB0hA==
+X-Received: by 2002:a17:907:160b:b0:6e1:116e:7a59 with SMTP id hb11-20020a170907160b00b006e1116e7a59mr5481791ejc.579.1648742072528;
+        Thu, 31 Mar 2022 08:54:32 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056402090a00b004196250baeasm11584077edz.95.2022.03.31.08.54.30
+        by smtp.gmail.com with ESMTPSA id g10-20020a056402090a00b004196250baeasm11584077edz.95.2022.03.31.08.54.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 08:54:30 -0700 (PDT)
+        Thu, 31 Mar 2022 08:54:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-spi@vger.kernel.org
 Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 2/4] arm64: dts: qcom: msm8916: align dmas in SPI with DT schema
-Date:   Thu, 31 Mar 2022 17:54:23 +0200
-Message-Id: <20220331155425.714946-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 3/4] arm64: dts: qcom: qcs404: align clocks in SPI with DT schema
+Date:   Thu, 31 Mar 2022 17:54:24 +0200
+Message-Id: <20220331155425.714946-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
 References: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,84 +76,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT schema expects dma channels in tx-rx order.  No functional
-change.
+The DT schema expects clocks core-iface order.  No functional change.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 36 ++++++++++++++--------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index e34963505e07..6e5e7883c747 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -1529,8 +1529,8 @@ blsp_spi1: spi@78b5000 {
- 			clocks = <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
--			dmas = <&blsp_dma 5>, <&blsp_dma 4>;
--			dma-names = "rx", "tx";
-+			dmas = <&blsp_dma 4>, <&blsp_dma 5>;
-+			dma-names = "tx", "rx";
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&spi1_default>;
- 			pinctrl-1 = <&spi1_sleep>;
-@@ -1561,8 +1561,8 @@ blsp_spi2: spi@78b6000 {
- 			clocks = <&gcc GCC_BLSP1_QUP2_SPI_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
--			dmas = <&blsp_dma 7>, <&blsp_dma 6>;
--			dma-names = "rx", "tx";
-+			dmas = <&blsp_dma 6>, <&blsp_dma 7>;
-+			dma-names = "tx", "rx";
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&spi2_default>;
- 			pinctrl-1 = <&spi2_sleep>;
-@@ -1593,8 +1593,8 @@ blsp_spi3: spi@78b7000 {
- 			clocks = <&gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
--			dmas = <&blsp_dma 9>, <&blsp_dma 8>;
--			dma-names = "rx", "tx";
-+			dmas = <&blsp_dma 8>, <&blsp_dma 9>;
-+			dma-names = "tx", "rx";
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&spi3_default>;
- 			pinctrl-1 = <&spi3_sleep>;
-@@ -1625,8 +1625,8 @@ blsp_spi4: spi@78b8000 {
- 			clocks = <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
--			dmas = <&blsp_dma 11>, <&blsp_dma 10>;
--			dma-names = "rx", "tx";
-+			dmas = <&blsp_dma 10>, <&blsp_dma 11>;
-+			dma-names = "tx", "rx";
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&spi4_default>;
- 			pinctrl-1 = <&spi4_sleep>;
-@@ -1657,8 +1657,8 @@ blsp_spi5: spi@78b9000 {
- 			clocks = <&gcc GCC_BLSP1_QUP5_SPI_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
--			dmas = <&blsp_dma 13>, <&blsp_dma 12>;
--			dma-names = "rx", "tx";
-+			dmas = <&blsp_dma 12>, <&blsp_dma 13>;
-+			dma-names = "tx", "rx";
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&spi5_default>;
- 			pinctrl-1 = <&spi5_sleep>;
-@@ -1689,8 +1689,8 @@ blsp_spi6: spi@78ba000 {
- 			clocks = <&gcc GCC_BLSP1_QUP6_SPI_APPS_CLK>,
- 				 <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
--			dmas = <&blsp_dma 15>, <&blsp_dma 14>;
--			dma-names = "rx", "tx";
-+			dmas = <&blsp_dma 14>, <&blsp_dma 15>;
-+			dma-names = "tx", "rx";
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&spi6_default>;
- 			pinctrl-1 = <&spi6_sleep>;
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+index 3f06f7cd3cf2..4af5065e830b 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -928,9 +928,9 @@ blsp1_spi0: spi@78b5000 {
+ 			compatible = "qcom,spi-qup-v2.2.1";
+ 			reg = <0x078b5000 0x600>;
+ 			interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
+-				 <&gcc GCC_BLSP1_QUP0_SPI_APPS_CLK>;
+-			clock-names = "iface", "core";
++			clocks = <&gcc GCC_BLSP1_QUP0_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&blsp1_spi0_default>;
+ 			#address-cells = <1>;
+@@ -956,9 +956,9 @@ blsp1_spi1: spi@78b6000 {
+ 			compatible = "qcom,spi-qup-v2.2.1";
+ 			reg = <0x078b6000 0x600>;
+ 			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
+-				 <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>;
+-			clock-names = "iface", "core";
++			clocks = <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&blsp1_spi1_default>;
+ 			#address-cells = <1>;
+@@ -984,9 +984,9 @@ blsp1_spi2: spi@78b7000 {
+ 			compatible = "qcom,spi-qup-v2.2.1";
+ 			reg = <0x078b7000 0x600>;
+ 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
+-				 <&gcc GCC_BLSP1_QUP2_SPI_APPS_CLK>;
+-			clock-names = "iface", "core";
++			clocks = <&gcc GCC_BLSP1_QUP2_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&blsp1_spi2_default>;
+ 			#address-cells = <1>;
+@@ -1012,9 +1012,9 @@ blsp1_spi3: spi@78b8000 {
+ 			compatible = "qcom,spi-qup-v2.2.1";
+ 			reg = <0x078b8000 0x600>;
+ 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
+-				 <&gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>;
+-			clock-names = "iface", "core";
++			clocks = <&gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&blsp1_spi3_default>;
+ 			#address-cells = <1>;
+@@ -1040,9 +1040,9 @@ blsp1_spi4: spi@78b9000 {
+ 			compatible = "qcom,spi-qup-v2.2.1";
+ 			reg = <0x078b9000 0x600>;
+ 			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
+-				 <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>;
+-			clock-names = "iface", "core";
++			clocks = <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP1_AHB_CLK>;
++			clock-names = "core", "iface";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&blsp1_spi4_default>;
+ 			#address-cells = <1>;
+@@ -1092,9 +1092,9 @@ blsp2_spi0: spi@7af5000 {
+ 			compatible = "qcom,spi-qup-v2.2.1";
+ 			reg = <0x07af5000 0x600>;
+ 			interrupts = <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&gcc GCC_BLSP2_AHB_CLK>,
+-				 <&gcc GCC_BLSP2_QUP0_SPI_APPS_CLK>;
+-			clock-names = "iface", "core";
++			clocks = <&gcc GCC_BLSP2_QUP0_SPI_APPS_CLK>,
++				 <&gcc GCC_BLSP2_AHB_CLK>;
++			clock-names = "core", "iface";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&blsp2_spi0_default>;
+ 			#address-cells = <1>;
 -- 
 2.32.0
 

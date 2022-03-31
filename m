@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614EF4ED4DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763054ED4E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbiCaHg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S232298AbiCaHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiCaHgy (ORCPT
+        with ESMTP id S231732AbiCaHjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:36:54 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB7837A3D;
-        Thu, 31 Mar 2022 00:35:06 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t25so39903022lfg.7;
-        Thu, 31 Mar 2022 00:35:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:from
-         :subject:to:cc:content-transfer-encoding;
-        bh=fygLA6FCziDtx1VVgJ2qLCPIBE2mOveDYVKTX7/lkjk=;
-        b=ABe8/cH+f1dBFRiwJ4AEsV7aww+qn4+vKIMuvvv9tuCNrfepOW/5gy728C9WlHwSGv
-         xpTlfYK6g5vAi28UNiMJOLB1fjXE8sMPi0c/5qZIDlyJgwUvg/klQwe8ZV+ScUudEU4/
-         rRFpNnD//uLJ56Gh4R0F7UBJZVUlsBv8Szbjn5ZojwunVTI+lWkN1gCUYTos7E6Weg3Q
-         +x/OOUhKvsHzQ4dELQVUbORt/wHgyAf+enniNwuPh3ADeEwzUifAIyAs4UOdf9nGJ/jp
-         6K9dDZANzfnqn61QCv9YvEzM51D1mKBmU/pBjLChmdF1r/7EzlLr36TFrtM68CE2nPTv
-         vaYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:subject:to:cc:content-transfer-encoding;
-        bh=fygLA6FCziDtx1VVgJ2qLCPIBE2mOveDYVKTX7/lkjk=;
-        b=aUqU5hO9kEP6o3kdyp18laLltoJP8En7wNY5cWxbWMtDIr7yIe+jBR1TsxPPN4LgNZ
-         Hu0OgVWNswOBGyebuIUTsH4KNrX82e5sgrnkOEtl2Hh3rd5ZoobLupeKE2nWVziXzAVG
-         3Y9v6Zrxlb5YwNIsfNrcvWgkhRkkD8jvQCj7ExGONxWLrpCdwsDeKx0MeqJMtQDJjDgN
-         BWzSjh/2KETlAJldEGxmG1v8IPg2ObaMZxpGkvs+0ZOzk3tovnM1fD5xq/E7IhJPOrEt
-         C5MTF+8ZlZUkTGwFmJOv+3b2KFBfvosgddHsyL7QFhIGtp5fBe6uV+Y2/sBuNaWaVcvS
-         mHFg==
-X-Gm-Message-State: AOAM531t7Q+QtgOYnMej3h/LxTlONmi8UWfzCKz9/jGfEg/FnQyxszhr
-        yKmnTP+KqG4Ocvb881StucU=
-X-Google-Smtp-Source: ABdhPJzu3nKlbF6eQZCocWc8zoJnOAKYzLHgkxLeJ6GrZCGdjgOd8T7ZRJ1hHhlVxMensAN3lIWpTg==
-X-Received: by 2002:ac2:5bcb:0:b0:44a:1fd6:6b14 with SMTP id u11-20020ac25bcb000000b0044a1fd66b14mr10099860lfn.186.1648712101124;
-        Thu, 31 Mar 2022 00:35:01 -0700 (PDT)
-Received: from [192.168.1.105] (235.132.246.94.ip4.artcom.pl. [94.246.132.235])
-        by smtp.gmail.com with ESMTPSA id y21-20020a2e9d55000000b0024aa6b3feb3sm1978389ljj.29.2022.03.31.00.35.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 00:35:00 -0700 (PDT)
-Message-ID: <9ccce84f-3573-46bd-0444-e812ea2524a9@gmail.com>
-Date:   Thu, 31 Mar 2022 09:36:36 +0200
+        Thu, 31 Mar 2022 03:39:08 -0400
+Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46423E0CE
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648712236;
+        bh=Jv9fkwCRcn6MDNriIVgJm97e12CbBytcdFXcKMLI9TU=;
+        h=From:To:Cc:Subject:Date;
+        b=Zt35AB+vavAdj/G425fTiyXDZWpsNG5qQUFEyqWh8MFxWimKKOpOtOFhf6tPSLqnz
+         4X0aXMCApE14PGaYF9KWI6luJ6711PKy2fc9d4Gr8J5SuUjzzRFEz+wneqX6e1pOxn
+         YgRKGmnlUghze7l41AG6513fFFx7wmVbCjLIipnk=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
+        id 94CB3206; Thu, 31 Mar 2022 15:37:12 +0800
+X-QQ-mid: xmsmtpt1648712232tem7vi6p1
+Message-ID: <tencent_884B806033C3E7D6734450A085172A55FF0A@qq.com>
+X-QQ-XMAILINFO: MyIXMys/8kCtORY7yWGrtDHkNV0SaQpklB00hVKoWuEBCXHGz+06UHLX+1Ob5d
+         wIuFCo1UElqeTY5gT/mVwPZBNWMCF05N0xZ0ICKw7Q2U5ug/nQdPkNu/JpM92mEjfZQ5L8VlpRv7
+         hVOAiplLNUl1DmfdqGBiXx6xj4F68FiSRLTJm49NsoYfnf5KHTq3VScx9h5X2mKsuXUcfgJupaJR
+         FZWt/eu0gudpq0JJCccDhtfEuM+oW1wVkmdX69B4vtJ1dFYOjfQvX3zJopez9X5piQsjX+mInSgv
+         Oy5WGKaQSWVYx+p8o8qE0Ukzl10v/QID9Rg4Jn+ktciB8Z7NfcEiJt7UcRIq/pGbf6bQbpOZp9Oi
+         airREyR1EzPX3ETngDmH7Li9nu9TxJ6FnVlaBRPEL2KN5Q3W1Ju6BSBJ5/oJJSZ6WwXYUDPDCajm
+         neUBn7wnDwEwYVT7VJv/rP+xT4COvfW3J7rr6IaO0wLbVfsxE2vWXmoceKGpfR18OtvcaTfv/u6G
+         khIObEIBWhq4B0c3+mg9z5GrwSd+8YkW5/MsS0MF2Sc5Z6XUD1Qk5v+VnObSih5C1BU+34RuztML
+         7tl1SR5R7sXerbGr0NGVGxsCUeM9kaSgfyfEksK+GCm9sVstHh0fwNYdhkHSzPb6R3gdQ5NyvzkX
+         mShRvoIBxiJc0/fglZ+KP1ARPt5DMVybNTq6qliT8RO+Gu8z4WS6mKPfGqnowFM+q+lcBIDWygqb
+         ukJPqImMCf92XUA7Av7MEtFfx6F35AMZiY6zCb4W7b8wC9yBf3ZiDVOf2WReaSGi9lzB/iXeDIgz
+         ZIPI6MuHfuOWUmpE73ZaOti1qEtNQ/ORh4+CBMMWL+Ba530qgXYFq77Lz8f4Oz2S6joYLXs3lrj+
+         3EgF5KgiIU4+5sraNrbDdXA4fl48KNFgbuE6ti56oszw7uuTPJPSx4m9+3v3+Na6xFNUHKhORrz/
+         /62OjzkN5JQFFEhJAwhymf4lxydQmh
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] staging: r8188eu: change the allocation type of pdata_attr
+Date:   Thu, 31 Mar 2022 15:37:00 +0800
+X-OQ-MSGID: <20220331073700.7505-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-From:   Piotr Chmura <chmooreck@gmail.com>
-Subject: [PATCH v2] si2157: unknown chip version Si2147-A30 ROM 0x50
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     robert Schlabbach <robert_s@gmx.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Antti Palosaari <crope@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix firmware file names assignment in si2157 tuner, allow for running 
-devices without firmware files needed.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
+`pdata_attr` was allocated by kzalloc() in go_add_group_info_attr(), but
+there is a lack of error handlers along the call chain it lies and the
+lifetime of `pdata_attr` is only in go_add_group_info_attr().
+Therefore, changing it to a local variable on stack like the other
+functions in rtw_p2p.c is a possible choice, such as
+`u8 p2pie[MAX_P2P_IE_LEN] = { 0x00 };` in build_probe_resp_p2p_ie()
+which is the caller of go_add_group_info_attr().
 
-It's regression in kernel 5.17.0, worked fine in 5.16 series.
-
-device: 07ca:1871 AVerMedia Technologies, Inc. TD310 DVB-T/T2/C dongle
-modprobe gives error: unknown chip version Si2147-A30 ROM 0x50
-Device initialization is interrupted.
-
-caused by:
-1. table si2157_tuners has swapped fields rom_id and required vs struct 
-si2157_tuner_info.
-2. both firmware file names can be null for devices with required == 
-false - device uses build-in firmware in this case
-
-Fix:
-1. Rearrange fields in table si2157_tuners
-2. Allow both firmware file names be NULL for devices defined with 
-required == false
-
-
-Fixes: 1c35ba3bf972 ("media: si2157: use a different namespace for 
-firmware")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215726
-Link: 
-https://lore.kernel.org/lkml/5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info/
-Cc: stable@vger.kernel.org # 5.17.x
-Signed-of-by: Piotr Chmura <chmooreck@poczta.onet.pl>
-Tested-by: Robert Schlabbach <robert_s@gmx.net>
-
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
+ drivers/staging/r8188eu/core/rtw_p2p.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/media/tuners/si2157.c    2022-03-20 21:14:17.000000000 +0100
-+++ b/drivers/media/tuners/si2157.c    2022-03-22 23:48:05.604408331 +0100
-@@ -77,16 +77,16 @@ err_mutex_unlock:
-  }
-
-  static const struct si2157_tuner_info si2157_tuners[] = {
--    { SI2141, false, 0x60, SI2141_60_FIRMWARE, SI2141_A10_FIRMWARE },
--    { SI2141, false, 0x61, SI2141_61_FIRMWARE, SI2141_A10_FIRMWARE },
--    { SI2146, false, 0x11, SI2146_11_FIRMWARE, NULL },
--    { SI2147, false, 0x50, SI2147_50_FIRMWARE, NULL },
--    { SI2148, true,  0x32, SI2148_32_FIRMWARE, SI2158_A20_FIRMWARE },
--    { SI2148, true,  0x33, SI2148_33_FIRMWARE, SI2158_A20_FIRMWARE },
--    { SI2157, false, 0x50, SI2157_50_FIRMWARE, SI2157_A30_FIRMWARE },
--    { SI2158, false, 0x50, SI2158_50_FIRMWARE, SI2158_A20_FIRMWARE },
--    { SI2158, false, 0x51, SI2158_51_FIRMWARE, SI2158_A20_FIRMWARE },
--    { SI2177, false, 0x50, SI2177_50_FIRMWARE, SI2157_A30_FIRMWARE },
-+    { SI2141, 0x60, false, SI2141_60_FIRMWARE, SI2141_A10_FIRMWARE },
-+    { SI2141, 0x61, false, SI2141_61_FIRMWARE, SI2141_A10_FIRMWARE },
-+    { SI2146, 0x11, false, SI2146_11_FIRMWARE, NULL },
-+    { SI2147, 0x50, false, SI2147_50_FIRMWARE, NULL },
-+    { SI2148, 0x32, true,  SI2148_32_FIRMWARE, SI2158_A20_FIRMWARE },
-+    { SI2148, 0x33, true,  SI2148_33_FIRMWARE, SI2158_A20_FIRMWARE },
-+    { SI2157, 0x50, false, SI2157_50_FIRMWARE, SI2157_A30_FIRMWARE },
-+    { SI2158, 0x50, false, SI2158_50_FIRMWARE, SI2158_A20_FIRMWARE },
-+    { SI2158, 0x51, false, SI2158_51_FIRMWARE, SI2158_A20_FIRMWARE },
-+    { SI2177, 0x50, false, SI2177_50_FIRMWARE, SI2157_A30_FIRMWARE },
-  };
-
-  static int si2157_load_firmware(struct dvb_frontend *fe,
-@@ -178,7 +178,7 @@ static int si2157_find_and_load_firmware
-          }
-      }
-
--    if (!fw_name && !fw_alt_name) {
-+    if (required && !fw_name && !fw_alt_name) {
-          dev_err(&client->dev,
-              "unknown chip version Si21%d-%c%c%c ROM 0x%02x\n",
-              part_id, cmd.args[1], cmd.args[3], cmd.args[4], rom_id);
-
+diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
+index e2b6cf2..f1a5df8 100644
+--- a/drivers/staging/r8188eu/core/rtw_p2p.c
++++ b/drivers/staging/r8188eu/core/rtw_p2p.c
+@@ -27,15 +27,14 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
+ 	struct list_head *phead, *plist;
+ 	u32 len = 0;
+ 	u16 attr_len = 0;
+-	u8 tmplen, *pdata_attr, *pstart, *pcur;
++	u8 pdata_attr[MAX_P2P_IE_LEN] = { 0x00 };
++	u8 tmplen, *pstart, *pcur;
+ 	struct sta_info *psta = NULL;
+ 	struct adapter *padapter = pwdinfo->padapter;
+ 	struct sta_priv *pstapriv = &padapter->stapriv;
+ 
+ 	DBG_88E("%s\n", __func__);
+ 
+-	pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
+-
+ 	pstart = pdata_attr;
+ 	pcur = pdata_attr;
+ 
+@@ -106,7 +105,6 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
+ 	if (attr_len > 0)
+ 		len = rtw_set_p2p_attr_content(pbuf, P2P_ATTR_GROUP_INFO, attr_len, pdata_attr);
+ 
+-	kfree(pdata_attr);
+ 	return len;
+ }
+ 
+-- 

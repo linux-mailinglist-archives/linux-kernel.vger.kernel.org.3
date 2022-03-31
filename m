@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5444EE4AD
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9CF4EE4AC
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243076AbiCaXZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S243018AbiCaXYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243050AbiCaXYx (ORCPT
+        with ESMTP id S242937AbiCaXYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:24:53 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE2E24D9BE
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:23:03 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g22so1049101edz.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VA4OmUlBn+h032QaRrbwfz0ENP/lgrthHNuo2cDc9zs=;
-        b=nYjHIf8uflbZHObYpxif9B5oD9Wtb4t5AI1eCWohJX41q9UAn/abH6xMu9omxNFwsr
-         7qUSDGsPXh0wIhNznI1YcZUJupDndJZzHhIHEE8hHppvHxSa6v170I7xv/CDtTfwhCpF
-         kzEWwkEZCviEfCOEDQ+sa6YJGh6+XAWttUpDc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VA4OmUlBn+h032QaRrbwfz0ENP/lgrthHNuo2cDc9zs=;
-        b=nB7dmW+vO6L2fAGzJE3roF+vpnkQMDq/sRHq3K8aS+M+b27wta7pQb+1ntBsFzQGDu
-         p2AzaLv8SfhJWLfdXx0TyntbKUN2XvFXPaT9jU8VyPJp4CvBwJD7Bn5jIVAdHNDf1LEb
-         QOc5JcQgVAp+P616/7RZc4Zp8aNR6a+cIAt6I8vjmTQ0vEDZaBdCL0sC/BbgE/3leFKe
-         vUqkdabU2leHnZef3qYiJloL8OURLkTKxCXdWzHjdr4UltEyknwNOerOvLouro0uplDW
-         yi5xliuR5Bj5cDRNNaDwoGS1p6wdYPrrEoK7X1/xqT09Q1de+NHKCI63lKytWOPIh3tz
-         ygDQ==
-X-Gm-Message-State: AOAM533azyXY20N7CzU+HqmbzITZ/5XgtUSZhxClkRHXmx85pDDYzTju
-        25QFGT/S3CnoiyjBcz2ZF8VwPD7Wo+iILVjh
-X-Google-Smtp-Source: ABdhPJzXMgZilbw8HT6aoE3hYf/pV6qd0Cnizp3xMTvu1jWfx7IhUstDe3roFvaNx28UfeaNTJ1pjg==
-X-Received: by 2002:a05:6402:35ca:b0:419:5a2d:9b87 with SMTP id z10-20020a05640235ca00b004195a2d9b87mr18304694edc.174.1648768981256;
-        Thu, 31 Mar 2022 16:23:01 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id gn33-20020a1709070d2100b006dfcce8be86sm302318ejc.225.2022.03.31.16.22.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 16:22:59 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id h4so1749755wrc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:22:58 -0700 (PDT)
-X-Received: by 2002:adf:fc47:0:b0:203:dda1:4311 with SMTP id
- e7-20020adffc47000000b00203dda14311mr5685367wrs.301.1648768978217; Thu, 31
- Mar 2022 16:22:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com> <1648656179-10347-4-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1648656179-10347-4-git-send-email-quic_sbillaka@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 31 Mar 2022 16:22:46 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X_ULva3J-Y7EF+0VPRRoFXSmtuKcXG9H=041Kmwa=W4A@mail.gmail.com>
-Message-ID: <CAD=FV=X_ULva3J-Y7EF+0VPRRoFXSmtuKcXG9H=041Kmwa=W4A@mail.gmail.com>
-Subject: Re: [PATCH v6 3/8] drm/msm/dp: Support only IRQ_HPD and REPLUG
- interrupts for eDP
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        quic_aravindh@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 31 Mar 2022 19:24:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E5D5C353;
+        Thu, 31 Mar 2022 16:22:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C2C2B82297;
+        Thu, 31 Mar 2022 23:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EDC5BC340ED;
+        Thu, 31 Mar 2022 23:22:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648768967;
+        bh=cFAMfnRYRwexlQ80k5xK4/bktdJv0fyhc/nvasOcLSo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=pTcM+bxBZsVhEHBrY6ebu5Cmk1+aCXLsOgWp/mU2iRlmn57LuxoT7dzpXi9j5fAvD
+         CIaUqPpOMCUXBffm2HoFE6HC46X9o2R40nzA4yU6Af5l56QBJUKWRl1RciX8DFAg2Z
+         xlTV0sOIhiHR05VPVfdbgYMf6ugOdwJZOkdk3qiA2P6NG2wcTRpYK+PhBa8XupZ7am
+         MNlnvupN2x8gNOeAF5RuVUoRIoETnY4RuO28YZMkfpQEPP9CGF1hXZRkWOUoRP1Wd1
+         lJr8tCu8ivfq6ga8dP5t2DEJkMILo0M4DDaAFHvhFcwtNHIYtZrHNi9Z23HKk0oHnn
+         bXEQbw+m+CCkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7C76E7BB0B;
+        Thu, 31 Mar 2022 23:22:46 +0000 (UTC)
+Subject: Re: [GIT PULL] netfs: Prep for write helpers
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <2639515.1648483225@warthog.procyon.org.uk>
+References: <2639515.1648483225@warthog.procyon.org.uk>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <2639515.1648483225@warthog.procyon.org.uk>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-prep-20220318
+X-PR-Tracked-Commit-Id: ab487a4cdfca3d1ef12795a49eafe1144967e617
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f008b1d6e1e06bb61e9402aa8a1cfa681510e375
+Message-Id: <164876896687.28012.3947884678367341659.pr-tracker-bot@kernel.org>
+Date:   Thu, 31 Mar 2022 23:22:46 +0000
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Steve French <sfrench@samba.org>, ceph-devel@vger.kernel.org,
+        dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,40 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The pull request you sent on Mon, 28 Mar 2022 17:00:25 +0100:
 
-On Wed, Mar 30, 2022 at 9:03 AM Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
->
-> @@ -1374,6 +1382,12 @@ static int dp_pm_resume(struct device *dev)
->         dp_catalog_ctrl_hpd_config(dp->catalog);
->
->
-> +       if (dp->dp_display.connector_type == DRM_MODE_CONNECTOR_DisplayPort)
-> +               dp_catalog_hpd_config_intr(dp->catalog,
-> +                               DP_DP_HPD_PLUG_INT_MASK |
-> +                               DP_DP_HPD_UNPLUG_INT_MASK,
-> +                               true);
-> +
+> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-prep-20220318
 
-nit: why are there two blank lines above?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f008b1d6e1e06bb61e9402aa8a1cfa681510e375
 
+Thank you!
 
-> @@ -1639,6 +1653,9 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->                 return;
->         }
->
-> +       if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-> +               dp_hpd_plug_handle(dp_display, 0);
-> +
-
-Should you add a "pre_enable" and do it there? That would make it more
-symmetric with the fact that you have the countertpart in
-"post_disable".
-
-
-Overall: I'm probably not familiar enough with this code to give it a
-full review. I'm hoping that Dmitry knows it well enough... ;-)
-
-
--Doug
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,195 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73044EE414
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C134EE418
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242497AbiCaWeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S242509AbiCaWgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242491AbiCaWeM (ORCPT
+        with ESMTP id S233852AbiCaWga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:34:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBDE1B8FD8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:32:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66BAA61280
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4328C36AE2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648765942;
-        bh=MI8AewDSQkp1S3OGkehy1DQErFde/A/tnZsKwUdv8F4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lhQiSoGpV0ttrCt64gxcdlRVxUPVdVtzxK39qNRHsjzFwqlunr4FujTCAZA3YGNTM
-         xgUHPDHNbMtUSvqMwhVPlHlfebgCm0kwJPMmgj8xcI0BChfVJkDwS8SKQ9rp53UqER
-         ryP+RAa5sa+nvgVr1CCXmoj30PPNzzyLHFrOZx1e9gEwnp7VAsnz3mZ0H1gdul+9AG
-         AngPjloMsCsBKsCyPEO/Ci+jR6ezpCgcSc1eZ0Tr6wq8SMNvPjhci2paEjKCQLTBeF
-         eKuh/b9Ps8iOxP9JJ+W0LiK45jHNwjLO7uO8G+wvUOR/j9m0nNrfNLu2URXBNawQIs
-         Fuvt/K4KNFrlw==
-Received: by mail-ed1-f44.google.com with SMTP id b15so937757edn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:32:22 -0700 (PDT)
-X-Gm-Message-State: AOAM531E+S12J1fI5BJM7Hsec7vKSddix1udZ3v9joidCeGCYLw7QM0J
-        nJNh8xj8E4yf1hZGgCrltJ3DA+zwwkUYvqz3qm1E3A==
-X-Google-Smtp-Source: ABdhPJwhoWz6DTXp6kj/giCuaqEceu+yembhXjMKP1Iyqzysm3LTuspPTK9zOGnc8SVv2O1RoZgWqcQlxjNXsYO1Wzg=
-X-Received: by 2002:a05:6402:348b:b0:419:172c:e2aa with SMTP id
- v11-20020a056402348b00b00419172ce2aamr18499542edc.261.1648765940962; Thu, 31
- Mar 2022 15:32:20 -0700 (PDT)
+        Thu, 31 Mar 2022 18:36:30 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6281C60F2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:34:42 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id r13so2220640ejd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=acES2We7h+b61Mo8+oMpTpwxU8V43KYhLkYyDhUPIro=;
+        b=LaYaFxb4308Ra+8BjjJVsy1kSa2az3SVuCIrWBRxAdwHMtb/+VOVrzEaIBCha1ZCeo
+         nJqROMozxayEBaxR7ZlTP5R9Y69YpLpIPao0v5fo+Bxo94EAkVGMSNrwxa8Pi6dGVM+y
+         Eq7Xjbx7dHimCkNtsWvDyU0HHWO78PgW2flQULDz7Rbb8eweGlg6kdjzIsmDZ4/9r0V2
+         UgDTxGdAbG7e4qOymXlueQxgdSazgglB5ivhKn/hzFxoikhFD0966apCjt2TOF7UI8XW
+         FiWPMetAnbbhliZI+PxvIfzyZN2ZCcYtxEGL2Dr2JMUqDzxS4XeLBXH6DmivLNbJ6b3c
+         tQ0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=acES2We7h+b61Mo8+oMpTpwxU8V43KYhLkYyDhUPIro=;
+        b=BXGmX8+L6WW3B9htZMerKLAvSr7wlBX4IbeH1fwkb4xpgZNBAE81WEuyfCt/tEv4NR
+         BwhAaHzQPLtcC1UfH1wQ/2iJ0kPWqLbr5y+/sCZ/vKjNod7derkv9DQpCSavzSM+Wemy
+         MghXUIJbE0iHuH5myhpoB/daW03IOXwwmtStJtlRZpM+J5u3sBOu0+BM6P+kpxk8WE3r
+         E3N7ASh3+dc+KAQTlA3eEVAwnU2AEOWQiDCsh9SaynmGyJIyq4cRfk6CmW+hiZSbXAdE
+         ANK2wwmbtpzpSrWTU6RU+jZDW24ID8KaIQ+W2XK63kY0THSnfqUba5r1CId/QZHhVT8e
+         ueQg==
+X-Gm-Message-State: AOAM530Q4LFbT2vQ+rNKyKQL2HiGSPf+sWdNOhJiOmFPCDAv8Ml3oK6O
+        lY4xDEQA2AwSeP8lw9yComY=
+X-Google-Smtp-Source: ABdhPJzu84nlagno7/B/iCTh45NIAtes3ADlYNLucnAQtD/vsIqDQRUwSN2TCW8BrJEBpEFPCzOewA==
+X-Received: by 2002:a17:906:c04d:b0:6b9:252:c51c with SMTP id bm13-20020a170906c04d00b006b90252c51cmr6916234ejb.470.1648766081039;
+        Thu, 31 Mar 2022 15:34:41 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id bm23-20020a170906c05700b006d597fd51c6sm279739ejb.145.2022.03.31.15.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 15:34:40 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Chao Yu <chao@kernel.org>, Yunlei He <heyunlei@huawei.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH] f2fs: fix dereference of stale list iterator after loop body
+Date:   Fri,  1 Apr 2022 00:34:14 +0200
+Message-Id: <20220331223414.901960-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
- <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
- <20220329093753.26wc3noelqrwlrcj@apollo.legion> <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
- <20220329232956.gbsr65jdbe4lw2m6@ast-mbp> <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
- <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com> <CA+khW7iqiKTLi75oSPe+ibV8afR_SPgtg7Q+nEswmMOFZaAebA@mail.gmail.com>
-In-Reply-To: <CA+khW7iqiKTLi75oSPe+ibV8afR_SPgtg7Q+nEswmMOFZaAebA@mail.gmail.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Fri, 1 Apr 2022 00:32:10 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ6-csGkdMQiGYYr5_DgShPWrUFfs92sUOhwzQt=T13+SA@mail.gmail.com>
-Message-ID: <CACYkzJ6-csGkdMQiGYYr5_DgShPWrUFfs92sUOhwzQt=T13+SA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Hao Luo <haoluo@google.com>, Jann Horn <jannh@google.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 8:26 PM Hao Luo <haoluo@google.com> wrote:
->
-> On Wed, Mar 30, 2022 at 11:16 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Wed, Mar 30, 2022 at 11:06 AM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > On Tue, Mar 29, 2022 at 4:30 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
-> > > > > On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
-> > > > > <memxor@gmail.com> wrote:
-> > > > > >
-> > > > > > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
-> > > > > > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
-> > > > > > > >
-> > > > > > > > Hi Yonghong,
-> > > > > > > >
-> > > > > > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > > > > > > > > Some map types support mmap operation, which allows userspace to
-> > > > > > > > > > communicate with BPF programs directly. Currently only arraymap
-> > > > > > > > > > and ringbuf have mmap implemented.
-> > > > > > > > > >
-> > > > > > > > > > However, in some use cases, when multiple program instances can
-> > > > > > > > > > run concurrently, global mmapable memory can cause race. In that
-> > > > > > > > > > case, userspace needs to provide necessary synchronizations to
-> > > > > > > > > > coordinate the usage of mapped global data. This can be a source
-> > > > > > > > > > of bottleneck.
-> > > > > > > > >
-> > > > > > > > > I can see your use case here. Each calling process can get the
-> > > > > > > > > corresponding bpf program task local storage data through
-> > > > > > > > > mmap interface. As you mentioned, there is a tradeoff
-> > > > > > > > > between more memory vs. non-global synchronization.
-> > > > > > > > >
-> > > > > > > > > I am thinking that another bpf_iter approach can retrieve
-> > > > > > > > > the similar result. We could implement a bpf_iter
-> > > > > > > > > for task local storage map, optionally it can provide
-> > > > > > > > > a tid to retrieve the data for that particular tid.
-> > > > > > > > > This way, user space needs an explicit syscall, but
-> > > > > > > > > does not need to allocate more memory than necessary.
-> > > > > > > > >
-> > > > > > > > > WDYT?
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
-> > > > > > > >
-> > > > > > > > - mmap prevents the calling task from reading other task's value.
-> > > > > > > > Using bpf_iter, one can pass other task's tid to get their values. I
-> > > > > > > > assume there are two potential ways of passing tid to bpf_iter: one is
-> > > > > > > > to use global data in bpf prog, the other is adding tid parameterized
-> > > > > > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
-> > > > > > > > the second, we need to create one iter_link object for each interested
-> > > > > > > > tid. It may not be easy to use either.
-> > > > > > > >
-> > > > > > > > - Regarding adding an explicit syscall. I thought about adding
-> > > > > > > > write/read syscalls for task local storage maps, just like reading
-> > > > > > > > values from iter_link. Writing or reading task local storage map
-> > > > > > > > updates/reads the current task's value. I think this could achieve the
-> > > > > > > > same effect as mmap.
-> > > > > > > >
-> > > > > > >
-> > > > > > > Actually, my use case of using mmap on task local storage is to allow
-> > > > > > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
-> > > > > > > need to take an FD as parameter and the bpf progs can run
-> > > > > > > concurrently, thus using global data is racy. Mmapable task local
-> > > > > > > storage is the best solution I can find for this purpose.
-> > > > > > >
-> > > > > > > Song also mentioned to me offline, that mmapable task local storage
-> > > > > > > may be useful for his use case.
-> > > > > > >
-> > > > > > > I am actually open to other proposals.
-> > > > > > >
-> > > > > >
-> > > > > > You could also use a syscall prog, and use bpf_prog_test_run to update local
-> > > > > > storage for current. Data can be passed for that specific prog invocation using
-> > > > > > ctx. You might have to enable bpf_task_storage helpers in it though, since they
-> > > > > > are not allowed to be called right now.
-> > > > > >
-> > > > >
-> > > > > The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
-> > > > > thinking of allowing any thread including unpriv ones to be able to
-> > > > > pass data to the prog and update their own storage.
-> > > >
-> > > > If I understand the use case correctly all of this mmap-ing is only to
-> > > > allow unpriv userspace to access a priv map via unpriv mmap() syscall.
-> > > > But the map can be accessed as unpriv already.
-> > > > Pin it with the world read creds and do map_lookup sys_bpf cmd on it.
-> > >
-> > > Right, but, if I understand correctly, with
-> > > sysctl_unprivileged_bpf_disabled, unpriv tasks are not able to make
-> > > use of __sys_bpf(). Is there anything I missed?
-> >
-> > That sysctl is a heavy hammer. Let's fix it instead.
-> > map lookup/update/delete can be allowed for unpriv for certain map types.
-> > There are permissions checks in corresponding lookup/update calls already.
->
+The list iterator variable will be a bogus pointer if no break was hit.
+Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
+value making it unsafe to use that in the comparision to determine if the
+specific element was found.
 
-(Adding Jann)
+Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
+by chance (or intention of an attacker) it matches the value of 'page'
+even though the correct element was not found.
 
-I wonder if we can tag a map as BPF_F_UNPRIVILEGED and allow the writes to
-only maps that are explicitly marked as writable by unprivileged processes.
+This is fixed by using a separate list iterator variable for the loop
+and only setting the original variable if a suitable element was found.
+Then determing if the element was found is simply checking if the
+variable is set.
 
-We will have task local storage in LSM programs that we
-won't like unprivileged processes to write to as well.
+Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ fs/f2fs/segment.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-struct {
-        __uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-        __uint(map_flags, BPF_F_NO_PREALLOC | BPF_F_UNPRIVILEGED);
-        __type(key, int);
-        __type(value, struct fd_storage);
-} task_fd_storage_map SEC(".maps");
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 22dfeb991529..58695997d42f 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -355,16 +355,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct list_head *head = &fi->inmem_pages;
+ 	struct inmem_pages *cur = NULL;
++	struct inmem_pages *tmp;
 
-- KP
+ 	f2fs_bug_on(sbi, !page_private_atomic(page));
 
-> This sounds great. If we can allow basic map operations for some map
-> types, it will change many use cases I'm looking at. Let me take a
-> look and report back.
+ 	mutex_lock(&fi->inmem_lock);
+-	list_for_each_entry(cur, head, list) {
+-		if (cur->page == page)
++	list_for_each_entry(tmp, head, list) {
++		if (tmp->page == page) {
++			cur = tmp;
+ 			break;
++		}
+ 	}
+
+-	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
++	f2fs_bug_on(sbi, !cur);
+ 	list_del(&cur->list);
+ 	mutex_unlock(&fi->inmem_lock);
+
+
+base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+--
+2.25.1
+

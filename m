@@ -2,69 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775D64ED453
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98784ED454
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 09:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbiCaHDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 03:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S231612AbiCaHEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 03:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiCaHCz (ORCPT
+        with ESMTP id S230463AbiCaHEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 03:02:55 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C2C1EF5C0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:01:04 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id w21so27731007wra.2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:01:04 -0700 (PDT)
+        Thu, 31 Mar 2022 03:04:14 -0400
+X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 00:02:27 PDT
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EDC1EE8FF
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 00:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kSVb1dTbWdbne8U6VvmE51Q2krf82Epq6ExE1DUNwlY=;
-        b=DWwExqt6wOKpB5leH0YrszfY4BBOcAmwKWK3k3xC8z8e3PXmH2PV8rw7gkliIKYfYT
-         YGcBgvBEmCwLigZ8CW8xgyRn+gx82i8csj/m8AzVx9MonCoVLLvo8bCJwMzEiS496oft
-         GvpunYLmNbKAs8mZL4KSAxIJZvc/3srBuPY+/2Q8kOIolZ91IWFOg0Bq8qSPL6AmJKTo
-         W/TBtzfmNxYjQAvzlw8mEEc4phADplW4qxzOFr7V6DxqNobma2+MH61VJSbUqzMNGEGV
-         B048JowqMWFaHg0uup350luMdndFk+UtyJxvESamR7b0WLTDnWkc5Cy9tfFc+ovLDIcN
-         NZiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kSVb1dTbWdbne8U6VvmE51Q2krf82Epq6ExE1DUNwlY=;
-        b=f9WjYUOXt/DqKl8k/bz7d5ipSpuU/LuLtV/4JCBU5068zbVNkwW+MrBjIgv6Qm5/51
-         wP6+sUv9zyxxdhCjHF2W4qVChFY4Nz9n456j8NT1X8jZrpooDenglDKCVdbedk508/Ca
-         DF5wmgPOXq4rzIXgwIyD5ZsmE9g3+bfDXsDhJLhV2j8hwRLac9y9VXCEDZLFj0vepVr/
-         jHcTQcJ+ZeTepdeu6f7p9PIni+VrS10GMjLmcPjNTPbGlEea1U/wU5ca6zbI9mmeM3zF
-         /INp9he1vYMhjVqQaR4sb8qdRnFnLR54hNHBG36dt2Bk9uDrqPGPeiWZXHOQcAhWlqOt
-         f6UA==
-X-Gm-Message-State: AOAM530aIg65/DvaafdMsFwCWNHaycbBZjf0+pmPBHi8f7quc9bPj9Yg
-        gEoSh6ESXKLgFWNKFTQ752I=
-X-Google-Smtp-Source: ABdhPJyVQ+8U4h+ZzHr7EWX8iqE5z6jQcrTABOrQQenrmyRHHZPiTBRsumyMbVJb1jBTKWKM7T0Y2A==
-X-Received: by 2002:adf:f102:0:b0:205:7d05:d250 with SMTP id r2-20020adff102000000b002057d05d250mr2943236wro.350.1648710063300;
-        Thu, 31 Mar 2022 00:01:03 -0700 (PDT)
-Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id j15-20020a05600c1c0f00b0038cabc63721sm6875058wms.30.2022.03.31.00.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 00:01:02 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparmaintainer@unisys.com
-Cc:     David Kershner <david.kershner@unisys.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev, Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH v2] staging: unisys: Remove "struct dentry *eth_debugfs_dir"
-Date:   Thu, 31 Mar 2022 09:00:59 +0200
-Message-ID: <2098282.irdbgypaU6@leap>
-In-Reply-To: <20220331064751.29634-1-fmdefrancesco@gmail.com>
-References: <20220331064751.29634-1-fmdefrancesco@gmail.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1648710147;
+  x=1680246147;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZGUlNEDgfhKPqk9GYADNZofauGboqQ59TxpOJKUhBBo=;
+  b=L26D9z/cE29l9ai1BgDDgCz2IHla5fTwKrQZ7eoaeex5Jac50lpsfEZ8
+   bk4HQxBgY855yLBZVLxQ6uWVWa5QnBPsjWJY6mbCyfPxn5qtF6Uv2hBA9
+   J9oJdcO7MKl9YHypwfFnhmoM5K/wI9n+Qkc/5CCHKsYwblFHhQ6pTKh6X
+   m7fHgqEqy+SCOrtYvr+2IhxEfMaVWLHJvwOUWA/me2oy1gpdnVcU2L/qE
+   x5jNmeRblxNCu1Qzkc7LjNZLCk0g/kpjI3LlBzHEq3eLoYbFQTVf3z6KQ
+   MPBJj1LxK+kBGHMDE9DiPDgxWQ4Qu/mZFuBUIjsT5B+Ug4gy82Tv7p1C2
+   Q==;
+From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+CC:     <kernel@axis.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mailbox: forward the hrtimer if not queued and under a lock
+Date:   Thu, 31 Mar 2022 09:01:15 +0200
+Message-ID: <20220331070115.29421-1-bjorn.ardo@axis.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,43 +51,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 31 marzo 2022 08:47:51 CEST Fabio M. De Francesco wrote:
-> There is no need for "struct dentry *eth_debugfs_dir" which is used for
-> debug / sysfs directories. Therefore, remove this "struct dentry" and
-> everything related (i.e., creation and removal).
->=20
-> As a side effect of this change, the code has no more need of the
-> "cleanup_register_netdev" label, which can also be removed.
->=20
-> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->=20
-> v1 - v2: Add a couple of "Suggested-by" tags which were forgotten.=20
-> Thanks to Dan Carpenter and Greg Kroah-Hartman.
->=20
->  drivers/staging/unisys/visornic/visornic_main.c | 17 -----------------
->  1 file changed, 17 deletions(-)
+This reverts commit c7dacf5b0f32957b24ef29df1207dc2cd8307743,
+"mailbox: avoid timer start from callback"
 
-As said some days ago, the email address of David Kershner at unisys.com
-is not anymore reachable. Each time I submit patches for this Unisys'=20
-driver I get the following message:
+The previous commit was reverted since it lead to a race that
+caused the hrtimer to not be started at all. The check for
+hrtimer_active() in msg_submit() will return true if the
+callback function txdone_hrtimer() is currently running. This
+function could return HRTIMER_NORESTART and then the timer
+will not be restarted, and also msg_submit() will not start
+the timer. This will lead to a message actually being submitted
+but no timer will start to check for its compleation.
 
-Delivery has failed to these recipients or groups:
+The original fix that added checking hrtimer_active() was added to
+avoid a warning with hrtimer_forward. Looking in the kernel
+another solution to avoid this warning is to check hrtimer_is_queued()
+before calling hrtimer_forward_now() instead. This however requires a
+lock so the timer is not started by msg_submit() inbetween this check
+and the hrtimer_forward() call.
 
-David Kershner (david.kershner at unisys.com)
-The email address you entered couldn't be found.=20
-Please check the recipient's email address and try to resend the message.
+Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+---
+ drivers/mailbox/mailbox.c          | 19 +++++++++++++------
+ include/linux/mailbox_controller.h |  1 +
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-Is it the case to remove his entry from the MAINTAINERS file? I'm asking
-because I don't yet know how these kinds of issues are handled.=20
-
-Any suggestions?
-
-Thanks,
-
-=46abio M. De Francesco
-
-
+diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+index 3e7d4b20ab34..4229b9b5da98 100644
+--- a/drivers/mailbox/mailbox.c
++++ b/drivers/mailbox/mailbox.c
+@@ -82,11 +82,11 @@ static void msg_submit(struct mbox_chan *chan)
+ exit:
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 
+-	/* kick start the timer immediately to avoid delays */
+ 	if (!err && (chan->txdone_method & TXDONE_BY_POLL)) {
+-		/* but only if not already active */
+-		if (!hrtimer_active(&chan->mbox->poll_hrt))
+-			hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
++		/* kick start the timer immediately to avoid delays */
++		spin_lock_irqsave(&chan->mbox->poll_hrt_lock, flags);
++		hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
++		spin_unlock_irqrestore(&chan->mbox->poll_hrt_lock, flags);
+ 	}
+ }
+ 
+@@ -120,20 +120,26 @@ static enum hrtimer_restart txdone_hrtimer(struct hrtimer *hrtimer)
+ 		container_of(hrtimer, struct mbox_controller, poll_hrt);
+ 	bool txdone, resched = false;
+ 	int i;
++	unsigned long flags;
+ 
+ 	for (i = 0; i < mbox->num_chans; i++) {
+ 		struct mbox_chan *chan = &mbox->chans[i];
+ 
+ 		if (chan->active_req && chan->cl) {
+-			resched = true;
+ 			txdone = chan->mbox->ops->last_tx_done(chan);
+ 			if (txdone)
+ 				tx_tick(chan, 0);
++			else
++				resched = true;
+ 		}
+ 	}
+ 
+ 	if (resched) {
+-		hrtimer_forward_now(hrtimer, ms_to_ktime(mbox->txpoll_period));
++		spin_lock_irqsave(&mbox->poll_hrt_lock, flags);
++		if (!hrtimer_is_queued(hrtimer))
++			hrtimer_forward_now(hrtimer, ms_to_ktime(mbox->txpoll_period));
++		spin_unlock_irqrestore(&mbox->poll_hrt_lock, flags);
++
+ 		return HRTIMER_RESTART;
+ 	}
+ 	return HRTIMER_NORESTART;
+@@ -500,6 +506,7 @@ int mbox_controller_register(struct mbox_controller *mbox)
+ 		hrtimer_init(&mbox->poll_hrt, CLOCK_MONOTONIC,
+ 			     HRTIMER_MODE_REL);
+ 		mbox->poll_hrt.function = txdone_hrtimer;
++		spin_lock_init(&mbox->poll_hrt_lock);
+ 	}
+ 
+ 	for (i = 0; i < mbox->num_chans; i++) {
+diff --git a/include/linux/mailbox_controller.h b/include/linux/mailbox_controller.h
+index 36d6ce673503..6fee33cb52f5 100644
+--- a/include/linux/mailbox_controller.h
++++ b/include/linux/mailbox_controller.h
+@@ -83,6 +83,7 @@ struct mbox_controller {
+ 				      const struct of_phandle_args *sp);
+ 	/* Internal to API */
+ 	struct hrtimer poll_hrt;
++	spinlock_t poll_hrt_lock;
+ 	struct list_head node;
+ };
+ 
+-- 
+2.20.1
 

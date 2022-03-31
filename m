@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC1D4EE1F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2C14EE1FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240968AbiCaTlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S240493AbiCaTmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241062AbiCaTkV (ORCPT
+        with ESMTP id S241022AbiCaTm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:40:21 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B579241A06;
-        Thu, 31 Mar 2022 12:38:14 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id B7BB71F47268
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648755493;
-        bh=QXCqhwGgS71Plij0LYpMswWc72NGt82a9mKy6xwpDRk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f3tdOpbrfmBJM9E1eieNv3lSTG8VF2jict14/WplVjzSJWPvrdt1WljxliR/iwYJN
-         gouvm328JQH/r5kJA06kVD4ZZuWct+FNxxAQVshBE4W9lhnd1nTQxwmQs5nlmDzXO/
-         yILZ0nAmysFMKoG3LgfSI3fYs84oTRdx1IfrnSafmC1hKX+J0fTesRCckW2C9UelpW
-         555/F3ldoPVZHM3cZxnibOaUc3pxF1USjL8EXbh77casUQ67cVyWEbXaIosgPN+CQg
-         70notWdfPUeDqt0ROnEIBqGBaCvI6gG+7btIN6l/vMRPDIWd2i+/rmBeiKIeun25Qw
-         CqjzRYpRU9f3w==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 23/23] media: hantro: Add H.264 field decoding support
-Date:   Thu, 31 Mar 2022 15:37:25 -0400
-Message-Id: <20220331193726.289559-24-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
-References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
+        Thu, 31 Mar 2022 15:42:27 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246CC34BAC
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:40:11 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b15so513051edn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZJPRDVJ4i3CoCpBpHTerrKP5+xFbRI1ypwTw9ETZHIs=;
+        b=LgUqkPajNt93eXRRHm8ZYg6x6pggOukr4LiPjE9VwNUjKKDtGSvJjZgFrlfDzkrw+Q
+         QxFsSXnRdRhBaafA1/1Qq6UlVwCYpP4kElG90RmPS4EXSFjgR+VACiUY/ppc85f1li4+
+         rYfgVhS9bysVCw47LDUgf9XCn/ozyhNvE7tHCFqQ1bYnHe1b5Yjb9E+eZ5Jr2FxQ44qZ
+         pNHccjpPMS/cxCLk5wPwA4zgFgX2HRZ/6nQBrrh5rnBSm3QCEt04rNshHKbb8DJH63dc
+         afuy0wIMk9vIfmB0CJNnuGSglM4PcpPM3nI2p5y2BxbwlTaaO0dMe9sav9Tn24IpyE6e
+         h66Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZJPRDVJ4i3CoCpBpHTerrKP5+xFbRI1ypwTw9ETZHIs=;
+        b=V91tKz4CDllkbhEz0gE7rdTgCqUturUItz0JHNeWd3JeFj8jJOsf2l1lNZiZ7UYKBw
+         QKTtNCUDOL9yqqIDB+qlNlYWVCu1OtLMT7h3kkv17lQq9oN6Z6k6KFJHe9xmquxyMNrx
+         49EoG7mMYXJrHmgjsPaP1zkoXtsA1wGEkVgQrbBAvam7UENeiGBKX4TeQSadWuTyArQ8
+         /PM9nxHKx6fqFjoKOR9tmgqKq1/kH2d87m3ox3GICV8CeVz3eNMxrfbRvzLdEedybD0n
+         aSAWkSNN3GIcWvIFqAoW7aR7Zfk1s/5Z67xcRD8Hff2ZCxp4wqVLawF4xjiFyHZDgIKP
+         hw6w==
+X-Gm-Message-State: AOAM531ZxXj2fTkzewyMO5RKtaU2j0pN38H9ABGY3St6A66sRtDDn/wO
+        6L5HksE7bOamgrcD65OtKpIfIFn1C4k20bp7
+X-Google-Smtp-Source: ABdhPJyyU7vh2YKhs2wXuvlY2VhSEWOYdBjCLkaHIh9iLI8tueZDx8Hr4XOIVJO8fkYZLCfr8/2h5A==
+X-Received: by 2002:a05:6402:2743:b0:419:4edd:c487 with SMTP id z3-20020a056402274300b004194eddc487mr18118161edd.325.1648755609668;
+        Thu, 31 Mar 2022 12:40:09 -0700 (PDT)
+Received: from [192.168.0.167] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id e22-20020a170906505600b006da7d71f25csm137088ejk.41.2022.03.31.12.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 12:40:09 -0700 (PDT)
+Message-ID: <ddc12aab-3cff-16a1-9ec9-a246240f9521@linaro.org>
+Date:   Thu, 31 Mar 2022 21:40:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to
+ dtschema
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20220331160248.716234-1-krzysztof.kozlowski@linaro.org>
+ <20220331175817.GA91341@9a2d8922b8f1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220331175817.GA91341@9a2d8922b8f1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,206 +81,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the required code to support field decoding. While most of
-the code is derived from Rockchip and VSI reference code, the
-reduction of the reference list to 16 entries was found by
-trial and errors. The list consists of all the references with the
-opposite field parity.
+On 31/03/2022 19:58, Kuldeep Singh wrote:
+> On Thu, Mar 31, 2022 at 06:02:47PM +0200, Krzysztof Kozlowski wrote:
+>> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
+>> Peripheral Interface (SPI) bindings to DT Schema.
+>>
+>> The original bindings in TXT were not complete, so add during conversion
+>> properties already used in DTS and/or in the driver: reg-names, dmas,
+>> interconnects, operating points and power-domains.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes since v1:
+>> 1. Correct $ref path and remove interconnect minItems (Kuldeep).
+>> 2. Remove child tpm device from example.
+>> 3. Pad reg hex addresses with 00.
+>> ---
+>>  .../bindings/spi/qcom,spi-geni-qcom.txt       |  39 ------
+>>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 120 ++++++++++++++++++
+>>  2 files changed, 120 insertions(+), 39 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
+>>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
+>> deleted file mode 100644
+>> index c8c1e913f4e7..000000000000
+>> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
+>> +++ /dev/null
+>> @@ -1,39 +0,0 @@
+>> -GENI based Qualcomm Universal Peripheral (QUP) Serial Peripheral Interface (SPI)
+>> -
+>> -The QUP v3 core is a GENI based AHB slave that provides a common data path
+>> -(an output FIFO and an input FIFO) for serial peripheral interface (SPI)
+>> -mini-core.
+>> -
+>> -SPI in master mode supports up to 50MHz, up to four chip selects, programmable
+>> -data path from 4 bits to 32 bits and numerous protocol variants.
+>> -
+>> -Required properties:
+>> -- compatible:		Must contain "qcom,geni-spi".
+>> -- reg:			Must contain SPI register location and length.
+>> -- interrupts:		Must contain SPI controller interrupts.
+>> -- clock-names:		Must contain "se".
+>> -- clocks:		Serial engine core clock needed by the device.
+>> -- #address-cells:	Must be <1> to define a chip select address on
+>> -			the SPI bus.
+>> -- #size-cells:		Must be <0>.
+>> -
+>> -SPI Controller nodes must be child of GENI based Qualcomm Universal
+>> -Peripharal. Please refer GENI based QUP wrapper controller node bindings
+>> -described in Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml.
+>> -
+>> -SPI slave nodes must be children of the SPI master node and conform to SPI bus
+>> -binding as described in Documentation/devicetree/bindings/spi/spi-bus.txt.
+>> -
+>> -Example:
+>> -	spi0: spi@a84000 {
+>> -		compatible = "qcom,geni-spi";
+>> -		reg = <0xa84000 0x4000>;
+>> -		interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
+>> -		clock-names = "se";
+>> -		clocks = <&clock_gcc GCC_QUPV3_WRAP0_S0_CLK>;
+>> -		pinctrl-names = "default", "sleep";
+>> -		pinctrl-0 = <&qup_1_spi_2_active>;
+>> -		pinctrl-1 = <&qup_1_spi_2_sleep>;
+>> -		#address-cells = <1>;
+>> -		#size-cells = <0>;
+>> -	};
+>> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> new file mode 100644
+>> index 000000000000..62c4a9598e16
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> @@ -0,0 +1,120 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/qcom,spi-geni-qcom.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: GENI based Qualcomm Universal Peripheral (QUP) Serial Peripheral Interface (SPI)
+>> +
+>> +maintainers:
+>> +  - Andy Gross <agross@kernel.org>
+>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> +
+>> +description:
+>> +  The QUP v3 core is a GENI based AHB slave that provides a common data path
+>> +  (an output FIFO and an input FIFO) for serial peripheral interface (SPI)
+>> +  mini-core.
+>> +
+>> +  SPI in master mode supports up to 50MHz, up to four chip selects,
+>> +  programmable data path from 4 bits to 32 bits and numerous protocol variants.
+>> +
+>> +  SPI Controller nodes must be child of GENI based Qualcomm Universal
+>> +  Peripharal. Please refer GENI based QUP wrapper controller node bindings
+>> +  described in Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml.
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,geni-spi
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    const: se
+>> +
+>> +  dmas:
+>> +    maxItems: 2
+>> +
+>> +  dma-names:
+>> +    items:
+>> +      - const: tx
+>> +      - const: rx
+>> +
+>> +  interconnects:
+>> +    maxItems: 2
+>> +
+>> +  interconnect-names:
+>> +    items:
+>> +      - const: qup-core
+>> +      - const: qup-config
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  operating-points-v2: true
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  reg-names:
+>> +    const: se
+> 
+> Why reg-names is required?
+> Reg contain max 1 value, we can skip reg-names like other users.
+> 
+> Also, "se" is used as clock name and using it again for reg-names?
+> I think this is wrong and reg-names shouldn't be documented.
 
-The strategy is to deduplicate the reference picture that points
-to the same storage (same index). The choice of opposite parity has
-been made to keep the other field of the current field pair in the
-list. This method may not be robust if a field was lost.
+reg-names are not required. If you ask why they are documented? As I
+wrote in commit msg - bindings were not fully updated to DTSes being used.
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- drivers/staging/media/hantro/hantro_h264.c | 107 ++++++++++++++++++---
- drivers/staging/media/hantro/hantro_hw.h   |   1 +
- 2 files changed, 94 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 7377fc26f780..f6fc939aa726 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -22,6 +22,11 @@
- #define POC_BUFFER_SIZE			34
- #define SCALING_LIST_SIZE		(6 * 16 + 2 * 64)
- 
-+/* For valid and long term reference marking, index are reversed, so bit 31
-+ * indicates the status of the picture 0.
-+ */
-+#define REF_BIT(i)			BIT(32 - 1 - (i))
-+
- /* Data structure describing auxiliary buffer format. */
- struct hantro_h264_dec_priv_tbl {
- 	u32 cabac_table[CABAC_INIT_BUFFER_SIZE];
-@@ -227,6 +232,7 @@ static void prepare_table(struct hantro_ctx *ctx)
- {
- 	const struct hantro_h264_dec_ctrls *ctrls = &ctx->h264_dec.ctrls;
- 	const struct v4l2_ctrl_h264_decode_params *dec_param = ctrls->decode;
-+	const struct v4l2_ctrl_h264_sps *sps = ctrls->sps;
- 	struct hantro_h264_dec_priv_tbl *tbl = ctx->h264_dec.priv.cpu;
- 	const struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
- 	u32 dpb_longterm = 0;
-@@ -237,20 +243,45 @@ static void prepare_table(struct hantro_ctx *ctx)
- 		tbl->poc[i * 2] = dpb[i].top_field_order_cnt;
- 		tbl->poc[i * 2 + 1] = dpb[i].bottom_field_order_cnt;
- 
-+		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_VALID))
-+			continue;
-+
- 		/*
- 		 * Set up bit maps of valid and long term DPBs.
--		 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
-+		 * NOTE: The bits are reversed, i.e. MSb is DPB 0. For frame
-+		 * decoding, bit 31 to 15 are used, while for field decoding,
-+		 * all bits are used, with bit 31 being a top field, 30 a bottom
-+		 * field and so on.
- 		 */
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
--			dpb_valid |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--			dpb_longterm |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
-+		if (dec_param->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) {
-+			if (dpb[i].fields & V4L2_H264_TOP_FIELD_REF)
-+				dpb_valid |= REF_BIT(i * 2);
-+
-+			if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)
-+				dpb_valid |= REF_BIT(i * 2 + 1);
-+
-+			if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM) {
-+				dpb_longterm |= REF_BIT(i * 2);
-+				dpb_longterm |= REF_BIT(i * 2 + 1);
-+			}
-+		} else {
-+			dpb_valid |= REF_BIT(i);
-+
-+			if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-+				dpb_longterm |= REF_BIT(i);
-+		}
-+	}
-+	ctx->h264_dec.dpb_valid = dpb_valid;
-+	ctx->h264_dec.dpb_longterm = dpb_longterm;
-+
-+	if ((dec_param->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) ||
-+	    !(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD)) {
-+		tbl->poc[32] = ctx->h264_dec.cur_poc;
-+		tbl->poc[33] = 0;
-+	} else {
-+		tbl->poc[32] = dec_param->top_field_order_cnt;
-+		tbl->poc[33] = dec_param->bottom_field_order_cnt;
- 	}
--	ctx->h264_dec.dpb_valid = dpb_valid << 16;
--	ctx->h264_dec.dpb_longterm = dpb_longterm << 16;
--
--	tbl->poc[32] = dec_param->top_field_order_cnt;
--	tbl->poc[33] = dec_param->bottom_field_order_cnt;
- 
- 	assemble_scaling_list(ctx);
- }
-@@ -326,6 +357,8 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- {
- 	struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
- 	dma_addr_t dma_addr = 0;
-+	s32 cur_poc = ctx->h264_dec.cur_poc;
-+	u32 flags;
- 
- 	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
- 		dma_addr = hantro_get_ref(ctx, dpb[dpb_idx].reference_ts);
-@@ -343,7 +376,12 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- 		dma_addr = hantro_get_dec_buf_addr(ctx, buf);
- 	}
- 
--	return dma_addr;
-+	flags = dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD ? 0x2 : 0;
-+	flags |= abs(dpb[dpb_idx].top_field_order_cnt - cur_poc) <
-+		 abs(dpb[dpb_idx].bottom_field_order_cnt - cur_poc) ?
-+		 0x1 : 0;
-+
-+	return dma_addr | flags;
- }
- 
- u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
-@@ -355,6 +393,34 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
- 	return dpb->frame_num;
- }
- 
-+static void deduplicate_reflist(struct v4l2_h264_reflist_builder *b,
-+				struct v4l2_h264_reference *reflist)
-+{
-+	int write_idx = 0;
-+	int i;
-+
-+	if (b->cur_pic_fields == V4L2_H264_FRAME_REF) {
-+		write_idx = b->num_valid;
-+		goto done;
-+	}
-+
-+	for (i = 0; i < b->num_valid; i++) {
-+		if (!(b->cur_pic_fields == reflist[i].fields)) {
-+			reflist[write_idx++] = reflist[i];
-+			continue;
-+		}
-+	}
-+
-+done:
-+	/* Should not happen unless we have a bug in the reflist builder. */
-+	if (WARN_ON(write_idx > 16))
-+		write_idx = 16;
-+
-+	/* Clear the remaining, some streams fails otherwise */
-+	for (; write_idx < 16; write_idx++)
-+		reflist[write_idx].index = 15;
-+}
-+
- int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_h264_dec_hw_ctx *h264_ctx = &ctx->h264_dec;
-@@ -386,15 +452,28 @@ int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx)
- 	/* Update the DPB with new refs. */
- 	update_dpb(ctx);
- 
--	/* Prepare data in memory. */
--	prepare_table(ctx);
--
- 	/* Build the P/B{0,1} ref lists. */
- 	v4l2_h264_init_reflist_builder(&reflist_builder, ctrls->decode,
- 				       ctrls->sps, ctx->h264_dec.dpb);
-+	h264_ctx->cur_poc = reflist_builder.cur_pic_order_count;
-+
-+	/* Prepare data in memory. */
-+	prepare_table(ctx);
-+
- 	v4l2_h264_build_p_ref_list(&reflist_builder, h264_ctx->reflists.p);
- 	v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx->reflists.b0,
- 				    h264_ctx->reflists.b1);
-+
-+	/* Reduce ref lists to at most 16 entries, Hantro hardware will deduce
-+	 * the actual picture lists in field through the dpb_valid,
-+	 * dpb_longterm bitmap along with the current frame parity.
-+	 */
-+	if (reflist_builder.cur_pic_fields != V4L2_H264_FRAME_REF) {
-+		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.p);
-+		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.b0);
-+		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.b1);
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 292aaaabaf24..fd869369fb97 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -91,6 +91,7 @@ struct hantro_h264_dec_hw_ctx {
- 	struct hantro_h264_dec_ctrls ctrls;
- 	u32 dpb_longterm;
- 	u32 dpb_valid;
-+	s32 cur_poc;
- };
- 
- /**
--- 
-2.34.1
-
+Best regards,
+Krzysztof

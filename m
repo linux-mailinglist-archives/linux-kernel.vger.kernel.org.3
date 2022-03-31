@@ -2,203 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7039D4EE1CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0D84EE142
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbiCaTjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S238097AbiCaTDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbiCaTjB (ORCPT
+        with ESMTP id S238038AbiCaTDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:39:01 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8E41EDA34
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648755384;
-        bh=t+pd5nnN/BLBgcMhZewfIZ7V3cZOxT7El4ZWjnd4n0U=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=jRYGbR0owV1jNj1qyjlIPjaWwx8o93GKJV5Euwg8RQwlrcLNMmytydH5yCzXWSkr7
-         PBpqA7cMt/oGMVQ2boLgZAfBnYs6pGutpe6SueuvC8dyXc2KKhrdBnqdtmViviEXah
-         7heE6OC7wooBFNUImc4maHiD2DwUyckwM/vsPhZA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from genesis.localnet ([80.187.80.35]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbRfv-1oBpNr0XSz-00boXP; Thu, 31
- Mar 2022 21:36:24 +0200
-From:   Alois Wohlschlager <alois1@gmx-topmail.de>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Hildenbrand <david@redhat.com>,
-        Rolf Eike Beer <eb@emlix.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Matthew Bobrowski <repnop@google.com>, Jan Kara <jack@suse.cz>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] pid: Allow creation of pidfds to threads
-Date:   Thu, 31 Mar 2022 21:02:32 +0200
-Message-ID: <3412128.IC5jYiYEAv@genesis>
+        Thu, 31 Mar 2022 15:03:32 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31EA20DB01;
+        Thu, 31 Mar 2022 12:01:44 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id u16so1094512wru.4;
+        Thu, 31 Mar 2022 12:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T9+AkiW/4h4A1Ms4Miaw1I42u6H5Nq21dOfaVBmxDOY=;
+        b=YhXQSDQNFt1PUyiQir/KzfA2QkhaB5iXoDEQqrvlYnBuvliALMKTvUF/Tst9kBbB4J
+         3SNayKANcUSbmkrIBfOB11eokDrjDFeazk5bLvOuuZ4y8rx4zeCDpIi026N2sJjKSBvO
+         MLyPRQCBNRqwW41BtETq9xWEHbm8pmQeI5NYZJD57XBOlNH+RELCfvheG81DDNXbfrW5
+         9V51RZJSTRfoGOfhBH/9emqzBACiqYXX7x+tMVXyOuVUUFOwQZ2CpUr+Isk4MflSzgt/
+         lC6ridW1AAiN1lJPO3jwMQmplC3eS2daZ4s+pQGQBaxFHIrfLJFYlsbAsQptf933E6Ba
+         kSfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T9+AkiW/4h4A1Ms4Miaw1I42u6H5Nq21dOfaVBmxDOY=;
+        b=4mgmH9MKEqNrZDHp7LizhNdyOBrrZyyx4Xd2gFc/DjVvKHBTypPle9q4BXCHWt54ud
+         hjLoFbDrjQcJKxefUsKSUVlAkV06RM0SucDEv2qVrsldqDkOmYTEiW1ctA+PXwXXUrWJ
+         UaINEq/2isvyflF22o8+Tt0QPsByIEGODmJ6bE3pQCjWWgHuNfWL18FPNtqw12/xQ17B
+         qNz6QZ5UY3GrVOWQ/UtuNvzJA7oYEBNqE5ogMqJkEtbYjy6ttftN/h3tBMUwfCklloS5
+         IipZio20EP1vUgiv3g5Jv9p94nhjDLbSuBlgRcLWN+UN/7Vu5vc9cxSknPKr/ZtRb6OB
+         HSaA==
+X-Gm-Message-State: AOAM530TQ88MDNASVl3dLAWLTKSHpwqLUoVq3vyWflHAzVdMDjqfVuDE
+        WrXx6fmedT8Gkklrcdg3VGOfs4PAWbFgSq7Wn2g=
+X-Google-Smtp-Source: ABdhPJwX9ypiRh4trrEQoi/7vM1BBV0U8zxJnGyxDNIWxKMhout7D4Lj2PJ5oVdWZLsHo820nf/TSIMiwiSGtr2XH7o=
+X-Received: by 2002:adf:f20f:0:b0:203:fc73:a9a0 with SMTP id
+ p15-20020adff20f000000b00203fc73a9a0mr5182581wro.418.1648753303352; Thu, 31
+ Mar 2022 12:01:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2296693.3NxCkoLgkh"; micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Provags-ID: V03:K1:pIqMjOucgodaMzVDBkS7oW22Bg7lNsPkkSahvuKflG6rcVRBV93
- JvF/m1LoS28i05au1HFQ9FTr4r2I8KJn0rSAxNSr7RReIn9zjlMVRLrcUSQkvVNba4kK0SI
- 6lRUHJAWvUGkx6OrJvxU/RCJYcu3f2St/3VURpEAqTfeLjFI2ktGqtvQNsSLt3P8HA0k4Tt
- x1Ph3ez8CHwQO6F4ibP5A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zexKTJhElVI=:oncBVUu6y3PEOAbwqzNWzH
- ld8OPM8zgxqbKUOGpnxubxR3eeNT61nSNnj8TvVwyixq6LFEeF3P8MefKANs9A6FcvQo6KgBX
- P1vWDcKeXqvVomTuzX3EeKU7NyYdOS+3qtk8Rm5pioL83c2iHGpUA4AcQ9gA06AmtRhEeoRwZ
- tvqAHSW/IndxBvVZZghtlnqJDQEc3mN005BAE0ZiIaJuw/5CJMBkWowly4s+YOQ9HLJIHISM7
- Sz3W5602UhgQDH5x9x+kVfGNFIY+tOy1RapMapdnmOK+1vYl3gIf3izctjr7+KvccQwwiasBB
- Y3fcgDVbwV5D4mRC1zIhNX+w3OgqGQthch/DKQ3XjkUc9ws2BUfSwkdnGXqL9R0MpxpqXW6NA
- C0zBWKTAffwH2RpGEvRWzGWPcYB+/H5ZqDcgp5azWytK8zReoZABtwHv3QqaBZtTNoB9+RylT
- oaz5xGO5dOqpJA0HFx2C988irQzSlByY7GO/HzhmJenhc6OgJLPjvBg3N5o4+Prkhn65nwQtj
- /od6AiF2brSKZh9MUY/JwzKDrY05jef6+3Sryn9PfcPHr23ODLWM0L0LOKn+/SedB1o01Yn9P
- lfI5XDLvP5Y8M/kGQP4WK/1Apd1P8++053ljFvGcP+DXQDNhmQhEuP7VodpZX8nMZK7ALMFZV
- gMXDGvXaEX52v9OS6Vlm4OK4r9VwlCZCB+2TTpcA7ixOyi/9JybhO4fsKFqiqyzvHBE2k3TP/
- RKrzj9W2w6COAsvsM1bQMEoPeCgzux0WVg88ZgCYtlkvVwWnpK7X/3i56rWbsEAEPYoxc1zjc
- SydZvuSy1gz+1oomxUIIMIMAdWJYrTqqkvmjnLebXbaGquLK4ze+OshKZrmrg2Eo+S9ahz2xM
- wOX1fXh2HnKPObDetQ62mvyAz0bE+V+PkIcL3v7R2dv9zmIdhvDeROEuAQemmVKTTzBG/gJW9
- TcOncNJ4AGT2kt+wRqiDp16Q1FvEQmnCKnWKvgXToJhy1joMQx/gWI53KaQIUq6hYNAvtqGlq
- D0qc9VuP4+UPzaZ9W03WzR7iObdwZMHlyB6ZZNsCaDz4QZQzpFPaC/5Hi+5sKphEZACWbyBN+
- +vwWuZxUwWKjok=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330204804.660819-1-robdclark@gmail.com> <20220330204804.660819-11-robdclark@gmail.com>
+ <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com>
+In-Reply-To: <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 31 Mar 2022 12:02:35 -0700
+Message-ID: <CAF6AEGvZqM1OT_n1C+x+C1GTd4PbFkH4c7P-BseDOUGj7yj3Eg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] drm/msm: Add a way for userspace to allocate GPU iova
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Emma Anholt <emma@anholt.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2296693.3NxCkoLgkh
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Alois Wohlschlager <alois1@gmx-topmail.de>
-To: Christian Brauner <brauner@kernel.org>
-Subject: [PATCH] pid: Allow creation of pidfds to threads
-Date: Thu, 31 Mar 2022 21:02:32 +0200
-Message-ID: <3412128.IC5jYiYEAv@genesis>
+On Thu, Mar 31, 2022 at 11:52 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> ...
+> > +/*
+> > + * Get the requested iova but don't pin it.  Fails if the requested iova is
+> > + * not available.  Doesn't need a put because iovas are currently valid for
+> > + * the life of the object.
+> > + *
+> > + * Setting an iova of zero will clear the vma.
+> > + */
+> > +int msm_gem_set_iova(struct drm_gem_object *obj,
+> > +                  struct msm_gem_address_space *aspace, uint64_t iova)
+> > +{
+> > +     int ret = 0;
+>
+> nit: No need to initialize the ret
 
-The pidfd_open() syscall now allows retrieving pidfds to processes which
-are not thread group leaders. Like standard pidfds so far, these may be
-used to retrieve file descriptors from the target thread using
-pidfd_getfd(), as well as for killing the target thread group using
-pidfd_send_signal().
-However, unlike pidfds referencing thread group leaders, they do not
-support polling for process exit. Attempts to do so signal an error
-condition instead of blocking indefinitely.
+actually, we do
 
-Since the semantics of pidfd_getfd() and pidfd_send_signal() are not
-very useful within a thread group, these thread pidfds can only be
-created using pidfd_open(), not via clone().
+> > +     msm_gem_lock(obj);
+> > +     if (!iova) {
+> > +             ret = clear_iova(obj, aspace);
+> > +     } else {
+> > +             struct msm_gem_vma *vma;
+> > +             vma = get_vma_locked(obj, aspace, iova, iova + obj->size);
+> > +             if (IS_ERR(vma)) {
+> > +                     ret = PTR_ERR(vma);
+> > +             } else if (GEM_WARN_ON(vma->iova != iova)) {
+> > +                     clear_iova(obj, aspace);
+> > +                     ret = -ENOSPC;
+>
+> The (vma->iova != iova) means that vma is already set, but to a
+> different address. Is -ENOSPC really appropriate here? -EBUSY or -EINVAL
+> looks more natural to me.
 
-Signed-off-by: Alois Wohlschlager <alois1@gmx-topmail.de>
-=2D--
- kernel/fork.c |  3 +++
- kernel/pid.c  | 15 +++------------
- 2 files changed, 6 insertions(+), 12 deletions(-)
+yeah, -EBUSY is better
 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index f1e89007f228..f98230630a57 100644
-=2D-- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1836,6 +1836,9 @@ static __poll_t pidfd_poll(struct file *file, struct
-poll_table_struct *pts)
-        struct pid *pid =3D file->private_data;
-        __poll_t poll_flags =3D 0;
+> > +             }
+> > +     }
+> > +     msm_gem_unlock(obj);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >  /*
+> >   * Unpin a iova by updating the reference counts. The memory isn't actually
+> >   * purged until something else (shrinker, mm_notifier, destroy, etc) decides
+> > diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+> > index 38d66e1248b1..efa2e5c19f1e 100644
+> > --- a/drivers/gpu/drm/msm/msm_gem.h
+> > +++ b/drivers/gpu/drm/msm/msm_gem.h
+> > @@ -38,6 +38,12 @@ struct msm_gem_address_space {
+> >
+> >       /* @faults: the number of GPU hangs associated with this address space */
+> >       int faults;
+> > +
+> > +     /** @va_start: lowest possible address to allocate */
+> > +     uint64_t va_start;
+> > +
+> > +     /** @va_size: the size of the address space (in bytes) */
+> > +     uint64_t va_size;
+> >  };
+> >
+> >  struct msm_gem_address_space *
+> > @@ -144,6 +150,8 @@ struct msm_gem_vma *msm_gem_get_vma_locked(struct drm_gem_object *obj,
+> >                                          struct msm_gem_address_space *aspace);
+> >  int msm_gem_get_iova(struct drm_gem_object *obj,
+> >               struct msm_gem_address_space *aspace, uint64_t *iova);
+> > +int msm_gem_set_iova(struct drm_gem_object *obj,
+> > +             struct msm_gem_address_space *aspace, uint64_t iova);
+> >  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
+> >               struct msm_gem_address_space *aspace, uint64_t *iova,
+> >               u64 range_start, u64 range_end);
+> nit: There is an odd mix of uint64_t and u64 (and alike) in the MSM code
+> :) The uint64_t variant shouldn't be used by kernel code in general and
+> checkpatch should want about it.
 
-+       if (!pid_has_task(pid, PIDTYPE_TGID))
-+               return EPOLLERR;
-+
-        poll_wait(file, &pid->wait_pidfd, pts);
+one of many things that I disagree with checkpatch about ;-)
 
-        /*
-diff --git a/kernel/pid.c b/kernel/pid.c
-index 2fc0a16ec77b..6be745c7399c 100644
-=2D-- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -548,11 +548,6 @@ struct pid *pidfd_get_pid(unsigned int fd, unsigned i=
-nt
-*flags)
-  * Return the task associated with @pidfd. The function takes a reference=
- on
-  * the returned task. The caller is responsible for releasing that refere=
-nce.
-  *
-- * Currently, the process identified by @pidfd is always a thread-group
-leader.
-- * This restriction currently exists for all aspects of pidfds including
-pidfd
-- * creation (CLONE_PIDFD cannot be used with CLONE_THREAD) and pidfd poll=
-ing
-- * (only supports thread group leaders).
-- *
-  * Return: On success, the task_struct associated with the pidfd.
-  *        On error, a negative errno number will be returned.
-  */
-@@ -566,7 +561,7 @@ struct task_struct *pidfd_get_task(int pidfd, unsigned=
- int
-*flags)
-        if (IS_ERR(pid))
-                return ERR_CAST(pid);
+I prefer standard types to custom ones.  I _kinda_ get the argument in
+case of uapi (but IMHO that doesn't apply to how drm uapi headers are
+used)
 
--       task =3D get_pid_task(pid, PIDTYPE_TGID);
-+       task =3D get_pid_task(pid, PIDTYPE_PID);
-        put_pid(pid);
-        if (!task)
-                return ERR_PTR(-ESRCH);
-@@ -595,7 +590,7 @@ int pidfd_create(struct pid *pid, unsigned int flags)
- {
-        int fd;
-
--       if (!pid || !pid_has_task(pid, PIDTYPE_TGID))
-+       if (!pid)
-                return -EINVAL;
-
-        if (flags & ~(O_NONBLOCK | O_RDWR | O_CLOEXEC))
-@@ -616,11 +611,7 @@ int pidfd_create(struct pid *pid, unsigned int flags)
-  * @flags: flags to pass
-  *
-  * This creates a new pid file descriptor with the O_CLOEXEC flag set for
-- * the process identified by @pid. Currently, the process identified by
-- * @pid must be a thread-group leader. This restriction currently exists
-- * for all aspects of pidfds including pidfd creation (CLONE_PIDFD cannot
-- * be used with CLONE_THREAD) and pidfd polling (only supports thread gro=
-up
-- * leaders).
-+ * the process identified by @pid.
-  *
-  * Return: On success, a cloexec pidfd is returned.
-  *         On error, a negative errno number will be returned.
-=2D-
-2.35.1
-
---nextPart2296693.3NxCkoLgkh
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEypeoIv8kJdR0rz5L4PWepeUhaRQFAmJF+sgACgkQ4PWepeUh
-aRQ7yg//Q2dmkkaR2O8Ze1ZUC62HOismnJntR5jFn1DTAOg8tRsLPyAooPKso6zY
-I6TS1TanCd2I2QFAjZXQ3jz6FKI/yR5pfFbRtHySylIigpqAEpK/NqPnAfqHDmCX
-XYgS0+iSvHCJZUejANJDLwBleQOjvWmnYKnIbVGRSITYYzg7//IS2BlKWt6k90Ov
-dxi5tdACAeQHCN8yJ8KKbtBhJe7A89NkTueD6Gp0q07FtK9mPmWaR5rmdApVdupe
-5g3u+kxxBhaLexwrtT+Z2YZsO/0rHsJbCXOmOcQN7VlyL7eZ5Q8rg3nGpDXX1wrw
-oAj6y8UmRWufXbPKbd3/yLAO+u5U7DYXKEIV1TcLJpL7sw2Fsv6WAdYQjxxflW5z
-hawEfIPQ3nDs3WijSt6tr+7BNUgv4jgtuTx5gm3FO8A2I8RL6pGwVPPJhtUURswU
-9QxDJj5opPoUzFisD5qakbm0nXiZlMBcS2PUESkp7KKOeV3gXspsujR4VDZ/H3KJ
-tsGsXmQpyNWhO4MHQf8wI/tvdgGxRf3BHRidEC44TB2C9gt73ME1TdGl26MPbxF3
-sTJ5d78bqlTt1wrkW4BOolup3d6r4exT33jxu5VMyyVYyzqwD/Oo8H0+bi8C53i4
-Flbl95HfFEtN6iaHhG2l2NAi15uPjwQ3hZTKRlFSpzvcbqCPFec=
-=F1tC
------END PGP SIGNATURE-----
-
---nextPart2296693.3NxCkoLgkh--
-
-
-
+BR,
+-R

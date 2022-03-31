@@ -2,105 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422AA4EE46C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC64D4EE46E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242718AbiCaXGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S242718AbiCaXIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237947AbiCaXF7 (ORCPT
+        with ESMTP id S236367AbiCaXIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:05:59 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2737E162185
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648767852; x=1680303852;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tucNaCUnD64doiDrH2VZYUE5jsE6WjQSguxgWFjc2AM=;
-  b=OHPMKVUIZYxXk83wIL5PtGfeyg4IYrdkCHkj5AQGweVzhcTy4znED8C+
-   r04DuYP8HqhMYJg35ZEre5KUslw5Nyc6dI/2wDZxUtDnC1B8uENF1TNje
-   ozOPOCQ7agvZeeKslLSClUUBOVlyTi/XqmvgTRZjpGeM4OlVgAO9Is8Hh
-   DkHpjYbj7YWpIZe1F7i+5zGnUCAe8Jc75vJ6YtLqcGpJ3rB5mzx1K/O7w
-   r7qn/nO9TXTC7CbolGPZI/hPKHS7VIKGy+GjMjtNG18htRk6u14lMF3vq
-   ESflkbvcL9dZPB+t/CwwAgAUW10sGZAD5l2+np5ZPqG3WffSzwoIX0oZT
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,225,1643644800"; 
-   d="scan'208";a="197688845"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Apr 2022 07:04:11 +0800
-IronPort-SDR: vL1FryFR6XTRbv+lbY9fg6Bgs8tczPzwZGDCnUjSGQh9mzlIyQYKCUM/yLte7rNEK7K2AHgpIb
- myA5c8yQCn4cLS2DOsqZYWi8Or4FV93GPIydCNZYC01/ZDXi9Y66MxM0epjUzTeppAu1LGtt25
- ui4UbM5tYOuhswyTbeOqxQTo8Vqi8mROX448GOUNvKVbSiZ7PO1acs6nkm1USzKdnMv7YZVHlF
- aPpBdHJSbzbrV2lQdgaSigbedFlc30grED3HOLoLHqUFQMqRganEomXvdWUdhkKxx5wXmnOaAa
- OWa/UKjyQA95uQpJnHClODxs
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Mar 2022 15:34:58 -0700
-IronPort-SDR: GHVO4KHZai2y6ZFwnwikZ7aVwtohjjTWwLuBfZ9C1TJ5aWNDfxWD5phgNZpFNcWVJVK591NJQo
- 1sc0k7S8HEAne89RKy1PjRSILQsPj7MpDQVdhsmSo8tcWyyx23nJ78wCJ7+i9oa7vv1vBnEGTT
- lxt7rqGuY+AqsQpeMRi/79oA68zsKB2lp4JTsxq1elTBpwl6t0qyUm6VcUq3KXYs6EmdXwb1/d
- DyXLn4L68vFFvmvFUguEs6huSvxWg51NaADsH1anfDqPyyeesosLv64fFmuVcvGMIkczhTsys8
- icI=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Mar 2022 16:04:10 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KTzQ16zKXz1SHwl
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:04:09 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1648767849; x=1651359850; bh=tucNaCUnD64doiDrH2VZYUE5jsE6WjQSgux
-        gWFjc2AM=; b=A/bFKKl+a7d7ND+7qicmHRuI3H/QVGVym6kET2Hawf/02mK1BrP
-        r45lOiz4r9wiW574prdunX7jjM670bu6YZZm5vfYA35uGY5hpUcbO6StQo4Z2AHh
-        sZoOdfYWDb61fNb7ITw4orHCCLzFQQavdZe2GGGcOrX23L/SfhZgegwPDnHf0L73
-        hUOX3e76uhb4VeeSIhXOQFmb94ee+/YKHo7GZq59xwF6tB1PoHnCRRCwiONgrBVw
-        //2pq31nxOqs3RI73j/MVTEPsZky8ZhHraqvUrAZ0We/65nAqfOWd2K7oqPQ2ABL
-        735rURjEnvDL2/MoRg2RkSKx7Jyy2C1uKDg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BOylXClSloio for <linux-kernel@vger.kernel.org>;
-        Thu, 31 Mar 2022 16:04:09 -0700 (PDT)
-Received: from [10.225.163.121] (unknown [10.225.163.121])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KTzQ03Q8zz1Rvlx;
-        Thu, 31 Mar 2022 16:04:08 -0700 (PDT)
-Message-ID: <22f69d9a-7d0d-a408-70b3-11295f14b82d@opensource.wdc.com>
-Date:   Fri, 1 Apr 2022 08:04:07 +0900
+        Thu, 31 Mar 2022 19:08:32 -0400
+Received: from uriel.iewc.co.za (uriel.iewc.co.za [IPv6:2c0f:f720:0:3:d6ae:52ff:feb8:f27b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C8623FF33;
+        Thu, 31 Mar 2022 16:06:41 -0700 (PDT)
+Received: from [2c0f:f720:fe16:c400::1] (helo=tauri.local.uls.co.za)
+        by uriel.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1na3s4-0003TG-Lp; Fri, 01 Apr 2022 01:06:28 +0200
+Received: from [192.168.42.210]
+        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1na3s3-00077U-Hx; Fri, 01 Apr 2022 01:06:27 +0200
+Message-ID: <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za>
+Date:   Fri, 1 Apr 2022 01:06:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 3/3] ata: ahci: Skip 200 ms debounce delay for AMD 300
- Series Chipset SATA Controller
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Mario Limonciello <Mario.Limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-ide@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Nehal-bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>
-References: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
- <20220321212431.13717-3-pmenzel@molgen.mpg.de>
- <BL1PR12MB5157DDFD5E75360F032346D3E2169@BL1PR12MB5157.namprd12.prod.outlook.com>
- <cc7b4426-f6a6-e6b1-4aaf-0a713ee3d388@opensource.wdc.com>
- <5fb6af7b-d84f-cbae-7eb1-543f3a7e53e4@molgen.mpg.de>
- <d9837420-1cbb-ed5e-7043-985d9eb9d065@opensource.wdc.com>
- <b3e4435d-335c-1aba-1920-c225b46d09e7@molgen.mpg.de>
- <f6c78650-f22f-fcaf-a660-b1fc4ea7f641@molgen.mpg.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <f6c78650-f22f-fcaf-a660-b1fc4ea7f641@molgen.mpg.de>
+ Thunderbird/91.6.1
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
+ connections
+Content-Language: en-GB
+To:     Neal Cardwell <ncardwell@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+References: <E1nZMdl-0006nG-0J@plastiekpoot>
+ <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za>
+ <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
+ <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za>
+ <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+From:   Jaco Kroon <jaco@uls.co.za>
+Organization: Ultimate Linux Solutions (Pty) Ltd
+In-Reply-To: <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,98 +60,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 23:42, Paul Menzel wrote:
-> Dear Damien,
->=20
->=20
-> Am 23.03.22 um 09:36 schrieb Paul Menzel:
->=20
->> Am 23.03.22 um 09:24 schrieb Damien Le Moal:
->>> On 3/23/22 15:55, Paul Menzel wrote:
->>
->>>> Am 23.03.22 um 06:01 schrieb Damien Le Moal:
->>>>> On 3/22/22 06:51, Limonciello, Mario wrote:
->>
->>>>>>> -----Original Message-----
->>>>>>> From: Paul Menzel <pmenzel@molgen.mpg.de>
->>>>>>> Sent: Monday, March 21, 2022 16:25
->>>>
->>>> [=E2=80=A6]
->>>>
->>>>>> I seem to recall that we were talking about trying to drop the=20
->>>>>> debounce delay for everything, weren't we?
->>>>>>
->>>>>> So perhaps it would be right to add a 4th patch in the series to d=
-o
->>>>>> just that.  Then If this turns out to be problematic for
->>>>>> anything other than the controllers in the series that you
->>>>>> identified as not problematic then that 4th patch can
->>>>>> potentially be reverted alone?
->>>>>
->>>>> Not quite everything :) But you are right, let's try to switch the=20
->>>>> default to no delay. I will be posting patches today for that.
->>>>> With these patches, your patches are not necessary anymore as the A=
-MD
->>>>> chipset falls under the default no-delay.
->>>>
->>>> I am all for improving the situation for all devices, but I am unabl=
-e to
->>>> judge the regression potential of changing this, as it affects a lot=
- of
->>>> devices. I guess it=E2=80=99d would go through the next tree, and ho=
-pefully the
->>>> company QA teams can give it a good spin. I hoped that my patches, a=
-s I
->>>> have tested them, and AMD will hopefully too, could go into the curr=
-ent
->>>> merge window.
->>>
->>> Yes, correct, the plan is to get the generic series queued as soon
->>> as rc1 so that it can spend plenty of time in linux-next for people
->>> to test. That will hopefully reduce the risk of breaking things in
->>> the field. Same for  the default LPM change.
->>
->> But 5.18 or 5.19? If 5.18, sounds good to me, if 5.19, I=E2=80=99d be =
-great if=20
->> my patches go into 5.18 cycle, as they have been tested, and it would=20
->> mean the whole change gets tested more widely already.
->>
->>> With the default removal of the debounce delay, your patches addressi=
-ng
->>> only the AMD adapter are not needed anymore: this adapter will not ha=
-ve a
->>> debounce delay unless the ATA_LFLAG_DEBOUNCE_DELAY flag is set.
->>
->> Yes, I understand.
->=20
-> The merge window for Linux 5.18 is going to close in three days this=20
-> Sunday. It=E2=80=99d be really great if my patches, tested on hardware,=
- could go=20
-> into that.
->=20
->>>>> It would be nice if you can test though.
->>>>
->>>> Of course, I am going to that either way.
->>>
->>> Series posted with you on CC. Please test !
->>
->> Thank you. I am going to test it in the coming days, and report back.
->>
->> Maybe more people should be put in Cc (Dell, Lenovo, IBM, x86 subsyste=
-m)=20
->> with a request to test this?
-> Thank you for the patches, which are a big improvement. Let=E2=80=99s h=
-ope, you=20
-> can re-roll them, so they get into Linux very soon for everyone=E2=80=99=
-s benefit.
+Hi Neal,
 
-I am waiting for 5.18-rc1 to rebase the patches and re-post them. Given
-reviewed-by and tested-by tags, I will queue them for 5.19. With that in
-mind, I am not planning to apply your previous patches for 5.18, as they
-would conflict and would only end up being churn since the delay removal
-by default will undo your changes.
+This sniff was grabbed ON THE CLIENT HOST.  There is no middlebox or
+anything between the sniffer and the client.  Only the firewall on the
+host itself, where we've already establish the traffic is NOT DISCARDED
+(at least not in filter/INPUT).
+
+Setup on our end:
+
+2 x routers, usually each with a direct peering with Google (which is
+being ignored at the moment so instead traffic is incoming via IPT over DD).
+
+Connected via switch to
+
+2 x firewalls, of which ONE is active (they have different networks
+behind them, and could be active / standby for different networks behind
+them - avoiding active-active because conntrackd is causing more trouble
+than it's worth), Linux hosts, using netfilter, has been operating for
+years, no recent kernel upgrades.
+
+4 x hosts in mail cluster, one of which you're looking at here.
+
+On 2022/03/31 17:41, Neal Cardwell wrote:
+> On Wed, Mar 30, 2022 at 9:04 AM Jaco Kroon <jaco@uls.co.za> wrote:
+> ...
+>> When you state sane/normal, do you mean there is fault with the other
+>> frames that could not be explained by packet loss in one or both of the
+>> directions?
+> Yes.
+>
+> (1) If you look at the attached trace time/sequence plots (from
+> tcptrace and xplot.org) there are several behaviors that do not look
+> like normal congestive packet loss:
+OK.  I'm not 100% sure how these plots of yours work, but let's see if I
+can follow your logic here - they mostly make sense.  A legend would
+probably help.  As I understand the white dots are original transmits,
+green is what has been ACKED.  R is retransmits ... what's the S? 
+What's the yellow line (I'm guessing receive window as advertised by the
+server)?
+>
+>   (a) Literally *all* original transmissions (white segments in the
+> plot) of packets after client sequence 66263 appear lost (are not
+> ACKed). Congestion generally does not behave like that. But broken
+> firewalls/middleboxes do.
+>        (See netdev-2022-03-29-tcp-disregarded-acks-zoomed-out.png )
+
+Agreed.  So could it be that something in the transit path towards
+Google is actually dropping all of that?
+
+As stated - I highly doubt this is on our network unless newer kernel
+(on mail cluster) is doing stuff which is causing older netfilter to
+drop perhaps?  But this doesn't explain why newer kernel retransmits
+data for which it received an ACK.
+
+>
+>   (b) When the client is retransmitting packets, only packets at
+> exactly snd_una are ACKed. The packets beyond that point are always
+> un-ACKed. Again sounds like a broken firewall/middlebox.
+>        (See netdev-2022-03-29-tcp-disregarded-acks-zoomed-in.png )
+No middlebox between packet sniffer and client ... client here is linux
+5.17.1.  Brings me back to the only thing that could be dropping the
+traffic is netfilter on the host, or the kernel doesn't like something
+about the ACK, or kernel is doing something else wrong as a result of
+TFO.  I'm not sure which option I like less.  Unfortunately I also use
+netfilter for redirecting traffic into haproxy here so can't exactly
+just switch off netfilter.
+>
+>   (c) After the client receives the server's "ack 73403", the client
+> ignores/drops all other incoming packets that show up in the trace.
+
+Agreed.  However, if I read your graph correctly, it gets an ACK for
+frame X at ~3.8s into the connection, then for X+2 at 4s, but it keeps
+retransmitting X+2, not X+1?
 
 
---=20
-Damien Le Moal
-Western Digital Research
+>
+>        As Eric notes, this doesn't look like a PAWS issue. And it
+> doesn't look like a checksum or sequence/ACK validation issue. The
+> client starts ignoring ACKs between two ACKs that have correct
+> checksums, valid ACK numbers, and valid (identical) sequence numbers
+> and TS val and ecr values (here showing absolute sequence/ACK
+> numbers):
+I'm not familiar with PAWS here.  Assuming that the green line is ACKs,
+then at around 4s we get an ACK that basically ACKs two frames in one
+(which is fine from my understanding of TCP), and then the second of
+these frames keeps getting retransmitted going forward, so it's almost
+like the kernel ACKs the *first* of these two frames but not the second.
+>
+>     (i) The client processes this ACK and uses it to advance snd_una:
+>     17:46:49.889911 IP6 (flowlabel 0x97427, hlim 61, next-header TCP
+> (6) payload length: 32) 2a00:1450:4013:c16::1a.25 >
+> 2c0f:f720:0:3:d6ae:52ff:feb8:f27b.48590: . cksum 0x7005 (correct)
+> 2699968514:2699968514(0) ack 3451415932 win 830 <nop,nop,TS val
+> 1206546583 ecr 331191428>
+
+>
+>     (ii) The client ignores this ACK and all later ACKs:
+>     17:46:49.889912 IP6 (flowlabel 0x97427, hlim 61, next-header TCP
+> (6) payload length: 32) 2a00:1450:4013:c16::1a.25 >
+> 2c0f:f720:0:3:d6ae:52ff:feb8:f27b.48590: . cksum 0x6a66 (correct)
+> 2699968514:2699968514(0) ack 3451417360 win 841 <nop,nop,TS val
+> 1206546583 ecr 331191428>
+>
+> neal

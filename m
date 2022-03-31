@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C134EE418
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63874EE423
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 00:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242509AbiCaWgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 18:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S242528AbiCaWhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 18:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiCaWga (ORCPT
+        with ESMTP id S240705AbiCaWhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 18:36:30 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6281C60F2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:34:42 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id r13so2220640ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 15:34:42 -0700 (PDT)
+        Thu, 31 Mar 2022 18:37:35 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61E71C8A8E;
+        Thu, 31 Mar 2022 15:35:47 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id p15so2199679ejc.7;
+        Thu, 31 Mar 2022 15:35:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=acES2We7h+b61Mo8+oMpTpwxU8V43KYhLkYyDhUPIro=;
-        b=LaYaFxb4308Ra+8BjjJVsy1kSa2az3SVuCIrWBRxAdwHMtb/+VOVrzEaIBCha1ZCeo
-         nJqROMozxayEBaxR7ZlTP5R9Y69YpLpIPao0v5fo+Bxo94EAkVGMSNrwxa8Pi6dGVM+y
-         Eq7Xjbx7dHimCkNtsWvDyU0HHWO78PgW2flQULDz7Rbb8eweGlg6kdjzIsmDZ4/9r0V2
-         UgDTxGdAbG7e4qOymXlueQxgdSazgglB5ivhKn/hzFxoikhFD0966apCjt2TOF7UI8XW
-         FiWPMetAnbbhliZI+PxvIfzyZN2ZCcYtxEGL2Dr2JMUqDzxS4XeLBXH6DmivLNbJ6b3c
-         tQ0g==
+        bh=nik1iTbxoUWnG6UF8WspcQRjvneqvZ965qd0fvy6u0Q=;
+        b=onwlNXEfsXY5267AxROmbVgwPHyozyAkfW/eFrSTJ29X2muD4OpT4LcAzhalPbQd/b
+         CKKvVbnuI0cwUFkWWUdzbnGsJSK/fRV89XUWiC/WnV/yncPvIhtMQLgUICGaLathnPov
+         SQyfqPvBUDIKdjR1LnGVk9ymAD/jMYdQ11bhYyZ6DboyOFk2Q51P/4WpDFx66Om+IUPr
+         oLc4SWKuRN472tKQAwpou0cQPzrxZnWOpoX0P8iqr85CgjGt3djEDjxAQwAcR9K779Qe
+         brkBa++inBLdnrRA2nDX/4m88mHASicccPQr2P8VaqCzfDtNDb6I/AVh+jqSYcSwCVvh
+         1sfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=acES2We7h+b61Mo8+oMpTpwxU8V43KYhLkYyDhUPIro=;
-        b=BXGmX8+L6WW3B9htZMerKLAvSr7wlBX4IbeH1fwkb4xpgZNBAE81WEuyfCt/tEv4NR
-         BwhAaHzQPLtcC1UfH1wQ/2iJ0kPWqLbr5y+/sCZ/vKjNod7derkv9DQpCSavzSM+Wemy
-         MghXUIJbE0iHuH5myhpoB/daW03IOXwwmtStJtlRZpM+J5u3sBOu0+BM6P+kpxk8WE3r
-         E3N7ASh3+dc+KAQTlA3eEVAwnU2AEOWQiDCsh9SaynmGyJIyq4cRfk6CmW+hiZSbXAdE
-         ANK2wwmbtpzpSrWTU6RU+jZDW24ID8KaIQ+W2XK63kY0THSnfqUba5r1CId/QZHhVT8e
-         ueQg==
-X-Gm-Message-State: AOAM530Q4LFbT2vQ+rNKyKQL2HiGSPf+sWdNOhJiOmFPCDAv8Ml3oK6O
-        lY4xDEQA2AwSeP8lw9yComY=
-X-Google-Smtp-Source: ABdhPJzu84nlagno7/B/iCTh45NIAtes3ADlYNLucnAQtD/vsIqDQRUwSN2TCW8BrJEBpEFPCzOewA==
-X-Received: by 2002:a17:906:c04d:b0:6b9:252:c51c with SMTP id bm13-20020a170906c04d00b006b90252c51cmr6916234ejb.470.1648766081039;
-        Thu, 31 Mar 2022 15:34:41 -0700 (PDT)
+        bh=nik1iTbxoUWnG6UF8WspcQRjvneqvZ965qd0fvy6u0Q=;
+        b=k0Sk+aWfmTpdSHV5Fl8BjCF9aAhkfiHjwn7gpm0EITMz9pMBEbP7v/DSK68T/3UzBg
+         htSUJWqVtblriVSv72bct7MjRbTz2xlICoq8uqsyen3bHQULkKTIIOUKxHn3sw/wrKYx
+         ux7pieF0pm6LoXv2sRsbVOJzgOa0f4TEg8DfCWV3PysuXRx9P+B9qh8dy9Z0G8jywMr4
+         R0HT2I/abgakujS1xJRMiaJq+pXpmW6P47eIm9XhCTvm/hFu1U4N1c9sp6xeKWLL3tPU
+         pEIibWl5kjxG7xEDuGLf7DjqHRFXmmg/iAln0szg/otOAoVRywUq46RMbgw63Wy2Zj+S
+         ifww==
+X-Gm-Message-State: AOAM5304QjDr8rHJAu+kAULSImKhHqVV499TKpRBfk1Cmt3X8ks0ZCxO
+        Ba9E68NtNPWXajvHQYTQ+RzbHS9rEP1uJSpS
+X-Google-Smtp-Source: ABdhPJwvadEyXeLejHBvKE54rjB5jVViHNh1B2AJIl0ecn//oet1U6QeTVIECiwaHI2D6i+E5n0PVw==
+X-Received: by 2002:a17:907:9725:b0:6e0:b274:aa4c with SMTP id jg37-20020a170907972500b006e0b274aa4cmr6900584ejc.565.1648766146417;
+        Thu, 31 Mar 2022 15:35:46 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bm23-20020a170906c05700b006d597fd51c6sm279739ejb.145.2022.03.31.15.34.40
+        by smtp.googlemail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm337761edu.51.2022.03.31.15.35.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:34:40 -0700 (PDT)
+        Thu, 31 Mar 2022 15:35:46 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Chao Yu <chao@kernel.org>, Yunlei He <heyunlei@huawei.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] f2fs: fix dereference of stale list iterator after loop body
-Date:   Fri,  1 Apr 2022 00:34:14 +0200
-Message-Id: <20220331223414.901960-1-jakobkoschel@gmail.com>
+Subject: [PATCH] video: fbdev-MMP: replace usage of found with dedicated list iterator variable
+Date:   Fri,  1 Apr 2022 00:35:03 +0200
+Message-Id: <20220331223503.902142-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,55 +71,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list iterator variable will be a bogus pointer if no break was hit.
-Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
-value making it unsafe to use that in the comparision to determine if the
-specific element was found.
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
-by chance (or intention of an attacker) it matches the value of 'page'
-even though the correct element was not found.
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-This is fixed by using a separate list iterator variable for the loop
-and only setting the original variable if a suitable element was found.
-Then determing if the element was found is simply checking if the
-variable is set.
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
-Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- fs/f2fs/segment.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/mmp/core.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 22dfeb991529..58695997d42f 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -355,16 +355,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct list_head *head = &fi->inmem_pages;
- 	struct inmem_pages *cur = NULL;
-+	struct inmem_pages *tmp;
-
- 	f2fs_bug_on(sbi, !page_private_atomic(page));
-
- 	mutex_lock(&fi->inmem_lock);
--	list_for_each_entry(cur, head, list) {
--		if (cur->page == page)
-+	list_for_each_entry(tmp, head, list) {
-+		if (tmp->page == page) {
-+			cur = tmp;
+diff --git a/drivers/video/fbdev/mmp/core.c b/drivers/video/fbdev/mmp/core.c
+index 154127256a2c..03707461eced 100644
+--- a/drivers/video/fbdev/mmp/core.c
++++ b/drivers/video/fbdev/mmp/core.c
+@@ -127,19 +127,18 @@ EXPORT_SYMBOL_GPL(mmp_unregister_panel);
+  */
+ struct mmp_path *mmp_get_path(const char *name)
+ {
+-	struct mmp_path *path;
+-	int found = 0;
++	struct mmp_path *path = NULL, *iter;
+ 
+ 	mutex_lock(&disp_lock);
+-	list_for_each_entry(path, &path_list, node) {
+-		if (!strcmp(name, path->name)) {
+-			found = 1;
++	list_for_each_entry(iter, &path_list, node) {
++		if (!strcmp(name, iter->name)) {
++			path = iter;
  			break;
-+		}
+ 		}
  	}
-
--	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
-+	f2fs_bug_on(sbi, !cur);
- 	list_del(&cur->list);
- 	mutex_unlock(&fi->inmem_lock);
-
+ 	mutex_unlock(&disp_lock);
+ 
+-	return found ? path : NULL;
++	return path;
+ }
+ EXPORT_SYMBOL_GPL(mmp_get_path);
+ 
 
 base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
---
+-- 
 2.25.1
 

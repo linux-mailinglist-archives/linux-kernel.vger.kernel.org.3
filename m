@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A404ED998
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483604ED999
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236051AbiCaM1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S236064AbiCaM1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiCaM1V (ORCPT
+        with ESMTP id S230433AbiCaM1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:27:21 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC29120A3BB
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:25:33 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id u3so33610629wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MznjTZcn+Iy7DTY+rcVw1rMxydmdSN5dbN0ljOIvUSE=;
-        b=XIlsHRds1+bGX6dMv6KaY/OPYfDYpOm/vmoOfAiAZuLUW2Z6EJU/ZGyNRJ3wWxhG93
-         1JwR5ouAKPZMifru28xuvZypQsA2Gfhsq3w9n8XC40RBEW/5e5yzLHqnjjicYLI2pmIw
-         7iQE1HkusVKBtamy4wZoAuxf4JXNPsdAKhen0haS3QveT79UcUeVLIeHBgdMgYA1jubK
-         pHrutTmcLY3ZbD6tvhqlbIltXhMZlbV1DtMZXk6Gf/T0c9sy43WOt30tzvW0UrhdhG3j
-         8hqLejQAi0uJy9aIyZ78PyVEZqmrkykjIj7P5dJxFsGqWrtFpSAJ1ODS/27tiN6onP2Z
-         nqwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MznjTZcn+Iy7DTY+rcVw1rMxydmdSN5dbN0ljOIvUSE=;
-        b=3mk9i1zlo3VvpJW19wePWVSGWIVLLOBApqfVEYTsHAIWOq7tk76/M5aGFWge39YNyc
-         Geg9z4YWmiUPeCtt382aWp0JXwMOf/BywpGZh2YncC/1MyiE0fkIbxquCgR2fIHdJMKv
-         DCZJww5PZu+WrKsYJ5QrkKogvqXI5P0SXrh7rCj2Cp6Hb86RuzyEJrWPqTcfm6BCGRyS
-         fiRCc5R+dzvnm5ViqSEzhbyxHmfkw9ZXSNiTznjCraE13qGiK86FKJISWfEKoBiR5RAN
-         4QwR4VmSd+6p1FwbXPPDqdGUCy8O/lBQ156GjtAOwIh2GGpKWhr+EiruGzUlMobH9K/O
-         62Bw==
-X-Gm-Message-State: AOAM533Ep7ceBPoTdEa5G+O78yG58kuejC/kT9Yu45A+C/uLKtAHPSKX
-        ibxhC3PQdveeR1SLialB8jW2l+YWBIxfY6o+PyfaZn7mGsJOtfptmRAzSfqH7wcBZto1zV6X9sK
-        6L2BKyYy0DQsg0MpbDNE9nA96RWAivpXRWsmKvPcd5vmyZd4a+WoX/Cn8jo7V98dCMXqxfOpohY
-        qg5CWLBw==
-X-Google-Smtp-Source: ABdhPJx0EZ844H5axJrPYISeU4kYpOEHVfAGm/h7E78xeG0hBKtIoXFXp1f6MxWcPXDv7ekVf0EnCQ==
-X-Received: by 2002:adf:e4c1:0:b0:205:8b74:8dee with SMTP id v1-20020adfe4c1000000b002058b748deemr4010962wrm.225.1648729532418;
-        Thu, 31 Mar 2022 05:25:32 -0700 (PDT)
-Received: from localhost.localdomain ([95.168.120.40])
-        by smtp.gmail.com with ESMTPSA id 3-20020a5d47a3000000b0020412ba45f6sm23498765wrb.8.2022.03.31.05.25.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 05:25:31 -0700 (PDT)
-From:   Vladimir Vid <vladimir.vid@sartura.hr>
-To:     linux-kernel@vger.kernel.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com
-Cc:     robert.marko@sartura.hr, luka.perkov@sartura.hr,
-        Vladimir Vid <vladimir.vid@sartura.hr>
-Subject: [PATCH] MAINTAINERS: update Methode uDPU maintainer
-Date:   Thu, 31 Mar 2022 14:25:28 +0200
-Message-Id: <20220331122528.3886-1-vladimir.vid@sartura.hr>
-X-Mailer: git-send-email 2.30.2
+        Thu, 31 Mar 2022 08:27:37 -0400
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8110A20C1A1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:25:50 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 0057E83680
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 07:25:49 -0500 (CDT)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id Zts5nhvgkb6UBZts5nkMZY; Thu, 31 Mar 2022 07:25:49 -0500
+X-Authority-Reason: nr=8
+Received: from host-79-43-204-123.retail.telecomitalia.it ([79.43.204.123]:33842 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nZts5-003e8f-63; Thu, 31 Mar 2022 07:25:49 -0500
+Message-ID: <2afd6cba-1a01-0c32-eae8-c4f9f7e76732@kernel.org>
+Date:   Thu, 31 Mar 2022 14:25:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] rtla/osnoise: fix NULL but dereferenced coccicheck errors
+Content-Language: en-US
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     kael_w@qq.com, Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220322113253.57390-1-wanjiabing@vivo.com>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220322113253.57390-1-wanjiabing@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 79.43.204.123
+X-Source-L: No
+X-Exim-ID: 1nZts5-003e8f-63
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-79-43-204-123.retail.telecomitalia.it ([10.0.0.45]) [79.43.204.123]:33842
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 1
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Robert Marko as Methode uDPU maintainer
+Hi Wan
 
-Signed-off-by: Vladimir Vid <vladimir.vid@sartura.hr>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 3/22/22 12:32, Wan Jiabing wrote:
+> Fix the following coccicheck errors:
+> ./tools/tracing/rtla/src/osnoise_hist.c:870:31-36: ERROR: record is NULL but dereferenced.
+> ./tools/tracing/rtla/src/osnoise_top.c:650:31-36: ERROR: record is NULL but dereferenced.
+> 
+> "record" is NULL before calling osnoise_init_trace_tool.
+> Add a tag "out_free" to avoid dereferring a NULL pointer.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 237046f8a499..c74e99efbb39 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12769,7 +12769,7 @@ F:	Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
- F:	drivers/staging/media/meson/vdec/
- 
- METHODE UDPU SUPPORT
--M:	Vladimir Vid <vladimir.vid@sartura.hr>
-+M:	Robert Marko <robert.marko@sartura.hr>
- S:	Maintained
- F:	arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
- 
--- 
-2.30.2
+Yes, I see the problem.
+
+Please, change the Subject to something with better information about the
+problem, instead of the way you fund it.
+
+
+> Fixes: 51d64c3a1819 ("rtla: Add -e/--event support")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  tools/tracing/rtla/src/osnoise_hist.c | 5 +++--
+>  tools/tracing/rtla/src/osnoise_top.c  | 9 +++++----
+>  2 files changed, 8 insertions(+), 6 deletions(-)
+
+Please, also add the version of coccicheck you are using, because it seems that
+there is a problem with it. There is a similar problem with timerlat, added by
+the same patch, but it seems that coccicheck did not find it.
+
+Would you mind to check coccicheck, and also add the fix for timerlat?
+
+Thanks.
+-- Daniel
 

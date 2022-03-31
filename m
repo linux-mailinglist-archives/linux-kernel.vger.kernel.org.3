@@ -2,158 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4394EE25E
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782DC4EE262
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 22:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241247AbiCaULy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 16:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
+        id S241253AbiCaUMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 16:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiCaULw (ORCPT
+        with ESMTP id S233606AbiCaUMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 16:11:52 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F615878F
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 13:10:01 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 508742C083D;
-        Thu, 31 Mar 2022 20:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1648757399;
-        bh=utd02a39MmCn6qH4iX7GZxU1nY5TtqGsKh1ad7CyZX0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=nMRpTMP6Jx9ms1Rcr+A01DgLNAcuffRwg9jQ6ijDwaiB2Vo4tlRBWVDjM7gM51Bnc
-         2jqIsc+GRs67oqMpOwOb/M/zo10Q7FYQxqYlCBqiBSPcKEgFYS+iU3X9abGmd/wE13
-         BKK7xHpAH3vrStp9Jf86DWgRHAJ1EnTZ/w/0IV1hFg7Izm93c+jYYsJBY25DLpHZWz
-         sKZBKdQNkBqK5reUQ5BFfOoUZNS6TtmM0OZaONT2iZVWIOYK4rv0u2Kkqp8limbFnI
-         ZZWlaECNIwIm17YP1OFWhPpq+ncuNAgwA/21z7auCENXTD/rH2xqv8Mu5Qy94Jjpkv
-         0WdruDW6pC5gA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B62460a970001>; Fri, 01 Apr 2022 09:09:59 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Fri, 1 Apr 2022 09:09:59 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Fri, 1 Apr 2022 09:09:59 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Rob Herring <robh@kernel.org>
-CC:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "huziji@marvell.com" <huziji@marvell.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
-Thread-Topic: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
-Thread-Index: AQHYQwBQxHzoaq5k202Ou7T2PLN3cqzVZnGAgAAXboCAAG7SgIABO5GAgAHuZgA=
-Date:   Thu, 31 Mar 2022 20:09:58 +0000
-Message-ID: <8d24fdee-1538-68bf-f4b8-1e07d3ba5b75@alliedtelesis.co.nz>
-References: <20220329000231.3544810-1-chris.packham@alliedtelesis.co.nz>
- <20220329000231.3544810-3-chris.packham@alliedtelesis.co.nz>
- <1648554629.870840.350362.nullmailer@robh.at.kernel.org>
- <d4c477b3-0cf2-e495-6a54-5fcd0301cc14@kernel.org>
- <6e118704-3c63-929e-ebf0-9a78fbed5daa@alliedtelesis.co.nz>
- <YkRr22lQHKCZa5A2@robh.at.kernel.org>
-In-Reply-To: <YkRr22lQHKCZa5A2@robh.at.kernel.org>
-Accept-Language: en-NZ, en-US
+        Thu, 31 Mar 2022 16:12:22 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A97719E382;
+        Thu, 31 Mar 2022 13:10:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cgmRX6+Ckmxo4KwbtMdKYCbaAKx0uAcAt3v03lmvKapAJw7w7inZru4paVjWld8lYwaZhE65YUHUD5J3ZD92FARWa1zmsIf1Y4D5XF+k6aBNL0EgJLR3LdaAbXQ/CJkVv0fHSbVsH4FCebVusOyfJWnYQufO5EoS/dvoQIBMO5lqE9eWdMwRxXKvXW4U/J2sm/2hnGGPAb0G/Bj/voToS0T91H+f8mJ4LEZZbB1vmsoHS0JrAy/C1kqPnVPFrMfGwH3VFF01O/UwqOPYiKJCpjNXlv66Cbe2snclK/WafurWCHRDz6DGWX+uOYEl+8AJTYQiQ9ZsUywI2cRMgJAwug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4/lx9dT9zrX145kwSPP3CwtOkrlJyAdXMDUUjLUYE8U=;
+ b=EY7ZKF33nnGQYe4GEwDQ/J+pP+i2kz3pZd1IGJMJGA9/DzPDoccKWmUw3DvnH0JelZP1rf5oOwDjqWeIVlCRDCZd8hC6fYqiQx3nZTj1x/sgKW/MirqDoUGkf6CSRa3BgOxKw2Q/TCa5jCuFkaqc2xTWMis3jHtCJeb+GO+G86UzZur4eCfcEarZNrAzS764nMDPUmcQAuPyg2uwhT7YZtGpwJh0H39u3d01a/WUXwbamC293EqFFRMXcEhZLwAeoVwGuW2l0TnZyCOwQAoXSry+RnjGFKBpIIGmyRAB6g+XBmuJsSHjlOLPUpISbbmVJSbPtt5bF2F/4cJdJljakg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4/lx9dT9zrX145kwSPP3CwtOkrlJyAdXMDUUjLUYE8U=;
+ b=k60VvkeHiZLaMlJA1oGVBxxwVtdwFxC049HmI6oE6MIyEegM7cBkKiT8ekd2F6pvvuDdeneSi5lVWH9QSO+9c3kZqtbFQxwT21EUIGMsMRRCnV99FgC+4fc0hwSJtNLnXP9h+PLeWDHv4Dl+f0JGR/E3Tr182NkzCx1ArciFkPM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by MN2PR12MB3792.namprd12.prod.outlook.com (2603:10b6:208:16e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Thu, 31 Mar
+ 2022 20:10:32 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1946:2337:6656:ae2e]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1946:2337:6656:ae2e%9]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
+ 20:10:32 +0000
+Message-ID: <d1586b34-1ed3-99fe-ce03-90aa54e88eae@amd.com>
+Date:   Thu, 31 Mar 2022 15:10:29 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 3/4] crypto: ccp: Allow PSP driver to load without
+ SEV/TEE support
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0630ACFD8453E448A56EA08445E6D350@atlnz.lc>
-Content-Transfer-Encoding: base64
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER" 
+        <linux-crypto@vger.kernel.org>,
+        Kerneis Gabriel <Gabriel.Kerneis@ssi.gouv.fr>,
+        Richard Hughes <hughsient@gmail.com>
+References: <20220329164117.1449-1-mario.limonciello@amd.com>
+ <20220329164117.1449-4-mario.limonciello@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20220329164117.1449-4-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR13CA0015.namprd13.prod.outlook.com
+ (2603:10b6:208:160::28) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=JcrCUnCV c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=z0gMJWrwH1QA:10 a=VwQbUJbxAAAA:8 a=UkoVw5r5gxAZN7hNCIAA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bbc08775-8888-4146-64e3-08da13528271
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3792:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3792BC61836B2880321E5F94ECE19@MN2PR12MB3792.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HB8x1xBNlIMv6jn+tfqqLG9AbRp0BNr9EXvv7e7cXdjdsonR3ef2LWOGs77jRrz532HEvR4PHAw5LFlnCOAnigWWTkv7xNunQ8fBVQgrpIgc88DcqMepZdyJg0pSH2MUq/f+IY2Atva/+iRzZ1q4V4k5tDlehUL7d749ADBO3J4992bf5Lwyt0Qs0OFMOxgNcAy6F2wBer4ywV4+Ma8mxABtA3TPUUCy0cF8KfGJSH95dA3zoOEyYYyT87Vj5gdiiCsi8X41S2i8WV0dZWEzD7iJwKVmObAryut12R3o86f93kjpP0pqfGgWmHn4Lcf45XdCeE3r3VRFuQD+mQLlGzfyMabYaxTTIJQqVSlC0wMuhO37Y1CHuUt8ghv3QedpPz6g1Z6jU7/KRgrxDJXrAGZINUeVNZhogQbzoXFxuQ2lsFpGjg0T0NO3iDaLegcXk81s4Rc6s7pxPgoxVWnJo5sSr2VEh+5Clzv12MDpfqFqW/BMS7ybP9ddxngeVU6iGPZhJNl6UrcO3T1BtBWElbHHi8vGamTMznoZZLfrkql9AgO1fF4vY92U+zd3M9WHkgyINKdl3mzSnz4dWnNROm1vbm3yFcBHG6dAJF3Cblj5yshIfnFUiFr8lUDe6IgNiMQhe4VpD+4dqwaYnipaWAc6WrPJ9WuC1JYulLGfsjHr9alLjH2ddwc68lecYZ7M047zlsuVHEVdJvmn1cyLXlDBQDf9Ch4OHGZngREe2kA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(6506007)(83380400001)(36756003)(6666004)(6512007)(31686004)(2906002)(5660300002)(53546011)(54906003)(110136005)(86362001)(8936002)(6486002)(38100700002)(2616005)(186003)(26005)(66476007)(8676002)(4326008)(66556008)(66946007)(316002)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U0NGWEVkemxjTHpYaHRKVjBKak9oMS9lblVINE1hT1MyTGpqY1ZSMlc0S2hS?=
+ =?utf-8?B?U1lBK1JvTVo3UzZtNGN3ak1XamZ0QXZ0Smp2TmlyM3IxV05GUkc1NEsvNmlU?=
+ =?utf-8?B?VDF0c2lXYTFPZTJNRjlSOURMVWVLQWxRbUF3TjhJQTlCMGRJbHhvTk5oT0Za?=
+ =?utf-8?B?dW16dE95WFdnUjc5OE9iT3NhK3FSalY3WXR6OXNmTk1yblFtakR0cnNUQ3BL?=
+ =?utf-8?B?SzdrVTFMK2liQlJ1SCtkb3FrVHFWMGpBWW5uSFpTRG9CNDdiMmtUREdMQWw5?=
+ =?utf-8?B?SDRCN2xSTGdyR0RzY3FqaVBmT1FMcnZmSWlIcnFFQ1JFbW9jdVIrK2VoRklY?=
+ =?utf-8?B?OFF5MVM0SEZ6dW5ZREVTa1AxZU8rRjJoRTBUMERZMlJpUHhuVzd5blRXTUth?=
+ =?utf-8?B?a0RuVTFiY2lqWUt4Mks5RVNocjF0Qk1YWk5UbDdka0FyTW1Ba2dMQXozT1Bn?=
+ =?utf-8?B?MENJZ2kwRzltMGw0NFh1c1RGQWZ0azZmR3UrWllqNk0zVGZ6RWlMelcxUUlo?=
+ =?utf-8?B?QUNFZFpGc1dQdE5aTkx4SXlicFZlQlUyL0pvKzJ3elNEU3AvYXNwV2RyL1VN?=
+ =?utf-8?B?NmJTaXE2L0JtMllRYzVVaFJvZHBuSkVqQVY1N1kya1JZSlpQNmM2OVNyQXBx?=
+ =?utf-8?B?WGNpdFpCU2prT1RmeU1rZjY0TFdoaVpkSHczMEhvQm1INW5tRk5Ld1Jwd052?=
+ =?utf-8?B?ZU9mekVSSnBLZm1JZ1BOTXVyYXY3OVNLb05jMVVNc3dzM1pVd3ZQOGFVNlIz?=
+ =?utf-8?B?YUNBTkdzSTdnRHBRTmVlZUtDMWtuZ2htTGtKY0Nkd2tHMVdSVWxWWGRSUzdN?=
+ =?utf-8?B?ZFphSmJpN1hIcUEwVjJoWmdPQzVObU1HOWpoRTNpN3NSanNRRWlzYXJIVVB2?=
+ =?utf-8?B?VEUzNExBNDBoVi9tcnl6SXRQeXpKZDNCTkFxbUUyajJ3RWE4TzAwZEdjSW5o?=
+ =?utf-8?B?LzRYdjY2ZUxoLy9YNUhPMVEzMWpjVzlMVlYzVjRCQmNZeHF4dlZVWm5kN0Z0?=
+ =?utf-8?B?dksyNllIQzRGd3N3ZGE3a05mMHdDQ29HZGxDeXUvSXJLU2JpL1Bud2pCSnh3?=
+ =?utf-8?B?bnBlU2JKamdiWUk4RVdPNit3UWkvdkJrVVhNQTR3eDBzR3BXVHJNVEM4Uk9P?=
+ =?utf-8?B?d21BSTZFT2M5YU5rdWpyZVZ0UFBLbXNYQjc4U1VzenpEam1RN1k1QUR2NEZu?=
+ =?utf-8?B?MmdXNGlXeUpCRXBvVElQNmoyT0U3WkZ0MWZyUkhtbGszeHAyR1pDa3FWWDZ2?=
+ =?utf-8?B?V0dldVI5RUdnUkVHVDUvbVVvTEtKbDFKaG9zRUoxUjF1c2FPcWhHQkdLZVBY?=
+ =?utf-8?B?QWlGZmdTVUl3Q0ZaY2ZjV1ZtdWUyYWRHVGN2NDJTOXRkRVhxK1pkcVhLNHZW?=
+ =?utf-8?B?akVVZzBIQzhSNitUZVc0ZURxYTVSOFVqSTBDQlBlbUhRYnZERkhPYnh1VnQx?=
+ =?utf-8?B?WWlNRDF1am5YbmVnREF4bC9MeEVBRmcyQmpMRVdmZDVrQmQ0VTVFL3ZpY1RL?=
+ =?utf-8?B?N1NXZys0Mnl0UlVOcmZnWGNGQlRnUmdsdW9GOTlPc0N3cTlHcEdiQld1UXUz?=
+ =?utf-8?B?TkI4VElTamg2RDRkS2FIT1F1Vmo3dUdXWHBoRkFQRFFpTEFQVnBiWWp6QXdU?=
+ =?utf-8?B?TTFkNGJwKzNyek5pWVlXcmZ2bDBDckpGUUVaTVpSeXQ5MnRhbXRqeU1YdEVP?=
+ =?utf-8?B?VitTWnJuOEZtUzd0dWx3Z3lhSDIrMzMvVE9OTXpmTlZNM1RZNGpKN0tjWGM5?=
+ =?utf-8?B?RlNPaEhTdXRhRE44ZkdVSHRBRU5CT0RZMUZSNXlOQmIxL21makZoTjZxSEZC?=
+ =?utf-8?B?UEs0RW9VQ3pWYjhvYkRKY1RDa1VhRjh6VEZWeE41YklhdzBvZGs4TlBYbDgv?=
+ =?utf-8?B?dW0reWkwcC9oRkp6RTJMcTYvekZIaVpBZ2NLVVNic3pZSFNmb1NVTUU5dTdk?=
+ =?utf-8?B?Q0l0dEoycVlwU3BoaFcwdkoxZFRJa0hSWVNtbmJGWnppdFNzNFhhQmpDTHkz?=
+ =?utf-8?B?ZFJrS2lCcVM4RjY1bU5kem83VWNUTENhejhUaEJiajhwM0x4SnRiZ3RDbitV?=
+ =?utf-8?B?NlFad3BTNFFJbWo2eTNUcTNCWGZIRW5uUWlmcW52NTA4eUtjUnpaUXZPOEVr?=
+ =?utf-8?B?VDZ2NytGQWhHV3B1OXpaMC9rUkpRWkVuNGJiZkRmdVRnNm1KbW5HUUU2cnMy?=
+ =?utf-8?B?eFVaRUtzSUJxTWliV1pFY0hVaTFQREJjZ2JDR1RUdUpyakIrWXB0ZFBFN1Jr?=
+ =?utf-8?B?S0JORVZsaTdBK2FUdDRZeEgxWFQ4V2NZUFF2YStwR3R2Z2thNDVSQlNMTS9H?=
+ =?utf-8?B?dGljN2lyaitiamN3VzRvaWduRmFMNERudTJaNllzN0hNRzVIK0FRdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbc08775-8888-4146-64e3-08da13528271
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 20:10:32.5561
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kiNIgTrElJjyKML48dPZI9Tl6uT6anzSJZ6dOmzAWg6zdNMGy93fMLpMDOo3soMMon5PWtiSdPge30MJ6ibCXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3792
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUm9iLA0KDQpPbiAzMS8wMy8yMiAwMzo0MCwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IE9uIFR1
-ZSwgTWFyIDI5LCAyMDIyIGF0IDA3OjUwOjU5UE0gKzAwMDAsIENocmlzIFBhY2toYW0gd3JvdGU6
-DQo+PiBPbiAzMC8wMy8yMiAwMjoxNCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4+PiBP
-biAyOS8wMy8yMDIyIDEzOjUwLCBSb2IgSGVycmluZyB3cm90ZToNCj4+Pj4gT24gVHVlLCAyOSBN
-YXIgMjAyMiAxMzowMjozMSArMTMwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+Pj4+IENvbnZl
-cnQgdGhlIG1hcnZlbGwseGVub24tc2RoY2kgYmluZGluZyB0byBKU09OIHNjaGVtYS4gQ3VycmVu
-dGx5IHRoZQ0KPj4+Pj4gaW4tdHJlZSBkdHMgZmlsZXMgZG9uJ3QgdmFsaWRhdGUgYmVjYXVzZSB0
-aGV5IHVzZSBzZGhjaUAgaW5zdGVhZCBvZiBtbWNADQo+Pj4+PiBhcyByZXF1aXJlZCBieSB0aGUg
-Z2VuZXJpYyBtbWMtY29udHJvbGxlciBzY2hlbWEuDQo+Pj4+Pg0KPj4+Pj4gVGhlIGNvbXBhdGli
-bGUgIm1hcnZlbGwsc2RoY2kteGVub24iIHdhcyBub3QgZG9jdW1lbnRlZCBpbiB0aGUgb2xkDQo+
-Pj4+PiBiaW5kaW5nIGJ1dCBpdCBhY2NvbXBhbmllcyB0aGUgb2YgIm1hcnZlbGwsYXJtYWRhLTM3
-MDAtc2RoY2kiIGluIHRoZQ0KPj4+Pj4gYXJtYWRhLTM3eHggU29DIGR0c2kgc28gdGhpcyBjb21i
-aW5hdGlvbiBpcyBhZGRlZCB0byB0aGUgbmV3IGJpbmRpbmcNCj4+Pj4+IGRvY3VtZW50Lg0KPj4+
-Pj4NCj4+Pj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxs
-aWVkdGVsZXNpcy5jby5uej4NCj4+Pj4+IFJldmlld2VkLWJ5OiBLcnp5c3p0b2YgS296bG93c2tp
-IDxrcnprQGtlcm5lbC5vcmc+DQo+Pj4+PiAtLS0NCj4+Pj4+DQo+Pj4+PiBOb3RlczoNCj4+Pj4+
-ICAgICAgIENoYW5nZXMgaW4gdjQ6DQo+Pj4+PiAgICAgICAtIEFkZCByZXZpZXcgZnJvbSBLcnp5
-c3p0b2YNCj4+Pj4+ICAgICAgIC0gU3F1YXNoIGluIGFkZGl0aW9uIG9mIG1hcnZlbGwsc2RoY2kt
-eGVub24gd2l0aCBhbiBleHBsYW5hdGlvbiBpbiB0aGUNCj4+Pj4+ICAgICAgICAgY29tbWl0IG1l
-c3NhZ2UNCj4+Pj4+ICAgICAgIENoYW5nZXMgaW4gdjM6DQo+Pj4+PiAgICAgICAtIERvbid0IGFj
-Y2VwdCBhcDgwNyB3aXRob3V0IGFwODA2DQo+Pj4+PiAgICAgICAtIEFkZCByZWY6IHN0cmluZyBm
-b3IgcGFkLXR5cGUNCj4+Pj4+ICAgICAgIENoYW5nZXMgaW4gdjI6DQo+Pj4+PiAgICAgICAtIFVw
-ZGF0ZSBNQUlOVEFJTkVSUyBlbnRyeQ0KPj4+Pj4gICAgICAgLSBJbmNvcnBvcmF0ZSBmZWVkYmFj
-ayBmcm9tIEtyenlzenRvZg0KPj4+Pj4NCj4+Pj4+ICAgIC4uLi9iaW5kaW5ncy9tbWMvbWFydmVs
-bCx4ZW5vbi1zZGhjaS50eHQgICAgICB8IDE3MyAtLS0tLS0tLS0tLQ0KPj4+Pj4gICAgLi4uL2Jp
-bmRpbmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNpLnlhbWwgICAgIHwgMjc1ICsrKysrKysrKysr
-KysrKysrKw0KPj4+Pj4gICAgTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgICAyICstDQo+Pj4+PiAgICAzIGZpbGVzIGNoYW5nZWQsIDI3NiBpbnNlcnRpb25z
-KCspLCAxNzQgZGVsZXRpb25zKC0pDQo+Pj4+PiAgICBkZWxldGUgbW9kZSAxMDA2NDQgRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNpLnR4dA0K
-Pj4+Pj4gICAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5k
-aW5ncy9tbWMvbWFydmVsbCx4ZW5vbi1zZGhjaS55YW1sDQo+Pj4+Pg0KPj4+PiBNeSBib3QgZm91
-bmQgZXJyb3JzIHJ1bm5pbmcgJ21ha2UgRFRfQ0hFQ0tFUl9GTEFHUz0tbSBkdF9iaW5kaW5nX2No
-ZWNrJw0KPj4+PiBvbiB5b3VyIHBhdGNoIChEVF9DSEVDS0VSX0ZMQUdTIGlzIG5ldyBpbiB2NS4x
-Myk6DQo+Pj4+DQo+Pj4+IHlhbWxsaW50IHdhcm5pbmdzL2Vycm9yczoNCj4+Pj4NCj4+Pj4gZHRz
-Y2hlbWEvZHRjIHdhcm5pbmdzL2Vycm9yczoNCj4+Pj4gL2J1aWxkcy9yb2JoZXJyaW5nL2xpbnV4
-LWR0LXJldmlldy9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbW1jL21hcnZlbGws
-eGVub24tc2RoY2kuZXhhbXBsZS5kdC55YW1sOiBtbWNAYWEwMDAwOiBjb21wYXRpYmxlOiAnb25l
-T2YnIGNvbmRpdGlvbmFsIGZhaWxlZCwgb25lIG11c3QgYmUgZml4ZWQ6DQo+Pj4+IAlbJ21hcnZl
-bGwsYXJtYWRhLTM3MDAtc2RoY2knXSBpcyB0b28gc2hvcnQNCj4+Pj4gCSdtYXJ2ZWxsLGFybWFk
-YS0zNzAwLXNkaGNpJyBpcyBub3Qgb25lIG9mIFsnbWFydmVsbCxhcm1hZGEtY3AxMTAtc2RoY2kn
-LCAnbWFydmVsbCxhcm1hZGEtYXA4MDYtc2RoY2knXQ0KPj4+PiAJJ21hcnZlbGwsYXJtYWRhLWFw
-ODA3LXNkaGNpJyB3YXMgZXhwZWN0ZWQNCj4+Pj4gCUZyb20gc2NoZW1hOiAvYnVpbGRzL3JvYmhl
-cnJpbmcvbGludXgtZHQtcmV2aWV3L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9t
-bWMvbWFydmVsbCx4ZW5vbi1zZGhjaS55YW1sDQo+Pj4+IC9idWlsZHMvcm9iaGVycmluZy9saW51
-eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9tYXJ2ZWxs
-LHhlbm9uLXNkaGNpLmV4YW1wbGUuZHQueWFtbDogbW1jQGFiMDAwMDogY29tcGF0aWJsZTogJ29u
-ZU9mJyBjb25kaXRpb25hbCBmYWlsZWQsIG9uZSBtdXN0IGJlIGZpeGVkOg0KPj4+PiAJWydtYXJ2
-ZWxsLGFybWFkYS0zNzAwLXNkaGNpJ10gaXMgdG9vIHNob3J0DQo+Pj4+IAknbWFydmVsbCxhcm1h
-ZGEtMzcwMC1zZGhjaScgaXMgbm90IG9uZSBvZiBbJ21hcnZlbGwsYXJtYWRhLWNwMTEwLXNkaGNp
-JywgJ21hcnZlbGwsYXJtYWRhLWFwODA2LXNkaGNpJ10NCj4+Pj4gCSdtYXJ2ZWxsLGFybWFkYS1h
-cDgwNy1zZGhjaScgd2FzIGV4cGVjdGVkDQo+Pj4+IAlGcm9tIHNjaGVtYTogL2J1aWxkcy9yb2Jo
-ZXJyaW5nL2xpbnV4LWR0LXJldmlldy9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
-bW1jL21hcnZlbGwseGVub24tc2RoY2kueWFtbA0KPj4+Pg0KPj4+PiBkb2MgcmVmZXJlbmNlIGVy
-cm9ycyAobWFrZSByZWZjaGVja2RvY3MpOg0KPj4+IENocmlzLCB5b3VyIG93biBkdCBiaW5kaW5n
-IGRvZXMgbm90IHBhc3MgaXQncyBjaGVjayAoZXhhbXBsZSkuLi4NCj4+Pg0KPj4+IEFmdGVyIHVw
-ZGF0aW5nIHRoZSBjb21wYXRpYmxlcywgeW91IG5lZWQgdG8gY2hlY2sgdGhlIGV4YW1wbGUuIFRo
-ZQ0KPj4+IGV4YW1wbGVzIGFyZSBhbnl3YXkgZHVwbGljYXRpbmcgY29tbW9uIHN0dWZmLCBzbyBo
-YWxmIG9mIHRoZW0gY291bGQgYmUNCj4+PiByZW1vdmVkLg0KPj4gWWVhaCBzaWxseSBtZS4gSSBz
-dGFydGVkIHRha2luZyBzaG9ydCBjdXRzIHRvIHJ1biBkdF9iaW5kaW5nX2NoZWNrDQo+PiBkdGJz
-X2NoZWNrIGFzIG9uZSBjb21tYW5kIGJ1dCB0aGVuIHRoZSBkdF9iaW5kaW5nc19jaGVjayBvdXRw
-dXQgc2Nyb2xsZWQNCj4+IG9mZiB0aGUgdG9wIG9mIG15IHRlcm1pbmFsLg0KPj4NCj4+IEFzIGZv
-ciB0aGUgZXhhbXBsZXMgdGhlbXNlbHZlcyBJIHdhbnQgdG8gbGVhdmUgd2hhdCdzIHRoZXJlIGFz
-IGEgZmFpcmx5DQo+PiBkaXJlY3QgdHJhbnNsYXRpb24gb2YgdGhlIG9sZCBiaW5kaW5nLiBJZiB3
-ZSBjb25zaWRlciB0aGVtIHVubmVjZXNzYXJ5DQo+PiByZW1vdmluZyB0aGVtIGNhbiBiZSBkb25l
-IGFzIGEgZm9sbG93LXVwLg0KPiBUaGUgZXhhbXBsZXMgY2Fubm90IGhhdmUgd2FybmluZ3MvZXJy
-b3JzLg0KSSB3YXMgcmVmZXJyaW5nIHRvIHRoZSBjb21tZW50IG9mIHJlbW92aW5nIGV4YW1wbGVz
-LiBUaGUgdjUgb2YgdGhpcyANCnNlcmllcyBhZGRyZXNzZWQgdGhlIGVycm9yIGluIHRoZSBleGFt
-cGxlLg0KPiBSb2I=
+On 3/29/22 11:41, Mario Limonciello wrote:
+> Previously the PSP probe routine would fail if both SEV and TEE were
+> missing.  This is possibly the case for some client parts.
+> 
+> As capabilities can now be accessed from userspace, it may still be
+> useful to have the PSP driver finish loading so that those capabilities
+> can be read.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>   * Whitespace fixes
+> ---
+>   drivers/crypto/ccp/psp-dev.c | 2 +-
+>   drivers/crypto/ccp/sp-dev.c  | 6 ++++++
+>   2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/crypto/ccp/psp-dev.c b/drivers/crypto/ccp/psp-dev.c
+> index 8cd404121cd5..3f47b2d81e3c 100644
+> --- a/drivers/crypto/ccp/psp-dev.c
+> +++ b/drivers/crypto/ccp/psp-dev.c
+> @@ -158,7 +158,7 @@ int psp_dev_init(struct sp_device *sp)
+>   
+>   	ret = psp_check_support(psp);
+>   	if (ret)
+> -		goto e_disable;
+> +		return 0;
+>   
+>   	/* Disable and clear interrupts until ready */
+>   	iowrite32(0, psp->io_regs + psp->vdata->inten_reg);
+> diff --git a/drivers/crypto/ccp/sp-dev.c b/drivers/crypto/ccp/sp-dev.c
+> index 7eb3e4668286..3486ab2a8982 100644
+> --- a/drivers/crypto/ccp/sp-dev.c
+> +++ b/drivers/crypto/ccp/sp-dev.c
+> @@ -132,6 +132,9 @@ int sp_request_psp_irq(struct sp_device *sp, irq_handler_t handler,
+>   
+>   void sp_free_ccp_irq(struct sp_device *sp, void *data)
+>   {
+> +	if (!sp->irq_registered)
+> +		return;
+> +
+
+I just noticed that irq_registered is only set when a single interrupt 
+ends up being used. When both the CCP and PSP get their own interrupts 
+(the common case), this will result in free_irq() not being called.
+
+So this needs to be fixed. I would think just allowing the IRQs to be 
+requested and freed whenever the driver is loaded (regardless of whether 
+they would be used) might be the best way forward.
+
+Thanks,
+Tom
+
+>   	if ((sp->psp_irq == sp->ccp_irq) && sp->dev_vdata->psp_vdata) {
+>   		/* Using common routine to manage all interrupts */
+>   		if (!sp->psp_irq_handler) {
+> @@ -151,6 +154,9 @@ void sp_free_ccp_irq(struct sp_device *sp, void *data)
+>   
+>   void sp_free_psp_irq(struct sp_device *sp, void *data)
+>   {
+> +	if (!sp->irq_registered)
+> +		return;
+> +
+>   	if ((sp->psp_irq == sp->ccp_irq) && sp->dev_vdata->ccp_vdata) {
+>   		/* Using common routine to manage all interrupts */
+>   		if (!sp->ccp_irq_handler) {

@@ -2,277 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9063D4EDE87
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3C54EDE95
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 18:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239771AbiCaQRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 12:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S239774AbiCaQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 12:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239681AbiCaQRA (ORCPT
+        with ESMTP id S239777AbiCaQTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:17:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E667D1F1254;
-        Thu, 31 Mar 2022 09:15:11 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b15so28767145edn.4;
-        Thu, 31 Mar 2022 09:15:11 -0700 (PDT)
+        Thu, 31 Mar 2022 12:19:30 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E9C8EB6A
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:17:39 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id d5so34255lfj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 09:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xjEyY3Y7idT2/xjZtTf3oO9KclkwZrkmMKAiZwZLsWQ=;
-        b=dqaf3H8pyJfqFWTnZGb7f7uCrEARjp8BxDSW24tcsT69J+NlH/EcQMF91tT7hBRJW7
-         eqOrkAsYEweGdXeAIcvlGVBV2u37BFdjYlQsY4yBwK5QhNsv9NkPLWP8QDMop+ZgxYy4
-         gU1+pIzf7ed7vK3EDnG4+g1eheaFKEK4k6heGdZWhaiLDVNwnxw1rxzQuWpY4mCXrI3v
-         ZlTaJHudv1Jliq5ZkQz8Tacroum5bOq4VxglFzzePVXvNG95n8T4uDSnxygD7dySVCPw
-         D5hz+ICtMJYyxUFhb7jMBqq5/WceTNE2/a3G2oYFfr6DSiMTL9qk3aF1oIRw10EfMPcb
-         fF5Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XvOQiTxrSkDE1O7y9Nnnhxp/qhEKorlXOf3Z2Rjc3+Q=;
+        b=CZq9cQspPXzmbUE3s0DkhpzbWQVXdbi4fuiFGL/Rh1tDQAnwJyVsKM9eAOr6KeA1uO
+         aOeP7VLuYzWXOEwFRT0SsN6v8ebYrzVDnNxrMOd01NivrLK1Qj5XvXBjOlC2C6aNYJeJ
+         5MUbI9z6Hq+EQw9f4gGnzjHBBkGhRnKrDhI1ea3iUic6u47BOcIoQu/4pTiLacnwUwSZ
+         J7kyUBgSujvFh9L2V6EHJ+PPMmyFHgwcwwZnwQmYkieJ3+qzdSQGIh8roiTz40uYXhbw
+         YbppkGon0l+pxrP7ET43mtovPVI48DUqTkmnKFQ0hL5RJlenajcti6B2Q7Z8ha6QH3iX
+         UPkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xjEyY3Y7idT2/xjZtTf3oO9KclkwZrkmMKAiZwZLsWQ=;
-        b=KKRlDovbaB8lIhRRstMtoZlrCxneI6xmQQz+DEAE9iOCMc4ssYkjkOdnf/fTRn4uDy
-         KajIOf/XEpEVoOQIFz8Bo5tOpuvZGYRLlyHjwUcJURgffoXe7hFt2a3JcJcJWz6KmNtQ
-         +l8P3LyuMECqndsnuEDT+us93+FNOfh4dorSQPQbGq2oiqHqZMtTY+U/C7vmIabSvMoV
-         gptpjTf/iSZ2yHWQwOiiB/xJr6F83l5UYoPKA7fYFF54V6cITUAl7DYdzOwXs9+s9OmG
-         iAA64niLYYV6M6vpXwVP6ucm/mHMHTJeObI1Rkdb8nE3Uq27LNuUh0WcUvpANK9wNc8O
-         t8hw==
-X-Gm-Message-State: AOAM531C8KEITN5ni9ITDVbvkrF5FqBKq7xz24Tq76gztmh7xrJVUmdM
-        yHLq7HVi4glZtBL+3vSzWFk=
-X-Google-Smtp-Source: ABdhPJzXn3NJfsGVHSbXv3mgVWGnaMYgEFt6COE/RUp0EjdFoSNUhzEGELqshVrSMgw/HosvsoiNHg==
-X-Received: by 2002:a05:6402:270b:b0:419:3383:7a9f with SMTP id y11-20020a056402270b00b0041933837a9fmr17248675edd.191.1648743310371;
-        Thu, 31 Mar 2022 09:15:10 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id g4-20020a170906520400b006e0b798a0b8sm7600302ejm.94.2022.03.31.09.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 09:15:09 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] ARM: dts: rockchip: restyle emac nodes
-Date:   Thu, 31 Mar 2022 18:14:59 +0200
-Message-Id: <20220331161459.16499-3-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220331161459.16499-1-jbx6244@gmail.com>
-References: <20220331161459.16499-1-jbx6244@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XvOQiTxrSkDE1O7y9Nnnhxp/qhEKorlXOf3Z2Rjc3+Q=;
+        b=3Sa4AYG8nSDgbl8PLf8mMZIxh+tYOlRVglC3zqcl1jhAw5Sc5PeJtl88TpKgAtmpw7
+         WJ+o+220geJhhzXO40k3f/Grp/9fm6534wrLTThZUXlihuScVAPj38LlzJqX9C3yMeFX
+         pgkdJTywS5J/hyA7+G07MBGdfwJ/WJZLeC/54flpg/n2/mxXEJKjaTyWb2nhpSwmd6n1
+         +CBkWHHthC3MpG9dzwAo9K+jfD8vhlBtRU9CLFw27eUaeD5ja/G0bBGGDVCJZZMaoXhM
+         rMOeU8kzHStQlwQHij/jtG+BgfCxGKs/+YJvRu57Z9tKBQ4o+5vc48L6qw5/ckhbSwqD
+         MZiA==
+X-Gm-Message-State: AOAM533/+pTtBQDRyuwl85r7+0A/kpyBLZaMi6dFPVjh2uEtB58Pq4pM
+        F6UuYBi7tGTpKwmmvC/TUH4ZnqYlS+PQPm2RlAgJRA==
+X-Google-Smtp-Source: ABdhPJwd4NdUxu5fCQXYydDZqM5jgGL7W8viaSPnRdGR9bff6fLWNRVHPMfv8oQIBMHP2xcRv0IXEfqLNgkt3iwstSc=
+X-Received: by 2002:a05:6512:6cf:b0:44a:25d1:a27 with SMTP id
+ u15-20020a05651206cf00b0044a25d10a27mr11152267lff.18.1648743457998; Thu, 31
+ Mar 2022 09:17:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220204141941.GE4077@xsang-OptiPlex-9020> <CADjb_WT0fcP2QBjYpsCAJEcVYWKNw1rQ6XZNz33i+KCbD8jB-A@mail.gmail.com>
+In-Reply-To: <CADjb_WT0fcP2QBjYpsCAJEcVYWKNw1rQ6XZNz33i+KCbD8jB-A@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 31 Mar 2022 18:17:26 +0200
+Message-ID: <CAKfTPtDFhORUyOfqr==ZrOSgBd8=vzvYgWMxw87bvq3pQmq7DQ@mail.gmail.com>
+Subject: Re: [sched/pelt] 2d02fa8cc2: stress-ng.pipeherd.ops_per_sec -9.7% regression
+To:     Chen Yu <yu.chen.surf@gmail.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, Huang Ying <ying.huang@intel.com>,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, Aubrey Li <aubrey.li@linux.intel.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The emac_rockchip.txt file is converted to YAML.
-Phy nodes are now a subnode of mdio, so restyle
-the emac nodes of rk3036/rk3066/rk3188.
+On Thu, 31 Mar 2022 at 16:19, Chen Yu <yu.chen.surf@gmail.com> wrote:
+>
+> Hi Vincent,
+>
+> On Wed, Feb 9, 2022 at 1:17 PM kernel test robot <oliver.sang@intel.com> =
+wrote:
+> >
+> >
+> >
+> > Greeting,
+> >
+> > FYI, we noticed a -9.7% regression of stress-ng.pipeherd.ops_per_sec du=
+e to commit:
+> >
+> >
+> > commit: 2d02fa8cc21a93da35cfba462bf8ab87bf2db651 ("sched/pelt: Relax th=
+e sync of load_sum with load_avg")
+> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> >
+> > in testcase: stress-ng
+> > on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Platinum 8358 C=
+PU @ 2.60GHz with 128G memory
+> > with following parameters:
+> >
+> >         nr_threads: 100%
+> >         testtime: 60s
+> >         class: memory
+> >         test: pipeherd
+> >         cpufreq_governor: performance
+> >         ucode: 0xd000280
+> >
+> This week we have re-run the test result and it seems that this
+> regression is still there.
+> As we are evaluating whether this report is valid or if the
+> downgrading is expected, appreciated
+> if you could give suggestion on further steps:
+>
+> 1.  If I understand correctly,
+> 2d02fa8cc21a93da35cfba462bf8ab87bf2db651 ("sched/pelt: Relax the sync
+> of load_sum with load_avg")
+>      fixed the calculating of  load_sum.  Before this patch  the
+> contribution part would be 'skipped' and caused the load_sum
+>      to be lower than expected.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm/boot/dts/rk3036-evb.dts        | 16 ++++++++++------
- arch/arm/boot/dts/rk3036-kylin.dts      | 16 ++++++++++------
- arch/arm/boot/dts/rk3036.dtsi           |  2 --
- arch/arm/boot/dts/rk3066a-marsboard.dts | 19 +++++++++++--------
- arch/arm/boot/dts/rk3066a-rayeager.dts  | 15 ++++++++++-----
- arch/arm/boot/dts/rk3188-radxarock.dts  | 19 +++++++++++--------
- arch/arm/boot/dts/rk3xxx.dtsi           |  2 --
- 7 files changed, 52 insertions(+), 37 deletions(-)
+Yes, you understand it correctly
 
-diff --git a/arch/arm/boot/dts/rk3036-evb.dts b/arch/arm/boot/dts/rk3036-evb.dts
-index 2a7e6624e..095e0821a 100644
---- a/arch/arm/boot/dts/rk3036-evb.dts
-+++ b/arch/arm/boot/dts/rk3036-evb.dts
-@@ -15,16 +15,20 @@
- };
- 
- &emac {
-+	phy-handle = <&phy0>;
-+	phy-reset-duration = <10>; /* millisecond */
-+	phy-reset-gpios = <&gpio2 RK_PC6 GPIO_ACTIVE_LOW>; /* PHY_RST */
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&emac_xfer>, <&emac_mdio>;
--	phy = <&phy0>;
--	phy-reset-gpios = <&gpio2 RK_PC6 GPIO_ACTIVE_LOW>; /* PHY_RST */
--	phy-reset-duration = <10>; /* millisecond */
--
- 	status = "okay";
- 
--	phy0: ethernet-phy@0 {
--		reg = <0>;
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		phy0: ethernet-phy@0 {
-+			reg = <0>;
-+		};
- 	};
- };
- 
-diff --git a/arch/arm/boot/dts/rk3036-kylin.dts b/arch/arm/boot/dts/rk3036-kylin.dts
-index e817eba8c..24c70e925 100644
---- a/arch/arm/boot/dts/rk3036-kylin.dts
-+++ b/arch/arm/boot/dts/rk3036-kylin.dts
-@@ -80,16 +80,20 @@
- };
- 
- &emac {
-+	phy-handle = <&phy0>;
-+	phy-reset-duration = <10>; /* millisecond */
-+	phy-reset-gpios = <&gpio2 RK_PC6 GPIO_ACTIVE_LOW>; /* PHY_RST */
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&emac_xfer>, <&emac_mdio>;
--	phy = <&phy0>;
--	phy-reset-gpios = <&gpio2 RK_PC6 GPIO_ACTIVE_LOW>; /* PHY_RST */
--	phy-reset-duration = <10>; /* millisecond */
--
- 	status = "okay";
- 
--	phy0: ethernet-phy@0 {
--		reg = <0>;
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		phy0: ethernet-phy@0 {
-+			reg = <0>;
-+		};
- 	};
- };
- 
-diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
-index e240b89b0..78686fc72 100644
---- a/arch/arm/boot/dts/rk3036.dtsi
-+++ b/arch/arm/boot/dts/rk3036.dtsi
-@@ -228,8 +228,6 @@
- 		compatible = "rockchip,rk3036-emac";
- 		reg = <0x10200000 0x4000>;
- 		interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
--		#address-cells = <1>;
--		#size-cells = <0>;
- 		rockchip,grf = <&grf>;
- 		clocks = <&cru HCLK_MAC>, <&cru SCLK_MACREF>, <&cru SCLK_MAC>;
- 		clock-names = "hclk", "macref", "macclk";
-diff --git a/arch/arm/boot/dts/rk3066a-marsboard.dts b/arch/arm/boot/dts/rk3066a-marsboard.dts
-index a66d915aa..e70ba3ccf 100644
---- a/arch/arm/boot/dts/rk3066a-marsboard.dts
-+++ b/arch/arm/boot/dts/rk3066a-marsboard.dts
-@@ -150,18 +150,21 @@
- #include "tps65910.dtsi"
- 
- &emac {
--	status = "okay";
--
--	phy = <&phy0>;
-+	phy-handle = <&phy0>;
- 	phy-supply = <&vcc_rmii>;
--
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&emac_xfer>, <&emac_mdio>, <&phy_int>;
-+	status = "okay";
-+
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
- 
--	phy0: ethernet-phy@0 {
--		reg = <0>;
--		interrupt-parent = <&gpio1>;
--		interrupts = <RK_PD2 IRQ_TYPE_LEVEL_LOW>;
-+		phy0: ethernet-phy@0 {
-+			reg = <0>;
-+			interrupt-parent = <&gpio1>;
-+			interrupts = <RK_PD2 IRQ_TYPE_LEVEL_LOW>;
-+		};
- 	};
- };
- 
-diff --git a/arch/arm/boot/dts/rk3066a-rayeager.dts b/arch/arm/boot/dts/rk3066a-rayeager.dts
-index 12b2e59ae..600ada0d8 100644
---- a/arch/arm/boot/dts/rk3066a-rayeager.dts
-+++ b/arch/arm/boot/dts/rk3066a-rayeager.dts
-@@ -142,15 +142,20 @@
- };
- 
- &emac {
-+	phy-handle = <&phy0>;
-+	phy-supply = <&vcc_rmii>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&emac_xfer>, <&emac_mdio>, <&rmii_rst>;
--	phy = <&phy0>;
--	phy-supply = <&vcc_rmii>;
- 	status = "okay";
- 
--	phy0: ethernet-phy@0 {
--		reg = <0>;
--		reset-gpios = <&gpio1 RK_PD6 GPIO_ACTIVE_LOW>;
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		phy0: ethernet-phy@0 {
-+			reg = <0>;
-+			reset-gpios = <&gpio1 RK_PD6 GPIO_ACTIVE_LOW>;
-+		};
- 	};
- };
- 
-diff --git a/arch/arm/boot/dts/rk3188-radxarock.dts b/arch/arm/boot/dts/rk3188-radxarock.dts
-index 36c0945f4..e5ed0642d 100644
---- a/arch/arm/boot/dts/rk3188-radxarock.dts
-+++ b/arch/arm/boot/dts/rk3188-radxarock.dts
-@@ -126,18 +126,21 @@
- };
- 
- &emac {
--	status = "okay";
--
-+	phy-handle = <&phy0>;
-+	phy-supply = <&vcc_rmii>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&emac_xfer>, <&emac_mdio>, <&phy_int>;
-+	status = "okay";
- 
--	phy = <&phy0>;
--	phy-supply = <&vcc_rmii>;
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
- 
--	phy0: ethernet-phy@0 {
--		reg = <0>;
--		interrupt-parent = <&gpio3>;
--		interrupts = <RK_PD2 IRQ_TYPE_LEVEL_LOW>;
-+		phy0: ethernet-phy@0 {
-+			reg = <0>;
-+			interrupt-parent = <&gpio3>;
-+			interrupts = <RK_PD2 IRQ_TYPE_LEVEL_LOW>;
-+		};
- 	};
- };
- 
-diff --git a/arch/arm/boot/dts/rk3xxx.dtsi b/arch/arm/boot/dts/rk3xxx.dtsi
-index 616a828e0..bf285091a 100644
---- a/arch/arm/boot/dts/rk3xxx.dtsi
-+++ b/arch/arm/boot/dts/rk3xxx.dtsi
-@@ -186,8 +186,6 @@
- 		compatible = "snps,arc-emac";
- 		reg = <0x10204000 0x3c>;
- 		interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
--		#address-cells = <1>;
--		#size-cells = <0>;
- 
- 		rockchip,grf = <&grf>;
- 
--- 
-2.20.1
+> 2. If above is true, after this patch, the load_sum becomes higher. Is
+> there a scenario that higher load_sum added to 1 cfs_rq brings
+>     more imbalance between this group and other sched_group, thus
+> brings more task migration/wake up? (because in below perf result,
+>     it seems that, with this patch applied, there are slightly more
+> take wake up)
 
+This change should not impact load balance as it only does comparison
+and I expect the load increase to happen on all cfs rq.
+The only place that could be impacted, would be wake_affine_weight()
+because it removes task load from previous cfs rq load before
+comparing.
+The task's load was not impacted by the underestimate which means that
+the load of prev cfs  might be seen lower than current cfs after
+subtracting the task's load whereas both cfs rqs were similarly
+underestimated.
+Now the load of prev cfs rq is not underestimated and becomes
+comparable or slightly higher than the current cfs and the task
+migrate on current cfs instead of staying on prev one at wakeup
+
+One possible test would be to run the test with WA_WEIGHT features
+disable and check if there is still a difference
+
+> 3.  Consider the 9.7% downgrading is not that high,  do you think if
+> lkp team should continue track this issue or just close it
+>     as documented?
+>
+> Best,
+> Yu
+> >
+> > commit:
+> >   95246d1ec8 ("sched/pelt: Relax the sync of runnable_sum with runnable=
+_avg")
+> >   2d02fa8cc2 ("sched/pelt: Relax the sync of load_sum with load_avg")
+> >
+> > 95246d1ec80b8d19 2d02fa8cc21a93da35cfba462bf
+> > ---------------- ---------------------------
+> >          %stddev     %change         %stddev
+> >              \          |                \
+> >       0.21           +11.0%       0.24 =C4=85  2%  stress-ng.pipeherd.c=
+ontext_switches_per_bogo_op
+> >  3.869e+09            -9.7%  3.494e+09        stress-ng.pipeherd.ops
+> >   64412021            -9.7%   58171101        stress-ng.pipeherd.ops_pe=
+r_sec
+> >     442.37            -7.2%     410.54        stress-ng.time.user_time
+> >       5.49 =C4=85  2%      -0.5        4.94 =C4=85  4%  mpstat.cpu.all.=
+usr%
+> >      80705 =C4=85  7%     +26.7%     102266 =C4=85 17%  numa-meminfo.no=
+de1.Active
+> >      80705 =C4=85  7%     +26.7%     102266 =C4=85 17%  numa-meminfo.no=
+de1.Active(anon)
+> >      12324 =C4=85  3%     -22.1%       9603 =C4=85 25%  softirqs.CPU106=
+.RCU
+> >      12703 =C4=85  4%     -23.1%       9769 =C4=85 24%  softirqs.CPU27.=
+RCU
+> >      15.96            +1.0       16.95        perf-profile.calltrace.cy=
+cles-pp.prepare_to_wait_event.pipe_read.new_sync_read.vfs_read.ksys_read
+> >       6.67            +1.0        7.68 =C4=85  2%  perf-profile.calltra=
+ce.cycles-pp.enqueue_task_fair.ttwu_do_activate.try_to_wake_up.autoremove_w=
+ake_function.__wake_up_common
+> >       6.77            +1.0        7.79 =C4=85  2%  perf-profile.calltra=
+ce.cycles-pp.ttwu_do_activate.try_to_wake_up.autoremove_wake_function.__wak=
+e_up_common.__wake_up_common_lock
+> >      14.46            +1.0       15.48 =C4=85  2%  perf-profile.calltra=
+ce.cycles-pp._raw_spin_lock_irqsave.prepare_to_wait_event.pipe_read.new_syn=
+c_read.vfs_read
+> >      13.73            +1.1       14.79 =C4=85  2%  perf-profile.calltra=
+ce.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock_irqsave.prepar=
+e_to_wait_event.pipe_read.new_sync_read
+> >      26.95            +1.4       28.34        perf-profile.calltrace.cy=
+cles-pp.__wake_up_common_lock.pipe_write.new_sync_write.vfs_write.ksys_writ=
+e
+> >      25.85            +1.5       27.32        perf-profile.calltrace.cy=
+cles-pp.__wake_up_common.__wake_up_common_lock.pipe_write.new_sync_write.vf=
+s_write
+> >      25.18            +1.5       26.69        perf-profile.calltrace.cy=
+cles-pp.autoremove_wake_function.__wake_up_common.__wake_up_common_lock.pip=
+e_write.new_sync_write
+> >      24.61            +1.5       26.14        perf-profile.calltrace.cy=
+cles-pp.try_to_wake_up.autoremove_wake_function.__wake_up_common.__wake_up_=
+common_lock.pipe_write

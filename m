@@ -2,172 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816BA4ED7FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE4E4ED803
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 12:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbiCaKxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 06:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S234794AbiCaKzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 06:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiCaKxI (ORCPT
+        with ESMTP id S232580AbiCaKzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 06:53:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AB11CABC6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:51:21 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nZsOX-00078k-A6; Thu, 31 Mar 2022 12:51:13 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-ffcf-bd2e-518f-8dbf.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:ffcf:bd2e:518f:8dbf])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 670AD57B86;
-        Thu, 31 Mar 2022 10:51:12 +0000 (UTC)
-Date:   Thu, 31 Mar 2022 12:51:12 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Aurelien Jarno <aurelien@aurel32.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        linux-sparse@vger.kernel.org, ukl@pengutronix.de,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH] riscv: fix build with binutils 2.38
-Message-ID: <20220331105112.7t3qgtilhortkiq4@pengutronix.de>
-References: <20220126171442.1338740-1-aurelien@aurel32.net>
- <20220331103247.y33wvkxk5vfbqohf@pengutronix.de>
- <20220331103913.2vlneq6clnheuty6@pengutronix.de>
+        Thu, 31 Mar 2022 06:55:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72E94CEC
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 03:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648724000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XcDlvWspDG5mfIRp6mHjzmYuHXnw0hkNnfZv5tbcBbY=;
+        b=XANPU3N2znyjxavFrHM2wb55W2d7zIAqa4WpdoeQVVp7+YG2XJhaYjPvZZGQPLFSeWEDhs
+        6TXwZZfB0/Tfp4QTtjO1qFwagPpE0lOrem1sN8h7CHJbHBjWB+07Q3ACitufNLDF6YYdRe
+        YTFSNfrFbCoetxvn2EoSGq4Dk6R0fRc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-AsacG903PWK74GM7ziGzmA-1; Thu, 31 Mar 2022 06:53:17 -0400
+X-MC-Unique: AsacG903PWK74GM7ziGzmA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64B06833942;
+        Thu, 31 Mar 2022 10:53:16 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F1B64C15D42;
+        Thu, 31 Mar 2022 10:53:07 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     lirongqing@baidu.com
+Subject: [PATCH] x86, kvm: fix compilation for !CONFIG_PARAVIRT_SPINLOCKS or !CONFIG_SMP
+Date:   Thu, 31 Mar 2022 06:53:07 -0400
+Message-Id: <20220331105307.487998-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y7e5q426lci6cphx"
-Content-Disposition: inline
-In-Reply-To: <20220331103913.2vlneq6clnheuty6@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The assembly version of __kvm_vcpu_is_preempted only works if
+CONFIG_SMP is defined, due to the use of __per_cpu_offset.  It
+also uses the KVM_STEAL_TIME_preempted offset constant which
+is currently not defined if !CONFIG_PARAVIRT_SPINLOCKS.  Fix
+both issues.
 
---y7e5q426lci6cphx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is the delta between Li RongQing's v3 and v4
+submissions.
 
-Cc +=3D linux-sparse, Uwe, Luc Van Oostenryck
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kernel/asm-offsets_64.c | 4 ++--
+ arch/x86/kernel/kvm.c            | 4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-tl;dr:
+diff --git a/arch/x86/kernel/asm-offsets_64.c b/arch/x86/kernel/asm-offsets_64.c
+index b14533af7676..9b698215d261 100644
+--- a/arch/x86/kernel/asm-offsets_64.c
++++ b/arch/x86/kernel/asm-offsets_64.c
+@@ -5,7 +5,7 @@
+ 
+ #include <asm/ia32.h>
+ 
+-#if defined(CONFIG_KVM_GUEST) && defined(CONFIG_PARAVIRT_SPINLOCKS)
++#if defined(CONFIG_KVM_GUEST)
+ #include <asm/kvm_para.h>
+ #endif
+ 
+@@ -20,7 +20,7 @@ int main(void)
+ 	BLANK();
+ #endif
+ 
+-#if defined(CONFIG_KVM_GUEST) && defined(CONFIG_PARAVIRT_SPINLOCKS)
++#if defined(CONFIG_KVM_GUEST)
+ 	OFFSET(KVM_STEAL_TIME_preempted, kvm_steal_time, preempted);
+ 	BLANK();
+ #endif
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index 21933095a10e..e12beeed9d13 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -752,7 +752,9 @@ static void kvm_crash_shutdown(struct pt_regs *regs)
+ }
+ #endif
+ 
+-#ifdef CONFIG_X86_32
++#if defined(CONFIG_X86_32) || !defined(CONFIG_SMP)
++bool __kvm_vcpu_is_preempted(long cpu);
++
+ __visible bool __kvm_vcpu_is_preempted(long cpu)
+ {
+ 	struct kvm_steal_time *src = &per_cpu(steal_time, cpu);
+-- 
+2.31.1
 
-A recent change in the kernel regarding the riscv -march handling breaks
-current sparse.
-
-On 31.03.2022 12:39:14, Marc Kleine-Budde wrote:
-> On 31.03.2022 12:32:47, Marc Kleine-Budde wrote:
-> > On 26.01.2022 18:14:42, Aurelien Jarno wrote:
-> > > From version 2.38, binutils default to ISA spec version 20191213. This
-> > > means that the csr read/write (csrr*/csrw*) instructions and fence.i
-> > > instruction has separated from the `I` extension, become two standalo=
-ne
-> > > extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-> > > this causes the following build failure:
-> > >=20
-> > >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler =
-messages:
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >=20
-> > > The fix is to specify those extensions explicitely in -march. However=
- as
-> > > older binutils version do not support this, we first need to detect
-> > > that.
-> > >=20
-> > > Cc: stable@vger.kernel.org # 4.15+
-> > > Cc: Kito Cheng <kito.cheng@gmail.com>
-> > > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> > > ---
-> > >  arch/riscv/Makefile | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > >=20
-> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > index 8a107ed18b0d..7d81102cffd4 100644
-> > > --- a/arch/riscv/Makefile
-> > > +++ b/arch/riscv/Makefile
-> > > @@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:=3D rv32ima
-> > >  riscv-march-$(CONFIG_ARCH_RV64I)	:=3D rv64ima
-> > >  riscv-march-$(CONFIG_FPU)		:=3D $(riscv-march-y)fd
-> > >  riscv-march-$(CONFIG_RISCV_ISA_C)	:=3D $(riscv-march-y)c
-> > > +
-> > > +# Newer binutils versions default to ISA spec version 20191213 which=
- moves some
-> > > +# instructions from the I extension to the Zicsr and Zifencei extens=
-ions.
-> > > +toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(r=
-iscv-march-y)_zicsr_zifencei)
-> > > +riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_z=
-icsr_zifencei
-> > > +
-> > >  KBUILD_CFLAGS +=3D -march=3D$(subst fd,,$(riscv-march-y))
-> > >  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
-> >=20
-> > I'm on current linus/master, this change breaks on current Debian
-> > testing with:
-> >=20
-> > | make: Leaving directory 'linux'
-> > |   SYNC    include/config/auto.conf.cmd
-> > |   GEN     Makefile
-> > |   GEN     Makefile
-> > |   CC      scripts/mod/empty.o
-> > |   CHECK   linux/scripts/mod/empty.c
->       ^^^^^
-> It's actually "sparse" that breaks
->      =20
-> > | invalid argument to '-march': '_zicsr_zifencei'
->=20
-> | $ sparse --version
-> | 0.6.4 (Debian: 0.6.4-2)
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---y7e5q426lci6cphx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJFh5wACgkQrX5LkNig
-013oyQgApEAGaNeYbcnBksclgOHXyRB9XqcWrrQVGYKkT0FziLqGCsxU30J3T4Rh
-HRyf/cB3aJ1vsHwnz2wyT7ylEoeD6V2gozxE2rKl0ZIw74gCrQO09Yn31SvRxuUz
-+CtJnkbrapsLGxZ8a7a08YU/9DSLkhvefR7vhgVMcjYYY/iceBjvdi1rJZGHI4iV
-PMG1oDT6nm8i6GtYQ8KmRuFs7iyCCL92nnoYSxd3CjCUzvYzVaL3hiM7gpEr1c9+
-SrVM13phszf/JPOUaZ1gRr2lnN5DXagyRH0S/ySN5fJ1+kJYq5HrRM6+NO01+5mN
-q9mwLpS5NvsBOIhnxolvuCOS0Yth/Q==
-=TEkc
------END PGP SIGNATURE-----
-
---y7e5q426lci6cphx--

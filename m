@@ -2,192 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7246A4EE154
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF64EE15C
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiCaTHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S239395AbiCaTIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239208AbiCaTHa (ORCPT
+        with ESMTP id S240480AbiCaTIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:07:30 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7547421C727;
-        Thu, 31 Mar 2022 12:05:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 33B1D3D67A7;
-        Thu, 31 Mar 2022 15:05:41 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 6ukdw3_Ch-TX; Thu, 31 Mar 2022 15:05:40 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 88EE63D670E;
-        Thu, 31 Mar 2022 15:05:40 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 88EE63D670E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1648753540;
-        bh=aCyzExiZNAlii4hNNUqKPOAEajExCBXUHglNihKOAvI=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=Xc1elefVGLKmqhhM58407/ZT1mhhPKmDZGHLDmZT9yfmDob05N5AEnpZEwv+KbHHL
-         dC1TmOhl3DueN9/BoShgyRxEZ70pNKZzWR5EpEb/XNr9RlG71WE5Mr0i68+VSoXt9+
-         njk/1WMSV1GwOC4+ckRMHfILAfc6TTUnfXauhv2s+wetabOQ8OFIVyX78Axmm6ktXU
-         AtpeTxYgtRHY9klkGbOQKtZVAIiE36I3Pic4QYFtIRZO1zc0UUMfaU+hc9YKcj917w
-         AtwKYrhPoDxti5O4GzPY8XPJDT0eK64zPH/+fNymsQH6BMNAobegH9M43L8is2svfi
-         ObjDMayWLVPZQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6MFkmGC2BjV5; Thu, 31 Mar 2022 15:05:40 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 774A13D67A6;
-        Thu, 31 Mar 2022 15:05:40 -0400 (EDT)
-Date:   Thu, 31 Mar 2022 15:05:40 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Beau Belgrave <beaub@microsoft.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Message-ID: <1879409978.201000.1648753540376.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220329215421.GA2997@kbox>
-References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com> <20220329002935.2869-1-beaub@linux.microsoft.com> <1014535694.197402.1648570634323.JavaMail.zimbra@efficios.com> <20220329215421.GA2997@kbox>
-Subject: Re: Comments on new user events ABI
+        Thu, 31 Mar 2022 15:08:22 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFA221C727
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:06:31 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 11034 invoked from network); 31 Mar 2022 21:06:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1648753588; bh=XZTdSmwm9/yO+AUq3L3jtZKpoXcOQ8kc/B2IKK6OQ0g=;
+          h=From:To:Cc:Subject;
+          b=ubO3oVMPOVqjvN6tQ+rX1kOZP3HTKba9P7eqRqlyQ6ZLsKV8E5DsrG6bN/d7QPuYF
+           kg22ppYJXqXEpo9tT65ne7kV4q0iWjUS00rszY5pzz8xAJjHS6u05AMK3wWCxVhmKf
+           K0pHcSmGSM/qYVb/eVoisklFqLQ9K5EGrfar2kDs=
+Received: from aaew62.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.126.62])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 31 Mar 2022 21:06:27 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm time in debugfs
+Date:   Thu, 31 Mar 2022 21:06:11 +0200
+Message-Id: <20220331190612.22162-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
-Thread-Topic: Comments on new user events ABI
-Thread-Index: 7vhB2TzqJsMr+Bak6Tdk339nleGFrg==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: c9fa4d8a8d8f00513ade2b3eaef03373
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [EcP0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Mar 29, 2022, at 5:54 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
+Before Linux 5.17, there was a problem with the CMOS RTC driver:
+cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
+in progress) bit, which could have caused it to sometimes fail silently
+and read bogus values or do not set the alarm correctly.
+Luckily, this issue was masked by cmos_read_time() invocations in core
+RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
 
-> On Tue, Mar 29, 2022 at 12:17:14PM -0400, Mathieu Desnoyers wrote:
->> ----- On Mar 28, 2022, at 8:29 PM, Beau Belgrave beaub@linux.microsoft.com
->> wrote:
->> 
->> >> ----- On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers
->> >> mathieu.desnoyers@efficios.com wrote:
-[...]
-> 
->> > 
->> >> I would have rather thought that tracers implemented in user-space could
->> >> register
->> >> themselves, and then there could be one
->> >> /sys/kernel/debug/tracing/user_events_status
->> >> per tracer. Considering that all kernel tracers use the same ABI to write an
->> >> event,
->> >> and then dispatch this event internally within the kernel to each registered
->> >> tracer, I would expect to have a single memory mapping for all those (e.g. a
->> >> /sys/kernel/debug/tracing/user_events_status/kernel_tracers file).
->> >> 
->> >> Then eventually if we have other user-space tracers such as lttng-ust with its
->> >> their own user-space code performing tracing in a shared memory ring buffer, it
->> >> would make sense to allow it to register its own
->> >> /sys/kernel/debug/tracing/user_events_status/lttng_ust file, with its own
->> >> indexes.
->> >> 
->> > 
->> > I don't follow that. The intention is to get user processes to participate with
->> > trace_events and the built-in tooling. When would a user-space tracer be used
->> > instead of perf/ftrace?
->> > 
->> > It seems like a feature request?
->> 
->> It can very well be out of scope for the user events, and I'm fine with that.
->> I was merely considering how the user events could be leveraged by tracers
->> implemented purely in user-space. But if the stated goal of this feature is
->> really to call into kernel tracers through a writev(), then I suspect that
->> supporting purely user-space tracers is indeed out of scope.
->> 
-> 
-> That was the goal with this ABI, are there maybe ways we can change the
-> ABI to accomodate this later without shutting that out?
+To avoid such a problem in the future in some other driver, I wrote a
+test unit that reads the alarm time many times in a row. As the alarm
+time is usually read once and cached by the RTC core, this requires a
+way for userspace to trigger direct alarm time read from hardware. I
+think that debugfs is the natural choice for this.
 
-I suspect that targeting this bit-enable memory mapping only as a gate for
-kernel tracers is good enough for now. Let's consider other use-cases when
-we have a clear picture of how it would be used. For the moment, I suspect
-that I would prefer to manage my own bit-enable memory mapping within lttng-ust
-rather than use a kernel-wide facility, which opens up questions about isolation
-of containers, and ability to run multiple concurrent instances on a given kernel
-without side-effects on each other.
+So, introduce /sys/kernel/debug/rtc/rtcX/wakealarm_raw. This interface
+as implemented here does not seem to be that useful to userspace, so
+there is little risk that it will become kernel ABI.
 
-I suspect that clarifying what this mmap'd based mechanism brings over the already
-existing SDT semaphores will be important to justify this new ABI.
+Is this approach correct and worth it?
 
-Ref. https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation
+TODO:
+- should I add a new Kconfig option (like CONFIG_RTC_INTF_DEBUGFS), or
+  just use CONFIG_DEBUG_FS here? I wouldn't like to create unnecessary
+  config options in the kernel.
 
-[...]
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Shuah Khan <shuah@kernel.org>
+---
+ drivers/rtc/Makefile    |   1 +
+ drivers/rtc/class.c     |   3 ++
+ drivers/rtc/debugfs.c   | 112 ++++++++++++++++++++++++++++++++++++++++
+ drivers/rtc/interface.c |   3 +-
+ include/linux/rtc.h     |  16 ++++++
+ 5 files changed, 133 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/rtc/debugfs.c
 
-> 
->> [...]
->> 
->> >> kernel/trace/trace_events_user.c:
->> >> 
->> >> static int user_events_release(struct inode *node, struct file *file)
->> >> {
->> >> [...]
->> >>         /*
->> >>          * Ensure refs cannot change under any situation by taking the
->> >>          * register mutex during the final freeing of the references.
->> >>          */
->> >>         mutex_lock(&reg_mutex);
->> >> [...]
->> >>         mutex_unlock(&reg_mutex);
->> >> 
->> >>         kfree(refs);
->> >> 
->> >>         ^ AFAIU, the user_events_write() does not rely on reg_mutex to ensure mutual
->> >>         exclusion.
->> >>           Doing so would be prohibitive performance-wise. But I suspect that freeing
->> >>           "refs" here
->> >>           without waiting for a RCU grace period can be an issue if user_events_write_core
->> >>           is using
->> >>           refs concurrently with file descriptor close.
->> >> 
->> > 
->> > The refs is per-file, so if user_events_write() is running release cannot be
->> > called for that file instance, since it's being used. Did I miss something?
->> 
->> I'm possibly the one missing something here, but what prevents 2 threads
->> from doing user_event_write() and close() concurrently on the same file
->> descriptor ?
->> 
-> 
-> While nothing prevents it, my understanding is that the actual release()
-> on the file_operations won't be invoked until the file struct has been
-> ref'd down to zero. (fs/file_table.c:fput, fs/read_write.c:do_pwritev).
-> 
-> While the write call is being run, the file should have a non-zero ref
-> count. I believe looking at do_pwritev the fdget/fdput pair are largely
-> responsible for this, do you agree?
-
-Yes, you are correct. So the "refs" lifetime for writev vs close is guaranteed
-by the reference counting of the struct file when the process file descriptor
-table has multiple users (e.g. multithreaded process).
-
-[...]
-
-Thanks,
-
-Mathieu
-
-
-
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 678a8ef4abae..50e166a97f54 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -14,6 +14,7 @@ rtc-core-$(CONFIG_RTC_NVMEM)		+= nvmem.o
+ rtc-core-$(CONFIG_RTC_INTF_DEV)		+= dev.o
+ rtc-core-$(CONFIG_RTC_INTF_PROC)	+= proc.o
+ rtc-core-$(CONFIG_RTC_INTF_SYSFS)	+= sysfs.o
++rtc-core-$(CONFIG_DEBUG_FS)		+= debugfs.o
+ 
+ obj-$(CONFIG_RTC_LIB_KUNIT_TEST)	+= lib_test.o
+ 
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 4b460c61f1d8..5673b7b26c0d 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -334,6 +334,7 @@ static void devm_rtc_unregister_device(void *data)
+ 	 * Remove innards of this RTC, then disable it, before
+ 	 * letting any rtc_class_open() users access it again
+ 	 */
++	rtc_debugfs_del_device(rtc);
+ 	rtc_proc_del_device(rtc);
+ 	if (!test_bit(RTC_NO_CDEV, &rtc->flags))
+ 		cdev_device_del(&rtc->char_dev, &rtc->dev);
+@@ -417,6 +418,7 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	}
+ 
+ 	rtc_proc_add_device(rtc);
++	rtc_debugfs_add_device(rtc);
+ 
+ 	dev_info(rtc->dev.parent, "registered as %s\n",
+ 		 dev_name(&rtc->dev));
+@@ -476,6 +478,7 @@ static int __init rtc_init(void)
+ 	}
+ 	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
+ 	rtc_dev_init();
++	rtc_debugfs_init();
+ 	return 0;
+ }
+ subsys_initcall(rtc_init);
+diff --git a/drivers/rtc/debugfs.c b/drivers/rtc/debugfs.c
+new file mode 100644
+index 000000000000..5ceed5504033
+--- /dev/null
++++ b/drivers/rtc/debugfs.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/*
++ * Debugfs interface for testing RTC alarms.
++ */
++#include <linux/debugfs.h>
++#include <linux/err.h>
++#include <linux/rtc.h>
++
++static struct dentry *rtc_main_debugfs_dir;
++
++void rtc_debugfs_init(void)
++{
++	struct dentry *ret = debugfs_create_dir("rtc", NULL);
++
++	// No error is critical here
++	if (!IS_ERR(ret))
++		rtc_main_debugfs_dir = ret;
++}
++
++/*
++ * Handler for /sys/kernel/debug/rtc/rtcX/wakealarm_raw .
++ * This function reads the RTC alarm time directly from hardware. If the RTC
++ * alarm is enabled, this function returns the alarm time modulo 24h in seconds
++ * since midnight.
++ *
++ * Should be only used for testing of the RTC alarm read functionality in
++ * drivers - to make sure that the driver returns consistent values.
++ *
++ * Used in tools/testing/selftests/rtc/rtctest.c .
++ */
++static int rtc_debugfs_alarm_read(void *p, u64 *out)
++{
++	int ret;
++	struct rtc_device *rtc = p;
++	struct rtc_wkalrm alm;
++
++	/* Using rtc_read_alarm_internal() instead of __rtc_read_alarm() will
++	 * allow us to avoid any interaction with rtc_read_time() and possibly
++	 * see more issues.
++	 */
++	ret = rtc_read_alarm_internal(rtc, &alm);
++	if (ret != 0)
++		return ret;
++
++	if (!alm.enabled) {
++		*out = -1;
++		return 0;
++	}
++
++	/* It does not matter if the device does not support seconds resolution
++	 * of the RTC alarm.
++	 */
++	if (test_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features))
++		alm.time.tm_sec = 0;
++
++	/* The selftest code works with fully defined alarms only.
++	 */
++	if (alm.time.tm_sec == -1 || alm.time.tm_min == -1 || alm.time.tm_hour == -1) {
++		*out = -2;
++		return 0;
++	}
++
++	/* Check if the alarm time is correct.
++	 * rtc_valid_tm() does not allow fields containing "-1", so put in
++	 * something to satisfy it.
++	 */
++	if (alm.time.tm_year == -1)
++		alm.time.tm_year = 100;
++	if (alm.time.tm_mon == -1)
++		alm.time.tm_mon = 0;
++	if (alm.time.tm_mday == -1)
++		alm.time.tm_mday = 1;
++	if (rtc_valid_tm(&alm.time))
++		return -EINVAL;
++
++	/* We do not duplicate the logic in __rtc_read_alarm() and instead only
++	 * return the alarm time modulo 24h, which all devices should support.
++	 * This should be enough for testing purposes.
++	 */
++	*out = alm.time.tm_hour * 3600 + alm.time.tm_min * 60 + alm.time.tm_sec;
++
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(rtc_alarm_raw, rtc_debugfs_alarm_read, NULL, "%lld\n");
++
++void rtc_debugfs_add_device(struct rtc_device *rtc)
++{
++	struct dentry *dev_dir;
++
++	if (!rtc_main_debugfs_dir)
++		return;
++
++	dev_dir = debugfs_create_dir(dev_name(&rtc->dev), rtc_main_debugfs_dir);
++
++	if (IS_ERR(dev_dir)) {
++		rtc->debugfs_dir = NULL;
++		return;
++	}
++	rtc->debugfs_dir = dev_dir;
++
++	if (test_bit(RTC_FEATURE_ALARM, rtc->features) && rtc->ops->read_alarm) {
++		debugfs_create_file("wakealarm_raw", 0444, dev_dir,
++				    rtc, &rtc_alarm_raw);
++	}
++}
++
++void rtc_debugfs_del_device(struct rtc_device *rtc)
++{
++	debugfs_remove_recursive(rtc->debugfs_dir);
++	rtc->debugfs_dir = NULL;
++}
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index d8e835798153..51c801c82472 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -175,8 +175,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
+ }
+ EXPORT_SYMBOL_GPL(rtc_set_time);
+ 
+-static int rtc_read_alarm_internal(struct rtc_device *rtc,
+-				   struct rtc_wkalrm *alarm)
++int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ {
+ 	int err;
+ 
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 47fd1c2d3a57..4665bc238a94 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -41,6 +41,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+ #include <linux/mutex.h>
+ #include <linux/timerqueue.h>
+ #include <linux/workqueue.h>
++#include <linux/debugfs.h>
+ 
+ extern struct class *rtc_class;
+ 
+@@ -152,6 +153,10 @@ struct rtc_device {
+ 	time64_t offset_secs;
+ 	bool set_start_time;
+ 
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *debugfs_dir;
++#endif
++
+ #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+ 	struct work_struct uie_task;
+ 	struct timer_list uie_timer;
+@@ -190,6 +195,7 @@ extern int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm);
+ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+ extern int rtc_read_alarm(struct rtc_device *rtc,
+ 			struct rtc_wkalrm *alrm);
++int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+ extern int rtc_set_alarm(struct rtc_device *rtc,
+ 				struct rtc_wkalrm *alrm);
+ extern int rtc_initialize_alarm(struct rtc_device *rtc,
+@@ -262,4 +268,14 @@ int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
+ 	return 0;
+ }
+ #endif
++
++#ifdef CONFIG_DEBUG_FS
++void rtc_debugfs_init(void);
++void rtc_debugfs_add_device(struct rtc_device *rtc);
++void rtc_debugfs_del_device(struct rtc_device *rtc);
++#else /* CONFIG_DEBUG_FS */
++static inline void rtc_debugfs_init(void) {}
++static inline void rtc_debugfs_add_device(struct rtc_device *rtc) {}
++static inline void rtc_debugfs_del_device(struct rtc_device *rtc) {}
++#endif /* CONFIG_DEBUG_FS */
+ #endif /* _LINUX_RTC_H_ */
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.25.1
+

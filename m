@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00834EE228
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08F84EE229
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239166AbiCaT4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S241096AbiCaT4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiCaT4H (ORCPT
+        with ESMTP id S240886AbiCaT4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:56:07 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A2960A84;
-        Thu, 31 Mar 2022 12:54:19 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id c7so1335542wrd.0;
-        Thu, 31 Mar 2022 12:54:19 -0700 (PDT)
+        Thu, 31 Mar 2022 15:56:08 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A12A60A84;
+        Thu, 31 Mar 2022 12:54:21 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q19so618581pgm.6;
+        Thu, 31 Mar 2022 12:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y+woCqSRN/iPJPDhXido2RTys7AhCgzJm7RlMHPDtp4=;
-        b=L8zzTUHI02LY2DUF6K1iFRY9ZUoFqty0Mfod+IdwlXRT49VTPLlTNtr6gUjNfio+lH
-         UeIfRaTUOb8BICGNlKrumSq8EjzTMrf9tTcPciDWG0CFitmHeCl3gLLQNaG4q8KmCjZv
-         UYcLumBp3/XXoj4KVE3vnJ1N8Bf1HAqnNFxUXcnB/xir0UFlooFLKIAOhS/FY59k1jLi
-         7sYFTZSWsLgeaxm6RJ/8EKZtiJSEc8bJI1AwxAOJqIoG2AXOIRoFoWDZC2TSDfXYgbyZ
-         0ukisy7tdPxLp4C0VX04Hg3zt0igZbMvSCezV/rV2akbZBgoL4XBJucJBGMO0FXseGb1
-         5Qhw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vwYbxEvOFzQZ3DfFjQoUndJHwl8sC80wy2uGif/41uE=;
+        b=QKzz3hwvxOS8I5FsifjjQB7LMh51VWqYRaLXy9QTs8T+LML+JUK/+/HareIvwQusHM
+         PTmuDTi2YUxPUwYCK5Q/uJrxD9QpDn2B39x5Bs+juLPoYsSDBhZ9zUphpvGzTbFDi4vR
+         GYVfcs8VpcmBQcRBFQQdh83gJfYD2JxsJ7ZByfBjhdSYt7hY1TahBmVj+6MkZQvVolE5
+         I3QBUlsVjdEAg/j1IXZ3XP+6A/JURnZJxwGJZwCaklkhfKVVF1XhwOZF1/buOTliUiql
+         7CfBPe9wz9XCXClc21sug9R6hvtb0bcnmGJ5Jw2ZCvV/55jrd+iJTO7bnABy0jj35wdW
+         8few==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y+woCqSRN/iPJPDhXido2RTys7AhCgzJm7RlMHPDtp4=;
-        b=epphDhGNKZMrSo5lEATJY17jEAR9aruTdh2wqofI6WguOK9+yJ6bIubzAem/eGKEW4
-         yn+ifRJeGYv4GngkphBV3lQy6bkq9PTplXHtAOmAV6xIPgjklKAf53+eKuvTb1aTcNNI
-         hp1Bp8UKWMH1h4zwAxfwH7u0ptQdDlGH3rQF2ngPiVHbseo+S2GoFRoNlRf23iMu1y0/
-         FpUxSLz4JG0LxNixYJ2FaCv3ywJ590y9yRmc3cmY34E255sN8WFKNGZm9IDsCqa9nuDY
-         NoCAOuhvDFvx2Tkb58gQfVJ+kkmaMY7CHqXcGgEr/7awkewh7L6WZyNqDAwfl1NQ33wQ
-         pXwg==
-X-Gm-Message-State: AOAM531k0BHYztW2S3b9WJUh/0wJF2gYkrkrgP41A80QCtaMHnsSQagJ
-        gTJWhjHYGkuFjtZcoBWu4d/4TJ1W3Jk5mFYgM5s=
-X-Google-Smtp-Source: ABdhPJxCn8bZA1ok0IRYryEvFh8skfsiOCJwEL2rMyo66Je1AvtOILxEmYjajETgMg9CBpv8K4ncluCui4jKiXIE0Yo=
-X-Received: by 2002:adf:f20f:0:b0:203:fc73:a9a0 with SMTP id
- p15-20020adff20f000000b00203fc73a9a0mr5302332wro.418.1648756458095; Thu, 31
- Mar 2022 12:54:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vwYbxEvOFzQZ3DfFjQoUndJHwl8sC80wy2uGif/41uE=;
+        b=TVqtIPcd2nk447/CxkhV8Qe+Gb6sKkxqn7SIB/nD9Y4gGsU3pAz1K+nMqa3EEmI+Yk
+         vk96/Av7COxM3FSWPctj4ZyPsbEWBOsGIT3vjYTcsXtJ1qhfZ8D7V4Zq3oVuIlKKJ8Zt
+         11xO/w5seV0hOV/Uwuk6zjJf4Xavv6vom/XUPT+s21w5ZahJ1GCU0r+vZfEvsYy1yP2q
+         6mkXnykIvgyITlcbc7UgviDnbGwn91MhzMEAUcTgkXhmWIfivJZDDahrosGZw8sUQXVK
+         HkgmswvoF4ua2co25jQSbnUGLdc/tojaSZlOfDLdsFlaKXS3Bdl82LO1EYG9d8Jk8ovI
+         JNcA==
+X-Gm-Message-State: AOAM5303AD386QLP9ID7Md6aRslZK9DdsOKpnfXhaVLux3/mU7cL9XDM
+        9kuzFbTD4wcdvGGMBhG5vG4=
+X-Google-Smtp-Source: ABdhPJw053091D9MqO5RSZUJy8UyPWhs/hLZBSYlI5FEYxBaDT8GAo2/s2AmaYMb9sOklX3icFDTdw==
+X-Received: by 2002:a05:6a00:810:b0:4fa:e71f:7e40 with SMTP id m16-20020a056a00081000b004fae71f7e40mr7196865pfk.15.1648756460698;
+        Thu, 31 Mar 2022 12:54:20 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm152830pgn.83.2022.03.31.12.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:54:20 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 12:54:19 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 021/104] KVM: x86: Introduce hooks to free VM
+ callback prezap and vm_free
+Message-ID: <20220331195419.GB2084469@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <af18a5c763a78af2b7de6e6e0841d9e61a571dc4.1646422845.git.isaku.yamahata@intel.com>
+ <03d3c1ac92cee3b0e8e325da0f703d1dd9657b4b.camel@intel.com>
 MIME-Version: 1.0
-References: <20220330204804.660819-1-robdclark@gmail.com> <20220330204804.660819-11-robdclark@gmail.com>
- <ad97096f-cc90-4f20-0f73-f33e9b275f1a@collabora.com> <CAF6AEGvZqM1OT_n1C+x+C1GTd4PbFkH4c7P-BseDOUGj7yj3Eg@mail.gmail.com>
- <22d9a9ff-1c44-ed41-6ae1-59a1f965ab6c@collabora.com>
-In-Reply-To: <22d9a9ff-1c44-ed41-6ae1-59a1f965ab6c@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 31 Mar 2022 12:54:06 -0700
-Message-ID: <CAF6AEGuX0EKU+XqvkhwNBgR733pa4ZPr2+i51uTQz85mjxh-2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] drm/msm: Add a way for userspace to allocate GPU iova
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <03d3c1ac92cee3b0e8e325da0f703d1dd9657b4b.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,49 +77,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 12:41 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 3/31/22 22:02, Rob Clark wrote:
-> > On Thu, Mar 31, 2022 at 11:52 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >>
-> >> ...
-> >>> +/*
-> >>> + * Get the requested iova but don't pin it.  Fails if the requested iova is
-> >>> + * not available.  Doesn't need a put because iovas are currently valid for
-> >>> + * the life of the object.
-> >>> + *
-> >>> + * Setting an iova of zero will clear the vma.
-> >>> + */
-> >>> +int msm_gem_set_iova(struct drm_gem_object *obj,
-> >>> +                  struct msm_gem_address_space *aspace, uint64_t iova)
-> >>> +{
-> >>> +     int ret = 0;
-> >>
-> >> nit: No need to initialize the ret
-> >
-> > actually, we do
->
-> Indeed, sorry :)
->
-> ...
-> >>>  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
-> >>>               struct msm_gem_address_space *aspace, uint64_t *iova,
-> >>>               u64 range_start, u64 range_end);
-> >> nit: There is an odd mix of uint64_t and u64 (and alike) in the MSM code
-> >> :) The uint64_t variant shouldn't be used by kernel code in general and
-> >> checkpatch should want about it.
-> >
-> > one of many things that I disagree with checkpatch about ;-)
-> >
-> > I prefer standard types to custom ones.  I _kinda_ get the argument in
-> > case of uapi (but IMHO that doesn't apply to how drm uapi headers are
-> > used)
->
-> I'd understand if it was all either uint64_t or u64, but the mix.. hm.
+On Thu, Mar 31, 2022 at 04:02:24PM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
 
-yeah, fair, we could be a bit more consistent
+> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > From: Kai Huang <kai.huang@intel.com>
+> > 
+> > Before tearing down private page tables, TDX requires some resources of the
+> > guest TD to be destroyed (i.e. keyID must have been reclaimed, etc).  Add
+> > prezap callback before tearing down private page tables for it.
+> > 
+> > TDX needs to free some resources after other resources (i.e. vcpu related
+> > resources).  Add vm_free callback at the end of kvm_arch_destroy_vm().
+> > 
+> > Signed-off-by: Kai Huang <kai.huang@intel.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/include/asm/kvm-x86-ops.h | 2 ++
+> >  arch/x86/include/asm/kvm_host.h    | 2 ++
+> >  arch/x86/kvm/x86.c                 | 8 ++++++++
+> >  3 files changed, 12 insertions(+)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index 8125d43d3566..ef48dcc98cfc 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -20,7 +20,9 @@ KVM_X86_OP(has_emulated_msr)
+> >  KVM_X86_OP(vcpu_after_set_cpuid)
+> >  KVM_X86_OP(is_vm_type_supported)
+> >  KVM_X86_OP(vm_init)
+> > +KVM_X86_OP_NULL(mmu_prezap)
+> >  KVM_X86_OP_NULL(vm_destroy)
+> > +KVM_X86_OP_NULL(vm_free)
+> >  KVM_X86_OP(vcpu_create)
+> >  KVM_X86_OP(vcpu_free)
+> >  KVM_X86_OP(vcpu_reset)
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 8de357a9ad30..5ff7a0fba311 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1326,7 +1326,9 @@ struct kvm_x86_ops {
+> >  	bool (*is_vm_type_supported)(unsigned long vm_type);
+> >  	unsigned int vm_size;
+> >  	int (*vm_init)(struct kvm *kvm);
+> > +	void (*mmu_prezap)(struct kvm *kvm);
+> >  	void (*vm_destroy)(struct kvm *kvm);
+> > +	void (*vm_free)(struct kvm *kvm);
+> >  
+> >  	/* Create, but do not attach this VCPU */
+> >  	int (*vcpu_create)(struct kvm_vcpu *vcpu);
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index f6438750d190..a48f5c69fadb 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -11779,6 +11779,7 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
+> >  	kvm_page_track_cleanup(kvm);
+> >  	kvm_xen_destroy_vm(kvm);
+> >  	kvm_hv_destroy_vm(kvm);
+> > +	static_call_cond(kvm_x86_vm_free)(kvm);
+> >  }
+> >  
+> >  static void memslot_rmap_free(struct kvm_memory_slot *slot)
+> > @@ -12036,6 +12037,13 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
+> >  
+> >  void kvm_arch_flush_shadow_all(struct kvm *kvm)
+> >  {
+> > +	/*
+> > +	 * kvm_mmu_zap_all() zaps both private and shared page tables.  Before
+> > +	 * tearing down private page tables, TDX requires some TD resources to
+> > +	 * be destroyed (i.e. keyID must have been reclaimed, etc).  Invoke
+> > +	 * kvm_x86_mmu_prezap() for this.
+> > +	 */
+> > +	static_call_cond(kvm_x86_mmu_prezap)(kvm);
+> >  	kvm_mmu_zap_all(kvm);
+> >  }
+> >  
+> 
+> The two callbacks are introduced here but they are actually implemented in 2
+> patches later (patch 24 KVM: TDX: create/destroy VM structure).  Why not just
+> squash this patch to patch 24?  Or at least you can put this patch right before
+> patch 24.
 
-BR,
--R
+Ok. I'll squash this patch into it.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

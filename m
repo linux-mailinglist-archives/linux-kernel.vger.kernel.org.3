@@ -2,228 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3507D4ED38F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF704ED393
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 07:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiCaFzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 01:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S230197AbiCaF4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 01:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiCaFzl (ORCPT
+        with ESMTP id S229966AbiCaF4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 01:55:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922761C0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:53:53 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id p15so45763066ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:53:53 -0700 (PDT)
+        Thu, 31 Mar 2022 01:56:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E1D673CD
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:54:48 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id jx9so23035520pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zzs+ZHibEnw+t1g8tg6/Dygsvg8Tq1tVYNwyuhr7FfU=;
-        b=PwtYT3853d0ybAZujxH83isegbuSphn/uUyIcg2L7F8ik2CoDddiJAd4vFrj01oQpq
-         ngjYoJpJK7Te6ACIQyLLz2gXfiDBfsTaTwdTJQXJKz5j61MhVeBWpOMbsbFL56Ywv/9u
-         n0jJe68RTMVvvXWVBxqWA45gJvDLJBtz0NTR7cQr8sBRzJhKn7uWcv5VEDTS4zQuPObK
-         kyrxW31am0Ly4RAI2Bes34LDjLEv5GZKbBVXtVkQQS3bxBUYI9urwL6yH1T5NrTmn/I/
-         eEte9nspD5UqCe5MGEOeuw1Wj9Xbux232G5ltRocxRiHoAhFHnkCgFw7WQMEKKrHNHc0
-         vwww==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LsQ2rHdZ2Pn2SWmoHtGM/9EAvT94L/VPQneu88cPzwo=;
+        b=fhBB4NNDdLmXkeTPANq7lsyDMOfX1/D0yapXetf68Ih585qlMXbjQk4w73YtHMyRA/
+         y7UIy8BR72on4QPmShIlonIzpPK3aFXq4jOAfItwroot+BWxIIVdbLbjlXJMdvU9vaul
+         KHrXRGClA2Jty1lY1c+R4Lq+cwHfraSVxaBqiIJYVad/MRTYNp1nE3aJ6j2d+eelUNlu
+         lc55fFYROwp6EwpJb0A+jUi9aMxQjAsa1yJGAm4QlrVXgD8nqkqA+znMAtAoAuO29Gky
+         aPF0tGurLWfqxxP7LEiVp3TXDehEdpApwcsKTt38YnfGW2NsR9SJUW/IdAL62n63Ci/X
+         OhCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zzs+ZHibEnw+t1g8tg6/Dygsvg8Tq1tVYNwyuhr7FfU=;
-        b=ae/bEljH+oEfCzAoBB2H4GyDAGpLuaLOFWdm5Ecf17hgQm9/3Zoh/rQ/lM0wsGRrpd
-         fcqVCBAOVVQW0eRnVjgq/hfV26lV/c1x6S+2+75zFmLjeQZfiZP993z5jNobkTJz1eOr
-         w+m7GfzumSIAu6ZRyTP+63SvB/o3FYBREVEPHtoNsTdQGUVN7OGtGwNCIrKDADD41lRC
-         a2dSuckPBA3Lm6Mxgg/6zvLayaASw5cERdNXCmPhvMND2sIGbjXcKa4QaKdEapl9mgwJ
-         /lX762b7ORzeJth7CX3r2FlahpY4hqoy6FdmMy06FF+yLmkO9ihvTp+7fFV4uSrG+ihf
-         cjhw==
-X-Gm-Message-State: AOAM531/awhpuL+m9HvH1BHw7dTLXE3xa7NoZvFKhQ65DykvEow1htJz
-        69lI3SkQQCsn+INIWFV4gi52HtA59Q2VfaTF
-X-Google-Smtp-Source: ABdhPJzkI8vj+Jq5KZdLH/R9bIGRMouax/d6lriJQXZwTgo7uUVSkqmvjIQT+GOZLxcFLw6ItXtNcQ==
-X-Received: by 2002:a17:907:608c:b0:6e0:5204:7454 with SMTP id ht12-20020a170907608c00b006e052047454mr3425777ejc.225.1648706032108;
-        Wed, 30 Mar 2022 22:53:52 -0700 (PDT)
-Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm9041961ejc.25.2022.03.30.22.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 22:53:51 -0700 (PDT)
-Message-ID: <5fa843d2-f07c-3bc0-22f1-8a2ae234e9aa@linaro.org>
-Date:   Thu, 31 Mar 2022 07:53:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 5/5] dt-bindings: phy: uniphier: Clean up clocks,
- resets, and their names using compatible string
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648637715-19262-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648637715-19262-6-git-send-email-hayashi.kunihiko@socionext.com>
- <a784ed61-965a-5c68-c2dd-3340cf18c7b5@linaro.org>
- <d32191fc-1302-89e4-8b24-40fe33867b98@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d32191fc-1302-89e4-8b24-40fe33867b98@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=LsQ2rHdZ2Pn2SWmoHtGM/9EAvT94L/VPQneu88cPzwo=;
+        b=o5cEwbS1j6rD6jdvNU2qpVTS9Tj8clLcccp6AzIGvYTK7FsP3y6ZfLzRsSUkt325bo
+         ex3CXomseDlSWnhYI6UtHotUYFpOACjTXBtEDBrPH5Gd5Bx/oqdLfrhIGJhuQrmd1gPH
+         4zbMS58EwonUCJoUY8IvDoS5sHlnA/Ue7IHBBvfnC2JKHIpp9W7sbhHM2koSh1h3FQFl
+         avOGwXu/KZzM0WlojjZXv8X/5gpho2u72kzJuXnDEShY3PmkkbYy/ss6mLwBpDTcaolY
+         tOtC5PyBxAVRu2VI8H96AqzZ1DpAUcRRWV37BL0TX9dyLSqJklSY2UQb8+K1h2oco0LU
+         l81w==
+X-Gm-Message-State: AOAM533S39lazGnFGw6k6QHXs+28AKQVle3p54N/A9SQe96F1iDMn253
+        e6wREwiv4JSQ6yBSNT/WonrPZA==
+X-Google-Smtp-Source: ABdhPJxioxYkaYts7CBDktycPVgQ0mhkwygWeeK4NEwWpOUCxx3LDEExO74HzKZgGeLU2iVMjn30sw==
+X-Received: by 2002:a17:902:8306:b0:14f:a386:6a44 with SMTP id bd6-20020a170902830600b0014fa3866a44mr3661884plb.140.1648706087889;
+        Wed, 30 Mar 2022 22:54:47 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id pc13-20020a17090b3b8d00b001c775679f58sm8661466pjb.37.2022.03.30.22.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 22:54:47 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 22:54:47 -0700 (PDT)
+X-Google-Original-Date: Wed, 30 Mar 2022 22:54:44 PDT (-0700)
+Subject:     Re: [PATCH v8 0/4] Determine the number of DMA channels by 'dma-channels' property
+In-Reply-To: <YkU6dPFNPkD0Jay+@matsya>
+CC:     zong.li@sifive.com, robh+dt@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        conor.dooley@microchip.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, green.wan@sifive.com,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     vkoul@kernel.org
+Message-ID: <mhng-c6a04a4f-1e85-49e9-baee-b56b0e78c602@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2022 02:50, Kunihiko Hayashi wrote:
-> Hi Krzysztof,
-> 
-> On 2022/03/31 2:40, Krzysztof Kozlowski wrote:
->> On 30/03/2022 12:55, Kunihiko Hayashi wrote:
->>> Instead of "oneOf:" choices, use "allOf:" and "if:" to define clocks,
->>> clock-names, resets, and reset-names that can be taken by the compatible
->>> string.
->>>
->>> The order of clock-names and reset-names doesn't change here.
->>>
->>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>> ---
->>>   .../phy/socionext,uniphier-ahci-phy.yaml      | 90 +++++++++++++-----
->>>   .../phy/socionext,uniphier-pcie-phy.yaml      | 47 ++++++---
->>>   .../phy/socionext,uniphier-usb3hs-phy.yaml    | 93 ++++++++++++++----
->>>   .../phy/socionext,uniphier-usb3ss-phy.yaml    | 95 +++++++++++++++----
->>>   4 files changed, 251 insertions(+), 74 deletions(-)
->>>
+On Wed, 30 Mar 2022 22:21:56 PDT (-0700), vkoul@kernel.org wrote:
+> On 30-03-22, 20:15, Palmer Dabbelt wrote:
+>> On Mon, 28 Mar 2022 02:52:21 PDT (-0700), zong.li@sifive.com wrote:
+>> > The PDMA driver currently assumes there are four channels by default, it
+>> > might cause the error if there is actually less than four channels.
+>> > Change that by getting number of channel dynamically from device tree.
+>> > For backwards-compatible, it uses the default value (i.e. 4) when there
+>> > is no 'dma-channels' information in dts.
+>> >
+>> > This patch set contains the dts and dt-bindings change.
+>> >
+>> > Changed in v8:
+>> >  - Rebase on master
+>> >  - Remove modification of microchip-mpfs.dtsi
+>> >  - Rename DMA node name of fu540-c000.dtsi
+>> >
+>> > Changed in v7:
+>> >  - Rebase on tag v5.17-rc7
+>> >  - Modify the subject of patch
+>> >
+>> > Changed in v6:
+>> >  - Rebase on tag v5.17-rc6
+>> >  - Change sf_pdma.chans[] to a flexible array member.
+>> >
+>> > Changed in v5:
+>> >  - Rebase on tag v5.17-rc3
+>> >  - Fix typo in dt-bindings and commit message
+>> >  - Add PDMA versioning scheme for compatible
+>> >
+>> > Changed in v4:
+>> >  - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
+>> >
+>> > Changed in v3:
+>> >  - Fix allocating wrong size
+>> >  - Return error if 'dma-channels' is larger than maximum
+>> >
+>> > Changed in v2:
+>> >  - Rebase on tag v5.16
+>> >  - Use 4 as default value of dma-channels
+>> >
+>> > Zong Li (4):
+>> >   dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
+>> >     modify compatible
+>> >   riscv: dts: Add dma-channels property and modify compatible
+>> >   riscv: dts: rename the node name of dma
+>> >   dmaengine: sf-pdma: Get number of channel by device tree
+>> >
+>> >  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
+>> >  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
+>> >  drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
+>> >  drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
+>> >  4 files changed, 38 insertions(+), 18 deletions(-)
 >>
->> (...)
->>
->>> diff --git
->>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->>> index 1bbd164f2527..21e4414eea60 100644
->>> ---
->>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->>> +++
->>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
->>> @@ -34,30 +34,12 @@ properties:
->>>       minItems: 2
->>>       maxItems: 3
->>>
->>> -  clock-names:
->>> -    oneOf:
->>> -      - items:               # for Pro5
->>> -          - const: gio
->>> -          - const: link
->>> -      - items:               # for PXs3 with phy-ext
->>> -          - const: link
->>> -          - const: phy
->>> -          - const: phy-ext
->>> -      - items:               # for others
->>> -          - const: link
->>> -          - const: phy
->>> +  clock-names: true
->>>
->>>     resets:
->>>       maxItems: 2
->>>
->>> -  reset-names:
->>> -    oneOf:
->>> -      - items:               # for Pro5
->>> -          - const: gio
->>> -          - const: link
->>> -      - items:               # for others
->>> -          - const: link
->>> -          - const: phy
->>> +  reset-names: true
->>>
->>>     vbus-supply:
->>>       description: A phandle to the regulator for USB VBUS
->>> @@ -80,6 +62,77 @@ properties:
->>>         required for each port, if any one is omitted, the trimming data
->>>         of the port will not be set at all.
->>>
->>> +allOf:
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const: socionext,uniphier-pro5-usb3-hsphy
->>> +    then:
->>> +      properties:
->>> +        clocks:
->>> +          minItems: 2
->>> +          maxItems: 2
->>> +        clock-names:
->>> +          items:
->>> +            - const: gio
->>> +            - const: link
->>> +        resets:
->>> +          minItems: 2
->>> +          maxItems: 2
->>> +        reset-names:
->>> +          items:
->>> +            - const: gio
->>> +            - const: link
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - socionext,uniphier-pxs2-usb3-hsphy
->>> +              - socionext,uniphier-ld20-usb3-hsphy
->>> +    then:
->>> +      properties:
->>> +        clocks:
->>> +          minItems: 2
->>> +          maxItems: 2
->>> +        clock-names:
->>> +          items:
->>> +            - const: link
->>> +            - const: phy
->>> +        resets:
->>> +          minItems: 2
->>> +          maxItems: 2
->>> +        reset-names:
->>> +          items:
->>> +            - const: link
->>> +            - const: phy
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - socionext,uniphier-pxs3-usb3-hsphy
->>> +              - socionext,uniphier-nx1-usb3-hsphy
->>> +    then:
->>> +      properties:
->>> +        clocks:
->>> +          minItems: 2
->>
->> Why minItems:2? Is the last phy-ext clock optional?
-> 
-> In an SoC with two controllers, there is a controller that requires extra
-> clock and a controller that does not. For example, PXs3 USB3 controller 1
-> needs "phy-ext" clock, but the controller 0 doesn't.
-> 
-> This difference is related to the phy configuration, where the controller 1
-> requires more clocks because it shares the phy with other subsystems.
-> 
-> So I think the last phy-ext clock should be optional.
-> 
+>> Thanks, these are on for-next.
+>
+> The drivers/dma/ should go thru dmaengine tree. During merge window I
+> dont apply the patches
 
-OK, thanks for explanation. I assume we talk about the hardware, not
-about Linux driver needs. :)
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+OK, I can drop this from my tree if you'd like?

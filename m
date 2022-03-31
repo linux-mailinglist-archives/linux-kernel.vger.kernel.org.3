@@ -2,156 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485F14ED29B
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10024ED2A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 06:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiCaEMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 00:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S229685AbiCaEKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 00:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiCaEMa (ORCPT
+        with ESMTP id S229610AbiCaEJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:12:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08810109A7A;
-        Wed, 30 Mar 2022 20:53:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AF441F869;
-        Thu, 31 Mar 2022 03:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648698792; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fe9jQftNyc0Y0493gOi7jED/OpJJXfPYMRr0C3GL7WE=;
-        b=0PkbxnrxFxuw3JNzcIlJcD7t4od8Ks3ZF8nWz67UZvC52D5zVOgf2qDKNsQhJRgvUZMyCU
-        s8YLkOOOXi6/hSHMX/JAsx5YeSYl/J5wAgSA3xG0wSQuAccZrBnqthu1dIspIO6RM4/Bno
-        nHb2PhJXFFHLbcOaVDRqKk5bs3WgXj0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648698792;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fe9jQftNyc0Y0493gOi7jED/OpJJXfPYMRr0C3GL7WE=;
-        b=koIpOhp7jJmNlY0vxYmpQNyRG+OkDMyQdv9RUNBp6+9UtZvzfnyMotitKOThlTCaO61hm2
-        Za6TFqpVXIIujzAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96DBA133B6;
-        Thu, 31 Mar 2022 03:53:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qE5HFKYlRWJJBgAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 31 Mar 2022 03:53:10 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 31 Mar 2022 00:09:20 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C53C170084;
+        Wed, 30 Mar 2022 20:56:59 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id g8so18827481qke.2;
+        Wed, 30 Mar 2022 20:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tYlHPxM0iDi5VXE98hgeozahqYJk78JaFFeV+qzNw5U=;
+        b=mTmT7+N63PXuIwB75+CKvFI6cw/jzFICsKFlmrX98DCY4KgVobDxkUkLrPbILjWEVd
+         zOpsJzohasYTU2cri3mhczLOHO+85IFJWAcIzlnZ8sYbVwKoGAyN3ZrI0vtWoa7Qu3eu
+         CsqMCtZFWjlutPRNC7lKg6mZUe8Sh5MDsmm5GAacxLBCKifK/EA4n2cFQBko12jzZ9sS
+         WKQUNIcMTTE9y9FtrLpqhMIlKbYvWdq1U+ww/1au0hwzkHBamg7+Phf1Jd5WuYcisENx
+         lCO2kL34hCyKaR+8Rf8wpTYtiFvSRdvzMZ6EfRXAZk+xbijJO3mI2cpMPxQ0aZw2TTYf
+         kybg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tYlHPxM0iDi5VXE98hgeozahqYJk78JaFFeV+qzNw5U=;
+        b=STUmnVhXh3Sl9XglOkQc0q42kfRim7WNYEzUWi3rEpWsak8Bo6/GdGb0uFif48+39l
+         MDu5uiw2YHoHws3uWmyTOkkceq6y3WAr8IPjocqb1k/rJXFV9Z7RH3T4eylr/ke3QcjJ
+         XK4AmlGHGuqjb/+YfFGBCVh5z9MjAdpe5+SE17gIZyiZEnfqxJ35AYpVBnacvZPzq1Om
+         IY8P6NLbrP/GEH/X/6fh1xel6nG34idP+lZDZBQrAmfPZ/OG/YzwO6lG3mxybkTgXqGk
+         AfhCaNbvBUJvVi8UqZPPH/yVDw1kXCkGnxNN8f2quvDKfJ+F5A+BMkkittxpkhMtKVIB
+         B1xQ==
+X-Gm-Message-State: AOAM5317i4sAHqNIthshm6txwNYl0SRLQpYDUY9za6OmGu3zO+ivoggd
+        bUXnHg0JH+c2n+y8Qwb3nQGP/gc3O/o=
+X-Google-Smtp-Source: ABdhPJzyPrz0p+L/ALJneQJkAZo6ZUHwvs4kf6iDO0DACiqXPcs8bbEYZ5Igo5IyJWR4z4os6/CMDA==
+X-Received: by 2002:a37:9503:0:b0:67e:977:9ff6 with SMTP id x3-20020a379503000000b0067e09779ff6mr2101575qkd.10.1648699018774;
+        Wed, 30 Mar 2022 20:56:58 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id f17-20020ac87f11000000b002e1e831366asm18698404qtk.77.2022.03.30.20.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 20:56:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     akpm@linux-foundation.org, david@redhat.com, willy@infradead.org
+Cc:     corbet@lwn.net, yang.yang29@zte.com.cn, yang.shi@linux.alibaba.com,
+        dave.hansen@linux.intel.com, saravanand@fb.com, minchan@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, jhubbard@nvidia.com,
+        xu xin <xu.xin16@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: [PATCH v5] mm/vmstat: add events for ksm cow
+Date:   Thu, 31 Mar 2022 03:56:17 +0000
+Message-Id: <20220331035616.2390805-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Disseldorp <ddiss@suse.de>
-Subject: [PATCH v2] VFS: filename_create(): fix incorrect intent.
-Date:   Thu, 31 Mar 2022 14:53:04 +1100
-Message-id: <164869878475.25542.14478885718949986319@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-When asked to create a path ending '/', but which is not to be a
-directory (LOOKUP_DIRECTORY not set), filename_create() will never try
-to create the file.  If it doesn't exist, -ENOENT is reported.
+Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
+to save memory, it's a tradeoff by suffering delay on ksm cow. Users can
+get to know how much memory ksm saved by reading
+/sys/kernel/mm/ksm/pages_sharing, but they don't know what's the costs
+of ksm cow, and this is important of some delay sensitive tasks.
 
-However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
-->lookup() function, even though there is no intent to create.  This is
-misleading and can cause incorrect behaviour.
+So add ksm cow events to help users evaluate whether or how to use ksm.
+Also update Documentation/admin-guide/mm/ksm.rst with new added events.
 
-If you try
-   ln -s foo /path/dir/
-
-where 'dir' is a directory on an NFS filesystem which is not currently
-known in the dcache, this will fail with ENOENT.
-As the name is not in the dcache, nfs_lookup gets called with
-LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
-lookup, with the expectation that as subsequent call to create the
-target will be made, and the lookup can be combined with the creation.
-In the case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
-made.  Instead filename_create() sees that the dentry is not (yet)
-positive and returns -ENOENT - even though the directory actually
-exists.
-
-So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent
-to create, and use the absence of these flags to decide if -ENOENT
-should be returned.
-
-Note that we now leave LOOKUP_DIRECTORY in lookup_flags as passed to
-->lookup etc.  This seems more consistent with the comment which says
-that only LOOKUP_REVAL and LOOKUP_DIRECTORY are relevant, and makes the
-code a little cleaner.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
 ---
- fs/namei.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+v2:
+- fix compile error when CONFIG_KSM is not set
+v3:
+- delete KSM_COW_FAIL event
+v4:
+- modify /Documentation/admin-guide/mm/ksm.rst. And let cow_ksm before
+- ksm_swpin_copy, so if new cow_* event could add before cow_ksm.
+v5:
+- fix compile error when CONFIG_SWAP is not set
+---
+ Documentation/admin-guide/mm/ksm.rst | 18 ++++++++++++++++++
+ include/linux/vm_event_item.h        |  3 +++
+ mm/memory.c                          |  4 ++++
+ mm/vmstat.c                          |  3 +++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 3f1829b3ab5b..6d337d951dd2 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3676,13 +3676,12 @@ static struct dentry *filename_create(int dfd, struct=
- filename *name,
- 	int type;
- 	int err2;
- 	int error;
--	bool is_dir =3D (lookup_flags & LOOKUP_DIRECTORY);
-=20
- 	/*
- 	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
- 	 * other flags passed in are ignored!
- 	 */
--	lookup_flags &=3D LOOKUP_REVAL;
-+	lookup_flags &=3D LOOKUP_REVAL | LOOKUP_DIRECTORY;
-=20
- 	error =3D filename_parentat(dfd, name, lookup_flags, path, &last, &type);
- 	if (error)
-@@ -3698,9 +3697,11 @@ static struct dentry *filename_create(int dfd, struct =
-filename *name,
- 	/* don't fail immediately if it's r/o, at least try to report other errors =
-*/
- 	err2 =3D mnt_want_write(path->mnt);
- 	/*
--	 * Do the final lookup.
-+	 * Do the final lookup.  Request 'create' only if there is no trailing
-+	 * '/', or if directory is requested.
- 	 */
--	lookup_flags |=3D LOOKUP_CREATE | LOOKUP_EXCL;
-+	if (!last.name[last.len] || (lookup_flags & LOOKUP_DIRECTORY))
-+		lookup_flags |=3D LOOKUP_CREATE | LOOKUP_EXCL;
- 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
- 	dentry =3D __lookup_hash(&last, path->dentry, lookup_flags);
- 	if (IS_ERR(dentry))
-@@ -3716,7 +3717,7 @@ static struct dentry *filename_create(int dfd, struct f=
-ilename *name,
- 	 * all is fine. Let's be bastards - you had / on the end, you've
- 	 * been asking for (non-existent) directory. -ENOENT for you.
- 	 */
--	if (unlikely(!is_dir && last.name[last.len])) {
-+	if (!likely(lookup_flags & LOOKUP_CREATE)) {
- 		error =3D -ENOENT;
- 		goto fail;
- 	}
---=20
-2.35.1
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+index 97d816791aca..b244f0202a03 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -184,6 +184,24 @@ The maximum possible ``pages_sharing/pages_shared`` ratio is limited by the
+ ``max_page_sharing`` tunable. To increase the ratio ``max_page_sharing`` must
+ be increased accordingly.
+ 
++Monitoring KSM events
++=====================
++
++There are some counters in /proc/vmstat that may be used to monitor KSM events.
++KSM might help save memory, it's a tradeoff by may suffering delay on KSM COW
++or on swapping in copy. Those events could help users evaluate whether or how
++to use KSM. For example, if cow_ksm increases too fast, user may decrease the
++range of madvise(, , MADV_MERGEABLE).
++
++cow_ksm
++	is incremented every time a KSM page triggers copy on write (COW)
++	when users try to write to a KSM page, we have to make a copy.
++
++ksm_swpin_copy
++	is incremented every time a KSM page is copied when swapping in
++	note that KSM page might be copied when swapping in because do_swap_page()
++	cannot do all the locking needed to reconstitute a cross-anon_vma KSM page.
++
+ --
+ Izik Eidus,
+ Hugh Dickins, 17 Nov 2009
+diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+index 16a0a4fd000b..e83967e4c20e 100644
+--- a/include/linux/vm_event_item.h
++++ b/include/linux/vm_event_item.h
+@@ -133,6 +133,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+ 		KSM_SWPIN_COPY,
+ #endif
+ #endif
++#ifdef CONFIG_KSM
++		COW_KSM,
++#endif
+ #ifdef CONFIG_X86
+ 		DIRECT_MAP_LEVEL2_SPLIT,
+ 		DIRECT_MAP_LEVEL3_SPLIT,
+diff --git a/mm/memory.c b/mm/memory.c
+index 4111f97c91a0..12925ceaf745 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3339,6 +3339,10 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 	get_page(vmf->page);
+ 
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
++#ifdef CONFIG_KSM
++	if (PageKsm(vmf->page))
++		count_vm_event(COW_KSM);
++#endif
+ 	return wp_page_copy(vmf);
+ }
+ 
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index d5cc8d739fac..79015f144b15 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1392,6 +1392,9 @@ const char * const vmstat_text[] = {
+ 	"ksm_swpin_copy",
+ #endif
+ #endif
++#ifdef CONFIG_KSM
++	"cow_ksm",
++#endif
+ #ifdef CONFIG_X86
+ 	"direct_map_level2_splits",
+ 	"direct_map_level3_splits",
+-- 
+2.25.1
 

@@ -2,301 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840AC4EDE0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33F04EDE14
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 17:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbiCaP4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 11:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S239430AbiCaP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 11:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239394AbiCaP4W (ORCPT
+        with ESMTP id S234112AbiCaP5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 11:56:22 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138348B6DD
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:35 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id r13so256588ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 08:54:35 -0700 (PDT)
+        Thu, 31 Mar 2022 11:57:43 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD80F101F0F;
+        Thu, 31 Mar 2022 08:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+0kj1VHuVCuTwIUYn8MksZLIxUzbITlQbSkk6fjy+L8=;
-        b=BI0/elhBlkqq1bXeh98Jmnkak4uRmVNbtBS92xsTZIFEgQeNnvVW/gAU/YtygYOuGG
-         LRmWiqTqhjNb63sA4Q3pXrOuGQFXIpJgZ+BqSV6zQP2gQW8l/kw+5jjmQyj+ZH8wl6gP
-         E4bD8MG+cEKcM7RfnqKOlhvGbNPm5/gemMG5kL7scc9uWrxqaZchZjWgP85bH9wlORVg
-         5WD0xP23siv/bqF4dqgZzeM4JrhlKgv9KnP9i7+KRhfkj8/JKWSJ9twwyPpDaM3QikLs
-         rRCubL85cVCZ3U2MSl1yryN4IMAxjmSv2O9AM3VVhXm4wumRQ71Wo/k42Cy4uX5Wpnqt
-         vryw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+0kj1VHuVCuTwIUYn8MksZLIxUzbITlQbSkk6fjy+L8=;
-        b=4jQ2ZXLWFekdAjm2XlnFOrdw4g86Z+MXLvxhyZFkjmaf+Rz7U/vsEtA00bXyxsiURw
-         d4wTitPIvW2gUSOXoCoH8m92tzHMICgBhH5TmLY8EvpcmdycDAb04Hmd2bYET1OlKv9w
-         kubtvn9SyUhJoJqV5aTOIvjfB3cu85ghOiYCEZvgp77Vx/xxEiHkzI11hT8+259Ltx9f
-         y465/eE8kakNtFTQWjweJ5mW9CkGZHqA22HlSlzc9YWATUfKPuVyEH457qBnUZAyApSF
-         79xbjUGmjBCIh/bY+IuFtAILqn+oK10feAejk9bC1zedS/oao0zIHC38nh79uozOmLfG
-         OQTw==
-X-Gm-Message-State: AOAM530s34S92RsB7xop3Q0/FMTMWX2kcfBaGyOKPysLyjXMG3W/pRh2
-        0y4kE9rlxF8o3BxnKafkhZYn0g==
-X-Google-Smtp-Source: ABdhPJzbxxi0je/17ReZeqypHNjqLc2e1+penHcUTMbi3GgRqWcyE7J/sUJKHoETqHY+ohqEaTBKEA==
-X-Received: by 2002:a17:907:a0c8:b0:6df:ef3c:5eb6 with SMTP id hw8-20020a170907a0c800b006dfef3c5eb6mr5689683ejc.646.1648742073481;
-        Thu, 31 Mar 2022 08:54:33 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056402090a00b004196250baeasm11584077edz.95.2022.03.31.08.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 08:54:33 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/4] spi: dt-bindings: qcom,spi-qup: convert to dtschema
-Date:   Thu, 31 Mar 2022 17:54:25 +0200
-Message-Id: <20220331155425.714946-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
-References: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648742155; x=1680278155;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7FgYWF4J7bdb/TBEmXiYCMO6B69KOL67kC6P7Wxf7pg=;
+  b=DnTHvkugBg0y9BywYnlbyszj4LrmCy/YHgR31TNc75XfbikWCGHc1bHF
+   jJ3Zz7uuSBtmcaFaOxnp+fMTY1DzAQ/IioHvbGTmooow6mLWyOC3UOsIe
+   eBHAlejMxCCb+PM8eZJwRui+4rJj31lNmuG/rlgKKFZY+lXjldxgy13pi
+   k=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 31 Mar 2022 08:55:55 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 08:55:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 31 Mar 2022 08:55:53 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 31 Mar
+ 2022 08:55:49 -0700
+Date:   Thu, 31 Mar 2022 11:55:47 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+CC:     <dan.j.williams@intel.com>, <willy@infradead.org>, <jack@suse.cz>,
+        <viro@zeniv.linux.org.uk>, <akpm@linux-foundation.org>,
+        <apopple@nvidia.com>, <shy828301@gmail.com>,
+        <rcampbell@nvidia.com>, <hughd@google.com>,
+        <xiyuyang19@fudan.edu.cn>, <kirill.shutemov@linux.intel.com>,
+        <zwisler@kernel.org>, <hch@infradead.org>,
+        <linux-fsdevel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <duanxiongchun@bytedance.com>, <smuchun@gmail.com>
+Subject: Re: [PATCH v5 0/6] Fix some bugs related to ramp and dax
+Message-ID: <YkXPA69iLBDHFtjn@qian>
+References: <20220318074529.5261-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220318074529.5261-1-songmuchun@bytedance.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm Universal Peripheral (QUP) Serial Peripheral
-Interface (SPI) bindings to DT Schema.
+On Fri, Mar 18, 2022 at 03:45:23PM +0800, Muchun Song wrote:
+> This series is based on next-20220225.
+> 
+> Patch 1-2 fix a cache flush bug, because subsequent patches depend on
+> those on those changes, there are placed in this series.  Patch 3-4
+> are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
+> since the previous patch remove the usage of follow_invalidate_pte().
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/soc/qcom/qcom,gsbi.txt           |   2 +-
- .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 ------------------
- .../devicetree/bindings/spi/qcom,spi-qup.yaml |  81 ++++++++++++++
- 3 files changed, 82 insertions(+), 104 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
- create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
+Reverting this series fixed boot crashes.
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-index fe1855f09dcc..c443f1416a0a 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-@@ -33,7 +33,7 @@ controller, or some combination of aforementioned devices.
- 
- See the following for child node definitions:
- Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
--Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
-+Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
- Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
- 
- Example for APQ8064:
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qup.txt b/Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
-deleted file mode 100644
-index 5c090771c016..000000000000
---- a/Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
-+++ /dev/null
-@@ -1,103 +0,0 @@
--Qualcomm Universal Peripheral (QUP) Serial Peripheral Interface (SPI)
--
--The QUP core is an AHB slave that provides a common data path (an output FIFO
--and an input FIFO) for serial peripheral interface (SPI) mini-core.
--
--SPI in master mode supports up to 50MHz, up to four chip selects, programmable
--data path from 4 bits to 32 bits and numerous protocol variants.
--
--Required properties:
--- compatible:     Should contain:
--		  "qcom,spi-qup-v1.1.1" for 8660, 8960 and 8064.
--		  "qcom,spi-qup-v2.1.1" for 8974 and later
--		  "qcom,spi-qup-v2.2.1" for 8974 v2 and later.
--
--- reg:            Should contain base register location and length
--- interrupts:     Interrupt number used by this controller
--
--- clocks:         Should contain the core clock and the AHB clock.
--- clock-names:    Should be "core" for the core clock and "iface" for the
--                  AHB clock.
--
--- #address-cells: Number of cells required to define a chip select
--                  address on the SPI bus. Should be set to 1.
--- #size-cells:    Should be zero.
--
--Optional properties:
--- spi-max-frequency: Specifies maximum SPI clock frequency,
--                     Units - Hz. Definition as per
--                     Documentation/devicetree/bindings/spi/spi-bus.txt
--- num-cs:	total number of chipselects
--- cs-gpios:	should specify GPIOs used for chipselects.
--		The gpios will be referred to as reg = <index> in the SPI child
--		nodes.  If unspecified, a single SPI device without a chip
--		select can be used.
--
--- dmas:         Two DMA channel specifiers following the convention outlined
--                in bindings/dma/dma.txt
--- dma-names:    Names for the dma channels, if present. There must be at
--                least one channel named "tx" for transmit and named "rx" for
--                receive.
--
--SPI slave nodes must be children of the SPI master node and can contain
--properties described in Documentation/devicetree/bindings/spi/spi-bus.txt
--
--Example:
--
--	spi_8: spi@f9964000 { /* BLSP2 QUP2 */
--
--		compatible = "qcom,spi-qup-v2";
--		#address-cells = <1>;
--		#size-cells = <0>;
--		reg = <0xf9964000 0x1000>;
--		interrupts = <0 102 0>;
--		spi-max-frequency = <19200000>;
--
--		clocks = <&gcc GCC_BLSP2_QUP2_SPI_APPS_CLK>, <&gcc GCC_BLSP2_AHB_CLK>;
--		clock-names = "core", "iface";
--
--		dmas = <&blsp1_bam 13>, <&blsp1_bam 12>;
--		dma-names = "rx", "tx";
--
--		pinctrl-names = "default";
--		pinctrl-0 = <&spi8_default>;
--
--		device@0 {
--			compatible = "arm,pl022-dummy";
--			#address-cells = <1>;
--			#size-cells = <1>;
--			reg = <0>; /* Chip select 0 */
--			spi-max-frequency = <19200000>;
--			spi-cpol;
--		};
--
--		device@1 {
--			compatible = "arm,pl022-dummy";
--			#address-cells = <1>;
--			#size-cells = <1>;
--			reg = <1>; /* Chip select 1 */
--			spi-max-frequency = <9600000>;
--			spi-cpha;
--		};
--
--		device@2 {
--			compatible = "arm,pl022-dummy";
--			#address-cells = <1>;
--			#size-cells = <1>;
--			reg = <2>; /* Chip select 2 */
--			spi-max-frequency = <19200000>;
--			spi-cpol;
--			spi-cpha;
--		};
--
--		device@3 {
--			compatible = "arm,pl022-dummy";
--			#address-cells = <1>;
--			#size-cells = <1>;
--			reg = <3>; /* Chip select 3 */
--			spi-max-frequency = <19200000>;
--			spi-cpol;
--			spi-cpha;
--			spi-cs-high;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
-new file mode 100644
-index 000000000000..93f14dd01afc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/qcom,spi-qup.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Universal Peripheral (QUP) Serial Peripheral Interface (SPI)
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  The QUP core is an AHB slave that provides a common data path (an output FIFO
-+  and an input FIFO) for serial peripheral interface (SPI) mini-core.
-+
-+  SPI in master mode supports up to 50MHz, up to four chip selects,
-+  programmable data path from 4 bits to 32 bits and numerous protocol variants.
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
-+      - qcom,spi-qup-v2.1.1 # for 8974 and later
-+      - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: core
-+      - const: iface
-+
-+  dmas:
-+    maxItems: 2
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-msm8996.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    spi@7575000 {
-+        compatible = "qcom,spi-qup-v2.2.1";
-+        reg = <0x07575000 0x600>;
-+        interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>,
-+                 <&gcc GCC_BLSP1_AHB_CLK>;
-+        clock-names = "core", "iface";
-+        pinctrl-names = "default", "sleep";
-+        pinctrl-0 = <&blsp1_spi1_default>;
-+        pinctrl-1 = <&blsp1_spi1_sleep>;
-+        dmas = <&blsp1_dma 12>, <&blsp1_dma 13>;
-+        dma-names = "tx", "rx";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+    };
--- 
-2.32.0
-
+ KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+ Mem abort info:
+   ESR = 0x96000004
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x04: level 0 translation fault
+ Data abort info:
+   ISV = 0, ISS = 0x00000004
+   CM = 0, WnR = 0
+ [dfff800000000003] address between user and kernel address ranges
+ Internal error: Oops: 96000004 [#1] PREEMPT SMP
+ Modules linked in: cdc_ether usbnet ipmi_devintf ipmi_msghandler cppc_cpufreq fuse ip_tables x_tables ipv6 btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq zstd_compress dm_mod nouveau crct10dif_ce drm_ttm_helper mlx5_core ttm drm_dp_helper drm_kms_helper nvme mpt3sas nvme_core xhci_pci raid_class drm xhci_pci_renesas
+ CPU: 3 PID: 1707 Comm: systemd-udevd Not tainted 5.17.0-next-20220331-00004-g2d550916a6b9 #51
+ pstate: 104000c9 (nzcV daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : __lock_acquire
+ lr : lock_acquire.part.0
+ sp : ffff800030a16fd0
+ x29: ffff800030a16fd0 x28: ffffdd876c4e9f90 x27: 0000000000000018
+ x26: 0000000000000000 x25: 0000000000000018 x24: 0000000000000000
+ x23: ffff08022beacf00 x22: ffffdd8772507660 x21: 0000000000000000
+ x20: 0000000000000000 x19: 0000000000000000 x18: ffffdd8772417d2c
+ x17: ffffdd876c5bc2e0 x16: 1fffe100457d5b06 x15: 0000000000000094
+ x14: 000000000000f1f1 x13: 00000000f3f3f3f3 x12: ffff08022beacf08
+ x11: 1ffffbb0ee482fa5 x10: ffffdd8772417d28 x9 : 0000000000000000
+ x8 : 0000000000000003 x7 : ffffdd876c4e9f90 x6 : 0000000000000000
+ x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+ x2 : 0000000000000000 x1 : 0000000000000003 x0 : dfff800000000000
+ Call trace:
+  __lock_acquire
+  lock_acquire.part.0
+  lock_acquire
+  _raw_spin_lock
+  page_vma_mapped_walk
+  try_to_migrate_one
+  rmap_walk_anon
+  try_to_migrate
+  __unmap_and_move
+  unmap_and_move
+  migrate_pages
+  migrate_misplaced_page
+  do_huge_pmd_numa_page
+  __handle_mm_fault
+  handle_mm_fault
+  do_translation_fault
+  do_mem_abort
+  el0_da
+  el0t_64_sync_handler
+  el0t_64_sync
+ Code: d65f03c0 d343ff61 d2d00000 f2fbffe0 (38e06820)
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Oops: Fatal exception
+ SMP: stopping secondary CPUs
+ Kernel Offset: 0x5d8763da0000 from 0xffff800008000000
+ PHYS_OFFSET: 0x80000000
+ CPU features: 0x000,00085c0d,19801c82
+ Memory Limit: none
+ ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
+> 
+> v5:
+> - Collect Reviewed-by from Dan Williams.
+> - Fix panic reported by kernel test robot <oliver.sang@intel.com>.
+> - Remove pmdpp parameter from follow_invalidate_pte() and fold it into follow_pte().
+> 
+> v4:
+> - Fix compilation error on riscv.
+> 
+> v3:
+> - Based on next-20220225.
+> 
+> v2:
+> - Avoid the overly long line in lots of places suggested by Christoph.
+> - Fix a compiler warning reported by kernel test robot since pmd_pfn()
+>   is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
+> - Split a new patch 4 for preparation of fixing the dax bug.
+> 
+> Muchun Song (6):
+>   mm: rmap: fix cache flush on THP pages
+>   dax: fix cache flush on PMD-mapped pages
+>   mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
+>   mm: pvmw: add support for walking devmap pages
+>   dax: fix missing writeprotect the pte entry
+>   mm: simplify follow_invalidate_pte()
+> 
+>  fs/dax.c             | 82 +++++-----------------------------------------------
+>  include/linux/mm.h   |  3 --
+>  include/linux/rmap.h |  3 ++
+>  mm/internal.h        | 26 +++++++++++------
+>  mm/memory.c          | 81 +++++++++++++++------------------------------------
+>  mm/page_vma_mapped.c | 16 +++++-----
+>  mm/rmap.c            | 68 +++++++++++++++++++++++++++++++++++--------
+>  7 files changed, 114 insertions(+), 165 deletions(-)
+> 
+> -- 
+> 2.11.0
+> 

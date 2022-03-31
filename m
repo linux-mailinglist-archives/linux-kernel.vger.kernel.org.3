@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785C04ED948
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BF04ED94A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 14:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbiCaMIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 08:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S232658AbiCaMIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 08:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbiCaMIh (ORCPT
+        with ESMTP id S233258AbiCaMIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 08:08:37 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6285C1CABE0;
-        Thu, 31 Mar 2022 05:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AgtlGBvip4o6BPip739J/vJfmGovHKt0I07A5HuYcDo=; b=WTDbAbmgVpacjB1m75bJllwnQ+
-        dnW4NobR/2wzwnyHYxQZFZpaM+0h6DCLeLdgTgCMMwuRIWLHpf7HM+UrpVeGG7/XTzOo0N3Oam1/E
-        K9J/SmBG5kURO4nCNeeJZ7U3WkpkUad2HueJ1teLxl3QX0frCHw+0rMLUxknjjNQRuFg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nZtZA-00DSLr-DU; Thu, 31 Mar 2022 14:06:16 +0200
-Date:   Thu, 31 Mar 2022 14:06:16 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Michael Walle <michael@walle.cc>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Xu Liang <lxu@maxlinear.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 4/5] net: phy: introduce is_c45_over_c22 flag
-Message-ID: <YkWZOEGwLcD6xYKu@lunn.ch>
-References: <20220323183419.2278676-1-michael@walle.cc>
- <20220323183419.2278676-5-michael@walle.cc>
- <Yjt99k57mM5PQ8bT@lunn.ch>
- <8304fb3578ee38525a158af768691e75@walle.cc>
- <Yju+SGuZ9aB52ARi@lunn.ch>
- <30012bd8256be3be9977bd15d1486c84@walle.cc>
- <YjybB/fseibDU4dT@lunn.ch>
- <0d4a2654acd2cc56f7b17981bf14474e@walle.cc>
- <Yjy+oCLdnu3FrNp+@lunn.ch>
- <YkWVku32gbaBAdEH@shell.armlinux.org.uk>
+        Thu, 31 Mar 2022 08:08:47 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990671D190A
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:06:55 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b13so19950504pfv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 05:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ajAH84Era5KkgIhOHwE81m3fGO3ciHDG++KPPLyfwho=;
+        b=o6Kca80XlDby8UicvWJFnGD/S4zB+msvdJGsi3MWk6P8D7MCMe/EVF8PVgu+Hh9BP6
+         VYjvaeZlC5nAXvTlmmpUyLad3VA53z/q28HdJkOoz4P5j04U/0UeLgtpIHSB1eOR+3P6
+         8xpcAGqThykG9tcWtss60SdU033mPxyX00eaDGphvQq250l7bVeIuuT4kdEb8vS+LUfl
+         WLOR3uFmUlpLzhYHt0vyOi9whtFfYWJRYN+JKtNqzvvD+T2L5YOS6i4tij2gSA+Fj0zQ
+         8w3RB9EBR4vb9+10Sue/pOi9p6ESnQwY7gx7FrEHCtWsSZCsQ00f7r/nvNi6YY34LQN1
+         0jxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ajAH84Era5KkgIhOHwE81m3fGO3ciHDG++KPPLyfwho=;
+        b=ZD0ZMsCj1j2dmEvK/QdDrhiTySD13RZUpvwgDLX2tnN87Q+xhRYv6udLTdgh91I9fJ
+         UujTwjca1/8mGgBhbVuOVCkFyQnOieIVh7A0weGOFjfI5XdjFzkBGAVAEIKz9Hsc7ZzI
+         GG6l1xivAkDbIP/M/ZaJfLCSSqVp4tn2eCfeu/SrsZQjITfLQ9UhalLhN5GZpfCtt8Fq
+         Zb0aKC3fXsMY4lopzr8sqHP0yWe017VJkAo258auaQxLPVd/vXiqjyab8VSLr/OnTbFx
+         3+/sBpHfoHHpkOG/ceRBqJZODEQQbjmTTJ6gd2UN6BoJZwFPxBfML/DeKk/ZGDjmhZOH
+         TuZA==
+X-Gm-Message-State: AOAM530en8qPxpQ7Vvrn0iOCmbdlRoIEWihZMnMeDq9jL79wtLQ6eEjS
+        MWMoxrarGfOgjT2vegtnChfiHw==
+X-Google-Smtp-Source: ABdhPJy4SLFWxEDZrMqlRYkOz4IFfm2BOt53Gvuy3QwVn6X+4z2A7ZWiREjZQ6MZt5vs5Pwq6hQvQQ==
+X-Received: by 2002:a63:354f:0:b0:398:4ead:866e with SMTP id c76-20020a63354f000000b003984ead866emr10789475pga.322.1648728414613;
+        Thu, 31 Mar 2022 05:06:54 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 73-20020a62194c000000b004fab3b767ccsm29425052pfz.216.2022.03.31.05.06.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 05:06:54 -0700 (PDT)
+Message-ID: <51522714-1194-57cf-b5c2-af497671fa09@kernel.dk>
+Date:   Thu, 31 Mar 2022 06:06:52 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkWVku32gbaBAdEH@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] block: use dedicated list iterator variable
+Content-Language: en-US
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     linux-block <linux-block@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220331091218.641532-1-jakobkoschel@gmail.com>
+ <a7b2fe8d-9967-2046-67a5-62d10e95a861@kernel.dk>
+ <E262CAA9-1B49-4035-9181-28C6FFDBE21F@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <E262CAA9-1B49-4035-9181-28C6FFDBE21F@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,66 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 12:50:42PM +0100, Russell King (Oracle) wrote:
-> On Thu, Mar 24, 2022 at 07:55:28PM +0100, Andrew Lunn wrote:
-> > > The
-> > > > only valid case i can think of is for a very oddball PHY which has C45
-> > > > register space, but cannot actually do C45 transfers, and so C45 over
-> > > > C22 is the only option.
-> > > 
-> > > And how would you know that the PHY has the needed registers in c22
-> > > space? Or do we assume that every C45 PHY has these registers?
-> > 
-> > I think it is a reasonable assumption at the moment. We have around
-> > 170 MDIO bus masters in Linux. All but one can do C22.
+On 3/31/22 6:00 AM, Jakob Koschel wrote:
 > 
-> I don't think that is correct. I'm aware of the Marvell XMDIO driver
-> that is C45 only, and also xgene's non-rgmii "xfi" variant which is
-> also C45 only. Note that the xfi variant doesn't reject C22 and makes
-> no distinction between a C22 and C45 access (so a C22 access to
-> phy_id = 0 reg = 0 hits C45 phy_id = 0 mmd 0 reg 0.
 > 
-> MDIO drivers are IMHO an utter mess and are in dire need of fixing...
-> and I'm coming to the conclusion that the bodge of passing both C22
-> and C45 accesses through the same read/write functions is a huge
-> mistake, one that is crying out for fixing to prevent more prolification
-> of this kind of mess.
+>> On 31. Mar 2022, at 13:59, Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 3/31/22 3:12 AM, Jakob Koschel wrote:
+>>> To move the list iterator variable into the list_for_each_entry_*()
+>>> macro in the future it should be avoided to use the list iterator
+>>> variable after the loop body.
+>>>
+>>> To *never* use the list iterator variable after the loop it was
+>>> concluded to use a separate iterator variable instead of a
+>>> found boolean [1].
+>>
+>> Not a huge fan of doing a helper for this single use, but I guess it
+>> does make the main function easier to code. So I guess that's fine. But
+>> can you move the call down where the result is checked?
+>>
+>> qe = blk_lookup_qe_pair(head, q);
+>> if (!qe)
+>> 	return;
+>>
+>> I prefer no distance between call and check, makes it easier to read. I
+>> can make the edit locally and note it in the commit message so you don't
+>> have to re-send it. Let me know, or just resend a v3.
 > 
-> Yes, it's a lot of work, but I think it needs to be done. Retrofitting
-> the MDIO drivers with checks etc sounds nice, but if we assume that
-> patches will continue to be applied to net-next with little review,
-> we have a losing battle - it would be better to have interfaces designed
-> to make this kind of mistake impossible.
+> I'm fine with you doing the change locally, thanks!
 
-Hi Russell
+OK, I did that, it's in. Thanks!
 
-So what i think you are saying is change the mii_bus structure:
+-- 
+Jens Axboe
 
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 36ca2b5c2253..26322ee23867 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -353,10 +353,15 @@ struct mii_bus {
-        const char *name;
-        char id[MII_BUS_ID_SIZE];
-        void *priv;
--       /** @read: Perform a read transfer on the bus */
--       int (*read)(struct mii_bus *bus, int addr, int regnum);
--       /** @write: Perform a write transfer on the bus */
--       int (*write)(struct mii_bus *bus, int addr, int regnum, u16 val);
-+       /** @read: Perform a C22 read transfer on the bus */
-+       int (*read_c22)(struct mii_bus *bus, int addr, int regnum);
-+       /** @write: Perform a C22 write transfer on the bus */
-+       int (*write_c22)(struct mii_bus *bus, int addr, int regnum, u16 val);
-+       /** @read: Perform a C45 read transfer on the bus */
-+       int (*read_c45)(struct mii_bus *bus, int addr, int devnum, int regnum);
-+       /** @write: Perform a C45 write transfer on the bus */
-+       int (*write_c45)(struct mii_bus *bus, int addr, int devnum,
-+                        int regnum, u16 val);
-        /** @reset: Perform a reset of the bus */
-        int (*reset)(struct mii_bus *bus);
-
-This way we get a cleaner interface, and the compiler helping us
-finding drivers we miss during conversion?
-
-	Andrew

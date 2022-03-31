@@ -2,124 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD484EE49E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225044EE49F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 01:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242897AbiCaXYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 19:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S242845AbiCaXYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 19:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiCaXYG (ORCPT
+        with ESMTP id S231898AbiCaXYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 19:24:06 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35369182AD3
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:22:18 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id p15so2368750ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i0Y8uJxAPTn+lPcbjKZMDigfiYGLfvVvyFJ8YmiOb0U=;
-        b=ZTUl4ukv0e2NXaBF5xnMO9o+oFVlY2n2XoA0kUxOx6skIG9dTSaA7oECXPy4k5G/qR
-         MtnM41dTUEMY98MWV1Q7y85uveZ3vNyBVCBdKuiNa70cypt1qBwokiaB5piPWsRGwfMf
-         lQ3VnxZKPPbfZxfyG6Kj11Hei7OeO9IuoWwMA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i0Y8uJxAPTn+lPcbjKZMDigfiYGLfvVvyFJ8YmiOb0U=;
-        b=OWaLtNSoPcdo64h1eeumGUNVdWa00K1sVjZSqv0w9y63kF356nOozaoU1kaocBKoCd
-         GfLVuFBby9ve8PfGIOlhc/nUsvLTqXwLvMZlbE+teIa1u1CLgjeKUcU71qbj2RbqsD/o
-         kMLDa6vHOCNO5GiyBZm9oDii0flQ/xuRCFnWSZjI/jP0rZOPVHlKuELtXTAKQ2a3Y0Eo
-         E4HCz8+coxo9iQr1LUyaGZ9s8U1jZs/siwiJfs2VOAye/SQapO/+oCrF5/ZfVnwu4FyI
-         qdUxlj3o/uCRjqSkqsgSDOdskDyIfVCx2NJkLp8yKclnFXsYlJztunNtrI4Pjby24YgD
-         Q23g==
-X-Gm-Message-State: AOAM5334IYoqdgV/iXl1wqVayQCvmAjxGPD7BpuwFqLeOw8wBvOEA4qH
-        Ln1t/ttcxIHFJSyryf1X4me5OuwvPtYCjdS5
-X-Google-Smtp-Source: ABdhPJy0Ur7MsP5xu05lOfR02tyDGwNgOCpOZTDIyek8AU75r46txHrEnZajpTYmIkdjM/EMa450aQ==
-X-Received: by 2002:a17:907:761c:b0:6d6:e553:7bd1 with SMTP id jx28-20020a170907761c00b006d6e5537bd1mr6895393ejc.5.1648768936436;
-        Thu, 31 Mar 2022 16:22:16 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id c12-20020a05640227cc00b004192114e521sm366706ede.60.2022.03.31.16.22.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 16:22:14 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id h4so1748268wrc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:22:14 -0700 (PDT)
-X-Received: by 2002:a5d:4491:0:b0:203:f63a:e89b with SMTP id
- j17-20020a5d4491000000b00203f63ae89bmr5615220wrq.342.1648768934136; Thu, 31
- Mar 2022 16:22:14 -0700 (PDT)
+        Thu, 31 Mar 2022 19:24:02 -0400
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017C749685
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 16:22:13 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 23:22:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=michaelmarod.com;
+        s=protonmail; t=1648768931;
+        bh=H/HIIOtE6ezWt3oBMOEbUNvqPRvMS/qhwtcdJgLLn40=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=QFUpB8Mf5Yo249YgcpZ2mBq/kbYlExC4LlzZC9jN5oobhUwMNnV3yPX5RgUtdCQV9
+         stnloZ02HxUnlbbDG8BgBswAfG4aNxP0QPBTKspeZSh5CwVkzzoPq1wY2p8tuo/Jxf
+         FPUqDsTIhOGhqZwXivTEpSjnx3bJKQpAm64p14zk=
+To:     Christoph Hellwig <hch@infradead.org>
+From:   Michael Marod <michael@michaelmarod.com>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Reply-To: Michael Marod <michael@michaelmarod.com>
+Subject: Re: NVME performance regression in Linux 5.x due to lack of block level IO queueing
+Message-ID: <4034AD9F-2A6A-4AE6-B5FC-58FC2BC238F5@michaelmarod.com>
+In-Reply-To: <YkUvgu6VxNORv8M6@infradead.org>
+References: <51E3A396-F68B-496D-AE36-B0457A3B0968@michaelmarod.com> <847D3821-1D92-468C-88C3-34284BA7922E@michaelmarod.com> <C06B8EF0-BF3B-4F14-994F-F80B5102D538@michaelmarod.com> <YkUvgu6VxNORv8M6@infradead.org>
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com> <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 31 Mar 2022 16:22:00 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
-Message-ID: <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        quic_aravindh@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Good call -- Turns out that that cache issue is resolved in 5.17. I tried a=
+ number of kernels and narrowed it down to a problem that started after 4.9=
+ and before 4.15, and ended some time after 5.13. Namely, 4.9 is good, 4.15=
+ is bad, 5.13 is bad, and 5.17 is good. I did not bisect it all the way dow=
+n to the specific versions where the behaviors changed.
 
-On Wed, Mar 30, 2022 at 9:03 AM Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
->
-> @@ -1547,6 +1593,10 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->
->         dp_display->encoder = encoder;
->
-> +       ret = dp_display_get_next_bridge(dp_display);
-> +       if (ret)
-> +               return ret;
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm =
+ %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+nvme1n1       2758.00 2783.00  11032.00  11132.00     0.00     0.00   0.00 =
+  0.00    0.10    0.03   0.36     4.00     4.00   0.18 100.00
+nvme0n1       2830.00 2875.00  11320.00  11500.00     0.00     0.00   0.00 =
+  0.00    0.10    0.03   0.39     4.00     4.00   0.18 100.00
 
-It feels weird to me that this is in a function called "modeset_init",
-though I certainly don't know the structure of the MSM display code
-well enough to fully comment. My expectation would have been that
-devm_of_dp_aux_populate_ep_devices() would have been called from your
-probe routine and then you would have returned -EPROBE_DEFER from your
-probe if you were unable to find the panel afterwards.
+With regards to the performance between 4.4.0 and 5.17, for a single thread=
+, 4.4.0 still had better performance over 5.17. However, the 5.17 kernel wa=
+s significantly better at multiple threads. In fact, it is so much better I=
+ don't believe the results (10x improvement!). Is this to be expected that =
+a single thread would be slower in 5.17, but recent improvements make it po=
+ssible to run many of them in parallel more efficiently?
 
-Huh, but I guess you _are_ getting called (indirectly) from
-dpu_kms_hw_init() and I can't imagine AUX transfers working before
-that function is called, so maybe I should just accept that it's
-complicated and let those who understand this driver better confirm
-that it's OK. ;-)
+# /usr/local/bin/fio -name=3Drandrw -filename=3D/opt/foo -direct=3D1 -iodep=
+th=3D1 -thread -rw=3Drandrw -ioengine=3Dpsync -bs=3D4k -size=3D10G -numjobs=
+=3D16 -group_reporting=3D1 -runtime=3D120
 
+// Ubuntu 16.04 / Linux 4.4.0:
+Run status group 0 (all jobs):
+   READ: bw=3D54.5MiB/s (57.1MB/s), 54.5MiB/s-54.5MiB/s (57.1MB/s-57.1MB/s)=
+, io=3D6537MiB (6854MB), run=3D120002-120002msec
+  WRITE: bw=3D54.5MiB/s (57.2MB/s), 54.5MiB/s-54.5MiB/s (57.2MB/s-57.2MB/s)=
+, io=3D6544MiB (6862MB), run=3D120002-120002msec
 
-> @@ -140,5 +140,6 @@ struct dp_parser {
->   * can be parsed using this module.
->   */
->  struct dp_parser *dp_parser_get(struct platform_device *pdev);
-> +int dp_parser_find_next_bridge(struct dp_parser *parser);
+// Ubuntu 18.04 / Linux 5.4.0:
+Run status group 0 (all jobs):
+   READ: bw=3D23.5MiB/s (24.7MB/s), 23.5MiB/s-23.5MiB/s (24.7MB/s-24.7MB/s)=
+, io=3D2821MiB (2959MB), run=3D120002-120002msec
+  WRITE: bw=3D23.5MiB/s (24.6MB/s), 23.5MiB/s-23.5MiB/s (24.6MB/s-24.6MB/s)=
+, io=3D2819MiB (2955MB), run=3D120002-120002msec
 
-Everything else in this file is described w/ kerneldoc. Shouldn't your
-function also have a kerneldoc comment?
+// Ubuntu 18.04 / Linux 5.17:
+Run status group 0 (all jobs):
+   READ: bw=3D244MiB/s (255MB/s), 244MiB/s-244MiB/s (255MB/s-255MB/s), io=
+=3D28.6GiB (30.7GB), run=3D120001-120001msec
+  WRITE: bw=3D244MiB/s (256MB/s), 244MiB/s-244MiB/s (256MB/s-256MB/s), io=
+=3D28.6GiB (30.7GB), run=3D120001-120001msec
+
+Thanks,
+Michael

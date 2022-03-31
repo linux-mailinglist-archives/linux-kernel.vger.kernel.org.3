@@ -2,163 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B414EE046
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CA84EE04A
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 20:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiCaSVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 14:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S234174AbiCaSVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 14:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiCaSVA (ORCPT
+        with ESMTP id S234161AbiCaSVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 14:21:00 -0400
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC2E35875;
-        Thu, 31 Mar 2022 11:19:10 -0700 (PDT)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id 8F5EF80746;
-        Thu, 31 Mar 2022 14:19:08 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1648750749; bh=KNvxQYBQic9pofn0PgmzAb/owVTqsgyVDZW5db+ph54=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=B07JMpme9jYQkYdbyeZY2FZqP95dA2Y55gjKO2qxqYE6oiStVB2ws9p7vIynjfoPz
-         J7eTX4vAIm29u38CfYomjHXabQHqRbr0riMGFiEoSTmwsbMp11VlqX1VdKcyCmrf65
-         0lgZejODuy4FHKBpOaRHSu18+YnKTs6Gtqxk3FYFv37ICJYxt9BJhuGXosfbVW89Fp
-         nozvoEuKN9H837hav9zeG/sMgZjpqdHWDVoGnzRjKeNF2UOwMzAEF1Bz/vypUlGh7F
-         nS7S4AM5a1pN7H57KcYNcfCqCxqR6whS7mjGkcd2szBFIAE0038zsm9B525BVHHGWt
-         hRpoGHfmKbodw==
-Message-ID: <f9493291-9981-d684-bf49-a551aaf08061@dorminy.me>
-Date:   Thu, 31 Mar 2022 14:19:07 -0400
+        Thu, 31 Mar 2022 14:21:35 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3D33878B
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:19:48 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id v75so401187oie.1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 11:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=UmEy4y9PjTmQL29BGmVnPhGoeFVJB6ew1tM59ape4EU=;
+        b=iRkJYB5sjDYwHA6hDkF9Xn57bLOePpOECuGzyJ+2TzWQ88nfVA2l34qVNpjVy26MCI
+         FTmOslALSnpQ2O9p/MwmR3A0ReB3xZEZKLHBQoH+vzpkCwnN9LzyBqQlM6AHuqEJ8WpF
+         xpHpNjKq9+JuDriODTgPFCRNoQSVNFQKjbolmoHS+A9UrPKgeC06BxT12WMhW6jVKSVv
+         JVERzi9tHHJBx1kok3RflAlTGSUfSIr8kY5fGHmbTMM/Hd1ccX00Cl1cbDI3v/0wZJDW
+         hRIgWOj8DuzVx19jNQ+87BgdHzWzc3cEKL0IBYfjPAJZwaF5dplyj+EL6rx1lwV0VzqP
+         8mZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=UmEy4y9PjTmQL29BGmVnPhGoeFVJB6ew1tM59ape4EU=;
+        b=NICKoXMNsEuAob8tmq5Q6dJuG7wgDTVRY8cfO4H+/07oJZDpjFQAGHZ8g2GG7scacw
+         w755QqEzj8sVfACtu2OZlLP4Ip7XO+WPHNjDxfCy2ZpEnbd2ccw3nYVqWXwAsB5sD78D
+         psw+kUWm0JFoxmqMeNJIO0AcvvfWxcITpUJ4tubh6dT2L6uvXXXIB+yRo/BtD/JK/Q3Z
+         G6360Kfe0CYtRzDLe+miKhxFhxh/7PHqnPMMwfZNRSrX1ZUX+6JVdrusJolh/Ep7CL7e
+         k7qtovdfrqZInLN6PqIhMQ4mkUvZEtBuT6PbiKYNbNefnRBm0/2CEiY6K2osLKkO7Y9b
+         T/mg==
+X-Gm-Message-State: AOAM5308hE19quyIECR+h353pBBR/w+xjg6zoHNtQc9gn8fGDDQhnUCq
+        A5yS4HW6LDTuQGsaRkGf9d8iVv+CWWqD5A==
+X-Google-Smtp-Source: ABdhPJxyXhBs2gU+7i9d2VhmYjMpJbu6B2GokWYmLoczSMphjcpITchlQGMyXmK5b+yJ2XjytKTZPw==
+X-Received: by 2002:a54:4593:0:b0:2ec:d27f:eec1 with SMTP id z19-20020a544593000000b002ecd27feec1mr3173830oib.257.1648750787760;
+        Thu, 31 Mar 2022 11:19:47 -0700 (PDT)
+Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
+        by smtp.gmail.com with ESMTPSA id e8-20020a9d63c8000000b005b235a56831sm112550otl.49.2022.03.31.11.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 11:19:47 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 13:19:45 -0500
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: [PATCH] staging: r8188eu: remove handlerOS independent comment
+Message-ID: <YkXwwfYBE+P0UObq@bertie>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 2/2] btrfs: allocate page arrays using bulk page
- allocator
-Content-Language: en-US
-To:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
-        Nikolay Borisov <nborisov@suse.com>
-References: <cover.1648669832.git.sweettea-kernel@dorminy.me>
- <ede1d39f7878ee2ed12c1526cc2ec358a2d862cf.1648669832.git.sweettea-kernel@dorminy.me>
- <20220331173525.GF15609@twin.jikos.cz>
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-In-Reply-To: <20220331173525.GF15609@twin.jikos.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The "need to make timeout handlerOS independent" comment is incorrect.
+Remove the comment to avoid misleading developers.
 
+Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_cmd.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On 3/31/22 13:35, David Sterba wrote:
-> On Wed, Mar 30, 2022 at 04:11:23PM -0400, Sweet Tea Dorminy wrote:
->> While calling alloc_page() in a loop is an effective way to populate an
->> array of pages, the kernel provides a method to allocate pages in bulk.
->> alloc_pages_bulk_array() populates the NULL slots in a page array, trying to
->> grab more than one page at a time.
->>
->> Unfortunately, it doesn't guarantee allocating all slots in the array,
->> but it's easy to call it in a loop and return an error if no progress
->> occurs. Similar code can be found in xfs/xfs_buf.c:xfs_buf_alloc_pages().
->>
->> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
->> Reviewed-by: Nikolay Borisov <nborisov@suse.com>
->> ---
->> Changes in v3:
->>   - Added a newline after variable declaration
->> Changes in v2:
->>   - Moved from ctree.c to extent_io.c
->> ---
->>   fs/btrfs/extent_io.c | 24 +++++++++++++++---------
->>   1 file changed, 15 insertions(+), 9 deletions(-)
->>
->> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
->> index ab4c1c4d1b59..b268e47aa2b7 100644
->> --- a/fs/btrfs/extent_io.c
->> +++ b/fs/btrfs/extent_io.c
->> @@ -3144,19 +3144,25 @@ static void end_bio_extent_readpage(struct bio *bio)
->>    */
->>   int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
->>   {
->> -	int i;
->> +	long allocated = 0;
->> +
->> +	for (;;) {
->> +		long last = allocated;
->>   
->> -	for (i = 0; i < nr_pages; i++) {
->> -		struct page *page;
->> +		allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages,
->> +						   page_array);
->> +		if (allocated == nr_pages)
->> +			return 0;
->>   
->> -		if (page_array[i])
->> +		if (allocated != last)
->>   			continue;
->> -		page = alloc_page(GFP_NOFS);
->> -		if (!page)
->> -			return -ENOMEM;
->> -		page_array[i] = page;
->> +		/*
->> +		 * During this iteration, no page could be allocated, even
->> +		 * though alloc_pages_bulk_array() falls back to alloc_page()
->> +		 * if  it could not bulk-allocate. So we must be out of memory.
->> +		 */
->> +		return -ENOMEM;
->>   	}
-> 
-> I find the way the loop is structured a bit cumbersome so I'd suggest to
-> rewrite it as:
-> 
-> int btrfs_alloc_page_array(unsigned int nr_pages, struct page **page_array)
-> {
->          unsigned int allocated;
-> 
->          for (allocated = 0; allocated < nr_pages;) {
->                  unsigned int last = allocated;
-> 
->                  allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages, page_array);
-> 
->                  /*
->                   * During this iteration, no page could be allocated, even
->                   * though alloc_pages_bulk_array() falls back to alloc_page()
->                   * if  it could not bulk-allocate. So we must be out of memory.
->                   */
->                  if (allocated == last)
->                          return -ENOMEM;
->          }
->          return 0;
-> }
-Sounds good, I'll amend it that way.
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index 859ec8d8ad9e..99fc1904ec52 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -1408,7 +1408,6 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
+ 
+ 	if (pcmd->res == H2C_DROPPED) {
+ 		/* TODO: cancel timer and do timeout handler directly... */
+-		/* need to make timeout handlerOS independent */
+ 		_set_timer(&pmlmepriv->scan_to_timer, 1);
+ 	} else if (pcmd->res != H2C_SUCCESS) {
+ 		_set_timer(&pmlmepriv->scan_to_timer, 1);
+-- 
+2.32.0
 
-> 
-> Also in the xfs code there's memalloc_retry_wait() which is supposed to be
-> called when repeated memory allocation is retried. What was the reason
-> you removed it?
-
-Trying to keep the behavior as close as possible to the existing behavior.
-
-The current behavior of each alloc_page loop is to fail if alloc_page() 
-fails; in the worst case, alloc_pages_bulk_array() calls alloc_page() 
-after trying to get a batch, so I figured the worst case is still 
-basically a loop calling alloc_page() and failing if it ever fails.
-
-Reading up on it, though, arguably the memalloc_retry_wait() should 
-already be in all the callsites, so maybe I should insert a patch in the 
-middle that just adds the memalloc_retry_wait() into 
-btrfs_alloc_page_array()? Since it's an orthogonal fixup to either the 
-refactoring or the conversion to alloc_pages_bulk_array()?
-
-Thanks!
-
-Sweet Tea

@@ -2,123 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2474ED596
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BAA4ED5A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 10:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbiCaI3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 04:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S232875AbiCaIeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 04:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbiCaI3U (ORCPT
+        with ESMTP id S232710AbiCaIeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:29:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C194E1C8878;
-        Thu, 31 Mar 2022 01:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1648715253; x=1680251253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lx3Akt2XgQBGgPwZQOjCdTFVnMM6p3ONMYke/VZbCfA=;
-  b=HR5H6cPT+Kqa1+nVNR7G8b7V4QwWosY+3s95dleERfEpnycYP5NDqgsa
-   RWBJ5PU8R78FlkKnKqdHrJAJYoiH2JE/LtdJ4Nrj/Tk8aQahqLTxWYToH
-   PKhheuuq1zvicq+M+3ACMaIPCuSvPoS2oR189M4fMh+T5BPI7q5pJVyF9
-   WucuSZ8dP0LQ2jKkt0px0LaM+ZEBK19h+1Bj+fwh4ZW63VjwS7wDJHV0H
-   sHHJdtd83x5bowtx9R4yF3HDDbUKYKwK6DTKkXrJ2HShEzXtvoP2z41nM
-   eyneGgbf2S6TWH3lj3YP46fPpO4zdKwAQWzRtDdhn/UXAcvLfJbfzLwXu
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,224,1643698800"; 
-   d="scan'208";a="158789272"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2022 01:27:32 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 31 Mar 2022 01:27:31 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 31 Mar 2022 01:27:31 -0700
-Date:   Thu, 31 Mar 2022 10:30:38 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC net-next] net: lan966x: make PHY reset support
- optional
-Message-ID: <20220331083038.eorhpmhydadujfft@soft-dev3-1.localhost>
-References: <20220330110210.3374165-1-michael@walle.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220330110210.3374165-1-michael@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 04:34:11 -0400
+X-Greylist: delayed 29513 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 01:32:23 PDT
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F5311A09;
+        Thu, 31 Mar 2022 01:32:22 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4KTc4450k8zBCBjq;
+        Thu, 31 Mar 2022 16:32:20 +0800 (CST)
+Received: from szxlzmapp07.zte.com.cn ([10.5.230.251])
+        by mse-fl1.zte.com.cn with SMTP id 22V8W7XO084002;
+        Thu, 31 Mar 2022 16:32:07 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Thu, 31 Mar 2022 16:32:07 +0800 (CST)
+Date:   Thu, 31 Mar 2022 16:32:07 +0800 (CST)
+X-Zmail-TransId: 2b0462456707ffffffff8d1-79fab
+X-Mailer: Zmail v1.0
+Message-ID: <202203311632074775168@zte.com.cn>
+In-Reply-To: <20220331053340.GE1544202@dread.disaster.area>
+References: 20220331003826.GL27690@magnolia,202203311128598207170@zte.com.cn,20220331053340.GE1544202@dread.disaster.area
+Mime-Version: 1.0
+From:   <wang.yi59@zte.com.cn>
+To:     <david@fromorbit.com>
+Cc:     <djwong@kernel.org>, <linux-xfs@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xue.zhihong@zte.com.cn>,
+        <wang.liang82@zte.com.cn>, <cheng.lin130@zte.com.cn>
+Subject: =?UTF-8?B?UmU6W1BBVENIXSB4ZnM6IGdldGF0dHIgaWdub3JlIGJsb2NrcyBiZXlvbmQgZW9m?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 22V8W7XO084002
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 62456714.003 by FangMail milter!
+X-FangMail-Envelope: 1648715540/4KTc4450k8zBCBjq/62456714.003/10.30.14.238/[10.30.14.238]/mse-fl1.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 62456714.003/4KTc4450k8zBCBjq
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 03/30/2022 13:02, Michael Walle wrote:
+> We do not, and have not ever tried to, hide allocation or block
+> usage artifacts from userspace because any application that depends
+> on specific block allocation patterns or accounting from the
+> filesystem is broken by design.
+>
+> Every filesystem accounts blocks differently, and more often than
+> not the block count exposed to userspace also includes metadata
+> blocks (extent maps, xattr blocks, etc) and it might multiple count
+> other blocks (e.g. shared extents). Hence so you can't actually
+> use it for anything useful in userspace except reporting how many
+> blocks this file *might* use.
+>
+> If your application is dependent on block counts exactly matching
+> the file data space for waht ever reason, then what speculative
+> preallocation does is the least of your problems.
+>
 
-Hi Michael,
+Thanks for your explaination.
 
-> 
-> The PHY subsystem as well as the MIIM mdio driver (in case of the
-> integrated PHYs) will already take care of the resets of any external
-> and internal PHY. There is no need for this reset anymore, so mark it
-> optionally to be backwards compatible.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> 
-> Horatiu, what do you think, should it be removed altogether? 
+Unfortunately, the app I'm using evaluates diskusage by querying
+the changes of the backend filesystem (XFS) file before and after
+the operation. Without giving up the benefits of preallocation, the
+app's statistics will become obsolete and no chance to correct it
+at a small cost, because of the silence reclaim of posteof blocks.
+That is the app's problem.
 
-I think it is OK to remove it altogether. If you get both [1] and [2]
-in.
-
-> There is
-> no user for that in mainline and I don't know about downstream but the
-> reset driver doesn't really work (as it also resets the GPIO/SGPIO)
-
-Yes because I didn't manage to send yet those patches. But if your get
-yours in that is fine for me.
-My problem was, if after the probe of the MDIO controller it was probed
-the SGPIO then the PHYs will be in reset because the SGPIO was resetting
-the swich. But you put the reset of the swich on the pinctrl which will
-be probed before the MDIO, so that should be fine.
-
-> and conceptionally the property is on the wrong DT node. All of the
-> drawbacks should have been addressed by my patches for the miim [1]
-> and the pinctrl driver [2].
-> 
-> [1] https://lore.kernel.org/netdev/20220318201324.1647416-1-michael@walle.cc/
-> [2] https://lore.kernel.org/linux-gpio/20220313154640.63813-1-michael@walle.cc/
-> 
->  drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> index 1f8c67f0261b..0765064d2845 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> @@ -916,7 +916,7 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
->                 return dev_err_probe(lan966x->dev, PTR_ERR(switch_reset),
->                                      "Could not obtain switch reset");
-> 
-> -       phy_reset = devm_reset_control_get_shared(lan966x->dev, "phy");
-> +       phy_reset = devm_reset_control_get_optional_shared(lan966x->dev, "phy");
->         if (IS_ERR(phy_reset))
->                 return dev_err_probe(lan966x->dev, PTR_ERR(phy_reset),
->                                      "Could not obtain phy reset\n");
-> --
-> 2.30.2
-> 
-
--- 
-/Horatiu
+Posteof blocks will be reclaimed sooner or later, it seems reasonable
+to ignore them directly during query. This is my humble opinion in
+this patch. At the query moment, it's not real, but it will become so
+eventually. It's a speculative result for query.

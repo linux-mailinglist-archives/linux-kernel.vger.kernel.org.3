@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DE24EE1B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF7E4EE1B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240719AbiCaTab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S240723AbiCaTa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240706AbiCaTaZ (ORCPT
+        with ESMTP id S240705AbiCaTax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:30:25 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58043554A6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:28:36 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id 9so703576iou.5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KDv50hCOMSNm4tqOFej1XxVHswnaiqBQ/Ql5PRaAElM=;
-        b=hr3WMnbNxfXX92/Y0t14FpEIS4pC+09DAI6p4oWqZgWnX03dIRuX74ev7qupnrKxzX
-         n5Cz8IINdInr4rUCepEci1G0mhVdD9KS789z+ALBCwmklBUAZ+nFdcApJvLiaQ6DE1h6
-         gsrrPum6Nsrl58HvbzUvPWVrmzlfcNkgPf0Os=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KDv50hCOMSNm4tqOFej1XxVHswnaiqBQ/Ql5PRaAElM=;
-        b=CmjlOW6UXyjWhsoz25m8R7H1RH0TKo0HTYMVgmSOC19G51/hUbsgDsq8Mh3xxTZteO
-         8KzPFEDVGh+kKcUB82i9MjNJFLz6FIae/Rn5u7sqXq3vKZByyHUHyQjY4SiJk3VurIi2
-         bv6iFURh2AXWw+Qz8hVYszgYE4TIyWBNGm4an7aEwQU+DULOoYx4JH2uMWhZlilFaNr0
-         O9f3guIQZ0beWo0xyL4vUWjDL7zHpXHile8iM6/jyQyZYunHhgwq6ALLTjn1Ev5FOW3h
-         cVkvu9IOcE3477LaPhilE79pRGYsfpPrLRX7PAIyVip8jKGl3Fu5T4gw0RYHuoWCpUVx
-         190A==
-X-Gm-Message-State: AOAM5339YQpkeoi7uCdRYyjpmuCbj2ca471WZofG0BLrzZXKR53bFA7s
-        zx9Gnzc7DvQVmN3Je6LOx4faFwOTcHKqVg==
-X-Google-Smtp-Source: ABdhPJxfJ3AXDmXIug9uhpRb3ABjQOmyzzRYZ0nfXa4ivrk5be6vqTiSy892fiqB2bYpvFEb5d7u9Q==
-X-Received: by 2002:a02:7fc9:0:b0:323:6239:cfdb with SMTP id r192-20020a027fc9000000b003236239cfdbmr3849890jac.186.1648754915705;
-        Thu, 31 Mar 2022 12:28:35 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id k12-20020a056e02156c00b002c9ad2b3dc4sm168559ilu.74.2022.03.31.12.28.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 12:28:35 -0700 (PDT)
-Subject: Re: [PATCH] selftest/vm: clarify error statement in gup_test
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220330215257.112029-1-sidhartha.kumar@oracle.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9a752af3-8e3f-bfc5-eb24-eadcaf800bd5@linuxfoundation.org>
-Date:   Thu, 31 Mar 2022 13:28:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 31 Mar 2022 15:30:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975F21244;
+        Thu, 31 Mar 2022 12:29:04 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 21:29:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648754942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SyRunJIttOSoKPtRPHVIrqd1pxkb0TjVve+voxhbD10=;
+        b=Kb6NtKDnhx71zz0GNRf097nKYq6nD1t7B3ApI8gUlJpzEqWyM/bVV04hZFHUhd66cgwkkB
+        s5QzvQIF4+pXqVYxkIopLCiEhvVpiw/vLG+43VyDaLWf0CQInoDz8VJFu9YkNwEkfJrbFX
+        rrwCCl7DxjIcb9N/o6dHp0vGghmY6cd6YkZGtHAqGWKUHvYa6ZfDLNy48EBbJZk9VB4sbz
+        6S6OPPGD6o9tRtxWQRMDTv4ENqC9Bbh7ggeByeklACXiFLxlasYMtZfrKCqaxJIK4W+V6l
+        euVywUCvpP/kzuk9vAlsY/uvtevd5a0llcjqeOysKcu1Gk32esIxCo6Zae0H8A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648754942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SyRunJIttOSoKPtRPHVIrqd1pxkb0TjVve+voxhbD10=;
+        b=uWFmRx5ti2WzkyyQpub6TqK7NwdfLKb6opOH0V23cijzXiMLlrEA+HR0IUlKfLppY7UdjY
+        Hqhkzoo4hWHiWNCQ==
+From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Brian Masney <bmasney@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Al Stone <ahs3@redhat.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] efi: Allow to enable EFI runtime services by default
+ on RT
+Message-ID: <YkYA/Wpqa/PMczkp@lx-t490>
+References: <20220331151654.184433-1-javierm@redhat.com>
+ <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220330215257.112029-1-sidhartha.kumar@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 3:52 PM, Sidhartha Kumar wrote:
-> Print two possible reasons /sys/kernel/debug/gup_test
-> cannot be opened to help users of this test diagnose
-> failures.
-> 
+Hi Ard, Javier,
 
-Thank you for the patch to improve rather cryptic error messages.
+Am Do, Mar 31, 2022, schrieb Ard Biesheuvel:
+> On Thu, 31 Mar 2022 at 17:17, Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+> >
+> > Commit d9f283ae71af ("efi: Disable runtime services on RT") disabled EFI
+> > runtime services by default when the CONFIG_PREEMPT_RT option is enabled.
+> >
+> > The rationale for that commit is that some EFI calls could take too much
+> > time, leading to large latencies which is an issue for Real-Time kernels.
+> >
+> > But a side effect of that change was that now is not possible anymore to
+> > enable the EFI runtime services by default when CONFIG_PREEMPT_RT is set,
+> > without passing an efi=runtime command line parameter to the kernel.
+> >
+> > Instead, let's add a new EFI_DISABLE_RUNTIME boolean Kconfig option, that
+> > would be set to n by default but to y if CONFIG_PREEMPT_RT is enabled.
+> >
+> > That way, the current behaviour is preserved but gives users a mechanism
+> > to enable the EFI runtimes services in their kernels if that is required.
+> > For example, if the firmware could guarantee bounded time for EFI calls.
+> >
+> > Also, having a separate boolean config could allow users to disable the
+> > EFI runtime services by default even when CONFIG_PREEMPT_RT is not set.
+> >
+> > Reported-by: Alexander Larsson <alexl@redhat.com>
+> > Fixes: d9f283ae71af ("efi: Disable runtime services on RT")
+> > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> > ---
+> >
+> > Changes in v2:
+> > - Improve commit description to make clear the motivation for the change
+> >   (Sebastian Andrzej Siewior).
+> >
+>
+> This looks ok to me. I'll queue this up once the merge window closes.
+>
 
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> Cc: stable@vger.kernel.org # 5.15+
-> ---
->   tools/testing/selftests/vm/gup_test.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-> index fe043f67798b0..c496bcefa7a0e 100644
-> --- a/tools/testing/selftests/vm/gup_test.c
-> +++ b/tools/testing/selftests/vm/gup_test.c
-> @@ -205,7 +205,9 @@ int main(int argc, char **argv)
->   
->   	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
->   	if (gup_fd == -1) {
-> -		perror("open");
-> +		perror("failed to open /sys/kernel/debug/gup_test");
-> +		printf("check if CONFIG_GUP_TEST is enabled in kernel config\n");
-> +		printf("check if debugfs is mounted at /sys/kernel/debug\n");
+In case of (CONFIG_PREEMPT_RT=y && CONFIG_EFI_DISABLE_RUNTIME=n),
+shouldn't we add a small message in the kernel log warning that EFI
+runtime services are enabled for the RT kernel?
 
-Instead of adding 3 messages in a row, please check the errno to figure
-out why it failed and print an appropriate message.
+In almost all HW, except custom ones with "verified" firmware, such a
+warning would be useful... This is especially true since in the embedded
+domain, manually-configured RT kernels are almost always the norm.
 
-If open fails because CONFIG_GUP_TEST is not enabled, the test should skip
-the test instead of fail. Failing will indicate a test failure which is not
-the case. The test couldn't be run due to unmet dependencies.
+Thanks,
 
-This test requires root access. A check for root privilege and skip the
-test for the same reason stated above.
+--
+Ahmed S. Darwish
+Linutronix GmbH | Bahnhofstrasse 3 | D-88690 Uhldingen-Mühlhofen
+Phone: +49 7556 25 999 31; Fax.: +49 7556 25 999 99
 
->   		exit(1);
->   	}
->   
-> 
+Hinweise zum Datenschutz finden Sie hier (Informations on data privacy
+can be found here): https://linutronix.de/kontakt/Datenschutz.php
 
-Please send v2 with these changes.
-
-thanks,
--- Shuah
+Linutronix GmbH | Firmensitz (Registered Office): Uhldingen-Mühlhofen |
+Registergericht (Registration Court): Amtsgericht Freiburg i.Br., HRB700
+806 | Geschäftsführer (Managing Directors): Heinz Egger, Thomas Gleixner

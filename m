@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD6B4EE204
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B004EE206
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 21:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238340AbiCaTnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 15:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S241034AbiCaTnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 15:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241218AbiCaTnX (ORCPT
+        with ESMTP id S240934AbiCaTnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:43:23 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF72C133650
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:41:35 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id z6so814457iot.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 12:41:35 -0700 (PDT)
+        Thu, 31 Mar 2022 15:43:35 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24CC13CA02;
+        Thu, 31 Mar 2022 12:41:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id w21so594420pgm.7;
+        Thu, 31 Mar 2022 12:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Pc/jYTnFP9mAV1+7e43JSOoZseHW1bH2+TqqY9lrlfo=;
-        b=ewHfLWMxsJZKEk520LS5HNZAbZ6cCC8NzmC23l7/cQkxKBXQPs2scHe5O3amIPLxnU
-         GZKu+0ZpKR2RAZ5rzdUsvoYM+i85OmUNY/9FEj3a16+P+TgsUPr/30eWQzK29tu7wp0S
-         Ly/XaRsczyDio3iRzflclWFrTEgJpEqx1Rv2mHZatI92RfR4yliThAdgZ7cpX/Cp7qiP
-         B65GVGh2ear75wvt4XPqetywdc0r4n+tVLjgvHux5xZjxljCQzcBO1hfaORGVOKiz9rS
-         y9gqVQRchINJKJvxCtd4ZxO4l7KjkFSMI8DTfGLV6Sa5KvRQRYYH82dM24U5uGMFxNAT
-         YOMQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qsGcrQBwGTi+5NyS4qf8vP5dYOxF5bqb0qAb2tXdERc=;
+        b=MStKuYmsLi0xX9P60xtA4qXl1aL+4rnXErAvTDwSewkBhFWiHmgzo3dl7EZPvmo+k5
+         QbL6C+JeUvrHGryk6qn3yyWAX/3HTQIGe0tiFp6eqqRM9zZOkNaIgfGmkcEDDXVoYX33
+         oA6vxV14x+fYrf4hSYdYgLysEoUu/AY2mpCMcljU6XwrZuDDLtBwXZJgm3kmemHnhyLk
+         rWyPWjyF/zfIgyOV3n1Z7pMy7e3gX3tfHKMG9JHAd+Vl8q6K0J0uA7EH8WucRSPLRuEN
+         Yk/Mfm/txzFS9uo5/2vOiDcgm33TN/Zxl3HyjwF9w/OF+Ycy+PDs6a1/s+ADfO13Q70D
+         TH5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Pc/jYTnFP9mAV1+7e43JSOoZseHW1bH2+TqqY9lrlfo=;
-        b=D3tMepSvdfUk22Nv3oOcmxPyc+XXPV3X/LE9bo5bl0J2CLDOBw+FUf4OVjXxRLrRAC
-         tuVYvL7WVZ0acSF2xciW8GXNzpdCsIE27fSC5jopmXtuVio2yO4I7akYvGM0hPq/X/KH
-         n6eXC26cgS6x8BnFwFZ9K6GHJ+RtmNOOFtH7TKSUP1TqKz0gNGG/IARl8I1tLLo1Q7mh
-         1k7+5HBTjqmlsakMRwk7Dtlmu4aSHfm8DoeEFqJMEoBisNmAhMmm6Hb8/UTiLzLf3Ez3
-         NGsXHkrmFQC0ro605snrwKOHQ5O6nOhyXNd64osJdKmZ/t3/w7kgv8A9TzreQyM/CvN8
-         ukFA==
-X-Gm-Message-State: AOAM531PzKuKpCzXtUCxR832uTQdLQbdcP+LPIlJ9zcSr3TzYBjIMLKv
-        8+jxjgGT2baccW6NtyXsZbqopjyYBf3ij5fkvC1oKn616hb4Ww==
-X-Google-Smtp-Source: ABdhPJyBpvsqKpmKpdNlGBhsOGe9f7R1AvOyEMHGm+vjWHHZiy9iLNMMx+OoQTefeTTo2JLktOLkbLoX/ek0dwFVB7w=
-X-Received: by 2002:a02:6a60:0:b0:315:4758:1be1 with SMTP id
- m32-20020a026a60000000b0031547581be1mr3720092jaf.316.1648755694986; Thu, 31
- Mar 2022 12:41:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qsGcrQBwGTi+5NyS4qf8vP5dYOxF5bqb0qAb2tXdERc=;
+        b=2wCiv+Eyw5n2MojPblpEDWYiGQyg5ISkj/hTyrgsl1jn38s9DBvt6i3t6hlWp2HwRP
+         NaOrpD4wGlf3WhRlzZrJjC6u8ZxbStSh2Mu0Wm510/0uh6JTEHlg3Jznp2OEVNqBQOlb
+         4nZvLVxbfFzqM5SPh020082hRSDMEiQRY6QbbOzz9irrmB7bm8MdIojur1vDyipcnfIv
+         IyFQLypcRp0eZ64r3tN4QUVCBVkrl9AXvNd1pjRhdRv1HgQY2w0FdYNbqzCnnN2HHqH2
+         gTFRFD5nLsyxUoVeLxEpboApTKMeHLdAZE+wy2te2eLPn+rxe+HdSwyvwjkSGOuZ9g3Q
+         rGQw==
+X-Gm-Message-State: AOAM531JVXdXd4Uxlv9YPa04FQaPpaP85nOaYVg7AAfafFhpI/6Oe6EW
+        MGTMnY+hFE9HSlpERcCKS8I=
+X-Google-Smtp-Source: ABdhPJxeaZ3jtyAxJe4EcbTylaLFD7g+Wd8z0WzP82DRl7tI7JsL5M55iZIIweIke4/eFcpKqgaFow==
+X-Received: by 2002:a63:bf0e:0:b0:386:361f:e97a with SMTP id v14-20020a63bf0e000000b00386361fe97amr11961114pgf.552.1648755706247;
+        Thu, 31 Mar 2022 12:41:46 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id h20-20020a056a001a5400b004fb1b4b010asm267163pfv.162.2022.03.31.12.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 12:41:45 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 12:41:44 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
+ TDX module
+Message-ID: <20220331194144.GA2084469@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+ <36aac3cb7c7447db6454ee396e25eea3bad378e6.camel@intel.com>
 MIME-Version: 1.0
-References: <202203311842.wFWvHrHn-lkp@intel.com> <CAJuCfpEObhCKuJeHNqxna1=N1+f738dTDnUjGPFST1PqqAqcVQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpEObhCKuJeHNqxna1=N1+f738dTDnUjGPFST1PqqAqcVQ@mail.gmail.com>
-From:   =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@google.com>
-Date:   Thu, 31 Mar 2022 12:41:22 -0700
-Message-ID: <CAK26GQ3JAzaVDkYzXMD1mEV3kUyp20gqY0vT_4FsQGudbX9HrA@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
- 1060/5872] arch/arm64/mm/mmu.c:1499:5: warning: no previous prototype for 'check_range_driver_managed'
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Sudarshan Rajagopalan <sudaraja@codeaurora.org>,
-        kbuild-all@lists.01.org,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <36aac3cb7c7447db6454ee396e25eea3bad378e6.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,128 +77,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 12:12 PM Suren Baghdasaryan <surenb@google.com> wro=
-te:
->
-> On Thu, Mar 31, 2022 at 3:17 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Sudarshan,
-> >
-> > FYI, the error/warning still remains.
->
-> The warnings has been fixed in later patch:
-> https://android-review.googlesource.com/c/kernel/common/+/1668705
-> android12-trusty-5.10 needs to rebase to the latest android12-5.10 to fix=
- this.
->
+On Thu, Mar 31, 2022 at 04:31:10PM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
 
-This branch is meant to be merged into vendor kernels that need the
-trusty driver. We should not rebase it as that could create merge
-conflicts. We could merge android12-5.10 but we don't have a good
-reason to do so at this time as downstream branches already merge
-android12-5.10 directly. The android12-trusty-5.10 branch itself is
-only used to build the linux kernel for our emulator tests.
+> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
 
-Arve Hj=C3=B8nnev=C3=A5g
+> > Add a wrapper function to initialize the TDX module and get system-wide
+> > parameters via those APIs.  Because TDX requires VMX enabled, It will be
+> > called on-demand when the first guest TD is created via x86 KVM init_vm
+> > callback.
+> 
+> Why not just merge this patch with the change where you implement the init_vm
+> callback?  Then you can just declare this patch as "detect and initialize TDX
+> module when first VM is created", or something like that..
 
-> >
-> > tree:   https://github.com/ammarfaizi2/linux-block google/android/kerne=
-l/common/android12-trusty-5.10
-> > head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
-> > commit: 1b4aca7d82ae9b40145484fa09ceab38a6a06062 [1060/5872] ANDROID: a=
-rm64/mm: implement {populate/depopulate}_range_driver_managed
-> > config: arm64-buildonly-randconfig-r005-20220331 (https://download.01.o=
-rg/0day-ci/archive/20220331/202203311842.wFWvHrHn-lkp@intel.com/config)
-> > compiler: aarch64-linux-gcc (GCC) 11.2.0
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/ammarfaizi2/linux-block/commit/1b4aca7d82a=
-e9b40145484fa09ceab38a6a06062
-> >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2=
-/linux-block
-> >         git fetch --no-tags ammarfaizi2-block google/android/kernel/com=
-mon/android12-trusty-5.10
-> >         git checkout 1b4aca7d82ae9b40145484fa09ceab38a6a06062
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.c=
-ross O=3Dbuild_dir ARCH=3Darm64 SHELL=3D/bin/bash arch/arm64/mm/ drivers/gp=
-u/drm/hisilicon/kirin/
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> arch/arm64/mm/mmu.c:1499:5: warning: no previous prototype for 'chec=
-k_range_driver_managed' [-Wmissing-prototypes]
-> >     1499 | int check_range_driver_managed(u64 start, u64 size, const ch=
-ar *resource_name)
-> >          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    In file included from include/linux/printk.h:7,
-> >                     from include/linux/kernel.h:16,
-> >                     from arch/arm64/mm/mmu.c:11:
-> >    arch/arm64/mm/mmu.c: In function 'check_range_driver_managed':
-> >    include/linux/kern_levels.h:5:25: warning: format '%lx' expects argu=
-ment of type 'long unsigned int', but argument 3 has type 'u64' {aka 'long =
-long unsigned int'} [-Wformat=3D]
-> >        5 | #define KERN_SOH        "\001"          /* ASCII Start Of He=
-ader */
-> >          |                         ^~~~~~
-> >    include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN=
-_SOH'
-> >       11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions =
-*/
-> >          |                         ^~~~~~~~
-> >    include/linux/printk.h:343:16: note: in expansion of macro 'KERN_ERR=
-'
-> >      343 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-> >          |                ^~~~~~~~
-> >    arch/arm64/mm/mmu.c:1509:17: note: in expansion of macro 'pr_err'
-> >     1509 |                 pr_err("%s: couldn't find memory resource fo=
-r start 0x%lx\n",
-> >          |                 ^~~~~~
-> >
-> >
-> > vim +/check_range_driver_managed +1499 arch/arm64/mm/mmu.c
-> >
-> >   1498
-> > > 1499  int check_range_driver_managed(u64 start, u64 size, const char =
-*resource_name)
-> >   1500  {
-> >   1501          struct mem_section *ms;
-> >   1502          unsigned long pfn =3D __phys_to_pfn(start);
-> >   1503          unsigned long end_pfn =3D __phys_to_pfn(start + size);
-> >   1504          struct resource *res;
-> >   1505          unsigned long flags;
-> >   1506
-> >   1507          res =3D lookup_resource(&iomem_resource, start);
-> >   1508          if (!res) {
-> >   1509                  pr_err("%s: couldn't find memory resource for s=
-tart 0x%lx\n",
-> >   1510                             __func__, start);
-> >   1511                  return -EINVAL;
-> >   1512          }
-> >   1513
-> >   1514          flags =3D res->flags;
-> >   1515
-> >   1516          if (!(flags & IORESOURCE_SYSRAM_DRIVER_MANAGED) ||
-> >   1517              strstr(resource_name, "System RAM (") !=3D resource=
-_name)
-> >   1518                  return -EINVAL;
-> >   1519
-> >   1520          for (; pfn < end_pfn; pfn +=3D PAGES_PER_SECTION) {
-> >   1521                  ms =3D __pfn_to_section(pfn);
-> >   1522                  if (early_section(ms))
-> >   1523                          return -EINVAL;
-> >   1524          }
-> >   1525
-> >   1526          return 0;
-> >   1527  }
-> >   1528
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+Ok. Anyway in the next respoin, tdx module initialization will be done when
+loading kvm_intel.ko.  So the whole part will be changed and will be a part
+of module loading.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

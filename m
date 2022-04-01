@@ -2,171 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FCB4EEC6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D958B4EEC6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345545AbiDALgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
+        id S1345553AbiDALim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241232AbiDALgw (ORCPT
+        with ESMTP id S233663AbiDALil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:36:52 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CBD1D66F6;
-        Fri,  1 Apr 2022 04:35:02 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2e5e176e1b6so28793527b3.13;
-        Fri, 01 Apr 2022 04:35:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1vcpLdnxR+c+1IodUhMT7bozvTtnxFjdrTjmrW7ioa8=;
-        b=ymhoIZQsDoCBsYv+BN4xO3LxZiq6CQAKHKwl8AZEhFYCmoHUccLKAKG+1NoX/BKL0A
-         Lyptv/pBHwMPhwmF/aMd4P8D3MU0zEPYpiDB3P0SH3i2Ak2fX8J5+nxEJhO4R5RQ8bwk
-         ScrriPF4IKOrFOmqJV82st704FZ3Hc9hZvgJ+RCJfJt8GdSi7lBzF/UWR4A409d+POCO
-         eBedtqso2OJGeC+NAad5Rooz4lWyQ+NqCXW34tveimvlhhG7LYATOHShKvfSzYwmwz+J
-         DGRMY50+saqRdwmHmepqoK/EVrHSpH+EEdb7DROJf6f5MlMlJzlij8lTddqzDxOiHZlN
-         dfIA==
-X-Gm-Message-State: AOAM533UVNbXOJllJZAl7y98eAZqadW1b2M0MbBPzPbuPONLrborQ0oc
-        Qt28uP3If0c3ITXJ9dPttTUnW7+wZ+1GVVcWk1Q=
-X-Google-Smtp-Source: ABdhPJzacR+RMoy0ORGG7NFwHFOcHeSB6CcA/ae/HowmGQBYxHBi8F7c1VKDCkwOLjaykLANKDkfCFEyb1cGKUAGXnw=
-X-Received: by 2002:a81:5cf:0:b0:2e5:7477:168e with SMTP id
- 198-20020a8105cf000000b002e57477168emr9592262ywf.149.1648812901273; Fri, 01
- Apr 2022 04:35:01 -0700 (PDT)
+        Fri, 1 Apr 2022 07:38:41 -0400
+Received: from uriel.iewc.co.za (uriel.iewc.co.za [IPv6:2c0f:f720:0:3:d6ae:52ff:feb8:f27b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70441D66F6;
+        Fri,  1 Apr 2022 04:36:48 -0700 (PDT)
+Received: from [2c0f:f720:fe16:c400::1] (helo=tauri.local.uls.co.za)
+        by uriel.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1naFa9-0005b8-R9; Fri, 01 Apr 2022 13:36:45 +0200
+Received: from [192.168.42.201]
+        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1naFa8-0001Tr-R7; Fri, 01 Apr 2022 13:36:45 +0200
+Message-ID: <628a909d-1090-dc62-a730-fd9514079218@uls.co.za>
+Date:   Fri, 1 Apr 2022 13:36:44 +0200
 MIME-Version: 1.0
-References: <11980172.O9o76ZdvQC@kreacher> <20220331215716.GA27368@bhelgaas>
-In-Reply-To: <20220331215716.GA27368@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 1 Apr 2022 13:34:50 +0200
-Message-ID: <CAJZ5v0hTBQ=eajovHixwMs+1YQVFV7=uAay1qdxh3uDs68HndQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
+ connections
+Content-Language: en-GB
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Neal Cardwell <ncardwell@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+References: <E1nZMdl-0006nG-0J@plastiekpoot>
+ <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za>
+ <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
+ <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za>
+ <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+ <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za>
+ <CANn89i+KsjGUppc3D8KLa4XUd-dzS3A+yDxbv2bRkDEkziS1qw@mail.gmail.com>
+ <4b4ff443-f8a9-26a8-8342-ae78b999335b@uls.co.za>
+ <CANn89iL203ZuRdcyxh16yKXqxXJW2u+4559DsDFmW=8S+_n7fg@mail.gmail.com>
+ <CANn89i+6LCWOZahAi_vPf9H=SKw-4vdMTj5T0dYsp1Se4g9-yw@mail.gmail.com>
+From:   Jaco Kroon <jaco@uls.co.za>
+Organization: Ultimate Linux Solutions (Pty) Ltd
+In-Reply-To: <CANn89i+6LCWOZahAi_vPf9H=SKw-4vdMTj5T0dYsp1Se4g9-yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+Hi Eric,
+
+On 2022/04/01 02:54, Eric Dumazet wrote:
+> On Thu, Mar 31, 2022 at 5:41 PM Eric Dumazet <edumazet@google.com> wrote:
+>> On Thu, Mar 31, 2022 at 5:33 PM Jaco Kroon <jaco@uls.co.za> wrote:
+>>
+>>> I'll deploy same on a dev host we've got in the coming week and start a
+>>> bisect process.
+>> Thanks, this will definitely help.
+> One thing I noticed in your pcap is a good amount of drops, as if
+> Hystart was not able to stop slow-start before the drops are
+> happening.
 >
-> Hi Rafael,
+> TFO with one less RTT at connection establishment could be the trigger.
 >
-> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > If one of the PCIe root ports on Elo i2 is put into D3cold and then
-> > back into D0, the downstream device becomes permanently inaccessible,
-> > so add a bridge D3 DMI quirk for that system.
-> >
-> > This was exposed by commit 14858dcc3b35 ("PCI: Use
-> > pci_update_current_state() in pci_enable_device_flags()"), but before
-> > that commit the root port in question had never been put into D3cold
-> > for real due to a mismatch between its power state retrieved from the
-> > PCI_PM_CTRL register (which was accessible even though the platform
-> > firmware indicated that the port was in D3cold) and the state of an
-> > ACPI power resource involved in its power management.
+> If you are still using cubic, please try to revert.
+Sorry, I understand TCP itself a bit, but I've given up trying to
+understand the various schedulers a long time ago and am just using the
+defaults that the kernel provides.  How do I check what I'm using, and
+how can I change that?  What is recommended at this stage?
 >
-> In the bug report you suspect a firmware issue.  Any idea what that
-> might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
-> it would be a hardware issue.
-
-The _ON method of the ACPI power resource associated with the root
-port doesn't work correctly.
-
-> Weird how things come in clumps.  Was just looking at Mario's patch,
-> which also has to do with bridges and D3.
 >
-> Do we need a Fixes line?  E.g.,
+> commit 4e1fddc98d2585ddd4792b5e44433dcee7ece001
+> Author: Eric Dumazet <edumazet@google.com>
+> Date:   Tue Nov 23 12:25:35 2021 -0800
 >
->   Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
+>     tcp_cubic: fix spurious Hystart ACK train detections for
+> not-cwnd-limited flows
+Ok, instead of starting with bisect, if I can reproduce in dev I'll use
+this one first.
 
-Strictly speaking, it is not a fix for the above commit.
-
-It is a workaround for a firmware issue uncovered by it which wasn't
-visible, because power management was not used correctly on the
-affected system because of another firmware problem addressed by
-14858dcc3b35.  It wouldn't have worked anyway had it been attempted
-AFAICS.
-
-I was thinking about CCing this change to -stable instead.
-
-> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
-> > Reported-by: Stefan Gottwald <gottwald@igel.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/pci/pci.c |   10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > Index: linux-pm/drivers/pci/pci.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/pci/pci.c
-> > +++ linux-pm/drivers/pci/pci.c
-> > @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
-> >                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-> >                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
-> >               },
-> > +             /*
-> > +              * Downstream device is not accessible after putting a root port
-> > +              * into D3cold and back into D0 on Elo i2.
-> > +              */
-> > +             .ident = "Elo i2",
-> > +             .matches = {
-> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
-> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
-> > +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
-> > +             },
->
-> Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
-
-Not really.  The former applies to the entire platform and not to an
-individual device.
-
-> Could they be folded together?  We have a lot of bits that seem
-> similar but maybe not exactly the same (dev->bridge_d3,
-> dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
-> PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
-
-Yes, I agree that this needs to be cleaned up.
-
-> bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
-> Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
-> which honestly looks kind of random, i.e., it doesn't seem to be
-> working around a hardware or even a firmware defect.
->
-> Apparently the X299 issue is that 00:1c.4 is connected to a
-> Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
-> powered off unless something is attached to it?  At least, 00:1c.4
-> leads to bus 05, and in the dmesg log attached to [1] shows no devices
-> on bus 05.
->
-> It also says the platform doesn't support PCIe native hotplug, which
-> matches what Mika said about it using ACPI hotplug.  If a system is
-> using ACPI hotplug, it seems like maybe *that* should prevent us from
-> putting things in D3cold?  How can we know whether ACPI hotplug
-> depends on a certain power state?
-
-We have this check in pci_bridge_d3_possible():
-
-if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
-            return false;
-
-but this only applies to the case when the particular bridge itself is
-a hotplug one using ACPI hotplug.
-
-If ACPI hotplug is used, it generally is unsafe to put PCIe ports into
-D3cold, because in that case it is unclear what the platform
-firmware's assumptions regarding control of the config space are.
-
-However, I'm not sure how this is related to the patch at hand.
+Kind Regards,
+Jaco

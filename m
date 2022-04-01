@@ -2,255 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374584EED9D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB48E4EEDA5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346060AbiDANDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S1346081AbiDANEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbiDANDH (ORCPT
+        with ESMTP id S233932AbiDANEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:03:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0BE21D7E6
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:01:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A98CB824B8
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D674FC340EC;
-        Fri,  1 Apr 2022 13:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648818074;
-        bh=XyhhxkCH+EZq6/hCNHBUt5Mn8spTAvSrKu7ndya82vQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Cq2Y0JFe6h7VK9qk4H1570Q4zDc67WrLaqMiBiQa24AgPdWIilnOnV2rxb78sdmt4
-         4j4xPH4eLVlLSNlE+HfoGYnswHXspKkd27lTffOXBudkq9i7cNWWmd1ewX8MWZFCKc
-         xWiYM6hWHMwtzBLiVGCcYKPm7Jij3snPFVPPS4floAuoq3gYveuBcX7dy9BPyrkGzH
-         YG5clas5oLLnrFIAIKqU7D5clZYEgpryow2dsUhEcXPPY5JuW0hkoCBuJ/o5bnE4nt
-         Y+m7kKDhL1lvcsNq3U+HVXOgO+x0Jm5L5PoYJewtNT8c+VzciUNZMm2QN0bvD9v8xz
-         8jC5TAH0VTTJw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 767735C094C; Fri,  1 Apr 2022 06:01:14 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 06:01:14 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
-Message-ID: <20220401130114.GC4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
- <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
- <CANn89iJaeBneeqiDBUh_ppEQGne_eyPp-BCVYjEyvoYkUxrDxg@mail.gmail.com>
- <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89i+rfrkRrdYAq8Baq04n_ACq+VdB+UcsMoq7U-dB-2hKJA@mail.gmail.com>
- <20220401000642.GB4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89iJtfTiSz4v+L3YW+b_gzNoPLz_wuAmXGrNJXqNs9BU9cA@mail.gmail.com>
+        Fri, 1 Apr 2022 09:04:02 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAB121FC5C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:02:13 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id v12so3842608ljd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F2a7FzY8m8T/X8RahAU7iiC4xIiCX7s7pXJBmjYLomg=;
+        b=Kllbv9ROEVis7uoR2X2A5Om2EfLwcuUoUFYo2Uqbalt5eN2n2PjiHTIsgraoZr6soK
+         6kmAdU75b2GR7Us5DWu9UBJ+YIkI6jVZY0RGMdjhCJt2LbuPUuSS4PtwpsVZp/lVyyiE
+         kYxSYv5oTXoVVkBJf2NdoFAkwWYLXC0/dVmj/N5TGrbaf39zSDCLCNNpCS4HtxeE3AbG
+         CbfnJgA6FcAIKSxFUxJX3kKDPNhQzvQ9jCwRA1ywyWQfXTan2FaeIkB9d26js8cpFYF8
+         5Gpe4gxL/zmJEQ/n0rjKKRaN5vJiaWjr1rxrWTj6QW7WjH+DBmAs7NeqgFjlyYm9HGGE
+         x8mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F2a7FzY8m8T/X8RahAU7iiC4xIiCX7s7pXJBmjYLomg=;
+        b=y0F43U4CLpY5vdiuD4WFOkrQU6MbbJjqXR0/iNzclATMSnRZZucMsw67GpfXsnTMc8
+         P5eQ06YasydgeoVGq5tbODvdmF/ch3QMNCvJF1bKulXDmfRfZjp7eami7rbU29YZ3KwD
+         FvRrOruM6rhB0p9GHcR/aOGpBMeOabo/0UgMZ1d5Bv96kOUfKZ+bYpwP0C+PRMCOw+uS
+         +9mnE6bfpBTOOl910v5IwZ+aPuAaDMMgE87ct05L4oCbWQYaOk8uD6TLxzPolYSAsSJs
+         /8aPb+R8q7QTggmT8odZQzaKnSH3MFRIGoXNYubu78EQCd/6dK/LnyFyTlnoIdHyVFW7
+         HlpA==
+X-Gm-Message-State: AOAM531A/RXK9W9t7eYrpkAjGmtbeymffviqgwZOkmWH7kksRVcIBIFC
+        Q9DFNlDQkQPVIGKhzq3+HS4=
+X-Google-Smtp-Source: ABdhPJwtj+gJj2b3rNmdT/kiOBvx9CCYWYS8G30yDCNSdGmhfGez5asIsu00ahMD2oJ4rY2OAnSOdg==
+X-Received: by 2002:a2e:5417:0:b0:24b:503:a2dc with SMTP id i23-20020a2e5417000000b0024b0503a2dcmr1238218ljb.485.1648818130833;
+        Fri, 01 Apr 2022 06:02:10 -0700 (PDT)
+Received: from inno-pc.lan (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id y22-20020a056512045600b0044a997dea9esm235574lfk.283.2022.04.01.06.02.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 06:02:10 -0700 (PDT)
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+X-Google-Original-From: Zhi Wang <zhi.a.wang@intel.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org
+Cc:     Zhi Wang <zhi.a.wang@intel.com>
+Subject: [PATCH v8 0/3] Refactor GVT-g MMIO tracking table and handlers
+Date:   Fri,  1 Apr 2022 09:02:04 -0400
+Message-Id: <20220401130207.33944-1-zhi.a.wang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iJtfTiSz4v+L3YW+b_gzNoPLz_wuAmXGrNJXqNs9BU9cA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:39:02PM -0700, Eric Dumazet wrote:
-> On Thu, Mar 31, 2022 at 5:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Thu, Mar 31, 2022 at 04:28:04PM -0700, Eric Dumazet wrote:
-> > > On Thu, Mar 31, 2022 at 4:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > >
-> > > > The initial setting of ->percpu_enqueue_shift forces all in-range CPU
-> > > > IDs to shift down to zero.  The grace-period kthread is allowed to run
-> > > > where it likes.  The callback lists are protected by locking, even in
-> > > > the case of local access, so this should be safe.
-> > > >
-> > > > Or am I missing your point?
-> > > >
-> > >
-> > > In fact I have been looking at this code, because we bisected a
-> > > regression back to this patch:
-> > >
-> > > 4fe192dfbe5ba9780df699d411aa4f25ba24cf61 rcu-tasks: Shorten
-> > > per-grace-period sleep for RCU Tasks Trace
-> > >
-> > > It is very possible the regression comes because the RCU task thread
-> > > is using more cpu cycles, from 'CPU 0'  where our system daemons are
-> > > pinned.
-> >
-> > Heh!  I did express that concern when creating that patch, but was
-> > assured that the latency was much more important.
-> >
-> > Yes, that patch most definitely increases CPU utilization during RCU Tasks
-> > Trace grace periods.  If you can tolerate longer grace-period latencies,
-> > it might be worth toning it down a bit.  The ask was for about twice
-> > the latency I achieved in my initial attempt, and I made the mistake of
-> > forwarding that attempt out for testing.  They liked the shorter latency
-> > very much, and objected strenuously to the thought that I might detune
-> > it back to the latency that they originally asked for.  ;-)
-> >
-> > But I can easily provide the means to detune it through use of a kernel
-> > boot parameter or some such, if that would help.
-> >
-> > > But I could not spot where the RCU task kthread is forced to run on CPU 0.
-> >
-> > I never did intend this kthread be bound anywhere.  RCU's policy is
-> > that any binding of its kthreads is the responsibility of the sysadm,
-> > be that carbon-based or otherwise.
-> >
-> > But this kthread is spawned early enough that only CPU 0 is online,
-> > so maybe the question is not "what is binding it to CPU 0?" but rather
-> > "why isn't something kicking it off of CPU 0?"
-> 
-> I guess the answer to this question can be found in the following
-> piece of code :)
-> 
-> rcu_read_lock();
-> for_each_process_thread(g, t)
->         rtp->pertask_func(t, &holdouts);
-> rcu_read_unlock();
-> 
-> 
-> With ~150,000 threads on a 256 cpu host, this holds current cpu for
-> very long times:
-> 
->  rcu_tasks_trace    11 [017]  5010.544762:
-> probe:rcu_tasks_wait_gp: (ffffffff963fb4b0)
->  rcu_tasks_trace    11 [017]  5010.600396:
-> probe:rcu_tasks_trace_postscan: (ffffffff963fb7c0)
+To support the new mdev interfaces and the re-factor patches from
+Christoph, which moves the GVT-g code into a dedicated module, the GVT-g
+initialization path has to be separated into two phases:
 
-So about 55 milliseconds for the tasklist scan, correct?  Or am I
-losing the plot here?
+a) Early initialization.
 
->  rcu_tasks_trace    11 [022]  5010.618783:
-> probe:check_all_holdout_tasks_trace: (ffffffff963fb850)
->  rcu_tasks_trace    11 [022]  5010.618840:
-> probe:rcu_tasks_trace_postgp: (ffffffff963fba70)
-> 
-> In this case, CPU 22 is the victim, not CPU 0 :)
+The early initialization of GVT requires to be done when loading i915.
+Mostly it's because the initial clean HW state needs to be saved before
+i915 touches the HW.
 
-My faith in the scheduler is restored!  ;-)
+b) Late initalization.
 
-My position has been that this tasklist scan does not need to be broken
-up because it should happen only when a sleepable BPF program is removed,
-which is a rare event.
+This phases of initalization will setup the rest components of GVT-g,
+which can be done later when the dedicated module is being loaded.
 
-In addition, breaking up this scan is not trivial, because as far as I
-know there is no way to force a given task to stay in the list.  I would
-have to instead use something like rcu_lock_break(), and restart the
-scan if either of the nailed-down pair of tasks was removed from the list.
-In a system where tasks were coming and going very frequently, it might
-be that such a broken-up scan would never complete.
+To initialize the GVT-g MMIO tracking table in the early initalization
+stage, which will be done in i915, the GVT-g MMIO tracking table needs
+to be sperated accordingly and moved into i915.
 
-I can imagine tricks where the nailed-down tasks are kept on a list,
-and the nailed-downness is moved to the next task when those tasks
-are removed.  I can also imagine a less-than-happy response to such
-a proposal.
+---
+v8:
 
-So I am not currently thinking in terms of breaking up this scan.
-
-Or is there some trick that I am missing?
-
-In the meantime, a simple patch that reduces the frequency of the scan
-by a factor of two.  But this would not be the scan of the full tasklist,
-but rather the frequency of the calls to check_all_holdout_tasks_trace().
-And the total of these looks to be less than 20 milliseconds, if I am
-correctly interpreting your trace.  And most of that 20 milliseconds
-is sleeping.
-
-Nevertheless, the patch is at the end of this email.
-
-Other than that, I could imagine batching removal of sleepable BPF
-programs and using a single grace period for all of their trampolines.
-But are there enough sleepable BPF programs ever installed to make this
-a useful approach?
-
-Or is the status quo in fact acceptable?  (Hey, I can dream, can't I?)
-
-							Thanx, Paul
-
-> > > I attempted to backport to our kernel all related patches that were
-> > > not yet backported,
-> > > and we still see a regression in our tests.
-> >
-> > The per-grace-period CPU consumption of rcu_tasks_trace was intentionally
-> > increased by the above commit, and I never have done anything to reduce
-> > that CPU consumption.  In part because you are the first to call my
-> > attention to it.
-> >
-> > Oh, and one other issue that I very recently fixed, that has not
-> > yet reached mainline, just in case it matters.  If you are building a
-> > CONFIG_PREEMPT_NONE=y or CONFIG_PREEMPT_VOLUNTARY=y kernel, but also have
-> > CONFIG_RCU_TORTURE_TEST=m (or, for that matter, =y, but please don't in
-> > production!), then your kernel will use RCU Tasks instead of vanilla RCU.
-> > (Note well, RCU Tasks, not RCU Tasks Trace, the latter being necessaary
-> > for sleepable BPF programs regardless of kernel .config).
-> >
-> > > Please ignore the sha1 in this current patch series, this is only to
-> > > show my current attempt to fix the regression in our tree.
-> > >
-> > > 450b3244f29b rcu-tasks: Don't remove tasks with pending IPIs from holdout list
-> > > 5f88f7e9cc36 rcu-tasks: Create per-CPU callback lists
-> > > 1a943d0041dc rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic
-> > > queue selection
-> > > ea5289f12fce rcu-tasks: Convert grace-period counter to grace-period
-> > > sequence number
-> > > 22efd5093c3b rcu/segcblist: Prevent useless GP start if no CBs to accelerate
-> > > 16dee1b3babf rcu: Implement rcu_segcblist_is_offloaded() config dependent
-> > > 8cafaadb6144 rcu: Add callbacks-invoked counters
-> > > 323234685765 rcu/tree: Make rcu_do_batch count how many callbacks were executed
-> > > f48f3386a1cc rcu/segcblist: Add additional comments to explain smp_mb()
-> > > 4408105116de rcu/segcblist: Add counters to segcblist datastructure
-> > > 4a0b89a918d6 rcu/tree: segcblist: Remove redundant smp_mb()s
-> > > 38c0d18e8740 rcu: Add READ_ONCE() to rcu_do_batch() access to rcu_divisor
-> > > 0b5d1031b509 rcu/segcblist: Add debug checks for segment lengths
-> > > 8a82886fbf02 rcu_tasks: Convert bespoke callback list to rcu_segcblist structure
-> > > cbd452a5c01f rcu-tasks: Use spin_lock_rcu_node() and friends
-> > > 073222be51f3 rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure
-> > > 5af10fb0f8fb rcu-tasks: Abstract checking of callback lists
-> > > d3e8be598546 rcu-tasks: Abstract invocations of callbacks
-> > > 65784460a392 rcu-tasks: Use workqueues for multiple
-> > > rcu_tasks_invoke_cbs() invocations
-> > > dd6413e355f1 rcu-tasks: Make rcu_barrier_tasks*() handle multiple
-> > > callback queues
-> > > 2499cb3c438e rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set
-> > > initial queueing
-> > > a859f409a503 rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention
-> > > 4ab253ca056e rcu-tasks: Avoid raw-spinlocked wakeups from
-> > > call_rcu_tasks_generic()
-> > > e9a3563fe76e rcu-tasks: Use more callback queues if contention encountered
-> > > 4023187fe31d rcu-tasks: Use separate ->percpu_dequeue_lim for callback
-> > > dequeueing
-> > > 533be3bd47c3 rcu: Provide polling interfaces for Tree RCU grace periods
-> > > f7e5a81d7953 rcu-tasks: Use fewer callbacks queues if callback flood ends
-> > > bb7ad9078e1b rcu-tasks: Fix computation of CPU-to-list shift counts
-> > > d9cebde55539 rcu-tasks: Use order_base_2() instead of ilog2()
-> > > 95606f1248f5 rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
+- Use SPDX header in the intel_gvt_mmio_table.c
+- Reference the gvt.h with path. (Jani)
+- Add a missing fix on mmio emulation path during my debug.
+- Fix a building problem on refreshed gvt-staging branch. (Christoph)
 
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 65d6e21a607a..141e2b4c70cc 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -1640,10 +1640,10 @@ static int __init rcu_spawn_tasks_trace_kthread(void)
- 		rcu_tasks_trace.gp_sleep = HZ / 10;
- 		rcu_tasks_trace.init_fract = HZ / 10;
- 	} else {
--		rcu_tasks_trace.gp_sleep = HZ / 200;
-+		rcu_tasks_trace.gp_sleep = HZ / 100;
- 		if (rcu_tasks_trace.gp_sleep <= 0)
- 			rcu_tasks_trace.gp_sleep = 1;
--		rcu_tasks_trace.init_fract = HZ / 200;
-+		rcu_tasks_trace.init_fract = HZ / 100;
- 		if (rcu_tasks_trace.init_fract <= 0)
- 			rcu_tasks_trace.init_fract = 1;
- 	}
+v7:
+
+- Keep the marcos of device generation in GVT-g. (Christoph, Jani)
+
+v6:
+
+- Move the mmio_table.c into i915. (Christoph)
+- Keep init_device_info and related structures in GVT-g. (Christoph)
+- Refine the callbacks of the iterator. (Christoph)
+- Move the flags of MMIO register defination to GVT-g. (Chrsitoph)
+- Move the mmio block handling to GVT-g.
+
+v5:
+
+- Re-design the mmio table framework. (Christoph)
+
+v4:
+
+- Fix the errors of patch checking scripts.
+
+v3:
+
+- Fix the errors when CONFIG_DRM_I915_WERROR is turned on. (Jani)
+
+v2:
+
+- Implement a mmio table instead of generating it by marco in i915. (Jani)
+
+Zhi Wang (3):
+  i915/gvt: Separate the MMIO tracking table from GVT-g
+  i915/gvt: Save the initial HW state snapshot in i915
+  i915/gvt: Use the initial HW state snapshot saved in i915
+
+ drivers/gpu/drm/i915/Makefile               |    2 +-
+ drivers/gpu/drm/i915/gvt/firmware.c         |   25 +-
+ drivers/gpu/drm/i915/gvt/gvt.h              |    3 +-
+ drivers/gpu/drm/i915/gvt/handlers.c         | 1031 ++-------------
+ drivers/gpu/drm/i915/gvt/mmio.h             |    1 -
+ drivers/gpu/drm/i915/gvt/reg.h              |    9 +-
+ drivers/gpu/drm/i915/i915_drv.h             |    2 +
+ drivers/gpu/drm/i915/intel_gvt.c            |   92 +-
+ drivers/gpu/drm/i915/intel_gvt.h            |   21 +
+ drivers/gpu/drm/i915/intel_gvt_mmio_table.c | 1290 +++++++++++++++++++
+ 10 files changed, 1559 insertions(+), 917 deletions(-)
+ create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+
+-- 
+2.25.1
+

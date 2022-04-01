@@ -2,186 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261C14EFA53
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B65E4EFA5B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351543AbiDATRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S236501AbiDAT1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347016AbiDATRH (ORCPT
+        with ESMTP id S231358AbiDAT1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:17:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424E433E3D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:15:17 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id c11so3078840pgu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 12:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=74mB6MqkSJBkwlaVi13tzJeL9OKs1IHJIH4CRNeep8g=;
-        b=bJTyRdDTmlbuSOM0B2IOeSL9/WFOBdcTPTkBu4BZi3VTXTZXyU9USVbd0ARBpqBd/o
-         Xhqm+ZokB9H18FXjbbbKA3nLPKuk8jlb1DV9o4R5Shg4d7X2Zd9deT8e+k5Wcvp8TurP
-         7FXpoK+YCocWG8BZCLk/6mOj8pmP2DTACrdxvZe8W597X5HAdipYg2QW/3kQ8Hh8kNfw
-         ddNYibFysh1gqMIgVAdqbXiMWNdskLI9YyNFUwamOWZgIQlW7hYipsYzaSZAs9wNLwDh
-         wJvQMCRCBmmEzHUKRTYCPGPum6YvplBPsG//0oQb/q9Es28OAkEP2D8h/i4/NbjA1iCK
-         Gf/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=74mB6MqkSJBkwlaVi13tzJeL9OKs1IHJIH4CRNeep8g=;
-        b=0eYxBdU8gaJv4aqCAMZerorChSaHCqDd0PcZ5Q6nSvTCvkzz672o3KQO8YQxiPEuxy
-         k9KZTIwNJ+bAYouH4A9G7SjlOXRymDbpfRC8lrZxWFY138iCaYGTGmCRFnZZBBzPikME
-         yUbuUxTZJ7SKHGYGOmOnmH8hQOuDUdYKD3csJsAaI25dC30XXRy0LCz74EY/rYVgF43h
-         LPdmAlGqEy22PcRtMDeDiqfNhJ8YjJE1rNJ33PUviGiPEobBaOCf1BIqB0TqLHlOrhwD
-         /20EtvX4FNrqMSNQGsaCq2J5Ja5h+cNTA6Z2nVY0PFtsIrW1N3wojV4i3aVrovgVG1T8
-         5UKw==
-X-Gm-Message-State: AOAM530Dn1X3Dsm/EXWsU5e0BH/Gh20Rk4wBaHF9QuiTV1QLdAiHRVDc
-        RM+tBBkYFBxKR+vTdwdTn1M=
-X-Google-Smtp-Source: ABdhPJyLNOCEvxq6jQfaw9AVNQZAkvBxjWn0h+EdPMHZI8Q6BSfpdilPDso/5du4exJGhiBafhi/+w==
-X-Received: by 2002:a63:3cf:0:b0:382:9343:bbd3 with SMTP id 198-20020a6303cf000000b003829343bbd3mr16248441pgd.511.1648840515432;
-        Fri, 01 Apr 2022 12:15:15 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id s10-20020a056a00178a00b004fda49fb25dsm3962041pfg.9.2022.04.01.12.15.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 01 Apr 2022 12:15:14 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH v1 mmotm] mm/mprotect: try avoiding write faults for
- exclusive anonynmous pages when changing protection
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220401101334.68859-1-david@redhat.com>
-Date:   Fri, 1 Apr 2022 12:15:13 -0700
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8A6AF878-D5D7-4D88-A736-0FEF71439D44@gmail.com>
-References: <20220401101334.68859-1-david@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Fri, 1 Apr 2022 15:27:14 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F082143469
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648841124; x=1680377124;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=1qdcczlKX4Qjv3s3lopzGh1+3WgMrjU6pxzvv7DskMU=;
+  b=eI01janHOsQDF+Og23x5JZVO6xC5SmAEfhEox0A0SeU+Jvi1inFJMl/W
+   JNLFWVy1BewXlbHr/Ae9sx6SXAn5YJP7T1CYT259w0YY+I1BAwCBZA3HW
+   Fz2oXvY0wv6+x4bLLDBY3oLfyGTukr6UNLfH1bPTiJvXHjQzgFQLr6bXv
+   7JduJQMsRCy7O7SZFNSk26f8Ioukw5xDF4Df6gSox5mot/YAAOXFqEngD
+   84oazZslNmBg5U5E1JjXCb6Gu+0T94dsc1osbpuGXmNWHNNyb0nPsxWMV
+   3LGVFAUmVHRNSt76w4xgsv1Tw3p6faRmGsC9wFsJYPKt1jzrgJnOKCi/D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="240151866"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="240151866"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 12:25:24 -0700
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="567739894"
+Received: from dajones-mobl.amr.corp.intel.com (HELO [10.212.134.9]) ([10.212.134.9])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 12:25:22 -0700
+Message-ID: <db4e00d5-0cec-d50a-7dae-2ca9808bc187@intel.com>
+Date:   Fri, 1 Apr 2022 12:25:22 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Bharata B Rao <bharata@amd.com>, Andy Lutomirski <luto@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, shuah@kernel.org,
+        Oleg Nesterov <oleg@redhat.com>, ananth.narayan@amd.com
+References: <20220310111545.10852-1-bharata@amd.com>
+ <6a5076ad-405e-4e5e-af55-fe2a6b01467d@www.fastmail.com>
+ <b0861376-e628-06bd-713e-8837e0dc9d0b@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [RFC PATCH v0 0/6] x86/AMD: Userspace address tagging
+In-Reply-To: <b0861376-e628-06bd-713e-8837e0dc9d0b@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ +Rick ]
+On 3/23/22 00:48, Bharata B Rao wrote:
+> Ok got that. However can you point to me a few instances in the current
+> kernel code where such assumption of high bit being user/kernel address
+> differentiator exists so that I get some idea of what it takes to
+> audit all such cases?
 
-> On Apr 1, 2022, at 3:13 AM, David Hildenbrand <david@redhat.com> =
-wrote:
->=20
-> Similar to our MM_CP_DIRTY_ACCT handling for shared, writable =
-mappings, we
-> can try mapping anonymous pages writable if they are exclusive,
-> the PTE is already dirty, and no special handling applies. Mapping the
-> PTE writable is essentially the same thing the write fault handler =
-would do
-> in this case.
+Look around for comparisons against TASK_SIZE_MAX.
+arch/x86/lib/putuser.S or something like arch_check_bp_in_kernelspace()
+come to mind.
 
-In general I am all supportive for such a change.
+> Also wouldn't the problem of high bit be solved by using only the
+> 6 out of 7 available bits in UAI and leaving the 63rd bit alone?
+> The hardware will still ignore the top bit, but this should take
+> care of the requirement of high bit being 0/1 for user/kernel in the
+> x86_64 kernel. Wouldn't that work?
 
-I do have some mostly-minor concerns.
+I don't think so.
 
->=20
-> +static inline bool can_change_pte_writable(struct vm_area_struct =
-*vma,
-> +					   unsigned long addr, pte_t =
-pte,
-> +					   unsigned long cp_flags)
-> +{
-> +	struct page *page;
-> +
-> +	if ((vma->vm_flags & VM_SHARED) && !(cp_flags & =
-MM_CP_DIRTY_ACCT))
-> +		/*
-> +		 * MM_CP_DIRTY_ACCT is only expressive for shared =
-mappings;
-> +		 * without MM_CP_DIRTY_ACCT, there is nothing to do.
-> +		 */
-> +		return false;
-> +
-> +	if (!(vma->vm_flags & VM_WRITE))
-> +		return false;
-> +
-> +	if (pte_write(pte) || pte_protnone(pte) || !pte_dirty(pte))
-> +		return false;
+The kernel knows that a dereference of a pointer that looks like a
+kernel address that get kernel data.  Userspace must be kept away from
+things that look like kernel addresses.
 
-If pte_write() is already try then return false? I understand you want
-to do so because the page is already writable, but it is confusing.
+Let's say some app does:
 
-In addition, I am not sure about the pte_dirty() check is really robust.
-I mean I think it is ok, but is there any issue with shadow-stack?=20
+	void *ptr = (void *)0xffffffffc038d130;
+	read(fd, ptr, 1);
 
-And this also assumes the kernel does not clear the dirty bit without
-clearing the present, as otherwise the note in Intel SDM section 4.8
-("Accessed and Dirty Flags=E2=80=9D) will be relevant and dirty bit =
-might be
-set unnecessarily. I think it is ok.
+and inside the kernel, that boils down to:
 
-> +
-> +	/* Do we need write faults for softdirty tracking? */
-> +	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !pte_soft_dirty(pte) &&
-> +	    (vma->vm_flags & VM_SOFTDIRTY))
+	put_user('x', 0xffffffffc038d130);
 
-If !IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) then VM_SOFTDIRTY =3D=3D 0. So I =
-do not
-think the IS_ENABLED() is necessary (unless you think it is clearer this
-way).
+Today the kernels knows that 0xffffffffc038d130 is >=TASK_SIZE_MAX, so
+this is obviously naughty userspace trying to write to the kernel.  But,
+it's not obviously wrong if the high bits are ignored.
 
-> +		return false;
-> +
-> +	/* Do we need write faults for uffd-wp tracking? */
-> +	if (userfaultfd_pte_wp(vma, pte))
-> +		return false;
-> +
-> +	if (!(vma->vm_flags & VM_SHARED)) {
-> +		/*
-> +		 * We can only special-case on exclusive anonymous =
-pages,
-> +		 * because we know that our write-fault handler =
-similarly would
-> +		 * map them writable without any additional checks while =
-holding
-> +		 * the PT lock.
-> +		 */
-> +		page =3D vm_normal_page(vma, addr, pte);
+Like you said, we could, as a convention, check for the highest bit
+being set and use *that* to indicate a kernel address.  But, the sneaky
+old userspace would just do:
 
-I guess we cannot call vm_normal_page() twice, once for prot_numa and =
-once
-here, in practice...
+	put_user('x', 0x7fffffffc038d130);
 
-> +		if (!page || !PageAnon(page) || =
-!PageAnonExclusive(page))
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
+It would pass the "high bit" check since that bit is clear, but it still
+accesses kernel memory because UAI ignores the bit userspace just cleared.
 
-Note that there is a small downside to all of that. Assume you =
-mprotect()
-a single page from RO to RW and you have many threads.
+I think the only way to get around this is to go find every single place
+in the kernel that does a userspace address check and ensure that it
+fully untags the pointer first.
 
-With my pending patch you would avoid the TLB shootdown (and get a PF).
-With this patch you would get a TLB shootdown and save the PF. IOW, I
-think it is worthy to skip the shootdown as well in such a case and
-instead flush the TLB on spurious page-faults. But I guess that=E2=80=99s =
-for
-another patch.
+...
+> However given that without a hardware feature like ARM64 MTE, this would
+> primarily be used in non-production environments. Hence I wonder if MSR
+> write cost could be tolerated?
 
+It would be great of the mysterious folks who asked both Intel and AMD
+for this feature could weigh in on this thread.  But, I've been assuming
+that these features will be used to accelerate address sanitizers which
+used heavily today in non-production environments but are (generally)
+too slow for production.
+
+I'd be very surprised if folks wanted this snazzy new hardware feature
+from every CPU vendor on the planet just to speed up their
+non-production environments.
+
+I'd be less surprised if they wanted to expand the use of pointer
+tagging into more production environments.

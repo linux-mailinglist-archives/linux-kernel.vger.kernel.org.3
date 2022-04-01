@@ -2,111 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B80A4EE94B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC2A4EE94D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343994AbiDAHw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S1344001AbiDAHxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbiDAHw1 (ORCPT
+        with ESMTP id S1344003AbiDAHxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:52:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BB118DABE;
-        Fri,  1 Apr 2022 00:50:37 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 6975B1F40FA7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648799436;
-        bh=GEf0nEJQNZXszGDptrQO3o7b80i82CTwEgPl8PZMhOA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jOwCiMnFbtrL2h5VrTaakpahFkQ9lyJBlI+5o/TInsHv9DsHVBS42/SycdxYzP8Z7
-         2rnV/9eeI3dLUgM+WIuGpo/jElJoqHM+bCHH9xZyitktLLhraAak+Hx5UbfxdzZ+2u
-         09VpPaI4M69e3oYBIfHgPPIIEbMOQt5+IyJJaGNcDFn3wLfAf3dMH0aFnpYBYFVxOb
-         TNVaUw1dyMzcLzJx8mVvm7Kc9S9OuKR7+GFBz+/B+3SrWooUnyCE3mbRjqMjctG/aW
-         fpqN9VDrR2AgU41yVkrpGsNR8Gt/DJKI2obowakUufYAB+yHvoP4mbVVmP0kA3PP7A
-         CpfJT++gxUrlg==
-Message-ID: <38c9685e-380e-87ce-4a3a-5d274c0892fa@collabora.com>
-Date:   Fri, 1 Apr 2022 09:50:33 +0200
+        Fri, 1 Apr 2022 03:53:24 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904A26240A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:51:33 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id k23so655951ejd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
+        b=R5qxyMq0KSgMLORzVFr6f8JZchVpBqg3vw6QZkgQMBmMpmrWvKJXEkPbDrZs+NDRNX
+         Q03+2GBXLOuu+WGHr2ImgjCSP8i5ANZM6zdGZHPChpz6m1xhNKPBNPmzSPCmhFczeIiG
+         zBBE5QrYUxqLcx7KAqLrrRxVbscoBuS+Nz0+d/T4WtF+Fz7Cyc0JvzCcF5/+dviBqJWY
+         GhXtl/dXbzv1w9GW18RawAEXaU70jdKR1CPuevT7lUMwFRzc8G1G+ukqTCVltycG1Dwb
+         4kf+VTT2GgdcwdOYxr1ksgSfhfhDaqD3WpPlg0ZS9r0RijRNPPQu60iG14SENDohcZyP
+         MHIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
+        b=s6GxL6nIUZDQNLgWA6t/Z7hEBlGMAv7z1ESm7tYRHthO8mAYTBZnGo7fB4n/8I04EN
+         9bGRfiEroNaj/t3ithV3wTjvdrZECtHDzX1yOs534T39IniaRW+8XKQQO8hj9NQpTh39
+         uPtHHYf5hoHNvReXbuuwkdymvcfvQxdZKGQ5tRfwPGgq9FpHeYshSeFeFhFK+GzfehPq
+         LlpLfONeZ3BFPy5e6UP4dg7qoK3eF714DhtygDrKN0N+Xxv8Nlvoi0qyH5TAbpB/jPFx
+         Zk/wORQ3Pyj53DSrBbkZBN44LSohIeQi24rdTgQrs2+b5kFxO0nlKx9bzdgmb7kMfP+5
+         v/Xg==
+X-Gm-Message-State: AOAM530bERnpo/W8rI3OksxPwqnggvJsctHnRqByxqbBH6wdyLGy/af5
+        oBpR+kd6pQYtF8/KiUT7EX33p73d5SU9Dts2XM0=
+X-Google-Smtp-Source: ABdhPJy15tXaBUCoFtBaiXbg+DtyxG4m2FK0tsoBWDirs3TPeDTGqKEPNXZ3qdpz2WbQOSw71PF4td1cPe7M8XL04po=
+X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
+ ji13-20020a170907980d00b006d6f910513amr7769180ejc.643.1648799491620; Fri, 01
+ Apr 2022 00:51:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] media: mediatek: vcodec: fix v4l2 compliance decoder cmd
- test fail
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220401030406.6437-1-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220401030406.6437-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Fri, 1 Apr 2022 08:51:30 +0100
+Message-ID: <CAHpNFcPUVeOhEnL_10u9Omb+LDpYXjTPkYzteduPYWFiLe90bw@mail.gmail.com>
+Subject: Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+ bandwidth transport of and transformation of 3D & 2D graphics & fonts into
+ directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+To:     moderator@vesa.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/04/22 05:04, Yunfei Dong ha scritto:
-> Will return -EINVAL using standard framework api when test stateless
-> decoder with cmd VIDIOC_(TRY)DECODER_CMD.
-> 
-> Using another return value to adjust v4l2 compliance test for user
-> driver(GStreamer/Chrome) won't use decode cmd.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+VecSR - Vector Standard Render
 
-Hello Yunfei,
+VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
+Consolas & other brilliant fonts : (c)RS
 
-this patch is a fix.. hence, this needs an appropriate Fixes: tag.
-Please add one.
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
 
-Thanks,
-Angelo
+OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
+Mode & Desktop Rendering modes
 
-> ---
->   drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> index 3859e4c651c6..69b0e797d342 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> @@ -51,8 +51,7 @@ static int vidioc_try_decoder_cmd(struct file *file, void *priv,
->   
->   	/* Use M2M stateless helper if relevant */
->   	if (ctx->dev->vdec_pdata->uses_stateless_api)
-> -		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
-> -								cmd);
-> +		return -ENOTTY;
->   	else
->   		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
->   }
+Improve Console & TV & BIOS & General Animated Render
+
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
+
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
+
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
+
+High precision for AVX 32Bit to 256Bit width precision.
+
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+(c)Rupert S
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
+
+https://bit.ly/VESA_BT
+
+*
+
+*Application of SiMD Polygon Font Method Render
+*3D Render method with Console input DEMO : RS
+
+3D Display access to correct display of fonts at angles in games &
+apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
+font or shape. (c)Rupert S
+
+3rd dimensional access with vector fonts by a simple method:
+
+Render text to virtual screen layer AKA a fully rendered monochrome, 2
+colour or multi colour..
+
+Bitmap/Texture,
+
+Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+
+Can be higher resolution & we can sub sample with closer view priority...
+
+We then rotate the texture on our output polygon & factor size differential.
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize
+
+Why ? Because rotating a polygon is harder than subtracting or adding
+width, Hight & direction to fully complex polygon Fonts & Polygon
+lines or curves...
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize.
+
+https://science.n-helix.com/2022/04/vecsr.html

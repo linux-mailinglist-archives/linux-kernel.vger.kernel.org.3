@@ -2,140 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E109B4EECAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BEA4EECB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345695AbiDAMBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S1345703AbiDAMDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiDAMBj (ORCPT
+        with ESMTP id S233112AbiDAMDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:01:39 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490FC517E2;
-        Fri,  1 Apr 2022 04:59:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWeDSGi3+IvS1RPrcJOLVGQNU9ub1M/5YcnxrTJdVV30Px/elbUXgInIFwaLa73xyRMAG05jzs1YCNh5DCoUTmjQHagz7PPcIIWvD+uabL1X/kokXag+aIIxUM5yfGBYiCaZ+qwk6RwwwYBKhxXvyO5Fm37DEdmMb8I9rDsobkfghMjmyV7YS3GbLh2vO4BJvu+jT0rOYz5qEthVgflDZ3p9SL7wng7o/r08waQLUKWRnrLRGHxhXLjaBZUaCxXd+Mr2vOsELQ0ZaNV5Ju5C51X9BCl/VMwsFAbW/xE4ZyG+kseSYCP28JUqSbHw7PCNz9xN+BuCuB0ARZpiFFw/qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LrUyoBi6dWiY5DdTIj7koCyVAqO7EeAfUdR3Q6ZzYrg=;
- b=SRw41e+Hjp5tGKNdWjjJvn29WL968owVYxDTcIyYZKlRniXBnfPDknfNmsugXwJ9ezuL94zvA0wlqAOHd4GGLZWeQRDMPvXF+I4bppG0XGmdpxV1i5Muzx0XkU0hjSBPgDAIVQpog/y/kSPR6B1YQ7xfQahhnPyyLfW3mc10tDDtcKyw1ljsR0Vx/vMkR8AhKFIB848x64HVIiOHFI+1yiSP/AXIwyKs+VJLuR2ycLEIwsCL312VDQULA11l0/es9C6443dAJL+SAojcKhec1QBrCiwEa6QrdCArYSgQ7ZeJcTMsJoKEMZDIzCM+dZ68ghit7Itx7lVvyuYzNqLYiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LrUyoBi6dWiY5DdTIj7koCyVAqO7EeAfUdR3Q6ZzYrg=;
- b=Z6yXVR01dHhAoZgE9yeyXhzOVzKvJSYcWW2fn/I+XbwfvMpDsIRGDbeuUStKh1dKeAhyOTeE7eK/9cTY9oiDv81d1mu4trBrOQbzN6aaT1jVSaSX6q/Ngz5v0arjncvVV6rjBEszbFgAjZE/vJPDZoFOyWcO7I5qAfm2wpIcAPhjoNJWYg5G9JvI3n4nXRlJx0/xy+4n1KcNEX0kg8RH6GVgjo+61rCNMDVpnAIjy3LOsBgIrcIQBnaMFoPvBqBspwB4QDs39u7aU+Ns+5mnrn23k9EiQIz4XxIcL0of/njykzQFou5eomGo7lEjLXX46WKWBO9yrhFcyRkmcakBHA==
-Received: from DM6PR06CA0007.namprd06.prod.outlook.com (2603:10b6:5:120::20)
- by CH2PR12MB3720.namprd12.prod.outlook.com (2603:10b6:610:29::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Fri, 1 Apr
- 2022 11:59:48 +0000
-Received: from DM6NAM11FT018.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::73) by DM6PR06CA0007.outlook.office365.com
- (2603:10b6:5:120::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
- Transport; Fri, 1 Apr 2022 11:59:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT018.mail.protection.outlook.com (10.13.172.110) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5123.19 via Frontend Transport; Fri, 1 Apr 2022 11:59:48 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 1 Apr
- 2022 11:59:47 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Apr 2022
- 04:59:47 -0700
-Received: from henryl-vm.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Fri, 1 Apr 2022 04:59:45 -0700
-From:   Henry Lin <henryl@nvidia.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     Henry Lin <henryl@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] xhci: stop polling roothubs after shutdown
-Date:   Fri, 1 Apr 2022 19:59:15 +0800
-Message-ID: <20220401115916.104527-1-henryl@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Fri, 1 Apr 2022 08:03:16 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4EC269A7A;
+        Fri,  1 Apr 2022 05:01:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 25F001F47727
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648814485;
+        bh=Ok/bhlIM0JcCZb8uUTTHlofIc9Z9EPno2A7+s/1bFDQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Op+QHp0iloqxyfa1Cn2Yeh2TK3ot9GItyD/jtb9wXfbHh6TG9FzkV+O8+OZ5DQTZq
+         Oy0Hoc8kqi9O5Ae7jG9rgk1jZc0gDRBbk5Sn3qdA6T9xiCX0l8/r7YVqDKEIKO/UZv
+         uvbKBvyBeD/89q7D/MTrbCUWb67jqrO9Ke2/JKIv249eaMxiAiWKEy/6Iprb7ZHMs1
+         dX4c7CNBQWYw3G4LKZ8E+MPNhQSawbr62f3lKNXbr3HkAbkQBj8fx11VFJhVVJOj/F
+         Ff0WbpdoAQlb2R74FVVxi0I2MMlA6HS6/MlgFarMM5Y2llMWESHuBBX7mDhGqI4svA
+         DU9Z/X0uCEerg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     qii.wang@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org, nfraprado@collabora.com, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] i2c: mediatek: Optimize master_xfer() and avoid circular locking
+Date:   Fri,  1 Apr 2022 14:01:20 +0200
+Message-Id: <20220401120120.7498-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1bba6bc2-580c-4fb7-1a29-08da13d71f04
-X-MS-TrafficTypeDiagnostic: CH2PR12MB3720:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB3720B568251C93E02C3FEEEAACE09@CH2PR12MB3720.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: i7CnAFam58akyj0hpQYosdie7BTHc5PRGbz3iAkkM9cAbfUl1zwCCFx3bNz1vB0FDqhPgf/Z7+E/uDPUbWCSC1zruOwPWkqDcAee42YBU7FkfeY47v7SHAAekGS4f/7UO0KWyMW2EwEGzze/NAB4BiIZQl8h0ZbTHzUMjfzTHlrSCnbVggQx3OPQ6688wkrpMG9QMPKo9PhuNi3CV0r7eqyNT6hXzcvVkDQ60Uk6BDnU1laSdHMIl4haQLPjodgub+PA3sVeZGlzovMw3WACbeu+4/J6VHRdhQ7kExGMaqpEuJMwwdaJUODCf0rKETz3Ts47BRXQ+KYvIVF9RqQEJKCgZ1ofg/onk+OZL/m8YU3I/Sr9jIIUfBY6uHarUWuzgup8EFHzcBnGAvG5uy/2skkWA1woz+OkiC30YgfT22b6V5B98m+xUjHrCyRUnidP9ujme3O+wBX3+zqLxjQIZgq5AP22sEk6ZZjQzRNJt8Q1xwmdJdmMcJ8Hhmr7nkcxqXTvNPzKJS8x1Afv2fM5nPxqalZFzxwZvfSynTLl4MS6uu9MLWsYKwTTRWYYVxAffVyzS9VVd9cF8GnLZ8yoMmvUj26r2Vg2VKFNzES/j7E7Jsebo70kBNjCl4PCZkBPgY94v1nnUPSIDFpRAdOPPTykR5e4KahznJnp3CDax+I00zQudGvlEiW+bQha3jxsutTQ5FDfVaAQ11TOTuTmfw==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(186003)(508600001)(4326008)(8676002)(2616005)(36860700001)(36756003)(70586007)(70206006)(1076003)(426003)(336012)(26005)(54906003)(82310400004)(6916009)(356005)(86362001)(47076005)(5660300002)(6666004)(2906002)(83380400001)(40460700003)(316002)(8936002)(7696005)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 11:59:48.4355
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bba6bc2-580c-4fb7-1a29-08da13d71f04
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT018.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3720
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While rebooting, XHCI controller and its bus device will be shut down
-in order by .shutdown callback. Stopping roothubs polling in
-xhci_shutdown() can prevent XHCI driver from accessing port status
-after its bus device shutdown.
+Especially (but not only) during probe, it may happen that multiple
+devices are communicating via i2c (or multiple i2c busses) and
+sometimes while others are probing asynchronously.
+For example, a Cr50 TPM may be filling entropy (or userspace may be
+reading random data) while the rt5682 (i2c) codec driver reads/sets
+some registers, like while getting/setting a clock's rate, which
+happens both during probe and during system operation.
 
-Take PCIe XHCI controller as example, if XHCI driver doesn't stop roothubs
-polling, XHCI driver may access PCIe BAR register for port status after
-parent PCIe root port driver is shutdown and cause PCIe bus error.
+In this driver, the mtk_i2c_transfer() function (which is the i2c
+.master_xfer() callback) was granularly managing the clocks by
+performing a clk_bulk_prepare_enable() to start them and its inverse.
+This is not only creating possible circular locking dependencies in
+the some cases (like former explaination), but it's also suboptimal,
+as clk_core prepare/unprepare operations are using mutex locking,
+which creates a bit of unwanted overhead (for example, i2c trackpads
+will call master_xfer() every few milliseconds!).
 
-Signed-off-by: Henry Lin <henryl@nvidia.com>
+With this commit, we avoid both the circular locking and additional
+overhead by changing how we handle the clocks in this driver:
+- Prepare the clocks during probe (and PM resume)
+- Enable/disable clocks in mtk_i2c_transfer()
+- Unprepare the clocks only for driver removal (and PM suspend)
+
+For the sake of providing a full explaination: during probe, the
+clocks are not only prepared but also enabled, as this is needed
+for somehardware initialization but, after that, we are disabling
+but not unpreparing them, leaving an expected state for the
+aforementioned clock handling strategy.
+
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/usb/host/xhci.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 2d378543bc3a..e7ae6766220e 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -780,6 +780,14 @@ void xhci_shutdown(struct usb_hcd *hcd)
- 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
+This patch was successfully tested on various chromebooks with
+different MediaTek SoCs.
+All chromebooks are using a Cr50 TPM, trackpad and/or touchscreen
+over i2c. Some of them are using a i2c audio codec as well.
+
+ drivers/i2c/busses/i2c-mt65xx.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index f651d3e124d6..bdecb78bfc26 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -1177,7 +1177,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 	int left_num = num;
+ 	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
  
-+	/* Don't poll the roothubs after shutdown. */
-+	xhci_dbg(xhci, "%s: stopping usb%d port polling.\n",
-+			__func__, hcd->self.busnum);
-+	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
-+	del_timer_sync(&hcd->rh_timer);
-+	clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
-+	del_timer_sync(&xhci->shared_hcd->rh_timer);
+-	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
++	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1231,7 +1231,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 	ret = num;
+ 
+ err_exit:
+-	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
++	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 	return ret;
+ }
+ 
+@@ -1412,7 +1412,7 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 	mtk_i2c_init_hw(i2c);
+-	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
++	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
+ 			       IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
+@@ -1439,6 +1439,8 @@ static int mtk_i2c_remove(struct platform_device *pdev)
+ 
+ 	i2c_del_adapter(&i2c->adap);
+ 
++	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
 +
- 	spin_lock_irq(&xhci->lock);
- 	xhci_halt(xhci);
- 	/* Workaround for spurious wakeups at shutdown with HSW */
+ 	return 0;
+ }
+ 
+@@ -1448,6 +1450,7 @@ static int mtk_i2c_suspend_noirq(struct device *dev)
+ 	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+ 
+ 	i2c_mark_adapter_suspended(&i2c->adap);
++	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 
+ 	return 0;
+ }
+@@ -1465,7 +1468,7 @@ static int mtk_i2c_resume_noirq(struct device *dev)
+ 
+ 	mtk_i2c_init_hw(i2c);
+ 
+-	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
++	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+ 
+ 	i2c_mark_adapter_resumed(&i2c->adap);
+ 
 -- 
-2.17.1
+2.35.1
 

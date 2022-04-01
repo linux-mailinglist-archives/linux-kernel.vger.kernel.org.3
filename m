@@ -2,308 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DD64EE7A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C714EE7AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245029AbiDAFPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S245036AbiDAFQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235699AbiDAFO5 (ORCPT
+        with ESMTP id S233551AbiDAFQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:14:57 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A762260C7A;
-        Thu, 31 Mar 2022 22:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648789988; x=1680325988;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MrWlulRGy9T6T21HhUXXCgKEFeu1p2W99NaSEdLXmzA=;
-  b=P8wbuHQOqt6CEPuHnzpMOXixLsmq4CzjlzkhJJy5PeacRObsOewxenal
-   OzURHcyFj/YsQRvoIt6BSqLymvA3/SceM7tMV899MfCNcAgIJ5OOZ6vsb
-   pZr10ILJM4XJyUFEtaWH9bO7kJJEWRgVH3HoOqpqlJ/WlN4OVq3dePPNd
-   lCY4v+GOjHm7vUpLglrU/YSbQc/WTDLo0amSUrvodnEoSp3r1CdEmMdYj
-   0zIq6B4W7avbn2p5sGWX/p4ooWj/9zEhTiBuyq3QcdpASSOp8rfg8igTc
-   H684iFEw+woEuW4ka9UZf1CoVlizMD40SiOqRq/SDKdwgNkhtayVYHuWm
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="260223631"
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="260223631"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:13:08 -0700
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="720748140"
-Received: from tswork-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.29.39])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:13:05 -0700
-Message-ID: <968de4765e63d8255ae1b3ac7062ffdca64706e4.camel@intel.com>
-Subject: Re: [RFC PATCH v5 037/104] KVM: x86/mmu: Allow non-zero init value
- for shadow PTE
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 01 Apr 2022 18:13:03 +1300
-In-Reply-To: <b74b3660f9d16deafe83f2670539a8287bef988f.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <b74b3660f9d16deafe83f2670539a8287bef988f.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 1 Apr 2022 01:16:48 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F662261301
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:14:58 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220401051456epoutp0334174abe34cad024c895d42bbd21051a~hrdt6A3MO2645826458epoutp03t
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:14:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220401051456epoutp0334174abe34cad024c895d42bbd21051a~hrdt6A3MO2645826458epoutp03t
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648790096;
+        bh=zWZLPSSISjiFTmW1ZkI756AoY5PvxUxkz4eHhpfrd70=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=jYFjYGuOIDXOVK1sWCwLB3u9O5XHY4Kw7ddLcf9m4N2nbK/YwNcuW1nGTUuf/TaDW
+         t68H2szJ2zSYoW+O6zb98quIGwQ2ejh/SB54MxaK7SYa7tHNQ7wAnPBoKS2u1mBNBs
+         a4DZCjrBdTl0Fwd8Xt/HzwytwzW27yxdi0UGEA0U=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220401051456epcas5p3a678c6bc453a9a945cbb04b919e8e565~hrdtYQKQO1668716687epcas5p3y;
+        Fri,  1 Apr 2022 05:14:56 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KV7dl02JRz4x9QS; Fri,  1 Apr
+        2022 05:14:51 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        43.CC.06423.54A86426; Fri,  1 Apr 2022 14:14:45 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220401051444epcas5p33affb4dc505675a890c3b4c1e21ac0f5~hrdixZ73L1487714877epcas5p3c;
+        Fri,  1 Apr 2022 05:14:44 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220401051444epsmtrp1a5a17c97637bc71bbac3f1b953504e10~hrdiwb9W30435804358epsmtrp1b;
+        Fri,  1 Apr 2022 05:14:44 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-1d-62468a45a05a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A5.32.03370.44A86426; Fri,  1 Apr 2022 14:14:44 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220401051442epsmtip1ef15f4a13ad7526b4990e8202be216fe~hrdg6HM9O3041330413epsmtip1b;
+        Fri,  1 Apr 2022 05:14:42 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Tomasz Figa'" <tomasz.figa@gmail.com>,
+        "'Krzysztof Kozlowski'" <krzk@kernel.org>,
+        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
+        "'Linus Walleij'" <linus.walleij@linaro.org>,
+        "'Ajay Kumar'" <ajaykumar.rs@samsung.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Cc:     "'kernel test robot'" <lkp@intel.com>
+In-Reply-To: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
+Date:   Fri, 1 Apr 2022 10:44:41 +0530
+Message-ID: <000a01d84587$661eb6a0$325c23e0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHzvMFjJH2rpLTrq9uN+E9KR2gT2QKFP4/HrI9q6lA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmuq5rl1uSQc8nNosD7w+yWJw/v4Hd
+        Yu/rrewWU/4sZ7LY9Pgaq8Xm+X8YLS7vmsNmMeP8PiaLV82P2CwOv2lntVi16w+jA7fHzll3
+        2T0W73nJ5LFpVSebx51re9g8Ni+p9+jbsorR4/MmuQD2qGybjNTElNQihdS85PyUzLx0WyXv
+        4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKAblRTKEnNKgUIBicXFSvp2NkX5pSWpChn5
+        xSW2SqkFKTkFJgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGR0tfewF2/kr+r+3sTUw7uLtYuTg
+        kBAwkZhx262LkYtDSGA3o8SPA33MEM4nRol3L/azQTifGSUm/tvB2MXICdax4MsPJhBbSGAX
+        o8Sxn6EQRS8ZJQ6uOg6WYBPQldixuA2sW0RgPbNEw5dtYN3MApoSC2a9YQGxOQVcJD5t6gOz
+        hQVsJY5u3M4OYrMIqEjceLqDFcTmFbCUmDflBwuELShxcuYTFog58hLb385hhrhIQeLn02Vg
+        9SICVhLvux+xQtSIS7w8eoQdouYIh8TfRyEQP7tIzLvrDhEWlnh1fAtUiZTEy/42dogSD4lF
+        f6QgwhkSb5evh/rdXuLAlTksICUgn6zfpQ+xiE+i9/cTJohOXomONiGIalWJ5ndXWSBsaYmJ
+        3d2sELaHxNZft1knMCrOQvLWLCRvzUJy/iyEZQsYWVYxSqYWFOempxabFhjmpZbDIzs5P3cT
+        Izj5annuYLz74IPeIUYmDsZDjBIczEoivFdjXZOEeFMSK6tSi/Lji0pzUosPMZoCw3ois5Ro
+        cj4w/eeVxBuaWBqYmJmZmVgamxkqifOeTt+QKCSQnliSmp2aWpBaBNPHxMEp1cAU+e38P4nF
+        7JUMn6wtj57KP6Z3YXuom+++rDdsNz9ITG8smhO61kPCkanwmTLrvnshLIdX7bPIn1a0iHdf
+        7QO1V/8XyPt/LzALsshtjGzdekT9xewpGScrX0/WfzPpy9H503YfmfA50X76gwMiNm9jOQS4
+        VVPryjqO8KlM4z3642WDAeuhe3nB80Tq+RU53vVt2VTG3/7FTmmByv1NCx4d1ulOLpp5dMfp
+        U5NlvnWImzmuufVwIvfxTXZCi+tkm1dUaDWyr0zeOmV23kGhnSmsLRrze7QPMFZbJH/plFEv
+        6zkctfnM47vZl/hfSV8SyliQfP6T3zbflYtDlX6efRFwf4c5r5sax4tDZTlys2/vUWIpzkg0
+        1GIuKk4EAES9xotHBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAIsWRmVeSWpSXmKPExsWy7bCSnK5Ll1uSwYo7ahYH3h9ksTh/fgO7
+        xd7XW9ktpvxZzmSx6fE1VovN8/8wWlzeNYfNYsb5fUwWr5ofsVkcftPOarFq1x9GB26PnbPu
+        snss3vOSyWPTqk42jzvX9rB5bF5S79G3ZRWjx+dNcgHsUVw2Kak5mWWpRfp2CVwZHS197AXb
+        +Sv6v7exNTDu4u1i5OSQEDCRWPDlB1MXIxeHkMAORol1XS0sEAlpiesbJ7BD2MISK/89Z4co
+        es4ocerLAkaQBJuArsSOxW1sIAkRge3MEg8OTQPrZhbQlFgw6w0LRMdURomGo/1sIAlOAReJ
+        T5v6wIqEBWwljm7cDraCRUBF4sbTHawgNq+ApcS8KT9YIGxBiZMznwDZHEBD9STaNjJCzJeX
+        2P52DjPEdQoSP58uA2sVEbCSeN/9iBWiRlzi5dEj7BMYhWchmTQLYdIsJJNmIelYwMiyilEy
+        taA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOBK1tHYw7ln1Qe8QIxMH4yFGCQ5mJRHeq7Gu
+        SUK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUw+TPxZdRs
+        jn93YvvOy6+nRhSHLdTa32Xgssut6KD1kwkukaVnE1b6ua8N+CU388eBr+w/cvV7pr6dXaTf
+        XRjuf4i/61icdMjCzfYH8k9t/O4afevX0byXCpdm9Hk75aRc95yYqsWbUSE/M74k6BtLW9bn
+        s1U734QU+uybub1cb/3N5wva1LKe6QvmzT2vb+XVGi9x88aUzykWrUqP9n6/fU2jmTFd9l+Q
+        nMF9/5+eTubSPqbHFLomv5xrkxVUk2Dksii+m62t93K4ct/ik99mfZ6tJb565qwVO4IWReTN
+        3//yzKqXHhfOMVtWZHCHi6hVXU5LdVvQ+EvvWQzH+V8tn8sCTNXWuS4/9lzz8QEZJZbijERD
+        Leai4kQAsOFjtzMDAAA=
+X-CMS-MailID: 20220401051444epcas5p33affb4dc505675a890c3b4c1e21ac0f5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220331194535epcas5p12503b9e75eb7e1147c1f6ab4548756ac
+References: <CGME20220331194535epcas5p12503b9e75eb7e1147c1f6ab4548756ac@epcas5p1.samsung.com>
+        <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> TDX will run with EPT violation #VEs enabled for shared EPT, which means
-> KVM needs to set the "suppress #VE" bit in unused PTEs to avoid
-> unintentionally reflecting not-present EPT violations into the guest.
 
-This sentence is hard to interpret.  Please add more sentences to elaborate "TDX
-will run with EPT violation #VEs enabled for shared EPT".  Also, this patch is
-the first time to introduce "shared EPT", perhaps you should also explain it
-here.  Or even you can move patch 43 ("KVM: TDX: Add load_mmu_pgd method for
-TDX") before this one.
 
-"reflecting non-present EPT violations into the guest" could be hard to
-interpret.  Perhaps you can be more explicit to say VMM wants to get EPT
-violation for normal (shared) memory access rather than to cause #VE to guest.  
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+>Sent: Friday, April 1, 2022 1:15 AM
+>To: Tomasz Figa <tomasz.figa@gmail.com>; Krzysztof Kozlowski
+><krzk@kernel.org>; Sylwester Nawrocki <s.nawrocki@samsung.com>; Alim
+>Akhtar <alim.akhtar@samsung.com>; Linus Walleij <linus.walleij@linaro.org>;
+>Ajay Kumar <ajaykumar.rs@samsung.com>; linux-arm-
+>kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+>gpio@vger.kernel.org; linux-kernel@vger.kernel.org
+>Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; kernel test robot
+><lkp@intel.com>
+>Subject: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
+>
+>struct fsd_pin_ctrl is not used outside of the file, so it can be made
+static.  This
+>fixes sparse warning:
+>
+>  drivers/pinctrl/samsung/pinctrl-exynos-arm64.c:773:31: sparse:
+>    symbol 'fsd_pin_ctrl' was not declared. Should it be static?
+>
+>Reported-by: kernel test robot <lkp@intel.com>
+>Fixes: 0d1b662c374c ("pinctrl: samsung: add FSD SoC specific data")
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>---
 
-Mentioning you want EPT violation instead of #VE for normal (shared) memory
-access also completes your statement of wanting #VE for MMIO below, so that
-people can have a clear picture when to get a #VE when not.
+Thanks Krzysztof.
 
-> 
-> Because guest memory is protected with TDX, VMM can't parse instructions
-> in the guest memory.  Instead, MMIO hypercall is used to pass necessary
-> information to VMM.
-> 
-> To make unmodified device driver work, guest TD expects #VE on accessing
-> shared GPA.  The #VE handler converts MMIO access into MMIO hypercall with
-> the EPT entry of enabled "#VE" by clearing "suppress #VE" bit.  Before VMM
-> enabling #VE, it needs to figure out the given GPA is for MMIO by EPT
-> violation.  So the execution flow looks like
-> 
-> - allocate unused shared EPT entry with suppress #VE bit set.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-allocate -> Allocate
+> drivers/pinctrl/samsung/pinctrl-exynos-arm64.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+>b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+>index d291819c2f77..cb965cf93705 100644
+>--- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+>+++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+>@@ -770,7 +770,7 @@ static const struct samsung_pin_bank_data
+>fsd_pin_banks2[] __initconst = {
+> 	EXYNOS850_PIN_BANK_EINTN(3, 0x00, "gpq0"),  };
+>
+>-const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
+>+static const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
+> 	{
+> 		/* pin-controller instance 0 FSYS0 data */
+> 		.pin_banks	= fsd_pin_banks0,
+>--
+>2.32.0
 
-> - EPT violation on that GPA.
-> - VMM figures out the faulted GPA is for MMIO.
-> - VMM clears the suppress #VE bit.
-> - Guest TD gets #VE, and converts MMIO access into MMIO hypercall.
-
-Here you have described both normal memory access and MMIO, it's good time to
-summarize the purpose of this patch: For both cases you want PTE with "suppress
-#VE" bit set initially when it is allocated, therefore allow non-zero init value
-for PTE.
-
-> 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu.h      |  1 +
->  arch/x86/kvm/mmu/mmu.c  | 50 +++++++++++++++++++++++++++++++++++------
->  arch/x86/kvm/mmu/spte.c | 10 +++++++++
->  arch/x86/kvm/mmu/spte.h |  2 ++
->  4 files changed, 56 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index 3fb530359f81..0ae91b8b25df 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -66,6 +66,7 @@ static __always_inline u64 rsvd_bits(int s, int e)
->  
->  void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
->  void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
-> +void kvm_mmu_set_spte_init_value(u64 init_value);
->  
->  void kvm_init_mmu(struct kvm_vcpu *vcpu);
->  void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 9907cb759fd1..a474f2e76d78 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -617,9 +617,9 @@ static int mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
->  	int level = sptep_to_sp(sptep)->role.level;
->  
->  	if (!spte_has_volatile_bits(old_spte))
-> -		__update_clear_spte_fast(sptep, 0ull);
-> +		__update_clear_spte_fast(sptep, shadow_init_value);
->  	else
-> -		old_spte = __update_clear_spte_slow(sptep, 0ull);
-> +		old_spte = __update_clear_spte_slow(sptep, shadow_init_value);
-
-I guess it's better to have some comment here.  Allow non-zero init value for
-shadow PTE doesn't necessarily mean the initial value should be used when one
-PTE is zapped.  I think mmu_spte_clear_track_bits() is only called for mapping
-of normal (shared) memory but not MMIO? Then perhaps it's better to have a
-comment to explain we want "suppress #VE" set to get a real EPT violation for
-normal memory access from guest?
-
->  
->  	if (!is_shadow_present_pte(old_spte))
->  		return old_spte;
-> @@ -651,7 +651,7 @@ static int mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
->   */
->  static void mmu_spte_clear_no_track(u64 *sptep)
->  {
-> -	__update_clear_spte_fast(sptep, 0ull);
-> +	__update_clear_spte_fast(sptep, shadow_init_value);
->  }
-
-Similar here.  Seems mmu_spte_clear_no_track() is used to zap non-leaf PTE which
-doesn't require state tracking, so theoretically it can be set to 0.  But this
-seems is also called to zap MMIO PTE so looks need to set to shadow_init_value.
-Anyway looks deserve a comment?
-
-Btw, Above two changes to mmu_spte_clear_track_bits() and
-mmu_spte_clear_track_bits() seems a little bit out-of-scope of what this patch
-claims to do.  Allow non-zero init value for shadow PTE doesn't necessarily mean
-the initial value should be used when one PTE is zapped. Maybe we can further
-improve the patch title and commit message a little bit.  Such as: Allow non-
-zero value for empty (or invalid?) PTE? Non-present seems doesn't fit here.
-
->  
->  static u64 mmu_spte_get_lockless(u64 *sptep)
-> @@ -737,6 +737,42 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
->  	}
->  }
->  
-> +static inline void kvm_init_shadow_page(void *page)
-> +{
-> +#ifdef CONFIG_X86_64
-> +	int ign;
-> +
-> +	asm volatile (
-> +		"rep stosq\n\t"
-> +		: "=c"(ign), "=D"(page)
-> +		: "a"(shadow_init_value), "c"(4096/8), "D"(page)
-> +		: "memory"
-> +	);
-> +#else
-> +	BUG();
-> +#endif
-> +}
-> +
-> +static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
-> +	int start, end, i, r;
-> +
-> +	if (shadow_init_value)
-> +		start = kvm_mmu_memory_cache_nr_free_objects(mc);
-> +
-> +	r = kvm_mmu_topup_memory_cache(mc, PT64_ROOT_MAX_LEVEL);
-> +	if (r)
-> +		return r;
-> +
-> +	if (shadow_init_value) {
-> +		end = kvm_mmu_memory_cache_nr_free_objects(mc);
-> +		for (i = start; i < end; i++)
-> +			kvm_init_shadow_page(mc->objects[i]);
-> +	}
-> +	return 0;
-> +}
-> +
->  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  {
->  	int r;
-> @@ -746,8 +782,7 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  				       1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
->  	if (r)
->  		return r;
-> -	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
-> -				       PT64_ROOT_MAX_LEVEL);
-> +	r = mmu_topup_shadow_page_cache(vcpu);
->  	if (r)
->  		return r;
->  	if (maybe_indirect) {
-> @@ -3146,7 +3181,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
->  	struct kvm_mmu_page *sp;
->  	int ret = RET_PF_INVALID;
-> -	u64 spte = 0ull;
-> +	u64 spte = shadow_init_value;
-
-I don't quite understand this change.  'spte' is set to the last level PTE of
-the given GFN if mapping is found.  Otherwise fast_page_fault() returns
-RET_PF_INVALID.  In both cases, the initial value doesn't matter.
-
-Am I wrong?
-
->  	u64 *sptep = NULL;
->  	uint retry_count = 0;
->  
-> @@ -5598,7 +5633,8 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
->  	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
->  	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
->  
-> -	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> +	if (!shadow_init_value)
-> +		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
->  
->  	vcpu->arch.mmu = &vcpu->arch.root_mmu;
->  	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 73cfe62fdad1..5071e8332db2 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -35,6 +35,7 @@ u64 __read_mostly shadow_mmio_access_mask;
->  u64 __read_mostly shadow_present_mask;
->  u64 __read_mostly shadow_me_mask;
->  u64 __read_mostly shadow_acc_track_mask;
-> +u64 __read_mostly shadow_init_value;
->  
->  u64 __read_mostly shadow_nonpresent_or_rsvd_mask;
->  u64 __read_mostly shadow_nonpresent_or_rsvd_lower_gfn_mask;
-> @@ -223,6 +224,14 @@ u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_pfn)
->  	return new_spte;
->  }
->  
-> +void kvm_mmu_set_spte_init_value(u64 init_value)
-> +{
-> +	if (WARN_ON(!IS_ENABLED(CONFIG_X86_64) && init_value))
-> +		init_value = 0;
-> +	shadow_init_value = init_value;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_mmu_set_spte_init_value);
-> +
->  static u8 kvm_get_shadow_phys_bits(void)
->  {
->  	/*
-> @@ -367,6 +376,7 @@ void kvm_mmu_reset_all_pte_masks(void)
->  	shadow_present_mask	= PT_PRESENT_MASK;
->  	shadow_acc_track_mask	= 0;
->  	shadow_me_mask		= sme_me_mask;
-> +	shadow_init_value	= 0;
->  
->  	shadow_host_writable_mask = DEFAULT_SPTE_HOST_WRITEABLE;
->  	shadow_mmu_writable_mask  = DEFAULT_SPTE_MMU_WRITEABLE;
-> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> index be6a007a4af3..8e13a35ab8c9 100644
-> --- a/arch/x86/kvm/mmu/spte.h
-> +++ b/arch/x86/kvm/mmu/spte.h
-> @@ -171,6 +171,8 @@ extern u64 __read_mostly shadow_mmio_access_mask;
->  extern u64 __read_mostly shadow_present_mask;
->  extern u64 __read_mostly shadow_me_mask;
->  
-> +extern u64 __read_mostly shadow_init_value;
-> +
->  /*
->   * SPTEs in MMUs without A/D bits are marked with SPTE_TDP_AD_DISABLED_MASK;
->   * shadow_acc_track_mask is the set of bits to be cleared in non-accessed
 

@@ -2,188 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C774EE62E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36414EE63A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244175AbiDACpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
+        id S241259AbiDACrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiDACp1 (ORCPT
+        with ESMTP id S235771AbiDACrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:45:27 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2064.outbound.protection.outlook.com [40.107.255.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB813F8DF
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:43:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Le/8xqEglvE/PedpztSlb15L5bIjW0RztcyLYJlCBXSOlWda1lMzLzAif3oPAQXBgG83OkzHAAWXWEx+t6vQYvcMVRu/rPbTynrmzliABvLlbe743GwwRnVSkNu5K1KCsUiUF83C479FRlUqhjNUCHITYpLH1lCDeljMktztsyZreDKDyciu6FIrcy2hOYR1OLxpriu3gEa2JSDy3ZFYirmBdkqBphtUMDhJO6Zy6zcy1NxCvCWeeE646M0udfFGMRp9y7M7Fz0z/3mmC6H4xVIbwpnnpT3NOSyS0p3vGpLYfuPpCQfAIIAekYHzcyWw5E1BXstbJXR/sN9iwvKFVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nh+Jk8UbGRHOv2ZMhzYZG7dD2fF/TU29e8UnBQl04fo=;
- b=PxPNrVv1gO37CMOL1epuVyU8tkJ4c/ibFbfp/dhccZtU6exggzn089bHzgkFAor4RsTru1eV8VKexOoAnSSYRm8FwI1okmWhr+toYEw505WK25NWHq3V+OVpwrlkluOOTOBuHPtxp8jvAsmcB/ng8z3QZW+GvcvOf3w+fY0jxYQtOA0spiZG+OlsDeWKP0aPzhNgaZGCWa+BihiVQk8g6auYm1Ft2EHCGnenRx0hfyh3KAwBxjX9XZ9MkjjDMLd7xKKs6fPXiX6anUaZwf6afZyqcn5Ggm+qGcK/zAuf585c1EvYznRbQvA14Ftyq6Y0sSt34zz6TFoo0E0oVCa7sQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nh+Jk8UbGRHOv2ZMhzYZG7dD2fF/TU29e8UnBQl04fo=;
- b=XSTDFFJh6eNQpR6IoklMWAMgcuFI86YbwT0cubL6gOn69o71F9m3YPkrAlUsA6cJxgAfoeLbIPf4LY6W8gO9H3GrPJY6yYtoWMrO4OKvQp1hyEqYjRdGER3+YlXS6akgn1hWXbfCc0ZDoshrCsrNapjpI/aMESQYnbXOZ3oT53I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SG2PR02MB5379.apcprd02.prod.outlook.com (2603:1096:4:177::10)
- by PSBPR02MB4408.apcprd02.prod.outlook.com (2603:1096:301:a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.25; Fri, 1 Apr
- 2022 02:43:34 +0000
-Received: from SG2PR02MB5379.apcprd02.prod.outlook.com
- ([fe80::84ba:7c96:f19f:85ec]) by SG2PR02MB5379.apcprd02.prod.outlook.com
- ([fe80::84ba:7c96:f19f:85ec%6]) with mapi id 15.20.5123.025; Fri, 1 Apr 2022
- 02:43:34 +0000
-From:   Chuanhua Han <hanchuanhua@oppo.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
-Cc:     alexandre.ghiti@canonical.com, jszhang@kernel.org,
-        mhiramat@kernel.org, akpm@linux-foundation.org,
-        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
-        liushixin2@huawei.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Chuanhua Han <hanchuanhua@oppo.com>
-Subject: [PATCH v4] riscv: mm: Remove the copy operation of pmd
-Date:   Thu, 31 Mar 2022 19:43:20 -0700
-Message-Id: <20220401024320.98510-1-hanchuanhua@oppo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR06CA0030.apcprd06.prod.outlook.com
- (2603:1096:404:2e::18) To SG2PR02MB5379.apcprd02.prod.outlook.com
- (2603:1096:4:177::10)
+        Thu, 31 Mar 2022 22:47:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA76195D93
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648781157; x=1680317157;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6ndinEXXOHNGpGQlprrrDXd/7g7WQ+qlsYIVKR04pRU=;
+  b=BtyITbb5b3SUWCCo8LzRxxCP0Q3GMcYm18wHYEcng9GFWNCZFC7F7Jty
+   LpPhYA7bFnYmhyjylbaM7RGlL1cVR42AzHquYxXiCaEv5pqBFL2ivLnrQ
+   D6A3jQ+5pFHQqRRqdBru2HHr5lGJaNpCvVs3AC1evFvLZYmkP6laGUMnl
+   fdhIE7vUerXzaXAqd37PC/dknRp0wWGUPNZ60fhnovQzxxs1RKdlfK0U3
+   o1rcMfEBzPngRf74jnuQngwVXJpLG8Ana37l1eju+AoLKtBG1nqvn0vNo
+   fJqHeMDGEH0fDI6MDAvYijJ27KSbfhoAdBeSqbJ6CFDn8scJT6bNU2dlL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="284953851"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="284953851"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 19:45:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="547614251"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 31 Mar 2022 19:45:54 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1na7IP-0000rc-So;
+        Fri, 01 Apr 2022 02:45:53 +0000
+Date:   Fri, 1 Apr 2022 10:45:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Michael Yan <michael.yan@starfivetech.com>,
+        Jenny Zhang <jenny.zhang@starfivetech.com>
+Subject: [esmil:visionfive 46/62] sound/soc/starfive/pwmdac-pcm.c:84:6:
+ warning: variable 'substream' is used uninitialized whenever 'if' condition
+ is false
+Message-ID: <202204011048.3Gw5aqvg-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d1cc67ef-1a28-43e6-b097-08da13896a1f
-X-MS-TrafficTypeDiagnostic: PSBPR02MB4408:EE_
-X-Microsoft-Antispam-PRVS: <PSBPR02MB4408962BBBD6A121B2232E0ADFE09@PSBPR02MB4408.apcprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z88OophW7l44OR1zR0nLwyMQjzdmdrbB2chepbxz9wqry5m7kI+OD9TCzTb17nuO7eNhSjLUzvDVy4eEco6+qlcZN/ZykFpwz8BCHJx1RB/8wNdVoMxkazGzxhybhNsvN020hqWY0pnkds4Q6YCw4PGHXrahkQKaHgipXKJzpEAqe443wVcUawf7UK68ZHGF+6YifE9Kh4K0CMC4AwIZsKEDrYzKkWjViOUYRr0ipjkn9hlyNSpXhMwnVeXNjMt4dcOEt+lK6r2TwgvwFutowMgmZtVlsTGaCbTuWtUg1Oa8iKc/1dR9nnoa8oy0nd8JH5oFXjxQ3q7e2TZzoIyGLZ6GJJERq0CwuINxIa4Bwsd0rWTOYawjp2t+g28cSNw/d/xwtDXOOPKwEUpuepQ1UurPMPDrN7Rb7+oDTQgaYkGxGK7odhTgwvpgQqEXv5YbJFHZgJs3jJ6Ko3HaV2D9Zgb5qhP9BbcElUR1BjAYPQJ8qU77kkcIY6AEqmsUNtdTX1Z2c5DSlj7hoVddY/NzRNM3JFEuGGqIivfF2GruA8IhyDCsv+RjwnGCSvf1LQ8g5pNceGJYUJgU0C6yGrlQSmdPfvSRfbUGnvA/5XKXSKTB6Sbd9CU2Yz6EhNELYAF/5U4WtXRMXAF7NI1aUj5HUh5Z3n2mDwNO1/x3WwrPRmEuUsxiJ43F9YHvFQllPTpG2lRPgac8V3E1x4V0Rf+v6Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR02MB5379.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(6512007)(8936002)(83380400001)(6506007)(6666004)(2616005)(1076003)(186003)(8676002)(107886003)(38100700002)(26005)(38350700002)(86362001)(5660300002)(7416002)(6486002)(36756003)(66476007)(2906002)(66556008)(66946007)(508600001)(316002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B83byt4q5dRf5B5G8PcUgozCNYHUWgfVNSXPSyhMrguS22M5C96ovV6Cj7Dq?=
- =?us-ascii?Q?+/F3N+zHXEVwXmRLlMi6ri4wrMeIfsrzUABey3lhfTZ13ixnL0qrymG31B24?=
- =?us-ascii?Q?3vxoyQfMTadER+RAZ2Llq7FJZgcHRQYdmNGt8ySLeyxyeBfitAj8hC+5VE9w?=
- =?us-ascii?Q?te9y3ET/dH/vFkpqTG2cMLQxvx/XGUI2YomsE+bbG4Zxl8F3EVGMUw1Gw+Fg?=
- =?us-ascii?Q?ESvnrnOrM/ZR9noi2t4n1jsArkmkduqAswf0HL7l+LWG921gjM4gmRP+F5rX?=
- =?us-ascii?Q?QgYOYFezCOK1GLZNYp9aLW/PHMgBxvpDdMAunzOYp6YnS18GNYHCJSg1ThRo?=
- =?us-ascii?Q?6SnG9+SawWQhw2Pqz0qJMWZU5n43CGfX8xuvOBzbEWPFmUwJDxogMvd+NoOI?=
- =?us-ascii?Q?3PBvP1T4Sq3KMGyiWiM6vWLvoA4sZ8u/bB3bZ4OzsR1NBx8wtT9Ixd203sY9?=
- =?us-ascii?Q?GCJBSscM5K2GpctMnTRTWtQbajo1SubO6gGGxFtAZsoWwTut4Hq+7pVjuYi8?=
- =?us-ascii?Q?ePdUt37mZB5PWkN2iRXN3YwEQNoNDpCpNsbHILcNqvstM+8H++/NgfahLSvh?=
- =?us-ascii?Q?LZUuR4n3zYsrFzAmNb1tmk3jSlFeLuxVAFfDHOZWAVQibpJLk5L3UA3CZ5bX?=
- =?us-ascii?Q?uY9ZWuaTBnJeCjfedZCFd97Wv8ctp8yHZpoYhD/i81ps/elM1vEPri08UHh0?=
- =?us-ascii?Q?UvZc9uhHdA9KnrFcNPiiofqGheoIrQquuC6GhhuBEyz+5X8+7X4+J6M+08cu?=
- =?us-ascii?Q?lr01qZlzs4JfXxdtQKeJ/v+NK6gzpr0U5cNw/N54UOdxVeUrzUQiyPI9Z4kO?=
- =?us-ascii?Q?EfPuP2XJfpHY9u9lBBHyVob2RZIfIWlFxvxBrUj6bfBcH6ZMh34hY+LfdSAv?=
- =?us-ascii?Q?6OmN7ogFNlzTZFMDQrrHRdncIIDIAaDTQ7tjTV6fuNGjzryaXifQJA/fOsgW?=
- =?us-ascii?Q?Nn18mjkLWLkcCa0FVhgOtARqvYHq/PqxQZ/8gRPbd2ykQqVCdqhBTIvuwcvN?=
- =?us-ascii?Q?hPcHvWh+BiY1OhQZGQmabONDrxYiT7AeaNPGuzEYFCefR2NiKiFS6gLdUXp0?=
- =?us-ascii?Q?aXXVwaJ8A/mbn7sfX8SDa3z63+d41UCcdYVwKn6qbx8DANNRx2tISt+K/lRk?=
- =?us-ascii?Q?mWvzMhVrU/G5HGm4OXULxwvBKXVXw/TwwhU5YRyLOCCr+SpzTuzEgsOF//zh?=
- =?us-ascii?Q?fLUGliz8HOZ4v589u0RUh2N+QMCqJ0s3nRLum4h0HtwSCvYBF7+hKylu2dos?=
- =?us-ascii?Q?ATaX/dI96zwvyRmKnkdMLRVNi3gXxyzMaJUfOZCA3oNWmYPTZzP+MBvBCutF?=
- =?us-ascii?Q?QZWNUJuvZvSSjQMRqRULXJUeM+Vr7oLFmwhAlHuKQvSxl2UTt6jDRrRH2OLS?=
- =?us-ascii?Q?k3kLiLiRPxBFv8LSM3CtCKvSGb/WMIt4o0o3voeQTlf3MCCq8pYfiQSzTS4T?=
- =?us-ascii?Q?WJswIMQT0WmOF5NoKzRq7kilD3lVZl/NncXwadvq6eph3YojSwYVfkcrVMsS?=
- =?us-ascii?Q?na3x0m7rSgTHXl3Lkdqc28YFZ8qJ16eMuW8YZF+8bTgT9PHF3aO6AWulPtcK?=
- =?us-ascii?Q?5fuTuL+JWO87ldgYPOgd48O5BXa9G3SNlmHhK/Ri7u2jWOtYK+VIQP7UZB1l?=
- =?us-ascii?Q?kvUvih2mN9B16OFYwdzu8iFZ7xJaadvmhLVVOtieWliP1SZMGiwkiNQAnLzx?=
- =?us-ascii?Q?TLVwin7rLfrZ6qHpf7jJIPYPZtu8/teb/aeN24B51FQ2WYK4ue8OK1ogZb+j?=
- =?us-ascii?Q?WgwFjkxoXOny+7/b8QAtKj9BALGTM/8=3D?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1cc67ef-1a28-43e6-b097-08da13896a1f
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR02MB5379.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 02:43:33.9985
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SDq4MuSJ1o7YbSlWu89d3xEXtfx7U+0jOkHfINSlalZovUknuWouPGfTcAKAaKy6f2nKaMvRWsOT0p61BO/5VQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSBPR02MB4408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since all processes share the kernel address space,
-we only need to copy pgd in case of a vmalloc page
-fault exception, the other levels of page tables are
-shared, so the operation of copying pmd is unnecessary.
+Hi Walker,
 
-Signed-off-by: Chuanhua Han <hanchuanhua@oppo.com>
----
-Changes in v4:
-  -Modify incorrect author name.
+FYI, the error/warning still remains.
 
-Changes in v3:
-  -Change the real name of signed-off-by.
+tree:   https://github.com/esmil/linux visionfive
+head:   6c7cd35771680c033c40b4af48cbe7e3093eab3d
+commit: 7c3b27a272448a123087494f7ade3e84a92543c6 [46/62] ASoC: starfive: Add StarFive JH7100 audio drivers
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220401/202204011048.3Gw5aqvg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/esmil/linux/commit/7c3b27a272448a123087494f7ade3e84a92543c6
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 7c3b27a272448a123087494f7ade3e84a92543c6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/ sound/soc/starfive/
 
-Changes in v2:
-  -Delete incorrect default signatures.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/starfive/pwmdac-pcm.c:84:6: warning: variable 'substream' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (push)
+               ^~~~
+   sound/soc/starfive/pwmdac-pcm.c:87:11: note: uninitialized use occurs here
+           active = substream && snd_pcm_running(substream);
+                    ^~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:84:2: note: remove the 'if' if its condition is always true
+           if (push)
+           ^~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:80:37: note: initialize the variable 'substream' to silence this warning
+           struct snd_pcm_substream *substream;
+                                              ^
+                                               = NULL
+>> sound/soc/starfive/pwmdac-pcm.c:92:7: warning: variable 'period_elapsed' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (push) {
+                       ^~~~
+   sound/soc/starfive/pwmdac-pcm.c:99:7: note: uninitialized use occurs here
+                   if (period_elapsed)
+                       ^~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:92:3: note: remove the 'if' if its condition is always true
+                   if (push) {
+                   ^~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:81:29: note: initialize the variable 'period_elapsed' to silence this warning
+           bool active, period_elapsed;
+                                      ^
+                                       = 0
+>> sound/soc/starfive/pwmdac-pcm.c:202:6: warning: variable 'pos' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:205:9: note: uninitialized use occurs here
+           return pos < runtime->buffer_size ? pos : 0;
+                  ^~~
+   sound/soc/starfive/pwmdac-pcm.c:202:2: note: remove the 'if' if its condition is always true
+           if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/starfive/pwmdac-pcm.c:200:23: note: initialize the variable 'pos' to silence this warning
+           snd_pcm_uframes_t pos;
+                                ^
+                                 = 0
+   3 warnings generated.
 
 
- arch/riscv/mm/fault.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+vim +84 sound/soc/starfive/pwmdac-pcm.c
 
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index 4e9efbe46d5f..40694f0cab9e 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -102,9 +102,9 @@ static inline void bad_area(struct pt_regs *regs, struct mm_struct *mm, int code
- static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
- {
- 	pgd_t *pgd, *pgd_k;
--	pud_t *pud, *pud_k;
--	p4d_t *p4d, *p4d_k;
--	pmd_t *pmd, *pmd_k;
-+	pud_t *pud_k;
-+	p4d_t *p4d_k;
-+	pmd_t *pmd_k;
- 	pte_t *pte_k;
- 	int index;
- 	unsigned long pfn;
-@@ -132,14 +132,12 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
- 	}
- 	set_pgd(pgd, *pgd_k);
- 
--	p4d = p4d_offset(pgd, addr);
- 	p4d_k = p4d_offset(pgd_k, addr);
- 	if (!p4d_present(*p4d_k)) {
- 		no_context(regs, addr);
- 		return;
- 	}
- 
--	pud = pud_offset(p4d, addr);
- 	pud_k = pud_offset(p4d_k, addr);
- 	if (!pud_present(*pud_k)) {
- 		no_context(regs, addr);
-@@ -150,13 +148,11 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
- 	 * Since the vmalloc area is global, it is unnecessary
- 	 * to copy individual PTEs
- 	 */
--	pmd = pmd_offset(pud, addr);
- 	pmd_k = pmd_offset(pud_k, addr);
- 	if (!pmd_present(*pmd_k)) {
- 		no_context(regs, addr);
- 		return;
- 	}
--	set_pmd(pmd, *pmd_k);
- 
- 	/*
- 	 * Make sure the actual PTE exists as well to
+    77	
+    78	static void sf_pcm_transfer(struct sf_pwmdac_dev *dev, bool push)
+    79	{
+    80		struct snd_pcm_substream *substream;
+    81		bool active, period_elapsed;
+    82	
+    83		rcu_read_lock();
+  > 84		if (push)
+    85			substream = rcu_dereference(dev->tx_substream);
+    86	
+    87		active = substream && snd_pcm_running(substream);
+    88		if (active) {
+    89			unsigned int ptr;
+    90			unsigned int new_ptr;
+    91	
+  > 92			if (push) {
+    93				ptr = READ_ONCE(dev->tx_ptr);
+    94				new_ptr = dev->tx_fn(dev, substream->runtime, ptr,
+    95						&period_elapsed);
+    96				cmpxchg(&dev->tx_ptr, ptr, new_ptr);
+    97			}
+    98	
+    99			if (period_elapsed)
+   100				snd_pcm_period_elapsed(substream);
+   101		}
+   102		rcu_read_unlock();
+   103	}
+   104	
+   105	void sf_pwmdac_pcm_push_tx(struct sf_pwmdac_dev *dev)
+   106	{
+   107		sf_pcm_transfer(dev, true);
+   108	}
+   109	
+   110	
+   111	static int sf_pcm_open(struct snd_soc_component *component,
+   112				struct snd_pcm_substream *substream)
+   113	{
+   114		struct snd_pcm_runtime *runtime = substream->runtime;
+   115		struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+   116		struct sf_pwmdac_dev *dev = snd_soc_dai_get_drvdata(asoc_rtd_to_cpu(rtd, 0));
+   117	
+   118		snd_soc_set_runtime_hwparams(substream, &sf_pcm_hardware);
+   119		snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
+   120		runtime->private_data = dev;
+   121	
+   122		return 0;
+   123	}
+   124	
+   125	
+   126	static int sf_pcm_close(struct snd_soc_component *component,
+   127				struct snd_pcm_substream *substream)
+   128	{
+   129		synchronize_rcu();
+   130		return 0;
+   131	}
+   132	
+   133	static int sf_pcm_hw_params(struct snd_soc_component *component,
+   134				struct snd_pcm_substream *substream,
+   135				struct snd_pcm_hw_params *hw_params)
+   136	{
+   137		struct snd_pcm_runtime *runtime = substream->runtime;
+   138		struct sf_pwmdac_dev *dev = runtime->private_data;
+   139	
+   140		switch (params_channels(hw_params)) {
+   141		case 2:
+   142			break;
+   143		default:
+   144			dev_err(dev->dev, "invalid channels number\n");
+   145			return -EINVAL;
+   146		}
+   147	
+   148		switch (params_format(hw_params)) {
+   149		case SNDRV_PCM_FORMAT_U8:
+   150		case SNDRV_PCM_FORMAT_S8:
+   151			dev->tx_fn = sf_pwmdac_pcm_tx_8;
+   152			break;
+   153		case SNDRV_PCM_FORMAT_S16_LE:
+   154			dev->tx_fn = sf_pwmdac_pcm_tx_16;
+   155			break;
+   156		default:
+   157			dev_err(dev->dev, "invalid format\n");
+   158			return -EINVAL;
+   159		}
+   160	
+   161			return 0;
+   162	}
+   163	
+   164	
+   165	static int sf_pcm_trigger(struct snd_soc_component *component,
+   166				struct snd_pcm_substream *substream, int cmd)
+   167	{
+   168		struct snd_pcm_runtime *runtime = substream->runtime;
+   169		struct sf_pwmdac_dev *dev = runtime->private_data;
+   170		int ret = 0;
+   171	
+   172		switch (cmd) {
+   173		case SNDRV_PCM_TRIGGER_START:
+   174		case SNDRV_PCM_TRIGGER_RESUME:
+   175		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+   176			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+   177				WRITE_ONCE(dev->tx_ptr, 0);
+   178				rcu_assign_pointer(dev->tx_substream, substream);
+   179			}
+   180			break;
+   181		case SNDRV_PCM_TRIGGER_STOP:
+   182		case SNDRV_PCM_TRIGGER_SUSPEND:
+   183		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+   184			if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+   185				rcu_assign_pointer(dev->tx_substream, NULL);
+   186			break;
+   187		default:
+   188			ret = -EINVAL;
+   189			break;
+   190		}
+   191	
+   192		return ret;
+   193	}
+   194	
+   195	static snd_pcm_uframes_t sf_pcm_pointer(struct snd_soc_component *component,
+   196				struct snd_pcm_substream *substream)
+   197	{
+   198		struct snd_pcm_runtime *runtime = substream->runtime;
+   199		struct sf_pwmdac_dev *dev = runtime->private_data;
+   200		snd_pcm_uframes_t pos;
+   201	
+ > 202		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+   203			pos = READ_ONCE(dev->tx_ptr);
+   204	
+   205		return pos < runtime->buffer_size ? pos : 0;
+   206	}
+   207	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

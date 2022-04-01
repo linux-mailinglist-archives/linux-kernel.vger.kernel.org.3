@@ -2,78 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183C34EE8CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0F84EE8F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343701AbiDAHIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S236683AbiDAHSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbiDAHIc (ORCPT
+        with ESMTP id S235587AbiDAHSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:08:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893BD22BD49;
-        Fri,  1 Apr 2022 00:06:43 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KVB4s3VZdzgYFZ;
-        Fri,  1 Apr 2022 15:05:01 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 15:06:41 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 1 Apr
- 2022 15:06:41 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
-CC:     <pbonzini@redhat.com>
-Subject: [PATCH -next] KVM: x86/mmu: Fix return value check in kvm_mmu_init_tdp_mmu()
-Date:   Fri, 1 Apr 2022 15:15:31 +0800
-Message-ID: <20220401071531.1841927-1-yangyingliang@huawei.com>
+        Fri, 1 Apr 2022 03:18:18 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A6725CBA0;
+        Fri,  1 Apr 2022 00:16:26 -0700 (PDT)
+X-UUID: d5c908bba9ca447f8dc5113c76938d63-20220401
+X-UUID: d5c908bba9ca447f8dc5113c76938d63-20220401
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 650611933; Fri, 01 Apr 2022 15:16:21 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 1 Apr 2022 15:16:21 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Apr
+ 2022 15:16:21 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Apr 2022 15:16:20 +0800
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Subject: [PATCH V7 0/3] spi: mediatek: add single/quad mode support 
+Date:   Fri, 1 Apr 2022 15:16:13 +0800
+Message-ID: <20220401071616.8874-1-leilk.liu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If alloc_workqueue() fails, it returns NULL pointer, replaces
-IS_ERR() check with NULL pointer check.
+This series of patches are based on spi for-next, and provide 3 patches to support MT7986.
 
-Fixes: 1a3320dd2939 ("KVM: MMU: propagate alloc_workqueue failure")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- arch/x86/kvm/mmu/tdp_mmu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+V7:
+1. add Reviewed-by: Rob Herring
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index a2f9a34a0168..7bddbb51033a 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -22,8 +22,8 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
- 		return 0;
- 
- 	wq = alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
--	if (IS_ERR(wq))
--		return PTR_ERR(wq);
-+	if (!wq)
-+		return -ENOMEM;
- 
- 	/* This should not be changed for the lifetime of the VM. */
- 	kvm->arch.tdp_mmu_enabled = true;
--- 
+V6:
+ 1. remove SPI_CFG3_IPM_PIN_MODE_OFFSET.
+ 2. add Reviewed-by: AngeloGioacchino Del Regno
+
+V5:
+ 1. remove 3 patches that already applied.
+ 2. use devm_clk_get_optional.
+ 3. remove of_mtk_spi_parse_dt()
+
+v4:
+ 1. fix Rob comment in v3;
+ 2. use "mediatek,mt7986-spi-ipm","mediatek,spi-ipm"
+
+v3:
+ 1. add Rob Acked-by in "dt-bindings: spi: Add compatible for MT7986 with single mode";
+ 2. add a fix patch "spi: mediatek: support tick_delay without enhance_timing";
+ 3. fix Angelogioacchino comments;
+ 4. use mt7986 instead of ipm in dt-binding.
+
+v2:
+ 1. rebase this series on spi for-next.
+ 2. fix Rob and Krzysztof comments in v1.
+
+Leilk Liu (3):
+  spi: mediatek: add spi memory support for ipm design
+  dt-bindings: spi: support hclk
+  spi: mediatek: support hclk
+
+ .../bindings/spi/mediatek,spi-mt65xx.yaml     |   4 +
+ drivers/spi/spi-mt65xx.c                      | 386 +++++++++++++++++-
+ 2 files changed, 373 insertions(+), 17 deletions(-)
+
+--
 2.25.1
+
 

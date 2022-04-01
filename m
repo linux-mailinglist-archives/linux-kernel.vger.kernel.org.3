@@ -2,163 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1AF4EE8AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736F14EE8AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343558AbiDAG6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S1343579AbiDAG6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243548AbiDAG6O (ORCPT
+        with ESMTP id S1343565AbiDAG6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:58:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59191C6816
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:56:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E782D60EFD
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57182C340F2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648796184;
-        bh=tmzuiXwE0YoCVxocrcXOwxCPWalAk7sv3NhfTwDfAgc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n8UTUSdZ4B/Q5FObugZadVAKu4c7uwaJ7PQ5ME6SVhV1p8qjrtO3cdRUaa0SzRXi9
-         63eU1efNrY57i9elJVMaMHvOEZe55atW0uMc0PKq5/IMKRToWNXoBabCnUPUlZSoEm
-         o1W2ar/aUXHLkDDSJ7n1SnMkEbeJmncVD4ifp+yxD9WO7M9OAVl9ATzwcTdoD/CmQ5
-         Yhsh5qFatwvtxB4xolwILzSH2tbtVu/7gx6d4FFkZcoiwKtrU7+1aT4YzJ7tjBxIB8
-         d+DOmeFjCta2dEisvRcuCilGQevNIH/sMtnyiJjOQaac8316QjgIqwbE0g5pud4oA6
-         /l4ZnpNa0/zFA==
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2e68c95e0f9so23244357b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:56:24 -0700 (PDT)
-X-Gm-Message-State: AOAM53314nSXajxRg4KGdZ5AdoLNXvdNuhO8POXuMaEJ9zH+ALl7uwFV
-        wEwaqerVCUlmJrVOPc8rDC9Pb7wNS3IgiZHj398=
-X-Google-Smtp-Source: ABdhPJzK/b7Hju7SnqNeAG1y6dWgvMDJnuOCRMrTT1avoROj7gRMnyg8XnjNT7Bzuak+k/h59U+jR6DgKmc+7b35F84=
-X-Received: by 2002:a81:79cc:0:b0:2e9:d3bd:b4e8 with SMTP id
- u195-20020a8179cc000000b002e9d3bdb4e8mr8798314ywc.93.1648796183378; Thu, 31
- Mar 2022 23:56:23 -0700 (PDT)
+        Fri, 1 Apr 2022 02:58:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B243B19F45E;
+        Thu, 31 Mar 2022 23:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648796207; x=1680332207;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Wxp4yJ/NukfxY6U5mWq/JBboluF6jxxrl8HF3wv1pMc=;
+  b=eKgaeZs2O26Nin60M62tJcf55tS38SGNyv7Xg65rho9I7cXRxzvxZdOV
+   lVg8aNJEZF2y3yyLjKuIWLOBxZrzMTxKvDWvq8NEZcxOnbPHUyGhRXJHj
+   vtEkZECGe8Ke3xqaEKSvCHumW9QirU2L9I8sHJmkDfX1ZOoiR7JOKRisO
+   ygxoS2KdWxieN69xbmRPKK9KaubAxHUyKgvGZtrwYoBDlROy/tzMphyiv
+   oL0NbM0gBIDKv5rkDJsKrDSOQ4ZMChYzGWCXb+ApG/NluMfoarQPv7H+z
+   NcMh4NlIURuy9eqlDr6OYNlECy5bznV9u1zC8BHiDElGzG/Miy5e3jFTt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="260045758"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="260045758"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 23:56:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="567217562"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.171.24]) ([10.249.171.24])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 23:56:43 -0700
+Message-ID: <d63042a2-91d8-5555-1bac-4d908e03da2b@intel.com>
+Date:   Fri, 1 Apr 2022 14:56:40 +0800
 MIME-Version: 1.0
-References: <20220401041615.3296387-1-jcmvbkbc@gmail.com> <CAK8P3a19-qtAg8GD8a9nG4ZPuyoDi3n39+zvHcRV-YdPJbJfKA@mail.gmail.com>
-In-Reply-To: <CAK8P3a19-qtAg8GD8a9nG4ZPuyoDi3n39+zvHcRV-YdPJbJfKA@mail.gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Fri, 1 Apr 2022 09:55:56 +0300
-X-Gmail-Original-Message-ID: <CAFCwf10hm4+WOa9JTNLTnEGtOGScOVu+PAXbk2=r+14u8d68VA@mail.gmail.com>
-Message-ID: <CAFCwf10hm4+WOa9JTNLTnEGtOGScOVu+PAXbk2=r+14u8d68VA@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: fix build warning
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Max Filippov <jcmvbkbc@gmail.com>,
-        Ohad Sharabi <osharabi@habana.ai>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize TDX
+ module
+Content-Language: en-US
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+ <36aac3cb7c7447db6454ee396e25eea3bad378e6.camel@intel.com>
+ <20220331194144.GA2084469@ls.amr.corp.intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20220331194144.GA2084469@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 9:40 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Apr 1, 2022 at 6:16 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
-> >
-> > allmodconfig build fails on ARCH=xtensa with the following message:
-> >
-> >   drivers/misc/habanalabs/common/memory.c:153:49: error: cast from pointer
-> >         to integer of different size [-Werror=pointer-to-int-cast]
-> >         (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> >
-> > Fix it by adding intermediate conversion to uintptr_t as in other places
-> > in that driver.
-> >
-> > Fixes: e8458e20e0a3 ("habanalabs: make sure device mem alloc is page aligned")
-> > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> > ---
-> >  drivers/misc/habanalabs/common/memory.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-> > index e008d82e4ba3..f0d373171d2a 100644
-> > --- a/drivers/misc/habanalabs/common/memory.c
-> > +++ b/drivers/misc/habanalabs/common/memory.c
-> > @@ -150,9 +150,9 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
-> >                 for (i = 0 ; i < num_pgs ; i++) {
-> >                         if (is_power_of_2(page_size))
-> >                                 phys_pg_pack->pages[i] =
-> > -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> > -                                                                               page_size, NULL,
-> > -                                                                               page_size);
-> > +                                       (u64)(uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> > +                                                                                page_size, NULL,
-> > +                                                                                page_size);
-> >                         else
-> >                                 phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
-> >                                                                                 page_size);
->
-> This addresses the warning, but I suspect there is still a problem in the code:
-> The description of that member lists it as '@pages: the physical page array',
-> but it is actually a kernel virtual address that gets passed to it. Since this
-> is a 'u64' member, it is hard to tell what type it actually is.
->
-> gen_pool_dma_alloc_align() returns both a virtual address and a dma (bus)
-> address. The dma address is ignored here, which makes me wonder why
-> this interface is used in the first place.
->
-> I can see four possible things that may be going on here:
->
-> - if the pages[] array is meant to be a kernel virtual address, it should be
->   changed from a 'u64' to a normal pointer, with the cast removed.
->
-> - if the pages[] array is meant to be a physical address, as documented,
->   it should be assigned using virt_to_phys() on the pointer, with a warning
->   that this must not be used a as a dma address (which can easily get
->   confused with a phys address as the binary representation is often the
->   same in the absence of an iommu). In this case, it should also be
->   changed to a phys_addr_t.
->
-> - if the pages[] array is meant to be a dma address, it should be changed
->   to a dma_addr_t, and passed as the third argument to
->   gen_pool_dma_alloc_align() in order to return the correct address.
->
-> - if there is a 'u64' member that is used for two (or all three) of the above
->   depending on context, it should be replaced with either multiple
->   struct members or a union.
->
-> Looking at other uses of the pages[] array, I see a dma_addr_t assigned
-> to it in init_phys_pg_pack_from_userptr(), but map_phys_pg_pack() and
-> alloc_sgt_from_device_pages appear to treat it as a cpu-physical phys_addr_t
-> rather than a device address again.
->
->         Arnd
+On 4/1/2022 3:41 AM, Isaku Yamahata wrote:
+> On Thu, Mar 31, 2022 at 04:31:10PM +1300,
+> Kai Huang <kai.huang@intel.com> wrote:
+> 
+>> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+>>> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+>>> Add a wrapper function to initialize the TDX module and get system-wide
+>>> parameters via those APIs.  Because TDX requires VMX enabled, It will be
+>>> called on-demand when the first guest TD is created via x86 KVM init_vm
+>>> callback.
+>>
+>> Why not just merge this patch with the change where you implement the init_vm
+>> callback?  Then you can just declare this patch as "detect and initialize TDX
+>> module when first VM is created", or something like that..
+> 
+> Ok. Anyway in the next respoin, tdx module initialization will be done when
+> loading kvm_intel.ko.  So the whole part will be changed and will be a part
+> of module loading.
 
-Hi,
-We use gen_pool in this function to manage our device memory
-allocations (this is why it is called alloc_device_memory).
-
-Basically, we initialize the genpool with the total size of the device memory,
-and each bit represents a page according to a fixed page size, which
-is dependent on asic type.
-The addresses represent the physical address of the device memory, as
-our device sees them.
-As these addresses are not accessible from the host, it is appropriate
-to hold them in u64, imo.
-
-For future asics which will support multiple page sizes, we need to
-use the gen_pool_dma_alloc_align() variant,
-because then we need the allocation to be aligned to the page size as
-requested by the user per allocation.
-
-We ignore the DMA address because this is device memory, not host memory.
-Therefore, our device's dma engine addresses the memory using the
-virtual memory addresses we assign to it in our device's MMU.
-
-Having said that, I'm wondering whether gen_pool_first_fit_align() can
-also work here, which might be less confusing.
-
-Oded
+Will we change the GET_TDX_CAPABILITIES ioctl back to KVM scope?

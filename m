@@ -2,115 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEE54EE5EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABB44EE5F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243987AbiDACPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S244004AbiDACRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243955AbiDACPV (ORCPT
+        with ESMTP id S238832AbiDACRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:15:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4863BA67;
-        Thu, 31 Mar 2022 19:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648779212; x=1680315212;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Cbc+NbdBXMFjQ6S0uqFsxm3h2/TeIJaRHelS0Ywburs=;
-  b=f/lzI4IIAuU7nRSBAEDlmh45+1i5tbMG94sdY0/7cBQLHrwjwu56BUKW
-   CZDUtPpnX/b4GOX7llAi3TLW8nGWu+EyF0ZDNBOR9+LF4uUxiTuIY7eXS
-   IRDrKdc4vHCtj/UJj4IsqVh3rotWksHyrt/TpJM2SqaCbXnltJ0+tnaj0
-   28OKId1ivAqc0l9vo87zDAUsFMn/+xTRH6gDnpaMmzizL7C7QOstGJA8F
-   18QAXtEIJ2hG1jVCVxkK5AqJr9qGkX4+sHv1gZZX5mlY09NgE+YW4J7ZM
-   5EjgJRUMeqcVV6QHuDH8/YSSy5wLD7QbsfKzBRwfrUhBADwiQqxqH0OtK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="257602917"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="257602917"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 19:13:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="521026646"
-Received: from tswork-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.29.39])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 19:13:29 -0700
-Message-ID: <9e01bc014df60e215ba17432c06b6854f6dae3f8.camel@intel.com>
-Subject: Re: [RFC PATCH v5 032/104] KVM: x86/mmu: introduce config for
- PRIVATE KVM MMU
-From:   Kai Huang <kai.huang@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 01 Apr 2022 15:13:27 +1300
-In-Reply-To: <20220401015130.GE2084469@ls.amr.corp.intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <770235e7fed04229b81c334e2477374374cea901.1646422845.git.isaku.yamahata@intel.com>
-         <55fa888b31bae80bf72cbdbdf6f27401ea4ccc5c.camel@intel.com>
-         <20220401015130.GE2084469@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 31 Mar 2022 22:17:54 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E803422451A;
+        Thu, 31 Mar 2022 19:16:04 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 1 Apr 2022
+ 10:15:57 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 1 Apr
+ 2022 10:15:56 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+CC:     Haowen Bai <baihaowen@meizu.com>,
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
+Date:   Fri, 1 Apr 2022 10:15:54 +0800
+Message-ID: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-31 at 18:51 -0700, Isaku Yamahata wrote:
-> On Fri, Apr 01, 2022 at 12:23:28AM +1300,
-> Kai Huang <kai.huang@intel.com> wrote:
-> 
-> > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > 
-> > > To Keep the case of non TDX intact, introduce a new config option for
-> > > private KVM MMU support.  At the moment, this is synonym for
-> > > CONFIG_INTEL_TDX_HOST && CONFIG_KVM_INTEL.  The new flag make it clear
-> > > that the config is only for x86 KVM MMU.
-> > > 
-> > > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > ---
-> > >  arch/x86/kvm/Kconfig | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> > > index 2b1548da00eb..2db590845927 100644
-> > > --- a/arch/x86/kvm/Kconfig
-> > > +++ b/arch/x86/kvm/Kconfig
-> > > @@ -136,4 +136,8 @@ config KVM_MMU_AUDIT
-> > >  config KVM_EXTERNAL_WRITE_TRACKING
-> > >  	bool
-> > >  
-> > > +config KVM_MMU_PRIVATE
-> > > +	def_bool y
-> > > +	depends on INTEL_TDX_HOST && KVM_INTEL
-> > > +
-> > >  endif # VIRTUALIZATION
-> > 
-> > I am really not sure why need this.  Roughly looking at MMU related patches this
-> > new config option is hardly used.  You have many code changes related to
-> > handling private/shared but they are not under this config option.
-> 
-> I don't want to use CONFIG_INTEL_TDX_HOST in KVM MMU code.  I think the change
-> to KVM MMU should be a sort of independent from TDX.  But it seems failed based
-> on your feedback.
+Return boolean values ("true" or "false") instead of 1 or 0 from bool
+functions.  This fixes the following warnings from coccicheck:
 
-Why do you need to use any config?  As I said majority of your changes to MMU
-are not under any config.  But I'll leave this to maintainer/reviewers. 
+./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
+return of 0/1 in function 'get_packet_dst' with return type bool
+./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
+return of 0/1 in function 'get_packet_dst' with return type bool
 
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ tools/testing/selftests/bpf/progs/test_l4lb_noinline.c |  2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_noinline.c  | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
+index 19e4d20..c8bc0c6 100644
+--- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
++++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
+@@ -218,7 +218,7 @@ static __noinline bool get_packet_dst(struct real_definition **real,
+ 
+ 	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
+ 	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
+-		return 0;
++		return false;
+ 
+ 	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
+ 	if (!real_pos)
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+index 596c4e7..125d872 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+@@ -564,22 +564,22 @@ static bool get_packet_dst(struct real_definition **real,
+ 	hash = get_packet_hash(pckt, hash_16bytes);
+ 	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
+ 	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
+-		return 0;
++		return false;
+ 	key = 2 * vip_info->vip_num + hash % 2;
+ 	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
+ 	if (!real_pos)
+-		return 0;
++		return false;
+ 	key = *real_pos;
+ 	*real = bpf_map_lookup_elem(&reals, &key);
+ 	if (!(*real))
+-		return 0;
++		return false;
+ 	if (!(vip_info->flags & (1 << 1))) {
+ 		__u32 conn_rate_key = 512 + 2;
+ 		struct lb_stats *conn_rate_stats =
+ 		    bpf_map_lookup_elem(&stats, &conn_rate_key);
+ 
+ 		if (!conn_rate_stats)
+-			return 1;
++			return true;
+ 		cur_time = bpf_ktime_get_ns();
+ 		if ((cur_time - conn_rate_stats->v2) >> 32 > 0xffFFFF) {
+ 			conn_rate_stats->v1 = 1;
+@@ -587,14 +587,14 @@ static bool get_packet_dst(struct real_definition **real,
+ 		} else {
+ 			conn_rate_stats->v1 += 1;
+ 			if (conn_rate_stats->v1 >= 1)
+-				return 1;
++				return true;
+ 		}
+ 		if (pckt->flow.proto == IPPROTO_UDP)
+ 			new_dst_lru.atime = cur_time;
+ 		new_dst_lru.pos = key;
+ 		bpf_map_update_elem(lru_map, &pckt->flow, &new_dst_lru, 0);
+ 	}
+-	return 1;
++	return true;
+ }
+ 
+ __attribute__ ((noinline))
 -- 
-Thanks,
--Kai
-
+2.7.4
 

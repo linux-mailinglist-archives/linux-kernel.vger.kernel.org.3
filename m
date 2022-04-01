@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075454EFAF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3644EFAF5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351120AbiDAUOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S1351791AbiDAUQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243806AbiDAUOj (ORCPT
+        with ESMTP id S234146AbiDAUQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:14:39 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B6322FD90
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:12:49 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id gh15so2856968qvb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northvilleschools.net; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=oZosTPYclzlc5poYKr58RA5wxMWJ95dZSkxQK8mQ7Lw=;
-        b=jBwU+Eju1cxeknfoVOH9U665mT7GdgJWN3rqZEQvdXJI7xGpq2y0fCTxG/o0GtRnQl
-         yHnaFIamVXVDs5C1aMm5Y3PYDukydkVUqVIB4uSDgYeDLAAIp4fkSfH7NBJusvIVEepJ
-         GKB84vhcjm/s/VZGn37oJzlqfyrv4mHPTKWwzfTRTkLT35frUBctvmujuurNm9wK5K3O
-         WEwkzL9JCDIOu6G6+oacKjv5YBo0ph2ZXZuQx+qEfVRFy8q816KS1SH+kkthZ0TdYhCH
-         GOyEEj6Tq9o2caghZEHYmJLmz97XehYzY1Go2hx9AGezQW5K1itwkygtQFlz3IqJbpM6
-         eWfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=oZosTPYclzlc5poYKr58RA5wxMWJ95dZSkxQK8mQ7Lw=;
-        b=ZZSZLE1q25qE3XG04ojlEHIvtyY1tl5FQ2rBm+Adk3z6LMyQ/OiGjm4GwQ52mx6Rnp
-         V2bKVQvvaoo2txDU/o23cbcz8kEv2pKWmx3bEH8ITqDnd17KRH/+nAaBlmmL0K95FbjQ
-         bLWIMPKEPcevHB22YIzyrx0Dj+5zvOPNO5zwSUNz+DtEBe7bM7knud7tDJ1SVNIjEv/F
-         nX72YVU3Hf/5ly6/cLj4hpoYK5MceJ9Ypv8M3DV0pXIo+xRT39uba207ANj80e4TJQIG
-         UHO3XlzQbWOIemS2Zznp06xztQJFS+BMj5r48XLm6X8JCjwMovEDsu0zDVvgny6TJcqS
-         Yfpg==
-X-Gm-Message-State: AOAM530K5lAJj2E2WHQJzAg6CpcKeT0G7jlkdSzlBa+FyHyja+yacZoK
-        c4TKk+yEbypkEhHHcnZTUMZ/4zTKkk7sTfBN
-X-Google-Smtp-Source: ABdhPJxR3D2ziE1C1fU3A5e9Qo50x2v8BOfL9Sh2jN9dQDz+G6xk6+Vq9Q6sv113p7q3DFR1pdKGAQ==
-X-Received: by 2002:a05:6214:cc9:b0:443:a483:3459 with SMTP id 9-20020a0562140cc900b00443a4833459mr6689045qvx.6.1648843968526;
-        Fri, 01 Apr 2022 13:12:48 -0700 (PDT)
-Received: from sckzor-linux (d4-50-247-168.col.wideopenwest.com. [50.4.168.247])
-        by smtp.gmail.com with ESMTPSA id b82-20020ae9eb55000000b0067b314c0fedsm1857817qkg.42.2022.04.01.13.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 13:12:48 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 16:12:47 -0400
-From:   Charlie Sands <sandsch@northvilleschools.net>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: Fix unsafe memory access by memcmp.
-Message-ID: <Ykdcv6Sm3oDE9IEp@sckzor-linux.localdomain>
+        Fri, 1 Apr 2022 16:16:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A75A2560FA
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06F4161800
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 20:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3901BC340EC;
+        Fri,  1 Apr 2022 20:14:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648844064;
+        bh=P8DlEnw33zBpitlgH8xwxIkpEbNasZsEeanZCbjhjtA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HO5L5PtRrU5/tc+G0RnuMcXonjj7DtCw4Ro3/SvoNPUXww5vNuWc5SxWFZhBKZQ6+
+         846CADk4UrrLizfdUub8e/vR7oFp9xFCTFDWPVR5QRkJTnk2O5pAMKtfntPxn5ApdV
+         RvPPBEWP3OaCXlE00j3c6qVaSFSTRlumhAUh8VFgx5onUF/PmS0JTfZVVN+oaEbXZn
+         KkZeS/YM69WlY5V/h7BQQm7wLCcuN85TECUXc2Rv0F/LVxgI5bwrWmZlG0cJC+R30h
+         ObVv9f+TwPI7uUgF6ZwfVIrpbbKqxTpMnto9tFzWo2/8aiWoElXFOQ5r8YKwhK06FI
+         8nGJErME0sQsA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] checkpatch: add warning for non-lore mailing list URLs
+Date:   Fri,  1 Apr 2022 15:14:17 -0500
+Message-Id: <20220401201417.126664-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,54 +52,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes sparse warnings about the memcmp function unsafely
-accessing userspace memory without first copying it to kernel space.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
+The lkml.org, marc.info, spinics.net, etc archives are not quite as useful
+as lore.kernel.org because they use different styles, add advertising, and
+may disappear in the future.  The lore archives are more consistent and
+more likely to stick around, so prefer https://lore.kernel.org URLs when
+they exist.
+
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 ---
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 7df213856d66..1cfac1b27eb7 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -3233,23 +3233,27 @@ static int rtw_p2p_get(struct net_device *dev,
- 			       struct iw_request_info *info,
- 			       union iwreq_data *wrqu, char *extra)
- {
--	if (!memcmp(wrqu->data.pointer, "status", 6)) {
-+	char wrqu_data_ptr[9];
-+	if (copy_from_user(wrqu_data_ptr, wrqu->data.pointer, 9))
-+		return 0;
+Thanks to Joe for fixing the quoting:
+https://lore.kernel.org/all/3e21b6e87e219d6538a193a9021b965fd8180025.camel@perches.com/
+Sorry I totally dropped the ball -- I guess I was scared off by fixing the
+perl quoting and didn't notice that you actually did it for me ;)
+
+Sample commits for testing with "checkpatch -g":
+
+  bd82d4bd2188 www.spinics.net/lists/arm-kernel/msg716956.html
+  fdec2a9ef853 www.spinics.net/lists/kvm-arm
+  1cdca16c043a www.spinics.net/lists/linux-mmc
+  48ea02184a9d www.spinics.net/lists/linux-pci
+  f32ae8a5f131 www.spinics.net/lists/netdev
+  b7dca6dd1e59 lkml.org
+  265df32eae58 lkml.org/lkml/
+  4a9ceb7dbadf marc.info/?l=linux-kernel&m=155656897409107&w=2.
+  c03914b7aa31 marc.info/?l=linux-mm
+  f108c887d089 marc.info/?l=linux-netdev
+  7424edbb5590 marc.info/?t=156200975600004&r=1&w=2
+  dabac6e460ce https://marc.info/?l=linux-rdma&m=152296522708522&w=2
+  b02f6a2ef0a1 www.mail-archive.com/linux-kernel@vger.kernel.org
+  5e91bf5ce9b8 lists.infradead.org/pipermail/linux-snps-arc/2019-May
+  3cde818cd02b mailman.alsa-project.org/pipermail/alsa-devel/2019-January/144761.html
+  a5448fdc469d http://lists.infradead.org/pipermail/linux-nvme/2019-June/024721.html
+---
+ scripts/checkpatch.pl | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 577e02998701..819e0dece5e9 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -698,6 +698,17 @@ sub find_standard_signature {
+ 	return "";
+ }
+ 
++our $obsolete_archives = qr{(?xi:
++	\Qfreedesktop.org/archives/dri-devel\E |
++	\Qlists.infradead.org\E |
++	\Qlkml.org\E |
++	\Qmail-archive.com\E |
++	\Qmailman.alsa-project.org/pipermail\E |
++	\Qmarc.info\E |
++	\Qozlabs.org/pipermail\E |
++	\Qspinics.net\E
++)};
 +
-+	if (!memcmp(wrqu_data_ptr, "status", 6)) {
- 		rtw_p2p_get_status(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "role", 4)) {
-+	} else if (!memcmp(wrqu_data_ptr, "role", 4)) {
- 		rtw_p2p_get_role(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_ifa", 8)) {
-+	} else if (!memcmp(wrqu_data_ptr, "peer_ifa", 8)) {
- 		rtw_p2p_get_peer_ifaddr(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "req_cm", 6)) {
-+	} else if (!memcmp(wrqu_data_ptr, "req_cm", 6)) {
- 		rtw_p2p_get_req_cm(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_deva", 9)) {
-+	} else if (!memcmp(wrqu_data_ptr, "peer_deva", 9)) {
- 		/*	Get the P2P device address when receiving the provision discovery request frame. */
- 		rtw_p2p_get_peer_devaddr(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "group_id", 8)) {
-+	} else if (!memcmp(wrqu_data_ptr, "group_id", 8)) {
- 		rtw_p2p_get_groupid(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_deva_inv", 9)) {
-+	} else if (!memcmp(wrqu_data_ptr, "peer_deva_inv", 9)) {
- 		/*	Get the P2P device address when receiving the P2P Invitation request frame. */
- 		rtw_p2p_get_peer_devaddr_by_invitation(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "op_ch", 5)) {
-+	} else if (!memcmp(wrqu_data_ptr, "op_ch", 5)) {
- 		rtw_p2p_get_op_ch(dev, info, wrqu, extra);
- 	}
- 	return 0;
+ our @typeListMisordered = (
+ 	qr{char\s+(?:un)?signed},
+ 	qr{int\s+(?:(?:un)?signed\s+)?short\s},
+@@ -3273,6 +3284,12 @@ sub process {
+ 			$last_git_commit_id_linenr = $linenr if ($line =~ /\bcommit\s*$/i);
+ 		}
+ 
++# Check for mailing list archives other than lore.kernel.org
++		if ($rawline =~ m{\b$obsolete_archives}) {
++			WARN("PREFER_LORE_ARCHIVE",
++			     "Use lore.kernel.org archive links when possible - see https://lore.kernel.org/lists.html\n" . $herecurr);
++		}
++
+ # Check for added, moved or deleted files
+ 		if (!$reported_maintainer_file && !$in_commit_log &&
+ 		    ($line =~ /^(?:new|deleted) file mode\s*\d+\s*$/ ||
 -- 
-2.35.1
+2.25.1
 

@@ -2,142 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672774EF87D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3974E4EF881
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345304AbiDAQ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S1347423AbiDAQ61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbiDAQ5R (ORCPT
+        with ESMTP id S1349545AbiDAQ6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:57:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C9F32B3;
-        Fri,  1 Apr 2022 09:55:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 834CDB82468;
-        Fri,  1 Apr 2022 16:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35661C340EC;
-        Fri,  1 Apr 2022 16:55:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648832125;
-        bh=48jXrzw1a+CUwNYdJ11VTIPu+z+bLZeiEL8pwinzCA0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OEoFXO3NMbcynJRaDOTTxooyYoOathk93aEkp8jb0BdKB+GNLCeDCPMnKt0daMM/m
-         zXDVUX01qvb0FJt1LeprWEehLrV7xZPnrNBGTYhh4Do//7gmG2C/Wns6Vt4cW4ZsGQ
-         k+sh5qpHfUfCP7hCTE0+sJxmDYdhrnufQGhsiHmD7mk/CUtwoPbBtMaqV6WrOaNvbp
-         B0V1d6Yy3tYqe+8rQymISG41alvjKON5PFOhWM5Xcd77yuiN64T/OoMwKQBVvu2bo4
-         s7p/ixdbGviK4T8dfvN1axYNCIp8jLF4cJG2NKQfvpjVwsGe9crgvhuwRfXKHFPsex
-         MIzMBL9bxAbHg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D71685C0A15; Fri,  1 Apr 2022 09:55:24 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 09:55:24 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Put the irq work into hard interrupt context for
- execution
-Message-ID: <20220401165524.GF4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220330060012.2470054-1-qiang1.zhang@intel.com>
- <20220330201620.GM4285@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB58802C1246C6F4FB895BDDA9DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20220331172943.GV4285@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880709B39EC5BDAACBD340FDAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Fri, 1 Apr 2022 12:58:11 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A3D11861B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:56:21 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id j15so2348461ila.13
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 09:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AocYHkt1MbaGb+EzbKia8sCXii4deKplOa2PaIkASDE=;
+        b=YDqVBVNEE8HcVFjurxrYb5hOycjVTxK7fOeL/e4ZGq8suMwkA1++G6q7Opq8eNnXmv
+         alhVqf6Q7sfMLjETKtpr386gqUSGhJX2C6o2VvqlJ8p7HtB5bwcIcNB0XRLlv6htt1PB
+         6hec/drOZlO2WnMOaNRiPlu1yfFknBkU60wZ93cfloTZc/pNROVqNWR8vRewZz+ln2Yz
+         GlgZw6Iv28fbArfWaavfo1YtdgqBkQ2LbR1nzQx/nUEoG9vwDenS8VHv7x3IpHv6BiGC
+         VOvSWmSoJUdtRtes52igqYpgxtIqlBQo6hHyvFe36ewT2/HlDIhhe/hMWBPT6zWryEwJ
+         /Aqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AocYHkt1MbaGb+EzbKia8sCXii4deKplOa2PaIkASDE=;
+        b=Uj/guy1paRbyUYpm11Nh2WUbrIAXOSVxvQnSxPODk17Qon/g/Aetp0DWHgcJ9PpkW2
+         ry5VPUP7+18aaEIxTFZ+JA8mh0dALxv6QafnNM+LnxjebH8oyZIGvL/f8TsAZTj6nP/9
+         rmp1ITlUWNVsL1Y/u5JEMA98JdAgvocoUrc3uiKRRbzbVlUlZNN/nk0HdRYGPddVTz2o
+         rtBqewjiODxZ50x0jghz2gQO9r5jH+8qGmIhqVdZ8J/K47bx7L1DjQZyWuAPCZOuzMKl
+         GoQfsGxDX8rYbtbxdhEvaCdxGzO25Xg4wIt9QB12//cNdo4q3ucrBoLMF76PhS+4r5+G
+         JyDg==
+X-Gm-Message-State: AOAM531nJxof+cwYHvayYaxWECeNRirqU6RvyqI3BihZMeyqQHB3QIdD
+        wTwHHlOMQp+smtakNpMJdBFevbldymdoNyKDTlC+Xch/a9hZeQ==
+X-Google-Smtp-Source: ABdhPJzSqAvEGZ84kfSPUS4u/aBoCuEYziFNCF1E0HAsnpfVQ8pj/c5nHIXH+rK38nN3J+0RORQPCdedCZH1BwcUCGw=
+X-Received: by 2002:a05:6e02:1b8f:b0:2ca:9c6:434a with SMTP id
+ h15-20020a056e021b8f00b002ca09c6434amr342958ili.303.1648832180377; Fri, 01
+ Apr 2022 09:56:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880709B39EC5BDAACBD340FDAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220331084151.2600229-1-yosryahmed@google.com> <YkcEMdsi9G5y8mX4@dhcp22.suse.cz>
+In-Reply-To: <YkcEMdsi9G5y8mX4@dhcp22.suse.cz>
+From:   Wei Xu <weixugc@google.com>
+Date:   Fri, 1 Apr 2022 09:56:08 -0700
+Message-ID: <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 01:55:51AM +0000, Zhang, Qiang1 wrote:
-> 
-> On Wed, Mar 30, 2022 at 10:47:05PM +0000, Zhang, Qiang1 wrote:
-> > On Wed, Mar 30, 2022 at 02:00:12PM +0800, Zqiang wrote:
-> > > In PREEMPT_RT kernel, if irq work flags is not set, it will be 
-> > > executed in per-CPU irq_work kthreads. set IRQ_WORK_HARD_IRQ flags 
-> > > to irq work, put it in the context of hard interrupt execution, 
-> > > accelerate scheduler to re-evaluate.
-> > > 
-> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > > ---
-> > >  kernel/rcu/tree.c        | 2 +-
-> > >  kernel/rcu/tree_plugin.h | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index
-> > > e2ffbeceba69..a69587773a85 100644
-> > > --- a/kernel/rcu/tree.c
-> > > +++ b/kernel/rcu/tree.c
-> > > @@ -678,7 +678,7 @@ static void late_wakeup_func(struct irq_work
-> > > *work)  }
-> > >  
-> > >  static DEFINE_PER_CPU(struct irq_work, late_wakeup_work) =
-> > > -	IRQ_WORK_INIT(late_wakeup_func);
-> > > +	IRQ_WORK_INIT_HARD(late_wakeup_func);
-> > 
-> > >This is used only by rcu_irq_work_resched(), which is invoked only by rcu_user_enter(), which is never invoked until userspace is enabled, by which time all of the various kthreads will have been spawned, correct?
-> > >
-> > >Either way, please show me the exact sequence of events that lead to a problem with the current IRQ_WORK_INIT().
-> > >
-> > >  /*
-> > >   * If either:
-> > > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h 
-> > > index 3037c2536e1f..cf7bd28af8ef 100644
-> > > --- a/kernel/rcu/tree_plugin.h
-> > > +++ b/kernel/rcu/tree_plugin.h
-> > > @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
-> > >  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
-> > >  				// Get scheduler to re-evaluate and call hooks.
-> > >  				// If !IRQ_WORK, FQS scan will eventually IPI.
-> > > -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
-> > > +				rdp->defer_qs_iw =
-> > > +IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
-> > >  				rdp->defer_qs_iw_pending = true;
-> > >  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
-> > >  			}
-> > >
-> > >OK, in theory, rcu_read_unlock() could get to this point before all of the various kthreads were spawned.  In practice, the next time that the boot CPU went idle, the end of the quiescent state would be noticed.
-> > 
-> > Through my understanding, use irq_work in order to make the quiescent 
-> > state be noticed earlier, Because the irq_work execute in interrupt, 
-> > this irq_work can be executed in time, but In RT kernel The irq_work  is put into the kthread for execution, when it is executed, it is affected by the scheduling delay.
-> > Is there anything I missed?
-> 
-> >Yes, in that I am not seeing any actual data showing that this fix really makes things better.  Please in mind that IRQ_WORK_INIT_HARD does have performance disadvantages of its own.  So although I agree with your words saying that IRQ_WORK_INIT_HARD -might- be helpful, those words are not sufficient.
+On Fri, Apr 1, 2022 at 6:54 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 31-03-22 08:41:51, Yosry Ahmed wrote:
+> > From: Shakeel Butt <shakeelb@google.com>
 > >
-> >So, can you show a statistically significant benefit on a real system?
-> >For example, by measuring the time required for a expedited grace period to complete?  That would argue for this change, though it would need to be conditional, so that systems that don't care that much about the latency of expedited RCU grace periods don't need to pay the IRQ_WORK_INIT_HARD performance penalties.  Or you would need to demonstrate that these performance penalties don't cause problems.  (But such a demonstration is not easy given the wide variety of systems that Linux supports.)
+> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
 > >
-> >Now, I could imagine that the current code could cause problems during boot on CONFIG_PREEMPT_RT kernels.  But, believe me, I can imagine all sorts of horrible problems.  But we should fix those that happen not just in my imagination, but also in the real world.  ;-)
-> 
-> Thanks, agree.  I'll test it according to your suggestion.
-
-Very good!  I am looking forward to seeing what you come up with.
-
-							Thanx, Paul
-
-> >So if you can make such a problem happen in real life, then I would be happy to take a patch that fixed this on CONFIG_PREEMPT_RT but kept the current code otherwise.
+> > Use case: Proactive Reclaim
+> > ---------------------------
 > >
-> >							Thanx, Paul
-> 
-> > Thanks
-> > Zqiang	
-> > 
-> > >
-> > >Or has this been failing in some other manner?  If so, please let me know the exact sequence of events.
-> > >
-> > >							Thanx, Paul
+> > A userspace proactive reclaimer can continuously probe the memcg to
+> > reclaim a small amount of memory. This gives more accurate and
+> > up-to-date workingset estimation as the LRUs are continuously
+> > sorted and can potentially provide more deterministic memory
+> > overcommit behavior. The memory overcommit controller can provide
+> > more proactive response to the changing behavior of the running
+> > applications instead of being reactive.
+> >
+> > A userspace reclaimer's purpose in this case is not a complete replacement
+> > for kswapd or direct reclaim, it is to proactively identify memory savings
+> > opportunities and reclaim some amount of cold pages set by the policy
+> > to free up the memory for more demanding jobs or scheduling new jobs.
+> >
+> > A user space proactive reclaimer is used in Google data centers.
+> > Additionally, Meta's TMO paper recently referenced a very similar
+> > interface used for user space proactive reclaim:
+> > https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+> >
+> > Benefits of a user space reclaimer:
+> > -----------------------------------
+> >
+> > 1) More flexible on who should be charged for the cpu of the memory
+> > reclaim. For proactive reclaim, it makes more sense to be centralized.
+> >
+> > 2) More flexible on dedicating the resources (like cpu). The memory
+> > overcommit controller can balance the cost between the cpu usage and
+> > the memory reclaimed.
+> >
+> > 3) Provides a way to the applications to keep their LRUs sorted, so,
+> > under memory pressure better reclaim candidates are selected. This also
+> > gives more accurate and uptodate notion of working set for an
+> > application.
+> >
+> > Why memory.high is not enough?
+> > ------------------------------
+> >
+> > - memory.high can be used to trigger reclaim in a memcg and can
+> >   potentially be used for proactive reclaim.
+> >   However there is a big downside in using memory.high. It can potentially
+> >   introduce high reclaim stalls in the target application as the
+> >   allocations from the processes or the threads of the application can hit
+> >   the temporary memory.high limit.
+> >
+> > - Userspace proactive reclaimers usually use feedback loops to decide
+> >   how much memory to proactively reclaim from a workload. The metrics
+> >   used for this are usually either refaults or PSI, and these metrics
+> >   will become messy if the application gets throttled by hitting the
+> >   high limit.
+> >
+> > - memory.high is a stateful interface, if the userspace proactive
+> >   reclaimer crashes for any reason while triggering reclaim it can leave
+> >   the application in a bad state.
+> >
+> > - If a workload is rapidly expanding, setting memory.high to proactively
+> >   reclaim memory can result in actually reclaiming more memory than
+> >   intended.
+> >
+> > The benefits of such interface and shortcomings of existing interface
+> > were further discussed in this RFC thread:
+> > https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+> >
+> > Interface:
+> > ----------
+> >
+> > Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> > trigger reclaim in the target memory cgroup.
+> >
+> >
+> > Possible Extensions:
+> > --------------------
+> >
+> > - This interface can be extended with an additional parameter or flags
+> >   to allow specifying one or more types of memory to reclaim from (e.g.
+> >   file, anon, ..).
+> >
+> > - The interface can also be extended with a node mask to reclaim from
+> >   specific nodes. This has use cases for reclaim-based demotion in memory
+> >   tiering systens.
+> >
+> > - A similar per-node interface can also be added to support proactive
+> >   reclaim and reclaim-based demotion in systems without memcg.
+> >
+> > For now, let's keep things simple by adding the basic functionality.
+>
+> Yes, I am for the simplicity and this really looks like a bare minumum
+> interface. But it is not really clear who do you want to add flags on
+> top of it?
+>
+> I am not really sure we really need a node aware interface for memcg.
+> The global reclaim interface will likely need a different node because
+> we do not want to make this CONFIG_MEMCG constrained.
+
+A nodemask argument for memory.reclaim can be useful for memory
+tiering between NUMA nodes with different performance.  Similar to
+proactive reclaim, it can allow a userspace daemon to drive
+memcg-based proactive demotion via the reclaim-based demotion
+mechanism in the kernel.
+
+> > [yosryahmed@google.com: refreshed to current master, updated commit
+> > message based on recent discussions and use cases]
+> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>
+> All that being said. I haven't been a great fan for explicit reclaim
+> triggered from the userspace but I do recognize that limitations of the
+> existing interfaces is just too restrictive.
+>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+>
+> Thanks!
+> --
+> Michal Hocko
+> SUSE Labs

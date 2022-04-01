@@ -2,40 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886C74EEC09
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8430E4EEC0C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345336AbiDALLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S1345342AbiDALLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiDALLJ (ORCPT
+        with ESMTP id S229459AbiDALLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:11:09 -0400
-X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Apr 2022 04:09:20 PDT
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C06126ECA3
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:09:19 -0700 (PDT)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        Fri, 1 Apr 2022 07:11:52 -0400
+X-Greylist: delayed 433 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Apr 2022 04:10:03 PDT
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D80826F23A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:10:03 -0700 (PDT)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
         by mail.avm.de (Postfix) with ESMTPS;
-        Fri,  1 Apr 2022 13:09:17 +0200 (CEST)
+        Fri,  1 Apr 2022 13:02:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1648811358; bh=sFx/9K+fATOwENpzWD0YB1nZDFiZRSMkfrxRTxYpYu4=;
-        h=Resent-From:Resent-Date:Resent-To:Date:From:To:Cc:Subject:
-         References:In-Reply-To:From;
-        b=f1+caPrFTM9krPvMzGaMjvf21458ykaBZj+qyEm215jn1ETA64nFCVVgl9ybWQsmn
-         eTo3J6miq1wsVvuBB5chBT3SOZawGquvDTWqYQ9Qk2xF2RHhlMLe2tof8vqxumssfJ
-         f557qT00kleC6jIOvQoCyiQqddX7WpoIPB8WkmSE=
+        t=1648810968; bh=sFx/9K+fATOwENpzWD0YB1nZDFiZRSMkfrxRTxYpYu4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uD45acwqIr3Wb7Vmu7traJYV3OYsvls8brN1bP65ys0qZv0AcDgvDvsldQCMYYyL7
+         xhr1K/xW2SjYI9WkKJVqBns7+0E0BbVnNGhUTrTRZNa5yex7IwFuRcJB2U0Two3vC9
+         EJO/1UWFUJ+BdmiGmfMGVU2Ni46LFFYpVy6LCJDk=
 Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 553F581C33;
-        Fri,  1 Apr 2022 13:09:17 +0200 (CEST)
-Received: from buildd.core.avm.de ([172.16.0.225])
-          by mail-notes.avm.de (HCL Domino Release 12.0.1HF50)
-          with ESMTP id 2022040113024702-22341 ;
-          Fri, 1 Apr 2022 13:02:47 +0200
+        by mail-auth.avm.de (Postfix) with ESMTPA id 0F546804BC;
+        Fri,  1 Apr 2022 13:02:47 +0200 (CEST)
 Received: by buildd.core.avm.de (Postfix, from userid 1000)
         id 0378D180FAB; Fri,  1 Apr 2022 13:02:46 +0200 (CEST)
-Date:   Fri, 01 Apr 2022 13:02:46 +0200
+Date:   Fri, 1 Apr 2022 13:02:46 +0200
 From:   Nicolas Schier <n.schier@avm.de>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     patches@arm.linux.org.uk, linux-kernel@vger.kernel.org,
@@ -49,19 +44,10 @@ Subject: Re: [PATCH] ARM: decompressor: fix unneeded rebuilds of library
 Message-ID: <Ykbb1ow2Oya0aXb+@buildd.core.avm.de>
 References: <20220331084709.1079362-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20220331084709.1079362-1-masahiroy@kernel.org>
-X-MIMETrack: Itemize by SMTP Server on ANIS1/AVM(Release 12.0.1HF50 | March 1,
- 2022) at
- 01.04.2022 13:02:47,
-        Serialize by http on ANIS1/AVM(Release 12.0.1HF50 | March 1, 2022) at
- 01.04.2022 13:04:32,
-        Serialize complete at 01.04.2022 13:04:32
-X-TNEFEvaluated: 1
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Old-Date: Fri, 1 Apr 2022 13:02:46 +0200
-X-Notes-UNID: 39A4C571028BCD46B1950F2992BC67A7
-X-purgate-ID: 149429::1648811358-0000050B-38C9F536/0/0
+In-Reply-To: <20220331084709.1079362-1-masahiroy@kernel.org>
+X-purgate-ID: 149429::1648810967-00000606-2BD65CB1/0/0
 X-purgate-type: clean
 X-purgate-size: 721
 X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de

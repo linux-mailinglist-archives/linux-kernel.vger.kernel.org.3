@@ -2,207 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156BF4EE85C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E18F4EE874
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245560AbiDAGjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S1343517AbiDAGkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245512AbiDAGiq (ORCPT
+        with ESMTP id S245754AbiDAGkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:38:46 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC1919236D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:52 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id 63-20020a621742000000b004fa914b7f34so1138172pfx.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=uzcMfPPC4r9DDGZEKc9Z+WT8d8M153ZB7YHzP50uvCQ=;
-        b=sejzPoMfvygP+Yln6s7tbom3x27vqmjv+uyd79uPjN3jxvfF1wmqSlZxhPazjIOTrR
-         V63nVwYUn6riNiFEpx242Cla0yUMB5ZPL3hVfLMlzCtGRGChXeobeN7IWM5exWkIZzLm
-         7qUSYt+8YqmjecCpxTc5MFGv7uGJhFp4qE4tYaXHhGqVq9gND/05SlJ32xq3jeGdd21h
-         nzs6jh+kRm8cXA9GYM00Z0hVDvMr4UtSfVPYFyWqhfdtH/b1wHlfcLU0X4aXEvpFpraI
-         DmEv5f0Zw9L4DOeapIvTN0h33kQyhVbYUr04noqzZ0mzlgqxRgsAC+vahAdD71/5k0DT
-         vO3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=uzcMfPPC4r9DDGZEKc9Z+WT8d8M153ZB7YHzP50uvCQ=;
-        b=6PKb5ou1ES19cCrLfVMsRg5z+cdsmAhWIm9fjglonLGetSpDxV69f39bPwDbLRuTZD
-         vNn9AlNlJwISRKt/IO8cUnJB0qxZw9Z/9sZyAHjGkk8rkmzVtIMXtTGINbCS/l7tdFas
-         7/TDEiLlEhhk3W9G1LrLUopXj1ifp1tYnKFavxxEkSOIZEn0Ok5tpi4wGw6f7oG9u520
-         99dN2Ify43xDPCdpTlCY5j+6RRnSgi7LKp2NyfXeU+rGHYwoE1WiLmn/T1jRdJ4GseoQ
-         KbZlk14nKzT/dbopi5Zggcpq7KURb7gc+YteRauXACSdQLS2a0kVUeco1jxSWP+ZUrgd
-         XZlA==
-X-Gm-Message-State: AOAM531lzdJA55hPBfmjuT5CvVwhXMPlDvhaSrQPBqfLgjxb7o3ADjNf
-        Q5GRaeJ0MMOT2M2yMbhWXI5lSe5TlIt5
-X-Google-Smtp-Source: ABdhPJyAOejzhvbgsx7VN0zVrvPkMlMTUNrgRtrz5gzaixv2702AoUZ4mGJxU7txTGviK1moyXxJiP62V/yX
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a05:6a00:140f:b0:4e0:6995:9c48 with SMTP
- id l15-20020a056a00140f00b004e069959c48mr9243091pfu.59.1648795012083; Thu, 31
- Mar 2022 23:36:52 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Fri,  1 Apr 2022 06:36:36 +0000
-In-Reply-To: <20220401063636.2414200-1-mizhang@google.com>
-Message-Id: <20220401063636.2414200-7-mizhang@google.com>
-Mime-Version: 1.0
-References: <20220401063636.2414200-1-mizhang@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v3 6/6] selftests: KVM: use page stats to check if dirty
- logging works properly
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 02:40:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4BB264F6A;
+        Thu, 31 Mar 2022 23:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0ACEEB823E8;
+        Fri,  1 Apr 2022 06:37:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E905C340EE;
+        Fri,  1 Apr 2022 06:37:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648795053;
+        bh=NVRQRpeh39RuFm4OX2xeblhFImSS4XXrwXSpkpOPkC0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AS6/UzciUNTcSEDtTgR2CaZ/Lhswkf9nU5GFDhl44Mw2YhNpB4LrN6o9USnlFSSLg
+         81sW1KzUOD0bHQZCNqJr+EKRO4psOREt/Rc0pK+w3iNNXpmd+qVvmVZceUmsHQK4w+
+         3Zbja2Ryo5GrFAHWLcZkux0IAJib2mdgHmZQ+c9I=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 4.14 26/27] arm64: add ID_AA64ISAR2_EL1 sys register
+Date:   Fri,  1 Apr 2022 08:36:36 +0200
+Message-Id: <20220401063624.973840474@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220401063624.232282121@linuxfoundation.org>
+References: <20220401063624.232282121@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When dirty logging is enabled, KVM will remap all accessed pages in
-NPT/EPT at 4K. This property could be used to check if
-the page stats metrics work properly in KVM mmu. At the same time, this
-logic might be used the other way around: using page stats to verify if
-dirty logging really splits all huge pages. Moreover, when dirty logging is
-disabled, KVM zaps corresponding SPTEs and we could check whether the large
-pages come back when guest touches the pages again.
+From: James Morse <james.morse@arm.com>
 
-So add page stats checking in dirty logging performance selftest. In
-particular, add checks in three locations:
- - just after vm is created;
- - after populating memory into vm but before enabling dirty logging;
- - finish dirty logging but before disabling it;
- - behind the final iteration after disabling dirty logging.
+commit 9e45365f1469ef2b934f9d035975dbc9ad352116 upstream.
 
-Tested using commands:
- - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
- - ./dirty_log_perf_test -s anonymous_hugetlb_2mb
- - ./dirty_log_perf_test -s anonymous_thp
+This is a new ID register, introduced in 8.7.
 
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: David Matlack <dmatlack@google.com>
-Cc: Jing Zhang <jingzhangos@google.com>
-Cc: Peter Xu <peterx@redhat.com>
-
-Suggested-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
+Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Reiji Watanabe <reijiw@google.com>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211210165432.8106-3-joey.gouly@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../selftests/kvm/dirty_log_perf_test.c       | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ arch/arm64/include/asm/cpu.h    |    1 +
+ arch/arm64/include/asm/sysreg.h |    1 +
+ arch/arm64/kernel/cpufeature.c  |    9 +++++++++
+ arch/arm64/kernel/cpuinfo.c     |    1 +
+ 4 files changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index c9d9e513ca04..dd48aabfff5c 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -25,6 +25,10 @@
- #define GICR_BASE_GPA			0x80A0000ULL
- #endif
+--- a/arch/arm64/include/asm/cpu.h
++++ b/arch/arm64/include/asm/cpu.h
+@@ -36,6 +36,7 @@ struct cpuinfo_arm64 {
+ 	u64		reg_id_aa64dfr1;
+ 	u64		reg_id_aa64isar0;
+ 	u64		reg_id_aa64isar1;
++	u64		reg_id_aa64isar2;
+ 	u64		reg_id_aa64mmfr0;
+ 	u64		reg_id_aa64mmfr1;
+ 	u64		reg_id_aa64mmfr2;
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -157,6 +157,7 @@
  
-+#ifdef __x86_64__
-+#include "processor.h"
-+#endif
+ #define SYS_ID_AA64ISAR0_EL1		sys_reg(3, 0, 0, 6, 0)
+ #define SYS_ID_AA64ISAR1_EL1		sys_reg(3, 0, 0, 6, 1)
++#define SYS_ID_AA64ISAR2_EL1		sys_reg(3, 0, 0, 6, 2)
+ 
+ #define SYS_ID_AA64MMFR0_EL1		sys_reg(3, 0, 0, 7, 0)
+ #define SYS_ID_AA64MMFR1_EL1		sys_reg(3, 0, 0, 7, 1)
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -134,6 +134,10 @@ static const struct arm64_ftr_bits ftr_i
+ 	ARM64_FTR_END,
+ };
+ 
++static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
++	ARM64_FTR_END,
++};
 +
- /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
- #define TEST_HOST_LOOP_N		2UL
+ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_CSV3_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_CSV2_SHIFT, 4, 0),
+@@ -361,6 +365,7 @@ static const struct __ftr_reg_entry {
+ 	/* Op1 = 0, CRn = 0, CRm = 6 */
+ 	ARM64_FTR_REG(SYS_ID_AA64ISAR0_EL1, ftr_id_aa64isar0),
+ 	ARM64_FTR_REG(SYS_ID_AA64ISAR1_EL1, ftr_id_aa64isar1),
++	ARM64_FTR_REG(SYS_ID_AA64ISAR2_EL1, ftr_id_aa64isar2),
  
-@@ -191,6 +195,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 				 p->slots, p->backing_src,
- 				 p->partition_vcpu_memory_access);
+ 	/* Op1 = 0, CRn = 0, CRm = 7 */
+ 	ARM64_FTR_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0),
+@@ -506,6 +511,7 @@ void __init init_cpu_features(struct cpu
+ 	init_cpu_ftr_reg(SYS_ID_AA64DFR1_EL1, info->reg_id_aa64dfr1);
+ 	init_cpu_ftr_reg(SYS_ID_AA64ISAR0_EL1, info->reg_id_aa64isar0);
+ 	init_cpu_ftr_reg(SYS_ID_AA64ISAR1_EL1, info->reg_id_aa64isar1);
++	init_cpu_ftr_reg(SYS_ID_AA64ISAR2_EL1, info->reg_id_aa64isar2);
+ 	init_cpu_ftr_reg(SYS_ID_AA64MMFR0_EL1, info->reg_id_aa64mmfr0);
+ 	init_cpu_ftr_reg(SYS_ID_AA64MMFR1_EL1, info->reg_id_aa64mmfr1);
+ 	init_cpu_ftr_reg(SYS_ID_AA64MMFR2_EL1, info->reg_id_aa64mmfr2);
+@@ -617,6 +623,8 @@ void update_cpu_features(int cpu,
+ 				      info->reg_id_aa64isar0, boot->reg_id_aa64isar0);
+ 	taint |= check_update_ftr_reg(SYS_ID_AA64ISAR1_EL1, cpu,
+ 				      info->reg_id_aa64isar1, boot->reg_id_aa64isar1);
++	taint |= check_update_ftr_reg(SYS_ID_AA64ISAR2_EL1, cpu,
++				      info->reg_id_aa64isar2, boot->reg_id_aa64isar2);
  
-+#ifdef __x86_64__
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
-+		    "4K page is non zero");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-+		    "2M page is non zero");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-+		    "1G page is non zero");
-+#endif
- 	perf_test_set_wr_fract(vm, p->wr_fract);
+ 	/*
+ 	 * Differing PARange support is fine as long as all peripherals and
+@@ -737,6 +745,7 @@ static u64 __read_sysreg_by_encoding(u32
+ 	read_sysreg_case(SYS_ID_AA64MMFR2_EL1);
+ 	read_sysreg_case(SYS_ID_AA64ISAR0_EL1);
+ 	read_sysreg_case(SYS_ID_AA64ISAR1_EL1);
++	read_sysreg_case(SYS_ID_AA64ISAR2_EL1);
  
- 	guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
-@@ -232,6 +244,17 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	pr_info("Populate memory time: %ld.%.9lds\n",
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
-+#ifdef __x86_64__
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-+		    "4K page is zero");
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP ||
-+	    p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-+			    "2M page is zero");
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-+			    "1G page is zero");
-+#endif
- 	/* Enable dirty logging */
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	enable_dirty_logging(vm, p->slots);
-@@ -277,6 +300,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 				iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 		}
- 	}
-+#ifdef __x86_64__
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
-+		    "4K page is zero after dirty logging");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
-+		    "2M page is non-zero after dirty logging");
-+	TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
-+		    "1G page is non-zero after dirty logging");
-+#endif
- 
- 	/* Disable dirty logging */
- 	clock_gettime(CLOCK_MONOTONIC, &start);
-@@ -285,6 +316,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
-+	/*
-+	 * Increment iteration to run the vcpus again to ensure all pages come
-+	 * back.
-+	 */
-+	iteration++;
-+	pr_info("Starting the final iteration to get all pages back.\n");
-+	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
-+		while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
-+		       != iteration)
-+			;
-+	}
-+
-+#ifdef __x86_64__
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP ||
-+	    p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
-+			    "2M page is zero");
-+	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
-+		TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
-+			    "1G page is zero");
-+#endif
-+
- 	/* Tell the vcpu thread to quit */
- 	host_quit = true;
- 	perf_test_join_vcpu_threads(nr_vcpus);
--- 
-2.35.1.1094.g7c7d902a7c-goog
+ 	read_sysreg_case(SYS_CNTFRQ_EL0);
+ 	read_sysreg_case(SYS_CTR_EL0);
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -333,6 +333,7 @@ static void __cpuinfo_store_cpu(struct c
+ 	info->reg_id_aa64dfr1 = read_cpuid(ID_AA64DFR1_EL1);
+ 	info->reg_id_aa64isar0 = read_cpuid(ID_AA64ISAR0_EL1);
+ 	info->reg_id_aa64isar1 = read_cpuid(ID_AA64ISAR1_EL1);
++	info->reg_id_aa64isar2 = read_cpuid(ID_AA64ISAR2_EL1);
+ 	info->reg_id_aa64mmfr0 = read_cpuid(ID_AA64MMFR0_EL1);
+ 	info->reg_id_aa64mmfr1 = read_cpuid(ID_AA64MMFR1_EL1);
+ 	info->reg_id_aa64mmfr2 = read_cpuid(ID_AA64MMFR2_EL1);
+
 

@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BCA4EFA48
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBCA4EFA46
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351535AbiDATJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S1351499AbiDATJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351497AbiDATJF (ORCPT
+        with ESMTP id S1351505AbiDATJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:09:05 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB9C28A028
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:07:14 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id hu11so2739357qvb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 12:07:14 -0700 (PDT)
+        Fri, 1 Apr 2022 15:09:07 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D72128A035
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:07:16 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id d65so2885367qke.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 12:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
         bh=7duh5/e6azg6x7M9ZEJraSnYR2xg1p2mo3IgTU2n19I=;
-        b=ixCVpPmT/JlXNt6KzufnyJWEqNtOWAo85HK28S7mlmUNz7+i+Xn2ycK3NtwdyV/3Ws
-         im+/dNS7arlQR3WljVo4QAnmbBbFbEWexnKya1xQXePJMI6X/aeQkvVEsNqaLv8hOedT
-         2pCzBm9lLcNw1XPFNOWd7YHC81/woL+Akco37rWL2xbn/fIsiyemhEveLI5NMLtd1ph0
-         HPvF+IuqC9qQAKpJuFTTm+a9KWHRw+YQd1uiasqUktgDSsxeDzJ9tqoBeP9L8gED8HNX
-         vm0KcOre3UBqdAWaiY04VWpAcV8o1dqVb1ol/Oxpu08qoU2KVPRpwfZ7f9LsR+p8qho4
-         2nHw==
+        b=APcJEDArJqsnOZqX52DlQofSk6M2o5kXbtnZRnmR4+bMQwuqhC9GbyCQkPWUCDWHpT
+         OjTa9QKc4uR6yJXko6K6zn1nL7B5iFutXY/Lts6BsgNBVevLricqdXdR1FeVpJ9Q+qGa
+         odNRS+gj1i6IZ1qn+MXW19FZEeqj98bhygB6n2ihmYQohknqiaPh8Bkepeyv+WbPLXtF
+         iSAxNrsv/HP1kpjqCgPgcknB4rc5goyMxLLdJrYq1KZkaYBrUFqj3B1X4gsnttBPrvfr
+         cSFfyN+EVJIPVBaqTlld9w5Xp/T5WOY9eMoYwrUgStxAljX6sxKK25KfVGJWuud9iqlW
+         N3hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
         bh=7duh5/e6azg6x7M9ZEJraSnYR2xg1p2mo3IgTU2n19I=;
-        b=aKLkpXPOkiu7Vu9SEG9osqZJr3cdT04lMQ1CqFhjQEuurIcRjmeZcY1/5dJY89nULC
-         Dcaac1TllXXzZczsJrj2zDFZrgA+mLXMY4Kx7Gv9xHodn8y55ttyDosweVed0Sknj5e4
-         e0lHEWmlcxmK6D5QXPHveMvoYan0YPfzJuWyUe2CXHSmQQD1Zet4sYzH4oU8ygIlDLT4
-         ytvV3csDpNgskDW8ThJzSMZFspkiocEehDh15ZNkB/CG2wt5nWk10lepq4AGqw2GGsBG
-         FRAci6RqfASuEzY97eDapbiQAABmYSOIqM9rOoLI8lra2ckFDx6gOnL0dxjxoAQOlc3p
-         DpBQ==
-X-Gm-Message-State: AOAM532wL+unANm20lxtUml/zkaQITL+up4c3uUthdGoYjLu5dRCzNjl
-        jTq4g7TyJB3QW/Xmnmauc6Y=
-X-Google-Smtp-Source: ABdhPJw2mfHY0gOg+ec3qnwP3hWFN+2tbRKgXUdgtDXbIGg/5BcqyaMV0aj88gpDCQmfER129js3Cg==
-X-Received: by 2002:ad4:4874:0:b0:440:f735:2743 with SMTP id u20-20020ad44874000000b00440f7352743mr9362812qvy.0.1648840033574;
-        Fri, 01 Apr 2022 12:07:13 -0700 (PDT)
+        b=UfOlpVkpelw+N8VpSdYBxfLrRrcMbhJX5xCecIHjqAUhuBejTuQlemK3FMlhznAxy/
+         PpaF7Qr1c4ploSay5pHFo+PIoUARLxKjqOxb80BJxH19oyC2G+T6ADYuLzvOLzcgjIRv
+         zlQYkb7eH9JrgLvk7yFtxzuvZBwLxelj5OQOVpv9TGbB+LflpTgOaEO7WapAF6M8zFhy
+         oVhezZXeaMAZfz1IAcUzaLTG9tGNNEm2bVkj5HYRYWwAbCUrrVTF8L1QkszSqbRE4cIe
+         /Ra+U9gVgVVKTk4pIV0IqjPEgkt9eoFs+hHi264WkwFG6ULKYs8iWL7njGgo3CgUZ177
+         Y0PQ==
+X-Gm-Message-State: AOAM531bbD2MJEoo711jafmKVt29Ki7Vbwr2QoATL6HIPhZmVxndQDZ+
+        1RdWX2smP8WXWGpIeZiJlXs=
+X-Google-Smtp-Source: ABdhPJzgZVBoX9n8hle80mGH6mQBR9zbxOU1a7ngT2sbYX7Q1YBV857k348RMha0AjcM8eAflQSSxw==
+X-Received: by 2002:a05:620a:410b:b0:67d:d23f:13d5 with SMTP id j11-20020a05620a410b00b0067dd23f13d5mr7670928qko.705.1648840035103;
+        Fri, 01 Apr 2022 12:07:15 -0700 (PDT)
 Received: from euclid ([71.58.109.160])
-        by smtp.gmail.com with ESMTPSA id h22-20020a05620a245600b0067d6dae634csm2070825qkn.9.2022.04.01.12.07.12
+        by smtp.gmail.com with ESMTPSA id l18-20020a05622a051200b002e1e5e57e0csm2341549qtx.11.2022.04.01.12.07.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 12:07:12 -0700 (PDT)
+        Fri, 01 Apr 2022 12:07:14 -0700 (PDT)
 From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         outreachy@lists.linux.dev,
         Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Subject: [PATCH 2/2] staging: rtl8723bs: remove redundant else branches
-Date:   Fri,  1 Apr 2022 15:06:59 -0400
-Message-Id: <eb57817c25a90a98d5f1602f6595cae13b2ae7ef.1648839290.git.sevinj.aghayeva@gmail.com>
+Subject: [PATCH 3/3] staging: rtl8723bs: remove redundant else branches
+Date:   Fri,  1 Apr 2022 15:07:00 -0400
+Message-Id: <eb57817c25a90a98d5f1602f6595cae13b2ae7ef.1648839305.git.sevinj.aghayeva@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1648839290.git.sevinj.aghayeva@gmail.com>
-References: <cover.1648839290.git.sevinj.aghayeva@gmail.com>
+In-Reply-To: <cover.1648839305.git.sevinj.aghayeva@gmail.com>
+References: <cover.1648839305.git.sevinj.aghayeva@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,

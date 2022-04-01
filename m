@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49A64EFB79
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F404EFB92
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352146AbiDAU1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S1352734AbiDAU3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240467AbiDAU1m (ORCPT
+        with ESMTP id S1352718AbiDAU21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:27:42 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C5F2A5
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:25:51 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-df22f50e0cso3949708fac.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oqLr3CQkeovfFARJlOS29QpiBz7Mv54uvfNsfK21+RE=;
-        b=coOUZSozgph8g3yWCWkQpoEyvEcw2gzPyFFMsn0aOu49d0AOZRLPlt6DB6qkqE/1aa
-         oZP8LkZY7cBvT/pMb0haVysTmw7cesWJ/R2J5jXQ9Nn/cXmlrWyuxxUGPvFed5adi4sB
-         SPk6XCvE/fEhadDXiP5NicXLmDj5B/ofrUB8jORzZGoN3lNh4K4saSCMKh78xTS2u8mf
-         JE5bo/FKjygn/SdX5FALm8Q/QVEw+XLRkF+jsVrhIw0qFKfc7v5PdxM2Cl5M+7ECLwSx
-         messGYWBZpMOrq9ZMDr+IyEvR6gozjPg65suApTedWWcCms1+jjJbxa1jcNun68/RR3G
-         1YWg==
+        Fri, 1 Apr 2022 16:28:27 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569AD58395;
+        Fri,  1 Apr 2022 13:26:36 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id e189so3917775oia.8;
+        Fri, 01 Apr 2022 13:26:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oqLr3CQkeovfFARJlOS29QpiBz7Mv54uvfNsfK21+RE=;
-        b=WI+DvQo+qKnNyB69Kpb0X7Ju4PnIMDlza0RA/l2NgwW6flfIfRU8YoSJcKp4nO8S3W
-         pBcD0KVl9lFcMKlu03iXa8qQgVsZANKsepogRk1xYuPXFqSP4VKnIsEBYjZkuP4fCdAv
-         pIYbe+TSmaOCs480FHtY8yY1uZ0NlUfcUedFYnTkNWno1xoR8Shs67UG0PpkbMtPkESH
-         mN7U+wIQZz5RpUyazZwIn9+LBm+dpsW9m74OU/Tf4FWfztJsMP+uZcbwK5FoANSCiSIJ
-         qxqbBWnXsMMPjmdxqcsbUd7SUJC/mZ6PyuuRh0LdAdahEJeXlrnWqAr+tX+KmIhkQwt0
-         k4kQ==
-X-Gm-Message-State: AOAM530vKecxRbCvSLYAIha+45qTKMjbKsqgAdUUsf5QLpc7UL4rVQmb
-        6JESMPWPw3qP5wl/lHOFIFWWkvjYOt4=
-X-Google-Smtp-Source: ABdhPJzkb0JznTQj7KBrDYpwHJJyzvXVyXaU1Rdk3Hk1yrEsFgwqtafPkNRZupXizjn7fIqrVHbepg==
-X-Received: by 2002:a05:6870:e9a0:b0:e1:c609:74ac with SMTP id r32-20020a056870e9a000b000e1c60974acmr1419358oao.127.1648844751291;
-        Fri, 01 Apr 2022 13:25:51 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::1004? (2603-8090-2005-39b3-0000-0000-0000-1004.res6.spectrum.com. [2603:8090:2005:39b3::1004])
-        by smtp.gmail.com with ESMTPSA id h11-20020a9d6f8b000000b005b230ab0461sm1559019otq.64.2022.04.01.13.25.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 13:25:50 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <8e68501c-24fd-cfbc-60f2-ec3e277159ab@lwfinger.net>
-Date:   Fri, 1 Apr 2022 15:25:49 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T+0PW5LNkz/Ox7qIIpulz8qqFC9xWysNmc+x8WFttFI=;
+        b=5lsKgLsuYt89sUkh4navtKdOnEt+IFXgqV50aak7qlru0y4CW+sBtVGH1XZ0gxsEcl
+         sxtAzqPlJixT3dL/EYHhWHugeEzr7lDVSs1chJcSYi3+wEIMuaIYCnrIR7bsxsezhadH
+         k8mm5HDPu6B7rrB5M+GusidyWZT+7Qxot3rP+QZd+jROfXVtSAkzYRZjkFRtH+ntHdBI
+         XN4XfVWtfLAY/VEEsGyjgdpzLRe9EZtvkJzpEYdMTDdBq8d9IttSlVRFBkOsfVBN1TIN
+         /aumwUd1OF+hin+Q8aGv7gACja0EX4vgrscGvfIcBvWNkNIIuCyJfhugw4N6BDd989bt
+         p6cg==
+X-Gm-Message-State: AOAM5301GaSTqgwtoPHEgHQuMfvSJ5ph3XaoloyTOxlTyDsXjPZ1ezD4
+        Y9AzFS8S/ERTzPWJGRu4EQ==
+X-Google-Smtp-Source: ABdhPJw+tFR9vw806n3+CZYVqImyHzmW91QrWT8iYynrciq4HEd6xNf3xACCW870T49+LpN9xAOA4Q==
+X-Received: by 2002:a05:6808:238e:b0:2ec:e0ee:abe4 with SMTP id bp14-20020a056808238e00b002ece0eeabe4mr5792022oib.187.1648844796079;
+        Fri, 01 Apr 2022 13:26:36 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y3-20020a056870e50300b000d9be6436f1sm1415409oag.29.2022.04.01.13.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 13:26:34 -0700 (PDT)
+Received: (nullmailer pid 3526180 invoked by uid 1000);
+        Fri, 01 Apr 2022 20:26:33 -0000
+Date:   Fri, 1 Apr 2022 15:26:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com, broonie@kernel.org,
+        lorenzo.pieralisi@arm.com, jingoohan1@gmail.com,
+        festevam@gmail.com, francesco.dolcini@toradex.com,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v8 8/8] PCI: imx6: Add compliance tests mode support
+Message-ID: <Ykdf+dQE10fkK3K6@robh.at.kernel.org>
+References: <1645760667-10510-1-git-send-email-hongxing.zhu@nxp.com>
+ <1645760667-10510-9-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] staging: r8188eu: Fix PPPoE tag insertion on big endian
- systems
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220401151257.3414576-1-linux@roeck-us.net>
- <782f0115-e45f-1aff-a152-5d403c990b31@lwfinger.net>
- <dcba377b-1fce-92e6-680a-77c5567cd06c@roeck-us.net>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <dcba377b-1fce-92e6-680a-77c5567cd06c@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645760667-10510-9-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,15 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 14:25, Guenter Roeck wrote:
-> The rest of the code uses htons/ntohs, so I prefer to follow that lead.
+On Fri, Feb 25, 2022 at 11:44:27AM +0800, Richard Zhu wrote:
+> Refer to the Chapter 3.2 System Board Signal Quality of PCI Express
+> Architecture PHY Test Specification Revision 2.0.
+> 
+> Signal quality tests (for example: jitter, differential eye opening and
+> so on) can be executed with devices in the polling.compliance state.
+> 
+> To let the device support polling.compliance state, the clocks and powers
+> shouldn't be turned off when the probe of device driver fails.
+> 
+> Based on CLB (Compliance Load Board) Test Fixture and so on test
+> equipments, the PHY link would be down during the compliance tests.
+> Refer to this scenario, add the i.MX PCIe compliance tests mode enable
+> support, and keep the clocks and powers on, and finish the driver probe
+> without error return.
 
-You just proved my point. It is hard to get be16_to_cpu() wrong. Sparse will 
-flag the error when you use cpu_to_be16() instead. I expect that your 
-htons/ntohs problem would also have shown up with Sparse.
+How is this specific to i.MX? If there's a need for compliance test 
+mode, then shouldn't it be common? However, while your usecase is 
+compliance testing, there doesn't seem to be any need for the kernel to 
+know what the usecase is.
 
-Larry
+In the same series you've argued both ways. You need the driver to probe 
+successfully with no link and you need it to shutdown on no link.
 
-
-
-
+> 
+> Use the "pci_imx6.compliance=1" in kernel command line to enable the
+> compliance tests mode.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 47 ++++++++++++++++++---------
+>  1 file changed, 31 insertions(+), 16 deletions(-)

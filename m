@@ -2,135 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43A04EEEA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218CF4EEEAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346583AbiDAN7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S1346597AbiDAOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiDAN7V (ORCPT
+        with ESMTP id S229719AbiDAOAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:59:21 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7022C280EF1;
-        Fri,  1 Apr 2022 06:57:32 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso2601311pjh.3;
-        Fri, 01 Apr 2022 06:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zhI8HSmXQhpupMl4PPKuINoqdj8SShsVbASO+4FyDJA=;
-        b=acHYoRd9fl+1Sd/3JOEzziqyFg3qrd4e4NkDwGpAwylr2oaZ8JR1ySztaOCn/zAuBM
-         Hc3bu4kJ1K6DbFaYcvUhUe1qBM5UREr0vjdh+DKnfiNqArhQlWGn9hNvrIyhWLK7Q0jR
-         qlltuIsxf5HENKVBXcNYpHTpHSKwSLYrbz7TNxV7zpyGzJVR9N08DeO2fT/kObUa6702
-         L5BTmXbu0W/7yXz8rWslEr0kY6nt9GYvVHGE8TritmhGnG+3OdBVj5rhUgXrE8YJqYS8
-         v3uBZErqCARwyzBlmjeinOzhPom5J2WkuFeNfGto5O7AI0I7h3d0QrAV44kAer9ucClZ
-         axVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zhI8HSmXQhpupMl4PPKuINoqdj8SShsVbASO+4FyDJA=;
-        b=UXlFtr/kfD50ahgraHPb7oohbnUtYRnIr5HqiivU/NvrqMesUiLo4GMbqJ6EoOX2VX
-         P2BQ8X+E9DEDaG26315ZnAoYGRlGvs34ylBiKXAOnQkyh0P4mQuXyTwbR4ksv4+1H85m
-         Bko7gLSp8hrMwqpL5R/UwsyFFr/S61QCpWKUIdYK1zt3/W/wfGb2X9EiQg7UcoHW25SP
-         lz+ohLyR2qmD7t1h1ScB9De9/LUSAmYGwwqmFd/kd0TJtBktnEKTGm+8TsWlBeu5/NRt
-         jnZkw1+2WYq39HMgdmiutKcZj+g6uUeHfcu+jKol7R0b4qpMCgC96l2YF88SXmtOfAZc
-         ceTQ==
-X-Gm-Message-State: AOAM530r+6y9TLZtzB0/8EbLp5MrFIY5CdiIKMfB/KqSwBAZyaUmSaOt
-        F4VAy/btSpPk4tHMiYojjCwvwtPUSyU=
-X-Google-Smtp-Source: ABdhPJxgbGSIiinLxRILEw+RqQWVcTIjP0Am+7lU6DaHiJzBfKzL46/yrtmT0Fx2COMzodmLjGUM4w==
-X-Received: by 2002:a17:90b:4a41:b0:1c7:a0d7:718c with SMTP id lb1-20020a17090b4a4100b001c7a0d7718cmr11849128pjb.57.1648821451721;
-        Fri, 01 Apr 2022 06:57:31 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id q15-20020a056a00150f00b004fb28ea8d9fsm3407312pfu.171.2022.04.01.06.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 06:57:31 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 19:27:25 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: qcom: qcom,geni-se: refer to
- dtschema for SPI
-Message-ID: <20220401135725.GA40356@9a2d8922b8f1>
-References: <20220331160248.716234-1-krzysztof.kozlowski@linaro.org>
- <20220331160248.716234-2-krzysztof.kozlowski@linaro.org>
+        Fri, 1 Apr 2022 10:00:19 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088E2C79
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:58:26 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id D9D393200F72;
+        Fri,  1 Apr 2022 09:58:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 01 Apr 2022 09:58:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=2nU+VZUHjfRgXw79i6wfh74gnFpHiuHpC7Kwwp
+        V6T0c=; b=OuASuwFKrQxica335ULucZKiokxQcmSt4KrmN5ES0JNIb755nefSlm
+        3edc33v1hLP0t+++hbn32p5/Ak5JDlDw9fmTC/iZuAUYnTwB6nf7znDzlMl/QhfC
+        hTjiJ1ZwmkyEj0yI8q6JfJwyb41KjqQgmAKYLV8gHjXhi9kGXSaCNbgIRvpnoksZ
+        p/CQFKRtvkQQNhHsb0LGhRvnI+G7aYdrDuU0ixKwCusEYB3JQnFvLoWzPUm6ms0h
+        ud/mQsnYX31xUYwtFz7TdiA2b8COWNTKS67w32Y9KHA6njHttK17oQZmMtLKFLTb
+        ApZ1CEF6rnYO9ut+HCHwy6bUSmYJUJxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:reply-to
+        :sender:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; bh=2nU+VZUHjfRgXw79i6wfh74gnFpHi
+        uHpC7KwwpV6T0c=; b=f35dgA121EFkB1TBtfF78IZ6c6+Bq4ZdaFRMx3RMTaJpK
+        l/9faZdXR6pgZYfw0zY02vrMLoGvVagPt9w9T7BMdI0vf7UCExAT6iZBYwx0TrI3
+        K7Kpn5yCBO7lnElRw+nc+i6rz56DF4c66CAR7gAlhKpKNjQclGsgm9Qf9GhXWutv
+        qNme3Al6fAbwd05wRzCZPhCDchytZLJu7IfCo515Zw+ZqRFqO3VJIoRXyTwB67aZ
+        R8mk58tkqQgGSWvgk7V0AZovlj0rOASRmHhvtPVv525ZUNHXGiLGLYtwuuXgqPlu
+        Y+7TjwVMaCnNkL0iGBFlFzd/JozwX6CuDAPuTWruA==
+X-ME-Sender: <xms:_wRHYvNGqM70L1016mlgyn4N64r7Fo4gWrKuKeLreRVf-ANLm88ILA>
+    <xme:_wRHYp-jXpdYkGyFDlVHUKTXpYRmZEqz4RknYJp-awzlTLeBn7x1fsE5d2qYGLTml
+    8BmP_G4k9Bay_sGbQ>
+X-ME-Received: <xmr:_wRHYuTcQCpnAYLUomeJr4OUqusJk5zatHo5DL805ra1qHH_IK0NjbSxbiKizwvRP3WPcyUxspxNV6FSiA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiiedgjeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkfforhgggfestdhqredtredttdenucfhrhhomhepkghiucgjrghn
+    uceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepteeiiedtje
+    fghfefueekjedvueeftddvudelhfetudffiefgfeetheeghfdvgedunecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
+X-ME-Proxy: <xmx:_wRHYjtRJuPRHJZXfsZJ-GAvc1cOnCF5FujH0B8Q30ZM8D_a1vdrLA>
+    <xmx:_wRHYndc82xGckScSSpi632FMYpH5Uo-BMeDe7HFcg35gfG6PHgllg>
+    <xmx:_wRHYv3kS_lPx50KHR-leB7F1ZdjpYpiiqJlWZZ4xNnI2DlqPQLWXA>
+    <xmx:AAVHYr42LgWsjsjgFAOM0TDK25FSar7JBQ8ym9BQQ2QTYgs84MVEYQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Apr 2022 09:58:23 -0400 (EDT)
+From:   Zi Yan <zi.yan@sent.com>
+To:     linux-mm@kvack.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: [PATCH 1/2] mm: page_alloc: simplify pageblock migratetype check in __free_one_page().
+Date:   Fri,  1 Apr 2022 09:58:19 -0400
+Message-Id: <20220401135820.1453829-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.35.1
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331160248.716234-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 06:02:48PM +0200, Krzysztof Kozlowski wrote:
-> After adding DT schema for the SPI controller, the Qualcomm GENI Serial
-> Engine QUP Wrapper Controller bindings can reference it directly for
-> full schema validation.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Zi Yan <ziy@nvidia.com>
 
-Reviewed-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Move pageblock migratetype check code in the while loop to simplify the
+logic. It also saves redundant buddy page checking code.
 
-> 
-> ---
-> 
-> Changes since v1:
-> 1. None
-> 
-> Patch depends on previous patch (DT schema conversion).
-> ---
->  .../bindings/soc/qcom/qcom,geni-se.yaml       | 22 +------------------
->  1 file changed, 1 insertion(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> index 690ce6a355de..1bc12b6a7e01 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> @@ -103,27 +103,7 @@ patternProperties:
->                   supports up to 50MHz, up to four chip selects, programmable
->                   data path from 4 bits to 32 bits and numerous protocol
->                   variants.
-> -    $ref: /spi/spi-controller.yaml#
-> -
-> -    properties:
-> -      compatible:
-> -        enum:
-> -          - qcom,geni-spi
-> -
-> -      interrupts:
-> -        maxItems: 1
-> -
-> -      "#address-cells":
-> -        const: 1
-> -
-> -      "#size-cells":
-> -        const: 0
-> -
-> -    required:
-> -      - compatible
-> -      - interrupts
-> -      - "#address-cells"
-> -      - "#size-cells"
-> +    $ref: /schemas/spi/qcom,spi-geni-qcom.yaml#
->  
->    "i2c@[0-9a-f]+$":
->      type: object
-> -- 
-> 2.32.0
-> 
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+Link: https://lore.kernel.org/linux-mm/27ff69f9-60c5-9e59-feb2-295250077551=
+@suse.cz/
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+---
+ mm/page_alloc.c | 46 +++++++++++++++++-----------------------------
+ 1 file changed, 17 insertions(+), 29 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 856473e54155..2ea106146686 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1054,7 +1054,6 @@ static inline void __free_one_page(struct page *page,
+ 		int migratetype, fpi_t fpi_flags)
+ {
+ 	struct capture_control *capc =3D task_capc(zone);
+-	unsigned int max_order =3D pageblock_order;
+ 	unsigned long buddy_pfn;
+ 	unsigned long combined_pfn;
+ 	struct page *buddy;
+@@ -1070,8 +1069,7 @@ static inline void __free_one_page(struct page *page,
+ 	VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+ 	VM_BUG_ON_PAGE(bad_range(zone, page), page);
+=20
+-continue_merging:
+-	while (order < max_order) {
++	while (order < MAX_ORDER - 1) {
+ 		if (compaction_capture(capc, page, order, migratetype)) {
+ 			__mod_zone_freepage_state(zone, -(1 << order),
+ 								migratetype);
+@@ -1082,6 +1080,22 @@ static inline void __free_one_page(struct page *page,
+=20
+ 		if (!page_is_buddy(page, buddy, order))
+ 			goto done_merging;
++
++		if (unlikely(order >=3D pageblock_order)) {
++			/*
++			 * We want to prevent merge between freepages on pageblock
++			 * without fallbacks and normal pageblock. Without this,
++			 * pageblock isolation could cause incorrect freepage or CMA
++			 * accounting or HIGHATOMIC accounting.
++			 */
++			int buddy_mt =3D get_pageblock_migratetype(buddy);
++
++			if (migratetype !=3D buddy_mt
++					&& (!migratetype_is_mergeable(migratetype) ||
++						!migratetype_is_mergeable(buddy_mt)))
++				goto done_merging;
++		}
++
+ 		/*
+ 		 * Our buddy is free or it is CONFIG_DEBUG_PAGEALLOC guard page,
+ 		 * merge with it and move up one order.
+@@ -1095,32 +1109,6 @@ static inline void __free_one_page(struct page *page,
+ 		pfn =3D combined_pfn;
+ 		order++;
+ 	}
+-	if (order < MAX_ORDER - 1) {
+-		/* If we are here, it means order is >=3D pageblock_order.
+-		 * We want to prevent merge between freepages on pageblock
+-		 * without fallbacks and normal pageblock. Without this,
+-		 * pageblock isolation could cause incorrect freepage or CMA
+-		 * accounting or HIGHATOMIC accounting.
+-		 *
+-		 * We don't want to hit this code for the more frequent
+-		 * low-order merging.
+-		 */
+-		int buddy_mt;
+-
+-		buddy_pfn =3D __find_buddy_pfn(pfn, order);
+-		buddy =3D page + (buddy_pfn - pfn);
+-
+-		if (!page_is_buddy(page, buddy, order))
+-			goto done_merging;
+-		buddy_mt =3D get_pageblock_migratetype(buddy);
+-
+-		if (migratetype !=3D buddy_mt
+-				&& (!migratetype_is_mergeable(migratetype) ||
+-					!migratetype_is_mergeable(buddy_mt)))
+-			goto done_merging;
+-		max_order =3D order + 1;
+-		goto continue_merging;
+-	}
+=20
+ done_merging:
+ 	set_buddy_order(page, order);
+--=20
+2.35.1
+

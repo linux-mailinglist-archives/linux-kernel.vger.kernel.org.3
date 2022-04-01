@@ -2,283 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE8F4EEA35
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0CE4EEA38
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344415AbiDAJSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 05:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S1344422AbiDAJST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236995AbiDAJSH (ORCPT
+        with ESMTP id S236995AbiDAJSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 05:18:07 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738E21D59C1
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:16:18 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id b13so2156343pfv.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 02:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mVtM4JSAbem5vI9+iuqfBK73jb3O87WJ5L8y1a9lG0k=;
-        b=qBhXowGyC8QPVrqYIiBrDRqGidNxRPybkTr1qpdVQuxv2f1BsLDxISO4qXFuFcNK7k
-         CjkH1IIsBGXG5QGrrQilYhMyUyVQ6Ffguxz8o4aPErdkR+RyesWbakUcwsTVHuRnggU5
-         41PA8xIK8/aT4fT3MRjvLBsVrYLlprc8AQiOzUWqTvvbWJjGQ6I/nhZQoH/ahBpr5noN
-         O2+Eq72KeLQLXtISp5EFkDKwDOvhw5J4Wx3vr2sHnwgWl4dGDROEQ3tfLw7yGl0x5C+q
-         XLbIfJS6nMf3DsP5oxD6k4cHALXNs2ggeBrQWfkIHsrAf++kuBxMf6i5Pqxf1SogT8Mo
-         nUVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mVtM4JSAbem5vI9+iuqfBK73jb3O87WJ5L8y1a9lG0k=;
-        b=3zZgQ1AHHuHoUziBjsCTZUjfT0o1D/1BkHR9IXjXz2zYFLm7PW/xBNeO5QzS6LrPml
-         0CCQ72d2agt2ud9INe+J2Sek6EP+6L8R2BEssESE4NdL1rKZ4/xCHDbcOrzOl08X/Srl
-         dVON9uwbA0mFyEZImrSMRGAuaiMI0br+ry8nh7lMlBgkaWs+mMYlwm/9nmvmfIPE2gdR
-         lyEgjZ+0fOvIXd3WEcpLMz4bbJS/IU1zoJM3WPeaBbZDWzVNPka32y1WvCXPRNkORdt9
-         un+EhF48VNZwWRTPV8vinvlSZ2xAoDlJE0Ip+E+thThFkWrs9p32nyj+YfNst31kMhLY
-         1AdQ==
-X-Gm-Message-State: AOAM533ktwJtx1xRz8tVW1F/3RGo23sQgcwVZPmhzi/S5rP/9n60BgsK
-        3YZndQmifhsxnpUCXm2rTjVjjUtkLrqDSL41CXB22Q==
-X-Google-Smtp-Source: ABdhPJxVpSge4lhANEie6/fjIW+bzMrkYinehipLbgvk+7CkO338yLhmViJP9F1aNuuv60tpEIk5t5ZrXK2q7845Y2c=
-X-Received: by 2002:a63:ff63:0:b0:386:327:5353 with SMTP id
- s35-20020a63ff63000000b0038603275353mr14022888pgk.401.1648804577681; Fri, 01
- Apr 2022 02:16:17 -0700 (PDT)
+        Fri, 1 Apr 2022 05:18:10 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002181CABC0
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:16:20 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220401091618epoutp049e1b6c54d03631f4da8e6022e55cca6d~huwczhbnV2454024540epoutp04e
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:16:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220401091618epoutp049e1b6c54d03631f4da8e6022e55cca6d~huwczhbnV2454024540epoutp04e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648804578;
+        bh=cGJepxz4cnstkBJIo6/P4jwwK3qA32Md6z1NYGJE1YA=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=fJ8oHR5X6p7ctSPK6cYpdWKADZkdkCCc1yNH3tBCUxc0miPJ69aAMKGCZLV3lh4z1
+         N54mrjrlruLQWlDtdqVGbASDGPaNLKntLkjOLl0+i4Wso7BJE9xYjXzVylxgREbWDv
+         Nhzp3zGRVG+VxaY9MIB//XTKYPDkA5vZtDTVu8Gw=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220401091617epcas2p20f5f28caf4027e56df85ca212a0e681c~huwcWwKeY0444904449epcas2p2-;
+        Fri,  1 Apr 2022 09:16:17 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KVF0G6Fp0z4x9Q7; Fri,  1 Apr
+        2022 09:16:14 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A7.28.33036.ED2C6426; Fri,  1 Apr 2022 18:16:14 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220401091614epcas2p16a5e0585aa821d448dd8f2609c51bffd~huwZbp9_R2667326673epcas2p1x;
+        Fri,  1 Apr 2022 09:16:14 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220401091614epsmtrp2a4d0c38cdba198365f5154ec19817213~huwZamjXn2251322513epsmtrp2a;
+        Fri,  1 Apr 2022 09:16:14 +0000 (GMT)
+X-AuditID: b6c32a48-511ff7000000810c-15-6246c2de0062
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        36.CD.03370.ED2C6426; Fri,  1 Apr 2022 18:16:14 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220401091614epsmtip21f4171f3b2d644951d46ed35cc5e2952~huwZQzi1C1759617596epsmtip2U;
+        Fri,  1 Apr 2022 09:16:14 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        "'Avri Altman'" <avri.altman@wdc.com>,
+        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
+        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220401085050.119323-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH] scsi: ufs: ufshcd-pltfrm: simplify usages of pdev->dev
+Date:   Fri, 1 Apr 2022 18:16:14 +0900
+Message-ID: <01e401d845a9$22e481e0$68ad85a0$@samsung.com>
 MIME-Version: 1.0
-References: <20220331084151.2600229-1-yosryahmed@google.com> <YkXkA+Oh1Bx33PrU@carbon.dhcp.thefacebook.com>
-In-Reply-To: <YkXkA+Oh1Bx33PrU@carbon.dhcp.thefacebook.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 1 Apr 2022 02:15:41 -0700
-Message-ID: <CAJD7tkZxqWg2NRi=83wSWLiykZBfrP8Kx_C5JWy48=rZoBWoHw@mail.gmail.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIQxNM3mfj57f4Z1qObDZeWls2QCQI208enrFgRaYA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmhe69Q25JBl8bDS0ezNvGZvHy51U2
+        i0U3tjFZ7H29ld3i8q45bBbd13ewWSw//o/Jgd3jzrU9bB4TFh1g9Pj49BaLR9+WVYwenzfJ
+        ebQf6GYKYIvKtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1
+        y8wBukVJoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BeoFecmFtcmpeul5daYmVo
+        YGBkClSYkJ0x491H1oKJghUrW5ewNTA28XUxcnJICJhIXOicytbFyMUhJLCDUWLa39msEM4n
+        RonddyZBOZ8ZJb7/XcMC0/J8zT92iMQuRomr7z4zQTgvGCU+T7nFCFLFJqAv8bJjG1i7iMAO
+        JolJ3+cAJTg4OAVcJebvdASpERbwlth8uhNsKouAisTadauYQGxeAUuJza/3skPYghInZz4B
+        q2EWkJfY/nYOM8QVChI/ny5jBbFFBKwkpry7xwpRIyIxu7ONGWSvhMBMDolT87YwgeyVEHCR
+        eDBLBKJXWOLV8S3sELaUxOd3e9kg7GKJpbM+MUH0NjBKXN72CyphLDHrWTvY/cwCmhLrd+lD
+        jFSWOHIL6jQ+iY7Df9khwrwSHW1CEI3qEge2T4eGm6xE95zPrBC2h8T3I/dYJzAqzkLy5Cwk
+        T85C8swshL0LGFlWMYqlFhTnpqcWGxWYwCM7OT93EyM4mWp57GCc/faD3iFGJg7GQ4wSHMxK
+        IrxXY12ThHhTEiurUovy44tKc1KLDzGaAoN9IrOUaHI+MJ3nlcQbmlgamJiZGZobmRqYK4nz
+        eqVsSBQSSE8sSc1OTS1ILYLpY+LglGpgqmI+YjAjqHTRww0vKoXeerr8P+p4g3GFQdWMWcIv
+        PArclykmZcXw+D9L4H3F+nihmtTRaYuzTNqj9adsdr3Ektb1YEHX63+XOvPaqqf/0JV/u23/
+        0/qcIvfObyfPT3oR/8opLs2xkScxtGDa3BbvT0w6pybphip+rtg4+3jEVOXFJ1dOOHjcWPbr
+        wjWHJVP4zZozcxjXJsXJP9CZ5mygp7Vsz/OU1t/ioeppK+u5eu+e7nrpKjojxMyo4VPmupSY
+        umkHd/Evu3vd0OLRtLU2XZ5+V/9dEmiZP+PnbIeo3VfyJ+vvMY2R+5jhL5W8oPilRNXvH9WV
+        Nb8yPaW4r/rOZP/Goaer8P72wY9KBYUHlViKMxINtZiLihMBRG3XTy8EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRmVeSWpSXmKPExsWy7bCSvO69Q25JBt+a5CwezNvGZvHy51U2
+        i0U3tjFZ7H29ld3i8q45bBbd13ewWSw//o/Jgd3jzrU9bB4TFh1g9Pj49BaLR9+WVYwenzfJ
+        ebQf6GYKYIvisklJzcksSy3St0vgypjx7iNrwUTBipWtS9gaGJv4uhg5OSQETCSer/nH3sXI
+        xSEksINRYsbZHlaIhKzEs3c72CFsYYn7LUfA4kICzxglZr8vA7HZBPQlXnZsYwVpFhHYwyTR
+        fOU/I8SkaYwSh37sAXI4ODgFXCXm73QEaRAW8JbYfLqTBcRmEVCRWLtuFROIzStgKbH59V52
+        CFtQ4uTMJywgrcwCehJtGxlBwswC8hLb385hhrhHQeLn02Vg94gIWElMeXePFaJGRGJ2Zxvz
+        BEahWUgmzUKYNAvJpFlIOhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOHi2t
+        HYx7Vn3QO8TIxMF4iFGCg1lJhPdqrGuSEG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTS
+        E0tSs1NTC1KLYLJMHJxSDUxe2TPcJQJfchxxfMBYWqWW8mCFmGu/9elD9hJPqydrp62YzSB5
+        1mjaJP2qy4dPbH33dp9fibRyXILiIlm7+Lu//0nMiUw4kV+u32n545vXKtWp2kout3mPn3RL
+        /OtmY+x6hvtI/0uZjVYXk7gWP1iXn7tKKoL/Mt8k3bbMeYw3n5rV/zhdozyP5cXlFEuZa5oR
+        M3P+Kay2UN1wffLOBfNML1ud4IoKWXr+29yzJlGLfKZmvejsvJTWs7tDJe6cs9uqjA7rTzvv
+        rH1QUrxALNCI787c79m7Jly8WrrMoHvGvyMJdV8OdbNoVys81ZqfdW96X7CP7eXHrV+ajz7v
+        CLlYdyY+5fHGXSufT7DR489QYinOSDTUYi4qTgQAj1EPWQ0DAAA=
+X-CMS-MailID: 20220401091614epcas2p16a5e0585aa821d448dd8f2609c51bffd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220401085104epcas2p4a13c6ec6b67da7cf7a165b92e811a545
+References: <CGME20220401085104epcas2p4a13c6ec6b67da7cf7a165b92e811a545@epcas2p4.samsung.com>
+        <20220401085050.119323-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 10:25 AM Roman Gushchin
-<roman.gushchin@linux.dev> wrote:
->
-> On Thu, Mar 31, 2022 at 08:41:51AM +0000, Yosry Ahmed wrote:
-> > From: Shakeel Butt <shakeelb@google.com>
-> >
-> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
-> >
-> > Use case: Proactive Reclaim
-> > ---------------------------
-> >
-> > A userspace proactive reclaimer can continuously probe the memcg to
-> > reclaim a small amount of memory. This gives more accurate and
-> > up-to-date workingset estimation as the LRUs are continuously
-> > sorted and can potentially provide more deterministic memory
-> > overcommit behavior. The memory overcommit controller can provide
-> > more proactive response to the changing behavior of the running
-> > applications instead of being reactive.
-> >
-> > A userspace reclaimer's purpose in this case is not a complete replacement
-> > for kswapd or direct reclaim, it is to proactively identify memory savings
-> > opportunities and reclaim some amount of cold pages set by the policy
-> > to free up the memory for more demanding jobs or scheduling new jobs.
-> >
-> > A user space proactive reclaimer is used in Google data centers.
-> > Additionally, Meta's TMO paper recently referenced a very similar
-> > interface used for user space proactive reclaim:
-> > https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
-> >
-> > Benefits of a user space reclaimer:
-> > -----------------------------------
-> >
-> > 1) More flexible on who should be charged for the cpu of the memory
-> > reclaim. For proactive reclaim, it makes more sense to be centralized.
-> >
-> > 2) More flexible on dedicating the resources (like cpu). The memory
-> > overcommit controller can balance the cost between the cpu usage and
-> > the memory reclaimed.
-> >
-> > 3) Provides a way to the applications to keep their LRUs sorted, so,
-> > under memory pressure better reclaim candidates are selected. This also
-> > gives more accurate and uptodate notion of working set for an
-> > application.
-> >
-> > Why memory.high is not enough?
-> > ------------------------------
-> >
-> > - memory.high can be used to trigger reclaim in a memcg and can
-> >   potentially be used for proactive reclaim.
-> >   However there is a big downside in using memory.high. It can potentially
-> >   introduce high reclaim stalls in the target application as the
-> >   allocations from the processes or the threads of the application can hit
-> >   the temporary memory.high limit.
-> >
-> > - Userspace proactive reclaimers usually use feedback loops to decide
-> >   how much memory to proactively reclaim from a workload. The metrics
-> >   used for this are usually either refaults or PSI, and these metrics
-> >   will become messy if the application gets throttled by hitting the
-> >   high limit.
-> >
-> > - memory.high is a stateful interface, if the userspace proactive
-> >   reclaimer crashes for any reason while triggering reclaim it can leave
-> >   the application in a bad state.
-> >
-> > - If a workload is rapidly expanding, setting memory.high to proactively
-> >   reclaim memory can result in actually reclaiming more memory than
-> >   intended.
-> >
-> > The benefits of such interface and shortcomings of existing interface
-> > were further discussed in this RFC thread:
-> > https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
->
-> Hello!
->
-> I'm totally up for the proposed feature! It makes total sense and is proved
-> to be useful, let's add it.
->
-> >
-> > Interface:
-> > ----------
-> >
-> > Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> > trigger reclaim in the target memory cgroup.
-> >
-> >
-> > Possible Extensions:
-> > --------------------
-> >
-> > - This interface can be extended with an additional parameter or flags
-> >   to allow specifying one or more types of memory to reclaim from (e.g.
-> >   file, anon, ..).
-> >
-> > - The interface can also be extended with a node mask to reclaim from
-> >   specific nodes. This has use cases for reclaim-based demotion in memory
-> >   tiering systens.
-> >
-> > - A similar per-node interface can also be added to support proactive
-> >   reclaim and reclaim-based demotion in systems without memcg.
->
-> Maybe an option to specify a timeout? That might simplify the userspace part.
-> Also, please please add a test to selftests/cgroup/memcg tests.
-> It will also provide an example on how the userspace can use the feature.
->
-> >
-> > For now, let's keep things simple by adding the basic functionality.
->
-> What I'm worried about is how we gonna extend it? How do you see the interface
-> with 2-3 extensions from the list above? All these extensions look very
-> reasonable to me, so we'll likely have to implement them soon. So let's think
-> about the extensibility now.
->
-> I wonder if it makes more sense to introduce a sys_reclaim() syscall instead?
-> In the end, such a feature might make sense on the system level too.
-> Yes, there is the drop_caches sysctl, but it's too radical for many cases.
->
-> >
-> > [yosryahmed@google.com: refreshed to current master, updated commit
-> > message based on recent discussions and use cases]
-> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
-> >  mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
-> >  2 files changed, 46 insertions(+)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > index 69d7a6983f78..925aaabb2247 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
-> >       high limit is used and monitored properly, this limit's
-> >       utility is limited to providing the final safety net.
-> >
-> > +  memory.reclaim
-> > +     A write-only file which exists on non-root cgroups.
-> > +
-> > +     This is a simple interface to trigger memory reclaim in the
-> > +     target cgroup. Write the number of bytes to reclaim to this
-> > +     file and the kernel will try to reclaim that much memory.
-> > +     Please note that the kernel can over or under reclaim from
-> > +     the target cgroup.
-> > +
-> >    memory.oom.group
-> >       A read-write single value file which exists on non-root
-> >       cgroups.  The default value is "0".
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index 725f76723220..994849fab7df 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
-> >       return nbytes;
-> >  }
-> >
-> > +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-> > +                           size_t nbytes, loff_t off)
-> > +{
-> > +     struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-> > +     unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-> > +     unsigned long nr_to_reclaim, nr_reclaimed = 0;
-> > +     int err;
-> > +
-> > +     buf = strstrip(buf);
-> > +     err = page_counter_memparse(buf, "", &nr_to_reclaim);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     while (nr_reclaimed < nr_to_reclaim) {
-> > +             unsigned long reclaimed;
-> > +
-> > +             if (signal_pending(current))
-> > +                     break;
-> > +
-> > +             reclaimed = try_to_free_mem_cgroup_pages(memcg,
-> > +                                             nr_to_reclaim - nr_reclaimed,
-> > +                                             GFP_KERNEL, true);
-> > +
-> > +             if (!reclaimed && !nr_retries--)
-> > +                     break;
-> > +
-> > +             nr_reclaimed += reclaimed;
-> > +     }
-> > +
-> > +     return nbytes;
-> > +}
-> > +
-> >  static struct cftype memory_files[] = {
-> >       {
-> >               .name = "current",
-> > @@ -6413,6 +6445,11 @@ static struct cftype memory_files[] = {
-> >               .seq_show = memory_oom_group_show,
-> >               .write = memory_oom_group_write,
-> >       },
-> > +     {
-> > +             .name = "reclaim",
-> > +             .flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
-> > +             .write = memory_reclaim,
->
-> Btw, why not on root?
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Sent: Friday, April 1, 2022 5:51 PM
+> To: Alim Akhtar <alim.akhtar@samsung.com>; Avri Altman
+> <avri.altman@wdc.com>; James E.J. Bottomley <jejb@linux.ibm.com>; Martin
+K.
+> Petersen <martin.petersen@oracle.com>; linux-scsi@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Subject: [PATCH] scsi: ufs: ufshcd-pltfrm: simplify usages of pdev->dev
+> 
+> The 'struct device' pointer is already cached as local variable in
+> ufshcd_pltfrm_init(), so use it.
 
-I missed the root question in my first reply. I think this was
-originally modeled after the memory.high interface, but I don't know
-if there are other reasons. Shakeel would know better.
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-AFAIK this should work naturally on root as well, but I think it makes
-more sense then to use a global interface (hopefully introduced soon)?
-I don't have an opinion here let me know what you prefer for v2.
+Best Regards,
+Chanho Park
+
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/scsi/ufs/ufshcd-pltfrm.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-
+> pltfrm.c
+> index 87975d1a21c8..cca4b2181a81 100644
+> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
+> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+> @@ -341,7 +341,7 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+> 
+>  	err = ufshcd_alloc_host(dev, &hba);
+>  	if (err) {
+> -		dev_err(&pdev->dev, "Allocation failed\n");
+> +		dev_err(dev, "Allocation failed\n");
+>  		goto out;
+>  	}
+> 
+> @@ -349,13 +349,13 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+> 
+>  	err = ufshcd_parse_clock_info(hba);
+>  	if (err) {
+> -		dev_err(&pdev->dev, "%s: clock parse failed %d\n",
+> +		dev_err(dev, "%s: clock parse failed %d\n",
+>  				__func__, err);
+>  		goto dealloc_host;
+>  	}
+>  	err = ufshcd_parse_regulator_info(hba);
+>  	if (err) {
+> -		dev_err(&pdev->dev, "%s: regulator init failed %d\n",
+> +		dev_err(dev, "%s: regulator init failed %d\n",
+>  				__func__, err);
+>  		goto dealloc_host;
+>  	}
+> @@ -368,8 +368,8 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+>  		goto dealloc_host;
+>  	}
+> 
+> -	pm_runtime_set_active(&pdev->dev);
+> -	pm_runtime_enable(&pdev->dev);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> 
+>  	return 0;
+> 
+> --
+> 2.32.0
+
+

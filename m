@@ -2,147 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEAE4EE7EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444824EE7ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245198AbiDAFxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S245217AbiDAFxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237583AbiDAFwx (ORCPT
+        with ESMTP id S245205AbiDAFxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:52:53 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941DD4E385
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:51:03 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t25so2914111lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qA1v0A7dc3FV4RuMv5ZQV+qnRwKmp9V+QFkq5cmpENY=;
-        b=RMf4MzqPShODxLhq+sO4cUVTL3s/BrBvRG/EaMjOanqT3bAMiyKedu7D3sCrExpRdk
-         nYKSZHJq3Y3KMEff96G8lFu3QcAjZT0UNIGroLdVSmjshBRp3CQ/VIgP+wZtFK73kk5Y
-         1Gr1qpQNLItoN5zU/4GjpZlzsKTMTduLnNfTxZ/F6Y2GOiQPkeb/5071tQGXYLH2e5iQ
-         Hlps5YemK2FlkjzWe0fmiMtXBDFUpmwsCqVPY8oTlM8hFaIRi42+tbLBP68BWhiIf+kH
-         9pVGm4jItuyZf7pyIMruxC/4uuZSRvpMuGpySvAHCtN0fT58BvcfJQmUBmyG3Lls5Wml
-         93Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qA1v0A7dc3FV4RuMv5ZQV+qnRwKmp9V+QFkq5cmpENY=;
-        b=BpKkm4N3b1MtP22HPwfcpJ+WY8YB//NS+XdA9rvvDsLI46s5bs+iyhQmB56Kecj/qx
-         LwiO0PJO4N8b0NmVUxSrWwurLJ1AHtKO5tceV62v1NHkZzRSgYCjFTrxyeZZSVwUWala
-         T1DZYGITInxyJQSnPaCc1j+sznL2Q3LV4EM3wzvxwFVKlBesoK+GY+DvcjRky70YgQJv
-         aF1903VkfL/KMc/b8YdW0Mv/vcAZTAGwZMpD6fdrQjJqxW5z1mQmzEUNVCOt1qJW6z+2
-         PofLFsx8U2uLLxbMPxHOaEoyUAWrOV+7DocVf6fTlbuRLADYsETKxUVkwo7gWAQ94M4V
-         AMcw==
-X-Gm-Message-State: AOAM531GHcftGn3FvE6arNMFeoKVu9x90pWG6e6WQhhQc+KpWcE88c3t
-        q35ubwqht8Q0REHasHwd0gMQgpWkjf54C0tr2SG1cA==
-X-Google-Smtp-Source: ABdhPJzV5rjeNDxGrh06Y6/j6ua7W2u+B+s3R9VuN1ozC2fonLH2ANgH5N2/XarDXlE09XwQEepCNwQd97y3piadpjo=
-X-Received: by 2002:a05:6512:1051:b0:44a:5dcb:3a74 with SMTP id
- c17-20020a056512105100b0044a5dcb3a74mr12761841lfb.51.1648792261524; Thu, 31
- Mar 2022 22:51:01 -0700 (PDT)
+        Fri, 1 Apr 2022 01:53:12 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BD45748C
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648792283; x=1680328283;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LUsDrFG9Q2jR0CDaosZ9jtW3pqzl1RrqwD0iH4NmVd8=;
+  b=cfcWb8Bppbf2WVi07QcIrVBWRqVmcn9KhsZ+pVfYbZzUNC7Fx+cbOp/8
+   eGIwdBwWnH9/WsJAnaGMSwgATtcDNjL/9Rz/hpXhZNoiNfOkiLN25bWkE
+   +oY5Lg46wrcvr1JQ4kaksLaYqnvXBwndTsmBw0X7R40WvkjI3AAhD8ykn
+   Xrt53qMOJ1Sfc2i8NIz0ExCpd/N3JQ0GMAz3z54DTapJmrSyrXTC88hLD
+   Xqo57+kK+/zj6A0/4FBOS4n9+KgxgsoXIBat6zL1+yD0as8HQGIKvhe2X
+   XMSV+W5VExqqI658M0+0EwEwmHLwRsH1UoC7EGgbkVaks6f/Lvndkfcj1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="247555560"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="247555560"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:51:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="655426752"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 22:51:21 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naABs-0000zW-Uv;
+        Fri, 01 Apr 2022 05:51:20 +0000
+Date:   Fri, 01 Apr 2022 13:50:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:core/urgent] BUILD SUCCESS
+ 7dd5ad2d3e82fb55229e3fe18e09160878e77e20
+Message-ID: <624692c2.5vOTXb1kGbSIggw1%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <mhng-c6a04a4f-1e85-49e9-baee-b56b0e78c602@palmer-ri-x1c9> <mhng-5afad1be-9b06-4cd1-95e3-c21605b9086a@palmer-mbp2014>
-In-Reply-To: <mhng-5afad1be-9b06-4cd1-95e3-c21605b9086a@palmer-mbp2014>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Fri, 1 Apr 2022 13:50:50 +0800
-Message-ID: <CANXhq0oJKRVV2QyzJ2WV1fjcw3piyoKeiR5U-=DqsyDayixTGA@mail.gmail.com>
-Subject: Re: [PATCH v8 0/4] Determine the number of DMA channels by
- 'dma-channels' property
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Vinod <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 6:42 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Wed, 30 Mar 2022 22:54:47 PDT (-0700), Palmer Dabbelt wrote:
-> > On Wed, 30 Mar 2022 22:21:56 PDT (-0700), vkoul@kernel.org wrote:
-> >> On 30-03-22, 20:15, Palmer Dabbelt wrote:
-> >>> On Mon, 28 Mar 2022 02:52:21 PDT (-0700), zong.li@sifive.com wrote:
-> >>> > The PDMA driver currently assumes there are four channels by default, it
-> >>> > might cause the error if there is actually less than four channels.
-> >>> > Change that by getting number of channel dynamically from device tree.
-> >>> > For backwards-compatible, it uses the default value (i.e. 4) when there
-> >>> > is no 'dma-channels' information in dts.
-> >>> >
-> >>> > This patch set contains the dts and dt-bindings change.
-> >>> >
-> >>> > Changed in v8:
-> >>> >  - Rebase on master
-> >>> >  - Remove modification of microchip-mpfs.dtsi
-> >>> >  - Rename DMA node name of fu540-c000.dtsi
-> >>> >
-> >>> > Changed in v7:
-> >>> >  - Rebase on tag v5.17-rc7
-> >>> >  - Modify the subject of patch
-> >>> >
-> >>> > Changed in v6:
-> >>> >  - Rebase on tag v5.17-rc6
-> >>> >  - Change sf_pdma.chans[] to a flexible array member.
-> >>> >
-> >>> > Changed in v5:
-> >>> >  - Rebase on tag v5.17-rc3
-> >>> >  - Fix typo in dt-bindings and commit message
-> >>> >  - Add PDMA versioning scheme for compatible
-> >>> >
-> >>> > Changed in v4:
-> >>> >  - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
-> >>> >
-> >>> > Changed in v3:
-> >>> >  - Fix allocating wrong size
-> >>> >  - Return error if 'dma-channels' is larger than maximum
-> >>> >
-> >>> > Changed in v2:
-> >>> >  - Rebase on tag v5.16
-> >>> >  - Use 4 as default value of dma-channels
-> >>> >
-> >>> > Zong Li (4):
-> >>> >   dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
-> >>> >     modify compatible
-> >>> >   riscv: dts: Add dma-channels property and modify compatible
-> >>> >   riscv: dts: rename the node name of dma
-> >>> >   dmaengine: sf-pdma: Get number of channel by device tree
-> >>> >
-> >>> >  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
-> >>> >  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
-> >>> >  drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
-> >>> >  drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
-> >>> >  4 files changed, 38 insertions(+), 18 deletions(-)
-> >>>
-> >>> Thanks, these are on for-next.
-> >>
-> >> The drivers/dma/ should go thru dmaengine tree. During merge window I
-> >> dont apply the patches
-> >
-> > OK, I can drop this from my tree if you'd like?
->
-> Just to follow up from IRC: I'm dropping these from my tree.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/urgent
+branch HEAD: 7dd5ad2d3e82fb55229e3fe18e09160878e77e20  Revert "signal, x86: Delay calling signals in atomic on RT enabled kernels"
 
-Hi Palmer and Vinod,
-Many thanks for your help. As all you suggested, let's go this
-patchset by the dmaengine tree. Thanks a lot!
+elapsed time: 1029m
+
+configs tested: 88
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                              allyesconfig
+arm                                 defconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+sh                            titan_defconfig
+sparc                       sparc64_defconfig
+m68k                       m5275evb_defconfig
+arm                            zeus_defconfig
+x86_64                        randconfig-c001
+i386                          randconfig-c001
+arm                  randconfig-c002-20220331
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+sparc                            allyesconfig
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220331
+hexagon              randconfig-r041-20220331
+riscv                randconfig-r042-20220331
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

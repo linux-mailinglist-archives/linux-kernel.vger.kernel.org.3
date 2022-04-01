@@ -2,58 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EDF4EECA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A994EECA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345661AbiDAL4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S1345685AbiDAL6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbiDAL4a (ORCPT
+        with ESMTP id S1345668AbiDAL6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:56:30 -0400
-Received: from uriel.iewc.co.za (uriel.iewc.co.za [IPv6:2c0f:f720:0:3:d6ae:52ff:feb8:f27b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E94D1D67ED;
-        Fri,  1 Apr 2022 04:54:41 -0700 (PDT)
-Received: from [2c0f:f720:fe16:c400::1] (helo=tauri.local.uls.co.za)
-        by uriel.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <jaco@uls.co.za>)
-        id 1naFrQ-0006sK-4N; Fri, 01 Apr 2022 13:54:36 +0200
-Received: from [192.168.42.201]
-        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
-        (envelope-from <jaco@uls.co.za>)
-        id 1naFrN-0001RS-PG; Fri, 01 Apr 2022 13:54:33 +0200
-Message-ID: <7d08dcfd-6ba0-f972-cee3-4fa0eff8c855@uls.co.za>
-Date:   Fri, 1 Apr 2022 13:54:33 +0200
+        Fri, 1 Apr 2022 07:58:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD4C22F3E6;
+        Fri,  1 Apr 2022 04:56:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDD61B824B1;
+        Fri,  1 Apr 2022 11:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92E2C34111;
+        Fri,  1 Apr 2022 11:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648814185;
+        bh=7wIcQSZqoF9yzXMmd3t7mD89xfVOVwiy5PT1j+hxDtc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=eOn24kv2RmHAL1Mjy1+rOyDlCLrJylnwNe4U0BO+dtFwuhJ+WXBv5CSJ/VDLFOsSw
+         QAyc8DI1/sqSQiFisk2b1rgQQ3mdcmDnzqiysdRJwhthuZj2EO4I7HqmL2I0z/4bTp
+         DAWc3+WdfRcFSzLdF3dXxd8d0hsXDdWwZGj1e80B6XYU5e5dWEaWPIrGvStrlyXES9
+         DvCbNq+cmesn/bfzHNnqEObEOIhf6zn3ALScCa63zJWqA3RVO4fxhgbU57rvuJZJvi
+         SOQwZ2LxPk37U4Uaz+SldjQr54u3i1f+1UpqYh5LYPKB0BA7aHBabgg8cnsnsemUYp
+         2jRWNTfPtLXlw==
+Message-ID: <0f781fa1b2bec48d40729d8306a2ed8b19209734.camel@kernel.org>
+Subject: Re: [PATCH] ceph: truncate page cache when doing DIO in encrypted
+ inodes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 01 Apr 2022 07:56:23 -0400
+In-Reply-To: <20220401113822.32545-1-lhenriques@suse.de>
+References: <20220401113822.32545-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
- connections
-Content-Language: en-GB
-To:     Florian Westphal <fw@strlen.de>, Eric Dumazet <edumazet@google.com>
-Cc:     Neal Cardwell <ncardwell@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Yuchung Cheng <ycheng@google.com>
-References: <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
- <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za>
- <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
- <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
- <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
- <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za>
- <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
- <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
- <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za>
- <CANn89i+KsjGUppc3D8KLa4XUd-dzS3A+yDxbv2bRkDEkziS1qw@mail.gmail.com>
- <20220401001531.GB9545@breakpoint.cc>
-From:   Jaco Kroon <jaco@uls.co.za>
-Organization: Ultimate Linux Solutions (Pty) Ltd
-In-Reply-To: <20220401001531.GB9545@breakpoint.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,40 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 2022-04-01 at 12:38 +0100, Luís Henriques wrote:
+> When doing DIO on an encrypted node, we need to truncate the page cache in
+> the range being written to, otherwise the cache will include invalid data.
+> 
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>  fs/ceph/file.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> This patch should fix generic/647 fstest when run with test_dummy_encryption.
+> 
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 5072570c2203..0f31c4d352a4 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -1895,6 +1895,11 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>  		req->r_inode = inode;
+>  		req->r_mtime = mtime;
+>  
+> +		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT))
+> +			truncate_inode_pages_range(
+> +				inode->i_mapping, write_pos,
+> +				PAGE_ALIGN(write_pos + write_len) - 1);
+> +
+>  		/* Set up the assertion */
+>  		if (rmw) {
+>  			/*
 
-On 2022/04/01 02:15, Florian Westphal wrote:
+Truncating the pagecache like this could cause dirty data to be
+discarded. I know we're planning to overwrite this range, but you are
+having to invalidate more than the written range here. We could
+potentially lose a write to that region.
 
-Incidently, I always find your initials to be interesting considering
-(as far as I know) you work on netfilter firewall.
-
-> Eric Dumazet <edumazet@google.com> wrote:
->> Next step would be to attempt removing _all_ firewalls, especially not
->> common setups like yours.
->>
->> conntrack had a bug preventing TFO deployment for a while, because
->> many boxes kept buggy kernel versions for years.
->>
->> 356d7d88e088687b6578ca64601b0a2c9d145296 netfilter: nf_conntrack: fix
->> tcp_in_window for Fast Open
-> Jaco could also try with
-> net.netfilter.nf_conntrack_tcp_be_liberal=1
->
-> and, if that helps, with liberal=0 and
-> sysctl net.netfilter.nf_conntrack_log_invalid=6
->
-> (check dmesg/syslog/nflog).
-
-Our core firewalls already had nf_conntrack_tcp_be_liberal for other
-reasons (asymmetric routing combined with conntrackd left-over if I
-recall), so maybe that's why it got through there ... don't exactly want
-to just flip that setting though, is there a way to log if it would have
-dropped anything, without actually dropping it (yet)?
-
-Will do this first, first need to confirm that I can reproduce in a dev
-environment.
-
-Kind Regards,
-Jaco
-
-
+Have you tried using something like invalidate_inode_pages2_range ?
+That's more of what we'd want here, as it's a bit more cautious about
+tossing out dirty pages. I see too that that is what
+ceph_direct_read_write calls in the write case as well.
+-- 
+Jeff Layton <jlayton@kernel.org>

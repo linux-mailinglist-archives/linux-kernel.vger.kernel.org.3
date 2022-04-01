@@ -2,412 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4CD4EE618
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B324EE61B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244130AbiDACgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S244149AbiDACjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244119AbiDACgR (ORCPT
+        with ESMTP id S244119AbiDACjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:36:17 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2573AC6827;
-        Thu, 31 Mar 2022 19:34:29 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p17so1257259plo.9;
-        Thu, 31 Mar 2022 19:34:29 -0700 (PDT)
+        Thu, 31 Mar 2022 22:39:24 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0152597F7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:37:34 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id j13so1266308plj.8
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VIas2AvVAgiNeaI3YZ+K1NbxYlATFfcBfaL8UD1Q7BY=;
-        b=PqHBp4a7bnOX8/79E/BD+vnRxLmvtEA4ne5Fg3uu56Cf44DffSzCJwdyuQYu7zhDtw
-         HKp8KqJVLIg5JiWwDm0uZjtKVAaj6X90Q1J/17EEGbKPulfGycnD1fwy2D2QaG48JapN
-         WgPIUFK0fkczq9qm7Ktglmh39r8HCiRVdLBvSIU5VL2LhIVkyST8o1tQ8vMadRMa4EBs
-         QSqWmHAB9GkLbUbXgF1BMSPqx3WH85FKnCXH54r/N7KF5SbGh93Nl0TPYJ2CdHpSmBFo
-         rrsn66pWWfXI1S1u1JFcdbbzzqlP8fl3sktXdRt/yeOgBHPeVuLC5tV+2xUedjxQGtTb
-         P6uA==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gBYCYz1bkk39xbyKo7MQ2WtVL9iFT5vSKgfWp7aQhV8=;
+        b=BkEA7+Zl5MzzUQCvqogIhTJYYPvdJTk6PT+6zs0MxnDjQH+YH2K1/6WTZ/eunZ5MR0
+         ZamaMNF/WT6f0OEZ7ZVanIV/AjhGLn5C6QKEGptHg13wc6+pqvTZk2nx9SVgCk2n8ul1
+         tljAEF2v/OfMVEzet6sntz/e0xR7a2+S+VYZoROSrj8Gyutq8kKLKhJEN1UyLP0rbQy2
+         MmD9yc7afum0nmGu9QpMBpWRgX9lMwnyXW7Ti5obmKnExR97CTP60yiHH9iZVf4piq+8
+         Q32wbs5ftGOOhWsEPNIVNCzt3g8nNCzgPdC2LvKIjiBeCQc1Ec6D6fgZI3KwX13HaTYj
+         l0DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VIas2AvVAgiNeaI3YZ+K1NbxYlATFfcBfaL8UD1Q7BY=;
-        b=An+hyas/80ZtMSw0KS4o0NpJ/WuaGgTeYjSGskPVv8MKxbQ7/4UWhMQ3Lyl4o7+AIo
-         TE+6ti8VieK749HnpGG4SENcgHtw+7cljJg6qw51P3jp9YGdrKr5BdRSnjZ1x68Muifo
-         Zy17n90pJeP6tbxAvYzSaom9M1vlRdDSlotjFJ2dNej2Pptgtb8SLhN7Jyxtysfx38c/
-         QaxsznTTHy9VQdMdJag3+amnPk/IMpD72FLIobWsOTN6IJ6OcwH/bZ3O8yQW8couMnpj
-         5mG6W1t45NLknL1oqJDkqYR1dLjZf1RBQaYL35GFaLuwc5A1xpU2ah34beSBKp/Wkkax
-         pEuA==
-X-Gm-Message-State: AOAM530KpdHJgL4FUw7ZxTXKFlaLBSLCLqkDGVTdSZNm1fovYQwWCfcp
-        wZeP66r3hhvZMP80FbMkG36EASKpyS0=
-X-Google-Smtp-Source: ABdhPJwU/5TGE36nOVllAgTgELpwhv2/nmZmLLOlwQgxfK+Czg/hMGThkM6sF30XP1UfHhwy0r2YlA==
-X-Received: by 2002:a17:90b:1bc2:b0:1c9:9cd1:a4fe with SMTP id oa2-20020a17090b1bc200b001c99cd1a4femr9402057pjb.136.1648780468499;
-        Thu, 31 Mar 2022 19:34:28 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm850967pfj.146.2022.03.31.19.34.26
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=gBYCYz1bkk39xbyKo7MQ2WtVL9iFT5vSKgfWp7aQhV8=;
+        b=6+dFM93A6JUskY4L6h6MHnStbqfjyXz1nUrbNEdut9u0hnsXH12m+w2VIyYm/q0K+T
+         nhBalt/8gTQnK1ywpeAdRIYkR761i7/Ke75g7Ozp64aD6i1RkRBa6vLrBOzWIA8ely1x
+         xtIQ6RJC5xgQhroAHszxZGoUMhQDQ62DQ+NpRUlNivNbSEO0KAj14AVKIMDLDKNm9up6
+         ZoCJ3zw0/A9AWrzUv0BxqKVzAhJDIWv2Jal2ek5bjln6ogXmBPWdn/OmAUAAfTHvLTDV
+         Pwq3KbikYHTv8KzYzUZ8xw1wtdutkod4wF4vTbicHbcHlIqqsCmWBJbD+u59M2LI0epy
+         i1wQ==
+X-Gm-Message-State: AOAM533O1UVnX/lj0+6dr84QtPS89XkW2k2Zrnue+qME8YRQIVszA/2n
+        8K3OtmZBrzjGlfxbEPEYuvbV0A==
+X-Google-Smtp-Source: ABdhPJygRK5APdtCoRrX/Zr1FLzYP83LYp5QO731w2mnNyypKr2ZxCP7OepqG94hBINlAwJrZsxTKA==
+X-Received: by 2002:a17:902:be18:b0:153:2444:9c1a with SMTP id r24-20020a170902be1800b0015324449c1amr8465054pls.152.1648780654348;
+        Thu, 31 Mar 2022 19:37:34 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id ev16-20020a17090aead000b001c7c2919453sm10973632pjb.33.2022.03.31.19.37.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 19:34:27 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 19:34:26 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Subject: Re: [RFC PATCH v5 033/104] KVM: x86: Add infrastructure for stolen
- GPA bits
-Message-ID: <20220401023426.GF2084469@ls.amr.corp.intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <a21c1f9065cf27db54820b2b504db4e507835584.1646422845.git.isaku.yamahata@intel.com>
- <2b8038c17b85658a054191b362840240bd66e46b.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2b8038c17b85658a054191b362840240bd66e46b.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 19:37:33 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 19:37:33 -0700 (PDT)
+X-Google-Original-Date: Thu, 31 Mar 2022 17:13:10 PDT (-0700)
+Subject:     Re: [PATCH v2 -next 0/6] riscv: kexec: add kexec_file_load() support
+In-Reply-To: <20220330081701.177026-1-lizhengyu3@huawei.com>
+CC:     liaochang1@huawei.com, alex@ghiti.fr, aou@eecs.berkeley.edu,
+        Bjorn Topel <bjorn.topel@gmail.com>, changbin.du@intel.com,
+        ebiederm@xmission.com, guoren@linux.alibaba.com,
+        jszhang@kernel.org, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        mick@ics.forth.gr, Paul Walmsley <paul.walmsley@sifive.com>,
+        penberg@kernel.org, sunnanyong@huawei.com,
+        wangkefeng.wang@huawei.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     lizhengyu3@huawei.com
+Message-ID: <mhng-1152c6f3-80c2-4409-848b-b882bbe2cbb8@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added Peng Chao.
+On Wed, 30 Mar 2022 01:16:55 PDT (-0700), lizhengyu3@huawei.com wrote:
+> This patchset implement kexec_file_load() support on riscv, Most of the
+> code is based on the kexec-tool-patch repo developed by Nick Kossifids.
+>
+> This patch series enables us to load the riscv vmlinux by specifying
+> its file decriptor, instead of user-filled buffer via kexec_file_load()
+> syscall.
+> ``
+> Contrary to kexec_load() system call, we reuse the dt blob of the first
+> kernel to the 2nd explicitly.
+>
+> To use kexec_file_load() system call, instead of kexec_load(), at kexec
+> command, '-s' options must be specified. The patch for kexec_tools has
+> to be apply to riscv architecture source like this:
+>
+> int elf_riscv_load(int argc, char **argv, const char *buf, off_t len,
+> 	...
+> 	if (info->file_mode) {
+> 		return prepare_kexec_file_options(info);
+> 	}
+> 	...
+>
+> Add following routine to prepare cmdline_ptr, cmdline_len and initrd_fd
+> for syscall kexec_file_load:
+>
+> int prepare_kexec_file_options(struct kexec_info *info)
+> {
+> 	int fd;
+> 	ssize_t result;
+> 	struct stat stats;
+>
+> 	if (arch_options.cmdline) {
+> 		info->command_line = (char *)arch_options.cmdline;
+> 		info->command_line_len = strlen(info->command_line) + 1;
+> 	}
+>
+> 	if (!arch_options.initrd_path) {
+> 		info->initrd_fd = -1;
+> 		return 0;
+> 	}
+>
+> 	fd = open(arch_options.initrd_path, O_RDONLY | _O_BINARY);
+> 	if (fd < 0) {
+> 		fprintf(stderr, "Cannot open `%s': %s\n", arch_options.initrd_path,
+> 				strerror(errno));
+> 		return -EINVAL;
+> 	}
+> 	result = fstat(fd, &stats);
+> 	if (result < 0) {
+> 		close(fd);
+> 		fprintf(stderr, "Cannot stat: %s: %s\n", arch_options.initrd_path,
+> 				strerror(errno));
+> 		return -EINVAL;
+> 	}
+> 	info->initrd_fd = fd;
+> 	return 0;
+> }
+>
+> The basic usage of kexec_file is:
+> 1) Reload capture kernel image:
+> $ kexec -s -l <riscv-vmlinux> --reuse-cmdline
+>
+> 2) Startup capture kernel:
+> $ kexec -e
+>
+> For kdump:
+> 1) Reload capture kernel image:
+> $ kexec -s -p <riscv-vmlinux> --reuse-cmdline
+>
+> 2) Do something to crash, like:
+> $ echo c > /proc/sysrq-trigger
+>
+> v2:
+>  * Support kdump
+>  * Support purgatory
+>  * Minor cleanups
+>
+> Li Zhengyu (3):
+>   RISC-V: Support for kexec_file on panic
+>   RISC-V: Add purgatory
+>   RISC-V: Load purgatory in kexec_file
+>
+> Liao Chang (3):
+>   kexec_file: Fix kexec_file.c build error for riscv platform
+>   RISC-V: use memcpy for kexec_file mode
+>   RISC-V: Add kexec_file support
+>
+>  arch/riscv/Kbuild                      |   2 +
+>  arch/riscv/Kconfig                     |  17 +
+>  arch/riscv/include/asm/kexec.h         |   4 +
+>  arch/riscv/kernel/Makefile             |   1 +
+>  arch/riscv/kernel/elf_kexec.c          | 448 +++++++++++++++++++++++++
+>  arch/riscv/kernel/machine_kexec.c      |   4 +-
+>  arch/riscv/kernel/machine_kexec_file.c |  14 +
+>  arch/riscv/purgatory/.gitignore        |   4 +
+>  arch/riscv/purgatory/Makefile          |  95 ++++++
+>  arch/riscv/purgatory/entry.S           |  47 +++
+>  arch/riscv/purgatory/purgatory.c       |  42 +++
+>  include/linux/kexec.h                  |   2 +-
+>  kernel/kexec_file.c                    |   4 +-
+>  13 files changed, 680 insertions(+), 4 deletions(-)
+>  create mode 100644 arch/riscv/kernel/elf_kexec.c
+>  create mode 100644 arch/riscv/kernel/machine_kexec_file.c
+>  create mode 100644 arch/riscv/purgatory/.gitignore
+>  create mode 100644 arch/riscv/purgatory/Makefile
+>  create mode 100644 arch/riscv/purgatory/entry.S
+>  create mode 100644 arch/riscv/purgatory/purgatory.c
 
-On Fri, Apr 01, 2022 at 12:16:41AM +1300,
-Kai Huang <kai.huang@intel.com> wrote:
+This seems like a reasonable way to do things, but I haven't looked over 
+the code yet.  Looks like the autobuilders are finding some failures, 
+and it's way too late for 5.18.  If you have time to fix the failures 
+then it'd be great to have a version based on rc1 with these fixed, so 
+we can target the next merge window.  That'll also make it easier to 
+look this over on my end.
 
-> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> > From: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> > 
-> > Add support in KVM's MMU for aliasing multiple GPAs (from a hardware
-> > perspective) to a single GPA (from a memslot perspective). GPA aliasing
-> > will be used to repurpose GPA bits as attribute bits, e.g. to expose an
-> > execute-only permission bit to the guest. To keep the implementation
-> > simple (relatively speaking), GPA aliasing is only supported via TDP.
-> > 
-> > Today KVM assumes two things that are broken by GPA aliasing.
-> >   1. GPAs coming from hardware can be simply shifted to get the GFNs.
-> >   2. GPA bits 51:MAXPHYADDR are reserved to zero.
-> > 
-> > With GPA aliasing, translating a GPA to GFN requires masking off the
-> > repurposed bit, and a repurposed bit may reside in 51:MAXPHYADDR.
-> > 
-> > To support GPA aliasing, introduce the concept of per-VM GPA stolen bits,
-> > that is, bits stolen from the GPA to act as new virtualized attribute
-> > bits. A bit in the mask will cause the MMU code to create aliases of the
-> > GPA. It can also be used to find the GFN out of a GPA coming from a tdp
-> > fault.
-> > 
-> > To handle case (1) from above, retain any stolen bits when passing a GPA
-> > in KVM's MMU code, but strip them when converting to a GFN so that the
-> > GFN contains only the "real" GFN, i.e. never has repurposed bits set.
-> > 
-> > GFNs (without stolen bits) continue to be used to:
-> >   - Specify physical memory by userspace via memslots
-> >   - Map GPAs to TDP PTEs via RMAP
-> >   - Specify dirty tracking and write protection
-> >   - Look up MTRR types
-> >   - Inject async page faults
-> > 
-> > Since there are now multiple aliases for the same aliased GPA, when
-> > userspace memory backing the memslots is paged out, both aliases need to be
-> > modified. Fortunately, this happens automatically. Since rmap supports
-> > multiple mappings for the same GFN for PTE shadowing based paging, by
-> > adding/removing each alias PTE with its GFN, kvm_handle_hva() based
-> > operations will be applied to both aliases.
-> > 
-> > In the case of the rmap being removed in the future, the needed
-> > information could be recovered by iterating over the stolen bits and
-> > walking the TDP page tables.
-> > 
-> > For TLB flushes that are address based, make sure to flush both aliases
-> > in the case of stolen bits.
-> > 
-> > Only support stolen bits in 64 bit guest paging modes (long, PAE).
-> > Features that use this infrastructure should restrict the stolen bits to
-> > exclude the other paging modes. Don't support stolen bits for shadow EPT.
-> > 
-> > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h |  2 ++
-> >  arch/x86/kvm/mmu.h              | 51 +++++++++++++++++++++++++++++++++
-> >  arch/x86/kvm/mmu/mmu.c          | 19 ++++++++++--
-> >  arch/x86/kvm/mmu/paging_tmpl.h  | 25 +++++++++-------
-> >  4 files changed, 84 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 208b29b0e637..d8b78d6abc10 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1235,7 +1235,9 @@ struct kvm_arch {
-> >  	spinlock_t hv_root_tdp_lock;
-> >  #endif
-> >  
-> > +#ifdef CONFIG_KVM_MMU_PRIVATE
-> >  	gfn_t gfn_shared_mask;
-> > +#endif
-> >  };
-> >  
-> >  struct kvm_vm_stat {
-> > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> > index e9fbb2c8bbe2..3fb530359f81 100644
-> > --- a/arch/x86/kvm/mmu.h
-> > +++ b/arch/x86/kvm/mmu.h
-> > @@ -365,4 +365,55 @@ static inline gpa_t kvm_translate_gpa(struct kvm_vcpu *vcpu,
-> >  		return gpa;
-> >  	return translate_nested_gpa(vcpu, gpa, access, exception);
-> >  }
-> > +
-> > +static inline gfn_t kvm_gfn_stolen_mask(struct kvm *kvm)
-> > +{
-> > +#ifdef CONFIG_KVM_MMU_PRIVATE
-> > +	return kvm->arch.gfn_shared_mask;
-> > +#else
-> > +	return 0;
-> > +#endif
-> > +}
-> > +
-> > +static inline gpa_t kvm_gpa_stolen_mask(struct kvm *kvm)
-> > +{
-> > +	return gfn_to_gpa(kvm_gfn_stolen_mask(kvm));
-> > +}
-> > +
-> > +static inline gpa_t kvm_gpa_unalias(struct kvm *kvm, gpa_t gpa)
-> > +{
-> > +	return gpa & ~kvm_gpa_stolen_mask(kvm);
-> > +}
-> > +
-> > +static inline gfn_t kvm_gfn_unalias(struct kvm *kvm, gfn_t gfn)
-> > +{
-> > +	return gfn & ~kvm_gfn_stolen_mask(kvm);
-> > +}
-> > +
-> > +static inline gfn_t kvm_gfn_shared(struct kvm *kvm, gfn_t gfn)
-> > +{
-> > +	return gfn | kvm_gfn_stolen_mask(kvm);
-> > +}
-> > +
-> > +static inline gfn_t kvm_gfn_private(struct kvm *kvm, gfn_t gfn)
-> > +{
-> > +	return gfn & ~kvm_gfn_stolen_mask(kvm);
-> > +}
-> > +
-> > +static inline gpa_t kvm_gpa_private(struct kvm *kvm, gpa_t gpa)
-> > +{
-> > +	return gpa & ~kvm_gpa_stolen_mask(kvm);
-> > +}
-> > +
-> > +static inline bool kvm_is_private_gfn(struct kvm *kvm, gfn_t gfn)
-> > +{
-> > +	gfn_t mask = kvm_gfn_stolen_mask(kvm);
-> > +
-> > +	return mask && !(gfn & mask);
-> > +}
-> > +
-> > +static inline bool kvm_is_private_gpa(struct kvm *kvm, gpa_t gpa)
-> > +{
-> > +	return kvm_is_private_gfn(kvm, gpa_to_gfn(gpa));
-> > +}
-> 
-> The patch title and commit message say nothing about private/shared, but only
-> mention stolen bits in general.  It's weird to introduce those *private* related
-> helpers here.
-> 
-> I think you can just ditch the concept of stolen bit infrastructure, but just
-> adopt what TDX needs.
-
-Sure, this patch heavily changed from the original patch Now.  One suggestion
-is that private/shared is characteristic to kvm page fault, not gpa/gfn.
-It's TDX specific.
-
-- Add a helper function to check if KVM MMU is TD or VM. Right now
-  kvm_gfn_stolen_mask() is used.  Probably kvm_mmu_has_private_bit().
-  (any better name?)
-- Let's keep address conversion functions: address => unalias/shared/private
-- Add struct kvm_page_fault.is_private
-  see how kvm_is_private_{gpa, gfn}() can be removed (or reduced).
-
-
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 8e24f73bf60b..b68191aa39bf 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -276,11 +276,24 @@ static inline bool kvm_available_flush_tlb_with_range(void)
-> >  static void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
-> >  		struct kvm_tlb_range *range)
-> >  {
-> > -	int ret = -ENOTSUPP;
-> > +	int ret = -EOPNOTSUPP;
-> 
-> Change doesn't belong to this patch.
-
-Will fix it.
-
-
-> > +	u64 gfn_stolen_mask;
-> >  
-> > -	if (range && kvm_x86_ops.tlb_remote_flush_with_range)
-> > +	/*
-> > +	 * Fall back to the big hammer flush if there is more than one
-> > +	 * GPA alias that needs to be flushed.
-> > +	 */
-> > +	gfn_stolen_mask = kvm_gfn_stolen_mask(kvm);
-> > +	if (hweight64(gfn_stolen_mask) > 1)
-> > +		goto generic_flush;
-> > +
-> > +	if (range && kvm_available_flush_tlb_with_range()) {
-> > +		/* Callback should flush both private GFN and shared GFN. */
-> > +		range->start_gfn = kvm_gfn_unalias(kvm, range->start_gfn);
-> 
-> This seems wrong.  It seems the intention of this function is to flush TLB for
-> all aliases for a given GFN range.  Here it seems you are unconditionally change
-> to range to always exclude the stolen bits.
-
-Ooh, right. This alias knowledge is in TDX.  This unalias should be dropped
-and put it in tdx.c.  I'll fix it.
-
-
-> >  		ret = static_call(kvm_x86_tlb_remote_flush_with_range)(kvm, range);
-> > +	}
-> 
-> And you always fall through to do big hammer flush, which is obviously not
-> intended.
-
-Please notice "if (ret)".  If it succeeded, big hammer flush is skipped.
-
-
-> > +generic_flush:
-> >  	if (ret)
-> >  		kvm_flush_remote_tlbs(kvm);
-> >  }
-> > @@ -4010,7 +4023,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  	unsigned long mmu_seq;
-> >  	int r;
-> >  
-> > -	fault->gfn = fault->addr >> PAGE_SHIFT;
-> > +	fault->gfn = kvm_gfn_unalias(vcpu->kvm, gpa_to_gfn(fault->addr));
-> >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
-> >  
-> >  	if (page_fault_handle_page_track(vcpu, fault))
-> > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> > index 5b5bdac97c7b..70aec31dee06 100644
-> > --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> > @@ -25,7 +25,8 @@
-> >  	#define guest_walker guest_walker64
-> >  	#define FNAME(name) paging##64_##name
-> >  	#define PT_BASE_ADDR_MASK GUEST_PT64_BASE_ADDR_MASK
-> > -	#define PT_LVL_ADDR_MASK(lvl) PT64_LVL_ADDR_MASK(lvl)
-> > +	#define PT_LVL_ADDR_MASK(vcpu, lvl) (~kvm_gpa_stolen_mask(vcpu->kvm) & \
-> > +					     PT64_LVL_ADDR_MASK(lvl))
-> >  	#define PT_LVL_OFFSET_MASK(lvl) PT64_LVL_OFFSET_MASK(lvl)
-> >  	#define PT_INDEX(addr, level) PT64_INDEX(addr, level)
-> >  	#define PT_LEVEL_BITS PT64_LEVEL_BITS
-> > @@ -44,7 +45,7 @@
-> >  	#define guest_walker guest_walker32
-> >  	#define FNAME(name) paging##32_##name
-> >  	#define PT_BASE_ADDR_MASK PT32_BASE_ADDR_MASK
-> > -	#define PT_LVL_ADDR_MASK(lvl) PT32_LVL_ADDR_MASK(lvl)
-> > +	#define PT_LVL_ADDR_MASK(vcpu, lvl) PT32_LVL_ADDR_MASK(lvl)
-> >  	#define PT_LVL_OFFSET_MASK(lvl) PT32_LVL_OFFSET_MASK(lvl)
-> >  	#define PT_INDEX(addr, level) PT32_INDEX(addr, level)
-> >  	#define PT_LEVEL_BITS PT32_LEVEL_BITS
-> > @@ -58,7 +59,7 @@
-> >  	#define guest_walker guest_walkerEPT
-> >  	#define FNAME(name) ept_##name
-> >  	#define PT_BASE_ADDR_MASK GUEST_PT64_BASE_ADDR_MASK
-> > -	#define PT_LVL_ADDR_MASK(lvl) PT64_LVL_ADDR_MASK(lvl)
-> > +	#define PT_LVL_ADDR_MASK(vcpu, lvl) PT64_LVL_ADDR_MASK(lvl)
-> >  	#define PT_LVL_OFFSET_MASK(lvl) PT64_LVL_OFFSET_MASK(lvl)
-> >  	#define PT_INDEX(addr, level) PT64_INDEX(addr, level)
-> >  	#define PT_LEVEL_BITS PT64_LEVEL_BITS
-> > @@ -75,7 +76,7 @@
-> >  #define PT_GUEST_ACCESSED_MASK (1 << PT_GUEST_ACCESSED_SHIFT)
-> >  
-> >  #define gpte_to_gfn_lvl FNAME(gpte_to_gfn_lvl)
-> > -#define gpte_to_gfn(pte) gpte_to_gfn_lvl((pte), PG_LEVEL_4K)
-> > +#define gpte_to_gfn(vcpu, pte) gpte_to_gfn_lvl(vcpu, pte, PG_LEVEL_4K)
-> >  
-> >  /*
-> >   * The guest_walker structure emulates the behavior of the hardware page
-> > @@ -96,9 +97,9 @@ struct guest_walker {
-> >  	struct x86_exception fault;
-> >  };
-> >  
-> > -static gfn_t gpte_to_gfn_lvl(pt_element_t gpte, int lvl)
-> > +static gfn_t gpte_to_gfn_lvl(struct kvm_vcpu *vcpu, pt_element_t gpte, int lvl)
-> >  {
-> > -	return (gpte & PT_LVL_ADDR_MASK(lvl)) >> PAGE_SHIFT;
-> > +	return (gpte & PT_LVL_ADDR_MASK(vcpu, lvl)) >> PAGE_SHIFT;
-> >  }
-> >  
-> >  static inline void FNAME(protect_clean_gpte)(struct kvm_mmu *mmu, unsigned *access,
-> > @@ -395,7 +396,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
-> >  		--walker->level;
-> >  
-> >  		index = PT_INDEX(addr, walker->level);
-> > -		table_gfn = gpte_to_gfn(pte);
-> > +		table_gfn = gpte_to_gfn(vcpu, pte);
-> >  		offset    = index * sizeof(pt_element_t);
-> >  		pte_gpa   = gfn_to_gpa(table_gfn) + offset;
-> >  
-> > @@ -460,7 +461,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
-> >  	if (unlikely(errcode))
-> >  		goto error;
-> >  
-> > -	gfn = gpte_to_gfn_lvl(pte, walker->level);
-> > +	gfn = gpte_to_gfn_lvl(vcpu, pte, walker->level);
-> >  	gfn += (addr & PT_LVL_OFFSET_MASK(walker->level)) >> PAGE_SHIFT;
-> >  
-> >  	if (PTTYPE == 32 && walker->level > PG_LEVEL_4K && is_cpuid_PSE36())
-> > @@ -555,12 +556,14 @@ FNAME(prefetch_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-> >  	gfn_t gfn;
-> >  	kvm_pfn_t pfn;
-> >  
-> > +	WARN_ON(gpte & kvm_gpa_stolen_mask(vcpu->kvm));
-> > +
-> >  	if (FNAME(prefetch_invalid_gpte)(vcpu, sp, spte, gpte))
-> >  		return false;
-> >  
-> >  	pgprintk("%s: gpte %llx spte %p\n", __func__, (u64)gpte, spte);
-> >  
-> > -	gfn = gpte_to_gfn(gpte);
-> > +	gfn = gpte_to_gfn(vcpu, gpte);
-> >  	pte_access = sp->role.access & FNAME(gpte_access)(gpte);
-> >  	FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
-> >  
-> > @@ -656,6 +659,8 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> >  	WARN_ON_ONCE(gw->gfn != base_gfn);
-> >  	direct_access = gw->pte_access;
-> >  
-> > +	WARN_ON(fault->addr & kvm_gpa_stolen_mask(vcpu->kvm));
-> > +
-> >  	top_level = vcpu->arch.mmu->root_level;
-> >  	if (top_level == PT32E_ROOT_LEVEL)
-> >  		top_level = PT32_ROOT_LEVEL;
-> > @@ -1080,7 +1085,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
-> >  			continue;
-> >  		}
-> >  
-> > -		gfn = gpte_to_gfn(gpte);
-> > +		gfn = gpte_to_gfn(vcpu, gpte);
-> >  		pte_access = sp->role.access;
-> >  		pte_access &= FNAME(gpte_access)(gpte);
-> >  		FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
-> 
-> In commit message you mentioned "Don't support stolen bits for shadow EPT" (you
-> actually mean shadow MMU I suppose), yet there's bunch of code change to shadow
-> MMU.
-
-
-Those are not needed. I'll drop them.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks!

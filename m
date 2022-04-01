@@ -2,199 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CA84EE855
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630AF4EE875
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245506AbiDAGis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S245615AbiDAGk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245455AbiDAGie (ORCPT
+        with ESMTP id S245611AbiDAGjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:38:34 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE6118D9AE
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:45 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id b19-20020a621b13000000b004fa68b3677bso1079012pfb.20
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=79d9al9/Ox8ojgYPVafCO8rjr+Q8aeYemdUQb3D6s/c=;
-        b=N3b6Yhe/1EBQnTkfpidMiqiMv9Vb0c2ONl+P0zVk+ldqlgRmqSNSMQzz6W5kdeqGiG
-         5N2WnohG0La3eMJjqlEt/3fAoG0FKkeCcNZbs53PdEx+CCYJRIq4GDWaNN4awB4rzbS8
-         beRw0rfxKpYYKnLouF0wkgn1rl0G6pTUde4p0fRb+Uz4rxrjqGOn4WdlcfElTdecYPvN
-         MHTF3uzCRELJYPqahjhEgG+R2bBQpgMsZXZzdiauYrMLnVWuCIS0EDl1VSlcTykTG9iu
-         1DuIBZKF/lDYPzhGhzXvyQKokiMKcVHqjG0BUPKFSBMhqXKkVHzcP4YkMG8UTy/6pxky
-         yrPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=79d9al9/Ox8ojgYPVafCO8rjr+Q8aeYemdUQb3D6s/c=;
-        b=RV+J4cnxVswp+KVCIl1pFHgYlWi60h1X1iMV0r3W1XH/141/IsD95EiX2iB3LMrNkV
-         kDt1oycnB1v+AhTblizP5Qpn/m+dC5wYWdt4DT/D0CqNBk34Yp24QiXYJuqqmrDs3k3Q
-         ZhT4t/JX7g1s6UgsxTnT6eaDf0/wiITG13kzZmLWFh/k3xcbBzAxzSQIWTKCAq7wpJwo
-         9Gjysiunj41LWjXGRIm+70EYobPiLOY/Jcm9ta4xZyPFQ4H3USzEVRBBchCXS2W31PRR
-         aEz8YxEpsYmWD1pLHupDbysqeSVSx9h4ZA0fFir9d600oMJJsrphX4JNYzn0pBDtckTw
-         0lqw==
-X-Gm-Message-State: AOAM530vjuD4FV6jPb36fojZop/c7VeEQQXvM4752Tc54rTAbj9ZLb2q
-        K+mg8vfQoPQciVeoNF4qGb2fxhD2OGRd
-X-Google-Smtp-Source: ABdhPJy3jxKjcEEonO+XJQJHQsbp/0IBv5UTK/0rCshy1zEI4VBGvkOvFuAhzl/cNBA6e0+bHVc8Bje4cTQi
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a63:1d62:0:b0:382:1421:c7 with SMTP id
- d34-20020a631d62000000b00382142100c7mr13700229pgm.416.1648795005383; Thu, 31
- Mar 2022 23:36:45 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Fri,  1 Apr 2022 06:36:32 +0000
-In-Reply-To: <20220401063636.2414200-1-mizhang@google.com>
-Message-Id: <20220401063636.2414200-3-mizhang@google.com>
-Mime-Version: 1.0
-References: <20220401063636.2414200-1-mizhang@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v3 2/6] KVM: x86/mmu: Track the number of TDP MMU pages, but
- not the actual pages
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 02:39:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3288264811;
+        Thu, 31 Mar 2022 23:37:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4749AB823E8;
+        Fri,  1 Apr 2022 06:37:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3527C340EE;
+        Fri,  1 Apr 2022 06:37:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648795040;
+        bh=ozyQ2xQiU42aoCVatxu5Lv/+CjIAA8xu/x5KnPLdbr8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1d0ytcSX0Y1Zql2p2IXnCDYUi4lmH5ioWVzxfLLCXkO6YjdTCwQ/s9nlvyvMtRZNT
+         V4ejl3FouwIp22rB6ppqCcVkIpC/C9iGb00yfzansnPoBNkhtL1mJ/oDRugLqyoPRJ
+         jv5aY501nFeKaz4ZBrg5XCo4PGLIU/xleuRqOPpA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 4.14 22/27] arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
+Date:   Fri,  1 Apr 2022 08:36:32 +0200
+Message-Id: <20220401063624.860794754@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220401063624.232282121@linuxfoundation.org>
+References: <20220401063624.232282121@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: James Morse <james.morse@arm.com>
 
-Track the number of TDP MMU "shadow" pages instead of tracking the pages
-themselves. With the NX huge page list manipulation moved out of the common
-linking flow, elminating the list-based tracking means the happy path of
-adding a shadow page doesn't need to acquire a spinlock and can instead
-inc/dec an atomic.
+commit dee435be76f4117410bbd90573a881fd33488f37 upstream.
 
-Keep the tracking as the WARN during TDP MMU teardown on leaked shadow
-pages is very, very useful for detecting KVM bugs.
+Speculation attacks against some high-performance processors can
+make use of branch history to influence future speculation as part of
+a spectre-v2 attack. This is not mitigated by CSV2, meaning CPUs that
+previously reported 'Not affected' are now moderately mitigated by CSV2.
 
-Tracking the number of pages will also make it trivial to expose the
-counter to userspace as a stat in the future, which may or may not be
-desirable.
+Update the value in /sys/devices/system/cpu/vulnerabilities/spectre_v2
+to also show the state of the BHB mitigation.
 
-Note, the TDP MMU needs to use a separate counter (and stat if that ever
-comes to be) from the existing n_used_mmu_pages. The TDP MMU doesn't bother
-supporting the shrinker nor does it honor KVM_SET_NR_MMU_PAGES (because the
-TDP MMU consumes so few pages relative to shadow paging), and including TDP
-MMU pages in that counter would break both the shrinker and shadow MMUs,
-e.g. if a VM is using nested TDP.
-
-Cc: Yosry Ahmed <yosryahmed@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+[ code move to cpu_errata.c for backport ]
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/kvm_host.h | 11 +++--------
- arch/x86/kvm/mmu/tdp_mmu.c      | 16 ++++++++--------
- 2 files changed, 11 insertions(+), 16 deletions(-)
+ arch/arm64/include/asm/cpufeature.h |    8 +++++++
+ arch/arm64/kernel/cpu_errata.c      |   38 +++++++++++++++++++++++++++++++++---
+ 2 files changed, 43 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 9694dd5e6ccc..d0dd5ed2e209 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1192,6 +1192,9 @@ struct kvm_arch {
- 	 */
- 	bool tdp_mmu_enabled;
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -495,6 +495,14 @@ static inline int arm64_get_ssbd_state(v
  
-+	/* The number of TDP MMU pages across all roots. */
-+	atomic64_t tdp_mmu_pages;
+ void arm64_set_ssbd_mitigation(bool state);
+ 
++/* Watch out, ordering is important here. */
++enum mitigation_state {
++	SPECTRE_UNAFFECTED,
++	SPECTRE_MITIGATED,
++	SPECTRE_VULNERABLE,
++};
 +
- 	/*
- 	 * List of struct kvm_mmu_pages being used as roots.
- 	 * All struct kvm_mmu_pages in the list should have
-@@ -1212,18 +1215,10 @@ struct kvm_arch {
- 	 */
- 	struct list_head tdp_mmu_roots;
++enum mitigation_state arm64_get_spectre_bhb_state(void);
+ #endif /* __ASSEMBLY__ */
  
--	/*
--	 * List of struct kvmp_mmu_pages not being used as roots.
--	 * All struct kvm_mmu_pages in the list should have
--	 * tdp_mmu_page set and a tdp_mmu_root_count of 0.
--	 */
--	struct list_head tdp_mmu_pages;
--
- 	/*
- 	 * Protects accesses to the following fields when the MMU lock
- 	 * is held in read mode:
- 	 *  - tdp_mmu_roots (above)
--	 *  - tdp_mmu_pages (above)
- 	 *  - the link field of struct kvm_mmu_pages used by the TDP MMU
- 	 *  - lpage_disallowed_mmu_pages
- 	 *  - the lpage_disallowed_link field of struct kvm_mmu_pages used
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index f05423545e6d..5ca78a89d8ed 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -24,7 +24,6 @@ bool kvm_mmu_init_tdp_mmu(struct kvm *kvm)
- 
- 	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_roots);
- 	spin_lock_init(&kvm->arch.tdp_mmu_pages_lock);
--	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_pages);
- 	kvm->arch.tdp_mmu_zap_wq =
- 		alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
- 
-@@ -51,7 +50,7 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
- 	flush_workqueue(kvm->arch.tdp_mmu_zap_wq);
- 	destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
- 
--	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_pages));
-+	WARN_ON(atomic64_read(&kvm->arch.tdp_mmu_pages));
- 	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
- 
- 	/*
-@@ -381,14 +380,17 @@ static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
- static void tdp_mmu_unlink_sp(struct kvm *kvm, struct kvm_mmu_page *sp,
- 			      bool shared)
- {
-+	atomic64_dec(&kvm->arch.tdp_mmu_pages);
-+
-+	if (!sp->lpage_disallowed)
-+		return;
-+
- 	if (shared)
- 		spin_lock(&kvm->arch.tdp_mmu_pages_lock);
- 	else
- 		lockdep_assert_held_write(&kvm->mmu_lock);
- 
--	list_del(&sp->link);
--	if (sp->lpage_disallowed)
--		unaccount_huge_nx_page(kvm, sp);
-+	unaccount_huge_nx_page(kvm, sp);
- 
- 	if (shared)
- 		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-@@ -1141,9 +1143,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
- 		tdp_mmu_set_spte(kvm, iter, spte);
- 	}
- 
--	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
--	list_add(&sp->link, &kvm->arch.tdp_mmu_pages);
--	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-+	atomic64_inc(&kvm->arch.tdp_mmu_pages);
- 
- 	return 0;
+ #endif
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -730,14 +730,39 @@ ssize_t cpu_show_spectre_v1(struct devic
+ 	return sprintf(buf, "Mitigation: __user pointer sanitization\n");
  }
--- 
-2.35.1.1094.g7c7d902a7c-goog
+ 
++static const char *get_bhb_affected_string(enum mitigation_state bhb_state)
++{
++	switch (bhb_state) {
++	case SPECTRE_UNAFFECTED:
++		return "";
++	default:
++	case SPECTRE_VULNERABLE:
++		return ", but not BHB";
++	case SPECTRE_MITIGATED:
++		return ", BHB";
++	}
++}
++
+ ssize_t cpu_show_spectre_v2(struct device *dev, struct device_attribute *attr,
+ 		char *buf)
+ {
+-	if (__spectrev2_safe)
+-		return sprintf(buf, "Not affected\n");
++	enum mitigation_state bhb_state = arm64_get_spectre_bhb_state();
++	const char *bhb_str = get_bhb_affected_string(bhb_state);
++	const char *v2_str = "Branch predictor hardening";
++
++	if (__spectrev2_safe) {
++		if (bhb_state == SPECTRE_UNAFFECTED)
++			return sprintf(buf, "Not affected\n");
++
++		/*
++		 * Platforms affected by Spectre-BHB can't report
++		 * "Not affected" for Spectre-v2.
++		 */
++		v2_str = "CSV2";
++	}
+ 
+ 	if (__hardenbp_enab)
+-		return sprintf(buf, "Mitigation: Branch predictor hardening\n");
++		return sprintf(buf, "Mitigation: %s%s\n", v2_str, bhb_str);
+ 
+ 	return sprintf(buf, "Vulnerable\n");
+ }
+@@ -758,3 +783,10 @@ ssize_t cpu_show_spec_store_bypass(struc
+ 
+ 	return sprintf(buf, "Vulnerable\n");
+ }
++
++static enum mitigation_state spectre_bhb_state;
++
++enum mitigation_state arm64_get_spectre_bhb_state(void)
++{
++	return spectre_bhb_state;
++}
+
 

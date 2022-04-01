@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5021F4EEB8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F084EEBAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344914AbiDAKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S1345090AbiDAKjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344579AbiDAKhu (ORCPT
+        with ESMTP id S1344980AbiDAKiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:37:50 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6069C266B73;
-        Fri,  1 Apr 2022 03:36:00 -0700 (PDT)
+        Fri, 1 Apr 2022 06:38:11 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3994E266B73;
+        Fri,  1 Apr 2022 03:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648809360; x=1680345360;
+  t=1648809382; x=1680345382;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FBjJubezRNdOufs68VLhvnQ07zN00wBh7949bWAqU/U=;
-  b=OGjDxB5wQ9cRSMjFpkVE+QfMHXkedmT4QvpLDu55PhOUpK5o9On/Y7dB
-   cfYDWwdGEad3uBHUgBtiTwCwb4/q+GPnz5bGToEZbSDXdza5FvBVN0EZ2
-   9n1DDRq4Gddi8eV8KAM0jjcoPqJf+naSL5wescvOpPnDpIeJcRhQhnos7
-   94nOXsPr0x+jnYUyj3YBwa+tv2k2kOnEUehCvYcC/BBxGuR4Mh4LGiAqu
-   W72DZl/sQ1JKcbGNYImGNvRre1GI1veKP70qiVrRLJEWnpz4IsBWvSQJH
-   sLPFHxzKhLj3xNbG195eHQojRfWBdeCheN/in4zURRl69HhNBnGrkWMa8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="240038604"
+  bh=EuhF9tdayYP61bXggQczwdo90eZaDVg9/mxLRlJMSCY=;
+  b=kpVFCLtyJ7+SfiGgaHfRCcwEmsOAIZovdrOyvV42mO8m4zqy1MZ5OJRr
+   x2J/U6ZTE0fMi8QoOvdqWIMDgPjB3iswl2+2LRvmxqopibz5mG6e8Wv1j
+   xMp/9Mc5SFxnTogRcz7pjdgx+PkeGTC8vLKOiI1ORLjtwejd0A8TRLsb2
+   9PXSZYUhKlpRrR/l3xi2/4FI6HU/qLlDTP/MPqa4OQptqoDIELTYPSn4m
+   DJ584Sayn53N5ShVH0zIPVoIRxpXlVYkp+pdytGzACmNlUtYsH1tRWR5Y
+   jllscMxRW8QLOOVvng4jf2AIebirqLAQYNyBOniKXBkIqK416fpZoteDx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="320790079"
 X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="240038604"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:36:00 -0700
+   d="scan'208";a="320790079"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:36:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="619271370"
+   d="scan'208";a="695847066"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Apr 2022 03:35:52 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 01 Apr 2022 03:35:52 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id F1EA1602; Fri,  1 Apr 2022 13:36:05 +0300 (EEST)
+        id 08D40612; Fri,  1 Apr 2022 13:36:06 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Qianggui Song <qianggui.song@amlogic.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -73,16 +73,16 @@ Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH v4 08/13] pinctrl: npcm7xx: Switch to use for_each_gpiochip_node() helper
-Date:   Fri,  1 Apr 2022 13:35:59 +0300
-Message-Id: <20220401103604.8705-9-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 09/13] pinctrl: meson: Rename REG_* to MESON_REG_*
+Date:   Fri,  1 Apr 2022 13:36:00 +0300
+Message-Id: <20220401103604.8705-10-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
 References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,181 +91,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the code to use for_each_gpiochip_node() helper.
+Currently compilation test fails on x86 due to name collision. The usual
+way to fix that is to move both conflicting parts to their own namespaces.
 
-While at it, in order to avoid additional churn in the future,
-do the following:
-- use a temporary variable for struct device pointer to shorten a few lines
-- get rid of a temporary variable for vIRQ number, assign it directly
-- switch to fwnode APIs where it makes sense
+Rename REG_* to MESON_REG_* as a prerequisite for enabling COMPILE_TEST.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 142 ++++++++++------------
- 1 file changed, 62 insertions(+), 80 deletions(-)
+ drivers/pinctrl/meson/pinctrl-meson.c | 24 ++++++++++++------------
+ drivers/pinctrl/meson/pinctrl-meson.h | 24 ++++++++++++------------
+ 2 files changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-index 9557fac5d11c..3cf0f8a43c37 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-@@ -17,6 +17,7 @@
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- 
- /* GCR registers */
-@@ -1862,88 +1863,69 @@ static int npcm7xx_gpio_of(struct npcm7xx_pinctrl *pctrl)
+diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
+index 49851444a6e3..5b46a0979db7 100644
+--- a/drivers/pinctrl/meson/pinctrl-meson.c
++++ b/drivers/pinctrl/meson/pinctrl-meson.c
+@@ -218,13 +218,13 @@ static int meson_pinconf_set_output(struct meson_pinctrl *pc,
+ 				    unsigned int pin,
+ 				    bool out)
  {
- 	int ret = -ENXIO;
- 	struct resource res;
--	int id = 0, irq;
--	struct device_node *np;
--	struct of_phandle_args pinspec;
--
--	for_each_available_child_of_node(pctrl->dev->of_node, np)
--		if (of_find_property(np, "gpio-controller", NULL)) {
--			ret = of_address_to_resource(np, 0, &res);
--			if (ret < 0) {
--				dev_err(pctrl->dev,
--					"Resource fail for GPIO bank %u\n", id);
--				return ret;
--			}
--
--			pctrl->gpio_bank[id].base =
--				ioremap(res.start, resource_size(&res));
--
--			irq = irq_of_parse_and_map(np, 0);
--			if (irq < 0) {
--				dev_err(pctrl->dev,
--					"No IRQ for GPIO bank %u\n", id);
--				ret = irq;
--				return ret;
--			}
--
--			ret = bgpio_init(&pctrl->gpio_bank[id].gc,
--					 pctrl->dev, 4,
--					 pctrl->gpio_bank[id].base +
--					 NPCM7XX_GP_N_DIN,
--					 pctrl->gpio_bank[id].base +
--					 NPCM7XX_GP_N_DOUT,
--					 NULL,
--					 NULL,
--					 pctrl->gpio_bank[id].base +
--					 NPCM7XX_GP_N_IEM,
--					 BGPIOF_READ_OUTPUT_REG_SET);
--			if (ret) {
--				dev_err(pctrl->dev, "bgpio_init() failed\n");
--				return ret;
--			}
--
--			ret = of_parse_phandle_with_fixed_args(np,
--							       "gpio-ranges", 3,
--							       0, &pinspec);
--			if (ret < 0) {
--				dev_err(pctrl->dev,
--					"gpio-ranges fail for GPIO bank %u\n",
--					id);
--				return ret;
--			}
--
--			pctrl->gpio_bank[id].irq = irq;
--			pctrl->gpio_bank[id].irq_chip = npcmgpio_irqchip;
--			pctrl->gpio_bank[id].gc.parent = pctrl->dev;
--			pctrl->gpio_bank[id].irqbase =
--				id * NPCM7XX_GPIO_PER_BANK;
--			pctrl->gpio_bank[id].pinctrl_id = pinspec.args[0];
--			pctrl->gpio_bank[id].gc.base = pinspec.args[1];
--			pctrl->gpio_bank[id].gc.ngpio = pinspec.args[2];
--			pctrl->gpio_bank[id].gc.owner = THIS_MODULE;
--			pctrl->gpio_bank[id].gc.label =
--				devm_kasprintf(pctrl->dev, GFP_KERNEL, "%pOF",
--					       np);
--			if (pctrl->gpio_bank[id].gc.label == NULL)
--				return -ENOMEM;
--
--			pctrl->gpio_bank[id].gc.dbg_show = npcmgpio_dbg_show;
--			pctrl->gpio_bank[id].direction_input =
--				pctrl->gpio_bank[id].gc.direction_input;
--			pctrl->gpio_bank[id].gc.direction_input =
--				npcmgpio_direction_input;
--			pctrl->gpio_bank[id].direction_output =
--				pctrl->gpio_bank[id].gc.direction_output;
--			pctrl->gpio_bank[id].gc.direction_output =
--				npcmgpio_direction_output;
--			pctrl->gpio_bank[id].request =
--				pctrl->gpio_bank[id].gc.request;
--			pctrl->gpio_bank[id].gc.request = npcmgpio_gpio_request;
--			pctrl->gpio_bank[id].gc.free = npcmgpio_gpio_free;
--			pctrl->gpio_bank[id].gc.of_node = np;
--			id++;
-+	struct device *dev = pctrl->dev;
-+	struct fwnode_reference_args args;
-+	struct fwnode_handle *child;
-+	int id = 0;
-+
-+	for_each_gpiochip_node(dev, child) {
-+		struct device_node *np = to_of_node(child);
-+
-+		ret = of_address_to_resource(np, 0, &res);
-+		if (ret < 0) {
-+			dev_err(dev, "Resource fail for GPIO bank %u\n", id);
-+			return ret;
-+		}
-+
-+		pctrl->gpio_bank[id].base = ioremap(res.start, resource_size(&res));
-+
-+		ret = bgpio_init(&pctrl->gpio_bank[id].gc, dev, 4,
-+				 pctrl->gpio_bank[id].base + NPCM7XX_GP_N_DIN,
-+				 pctrl->gpio_bank[id].base + NPCM7XX_GP_N_DOUT,
-+				 NULL,
-+				 NULL,
-+				 pctrl->gpio_bank[id].base + NPCM7XX_GP_N_IEM,
-+				 BGPIOF_READ_OUTPUT_REG_SET);
-+		if (ret) {
-+			dev_err(dev, "bgpio_init() failed\n");
-+			return ret;
- 		}
- 
-+		ret = fwnode_property_get_reference_args(child, "gpio-ranges", NULL, 3, 0, &args);
-+		if (ret < 0) {
-+			dev_err(dev, "gpio-ranges fail for GPIO bank %u\n", id);
-+			return ret;
-+		}
-+
-+		ret = irq_of_parse_and_map(np, 0);
-+		if (ret < 0) {
-+			dev_err(dev, "No IRQ for GPIO bank %u\n", id);
-+			return ret;
-+		}
-+		pctrl->gpio_bank[id].irq = ret;
-+		pctrl->gpio_bank[id].irq_chip = npcmgpio_irqchip;
-+		pctrl->gpio_bank[id].irqbase = id * NPCM7XX_GPIO_PER_BANK;
-+		pctrl->gpio_bank[id].pinctrl_id = args.args[0];
-+		pctrl->gpio_bank[id].gc.base = args.args[1];
-+		pctrl->gpio_bank[id].gc.ngpio = args.args[2];
-+		pctrl->gpio_bank[id].gc.owner = THIS_MODULE;
-+		pctrl->gpio_bank[id].gc.parent = dev;
-+		pctrl->gpio_bank[id].gc.fwnode = child;
-+		pctrl->gpio_bank[id].gc.label = devm_kasprintf(dev, GFP_KERNEL, "%pfw", child);
-+		if (pctrl->gpio_bank[id].gc.label == NULL)
-+			return -ENOMEM;
-+
-+		pctrl->gpio_bank[id].gc.dbg_show = npcmgpio_dbg_show;
-+		pctrl->gpio_bank[id].direction_input = pctrl->gpio_bank[id].gc.direction_input;
-+		pctrl->gpio_bank[id].gc.direction_input = npcmgpio_direction_input;
-+		pctrl->gpio_bank[id].direction_output = pctrl->gpio_bank[id].gc.direction_output;
-+		pctrl->gpio_bank[id].gc.direction_output = npcmgpio_direction_output;
-+		pctrl->gpio_bank[id].request = pctrl->gpio_bank[id].gc.request;
-+		pctrl->gpio_bank[id].gc.request = npcmgpio_gpio_request;
-+		pctrl->gpio_bank[id].gc.free = npcmgpio_gpio_free;
-+		id++;
-+	}
-+
- 	pctrl->bank_num = id;
- 	return ret;
+-	return meson_pinconf_set_gpio_bit(pc, pin, REG_DIR, !out);
++	return meson_pinconf_set_gpio_bit(pc, pin, MESON_REG_DIR, !out);
  }
+ 
+ static int meson_pinconf_get_output(struct meson_pinctrl *pc,
+ 				    unsigned int pin)
+ {
+-	int ret = meson_pinconf_get_gpio_bit(pc, pin, REG_DIR);
++	int ret = meson_pinconf_get_gpio_bit(pc, pin, MESON_REG_DIR);
+ 
+ 	if (ret < 0)
+ 		return ret;
+@@ -236,13 +236,13 @@ static int meson_pinconf_set_drive(struct meson_pinctrl *pc,
+ 				   unsigned int pin,
+ 				   bool high)
+ {
+-	return meson_pinconf_set_gpio_bit(pc, pin, REG_OUT, high);
++	return meson_pinconf_set_gpio_bit(pc, pin, MESON_REG_OUT, high);
+ }
+ 
+ static int meson_pinconf_get_drive(struct meson_pinctrl *pc,
+ 				   unsigned int pin)
+ {
+-	return meson_pinconf_get_gpio_bit(pc, pin, REG_OUT);
++	return meson_pinconf_get_gpio_bit(pc, pin, MESON_REG_OUT);
+ }
+ 
+ static int meson_pinconf_set_output_drive(struct meson_pinctrl *pc,
+@@ -269,7 +269,7 @@ static int meson_pinconf_disable_bias(struct meson_pinctrl *pc,
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, pin, REG_PULLEN, &reg, &bit);
++	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULLEN, &reg, &bit);
+ 	ret = regmap_update_bits(pc->reg_pullen, reg, BIT(bit), 0);
+ 	if (ret)
+ 		return ret;
+@@ -288,7 +288,7 @@ static int meson_pinconf_enable_bias(struct meson_pinctrl *pc, unsigned int pin,
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, pin, REG_PULL, &reg, &bit);
++	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULL, &reg, &bit);
+ 	if (pull_up)
+ 		val = BIT(bit);
+ 
+@@ -296,7 +296,7 @@ static int meson_pinconf_enable_bias(struct meson_pinctrl *pc, unsigned int pin,
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, pin, REG_PULLEN, &reg, &bit);
++	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULLEN, &reg, &bit);
+ 	ret = regmap_update_bits(pc->reg_pullen, reg, BIT(bit),	BIT(bit));
+ 	if (ret)
+ 		return ret;
+@@ -321,7 +321,7 @@ static int meson_pinconf_set_drive_strength(struct meson_pinctrl *pc,
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, pin, REG_DS, &reg, &bit);
++	meson_calc_reg_and_bit(bank, pin, MESON_REG_DS, &reg, &bit);
+ 
+ 	if (drive_strength_ua <= 500) {
+ 		ds_val = MESON_PINCONF_DRV_500UA;
+@@ -407,7 +407,7 @@ static int meson_pinconf_get_pull(struct meson_pinctrl *pc, unsigned int pin)
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, pin, REG_PULLEN, &reg, &bit);
++	meson_calc_reg_and_bit(bank, pin, MESON_REG_PULLEN, &reg, &bit);
+ 
+ 	ret = regmap_read(pc->reg_pullen, reg, &val);
+ 	if (ret)
+@@ -416,7 +416,7 @@ static int meson_pinconf_get_pull(struct meson_pinctrl *pc, unsigned int pin)
+ 	if (!(val & BIT(bit))) {
+ 		conf = PIN_CONFIG_BIAS_DISABLE;
+ 	} else {
+-		meson_calc_reg_and_bit(bank, pin, REG_PULL, &reg, &bit);
++		meson_calc_reg_and_bit(bank, pin, MESON_REG_PULL, &reg, &bit);
+ 
+ 		ret = regmap_read(pc->reg_pull, reg, &val);
+ 		if (ret)
+@@ -447,7 +447,7 @@ static int meson_pinconf_get_drive_strength(struct meson_pinctrl *pc,
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, pin, REG_DS, &reg, &bit);
++	meson_calc_reg_and_bit(bank, pin, MESON_REG_DS, &reg, &bit);
+ 
+ 	ret = regmap_read(pc->reg_ds, reg, &val);
+ 	if (ret)
+@@ -595,7 +595,7 @@ static int meson_gpio_get(struct gpio_chip *chip, unsigned gpio)
+ 	if (ret)
+ 		return ret;
+ 
+-	meson_calc_reg_and_bit(bank, gpio, REG_IN, &reg, &bit);
++	meson_calc_reg_and_bit(bank, gpio, MESON_REG_IN, &reg, &bit);
+ 	regmap_read(pc->reg_gpio, reg, &val);
+ 
+ 	return !!(val & BIT(bit));
+diff --git a/drivers/pinctrl/meson/pinctrl-meson.h b/drivers/pinctrl/meson/pinctrl-meson.h
+index ff5372e0a475..fa042cd6a7ff 100644
+--- a/drivers/pinctrl/meson/pinctrl-meson.h
++++ b/drivers/pinctrl/meson/pinctrl-meson.h
+@@ -63,12 +63,12 @@ struct meson_reg_desc {
+  * enum meson_reg_type - type of registers encoded in @meson_reg_desc
+  */
+ enum meson_reg_type {
+-	REG_PULLEN,
+-	REG_PULL,
+-	REG_DIR,
+-	REG_OUT,
+-	REG_IN,
+-	REG_DS,
++	MESON_REG_PULLEN,
++	MESON_REG_PULL,
++	MESON_REG_DIR,
++	MESON_REG_OUT,
++	MESON_REG_IN,
++	MESON_REG_DS,
+ 	NUM_REG,
+ };
+ 
+@@ -150,12 +150,12 @@ struct meson_pinctrl {
+ 		.irq_first	= fi,					\
+ 		.irq_last	= li,					\
+ 		.regs = {						\
+-			[REG_PULLEN]	= { per, peb },			\
+-			[REG_PULL]	= { pr, pb },			\
+-			[REG_DIR]	= { dr, db },			\
+-			[REG_OUT]	= { or, ob },			\
+-			[REG_IN]	= { ir, ib },			\
+-			[REG_DS]	= { dsr, dsb },			\
++			[MESON_REG_PULLEN]	= { per, peb },		\
++			[MESON_REG_PULL]	= { pr, pb },		\
++			[MESON_REG_DIR]		= { dr, db },		\
++			[MESON_REG_OUT]		= { or, ob },		\
++			[MESON_REG_IN]		= { ir, ib },		\
++			[MESON_REG_DS]		= { dsr, dsb },		\
+ 		},							\
+ 	 }
+ 
 -- 
 2.35.1
 

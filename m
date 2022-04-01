@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001044EED05
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D254EED08
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345839AbiDAMW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S1345835AbiDAMWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345820AbiDAMWT (ORCPT
+        with ESMTP id S1345826AbiDAMWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:22:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84271278546
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:20:30 -0700 (PDT)
+        Fri, 1 Apr 2022 08:22:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFB127855F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:20:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F70461766
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE622C340EC
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:20:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54238619CF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CC7C3410F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648815629;
-        bh=bv4ai29WIvi/ELGyR4yjSriIpSdWNprpTDF3XEOVCp8=;
+        s=k20201202; t=1648815630;
+        bh=uk21Dfi1NLedLZlU+WTy5BFw1I7PDgyf8dQtEmHAbs4=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=dI2B5VPxbg4U1m8Sa5adTMLDAyOvqyOK1deMeWe035676cpxjL6tdXlfrLIziT7zM
-         FaAYBmnPYHOPCvkD9EwlUPrnOdErSBB+brGZYw6kwHKuTXS80Xw9SaPOzX4G8EmG91
-         AbSvkI+G18r0u06vV4WNHphRRByFaBFLjvnhOixRgqdf2swvYpD+CGgK8pOnWcIFGG
-         l55D2JPCPmgeYBlndWmIub/4FZVH2KCi8qX8MkJhuMMpFZgzLqSBmlsbW4FgMTHCRj
-         Th4k0xcG1z8v3SsmjUrWonMM/abNMiPbzZcLDP6dL8/U6lxMdrCC+A4XYPAPiY4bZc
-         eMtIOEwLxsJCw==
+        b=VhmsRcXrqIM4fOgfTIH0PBnFO/lFojwzLa5fMGMaCVsFuKrbQo9JJogKeMIwNoO5S
+         16ANRqrGAgOM5LzciqYLO80KMZDAm0d6de5N6gEOhmM0gJ+jtWGcVrYBE2i6WgGlcQ
+         CV7cYS+La+52SvLB+zSsCwr1gavRmuXHChTcMrzG20qHJ7y0HYkUIblrixtGbffoNn
+         5qxpg42mQZXqhFoeHNyiKqovUOd13F8HGFTHq1NfSRAlH90Z9Jhltp+Kq423nRC5n1
+         nlV6RYokncR151pneTgpAdykm3mySq6HjzAiTivj9J1Juvj+r/91FSDy9deND6+CSu
+         bO8TQ+ucX6FEA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 6/7] habanalabs: remove redundant info print
-Date:   Fri,  1 Apr 2022 15:20:16 +0300
-Message-Id: <20220401122017.116205-6-ogabbay@kernel.org>
+Subject: [PATCH 7/7] habanalabs: change a reset print to debug level
+Date:   Fri,  1 Apr 2022 15:20:17 +0300
+Message-Id: <20220401122017.116205-7-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220401122017.116205-1-ogabbay@kernel.org>
 References: <20220401122017.116205-1-ogabbay@kernel.org>
@@ -52,46 +52,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Halting compute engines is a print that doesn't add us any information
-because it is always done in the reset process and not used elsewhere.
+Currently we have two reset prints per reset. One is in the common
+code and one in each asic-specific file.
 
-Even if it was, we don't use prints to mark functions we passed
-through.
+We can change the asic-specific message to be debug only as we can
+know the type of reset being done according to the print in the
+common code, which is also easier to maintain.
 
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 3 ---
- drivers/misc/habanalabs/goya/goya.c   | 3 ---
- 2 files changed, 6 deletions(-)
+ drivers/misc/habanalabs/gaudi/gaudi.c | 6 +++---
+ drivers/misc/habanalabs/goya/goya.c   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index bacb2f1df81e..33f7cfea53ae 100644
+index 33f7cfea53ae..b4bd40d47000 100644
 --- a/drivers/misc/habanalabs/gaudi/gaudi.c
 +++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -3795,9 +3795,6 @@ static void gaudi_halt_engines(struct hl_device *hdev, bool hard_reset, bool fw_
- {
- 	u32 wait_timeout_ms;
+@@ -4212,7 +4212,7 @@ static void gaudi_hw_fini(struct hl_device *hdev, bool hard_reset, bool fw_reset
+ 	}
  
--	dev_info(hdev->dev,
--		"Halting compute engines and disabling interrupts\n");
--
- 	if (hdev->pldm)
- 		wait_timeout_ms = GAUDI_PLDM_RESET_WAIT_MSEC;
- 	else
+ 	if (fw_reset) {
+-		dev_info(hdev->dev,
++		dev_dbg(hdev->dev,
+ 			"Firmware performs HARD reset, going to wait %dms\n",
+ 			reset_timeout_ms);
+ 
+@@ -4304,11 +4304,11 @@ static void gaudi_hw_fini(struct hl_device *hdev, bool hard_reset, bool fw_reset
+ 		WREG32(mmPSOC_GLOBAL_CONF_SW_ALL_RST,
+ 			1 << PSOC_GLOBAL_CONF_SW_ALL_RST_IND_SHIFT);
+ 
+-		dev_info(hdev->dev,
++		dev_dbg(hdev->dev,
+ 			"Issued HARD reset command, going to wait %dms\n",
+ 			reset_timeout_ms);
+ 	} else {
+-		dev_info(hdev->dev,
++		dev_dbg(hdev->dev,
+ 			"Firmware performs HARD reset, going to wait %dms\n",
+ 			reset_timeout_ms);
+ 	}
 diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index d75a180cf5bb..8572b178ef7d 100644
+index 8572b178ef7d..4d87dbf208f8 100644
 --- a/drivers/misc/habanalabs/goya/goya.c
 +++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -2482,9 +2482,6 @@ static void goya_halt_engines(struct hl_device *hdev, bool hard_reset, bool fw_r
- {
- 	u32 wait_timeout_ms;
+@@ -2825,12 +2825,12 @@ static void goya_hw_fini(struct hl_device *hdev, bool hard_reset, bool fw_reset)
+ 		goya_set_pll_refclk(hdev);
  
--	dev_info(hdev->dev,
--		"Halting compute engines and disabling interrupts\n");
--
- 	if (hdev->pldm)
- 		wait_timeout_ms = GOYA_PLDM_RESET_WAIT_MSEC;
- 	else
+ 		WREG32(mmPSOC_GLOBAL_CONF_SW_ALL_RST_CFG, RESET_ALL);
+-		dev_info(hdev->dev,
++		dev_dbg(hdev->dev,
+ 			"Issued HARD reset command, going to wait %dms\n",
+ 			reset_timeout_ms);
+ 	} else {
+ 		WREG32(mmPSOC_GLOBAL_CONF_SW_ALL_RST_CFG, DMA_MME_TPC_RESET);
+-		dev_info(hdev->dev,
++		dev_dbg(hdev->dev,
+ 			"Issued SOFT reset command, going to wait %dms\n",
+ 			reset_timeout_ms);
+ 	}
 -- 
 2.25.1
 

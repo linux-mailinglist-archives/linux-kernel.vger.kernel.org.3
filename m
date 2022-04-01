@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AD54EE71F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083874EE722
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244816AbiDAEZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S244828AbiDAEZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiDAEZB (ORCPT
+        with ESMTP id S233783AbiDAEZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:25:01 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE8B1A8443;
-        Thu, 31 Mar 2022 21:23:11 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id m18so1455773plx.3;
-        Thu, 31 Mar 2022 21:23:11 -0700 (PDT)
+        Fri, 1 Apr 2022 00:25:27 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4156721A5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:23:38 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so4236329pjo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=m+t6tz7gR24Bdf6PZaHlcoK+piVMTZrTtc48GD21Jpk=;
-        b=AMRr3I270ev4ymAfgVirzl6FQ4T+X5mX3SSgALXAHrgX/PYeB17g/QjgVq4WFAMnkv
-         07QY6GbwEljnOKGVdw1hB/2DyAQe0/+8XoqOXu6nfAnofRBLVJjgD7RukD+u0Mr8fgOS
-         +spKlZynLRk66LaXWWVUzZ7PxOE6zKbVq2B0Y9L4+Yzeb5zQDuLmw+dyiksHWg0Cu5cT
-         OJhEyOLLK8RALJheaJ3RIckECg4BRQCxNmoHQNB8d1ETWczWrEUiny4OUNUClacTcRzo
-         a/q+vwwM9nL0KcTjlTyWTBt3OhcakafmhN4fBSrZcz/UIHg85z79PS0WeHiWlTxhRHio
-         oJlg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qjcJFY+K3TS1eivpm/IZvtXBuodt+btawh7qCwUG148=;
+        b=aLfcYTperTFQ/2tIbR+mHV20JN2Ns3yu+0srEpm/ziN5iNA3nwDh/0a63A7jV0YZD2
+         RSIczCBgkTPHHw+nmH4qZCanrtegxWXh3L2ZbAUo9+Pwxn4VJ+0xGrtwE/98y8QArRz3
+         MnHReWthknARksAttkLna0sBombylCuqXwVSP106ZPGjfuk36DtCNYSZxxaxrLIU/vvF
+         qR86VCq6VIqAIDQ0eN5sqsr9+4Hiv5rZKnZwdECrNMv3hFrFfNRIGNvY8p+7BXN1ipAe
+         bBZF6rm/yPLifumYjyvulSPNmIpHmGHg6+JSZluoG9sqOhrITKSJpicWb2GOtXLhukIA
+         z/7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=m+t6tz7gR24Bdf6PZaHlcoK+piVMTZrTtc48GD21Jpk=;
-        b=1QUhaGUm/s5Y69K2pJV7ew26qBXHQacTcLR+AOke5tqnfrxyrM8EALJRkLj98QZaVx
-         KNTjpVIYfsB5HuOGsndo0lgu4ywnOmaFwk7GrI09D0KbxEKve/1SasL+yNxq0PaMn43+
-         QufuMhFWFkDUKIZQNmzd4paN39Zodw1eTVeNgHh9L8xEHSkFQXoEtqM7UdTSLFMrL50p
-         Ev/9fNlWxu/6vvLMKJnpQ45kAFcy1wQtw7IozzT+nNTorftRyIL0dCfAf9WH91cj0kj6
-         inXXgTr1J6pE7GTzLmLJSEU+2IYTFew6kdTzL8Yy0fpm8cyRMr+YEFS1rXtN7IpFP8yU
-         riSQ==
-X-Gm-Message-State: AOAM5308qnW0jTau02hw/OMdXkE1saVCsVzjXfHs10NLBJNRwPb0l+IM
-        /7NvdfSd/26nbSjLiJZTqRs=
-X-Google-Smtp-Source: ABdhPJxVjmOQ+kpxQnUwbp7mbogR6E1fVLKS6he/B/pczVg0MdQjfpxif7wTV9Dqa0eHDkT7rKnlOg==
-X-Received: by 2002:a17:902:f690:b0:154:2ceb:f18a with SMTP id l16-20020a170902f69000b001542cebf18amr8641905plg.4.1648786990736;
-        Thu, 31 Mar 2022 21:23:10 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:861c:fce2:7032:ab10])
-        by smtp.gmail.com with ESMTPSA id q18-20020aa78432000000b004fb0a5aa2c7sm1102958pfn.183.2022.03.31.21.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 21:23:09 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 21:23:07 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [git pull] Input updates for v5.18-rc0
-Message-ID: <YkZ+K2Gtt75y1/O+@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qjcJFY+K3TS1eivpm/IZvtXBuodt+btawh7qCwUG148=;
+        b=Q9oQv3CcIiwn+qadTX7UJ1Y6kBa6c4fkuVmSDukaT35SHq8HadJg5t1RXBtxI6YEs8
+         Ubhnj+PEpYEnR0b3ZOLkRtOt6mnRl6UtwDdqjDjc6UG3MVRyaLHxpsZaOfc54aaZ5U0l
+         waBRXr+hpT9T7CCCv1SNhy78fffS6cCpuOV0o4WQgizfTcbGQmmY7kOyzxwjPV/ZQfbP
+         JSUat9moyCRMqa9cYdMNPlPue/CKzM1w6X6DZmCMOKIx6V9UruCoFHmh7omoUdxaLlqI
+         XriHdFpPdOYGH+EhrLeyNnyr2l9JYY1F44t+y7du9sx7254Jo5Q0gHQM1zGc9nA9KY9F
+         UQqw==
+X-Gm-Message-State: AOAM533ZSZMGE2B5ObYrhmKuqbH4atsz/DB0XyMErqgfKoSIZHYcZJ3n
+        xckKkkv8aABJdlMw8uyO5jaRR8evCEopYhZSbHF5VQ==
+X-Google-Smtp-Source: ABdhPJw1KFriTS/qN+Hd7TLUXOZHnDPbK5zTZ/kCqb67xUFH865508OfPOxPU4nm0ucirJJvqXORmSyHyE+F91G1pWU=
+X-Received: by 2002:a17:903:2cb:b0:14f:4fb6:2fb0 with SMTP id
+ s11-20020a17090302cb00b0014f4fb62fb0mr43980317plk.172.1648787017568; Thu, 31
+ Mar 2022 21:23:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220330191440.1cc1b2de2b849d1ba93d2ba7@linux-foundation.org>
+ <89B53D3A-FCC5-4107-8D49-81D5B9AE5172@linux.dev> <20220331063956.5uqnab64cqnmcwyr@google.com>
+ <YkVcbElWjomA7ofF@dhcp22.suse.cz> <20220331181126.815cfe2b05b4281d32b7bf49@linux-foundation.org>
+In-Reply-To: <20220331181126.815cfe2b05b4281d32b7bf49@linux-foundation.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 31 Mar 2022 21:23:26 -0700
+Message-ID: <CALvZod54A5mkqK3uLhy-ibQ0ioYhrARmJiFdh=2DWqcMuUt5cA@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/list_lru: Fix possible race in memcg_reparent_list_lru_node()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Waiman Long <longman@redhat.com>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,140 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Mar 31, 2022 at 6:11 PM Andrew Morton <akpm@linux-foundation.org> w=
+rote:
+>
+> On Thu, 31 Mar 2022 09:46:52 +0200 Michal Hocko <mhocko@suse.com> wrote:
+>
+> > On Thu 31-03-22 06:39:56, Shakeel Butt wrote:
+> > > On Wed, Mar 30, 2022 at 07:48:45PM -0700, Roman Gushchin wrote:
+> > > >
+> > > >
+> > > [...]
+> > > >
+> > > >
+> > > > But honestly, I=E2=80=99d drop the original optimization together w=
+ith
+> > > > the fix, if only there is no _real world_ data on the problem and
+> > > > the improvement. It seems like it has started as a nice simple
+> > > > improvement, but the race makes it complex and probably not worth
+> > > > the added complexity and fragility.
+> > >
+> > > I agree with dropping the original optimization as it is not really
+> > > fixing an observed issue which may justify adding some complexity.
+> >
+> > Completely agreed. The patch as it is proposed is not really acceptable
+> > IMHO and I have to say I am worried that this is not the first time we
+> > are in a situation when a follow up fixes or unrelated patches are
+> > growing in complexity to fit on top of a performance optimizations whic=
+h
+> > do not refer to any actual numbers.
+>
+> Yup.  I did this:
+>
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: mm/list_lru.c: revert "mm/list_lru: optimize memcg_reparent_list=
+_lru_node()"
+>
+> 405cc51fc1049c73 ("mm/list_lru: optimize memcg_reparent_list_lru_node()")
+> has subtle races which are proving ugly to fix.  Revert the original
+> optimization.  If quantitative testing indicates that we have a
+> significant problem here then other implementations can be looked at.
+>
+> Fixes: 405cc51fc1049c73 ("mm/list_lru: optimize memcg_reparent_list_lru_n=
+ode()")
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Muchun Song <songmuchun@bytedance.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
-Please pull from:
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git for-linus
-
-to receive updates for the input subsystem. You will get:
-
-- a revert of a patch resetting extra buttons on touchpads claiming to
-  be buttonpads as this caused regression on certain Dell devices
-- a new driver for Mediatek MT6779 keypad
-- a new driver for Imagis touchscreen
-- rework of Google/Chrome OS "Vivaldi" keyboard handling
-- assorted driver fixes.
-
-Changelog:
----------
-
-Christophe JAILLET (1):
-      Input: da9063 - use devm_delayed_work_autocancel()
-
-Colin Ian King (1):
-      Input: adi - remove redundant variable z
-
-Danilo Krummrich (5):
-      Input: ps2-gpio - refactor struct ps2_gpio_data
-      Input: ps2-gpio - use ktime for IRQ timekeeping
-      Input: ps2-gpio - remove tx timeout from ps2_gpio_irq_tx()
-      Input: ps2-gpio - don't send rx data before the stop bit
-      Input: ps2-gpio - enforce GPIOs flag open drain
-
-Dmitry Torokhov (1):
-      HID: google: switch to devm when registering keyboard backlight LED
-
-Hans de Goede (4):
-      Input: set EV_ABS in dev->evbit even if input_alloc_absinfo() fails
-      Input: add input_copy_abs() function
-      Input: goodix - use input_copy_abs() helper
-      Input: goodix - fix race on driver unbind
-
-Jeff LaBundy (2):
-      Input: iqs5xx - use local input_dev pointer
-      Input: add bounds checking to input_set_capability()
-
-José Expósito (1):
-      Revert "Input: clear BTN_RIGHT/MIDDLE on buttonpads"
-
-Lv Ruyi (CGEL ZTE) (1):
-      Input: mt6779-keypad - fix signedness bug
-
-Marcos Alano (1):
-      Input: xbox - correct the name for Xbox Series S|X controller
-
-Markuss Broks (2):
-      dt-bindings: input/touchscreen: bindings for Imagis
-      Input: add Imagis touchscreen driver
-
-Matthew Haughton (1):
-      Input: synaptics - enable InterTouch on ThinkPad T14/P14s Gen 1 AMD
-
-Mattijs Korpershoek (3):
-      Input: mtk-pmic-keys - use get_irq_byname() instead of index
-      dt-bindings: input: mtk-pmic-keys: add MT6358 binding definition
-      Input: mtk-pmic-keys - add support for MT6358
-
-Stephen Boyd (3):
-      Input: extract ChromeOS vivaldi physmap show function
-      HID: google: extract Vivaldi hid feature mapping for use in hid-hammer
-      HID: google: Add support for vivaldi to hid-hammer
-
-Yunus Bas (1):
-      Input: tsc200x - add axis inversion and swapping support
-
-Zheng Yongjun (1):
-      Input: stmfts - fix reference leak in stmfts_input_open
-
-Zhengqiao Xia (1):
-      HID: google: modify HID device groups of eel
-
-fengping.yu (2):
-      dt-bindings: input: Add bindings for Mediatek matrix keypad
-      Input: mt6779-keypad - add MediaTek keypad driver
-
-Diffstat:
---------
-
- .../bindings/input/mediatek,mt6779-keypad.yaml     |  77 +++++
- .../devicetree/bindings/input/mtk-pmic-keys.txt    |   5 +-
- .../input/touchscreen/imagis,ist3038c.yaml         |  74 +++++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   6 +
- drivers/hid/Kconfig                                |  11 +
- drivers/hid/Makefile                               |   1 +
- drivers/hid/hid-google-hammer.c                    |  51 ++-
- drivers/hid/hid-vivaldi-common.c                   | 140 ++++++++
- drivers/hid/hid-vivaldi-common.h                   |  16 +
- drivers/hid/hid-vivaldi.c                          | 121 +------
- drivers/input/Kconfig                              |   7 +
- drivers/input/Makefile                             |   1 +
- drivers/input/input.c                              |  70 +++-
- drivers/input/joystick/adi.c                       |   4 +-
- drivers/input/joystick/xpad.c                      |   2 +-
- drivers/input/keyboard/Kconfig                     |  14 +
- drivers/input/keyboard/Makefile                    |   1 +
- drivers/input/keyboard/atkbd.c                     |  27 +-
- drivers/input/keyboard/cros_ec_keyb.c              |  43 +--
- drivers/input/keyboard/mt6779-keypad.c             | 221 +++++++++++++
- drivers/input/keyboard/mtk-pmic-keys.c             |  55 ++-
- drivers/input/misc/da9063_onkey.c                  |  13 +-
- drivers/input/mouse/synaptics.c                    |   1 +
- drivers/input/serio/ps2-gpio.c                     | 195 +++++++----
- drivers/input/touchscreen/Kconfig                  |  10 +
- drivers/input/touchscreen/Makefile                 |   1 +
- drivers/input/touchscreen/goodix.c                 |  61 ++--
- drivers/input/touchscreen/goodix.h                 |   1 +
- drivers/input/touchscreen/imagis.c                 | 367 +++++++++++++++++++++
- drivers/input/touchscreen/iqs5xx.c                 |  16 +-
- drivers/input/touchscreen/stmfts.c                 |   8 +-
- drivers/input/touchscreen/tsc200x-core.c           |   7 +-
- drivers/input/vivaldi-fmap.c                       |  39 +++
- include/linux/input.h                              |   2 +
- include/linux/input/vivaldi-fmap.h                 |  27 ++
- 36 files changed, 1364 insertions(+), 333 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
- create mode 100644 Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
- create mode 100644 drivers/hid/hid-vivaldi-common.c
- create mode 100644 drivers/hid/hid-vivaldi-common.h
- create mode 100644 drivers/input/keyboard/mt6779-keypad.c
- create mode 100644 drivers/input/touchscreen/imagis.c
- create mode 100644 drivers/input/vivaldi-fmap.c
- create mode 100644 include/linux/input/vivaldi-fmap.h
-
-Thanks.
-
-
--- 
-Dmitry
+Acked-by: Shakeel Butt <shakeelb@google.com>

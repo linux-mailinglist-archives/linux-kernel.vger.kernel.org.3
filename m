@@ -2,107 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E953D4EEF93
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD164EEFDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347080AbiDAO2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        id S1344444AbiDAOby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346911AbiDAO2Z (ORCPT
+        with ESMTP id S1347199AbiDAOap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:28:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F8591E3189
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648823190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2UVV1ZX1y9UdjpKVLfQDZGpGG6d6q550euWe10BEY9E=;
-        b=hUOw6p+Y4E4tlcFUL0wmM3fCsfUJAEh6zeCZY35oJR/A6ENIUFc6naEn6fJLssunnzjov2
-        n6vTy/+YBaDkkCUi1nmohbqbZQA7WQklJrmYKtKR1Q/N75UsLBqlJJ2V9lzAKsDLbAJLQL
-        cmmNBAfgaG255N0azMlYwIS/JkrW8Ik=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-wPpgVoM1MUCqsjfcuTCy2g-1; Fri, 01 Apr 2022 10:26:28 -0400
-X-MC-Unique: wPpgVoM1MUCqsjfcuTCy2g-1
-Received: by mail-lf1-f71.google.com with SMTP id bp13-20020a056512158d00b0044a7966d6baso1268574lfb.21
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:26:28 -0700 (PDT)
+        Fri, 1 Apr 2022 10:30:45 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D9228B103
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:27:41 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2e5827a76f4so34889837b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/yBHZSAzaOdetcg5JOmc7KTk+gATLVEE7qyh+p2yR08=;
+        b=lKu8NVYdkB8B4FroUiZcqglGUjmayIjnAOxS557eZB9iqUw3yVgKqog4K+ulQTQ+IE
+         dGPqkKVHNvB8Z66V9QC1ctGMwsdDl+sjxyfxv1LzkIpf1x0vIHymXnQf90klHyoIBEFC
+         3lO2PXxv38FQyWHytdRHlqzlH/2VtTwj55GQjGASLOj2e3jyp55+RK2PhMTaDZTn67bD
+         SEeuFZ3xVp057vNLwm90J76+e1spNghFZ4EDTSa0QALnENZrk8xB2IE5+62aku3NWBNv
+         G87AuYYt9jUuab8e7NS5+dT96N0ujvuRf8pDdMcpWYDArq2ZsLf4L2ox5mrfQetYRxFz
+         ioBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2UVV1ZX1y9UdjpKVLfQDZGpGG6d6q550euWe10BEY9E=;
-        b=6gjDy2Z8fdvzbaxW2ufLCsyzhOGxd/XySUdOaD4dHkm+YuMnQzHNFXCXxeGhA9KBlG
-         rvssd/bIS0Uog1V3FkB6vSoARrB7JqI9rATdsGOKCLghcSsTbmaVGZvlOK7QUehQ4jtx
-         tF4jKZKUha11omxswrAzALsw9WsBp5jt+IPUjzBs+ZcHdDEVrVUpWleaEhU+KYR8Z2Or
-         QBp7LyDcpyngiSHFM/KvZ8x/BXQYzmBRKeKTfNmNk9moQHQ2RAxENFB0gbnvUT+1fWrf
-         REmk5rUxWbKap84YAQdwYj0wN5u1PntreaH1X9eoL6AoA3XFcXd+/bpr6u66booGjOnl
-         OYzw==
-X-Gm-Message-State: AOAM532AT6u1hEZPx1SUB/7+y0oPCnlVBKXuUfl46arC2SkUnIUOwKqF
-        +3xAMM9H4cDY5opxTVPPkS2cwumMWrI93tWK6CuZbgO4RV4dm94ZJbUZhF3A1eZedOLUdrMP7zk
-        LzSk7Ov2iMpmihCLapZvXcLbGFEEZnM+0A9mx+ZKz
-X-Received: by 2002:a05:6512:308a:b0:44a:96cf:7ceb with SMTP id z10-20020a056512308a00b0044a96cf7cebmr13936439lfd.1.1648823187409;
-        Fri, 01 Apr 2022 07:26:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwEZVCL9DRSUlkJcPMDBd0xC2u70/SZJFXNSHYEoLpznTZMmi9QE8ctwQW8FDrNG5W5P8YwVfpONL2yFm35WK8=
-X-Received: by 2002:a05:6512:308a:b0:44a:96cf:7ceb with SMTP id
- z10-20020a056512308a00b0044a96cf7cebmr13936426lfd.1.1648823187229; Fri, 01
- Apr 2022 07:26:27 -0700 (PDT)
+        bh=/yBHZSAzaOdetcg5JOmc7KTk+gATLVEE7qyh+p2yR08=;
+        b=47l6rKSUeG4iK3hmn1i3VA6jlglWTCHaF7uhkuzR8qPNwspsQeEvybopc7WfP3HtqA
+         3umzK9TubXcDE+gigmT57VAITdtMr8gEdxGubaQs3wL68+jnvlW4w2WiLHoORQ3dxwMi
+         /mbt06ptEvw+SoOQRM87VSNSCLjVfn0yoakYMhyv0u8XSzwJpT1++uO3TPsgCxrUOlUx
+         KovEUIzZmYkcKcbdAwqRbpH4FnJObIKjDlaVnxa+hFXeEG8h6xv4rwsvxvKocb3w96p3
+         EyvR9ziCEOgKKYJEchgXSjQpAB1ccv+LxBEDxno9OUxQw/Njn1EYlhYt1oFhJwO7VccU
+         /QEw==
+X-Gm-Message-State: AOAM531DemkTWl8o/X5xs92eoLVPvuB7bh65Ku1Ecekl+b/1Ae242JTq
+        6w2iRLZCdo31ILP6OxkOl8xASb9aTbQSXFkVxF0Oqw==
+X-Google-Smtp-Source: ABdhPJx/s4Sf3KYRYdEDYCncQP39/k+7eSFZl8peNL0nvO6jLLB+GW3oMlL+R1l/6d7d2z75kLYO4MEE8GYJ3vTrAuI=
+X-Received: by 2002:a81:d4b:0:b0:2e5:91f2:ddc6 with SMTP id
+ 72-20020a810d4b000000b002e591f2ddc6mr10255853ywn.362.1648823260326; Fri, 01
+ Apr 2022 07:27:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220331190257.101781-1-wander@redhat.com> <20220331190257.101781-2-wander@redhat.com>
- <4767809d-5818-ad40-a0e7-b3af40aa071e@kernel.org>
-In-Reply-To: <4767809d-5818-ad40-a0e7-b3af40aa071e@kernel.org>
-From:   Wander Costa <wcosta@redhat.com>
-Date:   Fri, 1 Apr 2022 11:26:15 -0300
-Message-ID: <CAAq0SUmZ1u0TLTOq9fcn68oTZ6iHmpALbjhhy3zh6T=Kz1afxg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] serial/8250: Use fifo in 8250 console driver
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        =?UTF-8?Q?Andr=C3=A9_Goddard_Rosa?= <andre.goddard@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Jon Hunter <jonathanh@nvidia.com>, phil@raspberrypi.com
+References: <20220328145114.334577-1-yann.gautier@foss.st.com>
+In-Reply-To: <20220328145114.334577-1-yann.gautier@foss.st.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 1 Apr 2022 16:27:02 +0200
+Message-ID: <CAPDyKFqvZRangM1V_6d+iAPJ=1AG7_VFU8YVyp20a7d-9-OZGA@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: mmci: stm32: use a buffer for unaligned DMA requests
+To:     Yann Gautier <yann.gautier@foss.st.com>
+Cc:     Christophe Kerello <christophe.kerello@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mmc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 1:36 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+On Mon, 28 Mar 2022 at 16:51, Yann Gautier <yann.gautier@foss.st.com> wrote:
 >
-
+> In SDIO mode, the sg list for requests can be unaligned with what the
+> STM32 SDMMC internal DMA can support. In that case, instead of failing,
+> use a temporary bounce buffer to copy from/to the sg list.
+> This buffer is limited to 1MB. But for that we need to also limit
+> max_req_size to 1MB. It has not shown any throughput penalties for
+> SD-cards or eMMC.
 >
-> ">" missing here. Doesn't a compiler warn about subtracting different types?
+> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+
+Queued up for v5.19 on the devel branch, thanks!
+
+Kind regards
+Uffe
+
+
+> ---
+> Changes since v1:
+> - allocate bounce buffer in sdmmc_idma_validate_data()
+> - realign on top of mmc/devel branch
+>   (25e14a52d35928a1831ca98889a8a25ac3017990)
 >
-
-My local machine doesn't generate a warning; it causes a build error.
-So my question was, how was I able to build and test yesterday in a
-remote server? It turns out I built it with make -j40, so I missed the
-error message because of the parallel build, and I didn't pay
-attention that the output didn't display the modules_install typical
-output. Usually, I do my tests in an RHEL9 machine, which ships with
-kernel 5.14, but this time I tested in a Fedora machine, which ships
-kernel 5.16. And for a moment, I forgot that. So when I booted with
-kernel 5.16, I believed I was running my custom kernel. Luckily, v5
-mainly was a squash of v4 with this port->state check added. Anyway,
-sorry about the typo. v6 is on the way.
-
+>  drivers/mmc/host/mmci_stm32_sdmmc.c | 88 +++++++++++++++++++++++------
+>  1 file changed, 71 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
+> index 4566d7fc9055..60bca78a72b1 100644
+> --- a/drivers/mmc/host/mmci_stm32_sdmmc.c
+> +++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
+> @@ -43,6 +43,9 @@ struct sdmmc_lli_desc {
+>  struct sdmmc_idma {
+>         dma_addr_t sg_dma;
+>         void *sg_cpu;
+> +       dma_addr_t bounce_dma_addr;
+> +       void *bounce_buf;
+> +       bool use_bounce_buffer;
+>  };
+>
+>  struct sdmmc_dlyb {
+> @@ -54,6 +57,8 @@ struct sdmmc_dlyb {
+>  static int sdmmc_idma_validate_data(struct mmci_host *host,
+>                                     struct mmc_data *data)
+>  {
+> +       struct sdmmc_idma *idma = host->dma_priv;
+> +       struct device *dev = mmc_dev(host->mmc);
+>         struct scatterlist *sg;
+>         int i;
+>
+> @@ -61,41 +66,69 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
+>          * idma has constraints on idmabase & idmasize for each element
+>          * excepted the last element which has no constraint on idmasize
+>          */
+> +       idma->use_bounce_buffer = false;
+>         for_each_sg(data->sg, sg, data->sg_len - 1, i) {
+>                 if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
+>                     !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
+> -                       dev_err(mmc_dev(host->mmc),
+> +                       dev_dbg(mmc_dev(host->mmc),
+>                                 "unaligned scatterlist: ofst:%x length:%d\n",
+>                                 data->sg->offset, data->sg->length);
+> -                       return -EINVAL;
+> +                       goto use_bounce_buffer;
+>                 }
+>         }
+>
+>         if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
+> -               dev_err(mmc_dev(host->mmc),
+> +               dev_dbg(mmc_dev(host->mmc),
+>                         "unaligned last scatterlist: ofst:%x length:%d\n",
+>                         data->sg->offset, data->sg->length);
+> -               return -EINVAL;
+> +               goto use_bounce_buffer;
+>         }
+>
+> +       return 0;
+> +
+> +use_bounce_buffer:
+> +       if (!idma->bounce_buf) {
+> +               idma->bounce_buf = dmam_alloc_coherent(dev,
+> +                                                      host->mmc->max_req_size,
+> +                                                      &idma->bounce_dma_addr,
+> +                                                      GFP_KERNEL);
+> +               if (!idma->bounce_buf) {
+> +                       dev_err(dev, "Unable to map allocate DMA bounce buffer.\n");
+> +                       return -ENOMEM;
+> +               }
+> +       }
+> +
+> +       idma->use_bounce_buffer = true;
+> +
+>         return 0;
+>  }
+>
+>  static int _sdmmc_idma_prep_data(struct mmci_host *host,
+>                                  struct mmc_data *data)
+>  {
+> -       int n_elem;
+> +       struct sdmmc_idma *idma = host->dma_priv;
+>
+> -       n_elem = dma_map_sg(mmc_dev(host->mmc),
+> -                           data->sg,
+> -                           data->sg_len,
+> -                           mmc_get_dma_dir(data));
+> +       if (idma->use_bounce_buffer) {
+> +               if (data->flags & MMC_DATA_WRITE) {
+> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
+>
+> -       if (!n_elem) {
+> -               dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+> -               return -EINVAL;
+> -       }
+> +                       sg_copy_to_buffer(data->sg, data->sg_len,
+> +                                         idma->bounce_buf, xfer_bytes);
+> +                       dma_wmb();
+> +               }
+> +       } else {
+> +               int n_elem;
+> +
+> +               n_elem = dma_map_sg(mmc_dev(host->mmc),
+> +                                   data->sg,
+> +                                   data->sg_len,
+> +                                   mmc_get_dma_dir(data));
+>
+> +               if (!n_elem) {
+> +                       dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+> +                       return -EINVAL;
+> +               }
+> +       }
+>         return 0;
+>  }
+>
+> @@ -112,8 +145,19 @@ static int sdmmc_idma_prep_data(struct mmci_host *host,
+>  static void sdmmc_idma_unprep_data(struct mmci_host *host,
+>                                    struct mmc_data *data, int err)
+>  {
+> -       dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+> -                    mmc_get_dma_dir(data));
+> +       struct sdmmc_idma *idma = host->dma_priv;
+> +
+> +       if (idma->use_bounce_buffer) {
+> +               if (data->flags & MMC_DATA_READ) {
+> +                       unsigned int xfer_bytes = data->blksz * data->blocks;
+> +
+> +                       sg_copy_from_buffer(data->sg, data->sg_len,
+> +                                           idma->bounce_buf, xfer_bytes);
+> +               }
+> +       } else {
+> +               dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+> +                            mmc_get_dma_dir(data));
+> +       }
+>  }
+>
+>  static int sdmmc_idma_setup(struct mmci_host *host)
+> @@ -137,6 +181,8 @@ static int sdmmc_idma_setup(struct mmci_host *host)
+>                 host->mmc->max_segs = SDMMC_LLI_BUF_LEN /
+>                         sizeof(struct sdmmc_lli_desc);
+>                 host->mmc->max_seg_size = host->variant->stm32_idmabsize_mask;
+> +
+> +               host->mmc->max_req_size = SZ_1M;
+>         } else {
+>                 host->mmc->max_segs = 1;
+>                 host->mmc->max_seg_size = host->mmc->max_req_size;
+> @@ -154,8 +200,16 @@ static int sdmmc_idma_start(struct mmci_host *host, unsigned int *datactrl)
+>         struct scatterlist *sg;
+>         int i;
+>
+> -       if (!host->variant->dma_lli || data->sg_len == 1) {
+> -               writel_relaxed(sg_dma_address(data->sg),
+> +       if (!host->variant->dma_lli || data->sg_len == 1 ||
+> +           idma->use_bounce_buffer) {
+> +               u32 dma_addr;
+> +
+> +               if (idma->use_bounce_buffer)
+> +                       dma_addr = idma->bounce_dma_addr;
+> +               else
+> +                       dma_addr = sg_dma_address(data->sg);
+> +
+> +               writel_relaxed(dma_addr,
+>                                host->base + MMCI_STM32_IDMABASE0R);
+>                 writel_relaxed(MMCI_STM32_IDMAEN,
+>                                host->base + MMCI_STM32_IDMACTRLR);
+> --
+> 2.25.1
+>

@@ -2,72 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4279F4EF809
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9654EF813
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349633AbiDAQhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S1348721AbiDAQi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244385AbiDAQhD (ORCPT
+        with ESMTP id S1350198AbiDAQiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:37:03 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F9856C1D;
-        Fri,  1 Apr 2022 09:12:03 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso3795143wme.5;
-        Fri, 01 Apr 2022 09:12:03 -0700 (PDT)
+        Fri, 1 Apr 2022 12:38:00 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561551017E0;
+        Fri,  1 Apr 2022 09:15:43 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id m3so5764096lfj.11;
+        Fri, 01 Apr 2022 09:15:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MiR5EPOKkLhhEObk+YmsUARSnRu9/gwuzLaNmeH+HbE=;
-        b=PC1r74zw0BaM045emgzXvZ34kFbAVR0vYhGnDMBlSxTxsbRp0q7AJpcgfDz8gomnJA
-         56KqY8Qbll1p/J1/OnxHqA0oe0xMxZhdbPJNVWmWI9HVs4gzE3mhGTC9NGw4eEMIcLx2
-         WdvLf+ZxlcusfDT4AZlJGYcyLS8RUPafiVxnk5LBvYjxlIcV1y7vfy3xCxMxtyvsFonu
-         IAdgll79N6pGq8Lih8WdCocdG8jxqFkxGRq6sS7W8xK/kaagd9IsNBJOoRySkwmrIFkA
-         1cdvbDBanw9xnSxEbNt4YAJ56XweOQnYTWeYL/095b0fq4cXvd/3ARqAcDKNYEBwxHAy
-         544A==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=XbXCNFwHHw/7AcxBigwapuOKfyDexeoHFsZgqSWyus4=;
+        b=A7Qi+5s7OShNNKc36z53P4uDvpSQu+/hqp7p5j1TVC27Ytu91DmHq7N7yvw/woHrbm
+         +XzmvxLEHwkNXGhttQI3+hE3X6mKE5l783VNROkI30aZGhsmAD9wnqu2YnvOqFvEsTBK
+         fuM+1wVvd49XNC5ogu2AOOMp6PPaxUqnrPUjB5yMqyySWTAlVxHlFVmkblyFLjwS4IxE
+         F9BSSvnNw5mpNNvv8ivgtlcEdmU5h/KtZxnrQGwXgMD462mfr2oBz/qiFQ13kXxBSwUB
+         ENo654fYGP2/6zYAzv4XyAx+5sCSAZdSHoyP524DobpjEdNuhRz753X3X9piFroCpOSD
+         hPiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MiR5EPOKkLhhEObk+YmsUARSnRu9/gwuzLaNmeH+HbE=;
-        b=d/3pJ3/eT4Z57OpVNzw/sR/odq0PoNUlXRrs8GwlW5QVxZiXpP+W0azMJ7ehje5Be6
-         QO7DzxbtUrqSONirKQwd/QwCj9+uqqJrnhV0QYGaKnG/Kd8P+H3KosM591vTBdbTeSu5
-         ZMRyLl1qJhDrOEnbhoQQhbaArWE1/UVlqCdoh2WJJRXDqybbDeHT0VsvnR/5CXhp1X4w
-         2YxoJMPini6n5Ao8NfyKGb5pjXLpQl/cHftF0xpBP982o6Hf0P1KPCy/mrE4+uwFDToy
-         zFtX5/Ag5mMZfhqjXbaO2vPH2XNks2/eOV+s9pHXhQk8Fj1pm5NdV3sAhGkc/Qgp4cDB
-         HzoA==
-X-Gm-Message-State: AOAM533N63JEk8R9cUAJEthTAlLKDOmUW1Fyu8/d/hV9OlFJijtR3n20
-        +TsvlHEcpt5MdM+iz3SRqlE=
-X-Google-Smtp-Source: ABdhPJyFiyZhDPEC+rND9soHKz13sCFb9qDf8Mc2AIa/JTh7yxH0ggHH+x0G0Crv+QULy1frYEgG+w==
-X-Received: by 2002:a1c:4e19:0:b0:38c:88b8:c1ef with SMTP id g25-20020a1c4e19000000b0038c88b8c1efmr9458436wmh.133.1648829521497;
-        Fri, 01 Apr 2022 09:12:01 -0700 (PDT)
-Received: from [192.168.1.208] ([87.68.193.190])
-        by smtp.gmail.com with ESMTPSA id e12-20020a5d6d0c000000b001a65e479d20sm3023375wrq.83.2022.04.01.09.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 09:12:00 -0700 (PDT)
-Message-ID: <707a6991-ba4a-1224-8fb2-ea2d11963bdf@gmail.com>
-Date:   Fri, 1 Apr 2022 19:11:57 +0300
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=XbXCNFwHHw/7AcxBigwapuOKfyDexeoHFsZgqSWyus4=;
+        b=kgJASmoLD4qm/HcKyitbBVFG+ZamBnYByFc5oNOTHw76I0OFYMERqI80MADhLQTHH1
+         i7wixJjTF7NVpRUT0/VAtn7g2N6cTm5KF9M0lRvtZPNf+Nn1tAUhdvW4uDoF8FSBlBc4
+         q7WX/VDYVYKVXoDMOltOZUwcwcMei+wjQeDhcr/y0YLWvywcPThCRKEHIZMSDoZXmbq2
+         QV7nj6F40ZWn9ChWeV5SeO+6Foaom5SoRapyNwGnvIwcjSc+QOvlYTR9S4kpgotM3glb
+         yrz7jMCAVS+6Q9HTjrSHMJYuOOIYktQR688AUYz9ypon7VlbFlzk/QdhbnM+sJPYt/z5
+         EPYw==
+X-Gm-Message-State: AOAM530P40cxZ7zFoop41nyJ5pe2k2dYAbGHJlSYsYEfutF82OObdNuQ
+        RwLOTvQ6zR6RocUTrj1UoDb+onHWAWNUVfVacfMa/bRYGyY=
+X-Google-Smtp-Source: ABdhPJxm+mIZJM8q8k+iyEWVAPrlsYs1TcKqFg3TgDkek/wGBqQxDD6Y4+OE75h+uDgdr/IB/UpjG0/R3I9YNvZg8EU=
+X-Received: by 2002:a05:6512:33c3:b0:44a:8067:7ec4 with SMTP id
+ d3-20020a05651233c300b0044a80677ec4mr14736397lfg.601.1648829741242; Fri, 01
+ Apr 2022 09:15:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V5 1/1] Intel Sky Lake-E host root ports check.
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew.maier@eideticom.com, logang@deltatee.com,
-        bhelgaas@google.com, jgg@nvidia.com,
-        Shlomo Pongratz <shlomop@pliops.com>
-References: <20220331143101.GA4846@bhelgaas>
-From:   Shlomo Pongratz <shlomopongratz@gmail.com>
-In-Reply-To: <20220331143101.GA4846@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 1 Apr 2022 11:15:30 -0500
+Message-ID: <CAH2r5msKJPqE9sMpB2=_w9ZJQ8PAPhfD3CqpR5SKJkEFtTyaFg@mail.gmail.com>
+Subject: [GIT PULL] cifs/smb3 fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,75 +62,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/03/2022 17:31, Bjorn Helgaas wrote:
-> On Thu, Mar 31, 2022 at 10:35:39AM +0300, Shlomo Pongratz wrote:
->> In commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C, D to
->> the whitelist")
->> Andrew Maier added the Sky Lake-E additional devices
->> 2031, 2032 and 2033 root ports to the already existing 2030 device.
->>
->> The Intel devices 2030, 2031, 2032 and 2033 which are root ports A, B, C and D,
->> respectively and if all exist they will occupy slots 0 till 3 in that order.
-> Please make this a sentence.
->
->> The original code handled only the case where the devices in the whitelist are
->> host bridges and assumed that they will be found on slot 0.
->>
->> This assumption doesn't hold for root ports so an explicit test was added to
->> cover this case.
-> Please update the subject line to match the style of previous ones.
->
-> Please wrap the commit log to fit in 80 columns (including the 4
-> spaces added by "git log") like previous commits.
->
-> Please figure out whether you want "Sky Lake-E" or "SkyLake-E" and use
-> it consistently in commit log and code comments.  It seems to be
-> "Skylake" on intel.com, so I suggest using that.
-I think that you are right and Skylake is indeed a better name,
-but since Andrew Maier in his original patch used Sky Lake-E it is
-better to stick with it. (SkyLake-E will be removed).
->
-> Please use imperative mood, e.g., instead of "an explicit test was
-> added ...," write "add a test to cover this case."  Do the same in
-> code comments.
->
-> Bjorn
-Shlomo
-------------------------------------------------------------------------
-*From:* Bjorn Helgaas [mailto:helgaas@kernel.org]
-*Sent:* Thursday, March 31, 2022, 5:31 PM
-*To:* Shlomo Pongratz
-*Cc:* linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
-andrew.maier@eideticom.com, logang@deltatee.com, bhelgaas@google.com, 
-jgg@nvidia.com, Shlomo Pongratz
-*Subject:* [PATCH V5 1/1] Intel Sky Lake-E host root ports check.
+Please pull the following changes since commit
+dca65818c80cf06e0f08ba2cf94060a5236e73c2:
 
-> On Thu, Mar 31, 2022 at 10:35:39AM +0300, Shlomo Pongratz wrote:
->> In commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C, D to
->> the whitelist")
->> Andrew Maier added the Sky Lake-E additional devices
->> 2031, 2032 and 2033 root ports to the already existing 2030 device.
->>
->> The Intel devices 2030, 2031, 2032 and 2033 which are root ports A, B, C and D,
->> respectively and if all exist they will occupy slots 0 till 3 in that order.
-> Please make this a sentence.
->
->> The original code handled only the case where the devices in the whitelist are
->> host bridges and assumed that they will be found on slot 0.
->>
->> This assumption doesn't hold for root ports so an explicit test was added to
->> cover this case.
-> Please update the subject line to match the style of previous ones.
->
-> Please wrap the commit log to fit in 80 columns (including the 4
-> spaces added by "git log") like previous commits.
->
-> Please figure out whether you want "Sky Lake-E" or "SkyLake-E" and use
-> it consistently in commit log and code comments.  It seems to be
-> "Skylake" on intel.com, so I suggest using that.
->
-> Please use imperative mood, e.g., instead of "an explicit test was
-> added ...," write "add a test to cover this case."  Do the same in
-> code comments.
->
-> Bjorn
+  cifs: use a different reconnect helper for non-cifsd threads
+(2022-03-18 23:12:03 -0500)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-smb3-fixes-part2
+
+for you to fetch changes up to d6f5e358452479fa8a773b5c6ccc9e4ec5a20880:
+
+  cifs: fix NULL ptr dereference in smb2_ioctl_query_info()
+(2022-03-31 09:39:58 -0500)
+
+----------------------------------------------------------------
+14 fixes to cifs client and to smbfs_common code
+(used by both cifs.ko client and ksmbd server), 4 for stable
+- three fixes for big endian issues in how Persistent and Volatile
+file ids were stored
+- Various misc. fixes: including some for oops, 2 for ioctls, 1 for writeback
+- cleanup of how tcon (tree connection) status is tracked
+- Four changesets to move various duplicated protocol definitions
+(defined both in cifs.ko and ksmbd) into smbfs_common/smb2pdu.h
+- important performance improvement to use cached handles in some key
+compounding code paths (reduces numbers of opens/closes sent in some
+workloads)
+- fix to allow alternate DFS target to be used to retry on a failed i/o
+
+There is a trivial merge conflict (fixed in linux-next) with recent
+upstream commit:
+" 5224f7909617 ("treewide: Replace zero-length arrays with
+flexible-array members")" .
+
+Here is a link to a rebased version that resolves the conflict if you
+prefer using this:
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-rc-rebased-cifs-merge
+----------------------------------------------------------------
+David Howells (1):
+      cifs: writeback fix
+
+Paulo Alcantara (5):
+      cifs: do not skip link targets when an I/O fails
+      cifs: fix bad fids sent over wire
+      ksmbd: store fids as opaque u64 integers
+      cifs: prevent bad output lengths in smb2_ioctl_query_info()
+      cifs: fix NULL ptr dereference in smb2_ioctl_query_info()
+
+Ronnie Sahlberg (2):
+      cifs: convert the path to utf16 in smb2_query_info_compound
+      cifs: change smb2_query_info_compound to use a cached fid, if available
+
+Steve French (5):
+      [smb3] move more common protocol header definitions to smbfs_common
+      smb3: move defines for ioctl protocol header and SMB2 sizes to
+smbfs_common
+      smb3: move defines for query info and query fsinfo to smbfs_common
+      smb3: cleanup and clarify status of tree connections
+      smb3: fix ksmbd bigendian bug in oplock break, and move its
+struct to smbfs_common
+
+Xiaomeng Tong (1):
+      cifs: fix incorrect use of list iterator after the loop
+
+ fs/cifs/cifs_debug.c      |   2 +-
+ fs/cifs/cifsfs.c          |   4 +-
+ fs/cifs/cifsglob.h        |  24 +--
+ fs/cifs/cifspdu.h         |  14 +-
+ fs/cifs/cifssmb.c         |  11 +-
+ fs/cifs/connect.c         |  46 +++--
+ fs/cifs/file.c            |   8 +-
+ fs/cifs/misc.c            |   2 +-
+ fs/cifs/smb2glob.h        |  11 --
+ fs/cifs/smb2misc.c        |  14 +-
+ fs/cifs/smb2ops.c         | 246 +++++++++++++----------
+ fs/cifs/smb2pdu.c         |  73 ++++---
+ fs/cifs/smb2pdu.h         | 560
++---------------------------------------------------
+ fs/cifs/smb2proto.h       |   2 +-
+ fs/ksmbd/oplock.c         |   4 +-
+ fs/ksmbd/smb2pdu.c        | 108 +++++-----
+ fs/ksmbd/smb2pdu.h        | 533
++-------------------------------------------------
+ fs/smbfs_common/smb2pdu.h | 639
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 18 files changed, 924 insertions(+), 1377 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve

@@ -2,208 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF5F4EEAF8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F374EEAFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344917AbiDAKIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S234423AbiDAKKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344902AbiDAKIF (ORCPT
+        with ESMTP id S233780AbiDAKKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:08:05 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE287186F9B;
-        Fri,  1 Apr 2022 03:06:15 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 231A68lq104475;
-        Fri, 1 Apr 2022 05:06:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648807568;
-        bh=bZZMvG1DJXty1Xb3y/CLVrll4rMNeTTkKkkkhs781uU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=K2hJRpZNyMBaZRZ/TXNWd1acT32NgFhgQTpN/0nJQZhWXYmvwJJya9iBDQ63Hxm6y
-         HtMZmFcxZX1BmP5wXo3G2Jta8kx78Z149XrCGUt6PMCNcWgiNFgztXzbbVBgrs1b84
-         xaVxFnedqDOmBAdGmiiyWx9XFK+fUweK+HlaehcY=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 231A68EI003753
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 1 Apr 2022 05:06:08 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 1
- Apr 2022 05:06:07 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 1 Apr 2022 05:06:07 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 231A67uK073865;
-        Fri, 1 Apr 2022 05:06:07 -0500
-Date:   Fri, 1 Apr 2022 15:36:06 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: cadence-quadspi: fix protocol setup for non-1-1-X
- operations
-Message-ID: <20220401100606.iz52jbrdcz6pd5sg@ti.com>
-References: <20220331110819.133392-1-matthias.schiffer@ew.tq-group.com>
+        Fri, 1 Apr 2022 06:10:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3B9C76;
+        Fri,  1 Apr 2022 03:08:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-78-4-nat.elisa-mobile.fi [85.76.78.4])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 667222F7;
+        Fri,  1 Apr 2022 12:08:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1648807725;
+        bh=K5Sq9Yy2RVQrGV8/mjWy3qcvNyxqmrBpCW1VDNpkzIU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YJgE1tLwoo64WXtAjtalqJEtmqFFgBD6Qu0lVeDi0Y6HC1xI0R0/Pc6q8HnHAUbOD
+         lsH053yVUlKmysPK0nelTBuyZtTpZLelwx40jGSm+mfsj9R+SRYBLZTMeayhqCzss3
+         5/z3dIgalvgolqgnmaNrj0enAOLXhrhdvtqSEEgc=
+Date:   Fri, 1 Apr 2022 13:08:40 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2] media: nxp: imx-mips-csis depends on VIDEO_DEV
+Message-ID: <YkbPKHrmHwtmuZVR@pendragon.ideasonboard.com>
+References: <20220331231128.22015-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220331110819.133392-1-matthias.schiffer@ew.tq-group.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220331231128.22015-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+Hi Randy,
 
-On 31/03/22 01:08PM, Matthias Schiffer wrote:
-> cqspi_set_protocol() only set the data width, but ignored the command
-> and address width (except for 8-8-8 DTR ops), leading to corruption of
-> all transfers using 1-X-X or X-X-X ops. Fix by setting the other two
-> widths as well.
-> 
-> While we're at it, simplify the code a bit by replacing the
-> CQSPI_INST_TYPE_* constants with ilog2().
-> 
-> Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash with 1-4-4
-> read and write operations.
-> 
-> Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework")
+Thank you for the patch.
 
-I think a fixes tag is wrong here. The old driver did not support 1-X-X 
-modes either. So you are not fixing anything, you are adding a new 
-feature. I don't think we should backport this patch to stable.
+On Thu, Mar 31, 2022 at 04:11:28PM -0700, Randy Dunlap wrote:
+> imx-mipi-csis uses interfaces that are made available by VIDEO_DEV,
+> so the driver should depend on VIDEO_DEV to eliminate build errors.
+> 
+> Fixes these build errors:
+> 
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_calculate_params':
+> imx-mipi-csis.c:(.text+0x2ec): undefined reference to `v4l2_get_link_freq'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_async_register':
+> imx-mipi-csis.c:(.text+0x464): undefined reference to `v4l2_async_nf_init'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x48c): undefined reference to `v4l2_fwnode_endpoint_parse'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x538): undefined reference to `__v4l2_async_nf_add_fwnode_remote'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x56c): undefined reference to `v4l2_async_subdev_nf_register'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x57c): undefined reference to `v4l2_async_register_subdev'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_notify_bound':
+> imx-mipi-csis.c:(.text+0x5e0): undefined reference to `v4l2_create_fwnode_links_to_pad'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_probe':
+> imx-mipi-csis.c:(.text+0x1088): undefined reference to `v4l2_subdev_init'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x1148): undefined reference to `v4l2_async_nf_unregister'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x1150): undefined reference to `v4l2_async_nf_cleanup'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x1158): undefined reference to `v4l2_async_unregister_subdev'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_set_fmt':
+> imx-mipi-csis.c:(.text+0x1348): undefined reference to `v4l_bound_align_image'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_s_stream':
+> imx-mipi-csis.c:(.text+0x14bc): undefined reference to `v4l2_subdev_call_wrappers'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x14c0): undefined reference to `v4l2_subdev_call_wrappers'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x1624): undefined reference to `v4l2_subdev_call_wrappers'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x1628): undefined reference to `v4l2_subdev_call_wrappers'
+> aarch64-linux-ld: imx-mipi-csis.c:(.text+0x16d0): undefined reference to `v4l2_subdev_call_wrappers'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:imx-mipi-csis.c:(.text+0x16d4): more undefined references to `v4l2_subdev_call_wrappers' follow
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_remove':
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:(.rodata+0x4b8): undefined reference to `v4l2_subdev_get_fwnode_pad_1_to_1'
+> aarch64-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:(.rodata+0x4c8): undefined reference to `v4l2_subdev_link_validate'
+> 
+> Fixes: 46fb99951fe2 ("media: platform: place NXP drivers on a separate dir")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-media@vger.kernel.org
 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+This seems to duplicate
+https://lore.kernel.org/linux-media/20220331123151.1953-1-laurent.pinchart@ideasonboard.com/T/#u.
+
 > ---
->  drivers/spi/spi-cadence-quadspi.c | 46 ++++++++-----------------------
->  1 file changed, 12 insertions(+), 34 deletions(-)
+> v2: fix copy-pasta Subject: line problem
 > 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index b0c9f62ccefb..616ada891974 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -19,6 +19,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/jiffies.h>
->  #include <linux/kernel.h>
-> +#include <linux/log2.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/of.h>
-> @@ -102,12 +103,6 @@ struct cqspi_driver_platdata {
->  #define CQSPI_TIMEOUT_MS			500
->  #define CQSPI_READ_TIMEOUT_MS			10
->  
-> -/* Instruction type */
-> -#define CQSPI_INST_TYPE_SINGLE			0
-> -#define CQSPI_INST_TYPE_DUAL			1
-> -#define CQSPI_INST_TYPE_QUAD			2
-> -#define CQSPI_INST_TYPE_OCTAL			3
-> -
->  #define CQSPI_DUMMY_CLKS_PER_BYTE		8
->  #define CQSPI_DUMMY_BYTES_MAX			4
->  #define CQSPI_DUMMY_CLKS_MAX			31
-> @@ -376,10 +371,6 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
->  static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
->  			      const struct spi_mem_op *op)
->  {
-> -	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
-> -	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
-> -	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
-> -
->  	/*
->  	 * For an op to be DTR, cmd phase along with every other non-empty
->  	 * phase should have dtr field set to 1. If an op phase has zero
-> @@ -389,32 +380,23 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
->  		       (!op->addr.nbytes || op->addr.dtr) &&
->  		       (!op->data.nbytes || op->data.dtr);
->  
-> -	switch (op->data.buswidth) {
-> -	case 0:
-> -		break;
-> -	case 1:
-> -		f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
-> -		break;
-> -	case 2:
-> -		f_pdata->data_width = CQSPI_INST_TYPE_DUAL;
-> -		break;
-> -	case 4:
-> -		f_pdata->data_width = CQSPI_INST_TYPE_QUAD;
-> -		break;
-> -	case 8:
-> -		f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
-> -		break;
-> -	default:
-> -		return -EINVAL;
-> -	}
-> +	f_pdata->inst_width = 0;
-> +	if (op->cmd.buswidth)
-> +		f_pdata->inst_width = ilog2(op->cmd.buswidth);
-> +
-> +	f_pdata->addr_width = 0;
-> +	if (op->addr.buswidth)
-> +		f_pdata->addr_width = ilog2(op->addr.buswidth);
-> +
-> +	f_pdata->data_width = 0;
-> +	if (op->data.buswidth)
-> +		f_pdata->data_width = ilog2(op->data.buswidth);
-
-Honestly, I think we should get rid of cqspi_set_protocol() entirely. I 
-see no need to store f_pdata->{instr,addr,data}_width since we 
-recalculate those for each op execution anyway. So why not just use the 
-spi_mem_op to get those values directly and be rid of all this mess?
-
->  
->  	/* Right now we only support 8-8-8 DTR mode. */
->  	if (f_pdata->dtr) {
->  		switch (op->cmd.buswidth) {
->  		case 0:
-> -			break;
->  		case 8:
-> -			f_pdata->inst_width = CQSPI_INST_TYPE_OCTAL;
->  			break;
->  		default:
->  			return -EINVAL;
-> @@ -422,9 +404,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
->  
->  		switch (op->addr.buswidth) {
->  		case 0:
-> -			break;
->  		case 8:
-> -			f_pdata->addr_width = CQSPI_INST_TYPE_OCTAL;
->  			break;
->  		default:
->  			return -EINVAL;
-> @@ -432,9 +412,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
->  
->  		switch (op->data.buswidth) {
->  		case 0:
-> -			break;
->  		case 8:
-> -			f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
->  			break;
->  		default:
->  			return -EINVAL;
-> -- 
-> 2.25.1
+>  drivers/media/platform/nxp/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
 > 
+> --- linux-next-20220331.orig/drivers/media/platform/nxp/Kconfig
+> +++ linux-next-20220331/drivers/media/platform/nxp/Kconfig
+> @@ -7,6 +7,7 @@ comment "NXP media platform drivers"
+>  config VIDEO_IMX_MIPI_CSIS
+>  	tristate "NXP MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
+>  	depends on ARCH_MXC || COMPILE_TEST
+> +	depends on VIDEO_DEV
+>  	select MEDIA_CONTROLLER
+>  	select V4L2_FWNODE
+>  	select VIDEO_V4L2_SUBDEV_API
 
 -- 
 Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+
+Laurent Pinchart

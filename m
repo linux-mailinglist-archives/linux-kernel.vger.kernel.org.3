@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DCB4EF999
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB304EF99B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347606AbiDASQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S1347805AbiDASRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345474AbiDASQH (ORCPT
+        with ESMTP id S238409AbiDASRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:16:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D52178681
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 11:14:16 -0700 (PDT)
+        Fri, 1 Apr 2022 14:17:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F161788E0;
+        Fri,  1 Apr 2022 11:15:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 287C760C6C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:14:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A7B9C340EE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:14:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 231E060B19;
+        Fri,  1 Apr 2022 18:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AAF3C340EE;
+        Fri,  1 Apr 2022 18:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648836855;
-        bh=kqU9j86Fp20yiuk8kX7VoDCOGTK2BPuNyNh6eBUBXXQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HWRpGX4VIciF/GlnmQv6GJXgQ+OyVRdB2wgg9us7F85HQm/c2I0dS4nRq0y4Vw9QM
-         tr9hwIO63BWy3fyu7nlMXBlo1IcVkWB1myDWpWUmoGewxy9PJW2RSzNOu3HwE2/6ZV
-         POhh64oogsyLx9uRWiB7tWJ6QGnEzg2zLU+5M0DvHlhJbhVLNFXh1ul9N8HJdXqi+1
-         xWQXW68UtibXGdJGKREna7V522YPtYDR4XKJQOAIbC80rc61gOytRUYD/SDVXnKt6l
-         p8kKnk48sQvs6rmnHcbgLqi3c3Wfe8PQ3Coy3OChuWrywMtDglBcwDxWhpz/IaVSE1
-         7sFHryACB157w==
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e6ceb45174so41846567b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 11:14:15 -0700 (PDT)
-X-Gm-Message-State: AOAM532O/ZszlRi/GonNwJunH236l0wbE40aOcmGVIVB3QvCu63sgQ5E
-        j+gBfPdVBTpD5gWDaxb8rM5BI+3E/wtS8gyop08=
-X-Google-Smtp-Source: ABdhPJxX72PNJDxsBPPdOyCYcv5vbaFnbRnCdQFgmooWJ9gguxs2v2t8FmJaG5mRQzA59s9ZS0nSEuJvmAPfj2gW8xo=
-X-Received: by 2002:a0d:d912:0:b0:2e6:4099:b34f with SMTP id
- b18-20020a0dd912000000b002e64099b34fmr11356518ywe.46.1648836854617; Fri, 01
- Apr 2022 11:14:14 -0700 (PDT)
+        s=k20201202; t=1648836945;
+        bh=dVdKOaXz9iaxANVQcfDDCpVI8xWzvRSZh/at93Wv6jg=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=uQfzd4BOHaVqDO4ZgZhQhCLT+3p5a1pzo3UJ+8d7cx4bocv5rqXkpG6DD9FXK+sE6
+         6xnxiJb23d+LqznCMJUkzJl4Z6tcJq4+JBlBlb7hWf4CjNThkjlGBeW7hBC6HsmTmE
+         l/RygU0hN2DtTiUjnU/ItO/PL5pIzTpl+aT+8tY3Z4IiTX+EDNpHOjhHinIMN/g9qS
+         tKjfdIOTeoKpsO3vVrWVMLXJX2ISOOkI0KHMrupTroypga+zRE90iwWjuiEFOPL46z
+         8q5Ns3WfyrxUzmmiCIHFA2yc1Yha0+07/gf0dTHza66DZd93WOVVnQz11vXOO65diX
+         L7kpSOQa1iLxQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220401163909.20343-1-palmer@rivosinc.com>
-In-Reply-To: <20220401163909.20343-1-palmer@rivosinc.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Fri, 1 Apr 2022 21:13:48 +0300
-X-Gmail-Original-Message-ID: <CAFCwf13-o=kUR61xjWt=F-Q-Vfy=kF6fpMP7iB+83Gfqw7+2HA@mail.gmail.com>
-Message-ID: <CAFCwf13-o=kUR61xjWt=F-Q-Vfy=kF6fpMP7iB+83Gfqw7+2HA@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: Elide a warning on 32-bit targets
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Ohad Sharabi <osharabi@habana.ai>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220324165904.538861-1-steve@sk2.org>
+References: <20220324165904.538861-1-steve@sk2.org>
+Subject: Re: [PATCH] clk: use i2c_match_id and simple i2c probe
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Kitt <steve@sk2.org>
+Date:   Fri, 01 Apr 2022 11:15:43 -0700
+User-Agent: alot/0.10
+Message-Id: <20220401181545.7AAF3C340EE@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,81 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 7:41 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> This double-cast pattern looks a bit awkward, but it already exists
-> elsewhere in the driver.  Without this patch I get
->
-> drivers/misc/habanalabs/common/memory.c: In function =E2=80=98alloc_devic=
-e_memory=E2=80=99:
-> drivers/misc/habanalabs/common/memory.c:153:49: warning: cast from pointe=
-r to integer of different size [-Wpointer-to-int-cast]
->   153 |                                                 (u64) gen_pool_dm=
-a_alloc_align(vm->dram_pg_pool,
->       |                                                 ^
->
-> which ends up promoted to a build error in my test setup.
->
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->
+Please fix the subject.
+
+Quoting Stephen Kitt (2022-03-24 09:59:04)
+> As part of the ongoing i2c transition to the simple probe
+> ("probe_new"), this patch uses i2c_match_id to retrieve the
+> driver_data for the probed device. The id parameter is thus no longer
+> necessary and the simple probe can be used instead.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 > ---
->
-> I don't know anything about this driver, I'm just pattern-matching the
-> warning away.
-> ---
->  drivers/misc/habanalabs/common/memory.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/haban=
-alabs/common/memory.c
-> index e008d82e4ba3..f1fc79c1fc10 100644
-> --- a/drivers/misc/habanalabs/common/memory.c
-> +++ b/drivers/misc/habanalabs/common/memory.c
-> @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, =
-struct hl_mem_in *args,
->                 for (i =3D 0 ; i < num_pgs ; i++) {
->                         if (is_power_of_2(page_size))
->                                 phys_pg_pack->pages[i] =3D
-> -                                               (u64) gen_pool_dma_alloc_=
-align(vm->dram_pg_pool,
-> -                                                                        =
-       page_size, NULL,
-> -                                                                        =
-       page_size);
-> +                                               (u64) (uintptr_t) gen_poo=
-l_dma_alloc_align(vm->dram_pg_pool,
-> +                                                                        =
-                  page_size, NULL,
-> +                                                                        =
-                  page_size);
->                         else
-> -                               phys_pg_pack->pages[i] =3D (u64) gen_pool=
-_alloc(vm->dram_pg_pool,
-> -                                                                        =
-       page_size);
-> +                               phys_pg_pack->pages[i] =3D (u64) (uintptr=
-_t) gen_pool_alloc(vm->dram_pg_pool,
-> +                                                                        =
-                 page_size);
->                         if (!phys_pg_pack->pages[i]) {
->                                 dev_err(hdev->dev,
->                                         "Failed to allocate device memory=
- (out of memory)\n");
-> --
-> 2.34.1
->
+>  drivers/clk/clk-cdce925.c | 8 +++++---
+>  drivers/clk/clk-si5351.c  | 8 +++++---
+>  drivers/clk/clk-si544.c   | 8 +++++---
+>  drivers/clk/clk-si570.c   | 8 +++++---
 
-This patch is:
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-
-Greg,
-Could you please apply this directly to your misc tree and send it to
-Linus at your next pull request ?
-I don't have any other fixes pending for 5.18.
-
-For 5.19 we will do a more elegant solution that Arnd has recommended.
-
-Thanks,
-Oded
+Also split the patch for each driver and send in one patch series with a
+cover letter. Then the subject can be appropriate for that driver
+instead of generic "clk:" which is only for core things. Looking at
+previous patches to these files should help with the subject line.

@@ -2,138 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6224EFA5D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF9F4EFA5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351583AbiDAT1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S1351590AbiDAT2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351572AbiDAT1o (ORCPT
+        with ESMTP id S1351572AbiDAT2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:27:44 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E415D057
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:25:54 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id E87E1ACB39
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:25:53 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id aMu9nxyLK22u3aMu9n8PMl; Fri, 01 Apr 2022 14:25:53 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gRxeeaDwhvGBhrPafblbmd3XWXuP8IayVtlpg1IL5eU=; b=LwJc1tLL0hGCz49/ZelQdnZBTu
-        /tlUi+k1vfYhMZGElRwBh675jRNUmi5Lp4CLI9mahf6Bt5/nASzkGi/24Y2PaR6Lp9NCLUW59hGpn
-        hVbGk7ilF59KDzuoC9XzT7Obgz0kEhyExhlZRHUky0XB7h9J1Yo7pDJ0QE1RWeef6mhNmmq0SUeYc
-        4GoyXHUm4rOUC2y2hBauOgbOxkKGeutLjhHOAXar7mYunKDPR3h//gRx7FJEBwKgW+ncKVYIKV4mF
-        oy3KEXkZaV47F5xAyAsqR/zym2UKGG2nYtSgQg79nFL2CtXWoUknFvxZ3iPn7SB4pVXkrG6vpOlHX
-        w6VcYZEA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54662)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1naMu9-0020Md-I7; Fri, 01 Apr 2022 19:25:53 +0000
-Message-ID: <dcba377b-1fce-92e6-680a-77c5567cd06c@roeck-us.net>
-Date:   Fri, 1 Apr 2022 12:25:52 -0700
+        Fri, 1 Apr 2022 15:28:36 -0400
+Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 38654166E23
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:26:46 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
+ s=smtp; t=1648841206; h=Content-Transfer-Encoding: MIME-Version:
+ Content-Type: References: In-Reply-To: Date: Cc: To: To: From: From:
+ Subject: Subject: Message-ID: Sender: Sender;
+ bh=PIlVbnZoKBF9L8sNxcppwl76sMV8O2PlumgtWNhmvRs=; b=YV732cGqliDaGZzGsaWNA0zatWmlAemfdugj7ugP6cRGrifMd0hXtbVCUnDI+TlEvRnob23q
+ BWVsvUM1jVnvfhA1scF90FgpaPvLuEjkxwW6lyaFdzwuPzqil8/EuB9EZOZC7v8zY2ujEUTq
+ DVew5wGidJooUar3UBxDzWjm/NIecof1816uybJhvEknwMkf+e7OsWk6627YzcJ9MNkz7zAH
+ i+QRMAt9iOdZ/uxeyi+UohRKS0RybmhkPSmADCLMBEYlKdFPvMgaPEs/yC5QNXq/KBYw/fOD
+ 4gYu74PuIxkTGgi2z7mremo4gEXQJ+keiQD9UxN92qCVIwSdEkOrVw==
+X-Mailgun-Sending-Ip: 159.135.228.62
+X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
+Received: from [192.168.21.4] (dynamic-user.170.84.58.28.mhnet.com.br
+ [170.84.58.28]) by smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 624751f40418b8d3d7029d7e (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Fri, 01 Apr 2022 19:26:44 GMT
+Sender: codeagain@codeagain.dev
+Message-ID: <3fbc5325e94b9ae0666a1f5a56a4e5372bfcea1d.camel@codeagain.dev>
+Subject: Re: [PATCH] staging: vme: Adjusted VME_USER in Kconfig
+From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Date:   Fri, 01 Apr 2022 16:26:27 -0300
+In-Reply-To: <YkaXRpIElW1BwKGb@kroah.com>
+References: <20220401050045.3686663-1-codeagain@codeagain.dev>
+         <YkaW0ThT8Ah3z0wW@kroah.com> <YkaXRpIElW1BwKGb@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] staging: r8188eu: Fix PPPoE tag insertion on big endian
- systems
-Content-Language: en-US
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220401151257.3414576-1-linux@roeck-us.net>
- <782f0115-e45f-1aff-a152-5d403c990b31@lwfinger.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <782f0115-e45f-1aff-a152-5d403c990b31@lwfinger.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1naMu9-0020Md-I7
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54662
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 11:40, Larry Finger wrote:
-> On 4/1/22 10:12, Guenter Roeck wrote:
->> In __nat25_add_pppoe_tag(), the tag length is read from the tag data
->> structure. The value is kept in network format, but read as raw value.
->> With -Warray-bounds, this results in the following gcc error/warning
->> when building the driver on a big endian system such as alpha.
->>
->> In function '__nat25_add_pppoe_tag',
->>      inlined from 'nat25_db_handle' at
->>     drivers/staging/r8188eu/core/rtw_br_ext.c:479:11:
->> arch/alpha/include/asm/string.h:22:16: error:
->>     '__builtin_memcpy' forming offset [40, 2051] is out of the bounds
->>     [0, 40] of object 'tag_buf' with type 'unsigned char[40]'
->>
->> Add the missing ntohs().
->>
->> Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
->> Cc: Phillip Potter <phil@philpotter.co.uk>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>   drivers/staging/r8188eu/core/rtw_br_ext.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
->> index d68611ef22f8..31bcd495ec04 100644
->> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
->> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
->> @@ -70,7 +70,7 @@ static int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
->>       struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
->>       int data_len;
->> -    data_len = tag->tag_len + TAG_HDR_LEN;
->> +    data_len = htons(tag->tag_len) + TAG_HDR_LEN;
-
-Wonder where my brain was. That should have been ntohs().
-
->>       if (skb_tailroom(skb) < data_len)
->>           return -1;
+On Fri, 2022-04-01 at 08:10 +0200, reg Kroah-Hartman wrote:
+> On Fri, Apr 01, 2022 at 08:08:17AM +0200, reg Kroah-Hartman wrote:
+> > On Fri, Apr 01, 2022 at 02:00:45AM -0300, Bruno Moreira-Guedes
+> > wrote:
+> > > Currently, the VME_USER driver is in the staging tree Kconfig,
+> > > unlike
+> > > other VME drivers already moved to the main portions of the
+> > > kernel tree.
+> > > Its configuration is, however, nested into the VME_BUS config
+> > > option,
+> > > which might be misleading.
+> > > 
+> > > Since the staging tree "[...] is used to hold stand-alone[1]
+> > > drivers and
+> > > filesystem that are not ready to be merged into the main portion
+> > > of the
+> > > Linux kernel tree [...]"[1], IMHO all staging drivers should
+> > > appear
+> > > nested into the Main Menu -> Device Drivers -> Staging Drivers
+> > > to make
+> > > sure the user don't pick it without being fully aware of its
+> > > staging
+> > > status as it could be the case in Menu -> Device Drivers -> VME
+> > > bridge
+> > > support (the current location).
+> > > 
+> > > With this change menuconfig users will clearly know this is not
+> > > a driver
+> > > in the main portion of the kernel tree and decide whether to
+> > > build it or
+> > > not with that clearly in mind.
+> > > 
+> > > This change goes into the same direction of commit 4b4cdf3979c3
+> > > ("STAGING: Move staging drivers back to staging-specific menu")
+> > > 
+> > > [1] https://lkml.org/lkml/2009/3/18/314
+> > > 
+> > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+> > > ---
+> > >  drivers/staging/Kconfig | 2 ++
+> > >  drivers/vme/Kconfig     | 2 --
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+> > > index 932acb4e8cbc..0545850eb2ff 100644
+> > > --- a/drivers/staging/Kconfig
+> > > +++ b/drivers/staging/Kconfig
+> > > @@ -88,4 +88,6 @@ source "drivers/staging/qlge/Kconfig"
+> > >  
+> > >  source "drivers/staging/wfx/Kconfig"
+> > >  
+> > > +source "drivers/staging/vme/devices/Kconfig"
+> > > +
+> > >  endif # STAGING
+> > > diff --git a/drivers/vme/Kconfig b/drivers/vme/Kconfig
+> > > index 936392ca3c8c..c13dd9d2a604 100644
+> > > --- a/drivers/vme/Kconfig
+> > > +++ b/drivers/vme/Kconfig
+> > > @@ -15,6 +15,4 @@ source "drivers/vme/bridges/Kconfig"
+> > >  
+> > >  source "drivers/vme/boards/Kconfig"
+> > >  
+> > > -source "drivers/staging/vme/devices/Kconfig"
+> > > -
+> > >  endif # VME
+> > > -- 
+> > > 2.35.1
+> > > 
+> > > 
+> > 
+> > The problem with this change is that you just changed the
+> > initialization
+> > order of the drivers if they are built into the kernel.  Are you
+> > sure
+> > that you can initialize a vme device driver before the vme bridge
+> > and
+> > bus code is run?  I don't know if that will work properly, which
+> > is why
+> > the Kconfig entries are in the order they currently are in (we
+> > preserved
+> > the link order.)
+> > 
+> > It's not an obvious thing at all, sorry, but build order defines
+> > link
+> > order, which defines the order in which things are initialized in
+> > the
+> > kernel.
+> > 
+> > So I can't take this change unless you are able to prove that it
+> > still
+> > works properly on the hardware that these drivers control.  Do you
+> > have
+> > this hardware to test this change with?
 > 
-> Strange that a BE compiler would generate a warning for what is actually an execution error on LE platforms.
-> 
-> I prefer be16_to_cpu() to htons() as the former makes it clearer what is happening, but I suppose that is a matter of choice.
-> 
-The rest of the code uses htons/ntohs, so I prefer to follow that lead.
+> Oh wait, it's the Makefile order that controls this, not the Kconfig
+> order.  Sorry for the noise here, it's still early...
 
-> Reviewed_by: Larry Finger <Larry.Finger@lwfinger.net>
-> 
-> Incidentally, Sparse shows 3 more __be16 problems in this routine. I leave their fixing to you.
-> 
+No problem, your previous message was quite helpful to make realize
+some scenarios I wasn't considering at first. I did a more throrough
+inspection of how this patch impacts everything thanks to this
+observations.
 
-I'll need to resend anyway, so I'll track those down and fix them as well.
+I don't have the hardware so indeed I'm avoiding changes that would
+need it to be tested, and as far as I'm properly aware my patch just
+changes the places of things in the config targets. Build is protected
+from such changes through some Makefile validations such as in
+drivers/staging/Makefile:
+| obj-$(CONFIG_VME_BUS)           += vme/
 
-Thanks,
-Guenter
+> 
+> So this change _should_ be fine, but it would be good if you could
+> prove
+> it still works with some build tests.  How did you test this change?
+
+At first I ran menuconfig and tested if it was still properly setting
+CONFIG_VME_USER. Then I built with CONFIG_VME_USER=m and
+CONFIG_VME_USER=n to check if it would build the module.
+
+After your first e-mail I realized I didn't account for
+CONFIG_VME_USER=y on my tests. I have now successfuly built with this
+option too. Are those enough tests for this situation?
+
+> 
+> thanks,
+> 
+> greg k-h
+
+While testing and checking, I have found two other things that I think
+are remarkable to mention. First one is a missing `depends on` line
+for `VME_BRIDGE` in drivers/staging/vme/devices/Kconfig, not visible
+because they were in the same tree, but now unveiled. I'm fixing it,
+do you think it's best to add it in the same patch?
+
+Finally, not directly related with the patch, yet remarkable, I
+happened to notice something. When probing the vme_user module
+(compiled with CONFIG_VME_USER=m), I naturally get the following
+messages on my log and command output for `modprobe vme_user`:
+
+| [177666.590400] vme_user: module is from the staging directory, the
+quality is unknown, you have been warned.
+| [177666.601166] vme_user: VME User Space Access Driver
+| [177666.602111] vme_user: No cards, skipping registration modprobe:
+| ERROR: could not insert 'vme_user': No such device
+
+While this is completely expected, the message about the code from
+staging directory does not appear when compiled with
+CONFIG_VME_USER=y, as shows a `grep -i vme` on the console log:
+
+| [0.000000] Linux version 5.17.0lsa-t-vme_user=y-13483-gfeb94431c35c-
+dirty (bruno@AN5Bruno) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38)
+#7 SMP PREEMPT_DYNAMIC Fri Apr 1 14:33:16 -03 2022
+| [1.974450] vme_user: VME User Space Access Driver
+| [ 1.975405] vme_user: No cards, skipping registration
+
+Do you think it would be interesting for a future patch to provide
+some output when drivers from the staging tree are present in the
+running kernel image?
+
+NOTE: This message was sent earlier but due to some deliverability
+issues didn't make to destinations. I apologize in advance if it ends
+up duplicating.
+
+-- 
+Sincerely,
+Bruno | Pronouns: they/them/theirs
+IRC: CodeAgain

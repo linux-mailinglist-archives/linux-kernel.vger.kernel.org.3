@@ -2,100 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD35C4EEF18
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56BA4EEF1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346778AbiDAOSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S1346787AbiDAOT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346704AbiDAOSs (ORCPT
+        with ESMTP id S1346597AbiDAOT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:18:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4644322F3D6
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:16:58 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dr20so6132151ejc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bmS8kGPX3oqylsdkqHV+AyKQ/jkv5xD40RzktvQFBCA=;
-        b=k3AbnEjCIO9KtJuKhqWav0ixKZGHdzUpJy0TB96ZwLJiUMb6aBwkvyouonOEy3740l
-         fx+KLUxr3Ia/2nW6ZvHzpeNLwC0KjhtU4t60G1gNpq9/O/M+LfEk3UAwCC8d3zraGTAW
-         fPBcgXJ+/tzxgN4e/a/94pWU+DLGhDAIuLHOSna6SJhRUzOdB7/+z/35Qh4nGCc9I0hw
-         DWlYmYVgfY7gadz7pIyxbSc3niS3o9PBkf4VhPtH+vcP0ZiLUucPsOasugiMMFhg1/gu
-         eVqpap4/BBB3BrfE4TuScREYvqrqPm9iSebuiRQH2TKIw7aP1mLqbUOrzDHnJDxtkpn0
-         zbww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bmS8kGPX3oqylsdkqHV+AyKQ/jkv5xD40RzktvQFBCA=;
-        b=lhk8QrO7PVn3okdMw/CeQXje4WFtE1w8WEtGeqjfhLzgQIzyPTZ5YI6M7likkotQwH
-         6KNFGkxCE/rn1hLf4s7A7cJKVYdbp01PKSZd5qfz6L4dvfS/EC4+Cs7oI6rdwTOyUaSX
-         fvIDiW3rO9CGOyFJGjxttKzDLyuE+6q1f43G2rkkZEDlXR7c3VAeIIY4vjElruCHZsCH
-         blIZzK5H+CI+zNUV0wFQfsINFMs7r8LCMe3GJALsIVoLRuB/CMSEojt7nbjOfe+m2mHa
-         Erso4P3YEJ6WPVU5n7JjxjLgt/JhJE3eVO1HPkT8LlU66ZiQ3ry6fvOVi/E8uY918TZQ
-         +UwQ==
-X-Gm-Message-State: AOAM530b268WyhVGhiQ7Jql9m6BNTsru+UwUfCGdDTxf3zoVoFgbW9DC
-        HTotbA+8Jl641rGXvB+Rwf8pxqNAd6hSz4nA5DVl0psthQ==
-X-Google-Smtp-Source: ABdhPJwLbimfaR6/uUNJolgpuaocB/w+2fMr9wzVTSwPRnDn00eP1Xml6RgKsNOeu5+RkdFvCiT3qtjHTvdCAivyGbU=
-X-Received: by 2002:a17:907:1b09:b0:6d8:faa8:4a06 with SMTP id
- mp9-20020a1709071b0900b006d8faa84a06mr9613207ejc.701.1648822616645; Fri, 01
- Apr 2022 07:16:56 -0700 (PDT)
+        Fri, 1 Apr 2022 10:19:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC0628254D;
+        Fri,  1 Apr 2022 07:17:37 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 231DCe4t004568;
+        Fri, 1 Apr 2022 14:17:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=j+GrgQwSNP6LhnjiDCskOWjxGf/kQMb9FWXh3SM6zZY=;
+ b=L02HjvnV5//Swk5/pi0Oakf0r6E5nFlWyExEyF4nVFYBycUizttE3TY81IW1/578xmzf
+ JrEO6EFFehin9pH0OkC0J6awWPLBaCEvDnrWLGDUtg7COPWIqSmDc1gAPE42jutj9In3
+ jQwcKwJ+YbFDj2cuvus/zedi6iVrmHdeKtHTo4fUvz5V2VsXWeen9/kcbAHh7ioqWTI7
+ y8DBQyDMhoNS5HKsMDw2lwfmmf0OsE8CBX+gfx4Ap29E2J67YhYXNvqkrHuWNc3m/hws
+ LhrPXDH5c1K+i21Dq+bLFnim1Q7RUv8VFbOe83MwZnuR/L9nwUNEOEZwc//Pds7Tx+Td Nw== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f60ds44ax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 14:17:27 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 231EDXEF013373;
+        Fri, 1 Apr 2022 14:17:26 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01dal.us.ibm.com with ESMTP id 3f5y5r1ybr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 14:17:26 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 231EHPpg32899400
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Apr 2022 14:17:25 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F7F3BE054;
+        Fri,  1 Apr 2022 14:17:25 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5566BE056;
+        Fri,  1 Apr 2022 14:17:24 +0000 (GMT)
+Received: from [9.211.155.52] (unknown [9.211.155.52])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  1 Apr 2022 14:17:24 +0000 (GMT)
+Message-ID: <82528887-a6e9-f7cc-26f3-6a0932d967c9@linux.ibm.com>
+Date:   Fri, 1 Apr 2022 09:17:24 -0500
 MIME-Version: 1.0
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
- <CAHC9VhTaCNqfTOi8X5G3AheBFzTYCzGnt_-=fNFc5Z1o8gPm9Q@mail.gmail.com>
- <62465bf3.1c69fb81.d5424.365e@mx.google.com> <2777189.mvXUDI8C0e@x2>
-In-Reply-To: <2777189.mvXUDI8C0e@x2>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 1 Apr 2022 10:16:45 -0400
-Message-ID: <CAHC9VhRYHhHPx42BKa0gp974uzwHoXZWqmwt9o=1rox7tHyy1w@mail.gmail.com>
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     linux-audit@redhat.com, CGEL <cgel.zte@gmail.com>,
-        kbuild-all@lists.01.org, Zeal Robot <zealci@zte.com.cn>,
-        linux-kernel@vger.kernel.org, eparis@redhat.com,
-        dai.shixin@zte.com.cn, Yang Yang <yang.yang29@zte.com.cn>,
-        ink@jurassic.park.msu.ru, huang.junhua@zte.com.cn,
-        guo.xiaofeng@zte.com.cn, mattst88@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] leds: pca955x: Add HW blink support
+Content-Language: en-US
+To:     Patrick Williams <patrick@stwcx.xyz>
+Cc:     pavel@ucw.cz, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        joel@jms.id.au
+References: <20220330203318.19225-1-eajames@linux.ibm.com>
+ <YkXLG++LWdQWCxQF@heinlein>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <YkXLG++LWdQWCxQF@heinlein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4K5KvNpjB3ggIrLj-E8OVtJgVj3KKUFO
+X-Proofpoint-GUID: 4K5KvNpjB3ggIrLj-E8OVtJgVj3KKUFO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-01_05,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 bulkscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 clxscore=1011 mlxscore=0 priorityscore=1501 mlxlogscore=796
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204010066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 9:39 AM Steve Grubb <sgrubb@redhat.com> wrote:
+
+On 3/31/22 10:39, Patrick Williams wrote:
+> On Wed, Mar 30, 2022 at 03:33:18PM -0500, Eddie James wrote:
+>> Support blinking using the PCA955x chip. Use PWM0 for blinking
+>> instead of LED_HALF brightness. Since there is only one frequency
+>> and brightness register for any blinking LED, all blinked LEDs on
+>> the chip will have the same frequency and brightness.
+> The current implementation uses the PWM to control the "brightness"
+> with PWM0 being assigned 50% and PWM1 being configured as a single value
+> that isn't ON, OFF, or 50%.  I suspect that most users of these 955x
+> chips care either about brightness or blinking but not both, but it is
+> possible I am wrong.  It would be nice if we could use PWM1 as another
+> hardware blink control when it hasn't been used for brightness, but that
+> would require some additional state tracking I think.
 >
-> On Thursday, March 31, 2022 9:57:05 PM EDT CGEL wrote:
-> > On Thu, Mar 31, 2022 at 10:16:23AM -0400, Paul Moore wrote:
-> > > On Wed, Mar 30, 2022 at 10:29 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > > On Wed, Mar 30, 2022 at 10:48:12AM -0400, Paul Moore wrote:
-> > > > > If audit is not generating SYSCALL records, even for invalid/ENOSYS
-> > > > > syscalls, I would consider that a bug which should be fixed.
-> > > >
-> > > > If we fix this bug, do you think audit invalid/ENOSYS syscalls better
-> > > > be forcible or be a rule that can be configure? I think configure is
-> > > > better.
-> > >
-> > > It isn't clear to me exactly what you are asking, but I would expect
-> > > the existing audit syscall filtering mechanism to work regardless if
-> > > the syscall is valid or not.
-> >
-> > Thanks, I try to make it more clear. We found that auditctl would only
-> > set rule with syscall number (>=0 && <2047) ...
+> I like that we can now use the hardware to control blink rate, rather
+> than doing it in software, and, I really like that in theory if N LEDs on
+> the device are all blinking at the same rate they will actually turn on and
+> off at the same exact moment because it is done in hardware.  I am really
+> concerned about this proposed change and the way it will change current
+> behavior though.
+>
+> It is not uncommon in a BMC design to use one of these 955x chips to control
+> 8 or 16 different LEDs reflecting the state of the system and at
+> different blink rates.  An example LED policy might be that you have 1 LED
+> for "power status" and another LED for "system identify + health status".
+> When the system is powered off the "power status" LED flashes at a slow rate
+> and when the system is powered on it goes on solid.  When the system is healthy
+> the "health status" is on, when it is unhealthy it blinks slowly, and when the
+> system is "identified" it blinks fast.
+>
+> My point of the above is that there are certainly system policies where
+> you'd want to flash two different LEDs at two different rates.  In
+> today's implementation of this driver those both turn into
+> software-emulated blinking by the kernel.  With your proposal we lose
+> this ability and instead whichever LED is configured second will affect
+> all other blinking LEDs.
 
-That is exactly why I wrote the warning below in my response ...
 
-> > > Beware that there are some limitations
-> > > to the audit syscall filter, which are unfortunately baked into the
-> > > current design/implementation, which may affect this to some extent.
+Yep. I see your point, it could be problematic.
 
--- 
-paul-moore.com
+
+>
+> It looks like in led-core.c led_blink_setup that if the device
+> `blink_set` returns an error then software blinking is the fallback.  Is
+> it possible for us to have this driver keep track of how many LEDs are
+> in blink state (and which speeds are allocated) and get led-core to
+> fallback to software blinking if we are unable to satisfy the new blink
+> rate without affecting an existing LED blink rate?
+
+
+OK, I like this idea, I'll go ahead and implement it. Thanks for the 
+suggestion!
+
+
+Eddie
+
+
+>
+> Looking at the tree it seems bcm6328 does what I am suggesting already
+> but I don't see any other drivers that obviously do.  The PCA955x is
+> pretty widely used in BMC implementations:
+>
+>      $ git grep -l pca955 arch/arm/boot/dts/aspeed* | wc -l
+>      13
+>

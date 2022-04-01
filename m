@@ -2,151 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237F74EE645
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C71624EE64E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244270AbiDACv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S237064AbiDAC57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242572AbiDACvY (ORCPT
+        with ESMTP id S244308AbiDAC5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:51:24 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC10E22B0A;
-        Thu, 31 Mar 2022 19:49:35 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22VNFqb1007713;
-        Thu, 31 Mar 2022 19:49:18 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=fXs/sNH6Nz8VNLF4DioBwGDDaKbO/cCj+oFHMqPMEYQ=;
- b=ddPTg6kmhocZwFPDc59uCEQM/CosbNI7VdsyVxAXLZWKyoAIjYh0S6KTt/0WL0hQEFrp
- /V4dDisShmJDWedwm/ARH7zkC30imLcFKuhaw1T8xfucBYv1caGmpMJZfdIVl7p96LFI
- YYmQknzJiEIxR1gSpsUDv+8ZK2Z+UWXcVxA= 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f5gpcujgd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Mar 2022 19:49:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cV+JkGIzWF9AGpx+M6WgLwAy0SVrlanjgjbbu546Z0UuzCy+zvs2ArpOLH7jotGBqMcswpVJea8nDc4PecXg99St/TMSeMc5v7ldJNyF6vvmbnXvoykh+apeDUh35rTqVn3jOxSdlwgPZvT1t+DrjgMdYQonWInFkdCboDuETrpeDC60tc07p6DQArbJE3iVeQV/Bd9wijxfV8l+RHxwHpyLhCx0JuDcwUhUCI93wC366n/Axav2MBSor5gU1FkL5/R0TWhWTXLpT92iMEqsHfgDunHzTDtVaCPd5TEN0z4LFkjLayVbakxnd/TdVfktIWmi4UfUMI2JDY9W+dDFeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fXs/sNH6Nz8VNLF4DioBwGDDaKbO/cCj+oFHMqPMEYQ=;
- b=XYPpqIrfxKJCCbKbiPMVQOYpWjiQCmq/tuqAspEPfnMNt4N9bWva38xq7ZmpP097QxS4gxHfQZt9piBe1ugoZ0CXusHXAk2+eUdSpfF9BDe77EGnA51lOfbNx1tq4Bly1AOlI2pLHRS4fV1I8/StXAuwX/x70gCZtaQV9Zp00o7awYKz/jgLiEbX0q+0excBw8R12HsQPPTA9GFMJy3IcoCUwDOXpdgUJBxrYPtlOF9eF2G20pYeSKjI5yn541hmAXU4U5dYRQ7rP6kJv0giwSIPQKVbMnO/5E1x3JBK3FPFjSjptEHJPw0SI2/A3uyL2ljXN0fdMQsBB8hF8yZ70w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BYAPR15MB2759.namprd15.prod.outlook.com (2603:10b6:a03:151::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.25; Fri, 1 Apr
- 2022 02:49:15 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::4da5:c3b4:371e:28c2]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::4da5:c3b4:371e:28c2%7]) with mapi id 15.20.5123.021; Fri, 1 Apr 2022
- 02:49:15 +0000
-Message-ID: <854c30e3-1dc6-fc8c-caee-d4dfffb79c4b@fb.com>
-Date:   Thu, 31 Mar 2022 19:49:09 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
- functions
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0P220CA0016.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:41b::23) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Thu, 31 Mar 2022 22:57:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DD319E081
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648781766; x=1680317766;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lfHplC/HVi/jIs2bJ7G6nE1endTG1bCkDbuUBJKPWag=;
+  b=oECwHvBCHcCkF9D20UhHjRb4nb/XGaOtEGWtnFCg4bFw4rXADBPk6uL7
+   DVe4bxaQvlNixm0X6I06QqUcEt8BAZxzp3ozZLVSR/WLSXRNnROU/RHtY
+   bmPMHwEpLP3lgSSmNbykmoEO9FYDRguvJXZTEb+nXAMWCQiRDfJUviPGX
+   GwRZMkx4d9RbTzkpgIr+1QH1RvVaXIYTRnvzqalrff3JX1J9iwu//3nXG
+   FBYXg0sTABBQKvB/DTLkVh2ChB8RpX7/jg5+ppk6ZSCoLtx54xTkQifbG
+   1YFkoeaXMSayie//62MHCF9icZUhi+I099H0Cz/nj6zBu/cZ+YKJDm7BE
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="242175862"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="242175862"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 19:56:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="720718415"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2022 19:56:04 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1na7SF-0000rz-RD;
+        Fri, 01 Apr 2022 02:56:03 +0000
+Date:   Fri, 1 Apr 2022 10:55:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: drivers/crypto/amlogic/amlogic-gxl-cipher.c:171:19: sparse: sparse:
+ incorrect type in assignment (different base types)
+Message-ID: <202204011037.4f7vvM8S-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a2db47df-51c7-44b5-1acf-08da138a3568
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2759:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR15MB27592F367308A2EF17AA185BD3E09@BYAPR15MB2759.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3jJja1u4ntpSv4aTL5teYlzOms/slHB4LAUomwI2lt11x1/WgtbLdOwwjKwG7p/0iuvPf0zWKMg+LZc+l8xcmYZM8dwxlLYUwUToEKNtpmgGVp/AC3fgjQZCfw1X8HPn8cl/45UOfQgtiZ6wo5MJoqteEfgRzRaI1OOKmIAnDj7mBH+YiKb4ZY82HsqvoZgRTOLu0ELjqRhBJn4A5tN1ZtglNMpwOhSLvirwZLslXWBWRMg37zBjF3WKpfPB5qKo+mINY/fHnJhALJOKoXiGi9UUtDkutZZ5VYFE8x8hFzO+MmCsAlbgaTuxxn2xNMZICwR8rykkKeCU009tB4ArOK6V75CNreCspbEdO32lt/OF2an2yWk3WNwdn8QbHzx97HOP2WByobR2lDHwo9H3wgOxCN1YasGxjloN5jVfLHv/wNDHVwt46uYN3rk2esYDszHA9K8Hei4oFnrdmEurv9gnnWV1wwWbrxlrlwJF2CCa2FisWmFaD94CUKcbnCjLmTc3gALjuJeMUh1pj2ONW6ilAuSgEoeFoIiS3bgYRfyL85R5gblZD7sd9uRBo04biwpHYkKghf6Ddqw981ePvwzowHIRxRbv0vZK1BzQK3g+HN1ZkVxOiCZdZRT9ZJP4rGQtwYNTg0J0cqB9Wbx9B8Gja9QPxV1gRhi0DYh7S+Dfwoj+too9GMDLrqNLGj/AWWm7fTvy36TowDU5+elLdnKmfpBqUYK9UAtixlzg9395tvgbzQj3IGYPvH7/iv+D
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52116002)(66556008)(66946007)(53546011)(5660300002)(921005)(66476007)(4744005)(31686004)(7416002)(2906002)(38100700002)(36756003)(2616005)(186003)(8676002)(4326008)(110136005)(6486002)(508600001)(31696002)(83380400001)(6506007)(8936002)(6666004)(6512007)(86362001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anNWRUhHTFNIRG00NWpiU2xPYWc3SS81aXU5ODQrL2tYeDd3WWU5N2dyalpv?=
- =?utf-8?B?akJSMTlNM3B3cDExUUkxcE11aXJxWVgyWWVGMW9yWXl2RStxRC9mUVRYUUM2?=
- =?utf-8?B?dXVidU9maS9ZN3JOTXN5ZkhHYWpIOXMvWCs1TzhHUkFNelpQMlhDeG5oaVNB?=
- =?utf-8?B?S1Z1OXdpY2trUVFjeDVITXR3dEcxb1FXbWlPK1FvL3pzZmYxVTBNK0lNM0s0?=
- =?utf-8?B?cUdBZE9wUkE0OHp4U2NZY0ZFNUxlcmRjbWZ3aDZLMXkwZmcrZDdOR1Y4VGY2?=
- =?utf-8?B?cWhMK3A1YWlpQTVLSjVlRkFFYXhNV3FMOTk0RUE2V1dGbk1EY2FGMzE2T3Nz?=
- =?utf-8?B?dTZIcHRNSVpYK3lET0FoNHdpQlovcWhZa2FOMXhoUUVDRjVvbEh5M3dBUXNB?=
- =?utf-8?B?eTUwdllOREIzTFZKUml4UGI0ZlJMdHI1Mm8wYTE4VjNMa1RmcXVOT3Exc2Ra?=
- =?utf-8?B?ZEE5NU50a1U0eFc4YS9ZYVRjSTRkYi9uWDd6V1djZ2pTc1VzRThIMVdvU2Fk?=
- =?utf-8?B?U2FKOHcrSEdqVUpIWmx5b05OMFVrdFhQU2JJSFEwazdwc05rSDZBUzEyRkJi?=
- =?utf-8?B?dDgxY0lsQmg1Q3ZwdXVRSjEzSVp0OTV4Y1J5UkFPQlQzWmlYcjdYTFhYYzZH?=
- =?utf-8?B?c0ZGRzZkZ1dxbFl3a09WdStvWkdCWEFzS3dmWWlQWkd2a2ZyRVZoYSs5Tkl5?=
- =?utf-8?B?ekFXdC9relNMTHVlZkFUdGx6SVBtZks4RFRvRS81aUxGYk5pZDIyV2gyNUhn?=
- =?utf-8?B?Wk9hdTY2ZzRHc0hFOU0rUG01OVlXQmdqWUE3cFgvM2JuWU1YQlNjdHMzdTlB?=
- =?utf-8?B?UndOU0lXdmhaWTlvS0xpWTZET3VaS05wQWoxT00wNU9hVmZPNlBaR2Rjemlk?=
- =?utf-8?B?WndOYmMya2FiM2ZMNWdxSFl3Ny9Ma3gxSzJqbFpOdmtOOHhWUkMreTl1emdJ?=
- =?utf-8?B?ZUF2REtiNzJoQ3plYTBMUER2Ni8zMldhOW9TNmFseHA2U2duRUxIZ2M2bDE3?=
- =?utf-8?B?REdJbm0wQVZzS0x2UjNFS2FUeHFYTHZSWWE4cEpnc2tmdDlhUTNqQ3NsbVhC?=
- =?utf-8?B?bVRZNzVPL3NIUE5sZjlvc1VCSVZGS3J1Q3VaZ3o4dUlUQ3VYQi9wdkNhMEJB?=
- =?utf-8?B?b2RXUUlHRlRxZHJXQ3FoV0FCWGZLYVV0QkQ1S3FpQkRLNzhFRXFVNGtvc29l?=
- =?utf-8?B?Szd3TGpRS2pxazZKYVprOEQwZlM4K0lnMkp2bnNWOFI1MHZZSGxkTjRLQUd4?=
- =?utf-8?B?QnV4blVldmVJeXJlTGc4aEYvdllXdnlqemxSV1BZaUV0N3VQUnBXTmZWVjlL?=
- =?utf-8?B?ZGY3c1FNMHFOa0NaempRYjZrU2xWZHZ6eUVXTGxVb0F5WWY1VzljTXdJUmJI?=
- =?utf-8?B?dFl3dHM3N3pxZEpLRllKQlE4bks5K1pCUDBtb0c0bDQ0NGJRYVUwL2xFTUVF?=
- =?utf-8?B?dWhBQ1pIRUwwZEJXUzBweUlUVnJtNnUwVm43ZEROL1dQY3FWRGNoUnozaFJO?=
- =?utf-8?B?NzN6a2dJSXR4WCtWR2xtQ29PM2pqbENHQzRhYTVmRlAvRE5Oekl5SkZOMnQz?=
- =?utf-8?B?azlnNm8zWVF6YVZ2OVhtTUhPazIvYUFiY2x2SmJ3bjNXeEVQemhDdC9ydkVU?=
- =?utf-8?B?UHRMa1ZHdDRrV0xSVi93N25PVnl3VUN5RlRBRkdiU3IwbE9uQkhJanVDQ1RJ?=
- =?utf-8?B?UytxMmJxWUZUbU85YUZyVGpOZzQ4SWtlL2l3VmwzT2t5U01lVDV6azA4R0FB?=
- =?utf-8?B?TG96b2poazNWOUpyK0VRODJWbndTMkZpQmNvRS8xTjlaUGJ5Y3J5bFV4Mmhv?=
- =?utf-8?B?a1Z3d3A4MmJXQ2xCY0hRUVJQZ1pyYzYrMGJoS3dwSTljdjVTTzl5Z1Uwd0JK?=
- =?utf-8?B?WjBuemlieE1IWTA3aUpiU0pJS0NJbHpWNnJ4dWx1dVhuRmxUcGUyOVpGYTVU?=
- =?utf-8?B?VGZTSU4zUzh4WC9pOTFKenlZK3ZkTm9vK2N5L1Z0Y1ZncUtpWGNudGZiTUJ3?=
- =?utf-8?B?R25tMjRWVlV2RzlJckRiL3JwYStrRG5ITU5IdnA4YTRMdStVdHgyczM1c2ZX?=
- =?utf-8?B?eVRvdjVrUE5YaExoazA4S3NzR0ZWalE3MHdRWjltWHduWnhUdFo1RDZXWUxy?=
- =?utf-8?B?Y3FJYVFkS01RNEIzeTVndWJSWkgrNlp5d2Y3b1FUYzl3STFZTFkrK3k3enVu?=
- =?utf-8?B?UzB1TmhJbng4ckUwRFV6N3NscE9Pckw1KzgrdVFDYkNwQUJjdk43QmFvSnFt?=
- =?utf-8?B?eG11TE9HV1BROEdxVTlVRGg0amJSUXY5enRZRUp4SlVYdTZVTEc1OTJ4YlY3?=
- =?utf-8?B?TEtzWktaMzVpS2drbnNxNVFsMStwQW5FQ3hkZldZaDdCejFzTkRuVTQwSC9j?=
- =?utf-8?Q?UDG/ULarXxmI7k8E=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2db47df-51c7-44b5-1acf-08da138a3568
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 02:49:15.0338
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: owYR62Zy/JQ423uyCQ2ClTeMnek05t5C0/GrKmbWgchiz8qmwDUd5K4CRuu+50Al
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2759
-X-Proofpoint-ORIG-GUID: YM1bE6Czf169Evg8n4k2u0AbqX8AykfC
-X-Proofpoint-GUID: YM1bE6Czf169Evg8n4k2u0AbqX8AykfC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-31_06,2022-03-31_01,2022-02-23_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -155,17 +63,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8b767f5e04097aaedcd6e06e2270f9fe5282696
+commit: 3d04158814e7a808c38124c87502b430b916dfcb crypto: amlogic - enable working on big endian kernel
+date:   2 years, 4 months ago
+config: sh-randconfig-s031-20220328 (https://download.01.org/0day-ci/archive/20220401/202204011037.4f7vvM8S-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d04158814e7a808c38124c87502b430b916dfcb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3d04158814e7a808c38124c87502b430b916dfcb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On 3/31/22 7:15 PM, Haowen Bai wrote:
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
-> 
-> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+sparse warnings: (new ones prefixed by >>)
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:171:19: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] v @@     got unsigned long @@
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:171:19: sparse:     expected restricted __le32 [usertype] v
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:171:19: sparse:     got unsigned long
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse: sparse: cast from restricted __le32
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __le32 [usertype] v @@
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse:     expected unsigned int [usertype] val
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse:     got restricted __le32 [usertype] v
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse: sparse: cast from restricted __le32
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse: sparse: cast from restricted __le32
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse: sparse: cast from restricted __le32
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:172:34: sparse: sparse: cast from restricted __le32
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:215:19: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] v @@     got unsigned long @@
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:215:19: sparse:     expected restricted __le32 [usertype] v
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:215:19: sparse:     got unsigned long
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:217:27: sparse: sparse: invalid assignment: |=
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:217:27: sparse:    left side has type restricted __le32
+>> drivers/crypto/amlogic/amlogic-gxl-cipher.c:217:27: sparse:    right side has type unsigned long
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:221:27: sparse: sparse: invalid assignment: |=
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:221:27: sparse:    left side has type restricted __le32
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:221:27: sparse:    right side has type unsigned long
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse: sparse: cast from restricted __le32
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __le32 [usertype] v @@
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse:     expected unsigned int [usertype] val
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse:     got restricted __le32 [usertype] v
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse: sparse: cast from restricted __le32
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse: sparse: cast from restricted __le32
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse: sparse: cast from restricted __le32
+   drivers/crypto/amlogic/amlogic-gxl-cipher.c:222:34: sparse: sparse: cast from restricted __le32
 
-Acked-by: Yonghong Song <yhs@fb.com>
+vim +171 drivers/crypto/amlogic/amlogic-gxl-cipher.c
+
+   118	
+   119		/*
+   120		 * The hardware expect a list of meson_desc structures.
+   121		 * The 2 first structures store key
+   122		 * The third stores IV
+   123		 */
+   124		bkeyiv = kzalloc(48, GFP_KERNEL | GFP_DMA);
+   125		if (!bkeyiv)
+   126			return -ENOMEM;
+   127	
+   128		memcpy(bkeyiv, op->key, op->keylen);
+   129		keyivlen = op->keylen;
+   130	
+   131		ivsize = crypto_skcipher_ivsize(tfm);
+   132		if (areq->iv && ivsize > 0) {
+   133			if (ivsize > areq->cryptlen) {
+   134				dev_err(mc->dev, "invalid ivsize=%d vs len=%d\n", ivsize, areq->cryptlen);
+   135				err = -EINVAL;
+   136				goto theend;
+   137			}
+   138			memcpy(bkeyiv + 32, areq->iv, ivsize);
+   139			keyivlen = 48;
+   140			if (rctx->op_dir == MESON_DECRYPT) {
+   141				backup_iv = kzalloc(ivsize, GFP_KERNEL);
+   142				if (!backup_iv) {
+   143					err = -ENOMEM;
+   144					goto theend;
+   145				}
+   146				offset = areq->cryptlen - ivsize;
+   147				scatterwalk_map_and_copy(backup_iv, areq->src, offset,
+   148							 ivsize, 0);
+   149			}
+   150		}
+   151		if (keyivlen == 24)
+   152			keyivlen = 32;
+   153	
+   154		phykeyiv = dma_map_single(mc->dev, bkeyiv, keyivlen,
+   155					  DMA_TO_DEVICE);
+   156		err = dma_mapping_error(mc->dev, phykeyiv);
+   157		if (err) {
+   158			dev_err(mc->dev, "Cannot DMA MAP KEY IV\n");
+   159			goto theend;
+   160		}
+   161	
+   162		tloffset = 0;
+   163		eat = 0;
+   164		i = 0;
+   165		while (keyivlen > eat) {
+   166			desc = &mc->chanlist[flow].tl[tloffset];
+   167			memset(desc, 0, sizeof(struct meson_desc));
+   168			todo = min(keyivlen - eat, 16u);
+   169			desc->t_src = cpu_to_le32(phykeyiv + i * 16);
+   170			desc->t_dst = cpu_to_le32(i * 16);
+ > 171			v = (MODE_KEY << 20) | DESC_OWN | 16;
+ > 172			desc->t_status = cpu_to_le32(v);
+   173	
+   174			eat += todo;
+   175			i++;
+   176			tloffset++;
+   177		}
+   178	
+   179		if (areq->src == areq->dst) {
+   180			nr_sgs = dma_map_sg(mc->dev, areq->src, sg_nents(areq->src),
+   181					    DMA_BIDIRECTIONAL);
+   182			if (nr_sgs < 0) {
+   183				dev_err(mc->dev, "Invalid SG count %d\n", nr_sgs);
+   184				err = -EINVAL;
+   185				goto theend;
+   186			}
+   187			nr_sgd = nr_sgs;
+   188		} else {
+   189			nr_sgs = dma_map_sg(mc->dev, areq->src, sg_nents(areq->src),
+   190					    DMA_TO_DEVICE);
+   191			if (nr_sgs < 0 || nr_sgs > MAXDESC - 3) {
+   192				dev_err(mc->dev, "Invalid SG count %d\n", nr_sgs);
+   193				err = -EINVAL;
+   194				goto theend;
+   195			}
+   196			nr_sgd = dma_map_sg(mc->dev, areq->dst, sg_nents(areq->dst),
+   197					    DMA_FROM_DEVICE);
+   198			if (nr_sgd < 0 || nr_sgd > MAXDESC - 3) {
+   199				dev_err(mc->dev, "Invalid SG count %d\n", nr_sgd);
+   200				err = -EINVAL;
+   201				goto theend;
+   202			}
+   203		}
+   204	
+   205		src_sg = areq->src;
+   206		dst_sg = areq->dst;
+   207		len = areq->cryptlen;
+   208		while (src_sg) {
+   209			desc = &mc->chanlist[flow].tl[tloffset];
+   210			memset(desc, 0, sizeof(struct meson_desc));
+   211	
+   212			desc->t_src = cpu_to_le32(sg_dma_address(src_sg));
+   213			desc->t_dst = cpu_to_le32(sg_dma_address(dst_sg));
+   214			todo = min(len, sg_dma_len(src_sg));
+   215			v = (op->keymode << 20) | DESC_OWN | todo | (algt->blockmode << 26);
+   216			if (rctx->op_dir)
+ > 217				v |= DESC_ENCRYPTION;
+   218			len -= todo;
+   219	
+   220			if (!sg_next(src_sg))
+   221				v |= DESC_LAST;
+   222			desc->t_status = cpu_to_le32(v);
+   223			tloffset++;
+   224			src_sg = sg_next(src_sg);
+   225			dst_sg = sg_next(dst_sg);
+   226		}
+   227	
+   228		reinit_completion(&mc->chanlist[flow].complete);
+   229		mc->chanlist[flow].status = 0;
+   230		writel(mc->chanlist[flow].t_phy | 2, mc->base + (flow << 2));
+   231		wait_for_completion_interruptible_timeout(&mc->chanlist[flow].complete,
+   232							  msecs_to_jiffies(500));
+   233		if (mc->chanlist[flow].status == 0) {
+   234			dev_err(mc->dev, "DMA timeout for flow %d\n", flow);
+   235			err = -EINVAL;
+   236		}
+   237	
+   238		dma_unmap_single(mc->dev, phykeyiv, keyivlen, DMA_TO_DEVICE);
+   239	
+   240		if (areq->src == areq->dst) {
+   241			dma_unmap_sg(mc->dev, areq->src, nr_sgs, DMA_BIDIRECTIONAL);
+   242		} else {
+   243			dma_unmap_sg(mc->dev, areq->src, nr_sgs, DMA_TO_DEVICE);
+   244			dma_unmap_sg(mc->dev, areq->dst, nr_sgd, DMA_FROM_DEVICE);
+   245		}
+   246	
+   247		if (areq->iv && ivsize > 0) {
+   248			if (rctx->op_dir == MESON_DECRYPT) {
+   249				memcpy(areq->iv, backup_iv, ivsize);
+   250			} else {
+   251				scatterwalk_map_and_copy(areq->iv, areq->dst,
+   252							 areq->cryptlen - ivsize,
+   253							 ivsize, 0);
+   254			}
+   255		}
+   256	theend:
+   257		kzfree(bkeyiv);
+   258		kzfree(backup_iv);
+   259	
+   260		return err;
+   261	}
+   262	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

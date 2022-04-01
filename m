@@ -2,111 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41474EE579
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BFB4EE57B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243569AbiDAAnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 20:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S243578AbiDAAny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 20:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbiDAAnj (ORCPT
+        with ESMTP id S243573AbiDAAnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 20:43:39 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA4024E27E;
-        Thu, 31 Mar 2022 17:41:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KV1Zg4tDZz4xLS;
-        Fri,  1 Apr 2022 11:41:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648773708;
-        bh=/88WX07JiX8VYxmmbpmIqJeBpU5QCVP33iKwWdV9YWk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vAPKkYftMxMbtzOX3cVCbuxf5pqarEpFIl7vGnQul3esunHNHmHSamL8ZF+twbo1q
-         HC3HP7FpGX8HGJaQ5ELuCga144v6f+3mj7A+596y038EqI9Bxp12Qc67sOL6mFPJBg
-         5guvxfFb/6JcdWEMCmv42ZWJ1WDxGqE5x215zuBHI3a29DhdKWgYiFAADz9PBMbxAJ
-         /8gNCPa8BJhqOXN/f5poInNgv+1dqEHEjNaYYdOn4vmBvywdkGDkXz5vC7C2jZrYBU
-         nbLROPatTKGuM8LdJv8FsgjDGiScLR2MJi5YbMQu9fgm9Y+iG1fKjpEtS9Mc5JtoTU
-         0Ak/kx3Hies7Q==
-Date:   Fri, 1 Apr 2022 11:41:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul@pwsan.com>, Atish Patra <atishp@rivosinc.com>,
-        atishp@atishpatra.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: linux-next: build warning after merge of the risc-v tree
-Message-ID: <20220401114146.25ef9683@canb.auug.org.au>
-In-Reply-To: <mhng-165544a6-8754-47cf-b57b-74bba73ac76b@palmer-mbp2014>
-References: <mhng-f46f3c64-24e0-4284-a6cb-71266e61e9ef@palmer-mbp2014>
-        <mhng-165544a6-8754-47cf-b57b-74bba73ac76b@palmer-mbp2014>
+        Thu, 31 Mar 2022 20:43:50 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70924ED88
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:42:01 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id e203so2276249ybc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T+aH4s3B73YFGX6kkuTZiE+PkC6dF7JP+Qk/lqso9Lk=;
+        b=g3oMD6fJzNOJ8cWbQWsZf+1h66em24oMTbli/L0GfBvNcUiUHG8fWvMpS+M5uEpSA7
+         L1aUS++6665LSl6f3x9lzhYKAWrjj5jYFUe0jW+RYJWKAnVQkLNdh9EdzK19m4uNM2QE
+         MqlRi0YjyWj0r+1tFPNwqBsVFM8GTdPtkt3Kaf7k7XLnQYQytLcZxHGHPLzbwF8G8iia
+         tGPLIcnvWdaxfpqUeiwnnC19T3+BuraM4XDGfE3yJEq8TCq78ytnrxQOWrz7NoUOq6U9
+         M0TEazP+HdkOJPCV5qODm91cWv2Yu48qCtKP9Ak8IElTiK7lDDIOzdqE55i6wZkfW2wD
+         I7wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T+aH4s3B73YFGX6kkuTZiE+PkC6dF7JP+Qk/lqso9Lk=;
+        b=M6zrPVs9FUGw9i5x+AXq47rnan0wumi4+fuLG/WuwKmsVkXnu15iVnyQgxGZdxHGVn
+         Vr6sT5j9E/IumK9upgzTHM6QhCFqmH5llKejYtPVMpBTy1InrhGeAJvRsV3t3CvK1LtI
+         s8iVerS3pdFHf6ttz14T8oZ7G2xDBS11J7Fcb25Boey7RVeOvEguVL3sXIQjIzAfj4Wh
+         3/iRcsSD5eYq3/bVqEEUHeI/WyVLJPGPRyqKJDmOGPkfMIanW4l6L/+yvjOyRyCF888Q
+         q2t0XELxgiHr8AF30g3mLG7IIiYLzlrV2p6+FHNJOibXi+83brM6e3Kzd0aYlRr1Mzr2
+         YIBQ==
+X-Gm-Message-State: AOAM533atJ/ArAtT1yOIY8/NjinxO+CvYWq8VHaeOcMEKnX01OWHpRr/
+        DzHwGsoQpG/H+/Vu7NGENAtct0jbdWLF2qft0GMQOQ==
+X-Google-Smtp-Source: ABdhPJzO+hJibgNFwPkxqdKK73AhMACKjcWsY5MC2ECXd+RdrUf6vd8YDiTUSKFKOpXcHt4R2WZkSQIuoHtQcazuqt0=
+X-Received: by 2002:a25:4003:0:b0:633:8ab5:b93e with SMTP id
+ n3-20020a254003000000b006338ab5b93emr6437060yba.387.1648773720439; Thu, 31
+ Mar 2022 17:42:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ctW7Ac+5dS=2po4ABV7cCCL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <E1nZMdl-0006nG-0J@plastiekpoot> <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za> <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za> <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za> <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+ <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za> <CANn89i+KsjGUppc3D8KLa4XUd-dzS3A+yDxbv2bRkDEkziS1qw@mail.gmail.com>
+ <4b4ff443-f8a9-26a8-8342-ae78b999335b@uls.co.za>
+In-Reply-To: <4b4ff443-f8a9-26a8-8342-ae78b999335b@uls.co.za>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 31 Mar 2022 17:41:49 -0700
+Message-ID: <CANn89iL203ZuRdcyxh16yKXqxXJW2u+4559DsDFmW=8S+_n7fg@mail.gmail.com>
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP connections
+To:     Jaco Kroon <jaco@uls.co.za>
+Cc:     Neal Cardwell <ncardwell@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ctW7Ac+5dS=2po4ABV7cCCL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 31, 2022 at 5:33 PM Jaco Kroon <jaco@uls.co.za> wrote:
 
-Hi Palmer,
+> I'll deploy same on a dev host we've got in the coming week and start a
+> bisect process.
 
-On Thu, 31 Mar 2022 17:05:15 -0700 (PDT) Palmer Dabbelt <palmer@dabbelt.com=
-> wrote:
->
-> On Tue, 29 Mar 2022 09:46:57 PDT (-0700), Palmer Dabbelt wrote:
-> > On Mon, 28 Mar 2022 19:34:12 PDT (-0700), Stephen Rothwell wrote: =20
-> >>
-> >> After merging the risc-v tree, today's linux-next build (htmldocs)
-> >> produced this warning:
-> >>
-> >> Documentation/riscv/index.rst:5: WARNING: toctree contains reference t=
-o nonexisting document 'riscv/pmu'
-> >>
-> >> Introduced by commit
-> >>
-> >>   23b1f18326ec ("Documentation: riscv: Remove the old documentation")
-> >>
-> >> This is actually in Linus' tree.  Sorry I missed it when it was
-> >> introduced. =20
-> >
-> > I guess I missed it too.  I just sent a patch to fix it up. =20
->=20
-> Coming around to the fix reminds me that I should have asked what you're=
-=20
-> running to trigger these, as I should probably add it to my tests.
-
-I just do a "make htmldocs" once a day and compare it to the previous
-days results.  You will need to install quite a bit of extra stuff for
-sphinx to work.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ctW7Ac+5dS=2po4ABV7cCCL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJGSkoACgkQAVBC80lX
-0Gy5IAf/bZ7yBsyijztIGDzZn0ByQ17JcgVwN0DJDIZLkkWohyn7oS+aRaI9z7A6
-L1xXkpoWj1I/GtUP3GL4/45QEWg/ZN3lx+NhSzccMBiv7nxzH3kCgpep4Ty/yuAC
-uKpS9YuAs3SnB0B1p81xzBfIVihBDK+SMQ9ZaiPeLCuRLTMQTf8F+WtUobaQpUt2
-YolvPxIb1LjgoFPvAHBmK3BaVx+kmFa9ajP7zDgkVlhn+WOA4Hoag18RFhGS4S8A
-I8n52gELCrPqj++BRoFe0riPxX4rNoVw4m4+ZLMBmfC0t+wfU5s3HyyFv65eU+uu
-xwcu9cpnS2Hti5g2MN9tiOkc8Bxfeg==
-=k0ey
------END PGP SIGNATURE-----
-
---Sig_/ctW7Ac+5dS=2po4ABV7cCCL--
+Thanks, this will definitely help.

@@ -2,114 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F1B4EF7AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485CD4EF7B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349161AbiDAQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S1349498AbiDAQQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352304AbiDAQLF (ORCPT
+        with ESMTP id S1350413AbiDAQNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:11:05 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6D162CAE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:37:17 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bq8so6605995ejb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:37:17 -0700 (PDT)
+        Fri, 1 Apr 2022 12:13:54 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D0CC52F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:39:41 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id a11so2431811qtb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5lN//07PpztSXdT/l1Q7wLTBSohg5QXeX41GRcjjA3w=;
-        b=Vo0NRVJYkpcefUMBQNkTXCviEnXt1+lBlj4Abpz62bbTjfS0Sn+p0Pk39BMnELOYuM
-         6oEErk+Ps2ZVnkRzixmeXtsSM/1Xdr7hYOxDzCCt2rqDILc+8TZM0bug69MvwshLKCkF
-         O7gPC+UAFdKHU5A9aTWAckLrCJZ1J8x5xDXJlws+iBjLYBqBB4LBXfkWK6Lol4GJCAC3
-         E0noTsYOaokePlBZvCvMIJNR69pCZ9jq8Im39RpvGdxjUf7uIqufPhL6Fhr/vpZZSolU
-         XdcF26Zm/HQF+k7io+1KQQ6txw65+jf7I5goC/Ah1rff8x7V3yvbfalBJz9isIsfpbGW
-         OMUg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NStYi8rXtYWop4V2MnxgWp7QtmI7tN/4ns3xchJYyfU=;
+        b=RcBEDEhwGNG4pz2bKGcoUjhgTPL//Nw9SMozlKIJc/XyK5WeU3Z51Nq9I6OP26Qego
+         NZCnXhVVX0/YyfUzn51W4PEJVv9q+AWibLf4tNKLhoRnytOvEeL67wZA0WTNC58XbncV
+         rN5RfSRPM7HXo31kmDUNKIW48ke86Nc6RlBpatVt2QpyHllYeIRubzqOhP01RSyFeJTv
+         63toCKRjluEIi2Ud+b3w19ZNRaYRwhS0j4Kvym9j1GLh3X7v5squ5E9kC17IF3iC1t6Q
+         xGzYu8R9+oKaCVw+geZf/roX+EFERpJpHQ3Ok5K8/7qADlsejiKMbNh7EPMQf4vOGXuS
+         OsfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5lN//07PpztSXdT/l1Q7wLTBSohg5QXeX41GRcjjA3w=;
-        b=ih5kFuTyZnN8UE7W+9sNkMDcJJnH8PvhoFtizB1Nzt84wRW6/IXy/9PS6I9afsZl8k
-         6pZ4gA5EuZXtW1qRioUNQuCdWiGDP8wSB156TiQhzS23cdz8mHqI2o9a8rTQ7MixEhue
-         mbz2uWZqoeS4CiF79J6sUMkqm0rWJNRHlnGsir7WPvcQXO2cA6M1g/QMKf+FBjenESji
-         h87JxgE/7dXhzL2PI1l6siXl+2uXq9bdd6QvlgKYztisly090+8dzdgY7+3RcM9SQlWB
-         J/poEqSGHWdHCFN4N2Bq4ni5rbMVtrJfoTn2hK+WQPfymaRERtwtBeFoRBbmy1IKpDJw
-         VBjg==
-X-Gm-Message-State: AOAM531+XvFYOnnoDyMayxmbrtfxvdnF9HZhR/kT/W0en3W50RW3b2rP
-        EVaaBmtvWdDkWel4iUAJEXEAmw==
-X-Google-Smtp-Source: ABdhPJzn/CErWgq1p027Y/X/ko5lxEZxVAH5Rdh4zhZYEfDKLon+ss8aVA0mnp2U936AqAjG4TNByA==
-X-Received: by 2002:a17:906:1615:b0:6bb:150f:adf8 with SMTP id m21-20020a170906161500b006bb150fadf8mr358897ejd.272.1648827436142;
-        Fri, 01 Apr 2022 08:37:16 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dm8-20020a170907948800b006dfe5b317d3sm1150187ejc.75.2022.04.01.08.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 08:37:15 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] regulator: dt-bindings: richtek,rt4801: minor comments adjustments
-Date:   Fri,  1 Apr 2022 17:37:11 +0200
-Message-Id: <20220401153711.1057853-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NStYi8rXtYWop4V2MnxgWp7QtmI7tN/4ns3xchJYyfU=;
+        b=tfEFbj8mNJV+GdpiaKI33s/cOZoyh5SF7GSokfVi3ODcERLCzRu13u45u5CiZed+ie
+         Wlnmznpd9i2oYggG+cM51xgpMOFvSrquxtItlPkM3hIdKNSonjdpUzmlqNAaVEiyR7Zr
+         TNGVhYfw6XiE0YHN3GDvNQmzwEARW+HTqCBGDIotr3reEiYgXdZnyEJzpJg/wkh9R078
+         9Nn01wQHx3K9T8q4Fwzs5DbPhtJPHiV0IpbA/yUjU6v+j6MZkkzmd+Y2DVTj2WKgUreA
+         MHOm+kaS7WzIlDIGhS92JwFLYUo1axjdhFCgIBgJLmWLcLarBc+XDoGWGASL7pRvQgJj
+         pdTg==
+X-Gm-Message-State: AOAM53073ndViOI1hcOM19+EL4PxevaIrEg9iXeLS4FPXNOHMtf24iAM
+        oNXwnBMTi0nuPRzMrwwZy6QAv0GsTYEN8eJKKXaf4Q==
+X-Google-Smtp-Source: ABdhPJwQDqagA7/Uue9NFuWCMhrm/bBHXbtSwxNv7+uqSSiCMCYxX/856COy5CwMZFSp16jLb6Y8mXhI8vhvcRppTkU=
+X-Received: by 2002:ac8:7f0d:0:b0:2e1:e894:9f16 with SMTP id
+ f13-20020ac87f0d000000b002e1e8949f16mr8818981qtk.183.1648827580616; Fri, 01
+ Apr 2022 08:39:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <E1nZMdl-0006nG-0J@plastiekpoot> <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za> <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za> <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za> <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+ <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za> <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
+In-Reply-To: <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Fri, 1 Apr 2022 11:39:24 -0400
+Message-ID: <CADVnQy=GX0J_QbMJXogGzPwD=f0diKDDxLiHV0gzrb4bo=4FjA@mail.gmail.com>
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP connections
+To:     Jaco Kroon <jaco@uls.co.za>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>, Wei Wang <weiwan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct grammar in 'enable-gpios' description and remove useless comment
-about regulator nodes, because these are obvious from patternProperties.
+On Tue, Mar 29, 2022 at 9:03 PM Jaco <jaco@uls.co.za> wrote:
+...
+> Connection setup:
+>
+> 00:56:17.055481 IP6 2c0f:f720:0:3:d6ae:52ff:feb8:f27b.59110 > 2a00:1450:4=
+00c:c07::1b.25: Flags [S], seq 956633779, win 62580, options [mss 8940,nop,=
+nop,TS val 3687705482 ecr 0,nop,wscale 7,tfo  cookie f025dd84b6122510,nop,n=
+op], length 0
+>
+> 00:56:17.217747 IP6 2a00:1450:400c:c07::1b.25 > 2c0f:f720:0:3:d6ae:52ff:f=
+eb8:f27b.59110: Flags [S.], seq 726465675, ack 956633780, win 65535, option=
+s [mss 1440,nop,nop,TS val 3477429218 ecr 3687705482,nop,wscale 8], length =
+0
+>
+> 00:56:17.218628 IP6 2a00:1450:400c:c07::1b.25 > 2c0f:f720:0:3:d6ae:52ff:f=
+eb8:f27b.59110: Flags [P.], seq 726465676:726465760, ack 956633780, win 256=
+, options [nop,nop,TS val 3477429220 ecr 3687705482], length 84: SMTP: 220 =
+mx.google.com ESMTP e16-20020a05600c4e5000b0038c77be9b2dsi226281wmq.72 - gs=
+mtp
+>
+> 00:56:17.218663 IP6 2c0f:f720:0:3:d6ae:52ff:feb8:f27b.59110 > 2a00:1450:4=
+00c:c07::1b.25: Flags [.], ack 726465760, win 489, options [nop,nop,TS val =
+3687705645 ecr 3477429220], length 0
+>
+> This is pretty normal, we advertise an MSS of 8940 and the return is 1440=
+, thus
+> we shouldn't send segments larger than that, and they "can't".  I need to
+> determine if this is some form of offloading or they really are sending >=
+1500
+> byte frames (which I know won't pass our firewalls without fragmentation =
+so
+> probably some form of NIC offloading - which if it was active on older 5.=
+8
+> kernels did not cause problems):
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Jaco, was there some previous kernel version on these client machines
+where this problem did not show up? Perhaps the v5.8 version you
+mention here? Can you please share the exact version number?
 
----
+If so, a hypothesis would be:
 
-Changes since v1:
-1. Correct also "spefied"
----
- .../bindings/regulator/richtek,rt4801-regulator.yaml       | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+(1) There is a bug in netfilter's handling of TFO connections where
+the server sends a data packet after a TFO SYNACK, before the client
+ACKs anything (as we see in this trace).
 
-diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-index 235e593b3b2c..4a4dfa7d9d09 100644
---- a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-@@ -17,9 +17,6 @@ description: |
-   Datasheet is available at
-   https://www.richtek.com/assets/product_file/RT4801H/DS4801H-00.pdf
- 
--#The valid names for RT4801 regulator nodes are:
--#DSVP, DSVN
--
- properties:
-   compatible:
-     enum:
-@@ -33,8 +30,8 @@ properties:
-       The first one is ENP to enable DSVP, and second one is ENM to enable DSVN.
-       Number of GPIO in the array list could be 1 or 2.
-       If only one gpio is specified, only one gpio used to control ENP/ENM.
--      Else both are spefied, DSVP/DSVN could be controlled individually.
--      Othersie, this property not specified. treat both as always-on regulator.
-+      Else if both are specified, DSVP/DSVN could be controlled individually.
-+      If this property not specified, treat both as always-on regulators.
-     minItems: 1
-     maxItems: 2
- 
--- 
-2.32.0
+This bug is perhaps similar in character to the bug fixed by Yuchung's
+2013 commit that Eric mentioned:
 
+356d7d88e088687b6578ca64601b0a2c9d145296
+netfilter: nf_conntrack: fix tcp_in_window for Fast Open
+
+(2) With kernel v5.8, TFO blackhole detection detected that in your
+workload there were TFO connections that died due to apparent
+blackholing (like what's shown in the trace), and dynamically disabled
+TFO on your machines. This allowed mail traffic to flow, because the
+netfilter bug was no longer tickled. This worked around the netfilter
+bug.
+
+(3) You upgraded your client-side machine from v5.8 to v5.17, which
+has the following commit from v5.14, which disables TFO blackhole
+logic by default:
+  213ad73d0607 tcp: disable TFO blackhole logic by default
+
+(4) Due to (3), the blackhole detection logic was no longer operative,
+and when the netfilter bug blackholed the connection, TFO stayed
+enabled. This caused mail traffic to Google to stall.
+
+This hypothesis would explain why:
+  o disabling TFO fixes this problem
+  o you are seeing this with a newer kernel (and apparently not with a
+kernel before v5.14?)
+
+With this hypothesis, we need several pieces to trigger this:
+
+(a) client side software that tries TFO to a server that supports TFO
+(like the exim mail transfer agent you are using, connecting to
+Google)
+
+(b) a client-side Linux kernel running buggy netfilter code (you are
+running netfilter)
+
+(c) a client-side Linux kernel with TFO support but no blackhole
+detection logic active (e.g. v5.14 or later, like your v5.17.1)
+
+That's probably a rare combination, so would explain why we have not
+had this report before.
+
+Jaco, to provide some evidence for this hypothesis, can you please
+re-enable fastopen but also enable the TFO blackhole detection that
+was disabled in v5.14 (213ad73d0607), with something like:
+
+  sysctl -w net.ipv4.tcp_fastopen=3D1
+  sysctl -w tcp_fastopen_blackhole_timeout=3D3600
+
+And then after a few hours, check to see if this blackholing behavior
+has been detected:
+  nstat -az | grep -i blackhole
+And see if TFO FastOpenActive attempts have been cut to a super-low rate:
+  nstat -az | grep -i fastopenactive
+
+thanks,
+neal

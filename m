@@ -2,180 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513514EFC26
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AE54EFC35
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352762AbiDAV2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S1352810AbiDAViO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237505AbiDAV2d (ORCPT
+        with ESMTP id S1351536AbiDAViM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:28:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918AA2364D8
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:26:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09693619FA
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 21:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224EFC2BBE4;
-        Fri,  1 Apr 2022 21:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648848401;
-        bh=i7nHx2qAjWv+GVWkJdRsaDMX/zriWRbfq6bcjQ92bEk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tySgF6XtvYJ6Yfk54X2gbdlKZzWtXsYJCoXxJ4yrDK9naff3SE16iA9r4bkJM0HYy
-         YiwDRF+3WJfPqO1Bq6o1AGpCV/wdI01g2fktRbjdf1Ok/Kl7tM5ZLk7ffp9tOJXy2W
-         WXcn7Zxzdu482Y0/vj4Gxi+QO/99OIg4wcTvTFn8nPDKk4x0ZHN2UGVVPnKoo7oy9e
-         tR6nNkzfSxuunmMaf7dgy/NUYE5MZ45ze+Y8AG3hTSicxfWL5jRinZPCHKmkdoaewE
-         XZR3dtTI7QP4u3Gq4dN45TnqwDsOJ3Ik69hODvIZYydMvEibsIT8cT7LnxwkIaFHAi
-         PhLurufvi+ltQ==
-Date:   Fri, 1 Apr 2022 16:26:39 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>
-Subject: Re: [PATCH] checkpatch: add warning for non-lore mailing list URLs
-Message-ID: <20220401212639.GA131100@bhelgaas>
+        Fri, 1 Apr 2022 17:38:12 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC557483
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:36:22 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3667470pjh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=aYp862D2P9rwZ8w0k1RYiGcPZn0LcpIwaRufe0fXT+Y=;
+        b=cR90qpjLF0s9TN5+/tmfd7tRVhzAw6Rgcp1bmgNs6j2lfN/LDqZYdNhcaIXKiZMO/5
+         fCHJ+cLyou32ow4gj+JQD8M47sayLWMuqhytBxmsrrMgJh784Y0FcJBSjaoMZTl/a0Ee
+         uiGnFvZpZog9cICQuFau+R4G03yPe1jBNJ2LF1giFjkkEPHIMcuZel8Gu5eT7q+Whwx9
+         B88Hdsg9JO30Lea971VElBKwttjn1vh3H5gNRKgO8XdOosayy4Tq/MDyVIjp94eIVyqz
+         FPGzj7TTFGr4Y8Pw+6tnH6g7s2iWxY7x2EG4qk90xSy10Gmp79kNCIj3J/PgXJGZ6oTb
+         flrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=aYp862D2P9rwZ8w0k1RYiGcPZn0LcpIwaRufe0fXT+Y=;
+        b=stVUZSwdY9z2bPoVDb7B+VvIkJEOzCAvPL1eia5DkR2ZVrBZ6VauIDwcRWThb52SKt
+         mHXoQee2L8KCT6ulXPEjLIJJCY4P9+q9kr4f5ZwS6dC7VjfW31cq/j1a0F2UU5p/TKZ/
+         pcgHKJ2SWNFnMcb0vDJNFUr9SjAf3KTzxCVSyLxC8PLO62+dm22i2J6ia0gPOQ9HfizV
+         Qzvs2ndcXGqbNA13c/3ozF4MI0VhuKpYIuqc2Bt0crhrpsKnEFcVTUwsC0DDLKaubwUd
+         OgbwatKddOgnrA17z4bIHJdj7v7Bfqg4Y+sBVUjwERJr2vPtLxX+pg18m9wwcHQw4WnE
+         91oA==
+X-Gm-Message-State: AOAM531dpfCbnsZw6AG6RUiJEiXSvL6x4jmZx27E8eoXV/7LM5ZRd54q
+        I++fpmL3y1XoigMbVMCHoiIFUQ==
+X-Google-Smtp-Source: ABdhPJy2vP197SYrTV+OCDd087GwI8iQmVI39nnJ2WNSiTv31PP7MRAc4GpXIwLVD8UeXqi3YbAXsA==
+X-Received: by 2002:a17:90a:31cf:b0:1c9:f9b8:68c7 with SMTP id j15-20020a17090a31cf00b001c9f9b868c7mr14145759pjf.34.1648848981896;
+        Fri, 01 Apr 2022 14:36:21 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id d24-20020a637358000000b003823aefde04sm3228507pgn.86.2022.04.01.14.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 14:36:21 -0700 (PDT)
+Subject: [PATCH v3] dt-bindings: Fix phandle-array issues in the idle-states bindings
+Date:   Fri,  1 Apr 2022 14:26:59 -0700
+Message-Id: <20220401212658.30607-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <520eaf08-892e-8ce0-4dca-ad8febc3d6af@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Cc:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        anup@brainfault.org, guoren@kernel.org, krzk@kernel.org,
+        lorenzo.pieralisi@arm.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Rob Herring <robh@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc David, Marc for possibly archiving linux-afs on lore]
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-On Fri, Apr 01, 2022 at 01:50:12PM -0700, Randy Dunlap wrote:
-> On 4/1/22 13:14, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > The lkml.org, marc.info, spinics.net, etc archives are not quite as useful
-> > as lore.kernel.org because they use different styles, add advertising, and
-> > may disappear in the future.  The lore archives are more consistent and
-> > more likely to stick around, so prefer https://lore.kernel.org URLs when
-> > they exist.
-> > 
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > ---
-> > 
-> > Thanks to Joe for fixing the quoting:
-> > https://lore.kernel.org/all/3e21b6e87e219d6538a193a9021b965fd8180025.camel@perches.com/
-> > Sorry I totally dropped the ball -- I guess I was scared off by fixing the
-> > perl quoting and didn't notice that you actually did it for me ;)
-> > 
-> > Sample commits for testing with "checkpatch -g":
-> > 
-> >   bd82d4bd2188 www.spinics.net/lists/arm-kernel/msg716956.html
-> >   fdec2a9ef853 www.spinics.net/lists/kvm-arm
-> >   1cdca16c043a www.spinics.net/lists/linux-mmc
-> >   48ea02184a9d www.spinics.net/lists/linux-pci
-> >   f32ae8a5f131 www.spinics.net/lists/netdev
-> >   b7dca6dd1e59 lkml.org
-> >   265df32eae58 lkml.org/lkml/
-> >   4a9ceb7dbadf marc.info/?l=linux-kernel&m=155656897409107&w=2.
-> >   c03914b7aa31 marc.info/?l=linux-mm
-> >   f108c887d089 marc.info/?l=linux-netdev
-> >   7424edbb5590 marc.info/?t=156200975600004&r=1&w=2
-> >   dabac6e460ce https://marc.info/?l=linux-rdma&m=152296522708522&w=2
-> >   b02f6a2ef0a1 www.mail-archive.com/linux-kernel@vger.kernel.org
-> >   5e91bf5ce9b8 lists.infradead.org/pipermail/linux-snps-arc/2019-May
-> >   3cde818cd02b mailman.alsa-project.org/pipermail/alsa-devel/2019-January/144761.html
-> >   a5448fdc469d http://lists.infradead.org/pipermail/linux-nvme/2019-June/024721.html
-> > ---
-> >  scripts/checkpatch.pl | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> > 
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> > index 577e02998701..819e0dece5e9 100755
-> > --- a/scripts/checkpatch.pl
-> > +++ b/scripts/checkpatch.pl
-> > @@ -698,6 +698,17 @@ sub find_standard_signature {
-> >  	return "";
-> >  }
-> >  
-> > +our $obsolete_archives = qr{(?xi:
-> > +	\Qfreedesktop.org/archives/dri-devel\E |
-> > +	\Qlists.infradead.org\E |
-> > +	\Qlkml.org\E |
-> > +	\Qmail-archive.com\E |
-> > +	\Qmailman.alsa-project.org/pipermail\E |
-> > +	\Qmarc.info\E |
-> > +	\Qozlabs.org/pipermail\E |
-> > +	\Qspinics.net\E
-> > +)};
-> 
-> Hi,
-> 
-> There seem to be some mailing lists from lists.infradead.org that are not (yet?)
-> archived on lore.
-> Is there a plan to add more list archives from infradead to lore?
+As per 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas"), the
+phandle-array bindings have been disambiguated.  This fixes the new
+RISC-V idle-states bindings to comply with the schema.
 
-Good question.  I don't know how to find out what things are hosted at
-infradead (it redirects to https://lists.openwrt.org/mailman/listinfo),
-but in the linux git history, I found URLs for these lists that are
-not on lore:
+Fixes: 1bd524f7e8d8 ("dt-bindings: Add common bindings for ARM and RISC-V idle states")
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+Changes since v2:
 
-  barebox             1 link from 2014
-  kexec               5 links, most recent from 2021
-  lede-commits        1 link from 2017
-  linux-afs          16 links, most recent 2021
-  linux-parport       1 link from 2005
-  linux-pcmcia        6 links, most recent 2010
-  linux-rpi-kernel    1 link from 2019
-  linux-um            1 link from 2020
+* Add the missing schema requirement to riscv/cpus.yaml
 
-linux-afs looks like a good candidate for lore.  Possibly kexec, too.
+Changes since v1:
 
-linux-rpi-kernel seems like it might be of interest and
-https://lists.infradead.org/pipermail/linux-rpi-kernel/ still shows
-some activity.  Unfortunately the only URL I see in the git logs
-(http://lists.infradead.org/pipermail/linux-rpi-kernel/2019-March/008615.html)
-is already dead.
+* Only fix the RISC-V bindings, to avoid a merge conflict.
 
-The following infradead lists appear to be archived on lore already:
+---
+ .../devicetree/bindings/cpu/idle-states.yaml     | 16 ++++++++--------
+ .../devicetree/bindings/riscv/cpus.yaml          |  2 ++
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-  ath10k
-  b43-dev
-  linux-amlogic
-  linux-arm-kernel
-  linux-mediatek
-  linux-mtd
-  linux-nvme
-  linux-riscv
-  linux-snps-arc
+diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+index 95506ffb816c..0e89c469d0fc 100644
+--- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
++++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+@@ -719,8 +719,8 @@ examples:
+             reg = <0x0>;
+             riscv,isa = "rv64imafdc";
+             mmu-type = "riscv,sv48";
+-            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
+-                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
++            cpu-idle-states = <&CPU_RET_0_0>, <&CPU_NONRET_0_0>,
++                            <&CLUSTER_RET_0>, <&CLUSTER_NONRET_0>;
+ 
+             cpu_intc0: interrupt-controller {
+                 #interrupt-cells = <1>;
+@@ -735,8 +735,8 @@ examples:
+             reg = <0x1>;
+             riscv,isa = "rv64imafdc";
+             mmu-type = "riscv,sv48";
+-            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
+-                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
++            cpu-idle-states = <&CPU_RET_0_0>, <&CPU_NONRET_0_0>,
++                            <&CLUSTER_RET_0>, <&CLUSTER_NONRET_0>;
+ 
+             cpu_intc1: interrupt-controller {
+                 #interrupt-cells = <1>;
+@@ -751,8 +751,8 @@ examples:
+             reg = <0x10>;
+             riscv,isa = "rv64imafdc";
+             mmu-type = "riscv,sv48";
+-            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
+-                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
++            cpu-idle-states = <&CPU_RET_1_0>, <&CPU_NONRET_1_0>,
++                            <&CLUSTER_RET_1>, <&CLUSTER_NONRET_1>;
+ 
+             cpu_intc10: interrupt-controller {
+                 #interrupt-cells = <1>;
+@@ -767,8 +767,8 @@ examples:
+             reg = <0x11>;
+             riscv,isa = "rv64imafdc";
+             mmu-type = "riscv,sv48";
+-            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
+-                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
++            cpu-idle-states = <&CPU_RET_1_0>, <&CPU_NONRET_1_0>,
++                            <&CLUSTER_RET_1>, <&CLUSTER_NONRET_1>;
+ 
+             cpu_intc11: interrupt-controller {
+                 #interrupt-cells = <1>;
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index f62f646bc695..d632ac76532e 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -101,6 +101,8 @@ properties:
+ 
+   cpu-idle-states:
+     $ref: '/schemas/types.yaml#/definitions/phandle-array'
++    items:
++      maxItems: 1
+     description: |
+       List of phandles to idle state nodes supported
+       by this hart (see ./idle-states.yaml).
+-- 
+2.34.1
 
-> > +
-> >  our @typeListMisordered = (
-> >  	qr{char\s+(?:un)?signed},
-> >  	qr{int\s+(?:(?:un)?signed\s+)?short\s},
-> > @@ -3273,6 +3284,12 @@ sub process {
-> >  			$last_git_commit_id_linenr = $linenr if ($line =~ /\bcommit\s*$/i);
-> >  		}
-> >  
-> > +# Check for mailing list archives other than lore.kernel.org
-> > +		if ($rawline =~ m{\b$obsolete_archives}) {
-> > +			WARN("PREFER_LORE_ARCHIVE",
-> > +			     "Use lore.kernel.org archive links when possible - see https://lore.kernel.org/lists.html\n" . $herecurr);
-> > +		}
-> > +
-> >  # Check for added, moved or deleted files
-> >  		if (!$reported_maintainer_file && !$in_commit_log &&
-> >  		    ($line =~ /^(?:new|deleted) file mode\s*\d+\s*$/ ||
-> 
-> -- 
-> ~Randy

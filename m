@@ -2,315 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9B84EEB13
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCFD4EEB25
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244516AbiDAKPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S245343AbiDAKWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbiDAKPc (ORCPT
+        with ESMTP id S245165AbiDAKWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:15:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96E11195DAE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648808021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DfvuPMWdvc4+G3JUpkqcya8XC3atgp6avWIwZAaEb+8=;
-        b=NT2H2B6GwDDnWUsenpND4SkIOkqrI/rMrs7TH961nJqMjDeCav+NvwijE6iPyaMJiYY7LT
-        Q4VW6jweByyIUBhgJ2QpR3hjdexkOEx6fZLqAoLd0XO9Rhn2lgBF8DKnV9SF3+yLNmpaQD
-        zGb3wnJbKKsKPV4wrqa7xbTExkE9k+o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-lR0r3DxPPJ-1YlEArRg8QA-1; Fri, 01 Apr 2022 06:13:38 -0400
-X-MC-Unique: lR0r3DxPPJ-1YlEArRg8QA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42DB41C09056;
-        Fri,  1 Apr 2022 10:13:38 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 61B451400C2F;
-        Fri,  1 Apr 2022 10:13:35 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH v1 mmotm] mm/mprotect: try avoiding write faults for exclusive anonynmous pages when changing protection
-Date:   Fri,  1 Apr 2022 12:13:34 +0200
-Message-Id: <20220401101334.68859-1-david@redhat.com>
+        Fri, 1 Apr 2022 06:22:08 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B11C233D;
+        Fri,  1 Apr 2022 03:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648808417; x=1680344417;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+HMwS/vFP2XU2Odir0/lX1+97TApvyx0os8H662f8ts=;
+  b=C/iLwxDpzRh6AgdQWM5fAu8liM8jXGfbj2+S9lD0JaXRlK1h3+ixau4t
+   1I5KbFiCMvDJvlaccyDUxkxVeD+x1zGqwYRVauDSK2FHPk2g1yl63N4qb
+   YV1DgkqR98Q4ndXrjetd7qX6HEziWroU1F6W5h1+i84hptdQ1CVM1Xf10
+   0SsW6cIBjrtw9FLqFEoOFZ+YMgyW9/PqewpG0JyktuVm1lnKAgmkiCurP
+   5tmnMD/xgoyiwyCmTQe/7QaowaHCs4RjCCaiRV0yrXnKL9vk/qNOgbOkJ
+   bOA5PTmyOBiHXJkRN49PJy1EIvGRj4R1D0Acoyjg9lXPrJ2HGEBg7XcIF
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,227,1643670000"; 
+   d="scan'208";a="23040343"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 01 Apr 2022 12:20:14 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 01 Apr 2022 12:20:14 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 01 Apr 2022 12:20:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648808414; x=1680344414;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+HMwS/vFP2XU2Odir0/lX1+97TApvyx0os8H662f8ts=;
+  b=qDfNONIuZc3yJOhQ/k0nhgP0w95p6EninNXPIfe3Ov7ZosYST1T8ego7
+   Cj9Z/o22uGT6d/oBg4O/zoLAR55N6plJLhRZOlDYBkHlIDdcpEvanCFIq
+   DHneGgpUu4PqSFexqvU1mfNI2AevEBYuueeAvcAhzL0AOugh0iTyYbx68
+   w/JXlqyznwvsT7rjJZKHNiNwhGFA/hAg5h6xm83w5TQRJoeFo5Ei+smAp
+   EzaMK3j3qQyLzIBv2JRgJJoT3ogxvQDVnBHqbIqZRlNBFCAg34jz4JX/7
+   aJ8SAq8rS50Vb5Aa/GwZV5bpfss4+9rjq+u+azxhXJ+DGZJ1naQRSFC2m
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,227,1643670000"; 
+   d="scan'208";a="23040342"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 01 Apr 2022 12:20:14 +0200
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 137FB280065;
+        Fri,  1 Apr 2022 12:20:14 +0200 (CEST)
+Message-ID: <6b2bfa6614fbb9339b94a191ab933a2c25b8b4d7.camel@ew.tq-group.com>
+Subject: Re: [PATCH] spi: cadence-quadspi: fix protocol setup for non-1-1-X
+ operations
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 01 Apr 2022 12:20:11 +0200
+In-Reply-To: <20220401100606.iz52jbrdcz6pd5sg@ti.com>
+References: <20220331110819.133392-1-matthias.schiffer@ew.tq-group.com>
+         <20220401100606.iz52jbrdcz6pd5sg@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
-can try mapping anonymous pages writable if they are exclusive,
-the PTE is already dirty, and no special handling applies. Mapping the
-PTE writable is essentially the same thing the write fault handler would do
-in this case.
+On Fri, 2022-04-01 at 15:36 +0530, Pratyush Yadav wrote:
+> Hi Matthias,
+> 
+> On 31/03/22 01:08PM, Matthias Schiffer wrote:
+> > cqspi_set_protocol() only set the data width, but ignored the
+> > command
+> > and address width (except for 8-8-8 DTR ops), leading to corruption
+> > of
+> > all transfers using 1-X-X or X-X-X ops. Fix by setting the other
+> > two
+> > widths as well.
+> > 
+> > While we're at it, simplify the code a bit by replacing the
+> > CQSPI_INST_TYPE_* constants with ilog2().
+> > 
+> > Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash with 1-
+> > 4-4
+> > read and write operations.
+> > 
+> > Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to use
+> > spi-mem framework")
+> 
+> I think a fixes tag is wrong here. The old driver did not support 1-
+> X-X 
+> modes either. So you are not fixing anything, you are adding a new 
+> feature. I don't think we should backport this patch to stable.
 
-Special handling is required for uffd-wp and softdirty tracking, so take
-care of that properly. Also, leave PROT_NONE handling alone for now;
-in the future, we could similarly extend the logic in do_numa_page() or
-use pte_mk_savedwrite() here. Note that we'll now also check for uffd-wp in
-case of VM_SHARED -- which is harmless and prepares for uffd-wp support for
-shmem.
 
-While this improves mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE)
-performance, it should also be a valuable optimization for uffd-wp, when
-un-protecting.
+Giving a precise fixes tag is a bit difficult. The referenced commit
+made the driver (accidentally) accept commands like 1-4-4 without
+handing them correctly, causing data corruption for flashs that support
+these modes. The data corruption is fixed by my patch.
 
-Applying the same logic to PMDs (anonymous THP, anonymous hugetlb) is
-probably not worth the trouble, but could similarly be added if there is
-demand.
+As the change was unintended, one option would be to split this patch
+into two parts: One fix patch that makes cqspi_set_protocol() -EINVAL
+again for all commands that are not 1-1-X, and one feature patch that
+adds actual support for these commands.
 
-Results of a simple microbenchmark on my Ryzen 9 3900X, comparing the new
-optimization (avoiding write faults) during mrprotect() with softdirty
-tracking, where we require a write fault.
+My thought process was that making these commands work correctly can't
+break anything that is not already broken in current stable kernels.
+But if you prefer the minimal change, I can send a v2 that splits the
+patch.
 
-  Running 1000 iterations each
+Regards,
+Matthias
 
-  ==========================================================
-  Measuring memset() of 4096 bytes
-   First write access:
-    Min: 741 ns, Max: 3566 ns, Avg: 770 ns
-   Second write access:
-    Min: 150 ns, Max: 441 ns, Avg: 158 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 170 ns, Max: 420 ns, Avg: 177 ns
-   Write access after clearing softdirty:
-    Min: 440 ns, Max: 1533 ns, Avg: 454 ns
-  -> mprotect = 1.120 * second [avg]
-  -> mprotect = 0.390 * softdirty [avg]
-  ----------------------------------------------------------
-  Measuring single byte access per page of 4096 bytes
-   First write access:
-    Min: 281 ns, Max: 1022 ns, Avg: 732 ns
-   Second write access:
-    Min: 120 ns, Max: 160 ns, Avg: 129 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 140 ns, Max: 191 ns, Avg: 146 ns
-   Write access after clearing softdirty:
-    Min: 301 ns, Max: 561 ns, Avg: 416 ns
-  -> mprotect = 1.132 * second [avg]
-  -> mprotect = 0.351 * softdirty [avg]
-  ==========================================================
-  Measuring memset() of 16384 bytes
-   First write access:
-    Min: 1923 ns, Max: 3497 ns, Avg: 1986 ns
-   Second write access:
-    Min: 211 ns, Max: 310 ns, Avg: 249 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 9 ns, Max: 361 ns, Avg: 281 ns
-   Write access after clearing softdirty:
-    Min: 1203 ns, Max: 1974 ns, Avg: 1232 ns
-  -> mprotect = 1.129 * second [avg]
-  -> mprotect = 0.228 * softdirty [avg]
-  ----------------------------------------------------------
-  Measuring single byte access per page of 16384 bytes
-   First write access:
-    Min: 961 ns, Max: 9317 ns, Avg: 1855 ns
-   Second write access:
-    Min: 130 ns, Max: 171 ns, Avg: 132 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 150 ns, Max: 191 ns, Avg: 153 ns
-   Write access after clearing softdirty:
-    Min: 1061 ns, Max: 1513 ns, Avg: 1085 ns
-  -> mprotect = 1.159 * second [avg]
-  -> mprotect = 0.141 * softdirty [avg]
-  ==========================================================
-  Measuring memset() of 65536 bytes
-   First write access:
-    Min: 6933 ns, Max: 14366 ns, Avg: 7068 ns
-   Second write access:
-    Min: 601 ns, Max: 772 ns, Avg: 614 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 671 ns, Max: 7795 ns, Avg: 715 ns
-   Write access after clearing softdirty:
-    Min: 4238 ns, Max: 11703 ns, Avg: 4367 ns
-  -> mprotect = 1.164 * second [avg]
-  -> mprotect = 0.164 * softdirty [avg]
-  ----------------------------------------------------------
-  Measuring single byte access per page of 65536 bytes
-   First write access:
-    Min: 6082 ns, Max: 13866 ns, Avg: 6637 ns
-   Second write access:
-    Min: 130 ns, Max: 190 ns, Avg: 145 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 170 ns, Max: 992 ns, Avg: 184 ns
-   Write access after clearing softdirty:
-    Min: 3367 ns, Max: 4709 ns, Avg: 3759 ns
-  -> mprotect = 1.269 * second [avg]
-  -> mprotect = 0.049 * softdirty [avg]
-  ==========================================================
-  Measuring memset() of 524288 bytes
-   First write access:
-    Min: 54712 ns, Max: 86162 ns, Avg: 55544 ns
-   Second write access:
-    Min: 4989 ns, Max: 7714 ns, Avg: 5106 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 5561 ns, Max: 7044 ns, Avg: 5710 ns
-   Write access after clearing softdirty:
-    Min: 34224 ns, Max: 41848 ns, Avg: 34610 ns
-  -> mprotect = 1.118 * second [avg]
-  -> mprotect = 0.165 * softdirty [avg]
-  ----------------------------------------------------------
-  Measuring single byte access per page of 524288 bytes
-   First write access:
-    Min: 50695 ns, Max: 56617 ns, Avg: 51353 ns
-   Second write access:
-    Min: 390 ns, Max: 1553 ns, Avg: 1090 ns
-   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-    Min: 471 ns, Max: 2074 ns, Avg: 675 ns
-   Write access after clearing softdirty:
-    Min: 29115 ns, Max: 35076 ns, Avg: 29521 ns
-  -> mprotect = 0.619 * second [avg]
-  -> mprotect = 0.023 * softdirty [avg]
 
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
 
-This is based on:
-	"[PATCH v2 00/15] mm: COW fixes part 2: reliable GUP pins of
-	 anonymous pages"
--> https://lkml.kernel.org/r/20220315104741.63071-1-david@redhat.com
-
-... which is in -mm but not yet in -next. Sending this out for early
-discussion.
-
----
- mm/mprotect.c | 70 ++++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 58 insertions(+), 12 deletions(-)
-
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 56060acdabd3..69770b547ec1 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -36,6 +36,49 @@
- 
- #include "internal.h"
- 
-+static inline bool can_change_pte_writable(struct vm_area_struct *vma,
-+					   unsigned long addr, pte_t pte,
-+					   unsigned long cp_flags)
-+{
-+	struct page *page;
-+
-+	if ((vma->vm_flags & VM_SHARED) && !(cp_flags & MM_CP_DIRTY_ACCT))
-+		/*
-+		 * MM_CP_DIRTY_ACCT is only expressive for shared mappings;
-+		 * without MM_CP_DIRTY_ACCT, there is nothing to do.
-+		 */
-+		return false;
-+
-+	if (!(vma->vm_flags & VM_WRITE))
-+		return false;
-+
-+	if (pte_write(pte) || pte_protnone(pte) || !pte_dirty(pte))
-+		return false;
-+
-+	/* Do we need write faults for softdirty tracking? */
-+	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !pte_soft_dirty(pte) &&
-+	    (vma->vm_flags & VM_SOFTDIRTY))
-+		return false;
-+
-+	/* Do we need write faults for uffd-wp tracking? */
-+	if (userfaultfd_pte_wp(vma, pte))
-+		return false;
-+
-+	if (!(vma->vm_flags & VM_SHARED)) {
-+		/*
-+		 * We can only special-case on exclusive anonymous pages,
-+		 * because we know that our write-fault handler similarly would
-+		 * map them writable without any additional checks while holding
-+		 * the PT lock.
-+		 */
-+		page = vm_normal_page(vma, addr, pte);
-+		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 		unsigned long addr, unsigned long end, pgprot_t newprot,
- 		unsigned long cp_flags)
-@@ -44,7 +87,6 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 	spinlock_t *ptl;
- 	unsigned long pages = 0;
- 	int target_node = NUMA_NO_NODE;
--	bool dirty_accountable = cp_flags & MM_CP_DIRTY_ACCT;
- 	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
- 	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
- 	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
-@@ -133,21 +175,25 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 				ptent = pte_wrprotect(ptent);
- 				ptent = pte_mkuffd_wp(ptent);
- 			} else if (uffd_wp_resolve) {
--				/*
--				 * Leave the write bit to be handled
--				 * by PF interrupt handler, then
--				 * things like COW could be properly
--				 * handled.
--				 */
- 				ptent = pte_clear_uffd_wp(ptent);
- 			}
- 
--			/* Avoid taking write faults for known dirty pages */
--			if (dirty_accountable && pte_dirty(ptent) &&
--					(pte_soft_dirty(ptent) ||
--					 !(vma->vm_flags & VM_SOFTDIRTY))) {
-+			/*
-+			 * In some writable, shared mappings, we might want
-+			 * to catch actual write access -- see
-+			 * vma_wants_writenotify().
-+			 *
-+			 * In all writable, private mappings, we have to
-+			 * properly handle COW.
-+			 *
-+			 * In both cases, we can sometimes still map PTEs
-+			 * writable and avoid the write-fault handler, for
-+			 * example, if the PTE is already dirty and no other
-+			 * COW or special handling is required.
-+			 */
-+			if (can_change_pte_writable(vma, addr, ptent, cp_flags))
- 				ptent = pte_mkwrite(ptent);
--			}
-+
- 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
- 			pages++;
- 		} else if (is_swap_pte(oldpte)) {
--- 
-2.35.1
+> 
+> > Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com
+> > >
+> > ---
+> >  drivers/spi/spi-cadence-quadspi.c | 46 ++++++++-------------------
+> > ----
+> >  1 file changed, 12 insertions(+), 34 deletions(-)
+> > 
+> > diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-
+> > cadence-quadspi.c
+> > index b0c9f62ccefb..616ada891974 100644
+> > --- a/drivers/spi/spi-cadence-quadspi.c
+> > +++ b/drivers/spi/spi-cadence-quadspi.c
+> > @@ -19,6 +19,7 @@
+> >  #include <linux/iopoll.h>
+> >  #include <linux/jiffies.h>
+> >  #include <linux/kernel.h>
+> > +#include <linux/log2.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of_device.h>
+> >  #include <linux/of.h>
+> > @@ -102,12 +103,6 @@ struct cqspi_driver_platdata {
+> >  #define CQSPI_TIMEOUT_MS			500
+> >  #define CQSPI_READ_TIMEOUT_MS			10
+> >  
+> > -/* Instruction type */
+> > -#define CQSPI_INST_TYPE_SINGLE			0
+> > -#define CQSPI_INST_TYPE_DUAL			1
+> > -#define CQSPI_INST_TYPE_QUAD			2
+> > -#define CQSPI_INST_TYPE_OCTAL			3
+> > -
+> >  #define CQSPI_DUMMY_CLKS_PER_BYTE		8
+> >  #define CQSPI_DUMMY_BYTES_MAX			4
+> >  #define CQSPI_DUMMY_CLKS_MAX			31
+> > @@ -376,10 +371,6 @@ static unsigned int cqspi_calc_dummy(const
+> > struct spi_mem_op *op, bool dtr)
+> >  static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+> >  			      const struct spi_mem_op *op)
+> >  {
+> > -	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
+> > -	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
+> > -	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+> > -
+> >  	/*
+> >  	 * For an op to be DTR, cmd phase along with every other non-
+> > empty
+> >  	 * phase should have dtr field set to 1. If an op phase has
+> > zero
+> > @@ -389,32 +380,23 @@ static int cqspi_set_protocol(struct
+> > cqspi_flash_pdata *f_pdata,
+> >  		       (!op->addr.nbytes || op->addr.dtr) &&
+> >  		       (!op->data.nbytes || op->data.dtr);
+> >  
+> > -	switch (op->data.buswidth) {
+> > -	case 0:
+> > -		break;
+> > -	case 1:
+> > -		f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+> > -		break;
+> > -	case 2:
+> > -		f_pdata->data_width = CQSPI_INST_TYPE_DUAL;
+> > -		break;
+> > -	case 4:
+> > -		f_pdata->data_width = CQSPI_INST_TYPE_QUAD;
+> > -		break;
+> > -	case 8:
+> > -		f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
+> > -		break;
+> > -	default:
+> > -		return -EINVAL;
+> > -	}
+> > +	f_pdata->inst_width = 0;
+> > +	if (op->cmd.buswidth)
+> > +		f_pdata->inst_width = ilog2(op->cmd.buswidth);
+> > +
+> > +	f_pdata->addr_width = 0;
+> > +	if (op->addr.buswidth)
+> > +		f_pdata->addr_width = ilog2(op->addr.buswidth);
+> > +
+> > +	f_pdata->data_width = 0;
+> > +	if (op->data.buswidth)
+> > +		f_pdata->data_width = ilog2(op->data.buswidth);
+> 
+> Honestly, I think we should get rid of cqspi_set_protocol() entirely.
+> I 
+> see no need to store f_pdata->{instr,addr,data}_width since we 
+> recalculate those for each op execution anyway. So why not just use
+> the 
+> spi_mem_op to get those values directly and be rid of all this mess?
+> 
+> >  
+> >  	/* Right now we only support 8-8-8 DTR mode. */
+> >  	if (f_pdata->dtr) {
+> >  		switch (op->cmd.buswidth) {
+> >  		case 0:
+> > -			break;
+> >  		case 8:
+> > -			f_pdata->inst_width = CQSPI_INST_TYPE_OCTAL;
+> >  			break;
+> >  		default:
+> >  			return -EINVAL;
+> > @@ -422,9 +404,7 @@ static int cqspi_set_protocol(struct
+> > cqspi_flash_pdata *f_pdata,
+> >  
+> >  		switch (op->addr.buswidth) {
+> >  		case 0:
+> > -			break;
+> >  		case 8:
+> > -			f_pdata->addr_width = CQSPI_INST_TYPE_OCTAL;
+> >  			break;
+> >  		default:
+> >  			return -EINVAL;
+> > @@ -432,9 +412,7 @@ static int cqspi_set_protocol(struct
+> > cqspi_flash_pdata *f_pdata,
+> >  
+> >  		switch (op->data.buswidth) {
+> >  		case 0:
+> > -			break;
+> >  		case 8:
+> > -			f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
+> >  			break;
+> >  		default:
+> >  			return -EINVAL;
+> > -- 
+> > 2.25.1
+> > 
 

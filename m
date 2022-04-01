@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480184EE5C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B484EE5B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243835AbiDABkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 21:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S243763AbiDABgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 21:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiDABk3 (ORCPT
+        with ESMTP id S230402AbiDABgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 21:40:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4635011143;
-        Thu, 31 Mar 2022 18:38:35 -0700 (PDT)
-X-UUID: e575b3055c5842668a04d53803df5c83-20220401
-X-UUID: e575b3055c5842668a04d53803df5c83-20220401
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 418093412; Fri, 01 Apr 2022 09:38:23 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 1 Apr 2022 09:38:22 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Apr
- 2022 09:38:21 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 1 Apr 2022 09:38:21 +0800
-Message-ID: <e0d5a344c8ec1f92357bd9d5b8782dded862c549.camel@mediatek.com>
-Subject: Re: [PATCH v2,1/2] dt-bindings: display: mediatek: dpi: Add
- compatible for MediaTek MT8186
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jitao.shi@mediatek.com>
-Date:   Fri, 1 Apr 2022 09:38:20 +0800
-In-Reply-To: <1648727917-3099-2-git-send-email-xinlei.lee@mediatek.com>
-References: <1648727917-3099-1-git-send-email-xinlei.lee@mediatek.com>
-         <1648727917-3099-2-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 21:36:01 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89B67231935
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 18:34:12 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:55786.717889391
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.43 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 3FC9110023C;
+        Fri,  1 Apr 2022 09:34:09 +0800 (CST)
+Received: from  ([123.150.8.43])
+        by gateway-153622-dep-749df8664c-nmrf6 with ESMTP id dd0746ef3fd74dcf991a4b4269762705 for ast@kernel.org;
+        Fri, 01 Apr 2022 09:34:11 CST
+X-Transaction-ID: dd0746ef3fd74dcf991a4b4269762705
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.43
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Song Chen <chensong_2000@189.cn>
+Subject: [PATCH] sample: bpf: syscall_tp_kern: add dfd before filename
+Date:   Fri,  1 Apr 2022 09:40:46 +0800
+Message-Id: <1648777246-21352-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-31 at 19:58 +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Add dt-binding documentation of dpi for MediaTek MT8186 SoC.
-> 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml       | 1
-> +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> index dd2896a40ff0..a73044c50b5f 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> @@ -22,6 +22,7 @@ properties:
->        - mediatek,mt7623-dpi
->        - mediatek,mt8173-dpi
->        - mediatek,mt8183-dpi
-> +      - mediatek,mt8186-dpi
->        - mediatek,mt8192-dpi
->  
->    reg:
+When i was writing my eBPF program, i copied some pieces of code from
+syscall_tp, syscall_tp_kern only records how many files are opened, but
+mine needs to print file name.I reused struct syscalls_enter_open_args,
+which is defined as:
 
-Hello Xinlei,
+struct syscalls_enter_open_args {
+	unsigned long long unused;
+	long syscall_nr;
+	long filename_ptr;
+        long flags;
+        long mode;
+};
 
-From the dts we use, the dpi node needs other properties for MT8186.
-Please send another patch and add these properties to binding.
+I tried to use filename_ptr, but it's not the pointer of filename, flags
+turns out to be the pointer I'm looking for, there might be something
+missed in the struct.
 
-assigned-clocks = <&topckgen CLK_TOP_DPI>;
-assigned-clock-parents = <&topckgen CLK_TOP_TVDPLL_D2>;
+I read the ftrace log, found the missed one is dfd, which is supposed to be
+placed in between syscall_nr and filename_ptr.
 
-Thanks
+Actually syscall_tp has nothing to do with dfd, it can run anyway without
+it, but it's better to have it to make it a better eBPF sample, especially
+to new eBPF programmers, then i fixed it.
 
-BRs,
-Rex
+Signed-off-by: Song Chen <chensong_2000@189.cn>
+---
+ samples/bpf/syscall_tp_kern.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/samples/bpf/syscall_tp_kern.c b/samples/bpf/syscall_tp_kern.c
+index 50231c2eff9c..e4ac818aee57 100644
+--- a/samples/bpf/syscall_tp_kern.c
++++ b/samples/bpf/syscall_tp_kern.c
+@@ -7,6 +7,7 @@
+ struct syscalls_enter_open_args {
+ 	unsigned long long unused;
+ 	long syscall_nr;
++	long dfd_ptr;
+ 	long filename_ptr;
+ 	long flags;
+ 	long mode;
+-- 
+2.25.1
 

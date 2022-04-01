@@ -2,72 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0424EE6C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7EF4EE6CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244626AbiDADiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 23:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S244650AbiDADjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 23:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243899AbiDADiC (ORCPT
+        with ESMTP id S244625AbiDADjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 23:38:02 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F79F4629
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 20:36:14 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so1009587ilt.21
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 20:36:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=4CTVOpRlL+R3DgLW480cMVd45Tf3kymrAnPQ8cwHjuQ=;
-        b=WfzEx9AeaqzgnYjWTCM3Eh67+PrhcbgbiVrhZlrGvdkffTYPaGasj13scJ6OVN059P
-         Qo1KXGVdg7414D/YnL5N+wJdz+L3iJ9u7+avHxg7VexJN3CWmrq2/rnSe6hM5yrwoaVc
-         Mh1bMKhleF753t4VhfaBm3YEAAhidEZSBQMlFfjRVRF7DNt/5MvGbWe8+Cx1A5/gJxab
-         Mu6i1xMK0C0QxGS9JpfuHFeFXyaqTOrx5oSEmTD1tFRUlKc0tsyfqIAFPgFkxlMlFilg
-         CT2OV1DtAH3eW8pImdI+0kt6J+V05vUs0mZ2BUlvGhl/N+tTZr8qc9PgvBmjkkYh6XS2
-         M1oQ==
-X-Gm-Message-State: AOAM530fVpU/mbsxq+NBtlUzGVcIfcT4oJc7FTXvBUtulV6nJrWtDdPr
-        2cMiEajv7cxJpOYbcpg/DqbHT1jiC7y2bhOcZaa+nC8/PnbS
-X-Google-Smtp-Source: ABdhPJyPTJAo7j7p54O5jevUsiLvUW96vIvsJSiUQkhbzfRTVaGd3ZKkQWtlF92JrXEgVsuN331iFK8xXal7zrTDeobFHcLMxZjA
+        Thu, 31 Mar 2022 23:39:00 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1D1D1D66CA;
+        Thu, 31 Mar 2022 20:37:10 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:56850.577092616
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 7D5331002AF;
+        Fri,  1 Apr 2022 11:37:08 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-749df8664c-mvcg4 with ESMTP id a969fd7db226468788809b02151552bc for yhs@fb.com;
+        Fri, 01 Apr 2022 11:37:09 CST
+X-Transaction-ID: a969fd7db226468788809b02151552bc
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <306ab457-9f3d-4d90-bb31-e6fb08b6a5ad@189.cn>
+Date:   Fri, 1 Apr 2022 11:37:07 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a92:d9c7:0:b0:2c8:7bf5:b85e with SMTP id
- n7-20020a92d9c7000000b002c87bf5b85emr14615650ilq.275.1648784173368; Thu, 31
- Mar 2022 20:36:13 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 20:36:13 -0700
-In-Reply-To: <20220401032249.4888-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f70c4805db8f7ae0@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in j1939_xtp_rx_dat_one (3)
-From:   syzbot <syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] sample: bpf: syscall_tp_user: print result of verify_map
+Content-Language: en-US
+To:     Yonghong Song <yhs@fb.com>, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1648777272-21473-1-git-send-email-chensong_2000@189.cn>
+ <882349c0-123d-3deb-88e8-d400ec702d1f@fb.com>
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <882349c0-123d-3deb-88e8-d400ec702d1f@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com
+在 2022/4/1 11:01, Yonghong Song 写道:
+> 
+> 
+> On 3/31/22 6:41 PM, Song Chen wrote:
+>> syscall_tp only prints the map id and messages when something goes wrong,
+>> but it doesn't print the value passed from bpf map. I think it's better
+>> to show that value to users.
+>>
+>> What's more, i also added a 2-second sleep before calling verify_map,
+>> to make the value more obvious.
+>>
+>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>> ---
+>>   samples/bpf/syscall_tp_user.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/samples/bpf/syscall_tp_user.c 
+>> b/samples/bpf/syscall_tp_user.c
+>> index a0ebf1833ed3..1faa7f08054e 100644
+>> --- a/samples/bpf/syscall_tp_user.c
+>> +++ b/samples/bpf/syscall_tp_user.c
+>> @@ -36,6 +36,9 @@ static void verify_map(int map_id)
+>>           fprintf(stderr, "failed: map #%d returns value 0\n", map_id);
+>>           return;
+>>       }
+>> +
+>> +    printf("verify map:%d val: %d\n", map_id, val);
+> 
+> I am not sure how useful it is or anybody really cares.
+> This is just a sample to demonstrate how bpf tracepoint works.
+> The error path has error print out already.
+> 
+>> +
+>>       val = 0;
+>>       if (bpf_map_update_elem(map_id, &key, &val, BPF_ANY) != 0) {
+>>           fprintf(stderr, "map_update failed: %s\n", strerror(errno));
+>> @@ -98,6 +101,7 @@ static int test(char *filename, int num_progs)
+>>       }
+>>       close(fd);
+>> +    sleep(2);
+> 
+> The commit message mentioned this sleep(2) is
+> to make the value more obvious. I don't know what does this mean.
+> sleep(2) can be added only if it fixed a bug.
 
-Tested on:
+The value in bpf map means how many times trace_enter_open_at are 
+triggered with tracepoint,sys_enter_openat. Sleep(2) is to enlarge the 
+result, tell the user how many files are opened in the last 2 seconds.
 
-commit:         ae085d7f mm: kfence: fix missing objcg housekeeping fo..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6bae4cd50262530e
-dashboard link: https://syzkaller.appspot.com/bug?extid=a9dce1ff45c3bbeceb3a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11cc67f5700000
+It shows like this:
 
-Note: testing is done by a robot and is best-effort only.
+sudo ./samples/bpf/syscall_tp
+prog #0: map ids 4 5
+verify map:4 val: 253
+verify map:5 val: 252
+
+If we work harder, we can also print those files' name and opened by 
+which process.
+
+It's just an improvement instead of a bug fix, i will drop it if 
+reviewers think it's unnecessary.
+
+Thanks.
+
+BR
+
+chensong
+> 
+>>       /* verify the map */
+>>       for (i = 0; i < num_progs; i++) {
+>>           verify_map(map0_fds[i]);
+> 

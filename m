@@ -2,240 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0FD4EE766
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B114EE768
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244876AbiDAEiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S244890AbiDAEjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbiDAEhw (ORCPT
+        with ESMTP id S232741AbiDAEjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:37:52 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18FA243713;
-        Thu, 31 Mar 2022 21:36:03 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id h23so2431141wrb.8;
-        Thu, 31 Mar 2022 21:36:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=olW/xLwuiQra0w+84+rmqpMcAO9wN+Sku9gVx0ollFo=;
-        b=julqckNObXM5HJ743nwZ/yFGool+34eAu9o9Dq86iWJm4//8lJfAkR+Al1BtsdHe7n
-         4M23xx4jDPhF103GFAshfFbY3/wLfBe8lVINtum20ueiYYKtWHj4uqTlReIjm+x9Q/qU
-         HoFrNCPLWU/+qEQlvLkKB0NgUqC+l/iLS8VRL/0QXbTF15nF74FF5C/7+uTptMZ0dK2H
-         4Ocn2tuclJo4mwGN0NzF7qTd2qWnVk71e5xYdyXIeVyy9UYJbmDK1ncN63USvZB5mQTD
-         GvaVCFxFg/l1EoiItvawcdsfMUfJbXPTYl6Us+XzvJ/sfv6MZK8bAqQG+R1CSj3hbn/o
-         +a3g==
-X-Gm-Message-State: AOAM531CTqouTuPUpIWtlbKng/GZrSCMrc1LGMfBhxYt7GPCeegRBfwp
-        ziqpBt9dRlnBqXixQBTiQXY=
-X-Google-Smtp-Source: ABdhPJyv+IBI4CGl6Q1AzmNDsJMYYp7uyj/VURBMSErPvxbpLB2F+eOKSl02X9xcbUiYDXLPR3jLeQ==
-X-Received: by 2002:a05:6000:f:b0:203:d97a:947 with SMTP id h15-20020a056000000f00b00203d97a0947mr6366606wrx.654.1648787762171;
-        Thu, 31 Mar 2022 21:36:02 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05600c198600b0038cafe3d47dsm857337wmq.42.2022.03.31.21.36.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 21:36:01 -0700 (PDT)
-Message-ID: <4767809d-5818-ad40-a0e7-b3af40aa071e@kernel.org>
-Date:   Fri, 1 Apr 2022 06:35:58 +0200
+        Fri, 1 Apr 2022 00:39:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38B825CBB4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648787837; x=1680323837;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h5i5fthEhUv3TerCM063y5oBoq9S1I6QZnJ7/7t94CA=;
+  b=As07QLmTSt056P2ho2M2wj61AtbLEbjbDbQDt7rc979zJWseyTEgTYgQ
+   PE3fkNV1yxnavpMlxICuG79WlbXJ7RJ71GlrJBFIKa3dpHOVbH8hNVNJQ
+   BDZ4qHYjSPWoFb2j15ypK4XYzuRQMMQPWgzBge54WFQ4AAgdOYeto703+
+   fYTQhWighLe7i9EXR4dmin8Z8Gxr2hcH5vqObsgMtlTjZFJjYSo20tH1S
+   Fxu9OB/9E65fITYQxmhhDCZVe01KpXY8e0WBXg5njVl5SAWBX4oMEZf03
+   OVtv1xUf+o1cu/ZGoZgUBGfJhmdtPbZHDLDgivg3M5oGsvghwzJKP3L1M
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="346480858"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="346480858"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 21:37:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="547643455"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 31 Mar 2022 21:37:15 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1na92A-0000we-BJ;
+        Fri, 01 Apr 2022 04:37:14 +0000
+Date:   Fri, 1 Apr 2022 12:36:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [sbates130272-p2pmem:raid5_fixups 3/6]
+ drivers/md/raid5-ppl.c:895:30: sparse: sparse: incorrect type in assignment
+ (different address spaces)
+Message-ID: <202204011224.U5aqrW6q-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v5 1/1] serial/8250: Use fifo in 8250 console driver
-Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     rostedt@goodmis.org, senozhatsky@chromium.org,
-        andre.goddard@gmail.com, sudipm.mukherjee@gmail.com,
-        andy.shevchenko@gmail.com, David.Laight@aculab.com,
-        jonathanh@nvidia.com, phil@raspberrypi.com
-References: <20220331190257.101781-1-wander@redhat.com>
- <20220331190257.101781-2-wander@redhat.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220331190257.101781-2-wander@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31. 03. 22, 21:02, Wander Lairson Costa wrote:
-> Note: I am using a small test app + driver located at [0] for the
-> problem description. serco is a driver whose write function dispatches
-> to the serial controller. sertest is a user-mode app that writes n bytes
-> to the serial console using the serco driver.
-> 
-> While investigating a bug in the RHEL kernel, I noticed that the serial
-> console throughput is way below the configured speed of 115200 bps in
-> a HP Proliant DL380 Gen9. I was expecting something above 10KB/s, but
-> I got 2.5KB/s.
-> 
-> $ time ./sertest -n 2500 /tmp/serco
-> 
-> real    0m0.997s
-> user    0m0.000s
-> sys     0m0.997s
-> 
-> With the help of the function tracer, I then noticed the serial
-> controller was taking around 410us seconds to dispatch one single byte:
-> 
-> $ trace-cmd record -p function_graph -g serial8250_console_write \
->     ./sertest -n 1 /tmp/serco
-> 
-> $ trace-cmd report
-> 
->              |  serial8250_console_write() {
->   0.384 us   |    _raw_spin_lock_irqsave();
->   1.836 us   |    io_serial_in();
->   1.667 us   |    io_serial_out();
->              |    uart_console_write() {
->              |      serial8250_console_putchar() {
->              |        wait_for_xmitr() {
->   1.870 us   |          io_serial_in();
->   2.238 us   |        }
->   1.737 us   |        io_serial_out();
->   4.318 us   |      }
->   4.675 us   |    }
->              |    wait_for_xmitr() {
->   1.635 us   |      io_serial_in();
->              |      __const_udelay() {
->   1.125 us   |        delay_tsc();
->   1.429 us   |      }
-> ...
-> ...
-> ...
->   1.683 us   |      io_serial_in();
->              |      __const_udelay() {
->   1.248 us   |        delay_tsc();
->   1.486 us   |      }
->   1.671 us   |      io_serial_in();
->   411.342 us |    }
-> 
-> In another machine, I measured a throughput of 11.5KB/s, with the serial
-> controller taking between 80-90us to send each byte. That matches the
-> expected throughput for a configuration of 115200 bps.
-> 
-> This patch changes the serial8250_console_write to use the 16550 fifo
-> if available. In my benchmarks I got around 25% improvement in the slow
-> machine, and no performance penalty in the fast machine.
-> 
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> ---
->   drivers/tty/serial/8250/8250_port.c | 68 ++++++++++++++++++++++++++---
->   1 file changed, 62 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 318af6f13605..8f7eba5e71cf 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -2077,10 +2077,7 @@ static void serial8250_break_ctl(struct uart_port *port, int break_state)
->   	serial8250_rpm_put(up);
->   }
->   
-> -/*
-> - *	Wait for transmitter & holding register to empty
-> - */
-> -static void wait_for_xmitr(struct uart_8250_port *up, int bits)
-> +static void wait_for_lsr(struct uart_8250_port *up, int bits)
->   {
->   	unsigned int status, tmout = 10000;
->   
-> @@ -2097,6 +2094,16 @@ static void wait_for_xmitr(struct uart_8250_port *up, int bits)
->   		udelay(1);
->   		touch_nmi_watchdog();
->   	}
-> +}
-> +
-> +/*
-> + *	Wait for transmitter & holding register to empty
-> + */
-> +static void wait_for_xmitr(struct uart_8250_port *up, int bits)
-> +{
-> +	unsigned int tmout;
-> +
-> +	wait_for_lsr(up, bits);
->   
->   	/* Wait up to 1s for flow control if necessary */
->   	if (up->port.flags & UPF_CONS_FLOW) {
-> @@ -3332,6 +3339,35 @@ static void serial8250_console_restore(struct uart_8250_port *up)
->   	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
->   }
->   
-> +/*
-> + * Print a string to the serial port using the device FIFO
-> + *
-> + * It sends fifosize bytes and then waits for the fifo
-> + * to get empty.
-> + */
-> +static void serial8250_console_fifo_write(struct uart_8250_port *up,
-> +					  const char *s, unsigned int count)
-> +{
-> +	int i;
-> +	const char *end = s + count;
-> +	unsigned int fifosize = up->tx_loadsz;
-> +	bool cr_sent = false;
-> +
-> +	while (s != end) {
-> +		wait_for_lsr(up, UART_LSR_THRE);
-> +
-> +		for (i = 0; i < fifosize && s != end; ++i) {
-> +			if (*s == '\n' && !cr_sent) {
-> +				serial_out(up, UART_TX, '\r');
-> +				cr_sent = true;
-> +			} else {
-> +				serial_out(up, UART_TX, *s++);
-> +				cr_sent = false;
-> +			}
-> +		}
-> +	}
-> +}
-> +
->   /*
->    *	Print a string to the serial port trying not to disturb
->    *	any possible real use of the port...
-> @@ -3347,7 +3383,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
->   	struct uart_8250_em485 *em485 = up->em485;
->   	struct uart_port *port = &up->port;
->   	unsigned long flags;
-> -	unsigned int ier;
-> +	unsigned int ier, use_fifo;
->   	int locked = 1;
->   
->   	touch_nmi_watchdog();
-> @@ -3379,7 +3415,27 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
->   		mdelay(port->rs485.delay_rts_before_send);
->   	}
->   
-> -	uart_console_write(port, s, count, serial8250_console_putchar);
-> +	use_fifo = (up->capabilities & UART_CAP_FIFO) &&
-> +		/*
-> +		 * BCM283x requires to check the fifo
-> +		 * after each byte.
-> +		 */
-> +		!(up->capabilities & UART_CAP_MINI) &&
-> +		up->tx_loadsz > 1 &&
-> +		(up->fcr & UART_FCR_ENABLE_FIFO) &&
-> +		port-state &&
+tree:   https://github.com/sbates130272/linux-p2pmem.git raid5_fixups
+head:   37cb73889e93d24459385229b6925da10648225d
+commit: 93ecde7add0ce4b4464e98700e39da53458c2d46 [3/6] md/raid5: Add __rcu annotation to struct disk_info
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220401/202204011224.U5aqrW6q-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/sbates130272/linux-p2pmem/commit/93ecde7add0ce4b4464e98700e39da53458c2d46
+        git remote add sbates130272-p2pmem https://github.com/sbates130272/linux-p2pmem.git
+        git fetch --no-tags sbates130272-p2pmem raid5_fixups
+        git checkout 93ecde7add0ce4b4464e98700e39da53458c2d46
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
 
-">" missing here. Doesn't a compiler warn about subtracting different types?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-regards,
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/md/raid5-ppl.c: note: in included file:
+   drivers/md/raid5.h:271:14: sparse: sparse: array of flexible structures
+>> drivers/md/raid5-ppl.c:895:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct md_rdev *rdev @@     got struct md_rdev [noderef] __rcu *rdev @@
+   drivers/md/raid5-ppl.c:895:30: sparse:     expected struct md_rdev *rdev
+   drivers/md/raid5-ppl.c:895:30: sparse:     got struct md_rdev [noderef] __rcu *rdev
+>> drivers/md/raid5-ppl.c:946:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct md_rdev *parity_rdev @@     got struct md_rdev [noderef] __rcu *rdev @@
+   drivers/md/raid5-ppl.c:946:29: sparse:     expected struct md_rdev *parity_rdev
+   drivers/md/raid5-ppl.c:946:29: sparse:     got struct md_rdev [noderef] __rcu *rdev
+>> drivers/md/raid5-ppl.c:1417:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct md_rdev *rdev @@     got struct md_rdev [noderef] __rcu *rdev @@
+   drivers/md/raid5-ppl.c:1417:54: sparse:     expected struct md_rdev *rdev
+   drivers/md/raid5-ppl.c:1417:54: sparse:     got struct md_rdev [noderef] __rcu *rdev
+
+vim +895 drivers/md/raid5-ppl.c
+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  728  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  729  /*
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  730   * PPL recovery strategy: xor partial parity and data from all modified data
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  731   * disks within a stripe and write the result as the new stripe parity. If all
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  732   * stripe data disks are modified (full stripe write), no partial parity is
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  733   * available, so just xor the data disks.
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  734   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  735   * Recovery of a PPL entry shall occur only if all modified data disks are
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  736   * available and read from all of them succeeds.
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  737   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  738   * A PPL entry applies to a stripe, partial parity size for an entry is at most
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  739   * the size of the chunk. Examples of possible cases for a single entry:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  740   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  741   * case 0: single data disk write:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  742   *   data0    data1    data2     ppl        parity
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  743   * +--------+--------+--------+           +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  744   * | ------ | ------ | ------ | +----+    | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  745   * | ------ | -data- | ------ | | pp | -> | data1 ^ pp         |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  746   * | ------ | -data- | ------ | | pp | -> | data1 ^ pp         |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  747   * | ------ | ------ | ------ | +----+    | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  748   * +--------+--------+--------+           +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  749   * pp_size = data_size
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  750   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  751   * case 1: more than one data disk write:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  752   *   data0    data1    data2     ppl        parity
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  753   * +--------+--------+--------+           +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  754   * | ------ | ------ | ------ | +----+    | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  755   * | -data- | -data- | ------ | | pp | -> | data0 ^ data1 ^ pp |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  756   * | -data- | -data- | ------ | | pp | -> | data0 ^ data1 ^ pp |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  757   * | ------ | ------ | ------ | +----+    | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  758   * +--------+--------+--------+           +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  759   * pp_size = data_size / modified_data_disks
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  760   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  761   * case 2: write to all data disks (also full stripe write):
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  762   *   data0    data1    data2                parity
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  763   * +--------+--------+--------+           +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  764   * | ------ | ------ | ------ |           | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  765   * | -data- | -data- | -data- | --------> | xor all data       |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  766   * | ------ | ------ | ------ | --------> | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  767   * | ------ | ------ | ------ |           | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  768   * +--------+--------+--------+           +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  769   * pp_size = 0
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  770   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  771   * The following cases are possible only in other implementations. The recovery
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  772   * code can handle them, but they are not generated at runtime because they can
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  773   * be reduced to cases 0, 1 and 2:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  774   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  775   * case 3:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  776   *   data0    data1    data2     ppl        parity
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  777   * +--------+--------+--------+ +----+    +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  778   * | ------ | -data- | -data- | | pp |    | data1 ^ data2 ^ pp |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  779   * | ------ | -data- | -data- | | pp | -> | data1 ^ data2 ^ pp |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  780   * | -data- | -data- | -data- | | -- | -> | xor all data       |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  781   * | -data- | -data- | ------ | | pp |    | data0 ^ data1 ^ pp |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  782   * +--------+--------+--------+ +----+    +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  783   * pp_size = chunk_size
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  784   *
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  785   * case 4:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  786   *   data0    data1    data2     ppl        parity
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  787   * +--------+--------+--------+ +----+    +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  788   * | ------ | -data- | ------ | | pp |    | data1 ^ pp         |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  789   * | ------ | ------ | ------ | | -- | -> | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  790   * | ------ | ------ | ------ | | -- | -> | (no change)        |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  791   * | -data- | ------ | ------ | | pp |    | data0 ^ pp         |
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  792   * +--------+--------+--------+ +----+    +--------------------+
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  793   * pp_size = chunk_size
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  794   */
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  795  static int ppl_recover_entry(struct ppl_log *log, struct ppl_header_entry *e,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  796  			     sector_t ppl_sector)
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  797  {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  798  	struct ppl_conf *ppl_conf = log->ppl_conf;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  799  	struct mddev *mddev = ppl_conf->mddev;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  800  	struct r5conf *conf = mddev->private;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  801  	int block_size = ppl_conf->block_size;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  802  	struct page *page1;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  803  	struct page *page2;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  804  	sector_t r_sector_first;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  805  	sector_t r_sector_last;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  806  	int strip_sectors;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  807  	int data_disks;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  808  	int i;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  809  	int ret = 0;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  810  	char b[BDEVNAME_SIZE];
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  811  	unsigned int pp_size = le32_to_cpu(e->pp_size);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  812  	unsigned int data_size = le32_to_cpu(e->data_size);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  813  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  814  	page1 = alloc_page(GFP_KERNEL);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  815  	page2 = alloc_page(GFP_KERNEL);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  816  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  817  	if (!page1 || !page2) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  818  		ret = -ENOMEM;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  819  		goto out;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  820  	}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  821  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  822  	r_sector_first = le64_to_cpu(e->data_sector) * (block_size >> 9);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  823  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  824  	if ((pp_size >> 9) < conf->chunk_sectors) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  825  		if (pp_size > 0) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  826  			data_disks = data_size / pp_size;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  827  			strip_sectors = pp_size >> 9;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  828  		} else {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  829  			data_disks = conf->raid_disks - conf->max_degraded;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  830  			strip_sectors = (data_size >> 9) / data_disks;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  831  		}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  832  		r_sector_last = r_sector_first +
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  833  				(data_disks - 1) * conf->chunk_sectors +
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  834  				strip_sectors;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  835  	} else {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  836  		data_disks = conf->raid_disks - conf->max_degraded;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  837  		strip_sectors = conf->chunk_sectors;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  838  		r_sector_last = r_sector_first + (data_size >> 9);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  839  	}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  840  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  841  	pr_debug("%s: array sector first: %llu last: %llu\n", __func__,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  842  		 (unsigned long long)r_sector_first,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  843  		 (unsigned long long)r_sector_last);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  844  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  845  	/* if start and end is 4k aligned, use a 4k block */
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  846  	if (block_size == 512 &&
+c911c46c017c74 Yufen Yu          2020-07-18  847  	    (r_sector_first & (RAID5_STRIPE_SECTORS(conf) - 1)) == 0 &&
+c911c46c017c74 Yufen Yu          2020-07-18  848  	    (r_sector_last & (RAID5_STRIPE_SECTORS(conf) - 1)) == 0)
+c911c46c017c74 Yufen Yu          2020-07-18  849  		block_size = RAID5_STRIPE_SIZE(conf);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  850  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  851  	/* iterate through blocks in strip */
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  852  	for (i = 0; i < strip_sectors; i += (block_size >> 9)) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  853  		bool update_parity = false;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  854  		sector_t parity_sector;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  855  		struct md_rdev *parity_rdev;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  856  		struct stripe_head sh;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  857  		int disk;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  858  		int indent = 0;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  859  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  860  		pr_debug("%s:%*s iter %d start\n", __func__, indent, "", i);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  861  		indent += 2;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  862  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  863  		memset(page_address(page1), 0, PAGE_SIZE);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  864  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  865  		/* iterate through data member disks */
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  866  		for (disk = 0; disk < data_disks; disk++) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  867  			int dd_idx;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  868  			struct md_rdev *rdev;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  869  			sector_t sector;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  870  			sector_t r_sector = r_sector_first + i +
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  871  					    (disk * conf->chunk_sectors);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  872  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  873  			pr_debug("%s:%*s data member disk %d start\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  874  				 __func__, indent, "", disk);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  875  			indent += 2;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  876  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  877  			if (r_sector >= r_sector_last) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  878  				pr_debug("%s:%*s array sector %llu doesn't need parity update\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  879  					 __func__, indent, "",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  880  					 (unsigned long long)r_sector);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  881  				indent -= 2;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  882  				continue;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  883  			}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  884  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  885  			update_parity = true;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  886  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  887  			/* map raid sector to member disk */
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  888  			sector = raid5_compute_sector(conf, r_sector, 0,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  889  						      &dd_idx, NULL);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  890  			pr_debug("%s:%*s processing array sector %llu => data member disk %d, sector %llu\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  891  				 __func__, indent, "",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  892  				 (unsigned long long)r_sector, dd_idx,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  893  				 (unsigned long long)sector);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  894  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09 @895  			rdev = conf->disks[dd_idx].rdev;
+07719ff767dcd8 Artur Paszkiewicz 2017-09-29  896  			if (!rdev || (!test_bit(In_sync, &rdev->flags) &&
+07719ff767dcd8 Artur Paszkiewicz 2017-09-29  897  				      sector >= rdev->recovery_offset)) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  898  				pr_debug("%s:%*s data member disk %d missing\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  899  					 __func__, indent, "", dd_idx);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  900  				update_parity = false;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  901  				break;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  902  			}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  903  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  904  			pr_debug("%s:%*s reading data member disk %s sector %llu\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  905  				 __func__, indent, "", bdevname(rdev->bdev, b),
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  906  				 (unsigned long long)sector);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  907  			if (!sync_page_io(rdev, sector, block_size, page2,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  908  					REQ_OP_READ, 0, false)) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  909  				md_error(mddev, rdev);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  910  				pr_debug("%s:%*s read failed!\n", __func__,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  911  					 indent, "");
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  912  				ret = -EIO;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  913  				goto out;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  914  			}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  915  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  916  			ppl_xor(block_size, page1, page2);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  917  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  918  			indent -= 2;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  919  		}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  920  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  921  		if (!update_parity)
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  922  			continue;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  923  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  924  		if (pp_size > 0) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  925  			pr_debug("%s:%*s reading pp disk sector %llu\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  926  				 __func__, indent, "",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  927  				 (unsigned long long)(ppl_sector + i));
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  928  			if (!sync_page_io(log->rdev,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  929  					ppl_sector - log->rdev->data_offset + i,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  930  					block_size, page2, REQ_OP_READ, 0,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  931  					false)) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  932  				pr_debug("%s:%*s read failed!\n", __func__,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  933  					 indent, "");
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  934  				md_error(mddev, log->rdev);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  935  				ret = -EIO;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  936  				goto out;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  937  			}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  938  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  939  			ppl_xor(block_size, page1, page2);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  940  		}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  941  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  942  		/* map raid sector to parity disk */
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  943  		parity_sector = raid5_compute_sector(conf, r_sector_first + i,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  944  				0, &disk, &sh);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  945  		BUG_ON(sh.pd_idx != le32_to_cpu(e->parity_disk));
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09 @946  		parity_rdev = conf->disks[sh.pd_idx].rdev;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  947  
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  948  		BUG_ON(parity_rdev->bdev->bd_dev != log->rdev->bdev->bd_dev);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  949  		pr_debug("%s:%*s write parity at sector %llu, disk %s\n",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  950  			 __func__, indent, "",
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  951  			 (unsigned long long)parity_sector,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  952  			 bdevname(parity_rdev->bdev, b));
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  953  		if (!sync_page_io(parity_rdev, parity_sector, block_size,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  954  				page1, REQ_OP_WRITE, 0, false)) {
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  955  			pr_debug("%s:%*s parity write error!\n", __func__,
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  956  				 indent, "");
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  957  			md_error(mddev, parity_rdev);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  958  			ret = -EIO;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  959  			goto out;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  960  		}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  961  	}
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  962  out:
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  963  	if (page1)
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  964  		__free_page(page1);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  965  	if (page2)
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  966  		__free_page(page2);
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  967  	return ret;
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  968  }
+4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  969  
+
+:::::: The code at line 895 was first introduced by commit
+:::::: 4536bf9ba2d03404655586b07f8830b6f2106242 raid5-ppl: load and recover the log
+
+:::::: TO: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+:::::: CC: Shaohua Li <shli@fb.com>
+
 -- 
-js
-suse labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

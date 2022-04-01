@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D4A4EEA66
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865CF4EEA68
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344543AbiDAJ31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 05:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
+        id S1344555AbiDAJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344534AbiDAJ3Z (ORCPT
+        with ESMTP id S1344545AbiDAJaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 05:29:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27DD221B8D;
-        Fri,  1 Apr 2022 02:27:36 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 11:27:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648805255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A0QKk4sUzoou0ZzWNfIYO9gsM92vo3rk5/SdxP8/yFE=;
-        b=e9+em635APgoLqssrsv6kFNM75RsNlQAv0MsUxvgiqWXD8/j4F3AIoPIocvLF1Lc6gXaYY
-        FbnLq63KQRyyUDXHKYLI6MjPyJLQAv0uG3eEetRUpvuREyfaYCm/POibLyYF2VFzsKOsFv
-        9tDFJQpyu9KXKvqJE0q26abyN993UsmcSHbqC73BO/HJP7PBjoZysa2Gk/wtPOG91MP98Y
-        PVoefEZhmXUKORjwu/tdlb4C69j+j6reJeT/LuoFRFmxXQwB7cTqdMU1EFPnSCQYb8qI93
-        8AqRFFv1wG1EZINoFijF4jWRrBBLva3n62AZvPtmB/9VhZ0I2hpp9BSP2RrHIg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648805255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A0QKk4sUzoou0ZzWNfIYO9gsM92vo3rk5/SdxP8/yFE=;
-        b=I9QggolMgGWvvv1Prp90zDbdUwXY8WlunqftW8bYyXz78KlQ4Uv9IpHuhCn3/sMwK5+OzJ
-        /WDegpZUTGzSxCBw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH] kasan: Fix sleeping function called from invalid context
- in PREEMPT_RT
-Message-ID: <YkbFhgN1jZPTMfnS@linutronix.de>
-References: <20220401091006.2100058-1-qiang1.zhang@intel.com>
+        Fri, 1 Apr 2022 05:30:20 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06E1103D96
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:28:31 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id t2so2095677pfj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 02:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8RKpTKiU1sA+7C2AXK6LSzJS1T3BxhshmU+w3cvHKQE=;
+        b=hbGgPbq6pQGw/A55t8ZmzRWISJG+M6aJtIcqQtKX5min6lmTgeuXmjBJeqe9nF+MEe
+         h7ItB0pjbqm/2Pa6/vx2ng7HguhrxxwdVqa/GLFFWZzwSWKP/KzfL5nIFqWBXXPP2qOq
+         430aI6WerwZw7bEE3lBbQF5gQrnlzS/iGSnXcT4qE04dvslp1d3fAQ30vKWQ58r4EVm7
+         BnzU5/b2L7nBnkG59Iv7scs7dsfqZGvVWGr3tNJoqKHWjj5SMKwA5DHMpyTFo92pcWHw
+         t8G5QzTZSvYl5GjxTQ6WeodkZbfbvit+lui3HXSFbD1g7WPKkHqgnl2sgrbpvWHGzWZz
+         txGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8RKpTKiU1sA+7C2AXK6LSzJS1T3BxhshmU+w3cvHKQE=;
+        b=Fr8uB7ALUOxN4v2dFqo75GKbvRp2a7d9SKtzKPImPN4okuZJz23afCAaZC6sw0HQ5B
+         93Q3fHmNakDmVZAjkFmutEptsHWt0rRLZnYkBh0cAbXYghmQFWi56Qfw4rRIXX6bD8nq
+         XJNlH5LsdGTwoDeK8RQS3kRzek5tYSazqhH5Gj3OZjX084AhmyINRbe+/cjRUJtW8b6r
+         JnCteEpeDFma7LkJu883JkJb2t1ycoO3skTn+Xx1UAfWPiCTpVolgQKArVPOK4ruEjgl
+         AfcVvqt8qxk2ybtw1iSAcLGAECFicq0IGAe2xdKj3DAvLtVZLWE/iK/mKacSW3fHBu9X
+         pURA==
+X-Gm-Message-State: AOAM531fbF7A9pyE3B52LDH7hYDa/bMpdM6j0LBTzmUnHhP8PSBg7Z4m
+        N/s7dO3smaqr96+dObGuADpOUvuYYiyCSj76q14=
+X-Google-Smtp-Source: ABdhPJyHPYoEK2lUGZ2g9xEATWdlsalFZ6pHObcpGc3pFWALJ9ZXzC91NvqVV80Rlfcz4xqlRvdwzmoB+xhHjMov5WE=
+X-Received: by 2002:a05:6a00:c85:b0:4fa:f806:10f5 with SMTP id
+ a5-20020a056a000c8500b004faf80610f5mr9890996pfv.43.1648805311158; Fri, 01 Apr
+ 2022 02:28:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220401091006.2100058-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220330120246.25580-1-xiam0nd.tong@gmail.com> <20220330120246.25580-3-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220330120246.25580-3-xiam0nd.tong@gmail.com>
+From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Fri, 1 Apr 2022 11:28:19 +0200
+Message-ID: <CAMeQTsbZ4u=3pzu5p-4tt+kAiwmL2m+ZrCfzzv1vCMFeDAbDhQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] gma500: fix a missing break in cdv_intel_crtc_mode_set
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Zhao Yakui <yakui.zhao@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-01 17:10:06 [+0800], Zqiang wrote:
-> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1, name: swapper/0
-> preempt_count: 1, expected: 0
-> ...........
-> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt16-yocto-preempt-rt #22
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-> BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0x60/0x8c
-> dump_stack+0x10/0x12
->  __might_resched.cold+0x13b/0x173
-> rt_spin_lock+0x5b/0xf0
->  ___cache_free+0xa5/0x180
-> qlist_free_all+0x7a/0x160
-> per_cpu_remove_cache+0x5f/0x70
-> smp_call_function_many_cond+0x4c4/0x4f0
-> on_each_cpu_cond_mask+0x49/0xc0
-> kasan_quarantine_remove_cache+0x54/0xf0
-> kasan_cache_shrink+0x9/0x10
-> kmem_cache_shrink+0x13/0x20
-> acpi_os_purge_cache+0xe/0x20
-> acpi_purge_cached_objects+0x21/0x6d
-> acpi_initialize_objects+0x15/0x3b
-> acpi_init+0x130/0x5ba
-> do_one_initcall+0xe5/0x5b0
-> kernel_init_freeable+0x34f/0x3ad
-> kernel_init+0x1e/0x140
-> ret_from_fork+0x22/0x30
-> 
-> When the kmem_cache_shrink() be called, the IPI was triggered, the
-> ___cache_free() is called in IPI interrupt context, the local lock
-> or spin lock will be acquired. on PREEMPT_RT kernel, these lock is
-> replaced with sleepbale rt spin lock, so the above problem is triggered.
-> fix it by migrating the release action from the IPI interrupt context
-> to the task context on RT kernel.
+On Wed, Mar 30, 2022 at 2:03 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+>
+> Instead of exiting the loop as expected when an entry is found, the
+> list_for_each_entry() continues until the traversal is complete. It
+> could lead to a invalid reference to 'ddi_select' after the loop, and
+> could lead to multiple 'is_*' flags being set with true mistakely, too.
+>
+> The invalid reference to 'ddi_select' is here:
+>         cdv_dpll_set_clock_cdv(dev, crtc, &clock, is_lvds, ddi_select);
+>
+> To fix this, when found the entry, add a break after the switch statement.
+>
+> Fixes: d66760962d75 ("gma500: Program the DPLL lane based on the selected digitial port")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-I haven't seen that while playing with kasan. Is this new?
-Could we fix in a way that we don't involve freeing memory from in-IRQ?
-This could trigger a lockdep splat if the local-lock in SLUB is acquired
-from in-IRQ context on !PREEMPT_RT.
+Hi, this one is also already fixed in:
 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+commit b1a7d0ddb169774c3db5afe9e64124daea7fdd9f
+Author: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Tue Mar 22 14:17:38 2022 +0100
 
-Sebastian
+    drm/gma500: Make use of the drm connector iterator
+
+> ---
+>  drivers/gpu/drm/gma500/cdv_intel_display.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/gma500/cdv_intel_display.c b/drivers/gpu/drm/gma500/cdv_intel_display.c
+> index 94ebc48a4349..3e93019b17cb 100644
+> --- a/drivers/gpu/drm/gma500/cdv_intel_display.c
+> +++ b/drivers/gpu/drm/gma500/cdv_intel_display.c
+> @@ -616,6 +616,8 @@ static int cdv_intel_crtc_mode_set(struct drm_crtc *crtc,
+>                         DRM_ERROR("invalid output type.\n");
+>                         return 0;
+>                 }
+> +
+> +               break;
+>         }
+>
+>         if (dev_priv->dplla_96mhz)
+> --
+> 2.17.1
+>

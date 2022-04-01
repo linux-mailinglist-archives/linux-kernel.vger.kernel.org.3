@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835B94EE78A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA064EE79A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244960AbiDAFJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S244993AbiDAFLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234476AbiDAFJV (ORCPT
+        with ESMTP id S229921AbiDAFLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:09:21 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263A025FD42;
-        Thu, 31 Mar 2022 22:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648789653; x=1680325653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hqvHu/vWPMwXBYJFRV8AkDoq4xnOkIf3H0wEgyrnips=;
-  b=TDtN3ZXkoJA/nCoNFGzhB4OhBUAvihRkp7Gqo4GhqPtESUrpzZy5cB+f
-   hOf0ayGGMRgBzz9+i4L6wAWtPml7ENFcB8ILo8lH8mjBg6fatWsG8IZWR
-   GuDhabW2P+wtLMUkIKOJz4nN0eF7ayZ760a13Dkq2jA/kABtKIuC57P+0
-   LQ+MAEokCBLGjRC/nX9TOlTuKurGLEUsK0VEDYiinZ0aSMFs1tSwnQ4Gf
-   W3/zlhadnpGJIYGiyvesNGqco+XGEdjaAjAFh5EFbMZyRRjxW+DQr7v6m
-   1IDBpwvzW11frmNSFtgznEqqeOE1rMcY9JtmkzIUK88UuJLHq19pWYFtb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="284970399"
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="284970399"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:07:32 -0700
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="547650151"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:07:29 -0700
-Date:   Fri, 1 Apr 2022 13:07:26 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, Chao Gao <chao.gao@intel.com>
-Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
- TDX module
-Message-ID: <20220401050725.GA12103@gao-cwp>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
- <05aecc5a-e8d2-b357-3bf1-3d0cb247c28d@redhat.com>
- <20220314194513.GD1964605@ls.amr.corp.intel.com>
- <YkTvw5OXTTFf7j4y@google.com>
- <20220331170303.GA2179440@ls.amr.corp.intel.com>
- <YkYCNF3l62IxpmAD@google.com>
- <20220401032741.GA2806@gao-cwp>
+        Fri, 1 Apr 2022 01:11:35 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE0E1E7465;
+        Thu, 31 Mar 2022 22:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a4BwqPk85GvPQxl/KizQiBDKTaZ08byn7qa3hx7iA34=; b=KOJwv85m6nI+qdKCQfs1p86OPU
+        5FGO4RDDxrv9sy1p8lvRJtiwijAhVpxSL9BTzhqne/tfnoBq8NaP95VeLGBWolHJ2TZ+QLu6F8EuE
+        Tv4t4+0Itm7WEWNWgDlfdspUCl2Nw3fCn+g8Z7UlFJA1WKtzwrlvYtVuYWfH1f+Elg64l1KozGGQ8
+        WO4Dvih0mV6eDMlTyivd5mgpV8JUBTG1dmaTxa1tFf9P1JkD+H1HarQnX1QmjVAsYaZhj8ATcv52h
+        HWAJTu2xVXIX9YnJF4PtWohwzxMMxkxqDCv3alWVtz4d3Tg6SBxTnHgtc5GbvN7VoRpsFvVtmG/+V
+        VxO044TA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1na9XO-004Vvf-RF; Fri, 01 Apr 2022 05:09:30 +0000
+Date:   Thu, 31 Mar 2022 22:09:30 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Moore, Robert" <robert.moore@intel.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Benjamin =?iso-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "linux-atm-general@lists.sourceforge.net" 
+        <linux-atm-general@lists.sourceforge.net>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Harald Welte <laforge@gnumonks.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "wcn36xx@lists.infradead.org" <wcn36xx@lists.infradead.org>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "dennis.dalessandro@cornelisnetworks.com" 
+        <dennis.dalessandro@cornelisnetworks.com>,
+        "open list:HFI1 DRIVER" <linux-rdma@vger.kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Ingo Molnar <mingo@redhat.com>,
+        "3chas3@gmail.com" <3chas3@gmail.com>,
+        linux-input <linux-input@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Len Brown <lenb@kernel.org>,
+        "mike.marciniszyn@cornelisnetworks.com" 
+        <mike.marciniszyn@cornelisnetworks.com>,
+        Robert Richter <rric@kernel.org>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux@simtec.co.uk" <linux@simtec.co.uk>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Morse <james.morse@arm.com>,
+        netdev <netdev@vger.kernel.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH 05/22] acpica: Replace comments with C99 initializers
+Message-ID: <YkaJCjhyrRfAb3by@infradead.org>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+ <20220326165909.506926-5-benni@stuerz.xyz>
+ <CAHp75VeTXMAueQc_c0Ryj5+a8PrJ7gk-arugiNnxtAm03x7XTg@mail.gmail.com>
+ <BYAPR11MB3256D71C02271CD434959E0187E19@BYAPR11MB3256.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220401032741.GA2806@gao-cwp>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR11MB3256D71C02271CD434959E0187E19@BYAPR11MB3256.namprd11.prod.outlook.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The original reply was sent to Sean only by mistake. Add others back.
 
-On Fri, Apr 01, 2022 at 11:27:42AM +0800, Chao Gao wrote:
->On Thu, Mar 31, 2022 at 07:34:12PM +0000, Sean Christopherson wrote:
->>+Chao Gao
->>
->>On Thu, Mar 31, 2022, Isaku Yamahata wrote:
->>> On Thu, Mar 31, 2022 at 12:03:15AM +0000, Sean Christopherson <seanjc@google.com> wrote:
->>> > On Mon, Mar 14, 2022, Isaku Yamahata wrote:
->>> > > - VMXON on all pCPUs: The TDX module initialization requires to enable VMX
->>> > > (VMXON) on all present pCPUs.  vmx_hardware_enable() which is called on creating
->>> > > guest does it.  It naturally fits with the TDX module initialization at creating
->>> > > first TD.  I wanted to avoid code to enable VMXON on loading the kvm_intel.ko.
->>> > 
->>> > That's a solvable problem, though making it work without exporting hardware_enable_all()
->>> > could get messy.
->>> 
->>> Could you please explain any reason why it's bad idea to export it?
->>
->>I'd really prefer to keep the hardware enable/disable logic internal to kvm_main.c
->>so that all architectures share a common flow, and so that kvm_main.c is the sole
->>owner.  I'm worried that exposing the helper will lead to other arch/vendor usage,
->>and that will end up with what is effectively duplicate flows.  Deduplicating arch
->>code into generic KVM is usually very difficult.
->>
->>This might also be a good opportunity to make KVM slightly more robust.  Ooh, and
->>we can kill two birds with one stone.  There's an in-flight series to add compatibility
->>checks to hotplug[*].  But rather than special case hotplug, what if we instead do
->>hardware enable/disable during module load, and move the compatibility check into
->>the hardware_enable path?  That fixes the hotplug issue, gives TDX a window for running
->>post-VMXON code in kvm_init(), and makes the broadcast IPI less wasteful on architectures
->>that don't have compatiblity checks.
->
->Sounds good. But more time is wasted on compat checks on architectures
->that have them because they are done each time of enabling hardware.
->A solution for this is caching the result of kvm_arch_check_processor_compat().
->
->>
->>I'm thinking something like this, maybe as a modificatyion to patch 6 in Chao's
->>series, or more likely as a patch 7 so that the hotplug compat checks still get
->>in even
->
->>if the early hardware enable doesn't work on all architectures for some
->>reason.
->
->By "early", do you mean hardware enable during module loading or during CPU hotplug?
->
->And if below change is put into my series, kvm_arch_post_hardware_enable_setup()
->will be an empty function for all architectures until TDX series gets merged.
->So, I prefer to drop kvm_arch_post_hardware_enable_setup() and let TDX series
->introduce it.
+Please fix your mailer.  This mail is completely unreadable.

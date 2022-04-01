@@ -2,173 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2664EE70A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8044EE713
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244798AbiDAEKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S244803AbiDAESQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbiDAEK1 (ORCPT
+        with ESMTP id S233783AbiDAESO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:10:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A618211A34;
-        Thu, 31 Mar 2022 21:08:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CE8F61FCFE;
-        Fri,  1 Apr 2022 04:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648786115; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=stAERTlZOXYQ8hqsal36CeupS9MT75dVPrFy0RCK54s=;
-        b=AUd75ipOMfa7Ou4lvyPzy5YPdhfzhXVa5zlb2nrs2HKqOVpgSRCTocADY2TuMBAd6EbvvI
-        5uQeItZX4XQ9mJfPxKyLXXgNpyrIbCU5MEvI+/7vV5hPHKAGH/g6sJqTeFdA0LCCznWgZY
-        WXGDrGF8YJybUHurirpcxQQXcPdDdOI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648786115;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=stAERTlZOXYQ8hqsal36CeupS9MT75dVPrFy0RCK54s=;
-        b=HyWglv2bDxDqsK3EXqhXiPukE4oiciqPNMZk6YAhyvn9m0yew2BiDM39UDIphPEWCbPZUo
-        xrnirHgg6cBkW0Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B790B13B0C;
-        Fri,  1 Apr 2022 04:08:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9+9YHMF6RmLmXgAAMHmgww
-        (envelope-from <neilb@suse.de>); Fri, 01 Apr 2022 04:08:33 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 1 Apr 2022 00:18:14 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A814190B49
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:16:23 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id t2so1481725pfj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=74ylnfKmaB91Dte1fkFjw59xAp0QQDzufKTNNSjIwTM=;
+        b=IjxYUt/vk+zIhmyFu8wJhBbIb5BGluikpkcnV2MyKM/8k8TjHZ0RNA7kVX9FuKZGIY
+         3v+05iXk3OUqPrMfrhLgT3l1eNc1SSpZB6Q7Qd1sqGH2GHZlipdGYCfvvpxkxein58K2
+         Sm3JS0gKNqMqWTE8ceHHOVBw3ew86GQcmsmrLiwDA6BUAX3KLcy09/Zk8K4fsSlAWkq/
+         amfPizVf3cFguDZp0+wXKzDLqNOwx+fQ/3VGzo0hSvATzKbuh6Z3u0tbDqwavT/t+5Jw
+         pG5unepVtfSA2Ze9wUMdT5I4s1aQnvjSJnIeOZ77Z+A4uoM6X+o+NsxyTdbb9dhYmE3C
+         xi7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=74ylnfKmaB91Dte1fkFjw59xAp0QQDzufKTNNSjIwTM=;
+        b=jdPe6FZDvdAj6cp4zb3ZEzGZHyVbHNLRXFH2lTbFemaKWvn5n6PLRydUq3A03TWG82
+         dtD6Dldyxumcu1Y+ELKpZQkkZD5PQuAxGxdDSz33xXal8zynf9akD0RFvj/qaZXbydOp
+         IQaTs24oFSDL3ipcGdLopl0qcklCe84vxKjpKN8TfDvcVtoDNvt5oZblKDAc/cwCw50b
+         BNt13NSXBeLt2ulAnHekqCnCRqIX9qLZ69ymsKmACCcvtY2asE9yVyiiS3ToyjxVSyUP
+         42Q9ncRDzcBJb2JfIHNp8XzohUmjVMzfeijJamngAqoMcUZq2mR2f1pxM2RQwi0cpfpX
+         v+ew==
+X-Gm-Message-State: AOAM532AGuierok8zKIbmJ8OMjRHvqHP/dvjgCbpn70EclepftV4bJLP
+        9I3nHDp4GWcI/IYdx1Q9biU=
+X-Google-Smtp-Source: ABdhPJynM6eZ9mYnJarQcvXZQ/jPjrccbONLXCUpts+FGGHs1YsDxb+ay8uKx/aYPuFwKsJ9GYBzmQ==
+X-Received: by 2002:a63:2248:0:b0:382:1b3e:6336 with SMTP id t8-20020a632248000000b003821b3e6336mr13149492pgm.271.1648786582748;
+        Thu, 31 Mar 2022 21:16:22 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:6338:5657:1b69:f77])
+        by smtp.gmail.com with ESMTPSA id j11-20020a63230b000000b00372a08b584asm839851pgj.47.2022.03.31.21.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 21:16:22 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Ohad Sharabi <osharabi@habana.ai>
+Cc:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] habanalabs: fix build warning
+Date:   Thu, 31 Mar 2022 21:16:15 -0700
+Message-Id: <20220401041615.3296387-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Al Viro" <viro@zeniv.linux.org.uk>
-Cc:     linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "David Disseldorp" <ddiss@suse.de>
-Subject: [PATCH v4] VFS: filename_create(): fix incorrect intent.
-In-reply-to: <164877264126.25542.1271530843099472952@noble.neil.brown.name>
-References: <164877264126.25542.1271530843099472952@noble.neil.brown.name>
-Date:   Fri, 01 Apr 2022 15:08:30 +1100
-Message-id: <164878611050.25542.6758961460499392000@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+allmodconfig build fails on ARCH=xtensa with the following message:
 
-When asked to create a path ending '/', but which is not to be a
-directory (LOOKUP_DIRECTORY not set), filename_create() will never try
-to create the file.  If it doesn't exist, -ENOENT is reported.
+  drivers/misc/habanalabs/common/memory.c:153:49: error: cast from pointer
+	to integer of different size [-Werror=pointer-to-int-cast]
+	(u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
 
-However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
-->lookup() function, even though there is no intent to create.  This is
-misleading and can cause incorrect behaviour.
+Fix it by adding intermediate conversion to uintptr_t as in other places
+in that driver.
 
-If you try
-   ln -s foo /path/dir/
-
-where 'dir' is a directory on an NFS filesystem which is not currently
-known in the dcache, this will fail with ENOENT.
-As the name is not in the dcache, nfs_lookup gets called with
-LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
-lookup, with the expectation that a subsequent call to create the
-target will be made, and the lookup can be combined with the creation.
-In the case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
-made.  Instead filename_create() sees that the dentry is not (yet)
-positive and returns -ENOENT - even though the directory actually
-exists.
-
-So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent
-to create, and use the absence of these flags to decide if -ENOENT
-should be returned.
-
-Note that filename_parentat() is only interested in LOOKUP_REVAL, so we
-split that out and store it in 'reval_flag'.
-__looku_hash() then gets reval_flag combined with whatever create flags
-were determined to be needed.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
+Fixes: e8458e20e0a3 ("habanalabs: make sure device mem alloc is page aligned")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- fs/namei.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/misc/habanalabs/common/memory.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-ARG - v3 had a missing semi-colon.  Sorry.
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 3f1829b3ab5b..509657fdf4f5 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3673,18 +3673,14 @@ static struct dentry *filename_create(int dfd, struct=
- filename *name,
- {
- 	struct dentry *dentry =3D ERR_PTR(-EEXIST);
- 	struct qstr last;
-+	bool want_dir =3D lookup_flags & LOOKUP_DIRECTORY;
-+	unsigned int reval_flag =3D lookup_flags & LOOKUP_REVAL;
-+	unsigned int create_flags =3D LOOKUP_CREATE | LOOKUP_EXCL;
- 	int type;
- 	int err2;
- 	int error;
--	bool is_dir =3D (lookup_flags & LOOKUP_DIRECTORY);
-=20
--	/*
--	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
--	 * other flags passed in are ignored!
--	 */
--	lookup_flags &=3D LOOKUP_REVAL;
--
--	error =3D filename_parentat(dfd, name, lookup_flags, path, &last, &type);
-+	error =3D filename_parentat(dfd, name, reval_flag, path, &last, &type);
- 	if (error)
- 		return ERR_PTR(error);
-=20
-@@ -3698,11 +3694,13 @@ static struct dentry *filename_create(int dfd, struct=
- filename *name,
- 	/* don't fail immediately if it's r/o, at least try to report other errors =
-*/
- 	err2 =3D mnt_want_write(path->mnt);
- 	/*
--	 * Do the final lookup.
-+	 * Do the final lookup.  Suppress 'create' if there is a trailing
-+	 * '/', and a directory wasn't requested.
- 	 */
--	lookup_flags |=3D LOOKUP_CREATE | LOOKUP_EXCL;
-+	if (last.name[last.len] && !want_dir)
-+		create_flags =3D 0;
- 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
--	dentry =3D __lookup_hash(&last, path->dentry, lookup_flags);
-+	dentry =3D __lookup_hash(&last, path->dentry, reval_flag | create_flags);
- 	if (IS_ERR(dentry))
- 		goto unlock;
-=20
-@@ -3716,7 +3714,7 @@ static struct dentry *filename_create(int dfd, struct f=
-ilename *name,
- 	 * all is fine. Let's be bastards - you had / on the end, you've
- 	 * been asking for (non-existent) directory. -ENOENT for you.
- 	 */
--	if (unlikely(!is_dir && last.name[last.len])) {
-+	if (unlikely(!create_flags)) {
- 		error =3D -ENOENT;
- 		goto fail;
- 	}
---=20
-2.35.1
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index e008d82e4ba3..f0d373171d2a 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -150,9 +150,9 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+ 		for (i = 0 ; i < num_pgs ; i++) {
+ 			if (is_power_of_2(page_size))
+ 				phys_pg_pack->pages[i] =
+-						(u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+-										page_size, NULL,
+-										page_size);
++					(u64)(uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
++										 page_size, NULL,
++										 page_size);
+ 			else
+ 				phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+ 										page_size);
+-- 
+2.30.2
 

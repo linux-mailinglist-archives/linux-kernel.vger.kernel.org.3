@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AC84EE6F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1636F4EE6CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbiDADyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 23:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S244669AbiDADkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 23:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiDADyZ (ORCPT
+        with ESMTP id S244657AbiDADkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 23:54:25 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF11129279;
-        Thu, 31 Mar 2022 20:52:36 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id y6so1413869plg.2;
-        Thu, 31 Mar 2022 20:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LxPG2mpbpgdg5W4Fei+LZxCM5WvyBZ/Qj+QMe9CK3jY=;
-        b=VSGqhbbErXhfRKb/EP95CpvDlJaqHmF24MHDXj4qIGyl5U7DKiVi3Q295jWbHJlQZs
-         RUGDBqBsJaEmcxr03IlzhOvh6lEjuV+gW/lq8gea61XHQEx0gk2WwriznZrneVd4KcUm
-         O+Fh9/eYravoB7OomQjDQ7596DjtNbJRQZJlC9LdyFMBrA0Ky3D6IAGkhUNNF5g9Zm6h
-         66R61UcQqTzy6s511JH1W/5eCnEszYPkG6vuiS96pC4xLwCj8fPi+O+jcRC1Jn5150S9
-         u4+ZdCmsOa4pw2Zy4M+KqzUx4/iOu2KCDVd9rAirbN1xXT8OP9j4oTMPFihGvl6VYC5q
-         L3Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LxPG2mpbpgdg5W4Fei+LZxCM5WvyBZ/Qj+QMe9CK3jY=;
-        b=kfpIftmd0+h+YS9Pw/7xLc1LyPbw6PiIpWQJ94mMo4auRRiBQ0QwloEEF8TXRjAOcg
-         1XnAHoemUDf/6/dqejZV4l18g9y2F5nBafeYumUjjfQ1R05rQfbzqy45m84Ucn3h/eG2
-         1Uo29AsRN8g1/4d356mus61nAGWP8AxetBVbmPfsZNjfqLDYk+yEwpRgcUt2HD5Mj/zK
-         ltM0T3+5/BzeUI+ok0qoKmZ9dYiPREagq/6oW6vIQrZkujPzIbTYPFF+Y8X3P4Ye7TP8
-         8GfvQXqs4esW4A27OuOIwiDsT0U/ZdvvNPaELwjiMNOANghjkEmFPzVM520kWEo8AArX
-         Rt3A==
-X-Gm-Message-State: AOAM532BYpq2dbseCqJxH4YuQKDw5UoWczWaIyvxlWL8FOJ/1ARKyjP7
-        5CZxRAVdmlgYDIrqlVjAt2o=
-X-Google-Smtp-Source: ABdhPJwPRaIsAvn9tUV2ITPY/djkqas+NX3RSnWj4lMJM7obvGzz2BMpJTcjoYuaWqVJANY/xfVmTQ==
-X-Received: by 2002:a17:90b:504:b0:1c7:3095:fd78 with SMTP id r4-20020a17090b050400b001c73095fd78mr9628348pjz.142.1648785156200;
-        Thu, 31 Mar 2022 20:52:36 -0700 (PDT)
-Received: from localhost.localdomain (114-24-19-120.dynamic-ip.hinet.net. [114.24.19.120])
-        by smtp.gmail.com with ESMTPSA id 75-20020a62144e000000b004fae56c42a0sm966922pfu.211.2022.03.31.20.52.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 20:52:35 -0700 (PDT)
-From:   Zhiguang Ni <zhiguangni01@gmail.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhiguang Ni <zhiguangni01@gmail.com>
-Subject: [PATCH] d_path:fix missing include file in d_path.c
-Date:   Fri,  1 Apr 2022 11:52:21 +0800
-Message-Id: <20220401035221.454319-1-zhiguangni01@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 31 Mar 2022 23:40:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7E2F007;
+        Thu, 31 Mar 2022 20:38:32 -0700 (PDT)
+Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KV5Sf6zmczgYHJ;
+        Fri,  1 Apr 2022 11:36:50 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 1 Apr 2022 11:38:30 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 1 Apr
+ 2022 11:38:30 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
+Subject: [PATCH] blk-mq: add debugfs to print information for blk_mq_tag_set
+Date:   Fri, 1 Apr 2022 11:53:19 +0800
+Message-ID: <20220401035319.274260-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +50,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include internal.h to fix below error:
-fs/d_path.c:318:7: error: no previous prototype for ‘simple_dname’ [-Werror=missing-prototypes]
-  318 | char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
-In fact, this function is declared in fs/internal.h.
+This should be helpful to solve some problems.
 
-Signed-off-by: Zhiguang Ni <zhiguangni01@gmail.com>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- fs/d_path.c | 1 +
- 1 file changed, 1 insertion(+)
+ block/blk-mq-debugfs.c | 54 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 4 deletions(-)
 
-diff --git a/fs/d_path.c b/fs/d_path.c
-index e4e0ebad1f15..f9123b84f1ba 100644
---- a/fs/d_path.c
-+++ b/fs/d_path.c
-@@ -7,6 +7,7 @@
- #include <linux/slab.h>
- #include <linux/prefetch.h>
- #include "mount.h"
-+#include "internal.h"
+diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+index aa0349e9f083..3c6260df7a95 100644
+--- a/block/blk-mq-debugfs.c
++++ b/block/blk-mq-debugfs.c
+@@ -183,12 +183,52 @@ static ssize_t queue_state_write(void *data, const char __user *buf,
+ 	return count;
+ }
  
- struct prepend_buffer {
- 	char *buf;
++static void __flags_show(unsigned long flags, struct seq_file *m);
++
++static int queue_tag_set_show(void *data, struct seq_file *m)
++{
++	struct request_queue *q = data;
++	struct blk_mq_tag_set *set = q->tag_set;
++	int i, j;
++
++	seq_puts(m, "map:\n");
++	for (i = 0; i < set->nr_maps; ++i) {
++		struct blk_mq_queue_map *map = &set->map[i];
++
++		if (!map) {
++			seq_puts(m, "    NULL\n");
++			continue;
++		}
++
++		seq_printf(m, "    nr_queues %u offset %u map:", map->nr_queues,
++			   map->queue_offset);
++		if (!map->mq_map) {
++			seq_puts(m, " NULL\n");
++			continue;
++		}
++		for (j = 0; j < nr_cpu_ids; ++j)
++			seq_printf(m, " %u", map->mq_map[j]);
++		seq_puts(m, "\n");
++	}
++
++	seq_printf(m, "nr_hw_queues: %u\n", set->nr_hw_queues);
++	seq_printf(m, "queue_depth: %u\n", set->queue_depth);
++	seq_printf(m, "reserved_tags: %u\n", set->reserved_tags);
++	seq_printf(m, "cmd_size: %u\n", set->cmd_size);
++	seq_printf(m, "numa_node: %d\n", set->numa_node);
++	seq_printf(m, "timeout: %u\n", set->timeout);
++	__flags_show(set->flags, m);
++
++	return 0;
++}
++
+ static const struct blk_mq_debugfs_attr blk_mq_debugfs_queue_attrs[] = {
+ 	{ "poll_stat", 0400, queue_poll_stat_show },
+ 	{ "requeue_list", 0400, .seq_ops = &queue_requeue_list_seq_ops },
+ 	{ "pm_only", 0600, queue_pm_only_show, NULL },
+ 	{ "state", 0600, queue_state_show, queue_state_write },
+ 	{ "zone_wlock", 0400, queue_zone_wlock_show, NULL },
++	{ "tag_set", 0400, queue_tag_set_show, NULL },
+ 	{ },
+ };
+ 
+@@ -229,10 +269,9 @@ static const char *const hctx_flag_name[] = {
+ };
+ #undef HCTX_FLAG_NAME
+ 
+-static int hctx_flags_show(void *data, struct seq_file *m)
++static void __flags_show(unsigned long flags, struct seq_file *m)
+ {
+-	struct blk_mq_hw_ctx *hctx = data;
+-	const int alloc_policy = BLK_MQ_FLAG_TO_ALLOC_POLICY(hctx->flags);
++	const int alloc_policy = BLK_MQ_FLAG_TO_ALLOC_POLICY(flags);
+ 
+ 	seq_puts(m, "alloc_policy=");
+ 	if (alloc_policy < ARRAY_SIZE(alloc_policy_name) &&
+@@ -242,9 +281,16 @@ static int hctx_flags_show(void *data, struct seq_file *m)
+ 		seq_printf(m, "%d", alloc_policy);
+ 	seq_puts(m, " ");
+ 	blk_flags_show(m,
+-		       hctx->flags ^ BLK_ALLOC_POLICY_TO_MQ_FLAG(alloc_policy),
++		       flags ^ BLK_ALLOC_POLICY_TO_MQ_FLAG(alloc_policy),
+ 		       hctx_flag_name, ARRAY_SIZE(hctx_flag_name));
+ 	seq_puts(m, "\n");
++}
++
++static int hctx_flags_show(void *data, struct seq_file *m)
++{
++	struct blk_mq_hw_ctx *hctx = data;
++
++	__flags_show(hctx->flags, m);
+ 	return 0;
+ }
+ 
 -- 
-2.25.1
+2.31.1
 

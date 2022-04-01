@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F804EEEC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656B34EEECD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346651AbiDAOGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S1346669AbiDAOHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345764AbiDAOGK (ORCPT
+        with ESMTP id S239154AbiDAOHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:06:10 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B60C6579D;
-        Fri,  1 Apr 2022 07:04:21 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-dee0378ce7so2792975fac.4;
-        Fri, 01 Apr 2022 07:04:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=466muH8TK2/yIkrsl/4601LgxLVtXpA/vsSB0xSWFPM=;
-        b=rGqRBRgNfBRlr85/uY1NJ7xEeAUZNegM9wNH2XMUOgJZX//zgoSN/Ck7f7hQ379fUo
-         ABhNyLb/JbTS8WqOsEFi2gHUtT8Rng8N4/TsJXEva03ynq1P1wpjkSo2v3SJ8fHlZ1YL
-         v6mpUCbTGBpao0kZvaSCFRblUsZUgaED/x0GpnD2IFpuhvexsi/AIxemAh8PSbzfy77g
-         ZuiNQYhQQXk9Pgd5E9HBrnbTJLImYa2nnvPsa64kk+yqHkQOIeSgpB4W/55dmloLCGOW
-         zw8sbJFwS0jiM5kzzh7gFfOjcxIoeSFNt+PgNDbW1kxwI4hPLwgodtZdh6FJn/syxgFN
-         i8Ng==
-X-Gm-Message-State: AOAM531xSl1m0P/5fVw/wBDhe30QnLmQG0b7Ljo0nXFIPtdMw/NYnxQB
-        gYaen3RezgB2K1d3QcBw5g==
-X-Google-Smtp-Source: ABdhPJwDMMktaz/l2V8/Ke7d7S2/0T3HHlMyAQTdziceWQhTIjAzKSHejbo1nlHUsHjY+VnD9FuQHQ==
-X-Received: by 2002:a05:6870:c881:b0:de:ab7f:2401 with SMTP id er1-20020a056870c88100b000deab7f2401mr5031521oab.75.1648821860362;
-        Fri, 01 Apr 2022 07:04:20 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y67-20020a4a4546000000b0032476e1cb40sm1053435ooa.25.2022.04.01.07.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 07:04:18 -0700 (PDT)
-Received: (nullmailer pid 2984690 invoked by uid 1000);
-        Fri, 01 Apr 2022 14:04:17 -0000
-Date:   Fri, 1 Apr 2022 09:04:17 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     niravkumar.l.rabara@intel.com
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Add Altera hardware mutex driver
-Message-ID: <YkcGYcGVkai3eu1E@robh.at.kernel.org>
-References: <20220331214911.27194-1-niravkumar.l.rabara@intel.com>
+        Fri, 1 Apr 2022 10:07:39 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234C2215460;
+        Fri,  1 Apr 2022 07:05:49 -0700 (PDT)
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 231E5YY8009590;
+        Fri, 1 Apr 2022 23:05:35 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 231E5YY8009590
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648821935;
+        bh=lYJwx2t5MLUO2TNFBKPB81K9TnxZtWUlueGyUcuAKt4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DeUicgDCLU0/I7bvjyVh/zIhL5pGUu8QUaRmKYeYQSP6Q6Qmfchk/WNw10t+R+HlG
+         XiHlRDhM4WmNiROyhitLzGpezCwBrUsSGmT0SNFn6oaDMVnPJd4J+6CYrbBlAZYpNE
+         2FJkiITK6nB0jbG5qWAWRuBJVu98a69hcNTKJnE7eUO9iP0UVe6GWpTrzxSy9aWPzQ
+         7NJktYBq0gOQylUJXQ0C0gwtQKSP3h1oo/eHLaTRXW/mAr+SyZLrheFxjeToeI1k8H
+         i3pHT5NBJKYtpWhcrcNCVnN7WVJPJiPyz9HjjlmiHNi04b081YylpguE4JhLdzqE/y
+         Loiieqy7orymQ==
+X-Nifty-SrcIP: [209.85.216.49]
+Received: by mail-pj1-f49.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so2641827pjo.2;
+        Fri, 01 Apr 2022 07:05:34 -0700 (PDT)
+X-Gm-Message-State: AOAM531cAmEKxJR4malj11OPZ5ll6HZP/w7QoEJRfRvYe58QqpBdksEu
+        OnuuhjSbzj4Puy0CDNydCOOlb13ek/JJc56Sw6M=
+X-Google-Smtp-Source: ABdhPJyXJLqPhis5QHe17xlqCcalXu5IQ0bAvKEu3AgBBYL3izojvU6lopGH/jRrVFJaqFeKZg0NsEkHRqBFanL3wOk=
+X-Received: by 2002:a17:90b:4d01:b0:1c9:ec79:1b35 with SMTP id
+ mw1-20020a17090b4d0100b001c9ec791b35mr11774590pjb.77.1648821934090; Fri, 01
+ Apr 2022 07:05:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331214911.27194-1-niravkumar.l.rabara@intel.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+References: <20220330182329.52310-1-s23265@iisve.it>
+In-Reply-To: <20220330182329.52310-1-s23265@iisve.it>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 1 Apr 2022 23:04:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARvEsh3+dix+EdcXnm2L0rh8hndQD5N2vyc0q_c0Vf7gQ@mail.gmail.com>
+Message-ID: <CAK7LNARvEsh3+dix+EdcXnm2L0rh8hndQD5N2vyc0q_c0Vf7gQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: use hostname -s along uname to obtain LINUX_COMPILE_HOST
+To:     FraSharp <f.duca00@gmail.com>
+Cc:     Francesco Duca <s23265@iisve.it>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,144 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 05:49:11AM +0800, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> 
-> Altera hardware mutex soft IP provides hardware assistance for
-> synchronization and mutual exclusion between processors in
-> asymmetric/symmetric multiprocessing (AMP/SMP) system or
-> multi processes/threads in uniprocessor system.
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On Thu, Mar 31, 2022 at 3:23 AM FraSharp <f.duca00@gmail.com> wrote:
+>
+> From: Francesco Duca <s23265@iisve.it>
+>
+> * On some systems (e.g. macOS), using commands like 'uname -n' or
+>   'hostname' will print something similar to "hostname.domain"
+
+
+Not only macOS, but also on Linux systems such as Fedora, Debian.
+
+'uname -s' or 'hostname' prints "hostname.domain"
+
+
+
+
+>   ("Francescos-Air.fritz.box" for example), which is very annoying.
+
+I do not think so.
+
+
+>   What works instead is 'hostname -s', which will only write hostname
+>   without the domain ("Francescos-Air" for example),
+>   but also keep 'uname -n', as some systems as Arch Linux does not have
+>   'hostname' as command.
+
+If so, on Arch Linux, will this patch spit
+  hostname: command not found
+error message because   "2>/dev/null" is missing ?
+
+
+And, the intention of this patch is,
+print  Francescos-Air if the 'hostname -s' command is available,
+but Francescos-Air.fritz.box  otherwise, correct  ?
+
+
+
+
+
+
+>
+> * This commit is complementary to
+>   1e66d50ad3a1dbf0169b14d502be59a4b1213149
+>   ("kbuild: Use uname for LINUX_COMPILE_HOST detection")
+>
+> Signed-off-by: Francesco Duca <s23265@iisve.it>
 > ---
->  .../bindings/misc/altera-hwmutex.yaml         |  47 +++
+>  scripts/mkcompile_h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
+> index ca40a5258..6054e3eee 100755
+> --- a/scripts/mkcompile_h
+> +++ b/scripts/mkcompile_h
+> @@ -34,7 +34,7 @@ else
+>         LINUX_COMPILE_BY=$KBUILD_BUILD_USER
+>  fi
+>  if test -z "$KBUILD_BUILD_HOST"; then
+> -       LINUX_COMPILE_HOST=`uname -n`
+> +       LINUX_COMPILE_HOST=$(hostname -s || uname -n)
+>  else
+>         LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
+>  fi
+> --
+> 2.32.0 (Apple Git-132)
+>
 
-Bindings should be separate patch. We have a subsystem/class for this 
-type of h/w. The binding (and driver) belongs there.
 
->  drivers/misc/Kconfig                          |   6 +
->  drivers/misc/Makefile                         |   1 +
->  drivers/misc/altera_hwmutex.c                 | 321 ++++++++++++++++++
->  include/linux/altera_hwmutex.h                |  42 +++
->  5 files changed, 417 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/altera-hwmutex.yaml
->  create mode 100644 drivers/misc/altera_hwmutex.c
->  create mode 100644 include/linux/altera_hwmutex.h
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/altera-hwmutex.yaml b/Documentation/devicetree/bindings/misc/altera-hwmutex.yaml
-> new file mode 100644
-> index 000000000000..57a9ea19c563
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/altera-hwmutex.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/altera-hwmutex.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Altera hardware mutex
-> +
-> +maintainers:
-> +  - Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> +
-> +description:
-> +  Altera hardware mutex can provide hardware assistance for synchronization
-> +  and mutual exclusion between processors in asymmetric/symmetric multiprocessing
-> +  (AMP/SMP) system or multi processes/threads in uniprocessor system.
-
-Link to IP documentation?
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - altr,hwmutex-1.0
-
-1.0? I feel like you made up this version.
-
-> +      - client-1.0
-
-No.
-
-> +
-> +  reg:
-> +    items:
-> +      - description: physical address of hw mutex and length of memory mapped
-> +         region
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    mutex0: mutex0@100 {
-> +        compatible = "altr,hwmutex-1.0";
-> +        reg = <0x100 0x8>;
-> +    };
-> +
-> +
-> +   #Example of mutex's client node that includes mutex phandle    
-> +   #mclient0: mclient0@200 {
-> +   #     compatible = "client-1.0";
-> +   # 	reg = <0x200 0x10>;
-> +   #	mutex = <&mutex0>;
-
-We have a standard binding for this.
-
-> +   # };
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 0f5a49fc7c9e..707acf740c6f 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -435,6 +435,12 @@ config DW_XDATA_PCIE
->  
->  	  If unsure, say N.
->  
-> +config ALTERA_HWMUTEX
-> +       tristate "Altera Hardware Mutex"
-> +       help
-> +         This option enables device driver support for Altera Hardware Mutex.
-> +         Say Y here if you want to use the Altera hardware mutex support.
-> +
->  config PCI_ENDPOINT_TEST
->  	depends on PCI
->  	select CRC32
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index a086197af544..6fcbbd36b3cf 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -40,6 +40,7 @@ obj-$(CONFIG_PCH_PHUB)		+= pch_phub.o
->  obj-y				+= ti-st/
->  obj-y				+= lis3lv02d/
->  obj-$(CONFIG_ALTERA_STAPL)	+=altera-stapl/
-> +obj-$(CONFIG_ALTERA_HWMUTEX)   += altera_hwmutex.o
->  obj-$(CONFIG_INTEL_MEI)		+= mei/
->  obj-$(CONFIG_VMWARE_VMCI)	+= vmw_vmci/
->  obj-$(CONFIG_LATTICE_ECP3_CONFIG)	+= lattice-ecp3-config.o
-> diff --git a/drivers/misc/altera_hwmutex.c b/drivers/misc/altera_hwmutex.c
-> new file mode 100644
-> index 000000000000..45f98e4b13d0
-> --- /dev/null
-> +++ b/drivers/misc/altera_hwmutex.c
-> @@ -0,0 +1,321 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright Intel Corporation (C) 2022. All rights reserved
-> + *
-> + * This program is free software; you can redistribute it and/or modify it
-> + * under the terms and conditions of the GNU General Public License,
-> + * version 2, as published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope it will be useful, but WITHOUT
-> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> + * more details.
-> + *
-> + * You should have received a copy of the GNU General Public License along with
-> + * this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Drop the license text. You only need SPDX-License-Identifier
+-- 
+Best Regards
+Masahiro Yamada

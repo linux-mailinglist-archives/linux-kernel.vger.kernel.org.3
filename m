@@ -2,126 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E024EE5DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4E54EE5DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243913AbiDACCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S243927AbiDACDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiDACCd (ORCPT
+        with ESMTP id S236903AbiDACDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:02:33 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514751A6E68
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:00:44 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id r23so1375846edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:00:44 -0700 (PDT)
+        Thu, 31 Mar 2022 22:03:11 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8ED1B30BD
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:01:23 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id k14so1287231pga.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hNRvmRxRt7nKkMkW5WxVDCU1Iy6gNw03vGAy8sCh0g0=;
-        b=q6NNPzOLkXZoGfXiZdO6mALYkbFbSKmWy7A/tlX6Ss2tLm8FmRZ8T71Q/8D3NeX97/
-         hPUgZhJhXFhu0gQd8NtmHv15QqJFEdkFHn/jlBcOXNQE9qpi7voVdSP7yGofeQEt1b54
-         ztud9MOJqhvE0WBgfJ2Nx5WfghihikU4K7OZaS7TJfHaYggeDA91Ntzas5EODulNCD7K
-         nwMwrH/3On7bY8q6UQCsEEEOvRkUAd7YU429FvG/v+6C8CTNjygjx/Kr8+PZGJLJiXxv
-         D0V2g144e1V6ldVXWxgCQHCB4J/ivuKw9yqwG0M2kg2fHpzkGy6iuP0hFa+Iqdy9eTay
-         7nZw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=inp9kuKjhcCLTA1TO6bZG50bHXwwzvGRunHbg0VDKic=;
+        b=SI/wkGZSO7rD48uN4BWXpx6niBQ5n6IQZ0XrvOha2hO9JYf6qnh35WLUCCrN9BoXhG
+         4Pzbqszklq7U+YWi6+uZR/x4kx2Nif9znv3m5N/yDazmW/3ZQP2CpKvgEQQtIDmlldkg
+         fMDB3yOMCVhKpwuu11cRmHpnVvQCk2c87Ta4zgKDP5wqzXbpV/KAHE4yPFl9E3Z2I3uJ
+         kn54xeV+HaS8CfMS+IGBwiK87R7D0ylyf5O5tF6QBEuUqYCPoUPYyU+shQ2gRWdMvUks
+         PuxA/AqVzcsb4YvP1Yz34eGVzoU8+gGEgO0nKu7ZbHxbevGRwM3L9xSaPq6qa3swviSH
+         ItYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hNRvmRxRt7nKkMkW5WxVDCU1Iy6gNw03vGAy8sCh0g0=;
-        b=vVggSF2CYQUnIV1unJRyuxs6FtRP7y6bTzCoE2cdBV18zCShBGVm7UaiOWChkpNyO9
-         1pkYOWQhbNoc2J4qfOPE71rSCInSz37ECcJgNhPZ5JmOvxeiC9ftxq1eYk0s2Pfn2+J2
-         jTKZWnzWwh88wNPxt6O3JjNtTnDKnQMpG3ovR2BDKJUT2RXNTURxAZvmI3t+H7zxRZk5
-         ct3nso8uS58Wivc1stPTH3vezfs6PJWA6oinAv5hO96+1LLVsOW4F6P/GO6Xi5P1nguw
-         VULl5SRTwaWrDXElJYBaWHU7q55oHZ+OFBJRlV20T1rqEDLVL1X5jOQvd5jCJKcACKP+
-         4oYQ==
-X-Gm-Message-State: AOAM532ZpFwE7YfCcZ5HjeC0L+6AR35qqAPWlkfKlSTzWBbv40RK3897
-        nbyMaLhTZgafwcEZevNjDs9XPBWwv+tAzcVVzSM=
-X-Google-Smtp-Source: ABdhPJz6SbZ2JP++j7i1h9VR9R6xNzNBB/VbD5rE7Bch3cokupLLnU+lmRSu3tF7qoUdQXORvWkmU99jmdhFflmeEkY=
-X-Received: by 2002:a05:6402:2788:b0:41b:c871:715b with SMTP id
- b8-20020a056402278800b0041bc871715bmr3590672ede.53.1648778442797; Thu, 31 Mar
- 2022 19:00:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=inp9kuKjhcCLTA1TO6bZG50bHXwwzvGRunHbg0VDKic=;
+        b=Cb/22goG8DuzqPnXyeYyz4niZOpRGIkYG7d4GBW0HVR8qZScC0Zvx0ZnFEWQjXWDDW
+         G5zFDGUXv8fHZZum8BwSbM64Fc42sQbzbbanbE3UzKUZ300dlKGKe3yJmorD2k5P2qW5
+         k2z36Gv0ioviP+Lh/yqKcL+RkI6Nc6wIoa3BW8vjXW0USLPqQFHtjksKhNQQtJ2i48GW
+         VlXXtDKG+kuo9+pQlkSLzoyfEdcS4PNf1ta709AmfkPN2rWbQBr3QIJCJs6tdF541ppW
+         QPSxnY5vW0haE/8EQW9wYdmUJZN6VecDFIJD7hkCrved2sR1/7GZrxNYfK4Y61KWtkMK
+         m6og==
+X-Gm-Message-State: AOAM533567nPuW1rBCkmDgmkK/dUM50l6/cR1LZB4IhpeADrvfsW/Yh7
+        beq+B05giYaWK16PX4ipW2kEFw==
+X-Google-Smtp-Source: ABdhPJyLL3SdY6NIy8qFZ4rOg3G6n19qIWtzib0xs31/VSRF6zM7QszMHFllBq9XXMt8yIf+wClntA==
+X-Received: by 2002:a63:384e:0:b0:374:ae28:71fc with SMTP id h14-20020a63384e000000b00374ae2871fcmr13138721pgn.159.1648778482243;
+        Thu, 31 Mar 2022 19:01:22 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j11-20020a63230b000000b00372a08b584asm604023pgj.47.2022.03.31.19.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 19:01:21 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 02:01:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Gao Chao <chao.gao@intel.com>
+Subject: Re: [PATCH v7 7/8] KVM: x86: Allow userspace set maximum VCPU id for
+ VM
+Message-ID: <YkZc7cMsDaR5S2hM@google.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+ <20220304080725.18135-8-guang.zeng@intel.com>
 MIME-Version: 1.0
-References: <20220316135047.188122-1-dzm91@hust.edu.cn> <CAHUa44FiumE97drc11vBdr46Zh2uWysk--bn2AZnaw==5bTphA@mail.gmail.com>
- <CAD-N9QU=_M2_=GsQii8R85o46PnsxcLqJGFKA0UANbRWAFnjHQ@mail.gmail.com>
-In-Reply-To: <CAD-N9QU=_M2_=GsQii8R85o46PnsxcLqJGFKA0UANbRWAFnjHQ@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Fri, 1 Apr 2022 10:00:16 +0800
-Message-ID: <CAD-N9QWB9HGY=DU1gazbt3e8p4GdG-=CJtD26M59AgAhbagusA@mail.gmail.com>
-Subject: Re: [PATCH] tee: optee: add missing mutext_destroy in optee_ffa_probe
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        op-tee@lists.trustedfirmware.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304080725.18135-8-guang.zeng@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 5:33 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> On Thu, Mar 24, 2022 at 4:29 PM Jens Wiklander
-> <jens.wiklander@linaro.org> wrote:
-> >
-> > On Wed, Mar 16, 2022 at 2:51 PM Dongliang Mu <dzm91@hust.edu.cn> wrote:
-> > >
-> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> > >
-> > > The error handling code of optee_ffa_probe misses the mutex_destroy of
-> > > ffa.mutex when mutext_init succeeds.
-> > >
-> > > Fix this by adding mutex_destory of ffa.mutex at the error handling part
-> > >
-> > > Fixes: aceeafefff73 ("optee: use driver internal tee_context for some rpc")
-> >
-> > I believe this should be
-> > Fixes: 4615e5a34b95 ("optee: add FF-A support")
-> > don't you agree?
->
-> Hi Jen,
->
-> This commit 4615e5a34b95 is more suitable since mutex_init is introduced here.
->
-> Why did I label the commit aceeafefff73?
->
-> Because this commit tried to fix the issue, but only added one
-> mutex_destroy for &optee->call_queue.mutex, misses &optee->ffa.mutex.
->
+On Fri, Mar 04, 2022, Zeng Guang wrote:
+> Introduce new max_vcpu_id in KVM for x86 architecture. Userspace
+> can assign maximum possible vcpu id for current VM session using
+> KVM_CAP_MAX_VCPU_ID of KVM_ENABLE_CAP ioctl().
+> 
+> This is done for x86 only because the sole use case is to guide
+> memory allocation for PID-pointer table, a structure needed to
+> enable VMX IPI.
+> 
+> By default, max_vcpu_id set as KVM_MAX_VCPU_IDS.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  6 ++++++
+>  arch/x86/kvm/x86.c              | 11 +++++++++++
 
-ping?
+The new behavior needs to be documented in api.rst.
 
-> >
-> > Thanks,
-> > Jens
-> >
-> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > ---
-> > >  drivers/tee/optee/ffa_abi.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> > > index f744ab15bf2c..30a6119a2b16 100644
-> > > --- a/drivers/tee/optee/ffa_abi.c
-> > > +++ b/drivers/tee/optee/ffa_abi.c
-> > > @@ -894,6 +894,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
-> > >         rhashtable_free_and_destroy(&optee->ffa.global_ids, rh_free_fn, NULL);
-> > >         optee_supp_uninit(&optee->supp);
-> > >         mutex_destroy(&optee->call_queue.mutex);
-> > > +       mutex_destroy(&optee->ffa.mutex);
-> > >  err_unreg_supp_teedev:
-> > >         tee_device_unregister(optee->supp_teedev);
-> > >  err_unreg_teedev:
-> > > --
-> > > 2.25.1
-> > >
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 6dcccb304775..db16aebd946c 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1233,6 +1233,12 @@ struct kvm_arch {
+>  	hpa_t	hv_root_tdp;
+>  	spinlock_t hv_root_tdp_lock;
+>  #endif
+> +	/*
+> +	 * VM-scope maximum vCPU ID. Used to determine the size of structures
+> +	 * that increase along with the maximum vCPU ID, in which case, using
+> +	 * the global KVM_MAX_VCPU_IDS may lead to significant memory waste.
+> +	 */
+> +	u32 max_vcpu_id;
+
+This should be max_vcpu_ids.  I agree the it _should_ be max_vcpu_id, but KVM's API
+for this is awful and we're stuck with the plural name.
+
+>  };
+>  
+>  struct kvm_vm_stat {
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4f6fe9974cb5..ca17cc452bd3 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5994,6 +5994,13 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		kvm->arch.exit_on_emulation_error = cap->args[0];
+>  		r = 0;
+>  		break;
+> +	case KVM_CAP_MAX_VCPU_ID:
+
+I think it makes sense to change kvm_vm_ioctl_check_extension() to return the
+current max, it is a VM-scoped ioctl after all.
+
+Amusingly, I think we also need a capability to enumerate that KVM_CAP_MAX_VCPU_ID
+is writable.  
+
+> +		if (cap->args[0] <= KVM_MAX_VCPU_IDS) {
+> +			kvm->arch.max_vcpu_id = cap->args[0];
+
+This needs to be rejected if kvm->created_vcpus > 0, and that check needs to be
+done under kvm_lock, otherwise userspace can bump the max ID after KVM allocates
+per-VM structures and trigger buffer overflow.
+
+> +			r = 0;
+> +		} else
+
+If-elif-else statements need curly braces for all paths if any path needs braces.
+Probably a moot point for this patch due to the above changes.
+
+> +			r = -E2BIG;
+
+This should be -EINVAL, not -E2BIG.
+
+E.g.
+
+	case KVM_CAP_MAX_VCPU_ID:
+		r = -EINVAL;
+		if (cap->args[0] > KVM_MAX_VCPU_IDS)
+			break;
+
+		mutex_lock(&kvm->lock);
+		if (!kvm->created_vcpus) {
+			kvm->arch.max_vcpu_id = cap->args[0];
+			r = 0;
+		}
+		mutex_unlock(&kvm->lock);
+		break;
+
+
+> +		break;
+>  	default:
+>  		r = -EINVAL;
+>  		break;
+> @@ -11067,6 +11074,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  	struct page *page;
+>  	int r;
+>  
+> +	if (vcpu->vcpu_id >= vcpu->kvm->arch.max_vcpu_id)
+> +		return -E2BIG;
+
+Same here, it should be -EINVAL.
+
+> +
+>  	vcpu->arch.last_vmentry_cpu = -1;
+>  	vcpu->arch.regs_avail = ~0;
+>  	vcpu->arch.regs_dirty = ~0;
+> @@ -11589,6 +11599,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+>  	spin_lock_init(&kvm->arch.hv_root_tdp_lock);
+>  	kvm->arch.hv_root_tdp = INVALID_PAGE;
+>  #endif
+> +	kvm->arch.max_vcpu_id = KVM_MAX_VCPU_IDS;
+>  
+>  	INIT_DELAYED_WORK(&kvm->arch.kvmclock_update_work, kvmclock_update_fn);
+>  	INIT_DELAYED_WORK(&kvm->arch.kvmclock_sync_work, kvmclock_sync_fn);
+> -- 
+> 2.27.0
+> 

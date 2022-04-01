@@ -2,141 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E3B4EFC2C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1F04EFC2F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352081AbiDAVfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S1352789AbiDAVf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiDAVfT (ORCPT
+        with ESMTP id S235549AbiDAVf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:35:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE0013A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:33:28 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so3680210pjo.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BPUOt269UZx0fP/hcR9t05VLgduxdLJMOsB45EbEuuM=;
-        b=TBnXvmiM1XKxbsASblG7IqI4HZnjRUmSQyliD72UlcrYAd7Ec2hH8DV26z3NYobNkc
-         /7B2cBARUlkAcsELj9vBUeqJm13FbqkQvw5JKG4xjrXnMQqDjXWpzUf2mPu585+SpIgZ
-         KXM43VPi+LKLbG3Y0RM4AasfwxxwIwJte4YyM3q1WRfWC0E8+ZyiiWypIX+7+gb1R3ZL
-         h5U/QWG+oZDE82ST6gr+Ie1WUkj7N0dKpsGcjSKaDDaXd69QlqBLEFouY7YHGfbn5Opy
-         eAlQMHuPGBOqZx8WUzETvPit6Yg1HjWyo6ldmBJ1AX60k1t08dAUOf9Nzu4gIi98gAlI
-         0Hrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BPUOt269UZx0fP/hcR9t05VLgduxdLJMOsB45EbEuuM=;
-        b=cK5e6fcTeF9z//2homLcxeRv4QaJYFFcxseKORkEjzhndlpxMOqL0+nkAw4twVYxhB
-         eYMBr0tTxC4G0h7pNbsdSqIpvxCZkFe/FcuoiwWdHEjgycHZMQ335s512V4RwQyKwx+d
-         rBF7rAuhjcJYwaHhmniqdVY6v4/WliBm5Lxj3vY8Onoqt4Ct2aCNdoTvg1n4ZGN0epb8
-         vJe3c5/MkLxdS/I797yN7ZeyCE6Z+h5L31a5lG2KUro2X6ulOQk6rioFhGuXmaDzvEpf
-         sGh+O77MpPNAlEaDcpEiaMfGyfzWpdoHZQdotOBSoJ4RWqxEOc5xc/zlNk9ZiyiG6lTN
-         L2zQ==
-X-Gm-Message-State: AOAM531tFyubR9ReAND5duWPIPFue5tmmxcfaAc7G0rtc2gLhZ6D2FvY
-        QM+8h11XNkbeLuNDdv7nQzLIUo1eqnmOR7EJFcm76Q==
-X-Google-Smtp-Source: ABdhPJw5Abq6FL4cAVZAWaHZLdJogCtOBAxKooOTnZofkq1g6qvBl7rvy5TJDGMaSIB7JzT6LFfGjVlYeROYkFJ8xlU=
-X-Received: by 2002:a17:90b:4a01:b0:1c9:a552:f487 with SMTP id
- kk1-20020a17090b4a0100b001c9a552f487mr14253315pjb.68.1648848808052; Fri, 01
- Apr 2022 14:33:28 -0700 (PDT)
+        Fri, 1 Apr 2022 17:35:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE942632A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648848845; x=1680384845;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gQWF+3nXXQTVuvvNU3qL73QaPoVzfmUyNSXaNlhBWWg=;
+  b=J/Xl9068GygZmUU/Mv8TLpSKOVgGPTkY9VJ4mrAU0gkrCl9fZAnoJIJ8
+   FhCy486YYGqtYF9klb+fp/rDnF7vLGxXwA3/4S1vtjUTWTL1rs/dWyZz9
+   Lh66k9yhA6jbNWelOE4YP4R/P4b/lg3fCx7u2kUb0X6h9tMKeQLLNN6WO
+   2+kpitB/fdiDqsCMDoXVh6bPxCWYvIENca7lDDUPCATD6g/g3E1cY+CWG
+   ifxHu9kQnghxie1+DPYN//lhVMf28bAoI9vGivMENIfiBbwyiX1RjjJoE
+   S/YfYZsVfbuBi/uDWmI8pANU0c3GXX5i2Rqe0ElpFMObnSqV6iSyObCXo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="346673491"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="346673491"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 14:34:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="656042806"
+Received: from kmislam-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.112.89])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 14:34:05 -0700
+Date:   Fri, 1 Apr 2022 14:34:04 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: rtl8723bs: simplify control flow
+Message-ID: <YkdvzIyz/WGlm2uy@iweiny-desk3>
+References: <20220401114635.GA567659@euclid>
 MIME-Version: 1.0
-References: <20220331154555.422506-1-milan@mdaverde.com> <20220331154555.422506-4-milan@mdaverde.com>
- <8457bd5f-0541-e128-b033-05131381c590@isovalent.com> <CAEf4BzaqqZ+bFamrTXSzjgXgAEkBpCTmCffNR-xb8SwN6TNaOw@mail.gmail.com>
-In-Reply-To: <CAEf4BzaqqZ+bFamrTXSzjgXgAEkBpCTmCffNR-xb8SwN6TNaOw@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Fri, 1 Apr 2022 22:33:16 +0100
-Message-ID: <CACdoK4JbhtOpQeGo+NUh5t3nQG8No8Di6ce-9gwgNw3az2Fu=A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] bpf/bpftool: handle libbpf_probe_prog_type errors
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Milan Landaverde <milan@mdaverde.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401114635.GA567659@euclid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 at 19:42, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Apr 1, 2022 at 9:05 AM Quentin Monnet <quentin@isovalent.com> wrote:
-> >
-> > 2022-03-31 11:45 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
-> > > Previously [1], we were using bpf_probe_prog_type which returned a
-> > > bool, but the new libbpf_probe_bpf_prog_type can return a negative
-> > > error code on failure. This change decides for bpftool to declare
-> > > a program type is not available on probe failure.
-> > >
-> > > [1] https://lore.kernel.org/bpf/20220202225916.3313522-3-andrii@kernel.org/
-> > >
-> > > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
-> > > ---
-> > >  tools/bpf/bpftool/feature.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-> > > index c2f43a5d38e0..b2fbaa7a6b15 100644
-> > > --- a/tools/bpf/bpftool/feature.c
-> > > +++ b/tools/bpf/bpftool/feature.c
-> > > @@ -564,7 +564,7 @@ probe_prog_type(enum bpf_prog_type prog_type, bool *supported_types,
-> > >
-> > >               res = probe_prog_type_ifindex(prog_type, ifindex);
-> > >       } else {
-> > > -             res = libbpf_probe_bpf_prog_type(prog_type, NULL);
-> > > +             res = libbpf_probe_bpf_prog_type(prog_type, NULL) > 0;
-> > >       }
-> > >
-> > >  #ifdef USE_LIBCAP
-> >
->
-> A completely unrelated question to you, Quentin. How hard is bpftool's
-> dependency on libcap? We've recently removed libcap from selftests, I
-> wonder if it would be possible to do that for bpftool as well to
-> reduce amount of shared libraries bpftool depends on.
+On Fri, Apr 01, 2022 at 07:46:35AM -0400, Sevinj Aghayeva wrote:
+> The function iterates an index from 0 to NUM_PMKID_CACHE and returns
+> the first index for which the condition is true. If no such index is
+> found, the function returns -1. Current code has a complex control
+> flow that obfuscates this simple task. Replace it with a loop.
+> 
+> Also, given the shortened function body, replace the long variable
+> name psecuritypriv with a short variable name p.
+> 
+> Reported by checkpatch:
+> 
+> WARNING: else is not generally useful after a break or return
+> 
+> Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
 
-There's not a super-strong dependency on it. It's used in feature
-probing, for two things.
+Wow!  Nice find!  This is a huge clean up.  Extra kudos recognizing that it is
+not just the else statement which is broken here!
 
-First one is to be accurate when we check that the user has the right
-capabilities for probing efficiently the system. A workaround consists
-in checking that we run with uid=0 (root), although it's less
-accurate.
+The only issue for the patch is that I don't see any maintainer emailed?
+However, I don't see a maintainer listed in the MAINTAINERS file so ...
 
-Second thing is probing as an unprivileged user: if bpftool is run to
-probe as root but with the "unprivileged" keyword, libcap is used to
-drop the CAP_SYS_ADMIN and run the probes without it. I don't know if
-there's an easy alternative to libcap for that. Also I don't know how
-many people use this feature, but I remember that this was added
-because there was some demand at the time, so presumably there are
-users relying on this.
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-This being said, libcap is optional for compiling bpftool, so you
-should be able to have it work just as well if the library is not
-available on the system? Basically you'd just lose the ability to
-probe as an unprivileged user. Do you need to remove the optional
-dependency completely?
-
-Quentin
-
-PS: Not directly related but since we're talking of libcap, we
-recently discovered that the lib is apparently changing errno when it
-maybe shouldn't and plays badly with batch mode:
-https://stackoverflow.com/questions/71608181/bpf-xdp-bpftool-batch-file-returns-error-reading-batch-file-failed-opera
+> ---
+>  drivers/staging/rtl8723bs/core/rtw_mlme.c | 28 ++++++-----------------
+>  1 file changed, 7 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+> index d5bb3a5bd2fb..3eacf8f9d236 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+> @@ -2036,28 +2036,14 @@ int rtw_restruct_wmm_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie, uint in_
+>  
+>  static int SecIsInPMKIDList(struct adapter *Adapter, u8 *bssid)
+>  {
+> -	struct security_priv *psecuritypriv = &Adapter->securitypriv;
+> -	int i = 0;
+> -
+> -	do {
+> -		if ((psecuritypriv->PMKIDList[i].bUsed) &&
+> -				(!memcmp(psecuritypriv->PMKIDList[i].Bssid, bssid, ETH_ALEN))) {
+> -			break;
+> -		} else {
+> -			i++;
+> -			/* continue; */
+> -		}
+> -
+> -	} while (i < NUM_PMKID_CACHE);
+> -
+> -	if (i == NUM_PMKID_CACHE) {
+> -		i = -1;/*  Could not find. */
+> -	} else {
+> -		/*  There is one Pre-Authentication Key for the specific BSSID. */
+> -	}
+> -
+> -	return i;
+> +	struct security_priv *p = &Adapter->securitypriv;
+> +	int i;
+>  
+> +	for (i = 0; i < NUM_PMKID_CACHE; i++)
+> +		if ((p->PMKIDList[i].bUsed) &&
+> +				(!memcmp(p->PMKIDList[i].Bssid, bssid, ETH_ALEN)))
+> +			return i;
+> +	return -1;
+>  }
+>  
+>  /*  */
+> -- 
+> 2.25.1
+> 

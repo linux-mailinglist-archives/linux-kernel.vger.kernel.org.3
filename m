@@ -2,461 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13D84EE632
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4CD4EE618
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244241AbiDACpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S244130AbiDACgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244188AbiDACpq (ORCPT
+        with ESMTP id S244119AbiDACgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:45:46 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B901459AC;
-        Thu, 31 Mar 2022 19:43:57 -0700 (PDT)
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id D65D4C83A4;
-        Fri,  1 Apr 2022 02:33:49 +0000 (UTC)
-Received: (Authenticated sender: frank@zago.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 46F56240004;
-        Fri,  1 Apr 2022 02:33:29 +0000 (UTC)
-From:   frank zago <frank@zago.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        frank zago <frank@zago.net>
-Subject: [PATCH v5 3/3] i2c: ch341: add I2C MFD cell driver for the CH341
-Date:   Thu, 31 Mar 2022 21:33:06 -0500
-Message-Id: <20220401023306.79532-4-frank@zago.net>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220401023306.79532-1-frank@zago.net>
-References: <20220401023306.79532-1-frank@zago.net>
+        Thu, 31 Mar 2022 22:36:17 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2573AC6827;
+        Thu, 31 Mar 2022 19:34:29 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id p17so1257259plo.9;
+        Thu, 31 Mar 2022 19:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VIas2AvVAgiNeaI3YZ+K1NbxYlATFfcBfaL8UD1Q7BY=;
+        b=PqHBp4a7bnOX8/79E/BD+vnRxLmvtEA4ne5Fg3uu56Cf44DffSzCJwdyuQYu7zhDtw
+         HKp8KqJVLIg5JiWwDm0uZjtKVAaj6X90Q1J/17EEGbKPulfGycnD1fwy2D2QaG48JapN
+         WgPIUFK0fkczq9qm7Ktglmh39r8HCiRVdLBvSIU5VL2LhIVkyST8o1tQ8vMadRMa4EBs
+         QSqWmHAB9GkLbUbXgF1BMSPqx3WH85FKnCXH54r/N7KF5SbGh93Nl0TPYJ2CdHpSmBFo
+         rrsn66pWWfXI1S1u1JFcdbbzzqlP8fl3sktXdRt/yeOgBHPeVuLC5tV+2xUedjxQGtTb
+         P6uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VIas2AvVAgiNeaI3YZ+K1NbxYlATFfcBfaL8UD1Q7BY=;
+        b=An+hyas/80ZtMSw0KS4o0NpJ/WuaGgTeYjSGskPVv8MKxbQ7/4UWhMQ3Lyl4o7+AIo
+         TE+6ti8VieK749HnpGG4SENcgHtw+7cljJg6qw51P3jp9YGdrKr5BdRSnjZ1x68Muifo
+         Zy17n90pJeP6tbxAvYzSaom9M1vlRdDSlotjFJ2dNej2Pptgtb8SLhN7Jyxtysfx38c/
+         QaxsznTTHy9VQdMdJag3+amnPk/IMpD72FLIobWsOTN6IJ6OcwH/bZ3O8yQW8couMnpj
+         5mG6W1t45NLknL1oqJDkqYR1dLjZf1RBQaYL35GFaLuwc5A1xpU2ah34beSBKp/Wkkax
+         pEuA==
+X-Gm-Message-State: AOAM530KpdHJgL4FUw7ZxTXKFlaLBSLCLqkDGVTdSZNm1fovYQwWCfcp
+        wZeP66r3hhvZMP80FbMkG36EASKpyS0=
+X-Google-Smtp-Source: ABdhPJwU/5TGE36nOVllAgTgELpwhv2/nmZmLLOlwQgxfK+Czg/hMGThkM6sF30XP1UfHhwy0r2YlA==
+X-Received: by 2002:a17:90b:1bc2:b0:1c9:9cd1:a4fe with SMTP id oa2-20020a17090b1bc200b001c99cd1a4femr9402057pjb.136.1648780468499;
+        Thu, 31 Mar 2022 19:34:28 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm850967pfj.146.2022.03.31.19.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 19:34:27 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 19:34:26 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Subject: Re: [RFC PATCH v5 033/104] KVM: x86: Add infrastructure for stolen
+ GPA bits
+Message-ID: <20220401023426.GF2084469@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <a21c1f9065cf27db54820b2b504db4e507835584.1646422845.git.isaku.yamahata@intel.com>
+ <2b8038c17b85658a054191b362840240bd66e46b.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2b8038c17b85658a054191b362840240bd66e46b.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C interface can run at 4 different speeds. This driver currently
-only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
-subsystem.
+Added Peng Chao.
 
-Signed-off-by: frank zago <frank@zago.net>
----
- MAINTAINERS                    |   1 +
- drivers/i2c/busses/Kconfig     |  10 +
- drivers/i2c/busses/Makefile    |   1 +
- drivers/i2c/busses/i2c-ch341.c | 331 +++++++++++++++++++++++++++++++++
- drivers/mfd/ch341-core.c       |   3 +
- 5 files changed, 346 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-ch341.c
+On Fri, Apr 01, 2022 at 12:16:41AM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 757ab4f6f9f6..04ec5095e1d0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21216,6 +21216,7 @@ M:	Frank Zago <frank@zago.net>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	drivers/gpio/gpio-ch341.c
-+F:	drivers/i2c/busses/i2c-ch341.c
- F:	drivers/mfd/ch341-core.c
- F:	include/linux/mfd/ch341.h
- 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a1bae59208e3..db9797345ad5 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1199,6 +1199,16 @@ config I2C_RCAR
- 
- comment "External I2C/SMBus adapter drivers"
- 
-+config I2C_CH341
-+	tristate "CH341 USB to I2C support"
-+	select MFD_CH341
-+	help
-+	  If you say yes to this option, I2C support will be included for the
-+	  WCH CH341, a USB to I2C/SPI/GPIO interface.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called i2c-ch341.
-+
- config I2C_DIOLAN_U2C
- 	tristate "Diolan U2C-12 USB adapter"
- 	depends on USB
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 479f60e4ee3d..e83ca4a472f2 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -127,6 +127,7 @@ obj-$(CONFIG_I2C_XLP9XX)	+= i2c-xlp9xx.o
- obj-$(CONFIG_I2C_RCAR)		+= i2c-rcar.o
- 
- # External I2C/SMBus adapter drivers
-+obj-$(CONFIG_I2C_CH341)		+= i2c-ch341.o
- obj-$(CONFIG_I2C_DIOLAN_U2C)	+= i2c-diolan-u2c.o
- obj-$(CONFIG_I2C_DLN2)		+= i2c-dln2.o
- obj-$(CONFIG_I2C_CP2615) += i2c-cp2615.o
-diff --git a/drivers/i2c/busses/i2c-ch341.c b/drivers/i2c/busses/i2c-ch341.c
-new file mode 100644
-index 000000000000..3da11e358976
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-ch341.c
-@@ -0,0 +1,331 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * I2C cell driver for the CH341A, CH341B and CH341T.
-+ *
-+ * Copyright 2022, Frank Zago
-+ * Copyright (c) 2016 Tse Lun Bien
-+ * Copyright (c) 2014 Marco Gittler
-+ * Copyright (C) 2006-2007 Till Harbaum (Till@Harbaum.org)
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+#include <linux/usb.h>
-+
-+#include <linux/i2c.h>
-+
-+#include <linux/mfd/ch341.h>
-+
-+/* I2C bus speed. Speed selection is not implemented. */
-+#define CH341_I2C_20KHZ  0
-+#define CH341_I2C_100KHZ 1
-+#define CH341_I2C_400KHZ 2
-+#define CH341_I2C_750KHZ 3
-+
-+/* I2C chip commands */
-+#define CH341_CMD_I2C_STREAM 0xAA
-+#define CH341_CMD_I2C_STM_END 0x00
-+
-+#define CH341_CMD_I2C_STM_STA 0x74
-+#define CH341_CMD_I2C_STM_STO 0x75
-+#define CH341_CMD_I2C_STM_OUT 0x80
-+#define CH341_CMD_I2C_STM_IN 0xC0
-+#define CH341_CMD_I2C_STM_SET 0x60
-+
-+/*
-+ * The maximum request size is 4096 bytes, both for reading and
-+ * writing, split in up to 128 32-byte segments. The I2C stream must
-+ * start and stop in each 32-byte segment. Reading must also be split,
-+ * with up to 32-byte per segment.
-+ */
-+#define SEG_COUNT 128
-+
-+/*
-+ * Limit the transfer size that can be written. 4KiB is the maximum
-+ * size of the whole buffer, but it must include all the command
-+ * delimiters. 3KiB sounds reasonable.
-+ */
-+#define MAX_RW_LENGTH 3072
-+
-+struct ch341_i2c {
-+	struct i2c_adapter adapter;
-+
-+	/* I2C request and response state */
-+	int idx_out;		/* current offset in buf */
-+	int out_seg;		/* current segment */
-+	u8 i2c_buf[SEG_COUNT * SEG_SIZE];
-+};
-+
-+/*
-+ * Append a write command to the current request. A set of 32-byte
-+ * packets is filled. Each packet starts with STREAM and finishes with
-+ * END, and contains an OUT field, leaving up to 29 bytes of data. The
-+ * first packet must also include a START and the device address.
-+ */
-+static int append_write(struct ch341_i2c *dev, const struct i2c_msg *msg)
-+{
-+	bool start_done = false;
-+	u8 *out = dev->i2c_buf;
-+	int len;
-+	u8 *p;
-+
-+	len = msg->len;
-+	p = msg->buf;
-+
-+	while (len) {
-+		int to_write;
-+		int avail;
-+
-+		if (dev->idx_out % SEG_SIZE) {
-+			/* Finish current packet, and advance to the next one */
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+			dev->out_seg++;
-+			dev->idx_out = dev->out_seg * SEG_SIZE;
-+
-+			if (dev->out_seg == SEG_COUNT)
-+				return -E2BIG;
-+		}
-+
-+		out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+
-+		/* account for stream start and end */
-+		avail = SEG_SIZE - 3;
-+
-+		if (!start_done) {
-+			/* Each message has a start */
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_STA;
-+
-+			avail -= 2; /* room for STA and device address */
-+		}
-+
-+		to_write = min_t(int, len, avail);
-+
-+		if (!start_done) {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_OUT | (to_write + 1);
-+			out[dev->idx_out++] = msg->addr << 1;
-+
-+			start_done = true;
-+		} else {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_OUT | to_write;
-+		}
-+
-+		memcpy(&out[dev->idx_out], p, to_write);
-+		dev->idx_out += to_write;
-+		len -= to_write;
-+		p += to_write;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * Append a read command to the request. It usually follows a write
-+ * command. When that happens, the driver will attempt to concat the
-+ * read command into the same packet.  Each read command, of up to 32
-+ * bytes, must be written to a new packet. It is not possible to
-+ * concat them.
-+ */
-+static int append_read(struct ch341_i2c *dev, const struct i2c_msg *msg)
-+{
-+	bool start_done = false;
-+	u8 *out = dev->i2c_buf;
-+	int len;
-+
-+	len = msg->len;
-+
-+	while (len) {
-+		int to_read;
-+
-+		if (dev->idx_out % SEG_SIZE) {
-+			if (!start_done &&
-+			    (dev->idx_out % SEG_SIZE) <  (SEG_SIZE - 7)) {
-+				/* There's enough left for a read */
-+			} else {
-+				/* Finish current packet, and advance to the next one */
-+				out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+				dev->out_seg++;
-+				dev->idx_out = dev->out_seg * SEG_SIZE;
-+
-+				if (dev->out_seg == SEG_COUNT)
-+					return -E2BIG;
-+
-+				out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+			}
-+		} else {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+		}
-+
-+		if (!start_done) {
-+			/* Each message has a start */
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_STA;
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_OUT | 1;
-+			out[dev->idx_out++] = msg->addr << 1 | 1;
-+
-+			start_done = true;
-+		}
-+
-+		/* Apparently the last command must be an STM_IN to
-+		 * read the last byte. Without it, the adapter gets
-+		 * lost.
-+		 */
-+		to_read = min_t(int, len, 32);
-+		len -= to_read;
-+		if (len == 0) {
-+			if (to_read > 1)
-+				out[dev->idx_out++] = CH341_CMD_I2C_STM_IN | (to_read - 1);
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_IN;
-+		} else {
-+			out[dev->idx_out++] = CH341_CMD_I2C_STM_IN | to_read;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int ch341_i2c_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num)
-+{
-+	struct ch341_i2c *dev = i2c_get_adapdata(adapter);
-+	struct ch341_device *ch341 = adapter->algo_data;
-+	u8 *out = dev->i2c_buf;
-+	int actual;
-+	int rc;
-+	int i;
-+
-+	/* Prepare the request */
-+	dev->idx_out = 0;
-+	dev->out_seg = 0;
-+
-+	for (i = 0; i != num; i++) {
-+		if (msgs[i].flags & I2C_M_RD)
-+			rc = append_read(dev, &msgs[i]);
-+		else
-+			rc = append_write(dev, &msgs[i]);
-+
-+		if (rc)
-+			return rc;
-+	}
-+
-+	/* Finish the last packet */
-+	if (SEG_SIZE - (dev->idx_out % SEG_SIZE) < 2) {
-+		out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+
-+		dev->out_seg++;
-+		if (dev->out_seg == SEG_COUNT)
-+			return -E2BIG;
-+
-+		dev->idx_out = dev->out_seg * SEG_SIZE;
-+
-+		out[dev->idx_out++] = CH341_CMD_I2C_STREAM;
-+	}
-+
-+	out[dev->idx_out++] = CH341_CMD_I2C_STM_STO;
-+	out[dev->idx_out++] = CH341_CMD_I2C_STM_END;
-+
-+	dev_dbg(&adapter->dev, "bulk_out request with %d bytes\n",
-+		dev->idx_out);
-+
-+	mutex_lock(&ch341->usb_lock);
-+
-+	/* Issue the request */
-+	rc = usb_bulk_msg(ch341->usb_dev,
-+			  usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
-+			  dev->i2c_buf, dev->idx_out, &actual, DEFAULT_TIMEOUT_MS);
-+	if (rc < 0) {
-+		mutex_unlock(&ch341->usb_lock);
-+		return rc;
-+	}
-+
-+	for (i = 0; i != num; i++) {
-+		if (!(msgs[i].flags & I2C_M_RD))
-+			continue;
-+
-+		rc = usb_bulk_msg(ch341->usb_dev,
-+				  usb_rcvbulkpipe(ch341->usb_dev, ch341->ep_in),
-+				  dev->i2c_buf, msgs[i].len, &actual,
-+				  DEFAULT_TIMEOUT_MS);
-+
-+		if (rc) {
-+			mutex_unlock(&ch341->usb_lock);
-+			return rc;
-+		}
-+
-+		if (actual != msgs[i].len) {
-+			mutex_unlock(&ch341->usb_lock);
-+			return -EIO;
-+		}
-+
-+		memcpy(msgs[i].buf, dev->i2c_buf, actual);
-+	}
-+
-+	mutex_unlock(&ch341->usb_lock);
-+
-+	return num;
-+}
-+
-+static u32 ch341_i2c_func(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static const struct i2c_algorithm ch341_i2c_algorithm = {
-+	.master_xfer = ch341_i2c_xfer,
-+	.functionality = ch341_i2c_func,
-+};
-+
-+static const struct i2c_adapter_quirks ch341_i2c_quirks = {
-+	.max_read_len = MAX_RW_LENGTH,
-+	.max_write_len = MAX_RW_LENGTH,
-+};
-+
-+static int ch341_i2c_probe(struct platform_device *pdev)
-+{
-+	struct ch341_device *ch341 = dev_get_drvdata(pdev->dev.parent);
-+	struct ch341_i2c *ch341_i2c;
-+	int actual;
-+	int rc;
-+
-+	ch341_i2c = devm_kzalloc(&pdev->dev, sizeof(*ch341_i2c), GFP_KERNEL);
-+	if (ch341_i2c == NULL)
-+		return -ENOMEM;
-+
-+	ch341_i2c->adapter.owner = THIS_MODULE;
-+	ch341_i2c->adapter.class = I2C_CLASS_HWMON;
-+	ch341_i2c->adapter.algo = &ch341_i2c_algorithm;
-+	ch341_i2c->adapter.algo_data = ch341;
-+	ch341_i2c->adapter.quirks = &ch341_i2c_quirks;
-+	ch341_i2c->adapter.dev.parent = &pdev->dev;
-+	snprintf(ch341_i2c->adapter.name, sizeof(ch341_i2c->adapter.name),
-+		 "CH341 I2C USB bus %03d device %03d",
-+		 ch341->usb_dev->bus->busnum, ch341->usb_dev->devnum);
-+
-+	i2c_set_adapdata(&ch341_i2c->adapter, ch341_i2c);
-+	platform_set_drvdata(pdev, ch341_i2c);
-+
-+	/* Set ch341 i2c speed */
-+	ch341_i2c->i2c_buf[0] = CH341_CMD_I2C_STREAM;
-+	ch341_i2c->i2c_buf[1] = CH341_CMD_I2C_STM_SET | CH341_I2C_100KHZ;
-+	ch341_i2c->i2c_buf[2] = CH341_CMD_I2C_STM_END;
-+	mutex_lock(&ch341->usb_lock);
-+	rc = usb_bulk_msg(ch341->usb_dev,
-+			  usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
-+			  ch341_i2c->i2c_buf, 3, &actual, DEFAULT_TIMEOUT_MS);
-+	mutex_unlock(&ch341->usb_lock);
-+
-+	if (rc < 0)
-+		return dev_err_probe(&pdev->dev, rc, "Cannot set I2C speed\n");
-+
-+	return devm_i2c_add_adapter(&pdev->dev, &ch341_i2c->adapter);
-+}
-+
-+static struct platform_driver ch341_i2c_driver = {
-+	.driver.name	= "ch341-i2c",
-+	.probe		= ch341_i2c_probe,
-+};
-+module_platform_driver(ch341_i2c_driver);
-+
-+MODULE_AUTHOR("Various");
-+MODULE_DESCRIPTION("CH341 USB to I2C");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:ch341-i2c");
-diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
-index e919f6901a14..6a326cac2247 100644
---- a/drivers/mfd/ch341-core.c
-+++ b/drivers/mfd/ch341-core.c
-@@ -22,6 +22,9 @@ static const struct mfd_cell ch341_devs[] = {
- 	{
- 		.name = "ch341-gpio",
- 	},
-+	{
-+		.name = "ch341-i2c",
-+	},
- };
- 
- static int ch341_usb_probe(struct usb_interface *iface,
+> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > From: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> > 
+> > Add support in KVM's MMU for aliasing multiple GPAs (from a hardware
+> > perspective) to a single GPA (from a memslot perspective). GPA aliasing
+> > will be used to repurpose GPA bits as attribute bits, e.g. to expose an
+> > execute-only permission bit to the guest. To keep the implementation
+> > simple (relatively speaking), GPA aliasing is only supported via TDP.
+> > 
+> > Today KVM assumes two things that are broken by GPA aliasing.
+> >   1. GPAs coming from hardware can be simply shifted to get the GFNs.
+> >   2. GPA bits 51:MAXPHYADDR are reserved to zero.
+> > 
+> > With GPA aliasing, translating a GPA to GFN requires masking off the
+> > repurposed bit, and a repurposed bit may reside in 51:MAXPHYADDR.
+> > 
+> > To support GPA aliasing, introduce the concept of per-VM GPA stolen bits,
+> > that is, bits stolen from the GPA to act as new virtualized attribute
+> > bits. A bit in the mask will cause the MMU code to create aliases of the
+> > GPA. It can also be used to find the GFN out of a GPA coming from a tdp
+> > fault.
+> > 
+> > To handle case (1) from above, retain any stolen bits when passing a GPA
+> > in KVM's MMU code, but strip them when converting to a GFN so that the
+> > GFN contains only the "real" GFN, i.e. never has repurposed bits set.
+> > 
+> > GFNs (without stolen bits) continue to be used to:
+> >   - Specify physical memory by userspace via memslots
+> >   - Map GPAs to TDP PTEs via RMAP
+> >   - Specify dirty tracking and write protection
+> >   - Look up MTRR types
+> >   - Inject async page faults
+> > 
+> > Since there are now multiple aliases for the same aliased GPA, when
+> > userspace memory backing the memslots is paged out, both aliases need to be
+> > modified. Fortunately, this happens automatically. Since rmap supports
+> > multiple mappings for the same GFN for PTE shadowing based paging, by
+> > adding/removing each alias PTE with its GFN, kvm_handle_hva() based
+> > operations will be applied to both aliases.
+> > 
+> > In the case of the rmap being removed in the future, the needed
+> > information could be recovered by iterating over the stolen bits and
+> > walking the TDP page tables.
+> > 
+> > For TLB flushes that are address based, make sure to flush both aliases
+> > in the case of stolen bits.
+> > 
+> > Only support stolen bits in 64 bit guest paging modes (long, PAE).
+> > Features that use this infrastructure should restrict the stolen bits to
+> > exclude the other paging modes. Don't support stolen bits for shadow EPT.
+> > 
+> > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/include/asm/kvm_host.h |  2 ++
+> >  arch/x86/kvm/mmu.h              | 51 +++++++++++++++++++++++++++++++++
+> >  arch/x86/kvm/mmu/mmu.c          | 19 ++++++++++--
+> >  arch/x86/kvm/mmu/paging_tmpl.h  | 25 +++++++++-------
+> >  4 files changed, 84 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 208b29b0e637..d8b78d6abc10 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1235,7 +1235,9 @@ struct kvm_arch {
+> >  	spinlock_t hv_root_tdp_lock;
+> >  #endif
+> >  
+> > +#ifdef CONFIG_KVM_MMU_PRIVATE
+> >  	gfn_t gfn_shared_mask;
+> > +#endif
+> >  };
+> >  
+> >  struct kvm_vm_stat {
+> > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> > index e9fbb2c8bbe2..3fb530359f81 100644
+> > --- a/arch/x86/kvm/mmu.h
+> > +++ b/arch/x86/kvm/mmu.h
+> > @@ -365,4 +365,55 @@ static inline gpa_t kvm_translate_gpa(struct kvm_vcpu *vcpu,
+> >  		return gpa;
+> >  	return translate_nested_gpa(vcpu, gpa, access, exception);
+> >  }
+> > +
+> > +static inline gfn_t kvm_gfn_stolen_mask(struct kvm *kvm)
+> > +{
+> > +#ifdef CONFIG_KVM_MMU_PRIVATE
+> > +	return kvm->arch.gfn_shared_mask;
+> > +#else
+> > +	return 0;
+> > +#endif
+> > +}
+> > +
+> > +static inline gpa_t kvm_gpa_stolen_mask(struct kvm *kvm)
+> > +{
+> > +	return gfn_to_gpa(kvm_gfn_stolen_mask(kvm));
+> > +}
+> > +
+> > +static inline gpa_t kvm_gpa_unalias(struct kvm *kvm, gpa_t gpa)
+> > +{
+> > +	return gpa & ~kvm_gpa_stolen_mask(kvm);
+> > +}
+> > +
+> > +static inline gfn_t kvm_gfn_unalias(struct kvm *kvm, gfn_t gfn)
+> > +{
+> > +	return gfn & ~kvm_gfn_stolen_mask(kvm);
+> > +}
+> > +
+> > +static inline gfn_t kvm_gfn_shared(struct kvm *kvm, gfn_t gfn)
+> > +{
+> > +	return gfn | kvm_gfn_stolen_mask(kvm);
+> > +}
+> > +
+> > +static inline gfn_t kvm_gfn_private(struct kvm *kvm, gfn_t gfn)
+> > +{
+> > +	return gfn & ~kvm_gfn_stolen_mask(kvm);
+> > +}
+> > +
+> > +static inline gpa_t kvm_gpa_private(struct kvm *kvm, gpa_t gpa)
+> > +{
+> > +	return gpa & ~kvm_gpa_stolen_mask(kvm);
+> > +}
+> > +
+> > +static inline bool kvm_is_private_gfn(struct kvm *kvm, gfn_t gfn)
+> > +{
+> > +	gfn_t mask = kvm_gfn_stolen_mask(kvm);
+> > +
+> > +	return mask && !(gfn & mask);
+> > +}
+> > +
+> > +static inline bool kvm_is_private_gpa(struct kvm *kvm, gpa_t gpa)
+> > +{
+> > +	return kvm_is_private_gfn(kvm, gpa_to_gfn(gpa));
+> > +}
+> 
+> The patch title and commit message say nothing about private/shared, but only
+> mention stolen bits in general.  It's weird to introduce those *private* related
+> helpers here.
+> 
+> I think you can just ditch the concept of stolen bit infrastructure, but just
+> adopt what TDX needs.
+
+Sure, this patch heavily changed from the original patch Now.  One suggestion
+is that private/shared is characteristic to kvm page fault, not gpa/gfn.
+It's TDX specific.
+
+- Add a helper function to check if KVM MMU is TD or VM. Right now
+  kvm_gfn_stolen_mask() is used.  Probably kvm_mmu_has_private_bit().
+  (any better name?)
+- Let's keep address conversion functions: address => unalias/shared/private
+- Add struct kvm_page_fault.is_private
+  see how kvm_is_private_{gpa, gfn}() can be removed (or reduced).
+
+
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 8e24f73bf60b..b68191aa39bf 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -276,11 +276,24 @@ static inline bool kvm_available_flush_tlb_with_range(void)
+> >  static void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
+> >  		struct kvm_tlb_range *range)
+> >  {
+> > -	int ret = -ENOTSUPP;
+> > +	int ret = -EOPNOTSUPP;
+> 
+> Change doesn't belong to this patch.
+
+Will fix it.
+
+
+> > +	u64 gfn_stolen_mask;
+> >  
+> > -	if (range && kvm_x86_ops.tlb_remote_flush_with_range)
+> > +	/*
+> > +	 * Fall back to the big hammer flush if there is more than one
+> > +	 * GPA alias that needs to be flushed.
+> > +	 */
+> > +	gfn_stolen_mask = kvm_gfn_stolen_mask(kvm);
+> > +	if (hweight64(gfn_stolen_mask) > 1)
+> > +		goto generic_flush;
+> > +
+> > +	if (range && kvm_available_flush_tlb_with_range()) {
+> > +		/* Callback should flush both private GFN and shared GFN. */
+> > +		range->start_gfn = kvm_gfn_unalias(kvm, range->start_gfn);
+> 
+> This seems wrong.  It seems the intention of this function is to flush TLB for
+> all aliases for a given GFN range.  Here it seems you are unconditionally change
+> to range to always exclude the stolen bits.
+
+Ooh, right. This alias knowledge is in TDX.  This unalias should be dropped
+and put it in tdx.c.  I'll fix it.
+
+
+> >  		ret = static_call(kvm_x86_tlb_remote_flush_with_range)(kvm, range);
+> > +	}
+> 
+> And you always fall through to do big hammer flush, which is obviously not
+> intended.
+
+Please notice "if (ret)".  If it succeeded, big hammer flush is skipped.
+
+
+> > +generic_flush:
+> >  	if (ret)
+> >  		kvm_flush_remote_tlbs(kvm);
+> >  }
+> > @@ -4010,7 +4023,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  	unsigned long mmu_seq;
+> >  	int r;
+> >  
+> > -	fault->gfn = fault->addr >> PAGE_SHIFT;
+> > +	fault->gfn = kvm_gfn_unalias(vcpu->kvm, gpa_to_gfn(fault->addr));
+> >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
+> >  
+> >  	if (page_fault_handle_page_track(vcpu, fault))
+> > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> > index 5b5bdac97c7b..70aec31dee06 100644
+> > --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> > @@ -25,7 +25,8 @@
+> >  	#define guest_walker guest_walker64
+> >  	#define FNAME(name) paging##64_##name
+> >  	#define PT_BASE_ADDR_MASK GUEST_PT64_BASE_ADDR_MASK
+> > -	#define PT_LVL_ADDR_MASK(lvl) PT64_LVL_ADDR_MASK(lvl)
+> > +	#define PT_LVL_ADDR_MASK(vcpu, lvl) (~kvm_gpa_stolen_mask(vcpu->kvm) & \
+> > +					     PT64_LVL_ADDR_MASK(lvl))
+> >  	#define PT_LVL_OFFSET_MASK(lvl) PT64_LVL_OFFSET_MASK(lvl)
+> >  	#define PT_INDEX(addr, level) PT64_INDEX(addr, level)
+> >  	#define PT_LEVEL_BITS PT64_LEVEL_BITS
+> > @@ -44,7 +45,7 @@
+> >  	#define guest_walker guest_walker32
+> >  	#define FNAME(name) paging##32_##name
+> >  	#define PT_BASE_ADDR_MASK PT32_BASE_ADDR_MASK
+> > -	#define PT_LVL_ADDR_MASK(lvl) PT32_LVL_ADDR_MASK(lvl)
+> > +	#define PT_LVL_ADDR_MASK(vcpu, lvl) PT32_LVL_ADDR_MASK(lvl)
+> >  	#define PT_LVL_OFFSET_MASK(lvl) PT32_LVL_OFFSET_MASK(lvl)
+> >  	#define PT_INDEX(addr, level) PT32_INDEX(addr, level)
+> >  	#define PT_LEVEL_BITS PT32_LEVEL_BITS
+> > @@ -58,7 +59,7 @@
+> >  	#define guest_walker guest_walkerEPT
+> >  	#define FNAME(name) ept_##name
+> >  	#define PT_BASE_ADDR_MASK GUEST_PT64_BASE_ADDR_MASK
+> > -	#define PT_LVL_ADDR_MASK(lvl) PT64_LVL_ADDR_MASK(lvl)
+> > +	#define PT_LVL_ADDR_MASK(vcpu, lvl) PT64_LVL_ADDR_MASK(lvl)
+> >  	#define PT_LVL_OFFSET_MASK(lvl) PT64_LVL_OFFSET_MASK(lvl)
+> >  	#define PT_INDEX(addr, level) PT64_INDEX(addr, level)
+> >  	#define PT_LEVEL_BITS PT64_LEVEL_BITS
+> > @@ -75,7 +76,7 @@
+> >  #define PT_GUEST_ACCESSED_MASK (1 << PT_GUEST_ACCESSED_SHIFT)
+> >  
+> >  #define gpte_to_gfn_lvl FNAME(gpte_to_gfn_lvl)
+> > -#define gpte_to_gfn(pte) gpte_to_gfn_lvl((pte), PG_LEVEL_4K)
+> > +#define gpte_to_gfn(vcpu, pte) gpte_to_gfn_lvl(vcpu, pte, PG_LEVEL_4K)
+> >  
+> >  /*
+> >   * The guest_walker structure emulates the behavior of the hardware page
+> > @@ -96,9 +97,9 @@ struct guest_walker {
+> >  	struct x86_exception fault;
+> >  };
+> >  
+> > -static gfn_t gpte_to_gfn_lvl(pt_element_t gpte, int lvl)
+> > +static gfn_t gpte_to_gfn_lvl(struct kvm_vcpu *vcpu, pt_element_t gpte, int lvl)
+> >  {
+> > -	return (gpte & PT_LVL_ADDR_MASK(lvl)) >> PAGE_SHIFT;
+> > +	return (gpte & PT_LVL_ADDR_MASK(vcpu, lvl)) >> PAGE_SHIFT;
+> >  }
+> >  
+> >  static inline void FNAME(protect_clean_gpte)(struct kvm_mmu *mmu, unsigned *access,
+> > @@ -395,7 +396,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+> >  		--walker->level;
+> >  
+> >  		index = PT_INDEX(addr, walker->level);
+> > -		table_gfn = gpte_to_gfn(pte);
+> > +		table_gfn = gpte_to_gfn(vcpu, pte);
+> >  		offset    = index * sizeof(pt_element_t);
+> >  		pte_gpa   = gfn_to_gpa(table_gfn) + offset;
+> >  
+> > @@ -460,7 +461,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+> >  	if (unlikely(errcode))
+> >  		goto error;
+> >  
+> > -	gfn = gpte_to_gfn_lvl(pte, walker->level);
+> > +	gfn = gpte_to_gfn_lvl(vcpu, pte, walker->level);
+> >  	gfn += (addr & PT_LVL_OFFSET_MASK(walker->level)) >> PAGE_SHIFT;
+> >  
+> >  	if (PTTYPE == 32 && walker->level > PG_LEVEL_4K && is_cpuid_PSE36())
+> > @@ -555,12 +556,14 @@ FNAME(prefetch_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+> >  	gfn_t gfn;
+> >  	kvm_pfn_t pfn;
+> >  
+> > +	WARN_ON(gpte & kvm_gpa_stolen_mask(vcpu->kvm));
+> > +
+> >  	if (FNAME(prefetch_invalid_gpte)(vcpu, sp, spte, gpte))
+> >  		return false;
+> >  
+> >  	pgprintk("%s: gpte %llx spte %p\n", __func__, (u64)gpte, spte);
+> >  
+> > -	gfn = gpte_to_gfn(gpte);
+> > +	gfn = gpte_to_gfn(vcpu, gpte);
+> >  	pte_access = sp->role.access & FNAME(gpte_access)(gpte);
+> >  	FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
+> >  
+> > @@ -656,6 +659,8 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> >  	WARN_ON_ONCE(gw->gfn != base_gfn);
+> >  	direct_access = gw->pte_access;
+> >  
+> > +	WARN_ON(fault->addr & kvm_gpa_stolen_mask(vcpu->kvm));
+> > +
+> >  	top_level = vcpu->arch.mmu->root_level;
+> >  	if (top_level == PT32E_ROOT_LEVEL)
+> >  		top_level = PT32_ROOT_LEVEL;
+> > @@ -1080,7 +1085,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
+> >  			continue;
+> >  		}
+> >  
+> > -		gfn = gpte_to_gfn(gpte);
+> > +		gfn = gpte_to_gfn(vcpu, gpte);
+> >  		pte_access = sp->role.access;
+> >  		pte_access &= FNAME(gpte_access)(gpte);
+> >  		FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
+> 
+> In commit message you mentioned "Don't support stolen bits for shadow EPT" (you
+> actually mean shadow MMU I suppose), yet there's bunch of code change to shadow
+> MMU.
+
+
+Those are not needed. I'll drop them.
 -- 
-2.32.0
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

@@ -2,115 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31F04EEB64
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BFD4EEB6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344079AbiDAKgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S1344179AbiDAKhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344052AbiDAKgK (ORCPT
+        with ESMTP id S1343982AbiDAKhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:36:10 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6B165820
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:34:19 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220401103416epoutp01d923ae961154ae4d6f0b59c9d098c137~hv0hu14_a1845218452epoutp01f
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:34:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220401103416epoutp01d923ae961154ae4d6f0b59c9d098c137~hv0hu14_a1845218452epoutp01f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648809256;
-        bh=QD2Kd3UBHUe67Xsz/iHKdHMKOdhJMByAo2BtR/3Ii0E=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=Hf1xWk3/fo8Bbi8CsSECVAZhgUqDnFl01bkDWdLTXDHewkY6am0WNYgik9GSEdE0b
-         pYOP56DQp0+5gne+yj7mlcHJ2t30rVzMEQjzz5pAkUyqk1E6FDT50czc5wDqbchCAM
-         KlLfJe6OgfsvcJVaATXhMFgHiajYqmiK9lccnKcs=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220401103416epcas1p2b86898a2495b0ab46026f9bc6a2ff25c~hv0hZp01U1031510315epcas1p2p;
-        Fri,  1 Apr 2022 10:34:16 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.249]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4KVGkG5w7Vz4x9Pv; Fri,  1 Apr
-        2022 10:34:14 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5D.3E.21932.625D6426; Fri,  1 Apr 2022 19:34:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220401103414epcas1p2d43a8f3512776d4e443c13bfbe1cf05c~hv0ffOlR01039110391epcas1p2m;
-        Fri,  1 Apr 2022 10:34:14 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220401103413epsmtrp114f71ef7a6e66cf285e574750cff6635~hv0fei6fK2426024260epsmtrp1Y;
-        Fri,  1 Apr 2022 10:34:13 +0000 (GMT)
-X-AuditID: b6c32a38-929ff700000255ac-30-6246d5266ef0
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.67.03370.525D6426; Fri,  1 Apr 2022 19:34:13 +0900 (KST)
-Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220401103413epsmtip1c2af0f04b4c56c3e0a391373636231ce~hv0fU7zu80295502955epsmtip1Q;
-        Fri,  1 Apr 2022 10:34:13 +0000 (GMT)
-From:   "Sungjong Seo" <sj1557.seo@samsung.com>
-To:     "'Namjae Jeon'" <linkinjeon@kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <sj1557.seo@samsung.com>
-In-Reply-To: <HK2PR04MB38911DEEC1C24C06E4C272D5811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
-Subject: RE: [PATCH 2/2] exfat: remove exfat_update_parent_info()
-Date:   Fri, 1 Apr 2022 19:34:13 +0900
-Message-ID: <818b01d845b4$07f97b50$17ec71f0$@samsung.com>
+        Fri, 1 Apr 2022 06:37:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3121266B63;
+        Fri,  1 Apr 2022 03:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648809352; x=1680345352;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nXk4zlyXR8B57i9BaB9FWZP2fV36YlgrhivlcqXLjKY=;
+  b=TfvAAiG7O/se6YSiXM3eW+5AdHgnI5Mn6OcpKNwAmkwCEf8OiTi4bbT/
+   aP5JDGDjeVKdZCB8sDSOLXzTb4N/V9B2VJ4j77IWe4ybWoSPTyhTztBTp
+   sInFXdl+4otVlvjr0y/AlbeC/Dz7Tv1biXBVYtIENdOszvDsUQB+43AKt
+   AIqPHRnNWfIhEniKlAodmE0BnwltR2A30wtDsxrA9UViqK432Qwh5sRf7
+   uDZDOgqeoparW/ht59dunLv8Iy5bJN8nrM9m6kkR4Ff4if6XpeHoBtFFC
+   No36xx3l0E2dFNSYjvsdJLncPNxY/Sb212GHiDcDJ72yVlMFXr9rXQoVE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="257680697"
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="257680697"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:35:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="843133139"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Apr 2022 03:35:44 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 92A23179; Fri,  1 Apr 2022 13:36:05 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Qianggui Song <qianggui.song@amlogic.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH v4 00/13] gpiolib: Two new helpers and way toward fwnode
+Date:   Fri,  1 Apr 2022 13:35:51 +0300
+Message-Id: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQImj1FvZKQ/JrGWTmbWjfW63dKOuAHSXdAirC+2C+A=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDKsWRmVeSWpSXmKPExsWy7bCmrq7aVbckg2dTlCwmTlvKbLFn70kW
-        i8u75rBZbPl3hNWBxWPTqk42j74tqxg9Pm+SC2COyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneO
-        NzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAdqmpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFV
-        Si1IySkwK9ArTswtLs1L18tLLbEyNDAwMgUqTMjOOHf5AmPBRJGKx68fsTQwrhDoYuTkkBAw
-        kbi/o5uli5GLQ0hgB6PE/M+LmCGcT4wSS2Y9YIVwPjNKbN3TwwzTcn79V6iWXYwSL36thXJe
-        Mkpcm98KVsUmoCvx5MZPIJuDQ0RAW+L+i3SQMLNAvMTuaX2MIGFOgViJX3f4QMLCAo4SB8+c
-        YAKxWQRUJKZuXMYCYvMKWEr0nb3JBGELSpyc+YQFYoy8xPa3c6DuUZDY/ekoK4gtImAlsbv3
-        DRtEjYjE7M42sG8kBH6yS6w8sRSqwUXi3p0fLBC2sMSr41vYIWwpiZf9bVB2M6NEc6MRhN3B
-        KPF0oyzIzRIC9hLvL1mAmMwCmhLrd+lDVChK7Pw9lxFiLZ/Eu689rBDVvBIdbUIQJSoS3z/s
-        ZIFZdOXHVaYJjEqzkDw2C8ljs5A8MAth2QJGllWMYqkFxbnpqcWGBSbwqE7Oz93ECE6GWhY7
-        GOe+/aB3iJGJg/EQowQHs5II79VY1yQh3pTEyqrUovz4otKc1OJDjKbAoJ7ILCWanA9Mx3kl
-        8YYmlgYmZkYmFsaWxmZK4ry9U08nCgmkJ5akZqemFqQWwfQxcXBKNTDVFzgXxu2UKGIKkDuT
-        lbebM7s5oPTpV7MD2doqgfqdLcfeWMTNiPq61oG7WevuZmlbv0nHvN0S231v6vk6/pi2arLC
-        uaLZQiX7lfUsxLexudRLfkuK59eqfxkt77jor6zCh17THwbGRhN4jY4eUfe/VN52IfczqwbT
-        pBVFJ8s/T1H4IbNc8KIRZ03Q9jz1tSue5S2YGh3Wqdu70V3R/eGD1Yrft/2JCf1exvbPwspc
-        9rTM0UuPcl9sijOw81It9P8lv+lq2P8tEXut01lbHWsOnnBwPR2xSVw99IjW2mKPqqz5d0rE
-        +6SO6m9uD6rv2SByccb0yH3ytvP+1akkXG9Zs7bs4qKVzq/SbzFHKLEUZyQaajEXFScCAMfI
-        U1gPBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsWy7bCSnK7qVbckg8vHzC0mTlvKbLFn70kW
-        i8u75rBZbPl3hNWBxWPTqk42j74tqxg9Pm+SC2CO4rJJSc3JLEst0rdL4Mo4d/kCY8FEkYrH
-        rx+xNDCuEOhi5OSQEDCROL/+K0sXIxeHkMAORokrx/4ydjFyACWkJA7u04QwhSUOHy6GKHnO
-        KHF36yJ2kF42AV2JJzd+MoPUiAhoS9x/kQ4SZhZIlGj+cokJon4do0TT7z0sIDWcArESv+7w
-        gdQICzhKHDxzggnEZhFQkZi6cRkLiM0rYCnRd/YmE4QtKHFy5hMWiJnaEr0PWxkhbHmJ7W/n
-        MEOcryCx+9NRVhBbRMBKYnfvGzaIGhGJ2Z1tzBMYhWchGTULyahZSEbNQtKygJFlFaNkakFx
-        bnpusWGBUV5quV5xYm5xaV66XnJ+7iZGcFxoae1g3LPqg94hRiYOxkOMEhzMSiK8V2Ndk4R4
-        UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgKuR66blqq1NG
-        X8bO/j3F+w14Jd4fO9b66KTj47iQtJdun3dNfe3qYuyWGcq+rmL5/9cLwuOeLtj58iLP6gS+
-        49/LzRJ67mw4vnDl9JaU2Tvbc68sebQ2fUtQcnOM4bynu29Jqb9Z+9Sg3fWj0/WdBi1b+BZE
-        XY7NLY0WcHK+ePyEtOtvZc1Ylru2rOIHLWqX/ZKJsEsMDhU5alP4+8vp41NXh+v/8JH9fOb8
-        9Kdv1F6yKnVNllpq8erQUePV6pU+XD/aO9cxP9i8R1xXfLr4r4effjwSXabtl7LKYz7no0WL
-        JoUv7Zz/OuBSMue+rHfBVQsmfJFtNGk9uaY/QvKL0xqOr98VJG8cy1lx9ADzjCNKLMUZiYZa
-        zEXFiQBUeq45+gIAAA==
-X-CMS-MailID: 20220401103414epcas1p2d43a8f3512776d4e443c13bfbe1cf05c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220325094234epcas1p28605e75eef8d46f614ff11f98e5a6ef8
-References: <CGME20220325094234epcas1p28605e75eef8d46f614ff11f98e5a6ef8@epcas1p2.samsung.com>
-        <HK2PR04MB38911DEEC1C24C06E4C272D5811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,81 +89,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> exfat_update_parent_info() is a workaround for the wrong parent directory
-> information being used after renaming. Now that bug is fixed, this is no
-> longer needed, so remove it.
-> 
-> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
-> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
-> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
-> Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
+This is a spin-off of the previous work of switching GPIO library
+to use fwnode instead of of_node. Here we introduce a couple of
+a new macro helpers, which allows to switch some of the drivers
+to use fwnode and partially fwnode APIs. As a result of this cleanup
+a few drivers switched to use GPIO fwnode instead of of_node.
 
-As you said, exfat_update_parent_info() seems to be a workaround
-that exists from the legacy code to resolve the inconsistency of
-parent node information.
+Bart, Linus, I can take it thru my tree with an immutable branch if
+it's the way you prefer, otherwise please suggest on how to proceed.
 
-Thanks for your patch!
-Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
+Changelog v4:
+- fixed compilation of the Samsung pin control drivers (LKP)
+- explained in the commit message why namespacing is good for meson defs
+- added tag to one of meson patches (Neil)
 
-> ---
->  fs/exfat/namei.c | 26 --------------------------
->  1 file changed, 26 deletions(-)
-> 
-> diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c index
-> e7adb6bfd9d5..76acc3721951 100644
-> --- a/fs/exfat/namei.c
-> +++ b/fs/exfat/namei.c
-> @@ -1168,28 +1168,6 @@ static int exfat_move_file(struct inode *inode,
-> struct exfat_chain *p_olddir,
->  	return 0;
->  }
-> 
-> -static void exfat_update_parent_info(struct exfat_inode_info *ei,
-> -		struct inode *parent_inode)
-> -{
-> -	struct exfat_sb_info *sbi = EXFAT_SB(parent_inode->i_sb);
-> -	struct exfat_inode_info *parent_ei = EXFAT_I(parent_inode);
-> -	loff_t parent_isize = i_size_read(parent_inode);
-> -
-> -	/*
-> -	 * the problem that struct exfat_inode_info caches wrong parent
-> info.
-> -	 *
-> -	 * because of flag-mismatch of ei->dir,
-> -	 * there is abnormal traversing cluster chain.
-> -	 */
-> -	if (unlikely(parent_ei->flags != ei->dir.flags ||
-> -		     parent_isize != EXFAT_CLU_TO_B(ei->dir.size, sbi) ||
-> -		     parent_ei->start_clu != ei->dir.dir)) {
-> -		exfat_chain_set(&ei->dir, parent_ei->start_clu,
-> -			EXFAT_B_TO_CLU_ROUND_UP(parent_isize, sbi),
-> -			parent_ei->flags);
-> -	}
-> -}
-> -
->  /* rename or move a old file into a new file */  static int
-> __exfat_rename(struct inode *old_parent_inode,
->  		struct exfat_inode_info *ei, struct inode *new_parent_inode,
-> @@ -1220,8 +1198,6 @@ static int __exfat_rename(struct inode
-> *old_parent_inode,
->  		return -ENOENT;
->  	}
-> 
-> -	exfat_update_parent_info(ei, old_parent_inode);
-> -
->  	exfat_chain_dup(&olddir, &ei->dir);
->  	dentry = ei->entry;
-> 
-> @@ -1242,8 +1218,6 @@ static int __exfat_rename(struct inode
-> *old_parent_inode,
->  			goto out;
->  		}
-> 
-> -		exfat_update_parent_info(new_ei, new_parent_inode);
-> -
->  		p_dir = &(new_ei->dir);
->  		new_entry = new_ei->entry;
->  		ep = exfat_get_dentry(sb, p_dir, new_entry, &new_bh);
-> --
-> 2.25.1
+Changelog v3:
+- moved count initialization to the definition in patch 2 (Geert)
+- replaced of_args by args, used %pfwP in patch 7 (Geert)
+- fixed kernel doc warning in patch 7
+- added tags to patches 1, 2, 6, and 7 (Geert)
+- added tag to patch 4 (Fabien)
+- renamed MREG to MESON_REG in patch 9 (Neil)
+- added tag to patch 10 (Neil)
+- used --base for cover-letter
+
+Changelog v2:
+- properly based, so kbuild bot may test it (LKP)
+- fixed typo in the macro (Geert)
+- split to two macro helpers and rename the gpiochip_count()
+- tagged one of stm32 and one of meson patches (Fabien, Neil)
+- unified previously standalone armada patch
+- due to above rewrote the armada patch from v1 completely (Sergey)
+- added a lot of a new patches
+- compile tested all of them on x86
+
+Andy Shevchenko (13):
+  gpiolib: Introduce for_each_gpiochip_node() loop helper
+  gpiolib: Introduce gpiochip_node_count() helper
+  pinctrl: stm32: Replace custom code by gpiochip_node_count() call
+  pinctrl: stm32: Switch to use for_each_gpiochip_node() helper
+  pinctrl: samsung: Switch to use for_each_gpiochip_node() helper
+  pinctrl: renesas: rza1: Replace custom code by gpiochip_node_count()
+    call
+  pinctrl: renesas: rza1: Switch to use for_each_gpiochip_node() helper
+  pinctrl: npcm7xx: Switch to use for_each_gpiochip_node() helper
+  pinctrl: meson: Rename REG_* to MESON_REG_*
+  pinctrl: meson: Enable COMPILE_TEST
+  pinctrl: meson: Replace custom code by gpiochip_node_count() call
+  pinctrl: armada-37xx: Switch to use fwnode instead of of_node
+  pinctrl: armada-37xx: Reuse GPIO fwnode in
+    armada_37xx_irqchip_register()
+
+ drivers/pinctrl/meson/Kconfig               |   2 +-
+ drivers/pinctrl/meson/pinctrl-meson.c       |  52 ++++---
+ drivers/pinctrl/meson/pinctrl-meson.h       |  24 ++--
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c |  34 ++---
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c   | 142 +++++++++-----------
+ drivers/pinctrl/renesas/pinctrl-rza1.c      |  47 ++-----
+ drivers/pinctrl/samsung/pinctrl-exynos.c    |   8 +-
+ drivers/pinctrl/samsung/pinctrl-s3c24xx.c   |   2 +-
+ drivers/pinctrl/samsung/pinctrl-s3c64xx.c   |   4 +-
+ drivers/pinctrl/samsung/pinctrl-samsung.c   |  30 ++---
+ drivers/pinctrl/samsung/pinctrl-samsung.h   |   2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32.c       |  80 +++++------
+ include/linux/gpio/driver.h                 |  18 ++-
+ 13 files changed, 198 insertions(+), 247 deletions(-)
+
+
+base-commit: e5071887cd2296a7704dbcd10c1cedf0f11cdbd5
+-- 
+2.35.1
 

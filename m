@@ -2,141 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312CA4EEC6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FCB4EEC6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345535AbiDALgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
+        id S1345545AbiDALgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238883AbiDALgI (ORCPT
+        with ESMTP id S241232AbiDALgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:36:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F111D2515;
-        Fri,  1 Apr 2022 04:34:18 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9400D21612;
-        Fri,  1 Apr 2022 11:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648812857; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3HQl64Cj0Sry5BnIv1XFR1Ee5SQlSyhmW0GaIDy+uVE=;
-        b=Tp5z97a7IRx4XlEC6GyhubhMP7XO835TkZauXZwpC7ZQJFRKX//ek5wrKndXyxVFeNEoFG
-        9NtJ35eph7ci1tGFEr8/JVi+qFNRmQ+UyR91XoyjdMpraNHYez3uoMRJ0MZcodv2TvjQrG
-        VT3nfHf4Ec2ivQNFi09Dxw9fhlOUc2k=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0D02BA3B88;
-        Fri,  1 Apr 2022 11:34:15 +0000 (UTC)
-Date:   Fri, 1 Apr 2022 13:34:13 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, cgroups@vger.kernel.org,
-        Ke Wang <ke.wang@unisoc.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-Message-ID: <YkbjNYMY8VjHoSHR@dhcp22.suse.cz>
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz>
- <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
- <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
+        Fri, 1 Apr 2022 07:36:52 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CBD1D66F6;
+        Fri,  1 Apr 2022 04:35:02 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2e5e176e1b6so28793527b3.13;
+        Fri, 01 Apr 2022 04:35:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1vcpLdnxR+c+1IodUhMT7bozvTtnxFjdrTjmrW7ioa8=;
+        b=ymhoIZQsDoCBsYv+BN4xO3LxZiq6CQAKHKwl8AZEhFYCmoHUccLKAKG+1NoX/BKL0A
+         Lyptv/pBHwMPhwmF/aMd4P8D3MU0zEPYpiDB3P0SH3i2Ak2fX8J5+nxEJhO4R5RQ8bwk
+         ScrriPF4IKOrFOmqJV82st704FZ3Hc9hZvgJ+RCJfJt8GdSi7lBzF/UWR4A409d+POCO
+         eBedtqso2OJGeC+NAad5Rooz4lWyQ+NqCXW34tveimvlhhG7LYATOHShKvfSzYwmwz+J
+         DGRMY50+saqRdwmHmepqoK/EVrHSpH+EEdb7DROJf6f5MlMlJzlij8lTddqzDxOiHZlN
+         dfIA==
+X-Gm-Message-State: AOAM533UVNbXOJllJZAl7y98eAZqadW1b2M0MbBPzPbuPONLrborQ0oc
+        Qt28uP3If0c3ITXJ9dPttTUnW7+wZ+1GVVcWk1Q=
+X-Google-Smtp-Source: ABdhPJzacR+RMoy0ORGG7NFwHFOcHeSB6CcA/ae/HowmGQBYxHBi8F7c1VKDCkwOLjaykLANKDkfCFEyb1cGKUAGXnw=
+X-Received: by 2002:a81:5cf:0:b0:2e5:7477:168e with SMTP id
+ 198-20020a8105cf000000b002e57477168emr9592262ywf.149.1648812901273; Fri, 01
+ Apr 2022 04:35:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <11980172.O9o76ZdvQC@kreacher> <20220331215716.GA27368@bhelgaas>
+In-Reply-To: <20220331215716.GA27368@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 1 Apr 2022 13:34:50 +0200
+Message-ID: <CAJZ5v0hTBQ=eajovHixwMs+1YQVFV7=uAay1qdxh3uDs68HndQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Stefan Gottwald <gottwald@igel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 01-04-22 09:34:02, Zhaoyang Huang wrote:
-> On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
+On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> Hi Rafael,
+>
+> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> > > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > >
-> > > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > > > by loading an special algorithm into its virtual address space and make it hard
-> > > > > to protect the expanded usage without userspace's interaction.
-> > > >
-> > > > Do I get it correctly that the concern you have is that you do not know
-> > > > how much memory your workload will need because that depends on some
-> > > > parameters?
-> > > right. such as a camera APP will expand the usage from 50MB to 500MB
-> > > because of launching a special function(face beauty etc need special
-> > > algorithm)
-> > > >
-> > > > > Furthermore, fixed
-> > > > > memory.low is a little bit against its role of soft protection as it will response
-> > > > > any system's memory pressure in same way.
-> > > >
-> > > > Could you be more specific about this as well?
-> > > As the camera case above, if we set memory.low as 200MB to keep the
-> > > APP run smoothly, the system will experience high memory pressure when
-> > > another high load APP launched simultaneously. I would like to have
-> > > camera be reclaimed under this scenario.
+> > If one of the PCIe root ports on Elo i2 is put into D3cold and then
+> > back into D0, the downstream device becomes permanently inaccessible,
+> > so add a bridge D3 DMI quirk for that system.
 > >
-> > OK, so you effectivelly want to keep the memory protection when there is
-> > a "normal" memory pressure but want to relax the protection on other
-> > high memory utilization situations?
-> >
-> > How do you exactly tell a difference between a steady memory pressure
-> > (say stream IO on the page cache) from "high load APP launched"? Should
-> > you reduce the protection on the stram IO situation as well?
-> We can take either system's io_wait or PSI_IO into consideration for these.
+> > This was exposed by commit 14858dcc3b35 ("PCI: Use
+> > pci_update_current_state() in pci_enable_device_flags()"), but before
+> > that commit the root port in question had never been put into D3cold
+> > for real due to a mismatch between its power state retrieved from the
+> > PCI_PM_CTRL register (which was accessible even though the platform
+> > firmware indicated that the port was in D3cold) and the state of an
+> > ACPI power resource involved in its power management.
+>
+> In the bug report you suspect a firmware issue.  Any idea what that
+> might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
+> it would be a hardware issue.
 
-I do not follow. Let's say you have a stream IO workload which is mostly
-RO. Reclaiming those pages means effectivelly to drop them from the
-cache so there is no IO involved during the reclaim. This will generate
-a constant flow of reclaim that shouldn't normally affect other
-workloads (as long as kswapd keeps up with the IO pace). How does your
-scheme cope with this scenario? My understanding is that it will simply
-relax the protection.
+The _ON method of the ACPI power resource associated with the root
+port doesn't work correctly.
 
-> > [...]
-> > > > One very important thing that I am missing here is the overall objective of this
-> > > > tuning. From the above it seems that you want to (ab)use memory->low to
-> > > > protect some portion of the charged memory and that the protection
-> > > > shrinks over time depending on the the global PSI metrict and time.
-> > > > But why this is a good thing?
-> > > 'Good' means it meets my original goal of keeping the usage during a
-> > > period of time and responding to the system's memory pressure. For an
-> > > android like system, memory is almost forever being in a tight status
-> > > no matter how many RAM it has. What we need from memcg is more than
-> > > control and grouping, we need it to be more responsive to the system's
-> > > load and could  sacrifice its usage  under certain criteria.
+> Weird how things come in clumps.  Was just looking at Mario's patch,
+> which also has to do with bridges and D3.
+>
+> Do we need a Fixes line?  E.g.,
+>
+>   Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
+
+Strictly speaking, it is not a fix for the above commit.
+
+It is a workaround for a firmware issue uncovered by it which wasn't
+visible, because power management was not used correctly on the
+affected system because of another firmware problem addressed by
+14858dcc3b35.  It wouldn't have worked anyway had it been attempted
+AFAICS.
+
+I was thinking about CCing this change to -stable instead.
+
+> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
+> > Reported-by: Stefan Gottwald <gottwald@igel.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/pci/pci.c |   10 ++++++++++
+> >  1 file changed, 10 insertions(+)
 > >
-> > Why existing tools/APIs are insufficient for that? You can watch for
-> > both global and memcg memory pressure including PSI metrics and update
-> > limits dynamically. Why is it necessary to put such a logic into the
-> > kernel?
-> Poll and then React method in userspace requires a polling interval
-> and response time. Take PSI as an example, it polls ten times during
-> POLLING_INTERVAL while just report once, which introduce latency in
-> some extend.
+> > Index: linux-pm/drivers/pci/pci.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/pci/pci.c
+> > +++ linux-pm/drivers/pci/pci.c
+> > @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
+> >                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
+> >                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
+> >               },
+> > +             /*
+> > +              * Downstream device is not accessible after putting a root port
+> > +              * into D3cold and back into D0 on Elo i2.
+> > +              */
+> > +             .ident = "Elo i2",
+> > +             .matches = {
+> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
+> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
+> > +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
+> > +             },
+>
+> Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
 
-Do workload transitions happen so often in your situation that the
-interval really matters? As Suren already pointed out starting a new
-application is usually an explicit event which can pro-activelly update
-limits.
--- 
-Michal Hocko
-SUSE Labs
+Not really.  The former applies to the entire platform and not to an
+individual device.
+
+> Could they be folded together?  We have a lot of bits that seem
+> similar but maybe not exactly the same (dev->bridge_d3,
+> dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
+> PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
+
+Yes, I agree that this needs to be cleaned up.
+
+> bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
+> Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
+> which honestly looks kind of random, i.e., it doesn't seem to be
+> working around a hardware or even a firmware defect.
+>
+> Apparently the X299 issue is that 00:1c.4 is connected to a
+> Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
+> powered off unless something is attached to it?  At least, 00:1c.4
+> leads to bus 05, and in the dmesg log attached to [1] shows no devices
+> on bus 05.
+>
+> It also says the platform doesn't support PCIe native hotplug, which
+> matches what Mika said about it using ACPI hotplug.  If a system is
+> using ACPI hotplug, it seems like maybe *that* should prevent us from
+> putting things in D3cold?  How can we know whether ACPI hotplug
+> depends on a certain power state?
+
+We have this check in pci_bridge_d3_possible():
+
+if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
+            return false;
+
+but this only applies to the case when the particular bridge itself is
+a hotplug one using ACPI hotplug.
+
+If ACPI hotplug is used, it generally is unsafe to put PCIe ports into
+D3cold, because in that case it is unclear what the platform
+firmware's assumptions regarding control of the config space are.
+
+However, I'm not sure how this is related to the patch at hand.

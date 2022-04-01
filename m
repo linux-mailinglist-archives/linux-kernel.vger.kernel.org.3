@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB0E4EFCA9
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9424EFCBA
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353276AbiDAWLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 18:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        id S1353337AbiDAWUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 18:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353258AbiDAWLu (ORCPT
+        with ESMTP id S1349992AbiDAWUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 18:11:50 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838AB5A097
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:10:00 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-dee0378ce7so4205247fac.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 15:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=6rY8NKT6m0nS75suQ+nFywMY6wDIOo3ms5SeTbFXvxM=;
-        b=kwfOWInOCRYECvlHmEdCMRxg6iXPB40US4o+rR7nBbVs4TK8Xd3fhTJVHZw+Ipy+5/
-         vZLKw3rgc3fV8tqsLjXS82Y9etsT89es+YtpxzQ62EcKTU8JmT299mEE+wiMZ9GzeJh6
-         76DuwhxuZgF3SbR9FuuEqZa/f3t/o6hTNJ450=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=6rY8NKT6m0nS75suQ+nFywMY6wDIOo3ms5SeTbFXvxM=;
-        b=1s7eau8P0DT71q3d1Z/jJVDISK08J+47Wyh/7VmCDswnLdC2W8m16MdFKf5zqa6DkJ
-         nONTsuK/q528IheE2Xx7hBy3LFf2pxwgKyHxf8mrGpiJljjtCabf2r+F+krCdu4SZMco
-         6PamCZG3JL0SYd9JGf/rPkLjfxHmQmbwABPLX/m/9iN8keZvMuiyIzUHbSTJ1V3n4MZb
-         /VmG8hayF+I+llqeVIRAHI5+AvPnZSTJaN9lxwwrRdRfTY/T0+oJdukXKCF6Sp7exa3C
-         0KOCWyAxn8GeQmmDjfwbZS2VcID0KZ5TejqmKMlPm8EM9so2dMeCYzo4+S+r+ES66ih/
-         JbXQ==
-X-Gm-Message-State: AOAM5318slz24lYcM8qcPxa3lBQ9ksMLPtc7c36JdvyyHSvmZH974mU1
-        4K6ZxHBYQfhMyOsaMGxR3hED0kW/YVx/NWqyZYVxdw==
-X-Google-Smtp-Source: ABdhPJxQSBjHCimqKqmmEHvxpus5i7XPHVv6wtC8jb98htsIgcr/Uv9JRMFkIVcC3CNZ/kGzLXUj7+8PEY7X3yjZuXE=
-X-Received: by 2002:a05:6870:b69c:b0:dd:b74b:4099 with SMTP id
- cy28-20020a056870b69c00b000ddb74b4099mr5768834oab.193.1648850999220; Fri, 01
- Apr 2022 15:09:59 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 1 Apr 2022 17:09:58 -0500
-MIME-Version: 1.0
-In-Reply-To: <1647532165-6302-3-git-send-email-quic_c_sbhanu@quicinc.com>
-References: <1647532165-6302-1-git-send-email-quic_c_sbhanu@quicinc.com> <1647532165-6302-3-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 1 Apr 2022 17:09:58 -0500
-Message-ID: <CAE-0n53BBzgU6AJ70JNUBBkDZ1c9ZmpX8ZXLcxLxmmg1=UnSLw@mail.gmail.com>
-Subject: Re: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Add reset entries for
- SDCC controllers
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        robh+dt@kernel.org, ulf.hansson@linaro.org
-Cc:     quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        quic_sartgarg@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_sayalil@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 18:20:30 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC754C41F;
+        Fri,  1 Apr 2022 15:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648851520; x=1680387520;
+  h=from:to:cc:subject:date:message-id;
+  bh=qT1iUcSDEtAU+xXuDjdqpSGzyO4mMVV0OZcTstB3bGQ=;
+  b=mPv+ycXn5CMVZgHAXwkv9f0dkWxp4/F+l/vMPfzxDetILeuYow0o3LII
+   s6X2wVe6OEpJqYmDRRI3RZcYscCYZRB5rDRphHqbA+cae4eJ1ZV+B7417
+   vj7Hsa5fRrTd0Er4gp0hNHEWl8797wIiiQJfh0BaZv/X1AV8a8M3JDOm7
+   apGIqAarvPAU4Ws6d/gPeWm2QVuow06bQ6KvGjI8jG3mgVcB8gZV9Ewvz
+   zC5a0o5RxWGDkmn2xNlFPwlj8iRrOwLFrA7zkMY2bV0o1JFGDAf0+Cn28
+   tI/tJAEkEXOgLeZ4PtBUMzqnNEzW6xrhtvN4gzutkWAsCe0uN3t/LqFOi
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257822122"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="257822122"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 15:18:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="567860534"
+Received: from chang-linux-3.sc.intel.com ([172.25.112.114])
+  by orsmga008.jf.intel.com with ESMTP; 01 Apr 2022 15:18:34 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
+        chang.seok.bae@intel.com
+Subject: [PATCH 0/2] selftests/x86: AMX-related test improvements
+Date:   Fri,  1 Apr 2022 15:10:12 -0700
+Message-Id: <20220401221014.13556-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Shaik Sajida Bhanu (2022-03-17 08:49:25)
-> Add gcc hardware reset entries for eMMC and SD card.
->
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index c07765d..cd50ea3 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -881,6 +881,10 @@
->                         mmc-hs400-1_8v;
->                         mmc-hs400-enhanced-strobe;
->
-> +                       /* gcc hardware reset entry for eMMC */
+A couple of test updates are included:
 
-Please don't add this worthless comment.
+* With this option [1,2], the kernel's altstack check becomes stringent.
+  The x86 sigaltstack test is ignorant about this. Adjust the test now. 
+  This check was established [3] to ensure every AMX task's altstack is 
+  sufficient (regardless of that option) [4].
 
-> +                       resets = <&gcc GCC_SDCC1_BCR>;
-> +                       reset-names = "core_reset";
+* The AMX test wrongly fails on non-AMX machines. Fix the code to skip the
+  test instead.
 
-A "_reset" postfix is redundant. In fact, reset-names shouldn't even be
-required.
+The series is available in this repository:
+  git://github.com/intel/amx-linux.git selftest
 
-> +
->                         sdhc1_opp_table: opp-table {
->                                 compatible = "operating-points-v2";
->
-> @@ -2686,6 +2690,10 @@
->
->                         qcom,dll-config = <0x0007642c>;
->
-> +                       /* gcc hardware reset entry for SD card */
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/Kconfig#n2432
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/kernel-parameters.txt#n5676
+[3] 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
+[4] 4b7ca609a33d ("x86/signal: Use fpu::__state_user_size for sigalt stack validation")
 
-Please don't add this worthless comment.
+Chang S. Bae (2):
+  selftests/x86/signal: Adjust the test to the kernel's altstack check
+  selftests/x86/amx: Fix the test to avoid failure when AMX is
+    unavailable
 
-> +                       resets = <&gcc GCC_SDCC2_BCR>;
-> +                       reset-names = "core_reset";
-> +
->                         sdhc2_opp_table: opp-table {
->                                 compatible = "operating-points-v2";
->
+ tools/testing/selftests/x86/amx.c         | 42 +++++++++++++++++------
+ tools/testing/selftests/x86/sigaltstack.c | 12 ++++++-
+ 2 files changed, 42 insertions(+), 12 deletions(-)
+
+
+base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+-- 
+2.17.1
+

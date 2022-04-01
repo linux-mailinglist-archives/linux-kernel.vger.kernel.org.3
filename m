@@ -2,187 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B474EE9FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416884EEA14
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344272AbiDAIxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 04:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S1344234AbiDAJDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344088AbiDAIxa (ORCPT
+        with ESMTP id S231157AbiDAJDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 04:53:30 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E947B1F9759
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 01:51:40 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2e5e176e1b6so24580027b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 01:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RjJ1bjnY3yC7gcQ9YS5qaiBX2qOX1uixT7iNAUTqu/s=;
-        b=Qwke0j5cNSfW+QLAH417fkXqqvprzeTvgfWCezbyZYAcEuhBvPf4dIQLDqUxYy5r4r
-         8k1qcZc9m5ZitSY2JR/87JiB+hc3YH9NocaAR8HGVFi6mZ31IEuADhnGdefDZw+t6DWm
-         4p90eKLtxVyL7ziemcb3oedo3B4CbgR2XdUZ2LQnlDDGjiHfK57zvc4QwEcXqpPADubr
-         fQ/axZWhJGrGzckbvq9C2XznH1yhsnZvSw/vt59JucefYVYR6Bl4ENmgVL5WqR45XGR7
-         XGX8adUN/4eMm91t8lzcv1sdzdZhW2BeSaddPisTG+exrR9XJtMrBWdqRB6Qs4Djz7n5
-         kTJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RjJ1bjnY3yC7gcQ9YS5qaiBX2qOX1uixT7iNAUTqu/s=;
-        b=tVtEd2g7qrVNULLaq3RAGSi9+isvhRevAOE2hnhBYbAH3dYxxSnzdQ8WdlU6jQWDI4
-         QBAaOfWHSiLTb6md/khIVdUdrNGbnqulail3fJgOrKK6Kj8Q0bQUQKo+HniE9um63H/S
-         AJp/7pMyMBM3S2fXY4O4kbAREJlbldlRs6IhT/QwjwdnDdUkphyl40X52M/b9mADkxih
-         H/H+6PtLCOhJbqXsdOsmXrkT0hJRTPkPS98fm6ReJAgvrv1oMomUIjh24bdZh41Way2+
-         cR/BVSB+h1ixPUxpHazTq/VkhomxzpVL/pIJmaYTejuqf0CoAcOutBdnrrtixvEpdG9n
-         qZWw==
-X-Gm-Message-State: AOAM5315ut9NTeAUsiPWvlzZx7NOMeWmZKKSEZWDTbX8mydp8YgzS008
-        iaE/5+aDwx2PjCcWBFv0dNE7KhIOe1IcYrKIyawX1A==
-X-Google-Smtp-Source: ABdhPJwRAy6acFWGBZwFV4R+u5WXDyOLbWjYHwNmm2IBUhuVbI5bly0fqy3QmyeXvU6TE53jQncAnjgNcMES58pgicE=
-X-Received: by 2002:a81:5dd6:0:b0:2d6:3041:12e0 with SMTP id
- r205-20020a815dd6000000b002d6304112e0mr8972109ywb.331.1648803100207; Fri, 01
- Apr 2022 01:51:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220318074529.5261-1-songmuchun@bytedance.com>
- <YkXPA69iLBDHFtjn@qian> <CAMZfGtWFg=khjaHsjeHA24G8DMbjbRYRhGytBHaD7FbORa+iMg@mail.gmail.com>
-In-Reply-To: <CAMZfGtWFg=khjaHsjeHA24G8DMbjbRYRhGytBHaD7FbORa+iMg@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 1 Apr 2022 16:50:59 +0800
-Message-ID: <CAMZfGtVgWWchbSh4cH-0pGgSWaDjN=WE9Rh-Dgm_j3_ojwNEgw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] Fix some bugs related to ramp and dax
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Fri, 1 Apr 2022 05:03:16 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D1125F667
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648803638;
+        bh=A3dsJ2AXBiFkTvR2SoKOxX+hgIr1pcvpMiQ8AAPATCo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=U0B/7xUgHIBRZCONDSD4540AsBZEgTnO6HPKt/0HU6D+xvF+r2n9YJ/bXrf2KtcZv
+         TyIgfAFwguW9g95+99/aYjaCscWtGy2VkGL8g2TugVb6oFo649gtN4McPvAljnPJL9
+         pmC2Z/6OGBxFTQBiYD7CwVtABZjIo//KsTFPmCkk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from genesis.localnet ([217.232.146.93]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3DJv-1nbZWd0p9J-003ZlA; Fri, 01
+ Apr 2022 11:00:38 +0200
+From:   Alois Wohlschlager <alwoju@gmx.de>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Hildenbrand <david@redhat.com>,
+        Rolf Eike Beer <eb@emlix.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Matthew Bobrowski <repnop@google.com>, Jan Kara <jack@suse.cz>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pid: Allow creation of pidfds to threads
+Date:   Fri, 01 Apr 2022 11:00:27 +0200
+Message-ID: <5392366.5i5WIIk9Ns@genesis>
+In-Reply-To: <20220401070942.odjbuc5wecfayyok@wittgenstein>
+References: <3412128.IC5jYiYEAv@genesis> <20220401070942.odjbuc5wecfayyok@wittgenstein>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="nextPart36927791.vr0k8ECSMx"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Provags-ID: V03:K1:Mcz+IWskG6bHGd5D+uo1Pru/G0reYgYsMnwEkPHVLHar1c/ob9h
+ XT6NLZ338r66vUtCJKuudb6DfC3eCiUycko4I5wphhRxpqcrbsLtuOuHFDDNENKQLAs8pGc
+ 0uqS0KiipX0AwBqC0ZeiEmGuFMwJt2gSCxU4IxxPZj8DJvwaZ4A6c37c3Io99vqLOuMzStp
+ EJeA4OJbJxnFohDPFKpaQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:v653SADyf1U=:x2Hs4EmUJcTc+Zp/58Yauu
+ J7uMH2CL5CNggshXjbhZ3LCMauwP2t08dIGCuRgyDKDhx1aqo7tVL8UeDemt+iikhOnSEvluJ
+ hoqaem1RLkb70Ta2Y/nsysjSoOR3+BvT12kKV+srCU6c3Susi5lAsJMcQCcylq6fKOdOxvDX7
+ 1q2RE3NgDu/SyUvA0eTkKbHpB0cO6r09XJmIJqRnMotEUE5AOAeA9s+19uspukgoYa1dBJKkh
+ JCD3rvHESORxrzpNiOn7tPxTFknn/rhKnZ+qiatV2S6lszo5lS+5iBsbWcGarAr3TjUWWhpdR
+ Ue57IFkHm/AktNnhrj+4Z7D4F9WxUxX7mmmmk6gcrW9DpCmx71qJOY4uSfDO8eGAA+tt6YjW+
+ 3GOwWwST6F+WZ2UMbHlbLPrVOJGvM30dfIcCd8uAWc2vlVZKIC4JXFdeF1mBYAv6EPxhMoRjW
+ c/WBX3Gf8qfCYYMUpkosEm7YpT5Gl/ZsD73oKgEb3LlJ2yXinoz866pJqkJkyGcI4C+PZ/kWR
+ L2fGnybw6LJt6hQn9cA2Bg/0iyxWsBSispnvBbwDG0uGUVlowySjU4Xi71kb5uJbRnb4fdQxL
+ b/R+96Lj97SYN5dXLqC8Gggd1ctOKY0XeJRNtBlAytcwcsvhuARUAXh5yz+54pCr3tmo5EX1x
+ ZPQwOFcyqAV+E1Trd7zN+Nj886uR0wFeXOQ5aU19Fe7/6jvh0bFTiCGkKCwNRDkaKSuwGszrj
+ Qm3ymOnW3cqaPomhVweRD4pz2N68wJ0MbsvoSeLh4BetuSWXeLkh5XriqpPo91Op1ah67DHEL
+ AtzBekkW2Xud4b83UWfaKy3zEgR+/BroEB4B/YWXsr+zN7APhKqWqgXjERUE4uPKbiET1FbaK
+ M5MrQ5XjB2QQSYizis6WNBRwg8xZcONOfiEjnpcY2Fnlq26Qx3hlhRxHd7z4yeZJ8A69JRkFP
+ BC0boBzAAkw95epuH0OBTB1LYatOBqasX/Md+QRR1KoTh+u+tREGAKDXNR7SV6ng/poUO5lHL
+ GTgHRoEgJOYiw7tmg8yfUnBA1PtZUhZQBRuEMfBvkNIJz53BF8fo+IiewQR53dK3w6K6ZKEL2
+ dD1uSsI/VfGmfE=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 11:44 AM Muchun Song <songmuchun@bytedance.com> wrot=
-e:
->
-> On Thu, Mar 31, 2022 at 11:55 PM Qian Cai <quic_qiancai@quicinc.com> wrot=
-e:
-> >
-> > On Fri, Mar 18, 2022 at 03:45:23PM +0800, Muchun Song wrote:
-> > > This series is based on next-20220225.
-> > >
-> > > Patch 1-2 fix a cache flush bug, because subsequent patches depend on
-> > > those on those changes, there are placed in this series.  Patch 3-4
-> > > are preparation for fixing a dax bug in patch 5.  Patch 6 is code cle=
-anup
-> > > since the previous patch remove the usage of follow_invalidate_pte().
-> >
-> > Reverting this series fixed boot crashes.
-> >
-> >  KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
-> >  Mem abort info:
-> >    ESR =3D 0x96000004
-> >    EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-> >    SET =3D 0, FnV =3D 0
-> >    EA =3D 0, S1PTW =3D 0
-> >    FSC =3D 0x04: level 0 translation fault
-> >  Data abort info:
-> >    ISV =3D 0, ISS =3D 0x00000004
-> >    CM =3D 0, WnR =3D 0
-> >  [dfff800000000003] address between user and kernel address ranges
-> >  Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> >  Modules linked in: cdc_ether usbnet ipmi_devintf ipmi_msghandler cppc_=
-cpufreq fuse ip_tables x_tables ipv6 btrfs blake2b_generic libcrc32c xor xo=
-r_neon raid6_pq zstd_compress dm_mod nouveau crct10dif_ce drm_ttm_helper ml=
-x5_core ttm drm_dp_helper drm_kms_helper nvme mpt3sas nvme_core xhci_pci ra=
-id_class drm xhci_pci_renesas
-> >  CPU: 3 PID: 1707 Comm: systemd-udevd Not tainted 5.17.0-next-20220331-=
-00004-g2d550916a6b9 #51
-> >  pstate: 104000c9 (nzcV daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
-> >  pc : __lock_acquire
-> >  lr : lock_acquire.part.0
-> >  sp : ffff800030a16fd0
-> >  x29: ffff800030a16fd0 x28: ffffdd876c4e9f90 x27: 0000000000000018
-> >  x26: 0000000000000000 x25: 0000000000000018 x24: 0000000000000000
-> >  x23: ffff08022beacf00 x22: ffffdd8772507660 x21: 0000000000000000
-> >  x20: 0000000000000000 x19: 0000000000000000 x18: ffffdd8772417d2c
-> >  x17: ffffdd876c5bc2e0 x16: 1fffe100457d5b06 x15: 0000000000000094
-> >  x14: 000000000000f1f1 x13: 00000000f3f3f3f3 x12: ffff08022beacf08
-> >  x11: 1ffffbb0ee482fa5 x10: ffffdd8772417d28 x9 : 0000000000000000
-> >  x8 : 0000000000000003 x7 : ffffdd876c4e9f90 x6 : 0000000000000000
-> >  x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-> >  x2 : 0000000000000000 x1 : 0000000000000003 x0 : dfff800000000000
-> >  Call trace:
-> >   __lock_acquire
-> >   lock_acquire.part.0
-> >   lock_acquire
-> >   _raw_spin_lock
-> >   page_vma_mapped_walk
-> >   try_to_migrate_one
-> >   rmap_walk_anon
-> >   try_to_migrate
-> >   __unmap_and_move
-> >   unmap_and_move
-> >   migrate_pages
-> >   migrate_misplaced_page
-> >   do_huge_pmd_numa_page
-> >   __handle_mm_fault
-> >   handle_mm_fault
-> >   do_translation_fault
-> >   do_mem_abort
-> >   el0_da
-> >   el0t_64_sync_handler
-> >   el0t_64_sync
-> >  Code: d65f03c0 d343ff61 d2d00000 f2fbffe0 (38e06820)
-> >  ---[ end trace 0000000000000000 ]---
-> >  Kernel panic - not syncing: Oops: Fatal exception
-> >  SMP: stopping secondary CPUs
-> >  Kernel Offset: 0x5d8763da0000 from 0xffff800008000000
-> >  PHYS_OFFSET: 0x80000000
-> >  CPU features: 0x000,00085c0d,19801c82
-> >  Memory Limit: none
-> >  ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
->
-> Thanks for your report. Would you mind providing the .config?
+--nextPart36927791.vr0k8ECSMx
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Alois Wohlschlager <alwoju@gmx.de>
+To: Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH] pid: Allow creation of pidfds to threads
+Date: Fri, 01 Apr 2022 11:00:27 +0200
+Message-ID: <5392366.5i5WIIk9Ns@genesis>
+In-Reply-To: <20220401070942.odjbuc5wecfayyok@wittgenstein>
 
-Hi Qian Cai,
+Hello Christian,
 
-Would you mind helping me test if the following patch works properly?
-Thanks.
+> We originally blocked this because it is not as easy as simply allowing
+> pidfds to be created for non-thread-group leaders.
+> For a start, pidfd_poll() currently doens't work if pidfd_task() isn't a
+> thread-group leader
 
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index b3bf802a6435..3da82bf65de8 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -210,7 +210,8 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *=
-pvmw)
-                 */
-                pmde =3D READ_ONCE(*pvmw->pmd);
+I did notice the hang there, that's why my patch changes pidfd_poll to ret=
+urn
+error on tasks which are not thread-group leaders. IIRC, waiting on specif=
+ic
+threads is not supported by Linux at all, so I don't see a problem with no=
+t
+supporting it here either.
 
--               if (pmd_leaf(pmde) || is_pmd_migration_entry(pmde)) {
-+               if (pmd_trans_huge(pmde) || is_pmd_migration_entry(pmde) ||
-+                   (pmd_present(pmde) && pmd_devmap(pmde))) {
-                        pvmw->ptl =3D pmd_lock(mm, pvmw->pmd);
-                        pmde =3D *pvmw->pmd;
-                        if (!pmd_present(pmde)) {
+> and you'll just hang for CLONE_PIDFD | CLONE_THREAD.
+
+No, CLONE_PIDFD | CLONE_THREAD behavior is unchanged, it will still fail w=
+ith
+EINVAL. I actually confirmed this by double-checking right now.
+
+> So at least that needs to be adapated as well and there's likely a bunch
+> of other corner-cases I'm forgetting about.
+
+I'd be happy to hear about other corner-cases so I can fix them.
+
+> Do you have a concrete use-case you want this for?
+
+My use-case is basically making pidfd_getfd actually useful for its intend=
+ed
+purpose: there is a seccomp_unotify-based supervisor that wants to obtain =
+a
+file descriptor from its guest. This currently does not work if the action=
+ to
+be forwarded to the supervisor is performed in a secondary thread, since t=
+here
+is no way to obtain the required pidfd.
+
+> Christian
+
+Alois
+
+--nextPart36927791.vr0k8ECSMx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEypeoIv8kJdR0rz5L4PWepeUhaRQFAmJGvysACgkQ4PWepeUh
+aRSBhQ/8CXQauAadNg4smYJongj+K9af3RvKzcgoGNZ7inOUDRBADIyDIMkiP4QH
+1LxDeWn36uwVju5R+lIrW1nbO/aKEh+wEkQz8yQun4saQfehfGDydnk+TPXMPmlw
+E575TuBN7qncn2sR0eiOB0QecN8sO1pGHZbM6ZBTndFl9UR+3hMSse/vD9zbfiuP
+HhdTRY/Um/GHLTl1KTWua4v7GPLUVpDRh1nTSWaP366jwKX0xkeTqZ7hg1xTmEqz
+8c36+TAKS3MEOTt68hTFM3H7VfhzdxJuZRwP5++MlWfAk0B46zDMtRJKykQr9uH5
+Lx3BHmnDMt6XB+c9d4sgp+IOt/7HmSA/bEqKTIdb1Ea5eiChwPzQjbLo22L8U1hZ
+IxYeStwGSG0fgTPSrBlC+vad8FdTfSNHxNXPTMCmiLawhyXFWnSmfpqmhA6ots+I
+G4Ei5duX06BaL4Swwv/f4IxZQVfNIR5nhLsyRrgamh2+K7oakUmoxRLXScpGY9o4
+Ghh9+vjSnOB/b0lFtrjorFbYb5w8McSEGLigXfSHXnLfTdIA9a8t/2ojQDWfXIl2
+VA58qchxSuXhHPx76Strh3GmT1RLwgzA3qDMCpjdEvwHq5pvC6W5SOOiziNSRx19
+Igxi1fXGhJCkKE7krdS4/lqqNxucoaJVvtr1I55CbEd8WzjcgE4=
+=PTKU
+-----END PGP SIGNATURE-----
+
+--nextPart36927791.vr0k8ECSMx--
+
+
+

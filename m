@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6628F4EEC79
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7654EEC7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbiDALnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S1345566AbiDALp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbiDALnn (ORCPT
+        with ESMTP id S233087AbiDALpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:43:43 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397E8211EFF
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ga4MfIUZgdsktGYsgbWbZ2xcuagajJnCIZQSpqYHT18=; b=YFxkZ26vv3Nv6kN4orRf+lDvi6
-        k0rMp+VqktNM3orFFBNQG8fS8IrO7AwHdpktunaWKQ7+tQVUS3hCmYyAPkDiYrAIuZ07YJiLzjvbI
-        tkS4VD6XTUzi5+PtHugUPsXIZaE8X2vrE04BDaZ5RtjYEUDDMfwoCvSen5J5UBmrXa2igU1bUTNJc
-        3rWNQOOPEPZF6sOZ6xKEI81BuY+ZZ8nYlvUu1CfG7U7QvtcREv+jmGQLKvk3c9TbgC05Iiu+wIUXm
-        2eiN3yuj3/E3dlHRQf1XLd7gOojb5tJUYXroj5ZfBKOYikomJExM+cUyOQZf1lNUXRCchBxp6gHx2
-        RhRii4gw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1naFef-000NjN-54; Fri, 01 Apr 2022 11:41:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 61D0F30027B;
-        Fri,  1 Apr 2022 13:41:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4FDFA2007DF3D; Fri,  1 Apr 2022 13:41:20 +0200 (CEST)
-Date:   Fri, 1 Apr 2022 13:41:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        vincent.guittot@linaro.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        joel@joelfernandes.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com
-Subject: Re: [PATCH] sched/core: Fix forceidle balancing
-Message-ID: <Ykbk4MSSNSxsQoMs@hirez.programming.kicks-ass.net>
-References: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
+        Fri, 1 Apr 2022 07:45:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39E43A5DD;
+        Fri,  1 Apr 2022 04:43:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 583F6B824B1;
+        Fri,  1 Apr 2022 11:43:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DDDC340F2;
+        Fri,  1 Apr 2022 11:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648813412;
+        bh=9b2hrUOXZUT4PtJ74mv2OEiQ6y7RhlwtuoDd+ejgaHI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=p2wSzyrF0VBZw1zFe1IbnVN7qphAnFNPX8ag1U5Qc5lBrI9JpRxpzJiMU+21SfuC0
+         e27digsEly0p7uLDQZrbnshD5m9zC367HP5izc1WZ+N82FtkX1/rvLNGXOUntpS6Vm
+         i4YAImYwXujxOOl/niepyVgbxLMHxFW5w8d94WyDxXlaPKrSaBnQP8QhUmA3nL9c/X
+         U3U1Y39LDDq8RniNgJkd/iWi7WTo9lIPEHR26CguHEgWTgIk8PUSaX62eJayZOPSEI
+         ipZxOIhpAVRHbXeS1fMjTtRJxSWCsEik/BoRGVIowLf90o4bX8SZ6UpfLTjt1+8E0E
+         SWhT3rpqq5A1w==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] iwlwifi: fw: Replace zero-length arrays with flexible-array members
+References: <20220216195015.GA904148@embeddedor>
+        <202202161235.2FB20E6A5@keescook>
+        <20220326003843.GA2602091@embeddedor> <871qym1vck.fsf@kernel.org>
+        <4c520e2e-d1a5-6d2b-3ef1-b891d7946c01@embeddedor.com>
+Date:   Fri, 01 Apr 2022 14:43:26 +0300
+In-Reply-To: <4c520e2e-d1a5-6d2b-3ef1-b891d7946c01@embeddedor.com> (Gustavo A.
+        R. Silva's message of "Mon, 28 Mar 2022 01:23:59 -0500")
+Message-ID: <871qyhuizl.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 06:05:35PM +0200, Peter Zijlstra wrote:
-> 
-> Steve reported that ChromeOS encounters the forceidle balancer being
-> ran from rt_mutex_setprio()'s balance_callback() invocation and
-> explodes.
-> 
-> Now, the forceidle balancer gets queued every time the idle task gets
-> selected, set_next_task(), which is strictly too often.
-> rt_mutex_setprio() also uses set_next_task() in the 'change' pattern:
-> 
-> 	queued = task_on_rq_queued(p); /* p->on_rq == TASK_ON_RQ_QUEUED */
-> 	running = task_current(rq, p); /* rq->curr == p */
-> 
-> 	if (queued)
-> 		dequeue_task(...);
-> 	if (running)
-> 		put_prev_task(...);
-> 
-> 	/* change task properties */
-> 
-> 	if (queued)
-> 		enqueue_task(...);
-> 	if (running)
-> 		set_next_task(...);
-> 
-> However, rt_mutex_setprio() will explicitly not run this pattern on
-> the idle task (since priority boosting the idle task is quite insane).
-> Most other 'change' pattern users are pidhash based and would also not
-> apply to idle.
-> 
-> Also, the change pattern doesn't contain a __balance_callback()
-> invocation and hence we could have an out-of-band balance-callback,
-> which *should* trigger the WARN in rq_pin_lock() (which guards against
-> this exact anti-pattern).
-> 
-> So while none of that explains how this happens, it does indicate that
-> having it in set_next_task() might not be the most robust option.
-> 
-> Instead, explicitly queue the forceidle balancer from pick_next_task()
-> when it does indeed result in forceidle selection. Having it here,
-> ensures it can only be triggered under the __schedule() rq->lock
-> instance, and hence must be ran from that context.
-> 
-> This also happens to clean up the code a little, so win-win.
+"Gustavo A. R. Silva" <gustavo@embeddedor.com> writes:
 
-So I couldn't figure out how this could happen without triggering other
-warnings, because as I mentioned elsewhere, commit 565790d28b1e ("sched:
-Fix balance_callback()") should've caused a different splat.
+> On 3/28/22 00:47, Kalle Valo wrote:
+>> "Gustavo A. R. Silva" <gustavoars@kernel.org> writes:
+>>
+>>> On Wed, Feb 16, 2022 at 12:35:14PM -0800, Kees Cook wrote:
+>>>> On Wed, Feb 16, 2022 at 01:50:15PM -0600, Gustavo A. R. Silva wrote:
+>>>>> There is a regular need in the kernel to provide a way to declare
+>>>>> having a dynamically sized set of trailing elements in a structure.
+>>>>> Kernel code should always use =E2=80=9Cflexible array members=E2=80=
+=9D[1] for these
+>>>>> cases. The older style of one-element or zero-length arrays should
+>>>>> no longer be used[2].
+>>>>>
+>>>>> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+>>>>> [2]
+>>>>> https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-le=
+ngth-and-one-element-arrays
+>>>>>
+>>>>> Link: https://github.com/KSPP/linux/issues/78
+>>>>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+>>>>
+>>>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>>>
+>>> Hi all,
+>>>
+>>> Friendly ping: can someone take this, please?
+>>>
+>>> ...I can take this in my -next tree in the meantime.
+>>
+>> Like we have discussed before, please don't take any wireless patches to
+>> your tree. The conflicts just cause more work of us.
+>
+> Sure thing. I just removed it from my tree.
+>
+> I didn't get any reply from wireless people in more than a month, and
+> that's why I temporarily took it in my tree so it doesn't get lost. :)
 
-But then Dietmar reminded me that ChromeOS is probably running some
-ancient crud with backports on :/ and will most likely not have that
-commit.
+That increases the risk of conflicts and, because of multiple trees we
+have, the conflicts cause more work for us. Please don't take ANY
+wireless patches to your tree (or any other tree for that matter) unless
+Johannes or me has acked them.
 
+If you don't get reply to your patch for few weeks (and the merge window
+is not open), you can ping in the list or contact me.
+
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

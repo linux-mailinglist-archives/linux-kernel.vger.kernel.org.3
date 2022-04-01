@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB464EF909
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93584EF90B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350204AbiDARjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S1350214AbiDARja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345175AbiDARjR (ORCPT
+        with ESMTP id S1350210AbiDARj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:39:17 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706C20A96C;
-        Fri,  1 Apr 2022 10:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648834647; x=1680370647;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tWYhwZNDUcxCpd1s+9Q7UujJtONrw/WOyrIwvHKdDq0=;
-  b=ghyk0aulfNpldHMoEBBcmdWScFxssN4aSpyFISPkVuliUKWITYaeiBPT
-   /MdbgdJSG3HvflF61bAc6oG2OQxXseV9nflLfHrYxvws497lW4Lf5wJI6
-   PZFLhyIA5Hxb6N9AwCtuWYXoddo5uaRPaP7qwIUTapHioo/ZfYrPnw2fo
-   wCfZLqxl/QgIrZTA+u/FWhhAr7ENOzWQ4+2E7h0ccOHH1LkDyKlOE46rO
-   EtR6cOqyNugQbpBlOtGv49BL1yZBDbpQ1Y0AfHoMNhgf2m3vFyAbnNMdq
-   2eX0ogxuUFbvn/pYSfqh19GoshqBqQhgbdc0t0aKW7xjw1JMGMmz1GRje
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="320891977"
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="320891977"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 10:37:07 -0700
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="504243961"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 10:37:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1naLCL-00Aq8N-A4;
-        Fri, 01 Apr 2022 20:36:33 +0300
-Date:   Fri, 1 Apr 2022 20:36:32 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sandipan Patra <spatra@nvidia.com>
-Cc:     treding@nvidia.com, jonathanh@nvidia.com, digetx@gmail.com,
-        ulf.hansson@linaro.org, cai.huoqing@linux.dev, bbasu@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch V3] soc/tegra: pmc: update Tegra234 reset sources
-Message-ID: <Ykc4IBtQK1voGTGL@smile.fi.intel.com>
-References: <20220401143343.31989-1-spatra@nvidia.com>
+        Fri, 1 Apr 2022 13:39:27 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2959720DB07;
+        Fri,  1 Apr 2022 10:37:37 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KVS6l5bgGz9sRy;
+        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cMdvPpaRRqA1; Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVS6l4grQz9sRx;
+        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8B90B8B87E;
+        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id R0zb54Fhn4rx; Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.82])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 39C6C8B879;
+        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 231HbOLg665604
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 1 Apr 2022 19:37:24 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 231HbLoC665601;
+        Fri, 1 Apr 2022 19:37:21 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Douglas Miller <dougmill@linux.ibm.com>,
+        Dany Madden <drt@linux.ibm.com>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        Thomas Falcon <tlfalcon@linux.ibm.com>,
+        Ishizaki Kou <kou.ishizaki@toshiba.co.jp>,
+        Geoff Levand <geoff@infradead.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org
+Subject: [PATCH net-next] net: ethernet: Prepare cleanup of powerpc's asm/prom.h
+Date:   Fri,  1 Apr 2022 19:37:21 +0200
+Message-Id: <b3e4ef935b0c20e0bf2054505c0f0a26f6e831bb.1648833425.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401143343.31989-1-spatra@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648834640; l=4676; s=20211009; h=from:subject:message-id; bh=jl6LYjsEx9n7ujbs28rxMUGTFS2Ufwsf4HrsXVi8cQ8=; b=fuzhCyZSyHHY+dL2GY4yBHOSeCS+NQUMtkR16HooOTRLCr39XiwP7UIWvtVRcN4kEX59Zxm6NbKm m22unQn0C5HZVso0lQcHGkpbZg4Us85A9mGfZlOro3rh4b5aee9/
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,88 +73,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 08:03:43PM +0530, Sandipan Patra wrote:
-> Reset_sources list is updated to add all reset sources
-> and removing ones that do not actually exist.
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-This LGTM, but I am not a maintainer.
-So, if it helps and FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In order to clean it up, first add missing headers in
+users of asm/prom.h
 
-> Signed-off-by: Sandipan Patra <spatra@nvidia.com>
-> ---
-> Update on V3 patch:
->     Added more frequent comments to specify every 8 offsets
-> Update on V2 patch:
->     space inside comment and
->     Changed decimal to hexadecimal notation in the comments.
-> 
->  drivers/soc/tegra/pmc.c | 33 +++++++++++++++++++++++++--------
->  1 file changed, 25 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index fdf508e03400..c01db5309b5e 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -3766,7 +3766,7 @@ static const struct tegra_pmc_regs tegra234_pmc_regs = {
->  };
->  
->  static const char * const tegra234_reset_sources[] = {
-> -	"SYS_RESET_N",
-> +	"SYS_RESET_N",	/* 0x0 */
->  	"AOWDT",
->  	"BCCPLEXWDT",
->  	"BPMPWDT",
-> @@ -3774,19 +3774,36 @@ static const char * const tegra234_reset_sources[] = {
->  	"SPEWDT",
->  	"APEWDT",
->  	"LCCPLEXWDT",
-> -	"SENSOR",
-> -	"AOTAG",
-> -	"VFSENSOR",
-> +	"SENSOR",	/* 0x8 */
-> +	NULL,
-> +	NULL,
->  	"MAINSWRST",
->  	"SC7",
->  	"HSM",
-> -	"CSITE",
-> +	NULL,
->  	"RCEWDT",
-> -	"PVA0WDT",
-> -	"PVA1WDT",
-> -	"L1A_ASYNC",
-> +	NULL,		/* 0x10 */
-> +	NULL,
-> +	NULL,
->  	"BPMPBOOT",
->  	"FUSECRC",
-> +	"DCEWDT",
-> +	"PSCWDT",
-> +	"PSC",
-> +	"CSITE_SW",	/* 0x18 */
-> +	"POD",
-> +	"SCPM",
-> +	"VREFRO_POWERBAD",
-> +	"VMON",
-> +	"FMON",
-> +	"FSI_R5WDT",
-> +	"FSI_THERM",
-> +	"FSI_R52C0WDT",	/* 0x20 */
-> +	"FSI_R52C1WDT",
-> +	"FSI_R52C2WDT",
-> +	"FSI_R52C3WDT",
-> +	"FSI_FMON",
-> +	"FSI_VMON",	/* 0x25 */
->  };
->  
->  static const struct tegra_wake_event tegra234_wake_events[] = {
-> -- 
-> 2.17.1
-> 
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/net/ethernet/apple/bmac.c                | 2 +-
+ drivers/net/ethernet/apple/mace.c                | 2 +-
+ drivers/net/ethernet/freescale/fec_mpc52xx.c     | 2 ++
+ drivers/net/ethernet/freescale/fec_mpc52xx_phy.c | 1 +
+ drivers/net/ethernet/ibm/ehea/ehea.h             | 1 +
+ drivers/net/ethernet/ibm/ehea/ehea_main.c        | 2 ++
+ drivers/net/ethernet/ibm/ibmvnic.c               | 1 +
+ drivers/net/ethernet/sun/sungem.c                | 1 -
+ drivers/net/ethernet/toshiba/spider_net.c        | 1 +
+ 9 files changed, 10 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/net/ethernet/apple/bmac.c b/drivers/net/ethernet/apple/bmac.c
+index 4d2ba30c2fbd..3843e8fdcdde 100644
+--- a/drivers/net/ethernet/apple/bmac.c
++++ b/drivers/net/ethernet/apple/bmac.c
+@@ -25,7 +25,7 @@
+ #include <linux/ethtool.h>
+ #include <linux/slab.h>
+ #include <linux/pgtable.h>
+-#include <asm/prom.h>
++
+ #include <asm/dbdma.h>
+ #include <asm/io.h>
+ #include <asm/page.h>
+diff --git a/drivers/net/ethernet/apple/mace.c b/drivers/net/ethernet/apple/mace.c
+index 6f8c91eb1263..97f96d30d9b3 100644
+--- a/drivers/net/ethernet/apple/mace.c
++++ b/drivers/net/ethernet/apple/mace.c
+@@ -20,7 +20,7 @@
+ #include <linux/bitrev.h>
+ #include <linux/slab.h>
+ #include <linux/pgtable.h>
+-#include <asm/prom.h>
++
+ #include <asm/dbdma.h>
+ #include <asm/io.h>
+ #include <asm/macio.h>
+diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx.c b/drivers/net/ethernet/freescale/fec_mpc52xx.c
+index be0bd4b44926..5ddb769bdfb4 100644
+--- a/drivers/net/ethernet/freescale/fec_mpc52xx.c
++++ b/drivers/net/ethernet/freescale/fec_mpc52xx.c
+@@ -29,7 +29,9 @@
+ #include <linux/crc32.h>
+ #include <linux/hardirq.h>
+ #include <linux/delay.h>
++#include <linux/of_address.h>
+ #include <linux/of_device.h>
++#include <linux/of_irq.h>
+ #include <linux/of_mdio.h>
+ #include <linux/of_net.h>
+ #include <linux/of_platform.h>
+diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c b/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
+index b5497e308302..f85b5e81dfc1 100644
+--- a/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
++++ b/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
+@@ -15,6 +15,7 @@
+ #include <linux/phy.h>
+ #include <linux/of_platform.h>
+ #include <linux/slab.h>
++#include <linux/of_address.h>
+ #include <linux/of_mdio.h>
+ #include <asm/io.h>
+ #include <asm/mpc52xx.h>
+diff --git a/drivers/net/ethernet/ibm/ehea/ehea.h b/drivers/net/ethernet/ibm/ehea/ehea.h
+index b140835d4c23..208c440a602b 100644
+--- a/drivers/net/ethernet/ibm/ehea/ehea.h
++++ b/drivers/net/ethernet/ibm/ehea/ehea.h
+@@ -19,6 +19,7 @@
+ #include <linux/ethtool.h>
+ #include <linux/vmalloc.h>
+ #include <linux/if_vlan.h>
++#include <linux/platform_device.h>
+ 
+ #include <asm/ibmebus.h>
+ #include <asm/io.h>
+diff --git a/drivers/net/ethernet/ibm/ehea/ehea_main.c b/drivers/net/ethernet/ibm/ehea/ehea_main.c
+index bad94e4d50f4..8ce3348edf08 100644
+--- a/drivers/net/ethernet/ibm/ehea/ehea_main.c
++++ b/drivers/net/ethernet/ibm/ehea/ehea_main.c
+@@ -29,6 +29,8 @@
+ #include <asm/kexec.h>
+ #include <linux/mutex.h>
+ #include <linux/prefetch.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
+ 
+ #include <net/ip.h>
+ 
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index 77683909ca3d..309d97d28fb1 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -53,6 +53,7 @@
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/irq.h>
++#include <linux/irqdomain.h>
+ #include <linux/kthread.h>
+ #include <linux/seq_file.h>
+ #include <linux/interrupt.h>
+diff --git a/drivers/net/ethernet/sun/sungem.c b/drivers/net/ethernet/sun/sungem.c
+index 036856102c50..45bd89153de2 100644
+--- a/drivers/net/ethernet/sun/sungem.c
++++ b/drivers/net/ethernet/sun/sungem.c
+@@ -52,7 +52,6 @@
+ #endif
+ 
+ #ifdef CONFIG_PPC_PMAC
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/pmac_feature.h>
+ #endif
+diff --git a/drivers/net/ethernet/toshiba/spider_net.c b/drivers/net/ethernet/toshiba/spider_net.c
+index f47b8358669d..eeee4f7ae444 100644
+--- a/drivers/net/ethernet/toshiba/spider_net.c
++++ b/drivers/net/ethernet/toshiba/spider_net.c
+@@ -35,6 +35,7 @@
+ #include <linux/wait.h>
+ #include <linux/workqueue.h>
+ #include <linux/bitops.h>
++#include <linux/of.h>
+ #include <net/checksum.h>
+ 
+ #include "spider_net.h"
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 

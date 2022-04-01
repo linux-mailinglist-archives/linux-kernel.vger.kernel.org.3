@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08F84EE5BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7344EE5B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243812AbiDABgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 21:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
+        id S241260AbiDABgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 21:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243787AbiDABgf (ORCPT
+        with ESMTP id S229623AbiDABgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 21:36:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC251EFE05
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 18:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648776887; x=1680312887;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xKoMUE8P90EXj7e0aBSDGOtBFreVHfFzlRwIybfTyBc=;
-  b=AVtJ2ty3R9n/5Z4uq1aFtID/Es0et0YqgPrdzWq867B6l8iVHHVGPKDw
-   7A6u32jbDhq9jp9RgOAdk9ClskWuV5jplvaj/5lAb0veVN2Av5qR2lAwI
-   Ylrw696TPdWyTT7eJv0eiWHGgu4Ux1V8T3sd66CVDKq+3Ivu5KEJln5fP
-   jjLnyZ6/kmO0ARG6v6jHdR3WsfZmLuPXUAGnxM2A1pzS6bwCDVC8bI8b1
-   wy3Xt874yhrThPx6yiWUFCIxWgz1MQQI7xMlNbxMka85ZMN7nHwOx1ZAf
-   6vvas7zOT+AbZvKcVwzO+cHvfYKK2zuqcf1rdKs9znhbtWem+9puXP8EN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="259721404"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="259721404"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 18:34:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="720701523"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2022 18:34:44 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1na6BY-0000oy-8e;
-        Fri, 01 Apr 2022 01:34:44 +0000
-Date:   Fri, 1 Apr 2022 09:33:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Will Deacon <willdeacon@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-01
- 2099/9999] arch/arm64/kvm/perf.c:58:43: error: implicit declaration of
- function 'perf_num_counters'; did you mean 'dec_mm_counter'?
-Message-ID: <202204010933.P6eBPa2u-lkp@intel.com>
+        Thu, 31 Mar 2022 21:36:19 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8FA231939;
+        Thu, 31 Mar 2022 18:34:30 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id kc20so985964qvb.3;
+        Thu, 31 Mar 2022 18:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OO61RXD1UQQlNqnQzgeVM0kWox51DdMl6bQr1525nQg=;
+        b=p4gwZPXJ32qPFxQBPNIwc2U4bV4VVZK1GVtHoEpqp8EeXPTpe/97y8CCj+AG+Sf/yj
+         ej3wJrClyAZ29L642a9Mts49QtN2MIUmhNqKaZ47CIgNlVIcGuFIJBoIFqGUsQD8NMf/
+         foB8uj4lZnc5b2yY0Lo9CfcokPcgJ84OvzuLXGUk58gws1Mn5MsL+PReCOR74hz0ryAG
+         HaLLloFD0vxVIiySn8Fpv5K5WoPwDB2GlGP4Vnh/zovEGJjJ06eedD9f00/Limyu+SpK
+         X51T7UekluL2AArKcmG6OPYcilTV5HPVcig62WZR18cdiSpN8uqXqgrzqM3GNQqI6uyE
+         eTRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OO61RXD1UQQlNqnQzgeVM0kWox51DdMl6bQr1525nQg=;
+        b=I0k8XcmgqSgi8v5iyq2wWSD54uW4ypqco6AOBYa8E60tx9YjyELxVdme5fI8vccDu4
+         rES3uCaPkRU2+paoWxrIF5vB2Kr2dHNwuxd80O7oHmH++MIm3K/i4cv942KzNyRi0q3z
+         Zz4ku9+joAYr+0QEld6aihznJqUWaFo3Wc9UMMbpQ8eNRyifwgCXcB3PIFVCnoB5pSbT
+         OKaJedx1GRiR6m9PuEGdTlX0tTy/GPy5yyJf36BaU9GNwQjkJA/ZlxuFa9LL8zIKagm/
+         tPMrjpFK3vWqAKa+dPb/yQ9CX5tdpibK0BCJ4r6tt6Ukj64XrduFDsr2QgjhxoqQpc0p
+         30wQ==
+X-Gm-Message-State: AOAM530uvLJvnKCa2ePK5a4WhlMR153hwBSm/soyHb5yDqIYjU/MuqCz
+        B3XNleaSwoWQG5KZN/Lwnjya1LeaSxL4KiIfZvI=
+X-Google-Smtp-Source: ABdhPJxbujoJAHrQsW7VFgvsWVbk3K2SMvlp7+AO426NGykoFEb7GaBtXUPMbVMay4Pvg4FhUukNnf5ZAOScLkgJ/ik=
+X-Received: by 2002:a05:6214:d42:b0:440:d56b:4233 with SMTP id
+ 2-20020a0562140d4200b00440d56b4233mr6196293qvr.15.1648776869848; Thu, 31 Mar
+ 2022 18:34:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
+ <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
+In-Reply-To: <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Fri, 1 Apr 2022 09:34:02 +0800
+Message-ID: <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, cgroups@vger.kernel.org,
+        Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-01
-head:   17c6a0da4bb1ee0407e1e9f366517c4133cbbb72
-commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [2099/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
-config: arm64-randconfig-r035-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010933.P6eBPa2u-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-01
-        git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/arm64/kvm/perf.c: In function 'kvm_perf_init':
->> arch/arm64/kvm/perf.c:58:43: error: implicit declaration of function 'perf_num_counters'; did you mean 'dec_mm_counter'? [-Werror=implicit-function-declaration]
-      58 |         if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
-         |                                           ^~~~~~~~~~~~~~~~~
-         |                                           dec_mm_counter
-   cc1: some warnings being treated as errors
-
-
-vim +58 arch/arm64/kvm/perf.c
-
-    50	
-    51	int kvm_perf_init(void)
-    52	{
-    53		/*
-    54		 * Check if HW_PERF_EVENTS are supported by checking the number of
-    55		 * hardware performance counters. This could ensure the presence of
-    56		 * a physical PMU and CONFIG_PERF_EVENT is selected.
-    57		 */
-  > 58		if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
-    59			static_branch_enable(&kvm_arm_pmu_available);
-    60	
-    61		return perf_register_guest_info_callbacks(&kvm_guest_cbs);
-    62	}
-    63	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
+> > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
+> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > >
+> > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
+> > > > multimedia app could have the usage range from 50MB to 500MB, which generated
+> > > > by loading an special algorithm into its virtual address space and make it hard
+> > > > to protect the expanded usage without userspace's interaction.
+> > >
+> > > Do I get it correctly that the concern you have is that you do not know
+> > > how much memory your workload will need because that depends on some
+> > > parameters?
+> > right. such as a camera APP will expand the usage from 50MB to 500MB
+> > because of launching a special function(face beauty etc need special
+> > algorithm)
+> > >
+> > > > Furthermore, fixed
+> > > > memory.low is a little bit against its role of soft protection as it will response
+> > > > any system's memory pressure in same way.
+> > >
+> > > Could you be more specific about this as well?
+> > As the camera case above, if we set memory.low as 200MB to keep the
+> > APP run smoothly, the system will experience high memory pressure when
+> > another high load APP launched simultaneously. I would like to have
+> > camera be reclaimed under this scenario.
+>
+> OK, so you effectivelly want to keep the memory protection when there is
+> a "normal" memory pressure but want to relax the protection on other
+> high memory utilization situations?
+>
+> How do you exactly tell a difference between a steady memory pressure
+> (say stream IO on the page cache) from "high load APP launched"? Should
+> you reduce the protection on the stram IO situation as well?
+We can take either system's io_wait or PSI_IO into consideration for these.
+>
+> [...]
+> > > One very important thing that I am missing here is the overall objective of this
+> > > tuning. From the above it seems that you want to (ab)use memory->low to
+> > > protect some portion of the charged memory and that the protection
+> > > shrinks over time depending on the the global PSI metrict and time.
+> > > But why this is a good thing?
+> > 'Good' means it meets my original goal of keeping the usage during a
+> > period of time and responding to the system's memory pressure. For an
+> > android like system, memory is almost forever being in a tight status
+> > no matter how many RAM it has. What we need from memcg is more than
+> > control and grouping, we need it to be more responsive to the system's
+> > load and could  sacrifice its usage  under certain criteria.
+>
+> Why existing tools/APIs are insufficient for that? You can watch for
+> both global and memcg memory pressure including PSI metrics and update
+> limits dynamically. Why is it necessary to put such a logic into the
+> kernel?
+Poll and then React method in userspace requires a polling interval
+and response time. Take PSI as an example, it polls ten times during
+POLLING_INTERVAL while just report once, which introduce latency in
+some extend.
+>
+> --
+> Michal Hocko
+> SUSE Labs

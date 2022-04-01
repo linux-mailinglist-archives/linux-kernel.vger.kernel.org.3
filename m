@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A564EED1D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561CA4EED29
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345872AbiDAM3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S1345887AbiDAMbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241594AbiDAM3N (ORCPT
+        with ESMTP id S243390AbiDAMbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:29:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1C184B5D;
-        Fri,  1 Apr 2022 05:27:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07C92619C8;
-        Fri,  1 Apr 2022 12:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12516C2BBE4;
-        Fri,  1 Apr 2022 12:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648816043;
-        bh=HTs0/FAhtfEndhvRZxAwXkarTQgKugIaJi8BLyTakpc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OiygwegxAf+Nb8u/kYaR/sTqwX6e0Lsxxqct8K5A1abfkjfA8XRqqxguDLPJLfR/D
-         kbJOjRjiOhQsNMZB7V9aGgBPwnXtF0KalEBDK9VwxXe+VSiwAB/08LOI9VOl4yQD1t
-         3W2JCspaoJNyt+dJ2BicNJ3AVifeekj5Z35u1wzOsYdde8XZm5++CUvfdeT0ctyYO1
-         DaFmg2ZZiu/jT0j22lIqPY5/FQPY44Zgx3G0InDUpu8AA4OE86t4xojKSbRLSJBVWv
-         3MZzxD6mS8lbqQEDScQgisqXTlLqcndKgZL2etH6FhBjqgMfpieLMIzYeRHZLYhJ3s
-         0C7o9idUoKeMw==
-Date:   Fri, 1 Apr 2022 07:27:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] PCI: qcom: fix unbalanced phy init on probe errors
-Message-ID: <20220401122721.GA87767@bhelgaas>
+        Fri, 1 Apr 2022 08:31:34 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BA635AB8
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:29:45 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 8-20020a1c0208000000b0038ccb70e239so105442wmc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 05:29:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=knarY0P/HR9VLQQwSOZKVbQpfKOi+mXAWn23v+UHOuU=;
+        b=es3vNB+gmwleXUR7l3lIqpohW+v8Dt5oOPi/d27WUddaSeFFBuAu9BlbXS8CkgsnUz
+         xX9p93HJSwkLh/pszTghxMozVeCn/KeSZLXtv0iO38kVLLNuQRFpjj56IJEKBvyUBi4p
+         +MOT83oOqz6fCWpZs5JlmKXLPOfI7okx9BFbMuMLQ8GZl281jTbbDK6xEW2OdAxglyR9
+         A2imFYdhQdX1+cHktz80HFIsTZmrD6FCIcegrU9FVr5NeAVEm9v7fFYR2WDz9eWhaHiP
+         xTUlGgs7dQMZccji8ThdGwpLtiqmRju7+5vSt4ro7FAC4hVVq/yiDODDqlebMBJCh4kL
+         4low==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=knarY0P/HR9VLQQwSOZKVbQpfKOi+mXAWn23v+UHOuU=;
+        b=bsma3QQJ6cea8Q91Ue3Lcrw/6SJcV6vv7gkzvc3IcD/duWq8WgQ6+jEBr57BGyX6/N
+         8I56sYHFQHl7JneTaviPPyuR4cOzWx3NB37lIgOMX5IO469zBOUsYKHQaARijP6U0ghV
+         U2d8qX9YPGOnlap4ZSg67FYO+5SxAj0XAa76jusob5wUUrOxkBSeeNTdIkKxzh6UJ1U8
+         +A9G/cBeZJMYXwiTTWXtOinVnFieasxc45Ajc/8bEquZsG9vgYWgLs86gEOpVUBHB7SP
+         AOTl2yL7TIy35xzg9xh7+v9PNJDXeeHqlmcJUarJB3gz3P1gAz6jMFHEbIlT1zchvqby
+         YXXA==
+X-Gm-Message-State: AOAM531eDgYhc9nhfkaGb1ygQ+OmfLZF3iwCUoqvDlFsLWg2HLX0r1Ay
+        4wCLhKNIcPv71VoTFEfluto0pw==
+X-Google-Smtp-Source: ABdhPJzK9FbrQ+L6WETEz5Zs6aYYBGgKOhOzatOgaMiCxJy5rQAIxQS9fC5rZd0K9XJbOp53GVI/5g==
+X-Received: by 2002:a05:600c:1e85:b0:38c:ef05:ba5d with SMTP id be5-20020a05600c1e8500b0038cef05ba5dmr8462294wmb.119.1648816183627;
+        Fri, 01 Apr 2022 05:29:43 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id v13-20020adfe28d000000b0020375f27a5asm2036360wri.4.2022.04.01.05.29.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 05:29:43 -0700 (PDT)
+Message-ID: <9fd2c36d-0ac2-357e-23da-9d20397dbb67@linaro.org>
+Date:   Fri, 1 Apr 2022 13:29:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401121054.6205-3-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RESEND2] net: stmmac: Fix unset max_speed difference
+ between DT and non-DT platforms
+Content-Language: en-US
+To:     Chen-Yu Tsai <wens@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <rmk+kernel@armlinux.org.uk>
+References: <20220331184832.16316-1-wens@kernel.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220331184832.16316-1-wens@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,40 +82,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject, capitalize "Fix" and "PHY" to match previous commits and
-your commit log.  Same for other patch.
 
-On Fri, Apr 01, 2022 at 02:10:54PM +0200, Johan Hovold wrote:
-> Make sure to undo the PHY initialisation (e.g. balance runtime PM) in
-> case host initialisation fails during probe.
+
+On 31/03/2022 19:48, Chen-Yu Tsai wrote:
+> From: Chen-Yu Tsai <wens@csie.org>
 > 
-> Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-> Cc: stable@vger.kernel.org      # 4.5
-> Cc: Stanimir Varbanov <svarbanov@mm-sol.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> In commit 9cbadf094d9d ("net: stmmac: support max-speed device tree
+> property"), when DT platforms don't set "max-speed", max_speed is set to
+> -1; for non-DT platforms, it stays the default 0.
+> 
+> Prior to commit eeef2f6b9f6e ("net: stmmac: Start adding phylink support"),
+> the check for a valid max_speed setting was to check if it was greater
+> than zero. This commit got it right, but subsequent patches just checked
+> for non-zero, which is incorrect for DT platforms.
+> 
+> In commit 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+> the conversion switched completely to checking for non-zero value as a
+> valid value, which caused 1000base-T to stop getting advertised by
+> default.
+> 
+> Instead of trying to fix all the checks, simply leave max_speed alone if
+> DT property parsing fails.
+> 
+> Fixes: 9cbadf094d9d ("net: stmmac: support max-speed device tree property")
+> Fixes: 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+LGTM,
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 0b0bd71f1bd2..df47986bda29 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1624,11 +1624,13 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	ret = dw_pcie_host_init(pp);
->  	if (ret) {
->  		dev_err(dev, "cannot initialize host\n");
-> -		goto err_pm_runtime_put;
-> +		goto err_phy_exit;
->  	}
->  
->  	return 0;
->  
-> +err_phy_exit:
-> +	phy_exit(pcie->phy);
->  err_pm_runtime_put:
->  	pm_runtime_put(dev);
->  	pm_runtime_disable(dev);
-> -- 
-> 2.35.1
+> Resend2: CC Srinivas at Linaro instead of ST. Collected Russell's ack.
+> Resend: added Srinivas (author of first fixed commit) to CC list.
 > 
+> This was first noticed on ROC-RK3399-PC, and also observed on ROC-RK3328-CC.
+> The fix was tested on ROC-RK3328-CC and Libre Computer ALL-H5-ALL-CC.
+> 
+>   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> index 5d29f336315b..11e1055e8260 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> @@ -431,8 +431,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+>   	plat->phylink_node = np;
+>   
+>   	/* Get max speed of operation from device tree */
+> -	if (of_property_read_u32(np, "max-speed", &plat->max_speed))
+> -		plat->max_speed = -1;
+> +	of_property_read_u32(np, "max-speed", &plat->max_speed);
+>   
+>   	plat->bus_id = of_alias_get_id(np, "ethernet");
+>   	if (plat->bus_id < 0)

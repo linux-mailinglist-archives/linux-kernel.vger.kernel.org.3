@@ -2,153 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2786E4EFD3D
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 01:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF46F4EFD4E
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 01:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349868AbiDAXqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 19:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S1352313AbiDAX5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 19:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353456AbiDAXpS (ORCPT
+        with ESMTP id S233669AbiDAX5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 19:45:18 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A61F2DF7;
-        Fri,  1 Apr 2022 16:43:27 -0700 (PDT)
-Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 20B5920DF570;
-        Fri,  1 Apr 2022 16:43:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 20B5920DF570
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648856605;
-        bh=dxneIxyFrTOTz7WRpQU5x5JzmKlH6pr4TBlRuoXEHsU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n5KSa9Db49+uG+J/PM8NwppUB1DtfCKpVLACIieSGy329S5K8EPhCwDPpFNnB/O0H
-         h24uG7buNojo2g6phn7T+Zx5shTFUHdFO4yUKUkLP/Q7OMEq7DrNKnI793gEqEMTiQ
-         vxN0TENfcqj5qFpXdVkMfjShUxPv8QvrHtQOQfDE=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        mathieu.desnoyers@efficios.com
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, beaub@linux.microsoft.com
-Subject: [PATCH 7/7] tracing/user_events: Update ABI documentation to align to bits vs bytes
-Date:   Fri,  1 Apr 2022 16:43:09 -0700
-Message-Id: <20220401234309.21252-8-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220401234309.21252-1-beaub@linux.microsoft.com>
-References: <20220401234309.21252-1-beaub@linux.microsoft.com>
+        Fri, 1 Apr 2022 19:57:34 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D03C506F8;
+        Fri,  1 Apr 2022 16:55:43 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bc27so3514007pgb.4;
+        Fri, 01 Apr 2022 16:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ITDDF7wJMqoC4D+CMFddkLEBVT+cz8yxZasDs7bEqHU=;
+        b=lKGmW1uWP9QHlp4AUB8qvKmffBMuUV67+V/VNWVRF6rOOYUbY+74bGyNvz0/RaZGm0
+         /6a1CNZPKF9XX8ufK2skUi/JsjqwRe6QpfBWIMc4Hugbu/pi7xgtDj+QZhrsm47b6P7e
+         MOqTKbiXouVj0rKUrNmMDVRTSskLt1rtHCZgGPxPtO+6WMOtlhB0VeWkxpTII8BpF4Ar
+         ZZYmaNBpe+zxwun2L8jgoYeVVLVEgsbprrzeDw5z0zV8K8N7UqRI1RkpiMq9kECPUC5M
+         X+EyGGzgnmy6ExUyqWapnwBhOaROd4ahOlRCHdELR9gEp0stA9O6L/EGZyJY8XyOLX00
+         1z1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ITDDF7wJMqoC4D+CMFddkLEBVT+cz8yxZasDs7bEqHU=;
+        b=t6m6Wa6ns29KkvIODqEKUi3IJIvq8yJQJ1SAO2CFxrrY4nh34zbp6GZ4VK4yjgitHq
+         gRAbHWUGQ5Tlg7Ff3YhoNSeozgVLUpNs2UqU/M1eenvR+Vf4lLzF5yuyGSUw/YfyUfDm
+         6UxHo3iOwjb1BeZteRXbgchtmbiJFivGh7vleyZtHLjCllFldnlz5khDkoJRhcpIeJ4A
+         4jSUBJsAu6s4ZEndjLA4gjkcf/5FPn9RK61rK6fDnB0b7Eo7smymT/00hW2PCFIMX2QK
+         HyczYje+Hr05tfZEAjlZR8hcNJzolTyyQcC7NTMR2w9JDykMq26Q3eBcgI1r4/6Y8cvO
+         rAkw==
+X-Gm-Message-State: AOAM530tOaF4jSnxTrm7cwfBoa3r+dgUK9RFrtnBdLvGtr0lIn+WwneT
+        2pbiMjQ0EgtwBIRGVS2lfGE=
+X-Google-Smtp-Source: ABdhPJw5mHEx3OXRCJwg5BH/o7y2KBgiA/EPycjlEwRTxtui+XCnm3ENGoJTUYt+IJX/yfQbKijNJA==
+X-Received: by 2002:a62:84d3:0:b0:4fa:72e2:1c64 with SMTP id k202-20020a6284d3000000b004fa72e21c64mr47407413pfd.29.1648857342449;
+        Fri, 01 Apr 2022 16:55:42 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::5:fb6e])
+        by smtp.gmail.com with ESMTPSA id j7-20020a056a00130700b004b9f7cd94a4sm4230615pfu.56.2022.04.01.16.55.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 16:55:41 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 16:55:37 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Message-ID: <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the documentation to reflect the new ABI requirements and how to
-use the byte index with the mask properly to check event status.
+On Thu, Mar 31, 2022 at 08:25:22AM +0000, Roberto Sassu wrote:
+> > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> > Sent: Thursday, March 31, 2022 4:27 AM
+> > On Mon, Mar 28, 2022 at 07:50:15PM +0200, Roberto Sassu wrote:
+> > > eBPF already allows programs to be preloaded and kept running without
+> > > intervention from user space. There is a dedicated kernel module called
+> > > bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
+> > > program. If this module is enabled in the kernel configuration, its loading
+> > > will be triggered when the bpf filesystem is mounted (unless the module is
+> > > built-in), and the links of iterators_bpf are pinned in that filesystem
+> > > (they will appear as the progs.debug and maps.debug files).
+> > >
+> > > However, the current mechanism, if used to preload an LSM, would not
+> > offer
+> > > the same security guarantees of LSMs integrated in the security
+> > subsystem.
+> > > Also, it is not generic enough to be used for preloading arbitrary eBPF
+> > > programs, unless the bpf_preload code is heavily modified.
+> > >
+> > > More specifically, the security problems are:
+> > > - any program can be pinned to the bpf filesystem without limitations
+> > >   (unless a MAC mechanism enforces some restrictions);
+> > > - programs being executed can be terminated at any time by deleting the
+> > >   pinned objects or unmounting the bpf filesystem.
+> > 
+> > So many things to untangle here.
+> 
+> Hi Alexei
+> 
+> thanks for taking the time to provide such detailed
+> explanation.
+> 
+> > The above paragraphs are misleading and incorrect.
+> > The commit log sounds like there are security issues that this
+> > patch set is fixing.
+> > This is not true.
+> 
+> I reiterate the goal: enforce a mandatory policy with
+> an out-of-tree LSM (a kernel module is fine), with the
+> same guarantees of LSMs integrated in the security
+> subsystem.
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- Documentation/trace/user_events.rst | 46 +++++++++++++----------------
- 1 file changed, 21 insertions(+), 25 deletions(-)
+To make it 100% clear:
+Any in-kernel feature that benefits out-of-tree module will be rejected.
 
-diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
-index c180936f49fc..6aabdb126f2e 100644
---- a/Documentation/trace/user_events.rst
-+++ b/Documentation/trace/user_events.rst
-@@ -20,14 +20,15 @@ dynamic_events is the same as the ioctl with the u: prefix applied.
- 
- Typically programs will register a set of events that they wish to expose to
- tools that can read trace_events (such as ftrace and perf). The registration
--process gives back two ints to the program for each event. The first int is the
--status index. This index describes which byte in the
-+process gives back three ints to the program for each event. The first int is
-+the status index. This index describes which byte in the
- /sys/kernel/debug/tracing/user_events_status file represents this event. The
--second int is the write index. This index describes the data when a write() or
--writev() is called on the /sys/kernel/debug/tracing/user_events_data file.
-+second int is the mask to use on the byte to check the event status. The third
-+int is the write index which describes the data when a write() or writev() is
-+called on the /sys/kernel/debug/tracing/user_events_data file.
- 
--The structures referenced in this document are contained with the
--/include/uap/linux/user_events.h file in the source tree.
-+The structures referenced in this document are contained within the
-+/include/uapi/linux/user_events.h file in the source tree.
- 
- **NOTE:** *Both user_events_status and user_events_data are under the tracefs
- filesystem and may be mounted at different paths than above.*
-@@ -44,6 +45,7 @@ This command takes a struct user_reg as an argument::
-         u32 size;
-         u64 name_args;
-         u32 status_index;
-+        u32 status_mask;
-         u32 write_index;
-   };
- 
-@@ -112,14 +114,19 @@ writev() calls when something is actively attached to the event.
- 
- User programs call mmap() on /sys/kernel/debug/tracing/user_events_status to
- check the status for each event that is registered. The byte to check in the
--file is given back after the register ioctl() via user_reg.status_index.
-+file is given back after the register ioctl() via user_reg.status_index. The
-+byte needs to be AND'd with the user_reg.status_mask value to check if the
-+event is enabled currently.
-+
- Currently the size of user_events_status is a single page, however, custom
- kernel configurations can change this size to allow more user based events. In
- all cases the size of the file is a multiple of a page size.
- 
--For example, if the register ioctl() gives back a status_index of 3 you would
--check byte 3 of the returned mmap data to see if anything is attached to that
--event.
-+For example, if the register ioctl() gives back a status_index of 3 and a mask
-+of 1 you would check byte 3 of the returned mmap data and then AND the result
-+with 1 (e.g. status_page[3] & 1) to see if anything is attached to that event.
-+A helper function is available called user_event_enabled() which does this for
-+you.
- 
- Administrators can easily check the status of all registered events by reading
- the user_events_status file directly via a terminal. The output is as follows::
-@@ -137,7 +144,7 @@ For example, on a system that has a single event the output looks like this::
- 
-   Active: 1
-   Busy: 0
--  Max: 4096
-+  Max: 32768
- 
- If a user enables the user event via ftrace, the output would change to this::
- 
-@@ -145,21 +152,10 @@ If a user enables the user event via ftrace, the output would change to this::
- 
-   Active: 1
-   Busy: 1
--  Max: 4096
--
--**NOTE:** *A status index of 0 will never be returned. This allows user
--programs to have an index that can be used on error cases.*
--
--Status Bits
--^^^^^^^^^^^
--The byte being checked will be non-zero if anything is attached. Programs can
--check specific bits in the byte to see what mechanism has been attached.
--
--The following values are defined to aid in checking what has been attached:
--
--**EVENT_STATUS_FTRACE** - Bit set if ftrace has been attached (Bit 0).
-+  Max: 32768
- 
--**EVENT_STATUS_PERF** - Bit set if perf has been attached (Bit 1).
-+**NOTE:** *A status index of 0 with a mask of 1 will never be returned. This
-+allows user programs to have an index and mask that can be used on error cases.*
- 
- Writing Data
- ------------
--- 
-2.25.1
+> The root user is not part of the TCB (i.e. is untrusted),
+> all the changes that user wants to make must be subject
+> of decision by the LSM enforcing the mandatory policy.
+> 
+> I thought about adding support for LSMs from kernel
+> modules via a new built-in LSM (called LoadLSM), but
 
+Such approach will be rejected. See above.
+
+> > I suspect there is huge confusion on what these two "progs.debug"
+> > and "maps.debug" files are in a bpffs instance.
+> > They are debug files to pretty pring loaded maps and progs for folks who
+> > like to use 'cat' to examine the state of the system instead of 'bpftool'.
+> > The root can remove these files from bpffs.
+> > 
+> > There is no reason for kernel module to pin its bpf progs.
+> > If you want to develop DIGLIM as a kernel module that uses light skeleton
+> > just do:
+> > #include <linux/init.h>
+> > #include <linux/module.h>
+> > #include "diglim.lskel.h"
+> > 
+> > static struct diglim_bpf *skel;
+> > 
+> > static int __init load(void)
+> > {
+> >         skel = diglim_bpf__open_and_load();
+> >         err = diglim_bpf__attach(skel);
+> > }
+> > /* detach skel in __fini */
+> > 
+> > It's really that short.
+> > 
+> > Then you will be able to
+> > - insmod diglim.ko -> will load and attach bpf progs.
+> > - rmmod diglim -> will detach them.
+> 
+> root can stop the LSM without consulting the security
+> policy. The goal of having root untrusted is not achieved.
+
+Out-of-tree module can do any hack.
+For example:
+1. don't do detach skel in __fini
+  rmmod will remove the module, but bpf progs will keep running.
+2. do module_get(THIS_MODULE) in __init
+  rmmod will return EBUSY
+  and have some out-of-band way of dropping mod refcnt.
+3. hack into sys_delete_module. if module_name==diglem return EBUSY.
+4. add proper LSM hook to delete_module
+
+> My point was that pinning progs seems to be the
+> recommended way of keeping them running. 
+
+Not quite. bpf_link refcnt is what keeps progs attached.
+bpffs is mainly used for:
+- to pass maps/links from one process to another
+when passing fd is not possible.
+- to solve the case of crashing user space.
+The user space agent will restart and will pick up where
+it's left by reading map, link, prog FDs from bpffs.
+- pinning bpf iterators that are later used to 'cat' such files.
+That is what bpf_preload is doing by creating two debug
+files "maps.debug" and "progs.debug".
+
+> Pinning
+> them to unreachable inodes intuitively looked the
+> way to go for achieving the stated goal. 
+
+We can consider inodes in bpffs that are not unlinkable by root
+in the future, but certainly not for this use case.
+
+> Or maybe I
+> should just increment the reference count of links
+> and don't decrement during an rmmod?
+
+I suggest to abandon out-of-tree goal.
+Only then we can help and continue this discussion.

@@ -2,161 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153324EE602
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869F44EE604
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244044AbiDAC0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S244057AbiDAC2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244017AbiDAC0b (ORCPT
+        with ESMTP id S244017AbiDAC2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:26:31 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E3792320
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:24:41 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p17so1240682plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LooVy6HxBljYsBOT5BZDR0fJDc4Rp8fN59jEgY+o0DI=;
-        b=PJAxfuVD6PmKHxbahwunHYBhTlcgqbr8BH03aEQ7YdBeYh0l8U1M+pgy+mr9SEeoJX
-         spL22iG8LTYMgQoBYGlE7JsmG25ZPJjbYzqJgTUYalOgziSNfj4aEBd0+3qR4DQedjLu
-         ZRZPZr/+0ck7AP7BQvcFp4UV2cft/iM9QSGzE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LooVy6HxBljYsBOT5BZDR0fJDc4Rp8fN59jEgY+o0DI=;
-        b=o4V4am3/+kcZBQB/w2Bhy4lqQilXyiwuj6bkJFGY8RzIJT1y1H0eTPF2wTZ+CyC/oH
-         AqSDYdlHFZx/flUzyIG3owB6SjD7UibSOl3iQHwFqIbbwYTXrmF8z1SB10/mSTmMYhCg
-         2S2l+DmX8ifI+6X6yuausF2ENHN3i0MsOrhTxklzt4TsQfdbT3j/ASPx+qgI5nZRz5XD
-         QnNihEKVKnfIUtfxn2mXx5/Kgrn6QoZB84K/5qE2VB8S6JozVoHRgy2xBWdShv6ARiSX
-         uDZxgf29t0W2l9KWPhUbx46kuhuz/bB3/MU1HJFvW0hL3X+lfo/xosTexX+9NbILrDBy
-         8SfQ==
-X-Gm-Message-State: AOAM53166AAXBOupvnv8Y2Ho83Xty0hhU98YhL3xAXiGc9AFR5XCtWl5
-        pLvu4UxodFjq7hn+8UZRve6zj4DL3JR0BQ==
-X-Google-Smtp-Source: ABdhPJx3cds3IJYsBVyQKsdjyy6GrzZdmfUcleihi5PO6oQwuyC6RYYe7HrHRCWYE9lO/XrCkzT6Rw==
-X-Received: by 2002:a17:903:110f:b0:154:c7a4:9371 with SMTP id n15-20020a170903110f00b00154c7a49371mr8265857plh.75.1648779880649;
-        Thu, 31 Mar 2022 19:24:40 -0700 (PDT)
-Received: from localhost ([2401:fa00:8f:203:2248:fc58:91aa:767])
-        by smtp.gmail.com with UTF8SMTPSA id b7-20020a056a00114700b004f7be3231d6sm815989pfm.7.2022.03.31.19.24.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 19:24:40 -0700 (PDT)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Cc:     Tina Zhang <tina.zhang@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        David Stevens <stevensd@chromium.org>, stable@vger.kernel.org
-Subject: [PATCH v3] iommu/vt-d: calculate mask for non-aligned flushes
-Date:   Fri,  1 Apr 2022 11:24:30 +0900
-Message-Id: <20220401022430.1262215-1-stevensd@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+        Thu, 31 Mar 2022 22:28:46 -0400
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.4.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6674255A8A
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 19:26:53 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id AB7CB400C5F43
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:26:52 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id a700nH5R2Hnota700n6PA0; Thu, 31 Mar 2022 21:26:52 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=JL/R10AFXo3m+8yvx0Z1Ncw51gsFIrGlpCNnWHKID+k=; b=eDj6hmhodlrylz8YNuFxCUdKJ5
+        Abq1JxKySetWQDsQJk++hoyiq3Ct5cK1h05ym8t13TCuAR417Xu05vHoG3tx/KDUjI7zdN3QVjSyX
+        oV8CnCybZBETefM6shab9Pnp0YjimzYR2COrkXuRFZaAb2IM1/j1A4WAHDeNs2jN3EoaZ748hfdlV
+        9oTxMJM8tadTAN2U/P0oazDZhYDIOsVSUEsCIAoda4QH4/ATJC5/5pnYMNSeVYBchgp7iDChzLsWN
+        JY/8Lz1/ENJUG/LRjYktgVPipADWaT4d1XVjvdu3n6I1bnMCRDn58vTjsZOETKaKq4aVS764z3qVK
+        fQA4Qzsw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54610)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1na700-0045Hw-7g; Fri, 01 Apr 2022 02:26:52 +0000
+Message-ID: <a12c8a2a-1e8a-bfee-6812-969cccc6366e@roeck-us.net>
+Date:   Thu, 31 Mar 2022 19:26:50 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Tzung-Bi Shih <tzungbi@kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     wim@linux-watchdog.org, geert+renesas@glider.be,
+        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Phil Edworthy <phil.edworthy@renesas.com>
+References: <20220330100829.1000679-1-jjhiblot@traphandler.com>
+ <20220330100829.1000679-3-jjhiblot@traphandler.com>
+ <YkVFc6Q6/6rxSw89@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
+In-Reply-To: <YkVFc6Q6/6rxSw89@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1na700-0045Hw-7g
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54610
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+On 3/30/22 23:08, Tzung-Bi Shih wrote:
+> On Wed, Mar 30, 2022 at 12:08:29PM +0200, Jean-Jacques Hiblot wrote:
+>> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
+> [...]
+>> +/*
+>> + * Renesas RZ/N1 Watchdog timer.
+>> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
+>> + * cope with 2 seconds.
+>> + *
+>> + * Copyright 2018 Renesas Electronics Europe Ltd.
+> 
+> s/2018/2022/ ?
+> 
+>> +#define RZN1_WDT_RETRIGGER			0x0
+>> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
+>> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
+>> +#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
+>> +#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
+>> +#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
+> 
+> Do RZN1_WDT_RETRIGGER_RELOAD_VAL and RZN1_WDT_RETRIGGER_WDSI get 1 more tab
+> indent intentionally?
+> 
 
-Calculate the appropriate mask for non-size-aligned page selective
-invalidation. Since psi uses the mask value to mask out the lower order
-bits of the target address, properly flushing the iotlb requires using a
-mask value such that [pfn, pfn+pages) all lie within the flushed
-size-aligned region.  This is not normally an issue because iova.c
-always allocates iovas that are aligned to their size. However, iovas
-which come from other sources (e.g. userspace via VFIO) may not be
-aligned.
+That only looks like it due to the "+" at the beginning of the line.
+If you look at the actual code the alignment is ok.
 
-To properly flush the IOTLB, both the start and end pfns need to be
-equal after applying the mask. That means that the most efficient mask
-to use is the index of the lowest bit that is equal where all higher
-bits are also equal. For example, if pfn=0x17f and pages=3, then
-end_pfn=0x181, so the smallest mask we can use is 8. Any differences
-above the highest bit of pages are due to carrying, so by xnor'ing pfn
-and end_pfn and then masking out the lower order bits based on pages, we
-get 0xffffff00, where the first set bit is the mask we want to use.
+>> +static const struct watchdog_device rzn1_wdt = {
+>> +	.info = &rzn1_wdt_info,
+>> +	.ops = &rzn1_wdt_ops,
+>> +	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
+>> +};
+> [...]
+>> +static int rzn1_wdt_probe(struct platform_device *pdev)
+>> +{
+> [...]
+>> +	wdt->wdt = rzn1_wdt;
+> 
+> Does it really need to copy the memory?  For example,
+> 
+> 1. Use the memory in `wdt` directly and fill the `wdd`.
+> 
+> struct watchdog_device *wdd = &wdt->wdt;
+> wdd->info = &rzn1_wdt_info;
+> wdd->ops = &rzn1_wdt_ops;
+> ...
+> 
+> 2. Use drvdata instead of container_of().
+> 
+> Use watchdog_set_drvdata() in _probe and watchdog_get_drvdata() in the
+> watchdog ops to get struct rzn1_watchdog.
+> 
+That would indeed be preferred. The static data structure isn't really useful.
 
-Fixes: 6fe1010d6d9c ("vfio/type1: DMA unmap chunking")
-Cc: stable@vger.kernel.org
-Signed-off-by: David Stevens <stevensd@chromium.org>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
----
-The seeds of the bug were introduced by f76aec76ec7f6, which
-simultaniously added the alignement requirement to the iommu driver and
-made the iova allocator return aligned iovas. However, I don't think
-there was any way to trigger the bug at that time. The tagged VFIO
-change is one that actually introduced a code path that could trigger
-the bug. There may also be other ways to trigger the bug that I am not
-aware of.
+>> +static const struct of_device_id rzn1_wdt_match[] = {
+>> +	{ .compatible = "renesas,rzn1-wdt" },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
+> 
+> Doesn't it need to guard by CONFIG_OF?
+> 
+Only if of_match_ptr() is used below, and then I'd prefer __maybe_unused
 
-v1 -> v2:
- - Calculate an appropriate mask for non-size-aligned iovas instead
-   of falling back to domain selective flush.
-v2 -> v3:
- - Add more detail to commit message.
+>> +static struct platform_driver rzn1_wdt_driver = {
+>> +	.probe		= rzn1_wdt_probe,
+>> +	.driver		= {
+>> +		.name		= KBUILD_MODNAME,
+>> +		.of_match_table	= rzn1_wdt_match,
+> 
+> Does it makes more sense to use of_match_ptr()?
+> 
 
- drivers/iommu/intel/iommu.c | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+Usually we leave that up to driver authors.
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 5b196cfe9ed2..ab2273300346 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1717,7 +1717,8 @@ static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
- 				  unsigned long pfn, unsigned int pages,
- 				  int ih, int map)
- {
--	unsigned int mask = ilog2(__roundup_pow_of_two(pages));
-+	unsigned int aligned_pages = __roundup_pow_of_two(pages);
-+	unsigned int mask = ilog2(aligned_pages);
- 	uint64_t addr = (uint64_t)pfn << VTD_PAGE_SHIFT;
- 	u16 did = domain->iommu_did[iommu->seq_id];
- 
-@@ -1729,10 +1730,30 @@ static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
- 	if (domain_use_first_level(domain)) {
- 		domain_flush_piotlb(iommu, domain, addr, pages, ih);
- 	} else {
-+		unsigned long bitmask = aligned_pages - 1;
-+
-+		/*
-+		 * PSI masks the low order bits of the base address. If the
-+		 * address isn't aligned to the mask, then compute a mask value
-+		 * needed to ensure the target range is flushed.
-+		 */
-+		if (unlikely(bitmask & pfn)) {
-+			unsigned long end_pfn = pfn + pages - 1, shared_bits;
-+
-+			/*
-+			 * Since end_pfn <= pfn + bitmask, the only way bits
-+			 * higher than bitmask can differ in pfn and end_pfn is
-+			 * by carrying. This means after masking out bitmask,
-+			 * high bits starting with the first set bit in
-+			 * shared_bits are all equal in both pfn and end_pfn.
-+			 */
-+			shared_bits = ~(pfn ^ end_pfn) & ~bitmask;
-+			mask = shared_bits ? __ffs(shared_bits) : BITS_PER_LONG;
-+		}
-+
- 		/*
- 		 * Fallback to domain selective flush if no PSI support or
--		 * the size is too big. PSI requires page size to be 2 ^ x,
--		 * and the base address is naturally aligned to the size.
-+		 * the size is too big.
- 		 */
- 		if (!cap_pgsel_inv(iommu->cap) ||
- 		    mask > cap_max_amask_val(iommu->cap))
--- 
-2.35.1.1094.g7c7d902a7c-goog
+>> +	},
+>> +};
+>> +
+>> +module_platform_driver(rzn1_wdt_driver);
+> 
+> To make it look like a whole thing, I prefer to remove the extra blank line
+> in between struct platform_driver and module_platform_driver().
 
+We usually leave that up to driver authors. Many watchdog driver leave
+an empty line, so it is ok (as long as there are no two empty lines).
+
+Thanks,
+Guenter

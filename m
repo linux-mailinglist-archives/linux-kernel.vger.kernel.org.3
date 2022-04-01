@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A95D4EE781
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64594EE784
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244943AbiDAFF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S234423AbiDAFGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239357AbiDAFF1 (ORCPT
+        with ESMTP id S233411AbiDAFGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:05:27 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BA211BCE7;
-        Thu, 31 Mar 2022 22:03:37 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23153N1O001351;
-        Fri, 1 Apr 2022 00:03:23 -0500
+        Fri, 1 Apr 2022 01:06:01 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627512E77C;
+        Thu, 31 Mar 2022 22:04:11 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 231547da086462;
+        Fri, 1 Apr 2022 00:04:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648789403;
-        bh=+ruPXu8lGjfl8T2XS9PrIMnCggAYuJ8buRv16efJeN8=;
+        s=ti-com-17Q1; t=1648789447;
+        bh=pdOte0r4buZls7OnQjcRXzHmqGaFLMm2LPj/7uZYXPs=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nFor8yBMJLpGqHDGJtj7X+aFj9m6OkUB4vvrT7Nii+Mnk4ziBVxT2hNzRV1o++DR6
-         y0MBsqBgwjXEDCI0zDapFOPfVgcQMa0gO1GTv7X7iKZzZKN579cTFSkMoD2MfgrHzu
-         Duk1lcOKReUHX3Dj0EGdp9/Z774HBCqoRgaGJp5M=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23153NVV116401
+        b=Cy8sIj06UcND2JtGwRgSpICAq45rrQP9fQJxNECIsUwAX6cWsTsrXkUYZOoBs7Qxx
+         kv3EzG+Hl49Bmk8MOzVHahdEd8RGZNbxo+Vm21bZmml3FQ6w2yQN+GyyvubVnFHI1i
+         5Sqd0i6vvcEncprMD2gTHSQBq9vYZmQ5H9RM+33A=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 231547ts047177
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 1 Apr 2022 00:03:23 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 1 Apr 2022 00:04:07 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 1
- Apr 2022 00:03:22 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2022 00:04:06 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 1 Apr 2022 00:03:22 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23153Irm016650;
-        Fri, 1 Apr 2022 00:03:18 -0500
-Message-ID: <3ae1a0b5-236c-20b0-ac2a-a93f0b4ced97@ti.com>
-Date:   Fri, 1 Apr 2022 10:33:17 +0530
+ Frontend Transport; Fri, 1 Apr 2022 00:04:06 -0500
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 231542Bb017599;
+        Fri, 1 Apr 2022 00:04:03 -0500
+Message-ID: <1fcac9c3-4b84-6572-ebc6-4d6a50f0132a@ti.com>
+Date:   Fri, 1 Apr 2022 10:34:02 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-j721e-common-proc-board: add DP
- to j7 evm
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add documentation for AM62 USB
+ Wrapper module
 Content-Language: en-US
-To:     Rahul T R <r-ravikumar@ti.com>, <nm@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
-References: <20220331143035.16210-1-r-ravikumar@ti.com>
- <20220331143035.16210-3-r-ravikumar@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220331143035.16210-3-r-ravikumar@ti.com>
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20220324073425.18607-1-a-govindraju@ti.com>
+ <20220324073425.18607-2-a-govindraju@ti.com>
+ <93fe6a41-3b59-2fbc-6f95-833f337815ee@kernel.org>
+ <41f79aa5-1e04-53f8-ab21-85fe6039e24e@ti.com>
+ <2b33798e-23c2-d4a5-171a-55c28bc40c40@kernel.org>
+ <YkZFV4h/vvmKg6iw@robh.at.kernel.org>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+In-Reply-To: <YkZFV4h/vvmKg6iw@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -72,48 +78,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rahul,
+Hi Rob,
 
-On 31/03/22 8:00 pm, Rahul T R wrote:
-> From: Tomi Valkeinen <tomi.valkeinen@ti.com>
+On 01/04/22 05:50, Rob Herring wrote:
+> On Thu, Mar 24, 2022 at 12:53:08PM +0100, Krzysztof Kozlowski wrote:
+>> On 24/03/2022 12:40, Aswath Govindraju wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 24/03/22 16:37, Krzysztof Kozlowski wrote:
+>>>> On 24/03/2022 08:34, Aswath Govindraju wrote:
+>>>>> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
+>>>>> controller.
+>>>>>
+>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>>>> ---
+>>>>>
+>>>>> Changes since v1:
+>>>>> - made correction in grammer of clocks property description
+>>>>>   and added maxItems in the interrupts property based on comments
+>>>>>   received from Roger
+>>>>> - corrected the title, fixed the description of
+>>>>>   ti,syscon-phy-pll-refclk, added pattern properties and child node
+>>>>>   in the example based on the comments from Krzysztof.
+>>>>>
+>>>>>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++++++++++++++++
+>>>>>  1 file changed, 117 insertions(+)
+>>>>>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..452bfdc6fb09
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>>>>> @@ -0,0 +1,117 @@
+>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/usb/ti,am62-usb.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: TI's AM62 wrapper module for the Synopsys USBSS-DRD controller
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Aswath Govindraju <a-govindraju@ti.com>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: ti,am62-usb
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  ranges: true
+>>>>> +
+>>>>> +  power-domains:
+>>>>> +    description:
+>>>>> +      PM domain provider node and an args specifier containing
+>>>>> +      the USB ISO device id value. See,
+>>>>> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  clocks:
+>>>>> +    description: Clock phandle to usb2_refclk
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  clock-names:
+>>>>> +    items:
+>>>>> +      - const: ref
+>>>>> +
+>>>>> +  id-gpio:
+>>>>> +    description:
+>>>>> +      GPIO to be used as ID pin
+>>>>> +    maxItems: 1
+>>>>
+>>>> I have doubts about this. If you USB controller handles the ID pin, then
+>>>> probably this should be moved to usb-connector.yaml. I did not see
+>>>> id-gpio in any other USB controller blocks.
+>>>>
+>>>
+>>> Yes, the USB wrapper handles the ID pin operation only. It also reads
+>>> the status of VBUS by reading a register from its MMR and not using a
+>>> gpio. After evaluating the role the based on the states if id pin and
+>>> VBUS, this role is communicated to the dwc3 core driver using extcon.
+>>> There is no way for the dwc3 driver to detect the role on its own.
+>>>
+>>>
+>>> The usb-connector(drivers/usb/common/usb-conn-gpio.c) driver, seems to
+>>> be implemented for driving the VBUS, based on ID and VBUS pin status.
+>>> However, in case of the above implementation we need to communicate the
+>>> detected role to the dwc3 core driver. Also, the wrapper does not
+>>> control VBUS but it is the dwc3 core driver that drives the VBUS.
+>>> Therefore, I think the usb-connector implementation cannot be used here.
+>>
+>> I don't think about usb-conn-gpio.c but using the binding generic
+>> binding for usb-X-connector and define a connector with ID.
+>>
+>> Actually Rob could help here.
+>>
+>> Rob,
+>> Should the id-gpio be modeled as a property in this glue/wrapper driver
+>> or rather as part of usb-connector child node?
 > 
-> Add the endpoint nodes to describe connection from
-> DSS => MHDP => DisplayPort connector.
-> Also add the phy link node and required pinmux nodes
-> for hotplug.
+> That's a simple question. Where does the ID GPIO signal go to? The 
+> connector, so it goes in the connector node.
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> ---
->  .../dts/ti/k3-j721e-common-proc-board.dts     | 78 ++++++++++++++++++-
->  1 file changed, 74 insertions(+), 4 deletions(-)
+
+Thank you for the clarification. Here ID-gpio is directly read by the
+wrapper and hence, I have modeled it as a property in the wrapper dt
+node. May I know if this wrong and should the modelling be looked at
+differently?
+
+Thanks,
+Aswath
+
+> If we have a driver for the usb-connector node, that's news to me. Not 
+> that we couldn't, but that has nothing to do with designing the binding.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> index f5ca8e26ed99..8ddc0d3bd058 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> @@ -148,6 +148,28 @@
->  		pinctrl-0 = <&main_mcan2_gpio_pins_default>;
->  		standby-gpios = <&main_gpio0 127 GPIO_ACTIVE_HIGH>;
->  	};
-> +
-> +	dp_pwr_3v3: fixedregulator-dp-prw {
+> Rob
 
-Please use standard node name: regulator-X as per DT spec [1]
-
-
-[1]
-https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "dp-pwr";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpio = <&exp4 0 0>;	/* P0 - DP0_PWR_SW_EN */
-
-Please use GPIO_ACTIVE_* macros as appropriate.
-
-> +		enable-active-high;
-> +	};
-> +
-[...]

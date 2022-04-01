@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099A44EEE56
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B62D4EEE45
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346459AbiDANli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S1346410AbiDANjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346450AbiDANle (ORCPT
+        with ESMTP id S234797AbiDANjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:41:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4E53377F8
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648820383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h6NQyMqLB58mw6AkprjfrT2eMsB7dX14dgGFHiYBaig=;
-        b=Te19cyqTItTb52oZEDD3sn2FbFExWtyZDX9jMIg6oN91xyskJ2/Gk+Wk6QBgOnzY1wV8N7
-        zeaanDsJx+1n+Ef/2oaD7x2dJ3IfrMOvUcsc52zxzd3CNq7Bu+3Fm6quJnBaZT6zmVGcHy
-        jvYp1wp0R7Iht0hB82Ac2IykXvwBSmM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-nL7KlP4-Pv-1HD6HzTPi4A-1; Fri, 01 Apr 2022 09:39:40 -0400
-X-MC-Unique: nL7KlP4-Pv-1HD6HzTPi4A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E27B101AA64;
-        Fri,  1 Apr 2022 13:39:40 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.11.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6157342CFE9;
-        Fri,  1 Apr 2022 13:39:39 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>, linux-audit@redhat.com,
-        CGEL <cgel.zte@gmail.com>
-Cc:     kbuild-all@lists.01.org, Zeal Robot <zealci@zte.com.cn>,
-        linux-kernel@vger.kernel.org, eparis@redhat.com,
-        dai.shixin@zte.com.cn, Yang Yang <yang.yang29@zte.com.cn>,
-        linux-audit@redhat.com, ink@jurassic.park.msu.ru,
-        huang.junhua@zte.com.cn, guo.xiaofeng@zte.com.cn,
-        mattst88@gmail.com
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-Date:   Fri, 01 Apr 2022 09:39:38 -0400
-Message-ID: <2777189.mvXUDI8C0e@x2>
-Organization: Red Hat
-In-Reply-To: <62465bf3.1c69fb81.d5424.365e@mx.google.com>
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn> <CAHC9VhTaCNqfTOi8X5G3AheBFzTYCzGnt_-=fNFc5Z1o8gPm9Q@mail.gmail.com> <62465bf3.1c69fb81.d5424.365e@mx.google.com>
+        Fri, 1 Apr 2022 09:39:44 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DB527E84F;
+        Fri,  1 Apr 2022 06:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1648820275; x=1680356275;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qv8FscXyHh5HjbavNwVRDW0UTLUik5p2IFzPgviCoaQ=;
+  b=ambMfjm4f8LbCOW4TSD24QEkLMX0+vdNcYprhLmWq8ts8LNkpn0/3raw
+   Pgvrajj2q9fYu6yEvB0RmQBPpmUyHl/9BAzljHelG8gIfz/qQLpPIopsR
+   eZgXA2xPnPURjiLuEUj7c2SFK1HtXFAtPFkVNZ+dp4Ub0KE6IUGHLUshZ
+   RDip4N//2ydOp/+okjHsllmAcIiXx870KotH56tqLLyT9VuIwG4O4uRld
+   EhvUzg5T0dyBrSIaTuhAgFLCWQFLnpWqYB9IXVqlUBuFe3YlJirssXd/P
+   yYO2RMP/5qwygkzKZx+uQ6E5CmShrC8H3Hg/xmTQhSlWbNy7FNt9fsjT9
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,227,1643698800"; 
+   d="scan'208";a="158971507"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2022 06:37:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 1 Apr 2022 06:37:51 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 1 Apr 2022 06:37:50 -0700
+Date:   Fri, 1 Apr 2022 15:40:59 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <kuba@kernel.org>,
+        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [RFC PATCH net-next 1/2] ethtool: Extend to allow to set PHY
+ latencies
+Message-ID: <20220401134059.zef4ltvnux66jl2y@soft-dev3-1.localhost>
+References: <20220401093909.3341836-1-horatiu.vultur@microchip.com>
+ <20220401093909.3341836-2-horatiu.vultur@microchip.com>
+ <YkbxtzE/BRfz0XTW@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <YkbxtzE/BRfz0XTW@lunn.ch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,67 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, March 31, 2022 9:57:05 PM EDT CGEL wrote:
-> On Thu, Mar 31, 2022 at 10:16:23AM -0400, Paul Moore wrote:
-> > On Wed, Mar 30, 2022 at 10:29 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > On Wed, Mar 30, 2022 at 10:48:12AM -0400, Paul Moore wrote:
-> > > > If audit is not generating SYSCALL records, even for invalid/ENOSYS
-> > > > syscalls, I would consider that a bug which should be fixed.
-> > > 
-> > > If we fix this bug, do you think audit invalid/ENOSYS syscalls better
-> > > be forcible or be a rule that can be configure? I think configure is
-> > > better.
-> > 
-> > It isn't clear to me exactly what you are asking, but I would expect
-> > the existing audit syscall filtering mechanism to work regardless if
-> > the syscall is valid or not.
+The 04/01/2022 14:36, Andrew Lunn wrote:
 > 
-> Thanks, I try to make it more clear. We found that auditctl would only
-> set rule with syscall number (>=0 && <2047). So if userspace using
-> syscall whose number is (<0 || >=2047), there seems no meaning for
-> kernel audit to handle it, since this kind of syscall will never hit
-> any audit rule(this rule could not be set by auditctl).
-
-This limit is imposed by:
-
-/usr/include/linux/audit.h
-
-struct audit_rule_data {
-...
-        __u32           mask[AUDIT_BITMASK_SIZE]; /* syscall(s) affected */
-
-Where   #define AUDIT_BITMASK_SIZE 64
-
-So, 64 * 32 = 2048
-
--Steve
-
-> By the way it's a little strange for auditctl(using libaudit.c) to limit
-> syscall number (>=0 && <2047)(see audit_rule_syscall_data()), especially
-> we know NR_syscalls is the real limit in kernel, you can see how other
-> kernel code to the similar thing in ftrace_syscall_enter():
+> On Fri, Apr 01, 2022 at 11:39:08AM +0200, Horatiu Vultur wrote:
+> > Extend ethtool uapi to allow to configure the latencies for the PHY.
+> > Allow to configure the latency per speed and per direction.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  include/uapi/linux/ethtool.h |  6 ++++++
+> >  net/ethtool/common.c         |  6 ++++++
+> >  net/ethtool/ioctl.c          | 10 ++++++++++
+> >  3 files changed, 22 insertions(+)
+> >
+> > diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
+> > index 7bc4b8def12c..f120904a4e43 100644
+> > --- a/include/uapi/linux/ethtool.h
+> > +++ b/include/uapi/linux/ethtool.h
+> > @@ -296,6 +296,12 @@ enum phy_tunable_id {
+> >       ETHTOOL_PHY_DOWNSHIFT,
+> >       ETHTOOL_PHY_FAST_LINK_DOWN,
+> >       ETHTOOL_PHY_EDPD,
+> > +     ETHTOOL_PHY_LATENCY_RX_10MBIT,
+> > +     ETHTOOL_PHY_LATENCY_TX_10MBIT,
+> > +     ETHTOOL_PHY_LATENCY_RX_100MBIT,
+> > +     ETHTOOL_PHY_LATENCY_TX_100MBIT,
+> > +     ETHTOOL_PHY_LATENCY_RX_1000MBIT,
+> > +     ETHTOOL_PHY_LATENCY_TX_1000MBIT,
 > 
-> 	static void ftrace_syscall_enter(void *data, struct pt_regs
-> 	*regs, long id)
-> 	{
-> 		...
-> 		syscall_nr = trace_get_syscall_nr(current, regs);
-> 		if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
-> 			return;
-> 		...
-> 	}
+> How does this scale with 2.5G, 5G, 10G, 14G, 40G, etc.
 > 
-> Thanks.
+> Could half duplex differ to full duplex? What about 1000BaseT vs
+> 1000BaseT1 and 1000BaseT2? The Aquantia/Marvell PHY can do both
+> 1000BaseT and 1000BaseT2 and will downshift from 4 pairs to 2 pairs if
+> you have the correct magic in its firmware blobs.
 > 
-> > Beware that there are some limitations
-> > to the audit syscall filter, which are unfortunately baked into the
-> > current design/implementation, which may affect this to some extent.
+> A more generic API would pass a link mode, a direction and a
+> latency. The driver can then return -EOPNOTSUPP for a mode it does not
+> support.
+
+Yes, I can see your point, the proposed solution is not scalable.
+I will try implement something like you suggested.
+
 > 
-> --
-> Linux-audit mailing list
-> Linux-audit@redhat.com
-> https://listman.redhat.com/mailman/listinfo/linux-audit
+>         Andrew
 
-
-
-
+-- 
+/Horatiu

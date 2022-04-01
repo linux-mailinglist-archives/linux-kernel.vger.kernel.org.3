@@ -2,265 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E4B4EE707
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2664EE70A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbiDAEHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S244798AbiDAEKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiDAEHR (ORCPT
+        with ESMTP id S233930AbiDAEK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:07:17 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEF73E5F7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:05:27 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id p21so1904288ioj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B+CLss0WbItuifu72dHflWYaudPs9OpOIrtnBZ+LuaU=;
-        b=W4lP36K+Sb0fsBGicZNNHA2PdXSFLxGLOGu+QIo0Pr+K09Bfb/JQ9y7h29SJTwHCkL
-         qo9Meye8l/bh5ZdCafGJlboKfyAh3OTCZiwV615CLHt7foV27/crahdWIZpXP9o5zyDT
-         f4B0knRfleCmNsT7S/1gVtK/jnuLe8dMnvgnkEw7P3BsrmJSWJR0z6u8myMWpvrwhycC
-         K0MJjUxswzx2hsClKurU0lxBklqJnt5jCMfdXO/WkmQApUMQX+vefGDz6SReFNqKkDvo
-         OLqXgs1GpET++yDSsieKbkumlNIePUfHJvkrEdI24CUoKeH4Ge+57mvK0e8QEpJiPpQ6
-         0WeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B+CLss0WbItuifu72dHflWYaudPs9OpOIrtnBZ+LuaU=;
-        b=QbWFL6n44ViWDHZZ8cd7Eeswi1RmX6Kuwtu5Gvb0L1ZMZ8A05lo+wFZiumK/xfh9c7
-         P1dpXQWOeTHk2vWWPQmSuz7amltKDhPDxfGLjPJsVkA6t+a4z3R+qjU1E/jAs9znHrwS
-         fUKX9b3PLxOGR+/XlibwH4uXiL0saGKySbQ8ncYr0F/FSTL99b22WMnWKyUrOS5JnvS+
-         VhHh7XpqdSgiTWuOV5vZ8LPgZ4jEFsCAouNjDZi+AYm8Hezed/uweGRdZ7U9c/842Uw9
-         vmAqHgFXoGHesOvFaWYl4EGSGr+yUMmjyJzZjPaxw5bIUsIxWCjKFAFn0Y4wnwPHYwf8
-         fhUQ==
-X-Gm-Message-State: AOAM533ACwNcPw3LG4w/5Uggu8tCdwOYNdNS3ALG6p/nIehq1xRk1rcg
-        YOSa13Nhl5VxwOTbcTGltg+ddGU4nLIfJ7Yov9Rbgw==
-X-Google-Smtp-Source: ABdhPJxTpgpr2IYgcO6o0NsQkkbran/YiQB177+6APQAT+EOzydrNcz9ySUynHUNFST25lY4tTlWweAtwwYoDAybsGU=
-X-Received: by 2002:a05:6638:4128:b0:323:62b4:30c3 with SMTP id
- ay40-20020a056638412800b0032362b430c3mr4994319jab.318.1648785926987; Thu, 31
- Mar 2022 21:05:26 -0700 (PDT)
+        Fri, 1 Apr 2022 00:10:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A618211A34;
+        Thu, 31 Mar 2022 21:08:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CE8F61FCFE;
+        Fri,  1 Apr 2022 04:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648786115; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=stAERTlZOXYQ8hqsal36CeupS9MT75dVPrFy0RCK54s=;
+        b=AUd75ipOMfa7Ou4lvyPzy5YPdhfzhXVa5zlb2nrs2HKqOVpgSRCTocADY2TuMBAd6EbvvI
+        5uQeItZX4XQ9mJfPxKyLXXgNpyrIbCU5MEvI+/7vV5hPHKAGH/g6sJqTeFdA0LCCznWgZY
+        WXGDrGF8YJybUHurirpcxQQXcPdDdOI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648786115;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=stAERTlZOXYQ8hqsal36CeupS9MT75dVPrFy0RCK54s=;
+        b=HyWglv2bDxDqsK3EXqhXiPukE4oiciqPNMZk6YAhyvn9m0yew2BiDM39UDIphPEWCbPZUo
+        xrnirHgg6cBkW0Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B790B13B0C;
+        Fri,  1 Apr 2022 04:08:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9+9YHMF6RmLmXgAAMHmgww
+        (envelope-from <neilb@suse.de>); Fri, 01 Apr 2022 04:08:33 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220331084151.2600229-1-yosryahmed@google.com>
-In-Reply-To: <20220331084151.2600229-1-yosryahmed@google.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Thu, 31 Mar 2022 21:05:15 -0700
-Message-ID: <CAAPL-u8g2qkhdTQtFtBS3GNYz0WnyahWEXvR4g_OSaKv+7EozA@mail.gmail.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Al Viro" <viro@zeniv.linux.org.uk>
+Cc:     linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "David Disseldorp" <ddiss@suse.de>
+Subject: [PATCH v4] VFS: filename_create(): fix incorrect intent.
+In-reply-to: <164877264126.25542.1271530843099472952@noble.neil.brown.name>
+References: <164877264126.25542.1271530843099472952@noble.neil.brown.name>
+Date:   Fri, 01 Apr 2022 15:08:30 +1100
+Message-id: <164878611050.25542.6758961460499392000@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 1:42 AM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> From: Shakeel Butt <shakeelb@google.com>
->
-> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
->
-> Use case: Proactive Reclaim
-> ---------------------------
->
-> A userspace proactive reclaimer can continuously probe the memcg to
-> reclaim a small amount of memory. This gives more accurate and
-> up-to-date workingset estimation as the LRUs are continuously
-> sorted and can potentially provide more deterministic memory
-> overcommit behavior. The memory overcommit controller can provide
-> more proactive response to the changing behavior of the running
-> applications instead of being reactive.
->
-> A userspace reclaimer's purpose in this case is not a complete replacement
-> for kswapd or direct reclaim, it is to proactively identify memory savings
-> opportunities and reclaim some amount of cold pages set by the policy
-> to free up the memory for more demanding jobs or scheduling new jobs.
->
-> A user space proactive reclaimer is used in Google data centers.
-> Additionally, Meta's TMO paper recently referenced a very similar
-> interface used for user space proactive reclaim:
-> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
->
-> Benefits of a user space reclaimer:
-> -----------------------------------
->
-> 1) More flexible on who should be charged for the cpu of the memory
-> reclaim. For proactive reclaim, it makes more sense to be centralized.
->
-> 2) More flexible on dedicating the resources (like cpu). The memory
-> overcommit controller can balance the cost between the cpu usage and
-> the memory reclaimed.
->
-> 3) Provides a way to the applications to keep their LRUs sorted, so,
-> under memory pressure better reclaim candidates are selected. This also
-> gives more accurate and uptodate notion of working set for an
-> application.
->
-> Why memory.high is not enough?
-> ------------------------------
->
-> - memory.high can be used to trigger reclaim in a memcg and can
->   potentially be used for proactive reclaim.
->   However there is a big downside in using memory.high. It can potentially
->   introduce high reclaim stalls in the target application as the
->   allocations from the processes or the threads of the application can hit
->   the temporary memory.high limit.
->
-> - Userspace proactive reclaimers usually use feedback loops to decide
->   how much memory to proactively reclaim from a workload. The metrics
->   used for this are usually either refaults or PSI, and these metrics
->   will become messy if the application gets throttled by hitting the
->   high limit.
->
-> - memory.high is a stateful interface, if the userspace proactive
->   reclaimer crashes for any reason while triggering reclaim it can leave
->   the application in a bad state.
->
-> - If a workload is rapidly expanding, setting memory.high to proactively
->   reclaim memory can result in actually reclaiming more memory than
->   intended.
->
-> The benefits of such interface and shortcomings of existing interface
-> were further discussed in this RFC thread:
-> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
->
-> Interface:
-> ----------
->
-> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> trigger reclaim in the target memory cgroup.
->
->
-> Possible Extensions:
-> --------------------
->
-> - This interface can be extended with an additional parameter or flags
->   to allow specifying one or more types of memory to reclaim from (e.g.
->   file, anon, ..).
->
-> - The interface can also be extended with a node mask to reclaim from
->   specific nodes. This has use cases for reclaim-based demotion in memory
->   tiering systens.
->
-> - A similar per-node interface can also be added to support proactive
->   reclaim and reclaim-based demotion in systems without memcg.
->
-> For now, let's keep things simple by adding the basic functionality.
->
-> [yosryahmed@google.com: refreshed to current master, updated commit
-> message based on recent discussions and use cases]
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
->  mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
->  2 files changed, 46 insertions(+)
->
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 69d7a6983f78..925aaabb2247 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
->         high limit is used and monitored properly, this limit's
->         utility is limited to providing the final safety net.
->
-> +  memory.reclaim
-> +       A write-only file which exists on non-root cgroups.
-> +
-> +       This is a simple interface to trigger memory reclaim in the
-> +       target cgroup. Write the number of bytes to reclaim to this
-> +       file and the kernel will try to reclaim that much memory.
-> +       Please note that the kernel can over or under reclaim from
-> +       the target cgroup.
-> +
->    memory.oom.group
->         A read-write single value file which exists on non-root
->         cgroups.  The default value is "0".
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 725f76723220..994849fab7df 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
->         return nbytes;
->  }
->
-> +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-> +                             size_t nbytes, loff_t off)
-> +{
-> +       struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-> +       unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-> +       unsigned long nr_to_reclaim, nr_reclaimed = 0;
-> +       int err;
-> +
-> +       buf = strstrip(buf);
-> +       err = page_counter_memparse(buf, "", &nr_to_reclaim);
-> +       if (err)
-> +               return err;
-> +
-> +       while (nr_reclaimed < nr_to_reclaim) {
-> +               unsigned long reclaimed;
-> +
-> +               if (signal_pending(current))
-> +                       break;
-> +
-> +               reclaimed = try_to_free_mem_cgroup_pages(memcg,
-> +                                               nr_to_reclaim - nr_reclaimed,
-> +                                               GFP_KERNEL, true);
-> +
-> +               if (!reclaimed && !nr_retries--)
-> +                       break;
-> +
-> +               nr_reclaimed += reclaimed;
-> +       }
-> +
-> +       return nbytes;
 
-It is better to return an error code (e.g. -EBUSY) when
-memory_reclaim() fails to reclaim nr_to_reclaim bytes of memory,
-except if the cgroup memory usage is already 0.  We can also return
--EINVAL if nr_to_reclaim is too large (e.g. > limit).
+When asked to create a path ending '/', but which is not to be a
+directory (LOOKUP_DIRECTORY not set), filename_create() will never try
+to create the file.  If it doesn't exist, -ENOENT is reported.
 
-> +}
-> +
->  static struct cftype memory_files[] = {
->         {
->                 .name = "current",
-> @@ -6413,6 +6445,11 @@ static struct cftype memory_files[] = {
->                 .seq_show = memory_oom_group_show,
->                 .write = memory_oom_group_write,
->         },
-> +       {
-> +               .name = "reclaim",
-> +               .flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
-> +               .write = memory_reclaim,
-> +       },
->         { }     /* terminate */
->  };
->
-> --
-> 2.35.1.1021.g381101b075-goog
->
+However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
+->lookup() function, even though there is no intent to create.  This is
+misleading and can cause incorrect behaviour.
+
+If you try
+   ln -s foo /path/dir/
+
+where 'dir' is a directory on an NFS filesystem which is not currently
+known in the dcache, this will fail with ENOENT.
+As the name is not in the dcache, nfs_lookup gets called with
+LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
+lookup, with the expectation that a subsequent call to create the
+target will be made, and the lookup can be combined with the creation.
+In the case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
+made.  Instead filename_create() sees that the dentry is not (yet)
+positive and returns -ENOENT - even though the directory actually
+exists.
+
+So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent
+to create, and use the absence of these flags to decide if -ENOENT
+should be returned.
+
+Note that filename_parentat() is only interested in LOOKUP_REVAL, so we
+split that out and store it in 'reval_flag'.
+__looku_hash() then gets reval_flag combined with whatever create flags
+were determined to be needed.
+
+Signed-off-by: NeilBrown <neilb@suse.de>
+---
+ fs/namei.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+ARG - v3 had a missing semi-colon.  Sorry.
+
+diff --git a/fs/namei.c b/fs/namei.c
+index 3f1829b3ab5b..509657fdf4f5 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3673,18 +3673,14 @@ static struct dentry *filename_create(int dfd, struct=
+ filename *name,
+ {
+ 	struct dentry *dentry =3D ERR_PTR(-EEXIST);
+ 	struct qstr last;
++	bool want_dir =3D lookup_flags & LOOKUP_DIRECTORY;
++	unsigned int reval_flag =3D lookup_flags & LOOKUP_REVAL;
++	unsigned int create_flags =3D LOOKUP_CREATE | LOOKUP_EXCL;
+ 	int type;
+ 	int err2;
+ 	int error;
+-	bool is_dir =3D (lookup_flags & LOOKUP_DIRECTORY);
+=20
+-	/*
+-	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
+-	 * other flags passed in are ignored!
+-	 */
+-	lookup_flags &=3D LOOKUP_REVAL;
+-
+-	error =3D filename_parentat(dfd, name, lookup_flags, path, &last, &type);
++	error =3D filename_parentat(dfd, name, reval_flag, path, &last, &type);
+ 	if (error)
+ 		return ERR_PTR(error);
+=20
+@@ -3698,11 +3694,13 @@ static struct dentry *filename_create(int dfd, struct=
+ filename *name,
+ 	/* don't fail immediately if it's r/o, at least try to report other errors =
+*/
+ 	err2 =3D mnt_want_write(path->mnt);
+ 	/*
+-	 * Do the final lookup.
++	 * Do the final lookup.  Suppress 'create' if there is a trailing
++	 * '/', and a directory wasn't requested.
+ 	 */
+-	lookup_flags |=3D LOOKUP_CREATE | LOOKUP_EXCL;
++	if (last.name[last.len] && !want_dir)
++		create_flags =3D 0;
+ 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
+-	dentry =3D __lookup_hash(&last, path->dentry, lookup_flags);
++	dentry =3D __lookup_hash(&last, path->dentry, reval_flag | create_flags);
+ 	if (IS_ERR(dentry))
+ 		goto unlock;
+=20
+@@ -3716,7 +3714,7 @@ static struct dentry *filename_create(int dfd, struct f=
+ilename *name,
+ 	 * all is fine. Let's be bastards - you had / on the end, you've
+ 	 * been asking for (non-existent) directory. -ENOENT for you.
+ 	 */
+-	if (unlikely(!is_dir && last.name[last.len])) {
++	if (unlikely(!create_flags)) {
+ 		error =3D -ENOENT;
+ 		goto fail;
+ 	}
+--=20
+2.35.1
+

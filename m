@@ -2,159 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC2A4EE94D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7DD4EE95B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344001AbiDAHxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S1344035AbiDAHzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344003AbiDAHxY (ORCPT
+        with ESMTP id S233506AbiDAHzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:53:24 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904A26240A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:51:33 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id k23so655951ejd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
-        b=R5qxyMq0KSgMLORzVFr6f8JZchVpBqg3vw6QZkgQMBmMpmrWvKJXEkPbDrZs+NDRNX
-         Q03+2GBXLOuu+WGHr2ImgjCSP8i5ANZM6zdGZHPChpz6m1xhNKPBNPmzSPCmhFczeIiG
-         zBBE5QrYUxqLcx7KAqLrrRxVbscoBuS+Nz0+d/T4WtF+Fz7Cyc0JvzCcF5/+dviBqJWY
-         GhXtl/dXbzv1w9GW18RawAEXaU70jdKR1CPuevT7lUMwFRzc8G1G+ukqTCVltycG1Dwb
-         4kf+VTT2GgdcwdOYxr1ksgSfhfhDaqD3WpPlg0ZS9r0RijRNPPQu60iG14SENDohcZyP
-         MHIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
-        b=s6GxL6nIUZDQNLgWA6t/Z7hEBlGMAv7z1ESm7tYRHthO8mAYTBZnGo7fB4n/8I04EN
-         9bGRfiEroNaj/t3ithV3wTjvdrZECtHDzX1yOs534T39IniaRW+8XKQQO8hj9NQpTh39
-         uPtHHYf5hoHNvReXbuuwkdymvcfvQxdZKGQ5tRfwPGgq9FpHeYshSeFeFhFK+GzfehPq
-         LlpLfONeZ3BFPy5e6UP4dg7qoK3eF714DhtygDrKN0N+Xxv8Nlvoi0qyH5TAbpB/jPFx
-         Zk/wORQ3Pyj53DSrBbkZBN44LSohIeQi24rdTgQrs2+b5kFxO0nlKx9bzdgmb7kMfP+5
-         v/Xg==
-X-Gm-Message-State: AOAM530bERnpo/W8rI3OksxPwqnggvJsctHnRqByxqbBH6wdyLGy/af5
-        oBpR+kd6pQYtF8/KiUT7EX33p73d5SU9Dts2XM0=
-X-Google-Smtp-Source: ABdhPJy15tXaBUCoFtBaiXbg+DtyxG4m2FK0tsoBWDirs3TPeDTGqKEPNXZ3qdpz2WbQOSw71PF4td1cPe7M8XL04po=
-X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
- ji13-20020a170907980d00b006d6f910513amr7769180ejc.643.1648799491620; Fri, 01
- Apr 2022 00:51:31 -0700 (PDT)
+        Fri, 1 Apr 2022 03:55:09 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EC3140C7
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:53:18 -0700 (PDT)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M5Q2f-1nZMc41MiD-001U4k for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022
+ 09:53:17 +0200
+Received: by mail-wr1-f54.google.com with SMTP id i4so2989708wrb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:53:17 -0700 (PDT)
+X-Gm-Message-State: AOAM533MrPHAaEurEsdxkil6j/oSz6C92HaKXJM9iBuE5vGWvVWUjyiW
+        KzsD0zxG93Ixrw9Jg2qjYlmWh0RWdAXXBnSffhk=
+X-Google-Smtp-Source: ABdhPJxusnK+u0DqKBkLuDZOOKI4/Zzi0nexaW+kVu52xIgMD7+d3FBFhk7GeTr34pvfDFosmtsJveIZUp+6B4PwU/8=
+X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
+ e12-20020a056000178c00b002040648b4c4mr6693841wrg.219.1648799596920; Fri, 01
+ Apr 2022 00:53:16 -0700 (PDT)
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 1 Apr 2022 08:51:30 +0100
-Message-ID: <CAHpNFcPUVeOhEnL_10u9Omb+LDpYXjTPkYzteduPYWFiLe90bw@mail.gmail.com>
-Subject: Though the VESA & HDMI & DisplayPort standards Facilitates direct low
- bandwidth transport of and transformation of 3D & 2D graphics & fonts into
- directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-To:     moderator@vesa.org
+References: <20220401041615.3296387-1-jcmvbkbc@gmail.com> <CAK8P3a19-qtAg8GD8a9nG4ZPuyoDi3n39+zvHcRV-YdPJbJfKA@mail.gmail.com>
+ <CAFCwf10hm4+WOa9JTNLTnEGtOGScOVu+PAXbk2=r+14u8d68VA@mail.gmail.com>
+In-Reply-To: <CAFCwf10hm4+WOa9JTNLTnEGtOGScOVu+PAXbk2=r+14u8d68VA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 1 Apr 2022 09:53:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a05=J6-utHZ682bVGb8bEZczLDEcFXsK7yXcbER5CRTDA@mail.gmail.com>
+Message-ID: <CAK8P3a05=J6-utHZ682bVGb8bEZczLDEcFXsK7yXcbER5CRTDA@mail.gmail.com>
+Subject: Re: [PATCH] habanalabs: fix build warning
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Max Filippov <jcmvbkbc@gmail.com>,
+        Ohad Sharabi <osharabi@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:gUryK+d737oRkj6KChzTzsB2DtmkjWe+raEzZUlbfDHfbG4GuUh
+ q+K2i4oEkKef56HEab/Bus/FqUo1kSYGAaIagatst9DDSCNrrSJccE/xlW2g4o5MlxWRBW3
+ MqrTfwmAY0O1Jf5aNy2zSOqjDAO0xkjjuj0lcQvEyJsMUdnw431eP2OGqxV4ftKPrz3Q4au
+ i4JkRCw5PtMkj63CJz6QA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:am+a0hmLgcY=:FhzXhqpSfeWX+Pe8RNLni4
+ yLu85JFVlJnygYGReUvGYzfrEImZYCMCJBAG5iPMrsS8Ii2qXAZEMeEb3EKg/tl35dnKdWaXq
+ EpcbNkV5zDX8JHWWlSm1keQmSwIHundBJZbMhx+w3l7RjKgX1OnyU+llhEthCm+lHs4yK4Y45
+ c1wA/nf20a2knWPgrNYTTr3u2DK6eWh2+dSEnnEn8NRQ9l+koB7fdEefOGgUSL5W8H2S39UQ/
+ K/JA6LN2dP+UcbiXr9C1y4dKUBVWyTBN+8Q327aAFoZv8XKon4pUtO3Zl/dNBG15P+QltDBIp
+ Cl6fqEnsOj6Vejo1foK9Pu0QHQy6kC94bTA0SohnDp1zae5YNscmIGKvoKr7fE5eFU79vDMcZ
+ fsbJE9ldvaKR6+vLJujha9tbghMbLDXc1F9w4E/aem73ZFI2ZvvbCdn/cW7YhWE39s7w2qjba
+ NWDt9RKWnn1HxnANqC1M8BDjU3EQGMcI7R+x0IHI5mvRvdyIL3kEaT0KSEhbg8PHKFudVci0P
+ W8JvelH6jt7ZFtpCEjGo3MtoAx0E9wXLFfdBDwW7AVKxDsRVBp5OW3nWDptaqZfDXYQlhGu7d
+ 66E3n4rqPbPcIzYu0YaTk3TvtKU8DJpuw+/YFrLddR6xQr5bwfY/VUIcIo5JCBQXDTEh01RS/
+ oP11LQm36ioSUMBS4J4FnoN3b9r6bPPSkRcBYEo2EALR0g+/gluJuxx/ElYwnHaGd6gea2ZMR
+ pOKi9XRD49DF+7FbX5lK2Z1fKhvpiadqCi+VctN59uo2ROazv2NjL9C17sU9xYzztQcuODgl1
+ njv1p88RB/maJ3RYGFewlaA1zcQyQyVOBywb5vUpxirYQF42vQ=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VecSR - Vector Standard Render
+On Fri, Apr 1, 2022 at 8:55 AM Oded Gabbay <ogabbay@kernel.org> wrote:
+> On Fri, Apr 1, 2022 at 9:40 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Fri, Apr 1, 2022 at 6:16 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
+>
+> We use gen_pool in this function to manage our device memory
+> allocations (this is why it is called alloc_device_memory).
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
+Ok, so it's none of the three I listed ;-)
 
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+> Basically, we initialize the genpool with the total size of the device memory,
+> and each bit represents a page according to a fixed page size, which
+> is dependent on asic type.
+> The addresses represent the physical address of the device memory, as
+> our device sees them.
+> As these addresses are not accessible from the host, it is appropriate
+> to hold them in u64, imo.
+>
+> For future asics which will support multiple page sizes, we need to
+> use the gen_pool_dma_alloc_align() variant,
+> because then we need the allocation to be aligned to the page size as
+> requested by the user per allocation.
+>
+> We ignore the DMA address because this is device memory, not host memory.
+> Therefore, our device's dma engine addresses the memory using the
+> virtual memory addresses we assign to it in our device's MMU.
+>
+> Having said that, I'm wondering whether gen_pool_first_fit_align() can
+> also work here, which might be less confusing.
 
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
+Thank you for the explanation. I think the best way to make this less
+confusing and to avoid the type casts would be to define your own
+typedef for a device-internal address, and then wrap the allocator
+functions such as gen_pool_dma_alloc_align() in helper functions that
+do the type conversion safely.
 
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-(c)Rupert S
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-https://science.n-helix.com/2022/04/vecsr.html
+       Arnd

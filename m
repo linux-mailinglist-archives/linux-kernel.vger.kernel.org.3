@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7344EE5B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F944EE5BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241260AbiDABgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 21:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S243789AbiDABg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 21:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiDABgT (ORCPT
+        with ESMTP id S238249AbiDABgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 21:36:19 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8FA231939;
-        Thu, 31 Mar 2022 18:34:30 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id kc20so985964qvb.3;
-        Thu, 31 Mar 2022 18:34:30 -0700 (PDT)
+        Thu, 31 Mar 2022 21:36:54 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A889240598;
+        Thu, 31 Mar 2022 18:35:05 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id bp39so1073021qtb.6;
+        Thu, 31 Mar 2022 18:35:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OO61RXD1UQQlNqnQzgeVM0kWox51DdMl6bQr1525nQg=;
-        b=p4gwZPXJ32qPFxQBPNIwc2U4bV4VVZK1GVtHoEpqp8EeXPTpe/97y8CCj+AG+Sf/yj
-         ej3wJrClyAZ29L642a9Mts49QtN2MIUmhNqKaZ47CIgNlVIcGuFIJBoIFqGUsQD8NMf/
-         foB8uj4lZnc5b2yY0Lo9CfcokPcgJ84OvzuLXGUk58gws1Mn5MsL+PReCOR74hz0ryAG
-         HaLLloFD0vxVIiySn8Fpv5K5WoPwDB2GlGP4Vnh/zovEGJjJ06eedD9f00/Limyu+SpK
-         X51T7UekluL2AArKcmG6OPYcilTV5HPVcig62WZR18cdiSpN8uqXqgrzqM3GNQqI6uyE
-         eTRw==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lpUdQnkmu36v27iOFONf3ZseM2a8SDfnThG+6rfaJoI=;
+        b=KO+SHp2hyO5FOzAkbcl5F+prZx3tHpnTrNwmbYGqgzCx6veGUHkwN06CqE3+mjvjmZ
+         BjKqL9SfVkbD2rmXUDA0dMPrqu/HLk6cv2alOIQG7ES2fzgQf9aTeGMK9V80janvKCYe
+         2mzKk6WBt6I0nBxepgOYHrqkR0VWKWRmsDM5EkwqyVXgB4XuwmC5pMTrG55NfhrzHoRq
+         YjdDmM3rnVjOBSbvAO9k6qbstleYEdvQgcuBoDhsxDjmDCTHYmKugAO0sAawJgdZSzXL
+         9BchmgKMZuwFk8db12o4TZ5dILX2XbnoaYvJ//yUcvYbUHq10dt+PKBviaIr5vQBYY+y
+         vGeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OO61RXD1UQQlNqnQzgeVM0kWox51DdMl6bQr1525nQg=;
-        b=I0k8XcmgqSgi8v5iyq2wWSD54uW4ypqco6AOBYa8E60tx9YjyELxVdme5fI8vccDu4
-         rES3uCaPkRU2+paoWxrIF5vB2Kr2dHNwuxd80O7oHmH++MIm3K/i4cv942KzNyRi0q3z
-         Zz4ku9+joAYr+0QEld6aihznJqUWaFo3Wc9UMMbpQ8eNRyifwgCXcB3PIFVCnoB5pSbT
-         OKaJedx1GRiR6m9PuEGdTlX0tTy/GPy5yyJf36BaU9GNwQjkJA/ZlxuFa9LL8zIKagm/
-         tPMrjpFK3vWqAKa+dPb/yQ9CX5tdpibK0BCJ4r6tt6Ukj64XrduFDsr2QgjhxoqQpc0p
-         30wQ==
-X-Gm-Message-State: AOAM530uvLJvnKCa2ePK5a4WhlMR153hwBSm/soyHb5yDqIYjU/MuqCz
-        B3XNleaSwoWQG5KZN/Lwnjya1LeaSxL4KiIfZvI=
-X-Google-Smtp-Source: ABdhPJxbujoJAHrQsW7VFgvsWVbk3K2SMvlp7+AO426NGykoFEb7GaBtXUPMbVMay4Pvg4FhUukNnf5ZAOScLkgJ/ik=
-X-Received: by 2002:a05:6214:d42:b0:440:d56b:4233 with SMTP id
- 2-20020a0562140d4200b00440d56b4233mr6196293qvr.15.1648776869848; Thu, 31 Mar
- 2022 18:34:29 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lpUdQnkmu36v27iOFONf3ZseM2a8SDfnThG+6rfaJoI=;
+        b=zlNZE71L+t1g0eILpIqXCKl4DFOZ5nZSnwiATL5cKYZazy4tvi6Fxy2ZCAC43PpMpb
+         aAbSTO8LjD1RdU7CfV18+9WNPLLJ6Xh+jkkllPZpdVeC9zSRjwXxe4N3guaz6vzC/8Ze
+         UPHXvCrszYzvn2/GTmhgUSqe4Xuy00y3CLrg+QgaFj0j6lXzb0d6nR/ub8eLOa1GizLZ
+         dLV80IGPVbOoZwhL/ElHXW7RoIH1MJQqN6hJEM1q8mktvz2tOgsSHqrxiFmbeGrqXtO8
+         Mu3T1KXYUV/OuKuKcrElq1ezpOJ2NGcNF2d80vSBL3CFS+zQoUMIEmtMHDiO2Eavtbew
+         PSKg==
+X-Gm-Message-State: AOAM533KDi6HaKjMU3WsrYwvH90++vOmZF661/XssPlBvhBE+k8qVg2u
+        GvHYoOm8wujNdjfHGvuM1rM=
+X-Google-Smtp-Source: ABdhPJwH15x56Wp3o6vUCv5Dfe/2WnXWXwFxed/wvSA0j34NCyHKKp9OlGqIXwZ2JCgZnBm8cvUlzQ==
+X-Received: by 2002:a05:622a:c1:b0:2e1:e281:2ac0 with SMTP id p1-20020a05622a00c100b002e1e2812ac0mr6772498qtw.608.1648776904224;
+        Thu, 31 Mar 2022 18:35:04 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac87d48000000b002e1c6faae9csm834459qtb.28.2022.03.31.18.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 18:35:03 -0700 (PDT)
+Message-ID: <624656c7.1c69fb81.9e8ee.5657@mx.google.com>
+X-Google-Original-Message-ID: <20220401013500.GA2404167@cgel.zte@gmail.com>
+Date:   Fri, 1 Apr 2022 01:35:00 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com, willy@infradead.org,
+        corbet@lwn.net, yang.yang29@zte.com.cn, yang.shi@linux.alibaba.com,
+        dave.hansen@linux.intel.com, saravanand@fb.com, minchan@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, jhubbard@nvidia.com,
+        xu xin <xu.xin16@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH v5] mm/vmstat: add events for ksm cow
+References: <20220331035616.2390805-1-yang.yang29@zte.com.cn>
+ <a4f42004-7c99-8c4e-259b-903254501529@gmail.com>
 MIME-Version: 1.0
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
-In-Reply-To: <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Fri, 1 Apr 2022 09:34:02 +0800
-Message-ID: <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, cgroups@vger.kernel.org,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4f42004-7c99-8c4e-259b-903254501529@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,67 +77,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
+On Thu, Mar 31, 2022 at 06:44:31PM +0700, Bagas Sanjaya wrote:
+> On 31/03/22 10.56, cgel.zte@gmail.com wrote:
+> > +Monitoring KSM events
+> > +=====================
+> > +
+> > +There are some counters in /proc/vmstat that may be used to monitor KSM events.
+> > +KSM might help save memory, it's a tradeoff by may suffering delay on KSM COW
+> > +or on swapping in copy. Those events could help users evaluate whether or how
+> > +to use KSM. For example, if cow_ksm increases too fast, user may decrease the
+> > +range of madvise(, , MADV_MERGEABLE).
+> > +
+> 
+> Did you mean "tradeoff between possible delay on KSM COW and swapping
+> in copy"?
 >
-> On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > >
-> > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > > by loading an special algorithm into its virtual address space and make it hard
-> > > > to protect the expanded usage without userspace's interaction.
-> > >
-> > > Do I get it correctly that the concern you have is that you do not know
-> > > how much memory your workload will need because that depends on some
-> > > parameters?
-> > right. such as a camera APP will expand the usage from 50MB to 500MB
-> > because of launching a special function(face beauty etc need special
-> > algorithm)
-> > >
-> > > > Furthermore, fixed
-> > > > memory.low is a little bit against its role of soft protection as it will response
-> > > > any system's memory pressure in same way.
-> > >
-> > > Could you be more specific about this as well?
-> > As the camera case above, if we set memory.low as 200MB to keep the
-> > APP run smoothly, the system will experience high memory pressure when
-> > another high load APP launched simultaneously. I would like to have
-> > camera be reclaimed under this scenario.
->
-> OK, so you effectivelly want to keep the memory protection when there is
-> a "normal" memory pressure but want to relax the protection on other
-> high memory utilization situations?
->
-> How do you exactly tell a difference between a steady memory pressure
-> (say stream IO on the page cache) from "high load APP launched"? Should
-> you reduce the protection on the stram IO situation as well?
-We can take either system's io_wait or PSI_IO into consideration for these.
->
-> [...]
-> > > One very important thing that I am missing here is the overall objective of this
-> > > tuning. From the above it seems that you want to (ab)use memory->low to
-> > > protect some portion of the charged memory and that the protection
-> > > shrinks over time depending on the the global PSI metrict and time.
-> > > But why this is a good thing?
-> > 'Good' means it meets my original goal of keeping the usage during a
-> > period of time and responding to the system's memory pressure. For an
-> > android like system, memory is almost forever being in a tight status
-> > no matter how many RAM it has. What we need from memcg is more than
-> > control and grouping, we need it to be more responsive to the system's
-> > load and could  sacrifice its usage  under certain criteria.
->
-> Why existing tools/APIs are insufficient for that? You can watch for
-> both global and memcg memory pressure including PSI metrics and update
-> limits dynamically. Why is it necessary to put such a logic into the
-> kernel?
-Poll and then React method in userspace requires a polling interval
-and response time. Take PSI as an example, it polls ten times during
-POLLING_INTERVAL while just report once, which introduce latency in
-some extend.
->
-> --
-> Michal Hocko
-> SUSE Labs
+I mean both are tradeoff, or in other words KSM sacrifices time to gain space.
+KSM COW please see do_wp_page(), KSM swapping in copy see ksm_might_need_to_copy().
+
+Thanks.
+> -- 
+> An old man doll... just what I always wanted! - Clara

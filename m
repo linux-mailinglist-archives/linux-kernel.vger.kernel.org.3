@@ -2,272 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50624EEEA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 384ED4EEEAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346590AbiDAOAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S1346609AbiDAOA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245646AbiDAOAT (ORCPT
+        with ESMTP id S1345688AbiDAOA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:00:19 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71BDE0D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:58:27 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id A709E3201F86;
-        Fri,  1 Apr 2022 09:58:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 01 Apr 2022 09:58:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=iwnEykB1b2/b8D
-        mQ8le6vvZj3QpvHIfY2VKFpdl/8nY=; b=g+Om+fuhzju2leUInivnh8C2qIQaHL
-        XF/QPDkiMuLNqKa+wFapEwVQFlOZkN/a+AoTHMZa0aazl59SumO7kj2k93ahIhk+
-        5hvvLFY7rTHb3WGdwUVmEKzMCGuBuggvz8tABe9SM0dT7F5ZK3ez2aw14Tmt36p+
-        Zj2bvWR2+IhplHrSsfqziPOM0zHu9W/F0HPt6fk9L2sJhyPcnsCK3+s6Y8uw/w/F
-        o9v9K5BOr+JircZo655rMCdFJjMQLsk4yor09WmYaySLsWgbcuaZGZ/VxaW1zJlr
-        76SbN8ownfqTjhGe1BWmwnYw6UYrvCpm1rq7TQf/y7AERgNnK3bR+hMw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=iwnEykB1b2/b8DmQ8le6vvZj3QpvHIfY2VKFpdl/8nY=; b=UE0Zvq/N
-        YUG7Z+ibUqLWwT4//+gQfQ9p51b0xLhv15bY3/NlXphUDo27/IbWth5BBfaZBlTa
-        f5hkOaBY2i9FM8yCs1uef82Ae9SEc1zbfpAPRdtZzKnibrWO6FclcX68Z4MxKOe3
-        61SvbwUu/Ej1KyBkIZwlbXHMbjHdjame3xyw5lxXv8eHQlhfuMFxythCqWKGObGb
-        5yslizwwayQwLoyfrG2dKMUP/hOT9/LmKyFvtzLgOA6F9t7p3zNNPa4wXerotpwO
-        qYqvLJqqLSf073rjx3Ft3qv0gQ+LeKYUYEcRFQtwLCC2F8WEIMND7p/wH0V1uooI
-        jKxcG3a4vYxTLg==
-X-ME-Sender: <xms:AgVHYhUzU0BPft3YUh5T3YkZqzVhKt8KTEfSHc82yLgMWDflTNM8oQ>
-    <xme:AgVHYhm6o7hGx74IrB6R4Zdq3dVD0740Ym9yarGpwYw4uT4i6ntG4MzX26e1e9pRX
-    ldRffNu5hPcJcyKCw>
-X-ME-Received: <xmr:AgVHYtYKVesu7lS6N9bwWfUbk2Y0rsp8LZr-x8vAqGA07VjzbdTzXWfOsiyT44V8XYzveI7UJTts4ecwow>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiiedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepkeeiue
-    elvddtteeujeehtdegheejledvtdetgfeileejfeeghfeftdeuffefleevnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
-X-ME-Proxy: <xmx:AgVHYkVNHXE_2kSzpoiq11ZnYvXYXhlIv0TGBHpVBvO8MyzFG98euA>
-    <xmx:AgVHYrmoxcqOcX3EdeAg1t591s05gdy1J_jS4WNaM6Tu24vhnle01g>
-    <xmx:AgVHYhepMWUej4hUv3u8zbRUB0RSq6V9xLST0lKWRAIli1sZV7c5bg>
-    <xmx:AgVHYkhJZPN0WLEYNIPhvovbHNR4K9PIRQJP4x1zZ48mQ-ACOtqDjQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Apr 2022 09:58:25 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     linux-mm@kvack.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH 2/2] mm: wrap __find_buddy_pfn() with a necessary buddy page validation.
-Date:   Fri,  1 Apr 2022 09:58:20 -0400
-Message-Id: <20220401135820.1453829-2-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401135820.1453829-1-zi.yan@sent.com>
-References: <20220401135820.1453829-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Fri, 1 Apr 2022 10:00:56 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EEC4C416
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:59:06 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id bx5so2486522pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vINCBhX/7V/5MbVjKTcLLNhSCyxfRcucmANL3gsUx+c=;
+        b=kgoUwoh6UHXaBaA6YYZCcgdkNvoc15wi7vSzTTqulnHcMOVeuIFhIf/jCWzNDWRIDW
+         Zp8miYwkjL24BUhdbwxFu7MbiqL2t+lq0iMHCS+J06BNN/nlWQ+NXba27kWz6+vpPKKN
+         +xKDC/38TJb7+1r3HiXiuOrQMqlW/bzUF+RpJQpkCXVmnE+AkgCMZJNzF2dIENsVp1qt
+         51KuvPeZfuGH1CnRfNWH6blMVnA83mgMKm2BA5mvt5kr1nanrlxRCB81uvyHEl+JeFc2
+         LxqmtrNrjqTFqn4keU661u8EK0qc3N0JtZBYSCgczj9IBc2xDprdLRw30raFx21gvKI9
+         TtEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vINCBhX/7V/5MbVjKTcLLNhSCyxfRcucmANL3gsUx+c=;
+        b=05l96N7OlHXy2CB20+SVjb4Jlhp41XbZwV+UxYa3j+gAY1jd18WFj4/s2jHp/LZlFo
+         +VarI/BfA1K3YOy0oRQhS6/Vb0Fx+w0W9Nc1Zpib2Bv7T1enAzRFQYiwbsJtXwZz3bqS
+         kumj4fWGd6N51D6RdOaDd4TMAfOBBicamv2xC+cgvnqw0TxmYsngafWpuntaBGBrJlFB
+         fcAlFwKUhuDGXp5s/zRSsIsTw79rQ+F6IgJRRA1WqabUzXj6CVqFTDPRFuyXh6JBjcgn
+         zcvt06Tg52O2MPwSsKgjDwB2EWfah3KozgspwXJQoWtWtU76PeQU9E2JA/UVjUkJI+qd
+         NFpA==
+X-Gm-Message-State: AOAM530BhmoJVl30DhdtIzPd4jWaKCXqoRts7+eg+5oVpV/PSjIbHKdp
+        F/QTMnyxRUAKtavfV5ALwBnXbg==
+X-Google-Smtp-Source: ABdhPJzLqHePrkY/XZw4LtIr0qcnGq2xNXtmMhGv2XKvY6gEsdiOQBz+EHAXrwVP8F0HA3xy02hygg==
+X-Received: by 2002:a17:90b:4c08:b0:1c7:61ce:b707 with SMTP id na8-20020a17090b4c0800b001c761ceb707mr12061015pjb.16.1648821545937;
+        Fri, 01 Apr 2022 06:59:05 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm3308345pfk.88.2022.04.01.06.59.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 06:59:05 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 13:59:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     cgel.zte@gmail.com
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] KVM: x86/mmu: remove unnecessary flush_workqueue()
+Message-ID: <YkcFJZW0r+OQmQwz@google.com>
+References: <20220401083530.2407703-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401083530.2407703-1-lv.ruyi@zte.com.cn>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+On Fri, Apr 01, 2022, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> All work currently pending will be done first by calling destroy_workqueue,
+> so there is unnecessary to flush it explicitly.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-Whenever the buddy of a page is found from __find_buddy_pfn(),
-page_is_buddy() should be used to check its validity. Add a helper
-function find_buddy_page_pfn() to find the buddy page and do the check
-together.
+Good bot :-)
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/linux-mm/CAHk-=3Dwji_AmYygZMTsPMdJ7XksMt7kOur=
-8oDfDdniBRMjm4VkQ@mail.gmail.com/
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- mm/internal.h       | 24 ++---------------
- mm/page_alloc.c     | 63 ++++++++++++++++++++++++++++++++++++++-------
- mm/page_isolation.c |  9 +++----
- 3 files changed, 59 insertions(+), 37 deletions(-)
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index a2f9a34a0168..b822677ee3da 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -51,7 +51,6 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+>  	if (!kvm->arch.tdp_mmu_enabled)
+>  		return;
+>  
+> -	flush_workqueue(kvm->arch.tdp_mmu_zap_wq);
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 876e66237c89..791653c95bf1 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -211,28 +211,8 @@ struct alloc_context {
- 	bool spread_dirty_pages;
- };
-=20
--/*
-- * Locate the struct page for both the matching buddy in our
-- * pair (buddy1) and the combined O(n+1) page they form (page).
-- *
-- * 1) Any buddy B1 will have an order O twin B2 which satisfies
-- * the following equation:
-- *     B2 =3D B1 ^ (1 << O)
-- * For example, if the starting buddy (buddy2) is #8 its order
-- * 1 buddy is #10:
-- *     B2 =3D 8 ^ (1 << 1) =3D 8 ^ 2 =3D 10
-- *
-- * 2) Any buddy B will have an order O+1 parent P which
-- * satisfies the following equation:
-- *     P =3D B & ~(1 << O)
-- *
-- * Assumption: *_mem_map is contiguous at least up to MAX_ORDER
-- */
--static inline unsigned long
--__find_buddy_pfn(unsigned long page_pfn, unsigned int order)
--{
--	return page_pfn ^ (1 << order);
--}
-+extern bool find_buddy_page_pfn(struct page *page, unsigned int order,
-+				struct page **buddy, unsigned long *buddy_pfn);
-=20
- extern struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
- 				unsigned long end_pfn, struct zone *zone);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 2ea106146686..89490b9a19ef 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -998,6 +998,54 @@ static inline void del_page_from_free_list(struct page=
- *page, struct zone *zone,
- 	zone->free_area[order].nr_free--;
- }
-=20
-+/*
-+ * Locate the struct page for both the matching buddy in our
-+ * pair (buddy1) and the combined O(n+1) page they form (page).
-+ *
-+ * 1) Any buddy B1 will have an order O twin B2 which satisfies
-+ * the following equation:
-+ *     B2 =3D B1 ^ (1 << O)
-+ * For example, if the starting buddy (buddy2) is #8 its order
-+ * 1 buddy is #10:
-+ *     B2 =3D 8 ^ (1 << 1) =3D 8 ^ 2 =3D 10
-+ *
-+ * 2) Any buddy B will have an order O+1 parent P which
-+ * satisfies the following equation:
-+ *     P =3D B & ~(1 << O)
-+ *
-+ * Assumption: *_mem_map is contiguous at least up to MAX_ORDER
-+ */
-+static inline unsigned long
-+__find_buddy_pfn(unsigned long page_pfn, unsigned int order)
-+{
-+	return page_pfn ^ (1 << order);
-+}
-+
-+
-+/*
-+ * Find the buddy of @page and validate it.
-+ * @page: The input page
-+ * @order: Order of the input page
-+ * @buddy: Output pointer to the buddy page
-+ * @buddy_pfn: Output pointer to the buddy pfn
-+ *
-+ * The found buddy can be a non PageBuddy, out of @page's zone, or its ord=
-er is
-+ * not the same as @page. The validation is necessary before use it.
-+ *
-+ * Return: true if the found buddy page is valid or false if not.
-+ *
-+ */
-+bool find_buddy_page_pfn(struct page *page, unsigned int order,
-+			 struct page **buddy, unsigned long *buddy_pfn)
-+{
-+	unsigned long pfn =3D page_to_pfn(page);
-+
-+	*buddy_pfn =3D __find_buddy_pfn(pfn, order);
-+	*buddy =3D page + (*buddy_pfn - pfn);
-+
-+	return page_is_buddy(page, *buddy, order);
-+}
-+
- /*
-  * If this is not the largest possible page, check if the buddy
-  * of the next-highest order is free. If it is, it's possible
-@@ -1011,17 +1059,16 @@ buddy_merge_likely(unsigned long pfn, unsigned long=
- buddy_pfn,
- 		   struct page *page, unsigned int order)
- {
- 	struct page *higher_page, *higher_buddy;
--	unsigned long combined_pfn;
-+	unsigned long higher_page_pfn;
-=20
- 	if (order >=3D MAX_ORDER - 2)
- 		return false;
-=20
--	combined_pfn =3D buddy_pfn & pfn;
--	higher_page =3D page + (combined_pfn - pfn);
--	buddy_pfn =3D __find_buddy_pfn(combined_pfn, order + 1);
--	higher_buddy =3D higher_page + (buddy_pfn - combined_pfn);
-+	higher_page_pfn =3D buddy_pfn & pfn;
-+	higher_page =3D page + (higher_page_pfn - pfn);
-=20
--	return page_is_buddy(higher_page, higher_buddy, order + 1);
-+	return find_buddy_page_pfn(higher_page, order + 1,
-+			&higher_buddy, &buddy_pfn);
- }
-=20
- /*
-@@ -1075,10 +1122,8 @@ static inline void __free_one_page(struct page *page,
- 								migratetype);
- 			return;
- 		}
--		buddy_pfn =3D __find_buddy_pfn(pfn, order);
--		buddy =3D page + (buddy_pfn - pfn);
-=20
--		if (!page_is_buddy(page, buddy, order))
-+		if (!find_buddy_page_pfn(page, order, &buddy, &buddy_pfn))
- 			goto done_merging;
-=20
- 		if (unlikely(order >=3D pageblock_order)) {
-diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-index f67c4c70f17f..743c52f489f5 100644
---- a/mm/page_isolation.c
-+++ b/mm/page_isolation.c
-@@ -70,7 +70,7 @@ static void unset_migratetype_isolate(struct page *page, =
-unsigned migratetype)
- 	unsigned long flags, nr_pages;
- 	bool isolated_page =3D false;
- 	unsigned int order;
--	unsigned long pfn, buddy_pfn;
-+	unsigned long buddy_pfn;
- 	struct page *buddy;
-=20
- 	zone =3D page_zone(page);
-@@ -89,11 +89,8 @@ static void unset_migratetype_isolate(struct page *page,=
- unsigned migratetype)
- 	if (PageBuddy(page)) {
- 		order =3D buddy_order(page);
- 		if (order >=3D pageblock_order && order < MAX_ORDER - 1) {
--			pfn =3D page_to_pfn(page);
--			buddy_pfn =3D __find_buddy_pfn(pfn, order);
--			buddy =3D page + (buddy_pfn - pfn);
--
--			if (!is_migrate_isolate_page(buddy)) {
-+			if (find_buddy_page_pfn(page, order, &buddy, &buddy_pfn) &&
-+			    !is_migrate_isolate_page(buddy)) {
- 				isolated_page =3D !!__isolate_free_page(page, order);
- 				/*
- 				 * Isolating a free page in an isolated pageblock
---=20
-2.35.1
+Might be worth adding a comment calling out that this drains the queue.  Either way,
 
+Reviewed-by: Sean Christopherson <seanjc@google.com>

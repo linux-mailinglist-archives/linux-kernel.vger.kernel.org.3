@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA11E4EF83A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5380D4EF83B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349174AbiDAQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S1348857AbiDAQoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349852AbiDAQnG (ORCPT
+        with ESMTP id S1350447AbiDAQng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:43:06 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A9E9CF48E;
-        Fri,  1 Apr 2022 09:24:26 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:38814.38631177
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id AE3C71002C5;
-        Sat,  2 Apr 2022 00:24:13 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id c0936e5f532040c988fa50bee58868c7 for mripard@kernel.org;
-        Sat, 02 Apr 2022 00:24:25 CST
-X-Transaction-ID: c0936e5f532040c988fa50bee58868c7
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v14 6/6] MAINTAINERS: add maintainers for DRM LOONGSON driver
-Date:   Sat,  2 Apr 2022 00:22:51 +0800
-Message-Id: <20220401162251.1665081-7-15330273260@189.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220401162251.1665081-1-15330273260@189.cn>
-References: <20220401162251.1665081-1-15330273260@189.cn>
+        Fri, 1 Apr 2022 12:43:36 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B077114F13F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=AcBPC6b8Ow54uIrFRglU9gzXaSUC
+        Q4cd7DaZDtjcLyQ=; b=Tep0sd+ZQs/pV7W17OP62Su2NA/HIveSPhneZhKmB3yr
+        EFlsmnQ5J+3HzyhQ8LEt7EK1iocP9C2nrggkVq47g0R2v2ipR57zJ83uApFUonar
+        qZ9hKdd71rBIwi6WhnPuU9lacp/q/XseyT093J/wJcxudPOdGVdA1ORY6mfVvpY=
+Received: (qmail 801843 invoked from network); 1 Apr 2022 18:25:03 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Apr 2022 18:25:03 +0200
+X-UD-Smtp-Session: l3s3148p1@tUKLOJrbdqYgAQnoAGGbAFirbAEmXd1u
+Date:   Fri, 1 Apr 2022 18:25:03 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-mmc@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ath10k@lists.infradead.org, bcm-kernel-feedback-list@broadcom.com,
+        brcm80211-dev-list.pdl@broadcom.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        SHA-cyfmac-dev-list@infineon.com
+Subject: Re: [RFC PATCH 00/10] mmc: improve API to make clear {h|s}w_reset is
+ for cards
+Message-ID: <YkcnXxNjMNdDgEBt@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ath10k@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        brcm80211-dev-list.pdl@broadcom.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220321115059.21803-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PxhwHXhOFLOXfgmr"
+Content-Disposition: inline
+In-Reply-To: <20220321115059.21803-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- This patch add myself as maintainer
 
-Signed-off-by: Sui Jingfeng <15330273260@189.cn>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+--PxhwHXhOFLOXfgmr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 10476280acb8..21184d8577f4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6487,6 +6487,15 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	drivers/gpu/drm/lima/
- F:	include/uapi/drm/lima_drm.h
- 
-+DRM DRIVERS FOR LOONGSON
-+M:	suijingfeng <suijingfeng@loongson.cn>
-+L:	dri-devel@lists.freedesktop.org
-+S:	Maintained
-+W:	https://www.loongson.cn/
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	Documentation/devicetree/bindings/display/loongson/
-+F:	drivers/gpu/drm/loongson/
-+
- DRM DRIVERS FOR MEDIATEK
- M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
- M:	Philipp Zabel <p.zabel@pengutronix.de>
--- 
-2.25.1
 
+> I tested it with my Renesas boards, so far no regressions. Buildbots are
+
+Wishful thinking, the patches crash now when booting. Still checking
+what is the difference to when I send the patches out.
+
+Still, looking forward to comments on the general approach.
+
+
+--PxhwHXhOFLOXfgmr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJHJ1oACgkQFA3kzBSg
+KbYPGw//YUU0c/TCXVii8TbBtVaxFJ+SFYjCQiY3RhhVPIrWlCF7+1v7BKyWdqz+
+I/ctuhs3uUutw1dE3/WI12HevWANnVdw6EI8D0+aJOrxaCfMueJpEugMYguwpk8t
+ZWB8Kh+8Lozg55uOn7i4byGA5UThrrbV9k6/IwKnfbGS+fKUVWL9uJxMKssYx0uM
+ZjgVIKF0bSg0As+UuQBiFhKqJQybnBa27DHtl1n8Co3zX79M5T//aB/SvLbeyyKM
+MhsVF3xd7LxdWDVTkXEdjQqVtApNlGAp9+2iYdb86V0dd+hz0PWO9Acp9VB2ZOEv
+OcIhc8r0iExSdFITQeSevS5LdnRhyxv8mA0K4pS2ndbIPwut0dmHSSU4PnseFcAy
+khFA8jDujq1jz83z0ucAlCsr3U/u0Yrb7CGyLA3zKTCP05RLvPsbAxyymT2EOfen
+S9+LsJhEXiQ2KstNsFqWch/PebTxMkyrVvCo+US+HhCsDTP01WvqxwtC0TkB69Zk
+cjVeDWo5QkggA1nYKPntr9OIyqeHCmowWHW+2V4zmWAgI1qodhPfQnFsUuzwbbXy
+j8cavhOoe3ZKwLeH5X1gP0mOClgbRWFEzOBEFq2W94rLvt8gMp85Md8l2Y1MMUO2
+5byHakN0xAIFBbcv+tGO6SAK9ld3vFtWIoPtyYHnDKjmKQwU1GE=
+=v18S
+-----END PGP SIGNATURE-----
+
+--PxhwHXhOFLOXfgmr--

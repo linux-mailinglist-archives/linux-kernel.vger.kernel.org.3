@@ -2,116 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0124EEBDA
+	by mail.lfdr.de (Postfix) with ESMTP id C79A54EEBDB
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345256AbiDAKyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S1345237AbiDAKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243938AbiDAKwo (ORCPT
+        with ESMTP id S1345307AbiDAKxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:52:44 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4374C796
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:50:55 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so3266613wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 03:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QBKwD8HUOk6ZcRr/nLKL5Hzmfbcc34y7j+Mh2z7MZlA=;
-        b=I5Hvt5BVjSAhFjOahgRq+v8E8jlzYBL2YIlZi+yuzZYLfb7G1eZ+ra/Cqw/xGQ0Qib
-         JhG4lFsDyyevg5xwxnZgJR3iI7v5D836Bg3BHf9/jRB99F5G8e35Bz8GME4JQPYpEZ8y
-         F/HNdkGIWnnUYEhbbMaOs4/exiwV2f5LtOgPUp0ZJuk80nh6ezzLApOI+Y4Og1OoR4eC
-         ug+Qwh9TWSrO/AgrZ18o8Pv2Gu4qrQ2s8ukRiQ38qdtVnvJAYnBY4PfDtIVTA5j5P2aP
-         R7uMmuxcRMXnFzhVn0KlBeMnNGsRoCmEfWDKaTcGJ67Mdka9zey3R4iewbIWohtzPwjc
-         muTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QBKwD8HUOk6ZcRr/nLKL5Hzmfbcc34y7j+Mh2z7MZlA=;
-        b=YeqHvOSkCSFlt3tq1b5hOxqzXCcmdavLkD1egdXipxHvWC68mp5uec/cey7l0ZY3jr
-         iRrsMHSEBg3VqOBEI8KvsahT8mabIgsLs5F7JrKAODnTZRzBnV3YmaXLhwoKou/frpMW
-         DYM3TGXVBUV3FwRBndcp/trNOc9/p60y+smbsW2Zwho1FnWfH4L1ExjyXXOOQ/6a0ud9
-         Kd40AIIFHMJ/Muaq091toy0A9RbmMzRDzFj24LMK8xt7v7/96GFb6fscv9vxL9r+3MRs
-         grbWwJnyKJXRtDJLvxbE3kYGO6WdfrXjbiumokn2SJ79w2GH6huRMAztXn/OphttenZB
-         8QWA==
-X-Gm-Message-State: AOAM533Pzt8xd4frX1z5zC5Pt049DvWnGa/Qn4brxbnQVVrMRs80K0GI
-        OsfzcxH/PgTEIqSKaPxEVo1CyzAWHRngwA==
-X-Google-Smtp-Source: ABdhPJyNpBs9mmnzElZBquk0tBzk/CsYPd29bsHI3BohmQevd2bTWg1eoxFRWhMMDLZjtNuBUXIFOA==
-X-Received: by 2002:a05:600c:4fcd:b0:38c:7495:e644 with SMTP id o13-20020a05600c4fcd00b0038c7495e644mr8344490wmq.102.1648810253781;
-        Fri, 01 Apr 2022 03:50:53 -0700 (PDT)
-Received: from joneslee-l.cable.virginm.net (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id c5-20020a5d63c5000000b002040822b680sm2379542wrw.81.2022.04.01.03.50.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 03:50:53 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 1/1] nl80211: Prevent out-of-bounds read when processing NL80211_ATTR_REG_ALPHA2
-Date:   Fri,  1 Apr 2022 11:50:46 +0100
-Message-Id: <20220401105046.1952815-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+        Fri, 1 Apr 2022 06:53:05 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CE44C796
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648810277; x=1680346277;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=TyVT+WjrsnNzGE/O8TBVzv7J/PJ+lB7TDwLm8MQk4cM=;
+  b=dQz5+NOfzRmjIk5NNOhOAmyEusEpACbdTztzWq/XWpzM+Mm4xoWW8BiR
+   71h2ESZBfts89OcfEFJPPpJZs04oeU69tajvlBS2jNqV59WJAJ3WSoBnO
+   YDjL8oYzAomNEJ/lXZjuJYV1OpChSnS6bX2RmhpS6qjQIeHjvagrs+N49
+   RFa3MVmLMfaS1F6AbFCKc8oMXfgDMh231ma3JkODNiSnm39u+bbTZbSKO
+   gfUC0YIoRfyoJiQA6mMqDu3FAlUnXAJQbZZPuq3xjAopt4lWpt5SCEAg9
+   q+oyDa6trUYWU4Ohruw+iKzQMIDZyln0eCIZ00yQQMMUyldETaQSiAMdx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="259806989"
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="259806989"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:51:16 -0700
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="567386650"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.168.167]) ([10.249.168.167])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:51:14 -0700
+Subject: Re: dtbs_check: ERROR: dtschema minimum version is v2022.3
+To:     kernel test robot <lkp@intel.com>, Rob Herring <robh@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202204011633.0XlAbzBd-lkp@intel.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <bc9be279-a130-d5e7-4397-bbb389d14403@intel.com>
+Date:   Fri, 1 Apr 2022 18:51:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202204011633.0XlAbzBd-lkp@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checks are presently in place in validate_nla() to ensure strings
-greater than 2 are not passed in by the user which could potentially
-cause issues.
+Hi Rob,
 
-However, there is nothing to prevent userspace from only providing a
-single (1) Byte as the data length parameter via nla_put().  If this
-were to happen, it would cause an OOB read in regulatory_hint_user(),
-since it makes assumptions that alpha2[0] and alpha2[1] will always be
-accessible.
+Sorry for the inconvenience, please ignore this false positive.
 
-Add an additional check, to ensure enough data has been allocated to
-hold both Bytes.
+Best Regards,
+Rong Chen
 
-Cc: <stable@vger.kernel.org>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- net/wireless/nl80211.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index ee1c2b6b69711..80a516033db36 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -7536,6 +7536,10 @@ static int nl80211_req_set_reg(struct sk_buff *skb, struct genl_info *info)
- 		if (!info->attrs[NL80211_ATTR_REG_ALPHA2])
- 			return -EINVAL;
- 
-+		if (nla_len(info->attrs[NL80211_ATTR_REG_ALPHA2]) !=
-+		    nl80211_policy[NL80211_ATTR_REG_ALPHA2].len)
-+			return -EINVAL;
-+
- 		data = nla_data(info->attrs[NL80211_ATTR_REG_ALPHA2]);
- 		return regulatory_hint_user(data, user_reg_hint_type);
- 	case NL80211_USER_REG_HINT_INDOOR:
--- 
-2.35.1.1094.g7c7d902a7c-goog
-
+On 4/1/2022 4:50 PM, kernel test robot wrote:
+> Hi Rob,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   e8b767f5e04097aaedcd6e06e2270f9fe5282696
+> commit: 2783a7f56f9980f61ca809b826bcd14dc77eb7b9 dt-bindings: kbuild: Pass DT_SCHEMA_FILES to dt-validate
+> date:   3 weeks ago
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20220401/202204011633.0XlAbzBd-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce: make ARCH=arm dtbs_check
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     sort: -:2: disorder: 2022.1
+>>> ERROR: dtschema minimum version is v2022.3
+> 

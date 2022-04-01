@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FF34EF86C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5934EF878
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349818AbiDAQza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S1347366AbiDAQ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350373AbiDAQyx (ORCPT
+        with ESMTP id S1349886AbiDAQzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:54:53 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F28A1CA
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:50:49 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p10so5926347lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 09:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=luJj4KxFKmBTkLspMbSvyuPZv8Dkm0lFcSWy4HmQZis=;
-        b=Peuvx5N4W5SP8SZZ1FljaHqobq5N2Y8E5+jr3IR/SLI0XgCsiqJT4lNfJVJYQ36xfr
-         1PkzzDVLmLoemm1XKNLmG1O2R0Q+iskRlMlTGQFh1Nfu3laGnl7iXDzye9itDnrRyzXp
-         nyBb8dfODDODYXQJZ83eRiZmuVegiQPrbGUL4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=luJj4KxFKmBTkLspMbSvyuPZv8Dkm0lFcSWy4HmQZis=;
-        b=pJjskroRjY4vId8ENRHkrqUZJFw0GTMcJgkyr2Ie8O7x02OS8QwDCvI+fnZZSDEMJ9
-         +Y9nW3OMnud9pxFJJzKIJqQzqDZP1yKGW4g7caCyCy8O6h2cWoPoxnYBmbS7VxNZZCdL
-         ji1FcNi9efsgFvn1naY/6FsFbNojNTeRU3A+5xWL4PeaHFcSPR623XM9sTLqsEvthwbb
-         4J2qm8XCYGv41Y4QGFUcD7WJQWzGHdPqi6J3GpB+DSNu7s61ibtlolhdweCHBxwDPW8z
-         Pucjn4pqZwg7aIQEHlplgB4uPk2rGkGtIPAH0h6vIjlf02R+D+X1EbxaQY4a+CgRUNBu
-         bNlg==
-X-Gm-Message-State: AOAM533xJlnsiYwlDT+9fl8QsXz+jhdCT6IDmdCXkSa34P05diOiFyEp
-        gQjYF9BznELGPTCWD7EcOCTXGnSWqi8M0agPcbc=
-X-Google-Smtp-Source: ABdhPJwslgkCaW+tNsBKM35bycGMP2mhGOgtQUFUqhpynPjrNMLiTvEMQxMDpNj4gFlYY9HClbOpaA==
-X-Received: by 2002:a05:6512:b9d:b0:44a:52a6:3ae6 with SMTP id b29-20020a0565120b9d00b0044a52a63ae6mr14652552lfv.351.1648831847574;
-        Fri, 01 Apr 2022 09:50:47 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id p7-20020ac24ec7000000b00443d65ea161sm283763lfr.291.2022.04.01.09.50.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 09:50:47 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id d5so5938938lfj.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 09:50:46 -0700 (PDT)
-X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
- b21-20020a056512305500b0044a39146603mr14433392lfb.435.1648831846722; Fri, 01
- Apr 2022 09:50:46 -0700 (PDT)
+        Fri, 1 Apr 2022 12:55:32 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5E924966;
+        Fri,  1 Apr 2022 09:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hnfwsLgZVOZIuT10KF5Y8OYWiXObcAHQE/c7M1fjDc0=; b=HcYyiy+58bOxPhq9eI47Tx4i59
+        sFiUQBSBqbPaBq4b62MYXvR9ZMNc1DF+F2aVc/N0teqxKpX3wkmMZgqderzDUiVs/YNd/8O2i/l8o
+        0qMhyxBxiakSw/uZJp6jfESpENPZ42VPX+gwwqCPPHqtNxADYdnSqPC28wHOABKh3XFHAnKSlHnEf
+        +G+cpromG2/59eQrdza4WQ3RfbknpilV5m+nPLHZKsp+WNTd/5NFrtibL2W2lild0ETI6YbTpi/oA
+        sq2/yN6KTYDSBg9Vkbredx4xNHlGEkG6Cq+x91FDkgLMdCHNtZLRBaTyK9xXY3ycQdrdijDl1x6ht
+        cZFHnk+g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58084)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1naKV6-0006Mv-OR; Fri, 01 Apr 2022 17:51:52 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1naKV1-0000Ms-D9; Fri, 01 Apr 2022 17:51:47 +0100
+Date:   Fri, 1 Apr 2022 17:51:47 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     vkoul@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
+        robh+dt@kernel.org, catalin.marinas@arm.com, will.deacon@arm.com,
+        shawnguo@kernel.org, festevam@gmail.com, s.hauer@pengutronix.de,
+        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
+        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
+        frieder.schrempf@kontron.de, m.felsch@pengutronix.de,
+        l.stach@pengutronix.de, xiaoning.wang@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v15 11/12] dmaengine: imx-sdma: add uart rom script
+Message-ID: <Ykcto7pM3xSGRIse@shell.armlinux.org.uk>
+References: <1626201709-19643-1-git-send-email-yibin.gong@nxp.com>
+ <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-References: <YkYpfK5ubwafd+Rw@mail.local>
-In-Reply-To: <YkYpfK5ubwafd+Rw@mail.local>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 1 Apr 2022 09:50:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjuUZWMeUaTGtfivNQYeuqsQb2C4HnbbPLe+qFXU5Y70Q@mail.gmail.com>
-Message-ID: <CAHk-=wjuUZWMeUaTGtfivNQYeuqsQb2C4HnbbPLe+qFXU5Y70Q@mail.gmail.com>
-Subject: Re: [GIT PULL] RTC for 5.18
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 3:21 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Here is the RTC subsystem pull request for 5.18. The bulk of the patches
-> are about replacing the uie_unsupported struct rtc_device member by a
-> feature bit.
+On Wed, Jul 14, 2021 at 02:41:48AM +0800, Robin Gong wrote:
+> For the compatibility of NXP internal legacy kernel before 4.19 which
+> is based on uart ram script and upstreaming kernel based on uart rom
+> script, add both uart ram/rom script in latest sdma firmware. By default
+> uart rom script used.
+> Besides, add two multi-fifo scripts for SAI/PDM on i.mx8m/8mm and add
+> back qspi script miss for v4(i.mx7d/8m/8mm family, but v3 is for i.mx6).
+> 
+> rom script:
+>         uart_2_mcu_addr
+> 	uartsh_2_mcu_addr /* through spba bus */
+> am script:
+> 	uart_2_mcu_ram_addr
+> 	uartsh_2_mcu_ram_addr /* through spba bus */
+> 
+> Please get latest sdma firmware from the below and put them into the path
+> (/lib/firmware/imx/sdma/):
+> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+> /tree/imx/sdma
 
-Hmm.
+Thanks for breaking my platforms when upgrading from 5.13 to 5.16, that
+was a really nice experience.
 
-I've pulled this, but I don't see the point of the ALARM_RES_2S bit.
+This is _not_ what we do with the Linux kernel. We do not require random
+bits of userspace to be upgraded/downgraded in lock-step with the
+kernel. There is absolutely no reason for this to happen in this case.
 
-In particular, I don't see it used anywhere, and the two drivers that
-now set it clear both the UPDATE_INTERRUPT and ALARM features.
+The SDMA firmware is already versioned. You know what version is
+present. Randomly renaming stuff in a structure that represents the
+contents of firmware like this is just not on.
 
-So what's the point of that feature bit?
+I know it's taken 9 months to find this, but PLEASE do not ever do this
+again, and never think this kind of thing is acceptable. It isn't.
 
-                Linus
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

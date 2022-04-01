@@ -2,214 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21994EFB63
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BF44EFB00
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352448AbiDAUWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S1351891AbiDAUUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352375AbiDAUVX (ORCPT
+        with ESMTP id S240033AbiDAUUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:21:23 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40661F2B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:18:36 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h23so5778775wrb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:18:36 -0700 (PDT)
+        Fri, 1 Apr 2022 16:20:00 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B83A2706E7;
+        Fri,  1 Apr 2022 13:18:10 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i11so3382204plr.1;
+        Fri, 01 Apr 2022 13:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4CfXM7leMN5pRFOjPHWHxGcJrApetL12geqzG0hLkdA=;
-        b=xgTbv0BySELvx8Y6w1muFk/fSYXMJa+Ne1fthEts2plXS8pZu/NuZSx5P8+V5wIg+D
-         n8UVA2MVIvhx9nfmseXaju/85nmFurPxGG//0WdLCecD62vejPXRW8CqUQrrL6fG0+VZ
-         0+2f0vlHwtMaoV9YK5EM37kv26mif+jrfbWTVHHw1sxZj9ShApITGr1AuqZtg72gGrGi
-         Kh5Ki1YJC+k2oFvkaGa25mQguTTrXVBkPtxPFpKZsnDcTSizxfQTCmpManurk2GVZ89F
-         aaaC+ewHiIfQsmDUGSg6oiwzjTbKbAnhsefDal7jnShyMmml64ASz/BYNntU4d/Z5LSr
-         fyfw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kdnSMpiTCRDvRUDbYzRwpTgjmgodk5oaNh3fctE9L/g=;
+        b=H26iFxckDVq+YQVbmm0eqktbwJjqz4DvYVm67KyjEbafrWXdkDYv1EAt+8r/51FL42
+         Q4c8TxkF54vMWDLC+wF1/s/ig4WTU0PtPCClwFl9h9FUZF1UoxNs+v9wVIC7N2YF5GGe
+         QoeMEdJ2Edg18qp+Uq8iJspIKXXSf6BiBOrt9yfW8RMNvsqsJUDSrib5nl8Qgtt5CHHP
+         t/g/gCfpbL6oX+MVXjuBXnSsG9qbT4LxkisUCESOQmTn+wDIWvEh+l6/12a0M8kwpakj
+         Re5vCJ6i0RUtzYwIq0xLVE6JRNmuFBH40PDX3kHf9yyYaHvbtM/PbTt3g3H9+b1Yksfi
+         h09A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4CfXM7leMN5pRFOjPHWHxGcJrApetL12geqzG0hLkdA=;
-        b=h6bRtRHD2IaNqLsz/txxtM/zpNAil4pgYtw4VbEKD+amICPV+4tfcfdKC7WeTVWKgw
-         TVCovSqQRIw+dwVnWHXxjbRPggXvGsEtlCPxOj+FkS/EqlAZHxbS2LX8LYSwpWzTYOmx
-         QY+du/aojvuW+Zpk/40/MBfTspWCKOi/XUxsq4Y7Lcq0qSVGH+0SKI4OORUf23zQ71MZ
-         t2hP+wQQeRqVz3RD+cadPbyQKwFKRUbwSHMgltKRH3GvZX1ghLF81py+6WIq9k/vzqMN
-         xMHFKOu3pVaUlq+sJYroJAgONwHv0O8o2PmUt2cfv4fDfzrqA23U77eTBV6je1qEzIny
-         LK1A==
-X-Gm-Message-State: AOAM5326Zv2wtOffn3QzO8HByA9uluZAz9a3RIKG8ZntYcct7XeNWhOh
-        YRex2ltbDGb3fI6Lm2BGaSYQ5w==
-X-Google-Smtp-Source: ABdhPJwL0g8nYklbcJJtem7pvN8rmEB5bnkJhEB8bG5p00EedbdcmqrsBo0vMQsd6IexZoar32yoIw==
-X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id u13-20020adfeb4d000000b001edc1f7a951mr8648367wrn.454.1648844314873;
-        Fri, 01 Apr 2022 13:18:34 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm17823838wmq.27.2022.04.01.13.18.34
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kdnSMpiTCRDvRUDbYzRwpTgjmgodk5oaNh3fctE9L/g=;
+        b=3ofhz+PZFAhFNjvqNEq5ykkJl5FvJf3iWt1Q2xMaqAcDzyqBXjnAKQcEnij6YpRLXf
+         P7neWmTMl9sl4PJLcjvS4ItWpsY03bEhLK2UcUVgZ33xcq/I4NBBk2Ry5M/isb8HGNie
+         yRmuXYDrgvHn2P56cY+1iP+4zWi3X5NLAccS//7DC5ebhdX60vzWH0AkL9vhZO/md43M
+         fTcPzdhO3WilwEzRmCa8/myZkGQ8JWx3uunSM9C8rp3VlSq5t3gntnDy0+DFBVHHui12
+         Vc7Gu2+16E8M02BY6oiLVXhFwOnsOmVlUMYnz4vAbnhhmb015Mr6bCMNwMeTye6yNnXW
+         yRFw==
+X-Gm-Message-State: AOAM532YhKAYIbHt48ccAEDXOB6gSENcxH231/krSserTiSS31Pfq3uH
+        DpwmBVV+fOt2AskVs7zUMME=
+X-Google-Smtp-Source: ABdhPJxdgGqV7vPcSBlNaImstCIy0ZOcEaVBYvEY/qbtR6uKbWO1XRGd/oyDjb8VronlpmJbhP5TYw==
+X-Received: by 2002:a17:902:ced0:b0:153:f78e:c43f with SMTP id d16-20020a170902ced000b00153f78ec43fmr11718153plg.64.1648844289605;
+        Fri, 01 Apr 2022 13:18:09 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id j3-20020a056a00234300b004faabba358fsm3886617pfj.14.2022.04.01.13.18.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 13:18:34 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
-        robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v4 33/33] crypto: rockchip: Check for clocks numbers and their frequencies
-Date:   Fri,  1 Apr 2022 20:18:04 +0000
-Message-Id: <20220401201804.2867154-34-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220401201804.2867154-1-clabbe@baylibre.com>
-References: <20220401201804.2867154-1-clabbe@baylibre.com>
+        Fri, 01 Apr 2022 13:18:08 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 13:18:06 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize
+ TDX module
+Message-ID: <20220401201806.GA2862421@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+ <36aac3cb7c7447db6454ee396e25eea3bad378e6.camel@intel.com>
+ <20220331194144.GA2084469@ls.amr.corp.intel.com>
+ <d63042a2-91d8-5555-1bac-4d908e03da2b@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d63042a2-91d8-5555-1bac-4d908e03da2b@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the number of clocks needed for each compatible.
-Rockchip's datasheet give maximum frequencies for some clocks, so add
-checks for verifying they are within limits. Let's start with rk3288 for
-clock frequency check, other will came later.
+On Fri, Apr 01, 2022 at 02:56:40PM +0800,
+Xiaoyao Li <xiaoyao.li@intel.com> wrote:
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/crypto/rockchip/rk3288_crypto.c | 56 +++++++++++++++++++++----
- drivers/crypto/rockchip/rk3288_crypto.h |  9 ++++
- 2 files changed, 57 insertions(+), 8 deletions(-)
+> On 4/1/2022 3:41 AM, Isaku Yamahata wrote:
+> > On Thu, Mar 31, 2022 at 04:31:10PM +1300,
+> > Kai Huang <kai.huang@intel.com> wrote:
+> > 
+> > > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > > > Add a wrapper function to initialize the TDX module and get system-wide
+> > > > parameters via those APIs.  Because TDX requires VMX enabled, It will be
+> > > > called on-demand when the first guest TD is created via x86 KVM init_vm
+> > > > callback.
+> > > 
+> > > Why not just merge this patch with the change where you implement the init_vm
+> > > callback?  Then you can just declare this patch as "detect and initialize TDX
+> > > module when first VM is created", or something like that..
+> > 
+> > Ok. Anyway in the next respoin, tdx module initialization will be done when
+> > loading kvm_intel.ko.  So the whole part will be changed and will be a part
+> > of module loading.
+> 
+> Will we change the GET_TDX_CAPABILITIES ioctl back to KVM scope?
 
-diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-index 89a6aa65d2c1..f759ed7160d0 100644
---- a/drivers/crypto/rockchip/rk3288_crypto.c
-+++ b/drivers/crypto/rockchip/rk3288_crypto.c
-@@ -29,20 +29,63 @@ static struct rk_crypto_info *main;
- 
- static const struct rk_variant rk3288_variant = {
- 	.main = true,
-+	.num_clks = 4,
-+	.rkclks = {
-+		{ "sclk", 150000000},
-+	}
- };
- 
- static const struct rk_variant rk3328_variant = {
- 	.main = true,
-+	.num_clks = 3,
- };
- 
- static const struct rk_variant rk3399_variant0 = {
- 	.main = true,
-+	.num_clks = 3,
- };
- 
- static const struct rk_variant rk3399_variant1 = {
- 	.sub = true,
-+	.num_clks = 3,
- };
- 
-+static int rk_crypto_get_clks(struct rk_crypto_info *dev)
-+{
-+	int i, j, err;
-+	unsigned long cr;
-+
-+	dev->num_clks = devm_clk_bulk_get_all(dev->dev, &dev->clks);
-+	if (dev->num_clks < dev->variant->num_clks) {
-+		dev_err(dev->dev, "Missing clocks, got %d instead of %d\n",
-+			dev->num_clks, dev->variant->num_clks);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < dev->num_clks; i++) {
-+		cr = clk_get_rate(dev->clks[i].clk);
-+		for (j = 0; j < ARRAY_SIZE(dev->variant->rkclks); j++) {
-+			if (dev->variant->rkclks[j].max == 0)
-+				continue;
-+			if (strcmp(dev->variant->rkclks[j].name, dev->clks[i].id))
-+				continue;
-+			if (cr > dev->variant->rkclks[j].max) {
-+				err = clk_set_rate(dev->clks[i].clk,
-+						   dev->variant->rkclks[j].max);
-+				if (err)
-+					dev_err(dev->dev, "Fail downclocking %s from %lu to %lu\n",
-+						dev->variant->rkclks[j].name, cr,
-+						dev->variant->rkclks[j].max);
-+				else
-+					dev_info(dev->dev, "Downclocking %s from %lu to %lu\n",
-+						 dev->variant->rkclks[j].name, cr,
-+						 dev->variant->rkclks[j].max);
-+			}
-+		}
-+	}
-+	return 0;
-+}
-+
- static int rk_crypto_enable_clk(struct rk_crypto_info *dev)
- {
- 	int err;
-@@ -266,6 +309,9 @@ static int rk_crypto_probe(struct platform_device *pdev)
- 		goto err_crypto;
- 	}
- 
-+	crypto_info->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, crypto_info);
-+
- 	crypto_info->variant = of_device_get_match_data(&pdev->dev);
- 	if (!crypto_info->variant) {
- 		dev_err(&pdev->dev, "Missing variant\n");
-@@ -289,12 +335,9 @@ static int rk_crypto_probe(struct platform_device *pdev)
- 		goto err_crypto;
- 	}
- 
--	crypto_info->num_clks = devm_clk_bulk_get_all(&pdev->dev,
--						      &crypto_info->clks);
--	if (crypto_info->num_clks < 3) {
--		err = -EINVAL;
-+	err = rk_crypto_get_clks(crypto_info);
-+	if (err)
- 		goto err_crypto;
--	}
- 
- 	crypto_info->irq = platform_get_irq(pdev, 0);
- 	if (crypto_info->irq < 0) {
-@@ -312,9 +355,6 @@ static int rk_crypto_probe(struct platform_device *pdev)
- 		goto err_crypto;
- 	}
- 
--	crypto_info->dev = &pdev->dev;
--	platform_set_drvdata(pdev, crypto_info);
--
- 	crypto_info->engine = crypto_engine_alloc_init(&pdev->dev, true);
- 	crypto_engine_start(crypto_info->engine);
- 	init_completion(&crypto_info->complete);
-diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
-index 5662a1491a9e..b49bdc7541b1 100644
---- a/drivers/crypto/rockchip/rk3288_crypto.h
-+++ b/drivers/crypto/rockchip/rk3288_crypto.h
-@@ -188,9 +188,18 @@
- #define CRYPTO_WRITE(dev, offset, val)	  \
- 		writel_relaxed((val), ((dev)->reg + (offset)))
- 
-+#define RK_MAX_CLKS 4
-+
-+struct rk_clks {
-+	const char *name;
-+	unsigned long max;
-+};
-+
- struct rk_variant {
- 	bool main;
- 	bool sub;
-+	int num_clks;
-+	struct rk_clks rkclks[RK_MAX_CLKS];
- };
- 
- struct rk_crypto_info {
+No because it system scoped KVM_TDX_CAPABILITIES requires one more callback for
+it.  We can reduce the change.
+
+Or do you have any use case for system scoped KVM_TDX_CAPABILITIES?
 -- 
-2.35.1
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

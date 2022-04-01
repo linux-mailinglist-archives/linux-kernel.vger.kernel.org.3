@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D694EF812
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D614EF817
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349367AbiDAQjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S1348772AbiDAQkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350581AbiDAQiJ (ORCPT
+        with ESMTP id S1350917AbiDAQi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:38:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8626C1AA056;
-        Fri,  1 Apr 2022 09:16:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39351B82370;
-        Fri,  1 Apr 2022 16:16:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98425C2BBE4;
-        Fri,  1 Apr 2022 16:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648829796;
-        bh=QX63Fn0eIgqEzcIIs1tirFb9cVGOSCZjLncptockG0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q1nDlwiu9xUgQzfzc44B/c9aOelMsTe1UrKgUfsMg10qRetGAJe8yFX3jCleyVyYw
-         lBsIU54sESdNSkDqo0w2Lj5vOz6rIaqNcpHTEI+AWykxLqXyDM5PxabEOB0wKvAepF
-         eLHEzYZpDti2+zHcOFhCPAhFU51w5QLf8w/Hy0wFK2KL+QgeV+OkCYw1YuQbqSm0TX
-         tZxvF5xADvH40388zZ7kuvP2Uhl1v2dmHgi28KUYdf2wxU2kSRqFQvlJ3Xp7kQ5wIx
-         w+9MxzNbxsJZCXI0MjVyMq5Z1PyKzUd2UbcLY+c0JWrny+ZxC4bqoe4oM9aPdfi3OL
-         N3+543RJ/ds4w==
-Date:   Fri, 1 Apr 2022 17:16:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] modpost: restore the warning message for missing symbol
- versions
-Message-ID: <YkclXzHamGiOJJGz@sirena.org.uk>
-References: <20220401155610.1280262-1-masahiroy@kernel.org>
+        Fri, 1 Apr 2022 12:38:26 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4B5CB008
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:19:29 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id o5so5932256ybe.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 09:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wTQ+8nHLfi+YFFcta17BAmF8ZCVZ9zcPvzKqqA+2KFY=;
+        b=I000Q9g3yyVnGiV/P5M1/MzK+Q7YY6AXSWeK8NNLoUYuYWPabI8hMhI9mQMVE8cA9c
+         Mr6UhaoThyFv7TiXcdgYKkJql8PV4S4DgjRRBlUDNdWyLKgZZhIFp3sbadQB6C3WUeQe
+         lpPGU4yMCC0ndgjXvT3z07X+MiSe+EdTXnCfiE/6qnA2Vfyr3nHfvHlI5mW/E/HdDSPd
+         3pli7viRfgbBQ1p7ZOcfji2N+G1q8XwTpoxOa4lN4smeoKJKF9dsDjMy4+qGD/DPLNNw
+         CPDQJCLBxbp4+H8GZZ5Wd6uraHvEx9bHMjLgKNs67jU9f2PZSTbO3s8/QiAnzSXUpPKl
+         yUHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wTQ+8nHLfi+YFFcta17BAmF8ZCVZ9zcPvzKqqA+2KFY=;
+        b=jkW8u2xVvJPIrEYTR7xfDF8LlAwoLeGW787hhE3HxNN0Yl0iiD2XC0UcVeF5HIsGsD
+         gDikYis6ffWkWRfNY1VI2S3aQohJWy2FMtt2N/l//LjJBwqMSB3M4wyzwpdQvVcCDrLo
+         OGGmwQN0kkl4RBijMRu/L1envWUTazbwYJ+zB6xtarlFwyNH4yRHnbuEgTUOWrUO1nCd
+         UE/PPmT5+SDw8ythISNxRVagmUtghArRWaBQagwLO6QgrZm3GuKMpm8/lPzPf/24vNFy
+         QludEyigJV3l0b5qOHGqJhkiNPGGc12IHyqZE3S+yit0sUgdy+o6NbsH3dHYiccW2rSP
+         WM9g==
+X-Gm-Message-State: AOAM531owXLsHIBrOMjg/GgRSXnlHG9iuLBnxgZ/n8PaL+4vmT/X0Dkq
+        +qM04sdFifIOyVIPOdIYK4j66QfTyG+KHHYqBNfrBQ==
+X-Google-Smtp-Source: ABdhPJzFq8r+sFolA7YwP5uKAYxPzOaiimx3ijq5H/H+wf0ATiwefnMlyeMIAyplUeB4jTkjjdXm2AQ89wHytBhhGk8=
+X-Received: by 2002:a25:e749:0:b0:633:93d4:4b66 with SMTP id
+ e70-20020a25e749000000b0063393d44b66mr9271093ybh.553.1648829968227; Fri, 01
+ Apr 2022 09:19:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ERM5Vcs9RzIVdQ6X"
-Content-Disposition: inline
-In-Reply-To: <20220401155610.1280262-1-masahiroy@kernel.org>
-X-Cookie: Universe, n.:
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1648789811-3788971-1-git-send-email-liuhailong@linux.alibaba.com>
+In-Reply-To: <1648789811-3788971-1-git-send-email-liuhailong@linux.alibaba.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 1 Apr 2022 09:19:17 -0700
+Message-ID: <CAJuCfpH3mzLi4bhaLUYLDDXA6uVM5Pn67aXyPefseEsAYDatSA@mail.gmail.com>
+Subject: Re: [PATCH] psi: Fix trigger being fired unexpectedly at initial
+To:     Hailong Liu <liuhailong@linux.alibaba.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        aniel Bristot de Oliveira <bristot@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 31, 2022 at 10:10 PM Hailong Liu
+<liuhailong@linux.alibaba.com> wrote:
+>
+> When a trigger being created, its win.start_value and win.start_time are
+> reset to zero. If group->total[PSI_POLL][t->state] has accumulated before,
+> this trigger will be fired unexpectedly in the next period, even if its
+> growth time does not reach its threshold.
+>
+> So set the window of the new trigger to the current state value.
 
---ERM5Vcs9RzIVdQ6X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Makes sense to me. Thanks!
 
-On Sat, Apr 02, 2022 at 12:56:10AM +0900, Masahiro Yamada wrote:
-> This log message was accidentally chopped off.
+>
+> Signed-off-by: Hailong Liu <liuhailong@linux.alibaba.com>
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Suren Baghdasaryan <surenb@google.com>
 
---ERM5Vcs9RzIVdQ6X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJHJV8ACgkQJNaLcl1U
-h9BPZgf/Sfv3McX+bh3xSWnkxUleIIraRJQKSsPAS01PUQQ//vHzAJX+OBvTYA3S
-w1u4K6JSQaVyoDSxLUVrT4fVbxrRNESImFDhDl7cFoFtkHAhS1UC010i4UR+g50r
-KOIT5Jqyb7QghVkMo6Ak+bLWfeBf+o49JVz/5l2m6ek6er/QPrKO3/rcSN9dExgS
-PzaAe2y0bkLIxQ04UCudAtF8agSvW4mLQU098KR3zviDAMKRMoAgbEfePS8JgWxE
-RB0wWLaeuBEBSI22a255kd8Z4l4agADtv2QudSH0/mipUySVm/OgOtqxY6GHhRFP
-pgVuBaU+AuIWUmUVU8yKHeagfF6LnA==
-=tYvk
------END PGP SIGNATURE-----
-
---ERM5Vcs9RzIVdQ6X--
+> ---
+>  kernel/sched/psi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index a4fa3aadfcba..5a49a8c8783e 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -1117,7 +1117,8 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+>         t->state = state;
+>         t->threshold = threshold_us * NSEC_PER_USEC;
+>         t->win.size = window_us * NSEC_PER_USEC;
+> -       window_reset(&t->win, 0, 0, 0);
+> +       window_reset(&t->win, sched_clock(),
+> +                       group->total[PSI_POLL][t->state], 0);
+>
+>         t->event = 0;
+>         t->last_event_time = 0;
+> --
+> 2.19.1.6.gb485710b
+>

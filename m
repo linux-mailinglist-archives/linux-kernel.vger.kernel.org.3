@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5934EF878
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672774EF87D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347366AbiDAQ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S1345304AbiDAQ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349886AbiDAQzc (ORCPT
+        with ESMTP id S233692AbiDAQ5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:55:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5E924966;
-        Fri,  1 Apr 2022 09:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hnfwsLgZVOZIuT10KF5Y8OYWiXObcAHQE/c7M1fjDc0=; b=HcYyiy+58bOxPhq9eI47Tx4i59
-        sFiUQBSBqbPaBq4b62MYXvR9ZMNc1DF+F2aVc/N0teqxKpX3wkmMZgqderzDUiVs/YNd/8O2i/l8o
-        0qMhyxBxiakSw/uZJp6jfESpENPZ42VPX+gwwqCPPHqtNxADYdnSqPC28wHOABKh3XFHAnKSlHnEf
-        +G+cpromG2/59eQrdza4WQ3RfbknpilV5m+nPLHZKsp+WNTd/5NFrtibL2W2lild0ETI6YbTpi/oA
-        sq2/yN6KTYDSBg9Vkbredx4xNHlGEkG6Cq+x91FDkgLMdCHNtZLRBaTyK9xXY3ycQdrdijDl1x6ht
-        cZFHnk+g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58084)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1naKV6-0006Mv-OR; Fri, 01 Apr 2022 17:51:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1naKV1-0000Ms-D9; Fri, 01 Apr 2022 17:51:47 +0100
-Date:   Fri, 1 Apr 2022 17:51:47 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     vkoul@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        robh+dt@kernel.org, catalin.marinas@arm.com, will.deacon@arm.com,
-        shawnguo@kernel.org, festevam@gmail.com, s.hauer@pengutronix.de,
-        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
-        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
-        frieder.schrempf@kontron.de, m.felsch@pengutronix.de,
-        l.stach@pengutronix.de, xiaoning.wang@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v15 11/12] dmaengine: imx-sdma: add uart rom script
-Message-ID: <Ykcto7pM3xSGRIse@shell.armlinux.org.uk>
-References: <1626201709-19643-1-git-send-email-yibin.gong@nxp.com>
- <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
+        Fri, 1 Apr 2022 12:57:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C9F32B3;
+        Fri,  1 Apr 2022 09:55:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 834CDB82468;
+        Fri,  1 Apr 2022 16:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35661C340EC;
+        Fri,  1 Apr 2022 16:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648832125;
+        bh=48jXrzw1a+CUwNYdJ11VTIPu+z+bLZeiEL8pwinzCA0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OEoFXO3NMbcynJRaDOTTxooyYoOathk93aEkp8jb0BdKB+GNLCeDCPMnKt0daMM/m
+         zXDVUX01qvb0FJt1LeprWEehLrV7xZPnrNBGTYhh4Do//7gmG2C/Wns6Vt4cW4ZsGQ
+         k+sh5qpHfUfCP7hCTE0+sJxmDYdhrnufQGhsiHmD7mk/CUtwoPbBtMaqV6WrOaNvbp
+         B0V1d6Yy3tYqe+8rQymISG41alvjKON5PFOhWM5Xcd77yuiN64T/OoMwKQBVvu2bo4
+         s7p/ixdbGviK4T8dfvN1axYNCIp8jLF4cJG2NKQfvpjVwsGe9crgvhuwRfXKHFPsex
+         MIzMBL9bxAbHg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D71685C0A15; Fri,  1 Apr 2022 09:55:24 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 09:55:24 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rcu: Put the irq work into hard interrupt context for
+ execution
+Message-ID: <20220401165524.GF4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220330060012.2470054-1-qiang1.zhang@intel.com>
+ <20220330201620.GM4285@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB58802C1246C6F4FB895BDDA9DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20220331172943.GV4285@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880709B39EC5BDAACBD340FDAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <PH0PR11MB5880709B39EC5BDAACBD340FDAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 14, 2021 at 02:41:48AM +0800, Robin Gong wrote:
-> For the compatibility of NXP internal legacy kernel before 4.19 which
-> is based on uart ram script and upstreaming kernel based on uart rom
-> script, add both uart ram/rom script in latest sdma firmware. By default
-> uart rom script used.
-> Besides, add two multi-fifo scripts for SAI/PDM on i.mx8m/8mm and add
-> back qspi script miss for v4(i.mx7d/8m/8mm family, but v3 is for i.mx6).
+On Fri, Apr 01, 2022 at 01:55:51AM +0000, Zhang, Qiang1 wrote:
 > 
-> rom script:
->         uart_2_mcu_addr
-> 	uartsh_2_mcu_addr /* through spba bus */
-> am script:
-> 	uart_2_mcu_ram_addr
-> 	uartsh_2_mcu_ram_addr /* through spba bus */
+> On Wed, Mar 30, 2022 at 10:47:05PM +0000, Zhang, Qiang1 wrote:
+> > On Wed, Mar 30, 2022 at 02:00:12PM +0800, Zqiang wrote:
+> > > In PREEMPT_RT kernel, if irq work flags is not set, it will be 
+> > > executed in per-CPU irq_work kthreads. set IRQ_WORK_HARD_IRQ flags 
+> > > to irq work, put it in the context of hard interrupt execution, 
+> > > accelerate scheduler to re-evaluate.
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > > ---
+> > >  kernel/rcu/tree.c        | 2 +-
+> > >  kernel/rcu/tree_plugin.h | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index
+> > > e2ffbeceba69..a69587773a85 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -678,7 +678,7 @@ static void late_wakeup_func(struct irq_work
+> > > *work)  }
+> > >  
+> > >  static DEFINE_PER_CPU(struct irq_work, late_wakeup_work) =
+> > > -	IRQ_WORK_INIT(late_wakeup_func);
+> > > +	IRQ_WORK_INIT_HARD(late_wakeup_func);
+> > 
+> > >This is used only by rcu_irq_work_resched(), which is invoked only by rcu_user_enter(), which is never invoked until userspace is enabled, by which time all of the various kthreads will have been spawned, correct?
+> > >
+> > >Either way, please show me the exact sequence of events that lead to a problem with the current IRQ_WORK_INIT().
+> > >
+> > >  /*
+> > >   * If either:
+> > > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h 
+> > > index 3037c2536e1f..cf7bd28af8ef 100644
+> > > --- a/kernel/rcu/tree_plugin.h
+> > > +++ b/kernel/rcu/tree_plugin.h
+> > > @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
+> > >  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
+> > >  				// Get scheduler to re-evaluate and call hooks.
+> > >  				// If !IRQ_WORK, FQS scan will eventually IPI.
+> > > -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
+> > > +				rdp->defer_qs_iw =
+> > > +IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
+> > >  				rdp->defer_qs_iw_pending = true;
+> > >  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
+> > >  			}
+> > >
+> > >OK, in theory, rcu_read_unlock() could get to this point before all of the various kthreads were spawned.  In practice, the next time that the boot CPU went idle, the end of the quiescent state would be noticed.
+> > 
+> > Through my understanding, use irq_work in order to make the quiescent 
+> > state be noticed earlier, Because the irq_work execute in interrupt, 
+> > this irq_work can be executed in time, but In RT kernel The irq_work  is put into the kthread for execution, when it is executed, it is affected by the scheduling delay.
+> > Is there anything I missed?
 > 
-> Please get latest sdma firmware from the below and put them into the path
-> (/lib/firmware/imx/sdma/):
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-> /tree/imx/sdma
+> >Yes, in that I am not seeing any actual data showing that this fix really makes things better.  Please in mind that IRQ_WORK_INIT_HARD does have performance disadvantages of its own.  So although I agree with your words saying that IRQ_WORK_INIT_HARD -might- be helpful, those words are not sufficient.
+> >
+> >So, can you show a statistically significant benefit on a real system?
+> >For example, by measuring the time required for a expedited grace period to complete?  That would argue for this change, though it would need to be conditional, so that systems that don't care that much about the latency of expedited RCU grace periods don't need to pay the IRQ_WORK_INIT_HARD performance penalties.  Or you would need to demonstrate that these performance penalties don't cause problems.  (But such a demonstration is not easy given the wide variety of systems that Linux supports.)
+> >
+> >Now, I could imagine that the current code could cause problems during boot on CONFIG_PREEMPT_RT kernels.  But, believe me, I can imagine all sorts of horrible problems.  But we should fix those that happen not just in my imagination, but also in the real world.  ;-)
+> 
+> Thanks, agree.  I'll test it according to your suggestion.
 
-Thanks for breaking my platforms when upgrading from 5.13 to 5.16, that
-was a really nice experience.
+Very good!  I am looking forward to seeing what you come up with.
 
-This is _not_ what we do with the Linux kernel. We do not require random
-bits of userspace to be upgraded/downgraded in lock-step with the
-kernel. There is absolutely no reason for this to happen in this case.
+							Thanx, Paul
 
-The SDMA firmware is already versioned. You know what version is
-present. Randomly renaming stuff in a structure that represents the
-contents of firmware like this is just not on.
-
-I know it's taken 9 months to find this, but PLEASE do not ever do this
-again, and never think this kind of thing is acceptable. It isn't.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> >So if you can make such a problem happen in real life, then I would be happy to take a patch that fixed this on CONFIG_PREEMPT_RT but kept the current code otherwise.
+> >
+> >							Thanx, Paul
+> 
+> > Thanks
+> > Zqiang	
+> > 
+> > >
+> > >Or has this been failing in some other manner?  If so, please let me know the exact sequence of events.
+> > >
+> > >							Thanx, Paul

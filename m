@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C714EE7AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FD44EE7B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245036AbiDAFQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S245040AbiDAFR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiDAFQs (ORCPT
+        with ESMTP id S233551AbiDAFRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:16:48 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F662261301
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:14:58 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220401051456epoutp0334174abe34cad024c895d42bbd21051a~hrdt6A3MO2645826458epoutp03t
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:14:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220401051456epoutp0334174abe34cad024c895d42bbd21051a~hrdt6A3MO2645826458epoutp03t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648790096;
-        bh=zWZLPSSISjiFTmW1ZkI756AoY5PvxUxkz4eHhpfrd70=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=jYFjYGuOIDXOVK1sWCwLB3u9O5XHY4Kw7ddLcf9m4N2nbK/YwNcuW1nGTUuf/TaDW
-         t68H2szJ2zSYoW+O6zb98quIGwQ2ejh/SB54MxaK7SYa7tHNQ7wAnPBoKS2u1mBNBs
-         a4DZCjrBdTl0Fwd8Xt/HzwytwzW27yxdi0UGEA0U=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220401051456epcas5p3a678c6bc453a9a945cbb04b919e8e565~hrdtYQKQO1668716687epcas5p3y;
-        Fri,  1 Apr 2022 05:14:56 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KV7dl02JRz4x9QS; Fri,  1 Apr
-        2022 05:14:51 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.CC.06423.54A86426; Fri,  1 Apr 2022 14:14:45 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220401051444epcas5p33affb4dc505675a890c3b4c1e21ac0f5~hrdixZ73L1487714877epcas5p3c;
-        Fri,  1 Apr 2022 05:14:44 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220401051444epsmtrp1a5a17c97637bc71bbac3f1b953504e10~hrdiwb9W30435804358epsmtrp1b;
-        Fri,  1 Apr 2022 05:14:44 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-1d-62468a45a05a
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.32.03370.44A86426; Fri,  1 Apr 2022 14:14:44 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220401051442epsmtip1ef15f4a13ad7526b4990e8202be216fe~hrdg6HM9O3041330413epsmtip1b;
-        Fri,  1 Apr 2022 05:14:42 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Tomasz Figa'" <tomasz.figa@gmail.com>,
-        "'Krzysztof Kozlowski'" <krzk@kernel.org>,
-        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
-        "'Linus Walleij'" <linus.walleij@linaro.org>,
-        "'Ajay Kumar'" <ajaykumar.rs@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     "'kernel test robot'" <lkp@intel.com>
-In-Reply-To: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
-Date:   Fri, 1 Apr 2022 10:44:41 +0530
-Message-ID: <000a01d84587$661eb6a0$325c23e0$@samsung.com>
+        Fri, 1 Apr 2022 01:17:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952C5261304;
+        Thu, 31 Mar 2022 22:15:31 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2314gsKV028760;
+        Fri, 1 Apr 2022 05:15:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xzugCTuDJ0DLdgI8DOvKnnfZwyRwVxfvDJEJohli1d4=;
+ b=YMMaguZdGAmNKLxNmLs8aFbS9wEvvwd8SEsuHhU3DTUQnYxEYXDprwFgjibt5XDTVAz+
+ o1pyOlCcIibSwQAI7o2CnClE8IRFWbzldFNDyIfX6ZfahThwq0PRXi+mZOSzi7mcKJdk
+ aUE16mMYTa1GmMf633dP+ejh7WnkA1NuflGqlum9XOzetJ/xWOAbp6rmi445NIWgDC33
+ /lQXlzTgJ31uw9ev9uChngZI1iCjLpNFZ+f1yek8cPG6nW0IMKUs4sp9wVMyE6cXf0FO
+ brP4R4+CNJhCx8Q0Rzce26qIi7XpHOnt/SaQGt3mfYOc9MDEUb9aVT1dpdXD/Tw6Cfe0 PA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f51hw70uv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 05:15:12 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2314tD79032212;
+        Fri, 1 Apr 2022 05:15:12 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f51hw70u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 05:15:11 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2315E71K021074;
+        Fri, 1 Apr 2022 05:15:10 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04wdc.us.ibm.com with ESMTP id 3f1tfaa2yd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 05:15:10 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2315F9sh26476990
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Apr 2022 05:15:09 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9317A112064;
+        Fri,  1 Apr 2022 05:15:09 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EA3A11206F;
+        Fri,  1 Apr 2022 05:15:05 +0000 (GMT)
+Received: from [9.160.79.229] (unknown [9.160.79.229])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  1 Apr 2022 05:15:04 +0000 (GMT)
+Message-ID: <3b590f05-ff48-8cad-8e2d-e4ea339daf9c@linux.ibm.com>
+Date:   Fri, 1 Apr 2022 08:15:03 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v9 3/4] efi: Register efi_secret platform device if EFI
+ secret area is declared
+Content-Language: en-US
+To:     linux-efi@vger.kernel.org
+Cc:     Borislav Petkov <bp@suse.de>, Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
+References: <20220331215607.3182232-1-dovmurik@linux.ibm.com>
+ <20220331215607.3182232-4-dovmurik@linux.ibm.com>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <20220331215607.3182232-4-dovmurik@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHzvMFjJH2rpLTrq9uN+E9KR2gT2QKFP4/HrI9q6lA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmuq5rl1uSQc8nNosD7w+yWJw/v4Hd
-        Yu/rrewWU/4sZ7LY9Pgaq8Xm+X8YLS7vmsNmMeP8PiaLV82P2CwOv2lntVi16w+jA7fHzll3
-        2T0W73nJ5LFpVSebx51re9g8Ni+p9+jbsorR4/MmuQD2qGybjNTElNQihdS85PyUzLx0WyXv
-        4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKAblRTKEnNKgUIBicXFSvp2NkX5pSWpChn5
-        xSW2SqkFKTkFJgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGR0tfewF2/kr+r+3sTUw7uLtYuTg
-        kBAwkZhx262LkYtDSGA3o8SPA33MEM4nRol3L/azQTifGSUm/tvB2MXICdax4MsPJhBbSGAX
-        o8Sxn6EQRS8ZJQ6uOg6WYBPQldixuA2sW0RgPbNEw5dtYN3MApoSC2a9YQGxOQVcJD5t6gOz
-        hQVsJY5u3M4OYrMIqEjceLqDFcTmFbCUmDflBwuELShxcuYTFog58hLb385hhrhIQeLn02Vg
-        9SICVhLvux+xQtSIS7w8eoQdouYIh8TfRyEQP7tIzLvrDhEWlnh1fAtUiZTEy/42dogSD4lF
-        f6QgwhkSb5evh/rdXuLAlTksICUgn6zfpQ+xiE+i9/cTJohOXomONiGIalWJ5ndXWSBsaYmJ
-        3d2sELaHxNZft1knMCrOQvLWLCRvzUJy/iyEZQsYWVYxSqYWFOempxabFhjmpZbDIzs5P3cT
-        Izj5annuYLz74IPeIUYmDsZDjBIczEoivFdjXZOEeFMSK6tSi/Lji0pzUosPMZoCw3ois5Ro
-        cj4w/eeVxBuaWBqYmJmZmVgamxkqifOeTt+QKCSQnliSmp2aWpBaBNPHxMEp1cAU+e38P4nF
-        7JUMn6wtj57KP6Z3YXuom+++rDdsNz9ITG8smhO61kPCkanwmTLrvnshLIdX7bPIn1a0iHdf
-        7QO1V/8XyPt/LzALsshtjGzdekT9xewpGScrX0/WfzPpy9H503YfmfA50X76gwMiNm9jOQS4
-        VVPryjqO8KlM4z3642WDAeuhe3nB80Tq+RU53vVt2VTG3/7FTmmByv1NCx4d1ulOLpp5dMfp
-        U5NlvnWImzmuufVwIvfxTXZCi+tkm1dUaDWyr0zeOmV23kGhnSmsLRrze7QPMFZbJH/plFEv
-        6zkctfnM47vZl/hfSV8SyliQfP6T3zbflYtDlX6efRFwf4c5r5sax4tDZTlys2/vUWIpzkg0
-        1GIuKk4EAES9xotHBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAIsWRmVeSWpSXmKPExsWy7bCSnK5Ll1uSwYo7ahYH3h9ksTh/fgO7
-        xd7XW9ktpvxZzmSx6fE1VovN8/8wWlzeNYfNYsb5fUwWr5ofsVkcftPOarFq1x9GB26PnbPu
-        snss3vOSyWPTqk42jzvX9rB5bF5S79G3ZRWjx+dNcgHsUVw2Kak5mWWpRfp2CVwZHS197AXb
-        +Sv6v7exNTDu4u1i5OSQEDCRWPDlB1MXIxeHkMAORol1XS0sEAlpiesbJ7BD2MISK/89Z4co
-        es4ocerLAkaQBJuArsSOxW1sIAkRge3MEg8OTQPrZhbQlFgw6w0LRMdURomGo/1sIAlOAReJ
-        T5v6wIqEBWwljm7cDraCRUBF4sbTHawgNq+ApcS8KT9YIGxBiZMznwDZHEBD9STaNjJCzJeX
-        2P52DjPEdQoSP58uA2sVEbCSeN/9iBWiRlzi5dEj7BMYhWchmTQLYdIsJJNmIelYwMiyilEy
-        taA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOBK1tHYw7ln1Qe8QIxMH4yFGCQ5mJRHeq7Gu
-        SUK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUw+TPxZdRs
-        jn93YvvOy6+nRhSHLdTa32Xgssut6KD1kwkukaVnE1b6ua8N+CU388eBr+w/cvV7pr6dXaTf
-        XRjuf4i/61icdMjCzfYH8k9t/O4afevX0byXCpdm9Hk75aRc95yYqsWbUSE/M74k6BtLW9bn
-        s1U734QU+uybub1cb/3N5wva1LKe6QvmzT2vb+XVGi9x88aUzykWrUqP9n6/fU2jmTFd9l+Q
-        nMF9/5+eTubSPqbHFLomv5xrkxVUk2Dksii+m62t93K4ct/ik99mfZ6tJb565qwVO4IWReTN
-        3//yzKqXHhfOMVtWZHCHi6hVXU5LdVvQ+EvvWQzH+V8tn8sCTNXWuS4/9lzz8QEZJZbijERD
-        Leai4kQAsOFjtzMDAAA=
-X-CMS-MailID: 20220401051444epcas5p33affb4dc505675a890c3b4c1e21ac0f5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220331194535epcas5p12503b9e75eb7e1147c1f6ab4548756ac
-References: <CGME20220331194535epcas5p12503b9e75eb7e1147c1f6ab4548756ac@epcas5p1.samsung.com>
-        <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7SLh08xS3MLEo0C0hEY3XB2npW34po2y
+X-Proofpoint-ORIG-GUID: dZv0h6uPCKdzaMmc1D9kK-AMpfghoIQA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-31_06,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 impostorscore=0
+ adultscore=0 mlxscore=0 suspectscore=0 clxscore=1015 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204010022
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -127,53 +117,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->Sent: Friday, April 1, 2022 1:15 AM
->To: Tomasz Figa <tomasz.figa@gmail.com>; Krzysztof Kozlowski
-><krzk@kernel.org>; Sylwester Nawrocki <s.nawrocki@samsung.com>; Alim
->Akhtar <alim.akhtar@samsung.com>; Linus Walleij <linus.walleij@linaro.org>;
->Ajay Kumar <ajaykumar.rs@samsung.com>; linux-arm-
->kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
->gpio@vger.kernel.org; linux-kernel@vger.kernel.org
->Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; kernel test robot
-><lkp@intel.com>
->Subject: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
->
->struct fsd_pin_ctrl is not used outside of the file, so it can be made
-static.  This
->fixes sparse warning:
->
->  drivers/pinctrl/samsung/pinctrl-exynos-arm64.c:773:31: sparse:
->    symbol 'fsd_pin_ctrl' was not declared. Should it be static?
->
->Reported-by: kernel test robot <lkp@intel.com>
->Fixes: 0d1b662c374c ("pinctrl: samsung: add FSD SoC specific data")
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->---
+On 01/04/2022 0:56, Dov Murik wrote:
+> During efi initialization, check if coco_secret is defined in the EFI
+> configuration table; in such case, register platform device
+> "efi_secret".  This allows udev to automatically load the efi_secret
+> module (platform driver), which in turn will populate the
+> <securityfs>/secrets/coco directory in guests into which secrets were
+> injected.
+> 
+> Note that a declared address of an EFI secret area doesn't mean that
+> secrets where indeed injected to that area; if the secret area is not
+> populated, the driver will not load (but the platform device will still
+> be registered).
+> 
+> Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
+> ---
+>  drivers/firmware/efi/efi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index 378d044b2463..b92eabc554e6 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -425,6 +425,9 @@ static int __init efisubsys_init(void)
+>  	if (efi_enabled(EFI_DBG) && efi_enabled(EFI_PRESERVE_BS_REGIONS))
+>  		efi_debugfs_init();
+>  
+> +	if (efi.coco_secret != EFI_INVALID_TABLE_ADDR)
+> +		platform_device_register_simple("efi_secret", 0, NULL, 0);
 
-Thanks Krzysztof.
+These two lines should be wrapped by #ifdef CONFIG_EFI_COCO_SECRET .
+I'll fix that for the next round.
 
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+-Dov
 
-> drivers/pinctrl/samsung/pinctrl-exynos-arm64.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->index d291819c2f77..cb965cf93705 100644
->--- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->+++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->@@ -770,7 +770,7 @@ static const struct samsung_pin_bank_data
->fsd_pin_banks2[] __initconst = {
-> 	EXYNOS850_PIN_BANK_EINTN(3, 0x00, "gpq0"),  };
->
->-const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
->+static const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
-> 	{
-> 		/* pin-controller instance 0 FSYS0 data */
-> 		.pin_banks	= fsd_pin_banks0,
->--
->2.32.0
-
-
+> +
+>  	return 0;
+>  
+>  err_remove_group:

@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2140E4EE7D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043A34EE7D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245130AbiDAFkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S245141AbiDAFt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbiDAFkl (ORCPT
+        with ESMTP id S238796AbiDAFtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:40:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45D8193157
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:38:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 761AF61B46
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:38:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54FAFC340EE;
-        Fri,  1 Apr 2022 05:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648791531;
-        bh=idRurwlZhLY56xIhw05sesud6IxCOS559aOyQIT4ofY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jw/LLZTkEvakWoDSp1NQe8eAwdydMnAdUSdDxeQO4xijVb7dg07E4puORFyTPG9HL
-         vOQLgWLn9HBFgZ+KO+6ZFRSoF9NOldy6Rz00Pz3KSvZp3za1R+onauIra4k9nCTeI+
-         zUvHc5AvLYDz+reuH49yAQSIRCbSiEmdhwLzs/+s=
-Date:   Fri, 1 Apr 2022 07:38:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] staging: android: ashmem: remove usage of list iterator
- after the loop body
-Message-ID: <YkaP6UWmSZjxO/oA@kroah.com>
-References: <20220331213934.866804-1-jakobkoschel@gmail.com>
+        Fri, 1 Apr 2022 01:49:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EBD248792
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:47:36 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id u26so1647681eda.12
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w92NLA3TMQsYKuR9CXX+L2Tvsy/pumxbCD/vKiNzt/8=;
+        b=RrGd6fDL+BlZgiJiYDlk1afYMuo/wxX5kFOVTYynem0oxFMrwjZb3hB7Bju7pz0WJ5
+         CqSl/I+qy0nKeqMCA+hHT115kgVy6EaTH1nxCOluYxe1hWv67AuVlYeTVsp1sMM3VP9z
+         tscXTUtG3PR+1Ts022kRGQCECRCRU8bq2GazE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w92NLA3TMQsYKuR9CXX+L2Tvsy/pumxbCD/vKiNzt/8=;
+        b=VB2Kl/s5kCqU6RI6RiJPzIpWn09CeF2kW4zl8fECBF1xv2oDLyentsYZlfgQIx2YSY
+         /sGPLgCEx5SRctqCC0mcxtOcZQkkqVqJ9NEpVEnqN+9pVSo/m/kAhJGJx58UfQ2xnMFe
+         i008Wv8omaibsA5lfX1w56BdnqysiuArkaLyNCirrijoHOMfcw0/4MXfL9XdNCHL7bCt
+         ALarPR8oD2GX4+dqFvDn5WnV8eEBa0g0CSqd2PEArQUbGJizbF5mv+JE08TRG4dj0ot4
+         Uhjzpc+mYAo2cpOnur25Imq9S25G5tQ4iT5S4mZKUSNMsaCuG80P9gYD+/MlterHZb6Z
+         nM8A==
+X-Gm-Message-State: AOAM532/05WNHk3YntPfZnhpJFukLWCjfChpTM/FOGa5kDMbpqGTleKe
+        1K5AxtcfdCWXSbJPy7+y7guHElyiTc3tkPeCiMUjVn/oCeQ=
+X-Google-Smtp-Source: ABdhPJyfuPxec2DZyNCbiEggRHvedTz2z7UWAXESzkgSyo7XF/dLiybkn0eMtMv3PKBjeTtUuvcfQlIL8phX0K382lo=
+X-Received: by 2002:a05:6402:350b:b0:419:1c11:23ed with SMTP id
+ b11-20020a056402350b00b004191c1123edmr19717204edd.8.1648792055453; Thu, 31
+ Mar 2022 22:47:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331213934.866804-1-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220330031130.2152327-1-denik@chromium.org> <77fa14e8-6630-c0e9-21fc-2603f7383f5f@arm.com>
+In-Reply-To: <77fa14e8-6630-c0e9-21fc-2603f7383f5f@arm.com>
+From:   Denis Nikitin <denik@chromium.org>
+Date:   Thu, 31 Mar 2022 22:47:24 -0700
+Message-ID: <CADDJ8CVjOe4E-2uAP=vXdSFrn3+8cj4s6yDO-qqS2S0E55kjJw@mail.gmail.com>
+Subject: Re: [PATCH] perf session: Remap buf if there is no space for event
+To:     James Clark <james.clark@arm.com>
+Cc:     acme@kernel.org, linux-perf-users@vger.kernel.org,
+        jolsa@kernel.org, alexey.budankov@linux.intel.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,25 +65,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:39:34PM +0200, Jakob Koschel wrote:
-> In preparation to limit the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer to point to the found element
-> [1].
-> 
-> Before, the code implicitly used the head when no element was found
-> when using &pos->list. Since the new variable is only set if an
-> element was found, the head needs to be used explicitly if the
-> variable is NULL.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/staging/android/ashmem.c | 21 ++++++++++++---------
->  1 file changed, 12 insertions(+), 9 deletions(-)
+Hi James,
 
-What tree did you make this against?  This file is no longer in Linus's
-tree.
+Thanks for your review.
 
-thanks,
+On Thu, Mar 31, 2022 at 7:20 AM James Clark <james.clark@arm.com> wrote:
+>
+>
+>
+> On 30/03/2022 04:11, Denis Nikitin wrote:
+> > If a perf event doesn't fit into remaining buffer space return NULL to
+> > remap buf and fetch the event again.
+> > Keep the logic to error out on inadequate input from fuzzing.
+> >
+> > This fixes perf failing on ChromeOS (with 32b userspace):
+> >
+> >   $ perf report -v -i perf.data
+> >   ...
+> >   prefetch_event: head=0x1fffff8 event->header_size=0x30, mmap_size=0x2000000: fuzzed or compressed perf.data?
+> >   Error:
+> >   failed to process sample
+> >
+> > Fixes: 57fc032ad643 ("perf session: Avoid infinite loop when seeing invalid header.size")
+> > Signed-off-by: Denis Nikitin <denik@chromium.org>
+>
+> Hi Denis,
+>
+> I tested this and it does fix the issue with a 32bit build. One concern is that the calculation to
+> see if it will fit in the next map is dependent on the implementation of reader__mmap(). I think it
+> would be possible for that to change slightly and then you could still get an infinite loop.
+>
+> But I can't really see a better way to do it, and it's unlikely for reader__mmap() to be modified
+> to map data in a way to waste part of the buffer so it's probably fine.
+>
+> Maybe you could extract a function to calculate where the new offset would be in the buffer and share
+> it between here and reader__mmap(). That would also make it more obvious what the 'head % page_size'
+> bit is for.
 
-greg k-h
+Good point. I will send a separate patch to handle this.
+
+Thanks,
+Denis
+
+>
+> Either way:
+>
+> Reviewed-by: James Clark <james.clark@arm.com>
+>

@@ -2,270 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFFD4EF710
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B704EF712
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243855AbiDAPw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S1355609AbiDAPxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352618AbiDAPtw (ORCPT
+        with ESMTP id S1354015AbiDAPuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:49:52 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34321C040
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:22:21 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id e22so2243396qvf.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=C8BmOVTEvyZVSx9ld3GApD3hvsbMzWcJqgmXoodcSGk=;
-        b=JH66jwKCvtadoIObEkxAHGLxied0NOaZaqUYj7G9CXskhfqsNZS4yu2ULkKh+v9L/v
-         OF/Uu698Bvnw4CdTGVpFV2nGYvympuplG9wNMNe+VjnqKjTn4o+EuaeKa1u9zJ1eS1DI
-         43kxRf3Hmu4DGi6fKR7m03Ie7EvLkv6MjwkqkpS5hwlkGzB8jX7+ylAil9ZSmd/8dHV8
-         seR47Pjx2FAW2uaNc3PFRLxO+m5kZP0fhf3rmHbtly85FbUmAv1G+F5qwyj5+y+QKfZL
-         yQxVLSRmvupwh2lYDdUDB/JKUJaYVDoRPvRdiDOwv7C7JFVQ3M1Cwpn+vf5YQReZ8HI7
-         5e5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C8BmOVTEvyZVSx9ld3GApD3hvsbMzWcJqgmXoodcSGk=;
-        b=722/SkfRSGzj1kD7r9+bUnyYITb3Q3hpAp5xVbAZpn/jzpNxWyT1pvuHiYjdDUN3Zk
-         jTB19DcO7RKyWzaDVbrVAGWYSAoGUI5lPm7NkSgU5BP51Yjno8eJR9pKiSoWI8E+8khR
-         LSp6eJh55bYabfEVkgWFAzV2nZtBUae3Ngko6aTKumTq9iVYRn0VKJMLz8MFQOOsU4ra
-         vCYFz/ZWYuhG+b1neb465veFcPizS2ywSOt8V3QY6J4NHB4bBd419Gq7jGOLdaRcnuGM
-         sZWTNFWpXEMlNbioi+wL94lok+geGjcw5QXhxUwpAimjh6aPVHm7TpY+3iw0qGx3N+sZ
-         gKWw==
-X-Gm-Message-State: AOAM533koYhYqMjIVkFI509jHkpPnvNF1s8uvMhBRaLZvA040eucEv6D
-        A0F6ey4GL05JrtUUzLfjN6JCHyE7MmYRIg==
-X-Google-Smtp-Source: ABdhPJxEmQQeBCz/t0KOjwhgHs7svXisRYYpc/i6mk+/CYLPRZpJBXDA37aZKdGlx6vyVSbCuetdzQ==
-X-Received: by 2002:a05:6214:c48:b0:440:cded:f2ab with SMTP id r8-20020a0562140c4800b00440cdedf2abmr39703282qvj.18.1648826540487;
-        Fri, 01 Apr 2022 08:22:20 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05622a01c700b002e1b3555c2fsm1977394qtw.26.2022.04.01.08.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 08:22:20 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 11:22:19 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Wei Xu <weixugc@google.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-Message-ID: <YkcYq8F6MYlMi+yS@cmpxchg.org>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <CAAPL-u8g2qkhdTQtFtBS3GNYz0WnyahWEXvR4g_OSaKv+7EozA@mail.gmail.com>
+        Fri, 1 Apr 2022 11:50:50 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFE918C0CD;
+        Fri,  1 Apr 2022 08:24:12 -0700 (PDT)
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 231FNgBi014568;
+        Sat, 2 Apr 2022 00:23:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 231FNgBi014568
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648826623;
+        bh=R0dE/GJxxZwKKY9OqrOmtXhqMl/LHgAoLbcP/Uz/hjE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WoSpCIJnCHfCCtSALIo3MBs+VLdAaXG7pSvcA3nYQZY/0d+zuMQIikQxKc59RRkNz
+         NH7hLIXuo7KPKsWEiR4NyvrEsT9dHaV80md8oLUshnzF82nGPFbqIjLvU9FK+fCeXr
+         Wqtrt6cFpYO5iC5lhUN3cq/29ni8bBJXzHeN2wKa1dWvLvAgy/oNT3uLgbVs7KosDG
+         QBAU7C9bbBhc/rxCymA7tY/ag1KqgiptIW0Xi47QfN0Dqm0jT2m1oqZWIEmqV+iHQL
+         uNA5jbEFmv8JVwgKytIrKNzodOjxZJmdYJjgtHIhcX5RDz8wqdj+nhc7L0mn0ogLih
+         e4WQw2GDPpMZg==
+X-Nifty-SrcIP: [209.85.216.47]
+Received: by mail-pj1-f47.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so2895993pjm.0;
+        Fri, 01 Apr 2022 08:23:42 -0700 (PDT)
+X-Gm-Message-State: AOAM532I+11Dtg45lI1ACewNveDZDYLMf6TqQyYjMRxPKOo0RunUFxBH
+        eQIIfBFM/wf37DFy5nzYLBTFnz6tYjwwDmOXgUA=
+X-Google-Smtp-Source: ABdhPJzrKZuYUTascgmX1k8pTSoQQWg823Z67H1nqBuhjK+3DBk9nAv9dVZEodQzvFCRbmNsJAj54JN2Auf+I4Bx5H0=
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
+ s3-20020a170902b18300b0014fc26620d5mr11069874plr.136.1648826621987; Fri, 01
+ Apr 2022 08:23:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAPL-u8g2qkhdTQtFtBS3GNYz0WnyahWEXvR4g_OSaKv+7EozA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330182329.52310-1-s23265@iisve.it> <CAK7LNARvEsh3+dix+EdcXnm2L0rh8hndQD5N2vyc0q_c0Vf7gQ@mail.gmail.com>
+ <CAK7LNAQ3cj2M0+k2H0O30wdOwONGE3OVrFJfTHicpqaKPRgG3Q@mail.gmail.com> <YkcU4mpNX7AsJgbg@Francescos-Air.fritz.box>
+In-Reply-To: <YkcU4mpNX7AsJgbg@Francescos-Air.fritz.box>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 2 Apr 2022 00:22:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATvFnac4sSFkbtMT-+h6-jGNuCaJpNZOua0g5wg56vRjQ@mail.gmail.com>
+Message-ID: <CAK7LNATvFnac4sSFkbtMT-+h6-jGNuCaJpNZOua0g5wg56vRjQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: use hostname -s along uname to obtain LINUX_COMPILE_HOST
+To:     Francesco Duca <f.duca00@gmail.com>
+Cc:     Francesco Duca <s23265@iisve.it>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:05:15PM -0700, Wei Xu wrote:
-> On Thu, Mar 31, 2022 at 1:42 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+On Sat, Apr 2, 2022 at 12:06 AM Francesco Duca <f.duca00@gmail.com> wrote:
+>
+> >And, the intention of this patch is,
+> >print  Francescos-Air if the 'hostname -s' command is available,
+> >but Francescos-Air.fritz.box  otherwise, correct  ?
+>
+> Yes exactly, this is the intention of this patch
+>
+> >error message because   "2>/dev/null" is missing ?
+>
+> It is missing indeed, i forgot to add it.
+>
+> I will send a new v2 patch in a while
+>
+> On Fri, Apr 01, 2022 at 11:19:22PM +0900, Masahiro Yamada wrote:
+> > On Fri, Apr 1, 2022 at 11:04 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > On Thu, Mar 31, 2022 at 3:23 AM FraSharp <f.duca00@gmail.com> wrote:
+> > > >
+> > > > From: Francesco Duca <s23265@iisve.it>
+> > > >
+> > > > * On some systems (e.g. macOS), using commands like 'uname -n' or
+> > > >   'hostname' will print something similar to "hostname.domain"
+> > >
+> > >
+> > > Not only macOS, but also on Linux systems such as Fedora, Debian.
+> > >
+> > > 'uname -s' or 'hostname' prints "hostname.domain"
 > >
-> > From: Shakeel Butt <shakeelb@google.com>
+> > I mean,
 > >
-> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
-> >
-> > Use case: Proactive Reclaim
-> > ---------------------------
-> >
-> > A userspace proactive reclaimer can continuously probe the memcg to
-> > reclaim a small amount of memory. This gives more accurate and
-> > up-to-date workingset estimation as the LRUs are continuously
-> > sorted and can potentially provide more deterministic memory
-> > overcommit behavior. The memory overcommit controller can provide
-> > more proactive response to the changing behavior of the running
-> > applications instead of being reactive.
-> >
-> > A userspace reclaimer's purpose in this case is not a complete replacement
-> > for kswapd or direct reclaim, it is to proactively identify memory savings
-> > opportunities and reclaim some amount of cold pages set by the policy
-> > to free up the memory for more demanding jobs or scheduling new jobs.
-> >
-> > A user space proactive reclaimer is used in Google data centers.
-> > Additionally, Meta's TMO paper recently referenced a very similar
-> > interface used for user space proactive reclaim:
-> > https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
-> >
-> > Benefits of a user space reclaimer:
-> > -----------------------------------
-> >
-> > 1) More flexible on who should be charged for the cpu of the memory
-> > reclaim. For proactive reclaim, it makes more sense to be centralized.
-> >
-> > 2) More flexible on dedicating the resources (like cpu). The memory
-> > overcommit controller can balance the cost between the cpu usage and
-> > the memory reclaimed.
-> >
-> > 3) Provides a way to the applications to keep their LRUs sorted, so,
-> > under memory pressure better reclaim candidates are selected. This also
-> > gives more accurate and uptodate notion of working set for an
-> > application.
-> >
-> > Why memory.high is not enough?
-> > ------------------------------
-> >
-> > - memory.high can be used to trigger reclaim in a memcg and can
-> >   potentially be used for proactive reclaim.
-> >   However there is a big downside in using memory.high. It can potentially
-> >   introduce high reclaim stalls in the target application as the
-> >   allocations from the processes or the threads of the application can hit
-> >   the temporary memory.high limit.
-> >
-> > - Userspace proactive reclaimers usually use feedback loops to decide
-> >   how much memory to proactively reclaim from a workload. The metrics
-> >   used for this are usually either refaults or PSI, and these metrics
-> >   will become messy if the application gets throttled by hitting the
-> >   high limit.
-> >
-> > - memory.high is a stateful interface, if the userspace proactive
-> >   reclaimer crashes for any reason while triggering reclaim it can leave
-> >   the application in a bad state.
-> >
-> > - If a workload is rapidly expanding, setting memory.high to proactively
-> >   reclaim memory can result in actually reclaiming more memory than
-> >   intended.
-> >
-> > The benefits of such interface and shortcomings of existing interface
-> > were further discussed in this RFC thread:
-> > https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
-> >
-> > Interface:
-> > ----------
-> >
-> > Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> > trigger reclaim in the target memory cgroup.
+> >     'uname -n' or 'hostname' prints "hostname.domain"
 > >
 > >
-> > Possible Extensions:
-> > --------------------
 > >
-> > - This interface can be extended with an additional parameter or flags
-> >   to allow specifying one or more types of memory to reclaim from (e.g.
-> >   file, anon, ..).
-> >
-> > - The interface can also be extended with a node mask to reclaim from
-> >   specific nodes. This has use cases for reclaim-based demotion in memory
-> >   tiering systens.
-> >
-> > - A similar per-node interface can also be added to support proactive
-> >   reclaim and reclaim-based demotion in systems without memcg.
-> >
-> > For now, let's keep things simple by adding the basic functionality.
-> >
-> > [yosryahmed@google.com: refreshed to current master, updated commit
-> > message based on recent discussions and use cases]
-> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
-> >  mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
-> >  2 files changed, 46 insertions(+)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > index 69d7a6983f78..925aaabb2247 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
-> >         high limit is used and monitored properly, this limit's
-> >         utility is limited to providing the final safety net.
-> >
-> > +  memory.reclaim
-> > +       A write-only file which exists on non-root cgroups.
-> > +
-> > +       This is a simple interface to trigger memory reclaim in the
-> > +       target cgroup. Write the number of bytes to reclaim to this
-> > +       file and the kernel will try to reclaim that much memory.
-> > +       Please note that the kernel can over or under reclaim from
-> > +       the target cgroup.
-> > +
-> >    memory.oom.group
-> >         A read-write single value file which exists on non-root
-> >         cgroups.  The default value is "0".
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index 725f76723220..994849fab7df 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
-> >         return nbytes;
-> >  }
-> >
-> > +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-> > +                             size_t nbytes, loff_t off)
-> > +{
-> > +       struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-> > +       unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-> > +       unsigned long nr_to_reclaim, nr_reclaimed = 0;
-> > +       int err;
-> > +
-> > +       buf = strstrip(buf);
-> > +       err = page_counter_memparse(buf, "", &nr_to_reclaim);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       while (nr_reclaimed < nr_to_reclaim) {
-> > +               unsigned long reclaimed;
-> > +
-> > +               if (signal_pending(current))
-> > +                       break;
-> > +
-> > +               reclaimed = try_to_free_mem_cgroup_pages(memcg,
-> > +                                               nr_to_reclaim - nr_reclaimed,
-> > +                                               GFP_KERNEL, true);
-> > +
-> > +               if (!reclaimed && !nr_retries--)
-> > +                       break;
-> > +
-> > +               nr_reclaimed += reclaimed;
-> > +       }
-> > +
-> > +       return nbytes;
-> 
-> It is better to return an error code (e.g. -EBUSY) when
-> memory_reclaim() fails to reclaim nr_to_reclaim bytes of memory,
-> except if the cgroup memory usage is already 0.  We can also return
-> -EINVAL if nr_to_reclaim is too large (e.g. > limit).
+> > >
+> > >
+> > >
+> > > >   ("Francescos-Air.fritz.box" for example), which is very annoying.
+> > >
+> > > I do not think so.
+> > >
+> > >
+> > > >   What works instead is 'hostname -s', which will only write hostname
+> > > >   without the domain ("Francescos-Air" for example),
+> > > >   but also keep 'uname -n', as some systems as Arch Linux does not have
+> > > >   'hostname' as command.
+> > >
+> > > If so, on Arch Linux, will this patch spit
+> > >   hostname: command not found
+> > > error message because   "2>/dev/null" is missing ?
+> > >
+> > >
+> > > And, the intention of this patch is,
+> > > print  Francescos-Air if the 'hostname -s' command is available,
+> > > but Francescos-Air.fritz.box  otherwise, correct  ?
 
-For -EBUSY, are you thinking of a specific usecase where that would
-come in handy? I'm not really opposed to it, but couldn't convince
-myself of the practical benefits of it, either.
+I do not see a good reason to output different strings on different
+distributions.
+( <hostname> on Debian vs <hostname>.<domainname> on Arch Linux)
 
-Keep in mind that MAX_RECLAIM_RETRIES failed reclaim attempts usually
-constitute an OOM situation: memory.max will issue kills and
-memory.high will begin crippling throttling. In what scenario would
-you want to keep reclaiming a workload that is considered OOM?
 
-Certainly, proactive reclaim that wants to purge only the cold tail of
-the workload wouldn't retry. Meta's version of this patch actually
-does return -EAGAIN on reclaim failure, but the userspace daemon
-doesn't do anything with it, so I didn't bring it up.
+<hostname>.<domainname> is just fine.
+As I said, it is not annoying.
 
-For -EINVAL, I tend to lean more toward disagreeing. We've been trying
-to avoid arbitrary dependencies between control knobs in cgroup2, just
-because it exposes us to race conditions and adds complications to the
-interface. For example, it *usually* doesn't make sense to set limits
-to 0, or set local limits and protections higher than the parent. But
-we allow it anyway, to avoid creating well-intended linting rules that
-could interfere with somebody's unforeseen, legitimate usecase.
+NACK.
+
+
+
+
+
+
+> > >
+> > >
+> > >
+> > >
+> > >
+> > >
+> > > >
+> > > > * This commit is complementary to
+> > > >   1e66d50ad3a1dbf0169b14d502be59a4b1213149
+> > > >   ("kbuild: Use uname for LINUX_COMPILE_HOST detection")
+> > > >
+> > > > Signed-off-by: Francesco Duca <s23265@iisve.it>
+> > > > ---
+> > > >  scripts/mkcompile_h | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
+> > > > index ca40a5258..6054e3eee 100755
+> > > > --- a/scripts/mkcompile_h
+> > > > +++ b/scripts/mkcompile_h
+> > > > @@ -34,7 +34,7 @@ else
+> > > >         LINUX_COMPILE_BY=$KBUILD_BUILD_USER
+> > > >  fi
+> > > >  if test -z "$KBUILD_BUILD_HOST"; then
+> > > > -       LINUX_COMPILE_HOST=`uname -n`
+> > > > +       LINUX_COMPILE_HOST=$(hostname -s || uname -n)
+> > > >  else
+> > > >         LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
+> > > >  fi
+> > > > --
+> > > > 2.32.0 (Apple Git-132)
+> > > >
+> > >
+> > >
+> > > --
+> > > Best Regards
+> > > Masahiro Yamada
+> >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+
+
+
+--
+Best Regards
+Masahiro Yamada

@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE70B4EED2F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788614EED3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345835AbiDAMeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S1345903AbiDAMiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244258AbiDAMen (ORCPT
+        with ESMTP id S1345955AbiDAMiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:34:43 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33E7185968
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:32:53 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id c10so5458181ejs.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 05:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ag8WvDE5i+v4AIyc8d66eNfPUw+5fXLkkIoPop5k2gw=;
-        b=lqIepgVeQQ97BBh0z4xpMJesT3keS7gShEa4cvee1YLq8FXh22EG4iYtS+BVfJt3BD
-         is75XxOmyXtxjEKKSFqlbinwbqBxkNPIQLjJzGjQcd0i4432DKpzwQ20FaxAOtEZVL89
-         Cqn23WFahO68mkw4C0OtakOXOFp0jPwPobZnU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ag8WvDE5i+v4AIyc8d66eNfPUw+5fXLkkIoPop5k2gw=;
-        b=gFZ1i3quMTWgEg6trxiOp7LBraMIMC5fy7rqNdUoTGYVm7bVCJwHwUMJDNF6EzWufQ
-         uQmJWx5q0gjQ33gqFhtVJlpCCoy/rAxpNmHVw5KiNaHQ5p51ET+KJPKAmdOPgG7zY2t0
-         pX3AsGqHCZbBKc43gAuPuZOoEDFupNuPXEDosk0YLxoCGwhnGKR+YIuQriqNnN2AUapE
-         QnQBguIeETRoWsDFhR7NTXtJ2yQ19l9+swbqEhyeCGXotFZImxiTUotp72Z7ZNs1RiHM
-         HLhIXC3ZA0fbsRFfUS5HYekU3M5UtwSyQLUu5YBWoCkHk1bv8PZtAtQHwLUxWNhH7ejA
-         RSlg==
-X-Gm-Message-State: AOAM532Tm2PNsxNqZRckKrp4zo2y8+RuV9m+FC1Hqz81SYkvBapzt47s
-        uDp9OACWqqDsHK4A5MLvqKlB9g==
-X-Google-Smtp-Source: ABdhPJy9gg8WFi3gHSowl44VmwQm0/Ef8b9ygcFmgMO5A91Y0yqckKi6nIWNS1Gw67Qv+Sujg29NyA==
-X-Received: by 2002:a17:907:7daa:b0:6e0:c04f:be44 with SMTP id oz42-20020a1709077daa00b006e0c04fbe44mr9201767ejc.375.1648816372434;
-        Fri, 01 Apr 2022 05:32:52 -0700 (PDT)
-Received: from localhost ([2620:10d:c093:400::5:16a5])
-        by smtp.gmail.com with ESMTPSA id fx3-20020a170906b74300b006daecedee44sm979093ejb.220.2022.04.01.05.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 05:32:51 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 13:32:51 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH] MAINTAINERS: Add printk indexing maintainers on mention
- of printk_index
-Message-ID: <Ykbw82LY7fvJD/mI@chrisdown.name>
-References: <YkRp9IhToTmTnkl7@chrisdown.name>
- <YkbuovatudROyl4b@alley>
+        Fri, 1 Apr 2022 08:38:00 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F121AE61C;
+        Fri,  1 Apr 2022 05:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=sULdgJFq1r98J4IABATa5J7jKAkJH1Eot/nxqWikadM=; b=wRJNXr0AplaS8BsuBS5hgbZ+9N
+        IfvMPO+CiPI+vC0GG6e1xfZEndUIjiXKaMEQDQ/eKDe+CrPNL5067sHkCeVdnCJvWF8/eBpuZapYJ
+        w3zg3ZUgL0K3vXjqnaE6hz9hIvD2poZRBFHPnA2TKIc1cZhbra5qnq1OSSyex2oDtm80=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1naGVb-00DfXD-Ty; Fri, 01 Apr 2022 14:36:07 +0200
+Date:   Fri, 1 Apr 2022 14:36:07 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, richardcochran@gmail.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [RFC PATCH net-next 1/2] ethtool: Extend to allow to set PHY
+ latencies
+Message-ID: <YkbxtzE/BRfz0XTW@lunn.ch>
+References: <20220401093909.3341836-1-horatiu.vultur@microchip.com>
+ <20220401093909.3341836-2-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkbuovatudROyl4b@alley>
-User-Agent: Mutt/2.2.2 (aa28abe8) (2022-03-25)
+In-Reply-To: <20220401093909.3341836-2-horatiu.vultur@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek writes:
->On Wed 2022-03-30 15:32:20, Chris Down wrote:
->> This will primarily catch new and changed printk_index_subsys_emit
->> calls, but it's also worth catching changes to other printk indexing
->> infrastructure outside of kernel/printk/index.c.
->>
->> This avoids churn due to missing ccs when adding new printk indexes, as
->> was the case recently for the first round of the XFS printk indexing
->> patches.
->>
->> Signed-off-by: Chris Down <chris@chrisdown.name>
->> Cc: Petr Mladek <pmladek@suse.com>
->
->Nice trick. I was not aware of that K: entries.
->
->I have pushed the patch into printk/linux.git, branch for-5.19.
->
->We missed the direct 5.18 train. I will add the commit into
->a printk pull request for 5.18-rcX if there is any. But I think
->that it is not worth creating a pull request just with this change.
->
->I am going to make sure that you are added into CC in the meantime.
->I hope that they will add me at least ;-)
+On Fri, Apr 01, 2022 at 11:39:08AM +0200, Horatiu Vultur wrote:
+> Extend ethtool uapi to allow to configure the latencies for the PHY.
+> Allow to configure the latency per speed and per direction.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  include/uapi/linux/ethtool.h |  6 ++++++
+>  net/ethtool/common.c         |  6 ++++++
+>  net/ethtool/ioctl.c          | 10 ++++++++++
+>  3 files changed, 22 insertions(+)
+> 
+> diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
+> index 7bc4b8def12c..f120904a4e43 100644
+> --- a/include/uapi/linux/ethtool.h
+> +++ b/include/uapi/linux/ethtool.h
+> @@ -296,6 +296,12 @@ enum phy_tunable_id {
+>  	ETHTOOL_PHY_DOWNSHIFT,
+>  	ETHTOOL_PHY_FAST_LINK_DOWN,
+>  	ETHTOOL_PHY_EDPD,
+> +	ETHTOOL_PHY_LATENCY_RX_10MBIT,
+> +	ETHTOOL_PHY_LATENCY_TX_10MBIT,
+> +	ETHTOOL_PHY_LATENCY_RX_100MBIT,
+> +	ETHTOOL_PHY_LATENCY_TX_100MBIT,
+> +	ETHTOOL_PHY_LATENCY_RX_1000MBIT,
+> +	ETHTOOL_PHY_LATENCY_TX_1000MBIT,
 
-Sounds good, thank you! :-)
+How does this scale with 2.5G, 5G, 10G, 14G, 40G, etc.
+
+Could half duplex differ to full duplex? What about 1000BaseT vs
+1000BaseT1 and 1000BaseT2? The Aquantia/Marvell PHY can do both
+1000BaseT and 1000BaseT2 and will downshift from 4 pairs to 2 pairs if
+you have the correct magic in its firmware blobs.
+
+A more generic API would pass a link mode, a direction and a
+latency. The driver can then return -EOPNOTSUPP for a mode it does not
+support.
+
+	Andrew

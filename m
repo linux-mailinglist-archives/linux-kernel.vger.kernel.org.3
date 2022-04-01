@@ -2,189 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20674EFA4F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170554EFA52
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351525AbiDATOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S1351531AbiDATPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236407AbiDATOc (ORCPT
+        with ESMTP id S1347109AbiDATPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:14:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174E6617D;
-        Fri,  1 Apr 2022 12:12:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB536B82604;
-        Fri,  1 Apr 2022 19:12:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C023C340F3;
-        Fri,  1 Apr 2022 19:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648840359;
-        bh=YApioM8rRksuAEkG5aeY8aT6WHhUt0SJ/cvtvDy3mIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mq9ioClIwWzL8dm0dnfl9fxy3t4LppiDFcfjh+24Q3lbf5r5aI+7zIrT8zfKATY/q
-         nHZaT8suCYmK5RCUOlW0HGDkK1Gpifed4aFZVab0KxfKzX/wsA0Dq9JTKIBXeCV+nh
-         FxuJ6zg82piHE1mdtgXYUyUpzImSADdk7KMl4aktptJcxUDYyCQTO+UfjnIqJ9E7aw
-         NoO1GVnHIfT2tOSDLmQ6pK6M2bqd6lE9lx5sTGPiXQQK1/NcwxCYqxxgz7gXgzMz55
-         GS4yfivU4CP7GzH//pqv3av34vTRFUdxXzAbfn8HgNMFMldQr2J67V1qtKQ0WOo1RB
-         FtnUqAt+slLDg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5EE5040407; Fri,  1 Apr 2022 16:12:36 -0300 (-03)
-Date:   Fri, 1 Apr 2022 16:12:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 5/6] perf cpumap: Add intersect function.
-Message-ID: <YkdOpJDnknrOPq2t@kernel.org>
-References: <20220328232648.2127340-1-irogers@google.com>
- <20220328232648.2127340-6-irogers@google.com>
+        Fri, 1 Apr 2022 15:15:51 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E2465DF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:14:00 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id v12so5175277ljd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 12:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VTRBtZGT8BtVw5zsFhiWCluDgulKA3oSoE7nkZmGGeQ=;
+        b=bWkcNX1SCGfk89/b1oIPtwcBZ95PoBCpab48p/a44RYoYskq8HlTYvf/+WBMZsyeHm
+         v8Mmtb+JqFjqDNT/GIrEsfL6Yu6p/h7LQ6uss7CLSBzDlqgFiVwo1DDmEw09dH0hGNg+
+         NNljgzDmgpfwBld1PX8Mig99uGEfvh7v13cgPH6isWQQW3u3/LUCbaIR0JM7aPXWrapn
+         1wOmaZqF7zhpcXZYk1TEokfsNnkvA9xMzF3wpURXmxXEGWpOcHeqwNX6m43S0hfKmfAK
+         JhcqpImnfitPKpSZxnSr87vwHCVtiMAw7xaGoFN73W4MTNmKUK5QoeYOkuMw7hne/kyA
+         BHTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VTRBtZGT8BtVw5zsFhiWCluDgulKA3oSoE7nkZmGGeQ=;
+        b=LWr1WPUCPiab0mrAM6zOtZGB4HesaXugGtfP/rrUmcxTXAvfeDoRLUzp8eNcd36cf2
+         tZkE7XEp9k88dNIc7cQHBYfuHKCX3T36fS+1GyT0K16jcCvnihRlWpdmGkGRaGZRk3WT
+         3webk92ElYN8FqRfx3qadcgh+/1AMnSbyD/9cD4g/rqebLmMfiCdexkvbDyECwDgkDGe
+         GJax+KpqJSGWobYZ3hpuRDOwKLNYrUf74/8U4SloM/cCialH5iOxqtjI8pFl4QxoDVJQ
+         q16ha02AWAlNR0Yh6Ihb5ZmLYziVyzZj5cZYDhyiUvXG+S9wXZkXjeHOAyDxzTMRJsPF
+         uMnA==
+X-Gm-Message-State: AOAM530sWlAaIyUeBIcY9CU7eJG8eugSeIi9KHO6f51B3+i05Vs+yzFF
+        sq98weMQmiLSa+Wukf11/CRG2nKRuJb+f5vAHNRp/+N6liM=
+X-Google-Smtp-Source: ABdhPJw/1BErJf2YsIXa1Kl5uY4Bob/skl1WnEf3+Pb+Ap2phub/DgN1mXZqGV+3lFO1vfsRceu9D4X0N32XfymeAWU=
+X-Received: by 2002:a05:651c:1507:b0:249:83b4:9a27 with SMTP id
+ e7-20020a05651c150700b0024983b49a27mr14819100ljf.24.1648840438681; Fri, 01
+ Apr 2022 12:13:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328232648.2127340-6-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1648839305.git.sevinj.aghayeva@gmail.com>
+In-Reply-To: <cover.1648839305.git.sevinj.aghayeva@gmail.com>
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Date:   Fri, 1 Apr 2022 15:13:47 -0400
+Message-ID: <CAMWRUK4W6rRe=6dfZg4PsvD6nAxNSqtc0Q=6M3Ho=0JAs2hKWA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] rlt8723bs cleanup
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 28, 2022 at 04:26:47PM -0700, Ian Rogers escreveu:
-> The merge function gives the union of two cpu maps. Add an intersect
-> function which will be used in the next change.
+Oops, apologies for the noise!
 
-So I really don't think intersect() shouldn't modify the contents of any
-of its arguments, at most return one of them with a bumped refcount, as
-an optimization.
+I tried to send v2 of the patchset but I had older versions of the
+patches in /tmp and since I specified /tmp/*.patch to git send-email
+per tutorial, it ended up sending all of the files there. I will send
+a v3 ASAP and update the tutorial to prevent others from repeating the
+same mistake!
 
-The merge() operation is different in the sense that one expects that
-one of the operands will be inserted into the other, and even then it
-would be better to have a clearer semantic, i.e. merge(a, b) should mean
-get the contents of b and insert into a.
-
-Since we're talking about CPUs, it doesn't make sense to have a CPU
-multiple times in the cpu_map, so we eliminate duplicates while doing
-it.
-
-Also perhaps the merge() operation should not even change any of the
-operands, but instead return a new cpuset if one of the operands isn't
-contained in the other, in which case a bump in the reference count of
-the superset would be a valid optimization.
-
-But that boat has departed already, i.e. perf_cpu_map__merge() is
-already an exported libperf API, sigh.
-
-This is something we're exporting, so I think this warrants further
-discussion, even with a fix depending on the merge of this new API.
-
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Fri, Apr 1, 2022 at 3:07 PM Sevinj Aghayeva
+<sevinj.aghayeva@gmail.com> wrote:
+>
+> These patches fix three categories of checkpatch warnings (redundant
+> braces, redundant else branches after return/break, and constant
+> placements on tests) in file rtw_mlme_ext.c, which is part of the
+> rtl8723bs driver. False positives, such as
+>
+> if (foo) {
+>         /* TODO: ... */
+> }
+>
+> were not altered.
+>
 > ---
->  tools/lib/perf/cpumap.c              | 38 ++++++++++++++++++++++++++++
->  tools/lib/perf/include/perf/cpumap.h |  2 ++
->  2 files changed, 40 insertions(+)
-> 
-> diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-> index 384d5e076ee4..60cccd05f243 100644
-> --- a/tools/lib/perf/cpumap.c
-> +++ b/tools/lib/perf/cpumap.c
-> @@ -390,3 +390,41 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
->  	perf_cpu_map__put(orig);
->  	return merged;
->  }
-> +
-> +struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
-> +					     struct perf_cpu_map *other)
-> +{
-> +	struct perf_cpu *tmp_cpus;
-> +	int tmp_len;
-> +	int i, j, k;
-> +	struct perf_cpu_map *merged = NULL;
-> +
-> +	if (perf_cpu_map__is_subset(other, orig))
-> +		return orig;
-> +	if (perf_cpu_map__is_subset(orig, other)) {
-> +		perf_cpu_map__put(orig);
-> +		return perf_cpu_map__get(other);
-> +	}
-> +
-> +	tmp_len = max(orig->nr, other->nr);
-> +	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
-> +	if (!tmp_cpus)
-> +		return NULL;
-> +
-> +	i = j = k = 0;
-> +	while (i < orig->nr && j < other->nr) {
-> +		if (orig->map[i].cpu < other->map[j].cpu)
-> +			i++;
-> +		else if (orig->map[i].cpu > other->map[j].cpu)
-> +			j++;
-> +		else {
-> +			j++;
-> +			tmp_cpus[k++] = orig->map[i++];
-> +		}
-> +	}
-> +	if (k)
-> +		merged = cpu_map__trim_new(k, tmp_cpus);
-> +	free(tmp_cpus);
-> +	perf_cpu_map__put(orig);
-> +	return merged;
-> +}
-> diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
-> index 4a2edbdb5e2b..a2a7216c0b78 100644
-> --- a/tools/lib/perf/include/perf/cpumap.h
-> +++ b/tools/lib/perf/include/perf/cpumap.h
-> @@ -19,6 +19,8 @@ LIBPERF_API struct perf_cpu_map *perf_cpu_map__read(FILE *file);
->  LIBPERF_API struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map);
->  LIBPERF_API struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
->  						     struct perf_cpu_map *other);
-> +LIBPERF_API struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
-> +							 struct perf_cpu_map *other);
->  LIBPERF_API void perf_cpu_map__put(struct perf_cpu_map *map);
->  LIBPERF_API struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx);
->  LIBPERF_API int perf_cpu_map__nr(const struct perf_cpu_map *cpus);
-> -- 
-> 2.35.1.1021.g381101b075-goog
+> v1 -> v2: Removing a redundant else branch left a variable declaration
+> mixed with code, which was caught by the kernel test bot. Move the
+> declaration to the beginning of a function.
+> ---
+>
+> Sevinj Aghayeva (3):
+>   staging: rtl8723bs: remove redundant braces in if statements
+>   staging: rtl8723bs: place constants on the right side of tests
+>   staging: rtl8723bs: remove redundant else branches
+>
+>  drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 167 ++++++++----------
+>  1 file changed, 70 insertions(+), 97 deletions(-)
+>
+> --
+> 2.25.1
+>
+
 
 -- 
 
-- Arnaldo
+Sevinj.Aghayeva

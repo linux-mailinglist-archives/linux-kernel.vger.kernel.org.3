@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBE84EFBCB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8544EFBCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352618AbiDAUvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S1352620AbiDAUvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiDAUvC (ORCPT
+        with ESMTP id S229891AbiDAUvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:51:02 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3791C2D9E
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648846152; x=1680382152;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KV+pFZKLWh422cNJSg0ZSjERIplw9IBD5K8wbfwKPgc=;
-  b=PaNRBi3DBKJ40DpUvdvM+6M7bpKy+hQXKYfqdSLj5PTcMLfBhCog5Urb
-   xPJ0AzDuwV4z0UaRzSbxTcGNm+Fs43I9f5JOhiL7e71zRU+ilRtKixQeT
-   zCPrT6OvMf1xyoLqvGsh2G1BklkCnn0SHP1hioN7IfOPFL1uoAetEroHS
-   OvVzRFmHS9eMuqimkNAqu2p+5PYFssWC5rjwT3lNIaAluy5M4WOfi2mAP
-   DtBH45/5cqGmgWaxMmdJeSp5odYoczk23IxYiQNjY80I4NzFAPNzYWXgQ
-   4OwCqJUGKN6iTdwN8KAwAED3p/fCN9emVlSxysSf2RZdvF603xf0Pbms8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="346665035"
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="346665035"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 13:49:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="650850877"
-Received: from kmislam-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.112.89])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 13:49:11 -0700
-Date:   Fri, 1 Apr 2022 13:49:11 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: vc04_services: Convert kmap() to
- kmap_local_page()
-Message-ID: <YkdlRw/p4WDKZqvg@iweiny-desk3>
-References: <20220330191414.23141-1-fmdefrancesco@gmail.com>
+        Fri, 1 Apr 2022 16:51:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00DB1C2DB8
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:49:31 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h7so7056629lfl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F6d2skYVql+tVSKN+LeWI4wqrla7+wIiNypxUwRkHa4=;
+        b=hMYd6pmTPI97+AcCZJh/Dn8QrpJ9HZZTcdS8TTMPkGWVSlqDKFYucXq6uh7LsUsts7
+         XYPQnt6lwklNXpyprFv5V31939VSdLI/WWh9ySAmPfOmfEEOraklJJtoDhwbNPL7uVl0
+         c0QHb14+qWmOw6B7QrY5S4H1spDxTv0lSNah/dILmDC1ONV8QwXT0XywtWhVLu5hTJFI
+         X/tz9fDtANJolNAaaHFOIDu2Voab/vkYf6vCK5+yw4RcHvnhF7fOPHsN2yDybtQ9buZP
+         rRdsBilp4kXieYloEzL5TNYP8JnzdEymBVGCCoRXt7qqpCf2WqsP9Vbc086TuWB9PWr8
+         Csfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F6d2skYVql+tVSKN+LeWI4wqrla7+wIiNypxUwRkHa4=;
+        b=VciqLPaqu8e6HJkuGcNIESIU+dFuVwQ7NS10T5pIufcsmyg7R+Ema1XtL3s/CYRFvD
+         aDBMWsMwNxxxQMDRtPtlWfkmuroSMWw0FG/k1Id8WtwvDCoxSBX8xkhUeLmd3qeSOjwU
+         /Q5PLle1UnritdZyvEfHD0tuCtc9J6O9WYya053R78l2O5ImBZ5bewHDz+T8Z3TT+9k7
+         7ldoj8eJES8uU3V2ADB6RVphdK48rJTjts+hLBwFplufhaZuu38943OPGFEOE2jRViJO
+         w0odwViJPS7fTG56zloO38BJB9bn3uY7wd/RTVaE/rpxGcnfzxUQA5lsxcodZsb0NGD8
+         lVzQ==
+X-Gm-Message-State: AOAM532vmI1wEPL93Vly3VMP4YNTv8R5qw69qitCcU3HlogXonRmzCCo
+        CQAKNlo/k+NkleUUHVeBx0Jm/4r7Q0zZdKM1lneGPw==
+X-Google-Smtp-Source: ABdhPJwtN5JV7Er0QkmPA4FTptAsdOeyV1pqpypoQcR+zJKtwpSy5DFfObCmyKJ5WiGZs0EFARcFSwsA/J9wRS8COWQ=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr15308996lfl.87.1648846169999; Fri, 01
+ Apr 2022 13:49:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330191414.23141-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220401201916.1487500-1-samitolvanen@google.com>
+In-Reply-To: <20220401201916.1487500-1-samitolvanen@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 1 Apr 2022 13:49:18 -0700
+Message-ID: <CAKwvOdmHarC+O71PPJwUSnP4oZjknD0FHPZ5b9JbMJ-xOgwMwg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] cfi: Use __builtin_function_start
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 09:14:14PM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page()
-> where it is feasible. In file interface/vchiq_arm/vchiq_arm.c,
-> function free_pagelist() calls kmap() / kunmap() from two places.
-> 
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible. Therefore, free_pagelist() is a function where the
-> use of kmap_local_page() in place of kmap() is correctly suited.
-> 
-> Convert to kmap_local_page() but, instead of open coding it, use the
-> memcpy_to_page() helper.
-> 
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+On Fri, Apr 1, 2022 at 1:19 PM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> Clang 14 introduced the __builtin_function_start intrinsic, which
+> makes it possible to cleanly implement the function_nocfi() macro in a
+> way that also works with static initializers. Add a default
+> function_nocfi() implementation and drop the arm64 inline assembly
+> version.
 
-LGTM:
+For the series
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+I wouldn't mind if patch 1/3 included a link to the llvm commit in the
+commit message.
 
-> ---
->  .../vc04_services/interface/vchiq_arm/vchiq_arm.c   | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index f0bfacfdea80..efb1383b5218 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -431,21 +431,18 @@ free_pagelist(struct vchiq_pagelist_info *pagelistinfo,
->  			if (head_bytes > actual)
->  				head_bytes = actual;
->  
-> -			memcpy((char *)kmap(pages[0]) +
-> +			memcpy_to_page(pages[0],
->  				pagelist->offset,
->  				fragments,
->  				head_bytes);
-> -			kunmap(pages[0]);
->  		}
->  		if ((actual >= 0) && (head_bytes < actual) &&
-> -		    (tail_bytes != 0)) {
-> -			memcpy((char *)kmap(pages[num_pages - 1]) +
-> -				((pagelist->offset + actual) &
-> -				(PAGE_SIZE - 1) & ~(g_cache_line_size - 1)),
-> +		    (tail_bytes != 0))
-> +			memcpy_to_page(pages[num_pages - 1],
-> +				(pagelist->offset + actual) &
-> +				(PAGE_SIZE - 1) & ~(g_cache_line_size - 1),
->  				fragments + g_cache_line_size,
->  				tail_bytes);
-> -			kunmap(pages[num_pages - 1]);
-> -		}
->  
->  		down(&g_free_fragments_mutex);
->  		*(char **)fragments = g_free_fragments;
-> -- 
-> 2.34.1
-> 
+Link: https://github.com/llvm/llvm-project/commit/ec2e26eaf63558934f5b73a6e530edc453cf9508
+Link: https://github.com/ClangBuiltLinux/linux/issues/1353
+
+>
+> Sami Tolvanen (3):
+>   kbuild: Change CFI_CLANG to depend on __builtin_function_start
+>   linux/compiler-clang.h: define function_nocfi
+>   arm64: Drop the inline assembly implementation of function_nocfi
+>
+>  arch/Kconfig                      |  5 +----
+>  arch/arm64/include/asm/compiler.h | 16 ----------------
+>  include/linux/compiler-clang.h    | 10 ++++++++++
+>  init/Kconfig                      |  3 +++
+>  4 files changed, 14 insertions(+), 20 deletions(-)
+>
+> --
+> 2.35.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

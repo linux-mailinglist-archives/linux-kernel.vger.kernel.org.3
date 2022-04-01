@@ -2,107 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36BB4EEE01
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68764EEE05
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346285AbiDANZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S1346290AbiDANZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237846AbiDANZG (ORCPT
+        with ESMTP id S244750AbiDANZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:25:06 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D5226EC93
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:23:16 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so3524496wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ySJwETHpWDKKyAZvqLfjxNf0H3moszvQ74LGpXqQJbk=;
-        b=r09Df/g+9gVYcS3kXrgZjc05u2PZaF4ges6JZgG84LcXzjUr4d3bN6wjWWt0fn2OwO
-         tQUMqm1Bce5DoveGGEmjVPQd5n7CApCaYktyEc31v4DP8ygJUn2ZI0YGRktjS5B8Kfuv
-         o9CYlyvAo4/iEucHtkKUyVLJ3L5sospesGGkK+pmDCzcX63MUhZLkWzohVOnHXiBgTuP
-         hPnXk+0L9S+Nfdd7WEY6lkxGo9tuJmZt6+dgGmZFmAb/O1+4GqKJ5bCmQyVpoDiueyOV
-         U9drGkl9gG4pfbCG5W7kKf32/ofdg5icO0CRKVo88xdoO7iHR6fICFQdAws/SudPMzUw
-         HIzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ySJwETHpWDKKyAZvqLfjxNf0H3moszvQ74LGpXqQJbk=;
-        b=3NRXsWPqOsWszi4YG16MkUstvFNz21DnftyG/8pMDPsBB8aUj/eONSLRPmTZb5v/tU
-         q6Y6XzVM56nfeUsdkjTqR6Yifb2VUUkH8EC7pj13jmTx/u0fM6Z/UAj1rIrlCWmkzQI+
-         1QsPHgjs08cTznWMseyjdmhtBdIR9+ybWd6gO83Hjq4Rjb87r3VGi6jRJY6XGN46u5T4
-         06/SdNnoopvGFU3C2jRG4mtkeZj4gCvag7prFEmWUxNmg3serxgVe+/N+Hngdd7gTC5k
-         VlzAuI7G7jj/b8/VvjojRuxOhZQqVhNvNouJrzUdMntgKHQRaBwk9Fmz5EWOqg/6x/Nl
-         WtTg==
-X-Gm-Message-State: AOAM5331xUrSUPIKoK6tCfZH6qbo9XgOsKgzLn9vMIHgNlDVlEcOqb2t
-        MrYn41HFCU+vlLeqilE9mQFeFA==
-X-Google-Smtp-Source: ABdhPJyIM1k3E8ZpfQjB6FEVfcoHZ2cmWg6O46jdnlTi5pIXjttYPtO0MkxYD567xlI0ikYZWVHGvw==
-X-Received: by 2002:a05:600c:1d8e:b0:389:d079:cc0 with SMTP id p14-20020a05600c1d8e00b00389d0790cc0mr8838746wms.98.1648819394893;
-        Fri, 01 Apr 2022 06:23:14 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm1876503wmq.46.2022.04.01.06.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 06:23:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] regulator: dt-bindings: richtek,rt4801: minor comments adjustments
-Date:   Fri,  1 Apr 2022 15:23:06 +0200
-Message-Id: <20220401132306.854991-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 1 Apr 2022 09:25:48 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B110127382B;
+        Fri,  1 Apr 2022 06:23:58 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 231Bgmc7012980;
+        Fri, 1 Apr 2022 15:23:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=UaAHcRSFG0XlRh7PRn1uelLYtvz2ZgoPmp0BpWrkxH8=;
+ b=HzNLaN/nmCUVazB5rbJ/4ZoS+ltX5A+3XL2gnwo88RItDp+8AXd4QBgs8dipMHBAmLUy
+ lTz9ssun7P3JgPKh2uXq1I6tV5MAad346Q1KH4rPT8MnPo9cGdUCXS8XtJaLtjNox/rm
+ +9dX8oaOm1+o5searQbSvNSNXBLuiQF1NYH+6eEfgUZSrMr9YMtBWTmUTErXFryEH/UJ
+ UP1GFjDm6RTqoFSMrtr8VzFFIgresbhVfTQhRmpHHwgDKOpEZo5RaHeDKmNxdQmaFOGo
+ uRphPRSOE3ZFD51IOVYeSjAUyN3jQHCOup63QOlxtrGdbVxCWIf6+LgAmZBEsglRcG4X 6A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f1s4pvj82-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 15:23:50 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D774A10002A;
+        Fri,  1 Apr 2022 15:23:46 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CED2222ECC8;
+        Fri,  1 Apr 2022 15:23:46 +0200 (CEST)
+Received: from [10.211.9.74] (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 1 Apr
+ 2022 15:23:45 +0200
+Message-ID: <2468c46f-331c-588b-cb10-e8d2d7f2d6ba@foss.st.com>
+Date:   Fri, 1 Apr 2022 15:23:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2 1/3] rpmsg: core: Add signal API support
+Content-Language: en-US
+To:     Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <swboyd@chromium.org>, <quic_clew@quicinc.com>,
+        <mathieu.poirier@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>
+References: <1642534993-6552-1-git-send-email-quic_deesin@quicinc.com>
+ <1642534993-6552-2-git-send-email-quic_deesin@quicinc.com>
+ <Yiu7DPHDY3uwcnLK@builder.lan>
+ <9be3d491-4fdc-4aa6-8176-23a2cf3773ca@foss.st.com>
+ <9d95e516-409e-16d1-e1ea-72365efeee59@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <9d95e516-409e-16d1-e1ea-72365efeee59@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-01_04,2022-03-31_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct grammar in 'enable-gpios' description and remove useless comment
-about regulator nodes, because these are obvious from patternProperties.
+Hello Deepak,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/regulator/richtek,rt4801-regulator.yaml         | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+On 3/29/22 13:00, Deepak Kumar Singh wrote:
+> 
+> On 3/23/2022 4:27 PM, Arnaud POULIQUEN wrote:
+>>
+>> On 3/11/22 22:11, Bjorn Andersson wrote:
+>>> On Tue 18 Jan 13:43 CST 2022, Deepak Kumar Singh wrote:
+>>>
+>>>> Some transports like Glink support the state notifications between
+>>>> clients using signals similar to serial protocol signals.
+>>>> Local glink client drivers can send and receive signals to glink
+>>>> clients running on remote processors.
+>>>>
+>>>> Add APIs to support sending and receiving of signals by rpmsg clients.
+>>>>
+>>>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+>>>> ---
+>>>>   drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+>>>>   drivers/rpmsg/rpmsg_internal.h |  2 ++
+>>>>   include/linux/rpmsg.h          | 14 ++++++++++++++
+>>>>   3 files changed, 37 insertions(+)
+>>>>
+>>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+>>>> index d3eb600..6712418 100644
+>>>> --- a/drivers/rpmsg/rpmsg_core.c
+>>>> +++ b/drivers/rpmsg/rpmsg_core.c
+>>>> @@ -328,6 +328,24 @@ int rpmsg_trysend_offchannel(struct
+>>>> rpmsg_endpoint *ept, u32 src, u32 dst,
+>>>>   EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+>>>>     /**
+>>>> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+>>>> + * @ept:    the rpmsg endpoint
+>>>> + * @enable:    enable or disable serial flow control
+>>>> + *
+>>>> + * Return: 0 on success and an appropriate error value on failure.
+>>>> + */
+>>>> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
+>>> This API looks nice and clean and deals with flow control.
+>> seems to me ambiguous API... what does it means flow control enable?
+>> Does it means that the flow control is enable or that the the local
+>> endpoint is ready to receive?
+> This means that local endpoint is ready to receive data.
+>>
+>> Could we consider here that it is more a bind/unbind of the endpoint?
+> 
+> Endpoint will remain bind, only data on that endpoint is not expected if
+> flow control is disabled.
+> 
+> If flow control is enabled remote client can send data.
+> 
+>>>> +{
+>>>> +    if (WARN_ON(!ept))
+>>>> +        return -EINVAL;
+>>>> +    if (!ept->ops->set_flow_control)
+>>>> +        return -ENXIO;
+>>>> +
+>>>> +    return ept->ops->set_flow_control(ept, enable);
+>>>> +}
+>>>> +EXPORT_SYMBOL(rpmsg_set_flow_control);
+>>>> +
+>>>> +/**
+>>>>    * rpmsg_get_mtu() - get maximum transmission buffer size for
+>>>> sending message.
+>>>>    * @ept: the rpmsg endpoint
+>>>>    *
+>>>> @@ -535,6 +553,9 @@ static int rpmsg_dev_probe(struct device *dev)
+>>>>             rpdev->ept = ept;
+>>>>           rpdev->src = ept->addr;
+>>>> +
+>>>> +        if (rpdrv->signals)
+>> seems an useless check
+> 
+> Some rpmsg cleints may not want to deal with flow control and not
+> provide signal callback.
+> 
+> In such case this check is needed.
+> 
 
-diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-index 235e593b3b2c..9c4abc7ae6e2 100644
---- a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-@@ -17,9 +17,6 @@ description: |
-   Datasheet is available at
-   https://www.richtek.com/assets/product_file/RT4801H/DS4801H-00.pdf
- 
--#The valid names for RT4801 regulator nodes are:
--#DSVP, DSVN
--
- properties:
-   compatible:
-     enum:
-@@ -34,7 +31,7 @@ properties:
-       Number of GPIO in the array list could be 1 or 2.
-       If only one gpio is specified, only one gpio used to control ENP/ENM.
-       Else both are spefied, DSVP/DSVN could be controlled individually.
--      Othersie, this property not specified. treat both as always-on regulator.
-+      If this property not specified, treat both as always-on regulators.
-     minItems: 1
-     maxItems: 2
- 
--- 
-2.32.0
+my point here is that if rpdrv->signals is NULL,
+then  ept->sig_cb will be NULL with or without the check.
 
+>>>> +            ept->sig_cb = rpdrv->signals;
+>>>>       }
+>>>>         err = rpdrv->probe(rpdev);
+>>>> diff --git a/drivers/rpmsg/rpmsg_internal.h
+>>>> b/drivers/rpmsg/rpmsg_internal.h
+>>>> index b1245d3..35c2197 100644
+>>>> --- a/drivers/rpmsg/rpmsg_internal.h
+>>>> +++ b/drivers/rpmsg/rpmsg_internal.h
+>>>> @@ -53,6 +53,7 @@ struct rpmsg_device_ops {
+>>>>    * @trysendto:        see @rpmsg_trysendto(), optional
+>>>>    * @trysend_offchannel:    see @rpmsg_trysend_offchannel(), optional
+>>>>    * @poll:        see @rpmsg_poll(), optional
+>>>> + * @set_flow_control:    see @rpmsg_set_flow_control(), optional
+>>>>    * @get_mtu:        see @rpmsg_get_mtu(), optional
+>>>>    *
+>>>>    * Indirection table for the operations that a rpmsg backend
+>>>> should implement.
+>>>> @@ -73,6 +74,7 @@ struct rpmsg_endpoint_ops {
+>>>>                    void *data, int len);
+>>>>       __poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
+>>>>                    poll_table *wait);
+>>>> +    int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable);
+>>>>       ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
+>>>>   };
+>>>>   diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+>>>> index 02fa911..06d090c 100644
+>>>> --- a/include/linux/rpmsg.h
+>>>> +++ b/include/linux/rpmsg.h
+>>>> @@ -62,12 +62,14 @@ struct rpmsg_device {
+>>>>   };
+>>>>     typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int,
+>>>> void *, u32);
+>>>> +typedef int (*rpmsg_rx_sig_t)(struct rpmsg_device *, void *, u32);
+>>> This callback however, is still using the original low level tty
+>>> signals.
+>>>
+>>> Is there any reason why this can't be "rpmsg_flowcontrol_cb_t" and take
+>>> a boolean, so we get a clean interface in both directions?
+>>>
+>>> Regards,
+>>> Bjorn
+>>>
+>>>>     /**
+>>>>    * struct rpmsg_endpoint - binds a local rpmsg address to its user
+>>>>    * @rpdev: rpmsg channel device
+>>>>    * @refcount: when this drops to zero, the ept is deallocated
+>>>>    * @cb: rx callback handler
+>>>> + * @sig_cb: rx serial signal handler
+>> Is it signaling for reception or transmission?
+> Remote is signalling for transmission.
+
+So that the remote side is ready to receive, right?
+
+Perhaps "@sig_cb: remote signaling callback handler" would be
+less ambiguous?
+
+Regards,
+Arnaud
+
+>>
+>> Regards,
+>> Arnaud
+>>
+>>>>    * @cb_lock: must be taken before accessing/changing @cb
+>>>>    * @addr: local rpmsg address
+>>>>    * @priv: private data for the driver's use
+>>>> @@ -90,6 +92,7 @@ struct rpmsg_endpoint {
+>>>>       struct rpmsg_device *rpdev;
+>>>>       struct kref refcount;
+>>>>       rpmsg_rx_cb_t cb;
+>>>> +    rpmsg_rx_sig_t sig_cb;
+>>>>       struct mutex cb_lock;
+>>>>       u32 addr;
+>>>>       void *priv;
+>>>> @@ -111,6 +114,7 @@ struct rpmsg_driver {
+>>>>       int (*probe)(struct rpmsg_device *dev);
+>>>>       void (*remove)(struct rpmsg_device *dev);
+>>>>       int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
+>>>> +    int (*signals)(struct rpmsg_device *rpdev, void *priv, u32);
+>>>>   };
+>>>>     static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev,
+>>>> __rpmsg16 val)
+>>>> @@ -188,6 +192,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept,
+>>>> struct file *filp,
+>>>>     ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
+>>>>   +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable);
+>>>> +
+>>>>   #else
+>>>>     static inline int rpmsg_register_device(struct rpmsg_device *rpdev)
+>>>> @@ -306,6 +312,14 @@ static inline ssize_t rpmsg_get_mtu(struct
+>>>> rpmsg_endpoint *ept)
+>>>>       return -ENXIO;
+>>>>   }
+>>>>   +static inline int rpmsg_set_flow_control(struct rpmsg_endpoint
+>>>> *ept, bool enable)
+>>>> +{
+>>>> +    /* This shouldn't be possible */
+>>>> +    WARN_ON(1);
+>>>> +
+>>>> +    return -ENXIO;
+>>>> +}
+>>>> +
+>>>>   #endif /* IS_ENABLED(CONFIG_RPMSG) */
+>>>>     /* use a macro to avoid include chaining to get THIS_MODULE */
+>>>> -- 
+>>>> 2.7.4
+>>>>

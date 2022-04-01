@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10784EEDAD
+	by mail.lfdr.de (Postfix) with ESMTP id 94D174EEDAC
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346089AbiDANEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S1346102AbiDANEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346017AbiDANEE (ORCPT
+        with ESMTP id S1346072AbiDANEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:04:04 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12B0220327
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:02:14 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bn33so3823246ljb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:02:14 -0700 (PDT)
+        Fri, 1 Apr 2022 09:04:05 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945AB21FC5C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:02:15 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bt26so4822291lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5DFXf31GKfSGudJZyBNWX7ZcGus44fo6rHAT7tAYQY8=;
-        b=Jnkg08f69bgoGQwPpKIopTB8tcKz0IebSYALBukbDLhMBCYt0NYzDEkVFEcm2XdeaQ
-         AXnQ3tCnpMYEheFK4GPQsPn7oxI6SvkvlnYVy8aj2T9F42UjX9Urk7gEQkMOjSbgQ414
-         q/5Oz6bizdwuPYfFsIZs7sVTyFFdGZ2L2JVnrNC0w8fhyv3XTJtjKZTJoTJXCeZFymlZ
-         GiX+HRqzs9j+qijZN+cdMEf/q/u1qRiacXF9FRqMy51TJaxXs2r35G518hPSb0R/8DQ2
-         wmurVP7wp/HYhZOIszPKFd0d5kvqukWTfOScqjkzWt3lHQtEplWUIZVS4geVWWnFt6W3
-         RWlQ==
+        bh=g3YdE7NZj+L8Dg/chDHlwxEN35uclyYb0VXoHTgKIhw=;
+        b=nfVXaACmCvFErHHLmNFXvYLypWAxntbQhOofhVv7ZNsll0iXH7oC2baijOofqH55tl
+         ocaVjxe21bM+Po4QV0VsMrwJBUEd08ytEQRibXrlPAg4QTN6ioVivclEaDWT1LnyEWEx
+         8jAlXp8JIhhCPXZavsM4YpGUxzJJMDxUJvZQQuXujz+Db+429L0Gp8YXugIIseHVbtcP
+         O/APz+MB2/JCJ/erH8dsKo4GwrOtcW5hoK4y48UOly6cL7/KwsV5n+5QVPftBNnqUaNE
+         NBzltQ3wWRi7k0Mn50dLAFjZzLkurSmhPYdviABfBO4NDKlNUBYtE+wsBToRBTwX8Jv0
+         7yHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5DFXf31GKfSGudJZyBNWX7ZcGus44fo6rHAT7tAYQY8=;
-        b=B8niEsNrQiPyHqRFqZcrBdChDuXFh4igL/zP8SUqzlmWqz2kn4AZYvhlVd0VWKcD2Z
-         k/fMmexSaY9HEKech884tqWg3zOepYgb4/LSubK4sj7NLcze0nSf9rl+uboy/vXu0hRf
-         zi8XVu30qa3vb9esWVxmn33zQxgvnvwl37d5fZj1RoFQ89SVJ71hq4wBkVaSjX/cdH38
-         PJpZR4ln0ICKTCZCaJWnkCrvisF2g1b6hg7LoaYe4SYT/3Kp/OD3gKpxQdbfMG3XgDGI
-         PKp/Q1R5gftJyIKS8YUjx2LHCqt+1iNFNaOqzy/esTO/uJ2AZqanvH+JHa7T49BE0eg5
-         RFWw==
-X-Gm-Message-State: AOAM531kpmV6xlSU/EGs+pRDdSMhfqUuutgiqPSW5+w8uoNFf0/mYqdx
-        YtGqncXBxN+badF+nHHDYSU=
-X-Google-Smtp-Source: ABdhPJyB1OD67GBr2bt02H1xuMSXNlw1q9ra3S3UIO5aWMAcNsBldctTifUgOTD5GZsRq7PibNu4mQ==
-X-Received: by 2002:a2e:b012:0:b0:249:8061:8486 with SMTP id y18-20020a2eb012000000b0024980618486mr13200997ljk.463.1648818132866;
-        Fri, 01 Apr 2022 06:02:12 -0700 (PDT)
+        bh=g3YdE7NZj+L8Dg/chDHlwxEN35uclyYb0VXoHTgKIhw=;
+        b=O9z3lTPJ6E4/wAJJlykV5SVhEXthsqdMWT98NcsxpuIkkkmpeUBb1LCqmWTXgvFKXw
+         D3RqghaTaj00qbvut/YczxqCAc8EEMUkWbLtB/1YsiVLf6dW7HILTLX4/Iwa/98lAe0b
+         BAS8FJ5lplFRpqJkes4skm/e9YirP92Jc223aGV5PALrlgz9vwYZpf8EUbiAm1xawydc
+         8ECENKeDwbScejQueMgbkCTIJSPFKZfn2DQfpmSBQbG8OlpuYGLmzyi048efw5WUFvJM
+         feT4olzib8zDHzIjv4UlxcfSwSi5YfzCNSV842yNgvmf0dw9JYuxT4bJFs3khebXlomb
+         G11Q==
+X-Gm-Message-State: AOAM530B8EvWhXpSvQD1MOHpiut/gW2e3Ooc0YKA7WH5UXsLG6LQkSlb
+        P5HwADdiky9Z2G3W1hZ3gqE=
+X-Google-Smtp-Source: ABdhPJzk84w1oS7F4Lq6lobVV06BlLC92rk92/31hnu9QaUGvz0sy6uwPZ81oOHeM5CsMNbd2NlRug==
+X-Received: by 2002:a05:6512:908:b0:44a:e242:2876 with SMTP id e8-20020a056512090800b0044ae2422876mr960482lft.511.1648818133696;
+        Fri, 01 Apr 2022 06:02:13 -0700 (PDT)
 Received: from inno-pc.lan (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
         by smtp.gmail.com with ESMTPSA id y22-20020a056512045600b0044a997dea9esm235574lfk.283.2022.04.01.06.02.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 06:02:12 -0700 (PDT)
+        Fri, 01 Apr 2022 06:02:13 -0700 (PDT)
 From:   Zhi Wang <zhi.wang.linux@gmail.com>
 X-Google-Original-From: Zhi Wang <zhi.a.wang@intel.com>
 To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc:     Zhi Wang <zhi.a.wang@intel.com>, Christoph Hellwig <hch@lst.de>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Vivi Rodrigo <rodrigo.vivi@intel.com>,
         Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: [PATCH v8 2/3] i915/gvt: Save the initial HW state snapshot in i915
-Date:   Fri,  1 Apr 2022 09:02:06 -0400
-Message-Id: <20220401130207.33944-3-zhi.a.wang@intel.com>
+Subject: [PATCH v8 3/3] i915/gvt: Use the initial HW state snapshot saved in i915
+Date:   Fri,  1 Apr 2022 09:02:07 -0400
+Message-Id: <20220401130207.33944-4-zhi.a.wang@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220401130207.33944-1-zhi.a.wang@intel.com>
 References: <20220401130207.33944-1-zhi.a.wang@intel.com>
@@ -77,17 +77,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Save the initial HW state snapshot in i915 so that the rest code of GVT-g
-can be moved into a dedicated module while it can still get a clean
-initial HW state saved at the correct time during the initialization of
-i915. The futhrer vGPU created by GVT-g will use this HW state as the
-initial HW state.
-
----
-v6:
-
-- Remove the reference of intel_gvt_device_info.(Christoph)
-- Refine the save_mmio() function. (Christoph)
+The code of saving initial HW state snapshot has been moved into i915.
+Let the GVT-g core logic use that snapshot.
 
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Jason Gunthorpe <jgg@nvidia.com>
@@ -98,147 +89,63 @@ Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
 Cc: Zhi Wang <zhi.a.wang@intel.com>
 Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
 ---
- drivers/gpu/drm/i915/i915_drv.h  |  2 +
- drivers/gpu/drm/i915/intel_gvt.c | 92 +++++++++++++++++++++++++++++++-
- 2 files changed, 92 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/gvt/firmware.c | 25 +++++++++----------------
+ 1 file changed, 9 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-index 943267393ecb..abb39444b8be 100644
---- a/drivers/gpu/drm/i915/i915_drv.h
-+++ b/drivers/gpu/drm/i915/i915_drv.h
-@@ -421,6 +421,8 @@ struct i915_virtual_gpu {
- 	struct mutex lock; /* serialises sending of g2v_notify command pkts */
- 	bool active;
- 	u32 caps;
-+	u32 *initial_mmio;
-+	u8 *initial_cfg_space;
+diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/gvt/firmware.c
+index 1a8274a3f4b1..54fe442238c6 100644
+--- a/drivers/gpu/drm/i915/gvt/firmware.c
++++ b/drivers/gpu/drm/i915/gvt/firmware.c
+@@ -66,22 +66,16 @@ static struct bin_attribute firmware_attr = {
+ 	.mmap = NULL,
  };
  
- struct i915_selftest_stash {
-diff --git a/drivers/gpu/drm/i915/intel_gvt.c b/drivers/gpu/drm/i915/intel_gvt.c
-index cf6e98962d82..65daab2c4d9e 100644
---- a/drivers/gpu/drm/i915/intel_gvt.c
-+++ b/drivers/gpu/drm/i915/intel_gvt.c
-@@ -86,6 +86,85 @@ void intel_gvt_sanitize_options(struct drm_i915_private *dev_priv)
- 	dev_priv->params.enable_gvt = 0;
- }
+-static int mmio_snapshot_handler(struct intel_gvt *gvt, u32 offset, void *data)
+-{
+-	*(u32 *)(data + offset) = intel_uncore_read_notrace(gvt->gt->uncore,
+-							    _MMIO(offset));
+-	return 0;
+-}
+-
+ static int expose_firmware_sysfs(struct intel_gvt *gvt)
+ {
+ 	struct intel_gvt_device_info *info = &gvt->device_info;
+-	struct pci_dev *pdev = to_pci_dev(gvt->gt->i915->drm.dev);
++	struct drm_i915_private *i915 = gvt->gt->i915;
++	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
+ 	struct gvt_firmware_header *h;
+ 	void *firmware;
+ 	void *p;
+ 	unsigned long size, crc32_start;
+-	int i, ret;
++	int ret;
  
-+static void free_initial_hw_state(struct drm_i915_private *dev_priv)
-+{
-+	struct i915_virtual_gpu *vgpu = &dev_priv->vgpu;
-+
-+	vfree(vgpu->initial_mmio);
-+	vgpu->initial_mmio = NULL;
-+
-+	kfree(vgpu->initial_cfg_space);
-+	vgpu->initial_cfg_space = NULL;
-+}
-+
-+static void save_mmio(struct intel_gvt_mmio_table_iter *iter, u32 offset,
-+		      u32 size)
-+{
-+	struct drm_i915_private *dev_priv = iter->i915;
-+	u32 *mmio, i;
-+
-+	for (i = offset; i < offset + size; i += 4) {
-+		mmio = iter->data + i;
-+		*mmio = intel_uncore_read_notrace(to_gt(dev_priv)->uncore,
-+						  _MMIO(i));
-+	}
-+}
-+
-+static int handle_mmio(struct intel_gvt_mmio_table_iter *iter,
-+		       u32 offset, u32 size)
-+{
-+	if (WARN_ON(!IS_ALIGNED(offset, 4)))
-+		return -EINVAL;
-+
-+	save_mmio(iter, offset, size);
-+	return 0;
-+}
-+
-+static int save_initial_hw_state(struct drm_i915_private *dev_priv)
-+{
-+	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
-+	struct i915_virtual_gpu *vgpu = &dev_priv->vgpu;
-+	struct intel_gvt_mmio_table_iter iter;
-+	void *mem;
-+	int i, ret;
-+
-+	mem = kzalloc(PCI_CFG_SPACE_EXP_SIZE, GFP_KERNEL);
-+	if (!mem)
-+		return -ENOMEM;
-+
-+	vgpu->initial_cfg_space = mem;
-+
-+	for (i = 0; i < PCI_CFG_SPACE_EXP_SIZE; i += 4)
-+		pci_read_config_dword(pdev, i, mem + i);
-+
-+	mem = vzalloc(2 * SZ_1M);
-+	if (!mem) {
-+		ret = -ENOMEM;
-+		goto err_mmio;
-+	}
-+
-+	vgpu->initial_mmio = mem;
-+
-+	iter.i915 = dev_priv;
-+	iter.data = vgpu->initial_mmio;
-+	iter.handle_mmio_cb = handle_mmio;
-+
-+	ret = intel_gvt_iterate_mmio_table(&iter);
-+	if (ret)
-+		goto err_iterate;
-+
-+	return 0;
-+
-+err_iterate:
-+	vfree(vgpu->initial_mmio);
-+	vgpu->initial_mmio = NULL;
-+err_mmio:
-+	kfree(vgpu->initial_cfg_space);
-+	vgpu->initial_cfg_space = NULL;
-+
-+	return ret;
-+}
-+
- /**
-  * intel_gvt_init - initialize GVT components
-  * @dev_priv: drm i915 private data
-@@ -115,15 +194,23 @@ int intel_gvt_init(struct drm_i915_private *dev_priv)
- 		return -EIO;
- 	}
+ 	size = sizeof(*h) + info->mmio_size + info->cfg_space_size;
+ 	firmware = vzalloc(size);
+@@ -99,17 +93,16 @@ static int expose_firmware_sysfs(struct intel_gvt *gvt)
  
-+	ret = save_initial_hw_state(dev_priv);
-+	if (ret) {
-+		drm_dbg(&dev_priv->drm, "Fail to save initial HW state\n");
-+		goto err_save_hw_state;
-+	}
-+
- 	ret = intel_gvt_init_device(dev_priv);
- 	if (ret) {
- 		drm_dbg(&dev_priv->drm, "Fail to init GVT device\n");
--		goto bail;
-+		goto err_init_device;
- 	}
+ 	p = firmware + h->cfg_space_offset;
  
- 	return 0;
+-	for (i = 0; i < h->cfg_space_size; i += 4)
+-		pci_read_config_dword(pdev, i, p + i);
+-
+-	memcpy(gvt->firmware.cfg_space, p, info->cfg_space_size);
++	memcpy(gvt->firmware.cfg_space, i915->vgpu.initial_cfg_space,
++	       info->cfg_space_size);
++	memcpy(p, gvt->firmware.cfg_space, info->cfg_space_size);
  
--bail:
-+err_init_device:
-+	free_initial_hw_state(dev_priv);
-+err_save_hw_state:
- 	dev_priv->params.enable_gvt = 0;
- 	return 0;
- }
-@@ -147,6 +234,7 @@ void intel_gvt_driver_remove(struct drm_i915_private *dev_priv)
- 		return;
+ 	p = firmware + h->mmio_offset;
  
- 	intel_gvt_clean_device(dev_priv);
-+	free_initial_hw_state(dev_priv);
- }
+-	/* Take a snapshot of hw mmio registers. */
+-	intel_gvt_for_each_tracked_mmio(gvt, mmio_snapshot_handler, p);
++	memcpy(gvt->firmware.mmio, i915->vgpu.initial_mmio,
++	       info->mmio_size);
  
- /**
+-	memcpy(gvt->firmware.mmio, p, info->mmio_size);
++	memcpy(p, gvt->firmware.mmio, info->mmio_size);
+ 
+ 	crc32_start = offsetof(struct gvt_firmware_header, crc32) + 4;
+ 	h->crc32 = crc32_le(0, firmware + crc32_start, size - crc32_start);
 -- 
 2.25.1
 

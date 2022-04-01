@@ -2,178 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D181B4EE9D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A744EE9D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244283AbiDAIji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 04:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S244368AbiDAIkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 04:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiDAIjh (ORCPT
+        with ESMTP id S230512AbiDAIkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 04:39:37 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2995324D998;
-        Fri,  1 Apr 2022 01:37:49 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso1874666pjh.3;
-        Fri, 01 Apr 2022 01:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C2ZIrzrEu1TFpqYxyQ0dZlhf84IbrKS0ewf8L2avMJM=;
-        b=owpFPbxS5cv785WPDwMLC8/CIbDqRFmgDc7Nycduk/Hhf+Y6CNlqLQHYjRVL2kj6Ds
-         P5Uznb0su5/YA/8EUJ2M3PfA/gVWy5oVJkP2yPLCTPWYD/ekzHVHKAIcLkivK0tbYJcf
-         +lRRO8tCj59oIjO0Fh7CTU7BcAv0jf9bBqmuEOyJTkKktUau02pXSwjO1tLyH2vZCxWg
-         U2zMkKuWqz0T7L2g+bbbntOCxwZOtNsKz/EQZ22MtftPatXDUIgKNp8GNExBz8Aeo96N
-         G2RsvE4N9jaGjcmqEnnrFZ/QbdsrMVBzTCLM15K6kUT94i5ZPfUBgLiaeI8uuZOwuSys
-         4ZaQ==
+        Fri, 1 Apr 2022 04:40:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E09F03153F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 01:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648802327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jJgRufLo0Q+2TohvSo0V+grK8YPgHhb39pNmOaDe4X4=;
+        b=i1dUZuYYAqVSCyGEIlEn33F1du42TT2bGzKH2NGRzYwclcIFEsFMj6+/OA/RfSo3GacZbk
+        Im/lbOygJA9YGMJkucVlIOJ7ZZMbmTKSg9/ME8lL+5DcmmatUDaHm+q724dVVKvN42Q/Bz
+        ODM7agVwqiAfBpwzgCqXBWgP9r/UNOQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-576-bLyWL1dmM3iy4GRNK6i1pQ-1; Fri, 01 Apr 2022 04:38:46 -0400
+X-MC-Unique: bLyWL1dmM3iy4GRNK6i1pQ-1
+Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so887292wmj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 01:38:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=C2ZIrzrEu1TFpqYxyQ0dZlhf84IbrKS0ewf8L2avMJM=;
-        b=YuaaDK/9LsYf2RdhvgtyJ7rmO1lJnaC8eKhbSVkahovYJ8wS9vtPVm1zF+4KXBBK4a
-         NIjh3t6akK3t3+LeqE/t+WbBuyu+FhZ7bqg/FBm+Lqtk4oCOl2J5dYkflC5chSR18X+b
-         KT83wX+ue5CS1OYVyFoI7QZwzgXeNOdMrgSfxqb5e1bc//th2UigbyOMjIRDfSzdwJZt
-         AUBAdd6A081pOmJZM+5jZwLZOZlZNlfBSvmOP84wXntNeSu0iM1PLgRVzPofc7c7tCV6
-         8DsYaPhusTD+RN3GyFNoYhxGVRWmVnOLXGIMiRbynHkv9RY/eRyrtO0xh+xuHVQQxLHo
-         Tccw==
-X-Gm-Message-State: AOAM532+dsbbxq2GdRI0qV2vdTRTeFxcj66Z6B9w11pE3tzAL9Tuh472
-        GEWigOyjOgIU34NCCWhMl4Y=
-X-Google-Smtp-Source: ABdhPJyuhFzNZZCSVVgPjdDJbR2FwY3ZfDhx4tSj4Nw2TTWTyLJW/s5Wz4yBBRvvrPthA7l59gJF2w==
-X-Received: by 2002:a17:902:6b44:b0:154:4bee:c434 with SMTP id g4-20020a1709026b4400b001544beec434mr9208094plt.43.1648802268572;
-        Fri, 01 Apr 2022 01:37:48 -0700 (PDT)
-Received: from localhost.localdomain ([103.149.162.115])
-        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm2109374pfu.62.2022.04.01.01.37.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 01:37:48 -0700 (PDT)
-From:   Dongli Si <kvmx86@gmail.com>
-X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
-To:     peterz@infradead.org, joro@8bytes.org
-Cc:     liam.merwick@oracle.com, kim.phillips@amd.com, mingo@kernel.org,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf/x86/amd: Don't touch the Host-Only/Guest-Only bit inside the guest
-Date:   Fri,  1 Apr 2022 16:36:59 +0800
-Message-Id: <20220401083659.2529658-1-sidongli1997@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        bh=jJgRufLo0Q+2TohvSo0V+grK8YPgHhb39pNmOaDe4X4=;
+        b=jSfoKNb6oDlw+rAC3NwmntoJbnA+EILYvHaoMhEzJq1TMZR4VllO3tR6XrLbOa3Jm6
+         9XUsGAzmDxQmufj5JzTEoAzgDQmB+IgIwOiB1SnfxVYL53ix5HoWby1cDfd6IW9PJjMd
+         g0WGNjxmjKrK4nv3wb9xHsDo4AD7+qpxWumSPuJD/wB4Ifht746AjpPj3HNPWm2I16O7
+         9mXsmFyNdRyu2ml86CUgnRtWwnd0c3692Re7Je1eIzVPVFzSYKRgEX/jp60ksGyHntJZ
+         WrawQCYFFRop3JSwOKTpPr9KMcU+WUTEnY+/UmlP3s3d+OJ9PJgUgjuueb38wYzu+7Ny
+         DtKg==
+X-Gm-Message-State: AOAM5314hWurIFogwA4SXpwHdZzSamytngqHo9MwldlMdLLxmRiY7rPR
+        TI9KL71AJfxDIdrlJKC8fLBzZbTUc02BK9ZhS4YNiXgw/2aCnk3HMfuYde1D5fOlir5Fchhezac
+        bPnOLnK99utQz1oIBmbRVuzbx
+X-Received: by 2002:a05:600c:20a:b0:38c:95bf:3289 with SMTP id 10-20020a05600c020a00b0038c95bf3289mr7846158wmi.134.1648802324816;
+        Fri, 01 Apr 2022 01:38:44 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyZv6I0FVV+CMTD5Ii7q1vvCTUGk/jp2epbACrhoZA7VwhBmVuCWWnjWAfbB1yDcm4RVzFGLA==
+X-Received: by 2002:a05:600c:20a:b0:38c:95bf:3289 with SMTP id 10-20020a05600c020a00b0038c95bf3289mr7846142wmi.134.1648802324598;
+        Fri, 01 Apr 2022 01:38:44 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l126-20020a1c2584000000b00387d4f35651sm9408352wml.10.2022.04.01.01.38.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 01:38:44 -0700 (PDT)
+Message-ID: <19fa075a-cc5a-4127-389a-bab7812d7af3@redhat.com>
+Date:   Fri, 1 Apr 2022 10:38:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] efi: Allow to enable EFI runtime services by default
+ on RT
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Brian Masney <bmasney@redhat.com>, Al Stone <ahs3@redhat.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220331151654.184433-1-javierm@redhat.com>
+ <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
+ <YkYA/Wpqa/PMczkp@lx-t490>
+ <CAFOAJEeKNy0HW82W6HV_49d5sc5L0m62QDfY9qA1906_ZzGRYg@mail.gmail.com>
+ <Ykas9iX/D3WURx8T@linutronix.de>
+ <78a0360d-1a27-5280-10bf-d27d1d306fa5@redhat.com>
+ <CAMj1kXGEBtcdD+3MFK5gO6vCw8dg=ruTthdWGVUu1eJpgZXf8Q@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAMj1kXGEBtcdD+3MFK5gO6vCw8dg=ruTthdWGVUu1eJpgZXf8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongli Si <sidongli1997@gmail.com>
+Hello Ard,
 
-With nested virtualization on AMD Milan:
+On 4/1/22 10:34, Ard Biesheuvel wrote:
+> On Fri, 1 Apr 2022 at 10:33, Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
 
-If "perf record" is run in an L1 hypervisor with an L2 guest,
-the following warning is emitted in the L1 guest.
+[snip]
 
-[] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000510076)
-at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
-[] Call Trace:
-[]  <IRQ>
-[]  ? x86_pmu_enable+0x146/0x300
-[]  __perf_install_in_context+0x150/0x170
+>>
+>>         if (!efi_enabled(EFI_RUNTIME_SERVICES))
+>>                 efi.runtime_supported_mask = 0;
+>> +       else if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>> +               pr_warn("EFI runtime services can lead to high latencies on Real-Time kernels\n");
+>>
+>>         if (!efi_enabled(EFI_BOOT))
+>>                 return 0;
+>>
+> 
+> 
+> I don't think we need another warning.
+> 
+> The kernel log already tells you whether or not EFI runtime services
+> are enabled.
+> 
 
-and
+I'm fine with this too. As mentioned to Ahmed I was torn on this, since I
+understand the ask for the warning but also don't want to pollute the log.
 
-If "perf record" is run in an L2 guest,
-the following warning is emitted in the L1 guest.
-
-[] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000010000510076)
-at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
-[] Call Trace:
-[]  <TASK>
-[]  ? x86_pmu_enable+0x146/0x300
-[]  __perf_install_in_context+0x150/0x170
-
-The AMD64_EVENTSEL_HOSTONLY/AMD64_EVENTSEL_GUESTONLY bit is defined and
-used on the host (L0), while the L1 hypervisor Performance Monitor Unit
-should avoid such use.
-
-Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
-Signed-off-by: Dongli Si <sidongli1997@gmail.com>
----
- arch/x86/events/amd/core.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 9687a8aef01c..79bd60d6b0fd 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -8,6 +8,7 @@
- #include <linux/jiffies.h>
- #include <asm/apicdef.h>
- #include <asm/nmi.h>
-+#include <asm/hypervisor.h>
- 
- #include "../perf_event.h"
- 
-@@ -533,7 +534,15 @@ static void amd_pmu_cpu_starting(int cpu)
- 	struct amd_nb *nb;
- 	int i, nb_id;
- 
--	cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
-+	/*
-+	 * The Host-Only/Guest-Only bit can only be set on the host.
-+	 * When SVM is disabled, set the Host-Only bit will cause the
-+	 * performance counter to not work.
-+	 */
-+	if (hypervisor_is_type(X86_HYPER_NATIVE))
-+		cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
-+	else
-+		cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_GUESTONLY | AMD64_EVENTSEL_HOSTONLY;
- 
- 	if (!x86_pmu.amd_nb_constraints)
- 		return;
-@@ -1023,10 +1032,16 @@ __init int amd_pmu_init(void)
- 	return 0;
- }
- 
-+/*
-+ * Unmask the Host-only bit when virtualization is enabled on the Host Hypervisor
-+ */
- void amd_pmu_enable_virt(void)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
-+	if (!hypervisor_is_type(X86_HYPER_NATIVE))
-+		return;
-+
- 	cpuc->perf_ctr_virt_mask = 0;
- 
- 	/* Reload all events */
-@@ -1035,10 +1050,16 @@ void amd_pmu_enable_virt(void)
- }
- EXPORT_SYMBOL_GPL(amd_pmu_enable_virt);
- 
-+/*
-+ * Mask the Host-only bit when virtualization is disabled on the Host Hypervisor
-+ */
- void amd_pmu_disable_virt(void)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
-+	if (!hypervisor_is_type(X86_HYPER_NATIVE))
-+		return;
-+
- 	/*
- 	 * We only mask out the Host-only bit so that host-only counting works
- 	 * when SVM is disabled. If someone sets up a guest-only counter when
 -- 
-2.32.0
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

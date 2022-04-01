@@ -2,121 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C632A4EF9F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6FE4EF9F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351257AbiDAShe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S1351277AbiDASit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbiDAShd (ORCPT
+        with ESMTP id S232791AbiDASip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:37:33 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7841B8FC2;
-        Fri,  1 Apr 2022 11:35:42 -0700 (PDT)
+        Fri, 1 Apr 2022 14:38:45 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59F1E31AD
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 11:36:55 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id e5so3160405pls.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 11:36:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648838143; x=1680374143;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dE+eYbTlRphRYMzrizvUuQiOeaDFtpljQ+qdtyoyovA=;
-  b=Ht9zSv45O6vA+B2AVgriwFwRtGgWB4GDon1mCGFn5irdM/8BLNa+fjqd
-   JFnFXW0hRnq/qp5aROsF0jzW0dgFJczdfHVWEIEGWmfHk/l6X1J9diMIY
-   EAxGQbIjAVo4XD0JoGE6VXzj7Y51GjleArI+jXZkrQ1U9LAadphCxAM3C
-   g=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Apr 2022 11:35:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 11:35:30 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Apr 2022 11:35:29 -0700
-Received: from [10.110.67.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Apr 2022
- 11:35:29 -0700
-Message-ID: <25b13a66-ab99-8ec8-847a-450827f6163b@quicinc.com>
-Date:   Fri, 1 Apr 2022 11:35:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/1] nl80211: Prevent out-of-bounds read when processing
- NL80211_ATTR_REG_ALPHA2
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <20220401105046.1952815-1-lee.jones@linaro.org>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20220401105046.1952815-1-lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cqsuM9synFmM1yPUnHeSbl2P4nO3t+xg2dzn32HhZsU=;
+        b=xNoYg77Py57X1Me0ur5VPCcatzUb1xYQqOXB3osYqUEJZfzafFqJoogVTp+lKN1g9Q
+         g/jOWWRLrxIh7XlvcvzOO3Bun4bgj7ov1Qqtpxp6HG5kBgutbNTnrGemYPERcZugOBAN
+         nWUML92Jqx8ffU+/0T9aiCDGOVQPtaPpNrI+gp665M/iVo5I6rDobtMXMwBNDp7Tt+eP
+         bYKmDznFtNQYqD16E5guTIDDrgtCISFlRtpvrvQLwHvFV60H8ySyXFPwoN0f9iQk/Lks
+         LkQxlmP5AGqOMBRUFflhbrBu+dQ3128WmdIVSMsrfaW/cZlL5J9tS7NevH4+TFXuT6K3
+         hRdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=cqsuM9synFmM1yPUnHeSbl2P4nO3t+xg2dzn32HhZsU=;
+        b=1MJjM0borlepF6tPIwnsUtomLpbBtO2KcA7ZCA9ujjzkLL2oImRAjztkgNCHnbXASr
+         OsQxMvmaEo92D5pT+cagM/yGRppewFT+n43nYhXneLB4Y5UleznPPB5rYVFd4V86J1ds
+         R2y2y4+QbZDMuNmpo3+c9yS4foLTTlqEevpvZKWyra6Z3qVFUnHZx8YYpjDUP1iLaVad
+         Ht28p6ZdTi5/zxa+u89vENUO0DNhd3LUXn3C3+9qxTVHcJHkuglh5DOe29/9CXbY7CwM
+         GxwZYbKDIkta/B4f+OjxYARhRli+a1WUabaW685S9QMT34a4WFazUQappiA38CX/jNzi
+         F8Nw==
+X-Gm-Message-State: AOAM530zM5vRv9Qcpe6ocdSYW6hOWODtDakGhepCksBKfZYGyh7hqloL
+        3uRseN2A+t7+GWwe8j//08ZAQiYgzPvA5A==
+X-Google-Smtp-Source: ABdhPJxu0cXtXaLgk1bOZrTT27XsZcXSkZ6Zri7MAMHUWKOoDZ6GQ+6L8CEvdkcl0Jg4j4oCJybCgg==
+X-Received: by 2002:a17:902:d48d:b0:154:54f6:9384 with SMTP id c13-20020a170902d48d00b0015454f69384mr11524985plg.83.1648838214767;
+        Fri, 01 Apr 2022 11:36:54 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fb44e0cb17sm3875571pfw.116.2022.04.01.11.36.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 11:36:53 -0700 (PDT)
+Date:   Fri, 01 Apr 2022 11:36:53 -0700 (PDT)
+X-Google-Original-Date: Fri, 01 Apr 2022 11:36:52 PDT (-0700)
+Subject:     Re: [PATCH] habanalabs: Elide a warning on 32-bit targets
+In-Reply-To: <CAFCwf13-o=kUR61xjWt=F-Q-Vfy=kF6fpMP7iB+83Gfqw7+2HA@mail.gmail.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, osharabi@habana.ai
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     ogabbay@kernel.org
+Message-ID: <mhng-89bfa679-14d3-436e-80e1-439ab154beb2@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/2022 3:50 AM, Lee Jones wrote:
-> Checks are presently in place in validate_nla() to ensure strings
-> greater than 2 are not passed in by the user which could potentially
-> cause issues.
-> 
-> However, there is nothing to prevent userspace from only providing a
-> single (1) Byte as the data length parameter via nla_put().  If this
-> were to happen, it would cause an OOB read in regulatory_hint_user(),
-> since it makes assumptions that alpha2[0] and alpha2[1] will always be
-> accessible.
-> 
-> Add an additional check, to ensure enough data has been allocated to
-> hold both Bytes.
-> 
-> Cc: <stable@vger.kernel.org>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->   net/wireless/nl80211.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-> index ee1c2b6b69711..80a516033db36 100644
-> --- a/net/wireless/nl80211.c
-> +++ b/net/wireless/nl80211.c
-> @@ -7536,6 +7536,10 @@ static int nl80211_req_set_reg(struct sk_buff *skb, struct genl_info *info)
->   		if (!info->attrs[NL80211_ATTR_REG_ALPHA2])
->   			return -EINVAL;
->   
-> +		if (nla_len(info->attrs[NL80211_ATTR_REG_ALPHA2]) !=
-> +		    nl80211_policy[NL80211_ATTR_REG_ALPHA2].len)
-> +			return -EINVAL;
-> +
->   		data = nla_data(info->attrs[NL80211_ATTR_REG_ALPHA2]);
->   		return regulatory_hint_user(data, user_reg_hint_type);
->   	case NL80211_USER_REG_HINT_INDOOR:
+On Fri, 01 Apr 2022 11:13:48 PDT (-0700), ogabbay@kernel.org wrote:
+> On Fri, Apr 1, 2022 at 7:41 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> This double-cast pattern looks a bit awkward, but it already exists
+>> elsewhere in the driver.  Without this patch I get
+>>
+>> drivers/misc/habanalabs/common/memory.c: In function ‘alloc_device_memory’:
+>> drivers/misc/habanalabs/common/memory.c:153:49: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+>>   153 |                                                 (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+>>       |                                                 ^
+>>
+>> which ends up promoted to a build error in my test setup.
+>>
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> ---
+>>
+>> I don't know anything about this driver, I'm just pattern-matching the
+>> warning away.
+>> ---
+>>  drivers/misc/habanalabs/common/memory.c | 10 +++++-----
+>>  1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+>> index e008d82e4ba3..f1fc79c1fc10 100644
+>> --- a/drivers/misc/habanalabs/common/memory.c
+>> +++ b/drivers/misc/habanalabs/common/memory.c
+>> @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+>>                 for (i = 0 ; i < num_pgs ; i++) {
+>>                         if (is_power_of_2(page_size))
+>>                                 phys_pg_pack->pages[i] =
+>> -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+>> -                                                                               page_size, NULL,
+>> -                                                                               page_size);
+>> +                                               (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+>> +                                                                                          page_size, NULL,
+>> +                                                                                          page_size);
+>>                         else
+>> -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+>> -                                                                               page_size);
+>> +                               phys_pg_pack->pages[i] = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool,
+>> +                                                                                         page_size);
+>>                         if (!phys_pg_pack->pages[i]) {
+>>                                 dev_err(hdev->dev,
+>>                                         "Failed to allocate device memory (out of memory)\n");
+>> --
+>> 2.34.1
+>>
+>
+> This patch is:
+> Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+>
+> Greg,
+> Could you please apply this directly to your misc tree and send it to
+> Linus at your next pull request ?
+> I don't have any other fixes pending for 5.18.
+>
+> For 5.19 we will do a more elegant solution that Arnd has recommended.
 
-LGTM
+Thanks.
 
-doesn't nl80211_set_reg() also have this issue?
-	alpha2 = nla_data(info->attrs[NL80211_ATTR_REG_ALPHA2]);
-[...]
-	rd->alpha2[0] = alpha2[0];
-	rd->alpha2[1] = alpha2[1];
+Assuming this is too late for rc1, would it be possibe to have it in 
+something I can take into my fixes/for-next without too much diff?  I 
+put this on top of the offending commit with a 
+
+Fixes: e8458e20e0a3 ("habanalabs: make sure device mem alloc is page aligned")
+
+at kernel.org/palmer/habana , if that helps any.  No big deal if it goes 
+in another way, it's just nice to keep allyesconfig building on my 
+branches directly.

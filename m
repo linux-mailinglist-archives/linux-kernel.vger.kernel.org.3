@@ -2,97 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BC84EFB2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F3F4EFB6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352112AbiDAUUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
+        id S1352221AbiDAUX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351979AbiDAUUP (ORCPT
+        with ESMTP id S1352316AbiDAUX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:20:15 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D702BB3A;
-        Fri,  1 Apr 2022 13:18:17 -0700 (PDT)
+        Fri, 1 Apr 2022 16:23:27 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793CD281694
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:19:19 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e5db04460cso35181767b3.17
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648844297; x=1680380297;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=CogFtJjaMn8QgIkT5LRiduJ4KIefxWBcmJrzn3ot+fg=;
-  b=ZlKlgSZpveDxtuAD3XZiVTskjqNS2I8WK0LCygq3jJj3bl3ozAQYi/pr
-   3C1NipY1wtXT7Fx5HZ9o0SeegQVUqQLF2wBC+GtCf3gotiv19JB8DyoOr
-   e6jmdmfe/Q65eeGQ077o8/MpPKgvJFFoCVbuIjBXLjd8Z8GaODLil6CD9
-   4=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Apr 2022 13:18:16 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 13:18:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Apr 2022 13:18:15 -0700
-Received: from [10.110.60.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Apr 2022
- 13:18:14 -0700
-Message-ID: <06cc4a2f-13e2-c7c9-8194-2a9f5904e96b@quicinc.com>
-Date:   Fri, 1 Apr 2022 13:18:14 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 3/3] drm/msm/dp: replace DRM_DEBUG_DP marco with
- drm_dbg_dp
-Content-Language: en-US
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1645122930-23863-1-git-send-email-quic_khsieh@quicinc.com>
- <1645122930-23863-4-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n50nMVEG5ccU=m0hNoyPnWvyugjRSXL9hoW=VOxm6+w2uw@mail.gmail.com>
- <b5717861-c3f6-960c-f5be-013db8c4fa68@quicinc.com>
-In-Reply-To: <b5717861-c3f6-960c-f5be-013db8c4fa68@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MzDAtS181K28awKeVRl3qYn1BJqlBjys5Tr9TP3rlP4=;
+        b=QOgDbsi0Jkp536F8U3evqUrA5teUQPwd1J3oZVmL+ceW77Te9PiOo30oFh5I+Cfnhk
+         JRSBlrE2TEWRY9lp5O1ExdJ3rZ9tfHfrX12HIXnDBsywa2HTxTYfrUExdO5O8Mc+CXYr
+         +VcSZEAIn2TgQuCpwRPrZzCk6qPTjQeOMd0ydmwzGr9JKJ2gcUkb9xCkMMam9FGwIlcX
+         I33j6enXrKAymZJ+EdW0R1h5SNan1gb07PokkU/kScowj+gVxDmYYzu/QgCPhjm0q8EV
+         IKcE5cJMHuqqlrQzg5mj8ST5/OrbGo/QFKGmOIxcvChc3wGvv2gW5KJlZfG0TNiGur72
+         8KFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MzDAtS181K28awKeVRl3qYn1BJqlBjys5Tr9TP3rlP4=;
+        b=OUjSCfYLMWjP7UNFiLmGYxbPMZL80LzLv3tk8Q+QhAd89qdjldSXhs1bZ1zefGiqn4
+         wDCosTgJmpFfoqq7pV5aYehNFcAwNUtxE+9DRmYWORz72YHbF40r7CvvZXMUNUK4y/q7
+         Kexfjg/GJOsQztX9Or8WmZwcaX0MsiQX3zwQ7EeJC6/pmh78/6fZDOB2TZH49b9bI7xO
+         CLZmOBx5XrDOqGRMhxiHYA/1vPK9tUQeU2GMdjcAHC+fBGnOIkbtaXGDmsuBvN0xbFtS
+         Q82Yz6rCVesqVlPAr1vTRPRlE2f/slY5Lu7mYgNee4aPwoEkM6ugUcB0vL5pzEY/Jyse
+         2BGQ==
+X-Gm-Message-State: AOAM531UwOBuLYTTCQpFPOZCVqk9yj0uuZ/TyKLz+PS9+yVikw5llQkx
+        MC37KLx5bIVrtY5dSdVjsU8CmTvjHF2NeyYSlIo=
+X-Google-Smtp-Source: ABdhPJzVa2+iD5w2wZiAll+bNYAh4Woiw4BvSeE/HM1A5wWyO8tbc7KvmBfTDvYoGqyu9lJ2HX/YyH0IRTBMNj5XBOQ=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:ebe8:1acf:913c:f19e])
+ (user=samitolvanen job=sendgmr) by 2002:a81:4754:0:b0:2e5:9447:b1a0 with SMTP
+ id u81-20020a814754000000b002e59447b1a0mr12543646ywa.66.1648844358691; Fri,
+ 01 Apr 2022 13:19:18 -0700 (PDT)
+Date:   Fri,  1 Apr 2022 13:19:13 -0700
+Message-Id: <20220401201916.1487500-1-samitolvanen@google.com>
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=755; h=from:subject;
+ bh=WH/8OyJEi9p/hM5wZbbTiaLpH/4ppY4IMtyv+KlnWGQ=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBiR15CtFhTIHqRjcowQZaTOrS5xpFZwIuWGKgZH9QY
+ 9U9tLmuJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYkdeQgAKCRBMtfaEi7xW7nC8C/
+ 9PyrDAAwDUSsKHBXM2cS1o2I7dEFr0YXswqSVooDhekKHMqQvLQ36MLEJKCXvGOq4Hp4BEeyFauzi2
+ gVFFOC8aM0YY+vuiYObacWitVa/ZXz91yRIIRdFKsrvSdMalN+Nei37wUcBtyaoleFlwe/kP4jwCxr
+ ap9Mwf152DR57HwdQAwfJNXDPk2l+xkGh43Bsw4Bvkc5JZHl7q68+SvHZuYnTySOhdfE1x2NJo2o9a
+ g+BYwOVTkyQv3ktPgnCIPmwmj1JNKQXrYcoDOTfvRd5RmFKIzA/zYXypH/FEb3D3EY76bkdIuNg44S
+ 30bclKxDr7N/BgTQFumcNdOVgnvgm9ZcDNkT7xT/NpdvfM1HyHHW72wwtWmT5e1aZARYcVTsCdY0Wh
+ GqEJoMP3nQuyozhUqhU3WKFtKjvO5PYkGimKFod4mrEl4hJ/mUu5YFzJC4UVJ1xYqXrWa/K+oScIl9
+ dq8P2Qvs08jBmPDSxm8nEE8HlUHh+7VC6SIgRPcXP2F/8=
+X-Mailer: git-send-email 2.35.0
+Subject: [PATCH 0/3] cfi: Use __builtin_function_start
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Clang 14 introduced the __builtin_function_start intrinsic, which
+makes it possible to cleanly implement the function_nocfi() macro in a
+way that also works with static initializers. Add a default
+function_nocfi() implementation and drop the arm64 inline assembly
+version.
 
-On 4/1/2022 12:51 PM, Kuogee Hsieh wrote:
-> Hi Stephen,
->
->
-> Would you please help to pick this patch up to msm-next?
-my mistake, should kernel v5.15
->
-> Thanks,
->
-> On 2/24/2022 10:40 AM, Stephen Boyd wrote:
->> Quoting Kuogee Hsieh (2022-02-17 10:35:30)
->>> Since DRM_DEBUG_DP is deprecated in favor of drm_dbg_dp(NULL, ...),
->>> this patch replace all DRM_DEBUG_DP with drm_dbg_dp().
->>>
->>> Changes in v4:
->>> -- replace (strucr drm_dev *)NULL with drm_dev
->>>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Sami Tolvanen (3):
+  kbuild: Change CFI_CLANG to depend on __builtin_function_start
+  linux/compiler-clang.h: define function_nocfi
+  arm64: Drop the inline assembly implementation of function_nocfi
+
+ arch/Kconfig                      |  5 +----
+ arch/arm64/include/asm/compiler.h | 16 ----------------
+ include/linux/compiler-clang.h    | 10 ++++++++++
+ init/Kconfig                      |  3 +++
+ 4 files changed, 14 insertions(+), 20 deletions(-)
+
+-- 
+2.35.0
+

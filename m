@@ -2,125 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312894EEF32
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291344EEF45
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346807AbiDAOYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        id S1346809AbiDAOY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244735AbiDAOYE (ORCPT
+        with ESMTP id S233760AbiDAOY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:24:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B5BE27CE17
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648822932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3QOICKI5zhLuzzljpfPcHS3hr163EJLkUZtGfVJM2FU=;
-        b=PMSWPgpWKWYEf39UpGw7c+lRnpsrZSBKutoEBgKseRQjDQLtuIPeh01UrZtCBfZiwktVDC
-        PXdgnBwH5YC+67bWpnxQScB+Js3bbZQWMcaajI05U6Mtcvd3UtJffx3yVTUA1f8U02Rlgr
-        GFFl79cBTiyzdylvcW/Z48Dig+zIL/Q=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-7-KLf0lPM7ONKcepYDXApQAw-1; Fri, 01 Apr 2022 10:22:11 -0400
-X-MC-Unique: KLf0lPM7ONKcepYDXApQAw-1
-Received: by mail-wm1-f72.google.com with SMTP id 9-20020a05600c240900b0038c99b98f6fso1229204wmp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:22:11 -0700 (PDT)
+        Fri, 1 Apr 2022 10:24:27 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D5A27BC34
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:22:37 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id bc27so2526551pgb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y6NYgD6CmQKrzTR96Y2z4+22G7HGe2HX0/wPly7z848=;
+        b=HA5iffyA3tFUMp6Pxr9Re5GUyp6m4S7asQu/DiHNbPWlTGtD3kbvzQc8KjfiSGhcV/
+         L3MH8J9RPl46+EXVE3u3zNpgtBi3RQ98QM1ptM/G8gRQKiIPjRXy61Mup+Lsk26q9J8E
+         NyXyu9x63QS0DGcp7ouEjo6TOLSh7i0NfUtZhNCKhH4edSCQXunzdRhLPwDwEmN/0bBy
+         KmdF0Ig0R2tsB2P2EletU/Wt0nX8TiMURFjfuARKALF9Vx2M6od/gVsGIy0Zn+ZO41qY
+         sb4Jl7OFc+u/1LlCiwcQKX+gB8afChBs8wkdzB4/BoZQgyfXfaDxe09vGxEZt7+/ex4D
+         /lRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=3QOICKI5zhLuzzljpfPcHS3hr163EJLkUZtGfVJM2FU=;
-        b=yx0BcbWcAnfvk3INqUXmXe1uZjuCatp3KJpNAZ7FR5QNAWpkbq8zwBnce1bbr6IWG7
-         hW8vvkrFWUb4oEC6O+NilZO1kCesnY0NgVH1ssdGzAt9arPKtgzuRBkzOuDargzSslab
-         7m+Dk+DlVmUz5oCyWg+BhNmTyNybFqJvXibQ7307mNsTnqZEhou+QmG+l80nUQT0byyg
-         LmsbJMxxezB/d9A3CK4DYy2sV/ArmmjjH4hgoXGFPyfkaEJexaI41EpNGKMe35oepU3+
-         ACBvLGO5KnwbAg4f7NI1RdpBBU3kRHOA1UCXn2O+vKjFn9e+Hq9pqIsGvY/c1TKUUzg8
-         vbtA==
-X-Gm-Message-State: AOAM5338D8mka7T4ZEfLqtCmL5BXYUc3UO9S+xRgme7zImYwSEmKzkrR
-        7BfVN7eaHTz8+4DSS7ioVP0NxxNA4QO7Q6nP0vxAxm7j7B/RwOXYvCh6nN1fcJMJXGCSQ35aey3
-        UYI2z63OZi7jiutMbIou/Jmnh
-X-Received: by 2002:a5d:6842:0:b0:204:72d:e97e with SMTP id o2-20020a5d6842000000b00204072de97emr7915126wrw.254.1648822930334;
-        Fri, 01 Apr 2022 07:22:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy02L/MJnt+FwHcW2ZM1qZzkNlErDZTTehX7rnwXkJ4uJGyMdYW3gSqSKaQTGpR8b06y7T1gw==
-X-Received: by 2002:a5d:6842:0:b0:204:72d:e97e with SMTP id o2-20020a5d6842000000b00204072de97emr7915108wrw.254.1648822930033;
-        Fri, 01 Apr 2022 07:22:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:9e00:229d:4a10:2574:c6fa? (p200300cbc7069e00229d4a102574c6fa.dip0.t-ipconnect.de. [2003:cb:c706:9e00:229d:4a10:2574:c6fa])
-        by smtp.gmail.com with ESMTPSA id v15-20020a056000144f00b002057eac999fsm2270539wrx.76.2022.04.01.07.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 07:22:09 -0700 (PDT)
-Message-ID: <85520c49-5ef9-25f2-d6fa-f8b26e5dfec2@redhat.com>
-Date:   Fri, 1 Apr 2022 16:22:08 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y6NYgD6CmQKrzTR96Y2z4+22G7HGe2HX0/wPly7z848=;
+        b=jpDxoGAqaKgJ5PkTPBT12hc+zqblPULr/GY6aT+otyraPuziFWrkls6Tx+LaoU06kX
+         f3pbze/VrtN69aC4YJEV0wn8LTgN0B073GenUEv1V0detiv4seKv5Kx6l/Gj8CikzHQR
+         ZOFgpO7wJS2u7dS1way3kKx8G+OnPN8q+1xL7tjLMBFSvsJz5hApAZoHbyNBTQEPxM1U
+         2CVJu6KSSucFcyw7P4kivXtE7uDRhNDPHIIxPV7Sp+MUn/sL5J8stEGfvCAD94d+PjB3
+         uTtVtsQkflrzoeAGKawnsIO493BgSdBWHwKwkuU/dJDEt+MmYy/1TPKsesdMWyYIFq+B
+         iqTA==
+X-Gm-Message-State: AOAM532l8oLgwfktYMXaHwDQdEV94ALfUYKyK65H74FgA2ySu/5Gxqk4
+        tjgndgnfMrZ61MQ05je2dt/Y4Q==
+X-Google-Smtp-Source: ABdhPJwjSxNwfxF3iYVakNEEEOp1wum2Psbj1Tr4354n4ZHnBsOhz818mClGfh6VMEXcC4dZMwUszA==
+X-Received: by 2002:a62:7b97:0:b0:4fa:7a9a:6523 with SMTP id w145-20020a627b97000000b004fa7a9a6523mr11182028pfc.80.1648822956936;
+        Fri, 01 Apr 2022 07:22:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u18-20020a056a00125200b004fb112ee9b7sm2933175pfi.75.2022.04.01.07.22.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 07:22:36 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 14:22:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v3 2/6] KVM: x86/mmu: Track the number of TDP MMU pages,
+ but not the actual pages
+Message-ID: <YkcKqAqcKUAS+b7+@google.com>
+References: <20220401063636.2414200-1-mizhang@google.com>
+ <20220401063636.2414200-3-mizhang@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 1/2] mm: page_alloc: simplify pageblock migratetype check
- in __free_one_page().
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     linux-mm@kvack.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20220401135820.1453829-1-zi.yan@sent.com>
- <134f56da-e827-2d29-75ba-1ec88ae2b118@redhat.com>
- <66F9766D-A7D8-4310-9FA9-5EC8B2CC341C@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <66F9766D-A7D8-4310-9FA9-5EC8B2CC341C@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="j3c8VscvnAccrGCY"
+Content-Disposition: inline
+In-Reply-To: <20220401063636.2414200-3-mizhang@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.04.22 16:19, Zi Yan wrote:
-> On 1 Apr 2022, at 10:12, David Hildenbrand wrote:
-> 
->> On 01.04.22 15:58, Zi Yan wrote:
->>
->> It's weird, your mails arrive on my end as empty body with attachment. I
->> first suspected Thunderbird, but I get the same result on the google
->> mail web client.
->>
->> Not sure why that happens.
-> 
-> No idea. They look fine (except mangled links by outlook) on my outlook
-> desk client and web client on my side. lore looks OK too:
-> https://lore.kernel.org/linux-mm/20220401135820.1453829-1-zi.yan@sent.com/
 
-I can spot in the raw mail I receive
+--j3c8VscvnAccrGCY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-"Content-Type: application/octet-stream; x-default=true"
+On Fri, Apr 01, 2022, Mingwei Zhang wrote:
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index f05423545e6d..5ca78a89d8ed 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -24,7 +24,6 @@ bool kvm_mmu_init_tdp_mmu(struct kvm *kvm)
+>  
+>  	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_roots);
+>  	spin_lock_init(&kvm->arch.tdp_mmu_pages_lock);
+> -	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_pages);
+>  	kvm->arch.tdp_mmu_zap_wq =
+>  		alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
 
-But that seems to differ to the lore mail:
+This has a minor conflict with kvm/next and kvm/queue, attached a new version since
+you'll need a v3 (foreshadowing...).
 
-https://lore.kernel.org/linux-mm/20220401135820.1453829-1-zi.yan@sent.com/raw
+--j3c8VscvnAccrGCY
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-KVM-x86-mmu-Track-the-number-of-TDP-MMU-pages-but-no.patch"
 
+From 3d0c2796b22c75e3ab279cbcd3036c44500a6744 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 1 Apr 2022 06:36:32 +0000
+Subject: [PATCH] KVM: x86/mmu: Track the number of TDP MMU pages, but not the
+ actual pages
 
-Maybe something in my mail server chain decides to do some nasty
-conversion (grml, wouldn't be the first time)
+Track the number of TDP MMU "shadow" pages instead of tracking the pages
+themselves. With the NX huge page list manipulation moved out of the common
+linking flow, elminating the list-based tracking means the happy path of
+adding a shadow page doesn't need to acquire a spinlock and can instead
+inc/dec an atomic.
 
+Keep the tracking as the WARN during TDP MMU teardown on leaked shadow
+pages is very, very useful for detecting KVM bugs.
+
+Tracking the number of pages will also make it trivial to expose the
+counter to userspace as a stat in the future, which may or may not be
+desirable.
+
+Note, the TDP MMU needs to use a separate counter (and stat if that ever
+comes to be) from the existing n_used_mmu_pages. The TDP MMU doesn't bother
+supporting the shrinker nor does it honor KVM_SET_NR_MMU_PAGES (because the
+TDP MMU consumes so few pages relative to shadow paging), and including TDP
+MMU pages in that counter would break both the shrinker and shadow MMUs,
+e.g. if a VM is using nested TDP.
+
+Cc: Yosry Ahmed <yosryahmed@google.com>
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm_host.h | 11 +++--------
+ arch/x86/kvm/mmu/tdp_mmu.c      | 16 ++++++++--------
+ 2 files changed, 11 insertions(+), 16 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 676705ad1e23..8a80056cf841 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1192,6 +1192,9 @@ struct kvm_arch {
+ 	 */
+ 	bool tdp_mmu_enabled;
+ 
++	/* The number of TDP MMU pages across all roots. */
++	atomic64_t tdp_mmu_pages;
++
+ 	/*
+ 	 * List of struct kvm_mmu_pages being used as roots.
+ 	 * All struct kvm_mmu_pages in the list should have
+@@ -1212,18 +1215,10 @@ struct kvm_arch {
+ 	 */
+ 	struct list_head tdp_mmu_roots;
+ 
+-	/*
+-	 * List of struct kvmp_mmu_pages not being used as roots.
+-	 * All struct kvm_mmu_pages in the list should have
+-	 * tdp_mmu_page set and a tdp_mmu_root_count of 0.
+-	 */
+-	struct list_head tdp_mmu_pages;
+-
+ 	/*
+ 	 * Protects accesses to the following fields when the MMU lock
+ 	 * is held in read mode:
+ 	 *  - tdp_mmu_roots (above)
+-	 *  - tdp_mmu_pages (above)
+ 	 *  - the link field of struct kvm_mmu_pages used by the TDP MMU
+ 	 *  - lpage_disallowed_mmu_pages
+ 	 *  - the lpage_disallowed_link field of struct kvm_mmu_pages used
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index d6417740646a..1f44826cf794 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -29,7 +29,6 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
+ 	kvm->arch.tdp_mmu_enabled = true;
+ 	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_roots);
+ 	spin_lock_init(&kvm->arch.tdp_mmu_pages_lock);
+-	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_pages);
+ 	kvm->arch.tdp_mmu_zap_wq = wq;
+ 	return 1;
+ }
+@@ -54,7 +53,7 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+ 	flush_workqueue(kvm->arch.tdp_mmu_zap_wq);
+ 	destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
+ 
+-	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_pages));
++	WARN_ON(atomic64_read(&kvm->arch.tdp_mmu_pages));
+ 	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
+ 
+ 	/*
+@@ -384,14 +383,17 @@ static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
+ static void tdp_mmu_unlink_sp(struct kvm *kvm, struct kvm_mmu_page *sp,
+ 			      bool shared)
+ {
++	atomic64_dec(&kvm->arch.tdp_mmu_pages);
++
++	if (!sp->lpage_disallowed)
++		return;
++
+ 	if (shared)
+ 		spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+ 	else
+ 		lockdep_assert_held_write(&kvm->mmu_lock);
+ 
+-	list_del(&sp->link);
+-	if (sp->lpage_disallowed)
+-		unaccount_huge_nx_page(kvm, sp);
++	unaccount_huge_nx_page(kvm, sp);
+ 
+ 	if (shared)
+ 		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+@@ -1119,9 +1121,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+ 		tdp_mmu_set_spte(kvm, iter, spte);
+ 	}
+ 
+-	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+-	list_add(&sp->link, &kvm->arch.tdp_mmu_pages);
+-	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
++	atomic64_inc(&kvm->arch.tdp_mmu_pages);
+ 
+ 	return 0;
+ }
+
+base-commit: 88d1a6895b71b580b8fc98c23824aafa49d4948e
 -- 
-Thanks,
+2.35.1.1094.g7c7d902a7c-goog
 
-David / dhildenb
 
+--j3c8VscvnAccrGCY--

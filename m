@@ -2,356 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC1A4EF8B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC244EF8B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349616AbiDARMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S1349610AbiDARPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239345AbiDARMa (ORCPT
+        with ESMTP id S236126AbiDARPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:12:30 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181C92DA93
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:10:40 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id c7so5257147wrd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gtc0r33WP14cEsrZqwD4QZdIHMMUqw4VRfbzyFN9zcI=;
-        b=T86KnLvcENK6vxHzQQBGs+xno70D0fUd5uHERzr2EUB2h1RyMvB3L8bFM2kARK2wEw
-         zpqa8lwLvGiCtLqaU7Xyo8BIJiwzW8xifpHUHbYVWtMTts+ysAd19ytTaH+Uy3w1xZx3
-         7REKmZmq8Oo42q3J2zKP3nxjAmwaSozY7nE/Qk3IlNPPvi+lIimmabSia+I/truHNKEc
-         GLXqVkJnvF77KGkJiYW8sjZmvz1S24oFDNPafeCgjL5wsxb1y/V9v/5pPKRuD4hhm8nC
-         65d6WzqNF0IZ+jDniL2urfXfGhQKDywghq/LeNIthHTNMalGtX0FMcUQY653Az+w9SZ/
-         drJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gtc0r33WP14cEsrZqwD4QZdIHMMUqw4VRfbzyFN9zcI=;
-        b=a3DtS37EZOe8ORLGSoazeno3nJfyWh4wkCgfwquBTenuhA+O7N6lJ8e5JTZI3pB2UL
-         KlqcKLPhu27o0uQZ8cIaauEtmbzN0i98peNix57R7hmaHF0u3SzkGVLjSSgJdS4lvG4H
-         KE18A8UGI6Xty2lQMyPiosWTxhXcAwWGpOvMIs4gfZZbKsChKgIOZSRdlPjAAHwVybCd
-         lAfA8S+YdRssj8pjVBugi0j3AY9DuK5yX+eB4389YQeqWoTbqRK9/r9SwxRSPJVaj38c
-         hi6gPg9URBrq1i0wi/+r2gMiloZJopbpeXXffo7VzjP6Ej/rU9fZghX7/KftuW1X/W+v
-         3ugQ==
-X-Gm-Message-State: AOAM533DFpPD4vClCTb0bB4FcQjKAy50mJA9aMYRsjLhrRDstNDmMKnI
-        LrVWUK79trJ394+uHJjoXLvykg==
-X-Google-Smtp-Source: ABdhPJweuNmNgYcc50tSfFZ4+bVpsorn2yZtJtgONlQG0fxnUHa8+DlQjc/iAekVuWT/1loBlkWiOQ==
-X-Received: by 2002:a05:6000:1010:b0:204:c3c0:ad93 with SMTP id a16-20020a056000101000b00204c3c0ad93mr8342432wrx.311.1648833038514;
-        Fri, 01 Apr 2022 10:10:38 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c4f1300b0038cb924c3d7sm2601728wmq.45.2022.04.01.10.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 10:10:38 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: soc: qcom,smp2p: convert to dtschema
-Date:   Fri,  1 Apr 2022 19:10:35 +0200
-Message-Id: <20220401171035.1096670-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 1 Apr 2022 13:15:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB51171568;
+        Fri,  1 Apr 2022 10:13:51 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 231FflMg001896;
+        Fri, 1 Apr 2022 17:13:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=aZUktyIygGRp6+G92Fu4LfZjLn/Rve4c0PVNF2gACXI=;
+ b=gzw9CB4QtgD7IAZZ2dgKACWmTdZPplCDYIa3QUx+0t0K4UBVT7eOUFhpM3oPHxW/9OFX
+ JNiUzvKtNnyD7b6fews5KOpZxntcn6SmJDVJcS04gafO+r9AdArQOlWTXbMw/mPOUv9S
+ qvoKpi8ZJeELp/tvSVLHXrs3iGt4cemNjJOZVSvnLPVvLtCFfpZAo2ES4fZGUBuUPTp0
+ UKRGqwTTiYw9cnIgLb6MEeUlOLvnHVlwAoKigEJKTrEZFpDDcOq7NnfFbSZgjQ7HaxoI
+ cvY8uu+Bh3h5jIdZHTKuWj2n8IbWwEcLGtf4EBBU74TdGMXNLK0dhel/aLUZNl3Y4tmA IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f648s1ufn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 17:13:46 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 231GuAbl010416;
+        Fri, 1 Apr 2022 17:13:45 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f648s1uf5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 17:13:45 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 231HChX4029868;
+        Fri, 1 Apr 2022 17:13:44 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3f1tf95f3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 17:13:43 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 231H1aom45482284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Apr 2022 17:01:36 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 73ECBA405F;
+        Fri,  1 Apr 2022 17:13:40 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D5679A4051;
+        Fri,  1 Apr 2022 17:13:39 +0000 (GMT)
+Received: from [9.171.0.19] (unknown [9.171.0.19])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  1 Apr 2022 17:13:39 +0000 (GMT)
+Message-ID: <e191fbc0-9471-5cde-7698-cdd32d83051f@linux.ibm.com>
+Date:   Fri, 1 Apr 2022 19:13:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] KVM: s390: Don't indicate suppression on dirtying,
+ failing memop
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20220401170247.1287354-1-scgl@linux.ibm.com>
+ <20220401170247.1287354-2-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220401170247.1287354-2-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -RIGjg4fk1WFLx9wiwfUYGXh6t-JfNkp
+X-Proofpoint-ORIG-GUID: Sjr6veBoeqkutd937-Pow2z7yjcb4hdH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-01_05,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=991
+ bulkscore=0 spamscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204010082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm Shared Memory Point 2 Point bindings to DT Schema.
 
-Changes against original bindings: enforce only specific names of child
-nodes, instead of any names.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/soc/qcom/qcom,smp2p.txt          | 110 -------------
- .../bindings/soc/qcom/qcom,smp2p.yaml         | 145 ++++++++++++++++++
- 2 files changed, 145 insertions(+), 110 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
+Am 01.04.22 um 19:02 schrieb Janis Schoetterl-Glausch:
+> If user space uses a memop to emulate an instruction and that
+> memop fails, the execution of the instruction ends.
+> Instruction execution can end in different ways, one of which is
+> suppression, which requires that the instruction execute like a no-op.
+> A writing memop that spans multiple pages and fails due to key
+> protection can modified guest memory. Therefore do not indicate a
+> suppressing instruction ending in this case.
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.txt
-deleted file mode 100644
-index 49e1d72d3648..000000000000
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.txt
-+++ /dev/null
-@@ -1,110 +0,0 @@
--Qualcomm Shared Memory Point 2 Point binding
--
--The Shared Memory Point to Point (SMP2P) protocol facilitates communication of
--a single 32-bit value between two processors.  Each value has a single writer
--(the local side) and a single reader (the remote side).  Values are uniquely
--identified in the system by the directed edge (local processor ID to remote
--processor ID) and a string identifier.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be one of:
--		    "qcom,smp2p"
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: one entry specifying the smp2p notification interrupt
--
--- mboxes:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: reference to the associated doorbell in APCS, as described
--		    in mailbox/mailbox.txt
--
--- qcom,ipc:
--	Usage: required, unless mboxes is specified
--	Value type: <prop-encoded-array>
--	Definition: three entries specifying the outgoing ipc bit used for
--		    signaling the remote end of the smp2p edge:
--		    - phandle to a syscon node representing the apcs registers
--		    - u32 representing offset to the register within the syscon
--		    - u32 representing the ipc bit within the register
--
--- qcom,smem:
--	Usage: required
--	Value type: <u32 array>
--	Definition: two identifiers of the inbound and outbound smem items used
--		    for this edge
--
--- qcom,local-pid:
--	Usage: required
--	Value type: <u32>
--	Definition: specifies the identifier of the local endpoint of this edge
--
--- qcom,remote-pid:
--	Usage: required
--	Value type: <u32>
--	Definition: specifies the identifier of the remote endpoint of this edge
--
--= SUBNODES
--Each SMP2P pair contain a set of inbound and outbound entries, these are
--described in subnodes of the smp2p device node. The node names are not
--important.
--
--- qcom,entry-name:
--	Usage: required
--	Value type: <string>
--	Definition: specifies the name of this entry, for inbound entries this
--		    will be used to match against the remotely allocated entry
--		    and for outbound entries this name is used for allocating
--		    entries
--
--- interrupt-controller:
--	Usage: required for incoming entries
--	Value type: <empty>
--	Definition: marks the entry as inbound; the node should be specified
--		    as a two cell interrupt-controller as defined in
--		    "../interrupt-controller/interrupts.txt"
--		    If not specified this node will denote the outgoing entry
--
--- #interrupt-cells:
--	Usage: required for incoming entries
--	Value type: <u32>
--	Definition: must be 2 - denoting the bit in the entry and IRQ flags
--
--- #qcom,smem-state-cells:
--	Usage: required for outgoing entries
--	Value type: <u32>
--	Definition: must be 1 - denoting the bit in the entry
--
--= EXAMPLE
--The following example shows the SMP2P setup with the wireless processor,
--defined from the 8974 apps processor's point-of-view. It encompasses one
--inbound and one outbound entry:
--
--wcnss-smp2p {
--	compatible = "qcom,smp2p";
--	qcom,smem = <431>, <451>;
--
--	interrupts = <0 143 1>;
--
--	qcom,ipc = <&apcs 8 18>;
--
--	qcom,local-pid = <0>;
--	qcom,remote-pid = <4>;
--
--	wcnss_smp2p_out: master-kernel {
--		qcom,entry-name = "master-kernel";
--
--		#qcom,smem-state-cells = <1>;
--	};
--
--	wcnss_smp2p_in: slave-kernel {
--		qcom,entry-name = "slave-kernel";
--
--		interrupt-controller;
--		#interrupt-cells = <2>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-new file mode 100644
-index 000000000000..8c362ce3c05b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-@@ -0,0 +1,145 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,smp2p.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Shared Memory Point 2 Point
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  The Shared Memory Point to Point (SMP2P) protocol facilitates communication
-+  of a single 32-bit value between two processors.  Each value has a single
-+  writer (the local side) and a single reader (the remote side).  Values are
-+  uniquely identified in the system by the directed edge (local processor ID to
-+  remote processor ID) and a string identifier.
-+
-+properties:
-+  compatible:
-+    const: qcom,smp2p
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  mboxes:
-+    maxItems: 1
-+    description:
-+      Reference to the mailbox representing the outgoing doorbell in APCS for
-+      this client.
-+
-+  qcom,ipc:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: phandle to a syscon node representing the apcs registers
-+          - description: u32 representing offset to the register within the syscon
-+          - description: u32 representing the ipc bit within the register
-+    description:
-+      Three entries specifying the outgoing ipc bit used for signaling the
-+      remote end of the smp2p edge.
-+
-+  qcom,local-pid:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description:
-+      The identifier of the local endpoint of this edge.
-+
-+  qcom,remote-pid:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description:
-+      The identifier of the remote endpoint of this edge.
-+
-+  qcom,smem:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    items:
-+      maxItems: 2
-+    description:
-+      Two identifiers of the inbound and outbound smem items used for this edge.
-+
-+patternProperties:
-+  "^master-kernel|slave-kernel|ipa-ap-to-modem|ipa-modem-to-ap$":
-+    type: object
-+    description:
-+      Each SMP2P pair contain a set of inbound and outbound entries, these are
-+      described in subnodes of the smp2p device node. The node names are not
-+      important.
-+
-+    properties:
-+      interrupt-controller:
-+        description:
-+          Marks the entry as inbound; the node should be specified as a two
-+          cell interrupt-controller.  If not specified this node will denote
-+          the outgoing entry.
-+
-+      '#interrupt-cells':
-+        const: 2
-+
-+      qcom,entry-name:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        description:
-+          The name of this entry, for inbound entries this will be used to
-+          match against the remotely allocated entry and for outbound entries
-+          this name is used for allocating entries.
-+
-+      '#qcom,smem-state-cells':
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        const: 1
-+        description:
-+          Required for outgoing entries.
-+
-+    required:
-+      - qcom,entry-name
-+
-+    oneOf:
-+      - required:
-+          - interrupt-controller
-+          - '#interrupt-cells'
-+      - required:
-+          - '#qcom,smem-state-cells'
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - qcom,local-pid
-+  - qcom,remote-pid
-+  - qcom,smem
-+
-+oneOf:
-+  - required:
-+      - mboxes
-+  - required:
-+      - qcom,ipc
-+
-+additionalProperties: false
-+
-+examples:
-+  # The following example shows the SMP2P setup with the wireless processor,
-+  # defined from the 8974 apps processor's point-of-view. It encompasses one
-+  # inbound and one outbound entry.
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    shared-memory {
-+        compatible = "qcom,smp2p";
-+        qcom,smem = <431>, <451>;
-+        interrupts = <GIC_SPI 143 IRQ_TYPE_EDGE_RISING>;
-+        qcom,ipc = <&apcs 8 18>;
-+        qcom,local-pid = <0>;
-+        qcom,remote-pid = <4>;
-+
-+        wcnss_smp2p_out: master-kernel {
-+            qcom,entry-name = "master-kernel";
-+            #qcom,smem-state-cells = <1>;
-+        };
-+
-+        wcnss_smp2p_in: slave-kernel {
-+            qcom,entry-name = "slave-kernel";
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+        };
-+    };
--- 
-2.32.0
-
+Make it explicit in the changelog that this is "terminating" instead of
+"suppressing". z/VM has the same logic and the architecture allows for
+terminating in those cases (even for ESOP2).
+  >
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>   arch/s390/kvm/gaccess.c | 47 ++++++++++++++++++++++++-----------------
+>   1 file changed, 28 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> index d53a183c2005..3b1fbef82288 100644
+> --- a/arch/s390/kvm/gaccess.c
+> +++ b/arch/s390/kvm/gaccess.c
+> @@ -491,8 +491,8 @@ enum prot_type {
+>   	PROT_TYPE_IEP  = 4,
+>   };
+>   
+> -static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
+> -		     u8 ar, enum gacc_mode mode, enum prot_type prot)
+> +static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
+> +			    enum gacc_mode mode, enum prot_type prot, bool suppress)
+>   {
+>   	struct kvm_s390_pgm_info *pgm = &vcpu->arch.pgm;
+>   	struct trans_exc_code_bits *tec;
+> @@ -503,22 +503,24 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
+>   
+>   	switch (code) {
+>   	case PGM_PROTECTION:
+> -		switch (prot) {
+> -		case PROT_TYPE_IEP:
+> -			tec->b61 = 1;
+> -			fallthrough;
+> -		case PROT_TYPE_LA:
+> -			tec->b56 = 1;
+> -			break;
+> -		case PROT_TYPE_KEYC:
+> -			tec->b60 = 1;
+> -			break;
+> -		case PROT_TYPE_ALC:
+> -			tec->b60 = 1;
+> -			fallthrough;
+> -		case PROT_TYPE_DAT:
+> -			tec->b61 = 1;
+> -			break;
+> +		if (suppress) {
+> +			switch (prot) {
+> +			case PROT_TYPE_IEP:
+> +				tec->b61 = 1;
+> +				fallthrough;
+> +			case PROT_TYPE_LA:
+> +				tec->b56 = 1;
+> +				break;
+> +			case PROT_TYPE_KEYC:
+> +				tec->b60 = 1;
+> +				break;
+> +			case PROT_TYPE_ALC:
+> +				tec->b60 = 1;
+> +				fallthrough;
+> +			case PROT_TYPE_DAT:
+> +				tec->b61 = 1;
+> +				break;
+> +			}
+>   		}
+>   		fallthrough;
+>   	case PGM_ASCE_TYPE:
+> @@ -552,6 +554,12 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
+>   	return code;
+>   }
+>   
+> +static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
+> +		     enum gacc_mode mode, enum prot_type prot)
+> +{
+> +	return trans_exc_ending(vcpu, code, gva, ar, mode, prot, true);
+> +}
+> +
+>   static int get_vcpu_asce(struct kvm_vcpu *vcpu, union asce *asce,
+>   			 unsigned long ga, u8 ar, enum gacc_mode mode)
+>   {
+> @@ -1110,7 +1118,8 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+>   		ga = kvm_s390_logical_to_effective(vcpu, ga + fragment_len);
+>   	}
+>   	if (rc > 0)
+> -		rc = trans_exc(vcpu, rc, ga, ar, mode, prot);
+> +		rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot,
+> +				      (mode != GACC_STORE) || (idx == 0));
+>   out_unlock:
+>   	if (need_ipte_lock)
+>   		ipte_unlock(vcpu);

@@ -2,139 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DF04EF907
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DE54EF8F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350180AbiDARjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S1349715AbiDARbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbiDARjL (ORCPT
+        with ESMTP id S1347621AbiDARbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:39:11 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED82F20A3B6;
-        Fri,  1 Apr 2022 10:37:17 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 231G9jLc018254;
-        Fri, 1 Apr 2022 17:29:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=IWEKHRJ+fTq1DXKGcxx15f9MF6DQXhL75wZkQHTjY3E=;
- b=R/kzY6m+2ynGFjiCcHxmA9rRLU980gxYvsThUIVNS2Bu6krl1dBR1oZjzO8kea97fnzR
- ibbTe6q2iQ1drncqNb7EcR+niApcWMhFj9SS1zpaPotxbUr4TDraz5SeKaIqikrucG1h
- XRR+awR53mlBgDbNCenSQdB6wUwtbzagG3fQCm5NgGfp2uIMcZV16Y/CYLNMBH72WLSA
- oZq4v59AW2AnopdC8Bpo9mUStiVFkEIf1fs0TSFjZK2qhRuC52C5/9EUmG1YMXiXnADd
- 4VGP4LJjgGLw2KChTb9GXH0FVT7aWdoRCoEW6zNxmmpVHa5Pi1b4b3S2v1wY68StwZQR jA== 
-Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3f60uptts7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Apr 2022 17:29:08 +0000
-Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 8898357;
-        Fri,  1 Apr 2022 17:29:07 +0000 (UTC)
-Received: from ubuntu-20.04.3 (unknown [16.116.198.225])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 47D994B;
-        Fri,  1 Apr 2022 17:29:05 +0000 (UTC)
-From:   james.liu@hpe.com
-To:     rafael@kernel.org, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rwright@hpe.com, david.chang@hpe.co, clayc@hpe.com,
-        james.liu@hpe.com
-Subject: [PATCH]     ACPI: OSL: Fix the memory mapping of an ACPI GAS that addresses a data structure
-Date:   Fri,  1 Apr 2022 17:28:40 +0000
-Message-Id: <20220401172840.1252-1-james.liu@hpe.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Apr 2022 13:31:00 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDAF16DB6E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:29:10 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-d6ca46da48so3386862fac.12
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WraNq3noA/oHiDCjdg83h3Em4sODbXuxqxGa7fOH8ng=;
+        b=EsSECRyZjkVgBr1ClmR85DHg4N2nM7LFSOrbUSP+8C949qfg6GkveD5ES9E3SShZyZ
+         l4IPUKyvTHVumFZ9Dx8c2Luhu6rpCOrogAIXZ802DTlPka7u7JKOfjUljz/BAuPdRO0x
+         4Dx+gUlLKfDXSx2xVax3IkWYAy5V/cGSFOTK4dF1U80HifkUuGn0HWjfamK0JDGcBWM3
+         Ba1L3XJpeR0xUZp61b3NslEhzWr+Y+33udJpb8HxjqcIjm2FNp8DihAabvqyCvze7b1N
+         DusTQPre2DAIwUnKPYtCOWP0BS5ej/2M4GLYLKDgvgDq7cuq/+jceqBMy8B2vNCI5Tki
+         IAVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WraNq3noA/oHiDCjdg83h3Em4sODbXuxqxGa7fOH8ng=;
+        b=CuKgCXkRdVDh2kdor8ikmEcZHDVNU5jPtyrKmzvKpdaSA5kk+4EHMRsXV2bu2jsjmo
+         h1sOn1XC+F/ZjtEU/gXMjYqdJsevi9oaG532uJpLtmmYaqkX7qJgC9tykdaa5nxmi4Me
+         MBJHYs0GHvMTJwcjq1eFH0Ywaob6DBytsmtyb3l2E/44LQBvVtmS1a7fC7/rQeK/1sBe
+         jgs0z+y7TF7xChck7gGDcedZ4/JnrWNIE5Yg4Hrq9iGkmbFVK/X/aCIpQnabK4Befz2a
+         EqN9Z4ve8EuN/siS3bz9MoG19hUS0Eha0G93XVD26D3vvNj8SydfwZ9SYBIIj9oCawzC
+         bqZg==
+X-Gm-Message-State: AOAM533xLboLC1pNgbkqMG4UFaPGqtNydBYTq4/xJrnXUuWfcKTwd8m0
+        yF0o4VaZtYBMBoNatV8wLXxQuAqHUz7iyTN/i3YsFQ==
+X-Google-Smtp-Source: ABdhPJznFK2GQmOfuSdixOKziz2XOo/OGu52BVauEjLHcwnKrfyjITdvyw8UBW3cpa+rXmCw1sWOkZtnIbQUQLaG8SE=
+X-Received: by 2002:a05:6870:40cc:b0:de:15e7:4df0 with SMTP id
+ l12-20020a05687040cc00b000de15e74df0mr5635386oal.110.1648834149772; Fri, 01
+ Apr 2022 10:29:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 8n1cIHgXF3AJkwOoNdF5kd7vptPv2_rX
-X-Proofpoint-ORIG-GUID: 8n1cIHgXF3AJkwOoNdF5kd7vptPv2_rX
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-01_05,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=955 mlxscore=0 spamscore=0
- bulkscore=0 phishscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204010083
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220308043857.13652-1-nikunj@amd.com> <YkIh8zM7XfhsFN8L@google.com>
+ <c4b33753-01d7-684e-23ac-1189bd217761@amd.com> <YkSz1R3YuFszcZrY@google.com>
+ <5567f4ec-bbcf-4caf-16c1-3621b77a1779@amd.com> <CAMkAt6px4A0CyuZ8h7zKzTxQUrZMYEkDXbvZ=3v+kphRTRDjNA@mail.gmail.com>
+ <YkX6aKymqZzD0bwb@google.com>
+In-Reply-To: <YkX6aKymqZzD0bwb@google.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Fri, 1 Apr 2022 10:28:58 -0700
+Message-ID: <CAA03e5GXmo33OOyxb08L5Ztz1dP-OSsPzeo0HK73p9ShvnMmRg@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Bharata B Rao <bharata@amd.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Mingwei Zhang <mizhang@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Liu <james.liu@hpe.com>
+On Thu, Mar 31, 2022 at 12:01 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Mar 31, 2022, Peter Gonda wrote:
+> > On Wed, Mar 30, 2022 at 10:48 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
+> > > On 3/31/2022 1:17 AM, Sean Christopherson wrote:
+> > > > On Wed, Mar 30, 2022, Nikunj A. Dadhania wrote:
+> > > >> On 3/29/2022 2:30 AM, Sean Christopherson wrote:
+> > > >>> Let me preface this by saying I generally like the idea and especially the
+> > > >>> performance, but...
+> > > >>>
+> > > >>> I think we should abandon this approach in favor of committing all our resources
+> > > >>> to fd-based private memory[*], which (if done right) will provide on-demand pinning
+> > > >>> for "free".
+> > > >>
+> > > >> I will give this a try for SEV, was on my todo list.
+> > > >>
+> > > >>> I would much rather get that support merged sooner than later, and use
+> > > >>> it as a carrot for legacy SEV to get users to move over to its new APIs, with a long
+> > > >>> term goal of deprecating and disallowing SEV/SEV-ES guests without fd-based private
+> > > >>> memory.
+> > > >>
+> > > >>> That would require guest kernel support to communicate private vs. shared,
+> > > >>
+> > > >> Could you explain this in more detail? This is required for punching hole for shared pages?
+> > > >
+> > > > Unlike SEV-SNP, which enumerates private vs. shared in the error code, SEV and SEV-ES
+> > > > don't provide private vs. shared information to the host (KVM) on page fault.  And
+> > > > it's even more fundamental then that, as SEV/SEV-ES won't even fault if the guest
+> > > > accesses the "wrong" GPA variant, they'll silent consume/corrupt data.
+> > > >
+> > > > That means KVM can't support implicit conversions for SEV/SEV-ES, and so an explicit
+> > > > hypercall is mandatory.  SEV doesn't even have a vendor-agnostic guest/host paravirt
+> > > > ABI, and IIRC SEV-ES doesn't provide a conversion/map hypercall in the GHCB spec, so
+> > > > running a SEV/SEV-ES guest under UPM would require the guest firmware+kernel to be
+> > > > properly enlightened beyond what is required architecturally.
+> > > >
+> > >
+> > > So with guest supporting KVM_FEATURE_HC_MAP_GPA_RANGE and host (KVM) supporting
+> > > KVM_HC_MAP_GPA_RANGE hypercall, SEV/SEV-ES guest should communicate private/shared
+> > > pages to the hypervisor, this information can be used to mark page shared/private.
+> >
+> > One concern here may be that the VMM doesn't know which guests have
+> > KVM_FEATURE_HC_MAP_GPA_RANGE support and which don't. Only once the
+> > guest boots does the guest tell KVM that it supports
+> > KVM_FEATURE_HC_MAP_GPA_RANGE. If the guest doesn't we need to pin all
+> > the memory before we run the guest to be safe to be safe.
+>
+> Yep, that's a big reason why I view purging the existing SEV memory management as
+> a long term goal.  The other being that userspace obviously needs to be updated to
+> support UPM[*].   I suspect the only feasible way to enable this for SEV/SEV-ES
+> would be to restrict it to new VM types that have a disclaimer regarding additional
+> requirements.
+>
+> [*] I believe Peter coined the UPM acronym for "Unmapping guest Private Memory".  We've
+>     been using it iternally for discussion and it rolls off the tongue a lot easier than
+>     the full phrase, and is much more precise/descriptive than just "private fd".
 
-    Modify acpi_os_map_generic_address and acpi_os_unmap_generic_address
-    to handle a case that a GAS table (i.e., Table 5.1 in ACPI 6.4) is used
-    to address a data structure; in this case, the GAS has the field of
-    "Register Bit Width" equal to 0.
+Can we really "purge the existing SEV memory management"? This seems
+like a non-starter because it violates userspace API (i.e., the
+ability for the userspace VMM to run a guest without
+KVM_FEATURE_HC_MAP_GPA_RANGE). Or maybe I'm not quite following what
+you mean by purge.
 
-    For example, "Injection Instruction Entry" (Table 18.25 in ACPI 6.4)
-    has a RegisterRegion field that is a GAS that points to a data
-    structure SET_ERROR_TYPE_WITH_ADDRESS (Table 18.30), which is required
-    when using EINJ (Error Injection module).
+Assuming that UPM-based lazy pinning comes together via a new VM type
+that only supports new images based on a minimum kernel version with
+KVM_FEATURE_HC_MAP_GPA_RANGE, then I think this would like as follows:
 
-    This fix preserves a fairly sufficient memory space (i.e., page size)
-    to store the data structure so as to prevent EINJ module from loading
-    failure if platform firmware can support Injection Instruction Entry in
-    an EINJ table.
+1. Userspace VMM: Check SEV VM type. If type is legacy SEV type then
+do upfront pinning. Else, skip up front pinning.
+2. KVM: I'm not sure anything special needs to happen here. For the
+legacy VM types, it can be configured to use legacy memslots,
+presumably the same as non-CVMs will be configured. For the new VM
+type, it should be configured to use UPM.
+3. Control plane (thing creating VMs): Responsible for not allowing
+legacy SEV images (i.e., images without KVM_FEATURE_HC_MAP_GPA_RANGE)
+with the new SEV VM types that use UPM and have support for demand
+pinning.
 
-Signed-off-by: James Liu <james.liu@hpe.com>
----
- drivers/acpi/osl.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
-index 45c5c0e45..ab2f584b1 100644
---- a/drivers/acpi/osl.c
-+++ b/drivers/acpi/osl.c
-@@ -457,9 +457,15 @@ void __iomem *acpi_os_map_generic_address(struct acpi_generic_address *gas)
- 	if (gas->space_id != ACPI_ADR_SPACE_SYSTEM_MEMORY)
- 		return NULL;
- 
-+	/* Handle a case that GAS is used to address an ACPI data structure */
-+	if (!gas->bit_width) {
-+		pr_info("An ACPI data structure at 0x%llx is mapped\n", addr);
-+		return  acpi_os_map_iomem(addr, PAGE_SIZE);
-+	}
-+
- 	/* Handle possible alignment issues */
- 	memcpy(&addr, &gas->address, sizeof(addr));
--	if (!addr || !gas->bit_width)
-+	if (!addr)
- 		return NULL;
- 
- 	return acpi_os_map_iomem(addr, gas->bit_width / 8);
-@@ -474,9 +480,22 @@ void acpi_os_unmap_generic_address(struct acpi_generic_address *gas)
- 	if (gas->space_id != ACPI_ADR_SPACE_SYSTEM_MEMORY)
- 		return;
- 
-+	/* Handle a case that GAS is used to address an ACPI data structure */
-+	if (!gas->bit_width) {
-+		pr_info("An ACPI data structure at 0x%llx is unmapped\n", addr);
-+		mutex_lock(&acpi_ioremap_lock);
-+		map = acpi_map_lookup(addr, PAGE_SIZE);
-+		if (!map) {
-+			mutex_unlock(&acpi_ioremap_lock);
-+			return;
-+		}
-+		acpi_os_drop_map_ref(map);
-+		mutex_unlock(&acpi_ioremap_lock);
-+	}
-+
- 	/* Handle possible alignment issues */
- 	memcpy(&addr, &gas->address, sizeof(addr));
--	if (!addr || !gas->bit_width)
-+	if (!addr)
- 		return;
- 
- 	mutex_lock(&acpi_ioremap_lock);
--- 
-2.25.1
-
+Sean: Did I get this right?

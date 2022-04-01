@@ -2,228 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C424EFA03
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50D64EFA04
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351296AbiDASll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S1350104AbiDASmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351309AbiDASli (ORCPT
+        with ESMTP id S236447AbiDASmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:41:38 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BB71C64BE;
-        Fri,  1 Apr 2022 11:39:42 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 11:39:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1648838379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6MXwbAGbQP70Qk5CWwghKxNTCCf5Db8LdlAQSCU25Lc=;
-        b=vujg/j2hWKeqP8EtI7uVXt5LCe+pnOAJ1RZX27gn84Aji9T/TsxpWa83IyUU1iEXxb6Nu1
-        8odRVt2wjEoQKfOJY03nDiwIOplwiGAmAsIHjvKcBRDhukRrSqb7l4YqsX3W8ftpgXUfBy
-        5aC9HYQGD3RcMeSHLYIWNC95i8+wKhw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-Message-ID: <YkdG4nv/uKI0EtMp@carbon.dhcp.thefacebook.com>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <YkXkA+Oh1Bx33PrU@carbon.dhcp.thefacebook.com>
- <CAJD7tkYVpnf1+sa9vRAQCw5H0LUH6zE6_yhNAFwKF3sW0BLzEA@mail.gmail.com>
+        Fri, 1 Apr 2022 14:42:15 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B909B1C6EF1
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 11:40:24 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-d6ca46da48so3599689fac.12
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 11:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fk/O5aak+N33KC9MIWPLIbExEcKor3AEJLX4blCgxJs=;
+        b=SiPYCiMvqlOnvvJ12rA9PeRsnBQ11JhSBGYiHNiXnWO8U2t9FYIrag87+HlowHzOEq
+         QEfHwgntR/KK1/HhqDFmq7d6SWGjTpYI9ow3bjFcWPyvhmV7rm80rjtzGQMsZ31C/DtH
+         qvdaWhXfwNGg6vGHD2P1RcPUurQvw88GTUCGxMudpjFWdGYF4XpSG11+ySZ6qfrMiWoM
+         gdsl41WsJBa+BUr7WopTFUC5/k0PTeMgtN241IKFzHfGo603ShuW2Xirn4Wh71qQHehX
+         aGbFURiydzAR/YSx/IXwBf9AthIiGhteSjKuIMVqCVEPbuxrUMtu+VjjEfnqLBqlb7R4
+         FHlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fk/O5aak+N33KC9MIWPLIbExEcKor3AEJLX4blCgxJs=;
+        b=T+//QzO3emP8fg10fSm8epZ1BNjKVyXqDXBk6VeJDo8n95LadsgVdBx8U3X1OEueZw
+         tgcssfW8FYGlTbC8X3fpq7CYAazO4UhM8lubVJqerVg7QOBuxufR5Z8QQEzy+ajPKayQ
+         8FI73vuj3Dhpqbd9r1XYsLjI+EReicc+yGIr0UR8AkNH83CEWKK2LAx0utHwTQ21U9Pk
+         ZYXBF2kt5RdVCY5xv4IZoa1Cchn/svRYImlOJsnhQ0S8NqKmwmUFhnLW2Q2CGPWcYlNA
+         LuG0KaGONzbWZ6xi9Z1lNGErdnOuNpw8rtBzi9UacjEMelycQkGCD2WIFezS6lFk6OTD
+         1GOg==
+X-Gm-Message-State: AOAM532OboSuC94ZZEZc+E5IXdfPXRB6KFs122AtEGHwaor+vDE3fSV0
+        I4Rtq8BhUq/MYeLL4KZwmrg=
+X-Google-Smtp-Source: ABdhPJw6ApqVyzvZkE7AP2DkgyzvazCou+czbhV9toVYHjwbY7GETxfBbM9+pBT/ROWOZi1K0zLWVw==
+X-Received: by 2002:a05:6870:2041:b0:db:1a12:6cb1 with SMTP id l1-20020a056870204100b000db1a126cb1mr5437381oad.153.1648838424030;
+        Fri, 01 Apr 2022 11:40:24 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::1004? (2603-8090-2005-39b3-0000-0000-0000-1004.res6.spectrum.com. [2603:8090:2005:39b3::1004])
+        by smtp.gmail.com with ESMTPSA id y16-20020a9d6350000000b005c9653ab377sm1381170otk.17.2022.04.01.11.40.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 11:40:23 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <782f0115-e45f-1aff-a152-5d403c990b31@lwfinger.net>
+Date:   Fri, 1 Apr 2022 13:40:21 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkYVpnf1+sa9vRAQCw5H0LUH6zE6_yhNAFwKF3sW0BLzEA@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] staging: r8188eu: Fix PPPoE tag insertion on big endian
+ systems
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220401151257.3414576-1-linux@roeck-us.net>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <20220401151257.3414576-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 02:11:51AM -0700, Yosry Ahmed wrote:
-> On Thu, Mar 31, 2022 at 10:25 AM Roman Gushchin
-> <roman.gushchin@linux.dev> wrote:
-> >
-> > On Thu, Mar 31, 2022 at 08:41:51AM +0000, Yosry Ahmed wrote:
-> > > From: Shakeel Butt <shakeelb@google.com>
-> > >
-> > > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
-> > >
-> > > Use case: Proactive Reclaim
-> > > ---------------------------
-> > >
-> > > A userspace proactive reclaimer can continuously probe the memcg to
-> > > reclaim a small amount of memory. This gives more accurate and
-> > > up-to-date workingset estimation as the LRUs are continuously
-> > > sorted and can potentially provide more deterministic memory
-> > > overcommit behavior. The memory overcommit controller can provide
-> > > more proactive response to the changing behavior of the running
-> > > applications instead of being reactive.
-> > >
-> > > A userspace reclaimer's purpose in this case is not a complete replacement
-> > > for kswapd or direct reclaim, it is to proactively identify memory savings
-> > > opportunities and reclaim some amount of cold pages set by the policy
-> > > to free up the memory for more demanding jobs or scheduling new jobs.
-> > >
-> > > A user space proactive reclaimer is used in Google data centers.
-> > > Additionally, Meta's TMO paper recently referenced a very similar
-> > > interface used for user space proactive reclaim:
-> > > https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
-> > >
-> > > Benefits of a user space reclaimer:
-> > > -----------------------------------
-> > >
-> > > 1) More flexible on who should be charged for the cpu of the memory
-> > > reclaim. For proactive reclaim, it makes more sense to be centralized.
-> > >
-> > > 2) More flexible on dedicating the resources (like cpu). The memory
-> > > overcommit controller can balance the cost between the cpu usage and
-> > > the memory reclaimed.
-> > >
-> > > 3) Provides a way to the applications to keep their LRUs sorted, so,
-> > > under memory pressure better reclaim candidates are selected. This also
-> > > gives more accurate and uptodate notion of working set for an
-> > > application.
-> > >
-> > > Why memory.high is not enough?
-> > > ------------------------------
-> > >
-> > > - memory.high can be used to trigger reclaim in a memcg and can
-> > >   potentially be used for proactive reclaim.
-> > >   However there is a big downside in using memory.high. It can potentially
-> > >   introduce high reclaim stalls in the target application as the
-> > >   allocations from the processes or the threads of the application can hit
-> > >   the temporary memory.high limit.
-> > >
-> > > - Userspace proactive reclaimers usually use feedback loops to decide
-> > >   how much memory to proactively reclaim from a workload. The metrics
-> > >   used for this are usually either refaults or PSI, and these metrics
-> > >   will become messy if the application gets throttled by hitting the
-> > >   high limit.
-> > >
-> > > - memory.high is a stateful interface, if the userspace proactive
-> > >   reclaimer crashes for any reason while triggering reclaim it can leave
-> > >   the application in a bad state.
-> > >
-> > > - If a workload is rapidly expanding, setting memory.high to proactively
-> > >   reclaim memory can result in actually reclaiming more memory than
-> > >   intended.
-> > >
-> > > The benefits of such interface and shortcomings of existing interface
-> > > were further discussed in this RFC thread:
-> > > https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
-> >
-> > Hello!
-> >
-> > I'm totally up for the proposed feature! It makes total sense and is proved
-> > to be useful, let's add it.
-> >
-> > >
-> > > Interface:
-> > > ----------
-> > >
-> > > Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> > > trigger reclaim in the target memory cgroup.
-> > >
-> > >
-> > > Possible Extensions:
-> > > --------------------
-> > >
-> > > - This interface can be extended with an additional parameter or flags
-> > >   to allow specifying one or more types of memory to reclaim from (e.g.
-> > >   file, anon, ..).
-> > >
-> > > - The interface can also be extended with a node mask to reclaim from
-> > >   specific nodes. This has use cases for reclaim-based demotion in memory
-> > >   tiering systens.
-> > >
-> > > - A similar per-node interface can also be added to support proactive
-> > >   reclaim and reclaim-based demotion in systems without memcg.
-> >
-> > Maybe an option to specify a timeout? That might simplify the userspace part.
-> > Also, please please add a test to selftests/cgroup/memcg tests.
-> > It will also provide an example on how the userspace can use the feature.
-> >
+On 4/1/22 10:12, Guenter Roeck wrote:
+> In __nat25_add_pppoe_tag(), the tag length is read from the tag data
+> structure. The value is kept in network format, but read as raw value.
+> With -Warray-bounds, this results in the following gcc error/warning
+> when building the driver on a big endian system such as alpha.
 > 
-> Hi Roman, thanks for taking the time to review this!
+> In function '__nat25_add_pppoe_tag',
+>      inlined from 'nat25_db_handle' at
+> 	drivers/staging/r8188eu/core/rtw_br_ext.c:479:11:
+> arch/alpha/include/asm/string.h:22:16: error:
+> 	'__builtin_memcpy' forming offset [40, 2051] is out of the bounds
+> 	[0, 40] of object 'tag_buf' with type 'unsigned char[40]'
 > 
-> A timeout can be a good extension, I will add it to the commit message
-> in the next version in possible extensions.
+> Add the missing ntohs().
 > 
-> I will add a test in v2, thanks!
-
-Great, thank you!
-
+> Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+> Cc: Phillip Potter <phil@philpotter.co.uk>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>   drivers/staging/r8188eu/core/rtw_br_ext.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> >
-> > >
-> > > For now, let's keep things simple by adding the basic functionality.
-> >
-> > What I'm worried about is how we gonna extend it? How do you see the interface
-> > with 2-3 extensions from the list above? All these extensions look very
-> > reasonable to me, so we'll likely have to implement them soon. So let's think
-> > about the extensibility now.
-> >
-> 
-> My idea is to have these extensions as optional positional arguments
-> (like Wei suggested), so that the interface does not get too
-> complicated for users who don't care about tuning these options. If
-> this is the case then I think there is nothing to worry about.
-> Otherwise, if you think some of these options make sense to be a
-> required argument instead, we can rethink the initial interface.
+> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> index d68611ef22f8..31bcd495ec04 100644
+> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> @@ -70,7 +70,7 @@ static int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
+>   	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
+>   	int data_len;
+>   
+> -	data_len = tag->tag_len + TAG_HDR_LEN;
+> +	data_len = htons(tag->tag_len) + TAG_HDR_LEN;
+>   	if (skb_tailroom(skb) < data_len)
+>   		return -1;
+>   
 
-The interface you're proposing is not really extensible, so we'll likely need to
-introduce a new interface like memory.reclaim_ext very soon. Why not create
-an extensible API from scratch?
+Strange that a BE compiler would generate a warning for what is actually an 
+execution error on LE platforms.
 
-I'm looking at cgroup v2 documentation which describes various interface files
-formats and it seems like given the number of potential optional arguments
-the best option is nested keyed (please, refer to the Interface Files section).
+I prefer be16_to_cpu() to htons() as the former makes it clearer what is 
+happening, but I suppose that is a matter of choice.
 
-E.g. the format can be:
-echo "1G type=file nodemask=1-2 timeout=30s" > memory.reclaim
+Reviewed_by: Larry Finger <Larry.Finger@lwfinger.net>
 
-We can say that now we don't support any keyed arguments, but they can be
-added in the future.
+Incidentally, Sparse shows 3 more __be16 problems in this routine. I leave their 
+fixing to you.
 
-Basically you don't even need to change any code, only document the interface
-properly, so we can extend it later without breaking the API.
+Larry
 
-> 
-> > I wonder if it makes more sense to introduce a sys_reclaim() syscall instead?
-> > In the end, such a feature might make sense on the system level too.
-> > Yes, there is the drop_caches sysctl, but it's too radical for many cases.
-> >
-> 
-> I think in the RFC discussion there was consensus to add both a
-> per-memcg knob, as well as per-node / per-system knobs (through sysfs
-> or syscalls) later. Wei also points out that it's not common for a
-> syscall to have a cgroup argument.
-
-Actually there are examples (e.g. sys_bpf), but my only point is to make
-the API extensible, so maybe syscall is not the best idea.
-
-I'd add the root level interface from scratch: the code change is simple
-and it makes sense as a feature. Then likely we don't really need another
-system-level interface at all.
-
-Thanks!

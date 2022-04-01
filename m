@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B62D4EEE45
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697534EEE60
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346410AbiDANjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
+        id S239689AbiDANo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbiDANjo (ORCPT
+        with ESMTP id S231720AbiDANo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:39:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DB527E84F;
-        Fri,  1 Apr 2022 06:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1648820275; x=1680356275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qv8FscXyHh5HjbavNwVRDW0UTLUik5p2IFzPgviCoaQ=;
-  b=ambMfjm4f8LbCOW4TSD24QEkLMX0+vdNcYprhLmWq8ts8LNkpn0/3raw
-   Pgvrajj2q9fYu6yEvB0RmQBPpmUyHl/9BAzljHelG8gIfz/qQLpPIopsR
-   eZgXA2xPnPURjiLuEUj7c2SFK1HtXFAtPFkVNZ+dp4Ub0KE6IUGHLUshZ
-   RDip4N//2ydOp/+okjHsllmAcIiXx870KotH56tqLLyT9VuIwG4O4uRld
-   EhvUzg5T0dyBrSIaTuhAgFLCWQFLnpWqYB9IXVqlUBuFe3YlJirssXd/P
-   yYO2RMP/5qwygkzKZx+uQ6E5CmShrC8H3Hg/xmTQhSlWbNy7FNt9fsjT9
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,227,1643698800"; 
-   d="scan'208";a="158971507"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2022 06:37:54 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 1 Apr 2022 06:37:51 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 1 Apr 2022 06:37:50 -0700
-Date:   Fri, 1 Apr 2022 15:40:59 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [RFC PATCH net-next 1/2] ethtool: Extend to allow to set PHY
- latencies
-Message-ID: <20220401134059.zef4ltvnux66jl2y@soft-dev3-1.localhost>
-References: <20220401093909.3341836-1-horatiu.vultur@microchip.com>
- <20220401093909.3341836-2-horatiu.vultur@microchip.com>
- <YkbxtzE/BRfz0XTW@lunn.ch>
+        Fri, 1 Apr 2022 09:44:57 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E2027F4EB
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:43:07 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id dr20so5929986ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kRGQSHbNrQ56sbIjo0fVlJQ0u1ahcNvK7/rx7vN//fU=;
+        b=POSigfPFudfJz+V4egSDKxGTnB5HpDAVi2PWRCIkSCMe6zHwz+M1g2gVx3gDoH+OfO
+         fU3SrAFaU8TidUv3pLDTkLhlwi1F9PmR2bB0JD5cfPUBRVzdeldYspsi8SrqDWfW+qrf
+         IiWaQ05EIeb4DFNYZr8fd9YxkJw+tHSkl1D4U/suibOuTuJoQ7RXlpBtpMhKCnjXOTKA
+         c3Mjh6YF4Ic3cMf6WxFZ90yY8HmxJwu4dShVCPM3sVrieRAZLtAznwI8CRWzpH8ntGA0
+         jlftKvgtiosy569jtbzNttfcORzAKdvnMHsSIOPWRjeKJN2RbfLZPi2KdPWBLSe0tarE
+         ZkzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kRGQSHbNrQ56sbIjo0fVlJQ0u1ahcNvK7/rx7vN//fU=;
+        b=zlvPkq+E6PEWH5UyQFyt8sj+6ahXdmi1y+YivXA4seIOjPq77Vn9XtJ6sQEa0Wqgx6
+         86xm+dqqMRH0JJ11mUM/ODiGFWH/4W+P+eWBYcG98XD898UaxXqlXylZfTDQiSqJq/vS
+         YjtYpuFKWQ4Nf44qRamlYO7Jw2hUphRdcFK8+bduPxOzHYb3K9Jn6h9OhbZ7wMdaAiOh
+         rcjqDUM8CzOdpZvu1VEEF/HaFulU0V+y7VBjolzgknuXUp0kLc/CxmkLN3GcvLIQGIDU
+         1YzfVNHVEHRT3cTxXxU3CD/A1+I3bFCx45zp1LgDHQTBfI3A88hK+OLlnWpc/GKV9K6s
+         xVdg==
+X-Gm-Message-State: AOAM533LKtdKJFiE2VAhwvMLrtqvPAKx8EMUhil9r/1z0nd3URnwPZmw
+        zYjo76H5jpq3OBHl8cGg8sbHoA==
+X-Google-Smtp-Source: ABdhPJwQ1HtREvWS1HonL2xj33ywp4DkIJSz+zdns6tFyQ93YEsSmnal+eYCLtgrddAv08r12QNvTA==
+X-Received: by 2002:a17:907:3f07:b0:6e0:2fa0:2482 with SMTP id hq7-20020a1709073f0700b006e02fa02482mr9289837ejc.766.1648820585959;
+        Fri, 01 Apr 2022 06:43:05 -0700 (PDT)
+Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170906145000b006bdaf981589sm1046344ejc.81.2022.04.01.06.43.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 06:43:05 -0700 (PDT)
+Message-ID: <3d03bc18-dd42-002d-739b-230b4134b866@linaro.org>
+Date:   Fri, 1 Apr 2022 15:43:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <YkbxtzE/BRfz0XTW@lunn.ch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/4] dt-bindings: vendor-prefixes: Add prefix for SINO
+ WEALTH Eletronics Ltd.
+Content-Language: en-US
+To:     Chen-Yu Tsai <wens@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Chen-Yu Tsai <wens@csie.org>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220330190846.13997-1-wens@kernel.org>
+ <20220330190846.13997-2-wens@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220330190846.13997-2-wens@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/01/2022 14:36, Andrew Lunn wrote:
+On 30/03/2022 21:08, Chen-Yu Tsai wrote:
+> From: Chen-Yu Tsai <wens@csie.org>
 > 
-> On Fri, Apr 01, 2022 at 11:39:08AM +0200, Horatiu Vultur wrote:
-> > Extend ethtool uapi to allow to configure the latencies for the PHY.
-> > Allow to configure the latency per speed and per direction.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  include/uapi/linux/ethtool.h |  6 ++++++
-> >  net/ethtool/common.c         |  6 ++++++
-> >  net/ethtool/ioctl.c          | 10 ++++++++++
-> >  3 files changed, 22 insertions(+)
-> >
-> > diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
-> > index 7bc4b8def12c..f120904a4e43 100644
-> > --- a/include/uapi/linux/ethtool.h
-> > +++ b/include/uapi/linux/ethtool.h
-> > @@ -296,6 +296,12 @@ enum phy_tunable_id {
-> >       ETHTOOL_PHY_DOWNSHIFT,
-> >       ETHTOOL_PHY_FAST_LINK_DOWN,
-> >       ETHTOOL_PHY_EDPD,
-> > +     ETHTOOL_PHY_LATENCY_RX_10MBIT,
-> > +     ETHTOOL_PHY_LATENCY_TX_10MBIT,
-> > +     ETHTOOL_PHY_LATENCY_RX_100MBIT,
-> > +     ETHTOOL_PHY_LATENCY_TX_100MBIT,
-> > +     ETHTOOL_PHY_LATENCY_RX_1000MBIT,
-> > +     ETHTOOL_PHY_LATENCY_TX_1000MBIT,
+> Add a vendor prefix entry for SINO WEALTH Eletronics Ltd.
+> (http://www.sinowealth.com).
 > 
-> How does this scale with 2.5G, 5G, 10G, 14G, 40G, etc.
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Could half duplex differ to full duplex? What about 1000BaseT vs
-> 1000BaseT1 and 1000BaseT2? The Aquantia/Marvell PHY can do both
-> 1000BaseT and 1000BaseT2 and will downshift from 4 pairs to 2 pairs if
-> you have the correct magic in its firmware blobs.
-> 
-> A more generic API would pass a link mode, a direction and a
-> latency. The driver can then return -EOPNOTSUPP for a mode it does not
-> support.
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 01430973ecec..bb4ae59a3c89 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -1128,6 +1128,8 @@ patternProperties:
+>      description: Cypress Semiconductor Corporation (Simtek Corporation)
+>    "^sinlinx,.*":
+>      description: Sinlinx Electronics Technology Co., LTD
+> +  "^sinowealth,.*":
 
-Yes, I can see your point, the proposed solution is not scalable.
-I will try implement something like you suggested.
+Alphabetical order, so after sinovoip
 
-> 
->         Andrew
+> +    description: SINO WEALTH Electronic Ltd.
+>    "^sinovoip,.*":
+>      description: SinoVoip Co., Ltd
+>    "^sipeed,.*":
 
--- 
-/Horatiu
+
+Best regards,
+Krzysztof

@@ -2,160 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED5F4EE537
+	by mail.lfdr.de (Postfix) with ESMTP id 227824EE536
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243423AbiDAAVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 20:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S243436AbiDAAVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 20:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243370AbiDAAVA (ORCPT
+        with ESMTP id S243400AbiDAAVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 20:21:00 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12olkn2085.outbound.protection.outlook.com [40.92.22.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D057111C20;
-        Thu, 31 Mar 2022 17:19:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H8AcyZ2qREMKTMkUc8HTR0CHn20WThShjptS2qOhfv+W6StBtCRT8OUbIqJmWw9UZ6SspTeP/ExYARhWss/Uv/Wz7vb9LhwDVFw2ntXiwfSO21MbLwg30VzwnJVgssI0mDKmb7fjp4aJgknra2Xfop/drUXgw39ol1YP8z5K6I4Kuku98Jt3dh5epIzBQ6dohnMqWOk063hQXPMxchLjxm4w6+jtnUU0A4B9Sk2YtlyXPP/v1cDHa+sPpfY7lHp968orcMEGiQVo1v7kP61KHyfIR3LHaZadJcNcjgztWGaG0PEGzRCNfXcqF/BdiERXvCRHBd31imJIKePXPNCvMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XMEzQu4F0mBvq7aOQq/fBrabir7c9sgCK8g5nQFjLYU=;
- b=oec/D8yE/63lBEaDhGlrj/U3PI6kWlBgIVY0nKxgmapG2jBOR29COE7z+g7h91yZMdylMTLRyr8Q4RyjRjsnik1CggLSZQjVnos1Y4K/pq37zj6/ocXr+1wmuvyVZnJnhE0MG0cCm9zWVGM20WMicSvWmaaA+i3UPPFxRxQ7r3WrSxFd27M6z0/Jhw5C6EX6FBO/D3M+PqGqyef66tIcZggwOwoq7s6nihgkUiUu8dRpv3SiD5aPCiHCa78cptT61FE4uZ7YtvbY2Q4ziifrE/n0o9fJFF2BRm2vu6XOm1uNAHbXIwCaw9e1UuMs2hNwegcJeEMHOH1C/2Tah9oMPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
- by MWHPR02MB2253.namprd02.prod.outlook.com (2603:10b6:300:5c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Fri, 1 Apr
- 2022 00:19:09 +0000
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::413f:bae6:4e5e:5ae6]) by BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::413f:bae6:4e5e:5ae6%6]) with mapi id 15.20.5123.025; Fri, 1 Apr 2022
- 00:19:09 +0000
-From:   Joel Selvaraj <jo@jsfamily.in>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Joel Selvaraj <jo@jsfamily.in>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sdm845-xiaomi-beryllium: enable qcom wled backlight and link to panel
-Date:   Fri,  1 Apr 2022 05:48:10 +0530
-Message-ID: <BY5PR02MB70092607CD7CDD8CF8BCD464D9E09@BY5PR02MB7009.namprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401001810.81507-1-jo@jsfamily.in>
-References: <20220401001810.81507-1-jo@jsfamily.in>
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [xDvow7uE4poCKjt/5+igvmqfozsigKY2ns/ub/vloTaWsblgwLA4GhmBKkvIHIJz]
-X-ClientProxiedBy: BM1PR0101CA0055.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:19::17) To BY5PR02MB7009.namprd02.prod.outlook.com
- (2603:10b6:a03:236::13)
-X-Microsoft-Original-Message-ID: <20220401001810.81507-4-jo@jsfamily.in>
+        Thu, 31 Mar 2022 20:21:02 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA5336E2F
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:19:12 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so2587324wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=topTsn3BbDfEubVD1cikcVfyc0RXu7k2rZg0bc7HcHo=;
+        b=kvy8iUb1fFHIuiK+XjgqcekL+X6UMxEzYpsrUiZ8Stm1VLlUJIAam6VAhMQAdmAbk6
+         bsSEg1aUauNnoglAjYIxKaP44MwOs+4OT4XmY7G2oqXPdj84UhOfYQ5Y08GbxveQbkvz
+         4A6Jy7qjdcj50NkLOrU34POwuYAJMBy0IPJa6ro2Gy1LkwjtLESG305tN64Rn9BcXZM1
+         amKusHf8M9dHjLnKptYtkvVO3FjH0xMZxBOuCDyPsHJK+2wK/wHwWIPCBVXdEMCTyWXt
+         ysi8ByznGhqNnsBdZySNf279wyWen3egCdQgHfElynmekbwZNfLEP9ZqBYZXFpS4AmDy
+         xuTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=topTsn3BbDfEubVD1cikcVfyc0RXu7k2rZg0bc7HcHo=;
+        b=e1bD7ZlVTRjMEDfYWdBuy9JPxnx/y0J9Mjd7TjGo6wKqKBLIBsGDOAJ6oZl9yesR+B
+         DkHikcE1PzGtk/NC96sIg66lMxHti0GdhR4d9fwa2EqvI7qbT+flrtaOeDnT4xW3xa6w
+         5tmqj9azjb9l8R5dA4kiScr/6QkbhsQOfBUZ9HUSnxlOt3rPL3nZioEDDc8PFYwm3HAr
+         uGFxVa2HuTFuG0DSAtLhDQiYytAB4WawUc1bb8gWAgwj61D99o5EVX7p4dqsGRL0CE7H
+         wl2YRSv2XXP4mmnOMdbGjRvwrXuy/lXHkWmZQQcEFxPpX5GXQKhU6jo3OEnKmtUxEBZs
+         23qw==
+X-Gm-Message-State: AOAM532mXnM+0EGRVLK+LqN/MkZgJylpyYcrX8GiEj3d4QeSuUVMB15g
+        3f0ZcuMi7FgelpqM95sBSgbI4xCVNtxq6ncCXRAINQ==
+X-Google-Smtp-Source: ABdhPJyU3aKfRMYGV4rQcmjJvbX4vx4GEoEzj2qPFt8IMYkbdKqPXLe0iMTVT88ha5fBbWcwRUdML5nEDifkS+vkK+w=
+X-Received: by 2002:a05:600c:6004:b0:38c:6c00:4316 with SMTP id
+ az4-20020a05600c600400b0038c6c004316mr6700826wmb.6.1648772350645; Thu, 31 Mar
+ 2022 17:19:10 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 96dfad78-a4fb-4351-8730-08da13753d67
-X-MS-TrafficTypeDiagnostic: MWHPR02MB2253:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Dz9GnjDOMj//WXdh4H2jNgv+/AI6KsuWJUnfWiJTQnQ38/4j9WDU1HBAaIGIBBnGOZz6u3ZP7Fnmj8zvvGfKGp4p3smIsAeX1Ac4CQukLf0aGTMvERfQ1bObcwL/U/x3yNN4TJKZ0e9DuFeQQNoxOd6LO/kmV9xSE5vBqirfZef9ks728hI+pwRZZtQhDgR/Ww49834egfbBrNPI/tSEns6c3ZUL8zkAadyBC3JmG+VndR9uVNE6N6ipKbEbzKEIk22vpm6vlg3I4ij29v/cpsVq7j7PusUhC/NRFOeTF/LDrS7Xx2PAG/r0/o2ftOiuHDzEJw1GjJiDpsQYQSLBJmoa/lidYHo/rV2I4L5zeOm4oM1KF97sCYt7nh+sP4SIP26pLaYJzAePboMRWd6oQ22uhjrOIYYhhxMnTIPYV3EhB98KTyNs7P1kC3kHTn4CaQrw9AFSpEfuOl5C/8B9Rh7RO7xIF/278sUtw4Sm68xJc+c8+Bmv2xFyS4piMHavgD3zEwHfuNKb/9TBh19daEzt7GSLVnPwJiIEQxchiG6C2aFA8Pv6ELTmisBExbtxJzl7p4Z2QeMhqy7b4o/0/w==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?muhNLRFzYq5U1zV4IR6FjvjZdichdN4zwdqZqYOAskxnCvMDdMPHv+WvBMv8?=
- =?us-ascii?Q?JraMpg3EZ2Q4pJ3K7/D/GyimZDM2+1Fyob192pvU/a8ayEhiXbDmgTJ8IkPT?=
- =?us-ascii?Q?vbtV5n5CnFp2SCUAzj3OAbMPO0TlAmfcFFqYhGmNUYo6fYM05aCDNY5pKbuX?=
- =?us-ascii?Q?kTdHLMzPwyH6CKBiQ480FxPTV1VpuejTIxsYy00vyCEI4l2yrfoQuhhtvVXC?=
- =?us-ascii?Q?RyMovcEuWlPCEKgzjitCgtbXYuaHrKieGwI1GZU/xuqWNbLDc91WQmu67XS2?=
- =?us-ascii?Q?tpUlNPmWjd6UI2eK/rjDqIomflEu1p9+h7FlB3AgGE7K0UhGq8TiWytPZgwe?=
- =?us-ascii?Q?8R2WUFyjc6myR35QA0hDcZOd7+SZB8Bh7BXUq1tRhcMrOcfVZY5hS+z3QIhh?=
- =?us-ascii?Q?5QquI7HuzQK2o/rvEunYml++IPkD8ca+TijCpHz+/aJUze+Ih4FwRyTq6r/V?=
- =?us-ascii?Q?NVXeSZtL92/25E4TrY8jvXCIoqmTHjXRBn59aWphkQCiMq48xeEcTTjrfgd0?=
- =?us-ascii?Q?Uutkbi9gvYqn526foBhn/Ot15EC95VzrMLk19+H5hdEEdcOjfh4/1kS1SxRc?=
- =?us-ascii?Q?UyGju0J1t5OGv2yAd9gv0ISHr20fAiJjBGZ+Ooj+CmokRdQHa9y4hCXSK6/k?=
- =?us-ascii?Q?kP0oYViO1Xjdi8k0UFdeL5lkv/KU+4rMkxMe1j08iI/JQA7WJQ3r+fWQXdca?=
- =?us-ascii?Q?/eY7r1Qs4XJyZ0BSo2bB68+kNyN72XEcpm/ReEwsZ481ixBwnNvYGxXyA/Cn?=
- =?us-ascii?Q?VvUE0kRoRpsbtUbfYdUAfePKaNtGz2M0fXK+5oh0mH1QxUvZH3I2YV8dlbLl?=
- =?us-ascii?Q?IZy5iPfwKvR4jhzpy7zz5PX3BjYYIE+NPAzLpE0Ps7l14p3yExwzLorGCCGK?=
- =?us-ascii?Q?Xq1Id8zH69QrJMXZb8V2kvZwySQwI+ZyvATkfQYeVkf3fW0qND2SPEqyxqJ8?=
- =?us-ascii?Q?2ZOyjNCCTYwz9tzsFvN44cQtkKz81Q/EES2DPrzDIV8eRZMoFg70UNObky7Z?=
- =?us-ascii?Q?/RSNV8lk+FCXZgH+lJbjehB/9KDWRkmpukoRfVMA1U/m1kQ63e5NF6ymUKNZ?=
- =?us-ascii?Q?gnB2ljGwAHmYtj5HzunJo6RwyAl6NaetFE6/JJCTmkP0iLvVd3jmbK2O1U9H?=
- =?us-ascii?Q?lwdXrH+SivQ8M63ginKrfHZKgFGuivxF0q9mvUpNQ9d8UamX61k9LA4VSGI3?=
- =?us-ascii?Q?ILlELKtRC9Cx8u8i2rV6Tc67DF6qMsPjGQVuvy5sJhE6NeCyZYQcMpNVFmja?=
- =?us-ascii?Q?sBkhOsWU5iMh6FQPYL4HrgE+14bp+tTS33z40mC4kaFxUbFBp3Wt3D12kvqs?=
- =?us-ascii?Q?LTFGqNwlfscpoMdYt9QvBCE6PYktNBEiDp2ntk9JF6jSjVoay2eQaw4QXU9g?=
- =?us-ascii?Q?y/g8ddCPdBS9Af2SEt8HksHwH9sI+b3dVe/yQOgjI3YQomNSb+DWEr/3bw1O?=
- =?us-ascii?Q?ZMFrBDouh3XRKzwf8PglleKGW/2TtI6NcpCUy354WDSFPuNkzS0RHg=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96dfad78-a4fb-4351-8730-08da13753d67
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 00:19:09.3806
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2253
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1648593132.git.marcelo.schmitt1@gmail.com>
+ <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
+ <CABVgOSkb5CpnXDF_m7iy=A7RmN+KmY0T38TeZ4hKbmkdQgt6Yw@mail.gmail.com> <YkSv1eUfS9MxotOz@marsc.168.1.7>
+In-Reply-To: <YkSv1eUfS9MxotOz@marsc.168.1.7>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 1 Apr 2022 08:18:59 +0800
+Message-ID: <CABVgOSnP0OXjyX5x=F4L9okDnxUYuhWuf--LZ7fcmVmg2MDmLw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Documentation: dev-tools: Enhance static analysis
+ section with discussion
+To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-sparse@vger.kernel.org, cocci@inria.fr,
+        smatch@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>, julia.lawall@inria.fr
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiaomi Poco F1 uses the QCOM WLED driver for backlight control.
-Enable and link it to the panel to use it.
+On Thu, Mar 31, 2022 at 3:30 AM Marcelo Schmitt
+<marcelo.schmitt1@gmail.com> wrote:
+>
+> On 03/30, David Gow wrote:
+> > On Wed, Mar 30, 2022 at 7:23 AM Marcelo Schmitt
+> > <marcelo.schmitt1@gmail.com> wrote:
+> > >
+> > > Enhance the static analysis tools section with a discussion on when to
+> > > use each of them.
+> > >
+> > > This was mainly taken from Dan Carpenter and Julia Lawall's comments on
+> > > the previous documentation patch for static analysis tools.
+> > >
+> > > Lore: https://lore.kernel.org/linux-doc/20220329090911.GX3293@kadam/T/#mb97770c8e938095aadc3ee08f4ac7fe32ae386e6
+> > >
+> > > Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+> > > Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> > > Cc: Julia Lawall <julia.lawall@inria.fr>
+> > > ---
+> >
+> > Thanks: this sort of "when to use which tool" information is really
+> > what the testing guide page needs.
+> >
+> > I'm not familiar enough with these tools that I can really review the
+> > details properly, but nothing stands out as obviously wrong to me.
+> > I've made a few comments below regardless, but feel free to ignore
+> > them if they're not quite right.
+> >
+> > Acked-by: David Gow <davidgow@google.com>
+> >
+> > Cheers,
+> > -- David
+> >
+> > >  Documentation/dev-tools/testing-overview.rst | 33 ++++++++++++++++++++
+> > >  1 file changed, 33 insertions(+)
+> > >
+> > > diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
+> > > index b5e02dd3fd94..91e479045d3a 100644
+> > > --- a/Documentation/dev-tools/testing-overview.rst
+> > > +++ b/Documentation/dev-tools/testing-overview.rst
+> > > @@ -146,3 +146,36 @@ Documentation/dev-tools/coccinelle.rst documentation page for details.
+> > >
+> > >  Beware, though, that static analysis tools suffer from **false positives**.
+> > >  Errors and warns need to be evaluated carefully before attempting to fix them.
+> > > +
+> > > +When to use Sparse and Smatch
+> > > +-----------------------------
+> > > +
+> > > +Sparse is useful for type checking, detecting places that use ``__user``
+> > > +pointers improperly, or finding endianness bugs. Sparse runs much faster than
+> > > +Smatch.
+> >
+> > Given that the __user pointer and endianness stuff is found as a
+> > result of Sparse's type checking support, would rewording this as
+> > "Sparse does type checking, such as [detecting places...]" or similar
+> > be more clear?
+>
+> Myabe. I tried changing it a little while adding a bit of information from
+> https://lwn.net/Articles/689907/
+>
+> "Sparse does type checking, such as verifying that annotated variables do not
+> cause endianness bugs, detecting places that use ``__user`` pointers improperly,
+> and analyzing the compatibility of symbol initializers."
+>
+> Does it sound better?
+>
 
-Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
----
-Changes in v2:
- - Remove qcom,enabled-strings property as either it or qcom,num-strings
-   should be present. qcom,num-strings is specified and sufficient.
-   (Marijn Suijten's Suggestion)
+Yeah: that sounds much better to me. Thanks!
 
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+> >
+> > > +
+> > > +Smatch does flow analysis and, if allowed to build the function database, it
+> > > +also does cross function analysis. Smatch tries to answer questions like where
+> > > +is this buffer allocated? How big is it? Can this index be controlled by the
+> > > +user? Is this variable larger than that variable?
+> > > +
+> > > +It's generally easier to write checks in Smatch than it is to write checks in
+> > > +Sparse. Nevertheless, there are some overlaps between Sparse and Smatch checks
+> > > +because there is no reason for re-implementing Sparse's check in Smatch.
+> >
+> > This last sentence isn't totally clear to me. Should this "because" be "so"?
+>
+> Smatch uses (is shipped with) a modified Sparse implementation which it uses as
+> a C parser. Apparently, Sparse does some checkings while parsing the code for
+> Smatch so that's why we have some overlapping between the checks made when we
+> run Smatch and the ones made when we run Sparse alone.
+>
+> I didn't dig into the code, but I guess further modifying Sparse to prevent it
+> from doing some types of cheks wouldn't add much to Smatch. That last saying
+> should've reflected this fact, but it seems to cause confusion without a proper
+> context. Reading the sentence back again, I think we could just drop the last
+> part:
+>
+> "Nevertheless, there are some overlaps between Sparse and Smatch checks."
+>
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-index 798fc72578a7..d88dc07205f7 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-@@ -231,6 +231,7 @@ panel@0 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
-+		backlight = <&pmi8998_wled>;
- 		reset-gpios = <&tlmm 6 GPIO_ACTIVE_LOW>;
- 
- 		port {
-@@ -314,6 +315,17 @@ vol_up_pin_a: vol-up-active {
- 	};
- };
- 
-+&pmi8998_wled {
-+	status = "okay";
-+	qcom,current-boost-limit = <970>;
-+	qcom,ovp-millivolt = <29600>;
-+	qcom,current-limit-microamp = <20000>;
-+	qcom,num-strings = <2>;
-+	qcom,switching-freq = <600>;
-+	qcom,external-pfet;
-+	qcom,cabc;
-+};
-+
- &pm8998_pon {
- 	resin {
- 		compatible = "qcom,pm8941-resin";
--- 
-2.35.1
+Yeah, I do think that makes more sense. I don't think the fact that
+some of the checks overlap causes any problems at all, to be honest,
+so you _could_ get rid of the whole sentence without losing too much,
+but I'm also happy with it as it is in v3.
 
+
+> >
+> > > +
+> > > +Strong points of Smatch and Coccinelle
+> > > +--------------------------------------
+> > > +
+> > > +Coccinelle is probably the easiest for writing checks. It works before the
+> > > +pre-compiler so it's easier to check for bugs in macros using Coccinelle.
+> > > +Coccinelle also writes patches fixes for you which no other tool does.
+> > > +
+> > > +With Coccinelle you can do a mass conversion from
+> >
+> > (Maybe start this with "For example," just to make it clear that this
+> > paragraph is mostly following on from how useful it is that Coccinelle
+> > produces fixes, not just warnings.)
+>
+> Will do
+>
+> >
+> > > +``kmalloc(x * size, GFP_KERNEL)`` to ``kmalloc_array(x, size, GFP_KERNEL)``, and
+> > > +that's really useful. If you just created a Smatch warning and try to push the
+> > > +work of converting on to the maintainers they would be annoyed. You'd have to
+> > > +argue about each warning if can really overflow or not.
+> > > +
+> > > +Coccinelle does no analysis of variable values, which is the strong point of
+> > > +Smatch. On the other hand, Coccinelle allows you to do simple things in a simple
+> > > +way.
+> > > --
+> > > 2.35.1
+> > >

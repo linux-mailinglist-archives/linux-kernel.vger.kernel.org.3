@@ -2,48 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE854EFCB1
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9066F4EFCB3
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353285AbiDAWQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 18:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S1353322AbiDAWQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 18:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353290AbiDAWQT (ORCPT
+        with ESMTP id S1353291AbiDAWQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 18:16:19 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E74E666AC6;
-        Fri,  1 Apr 2022 15:14:27 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id CFE5153427D;
-        Sat,  2 Apr 2022 09:14:25 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1naPXE-00CdxP-0g; Sat, 02 Apr 2022 09:14:24 +1100
-Date:   Sat, 2 Apr 2022 09:14:24 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     wang.yi59@zte.com.cn
-Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
-        wang.liang82@zte.com.cn, cheng.lin130@zte.com.cn
-Subject: Re: [PATCH] xfs: getattr ignore blocks beyond eof
-Message-ID: <20220401221424.GN1544202@dread.disaster.area>
-References: <20220331212152.GG1544202@dread.disaster.area>
- <202204011609406223339@zte.com.cn>
+        Fri, 1 Apr 2022 18:16:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729765D07
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:14:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 90F63210E7;
+        Fri,  1 Apr 2022 22:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1648851266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pe8liXZM2h2O58fZfmoQfsuWte/F3qXp4GTmZwoKHTo=;
+        b=C8LKGm9NV3UCxChk+Ki0Qqi5ub/fm2rMl8CvkGWwDWUif+yFiVSVMHQ8zOX0MDlgefO7d9
+        9uxTovQbdZpz6oTGnOY+3H+148DZgAFhmCnEpSkdrK3ixVee0d9bjiuHf6b30Xk4Qipq+E
+        EEz6eL64kNB7x3eAcHKbAow2+JyXxfQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1648851266;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pe8liXZM2h2O58fZfmoQfsuWte/F3qXp4GTmZwoKHTo=;
+        b=agfDnaSu6LIxtuRbx0j1308aGrwrlbUC2vDiZxV8ghYOE3FnxP32itpafXxMJrfv5PfxLD
+        URWvqp5wqIIoOwAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DF01132C1;
+        Fri,  1 Apr 2022 22:14:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pbouFkJ5R2LlLgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 01 Apr 2022 22:14:26 +0000
+Message-ID: <a085d739-aa06-eff0-d350-0df088a7f2d0@suse.cz>
+Date:   Sat, 2 Apr 2022 00:14:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202204011609406223339@zte.com.cn>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=62477942
-        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
-        a=IkcTkHD0fZMA:10 a=z0gMJWrwH1QA:10 a=1RTuLK3dAAAA:8 a=7-415B0cAAAA:8
-        a=PNVk_V5aYQPfWbkZ830A:9 a=QEXdDO2ut3YA:10 a=kRpfLKi8w9umh8uBmg1i:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 1/2] mm: page_alloc: simplify pageblock migratetype
+ check in __free_one_page().
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220401181109.1477354-1-zi.yan@sent.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220401181109.1477354-1-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,58 +81,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 04:09:40PM +0800, wang.yi59@zte.com.cn wrote:
-> > On Thu, Mar 31, 2022 at 04:32:07PM +0800, wang.yi59@zte.com.cn wrote:
-> > > > We do not, and have not ever tried to, hide allocation or block
-> > > > usage artifacts from userspace because any application that depends
-> > > > on specific block allocation patterns or accounting from the
-> > > > filesystem is broken by design.
-> > > >
-> > > > If your application is dependent on block counts exactly matching
-> > > > the file data space for waht ever reason, then what speculative
-> > > > preallocation does is the least of your problems.
-> > > >
-> > >
-> > > Thanks for your explaination.
-> > >
-> > > Unfortunately, the app I'm using evaluates diskusage by querying
-> > > the changes of the backend filesystem (XFS) file before and after
-> > > the operation.
-> >
-> > What application is this?
-> >
-> > What is it trying to use this information for?
+On 4/1/22 20:11, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
 > 
-> Thanks very much, Dave.
+> Move pageblock migratetype check code in the while loop to simplify the
+> logic. It also saves redundant buddy page checking code.
 > 
-> I'm trying to use a new xlater(module) named 'simple-quota' in
-> glusterfs, which collects file's diskusage by stat, for quota function.
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Link: https://lore.kernel.org/linux-mm/27ff69f9-60c5-9e59-feb2-295250077551@suse.cz/
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
 
-So a company (kadalu) has forked gluster, then removed the gluster
-quota implementation because of undefined "major performance
-problems" and then implemented their own quota thing that stores
-disk usage information in extended attributes. And:
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-	Advised method is adding quota limit info before writing any
-	information to directory. Even otherwise we don’t need quota
-	crawl for updating quota-limit, but do a du -s -b $dir and
-	write the output into xattr.
+> ---
+>  mm/page_alloc.c | 46 +++++++++++++++++-----------------------------
+>  1 file changed, 17 insertions(+), 29 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 856473e54155..2ea106146686 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1054,7 +1054,6 @@ static inline void __free_one_page(struct page *page,
+>  		int migratetype, fpi_t fpi_flags)
+>  {
+>  	struct capture_control *capc = task_capc(zone);
+> -	unsigned int max_order = pageblock_order;
+>  	unsigned long buddy_pfn;
+>  	unsigned long combined_pfn;
+>  	struct page *buddy;
+> @@ -1070,8 +1069,7 @@ static inline void __free_one_page(struct page *page,
+>  	VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+>  	VM_BUG_ON_PAGE(bad_range(zone, page), page);
+>  
+> -continue_merging:
+> -	while (order < max_order) {
+> +	while (order < MAX_ORDER - 1) {
+>  		if (compaction_capture(capc, page, order, migratetype)) {
+>  			__mod_zone_freepage_state(zone, -(1 << order),
+>  								migratetype);
+> @@ -1082,6 +1080,22 @@ static inline void __free_one_page(struct page *page,
+>  
+>  		if (!page_is_buddy(page, buddy, order))
+>  			goto done_merging;
+> +
+> +		if (unlikely(order >= pageblock_order)) {
+> +			/*
+> +			 * We want to prevent merge between freepages on pageblock
+> +			 * without fallbacks and normal pageblock. Without this,
+> +			 * pageblock isolation could cause incorrect freepage or CMA
+> +			 * accounting or HIGHATOMIC accounting.
+> +			 */
+> +			int buddy_mt = get_pageblock_migratetype(buddy);
+> +
+> +			if (migratetype != buddy_mt
+> +					&& (!migratetype_is_mergeable(migratetype) ||
+> +						!migratetype_is_mergeable(buddy_mt)))
+> +				goto done_merging;
+> +		}
+> +
+>  		/*
+>  		 * Our buddy is free or it is CONFIG_DEBUG_PAGEALLOC guard page,
+>  		 * merge with it and move up one order.
+> @@ -1095,32 +1109,6 @@ static inline void __free_one_page(struct page *page,
+>  		pfn = combined_pfn;
+>  		order++;
+>  	}
+> -	if (order < MAX_ORDER - 1) {
+> -		/* If we are here, it means order is >= pageblock_order.
+> -		 * We want to prevent merge between freepages on pageblock
+> -		 * without fallbacks and normal pageblock. Without this,
+> -		 * pageblock isolation could cause incorrect freepage or CMA
+> -		 * accounting or HIGHATOMIC accounting.
+> -		 *
+> -		 * We don't want to hit this code for the more frequent
+> -		 * low-order merging.
+> -		 */
+> -		int buddy_mt;
+> -
+> -		buddy_pfn = __find_buddy_pfn(pfn, order);
+> -		buddy = page + (buddy_pfn - pfn);
+> -
+> -		if (!page_is_buddy(page, buddy, order))
+> -			goto done_merging;
+> -		buddy_mt = get_pageblock_migratetype(buddy);
+> -
+> -		if (migratetype != buddy_mt
+> -				&& (!migratetype_is_mergeable(migratetype) ||
+> -					!migratetype_is_mergeable(buddy_mt)))
+> -			goto done_merging;
+> -		max_order = order + 1;
+> -		goto continue_merging;
+> -	}
+>  
+>  done_merging:
+>  	set_buddy_order(page, order);
 
-Yeah, that's broken by design.
-
-Oh, look at that:
-
-	Just run statfs() on all dirs which has Quota set, and send
-	a flag to update status of quota xlator through internal
-	xattr mechanism if quota limit exceeds for a directory! This
-	can run once in 5 or 10 seconds, or even lesser frequency if
-	the quota limit is huge!
-
-That's pretty broken, too. Doesn't scale out, either...
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com

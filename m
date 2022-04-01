@@ -2,83 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307904EF714
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34D44EF719
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349705AbiDAPxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S1346038AbiDAPxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353640AbiDAPuf (ORCPT
+        with ESMTP id S1353896AbiDAPuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:50:35 -0400
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.61.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA66D301
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:23:21 -0700 (PDT)
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 45006400E28B2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:23:21 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id aJ7RnX2U1XvvJaJ7Rne6aI; Fri, 01 Apr 2022 10:23:21 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=us+dnlysbc7Q3Qvt0JVnL+wmstazMUpPbiUvh87DKYQ=; b=E4S9V9nXDBy1+pXjy9gIRIqFUN
-        PacMyGS98VVMpJJ7VwS3fXGPgb975C20Jcs0oTqBkoaWiZgb5ocRO+URmHR9wu1XB1O2+cqoTD7d+
-        YXMfTo/WmU0lyvFtdz0LPDNBjB4qle0J89GODt3LgnOn0NlwQvOOXZSdOvQWgr2a/GoCcpv/SPza2
-        Ubmz7ki9VtRQLhiCnsOO2UI01PC22lr7tUoP+7gyg67wbEIu5nowYzamYFUnt/yA/dFRh3uSMYmFT
-        5N+MI4c2oYIiWDBLqxuoCE7fE5VBBxtQn8nKNJJYWSzg6WmPZuoiem5t+yHeVfxpuuvYIKckrrzoG
-        oHq+JzEg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54650)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1naJ7Q-0042Nx-Qk; Fri, 01 Apr 2022 15:23:20 +0000
-Message-ID: <e4267787-4e71-6122-db3e-ce34110cccbb@roeck-us.net>
-Date:   Fri, 1 Apr 2022 08:23:19 -0700
+        Fri, 1 Apr 2022 11:50:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71F43633E;
+        Fri,  1 Apr 2022 08:23:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39756612B9;
+        Fri,  1 Apr 2022 15:23:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7308C2BBE4;
+        Fri,  1 Apr 2022 15:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648826634;
+        bh=xWcXQye1OTcqa40wP8K9l3+u3eD7fmDLyJj7urdTmaY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DPYJcJMLE6W6curQMeYfdDhaZminHTICn5OWo5BncOHEinmeF4/zXesta30bj7pxZ
+         zO20xAP5UYBZEnHZ58FBLnVR0ydYH86GMNtBONqiRPX6SK/7VILcxVinJi4e+hRIUt
+         +POqaO3bvUg9hLZ6paBZC8U8BYeaTGLo7Tc/phLX19KTtUWVWO0rdVUQXY7w0LvT5a
+         aDgTa4vKpuoO1J+WlvvGo2irGtnyjJJ0fgpwpSkcn/FNQqhgn/41YifTVGi6oGkC9f
+         wDryZ+GzLzMoUBBfeu1K727FQsaFP7yCtawOvzqQTUSoFQ+uDXaqqhIy3e+yvnUyUY
+         0UMdFkMJnpsQg==
+Message-ID: <fc02b2d29ecb7e277d48afb340b01cdc684e2e5a.camel@kernel.org>
+Subject: Re: [PATCH 2/2] ceph: replace usage of found with dedicated list
+ iterator variable
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Date:   Fri, 01 Apr 2022 11:23:52 -0400
+In-Reply-To: <20220331215329.882411-2-jakobkoschel@gmail.com>
+References: <20220331215329.882411-1-jakobkoschel@gmail.com>
+         <20220331215329.882411-2-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/4] hwmon: add driver for the Microchip LAN966x SoC
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220331162431.3648535-1-michael@walle.cc>
- <20220331162431.3648535-5-michael@walle.cc>
- <06ff3ca0-9d2b-205f-064d-24bcb86e5362@roeck-us.net>
- <415334e3278a610bc603b316d4af6502@walle.cc>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <415334e3278a610bc603b316d4af6502@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1naJ7Q-0042Nx-Qk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54650
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 15
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,107 +60,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 05:57, Michael Walle wrote:
-> Am 2022-03-31 19:28, schrieb Guenter Roeck:
+On Thu, 2022-03-31 at 23:53 +0200, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
 > 
->>> +static int lan966x_hwmon_write_pwm_freq(struct device *dev, long val)
->>> +{
->>> +    struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
->>> +
->>> +    val = DIV_ROUND_CLOSEST(hwmon->clk_rate, val);
->>
->> I must have looked at this for an hour, but I didn't see the problem.
->> Sorry for that. Try writing "0" as new pwm frequency.
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
 > 
-> Ohh, and negative values..
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
 > 
-> I'll add a
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+>  fs/ceph/caps.c | 32 +++++++++++++++-----------------
+>  1 file changed, 15 insertions(+), 17 deletions(-)
 > 
-> if (val <= 0)
->      return -EINVAL;
-> 
->>> +static int lan966x_hwmon_enable(struct lan966x_hwmon *hwmon)
->>> +{
->>> +    unsigned int mask = SENSOR_CFG_SAMPLE_ENA |
->>> +                SENSOR_CFG_START_CAPTURE |
->>> +                SENSOR_CFG_CONTINIOUS_MODE |
->>> +                SENSOR_CFG_PSAMPLE_ENA;
->>> +    unsigned int val;
->>> +
->>> +    /* enable continuous mode */
->>> +    val = SENSOR_CFG_SAMPLE_ENA | SENSOR_CFG_CONTINIOUS_MODE;
->>> +
->>
->> I am curious: Why not as part of the assignment, similar to 'mask' ?
-> 
-> There was code to set the clock divider, but I've removed
-> it as the hardware has a sane default. That left just that one
-> line, but moving the comment above the declaration looked
-> weird.
-> 
-> Now thinking about it again, it might make sense to bring
-> back the code to set the clock divider in case someone
-> will fiddle around with it before the driver is probed.
-> 
-> #define LAN966X_PVT_CLK 1200000 /* 1.2 MHz */
-> 
-> /* set PVT clock to be between 1.15 and 1.25 MHz */
-> div = DIV_ROUND_CLOSEST(hwmon->clk_rate, LAN966X_PVT_CLK);
-> val |= FIELD_PREP(SENSOR_CFG_CLK_CFG, div);
-> 
+> diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
+> index 519750bc5a1a..70f9c5ffa9b7 100644
+> --- a/fs/ceph/caps.c
+> +++ b/fs/ceph/caps.c
+> @@ -3179,10 +3179,9 @@ void ceph_put_wrbuffer_cap_refs(struct ceph_inode_info *ci, int nr,
+>  				struct ceph_snap_context *snapc)
+>  {
+>  	struct inode *inode = &ci->vfs_inode;
+> -	struct ceph_cap_snap *capsnap = NULL;
+> +	struct ceph_cap_snap *capsnap = NULL, *iter;
+>  	int put = 0;
+>  	bool last = false;
+> -	bool found = false;
+>  	bool flush_snaps = false;
+>  	bool complete_capsnap = false;
+>  
+> @@ -3209,14 +3208,14 @@ void ceph_put_wrbuffer_cap_refs(struct ceph_inode_info *ci, int nr,
+>  		     ci->i_wrbuffer_ref, ci->i_wrbuffer_ref_head,
+>  		     last ? " LAST" : "");
+>  	} else {
+> -		list_for_each_entry(capsnap, &ci->i_cap_snaps, ci_item) {
+> -			if (capsnap->context == snapc) {
+> -				found = true;
+> +		list_for_each_entry(iter, &ci->i_cap_snaps, ci_item) {
+> +			if (iter->context == snapc) {
+> +				capsnap = iter;
+>  				break;
+>  			}
+>  		}
+>  
+> -		if (!found) {
+> +		if (!capsnap) {
+>  			/*
+>  			 * The capsnap should already be removed when removing
+>  			 * auth cap in the case of a forced unmount.
+> @@ -3766,8 +3765,7 @@ static void handle_cap_flushsnap_ack(struct inode *inode, u64 flush_tid,
+>  	struct ceph_inode_info *ci = ceph_inode(inode);
+>  	struct ceph_mds_client *mdsc = ceph_sb_to_client(inode->i_sb)->mdsc;
+>  	u64 follows = le64_to_cpu(m->snap_follows);
+> -	struct ceph_cap_snap *capsnap;
+> -	bool flushed = false;
+> +	struct ceph_cap_snap *capsnap = NULL, *iter;
+>  	bool wake_ci = false;
+>  	bool wake_mdsc = false;
+>  
+> @@ -3775,26 +3773,26 @@ static void handle_cap_flushsnap_ack(struct inode *inode, u64 flush_tid,
+>  	     inode, ci, session->s_mds, follows);
+>  
+>  	spin_lock(&ci->i_ceph_lock);
+> -	list_for_each_entry(capsnap, &ci->i_cap_snaps, ci_item) {
+> -		if (capsnap->follows == follows) {
+> -			if (capsnap->cap_flush.tid != flush_tid) {
+> +	list_for_each_entry(iter, &ci->i_cap_snaps, ci_item) {
+> +		if (iter->follows == follows) {
+> +			if (iter->cap_flush.tid != flush_tid) {
+>  				dout(" cap_snap %p follows %lld tid %lld !="
+> -				     " %lld\n", capsnap, follows,
+> -				     flush_tid, capsnap->cap_flush.tid);
+> +				     " %lld\n", iter, follows,
+> +				     flush_tid, iter->cap_flush.tid);
+>  				break;
+>  			}
+> -			flushed = true;
+> +			capsnap = iter;
+>  			break;
+>  		} else {
+>  			dout(" skipping cap_snap %p follows %lld\n",
+> -			     capsnap, capsnap->follows);
+> +			     iter, iter->follows);
+>  		}
+>  	}
+> -	if (flushed)
+> +	if (capsnap)
+>  		ceph_remove_capsnap(inode, capsnap, &wake_ci, &wake_mdsc);
+>  	spin_unlock(&ci->i_ceph_lock);
+>  
+> -	if (flushed) {
+> +	if (capsnap) {
+>  		ceph_put_snap_context(capsnap->context);
+>  		ceph_put_cap_snap(capsnap);
+>  		if (wake_ci)
 
-Yes, that would be a good idea.
+Thanks Jakob,
 
-Thanks,
-Guenter
+Both patches look fine. Applied to the ceph-client/testing branch. This
+should make v5.19 if there are no issues.
 
->>> +static int lan966x_hwmon_probe(struct platform_device *pdev)
->>> +{
->>> +    struct device *dev = &pdev->dev;
->>> +    struct lan966x_hwmon *hwmon;
->>> +    struct device *hwmon_dev;
->>> +    int ret;
->>> +
->>> +    hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
->>> +    if (!hwmon)
->>> +        return -ENOMEM;
->>> +
->>> +    hwmon->clk = devm_clk_get(dev, NULL);
->>> +    if (IS_ERR(hwmon->clk))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon->clk),
->>> +                     "failed to get clock\n");
->>> +
->>> +    ret = lan966x_clk_enable(dev, hwmon);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "failed to enable clock\n");
->>> +
->>> +    hwmon->clk_rate = clk_get_rate(hwmon->clk);
->>> +
->>> +    hwmon->regmap_pvt = lan966x_init_regmap(pdev, "pvt");
->>> +    if (IS_ERR(hwmon->regmap_pvt))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon->regmap_pvt),
->>> +                     "failed to get regmap for PVT registers\n");
->>> +
->>> +    hwmon->regmap_fan = lan966x_init_regmap(pdev, "fan");
->>> +    if (IS_ERR(hwmon->regmap_fan))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon->regmap_fan),
->>> +                     "failed to get regmap for fan registers\n");
->>> +
->>> +    hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
->>> +                "lan966x_hwmon", hwmon,
->>> +                &lan966x_hwmon_chip_info, NULL);
->>> +    if (IS_ERR(hwmon_dev))
->>> +        return dev_err_probe(dev, PTR_ERR(hwmon_dev),
->>> +                     "failed to register hwmon device\n");
->>> +
->>> +    return lan966x_hwmon_enable(hwmon);
->>
->> Since I am nitpicking: It may make sense to call this function before
->> registering the hwmon device, and it may make sense to disable sampling
->> when unloading the driver (you could trigger that by calling
->> devm_add_action_or_reset() from lan966x_hwmon_enable).
-> 
-> sure
-> 
-> -michael
-
+Thanks!
+-- 
+Jeff Layton <jlayton@kernel.org>

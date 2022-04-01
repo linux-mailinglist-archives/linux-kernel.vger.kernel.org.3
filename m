@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5980C4EF5FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C454EF6C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355996AbiDAPZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S1353057AbiDAPll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349377AbiDAOzX (ORCPT
+        with ESMTP id S1349775AbiDAO55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:55:23 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0308E25E9E;
-        Fri,  1 Apr 2022 07:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=b2CiO4L5LMsTPjyVGlh+eoZTqAHsqAzbmA0VJTGYz9o=; b=o6BUqL3qcos1U48U8sIZkxD6OH
-        YW8IGXnQorGS207zezKy4MeXATgJB4mmk/Z2/4hON2iGNgaBvIQqnMXHOp5QWoaI6LY8FMnh9fnYk
-        UrCSXHdy7RFQ1wxLt9GGZRWC0vKxHO/5LFF6DsGHA4uAI6pEOZkj4Wf/DDXdFu+JAwbq3GIqpKQIl
-        ul9BhwQ7ZuYl1fYhKTqHQKd9NApdCXPq+HwZU/uL8QdWrt1PImgbni7qrmxbrhdjcp4GuKniKZUnB
-        kAZ2Xb12OAQsWelmi73rYWpDAobSOHKhLItkhIxrRseDl3ygyokyVxhGXuT9nwWKU5db1gm9HjvgE
-        Avu36DhA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58082)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1naIUs-0006GG-6f; Fri, 01 Apr 2022 15:43:29 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1naIUo-0000H1-0J; Fri, 01 Apr 2022 15:43:26 +0100
-Date:   Fri, 1 Apr 2022 15:43:25 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hkallweit1@gmail.com,
-        Divya.Koppera@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net v2 0/3] net: phy: micrel: Remove latencies support
- lan8814
-Message-ID: <YkcPja9WxzJ6eU5d@shell.armlinux.org.uk>
-References: <20220401110522.3418258-1-horatiu.vultur@microchip.com>
- <Ykb2yoXHib6l9gkT@lunn.ch>
+        Fri, 1 Apr 2022 10:57:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD401587BC;
+        Fri,  1 Apr 2022 07:44:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC02260BAF;
+        Fri,  1 Apr 2022 14:44:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 236DAC2BBE4;
+        Fri,  1 Apr 2022 14:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648824289;
+        bh=aNouMf6HB7bGVRYB3vXS2dnlB1LtY2eK90MMG/PNgRg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MUEtdsIrL2PIJlDKjVxasgQN0ydPITTqiyGMQidaRAbJh/OheYCQCfGTLFJzSbw0+
+         YGhbxFib2+Jrs7tzdV+767khrcooYF3gQzophG00QVeyrqdJoXo5BViFg9+Pqj12Nm
+         lFRb6WNeiC3njq2PeD95C8LSD1YxR4XniL9N45wV6GtlCBkoN44I02uIpZclM8jnXE
+         aAItjt9l1Cbj1uoMnR9/DQDQ3xRoPHAOoPwnDp/SqvbTDnkTc299QA1DnjS9S8qTm7
+         ZuvUq+8E+1/96h3jtel7YZ25YQkvy9pG1DPSt5EwcOwgbWhpI5lpcTto+Xq4onxmpZ
+         xMfXTK+F2yYtg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Anisse Astier <anisse@astier.eu>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.4 01/37] drm: Add orientation quirk for GPD Win Max
+Date:   Fri,  1 Apr 2022 10:44:10 -0400
+Message-Id: <20220401144446.1954694-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ykb2yoXHib6l9gkT@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 02:57:46PM +0200, Andrew Lunn wrote:
-> On Fri, Apr 01, 2022 at 01:05:19PM +0200, Horatiu Vultur wrote:
-> > Remove the latencies support both from the PHY driver and from the DT.
-> > The IP already has some default latencies values which can be used to get
-> > decent results. It has the following values(defined in ns):
-> > rx-1000mbit: 429
-> > tx-1000mbit: 201
-> > rx-100mbit:  2346
-> > tx-100mbit:  705
-> 
-> So one alternative option here is that ptp4l looks at
-> 
-> /sys/class/net/<ifname>/phydev/phy_id
+From: Anisse Astier <anisse@astier.eu>
 
-That doesn't work for Clause 45 PHYs, only Clause 22 PHYs. If we want
-userspace to know which PHY it is, we need a proper interface that
-exports all the 31 Clause 45 IDs (each mmd's registers 2/3) as well, as
-well as the Clause 45 package ID (registers 14/15).
+[ Upstream commit 0b464ca3e0dd3cec65f28bc6d396d82f19080f69 ]
 
+Panel is 800x1280, but mounted on a laptop form factor, sideways.
+
+Signed-off-by: Anisse Astier <anisse@astier.eu>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211229222200.53128-3-anisse@astier.eu
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index 448c2f2d803a..f5ab891731d0 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -166,6 +166,12 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "MicroPC"),
+ 		},
+ 		.driver_data = (void *)&lcd720x1280_rightside_up,
++	}, {	/* GPD Win Max */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "GPD"),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G1619-01"),
++		},
++		.driver_data = (void *)&lcd800x1280_rightside_up,
+ 	}, {	/*
+ 		 * GPD Pocket, note that the the DMI data is less generic then
+ 		 * it seems, devices with a board-vendor of "AMI Corporation"
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+

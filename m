@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3244EFA99
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BD34EFA9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350872AbiDATwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S1351155AbiDATxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236540AbiDATwm (ORCPT
+        with ESMTP id S236540AbiDATxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:52:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53C91C2325;
-        Fri,  1 Apr 2022 12:50:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ECFA616EC;
-        Fri,  1 Apr 2022 19:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA29C2BBE4;
-        Fri,  1 Apr 2022 19:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648842651;
-        bh=PKTFHbSH2UMkep2LxR08v4Qo2oXbGIPuL7oyn0ZenWY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WPKKYPjYyDTLLAm+QGrpTCsUY9xUETEer9nSxBTmhQirlDQ1PO0aMTd00lI5ixras
-         yOZ79hHPzYBSHRQWDgIWOJKN3RLNQ+qlY9Ia1H/QJ40c0nTSHm7QBy+EhAtgwdllO+
-         sAEvhxO7J6dOu647JvRG4j5G1SSkRQsmg5rxS8xiDh9h5yzcPEAQxWsV7nbke6in+R
-         J42ZV1loDbwntr24GpIKKro5/bdXxWjehJxGYSM5mBDqPO9hdU0Mo62L4+K0q5zaby
-         ryco0KJa4J66fbCMYUS3lA43kUiseRK0qLsmKkur8Fdm8p/q08nZ3Y0tTWvKtDCCVr
-         hsCPVLWFhCdXg==
-Received: by mail-io1-f42.google.com with SMTP id q11so4414911iod.6;
-        Fri, 01 Apr 2022 12:50:51 -0700 (PDT)
-X-Gm-Message-State: AOAM531Bzvt8xTsMj/mabgy+tXt8EG5VSfeEwbPPGGpXi4oTqKF54YeH
-        Y62O46s1Z9vNo4Q6u+IqGH1XYQKn3m9w+5kQGA==
-X-Google-Smtp-Source: ABdhPJyIcUK7bqTW8w5TQkOlzL6lG73KMke4wGGd5zyAjhua+Xd9s8cC/DO2J5ZOXZGS9IfXEI2/dDTCAlNA8o40WWE=
-X-Received: by 2002:a05:6638:3052:b0:317:79e1:8b7f with SMTP id
- u18-20020a056638305200b0031779e18b7fmr6364291jak.239.1648842650947; Fri, 01
- Apr 2022 12:50:50 -0700 (PDT)
+        Fri, 1 Apr 2022 15:53:50 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CBD200958;
+        Fri,  1 Apr 2022 12:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648842719; x=1680378719;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mzQwyM79i2VPG1OyvzFuki0I0QTOLGm5moKyhLq7OwU=;
+  b=Emyq7N5BjwaR7H7veMn6hcW97Gsmmp3o7hg4gzawYeHsTbc0ixP7Mt1R
+   RL24IWfShDaMqtI/vFGYsdOLkTqO3LY1te0MFS8t4DkFHzA57r/1FQJTL
+   nLSBEZ81Uj6cRdZwINpUjHiRPEpBdRBCSN08WTO7LOm+pXcdhg17dE4sz
+   A=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Apr 2022 12:51:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 12:51:59 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 1 Apr 2022 12:51:58 -0700
+Received: from [10.110.60.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Apr 2022
+ 12:51:57 -0700
+Message-ID: <b5717861-c3f6-960c-f5be-013db8c4fa68@quicinc.com>
+Date:   Fri, 1 Apr 2022 12:51:56 -0700
 MIME-Version: 1.0
-References: <20220401193108.12490-1-palmer@rivosinc.com>
-In-Reply-To: <20220401193108.12490-1-palmer@rivosinc.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 1 Apr 2022 14:50:39 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+ALvAUR5V4Fv1RohA=-PB0Ry05ETm6OqJ+f=ediGc7HA@mail.gmail.com>
-Message-ID: <CAL_Jsq+ALvAUR5V4Fv1RohA=-PB0Ry05ETm6OqJ+f=ediGc7HA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix phandle-array issues in the idle-states bindings
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 3/3] drm/msm/dp: replace DRM_DEBUG_DP marco with
+ drm_dbg_dp
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1645122930-23863-1-git-send-email-quic_khsieh@quicinc.com>
+ <1645122930-23863-4-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n50nMVEG5ccU=m0hNoyPnWvyugjRSXL9hoW=VOxm6+w2uw@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n50nMVEG5ccU=m0hNoyPnWvyugjRSXL9hoW=VOxm6+w2uw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,35 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 2:32 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> As per 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas"), the
-> phandle-array bindings have been disambiguated.  This fixes the new
-> generic idle-states bindings to comply with the schema.
->
-> Fixes: 1bd524f7e8d8 ("dt-bindings: Add common bindings for ARM and RISC-V idle states")
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->  .../devicetree/bindings/cpu/idle-states.yaml  | 96 +++++++++----------
->  1 file changed, 48 insertions(+), 48 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> index 95506ffb816c..6f5223659950 100644
-> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> @@ -385,8 +385,8 @@ examples:
->              compatible = "arm,cortex-a57";
->              reg = <0x0 0x0>;
->              enable-method = "psci";
-> -            cpu-idle-states = <&CPU_RETENTION_0_0 &CPU_SLEEP_0_0
-> -                   &CLUSTER_RETENTION_0 &CLUSTER_SLEEP_0>;
-> +            cpu-idle-states = <&CPU_RETENTION_0_0>, <&CPU_SLEEP_0_0>,
-> +                   <&CLUSTER_RETENTION_0>, <&CLUSTER_SLEEP_0>;
+Hi Stephen,
 
-All the Arm examples are already fixed. You need to fix just the RiscV
-examples added in your branch. Otherwise, it is a bunch of merge
-conflicts.
 
-Rob
+Would you please help to pick this patch up to msm-next?
+
+Thanks,
+
+On 2/24/2022 10:40 AM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-02-17 10:35:30)
+>> Since DRM_DEBUG_DP is deprecated in favor of drm_dbg_dp(NULL, ...),
+>> this patch replace all DRM_DEBUG_DP with drm_dbg_dp().
+>>
+>> Changes in v4:
+>> -- replace (strucr drm_dev *)NULL with drm_dev
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>

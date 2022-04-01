@@ -2,171 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41904EEDE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB1C4EEDEB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346244AbiDANOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S1346260AbiDANPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbiDANOt (ORCPT
+        with ESMTP id S241686AbiDANPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:14:49 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B2227BC38
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648818778; x=1680354778;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=rlStFOOfCiFrb+mHGMRB2T/Ur/0vnq+9sP5mQv+HsnM=;
-  b=XBVBmqLVZ/yelTHhlZvpKFIXv8wrDNWICAydLcOJtOcQUbYYyRtcy211
-   pfS7cMSuycU/nhDLXbojUDsedCdz/D202fhQTk2JqkpxTg3/O0joy5f1P
-   m8I69/yU1cjL81GUXt6FAV4otkailv5Ggkwvbf2yOczhsNFuNThYNeXTJ
-   kCZ++RpWaa+MB9GOL5eLSUjhNrFhQvENwA1xOMOyLVMF0vmlbnq0Qdflb
-   j6L+Hf85Y1FVmXzOHgOMo18Az0nyR3qvBCt+4BP5Zsu04e2Ao46n3HV8A
-   e/Sg0JB84Ihf+N5iWfFZUS1vlTo9+7303nNfk8OxLEThBvxlturfHzisK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="242279483"
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="242279483"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 06:12:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="521388127"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga002.jf.intel.com with ESMTP; 01 Apr 2022 06:12:57 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 1 Apr 2022 06:12:56 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 1 Apr 2022 06:12:56 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 1 Apr 2022 06:12:56 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 1 Apr 2022 06:12:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J8CCMblvkt+fMwPVDILNkX/A7w+UOulSBM7gsucfZRZZI2K6BJIe3H2SivEh2t9ljzO9/zwcF/+RmXV9dEg+lbhFHBg8RZ62frltUkbXiOXBjI+xM8K5jBn0s04qjJX9GfmDzR455pl8oC9rQG7rjOHDEeuQdi+q2UuuTzHKAbCqFb8rSlNItRgzTZaneHxhmcboPMxt6yd2/gTqQNtnwiCNnygNIjcepRM0q5x9xY2N4gN8b+CH6z2Eadf7bQkcb4jtEJU6BLK7uwiJ/1GcHL98y5salIXNgBZK8aOkW7YLfrhYEN4HihM3+0fvSbrpWWOFi4lx0CV+iMnsCHU1Pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rlStFOOfCiFrb+mHGMRB2T/Ur/0vnq+9sP5mQv+HsnM=;
- b=l2MCBVbrmX9j+ioMw9W6TkmJHd+aEgzdGge3asDBBbesDz+Gp1JBJPBXjNqZS5FsaBFkPbb7V7fRmJOM4mrBL9N+OYJ6Osqt7oeGcpT3gacpWreso9TsoxC5p3GAtT4yfT5GW4980AjsRb07tf6uPfJ0ocOSPrtIO3iT2l5Zmn0VJNtY7FJExx/DrGpO4H5sMe1acVx+TWBw6Em13isaDtYvDZyVxTo7w5ATueBEOEeZO/00bk0k+WTbgWGf1/qMszJCoo4fgYYnwpAT2ErqVGZzUKOnXhTbnvBlncKl+j8vw5/B+EMBIslZFM3bLo985hp8gvsSV8I9+BS8ewhmmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
- SA0PR11MB4670.namprd11.prod.outlook.com (2603:10b6:806:9a::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5123.27; Fri, 1 Apr 2022 13:12:54 +0000
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::6807:ff2e:9ac6:4d3c]) by DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::6807:ff2e:9ac6:4d3c%5]) with mapi id 15.20.5123.025; Fri, 1 Apr 2022
- 13:12:54 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Zhi Wang <zhi.wang.linux@gmail.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        Zhi Wang <zhi.a.wang@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: Re: [PATCH v7 1/3] i915/gvt: Separate the MMIO tracking table from
- GVT-g
-Thread-Topic: [PATCH v7 1/3] i915/gvt: Separate the MMIO tracking table from
- GVT-g
-Thread-Index: AQHYQHGFbzTs9dpVNkulZ3C9zD1FsKzUXz0AgAS82gCAABTDgIAB4qaA
-Date:   Fri, 1 Apr 2022 13:12:54 +0000
-Message-ID: <2817b81e-df97-fe03-4ee6-59861f4258ea@intel.com>
-References: <20220325175251.167164-1-zhi.a.wang@intel.com>
- <20220328065008.GA29798@lst.de>
- <4af59d97-b583-4022-3ec3-360e7df43689@intel.com> <871qyibkay.fsf@intel.com>
-In-Reply-To: <871qyibkay.fsf@intel.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a3c695b6-e5cb-4c2f-0bc1-08da13e1550e
-x-ms-traffictypediagnostic: SA0PR11MB4670:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <SA0PR11MB46708E98BD232D068DFF82EACAE09@SA0PR11MB4670.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: StN0frbQaoHBdVf68Q01OL51C6UPVAI1vE5VNLI4eSbOVMo8wIQ4nHBuB7Fy3mlenU+nY0OmWcjMAu1oZL8xknFbyc63UkUPSnCRAalCh6iMBy0eSYenjgpZQSqQlVjOsEjgbnCuZcrk46qv/HnL7VaqYi4NuVGF41NRO9Z0XIv1k0aN0Q+AxsFUVakzQkjraaqXBCk3e8TfwQSMvnwXx1u0vL+eahPk4e6GfQN+VNJpmefdDo08ZyVkkOl9EwD2v3vFpxZYmBSbGw9ZylUaZlDsa2KBrXVXx4XzXzqYAgftAWkitwViWiDHop/upK3fwYFK59oYbar6Bs9b9MGe7MZzcNPHzpgClweqT/YvWHSffCMELfOvgBpM8Ez2rx1nFV4qRvCB5zWc0pjYpyWoA7iOcUDjyyYXoSQahLW/GnQK7nUugTh2h1ukhv5jso9Xru7TyJ8783KW3pEjZrqlcqzPs+ndnPA2ZXbpDb5gRYda/6aV4nXqjWzM36YXBR8n5dJe1qj8ujjNSagdRNp6ek9AQrAtOEwkw47C17VHTP89mF9AQg2fm2SCDWXKNAUbVm1Il961TPWDVNPiH3Gdff8ltd1X3atLctPrCEzWTbUu5uRIF/rF4oW8D60kCrSZp1my7FQ0GirBZSiE6R/q64b3J7DxtyJmBAH7hl29k53bnnPB19lnXcGBQ4Nskmt/C1qh+Ihul1IUVsXp71z2jBjeI2xn7NWz6v63VYatKWySEVp9a18KdvjJBUhgl2exSUkWJ4YdMc57gE0ZaQ8nVA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(5660300002)(110136005)(2906002)(6506007)(6512007)(36756003)(53546011)(2616005)(316002)(31686004)(83380400001)(54906003)(26005)(186003)(8936002)(7416002)(71200400001)(91956017)(82960400001)(6486002)(4326008)(66476007)(66446008)(64756008)(66946007)(66556008)(31696002)(76116006)(122000001)(86362001)(8676002)(38100700002)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?/b8VO5AHYa8hOaq5hbnfILImKw+nV6Rd1v8BBK9rUTA4pE+/txy1SLRb?=
- =?Windows-1252?Q?gv4qV1lM/tqd9fWpqXtFmKJ7Zbx6UHLTifgAncoyLqDPdHQvIdx6NnFy?=
- =?Windows-1252?Q?/JllWkcaS4WindnCZNSCw9MvVAIyqfTW8dVy3UmjABrSniiUelwbHz26?=
- =?Windows-1252?Q?yy9ylTU9lmYZZC+k61eyPLE0XlMn44RgXE1v8k0+ZOSHZAJjJqVu9npZ?=
- =?Windows-1252?Q?4hfpYjDgR95IPo9iTbpI9+Jt9lRxjT+LFamor3DqQZDLmmSNoz+JukXI?=
- =?Windows-1252?Q?H6mTYSBGR+SSDdvwAEUWPqaNkbEJyiTBjQW5T6tf9N/pjDNcRwXoS892?=
- =?Windows-1252?Q?brn26BabRwSk598bl+VKc2z7gzsgwYmSUul8C1l7j9nsB2r9/hLHjcbR?=
- =?Windows-1252?Q?SZ9yzF0jK7hUf2km7Vd331n0K9BgYVtgxdfDUHVdcfTmrAusjfp8grrx?=
- =?Windows-1252?Q?fNvxzhNcuDDRkydabkoygOgUDrATHHhb25mOVYSD7rGlVMvKZaDVAkm+?=
- =?Windows-1252?Q?Mjc5WVwcoXI+xn3DvuO2LIL74V2Lq+xlDN4VTV3cBugzC5ETDUO84H6x?=
- =?Windows-1252?Q?jsn4TrMUv4qC/buDXLQQUmscMWbjnGgxVDHtYkApLFEJONVkvX5456Ta?=
- =?Windows-1252?Q?HPztM4+FbXYONkhaWdbXvMkOJJySxpkd/pc1Sc2e+NtJ4sHlfOap4pcP?=
- =?Windows-1252?Q?FEuFWLQQ0P1Lhti8ObQp6wFJMywFXN9YYJW46JowZbmyr1Yi8SrnyADV?=
- =?Windows-1252?Q?xkQWqLIrC2HjTrTHDmhkyxOeWUUTzcE95UwP5HHCHJbnr94UoJPB/hZQ?=
- =?Windows-1252?Q?XaYEswpnu7jmOI2fWNdxlCMGA33o7Bli5w4uU6xDLB1LyJ/Z9LUdtPLN?=
- =?Windows-1252?Q?ytc2iNDiEBHzjqpERs1kOpjPjqSEwcxHkw2+UGfc/JnCrDrUuicHBHnG?=
- =?Windows-1252?Q?VrvsNjv257m+HM5d6djeDAMklkmok+mCk66X3O/miIu84JDy5CKlOg5w?=
- =?Windows-1252?Q?B01OlF+oM+FT7Hq9ih5LBbBRoianvEqrEGSOXS1NxKNujLzIi3xYBJ+N?=
- =?Windows-1252?Q?IzDHMArSSEIVlmLNmWibYWBZZa61Oqe1Ivk0xYVYfbZbVotvSqd0gSsx?=
- =?Windows-1252?Q?nQt7IH5DwHZ2SaeC5aLIS3r8Hou9ZTAquv6kvuNMQ2wCmaJi6NOI+vGK?=
- =?Windows-1252?Q?XphTEwNMd47xYzoaGgIXHuftR8AyjMIhUOyOuo4MfPd6wQ+qxv+Eg7eh?=
- =?Windows-1252?Q?60+CTWMn4Uy2siE6WRwOKneSlCB6DB1Zzz1o8GiPjL3cDQRnYVeiqr+f?=
- =?Windows-1252?Q?lmvLVLhNouymCexaN81+PiaUWpF9BRmCZPiL55FmzB7JiS+x1ph4jBF4?=
- =?Windows-1252?Q?+AW8/05u4HrbjtsKUJLY9WcuB0IwsnMDQQJrt/cPaa/fngL7oBib/BaI?=
- =?Windows-1252?Q?07fb6oAbPfq86UbQDOtOuZbfISEohnjqxqh834VWydNOEeHjf6T9Hsbw?=
- =?Windows-1252?Q?0bvtDbks1CEptIbUqrf9DQ165bPjk8zZMTLHh0EdXBZHRQVfroNnrE/n?=
- =?Windows-1252?Q?Dyv7UWwiCcTTCcB58Ftx6XyBGJp4IegKJm9RN85ELN6R0aU0d5bk9p8D?=
- =?Windows-1252?Q?BWTkHRtVWsUdsqB3KCWdfCxOAagtBEEWcNhEI9D012DHQ/j8YMrFyXU5?=
- =?Windows-1252?Q?pH16ul8S772bi+qa3QMbLCjlby4yHYGc118UP6xdkLjAwV61wIOnxBIc?=
- =?Windows-1252?Q?mPyAjUNufXYUk6DGPl5vNznXT5XCFwJy2bDyareHC9D1eAclrPUPGrer?=
- =?Windows-1252?Q?GmCVDO0ruIaGzV8+vMzpieXcIFCxmc61gRD2LaLFlyxEbEvYNASOoftm?=
- =?Windows-1252?Q?FPqvBFmaIfM8kg=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <668DCEA50334564B8EC4049587D44C7A@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3c695b6-e5cb-4c2f-0bc1-08da13e1550e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 13:12:54.0649
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m6IexrAZPdzN0gPJ+o+D8fmxL2txz9/QzDfYHhQ5aMXZprtDPGH1MvhRYdzxh7ng1ayVioUnof2wVcrXwgbM3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4670
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 1 Apr 2022 09:15:19 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB483EA9D;
+        Fri,  1 Apr 2022 06:13:30 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id b188so2722518oia.13;
+        Fri, 01 Apr 2022 06:13:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Dt6DUcWZe68wNzFOcmf1w5pbg157v95Sfa3KdIbLtuY=;
+        b=ygOs0ijOlu9kSRz6xLgL2o974GzCt2H6RZXZM+SrE1kgXmwzlRoosKtRS4k16XRY4Y
+         IBflj+MZOAsUk+CuLbKNoeuMk/uCldAQgT0ARtcn5N/l6/9WezAacs//wB11c0+ctEso
+         tlmw4qk6gxEHbzZ8apRmQjRESTz4o7PtXAYuuE/ngoeuD23sQzrnxFw5EDebjDDvpdPU
+         lfN5sEhGNmpy7mAnbDUadLqqt7/JAOdrUz9FTVTX1Mi6P2ceAWHJoF1QebNdfip9YPVr
+         7NPkFPxNsB7mo7MIqR1EbHkYuN9CHRORhdKcwPTjzPJsI3R9xlpjGErrQgkb3Bdikg+B
+         x3Bw==
+X-Gm-Message-State: AOAM530mLzKRgZ1btgoSco0haNcq4G7/CR/F1RO5oomg6gl3TaWJuYJJ
+        p6aoInN5y9oYroWAG8m2rg==
+X-Google-Smtp-Source: ABdhPJx0RcNvDjmuubFatcz4ZzB3jxBfl9sx/UlLM31HKdGp5LJoSd3+/HrnySHLnCdBMlFeh+WiWA==
+X-Received: by 2002:aca:1303:0:b0:2ec:cae7:acc4 with SMTP id e3-20020aca1303000000b002eccae7acc4mr4664170oii.179.1648818809222;
+        Fri, 01 Apr 2022 06:13:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r19-20020acaa813000000b002ed02ca6a3fsm981706oie.1.2022.04.01.06.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 06:13:27 -0700 (PDT)
+Received: (nullmailer pid 2864971 invoked by uid 1000);
+        Fri, 01 Apr 2022 13:13:26 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+In-Reply-To: <20220401072714.106403-1-krzysztof.kozlowski@linaro.org>
+References: <20220401072714.106403-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3] dt-bindings: gpio: add common consumer GPIO lines
+Date:   Fri, 01 Apr 2022 08:13:26 -0500
+Message-Id: <1648818806.914066.2864970.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -174,65 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jani:
+On Fri, 01 Apr 2022 09:27:14 +0200, Krzysztof Kozlowski wrote:
+> Typical GPIO lines like enable, powerdown, reset or wakeup are not
+> documented as common, which leads to new variations of these (e.g.
+> pwdn-gpios).  Add a common schema which serves also as a documentation
+> for preferred naming.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v2:
+> 1. Correct email.
+> 
+> Changes since v1:
+> 1. Select-true, add maxItems and description for each entry (Rob).
+> 2. Mention ACTIVE_LOW in bindings description (Linus).
+> 3. Add allOf for pwrseq reset-gpios case.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/gpio/gpio-consumer-common.yaml   | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml
+> 
 
-Thanks so much for the guidance. :) I included it in the v8 patch. :)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks,
-Zhi.
+yamllint warnings/errors:
 
-On 3/31/22 8:25 AM, Jani Nikula wrote:
-> On Thu, 31 Mar 2022, "Wang, Zhi A" <zhi.a.wang@intel.com> wrote:
->> Hi Jani and Joonas:
->>
->> Are you OK with these patches? I noticed I need to change the license
->> of the new file. Will do that when check-in if you are OK with these.
->=20
-> Use SPDX license header instead of the full text?
->=20
-> I don't know much about the actual contents, I'll leave that part to
-> others.
->=20
-> Seems that you are dropping const in a number of places where I thought
-> you could perhaps retain it.
->=20
-> Also in drivers/gpu/drm/i915/intel_gvt_mmio_table.c:
->=20
-> #include "gvt.h"=20
->=20
-> looks bad. It should be "gvt/gvt.h". I realize you can do that because
-> gvt/Makefile has:
->=20
-> ccflags-y +=3D -I $(srctree)/$(src) -I $(srctree)/$(src)/$(GVT_DIR)/
->=20
-> which I think should be removed.
->=20
-> I sent patches fixing this to give you an idea. No need to queue them
-> first, I can rebase them later. But please make sure this builds without
-> the ccflags.
->=20
->=20
-> BR,
-> Jani.
->=20
->=20
->>
->> Thanks,
->> Zhi.
->>
->> On 3/28/22 6:50 AM, Christoph Hellwig wrote:
->>> On Fri, Mar 25, 2022 at 01:52:49PM -0400, Zhi Wang wrote:
->>>>
->>>> v7:
->>>>
->>>> - Keep the marcos of device generation in GVT-g. (Christoph, Jani)
->>>
->>> The changelog go under the "---" line (also for the other patches).
->>>
->>> Otherwise looks good:
->>>
->>> Reviewed-by: Christoph Hellwig <hch@lst.de>
->>>
->>
->=20
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.example.dt.yaml: rt4801@73: enable-gpios: [[4294967295, 2, 0], [4294967295, 3, 0]] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

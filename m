@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE7E4EEE27
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0384EEE52
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346361AbiDANdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S1346436AbiDANlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345975AbiDANdk (ORCPT
+        with ESMTP id S233738AbiDANl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:33:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D25027DEA6;
-        Fri,  1 Apr 2022 06:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1648819909; x=1680355909;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lOHpdOenq/fYFzyDMijV5NodHbSZD635rAmVNUrJjAs=;
-  b=LXlqkFAVQeMRZgo02TR8wYLY51ymTpt0kg1Dmct8GLHAl8f526xEgYct
-   l+y0TgWtft2/Z9COa87xaKRfsVViyXwhzeuu5dSpU1igAeYKAtAZuX+zd
-   bfSflxkoy5uPrEPrqOxX38yIYfSrsn8Xtdv4yoSZceU0M9ijvaxa2YvaL
-   7M07rkkLfuiLXKuAn2sD4oRH4W8avbjaZvu5qCnTUgS+0mdho8XMvLgI2
-   5zmT0ahkuyGev1KQ8bYIWfoDu1/0kV5KDAZGLq3R6ynbDyiWm7vbsXlHB
-   1eCKddLGzsHDhGj2t3xmn+fhIr0NPXuwiUupbf7E6+nSgfMZqI/PHCdMU
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,227,1643698800"; 
-   d="scan'208";a="158536030"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Apr 2022 06:31:47 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 1 Apr 2022 06:31:46 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 1 Apr 2022 06:31:46 -0700
-Date:   Fri, 1 Apr 2022 15:34:54 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <Divya.Koppera@microchip.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net 2/3] net: phy: micrel: Remove latency from driver
-Message-ID: <20220401133454.ic6jxnripuxjhp5g@soft-dev3-1.localhost>
-References: <20220401094805.3343464-1-horatiu.vultur@microchip.com>
- <20220401094805.3343464-3-horatiu.vultur@microchip.com>
- <Ykb0RgM+fnzOUTNx@lunn.ch>
+        Fri, 1 Apr 2022 09:41:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427F377FE;
+        Fri,  1 Apr 2022 06:39:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B07B61B71;
+        Fri,  1 Apr 2022 13:39:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF93C340F2;
+        Fri,  1 Apr 2022 13:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648820377;
+        bh=JDcYVcySpRVUl/AV2fOCAyPCgwgjqicV/Gx5uhTLnNo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LLwuMm5SIlIZ2OZWW7uitQ2S/ZqWPKshNbh+r80cldUEaKo+Nizu7PQzSVmfq60+Q
+         UAwEdV6YBgf9HTdtXVi5rcjac3kHxcnY+Q/vJYzeDSrBAPq1BtvbmBOh23oyk+c/ZF
+         wGi6HubXc9leSaM7s7hMo+gomdl4OQ4TIo4Uq9dasqsTMQU1+uWutMRfzM4x0+9rZE
+         pXP2QEAhuJ+nINjLYnN2XnP5IEc17bHUlIBoid8lHuwxT7oxtRXej28/e8qECkSSVU
+         IwrAqEjZvwn1AMunck+0Xa0IZKiDD0u8Fge/7XBsLefYv5OQJOE5t52v6JzK2KyAPH
+         tCzaiLYYkKTzA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1naHV3-0002kB-Kc; Fri, 01 Apr 2022 15:39:37 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 0/2] PCI: qcom: Fix probe error paths
+Date:   Fri,  1 Apr 2022 15:38:52 +0200
+Message-Id: <20220401133854.10421-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <Ykb0RgM+fnzOUTNx@lunn.ch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/01/2022 14:47, Andrew Lunn wrote:
-> 
-> On Fri, Apr 01, 2022 at 11:48:04AM +0200, Horatiu Vultur wrote:
-> > Based on the discussions here[1], the PHY driver is the wrong place
-> > to set the latencies, therefore remove them.
-> >
-> > [1] https://lkml.org/lkml/2022/3/4/325
-> >
-> > Fixes: ece19502834d84 ("net: phy: micrel: 1588 support for LAN8814 phy")
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> 
-> Thanks for the revert.
-> 
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> 
-> > -static struct kszphy_latencies lan8814_latencies = {
-> > -     .rx_10          = 0x22AA,
-> > -     .tx_10          = 0x2E4A,
-> > -     .rx_100         = 0x092A,
-> > -     .tx_100         = 0x02C1,
-> > -     .rx_1000        = 0x01AD,
-> > -     .tx_1000        = 0x00C9,
-> > -};
-> 
-> What are the reset defaults of these? 
+This series fixes a few problems in the probe error handling which could
+cause trouble, for example, on probe deferral.
 
-Those are actually the reset values.
+Johan
 
-> I'm just wondering if we should
-> explicitly set them to 0, so we don't get into a mess where some
-> vendor bootloader sets values but mainline bootloader does not,
-> breaking a configuration where the userspace daemon does the correct?
 
-It would be fine for me to set them to 0. But then definitely we need a
-way to set these latencies from userspace.
+Changes in v2
+ - Capitalise subject lines according to PCI subsystem conventions
 
-> 
->          Andrew
+
+Johan Hovold (2):
+  PCI: qcom: Fix runtime PM imbalance on probe errors
+  PCI: qcom: Fix unbalanced PHY init on probe errors
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 -- 
-/Horatiu
+2.35.1
+

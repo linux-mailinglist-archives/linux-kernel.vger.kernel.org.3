@@ -2,263 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBDB4EE882
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39EC4EE851
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245164AbiDAGkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S245463AbiDAGig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245675AbiDAGjS (ORCPT
+        with ESMTP id S236461AbiDAGid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:39:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F1E1905A8;
-        Thu, 31 Mar 2022 23:37:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB6E61123;
-        Fri,  1 Apr 2022 06:37:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A163C340EE;
-        Fri,  1 Apr 2022 06:37:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648795037;
-        bh=PLiE066eJxQuzox36/0GZ4/VcS4Yg1p6+GIIb80lyjs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=McdwvW1YodQtHlcUSDqcVSFUgmcwE8ebK8Ckqh8ujshjm8LZeOVas6pYid4rKGt9H
-         PYzYrMaN6Em4FLNBBa/Te+ALstechscURXD+LJ+9yJtqQ4Al1Y9hl/1YRdnU2GWXTk
-         iqHPOq7lLZm0/W+4eOjey+Xx5bn3X+7qfj8paEkE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: [PATCH 4.14 21/27] arm64: Add percpu vectors for EL1
-Date:   Fri,  1 Apr 2022 08:36:31 +0200
-Message-Id: <20220401063624.832683310@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401063624.232282121@linuxfoundation.org>
-References: <20220401063624.232282121@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 02:38:33 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302DB18C0FB
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:44 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id j1-20020a170903028100b0014b1f9e0068so1017673plr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=ENE9zx/RQL0mygOY8ggwW7MkJ6Wz+nE6nyB1FT/1jsI=;
+        b=g/PXhHA9mEdDh3slFWre1e8TY+VvyivH7kjt/GwKq6ffkDtuX8VopYGCymUtyb6RhB
+         ewGF1UtAPU9Sa4dDc2iZ/Vy4PCNdUU1oab2oehFVqdpd50H5GyiHav8G1r3hK+dGQCEd
+         2M03mMQ3XT30DZuUkxXGbS8wIldDzpmGyJbXpYUzJ+B0h0Vq5/FZqP5GXso0g7lZAPDa
+         Z9wniQhVdLTYYSQpK2p/N6gEsY02XpfE5LgltNjUxFVZwNvPXeoTjlGQpvck6zw5v86S
+         GSJgvXA2Y+rWm0Zj/zC6O02GcPTDMoUv5jdOBqHc2jB9el+gIeA2f0LV9z9IhvWcNZ+u
+         Z4MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=ENE9zx/RQL0mygOY8ggwW7MkJ6Wz+nE6nyB1FT/1jsI=;
+        b=RDDwwbl3tBYRtBtreHWp19gCxs+Pu2oJtNvo3+2rS4nqxUEZQmuXX4vvGilazv7LMi
+         Cd7upfAZVEMqsy7TAnHD6egDMrULRpUQK2YfITGiOLAwcH5v9fJbWgSivSUE8okSENwA
+         zSzUCeP9nVtwXs+qPaNOqzLcGkG2Z5IVzJAhMcMIJPl+dbwIGy8LbsiMX+2Pjt1vfdAe
+         7Ewwg3EL70/tJ+PM9wX9MVCOUd6ftuJ677U2OkmFjOaOT0fun9VUAVJbqnkmy1dFzlN0
+         piXLXQb2XM7IiffOwWxTGUmBI1OgL1mUStFVjkPenyDRbbuVTtBP0dMb5Z2FubXBjL92
+         cN1w==
+X-Gm-Message-State: AOAM5336ZCg8mUpgu7lZXxmeYVq115WgPMf73uCIwMRdyXOXJBc46WIz
+        mI7Xd1sH2AXOjwbyZE11fnQ3k9Qqo2JX
+X-Google-Smtp-Source: ABdhPJzv9YI6PtocdAi7hN0IW4mYt7gmW+cmzFUcODAijax0zAODiJkHDyITC84noPld2tbNypH2tj2bhqUm
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a63:f54b:0:b0:384:64d1:fa45 with SMTP id
+ e11-20020a63f54b000000b0038464d1fa45mr13816423pgk.95.1648795003619; Thu, 31
+ Mar 2022 23:36:43 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Fri,  1 Apr 2022 06:36:31 +0000
+In-Reply-To: <20220401063636.2414200-1-mizhang@google.com>
+Message-Id: <20220401063636.2414200-2-mizhang@google.com>
+Mime-Version: 1.0
+References: <20220401063636.2414200-1-mizhang@google.com>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v3 1/6] KVM: x86/mmu: Set lpage_disallowed in TDP MMU before
+ setting SPTE
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit bd09128d16fac3c34b80bd6a29088ac632e8ce09 upstream.
+Set lpage_disallowed in TDP MMU shadow pages before making the SP visible
+to other readers, i.e. before setting its SPTE.  This will allow KVM to
+query lpage_disallowed when determining if a shadow page can be replaced
+by a NX huge page without violating the rules of the mitigation.
 
-The Spectre-BHB workaround adds a firmware call to the vectors. This
-is needed on some CPUs, but not others. To avoid the unaffected CPU in
-a big/little pair from making the firmware call, create per cpu vectors.
-
-The per-cpu vectors only apply when returning from EL0.
-
-Systems using KPTI can use the canonical 'full-fat' vectors directly at
-EL1, the trampoline exit code will switch to this_cpu_vector on exit to
-EL0. Systems not using KPTI should always use this_cpu_vector.
-
-this_cpu_vector will point at a vector in tramp_vecs or
-__bp_harden_el1_vectors, depending on whether KPTI is in use.
-
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/arm64/include/asm/mmu.h     |    2 +-
- arch/arm64/include/asm/vectors.h |   27 +++++++++++++++++++++++++++
- arch/arm64/kernel/cpufeature.c   |   11 +++++++++++
- arch/arm64/kernel/entry.S        |   16 ++++++++++------
- arch/arm64/kvm/hyp/switch.c      |    9 +++++++--
- 5 files changed, 56 insertions(+), 9 deletions(-)
+ arch/x86/kvm/mmu/mmu.c          | 14 ++++++++++----
+ arch/x86/kvm/mmu/mmu_internal.h |  2 +-
+ arch/x86/kvm/mmu/tdp_mmu.c      | 20 ++++++++++++--------
+ 3 files changed, 23 insertions(+), 13 deletions(-)
 
---- a/arch/arm64/include/asm/mmu.h
-+++ b/arch/arm64/include/asm/mmu.h
-@@ -35,7 +35,7 @@ typedef struct {
-  */
- #define ASID(mm)	((mm)->context.id.counter & 0xffff)
- 
--static inline bool arm64_kernel_unmapped_at_el0(void)
-+static __always_inline bool arm64_kernel_unmapped_at_el0(void)
- {
- 	return IS_ENABLED(CONFIG_UNMAP_KERNEL_AT_EL0) &&
- 	       cpus_have_const_cap(ARM64_UNMAP_KERNEL_AT_EL0);
---- a/arch/arm64/include/asm/vectors.h
-+++ b/arch/arm64/include/asm/vectors.h
-@@ -5,6 +5,15 @@
- #ifndef __ASM_VECTORS_H
- #define __ASM_VECTORS_H
- 
-+#include <linux/bug.h>
-+#include <linux/percpu.h>
-+
-+#include <asm/fixmap.h>
-+
-+extern char vectors[];
-+extern char tramp_vectors[];
-+extern char __bp_harden_el1_vectors[];
-+
- /*
-  * Note: the order of this enum corresponds to two arrays in entry.S:
-  * tramp_vecs and __bp_harden_el1_vectors. By default the canonical
-@@ -31,4 +40,22 @@ enum arm64_bp_harden_el1_vectors {
- 	EL1_VECTOR_KPTI,
- };
- 
-+/* The vectors to use on return from EL0. e.g. to remap the kernel */
-+DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
-+
-+#ifndef CONFIG_UNMAP_KERNEL_AT_EL0
-+#define TRAMP_VALIAS	0
-+#endif
-+
-+static inline const char *
-+arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
-+{
-+	if (arm64_kernel_unmapped_at_el0())
-+		return (char *)TRAMP_VALIAS + SZ_2K * slot;
-+
-+	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
-+
-+	return __bp_harden_el1_vectors + SZ_2K * slot;
-+}
-+
- #endif /* __ASM_VECTORS_H */
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -20,11 +20,13 @@
- 
- #include <linux/bsearch.h>
- #include <linux/cpumask.h>
-+#include <linux/percpu.h>
- #include <linux/sort.h>
- #include <linux/stop_machine.h>
- #include <linux/types.h>
- #include <linux/mm.h>
- #include <linux/cpu.h>
-+
- #include <asm/cpu.h>
- #include <asm/cpufeature.h>
- #include <asm/cpu_ops.h>
-@@ -32,6 +34,7 @@
- #include <asm/processor.h>
- #include <asm/sysreg.h>
- #include <asm/traps.h>
-+#include <asm/vectors.h>
- #include <asm/virt.h>
- 
- unsigned long elf_hwcap __read_mostly;
-@@ -50,6 +53,8 @@ unsigned int compat_elf_hwcap2 __read_mo
- DECLARE_BITMAP(cpu_hwcaps, ARM64_NCAPS);
- EXPORT_SYMBOL(cpu_hwcaps);
- 
-+DEFINE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector) = vectors;
-+
- static int dump_cpu_hwcaps(struct notifier_block *self, unsigned long v, void *p)
- {
- 	/* file-wide pr_fmt adds "CPU features: " prefix */
-@@ -892,6 +897,12 @@ kpti_install_ng_mappings(const struct ar
- 	static bool kpti_applied = false;
- 	int cpu = smp_processor_id();
- 
-+	if (__this_cpu_read(this_cpu_vector) == vectors) {
-+		const char *v = arm64_get_bp_hardening_vector(EL1_VECTOR_KPTI);
-+
-+		__this_cpu_write(this_cpu_vector, v);
-+	}
-+
- 	if (kpti_applied)
- 		return;
- 
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -75,7 +75,6 @@
- 	.macro kernel_ventry, el, label, regsize = 64
- 	.align 7
- .Lventry_start\@:
--#ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- 	.if	\el == 0
- 	/*
- 	 * This must be the first instruction of the EL0 vector entries. It is
-@@ -90,7 +89,6 @@
- 	.endif
- .Lskip_tramp_vectors_cleanup\@:
- 	.endif
--#endif
- 
- 	sub	sp, sp, #S_FRAME_SIZE
- #ifdef CONFIG_VMAP_STACK
-@@ -1085,10 +1083,14 @@ alternative_insn isb, nop, ARM64_WORKARO
- 	.endm
- 
- 	.macro tramp_exit, regsize = 64
--	adr	x30, tramp_vectors
--#ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
--	add	x30, x30, SZ_4K
--#endif
-+	tramp_data_read_var	x30, this_cpu_vector
-+alternative_if_not ARM64_HAS_VIRT_HOST_EXTN
-+	mrs	x29, tpidr_el1
-+alternative_else
-+	mrs	x29, tpidr_el2
-+alternative_endif
-+	ldr	x30, [x30, x29]
-+
- 	msr	vbar_el1, x30
- 	ldr	lr, [sp, #S_LR]
- 	tramp_unmap_kernel	x29
-@@ -1148,6 +1150,8 @@ __entry_tramp_data_vectors:
- __entry_tramp_data___sdei_asm_trampoline_next_handler:
- 	.quad	__sdei_asm_handler
- #endif /* CONFIG_ARM_SDE_INTERFACE */
-+__entry_tramp_data_this_cpu_vector:
-+	.quad	this_cpu_vector
- 	.popsection				// .rodata
- #endif /* CONFIG_RANDOMIZE_BASE */
- #endif /* CONFIG_UNMAP_KERNEL_AT_EL0 */
---- a/arch/arm64/kvm/hyp/switch.c
-+++ b/arch/arm64/kvm/hyp/switch.c
-@@ -27,6 +27,7 @@
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_hyp.h>
- #include <asm/fpsimd.h>
-+#include <asm/vectors.h>
- 
- extern struct exception_table_entry __start___kvm_ex_table;
- extern struct exception_table_entry __stop___kvm_ex_table;
-@@ -110,17 +111,21 @@ static void __hyp_text __activate_traps(
- 
- static void __hyp_text __deactivate_traps_vhe(void)
- {
--	extern char vectors[];	/* kernel exception vectors */
-+	const char *host_vectors = vectors;
- 	u64 mdcr_el2 = read_sysreg(mdcr_el2);
- 
- 	mdcr_el2 &= MDCR_EL2_HPMN_MASK |
- 		    MDCR_EL2_E2PB_MASK << MDCR_EL2_E2PB_SHIFT |
- 		    MDCR_EL2_TPMS;
- 
-+
- 	write_sysreg(mdcr_el2, mdcr_el2);
- 	write_sysreg(HCR_HOST_VHE_FLAGS, hcr_el2);
- 	write_sysreg(CPACR_EL1_FPEN, cpacr_el1);
--	write_sysreg(vectors, vbar_el1);
-+
-+	if (!arm64_kernel_unmapped_at_el0())
-+		host_vectors = __this_cpu_read(this_cpu_vector);
-+	write_sysreg(host_vectors, vbar_el1);
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 1361eb4599b4..5cb845fae56e 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -812,14 +812,20 @@ static void account_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
+ 	kvm_mmu_gfn_disallow_lpage(slot, gfn);
  }
  
- static void __hyp_text __deactivate_traps_nvhe(void)
-
+-void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
++void __account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+ {
+-	if (sp->lpage_disallowed)
+-		return;
+-
+ 	++kvm->stat.nx_lpage_splits;
+ 	list_add_tail(&sp->lpage_disallowed_link,
+ 		      &kvm->arch.lpage_disallowed_mmu_pages);
++}
++
++static void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
++{
++	if (sp->lpage_disallowed)
++		return;
++
++	__account_huge_nx_page(kvm, sp);
++
+ 	sp->lpage_disallowed = true;
+ }
+ 
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index 1bff453f7cbe..4a0087efa1e3 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -168,7 +168,7 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
+ 
+ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+ 
+-void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
++void __account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+ void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+ 
+ #endif /* __KVM_X86_MMU_INTERNAL_H */
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index b3b6426725d4..f05423545e6d 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1122,16 +1122,13 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
+  * @kvm: kvm instance
+  * @iter: a tdp_iter instance currently on the SPTE that should be set
+  * @sp: The new TDP page table to install.
+- * @account_nx: True if this page table is being installed to split a
+- *              non-executable huge page.
+  * @shared: This operation is running under the MMU lock in read mode.
+  *
+  * Returns: 0 if the new page table was installed. Non-0 if the page table
+  *          could not be installed (e.g. the atomic compare-exchange failed).
+  */
+ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+-			   struct kvm_mmu_page *sp, bool account_nx,
+-			   bool shared)
++			   struct kvm_mmu_page *sp, bool shared)
+ {
+ 	u64 spte = make_nonleaf_spte(sp->spt, !shadow_accessed_mask);
+ 	int ret = 0;
+@@ -1146,8 +1143,6 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+ 
+ 	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+ 	list_add(&sp->link, &kvm->arch.tdp_mmu_pages);
+-	if (account_nx)
+-		account_huge_nx_page(kvm, sp);
+ 	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+ 
+ 	return 0;
+@@ -1160,6 +1155,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ {
+ 	struct kvm_mmu *mmu = vcpu->arch.mmu;
++	struct kvm *kvm = vcpu->kvm;
+ 	struct tdp_iter iter;
+ 	struct kvm_mmu_page *sp;
+ 	int ret;
+@@ -1210,10 +1206,18 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 			sp = tdp_mmu_alloc_sp(vcpu);
+ 			tdp_mmu_init_child_sp(sp, &iter);
+ 
+-			if (tdp_mmu_link_sp(vcpu->kvm, &iter, sp, account_nx, true)) {
++			sp->lpage_disallowed = account_nx;
++
++			if (tdp_mmu_link_sp(kvm, &iter, sp, true)) {
+ 				tdp_mmu_free_sp(sp);
+ 				break;
+ 			}
++
++			if (account_nx) {
++				spin_lock(&kvm->arch.tdp_mmu_pages_lock);
++				__account_huge_nx_page(kvm, sp);
++				spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
++			}
+ 		}
+ 	}
+ 
+@@ -1501,7 +1505,7 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
+ 	 * correctness standpoint since the translation will be the same either
+ 	 * way.
+ 	 */
+-	ret = tdp_mmu_link_sp(kvm, iter, sp, false, shared);
++	ret = tdp_mmu_link_sp(kvm, iter, sp, shared);
+ 	if (ret)
+ 		goto out;
+ 
+-- 
+2.35.1.1094.g7c7d902a7c-goog
 

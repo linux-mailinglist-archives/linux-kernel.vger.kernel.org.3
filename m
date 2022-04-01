@@ -2,132 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED9A4EED6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EAC4EED8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345969AbiDAMuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S1346017AbiDAM6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241268AbiDAMuD (ORCPT
+        with ESMTP id S1346010AbiDAM6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:50:03 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC5D279725
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:48:13 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id ke15so1886574qvb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 05:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xe47BId8FG+UXcgp+7n4Gi6HT1T1Ri6vaJkb35OI79E=;
-        b=FBydJEEFg2JnreasDcvN+X3Fq2AX2Cs4fSs/4d70XuBUcAihS42Jlr1aVS8XHW7YOr
-         yqONMeg57T9UGPkKnjAqZicVRiwKDRz+iqJj44F3jnslTpCPtd6aklA56Q8LSZ1sSdiu
-         hZ7dWImKzxdcQ9Y95O55H9qi8sEtoOL7De/v8pwrpZlWNqQmuefmdiVqA2L4OIgTfFUd
-         gmMT7p6izyDL3RZMSOPH1sBJp1UTxTw6PaIKuiRs6+GNDndlJG9nq6hJc4SkFxbk+SLi
-         ByG5DD+UgNMKrieXWTWNAICDaXx219aIGoEEPFlRNznLCQvmruBbWclbp4KiyOcjGygJ
-         6rWg==
+        Fri, 1 Apr 2022 08:58:34 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9060F276815
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:56:44 -0700 (PDT)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7F3133F806
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1648817802;
+        bh=oz27duE5Ryo8jJ1fge3md1VX7PuJsZs6ffNWaIrGhqo=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=mye6/+uva7C28e6zBCtTdHDCYypnz+A60648rsUU3TVSODh28V9H0pFQPmj6PfYUW
+         xEe3DSe1QBBNSB5FmSgN/5xzo1zetb7J7ooqbyP0VKA0Bu3Tij1xzmdsmL+VML4SVk
+         dW7AulY7J+RUx4xYF91lz9QJXBl3bKPoBqlK5T6rEwrGt74FyIaZfZHcKM/GvVomPU
+         VPsYdCZtV2oEFJzJCPJiRYwbUODkrh51xYM0kxbN3MpeuOukO21NFIwMYxr4rBmGmg
+         9qHZt7yZDNVFlmdtC1CTmmIbtPVsuTS1SJv3bMevX5YtIEww8B6o63ssSKb2+vDEsJ
+         sKsXWY3WiKF/g==
+Received: by mail-ej1-f72.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso1510081ejc.22
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 05:56:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=xe47BId8FG+UXcgp+7n4Gi6HT1T1Ri6vaJkb35OI79E=;
-        b=XfWhxg5mJov3ZU+vBgqGvAzqJO8GoPm2vTGAB9sMUU/ys07Ny+kwwfOuWS9MbjvGLW
-         DagJatk9tjIicUPIJr4FA9R4t3CfP+BSnphv2IS8ks6XctxKPRltftEyWIjnnQp1KEAp
-         rG0xqSUfWTdPW16bmchuqpRFiXejFihcJalSeRpzcMNfqcXIxPlCzLxmpmr8/SAjSXPa
-         dRv5EOeM3bYNd2Xv7pD+U1s74o8lvgPxbcFeiBRaUoazA1MhPa+HVONae15UcHd9IAYE
-         elk2GW0lzxKyzo0EgAyGvOVLnXP0pxi1aW4GlJL/r4E5laGKqUQJzPfUrRuc2bDmN4jz
-         ibzg==
-X-Gm-Message-State: AOAM533g9+J77WS8m4rKbGBTtQFTsYXyuptcaBhjWm/PLtepQhXCTk0N
-        I8MoJeWvqI3UTsFdoCEtLA==
-X-Google-Smtp-Source: ABdhPJx8tlteUME04IRt0HIMAZ9xccnNs1UTSFwNMRwSF4eO8B8on1fFqquHG3wS3X6XiJ8VpL1CdA==
-X-Received: by 2002:a05:6214:e45:b0:441:718f:e14e with SMTP id o5-20020a0562140e4500b00441718fe14emr7602001qvc.105.1648817292858;
-        Fri, 01 Apr 2022 05:48:12 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id 22-20020ac85756000000b002e1cabad999sm1694591qtx.89.2022.04.01.05.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 05:48:11 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:18b8:c103:5b12:b0c4])
-        by serve.minyard.net (Postfix) with ESMTPSA id C8E621800BB;
-        Fri,  1 Apr 2022 12:48:10 +0000 (UTC)
-Date:   Fri, 1 Apr 2022 07:48:09 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipmi: ssif: potential NULL dereference in
- msg_done_handler()
-Message-ID: <20220401124809.GF29333@minyard.net>
-Reply-To: minyard@acm.org
-References: <1648783665-19237-1-git-send-email-baihaowen@meizu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oz27duE5Ryo8jJ1fge3md1VX7PuJsZs6ffNWaIrGhqo=;
+        b=EOaPnulPkeiTKvJspDh4fk3TZ5U2XKa8tDYx3gtweKLVZKa3ww3DA+fvz83YhozSQo
+         A//+kujFTyatajeKIoMXy/vXcp7u5Q+5UcFO+143eNiK6hW2BzKKBMLt9BPuQZIPhInJ
+         ypxrNCzqhSfDAaesPQuv6oAaL6wwPi/5LcfUrAFhaycAxYkp7K4etodYd++Mumrcmd5Q
+         tvg5pyo9QTRP5T6PPntiyOY1ixM7ar3PIO9mfOtEk2CQhv8RPsrqkvZB+ioxx7XsW033
+         dupc2ED18yyMQ9TIjxqg0afAn3WMxRTp4w9UvP3N3mhINeFJ9iq7qxNW3Nur9XYvBTvT
+         GHqA==
+X-Gm-Message-State: AOAM532HRVTYdtZ/jfYnz/JSLF4nqt4lsQq7F9yXB/44+gNB2/IHiHn6
+        VuF2L3s3ynzQpw9jZHLW/jBtUIIxVnlwFegDg2jtvvmxF939wAsswBWpyNUcFttPRizDz1j2QRd
+        iG2PHpKxZnsR5tZ9ApIn5VpNx7yTbNSBLv6GH7RhTrpaeQTfjit0CwJ57/Q==
+X-Received: by 2002:a17:907:6d90:b0:6e4:de0d:462 with SMTP id sb16-20020a1709076d9000b006e4de0d0462mr1479966ejc.297.1648817802118;
+        Fri, 01 Apr 2022 05:56:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx3UOVWoFjs/8J+LCeSjgOBZWMsxpLRT/MRpcKhhW7WGYKzTlQ7ENxIvkntR92kvsH+XxHiD2o6KQi3CkOW2X0=
+X-Received: by 2002:a17:907:6d90:b0:6e4:de0d:462 with SMTP id
+ sb16-20020a1709076d9000b006e4de0d0462mr1479957ejc.297.1648817801897; Fri, 01
+ Apr 2022 05:56:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648783665-19237-1-git-send-email-baihaowen@meizu.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+ <mhng-cdec292e-aea2-4b76-8853-b8465521e94f@palmer-ri-x1c9>
+ <CA+zEjCuTSjOCmNExSN1jO50tsuXNzL9x6K6jWjG4+vVky5eWsw@mail.gmail.com>
+ <CA+zEjCuTYmk-dLPhJ=9CkNrqf7VbCNyRDSZUGYkJSUWqZDWHpA@mail.gmail.com> <CA+zEjCt04OV++qK5ar+p8HwqOfEgkSN8YFfxwRiCFw1FeJv2rg@mail.gmail.com>
+In-Reply-To: <CA+zEjCt04OV++qK5ar+p8HwqOfEgkSN8YFfxwRiCFw1FeJv2rg@mail.gmail.com>
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date:   Fri, 1 Apr 2022 14:56:30 +0200
+Message-ID: <CA+zEjCuyEsB0cHoL=zepejcRbn9Rwg9nRXLMZCOXe_daSWbvig@mail.gmail.com>
+Subject: Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
+        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        keescook@chromium.org, guoren@linux.alibaba.com,
+        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 11:27:45AM +0800, Haowen Bai wrote:
-> msg could be null without checking null and return, but still dereference
-> msg->rsp[2] and will lead to a null pointer trigger.
+On Fri, Feb 18, 2022 at 11:45 AM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> Hi Palmer,
+>
+> On Thu, Jan 20, 2022 at 11:05 AM Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > On Thu, Jan 20, 2022 at 8:30 AM Alexandre Ghiti
+> > <alexandre.ghiti@canonical.com> wrote:
+> > >
+> > > On Thu, Jan 20, 2022 at 5:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> > > >
+> > > > On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
+> > > > > * Please note notable changes in memory layouts and kasan population *
+> > > > >
+> > > > > This patchset allows to have a single kernel for sv39 and sv48 without
+> > > > > being relocatable.
+> > > > >
+> > > > > The idea comes from Arnd Bergmann who suggested to do the same as x86,
+> > > > > that is mapping the kernel to the end of the address space, which allows
+> > > > > the kernel to be linked at the same address for both sv39 and sv48 and
+> > > > > then does not require to be relocated at runtime.
+> > > > >
+> > > > > This implements sv48 support at runtime. The kernel will try to
+> > > > > boot with 4-level page table and will fallback to 3-level if the HW does not
+> > > > > support it. Folding the 4th level into a 3-level page table has almost no
+> > > > > cost at runtime.
+> > > > >
+> > > > > Note that kasan region had to be moved to the end of the address space
+> > > > > since its location must be known at compile-time and then be valid for
+> > > > > both sv39 and sv48 (and sv57 that is coming).
+> > > > >
+> > > > > Tested on:
+> > > > >   - qemu rv64 sv39: OK
+> > > > >   - qemu rv64 sv48: OK
+> > > > >   - qemu rv64 sv39 + kasan: OK
+> > > > >   - qemu rv64 sv48 + kasan: OK
+> > > > >   - qemu rv32: OK
+> > > > >
+> > > > > Changes in v3:
+> > > > >   - Fix SZ_1T, thanks to Atish
+> > > > >   - Fix warning create_pud_mapping, thanks to Atish
+> > > > >   - Fix k210 nommu build, thanks to Atish
+> > > > >   - Fix wrong rebase as noted by Samuel
+> > > > >   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
+> > > > >   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
+> > > > >
+> > > > > Changes in v2:
+> > > > >   - Rebase onto for-next
+> > > > >   - Fix KASAN
+> > > > >   - Fix stack canary
+> > > > >   - Get completely rid of MAXPHYSMEM configs
+> > > > >   - Add documentation
+> > > > >
+> > > > > Alexandre Ghiti (13):
+> > > > >   riscv: Move KASAN mapping next to the kernel mapping
+> > > > >   riscv: Split early kasan mapping to prepare sv48 introduction
+> > > > >   riscv: Introduce functions to switch pt_ops
+> > > > >   riscv: Allow to dynamically define VA_BITS
+> > > > >   riscv: Get rid of MAXPHYSMEM configs
+> > > > >   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
+> > > > >   riscv: Implement sv48 support
+> > > > >   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
+> > > > >   riscv: Explicit comment about user virtual address space size
+> > > > >   riscv: Improve virtual kernel memory layout dump
+> > > > >   Documentation: riscv: Add sv48 description to VM layout
+> > > > >   riscv: Initialize thread pointer before calling C functions
+> > > > >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+> > > > >
+> > > > >  Documentation/riscv/vm-layout.rst             |  48 ++-
+> > > > >  arch/riscv/Kconfig                            |  37 +-
+> > > > >  arch/riscv/configs/nommu_k210_defconfig       |   1 -
+> > > > >  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
+> > > > >  arch/riscv/configs/nommu_virt_defconfig       |   1 -
+> > > > >  arch/riscv/include/asm/csr.h                  |   3 +-
+> > > > >  arch/riscv/include/asm/fixmap.h               |   1
+> > > > >  arch/riscv/include/asm/kasan.h                |  11 +-
+> > > > >  arch/riscv/include/asm/page.h                 |  20 +-
+> > > > >  arch/riscv/include/asm/pgalloc.h              |  40 ++
+> > > > >  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
+> > > > >  arch/riscv/include/asm/pgtable.h              |  47 +-
+> > > > >  arch/riscv/include/asm/sparsemem.h            |   6 +-
+> > > > >  arch/riscv/kernel/cpu.c                       |  23 +-
+> > > > >  arch/riscv/kernel/head.S                      |   4 +-
+> > > > >  arch/riscv/mm/context.c                       |   4 +-
+> > > > >  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
+> > > > >  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
+> > > > >  drivers/firmware/efi/libstub/efi-stub.c       |   2
+> > > > >  drivers/pci/controller/pci-xgene.c            |   2 +-
+> > > > >  include/asm-generic/pgalloc.h                 |  24 +-
+> > > > >  include/linux/sizes.h                         |   1
+> > > > >  22 files changed, 833 insertions(+), 209 deletions(-)
+> > > >
+> > > > Sorry this took a while.  This is on for-next, with a bit of juggling: a
+> > > > handful of trivial fixes for configs that were failing to build/boot and
+> > > > some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so
+> > > > it'd be easier to backport.  This is bigger than something I'd normally like to
+> > > > take late in the cycle, but given there's a lot of cleanups, likely some fixes,
+> > > > and it looks like folks have been testing this I'm just going to go with it.
+> > > >
+> > >
+> > > Yes yes yes! That's fantastic news :)
+> > >
+> > > > Let me know if there's any issues with the merge, it was a bit hairy.
+> > > > Probably best to just send along a fixup patch at this point.
+> > >
+> > > I'm going to take a look at that now, and I'll fix anything that comes
+> > > up quickly :)
+> >
+> > I see in for-next that you did not take the following patches:
+> >
+> >   riscv: Improve virtual kernel memory layout dump
+> >   Documentation: riscv: Add sv48 description to VM layout
+> >   riscv: Initialize thread pointer before calling C functions
+> >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+> >
+> > I'm not sure this was your intention. If it was, I believe that at
+> > least the first 2 patches are needed in this series, the 3rd one is a
+> > useful fix and we can discuss the 4th if that's an issue for you.
+>
+> Can you confirm that this was intentional and maybe explain the
+> motivation behind it? Because I see value in those patches.
 
-Actually:
+Palmer,
 
-  If you look at the big picture (how the rest of the code works), it's
-  not possible for msg to be NULL in these cases.  However, being
-  defensive here is probably a good idea.
+I read that you were still taking patches for 5.18, so I confirm again
+that the patches above are needed IMO.
 
-  There are two of these cases, why didn't you fix both of them?
+Maybe even the relocatable series?
 
-  This still doesn't fix the problem.  There is an "else if" in both
-  cases that also uses msg.
+Thanks,
 
-You can't just look at the output of some code analysis tool and make a
-blind decision like this.  You have to look at the big picture.  And you
-have to analyze the code carefully.
+Alex
 
-The right way to be defensive here is to add:
-	if (!msg) {
-		ipmi_ssif_unlock_cond(ssif_info, flags);
-		break;
-	}
-in both cases.  And probably add a log, since this means something else
-went wrong.
-
-Anyway, I'll add a patch for defensive measure and give you credit for
-pointing it out.
-
--corey
-
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/char/ipmi/ipmi_ssif.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-> index f199cc1..9383de3 100644
-> --- a/drivers/char/ipmi/ipmi_ssif.c
-> +++ b/drivers/char/ipmi/ipmi_ssif.c
-> @@ -814,7 +814,7 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
->  		break;
->  
->  	case SSIF_GETTING_EVENTS:
-> -		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
-> +		if ((result < 0) || (len < 3) || (msg && (msg->rsp[2] != 0))) {
->  			/* Error getting event, probably done. */
->  			msg->done(msg);
->  
-> -- 
-> 2.7.4
-> 
+>
+> Thanks,
+>
+> Alex
+>
+> >
+> > I tested for-next on both sv39 and sv48 successfully, I took a glance
+> > at the code and noticed you fixed the PTRS_PER_PGD error, thanks for
+> > that. Otherwise nothing obvious has popped.
+> >
+> > Thanks again,
+> >
+> > Alex
+> >
+> > >
+> > > Thanks!
+> > >
+> > > Alex
+> > >
+> > > >
+> > > > Thanks!

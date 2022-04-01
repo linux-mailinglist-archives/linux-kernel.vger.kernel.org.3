@@ -2,122 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD124EE4FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4084EE4FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243221AbiDAAHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 20:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
+        id S243219AbiDAAIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 20:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243188AbiDAAHI (ORCPT
+        with ESMTP id S240613AbiDAAIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 20:07:08 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDB0DB49E
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:05:19 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j8so1006957pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p1Kk4asKnMlrLdFRP7KKaRA1SmfSqVpzna8bIJo/9fM=;
-        b=Fo+F2q273Jom1d6+49Kn4y8sS3JIWP9Hm5KfaGS7UuL7ZN/g1Qc65G1IUtU+Txwf3t
-         NpieS75qeiyyqlsPakJVqEqZrH89XLxR3qd1c1Y5WDMAbmFNR6W6Fy9HGIJo62QbdoKC
-         hJFWcH09JN4eisXcydwjq+0r9v2qwE9hNm7ONJIgQZYak8OJhNvsYeHj6Gey41Nqb8+C
-         xdmR2Ag69ccHTmG3MpBKMewdek8eWwewZnpEJNMv6SsjQg1CY8B5FCc4iQzz19t6u7et
-         btanDcsTBRfl/tQFniC6gpNnfUEIbGZFNd4n55V5agn4e0QFPklp56aqROGoZLBrCsa4
-         njZw==
+        Thu, 31 Mar 2022 20:08:18 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6243D1DB88F;
+        Thu, 31 Mar 2022 17:06:29 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so1047757otj.1;
+        Thu, 31 Mar 2022 17:06:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=p1Kk4asKnMlrLdFRP7KKaRA1SmfSqVpzna8bIJo/9fM=;
-        b=uHLfyKu6zmMRqBbw6sZCujL5yr05go2wdVVRZU4IxdxC3OxfeyfcWKcxYDgjTFlZQ/
-         oX3EKVm3g5PQzOZBI6lbS5kwtIFRp+IFSRfFooPh671rcYLaW2yjzXv2P5UZXHrj6lJg
-         l3n4EDHTXzbeNVutu4GN+iHwkKQYrzAVc0SNbYe9An5zmaejKxq7IyBxx4HlL9AF1BKK
-         d/WcdwJSiifjPbdiWeV0AmIh9amUN89hz+XMjf9lw1Ul1JBJE1it+wIzFDcGpddg2JFg
-         3JMguW0RGA2cVPv3DUb2V2Mgr7FwEJpeg/M+Dmf9bjY49YG0mGl3AFjJL86z6E1/3S4N
-         /Vmw==
-X-Gm-Message-State: AOAM532njQdGMUo3dT5F3iAFxBLq97U9HDZ3T/kQnY7mDMp2FbbwXzBR
-        OmsTFJsV/r+zMxQMTTH5EjJZNA==
-X-Google-Smtp-Source: ABdhPJxe1BJPhMA/qe+O/I1I6VTtI0vPk9DRXRO2Bb5f18M5jyRjbCnZzywP9UowAOFfgdvjVyYn/w==
-X-Received: by 2002:a17:902:d3c5:b0:154:a3b5:d918 with SMTP id w5-20020a170902d3c500b00154a3b5d918mr7696913plb.91.1648771519308;
-        Thu, 31 Mar 2022 17:05:19 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id 123-20020a620681000000b004fa7c20d732sm593121pfg.133.2022.03.31.17.05.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PCmWVNwJqGG8J6v9brInFeE4eL7KqzGs5peJQaBGQBk=;
+        b=p40yHpPqXEwBPhtc0acCwybJIXuwdQsmR6Vgty+DU3qVwoUR4f+ojSRLYGgTsiF5oe
+         1i8qEcsoFSzklXIHJ5K0RtAiGJkAksI8hTSXpmPUiyBAsEgPV81Z1oitpmNgiI1ZaTRw
+         n7KQucYkwWzb5CkDuj1JaK3g2uzfHEJtvrKGchUEcTJLat+CMYRdGx0OkPKFvaI/Q4ze
+         /B32ubM7PZXc0LdcNS3rOXSA/Lm6jwfpSvIDMci+1m/nW3QkiUrSOfPi8CGPVoWOV6VF
+         BSxDa3Per/gzRBMRnsNB+aC4UtKahF8AT2MR0OpLTnQVEx+58HK15sdphR7a4hqzFTI7
+         0R6g==
+X-Gm-Message-State: AOAM530WA4wDoDZWBuLJrx+xQug84R28KXoPKtBnpXEYdavXrmhT66yY
+        ijztWJr+nk6LneEy1f9sakZG9qYyHA==
+X-Google-Smtp-Source: ABdhPJzW6OJ8B0dPnE/OHwPEY9o6TKU2FhrjWeaez+zcM9WbtuvIgJruB5BdPa77EZcitEVaM84XTQ==
+X-Received: by 2002:a9d:65d2:0:b0:5cb:5d55:ae24 with SMTP id z18-20020a9d65d2000000b005cb5d55ae24mr6528157oth.249.1648771588622;
+        Thu, 31 Mar 2022 17:06:28 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r6-20020a0568301ac600b005cdbc6e62a9sm489668otc.39.2022.03.31.17.06.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 17:05:18 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 17:05:18 -0700 (PDT)
-X-Google-Original-Date: Thu, 31 Mar 2022 16:19:20 PDT (-0700)
-Subject:     Re: [PATCH] Documentation: riscv: remove non-existent document from table of contents
-In-Reply-To: <20220329084428.376003-1-bagasdotme@gmail.com>
-CC:     linux-doc@vger.kernel.org, bagasdotme@gmail.com,
-        Paul Walmsley <paul@pwsan.com>,
-        Atish Patra <atishp@rivosinc.com>, atishp@atishpatra.org,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     bagasdotme@gmail.com, corbet@lwn.net, linux-doc@vger.kernel.org
-Message-ID: <mhng-cda2a9b2-2e3a-41a8-8df9-ee3d05d47a1a@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Mar 2022 17:06:28 -0700 (PDT)
+Received: (nullmailer pid 1749493 invoked by uid 1000);
+        Fri, 01 Apr 2022 00:06:27 -0000
+Date:   Thu, 31 Mar 2022 19:06:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 16/21] dt-bindings: ata: ahci: Add DWC AHCI SATA
+ controller DT schema
+Message-ID: <YkZCA08HZ6Nx1IqQ@robh.at.kernel.org>
+References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324001628.13028-17-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324001628.13028-17-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 01:44:28 PDT (-0700), bagasdotme@gmail.com wrote:
-> Remove reference to non-existent pmu.rst from table of contents tree
-> in Documentation/riscv/index.rst.
->
-> Fixes: 23b1f18326ec ("Documentation: riscv: Remove the old
-> documentation")
-> Link: https://lore.kernel.org/linux-next/20220329133412.591d6882@canb.auug.org.au/
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Paul Walmsley <paul@pwsan.com>
-> Cc: Atish Patra <atish.patra@wdc.com>
-> Cc: Atish Patra <atishp@atishpatra.org>
-> Cc: Atish Patra <atishp@rivosinc.com>
-> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
-> Cc: linux-riscv@lists.infradead.org
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On Thu, Mar 24, 2022 at 03:16:23AM +0300, Serge Semin wrote:
+> Synopsys AHCI SATA controller is mainly compatible with the generic AHCI
+> SATA controller except a few peculiarities and the platform environment
+> requirements. In particular it can have one or two reference clocks to
+> feed up its AXI/AHB interface and SATA PHYs domain and at least one reset
+> control for the application clock domain. In addition to that the DMA
+> interface of each port can be tuned up to work with the predefined maximum
+> data chunk size. Note unlike generic AHCI controller DWC AHCI can't have
+> more than 8 ports. All of that is reflected in the new DWC AHCI SATA
+> device DT binding.
+> 
+> Note the DWC AHCI SATA controller DT-schema has been created in a way so
+> to be reused for the vendor-specific DT-schemas. One of which we are about
+> to introduce.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > ---
->  Documentation/riscv/index.rst | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/Documentation/riscv/index.rst b/Documentation/riscv/index.rst
-> index ea915c1960488a..e23b876ad6ebb6 100644
-> --- a/Documentation/riscv/index.rst
-> +++ b/Documentation/riscv/index.rst
-> @@ -7,7 +7,6 @@ RISC-V architecture
->
->      boot-image-header
->      vm-layout
-> -    pmu
->      patch-acceptance
->
->      features
->
-> base-commit: 1930a6e739c4b4a654a69164dbe39e554d228915
+>  .../bindings/ata/snps,dwc-ahci.yaml           | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> new file mode 100644
+> index 000000000000..b443154b63aa
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> @@ -0,0 +1,121 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ata/snps,dwc-ahci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DWC AHCI SATA controller
+> +
+> +maintainers:
+> +  - Serge Semin <fancer.lancer@gmail.com>
+> +
+> +description: |
+> +  This document defines device tree bindings for the Synopsys DWC
+> +  implementation of the AHCI SATA controller.
+> +
+> +allOf:
+> +  - $ref: ahci-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: Synopsys AHCI SATA-compatible devices
+> +        contains:
+> +          const: snps,dwc-ahci
+> +      - description: SPEAr1340 AHCI SATA device
+> +        const: snps,spear-ahci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Basic DWC AHCI SATA clock sources like application AXI/AHB BIU clock
+> +      and embedded PHYs reference clock together with vendor-specific set
+> +      of clocks.
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    contains:
+> +      anyOf:
+> +        - description: Application AXI/AHB BIU clock source
+> +          enum:
+> +            - aclk
+> +            - sata
+> +        - description: SATA Ports reference clock
+> +          enum:
+> +            - ref
+> +            - sata_ref
+> +
+> +  resets:
+> +    description:
+> +      At least basic core and application clock domains reset is normally
+> +      supported by the DWC AHCI SATA controller. Some platform specific
+> +      clocks can be also specified though.
+> +
+> +  reset-names:
+> +    contains:
+> +      description: Core and application clock domains reset control
+> +      const: arst
+> +
+> +patternProperties:
+> +  "^sata-port@[0-9a-e]$":
+> +    type: object
+> +
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 7
+> +
+> +      snps,tx-ts-max:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: Maximal size of Tx DMA transactions in FIFO words
+> +        minimum: 1
+> +        maximum: 1024
+> +
+> +      snps,rx-ts-max:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: Maximal size of Rx DMA transactions in FIFO words
+> +        minimum: 1
+> +        maximum: 1024
 
-Adding the doc folks.
+Are you reading these somewhere? 
 
-I'm going to go ahead and just take this via the RISC-V tree, as I just 
-broke things.  I'd usually wait for longer for an ack/review, but IMO 
-it's saner to just get this into rc1 so builds don't break.  My version 
-[1] was sent at the same time and was CC'd to the right place, but I'm 
-going to take this one instead.
+Only powers of 2 are valid. (Guess what Calxeda's controller uses.)
 
-[1]: https://lore.kernel.org/lkml/20220329164544.29367-1-palmer@rivosinc.com/
-
-Thanks!
+Rob

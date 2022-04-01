@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546AC4EEBB1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874264EEBB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344721AbiDAKl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S1345243AbiDAKoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344961AbiDAKlH (ORCPT
+        with ESMTP id S1344972AbiDAKmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:41:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D50EC1C649A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:38:57 -0700 (PDT)
+        Fri, 1 Apr 2022 06:42:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1977C12E75C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648809537;
+        s=mimecast20190719; t=1648809665;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ezvw0rKqPT5/LGCk85RqozRyZpuO5fC9uJeYVkFf5Cs=;
-        b=Xu6sueT86W7cuNytNUm4KmIFr4rlQ9ovwG/Fd5ukY7bEdgndWsdD5yWChQ0YnnI+JFIMQI
-        HbWUY+Tg/7Fk9abkgUvcUx+E6Pf7kPOIt2MPAAOv4LLkjShpTHK21wG+e0jarQzSQWs5EN
-        j+0dIX5hHUQ7SWI3O271CJ8L88EZf3k=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DjkNl878MF0d7RU+70oPmG5s+v89O1lNqPhsXPb8x2M=;
+        b=BBPiIVWZ9wKPY0zLi4WDB1ssrVHgnE3Z0UP2P0ZqrTbs0mcLkx6IARVQo6lrlY04uoDoOF
+        wF4lbLICAec7p3/48cF3Ap0SS1IFx/qh9Bz17+UwKLAuckgDa6AsnDRFPoSZfKPo3G7UL5
+        6NrAfUtm6QXiAgAZe9pZJWD1qypZ0Is=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-XDmLdpgfOFCsU80pgvltkQ-1; Fri, 01 Apr 2022 06:38:56 -0400
-X-MC-Unique: XDmLdpgfOFCsU80pgvltkQ-1
-Received: by mail-wr1-f70.google.com with SMTP id v3-20020adf8b43000000b00205e463b017so516030wra.10
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 03:38:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=ezvw0rKqPT5/LGCk85RqozRyZpuO5fC9uJeYVkFf5Cs=;
-        b=0ABD5maCjRWYx/jJ8TDyVYN0WUvILpAIVenQKYpBA+hJUDgDK2cSXem7mwAIys8kwp
-         mTidSKG5yKjdJO9zZ1AkLvNtyRINXZoSCktgmarxEiTMlefXwt6pZDdQxHodQ2DxCv8R
-         PHzftAcNyoRIRRCsbvclBZTiIchgFCkBsvrAKxyYptpIvQbtQIx4gWFG/W2B81mAiM4y
-         UUkCJ1GWj1t6Enw+mTaht66KEU6gnTdk9BEOhSReJCIiO0CaksO1UBQ55Chne/Cz6zMU
-         lo+p0J3UHcHwoPmR3mGY547NPLuoGQH6Kux0rxtDeu3Vcbw8XSOoKcc7GA10d3JCQN5Y
-         uLeA==
-X-Gm-Message-State: AOAM53042nHjPBfoB1QLtLOGvJ5JHRelRAfJ9oxd7W/3lyAEbXu5euAx
-        5o77wgqyHeSxjsN8f5+R2SXJpErffX6WdH8IGM5jNNKtxmsBrBsbyd24t7FiDn5hYOIlTdoDSlw
-        W1O8F8FFVuK8AiIQclF06ukbx
-X-Received: by 2002:a05:600c:3d0e:b0:38c:9b5e:52c0 with SMTP id bh14-20020a05600c3d0e00b0038c9b5e52c0mr7996505wmb.3.1648809534719;
-        Fri, 01 Apr 2022 03:38:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwaWgGQ8M2sjU3PoOKPy7iwYNiR2ru0Z0Wve7wdBUk79kqf/ISdWJtqlHY3s9J5U6IT3wH/2Q==
-X-Received: by 2002:a05:600c:3d0e:b0:38c:9b5e:52c0 with SMTP id bh14-20020a05600c3d0e00b0038c9b5e52c0mr7996481wmb.3.1648809534399;
-        Fri, 01 Apr 2022 03:38:54 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:9e00:229d:4a10:2574:c6fa? (p200300cbc7069e00229d4a102574c6fa.dip0.t-ipconnect.de. [2003:cb:c706:9e00:229d:4a10:2574:c6fa])
-        by smtp.gmail.com with ESMTPSA id i206-20020a1c3bd7000000b0038bfc3ab76csm1528779wma.48.2022.04.01.03.38.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 03:38:53 -0700 (PDT)
-Message-ID: <3059b709-7d9a-079d-f7c4-f7cda6b7351e@redhat.com>
-Date:   Fri, 1 Apr 2022 12:38:53 +0200
+ us-mta-442-ewtEnXRZPAqk3RJgynQXIA-1; Fri, 01 Apr 2022 06:41:00 -0400
+X-MC-Unique: ewtEnXRZPAqk3RJgynQXIA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84BCA811E83;
+        Fri,  1 Apr 2022 10:40:59 +0000 (UTC)
+Received: from ceranb.redhat.com (unknown [10.40.192.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DEC21121315;
+        Fri,  1 Apr 2022 10:40:52 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     poros@redhat.com, mschmidt@redhat.com, jacob.e.keller@intel.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Brett Creeley <brett.creeley@intel.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net v2] ice: Fix incorrect locking in ice_vc_process_vf_msg()
+Date:   Fri,  1 Apr 2022 12:40:52 +0200
+Message-Id: <20220401104052.1711721-1-ivecera@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220401081023.37080-1-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm/mremap: avoid unneeded do_munmap call
-In-Reply-To: <20220401081023.37080-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,45 +65,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.04.22 10:10, Miaohe Lin wrote:
-> When old_len == new_len, do_munmap will return -EINVAL due to len == 0.
-> This errno will be simply ignored because of old_len != new_len check.
-> So it is unnecessary to call do_munmap when old_len == new_len because
-> nothing is actually done.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/mremap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/mremap.c b/mm/mremap.c
-> index e776d4c2345c..dd966621a056 100644
-> --- a/mm/mremap.c
-> +++ b/mm/mremap.c
-> @@ -817,9 +817,9 @@ static unsigned long mremap_to(unsigned long addr, unsigned long old_len,
->  			goto out;
->  	}
->  
-> -	if (old_len >= new_len) {
-> +	if (old_len > new_len) {
->  		ret = do_munmap(mm, addr+new_len, old_len - new_len, uf_unmap);
-> -		if (ret && old_len != new_len)
-> +		if (ret)
->  			goto out;
->  		old_len = new_len;
->  	}
+Usage of mutex_trylock() in ice_vc_process_vf_msg() is incorrect
+because message sent from VF is ignored and never processed.
 
-I remember stumbling over that myself a year ago or so but dig not
-deeper. But indeed, both variants (mmu, nommu) return -EINVAL in case
-len (old_len - new_len) == 0.
+Use mutex_lock() instead to fix the issue. It is safe because this
+mutex is used to prevent races between VF related NDOs and
+handlers processing request messages from VF and these handlers
+are running in ice_service_task() context. Additionally move this
+mutex lock prior ice_vc_is_opcode_allowed() call to avoid potential
+races during allowlist acccess.
 
-Maybe that used to be different before ecc1a8993751 ("do_mremap()
-untangling, part 2"), but it doesn't look like it.
+Fixes: e6ba5273d4ed ("ice: Fix race conditions between virtchnl handling and VF ndo ops")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_virtchnl.c | 21 +++++++------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-Acked-by: David Hildenbrand <david@redhat.com>
-
+diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl.c b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+index 3f1a63815bac..a465f3743ffc 100644
+--- a/drivers/net/ethernet/intel/ice/ice_virtchnl.c
++++ b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
+@@ -3642,14 +3642,6 @@ void ice_vc_process_vf_msg(struct ice_pf *pf, struct ice_rq_event_info *event)
+ 			err = -EINVAL;
+ 	}
+ 
+-	if (!ice_vc_is_opcode_allowed(vf, v_opcode)) {
+-		ice_vc_send_msg_to_vf(vf, v_opcode,
+-				      VIRTCHNL_STATUS_ERR_NOT_SUPPORTED, NULL,
+-				      0);
+-		ice_put_vf(vf);
+-		return;
+-	}
+-
+ error_handler:
+ 	if (err) {
+ 		ice_vc_send_msg_to_vf(vf, v_opcode, VIRTCHNL_STATUS_ERR_PARAM,
+@@ -3660,12 +3652,13 @@ void ice_vc_process_vf_msg(struct ice_pf *pf, struct ice_rq_event_info *event)
+ 		return;
+ 	}
+ 
+-	/* VF is being configured in another context that triggers a VFR, so no
+-	 * need to process this message
+-	 */
+-	if (!mutex_trylock(&vf->cfg_lock)) {
+-		dev_info(dev, "VF %u is being configured in another context that will trigger a VFR, so there is no need to handle this message\n",
+-			 vf->vf_id);
++	mutex_lock(&vf->cfg_lock);
++
++	if (!ice_vc_is_opcode_allowed(vf, v_opcode)) {
++		ice_vc_send_msg_to_vf(vf, v_opcode,
++				      VIRTCHNL_STATUS_ERR_NOT_SUPPORTED, NULL,
++				      0);
++		mutex_unlock(&vf->cfg_lock);
+ 		ice_put_vf(vf);
+ 		return;
+ 	}
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 

@@ -2,114 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA294EE8BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DF84EE8C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343626AbiDAHFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S1343692AbiDAHHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236804AbiDAHFc (ORCPT
+        with ESMTP id S242935AbiDAHHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:05:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9362AF;
-        Fri,  1 Apr 2022 00:03:41 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KV9yW2txtzBrvc;
-        Fri,  1 Apr 2022 14:59:31 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 15:03:36 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 15:03:35 +0800
-Message-ID: <3381d7df-7254-e0ba-648c-6e763bda2ea4@huawei.com>
-Date:   Fri, 1 Apr 2022 15:03:34 +0800
+        Fri, 1 Apr 2022 03:07:40 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF26FA238
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:05:51 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w8so1707908pll.10
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DgqOKKf2QPWibHI++3a4qElNtqGNYsPXAymuITvgbww=;
+        b=NaWjXWOVRG8zYJAo01P6Bae8CTdC/AZpskHAWVHlIfyVAnPQhoM0EHcb5BgVJAJic0
+         UuO//02kyZt70g/h79qvCWj2L9j8HUMVIUAx1YVRoyE+rmKpLmppjdP3bwT/zILRfd/x
+         zZrdWoBZabP0fcujPVmeQyiw2xGoAqrx+C2NpVzXwf391zKMe71GNUA67OCdDxaOoogG
+         yExVwdPfqJLJhNwS+pXgGpmBtSeFW4vNfia4Vf1YYV8uEjt2OhVqzT12VvJLBGt8PcnO
+         bpBIVyQyMN5VYBHRBKFg3aX5/k2WVj3QXbp71RmfwZh2J0GNlM6Appj9XMH3ruuCvWcT
+         E4SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DgqOKKf2QPWibHI++3a4qElNtqGNYsPXAymuITvgbww=;
+        b=VHpxDO9Hq+CAD377bMKREGxqPxtjOtAi9xcgKxuC4oqQzP9LCf6hVJLcA9jpx+ED6/
+         XSGeJQZibwPhbv4Ir0UXoHdVyWQbbIKt589D3ShqSxMZ0Rb2JdR41QnH6/APTvySiwx6
+         W24uf8ynQO27mt3IB8lic+JHtFMdSEglGv6skhxxND2Yb1LnhPINLUSmz3jwqiubqy5/
+         +ovw29l3lvryN3NpRbAuBlB3Vjnaj8+xpRNi7RgzmfTtQF4yC3gv5aUZnZN1oZzYFlQv
+         MJ3Ihi3e0NuTSfhHTnRxXxN6TldDLUWFu+XbLmOdnYi70DlvTAvkWG53QHLqpKn1H/3h
+         R0WA==
+X-Gm-Message-State: AOAM5311CUVpgMIAwy/aoXAV/tBtCf9UX9Kg+Wuw6CPGUKkjFriH1nQK
+        ScgruA93qPB1g/8Pp3cnoan/oQ==
+X-Google-Smtp-Source: ABdhPJwr/N4+d353Pr+bgVkOXaa2KhIRQTdZiVrZBVriWKv8NUxHiG1Epi3pLbPTWxa+RzzF3VugSA==
+X-Received: by 2002:a17:902:c745:b0:151:e8fa:629b with SMTP id q5-20020a170902c74500b00151e8fa629bmr45891827plq.90.1648796751375;
+        Fri, 01 Apr 2022 00:05:51 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e6d:3f10:69f0:2593:647c:15eb? ([2409:8a28:e6d:3f10:69f0:2593:647c:15eb])
+        by smtp.gmail.com with ESMTPSA id t5-20020a17090a6a0500b001c9ba10352fsm1382968pjj.25.2022.04.01.00.05.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 00:05:50 -0700 (PDT)
+Message-ID: <2f178bad-06e1-83de-0430-b0107053f248@bytedance.com>
+Date:   Fri, 1 Apr 2022 15:05:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH -next,v2 0/3] nfs: handle writeback errors correctly
-To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
-        <smayhew@redhat.com>
-CC:     <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liuyongqiang13@huawei.com>, <yi.zhang@huawei.com>,
-        <zhangxiaoxu5@huawei.com>
-References: <20220401034409.256770-1-chenxiaosong2@huawei.com>
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-In-Reply-To: <20220401034409.256770-1-chenxiaosong2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
+ with nohz_full
+Content-Language: en-US
+To:     Phil Auld <pauld@redhat.com>, Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Frederic Weisbecker <fweisbec@gmail.com>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+ <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+ <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
+ <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
+ <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+ <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
+ <20220328124454.08ab6126@gandalf.local.home>
+ <20220330182327.GO8939@worktop.programming.kicks-ass.net>
+ <20220330191439.GC17246@pauld.bos.csb>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220330191439.GC17246@pauld.bos.csb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/4/1 11:44, ChenXiaoSong 写道:
-> v1:
-> cover letter: (nfs: check writeback errors correctly)
+Hi,
+
+On 2022/3/31 03:14, Phil Auld wrote:
+> Hi Peter,
 > 
-> v2:
-> - return more nuanced writeback errors in nfs_file_write().
-> - return writeback error in close()->flush() without consumed it.
-> - fix: nfs_file_write() will always call nfs_wb_all() even if there is no
-> new writeback error.
+> On Wed, Mar 30, 2022 at 08:23:27PM +0200 Peter Zijlstra wrote:
+>> On Mon, Mar 28, 2022 at 12:44:54PM -0400, Steven Rostedt wrote:
+>>> On Mon, 28 Mar 2022 17:56:07 +0200
+>>> Peter Zijlstra <peterz@infradead.org> wrote:
+>>>
+>>>>> echo $$ > test/cgroup.procs
+>>>>> taskset -c 1 bash -c "while true; do let i++; done"  --> will be throttled  
+>>>>
+>>>> Ofcourse.. I'm arguing that bandiwdth control and NOHZ_FULL are somewhat
+>>>> mutually exclusive, use-case wise. So I really don't get why you'd want
+>>>> them both.
+>>>
+>>> Is it?
+>>>
+>>> One use case I can see for having both is for having a deadline task that
+>>> needs to get something done in a tight deadline. NOHZ_FULL means "do not
+>>> interrupt this task when it is the top priority task on the CPU and is
+>>> running in user space".
+>>
+>> This is absolute batshit.. It means no such thing. We'll happily wake
+>> another task to this CPU and re-enable the tick any instant.
+>>
+>> Worse; the use-case at hand pertains to cfs bandwidth control, which
+>> pretty much guarantees there *will* be an interrupt.
+> 
+> The problem is (at least in some cases) that container orchestration userspace
+> code allocates a whole CPU by setting quota == period.  Or 3 cpus as 3*period etc.
+> 
+> In cases where an isolated task is expected to run uninterrupted (only task in 
+> the system affined to that cpu, nohz_full, nocbs etc) you can end up with it
+> getting throttled even though it theoritically has enough bandwidth for the full
+> cpu and therefore should never get throttled. 
+> 
+> There are radio network setups where the packet processing is isolated
+> like this but the system as a whole is managed by container orchestration so 
+> everything has cfs bandwidth quotas set.
+> 
+> I don't think generally the bandwidth controls in these cases are used for 
+> CPU sharing (quota < period). I agree that doesn't make much sense with NOHZ_FULL
+> and won't work right. 
+> 
+> It's doled out as full cpu(s) in these cases.
+> 
+> Thats not a VM case so is likely different from the one that started this thread
+> but I thought I should mention it.
+
+Yes, it's a different use-case from ours. Thanks for sharing with us. I should
+put these in the patch log and send an updated version.
+
+Thanks.
+
 > 
 > 
-> ChenXiaoSong (3):
->    NFS: return more nuanced writeback errors in nfs_file_write()
->    NFS: nfs{,4}_file_flush() return correct writeback errors
->    Revert "nfs: nfs_file_write() should check for writeback errors"
+> Cheers,
+> Phil
 > 
->   fs/nfs/file.c     | 23 ++++++++++-------------
->   fs/nfs/nfs4file.c |  8 ++++----
->   fs/nfs/write.c    |  5 +----
->   3 files changed, 15 insertions(+), 21 deletions(-)
+>>
+>>> Why is it mutually exclusive to have a deadline task that does not want to
+>>> be interrupted by timer interrupts?
+>>
+>> This has absolutely nothing to do with deadline tasks, nada, noppes.
+>>
+>>> Just because the biggest pushers of NOHZ_FULL is for those that are running
+>>> RT tasks completely in user space and event want to fault if it ever goes
+>>> into the kernel, doesn't mean that's the only use case.
+>>
+>> Because there's costs associated with the whole thing. system entry/exit
+>> get far more expensive. It just doesn't make much sense to use NOHZ_FULL
+>> if you're not absoultely limiting system entry.
+>>
+>>> Chengming brought up VMs. That's a case to want to control the bandwidth,
+>>> but also not interrupt them with timer interrupts when they are running as
+>>> the top priority task on a CPU.
+>>
+>> It's CFS, there is nothing top priority about that.
+>>
 > 
-
-It is not a good idea to modify error sequence mechanism, as the 
-`lib/errseq.c` described:
-
-	22  * Note that there is a risk of collisions if new errors are being 
-recorded
-	23  * frequently, since we have so few bits to use as a counter. 
-
-	24  *
-	25  * To mitigate this, one bit is used as a flag to tell whether the 
-value has
-	26  * been sampled since a new value was recorded. That allows us to 
-avoid bumping
-	27  * the counter if no one has sampled it since the last time an error was
-	28  * recorded.
-
-
-So, if we want to report nuanced writeback error, it is better to detect 
-wb error from filemap_check_errors(), and then return 
--(file->f_mapping->wb_err & MAX_ERRNO) to userspace without consume it.
-
-   nfs_mapping_set_error
-     mapping_set_error
-       __filemap_set_wb_err // record error sequence
-         errseq_set
-       set_bit(..., &mapping->flags) // record address_space flag
-
-   // it is not used to be reported, just used to detect
-   error = filemap_check_errors // -ENOSPC or -EIO
-     test_and_clear_bit(..., &mapping->flags) // error bit cleared
-
-   // now we try to return nuanced writeback error
-   if (error)
-   return filemap_check_wb_err(file->f_mapping, 0);
-     return -(file->f_mapping->wb_err & MAX_ERRNO)
-

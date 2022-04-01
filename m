@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281A14EE5FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379B24EE5FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244013AbiDACUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S244031AbiDACVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238038AbiDACUJ (ORCPT
+        with ESMTP id S242265AbiDACVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:20:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE5F192BA;
-        Thu, 31 Mar 2022 19:18:19 -0700 (PDT)
-X-UUID: b491eb1115b14c9188e725920ef79dbd-20220401
-X-UUID: b491eb1115b14c9188e725920ef79dbd-20220401
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        Thu, 31 Mar 2022 22:21:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D5055482;
+        Thu, 31 Mar 2022 19:19:40 -0700 (PDT)
+X-UUID: e4ab3b337fd44b24b6578b50061434db-20220401
+X-UUID: e4ab3b337fd44b24b6578b50061434db-20220401
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1063335137; Fri, 01 Apr 2022 10:18:10 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1335888238; Fri, 01 Apr 2022 10:19:23 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 1 Apr 2022 10:18:08 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 1 Apr 2022 10:19:22 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 1 Apr 2022 10:18:08 +0800
-Message-ID: <53cb53b8614aa39e0785b99f46b708ad201c3dd8.camel@mediatek.com>
-Subject: Re: [PATCH v13 1/2] dt-bindings: mmc: mtk-sd: increase reg items
+ Transport; Fri, 1 Apr 2022 10:19:22 +0800
+Message-ID: <dbfe7ce524747ed3c3a7ccb8f370ca67cbb12361.camel@mediatek.com>
+Subject: Re: [PATCH v13 2/2] arm64: dts: Add mediatek SoC mt8195 and
+ evaluation board
 From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Chaotian Jing <chaotian.jing@mediatek.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         "Rob Herring" <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Wenbin Mei <wenbin.mei@mediatek.com>
@@ -45,12 +46,12 @@ CC:     <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <ryder.lee@kernel.org>, <wenst@chromium.org>,
-        <chunfeng.yun@mediatek.com>
-Date:   Fri, 1 Apr 2022 10:18:08 +0800
-In-Reply-To: <aebbb5c8-1d27-5e66-e18a-e2b647bc8cb4@gmail.com>
+        Seiya Wang <seiya.wang@mediatek.com>
+Date:   Fri, 1 Apr 2022 10:19:22 +0800
+In-Reply-To: <58f498a19f6c7be85823b2e2d5955272e78f0176.camel@mediatek.com>
 References: <20220330094532.21721-1-tinghan.shen@mediatek.com>
-         <20220330094532.21721-2-tinghan.shen@mediatek.com>
-         <aebbb5c8-1d27-5e66-e18a-e2b647bc8cb4@gmail.com>
+         <20220330094532.21721-3-tinghan.shen@mediatek.com>
+         <58f498a19f6c7be85823b2e2d5955272e78f0176.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -65,78 +66,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
-
-On Thu, 2022-03-31 at 12:54 +0200, Matthias Brugger wrote:
-> 
-> On 30/03/2022 11:45, Tinghan Shen wrote:
-> > MediaTek has a new version of mmc IP since mt8183. Some IO registers
-> > are moved to top to improve hardware design and named as "host top
-> > registers".
+On Thu, 2022-03-31 at 15:29 +0800, Chunfeng Yun wrote:
+> On Wed, 2022-03-30 at 17:45 +0800, Tinghan Shen wrote:
+> > Add basic chip support for mediatek mt8195.
 > > 
-> > Add host top register in the reg binding description for mt8183 and
-> > successors.
-> > 
-> > Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+> > Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
 > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
 > > ---
-> >   Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 15 ++++++++++++++-
-> >   1 file changed, 14 insertions(+), 1 deletion(-)
+> >  arch/arm64/boot/dts/mediatek/Makefile       |    1 +
+> >  arch/arm64/boot/dts/mediatek/mt8195-evb.dts |  173 +++
+> >  arch/arm64/boot/dts/mediatek/mt8195.dtsi    | 1045
+> > +++++++++++++++++++
+> >  3 files changed, 1219 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
 > > 
-> > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > index 297ada03e3de..2a2e9fa8c188 100644
-> > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > @@ -40,7 +40,10 @@ properties:
-> >             - const: mediatek,mt8183-mmc
-> >   
-> >     reg:
-> > -    maxItems: 1
-> > +    minItems: 1
+> > diff --git a/arch/arm64/boot/dts/mediatek/Makefile
+> > b/arch/arm64/boot/dts/mediatek/Makefile
+> > index 8c1e18032f9f..5da29e7223e4 100644
+> > --- a/arch/arm64/boot/dts/mediatek/Makefile
+> > +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> > @@ -38,4 +38,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-
+> > sku0.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
+> > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > new file mode 100644
+> > index 000000000000..76b5aaad7263
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > @@ -0,0 +1,173 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > +/*
+> > + * Copyright (C) 2021 MediaTek Inc.
+> > + * Author: Seiya Wang <seiya.wang@mediatek.com>
+> > + */
+> > +/dts-v1/;
+> > +#include "mt8195.dtsi"
+> > +
+> > +/ {
+> > +	model = "MediaTek MT8195 evaluation board";
+> > +	compatible = "mediatek,mt8195-evb", "mediatek,mt8195";
+> > +
+> > +	aliases {
+> > +		serial0 = &uart0;
+> > +	};
+> > +
+> > +	chosen {
+> > +		stdout-path = "serial0:921600n8";
+> > +	};
+> > +
+> > +	memory@40000000 {
+> > +		device_type = "memory";
+> > +		reg = <0 0x40000000 0 0x80000000>;
+> > +	};
+> > +};
+> > +
+> > +&auxadc {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&i2c0 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&i2c0_pin>;
+> > +	clock-frequency = <100000>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&i2c1 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&i2c1_pin>;
+> > +	clock-frequency = <400000>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&i2c4 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&i2c4_pin>;
+> > +	clock-frequency = <400000>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&i2c6 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&i2c6_pin>;
+> > +	clock-frequency = <400000>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&nor_flash {
+> > +	status = "okay";
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&nor_pins_default>;
+> > +
+> > +	flash@0 {
+> > +		compatible = "jedec,spi-nor";
+> > +		reg = <0>;
+> > +		spi-max-frequency = <50000000>;
+> > +	};
+> > +};
+> > +
+> > +&pio {
+> > +	i2c0_pin: i2c0-pins {
+> > +		pins {
+> > +			pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
+> > +				 <PINMUX_GPIO9__FUNC_SCL0>;
+> > +			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> > +			mediatek,drive-strength-adv = <0>;
+> > +			drive-strength = <6>;
+> > +		};
+> > +	};
+> > +
+> > +	i2c1_pin: i2c1-pins {
+> > +		pins {
+> > +			pinmux = <PINMUX_GPIO10__FUNC_SDA1>,
+> > +				 <PINMUX_GPIO11__FUNC_SCL1>;
+> > +			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> > +			mediatek,drive-strength-adv = <0>;
+> > +			drive-strength = <6>;
+> > +		};
+> > +	};
+> > +
+> > +	i2c4_pin: i2c4-pins {
+> > +		pins {
+> > +			pinmux = <PINMUX_GPIO16__FUNC_SDA4>,
+> > +				 <PINMUX_GPIO17__FUNC_SCL4>;
+> > +			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> > +			mediatek,drive-strength-adv = <7>;
+> > +		};
+> > +	};
+> > +
+> > +	i2c6_pin: i2c6-pins {
+> > +		pins {
+> > +			pinmux = <PINMUX_GPIO25__FUNC_SDA6>,
+> > +				 <PINMUX_GPIO26__FUNC_SCL6>;
+> > +			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> > +		};
+> > +	};
+> > +
+> > +	i2c7_pin: i2c7-pins {
+> > +		pins {
+> > +			pinmux = <PINMUX_GPIO27__FUNC_SCL7>,
+> > +				 <PINMUX_GPIO28__FUNC_SDA7>;
+> > +			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> > +		};
+> > +	};
+> > +
+> > +	nor_pins_default: nor-pins {
+> > +		pins0 {
+> > +			pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
+> > +				 <PINMUX_GPIO141__FUNC_SPINOR_CK>,
+> > +				 <PINMUX_GPIO143__FUNC_SPINOR_IO1>;
+> > +			bias-pull-down;
+> > +		};
+> > +
+> > +		pins1 {
+> > +			pinmux = <PINMUX_GPIO140__FUNC_SPINOR_CS>,
+> > +				 <PINMUX_GPIO130__FUNC_SPINOR_IO2>,
+> > +				 <PINMUX_GPIO131__FUNC_SPINOR_IO3>;
+> > +			bias-pull-up;
+> > +		};
+> > +	};
+> > +
+> > +	uart0_pin: uart0-pins {
+> > +		pins {
+> > +			pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
+> > +				 <PINMUX_GPIO99__FUNC_URXD0>;
+> > +		};
+> > +	};
+> > +};
+> > +
+> > +&u3phy0 {
+> > +	status="okay";
+> > +};
+> > +
+> > +&u3phy1 {
+> > +	status="okay";
+> > +};
 > 
->  From my understanding adding minItems is correct, but you need to add also 
-> maxItems: 2 as there can't be more then two register entries.
-> 
-> Regards,
-> Matthias
-> 
+> Seems forget to enable &phy2/3? due to xhci2/3 are enabled below
 
-After add "maxItems: 2", I get following message when doing dt_binding_check.
-from this message, it looks like that maxItems is not necessary.
-
-/proj/mtk15399/2cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/mmc/mtk-sd.yaml: 
-properties:reg: {'minItems': 1, 'maxItems': 2, 'items': [{'description': 'base register
-(required).'}, {'description': 'top base register (required for MT8183).'}]} should not be valid
-under {'required': ['maxItems']}
-        hint: "maxItems" is not needed with an "items" list
-        from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+Ok, I'll add them at next version.
+Thank you.
 
 Best regards,
 Tinghan
 
-> > +    items:
-> > +      - description: base register (required).
-> > +      - description: top base register (required for MT8183).
-> >   
-> >     clocks:
-> >       description:
-> > @@ -168,6 +171,16 @@ required:
-> >     - vmmc-supply
-> >     - vqmmc-supply
-> >   
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: mediatek,mt8183-mmc
-> > +then:
-> > +  properties:
-> > +    reg:
-> > +      minItems: 2
+> 
 > > +
-> >   unevaluatedProperties: false
-> >   
-> >   examples:
+> > +&uart0 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&uart0_pin>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&xhci0 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&xhci1 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&xhci2 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&xhci3 {
+> > +	/* This controller is connected with a BT device.
+> > +	 * Disable usb2 lpm to prevent known issues.
+> > +	 */
+> > +	usb2-lpm-disable;
+> > +	status = "okay";
+> > +};
+> > 
+> 
+> [skip]
+> 
 

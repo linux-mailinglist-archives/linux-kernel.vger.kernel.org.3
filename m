@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9131C4EFD02
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 01:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BD34EFD04
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 01:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353356AbiDAXNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 19:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S1353362AbiDAXOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 19:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiDAXNV (ORCPT
+        with ESMTP id S235008AbiDAXOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 19:13:21 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9861AE231;
-        Fri,  1 Apr 2022 16:11:29 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 3061BC01E; Sat,  2 Apr 2022 01:11:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648854688; bh=SetFAKutclE/yyKTkciHTa9dxUVAQelXK5rEur9ld6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=4LpuhqYg0JYGNwwdEcsJuxwlpKU9TfWtt6EuaItp0DiPKVZpLdyYG36HeVYeMDloj
-         oBmuzUQX2VaLiVTfvIwa2tfJqNSwlxchSagqicC+xD9O9MovXh/F5xE1P9/prGYH/U
-         /XstkEwVo3tcYdHurSeDePxxienJ4IktVZJG8JRn9V1T0hxWHBBFdELSuj+wQqB8EH
-         zwT35Y82CaWe9fSkn27sp4jhs+kZ5uKrdHZUm4JisQh5F6v0Uh9i3+j50djyNE0Swu
-         nyFthwX3L4XCUXamyindjatuucN99GMcDSLWVea4UpbAw3bCXyrg0nQZptx+xC5ZB3
-         +W+TFuNI/Fmsg==
+        Fri, 1 Apr 2022 19:14:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE4D1AE232
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 16:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648854783; x=1680390783;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OPzCag2JGWoNxMNwu7uFebgX4znndl20tsdpoJydaHM=;
+  b=S1EpZM9VEzFwBVWExNW1N7YBCtF9Z9P3ewFoMrGRdjkhAxqo5oUTnf5n
+   HW2zsBB0d+R8m6D+9I5xc/VQH3HcgRo+17cG8KyUJ2bVd1PHzh+L8Vy0Q
+   CoFjjfE6pfyQ9lWfk1nNqRQPFEbjoTY1+fJNEcl1WL4ci/CUfBRbo3Wmb
+   //y0Cz8RHMvaM8pwDle+eebE/PItcah0QuJn+5uObWqMqW+ovqv3R6oci
+   GxeI9ym5K0I4tT2pdPPV7zIaEn8dHtW717s9AjrD6J6yL+WaFnghqrW+N
+   02CiqRr86R9cgRqFo29tkl30C89jZgJxvakHDK/TaDTKGwZkI666L3fC6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260234323"
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="260234323"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 16:13:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="522948513"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 16:13:00 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naQRv-0001aS-Hq;
+        Fri, 01 Apr 2022 23:12:59 +0000
+Date:   Sat, 2 Apr 2022 07:12:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dafna Hirschfeld <dhirschfeld@habana.ai>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-next 25/28]
+ drivers/misc/habanalabs/goya/goya.c:4265:5: warning: no previous prototype
+ for 'goya_debugfs_read_dma'
+Message-ID: <202204020706.ouqJkQDU-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id E5B28C009;
-        Sat,  2 Apr 2022 01:11:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648854687; bh=SetFAKutclE/yyKTkciHTa9dxUVAQelXK5rEur9ld6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y7AyGgdzV9RIYAvdo+e71CeyXyd7OjgbOu+6jy5903aPxwQKeWDMwygxuze4Cj0JY
-         rLgHWupoCxT2rLOccNXi4WipK9q1vufgQDHoZi307pgRgfiFnwyOdqMhdB0xoOyp8M
-         ueZo/74TsW7C4T8WxuSoU1JOqVi9sOVf4htDVSoIMHRiyXjkpY5pauKCrgdC+pUV2i
-         KBtGZhbhG/GOdyI0OIfTQx7NCZCMoLE0HWQWa/aVDSSr9OAgmIQ99D6zL+5qJ5VMsp
-         ZVpqvC777v6leVvOz8bYs/5t2Jo9G00MpfMFstxfuRMSd5tW7wjuyvl+yAAm/JP6tt
-         StnW9X+XJLe9A==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id ad70e3e6;
-        Fri, 1 Apr 2022 23:11:19 +0000 (UTC)
-Date:   Sat, 2 Apr 2022 08:11:04 +0900
-From:   asmadeus@codewreck.org
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie
- detected)
-Message-ID: <YkeGiLyO52etYhgb@codewreck.org>
-References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
- <3791738.ukkqOL8KQD@silver>
- <YkTP/Talsy3KQBbf@codewreck.org>
- <1866935.Y7JIjT2MHT@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1866935.Y7JIjT2MHT@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Schoenebeck wrote on Fri, Apr 01, 2022 at 04:19:20PM +0200:
-> 4. v9fs_qid_iget_dotl [fs/9p/vfs_inode_dotl.c, 133]:
-> 
-> 	v9fs_cache_inode_get_cookie(inode);
-> 	^--- Called independent of function argument "new"'s value here
->    https://github.com/torvalds/linux/blob/e8b767f5e04097aaedcd6e06e2270f9fe5282696/fs/9p/vfs_inode_dotl.c#L133
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
+head:   fa59c43c5c906277ab3b753d782488ef4fd3ba62
+commit: cb162eee0d9f31c21860a9f454563abde2ff30aa [25/28] habanalabs: remove debugfs read/write callbacks
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220402/202204020706.ouqJkQDU-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=cb162eee0d9f31c21860a9f454563abde2ff30aa
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay habanalabs-next
+        git checkout cb162eee0d9f31c21860a9f454563abde2ff30aa
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/misc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/misc/habanalabs/goya/goya.c:4265:5: warning: no previous prototype for 'goya_debugfs_read_dma' [-Wmissing-prototypes]
+    4265 | int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
+         |     ^~~~~~~~~~~~~~~~~~~~~
 
 
-uh, I'd have assumed either this call or the function to check
-v9ses->cache, but it doesn't look like either do...
-There's a nice compile-time static inline empty definition if FSCACHE is
-not compiled in, but that should -also- be a check at runtime based on
-the session struct.
+vim +/goya_debugfs_read_dma +4265 drivers/misc/habanalabs/goya/goya.c
 
-For your remark vs. the 'new' argument, it does depend on it:
- - new determines which check is used for iget5_locked.
-In the 'new' case, v9fs_test_new_inode_dotl always returns 0 so we
-always get a new inode.
- - if iget5_locked found an existing inode (i_state & I_NEW false) we
-return it.
- - at this point we're allocating a new inode, so we should initialize
-its cookie if it's on a fscache-enabled mount
-
-So that part looks OK to me.
-
-What isn't correct with qemu setting qid version is the non-new case's
-v9fs_test_inode_dotl, it'll consider the inode to be new if version
-changed so it would recreate new, different inodes with same inode
-number/cookie and I was sure that was the problem, but it looks like
-there's more to it from your reply below :(
-
-
->> Well, at least that one is an easy fix: we just don't need this.
->> It's the easiest way to reproduce but there are also harder to fix
->> collisions, file systems only guarantee unicity for (fsid,inode
->> number,version) which is usually bigger than 128 bits (although version
->> is often 0), but version isn't exposed to userspace easily...
->> What we'd want for unicity is handle from e.g. name_to_handle_at but
->> that'd add overhead, wouldn't fit in qid path and not all fs are capable
->> of providing one... The 9p protocol just doesn't want bigger handles
->> than qid path.
-> 
-> No bigger qid.path on 9p protocol level in future? Why?
-
-I have no idea about the "9p protocol" as a standard, nor who decides
-how that evolves -- I guess if we wanted to we could probably make a
-9p2022.L without concerting much around, but I have no plan to do
-that... But if we do, I can probably add quite a few things to the
-list of things that might need to change :)
-
-
-That being said, this particular change of qid format is rather
-annoying. 9p2000.L basically just added new message types, so dissectors
-such as wireshark could barge in the middle of the tcp flow and more or
-less understand; modifying a basic type like this would require to
-either catch the TVERSION message or make new message types for
-everything that deals wth qids (auth/attach, walk, lopen, lcreate,
-mknod, getattr, readdir, mkdir... that's quite a few)
-
-So I think we're better off with the status quo here.
-
->> And, err, looking at the qemu code
->> 
->>   qidp->version = stbuf->st_mtime ^ (stbuf->st_size << 8);
->> 
->> so the qid is treated as "data version",
->> but on kernel side we've treated it as inode version (i_version, see
->> include/linux/iversion.h)
->> 
->> (v9fs_test_inode_dotl checks the version is the same when comparing two
->> inodes) so it will incorrectly identify two identical inodes as
->> different.
->> That will cause problems...
->> Since you'll be faster than me could you try keeping it at 0 there?
-> 
-> I tried with your suggested change on QEMU side:
-> 
-> diff --git a/hw/9pfs/9p.c b/hw/9pfs/9p.c
-> index a6d6b3f835..5d9be87758 100644
-> --- a/hw/9pfs/9p.c
-> +++ b/hw/9pfs/9p.c
-> @@ -981,7 +981,7 @@ static int stat_to_qid(V9fsPDU *pdu, const struct stat *stbuf, V9fsQID *qidp)
->          memcpy(&qidp->path, &stbuf->st_ino, size);
->      }
->  
-> -    qidp->version = stbuf->st_mtime ^ (stbuf->st_size << 8);
-> +    qidp->version = 0;
->      qidp->type = 0;
->      if (S_ISDIR(stbuf->st_mode)) {
->          qidp->type |= P9_QID_TYPE_DIR;
-> 
-> Unfortunately it did not make any difference for these 2 Linux kernel fs-cache
-> issues at least; still same errors, and same suboptimal performance.
-
-Thanks, I'll give it a try today or tomorrow, adding some trace when we
-create inodes might give a clue...
+  4264	
+> 4265	int goya_debugfs_read_dma(struct hl_device *hdev, u64 addr, u32 size,
+  4266					void *blob_addr)
+  4267	{
+  4268		dev_err(hdev->dev, "Reading via DMA is unimplemented yet\n");
+  4269		return -EPERM;
+  4270	}
+  4271	
 
 -- 
-Dominique
+0-DAY CI Kernel Test Service
+https://01.org/lkp

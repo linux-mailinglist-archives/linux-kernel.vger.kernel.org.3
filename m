@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9314EFC13
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251844EFC17
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352738AbiDAVQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S1352747AbiDAVRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245368AbiDAVQn (ORCPT
+        with ESMTP id S234925AbiDAVRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:16:43 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8328148C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:14:52 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 14:14:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1648847690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQPbMxATgPsqR0bbHUcTP6NBEErFcNaDM6bna/D7CWc=;
-        b=S1xB/VeBA2PtdLMYm1TIUy3l5XknOdb7JYkFyCUActTxWOhIhfbV19hvwDT62ns5ZeIN64
-        tk4jS6o4OHLGg8jKou/3GF7wwWigcrw4ZsMyVGulwhw/mHUOHnoNyhfn+t90jS/ypz76ur
-        Q0PlSXXlJKqdj9aZJT8JGRhk7/8+nL0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Vasily Averin <vasily.averin@linux.dev>,
-        Pablo Neira Ayuso <pablo@netfilter.org>, kernel@openvz.org,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH nft] nft: memcg accounting for dynamically allocated
- objects
-Message-ID: <YkdrRAiO1P7segcd@carbon.dhcp.thefacebook.com>
-References: <bf4b8fe3-6dd6-4f3a-12f4-1b5bf2e45783@linux.dev>
- <e730480d-9396-6486-ab98-67ecb683e819@linux.dev>
- <20220401120342.GC9545@breakpoint.cc>
- <7bfa2e2e-b22d-7561-661b-41ef7714caf5@linux.dev>
- <20220401193159.GB28321@breakpoint.cc>
+        Fri, 1 Apr 2022 17:17:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C859E7A98C;
+        Fri,  1 Apr 2022 14:15:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00168B82505;
+        Fri,  1 Apr 2022 21:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2EC3C2BBE4;
+        Fri,  1 Apr 2022 21:15:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648847728;
+        bh=TMC2lxjFF/69h0u5qOKYS/bbP77+QCpSH+WipT6atYo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aXldOcwmEiQWYMEcq5ev2wNzg1h3hWsksE5NKJhhhunaPJT5MOCY2kCYWIJCx20zB
+         XqJQPe7vYfY+srPArI0uQeL8UG6YUb13TBmMRubipai8+cJvBvVt+nSMfsL1Nx0Jn0
+         NTAgSQ4C+MPV6bxSJ7Ecc6Rp4bR//yJGo021FATXP5YZ8JiP50CZZ+H1DlFvSz1/Nq
+         KylaDGG8CKkoSm3+Q+H/qvlU4/p90PsMoiiKv7l5Cl6ouv8DVJev6g2S/47saNGV+r
+         kXeNxo8o6V2iWrTBWVPvK+JH93lpehP3gmhLQ6e1bWMqMrOMfVeAz1nBk7GP6f7ILH
+         +xG7Kj/WN6RFg==
+Date:   Fri, 1 Apr 2022 22:15:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: qcom,smd-rpm: update maintainers (drop
+ Kathiravan)
+Message-ID: <Ykdra8vV6IxjUaRH@sirena.org.uk>
+References: <20220401202759.191560-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="N7jqBAFlRuRLdVOL"
 Content-Disposition: inline
-In-Reply-To: <20220401193159.GB28321@breakpoint.cc>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220401202759.191560-1-krzysztof.kozlowski@linaro.org>
+X-Cookie: Universe, n.:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 09:31:59PM +0200, Florian Westphal wrote:
-> Vasily Averin <vasily.averin@linux.dev> wrote:
-> > > Same problem as connlimit, can be called from packet path.
-> > > Basically all GFP_ATOMIC are suspicious.
-> > > 
-> > > Not sure how to resolve this, similar mechanics in iptables world (e.g.
-> > > connlimit or SET target) don't use memcg accounting.
-> > > 
-> > > Perhaps for now resend with only the GFP_KERNEL parts converted?
-> > > Those are safe.
-> > 
-> > It is safe for packet path too, _ACCOUNT allocation will not be able to find memcg
-> > in case of "!in_task()" context.
-> > On the other hand any additional checks on such path will affect performance.
-> 
-> I'm not sure this works with ksoftirqd serving network stack?
-> 
-> > Could you please estimate how often is this code used in the case of nft vs packet path?
-> 
-> It depends on user configuration.
-> Update from packet path is used for things like port knocking or other
-> dyanamic filter lists, or somehing like Limiting connections to x-per-address/subnet and so on.
-> 
-> > If the opposite is the case, then I can add __GFP_ACCOUNT flag depending on in_task() check.
-> 
-> But what task/memcg is used for the accounting in that case?
 
-Root memcg/no accounting, which is the same.
+--N7jqBAFlRuRLdVOL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There is a way to account for a specific memcg in such cases, it's used for
-bpf maps, for example. We save a pointer to the memcg which created the map and
-charge it for all allocations from a !in_task context. But the performance can
-be affected, so let's not do without regression tests and a serious need.
+On Fri, Apr 01, 2022 at 10:27:59PM +0200, Krzysztof Kozlowski wrote:
+> Kathiravan's email bounces (585: Recipient address rejected:
+> undeliverable address: No such user here) so switch maintainers to Andy
+> and Bjorn (as Qualcomm platform maintainers).
 
-Thanks!
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--N7jqBAFlRuRLdVOL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJHa2oACgkQJNaLcl1U
+h9B4qgf8CMZZLIY0wIj858AnHDOmx0Q0TleK9Jc52emgEcvQFHK1uMznH0azLAtY
+ex4Hvf6EaAgyTksyBVH/JdEv2RLgyEUzf6mjYItFX+vJn3N9pLn02QSTyXlKPIa1
+Zjmo+rL9RuMmiuBng3ARlIuFM50GmvyQb/EtkGPv1hVXWvEoaByY7xsygLu+4o/L
+QX5lWzS0k7EWj6fVvjRCkQiJMNyHj3ZOSw0EECy7LW6xCF/iOTh0i+j6JHOSOJ0E
+/bdTinxZydO6y6NZS3FfYwzjljs2BkVRQL/tVjaXKLVw7z+KF2Wg5zk7nwkjVSon
+BCMRpnZvrjSSCt6sqK8hmoRyRYj8Xg==
+=p3Q7
+-----END PGP SIGNATURE-----
+
+--N7jqBAFlRuRLdVOL--

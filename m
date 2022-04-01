@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCC14EE817
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1EE4EE81B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245329AbiDAGTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
+        id S245343AbiDAGVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiDAGTe (ORCPT
+        with ESMTP id S235485AbiDAGVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AF51E6EB5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:17:45 -0700 (PDT)
+        Fri, 1 Apr 2022 02:21:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D512F157;
+        Thu, 31 Mar 2022 23:19:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B0F060BB5
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A73DC2BBE4;
-        Fri,  1 Apr 2022 06:17:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0D9A7CE2402;
+        Fri,  1 Apr 2022 06:19:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6CC5C340EE;
+        Fri,  1 Apr 2022 06:19:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648793864;
-        bh=8HJ2dThZuhlAG/zKt+3MnNMi7qOyxQ+9IpdZjNkR/lo=;
+        s=korg; t=1648793972;
+        bh=UNO2VY2szv3tnY2SSi44aAJ9/bbdp19Fi5sMykNkswE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MRJ+IqR6sNNK49lG+DQI4teQUGEdOP/AyEcFA7JW4CBs1h0S8V8NersUv1Z0hBF8u
-         GR8o9y3awtwy6o3EozMKGc/PdiSC33dLBgNn4XEkoRcDwESnTaSGGH8m8wF8RDPQDh
-         ABHoDqrBI9S2v8A+K9e4c1O5VtVG6DRgb4iynUsg=
-Date:   Fri, 1 Apr 2022 08:17:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH] uio/uio_pci_generic: Introduce refcnt on open/release
-Message-ID: <YkaZBWqcOSBO28HU@kroah.com>
-References: <1648692384-109967-1-git-send-email-yaohongbo@linux.alibaba.com>
- <20220331162521-mutt-send-email-mst@kernel.org>
+        b=DCHiplod743wmDADlym8FzwvFReEK1+BjoT6lMvXmE87rEM0nZFG4Tz9I7BzUNlGD
+         Q9oWAYymPkNL5IP7WKoTMSERvTZjLP41m+gQB1J5VZ7qey10gG/MJCnedYqM4ubey7
+         0quqtvVpnGcS7tEddZVn5qkvi2vFtC8DQ8K/3mv8=
+Date:   Fri, 1 Apr 2022 08:19:29 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dan Vacura <w36195@motorola.com>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Carlos Bilbao <bilbao@vt.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: allow changing interface name via
+ configfs
+Message-ID: <YkaZcSsadjHp1yJZ@kroah.com>
+References: <20220331211155.412906-1-w36195@motorola.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331162521-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220331211155.412906-1-w36195@motorola.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,23 +58,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 04:29:23PM -0400, Michael S. Tsirkin wrote:
-> On Thu, Mar 31, 2022 at 10:06:24AM +0800, Yao Hongbo wrote:
-> > If two userspace programs both open the PCI UIO fd, when one
-> > of the program exits uncleanly, the other will cause IO hang
-> > due to bus-mastering disabled.
+On Thu, Mar 31, 2022 at 04:11:50PM -0500, Dan Vacura wrote:
+> Add a configfs entry, "function_name", to change the iInterface field
+> for VideoControl. This name is used on host devices for user selection,
+> useful when multiple cameras are present. The default will remain "UVC
+> Camera".
 > 
-> With two programs poking at the same device, how is this ever
-> supposed to work even while both are alive?
-> 
-> > It's a common usage for spdk/dpdk to use UIO.
-> 
-> Except people really should just use vfio ...
+> Cc: <stable@vger.kernel.org> # 5.10+
 
-Yes they should, the kernel should not care if multiple programs open
-the same UIO device node, it can not prevent that and userspace is on
-it's own here as it _should_ know what it is doing.
+Why is adding a new feature a stable kernel issue?
 
-thanks,
+confused,
 
 greg k-h

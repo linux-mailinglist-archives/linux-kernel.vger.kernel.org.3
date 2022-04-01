@@ -2,109 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6954EEEBC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F804EEEC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346642AbiDAOCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S1346651AbiDAOGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242987AbiDAOCM (ORCPT
+        with ESMTP id S1345764AbiDAOGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:02:12 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D159C5FF09
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:00:22 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id u16so4419980wru.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=81peZBmLl1P8MoxcBKe75OzMzjaOe8BW5vGSNP3oTXE=;
-        b=Hdh90bsQfQulbfzNnj8rBKM2RkpMeOff3GwqzbmItaBJlvpZWpIN4aoVoScFoR68au
-         DY7xCCwSduhD8QEdLwhChipugpkXwCQe5b9LgascBxXen/2w3UZqKkqvEMLVWCeJvnbf
-         19THXr24xyg9RT2QWUDyOiz7xXwTgUlyQzPNLVnlCnRO6YPKt7jzfSai5SpkQE1WyNbn
-         BjRag587ypYj8P4ltLpckaVeCO9TTTyJGcpYoOQV7vqCxld2ZIoXpfj/9GkzJBfKi899
-         qegJgNs2sQApu2KDACf3wkMACwWvLSvZp/Is0A8g/CGzFA9RRteTkNs/9+1l7QZmcqDO
-         LSiA==
+        Fri, 1 Apr 2022 10:06:10 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B60C6579D;
+        Fri,  1 Apr 2022 07:04:21 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-dee0378ce7so2792975fac.4;
+        Fri, 01 Apr 2022 07:04:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=81peZBmLl1P8MoxcBKe75OzMzjaOe8BW5vGSNP3oTXE=;
-        b=D4Osbng5suwOc43RNS4YWGr8Lxw8Xq0jrPEttiYzrF4zyOGqk2gN7fG8kDPTSP4tDr
-         5xTfOVHESlE2JR5WfdC/DpTGUdT0mEyi4Dlp3ulh5GbZkKA5Ugqfl8cuNePPOKUTA/He
-         ttXUPTIlJlY/+J0uhDJfx5hJF6L3cMMFhhln3+rlH3/VdOiu4xMvXaOsKN6PYnMmkm68
-         nLefo80zXgRKcmpIj59A5UhfS3HCnm72pD5+/6UPbiLkTg0DqLWEtcCy1Jqy8qHqItXB
-         NAO+sqZ0dAc4aXXJRDlxcUe2YqUSw4DCEQKwiPYBT03EoNAsgFJ0iaRF8jgLdA+HhvW9
-         ra8Q==
-X-Gm-Message-State: AOAM532QIWtrCwhynj2tYlogjIb5V4VUCkW6pa7mYs/BCrwrAi4zlp69
-        +q9FC2p0PY8xKqHmvwbrQz5uoQ==
-X-Google-Smtp-Source: ABdhPJyCu9IMphhIOyUvpdqAUVDOPHIsymxVBgBJ9ednqPNXmoIk17Kb4I6XSEUVbLRpacJ5viDp0A==
-X-Received: by 2002:a05:6000:22a:b0:203:f7f8:e006 with SMTP id l10-20020a056000022a00b00203f7f8e006mr7866808wrz.175.1648821621323;
-        Fri, 01 Apr 2022 07:00:21 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:e6f2:bb17:31a5:c2ca])
-        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm2197824wre.22.2022.04.01.07.00.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=466muH8TK2/yIkrsl/4601LgxLVtXpA/vsSB0xSWFPM=;
+        b=rGqRBRgNfBRlr85/uY1NJ7xEeAUZNegM9wNH2XMUOgJZX//zgoSN/Ck7f7hQ379fUo
+         ABhNyLb/JbTS8WqOsEFi2gHUtT8Rng8N4/TsJXEva03ynq1P1wpjkSo2v3SJ8fHlZ1YL
+         v6mpUCbTGBpao0kZvaSCFRblUsZUgaED/x0GpnD2IFpuhvexsi/AIxemAh8PSbzfy77g
+         ZuiNQYhQQXk9Pgd5E9HBrnbTJLImYa2nnvPsa64kk+yqHkQOIeSgpB4W/55dmloLCGOW
+         zw8sbJFwS0jiM5kzzh7gFfOjcxIoeSFNt+PgNDbW1kxwI4hPLwgodtZdh6FJn/syxgFN
+         i8Ng==
+X-Gm-Message-State: AOAM531xSl1m0P/5fVw/wBDhe30QnLmQG0b7Ljo0nXFIPtdMw/NYnxQB
+        gYaen3RezgB2K1d3QcBw5g==
+X-Google-Smtp-Source: ABdhPJwDMMktaz/l2V8/Ke7d7S2/0T3HHlMyAQTdziceWQhTIjAzKSHejbo1nlHUsHjY+VnD9FuQHQ==
+X-Received: by 2002:a05:6870:c881:b0:de:ab7f:2401 with SMTP id er1-20020a056870c88100b000deab7f2401mr5031521oab.75.1648821860362;
+        Fri, 01 Apr 2022 07:04:20 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y67-20020a4a4546000000b0032476e1cb40sm1053435ooa.25.2022.04.01.07.04.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 07:00:20 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.18-rc1
-Date:   Fri,  1 Apr 2022 16:00:16 +0200
-Message-Id: <20220401140016.831088-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.32.0
+        Fri, 01 Apr 2022 07:04:18 -0700 (PDT)
+Received: (nullmailer pid 2984690 invoked by uid 1000);
+        Fri, 01 Apr 2022 14:04:17 -0000
+Date:   Fri, 1 Apr 2022 09:04:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     niravkumar.l.rabara@intel.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Add Altera hardware mutex driver
+Message-ID: <YkcGYcGVkai3eu1E@robh.at.kernel.org>
+References: <20220331214911.27194-1-niravkumar.l.rabara@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331214911.27194-1-niravkumar.l.rabara@intel.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Fri, Apr 01, 2022 at 05:49:11AM +0800, niravkumar.l.rabara@intel.com wrote:
+> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> 
+> Altera hardware mutex soft IP provides hardware assistance for
+> synchronization and mutual exclusion between processors in
+> asymmetric/symmetric multiprocessing (AMP/SMP) system or
+> multi processes/threads in uniprocessor system.
+> 
+> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> ---
+>  .../bindings/misc/altera-hwmutex.yaml         |  47 +++
 
-Please pull the following documentation and comment fixes for the
-upcoming rc.
+Bindings should be separate patch. We have a subsystem/class for this 
+type of h/w. The binding (and driver) belongs there.
 
-Best regards,
-Bartosz Golaszewski
+>  drivers/misc/Kconfig                          |   6 +
+>  drivers/misc/Makefile                         |   1 +
+>  drivers/misc/altera_hwmutex.c                 | 321 ++++++++++++++++++
+>  include/linux/altera_hwmutex.h                |  42 +++
+>  5 files changed, 417 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/altera-hwmutex.yaml
+>  create mode 100644 drivers/misc/altera_hwmutex.c
+>  create mode 100644 include/linux/altera_hwmutex.h
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/altera-hwmutex.yaml b/Documentation/devicetree/bindings/misc/altera-hwmutex.yaml
+> new file mode 100644
+> index 000000000000..57a9ea19c563
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/altera-hwmutex.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/altera-hwmutex.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Altera hardware mutex
+> +
+> +maintainers:
+> +  - Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> +
+> +description:
+> +  Altera hardware mutex can provide hardware assistance for synchronization
+> +  and mutual exclusion between processors in asymmetric/symmetric multiprocessing
+> +  (AMP/SMP) system or multi processes/threads in uniprocessor system.
 
-The following changes since commit f443e374ae131c168a065ea1748feac6b2e76613:
+Link to IP documentation?
 
-  Linux 5.17 (2022-03-20 13:14:17 -0700)
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - altr,hwmutex-1.0
 
-are available in the Git repository at:
+1.0? I feel like you made up this version.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.18-rc1
+> +      - client-1.0
 
-for you to fetch changes up to 24f71ae5447e661813228677d343208d624fc141:
+No.
 
-  gpio: ts5500: Fix Links to Technologic Systems web resources (2022-03-31 16:44:57 +0200)
+> +
+> +  reg:
+> +    items:
+> +      - description: physical address of hw mutex and length of memory mapped
+> +         region
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    mutex0: mutex0@100 {
+> +        compatible = "altr,hwmutex-1.0";
+> +        reg = <0x100 0x8>;
+> +    };
+> +
+> +
+> +   #Example of mutex's client node that includes mutex phandle    
+> +   #mclient0: mclient0@200 {
+> +   #     compatible = "client-1.0";
+> +   # 	reg = <0x200 0x10>;
+> +   #	mutex = <&mutex0>;
 
-----------------------------------------------------------------
-gpio fixes for v5.18-rc1
+We have a standard binding for this.
 
-- grammar and formatting fixes in comments for gpio-ts4900
-- correct links in gpio-ts5500
-- fix a warning in doc generation for the core GPIO documentation
+> +   # };
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index 0f5a49fc7c9e..707acf740c6f 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -435,6 +435,12 @@ config DW_XDATA_PCIE
+>  
+>  	  If unsure, say N.
+>  
+> +config ALTERA_HWMUTEX
+> +       tristate "Altera Hardware Mutex"
+> +       help
+> +         This option enables device driver support for Altera Hardware Mutex.
+> +         Say Y here if you want to use the Altera hardware mutex support.
+> +
+>  config PCI_ENDPOINT_TEST
+>  	depends on PCI
+>  	select CRC32
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index a086197af544..6fcbbd36b3cf 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -40,6 +40,7 @@ obj-$(CONFIG_PCH_PHUB)		+= pch_phub.o
+>  obj-y				+= ti-st/
+>  obj-y				+= lis3lv02d/
+>  obj-$(CONFIG_ALTERA_STAPL)	+=altera-stapl/
+> +obj-$(CONFIG_ALTERA_HWMUTEX)   += altera_hwmutex.o
+>  obj-$(CONFIG_INTEL_MEI)		+= mei/
+>  obj-$(CONFIG_VMWARE_VMCI)	+= vmw_vmci/
+>  obj-$(CONFIG_LATTICE_ECP3_CONFIG)	+= lattice-ecp3-config.o
+> diff --git a/drivers/misc/altera_hwmutex.c b/drivers/misc/altera_hwmutex.c
+> new file mode 100644
+> index 000000000000..45f98e4b13d0
+> --- /dev/null
+> +++ b/drivers/misc/altera_hwmutex.c
+> @@ -0,0 +1,321 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright Intel Corporation (C) 2022. All rights reserved
+> + *
+> + * This program is free software; you can redistribute it and/or modify it
+> + * under the terms and conditions of the GNU General Public License,
+> + * version 2, as published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope it will be useful, but WITHOUT
+> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+> + * more details.
+> + *
+> + * You should have received a copy of the GNU General Public License along with
+> + * this program.  If not, see <http://www.gnu.org/licenses/>.
 
-----------------------------------------------------------------
-Joey Gouly (1):
-      gpio: Properly document parent data union
-
-Kris Bahnsen (2):
-      gpio: ts4900: Fix comment formatting and grammar
-      gpio: ts5500: Fix Links to Technologic Systems web resources
-
- drivers/gpio/gpio-ts4900.c  | 12 +++++++-----
- drivers/gpio/gpio-ts5500.c  |  4 ++--
- include/linux/gpio/driver.h | 13 ++++++++-----
- 3 files changed, 17 insertions(+), 12 deletions(-)
+Drop the license text. You only need SPDX-License-Identifier

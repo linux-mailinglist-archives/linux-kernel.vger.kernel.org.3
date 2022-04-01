@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EA94EEDC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5664EEDCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346130AbiDANFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S1346160AbiDANG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346156AbiDANFq (ORCPT
+        with ESMTP id S1345944AbiDANGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:05:46 -0400
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7232211C26;
-        Fri,  1 Apr 2022 06:03:44 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.108.20.220])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id E28952451C7;
-        Fri,  1 Apr 2022 13:03:31 +0000 (UTC)
-Received: from [192.168.1.42] (88.125.132.78) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Apr
- 2022 15:03:30 +0200
-Message-ID: <8fb86bde-7672-87e1-28a1-e78f371bfcca@traphandler.com>
-Date:   Fri, 1 Apr 2022 15:03:29 +0200
+        Fri, 1 Apr 2022 09:06:53 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFDF674C7;
+        Fri,  1 Apr 2022 06:05:03 -0700 (PDT)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 231D4TDg016474;
+        Fri, 1 Apr 2022 22:04:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 231D4TDg016474
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648818270;
+        bh=U4tivoNrq6M0EJH3DKmbmPRC4R9x9GkT3H+S8TbYLJc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WTKWq2NMSHfTrxUlVjLN3HagkNdHTVcnma3lnxXTIWuMlfHyKX7bl2C6SQUqPKMg+
+         8U9B2hIUNGMOmvOMJqoP+Ao+/taWX00tI2T80zg4ctOGeb8uhplU7EB8/ytJkS7mzV
+         pnMfkWxF8QfxI1CG3NnaRILUXkHhYQ1pWBFXcx5BNq+/6VQnkNu3YQWoVNijAm9XIX
+         Jy/GxlkE0hA+PM+kI9ZSLrEvRMWwhWaavAtuoP2NNZ4ZdD6o5ovwLA+3VWHSVQrAvN
+         JapjV1G0Ajdgsc2YN1z/UfaNwVHaETa18v09n3Tj9Kd6EDJojx5HuHnimnAisD63nH
+         nOqDbjz8bTLjw==
+X-Nifty-SrcIP: [209.85.216.42]
+Received: by mail-pj1-f42.google.com with SMTP id d30so2413773pjk.0;
+        Fri, 01 Apr 2022 06:04:29 -0700 (PDT)
+X-Gm-Message-State: AOAM533cnbXrA692PB7D5UheAw86EnFtydh8mODDgo3jRgzUu4uIqm0O
+        dqJuMlLV4NX0mXlKx9CO4yvvzkGWvXGA7Es5Q1A=
+X-Google-Smtp-Source: ABdhPJz7VifLyQ80hcB1Aoh/UYgD01w32NA00IyMZnxMSO58Iq1X8IgsvauYHKLcjG96jZqsutGm4BwB9r9evHvT3GY=
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
+ s3-20020a170902b18300b0014fc26620d5mr10504064plr.136.1648818269002; Fri, 01
+ Apr 2022 06:04:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
-Content-Language: en-US
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <geert+renesas@glider.be>, <linux-watchdog@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-References: <20220330100829.1000679-1-jjhiblot@traphandler.com>
- <20220330100829.1000679-3-jjhiblot@traphandler.com>
- <YkVFc6Q6/6rxSw89@google.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <YkVFc6Q6/6rxSw89@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [88.125.132.78]
-X-ClientProxiedBy: DAG3EX1.emp2.local (172.16.2.21) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 17880416423138572789
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiiedgheelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtjeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpefhiedthedttdegueeggfdtjeegtdeileeftdegheeutdetjeeuieehtdevvdefieenucfkpheptddrtddrtddrtddpkeekrdduvdehrddufedvrdejkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepphhhihhlrdgvugifohhrthhhhiesrhgvnhgvshgrshdrtghomh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330234528.1426991-1-nathan@kernel.org>
+In-Reply-To: <20220330234528.1426991-1-nathan@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 1 Apr 2022 22:03:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS6C6Uj9cCQ0o=bYF1F-EVD=VgdR8YYx-1PJc9toX_HZA@mail.gmail.com>
+Message-ID: <CAK7LNAS6C6Uj9cCQ0o=bYF1F-EVD=VgdR8YYx-1PJc9toX_HZA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Remove '-mno-global-merge' from KBUILD_CFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-um@lists.infradead.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 31, 2022 at 8:46 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> As discussed at [1] and [2], this series removes '-mno-global-merge'
+> from KBUILD_CFLAGS for clang, as it causes warnings for UML, and it
+> no longer appears to be necessary, as I do not see any modpost warnings
+> with LLVM 11 through 15 with several different ARCH=arm and ARCH=arm64
+> configurations.
+>
+> [1] is currently in the UML tree, destined for 5.18, but it is buggy, as
+> I note in [2]. This series is an alternative to [2], which has not been
+> picked up yet, so it is based on the current UML tree. If [2] is picked
+> up, I can rework the first patch to remove the '-mno-global-merge'
+> filtering from arch/um/Makefile; otherwise, this should be picked up in
+> place of [2].
+>
+> I intentionally kept the first patch vague around what fixed the modpost
+> warnings, as I am not too sure. [3] seems somewhat likely, but I don't
+> think that will revert cleanly on main to test. I think the testing is
+> enough to show that the original issue is resolved but I do note that we
+> can add this flag back in the architecture specific Makefiles if needed.
+>
+> Please review and ack as necessary.
 
-On 31/03/2022 08:08, Tzung-Bi Shih wrote:
-> On Wed, Mar 30, 2022 at 12:08:29PM +0200, Jean-Jacques Hiblot wrote:
->> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
-> [...]
->> +/*
->> + * Renesas RZ/N1 Watchdog timer.
->> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
->> + * cope with 2 seconds.
->> + *
->> + * Copyright 2018 Renesas Electronics Europe Ltd.
-> s/2018/2022/ ?
-This driver wasn't written by me originally. So I'd rather not change 
-this line.
->
->> +#define RZN1_WDT_RETRIGGER			0x0
->> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
->> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
->> +#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
->> +#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
->> +#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
-> Do RZN1_WDT_RETRIGGER_RELOAD_VAL and RZN1_WDT_RETRIGGER_WDSI get 1 more tab
-> indent intentionally?
->
->> +static const struct watchdog_device rzn1_wdt = {
->> +	.info = &rzn1_wdt_info,
->> +	.ops = &rzn1_wdt_ops,
->> +	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
->> +};
-> [...]
->> +static int rzn1_wdt_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +	wdt->wdt = rzn1_wdt;
-> Does it really need to copy the memory?  For example,
->
-> 1. Use the memory in `wdt` directly and fill the `wdd`.
->
-> struct watchdog_device *wdd = &wdt->wdt;
-> wdd->info = &rzn1_wdt_info;
-> wdd->ops = &rzn1_wdt_ops;
-> ...
->
-> 2. Use drvdata instead of container_of().
->
-> Use watchdog_set_drvdata() in _probe and watchdog_get_drvdata() in the
-> watchdog ops to get struct rzn1_watchdog.
-I'll rework this. Thanks for the review
->> +static const struct of_device_id rzn1_wdt_match[] = {
->> +	{ .compatible = "renesas,rzn1-wdt" },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
-> Doesn't it need to guard by CONFIG_OF?
 
-I don't think it has to.
+Both applied to linux-kbuild/fixes.
 
+
+
+
+> [1]: https://lore.kernel.org/r/20220303090643.241747-1-davidgow@google.com/
+> [2]: https://lore.kernel.org/r/20220322173547.677760-1-nathan@kernel.org/
+> [3]: https://github.com/llvm/llvm-project/commit/863bfdbfb446adaef767ff514d1f2ffb5d489562
 >
->> +static struct platform_driver rzn1_wdt_driver = {
->> +	.probe		= rzn1_wdt_probe,
->> +	.driver		= {
->> +		.name		= KBUILD_MODNAME,
->> +		.of_match_table	= rzn1_wdt_match,
-> Does it makes more sense to use of_match_ptr()?
+> Nathan Chancellor (2):
+>   kbuild: Remove '-mno-global-merge'
+>   Revert "um: clang: Strip out -mno-global-merge from USER_CFLAGS"
 >
->> +	},
->> +};
->> +
->> +module_platform_driver(rzn1_wdt_driver);
-> To make it look like a whole thing, I prefer to remove the extra blank line
-> in between struct platform_driver and module_platform_driver().
+>  Makefile         | 4 ----
+>  arch/um/Makefile | 4 ----
+>  2 files changed, 8 deletions(-)
+>
+>
+> base-commit: 82017457957a550d7d00dde419435dd74a890887
+> --
+> 2.35.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

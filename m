@@ -2,209 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93584EF90B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD78D4EF90D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350214AbiDARja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S1350242AbiDARkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350210AbiDARj1 (ORCPT
+        with ESMTP id S242930AbiDARkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:39:27 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2959720DB07;
-        Fri,  1 Apr 2022 10:37:37 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KVS6l5bgGz9sRy;
-        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cMdvPpaRRqA1; Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVS6l4grQz9sRx;
-        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8B90B8B87E;
-        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id R0zb54Fhn4rx; Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.82])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 39C6C8B879;
-        Fri,  1 Apr 2022 19:37:35 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 231HbOLg665604
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 1 Apr 2022 19:37:24 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 231HbLoC665601;
-        Fri, 1 Apr 2022 19:37:21 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Douglas Miller <dougmill@linux.ibm.com>,
-        Dany Madden <drt@linux.ibm.com>,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        Thomas Falcon <tlfalcon@linux.ibm.com>,
-        Ishizaki Kou <kou.ishizaki@toshiba.co.jp>,
-        Geoff Levand <geoff@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next] net: ethernet: Prepare cleanup of powerpc's asm/prom.h
-Date:   Fri,  1 Apr 2022 19:37:21 +0200
-Message-Id: <b3e4ef935b0c20e0bf2054505c0f0a26f6e831bb.1648833425.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        Fri, 1 Apr 2022 13:40:21 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17751EC9A4
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648834710; x=1680370710;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1sXInO0WcC5PaI49sZEA8uZPMt8e2+U3uhkMTkC/2nM=;
+  b=MhfB2eYZIvqyBgkNg9IznblaMktEaaCVoHe8pbnLbnR/0vyOikgbtURS
+   FtBz8B2WdEC4oLf2MPGM8VOssTkYo+ifMmyHq6MpYfwV7yTYIWI89RegZ
+   l4BlyUWyvnfdHWO1/pwXK+Bjr8ssYwwCVZ5rysp9sUb74KEUTqKKZsDTy
+   7TvDWTc4FDajgzvmyinr736W2LoXzHuKeXCoQE6nGR3xQlalVnWGkd2Rt
+   hJj6jHGKj2tE/41fH5QZVmSgUVqXEVOtDSr006Mm1Qy7r/gPB/5j11//u
+   BRUUubihRvgPM+3NQwQjtImqTaGVlSGE/2T7Vpz4ZjVwGlOE9I0X6We6O
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="320892389"
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="320892389"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 10:38:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
+   d="scan'208";a="720962357"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2022 10:38:29 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naLEC-0001QI-Hj;
+        Fri, 01 Apr 2022 17:38:28 +0000
+Date:   Sat, 2 Apr 2022 01:37:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp 16/18]
+ drivers/scsi/ufs/ufshcd.c:1168:23: warning: variable 'pm_opp_target_rate'
+ set but not used
+Message-ID: <202204020157.isDVHFsp-lkp@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648834640; l=4676; s=20211009; h=from:subject:message-id; bh=jl6LYjsEx9n7ujbs28rxMUGTFS2Ufwsf4HrsXVi8cQ8=; b=fuzhCyZSyHHY+dL2GY4yBHOSeCS+NQUMtkR16HooOTRLCr39XiwP7UIWvtVRcN4kEX59Zxm6NbKm m22unQn0C5HZVso0lQcHGkpbZg4Us85A9mGfZlOro3rh4b5aee9/
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-powerpc's asm/prom.h brings some headers that it doesn't
-need itself.
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp
+head:   df7fc04027f28b5b133954ef8e766e3190a30d4f
+commit: ab65d39794d1521614271985db9322211816dbb6 [16/18] WIP
+config: mips-randconfig-r013-20220331 (https://download.01.org/0day-ci/archive/20220402/202204020157.isDVHFsp-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/krzk/linux/commit/ab65d39794d1521614271985db9322211816dbb6
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp
+        git checkout ab65d39794d1521614271985db9322211816dbb6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/mm/ drivers/scsi/ufs/
 
-In order to clean it up, first add missing headers in
-users of asm/prom.h
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/net/ethernet/apple/bmac.c                | 2 +-
- drivers/net/ethernet/apple/mace.c                | 2 +-
- drivers/net/ethernet/freescale/fec_mpc52xx.c     | 2 ++
- drivers/net/ethernet/freescale/fec_mpc52xx_phy.c | 1 +
- drivers/net/ethernet/ibm/ehea/ehea.h             | 1 +
- drivers/net/ethernet/ibm/ehea/ehea_main.c        | 2 ++
- drivers/net/ethernet/ibm/ibmvnic.c               | 1 +
- drivers/net/ethernet/sun/sungem.c                | 1 -
- drivers/net/ethernet/toshiba/spider_net.c        | 1 +
- 9 files changed, 10 insertions(+), 3 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/net/ethernet/apple/bmac.c b/drivers/net/ethernet/apple/bmac.c
-index 4d2ba30c2fbd..3843e8fdcdde 100644
---- a/drivers/net/ethernet/apple/bmac.c
-+++ b/drivers/net/ethernet/apple/bmac.c
-@@ -25,7 +25,7 @@
- #include <linux/ethtool.h>
- #include <linux/slab.h>
- #include <linux/pgtable.h>
--#include <asm/prom.h>
-+
- #include <asm/dbdma.h>
- #include <asm/io.h>
- #include <asm/page.h>
-diff --git a/drivers/net/ethernet/apple/mace.c b/drivers/net/ethernet/apple/mace.c
-index 6f8c91eb1263..97f96d30d9b3 100644
---- a/drivers/net/ethernet/apple/mace.c
-+++ b/drivers/net/ethernet/apple/mace.c
-@@ -20,7 +20,7 @@
- #include <linux/bitrev.h>
- #include <linux/slab.h>
- #include <linux/pgtable.h>
--#include <asm/prom.h>
-+
- #include <asm/dbdma.h>
- #include <asm/io.h>
- #include <asm/macio.h>
-diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx.c b/drivers/net/ethernet/freescale/fec_mpc52xx.c
-index be0bd4b44926..5ddb769bdfb4 100644
---- a/drivers/net/ethernet/freescale/fec_mpc52xx.c
-+++ b/drivers/net/ethernet/freescale/fec_mpc52xx.c
-@@ -29,7 +29,9 @@
- #include <linux/crc32.h>
- #include <linux/hardirq.h>
- #include <linux/delay.h>
-+#include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/of_irq.h>
- #include <linux/of_mdio.h>
- #include <linux/of_net.h>
- #include <linux/of_platform.h>
-diff --git a/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c b/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
-index b5497e308302..f85b5e81dfc1 100644
---- a/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
-+++ b/drivers/net/ethernet/freescale/fec_mpc52xx_phy.c
-@@ -15,6 +15,7 @@
- #include <linux/phy.h>
- #include <linux/of_platform.h>
- #include <linux/slab.h>
-+#include <linux/of_address.h>
- #include <linux/of_mdio.h>
- #include <asm/io.h>
- #include <asm/mpc52xx.h>
-diff --git a/drivers/net/ethernet/ibm/ehea/ehea.h b/drivers/net/ethernet/ibm/ehea/ehea.h
-index b140835d4c23..208c440a602b 100644
---- a/drivers/net/ethernet/ibm/ehea/ehea.h
-+++ b/drivers/net/ethernet/ibm/ehea/ehea.h
-@@ -19,6 +19,7 @@
- #include <linux/ethtool.h>
- #include <linux/vmalloc.h>
- #include <linux/if_vlan.h>
-+#include <linux/platform_device.h>
- 
- #include <asm/ibmebus.h>
- #include <asm/io.h>
-diff --git a/drivers/net/ethernet/ibm/ehea/ehea_main.c b/drivers/net/ethernet/ibm/ehea/ehea_main.c
-index bad94e4d50f4..8ce3348edf08 100644
---- a/drivers/net/ethernet/ibm/ehea/ehea_main.c
-+++ b/drivers/net/ethernet/ibm/ehea/ehea_main.c
-@@ -29,6 +29,8 @@
- #include <asm/kexec.h>
- #include <linux/mutex.h>
- #include <linux/prefetch.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
- 
- #include <net/ip.h>
- 
-diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
-index 77683909ca3d..309d97d28fb1 100644
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -53,6 +53,7 @@
- #include <linux/ip.h>
- #include <linux/ipv6.h>
- #include <linux/irq.h>
-+#include <linux/irqdomain.h>
- #include <linux/kthread.h>
- #include <linux/seq_file.h>
- #include <linux/interrupt.h>
-diff --git a/drivers/net/ethernet/sun/sungem.c b/drivers/net/ethernet/sun/sungem.c
-index 036856102c50..45bd89153de2 100644
---- a/drivers/net/ethernet/sun/sungem.c
-+++ b/drivers/net/ethernet/sun/sungem.c
-@@ -52,7 +52,6 @@
- #endif
- 
- #ifdef CONFIG_PPC_PMAC
--#include <asm/prom.h>
- #include <asm/machdep.h>
- #include <asm/pmac_feature.h>
- #endif
-diff --git a/drivers/net/ethernet/toshiba/spider_net.c b/drivers/net/ethernet/toshiba/spider_net.c
-index f47b8358669d..eeee4f7ae444 100644
---- a/drivers/net/ethernet/toshiba/spider_net.c
-+++ b/drivers/net/ethernet/toshiba/spider_net.c
-@@ -35,6 +35,7 @@
- #include <linux/wait.h>
- #include <linux/workqueue.h>
- #include <linux/bitops.h>
-+#include <linux/of.h>
- #include <net/checksum.h>
- 
- #include "spider_net.h"
+   drivers/scsi/ufs/ufshcd.c: In function 'ufshcd_scale_gear':
+>> drivers/scsi/ufs/ufshcd.c:1168:23: warning: variable 'pm_opp_target_rate' set but not used [-Wunused-but-set-variable]
+    1168 |         unsigned long pm_opp_target_rate;
+         |                       ^~~~~~~~~~~~~~~~~~
+
+
+vim +/pm_opp_target_rate +1168 drivers/scsi/ufs/ufshcd.c
+
+  1154	
+  1155	/**
+  1156	 * ufshcd_scale_gear - scale up/down UFS gear
+  1157	 * @hba: per adapter instance
+  1158	 * @scale_up: True for scaling up gear and false for scaling down
+  1159	 *
+  1160	 * Returns 0 for success,
+  1161	 * Returns -EBUSY if scaling can't happen at this time
+  1162	 * Returns non-zero for any other errors
+  1163	 */
+  1164	static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
+  1165	{
+  1166		int ret = 0;
+  1167		struct ufs_clk_info *clki;
+> 1168		unsigned long pm_opp_target_rate;
+  1169		struct ufs_pa_layer_attr new_pwr_info;
+  1170	
+  1171		dev_err(hba->dev, "AAAA ufshcd_scale_gear %d - %d\n",
+  1172			scale_up, hba->use_pm_opp);
+  1173		clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
+  1174	
+  1175		if (scale_up) {
+  1176			memcpy(&new_pwr_info, &hba->clk_scaling.saved_pwr_info.info,
+  1177			       sizeof(struct ufs_pa_layer_attr));
+  1178			pm_opp_target_rate = clki->max_freq;
+  1179		} else {
+  1180			memcpy(&new_pwr_info, &hba->pwr_info,
+  1181			       sizeof(struct ufs_pa_layer_attr));
+  1182	
+  1183			if (hba->pwr_info.gear_tx > hba->clk_scaling.min_gear ||
+  1184			    hba->pwr_info.gear_rx > hba->clk_scaling.min_gear) {
+  1185				/* save the current power mode */
+  1186				memcpy(&hba->clk_scaling.saved_pwr_info.info,
+  1187					&hba->pwr_info,
+  1188					sizeof(struct ufs_pa_layer_attr));
+  1189	
+  1190				/* scale down gear */
+  1191				new_pwr_info.gear_tx = hba->clk_scaling.min_gear;
+  1192				new_pwr_info.gear_rx = hba->clk_scaling.min_gear;
+  1193			}
+  1194			pm_opp_target_rate = clki->min_freq;
+  1195		}
+  1196	
+  1197		if (hba->use_pm_opp && scale_up) {
+  1198			//ret = dev_pm_opp_set_rate(hba->dev, pm_opp_target_rate);
+  1199			//dev_err(hba->dev, "AAA dev_pm_opp_set_rate %d\n", ret);
+  1200			//ret = 0;
+  1201		}
+  1202	
+  1203		/* check if the power mode needs to be changed or not? */
+  1204		ret = ufshcd_config_pwr_mode(hba, &new_pwr_info);
+  1205		if (ret)
+  1206			dev_err(hba->dev, "%s: failed err %d, old gear: (tx %d rx %d), new gear: (tx %d rx %d)",
+  1207				__func__, ret,
+  1208				hba->pwr_info.gear_tx, hba->pwr_info.gear_rx,
+  1209				new_pwr_info.gear_tx, new_pwr_info.gear_rx);
+  1210	
+  1211		if (hba->use_pm_opp && !scale_up) {
+  1212			//ret = dev_pm_opp_set_rate(hba->dev, pm_opp_target_rate);
+  1213			//dev_err(hba->dev, "AAA dev_pm_opp_set_rate %d\n", ret);
+  1214			//ret = 0;
+  1215		}
+  1216	
+  1217		return ret;
+  1218	}
+  1219	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

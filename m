@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F0F4EF6D2
+	by mail.lfdr.de (Postfix) with ESMTP id CD44F4EF6D3
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351295AbiDAPoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S1351364AbiDAPoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352403AbiDAPDd (ORCPT
+        with ESMTP id S1352776AbiDAPDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:03:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3182928F822;
-        Fri,  1 Apr 2022 07:51:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15C2EB82504;
-        Fri,  1 Apr 2022 14:51:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D98C340EE;
-        Fri,  1 Apr 2022 14:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824660;
-        bh=gjV78sg4M+SM1WZOKlh+sYIDNQs2GbRiH0Kl00+k6sU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=XtL/uOlm7Nc/XmvuFw9Y8MtWQjXB4YZxqS9fsjx/DLkiHyr7t611GPc4N30ZUWosI
-         IbH9H7f6G2MXdFMO7g80pNst29rq5yBE/AC+QU6eDkb6UDaFqadfzdt09ucBXG3DTr
-         mPQh/siL1bHfm+/iWaHQeBSL5b6a5msoZOxR6CA3GIVMJ9nWtd/gU2500iKjMpbyzQ
-         zc0EOfevuMQ/7n2/CxQ6Lk8feUVkwqb/n1P2iQnwSy7dT+e75xnUPhb0AywOUhBaJr
-         u4W1kOQfxdp69fWzo6QoLdcSkHodk3c4PTNnY94yW+I0TTkgkdGUlTfDbMeFTJt4Ro
-         zmIv6r7ZkLU7g==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ath11k: select QRTR for AHB as well
-References: <20220401093554.360211-1-robimarko@gmail.com>
-Date:   Fri, 01 Apr 2022 17:50:55 +0300
-In-Reply-To: <20220401093554.360211-1-robimarko@gmail.com> (Robert Marko's
-        message of "Fri, 1 Apr 2022 11:35:54 +0200")
-Message-ID: <87ilrsuab4.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 1 Apr 2022 11:03:47 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F76B2976C9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:51:38 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id g21so3371558iom.13
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=D14pWmbu4syU7uJkQHRgnmv++dTH97de4155oI8GfsE=;
+        b=EQFT0Jhws+NvlMFDO4cBK8+vf0xZwe0spwHwZaPLSg4VvMLB7O/3/xcGChCgFxwUDT
+         WeDHcSV03eHkg/jH1HOSCi+2geSHjLXmNnPSX/kJkH39OL7XtdYiO5wMnQDkcOePvXVS
+         GkyogTnrt9Ur/DBa7KVq6IJHpHn/Ktp0atNXyZDLmoCV0TMJx6/KFawzKNvzg1YAYKu5
+         TEbVn0a2cGn/HNgWKylLCrvPMh4SqGx6mieBvI4hYr7UtHiMYoGbCsCFPMu0QAKzlRpt
+         udKy5AXiB/YJYg7HbQF5mzHyQok2/LNQiv2Kci7T8vV15xkuTExtph5zrk6goZh+9QoT
+         ia2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D14pWmbu4syU7uJkQHRgnmv++dTH97de4155oI8GfsE=;
+        b=6WoJKFVJGogHydCTGPDAdnYJUJCw2Bu5QVKwfNUAOcVl0jkbAOWJneLzBf6+3o/OuV
+         5ykHoR2etIKstCyocj6Hf49d+4yEqYp6w+e0PTy0q0jtpM7NhBQz5SAmGU5YvyvqyfUS
+         6n/u50OGsybg519KCO3h8NI3eaZeo6QgGVuC5MNLhYfpOFnbMkLHlaIKOCHKWwNnrkxQ
+         AwHhcEnZXD9+5p806CPCl83tWIXFcV6gXVJAWO8KbJVL+M2FbX8wfe8Ixw53suYMK93T
+         wpsVninF/7pTc8gVlb4SyTrawkF1+Z4ZcitNskP6vz7mquREmAdcBKDCoPNix/WawUvE
+         iiYg==
+X-Gm-Message-State: AOAM533mwsDJ+UnyG56OqcqX+/woXsk4a4BE6RrEPcJ49InRxrmkOskU
+        PBN2DAqNkOVKGrg/WQNAjoV0BpyHa12arSdH
+X-Google-Smtp-Source: ABdhPJzYbeqp+kwp8qzmr13henE1FZQIuNtACTLsPIF/1inWLvoPj0gol9ZBEuaZQ3uoKF4MM4aH0A==
+X-Received: by 2002:a6b:5d19:0:b0:645:c7ca:7ca with SMTP id r25-20020a6b5d19000000b00645c7ca07camr68440iob.104.1648824697737;
+        Fri, 01 Apr 2022 07:51:37 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id v2-20020a056e020f8200b002c9a9b96b67sm1445723ilo.23.2022.04.01.07.51.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 07:51:37 -0700 (PDT)
+Message-ID: <d713dcc7-cdae-0834-f10a-c3cdcb6fa301@kernel.dk>
+Date:   Fri, 1 Apr 2022 08:51:36 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [syzbot] KASAN: use-after-free Read in io_poll_check_events
+Content-Language: en-US
+To:     syzbot <syzbot+edb9c7738ba8cbdbf197@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000009bb4505db96e211@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <00000000000009bb4505db96e211@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Marko <robimarko@gmail.com> writes:
+On 4/1/22 6:26 AM, syzbot wrote:
+> syzbot has bisected this issue to:
+> 
+> commit d570aa1c4f191100f502edfc240e8d49687f62ac
+> Author: Jens Axboe <axboe@kernel.dk>
+> Date:   Thu Mar 31 18:38:46 2022 +0000
+> 
+>     io_uring: drop the old style inflight file tracking
 
-> Currently, ath11k only selects QRTR if ath11k PCI is selected, however
-> AHB support requires QRTR, more precisely QRTR_SMD because it is using
-> QMI as well which in turn uses QRTR.
->
-> Without QRTR_SMD AHB does not work, so select QRTR in ATH11K and then
-> select QRTR_SMD for ATH11K_AHB and QRTR_MHI for ATH11K_PCI.
->
-> Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
->
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  drivers/net/wireless/ath/ath11k/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/ath/ath11k/Kconfig b/drivers/net/wireless/ath/ath11k/Kconfig
-> index ad5cc6cac05b..b45baad184f6 100644
-> --- a/drivers/net/wireless/ath/ath11k/Kconfig
-> +++ b/drivers/net/wireless/ath/ath11k/Kconfig
-> @@ -5,6 +5,7 @@ config ATH11K
->  	depends on CRYPTO_MICHAEL_MIC
->  	select ATH_COMMON
->  	select QCOM_QMI_HELPERS
-> +	select QRTR
->  	help
->  	  This module adds support for Qualcomm Technologies 802.11ax family of
->  	  chipsets.
-> @@ -15,6 +16,7 @@ config ATH11K_AHB
->  	tristate "Atheros ath11k AHB support"
->  	depends on ATH11K
->  	depends on REMOTEPROC
-> +	select QRTR_SMD
->  	help
->  	  This module adds support for AHB bus
->  
-> @@ -22,7 +24,6 @@ config ATH11K_PCI
->  	tristate "Atheros ath11k PCI support"
->  	depends on ATH11K && PCI
->  	select MHI_BUS
-> -	select QRTR
->  	select QRTR_MHI
->  	help
->  	  This module adds support for PCIE bus
-
-I now see a new warning:
-
-WARNING: unmet direct dependencies detected for QRTR_SMD
-  Depends on [n]: NET [=y] && QRTR [=m] && (RPMSG [=n] || COMPILE_TEST [=n] && RPMSG [=n]=n)
-  Selected by [m]:
-  - ATH11K_AHB [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ATH [=y] && ATH11K [=m] && REMOTEPROC [=y]
+#syz test git://git.kernel.dk/linux-block for-next
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Jens Axboe
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

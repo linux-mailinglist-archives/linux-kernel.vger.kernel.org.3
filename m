@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C594EE935
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E234EE941
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343960AbiDAHtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S1343969AbiDAHuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243493AbiDAHtC (ORCPT
+        with ESMTP id S242163AbiDAHuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:49:02 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AB218C0F8;
-        Fri,  1 Apr 2022 00:47:13 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id t2so1521844qtw.9;
-        Fri, 01 Apr 2022 00:47:13 -0700 (PDT)
+        Fri, 1 Apr 2022 03:50:16 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35DE640D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:48:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bq8so4043104ejb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jKLQBlqIFr/iG8CIwjuu4g6Q7RGdVgPWfVQ84Mi3Szw=;
+        b=KzeZfGo9KEvF7K0FINsb2Zw+lDMpJcEXVQB/RHtbXUlJlwYpbs4L7Yeda1a6F/OFAQ
+         j6V5g9qh5PCVqg0b266UGaWdDa/xAh5DDNBKUYHi2TOJqW4eZBp+tqv+MHS+dUXrM527
+         J7wfoZM8BfcEFhnVOKmH6AUtEnqhxuubqs9JyXAGB3XH4UjNW+HBxyrLA0Vp6u5wlvnu
+         OGE86RrHHoq4EFlBlyNvmiIdszD4dD79P5SBrwuuF5JRu/KtBi8/DP1SkX0Lnvr/+bOs
+         udplW3iJ7/CTJqzhIkJMy9URRFZZAMSzNJASwgXKEpGYfbv6KkWF25kwBWxNCCxh0dd0
+         cy5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hsgG5k1IRB7JkkSvYRKFqt0X90anL2wVYww9yxyb0VA=;
-        b=lnOnBBtJyi+ptYHryHFTbrSIM8RtWYeGSVrzVT8ziC8F/Nvt53QglIDMITc2ZX7AhZ
-         lrvLKKpXG1PL5hdaAM8vmXsVVGAU/Vd2+aC8GketleM3dPW9YNP0ai6RePkDhl5LVzT0
-         FObZUBHwcESGALGiPZLUAugR1xpF5buIXSAhIe4UiaFHlj5D4UyufWZTWiAr2DoDJIfu
-         eQ2fID1iWNGcmc5ctX+QJgdx9dPAF5llfXwhwMa/75goEfEsOtIvFwx/nQ6sHtAz8MSD
-         Jn0hfb2U4f41ebz2Qndq/UuapX/YJ5UBpzplb0f//nqX69RyWMR3tkk5kQG+00TfP5O8
-         Z3yw==
-X-Gm-Message-State: AOAM5337dPgbNs8vtYMzN2DFDS9dvLaeg979Rh6dNmtx6Af/MNsw5pmj
-        M9Svs/HHxLvSBtctklh2Hg6p3+hxKUWgVw==
-X-Google-Smtp-Source: ABdhPJwZE4sp1jfUL16KYUDF2Yg41lwFL597VHQxrQFo3hwFvOCVshdhzRqByH59tiWLWbTzIE+Mzg==
-X-Received: by 2002:a05:622a:2d5:b0:2e1:ea60:231 with SMTP id a21-20020a05622a02d500b002e1ea600231mr7530800qtx.460.1648799232308;
-        Fri, 01 Apr 2022 00:47:12 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id y17-20020a05622a121100b002e0702457b2sm1303952qtx.20.2022.04.01.00.47.11
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jKLQBlqIFr/iG8CIwjuu4g6Q7RGdVgPWfVQ84Mi3Szw=;
+        b=ut++u4zHIdEfXGhsbDgHPEL1ZCsFFBnUFEboHoszjlstypBnBGpCx5C58aImL7DK1S
+         7b7Sn7tIu/y1LLMqo9gW1cmxFflgr5Au1om9ls6N7rADNK25i6+FGrnh+jwdlhp8mChp
+         GTCmO/YmB/wWwxPmr+p9mRNPTQ/1m1uk6wwQk8qW0IqRlrSRMokIWjmFHH4LomsUcIQl
+         jJdQe9o+aX6viHJRF2bWRQTMaa/M0QpCToPyEpjWbSFRwhTNkB6wr9MfMvmlrEWbXeml
+         rNRTBdF7/u1v69WDQ6qzvvKa8Qf9Lk88eNv5qYB/F3gLW8oN3OECdmcALCoTEIVo8q+4
+         MtEA==
+X-Gm-Message-State: AOAM533vwCHP6kRp+mruVe6py1kJPFq6VHPzBcO2DVCvlr/HSGz3ct/b
+        R2MaA/evb653PNPMExicz9G4qg==
+X-Google-Smtp-Source: ABdhPJx9cuTp/HJczdd8HHheza6l+fRGghaWPC5zP6OhOX6OjwVsHgut0xVX9BrZq/DnM7xxD2Sdww==
+X-Received: by 2002:a17:906:4cd8:b0:6db:372:c4ba with SMTP id q24-20020a1709064cd800b006db0372c4bamr8216694ejt.57.1648799304275;
+        Fri, 01 Apr 2022 00:48:24 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170906728b00b006df8494d384sm738545ejl.122.2022.04.01.00.48.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 00:47:12 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2e592e700acso23523827b3.5;
-        Fri, 01 Apr 2022 00:47:11 -0700 (PDT)
-X-Received: by 2002:a81:5c2:0:b0:2e5:e4eb:c3e7 with SMTP id
- 185-20020a8105c2000000b002e5e4ebc3e7mr8846053ywf.62.1648799231230; Fri, 01
- Apr 2022 00:47:11 -0700 (PDT)
+        Fri, 01 Apr 2022 00:48:23 -0700 (PDT)
+Message-ID: <8f02c5fc-5ded-b589-19ca-2b419c4664ab@linaro.org>
+Date:   Fri, 1 Apr 2022 09:48:22 +0200
 MIME-Version: 1.0
-References: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 1 Apr 2022 09:46:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVX-6A5KH1+WodNviq1LKqZ4qo7aq92S-j+zf79xQD0gQ@mail.gmail.com>
-Message-ID: <CAMuHMdVX-6A5KH1+WodNviq1LKqZ4qo7aq92S-j+zf79xQD0gQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] regulator: dt-bindings: maxim,max8997: correct array
- of voltages
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: net: snps: remove duplicate name
+Content-Language: en-US
+To:     dj76.yang@samsung.com, "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+References: <CGME20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8>
+ <20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:17 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> uint32-array with voltages should be within one bracket pair <>, not
-> each number in its own <>.  Also the number of elements in the array
-> should be defined within "items:".
->
-> This fixes DT schema warnings like:
->
->   maxim,max8997.example.dtb: pmic@66: max8997,pmic-buck1-dvs-voltage:
->     [[1350000, 1300000, 1250000, 1200000, 1150000, 1100000, 1000000, 950000]] is too short
->
-> Fixes: 1d2104f21618 ("regulator: dt-bindings: maxim,max8997: convert to dtschema")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 01/04/2022 05:08, 양동진 wrote:
+> snps,dwmac has duplicated name for loongson,ls2k-dwmac and
+> loongson,ls7a-dwmac.
 
-Thanks!
-Warning going, and if I add one entry too much, it still complains, so:
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Your "From" name seems to be different than Signed-off-by. These should
+be the same, so can you fix the commit author to be the same as SoB?
 
-Gr{oetje,eeting}s,
+> 
+> Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
 
-                        Geert
+Fixes: 68277749a013 ("dt-bindings: dwmac: Add bindings for new Loongson
+SoC and bridge chip")
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index 2d5248f..36c85eb 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -53,20 +53,18 @@ properties:
+>          - allwinner,sun8i-r40-gmac
+>          - allwinner,sun8i-v3s-emac
+>          - allwinner,sun50i-a64-emac
+> -        - loongson,ls2k-dwmac
+> -        - loongson,ls7a-dwmac
+>          - amlogic,meson6-dwmac
+>          - amlogic,meson8b-dwmac
+>          - amlogic,meson8m2-dwmac
+>          - amlogic,meson-gxbb-dwmac
+>          - amlogic,meson-axg-dwmac
+> -        - loongson,ls2k-dwmac
+> -        - loongson,ls7a-dwmac
+>          - ingenic,jz4775-mac
+>          - ingenic,x1000-mac
+>          - ingenic,x1600-mac
+>          - ingenic,x1830-mac
+>          - ingenic,x2000-mac
+> +        - loongson,ls2k-dwmac
+> +        - loongson,ls7a-dwmac
+>          - rockchip,px30-gmac
+>          - rockchip,rk3128-gmac
+>          - rockchip,rk3228-gmac
+
+
+Best regards,
+Krzysztof

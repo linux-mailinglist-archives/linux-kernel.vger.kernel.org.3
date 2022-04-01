@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7654EEC7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCA84EEC80
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345566AbiDALp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
+        id S1345575AbiDALq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbiDALpZ (ORCPT
+        with ESMTP id S233087AbiDALq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:45:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39E43A5DD;
-        Fri,  1 Apr 2022 04:43:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 583F6B824B1;
-        Fri,  1 Apr 2022 11:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DDDC340F2;
-        Fri,  1 Apr 2022 11:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648813412;
-        bh=9b2hrUOXZUT4PtJ74mv2OEiQ6y7RhlwtuoDd+ejgaHI=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=p2wSzyrF0VBZw1zFe1IbnVN7qphAnFNPX8ag1U5Qc5lBrI9JpRxpzJiMU+21SfuC0
-         e27digsEly0p7uLDQZrbnshD5m9zC367HP5izc1WZ+N82FtkX1/rvLNGXOUntpS6Vm
-         i4YAImYwXujxOOl/niepyVgbxLMHxFW5w8d94WyDxXlaPKrSaBnQP8QhUmA3nL9c/X
-         U3U1Y39LDDq8RniNgJkd/iWi7WTo9lIPEHR26CguHEgWTgIk8PUSaX62eJayZOPSEI
-         ipZxOIhpAVRHbXeS1fMjTtRJxSWCsEik/BoRGVIowLf90o4bX8SZ6UpfLTjt1+8E0E
-         SWhT3rpqq5A1w==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] iwlwifi: fw: Replace zero-length arrays with flexible-array members
-References: <20220216195015.GA904148@embeddedor>
-        <202202161235.2FB20E6A5@keescook>
-        <20220326003843.GA2602091@embeddedor> <871qym1vck.fsf@kernel.org>
-        <4c520e2e-d1a5-6d2b-3ef1-b891d7946c01@embeddedor.com>
-Date:   Fri, 01 Apr 2022 14:43:26 +0300
-In-Reply-To: <4c520e2e-d1a5-6d2b-3ef1-b891d7946c01@embeddedor.com> (Gustavo A.
-        R. Silva's message of "Mon, 28 Mar 2022 01:23:59 -0500")
-Message-ID: <871qyhuizl.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 1 Apr 2022 07:46:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B6AE33B0
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:45:06 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 13:45:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648813505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q7i6/O5ILryekqXQJ6olrqRxKKJfslH08xthB5phvm8=;
+        b=ev8Fs6xjSuQd1unPeFkOUH3G/dtkXgSvoxnrRWpsRb9EeYgvlDnpPVQs2UcY4H40TR7vLb
+        0VfRbH80ItoIE5PYreUX/vtDdPXjKoG6xM3eI5EjcGpJbPwvttbrSsTP7hONK76+EXDLEP
+        NsgA0J3ieABo5tWzGc2qeXnULdF8muI9qUhUyQNCjAYiGy9FjfOUNoCIARFxtF08eqTCGm
+        UyO6TkK0iLlCBLbjuiJYw+8tXKG/sHbuE0EAuQHQWG5lYqLy55m1oLTEkWPZEHrx495UVk
+        9+IGhQ5EgJdQ5Pwgp0Xpofat6H+8/GIhGyo/r/MSa3KmdfOPT5MbOj9ipJ1Jqw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648813505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q7i6/O5ILryekqXQJ6olrqRxKKJfslH08xthB5phvm8=;
+        b=zD26LMBkhitDATDDbfX0hFJu7yVNadjpRBFsqon7/6vBOiynr8fgGGOyVVTtD3IERsSoxc
+        V4kRyQMJevqrg6Ag==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH] signal/x86: Delay calling signals in atomic
+Message-ID: <Ykblv2aKh3ekqpi4@linutronix.de>
+References: <Ygq5aBB/qMQw6aP5@linutronix.de>
+ <8735j2xigt.fsf@email.froward.int.ebiederm.org>
+ <YkHfokLO1UGCISGc@linutronix.de>
+ <87zgl9pw82.fsf@email.froward.int.ebiederm.org>
+ <YkLR3rGTayl/6qIm@linutronix.de>
+ <87o81nl3b6.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <87o81nl3b6.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Gustavo A. R. Silva" <gustavo@embeddedor.com> writes:
+On 2022-03-30 13:10:05 [-0500], Eric W. Biederman wrote:
+> But it looks like if we are coming from userspace then we use the same
+> stack as any other time we would come from userspace.  AKA a stack
+> that allows the kernel to sleep.
+> 
+> So I don't see what the problem is that is trying to be fixed.
 
-> On 3/28/22 00:47, Kalle Valo wrote:
->> "Gustavo A. R. Silva" <gustavoars@kernel.org> writes:
->>
->>> On Wed, Feb 16, 2022 at 12:35:14PM -0800, Kees Cook wrote:
->>>> On Wed, Feb 16, 2022 at 01:50:15PM -0600, Gustavo A. R. Silva wrote:
->>>>> There is a regular need in the kernel to provide a way to declare
->>>>> having a dynamically sized set of trailing elements in a structure.
->>>>> Kernel code should always use =E2=80=9Cflexible array members=E2=80=
-=9D[1] for these
->>>>> cases. The older style of one-element or zero-length arrays should
->>>>> no longer be used[2].
->>>>>
->>>>> [1] https://en.wikipedia.org/wiki/Flexible_array_member
->>>>> [2]
->>>>> https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-le=
-ngth-and-one-element-arrays
->>>>>
->>>>> Link: https://github.com/KSPP/linux/issues/78
->>>>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->>>>
->>>> Reviewed-by: Kees Cook <keescook@chromium.org>
->>>
->>> Hi all,
->>>
->>> Friendly ping: can someone take this, please?
->>>
->>> ...I can take this in my -next tree in the meantime.
->>
->> Like we have discussed before, please don't take any wireless patches to
->> your tree. The conflicts just cause more work of us.
->
-> Sure thing. I just removed it from my tree.
->
-> I didn't get any reply from wireless people in more than a month, and
-> that's why I temporarily took it in my tree so it doesn't get lost. :)
+It is not only the stack. In atomic context / disabled interrupts it is
+not possible to acquire a spinlock_t (sighand_struct::siglock) which is
+done later.
 
-That increases the risk of conflicts and, because of multiple trees we
-have, the conflicts cause more work for us. Please don't take ANY
-wireless patches to your tree (or any other tree for that matter) unless
-Johannes or me has acked them.
+> I know that code has been changed over the years, perhaps this is
+> something that was fixed upstream and the real time tree didn't realize
+> there was no longer a need to fix anything?
+> 
+> Or am I missing something subtle when reading the idtentry assembly?
 
-If you don't get reply to your patch for few weeks (and the merge window
-is not open), you can ping in the list or contact me.
+It certainly is true that the code changed over the years. The per-CPU
+stack is one problem, the siglock in atomic context is the other one.
+Thank you for the input. Let me digest the informations I have here and
+get back.
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+> Eric
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+Sebastian

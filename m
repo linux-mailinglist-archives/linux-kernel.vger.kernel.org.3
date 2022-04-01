@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A994EECA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046B64EECAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345685AbiDAL6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S1345133AbiDAMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345668AbiDAL6R (ORCPT
+        with ESMTP id S243520AbiDAMAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:58:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD4C22F3E6;
-        Fri,  1 Apr 2022 04:56:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDD61B824B1;
-        Fri,  1 Apr 2022 11:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92E2C34111;
-        Fri,  1 Apr 2022 11:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648814185;
-        bh=7wIcQSZqoF9yzXMmd3t7mD89xfVOVwiy5PT1j+hxDtc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=eOn24kv2RmHAL1Mjy1+rOyDlCLrJylnwNe4U0BO+dtFwuhJ+WXBv5CSJ/VDLFOsSw
-         QAyc8DI1/sqSQiFisk2b1rgQQ3mdcmDnzqiysdRJwhthuZj2EO4I7HqmL2I0z/4bTp
-         DAWc3+WdfRcFSzLdF3dXxd8d0hsXDdWwZGj1e80B6XYU5e5dWEaWPIrGvStrlyXES9
-         DvCbNq+cmesn/bfzHNnqEObEOIhf6zn3ALScCa63zJWqA3RVO4fxhgbU57rvuJZJvi
-         SOQwZ2LxPk37U4Uaz+SldjQr54u3i1f+1UpqYh5LYPKB0BA7aHBabgg8cnsnsemUYp
-         2jRWNTfPtLXlw==
-Message-ID: <0f781fa1b2bec48d40729d8306a2ed8b19209734.camel@kernel.org>
-Subject: Re: [PATCH] ceph: truncate page cache when doing DIO in encrypted
- inodes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 01 Apr 2022 07:56:23 -0400
-In-Reply-To: <20220401113822.32545-1-lhenriques@suse.de>
-References: <20220401113822.32545-1-lhenriques@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 08:00:16 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5DFB26
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:58:19 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id c11so2226813pgu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 04:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=pNnolXvBibVhqxDqWCeFrSPBPwyB5lZY/VZp6mQCeHA=;
+        b=Yd6ygkuuA+1IeY5weMNKvZxSvo7KmvYZHJezeyjkEIUPjSb1ZLica8eb7RZ3kaC2wD
+         w2bWnKZPX4LdsrQHU88VkW2Djz+2HRZY/qIVgZ0cY4XVGywe3wZHL4IxCNhVsNqosJey
+         fgXhNw0NsLPIxqwWuJHEes0WS+2wVYq/5ilYrFYGo8sXVJnL0PQKIaUPZ/vlodxulH4B
+         PWD5Lmj5zvbCDDBEKWpD4R+ulUvsgaDzyM35MhsogJ4Q2A5W2v9juxouyDF+NiBk33zL
+         vI3tdb7zS+FjPzgq8W3YXcnj24yNXrX/Z4iLUlDm0TLuRsuazFm57UY9Fp4PAFaorMXl
+         KGsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pNnolXvBibVhqxDqWCeFrSPBPwyB5lZY/VZp6mQCeHA=;
+        b=3NOgGaV7AQXnYPKEjyfKQZQZaSQb6l5dNEyCDCVBcpsZpevSlVeZSgqvL+HepHaZaV
+         /DV4h/uZ9Q04MQL/6YAY3PNr8SeDg5eOOU/MSrxJM6vk1xtpjr3VPo0U+RuEbvzvxNjE
+         V481hjlf9G9oaWZpAwLv/1vZFIyL8e/Qhnva2OmKPFbRCWbQMpJi601FmRFIKgTkRHmV
+         xLBBEMvb3OYlgMunBcCS3v0M6IFmfW2II9oJFMXMv15exMkl82LxTLKB9QT36OWuW4qt
+         K6KBEx4zpUjNPpTJwo1N8zapKt1dDRX8TUs6BJ27x6NBWHP2ATS1Q7WCxpbi334O96eD
+         M5WQ==
+X-Gm-Message-State: AOAM5322aku0daimOROtdwZ1UX7+uN9delFly5G3WrWiuwSkKVpC4WNA
+        igM/bKNl9eTgkeH9xh+R3EMvWAV8XlHIcQ==
+X-Google-Smtp-Source: ABdhPJxIC6mkCVE/l4zf/4k9AWKh5V4DbbpyGGI36gOJmNszhaTTmeM1VfUSsbFoNiGDYq6Q3gmgXw==
+X-Received: by 2002:a05:6a00:c8e:b0:4fb:18a6:18f9 with SMTP id a14-20020a056a000c8e00b004fb18a618f9mr36107343pfv.47.1648814298932;
+        Fri, 01 Apr 2022 04:58:18 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm2978064pfh.46.2022.04.01.04.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 04:58:18 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     patrik.r.jakobsson@gmail.com
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH] drm/gma500: fix a missing break in psb_driver_load
+Date:   Fri,  1 Apr 2022 19:58:11 +0800
+Message-Id: <20220401115811.9656-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-01 at 12:38 +0100, Luís Henriques wrote:
-> When doing DIO on an encrypted node, we need to truncate the page cache in
-> the range being written to, otherwise the cache will include invalid data.
-> 
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->  fs/ceph/file.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> This patch should fix generic/647 fstest when run with test_dummy_encryption.
-> 
-> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> index 5072570c2203..0f31c4d352a4 100644
-> --- a/fs/ceph/file.c
-> +++ b/fs/ceph/file.c
-> @@ -1895,6 +1895,11 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
->  		req->r_inode = inode;
->  		req->r_mtime = mtime;
->  
-> +		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT))
-> +			truncate_inode_pages_range(
-> +				inode->i_mapping, write_pos,
-> +				PAGE_ALIGN(write_pos + write_len) - 1);
-> +
->  		/* Set up the assertion */
->  		if (rmw) {
->  			/*
+Instead of exiting the loop as expected when an entry is found, the
+list_for_each_entry() continues until the traversal is complete. To
+avoid potential executing 'ret = gma_backlight_init(dev);' repeatly,
+break the loop when the entry is found.
 
-Truncating the pagecache like this could cause dirty data to be
-discarded. I know we're planning to overwrite this range, but you are
-having to invalidate more than the written range here. We could
-potentially lose a write to that region.
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/gpu/drm/gma500/psb_drv.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Have you tried using something like invalidate_inode_pages2_range ?
-That's more of what we'd want here, as it's a bit more cautious about
-tossing out dirty pages. I see too that that is what
-ceph_direct_read_write calls in the write case as well.
+diff --git a/drivers/gpu/drm/gma500/psb_drv.c b/drivers/gpu/drm/gma500/psb_drv.c
+index 2aff54d505e2..b61a8b0eea38 100644
+--- a/drivers/gpu/drm/gma500/psb_drv.c
++++ b/drivers/gpu/drm/gma500/psb_drv.c
+@@ -402,6 +402,9 @@ static int psb_driver_load(struct drm_device *dev, unsigned long flags)
+ 			ret = gma_backlight_init(dev);
+ 			break;
+ 		}
++
++		if (!ret)
++			break;
+ 	}
+ 	drm_connector_list_iter_end(&conn_iter);
+ 
 -- 
-Jeff Layton <jlayton@kernel.org>
+2.17.1
+

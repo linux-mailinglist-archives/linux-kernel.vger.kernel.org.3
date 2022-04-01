@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B114EE768
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3294EE769
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244890AbiDAEjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S244896AbiDAElG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbiDAEjG (ORCPT
+        with ESMTP id S232741AbiDAElD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:39:06 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38B825CBB4
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648787837; x=1680323837;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h5i5fthEhUv3TerCM063y5oBoq9S1I6QZnJ7/7t94CA=;
-  b=As07QLmTSt056P2ho2M2wj61AtbLEbjbDbQDt7rc979zJWseyTEgTYgQ
-   PE3fkNV1yxnavpMlxICuG79WlbXJ7RJ71GlrJBFIKa3dpHOVbH8hNVNJQ
-   BDZ4qHYjSPWoFb2j15ypK4XYzuRQMMQPWgzBge54WFQ4AAgdOYeto703+
-   fYTQhWighLe7i9EXR4dmin8Z8Gxr2hcH5vqObsgMtlTjZFJjYSo20tH1S
-   Fxu9OB/9E65fITYQxmhhDCZVe01KpXY8e0WBXg5njVl5SAWBX4oMEZf03
-   OVtv1xUf+o1cu/ZGoZgUBGfJhmdtPbZHDLDgivg3M5oGsvghwzJKP3L1M
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="346480858"
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="346480858"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 21:37:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="547643455"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 31 Mar 2022 21:37:15 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1na92A-0000we-BJ;
-        Fri, 01 Apr 2022 04:37:14 +0000
-Date:   Fri, 1 Apr 2022 12:36:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [sbates130272-p2pmem:raid5_fixups 3/6]
- drivers/md/raid5-ppl.c:895:30: sparse: sparse: incorrect type in assignment
- (different address spaces)
-Message-ID: <202204011224.U5aqrW6q-lkp@intel.com>
+        Fri, 1 Apr 2022 00:41:03 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ADF527C5
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:39:14 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id v35so2957405ybi.10
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ox5Xs8VVjr5sTQccCyZKH6QAT3KTfr65pMMuHLPychQ=;
+        b=IsaHx/5fSObUs+7L/C0SyHYi5BXs5cvVVSjvNFe8me+CCc3c1QV5gQi8MChigRzvn8
+         fZvDVxIIUe3fsto+W7sE9KQRYKfbFC2ROt+HA1iBteCaU/4TezVju/R9uuwDKU4RR7wS
+         nxBNr4vRbZ55ZUlewbplvaUImaFfNMRZXVn7eDE9HCETpwUIYfQl1/Am48mb2s3R3zZg
+         sVsjMNVs6V3GfB3BIiCf/kdUZo+RLIvE8qnLVRkL9cYSWtLEF5+Mww+TfIk7o2uEXU1V
+         1w7YZTG3lWHGlFbOKBIPOgin/s1AHaCKOBZxkgjmEG2Un7iZuZBRG1evucrzM+vHvIix
+         /TgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ox5Xs8VVjr5sTQccCyZKH6QAT3KTfr65pMMuHLPychQ=;
+        b=bvjdr+vrthc7hQv9CkALTU/Tviu53nOMwiHLvLbLlIe6lDtPbEff0EHg2c47cjTiSK
+         5kjd7XOXyCbx+wvoQytB6l0fP4KejUIHbB/NAk27PpBAAzuqYdcVykECUVawS2iXoaoP
+         BRNPvQ25pzxbM0J57kaq5YIpWSQdKZbVADJgR7wZyYnNJgMqqdazBR0p4mhsM3MUEZOX
+         wKha64M+0r38RuH4lPgJXxtiVVpmvysdurw5niw/M0phfA9Gf+1/d/rBQNi+jgXS0YFg
+         OwQ5mSkI6w8bepJPKcXGOJ8dWUa7giFkPAtKgLGQenmatv/iTeETzfX3DZc36v/grfR3
+         554A==
+X-Gm-Message-State: AOAM533NLgK8uLdPPlXOLNDW9JLsyzBZ0FZoIR8L4q9p+GnFXc8HF7n/
+        djMfhiifEz5e1Q3nEtpI2no8x0KggHOSQWoYm7fG+nrM/OCUnA==
+X-Google-Smtp-Source: ABdhPJyLekdpGi8wXZNxT0PvJRUEWLHtugRy/PijZGDLWxhO7W3KdwIL0H7lPmuWOMTnh+m2ic4tRqz87XmkctenR3U=
+X-Received: by 2002:a05:6902:72a:b0:634:6843:499c with SMTP id
+ l10-20020a056902072a00b006346843499cmr7484066ybt.36.1648787953248; Thu, 31
+ Mar 2022 21:39:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
+ <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1> <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
+ <CANn89iJaeBneeqiDBUh_ppEQGne_eyPp-BCVYjEyvoYkUxrDxg@mail.gmail.com>
+ <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1> <CANn89i+rfrkRrdYAq8Baq04n_ACq+VdB+UcsMoq7U-dB-2hKJA@mail.gmail.com>
+ <20220401000642.GB4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220401000642.GB4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 31 Mar 2022 21:39:02 -0700
+Message-ID: <CANn89iJtfTiSz4v+L3YW+b_gzNoPLz_wuAmXGrNJXqNs9BU9cA@mail.gmail.com>
+Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,290 +70,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/sbates130272/linux-p2pmem.git raid5_fixups
-head:   37cb73889e93d24459385229b6925da10648225d
-commit: 93ecde7add0ce4b4464e98700e39da53458c2d46 [3/6] md/raid5: Add __rcu annotation to struct disk_info
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220401/202204011224.U5aqrW6q-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/sbates130272/linux-p2pmem/commit/93ecde7add0ce4b4464e98700e39da53458c2d46
-        git remote add sbates130272-p2pmem https://github.com/sbates130272/linux-p2pmem.git
-        git fetch --no-tags sbates130272-p2pmem raid5_fixups
-        git checkout 93ecde7add0ce4b4464e98700e39da53458c2d46
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
+On Thu, Mar 31, 2022 at 5:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Thu, Mar 31, 2022 at 04:28:04PM -0700, Eric Dumazet wrote:
+> > On Thu, Mar 31, 2022 at 4:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > The initial setting of ->percpu_enqueue_shift forces all in-range CPU
+> > > IDs to shift down to zero.  The grace-period kthread is allowed to run
+> > > where it likes.  The callback lists are protected by locking, even in
+> > > the case of local access, so this should be safe.
+> > >
+> > > Or am I missing your point?
+> > >
+> >
+> > In fact I have been looking at this code, because we bisected a
+> > regression back to this patch:
+> >
+> > 4fe192dfbe5ba9780df699d411aa4f25ba24cf61 rcu-tasks: Shorten
+> > per-grace-period sleep for RCU Tasks Trace
+> >
+> > It is very possible the regression comes because the RCU task thread
+> > is using more cpu cycles, from 'CPU 0'  where our system daemons are
+> > pinned.
+>
+> Heh!  I did express that concern when creating that patch, but was
+> assured that the latency was much more important.
+>
+> Yes, that patch most definitely increases CPU utilization during RCU Tasks
+> Trace grace periods.  If you can tolerate longer grace-period latencies,
+> it might be worth toning it down a bit.  The ask was for about twice
+> the latency I achieved in my initial attempt, and I made the mistake of
+> forwarding that attempt out for testing.  They liked the shorter latency
+> very much, and objected strenuously to the thought that I might detune
+> it back to the latency that they originally asked for.  ;-)
+>
+> But I can easily provide the means to detune it through use of a kernel
+> boot parameter or some such, if that would help.
+>
+> > But I could not spot where the RCU task kthread is forced to run on CPU 0.
+>
+> I never did intend this kthread be bound anywhere.  RCU's policy is
+> that any binding of its kthreads is the responsibility of the sysadm,
+> be that carbon-based or otherwise.
+>
+> But this kthread is spawned early enough that only CPU 0 is online,
+> so maybe the question is not "what is binding it to CPU 0?" but rather
+> "why isn't something kicking it off of CPU 0?"
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I guess the answer to this question can be found in the following
+piece of code :)
+
+rcu_read_lock();
+for_each_process_thread(g, t)
+        rtp->pertask_func(t, &holdouts);
+rcu_read_unlock();
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/md/raid5-ppl.c: note: in included file:
-   drivers/md/raid5.h:271:14: sparse: sparse: array of flexible structures
->> drivers/md/raid5-ppl.c:895:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct md_rdev *rdev @@     got struct md_rdev [noderef] __rcu *rdev @@
-   drivers/md/raid5-ppl.c:895:30: sparse:     expected struct md_rdev *rdev
-   drivers/md/raid5-ppl.c:895:30: sparse:     got struct md_rdev [noderef] __rcu *rdev
->> drivers/md/raid5-ppl.c:946:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct md_rdev *parity_rdev @@     got struct md_rdev [noderef] __rcu *rdev @@
-   drivers/md/raid5-ppl.c:946:29: sparse:     expected struct md_rdev *parity_rdev
-   drivers/md/raid5-ppl.c:946:29: sparse:     got struct md_rdev [noderef] __rcu *rdev
->> drivers/md/raid5-ppl.c:1417:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct md_rdev *rdev @@     got struct md_rdev [noderef] __rcu *rdev @@
-   drivers/md/raid5-ppl.c:1417:54: sparse:     expected struct md_rdev *rdev
-   drivers/md/raid5-ppl.c:1417:54: sparse:     got struct md_rdev [noderef] __rcu *rdev
+With ~150,000 threads on a 256 cpu host, this holds current cpu for
+very long times:
 
-vim +895 drivers/md/raid5-ppl.c
+ rcu_tasks_trace    11 [017]  5010.544762:
+probe:rcu_tasks_wait_gp: (ffffffff963fb4b0)
+ rcu_tasks_trace    11 [017]  5010.600396:
+probe:rcu_tasks_trace_postscan: (ffffffff963fb7c0)
+ rcu_tasks_trace    11 [022]  5010.618783:
+probe:check_all_holdout_tasks_trace: (ffffffff963fb850)
+ rcu_tasks_trace    11 [022]  5010.618840:
+probe:rcu_tasks_trace_postgp: (ffffffff963fba70)
 
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  728  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  729  /*
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  730   * PPL recovery strategy: xor partial parity and data from all modified data
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  731   * disks within a stripe and write the result as the new stripe parity. If all
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  732   * stripe data disks are modified (full stripe write), no partial parity is
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  733   * available, so just xor the data disks.
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  734   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  735   * Recovery of a PPL entry shall occur only if all modified data disks are
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  736   * available and read from all of them succeeds.
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  737   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  738   * A PPL entry applies to a stripe, partial parity size for an entry is at most
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  739   * the size of the chunk. Examples of possible cases for a single entry:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  740   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  741   * case 0: single data disk write:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  742   *   data0    data1    data2     ppl        parity
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  743   * +--------+--------+--------+           +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  744   * | ------ | ------ | ------ | +----+    | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  745   * | ------ | -data- | ------ | | pp | -> | data1 ^ pp         |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  746   * | ------ | -data- | ------ | | pp | -> | data1 ^ pp         |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  747   * | ------ | ------ | ------ | +----+    | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  748   * +--------+--------+--------+           +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  749   * pp_size = data_size
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  750   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  751   * case 1: more than one data disk write:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  752   *   data0    data1    data2     ppl        parity
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  753   * +--------+--------+--------+           +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  754   * | ------ | ------ | ------ | +----+    | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  755   * | -data- | -data- | ------ | | pp | -> | data0 ^ data1 ^ pp |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  756   * | -data- | -data- | ------ | | pp | -> | data0 ^ data1 ^ pp |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  757   * | ------ | ------ | ------ | +----+    | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  758   * +--------+--------+--------+           +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  759   * pp_size = data_size / modified_data_disks
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  760   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  761   * case 2: write to all data disks (also full stripe write):
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  762   *   data0    data1    data2                parity
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  763   * +--------+--------+--------+           +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  764   * | ------ | ------ | ------ |           | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  765   * | -data- | -data- | -data- | --------> | xor all data       |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  766   * | ------ | ------ | ------ | --------> | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  767   * | ------ | ------ | ------ |           | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  768   * +--------+--------+--------+           +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  769   * pp_size = 0
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  770   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  771   * The following cases are possible only in other implementations. The recovery
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  772   * code can handle them, but they are not generated at runtime because they can
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  773   * be reduced to cases 0, 1 and 2:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  774   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  775   * case 3:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  776   *   data0    data1    data2     ppl        parity
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  777   * +--------+--------+--------+ +----+    +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  778   * | ------ | -data- | -data- | | pp |    | data1 ^ data2 ^ pp |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  779   * | ------ | -data- | -data- | | pp | -> | data1 ^ data2 ^ pp |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  780   * | -data- | -data- | -data- | | -- | -> | xor all data       |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  781   * | -data- | -data- | ------ | | pp |    | data0 ^ data1 ^ pp |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  782   * +--------+--------+--------+ +----+    +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  783   * pp_size = chunk_size
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  784   *
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  785   * case 4:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  786   *   data0    data1    data2     ppl        parity
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  787   * +--------+--------+--------+ +----+    +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  788   * | ------ | -data- | ------ | | pp |    | data1 ^ pp         |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  789   * | ------ | ------ | ------ | | -- | -> | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  790   * | ------ | ------ | ------ | | -- | -> | (no change)        |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  791   * | -data- | ------ | ------ | | pp |    | data0 ^ pp         |
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  792   * +--------+--------+--------+ +----+    +--------------------+
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  793   * pp_size = chunk_size
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  794   */
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  795  static int ppl_recover_entry(struct ppl_log *log, struct ppl_header_entry *e,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  796  			     sector_t ppl_sector)
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  797  {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  798  	struct ppl_conf *ppl_conf = log->ppl_conf;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  799  	struct mddev *mddev = ppl_conf->mddev;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  800  	struct r5conf *conf = mddev->private;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  801  	int block_size = ppl_conf->block_size;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  802  	struct page *page1;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  803  	struct page *page2;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  804  	sector_t r_sector_first;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  805  	sector_t r_sector_last;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  806  	int strip_sectors;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  807  	int data_disks;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  808  	int i;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  809  	int ret = 0;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  810  	char b[BDEVNAME_SIZE];
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  811  	unsigned int pp_size = le32_to_cpu(e->pp_size);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  812  	unsigned int data_size = le32_to_cpu(e->data_size);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  813  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  814  	page1 = alloc_page(GFP_KERNEL);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  815  	page2 = alloc_page(GFP_KERNEL);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  816  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  817  	if (!page1 || !page2) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  818  		ret = -ENOMEM;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  819  		goto out;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  820  	}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  821  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  822  	r_sector_first = le64_to_cpu(e->data_sector) * (block_size >> 9);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  823  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  824  	if ((pp_size >> 9) < conf->chunk_sectors) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  825  		if (pp_size > 0) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  826  			data_disks = data_size / pp_size;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  827  			strip_sectors = pp_size >> 9;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  828  		} else {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  829  			data_disks = conf->raid_disks - conf->max_degraded;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  830  			strip_sectors = (data_size >> 9) / data_disks;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  831  		}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  832  		r_sector_last = r_sector_first +
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  833  				(data_disks - 1) * conf->chunk_sectors +
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  834  				strip_sectors;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  835  	} else {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  836  		data_disks = conf->raid_disks - conf->max_degraded;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  837  		strip_sectors = conf->chunk_sectors;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  838  		r_sector_last = r_sector_first + (data_size >> 9);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  839  	}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  840  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  841  	pr_debug("%s: array sector first: %llu last: %llu\n", __func__,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  842  		 (unsigned long long)r_sector_first,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  843  		 (unsigned long long)r_sector_last);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  844  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  845  	/* if start and end is 4k aligned, use a 4k block */
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  846  	if (block_size == 512 &&
-c911c46c017c74 Yufen Yu          2020-07-18  847  	    (r_sector_first & (RAID5_STRIPE_SECTORS(conf) - 1)) == 0 &&
-c911c46c017c74 Yufen Yu          2020-07-18  848  	    (r_sector_last & (RAID5_STRIPE_SECTORS(conf) - 1)) == 0)
-c911c46c017c74 Yufen Yu          2020-07-18  849  		block_size = RAID5_STRIPE_SIZE(conf);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  850  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  851  	/* iterate through blocks in strip */
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  852  	for (i = 0; i < strip_sectors; i += (block_size >> 9)) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  853  		bool update_parity = false;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  854  		sector_t parity_sector;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  855  		struct md_rdev *parity_rdev;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  856  		struct stripe_head sh;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  857  		int disk;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  858  		int indent = 0;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  859  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  860  		pr_debug("%s:%*s iter %d start\n", __func__, indent, "", i);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  861  		indent += 2;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  862  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  863  		memset(page_address(page1), 0, PAGE_SIZE);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  864  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  865  		/* iterate through data member disks */
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  866  		for (disk = 0; disk < data_disks; disk++) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  867  			int dd_idx;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  868  			struct md_rdev *rdev;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  869  			sector_t sector;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  870  			sector_t r_sector = r_sector_first + i +
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  871  					    (disk * conf->chunk_sectors);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  872  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  873  			pr_debug("%s:%*s data member disk %d start\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  874  				 __func__, indent, "", disk);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  875  			indent += 2;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  876  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  877  			if (r_sector >= r_sector_last) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  878  				pr_debug("%s:%*s array sector %llu doesn't need parity update\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  879  					 __func__, indent, "",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  880  					 (unsigned long long)r_sector);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  881  				indent -= 2;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  882  				continue;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  883  			}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  884  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  885  			update_parity = true;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  886  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  887  			/* map raid sector to member disk */
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  888  			sector = raid5_compute_sector(conf, r_sector, 0,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  889  						      &dd_idx, NULL);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  890  			pr_debug("%s:%*s processing array sector %llu => data member disk %d, sector %llu\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  891  				 __func__, indent, "",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  892  				 (unsigned long long)r_sector, dd_idx,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  893  				 (unsigned long long)sector);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  894  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09 @895  			rdev = conf->disks[dd_idx].rdev;
-07719ff767dcd8 Artur Paszkiewicz 2017-09-29  896  			if (!rdev || (!test_bit(In_sync, &rdev->flags) &&
-07719ff767dcd8 Artur Paszkiewicz 2017-09-29  897  				      sector >= rdev->recovery_offset)) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  898  				pr_debug("%s:%*s data member disk %d missing\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  899  					 __func__, indent, "", dd_idx);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  900  				update_parity = false;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  901  				break;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  902  			}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  903  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  904  			pr_debug("%s:%*s reading data member disk %s sector %llu\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  905  				 __func__, indent, "", bdevname(rdev->bdev, b),
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  906  				 (unsigned long long)sector);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  907  			if (!sync_page_io(rdev, sector, block_size, page2,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  908  					REQ_OP_READ, 0, false)) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  909  				md_error(mddev, rdev);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  910  				pr_debug("%s:%*s read failed!\n", __func__,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  911  					 indent, "");
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  912  				ret = -EIO;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  913  				goto out;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  914  			}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  915  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  916  			ppl_xor(block_size, page1, page2);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  917  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  918  			indent -= 2;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  919  		}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  920  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  921  		if (!update_parity)
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  922  			continue;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  923  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  924  		if (pp_size > 0) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  925  			pr_debug("%s:%*s reading pp disk sector %llu\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  926  				 __func__, indent, "",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  927  				 (unsigned long long)(ppl_sector + i));
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  928  			if (!sync_page_io(log->rdev,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  929  					ppl_sector - log->rdev->data_offset + i,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  930  					block_size, page2, REQ_OP_READ, 0,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  931  					false)) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  932  				pr_debug("%s:%*s read failed!\n", __func__,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  933  					 indent, "");
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  934  				md_error(mddev, log->rdev);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  935  				ret = -EIO;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  936  				goto out;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  937  			}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  938  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  939  			ppl_xor(block_size, page1, page2);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  940  		}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  941  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  942  		/* map raid sector to parity disk */
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  943  		parity_sector = raid5_compute_sector(conf, r_sector_first + i,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  944  				0, &disk, &sh);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  945  		BUG_ON(sh.pd_idx != le32_to_cpu(e->parity_disk));
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09 @946  		parity_rdev = conf->disks[sh.pd_idx].rdev;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  947  
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  948  		BUG_ON(parity_rdev->bdev->bd_dev != log->rdev->bdev->bd_dev);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  949  		pr_debug("%s:%*s write parity at sector %llu, disk %s\n",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  950  			 __func__, indent, "",
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  951  			 (unsigned long long)parity_sector,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  952  			 bdevname(parity_rdev->bdev, b));
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  953  		if (!sync_page_io(parity_rdev, parity_sector, block_size,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  954  				page1, REQ_OP_WRITE, 0, false)) {
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  955  			pr_debug("%s:%*s parity write error!\n", __func__,
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  956  				 indent, "");
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  957  			md_error(mddev, parity_rdev);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  958  			ret = -EIO;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  959  			goto out;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  960  		}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  961  	}
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  962  out:
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  963  	if (page1)
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  964  		__free_page(page1);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  965  	if (page2)
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  966  		__free_page(page2);
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  967  	return ret;
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  968  }
-4536bf9ba2d034 Artur Paszkiewicz 2017-03-09  969  
+In this case, CPU 22 is the victim, not CPU 0 :)
 
-:::::: The code at line 895 was first introduced by commit
-:::::: 4536bf9ba2d03404655586b07f8830b6f2106242 raid5-ppl: load and recover the log
 
-:::::: TO: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
-:::::: CC: Shaohua Li <shli@fb.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> > I attempted to backport to our kernel all related patches that were
+> > not yet backported,
+> > and we still see a regression in our tests.
+>
+> The per-grace-period CPU consumption of rcu_tasks_trace was intentionally
+> increased by the above commit, and I never have done anything to reduce
+> that CPU consumption.  In part because you are the first to call my
+> attention to it.
+>
+> Oh, and one other issue that I very recently fixed, that has not
+> yet reached mainline, just in case it matters.  If you are building a
+> CONFIG_PREEMPT_NONE=y or CONFIG_PREEMPT_VOLUNTARY=y kernel, but also have
+> CONFIG_RCU_TORTURE_TEST=m (or, for that matter, =y, but please don't in
+> production!), then your kernel will use RCU Tasks instead of vanilla RCU.
+> (Note well, RCU Tasks, not RCU Tasks Trace, the latter being necessaary
+> for sleepable BPF programs regardless of kernel .config).
+>
+> > Please ignore the sha1 in this current patch series, this is only to
+> > show my current attempt to fix the regression in our tree.
+> >
+> > 450b3244f29b rcu-tasks: Don't remove tasks with pending IPIs from holdout list
+> > 5f88f7e9cc36 rcu-tasks: Create per-CPU callback lists
+> > 1a943d0041dc rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic
+> > queue selection
+> > ea5289f12fce rcu-tasks: Convert grace-period counter to grace-period
+> > sequence number
+> > 22efd5093c3b rcu/segcblist: Prevent useless GP start if no CBs to accelerate
+> > 16dee1b3babf rcu: Implement rcu_segcblist_is_offloaded() config dependent
+> > 8cafaadb6144 rcu: Add callbacks-invoked counters
+> > 323234685765 rcu/tree: Make rcu_do_batch count how many callbacks were executed
+> > f48f3386a1cc rcu/segcblist: Add additional comments to explain smp_mb()
+> > 4408105116de rcu/segcblist: Add counters to segcblist datastructure
+> > 4a0b89a918d6 rcu/tree: segcblist: Remove redundant smp_mb()s
+> > 38c0d18e8740 rcu: Add READ_ONCE() to rcu_do_batch() access to rcu_divisor
+> > 0b5d1031b509 rcu/segcblist: Add debug checks for segment lengths
+> > 8a82886fbf02 rcu_tasks: Convert bespoke callback list to rcu_segcblist structure
+> > cbd452a5c01f rcu-tasks: Use spin_lock_rcu_node() and friends
+> > 073222be51f3 rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure
+> > 5af10fb0f8fb rcu-tasks: Abstract checking of callback lists
+> > d3e8be598546 rcu-tasks: Abstract invocations of callbacks
+> > 65784460a392 rcu-tasks: Use workqueues for multiple
+> > rcu_tasks_invoke_cbs() invocations
+> > dd6413e355f1 rcu-tasks: Make rcu_barrier_tasks*() handle multiple
+> > callback queues
+> > 2499cb3c438e rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set
+> > initial queueing
+> > a859f409a503 rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention
+> > 4ab253ca056e rcu-tasks: Avoid raw-spinlocked wakeups from
+> > call_rcu_tasks_generic()
+> > e9a3563fe76e rcu-tasks: Use more callback queues if contention encountered
+> > 4023187fe31d rcu-tasks: Use separate ->percpu_dequeue_lim for callback
+> > dequeueing
+> > 533be3bd47c3 rcu: Provide polling interfaces for Tree RCU grace periods
+> > f7e5a81d7953 rcu-tasks: Use fewer callbacks queues if callback flood ends
+> > bb7ad9078e1b rcu-tasks: Fix computation of CPU-to-list shift counts
+> > d9cebde55539 rcu-tasks: Use order_base_2() instead of ilog2()
+> > 95606f1248f5 rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention

@@ -2,317 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5C34EF709
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFFD4EF710
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351908AbiDAPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S243855AbiDAPw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352804AbiDAPpL (ORCPT
+        with ESMTP id S1352618AbiDAPtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:45:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513A0B1E
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:20:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D8ECB82500
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D6AC2BBE4;
-        Fri,  1 Apr 2022 15:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648826438;
-        bh=jpGvEUWglP4FEJwkhpNwyFmBIHkh/fvee0wxQQk561I=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DDyrkFtZmJwfuJ6mrWQCHrt+3kjmp8/PJTB2xaOOgwZaQWVG7gSP3NbuhHk/R2YNB
-         PsuzRRIt1/qQwCMWpGgxkTEc3/iJpgxpqvObCBb5p/MpFGg094H1qzu6/pO4mqn1ZD
-         QieQe/BtYOM2PxsSQr+ovlKjUGDMSW1cjcqOiB60hJXTbq9JMUxJ5h3bgHe3fAgfWp
-         jkm7xlllEZeCWPzN9NSm4erEgGwDEBnrrjdvTfk8jFBLg6NtP3Ewzn4BqSJcjZrB8t
-         cT+VmE9aJ8u1XX9fgKjmM64KBYpqlc0B3m1LMIo9hUmzLHIyBqc9g9jlYutGRgRIxC
-         4I9pUSzvnfGEw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EA5C25C0A15; Fri,  1 Apr 2022 08:20:37 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 08:20:37 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>, quic_neeraju@quicinc.com
-Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
-Message-ID: <20220401152037.GD4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
- <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
- <CANn89iJaeBneeqiDBUh_ppEQGne_eyPp-BCVYjEyvoYkUxrDxg@mail.gmail.com>
- <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89i+rfrkRrdYAq8Baq04n_ACq+VdB+UcsMoq7U-dB-2hKJA@mail.gmail.com>
- <20220401000642.GB4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89iJtfTiSz4v+L3YW+b_gzNoPLz_wuAmXGrNJXqNs9BU9cA@mail.gmail.com>
- <20220401130114.GC4285@paulmck-ThinkPad-P17-Gen-1>
- <CANn89iLicuKS2wDjY1D5qNT4c-ob=D2n1NnRnm5fGg4LFuW1Kg@mail.gmail.com>
+        Fri, 1 Apr 2022 11:49:52 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34321C040
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:22:21 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id e22so2243396qvf.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C8BmOVTEvyZVSx9ld3GApD3hvsbMzWcJqgmXoodcSGk=;
+        b=JH66jwKCvtadoIObEkxAHGLxied0NOaZaqUYj7G9CXskhfqsNZS4yu2ULkKh+v9L/v
+         OF/Uu698Bvnw4CdTGVpFV2nGYvympuplG9wNMNe+VjnqKjTn4o+EuaeKa1u9zJ1eS1DI
+         43kxRf3Hmu4DGi6fKR7m03Ie7EvLkv6MjwkqkpS5hwlkGzB8jX7+ylAil9ZSmd/8dHV8
+         seR47Pjx2FAW2uaNc3PFRLxO+m5kZP0fhf3rmHbtly85FbUmAv1G+F5qwyj5+y+QKfZL
+         yQxVLSRmvupwh2lYDdUDB/JKUJaYVDoRPvRdiDOwv7C7JFVQ3M1Cwpn+vf5YQReZ8HI7
+         5e5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C8BmOVTEvyZVSx9ld3GApD3hvsbMzWcJqgmXoodcSGk=;
+        b=722/SkfRSGzj1kD7r9+bUnyYITb3Q3hpAp5xVbAZpn/jzpNxWyT1pvuHiYjdDUN3Zk
+         jTB19DcO7RKyWzaDVbrVAGWYSAoGUI5lPm7NkSgU5BP51Yjno8eJR9pKiSoWI8E+8khR
+         LSp6eJh55bYabfEVkgWFAzV2nZtBUae3Ngko6aTKumTq9iVYRn0VKJMLz8MFQOOsU4ra
+         vCYFz/ZWYuhG+b1neb465veFcPizS2ywSOt8V3QY6J4NHB4bBd419Gq7jGOLdaRcnuGM
+         sZWTNFWpXEMlNbioi+wL94lok+geGjcw5QXhxUwpAimjh6aPVHm7TpY+3iw0qGx3N+sZ
+         gKWw==
+X-Gm-Message-State: AOAM533koYhYqMjIVkFI509jHkpPnvNF1s8uvMhBRaLZvA040eucEv6D
+        A0F6ey4GL05JrtUUzLfjN6JCHyE7MmYRIg==
+X-Google-Smtp-Source: ABdhPJxEmQQeBCz/t0KOjwhgHs7svXisRYYpc/i6mk+/CYLPRZpJBXDA37aZKdGlx6vyVSbCuetdzQ==
+X-Received: by 2002:a05:6214:c48:b0:440:cded:f2ab with SMTP id r8-20020a0562140c4800b00440cdedf2abmr39703282qvj.18.1648826540487;
+        Fri, 01 Apr 2022 08:22:20 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05622a01c700b002e1b3555c2fsm1977394qtw.26.2022.04.01.08.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 08:22:20 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 11:22:19 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+Message-ID: <YkcYq8F6MYlMi+yS@cmpxchg.org>
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <CAAPL-u8g2qkhdTQtFtBS3GNYz0WnyahWEXvR4g_OSaKv+7EozA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89iLicuKS2wDjY1D5qNT4c-ob=D2n1NnRnm5fGg4LFuW1Kg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAPL-u8g2qkhdTQtFtBS3GNYz0WnyahWEXvR4g_OSaKv+7EozA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 06:24:13AM -0700, Eric Dumazet wrote:
-> On Fri, Apr 1, 2022 at 6:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Thu, Mar 31, 2022 at 09:05:15PM -0700, Wei Xu wrote:
+> On Thu, Mar 31, 2022 at 1:42 AM Yosry Ahmed <yosryahmed@google.com> wrote:
 > >
-> > On Thu, Mar 31, 2022 at 09:39:02PM -0700, Eric Dumazet wrote:
-> > > On Thu, Mar 31, 2022 at 5:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > >
-> > > > On Thu, Mar 31, 2022 at 04:28:04PM -0700, Eric Dumazet wrote:
-> > > > > On Thu, Mar 31, 2022 at 4:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > >
-> > > > > > The initial setting of ->percpu_enqueue_shift forces all in-range CPU
-> > > > > > IDs to shift down to zero.  The grace-period kthread is allowed to run
-> > > > > > where it likes.  The callback lists are protected by locking, even in
-> > > > > > the case of local access, so this should be safe.
-> > > > > >
-> > > > > > Or am I missing your point?
-> > > > > >
-> > > > >
-> > > > > In fact I have been looking at this code, because we bisected a
-> > > > > regression back to this patch:
-> > > > >
-> > > > > 4fe192dfbe5ba9780df699d411aa4f25ba24cf61 rcu-tasks: Shorten
-> > > > > per-grace-period sleep for RCU Tasks Trace
-> > > > >
-> > > > > It is very possible the regression comes because the RCU task thread
-> > > > > is using more cpu cycles, from 'CPU 0'  where our system daemons are
-> > > > > pinned.
-> > > >
-> > > > Heh!  I did express that concern when creating that patch, but was
-> > > > assured that the latency was much more important.
-> > > >
-> > > > Yes, that patch most definitely increases CPU utilization during RCU Tasks
-> > > > Trace grace periods.  If you can tolerate longer grace-period latencies,
-> > > > it might be worth toning it down a bit.  The ask was for about twice
-> > > > the latency I achieved in my initial attempt, and I made the mistake of
-> > > > forwarding that attempt out for testing.  They liked the shorter latency
-> > > > very much, and objected strenuously to the thought that I might detune
-> > > > it back to the latency that they originally asked for.  ;-)
-> > > >
-> > > > But I can easily provide the means to detune it through use of a kernel
-> > > > boot parameter or some such, if that would help.
-> > > >
-> > > > > But I could not spot where the RCU task kthread is forced to run on CPU 0.
-> > > >
-> > > > I never did intend this kthread be bound anywhere.  RCU's policy is
-> > > > that any binding of its kthreads is the responsibility of the sysadm,
-> > > > be that carbon-based or otherwise.
-> > > >
-> > > > But this kthread is spawned early enough that only CPU 0 is online,
-> > > > so maybe the question is not "what is binding it to CPU 0?" but rather
-> > > > "why isn't something kicking it off of CPU 0?"
-> > >
-> > > I guess the answer to this question can be found in the following
-> > > piece of code :)
-> > >
-> > > rcu_read_lock();
-> > > for_each_process_thread(g, t)
-> > >         rtp->pertask_func(t, &holdouts);
-> > > rcu_read_unlock();
-> > >
-> > >
-> > > With ~150,000 threads on a 256 cpu host, this holds current cpu for
-> > > very long times:
-> > >
-> > >  rcu_tasks_trace    11 [017]  5010.544762:
-> > > probe:rcu_tasks_wait_gp: (ffffffff963fb4b0)
-> > >  rcu_tasks_trace    11 [017]  5010.600396:
-> > > probe:rcu_tasks_trace_postscan: (ffffffff963fb7c0)
+> > From: Shakeel Butt <shakeelb@google.com>
 > >
-> > So about 55 milliseconds for the tasklist scan, correct?  Or am I
-> > losing the plot here?
+> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
 > >
-> > >  rcu_tasks_trace    11 [022]  5010.618783:
-> > > probe:check_all_holdout_tasks_trace: (ffffffff963fb850)
-> > >  rcu_tasks_trace    11 [022]  5010.618840:
-> > > probe:rcu_tasks_trace_postgp: (ffffffff963fba70)
-> > >
-> > > In this case, CPU 22 is the victim, not CPU 0 :)
+> > Use case: Proactive Reclaim
+> > ---------------------------
 > >
-> > My faith in the scheduler is restored!  ;-)
+> > A userspace proactive reclaimer can continuously probe the memcg to
+> > reclaim a small amount of memory. This gives more accurate and
+> > up-to-date workingset estimation as the LRUs are continuously
+> > sorted and can potentially provide more deterministic memory
+> > overcommit behavior. The memory overcommit controller can provide
+> > more proactive response to the changing behavior of the running
+> > applications instead of being reactive.
 > >
-> > My position has been that this tasklist scan does not need to be broken
-> > up because it should happen only when a sleepable BPF program is removed,
-> > which is a rare event.
+> > A userspace reclaimer's purpose in this case is not a complete replacement
+> > for kswapd or direct reclaim, it is to proactively identify memory savings
+> > opportunities and reclaim some amount of cold pages set by the policy
+> > to free up the memory for more demanding jobs or scheduling new jobs.
+> >
+> > A user space proactive reclaimer is used in Google data centers.
+> > Additionally, Meta's TMO paper recently referenced a very similar
+> > interface used for user space proactive reclaim:
+> > https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+> >
+> > Benefits of a user space reclaimer:
+> > -----------------------------------
+> >
+> > 1) More flexible on who should be charged for the cpu of the memory
+> > reclaim. For proactive reclaim, it makes more sense to be centralized.
+> >
+> > 2) More flexible on dedicating the resources (like cpu). The memory
+> > overcommit controller can balance the cost between the cpu usage and
+> > the memory reclaimed.
+> >
+> > 3) Provides a way to the applications to keep their LRUs sorted, so,
+> > under memory pressure better reclaim candidates are selected. This also
+> > gives more accurate and uptodate notion of working set for an
+> > application.
+> >
+> > Why memory.high is not enough?
+> > ------------------------------
+> >
+> > - memory.high can be used to trigger reclaim in a memcg and can
+> >   potentially be used for proactive reclaim.
+> >   However there is a big downside in using memory.high. It can potentially
+> >   introduce high reclaim stalls in the target application as the
+> >   allocations from the processes or the threads of the application can hit
+> >   the temporary memory.high limit.
+> >
+> > - Userspace proactive reclaimers usually use feedback loops to decide
+> >   how much memory to proactively reclaim from a workload. The metrics
+> >   used for this are usually either refaults or PSI, and these metrics
+> >   will become messy if the application gets throttled by hitting the
+> >   high limit.
+> >
+> > - memory.high is a stateful interface, if the userspace proactive
+> >   reclaimer crashes for any reason while triggering reclaim it can leave
+> >   the application in a bad state.
+> >
+> > - If a workload is rapidly expanding, setting memory.high to proactively
+> >   reclaim memory can result in actually reclaiming more memory than
+> >   intended.
+> >
+> > The benefits of such interface and shortcomings of existing interface
+> > were further discussed in this RFC thread:
+> > https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+> >
+> > Interface:
+> > ----------
+> >
+> > Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> > trigger reclaim in the target memory cgroup.
+> >
+> >
+> > Possible Extensions:
+> > --------------------
+> >
+> > - This interface can be extended with an additional parameter or flags
+> >   to allow specifying one or more types of memory to reclaim from (e.g.
+> >   file, anon, ..).
+> >
+> > - The interface can also be extended with a node mask to reclaim from
+> >   specific nodes. This has use cases for reclaim-based demotion in memory
+> >   tiering systens.
+> >
+> > - A similar per-node interface can also be added to support proactive
+> >   reclaim and reclaim-based demotion in systems without memcg.
+> >
+> > For now, let's keep things simple by adding the basic functionality.
+> >
+> > [yosryahmed@google.com: refreshed to current master, updated commit
+> > message based on recent discussions and use cases]
+> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
+> >  mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
+> >  2 files changed, 46 insertions(+)
+> >
+> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> > index 69d7a6983f78..925aaabb2247 100644
+> > --- a/Documentation/admin-guide/cgroup-v2.rst
+> > +++ b/Documentation/admin-guide/cgroup-v2.rst
+> > @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
+> >         high limit is used and monitored properly, this limit's
+> >         utility is limited to providing the final safety net.
+> >
+> > +  memory.reclaim
+> > +       A write-only file which exists on non-root cgroups.
+> > +
+> > +       This is a simple interface to trigger memory reclaim in the
+> > +       target cgroup. Write the number of bytes to reclaim to this
+> > +       file and the kernel will try to reclaim that much memory.
+> > +       Please note that the kernel can over or under reclaim from
+> > +       the target cgroup.
+> > +
+> >    memory.oom.group
+> >         A read-write single value file which exists on non-root
+> >         cgroups.  The default value is "0".
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 725f76723220..994849fab7df 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+> >         return nbytes;
+> >  }
+> >
+> > +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+> > +                             size_t nbytes, loff_t off)
+> > +{
+> > +       struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+> > +       unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+> > +       unsigned long nr_to_reclaim, nr_reclaimed = 0;
+> > +       int err;
+> > +
+> > +       buf = strstrip(buf);
+> > +       err = page_counter_memparse(buf, "", &nr_to_reclaim);
+> > +       if (err)
+> > +               return err;
+> > +
+> > +       while (nr_reclaimed < nr_to_reclaim) {
+> > +               unsigned long reclaimed;
+> > +
+> > +               if (signal_pending(current))
+> > +                       break;
+> > +
+> > +               reclaimed = try_to_free_mem_cgroup_pages(memcg,
+> > +                                               nr_to_reclaim - nr_reclaimed,
+> > +                                               GFP_KERNEL, true);
+> > +
+> > +               if (!reclaimed && !nr_retries--)
+> > +                       break;
+> > +
+> > +               nr_reclaimed += reclaimed;
+> > +       }
+> > +
+> > +       return nbytes;
 > 
-> Hmm... what about  bpf_sk_storage_free() ?
-> 
-> Definitely not a rare event.
+> It is better to return an error code (e.g. -EBUSY) when
+> memory_reclaim() fails to reclaim nr_to_reclaim bytes of memory,
+> except if the cgroup memory usage is already 0.  We can also return
+> -EINVAL if nr_to_reclaim is too large (e.g. > limit).
 
-Hmmm...  Are the BPF guys using call_rcu_tasks_trace() to free things that
-are not trampolines for sleepable BPF programs?  Kind of looks like it.
+For -EBUSY, are you thinking of a specific usecase where that would
+come in handy? I'm not really opposed to it, but couldn't convince
+myself of the practical benefits of it, either.
 
-Maybe RCU Tasks Trace was too convenient to use?  ;-)
+Keep in mind that MAX_RECLAIM_RETRIES failed reclaim attempts usually
+constitute an OOM situation: memory.max will issue kills and
+memory.high will begin crippling throttling. In what scenario would
+you want to keep reclaiming a workload that is considered OOM?
 
-> > In addition, breaking up this scan is not trivial, because as far as I
-> > know there is no way to force a given task to stay in the list.  I would
-> > have to instead use something like rcu_lock_break(), and restart the
-> > scan if either of the nailed-down pair of tasks was removed from the list.
-> > In a system where tasks were coming and going very frequently, it might
-> > be that such a broken-up scan would never complete.
-> >
-> > I can imagine tricks where the nailed-down tasks are kept on a list,
-> > and the nailed-downness is moved to the next task when those tasks
-> > are removed.  I can also imagine a less-than-happy response to such
-> > a proposal.
-> >
-> > So I am not currently thinking in terms of breaking up this scan.
-> >
-> > Or is there some trick that I am missing?
-> >
-> > In the meantime, a simple patch that reduces the frequency of the scan
-> > by a factor of two.  But this would not be the scan of the full tasklist,
-> > but rather the frequency of the calls to check_all_holdout_tasks_trace().
-> > And the total of these looks to be less than 20 milliseconds, if I am
-> > correctly interpreting your trace.  And most of that 20 milliseconds
-> > is sleeping.
-> >
-> > Nevertheless, the patch is at the end of this email.
-> >
-> > Other than that, I could imagine batching removal of sleepable BPF
-> > programs and using a single grace period for all of their trampolines.
-> > But are there enough sleepable BPF programs ever installed to make this
-> > a useful approach?
-> >
-> > Or is the status quo in fact acceptable?  (Hey, I can dream, can't I?)
-> >
-> >                                                         Thanx, Paul
-> >
-> > > > > I attempted to backport to our kernel all related patches that were
-> > > > > not yet backported,
-> > > > > and we still see a regression in our tests.
-> > > >
-> > > > The per-grace-period CPU consumption of rcu_tasks_trace was intentionally
-> > > > increased by the above commit, and I never have done anything to reduce
-> > > > that CPU consumption.  In part because you are the first to call my
-> > > > attention to it.
-> > > >
-> > > > Oh, and one other issue that I very recently fixed, that has not
-> > > > yet reached mainline, just in case it matters.  If you are building a
-> > > > CONFIG_PREEMPT_NONE=y or CONFIG_PREEMPT_VOLUNTARY=y kernel, but also have
-> > > > CONFIG_RCU_TORTURE_TEST=m (or, for that matter, =y, but please don't in
-> > > > production!), then your kernel will use RCU Tasks instead of vanilla RCU.
-> > > > (Note well, RCU Tasks, not RCU Tasks Trace, the latter being necessaary
-> > > > for sleepable BPF programs regardless of kernel .config).
-> > > >
-> > > > > Please ignore the sha1 in this current patch series, this is only to
-> > > > > show my current attempt to fix the regression in our tree.
-> > > > >
-> > > > > 450b3244f29b rcu-tasks: Don't remove tasks with pending IPIs from holdout list
-> > > > > 5f88f7e9cc36 rcu-tasks: Create per-CPU callback lists
-> > > > > 1a943d0041dc rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic
-> > > > > queue selection
-> > > > > ea5289f12fce rcu-tasks: Convert grace-period counter to grace-period
-> > > > > sequence number
-> > > > > 22efd5093c3b rcu/segcblist: Prevent useless GP start if no CBs to accelerate
-> > > > > 16dee1b3babf rcu: Implement rcu_segcblist_is_offloaded() config dependent
-> > > > > 8cafaadb6144 rcu: Add callbacks-invoked counters
-> > > > > 323234685765 rcu/tree: Make rcu_do_batch count how many callbacks were executed
-> > > > > f48f3386a1cc rcu/segcblist: Add additional comments to explain smp_mb()
-> > > > > 4408105116de rcu/segcblist: Add counters to segcblist datastructure
-> > > > > 4a0b89a918d6 rcu/tree: segcblist: Remove redundant smp_mb()s
-> > > > > 38c0d18e8740 rcu: Add READ_ONCE() to rcu_do_batch() access to rcu_divisor
-> > > > > 0b5d1031b509 rcu/segcblist: Add debug checks for segment lengths
-> > > > > 8a82886fbf02 rcu_tasks: Convert bespoke callback list to rcu_segcblist structure
-> > > > > cbd452a5c01f rcu-tasks: Use spin_lock_rcu_node() and friends
-> > > > > 073222be51f3 rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure
-> > > > > 5af10fb0f8fb rcu-tasks: Abstract checking of callback lists
-> > > > > d3e8be598546 rcu-tasks: Abstract invocations of callbacks
-> > > > > 65784460a392 rcu-tasks: Use workqueues for multiple
-> > > > > rcu_tasks_invoke_cbs() invocations
-> > > > > dd6413e355f1 rcu-tasks: Make rcu_barrier_tasks*() handle multiple
-> > > > > callback queues
-> > > > > 2499cb3c438e rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set
-> > > > > initial queueing
-> > > > > a859f409a503 rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention
-> > > > > 4ab253ca056e rcu-tasks: Avoid raw-spinlocked wakeups from
-> > > > > call_rcu_tasks_generic()
-> > > > > e9a3563fe76e rcu-tasks: Use more callback queues if contention encountered
-> > > > > 4023187fe31d rcu-tasks: Use separate ->percpu_dequeue_lim for callback
-> > > > > dequeueing
-> > > > > 533be3bd47c3 rcu: Provide polling interfaces for Tree RCU grace periods
-> > > > > f7e5a81d7953 rcu-tasks: Use fewer callbacks queues if callback flood ends
-> > > > > bb7ad9078e1b rcu-tasks: Fix computation of CPU-to-list shift counts
-> > > > > d9cebde55539 rcu-tasks: Use order_base_2() instead of ilog2()
-> > > > > 95606f1248f5 rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
-> >
-> >
-> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> > index 65d6e21a607a..141e2b4c70cc 100644
-> > --- a/kernel/rcu/tasks.h
-> > +++ b/kernel/rcu/tasks.h
-> > @@ -1640,10 +1640,10 @@ static int __init rcu_spawn_tasks_trace_kthread(void)
-> >                 rcu_tasks_trace.gp_sleep = HZ / 10;
-> >                 rcu_tasks_trace.init_fract = HZ / 10;
-> >         } else {
-> > -               rcu_tasks_trace.gp_sleep = HZ / 200;
-> > +               rcu_tasks_trace.gp_sleep = HZ / 100;
-> >                 if (rcu_tasks_trace.gp_sleep <= 0)
-> >                         rcu_tasks_trace.gp_sleep = 1;
-> > -               rcu_tasks_trace.init_fract = HZ / 200;
-> > +               rcu_tasks_trace.init_fract = HZ / 100;
-> >                 if (rcu_tasks_trace.init_fract <= 0)
-> >                         rcu_tasks_trace.init_fract = 1;
-> >         }
-> 
-> It seems that if the scan time is > 50ms in some common cases (at
-> least at Google scale),
-> the claim of having a latency of 10ms is not reasonable.
+Certainly, proactive reclaim that wants to purge only the cold tail of
+the workload wouldn't retry. Meta's version of this patch actually
+does return -EAGAIN on reclaim failure, but the userspace daemon
+doesn't do anything with it, so I didn't bring it up.
 
-But does the above patch make things better?  If it does, I will send
-you a proper patch with kernel boot parameters.  We can then discuss
-better autotuning, for example, making the defaults a function of the
-number of CPUs.
-
-Either way, that certainly is a fair point.  Another fair point is that
-the offending commit was in response to a bug report from your colleagues.  ;-)
-
-Except that I don't see any uses of synchronize_rcu_tasks_trace(), so
-I am at a loss as to why latency matters anymore.
-
-Is the issue the overall CPU consumption of the scan (which is my
-current guess) or the length of time that the scan runs without invoking
-cond_resched() or similar?
-
-Either way, how frequently is call_rcu_tasks_trace() being invoked in
-your setup?  If it is being invoked frequently, increasing delays would
-allow multiple call_rcu_tasks_trace() instances to be served by a single
-tasklist scan.
-
-> Given that, I do not think bpf_sk_storage_free() can/should use
-> call_rcu_tasks_trace(),
-> we probably will have to fix this soon (or revert from our kernels)
-
-Well, you are in luck!!!  This commit added call_rcu_tasks_trace() to
-bpf_selem_unlink_storage_nolock(), which is invoked in a loop by
-bpf_sk_storage_free():
-
-0fe4b381a59e ("bpf: Allow bpf_local_storage to be used by sleepable programs")
-
-This commit was authored by KP Singh, who I am adding on CC.  Or I would
-have, except that you beat me to it.  Good show!!!  ;-)
-
-If this commit provoked this issue, then the above patch might help.
-
-I am also adding Neeraj Uphadhyay on CC for his thoughts, as he has
-also been throught this code.
-
-My response time may be a bit slow next week, but I will be checking
-email.
-
-							Thanx, Paul
+For -EINVAL, I tend to lean more toward disagreeing. We've been trying
+to avoid arbitrary dependencies between control knobs in cgroup2, just
+because it exposes us to race conditions and adds complications to the
+interface. For example, it *usually* doesn't make sense to set limits
+to 0, or set local limits and protections higher than the parent. But
+we allow it anyway, to avoid creating well-intended linting rules that
+could interfere with somebody's unforeseen, legitimate usecase.

@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7CE4EE778
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5178A4EE786
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244930AbiDAE7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        id S244947AbiDAFIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244906AbiDAE7H (ORCPT
+        with ESMTP id S233411AbiDAFH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:59:07 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A63AF1E5;
-        Thu, 31 Mar 2022 21:57:18 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D5FF268AFE; Fri,  1 Apr 2022 06:57:13 +0200 (CEST)
-Date:   Fri, 1 Apr 2022 06:57:13 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH 4/5] block: turn bio_kmalloc into a simple kmalloc
- wrapper
-Message-ID: <20220401045713.GA9057@lst.de>
-References: <20220308061551.737853-1-hch@lst.de> <20220308061551.737853-5-hch@lst.de> <CGME20220331211804eucas1p28da21f2dfd57aa490abffb8f87417f42@eucas1p2.samsung.com> <6696cc6a-3e3f-035e-5b8c-05ea361383f3@samsung.com>
+        Fri, 1 Apr 2022 01:07:59 -0400
+X-Greylist: delayed 312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 22:06:09 PDT
+Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 2616D25F678
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:06:08 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
+ s=smtp; t=1648789568; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender:
+ Sender; bh=l+7Y194RkHEDvlBRUE9dOX8hqW2hHbFhgCzQfGAyZwQ=; b=gRoRH1cLY05CwIS9RZg5qf2Ex3BIQ2c33jMdGISh7sEuJ1UvZzP8LYjPUHvjR9axgsG2UILy
+ T+aNt66L+rnMmWH0SGxJvy1DZDhfKPcIlPwvIR6B1+O4X/zyzNKNHBfZqn/gqHLbdtX/KLRG
+ 97nGNqlKHdGhjwc6n4OjXF9MZ9wYWxUVEcs4xt7K/NiTD4O3QcalqXJ3oylghvixb9s3Xa+q
+ vKr7kOKDBIRBy/lDPjkTUEl/ePnunTYMatmDLq0uynsP5UiKfP7pqgIszbvfrzpev5QY/coI
+ Gm6g+TIsiy8p2UF5Lov+9tjH1oHyAXfZutHy+KptetvUiavcOYo11w==
+X-Mailgun-Sending-Ip: 159.135.228.13
+X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
+Received: from localhost.localdomain (dynamic-user.170.84.58.28.mhnet.com.br
+ [170.84.58.28]) by smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 624687077afabd0707a01256 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Fri, 01 Apr 2022 05:00:55 GMT
+Sender: codeagain@codeagain.dev
+From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
+To:     reg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
+Subject: [PATCH] staging: vme: Adjusted VME_USER in Kconfig
+Date:   Fri,  1 Apr 2022 02:00:45 -0300
+Message-Id: <20220401050045.3686663-1-codeagain@codeagain.dev>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6696cc6a-3e3f-035e-5b8c-05ea361383f3@samsung.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:18:03PM +0200, Marek Szyprowski wrote:
-> Hi Christoph,
-> 
-> On 08.03.2022 07:15, Christoph Hellwig wrote:
-> > Remove the magic autofree semantics and require the callers to explicitly
-> > call bio_init to initialize the bio.
-> >
-> > This allows bio_free to catch accidental bio_put calls on bio_init()ed
-> > bios as well.
-> >
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> 
-> This patch, which landed in today's next-20220331 as commit 57c47b42f454 
-> ("block: turn bio_kmalloc into a simple kmalloc wrapper"), breaks badly 
-> all my test systems, which use squashfs initrd:
+Currently, the VME_USER driver is in the staging tree Kconfig, unlike
+other VME drivers already moved to the main portions of the kernel tree.
+Its configuration is, however, nested into the VME_BUS config option,
+which might be misleading.
 
-In addition to the revert, this is the patch I had already queued up:
+Since the staging tree "[...] is used to hold stand-alone[1] drivers and
+filesystem that are not ready to be merged into the main portion of the
+Linux kernel tree [...]"[1], IMHO all staging drivers should appear
+nested into the Main Menu -> Device Drivers -> Staging Drivers to make
+sure the user don't pick it without being fully aware of its staging
+status as it could be the case in Menu -> Device Drivers -> VME bridge
+support (the current location).
 
-diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
-index 930eb530fa622..fed99bb3df3be 100644
---- a/fs/squashfs/block.c
-+++ b/fs/squashfs/block.c
-@@ -72,6 +72,13 @@ static int copy_bio_to_actor(struct bio *bio,
- 	return copied_bytes;
- }
+With this change menuconfig users will clearly know this is not a driver
+in the main portion of the kernel tree and decide whether to build it or
+not with that clearly in mind.
+
+This change goes into the same direction of commit 4b4cdf3979c3
+("STAGING: Move staging drivers back to staging-specific menu")
+
+[1] https://lkml.org/lkml/2009/3/18/314
+
+Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+---
+ drivers/staging/Kconfig | 2 ++
+ drivers/vme/Kconfig     | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index 932acb4e8cbc..0545850eb2ff 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -88,4 +88,6 @@ source "drivers/staging/qlge/Kconfig"
  
-+static void squashfs_bio_free(struct bio *bio)
-+{
-+	bio_free_pages(bio);
-+	bio_uninit(bio);
-+	kfree(bio);
-+}
+ source "drivers/staging/wfx/Kconfig"
+ 
++source "drivers/staging/vme/devices/Kconfig"
 +
- static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
- 			     struct bio **biop, int *block_offset)
- {
-@@ -118,9 +125,7 @@ static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
- 	return 0;
+ endif # STAGING
+diff --git a/drivers/vme/Kconfig b/drivers/vme/Kconfig
+index 936392ca3c8c..c13dd9d2a604 100644
+--- a/drivers/vme/Kconfig
++++ b/drivers/vme/Kconfig
+@@ -15,6 +15,4 @@ source "drivers/vme/bridges/Kconfig"
  
- out_free_bio:
--	bio_free_pages(bio);
--	bio_uninit(bio);
--	kfree(bio);
-+	squashfs_bio_free(bio);
- 	return error;
- }
+ source "drivers/vme/boards/Kconfig"
  
-@@ -183,8 +188,7 @@ int squashfs_read_data(struct super_block *sb, u64 index, int length,
- 			data = bvec_virt(bvec);
- 			length |= data[0] << 8;
- 		}
--		bio_free_pages(bio);
--		bio_put(bio);
-+		squashfs_bio_free(bio);
- 
- 		compressed = SQUASHFS_COMPRESSED(length);
- 		length = SQUASHFS_COMPRESSED_SIZE(length);
-@@ -217,8 +221,7 @@ int squashfs_read_data(struct super_block *sb, u64 index, int length,
- 	}
- 
- out_free_bio:
--	bio_free_pages(bio);
--	bio_put(bio);
-+	squashfs_bio_free(bio);
- out:
- 	if (res < 0) {
- 		ERROR("Failed to read block 0x%llx: %d\n", index, res);
+-source "drivers/staging/vme/devices/Kconfig"
+-
+ endif # VME
+-- 
+2.35.1
 

@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AB24EE5BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480184EE5C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243820AbiDABii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 21:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S243835AbiDABkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 21:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237909AbiDABig (ORCPT
+        with ESMTP id S233381AbiDABk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 21:38:36 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3879F25664A;
-        Thu, 31 Mar 2022 18:36:48 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2e6650cde1bso16938467b3.12;
-        Thu, 31 Mar 2022 18:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u6x01OZCawLHPZ1FUaBYZ0o7IOp3zWuTpMYfW841yjE=;
-        b=QjQirwuCkvewHV7TQxirxIwWPMCkWvQHovcw2h2AuW0vjezZFM+OwOhsIefY82l0Hl
-         jjAMqon7jpb0w4z8JOTNZ0Ro68h2xlvZiHr03ylZQ61exIzfuRE8odcHeJmqjG55qd2f
-         hXCulZTI9YsTDLiWU2ONQX4Cwvxy1Hhvq3j1XDYPBxhTf0ullITVrJP4DeRVKNChGuIr
-         rYPk4X/7JAbEVTNq90F5rVO1mDyI0VdZbPoYUU/5BQcSjCSbyqNa4AEXFWh1dvIAJPXy
-         f1/oacOuQGM9qXhhPwcslKeGX8YEDFMyNdNffKZV3IVhlIF+9fw1vBVpw+P9rDjgbq8n
-         +Z5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u6x01OZCawLHPZ1FUaBYZ0o7IOp3zWuTpMYfW841yjE=;
-        b=W9ZF6YzI7OyGaSv8TzyVDRZIoruByYne7NPv+LjdWsj4uat1rb0FQ35jnwv3YB1O+t
-         bRjqLVoKEUgXV9yiXWFo28G8HWM3aOKnJpbzp+FIOej2KNcVVExsRGv6uvcu+iQSfifw
-         4GsdYcFfcYiJdVzCJrkav47wUGJgOYoOJuRaLjVqFqQVbQvewkq6wGpsqLRHyZmCfLK9
-         GVGqW6G4/YASfgTDXG78OJ+LR1v56Wz+l0nzOIbjJLtdRC24a4bOeCqIhOMiaioA+9Vn
-         sty623PeXiYfLHADRl32Yp1qTSZ04N5DuRH1CAaWWkr1po0s+m3wRnxv6MjQOvNJuyEQ
-         COuQ==
-X-Gm-Message-State: AOAM533DJ35s71JwPFiWwzlaS06NhqEI4s8umYMxE4nDvjIXLTBX0VlV
-        Xi6V9e9/fS6XJPFT3TLubi+dtlzUXfWiR8KCdG4Z6mjD
-X-Google-Smtp-Source: ABdhPJyjfRa3lzqzSM583hEzjxFMmlXHMIzyEkOZ62HPuFJxBtM66x4Ylan/ZVN2HXhSx2pjvg7U03eprxdQBnksazA=
-X-Received: by 2002:a05:690c:85:b0:2ea:2e9e:fcdf with SMTP id
- be5-20020a05690c008500b002ea2e9efcdfmr8193295ywb.284.1648777007556; Thu, 31
- Mar 2022 18:36:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <1648216709-44755-1-git-send-email-wanpengli@tencent.com>
- <1648216709-44755-3-git-send-email-wanpengli@tencent.com> <YkOembt1lvTEJrx0@google.com>
- <CANRm+Cy66YAyRp0JJuoyp3k-D9HSZbYF3hYO3Vjxz5w1Rz-P3g@mail.gmail.com> <YkYkiLRo+p2T/HQx@google.com>
-In-Reply-To: <YkYkiLRo+p2T/HQx@google.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Fri, 1 Apr 2022 09:36:36 +0800
-Message-ID: <CANRm+Czk-JYx5TsB=AvjssFS9PEvgSjk0=hKu8yo1U3ECNfOhQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND 2/5] KVM: X86: Add guest interrupt disable state support
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
+        Thu, 31 Mar 2022 21:40:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4635011143;
+        Thu, 31 Mar 2022 18:38:35 -0700 (PDT)
+X-UUID: e575b3055c5842668a04d53803df5c83-20220401
+X-UUID: e575b3055c5842668a04d53803df5c83-20220401
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 418093412; Fri, 01 Apr 2022 09:38:23 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 1 Apr 2022 09:38:22 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Apr
+ 2022 09:38:21 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Apr 2022 09:38:21 +0800
+Message-ID: <e0d5a344c8ec1f92357bd9d5b8782dded862c549.camel@mediatek.com>
+Subject: Re: [PATCH v2,1/2] dt-bindings: display: mediatek: dpi: Add
+ compatible for MediaTek MT8186
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <jitao.shi@mediatek.com>
+Date:   Fri, 1 Apr 2022 09:38:20 +0800
+In-Reply-To: <1648727917-3099-2-git-send-email-xinlei.lee@mediatek.com>
+References: <1648727917-3099-1-git-send-email-xinlei.lee@mediatek.com>
+         <1648727917-3099-2-git-send-email-xinlei.lee@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 at 06:00, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, Mar 30, 2022, Wanpeng Li wrote:
-> > On Wed, 30 Mar 2022 at 08:04, Sean Christopherson <seanjc@google.com> wrote:
-> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > > > index 50f011a7445a..8e05cbfa9827 100644
-> > > > --- a/arch/x86/include/asm/kvm_host.h
-> > > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > > @@ -861,6 +861,7 @@ struct kvm_vcpu_arch {
-> > > >               bool preempt_count_enabled;
-> > > >               struct gfn_to_hva_cache preempt_count_cache;
-> > > >       } pv_pc;
-> > > > +     bool irq_disabled;
-> > >
-> > > This is going to at best be confusing, and at worst lead to bugs  The flag is
-> > > valid if and only if the vCPU is not loaded.  I don't have a clever answer, but
-> > > this needs to have some form of guard to (a) clarify when it's valid and (b) actively
-> > > prevent misuse.
-> >
-> > How about renaming it to last_guest_irq_disabled and comments as /*
-> > Guest irq disabled state, valid iff the vCPU is not loaded */
->
-> What about usurping vcpu->run->if_flag?  Userspace could manipulate the data, but
-> that should be fine since the data is already guest-controlled.
+On Thu, 2022-03-31 at 19:58 +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Add dt-binding documentation of dpi for MediaTek MT8186 SoC.
+> 
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml       | 1
+> +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> index dd2896a40ff0..a73044c50b5f 100644
+> ---
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> +++
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> @@ -22,6 +22,7 @@ properties:
+>        - mediatek,mt7623-dpi
+>        - mediatek,mt8173-dpi
+>        - mediatek,mt8183-dpi
+> +      - mediatek,mt8186-dpi
+>        - mediatek,mt8192-dpi
+>  
+>    reg:
 
-We should at least update vcpu->run->if_flag during vcpu scheduled for
-the purpose of this patch, I think it looks strange for
-vcpu->run->if_flag.
+Hello Xinlei,
 
-    Wanpeng
+From the dts we use, the dpi node needs other properties for MT8186.
+Please send another patch and add these properties to binding.
+
+assigned-clocks = <&topckgen CLK_TOP_DPI>;
+assigned-clock-parents = <&topckgen CLK_TOP_TVDPLL_D2>;
+
+Thanks
+
+BRs,
+Rex
+

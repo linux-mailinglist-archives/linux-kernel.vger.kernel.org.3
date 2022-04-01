@@ -2,108 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBA64EFC2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E3B4EFC2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352766AbiDAVdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S1352081AbiDAVfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiDAVdI (ORCPT
+        with ESMTP id S235288AbiDAVfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:33:08 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311DC264F6E;
-        Fri,  1 Apr 2022 14:31:18 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id a30so5473715ljq.13;
-        Fri, 01 Apr 2022 14:31:18 -0700 (PDT)
+        Fri, 1 Apr 2022 17:35:19 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE0013A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:33:28 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so3680210pjo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=X0JK5ihT1MOGfyrbF7/pj0RowTruIVoP8e8CBBTi+S4=;
-        b=C3Kf9Jm7U1BjEQwktj6mm0YSGdJta5gC611qurF0ij+1RP2Nw6zIG8ZqJlQeUPFlSR
-         4raoXNZ0GZM2xMqM+JWbTCIJOOITuhrDYmCMsyuA540wopq7D/I4dCPHjnz1L1AuC+Ed
-         fSVIkEpV+m5VcxY6+rZb96Oyp9TyTWfOOH/32rIrgph10FCwftAH2n/JjYxdXaSqv5ba
-         wRchlZZNVv2YkBrwuydSSuEW/BcDn/BkHwRj6Yqk05OS3Qo9R1p28mK9m/JTNJzoCu6N
-         I86TdUsZRQ6dD0J6GYUoSB0mZ5zPDkz8CE1W6SIxIVouoS9AipGBIMPgO+P9wu86uIro
-         jhKw==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BPUOt269UZx0fP/hcR9t05VLgduxdLJMOsB45EbEuuM=;
+        b=TBnXvmiM1XKxbsASblG7IqI4HZnjRUmSQyliD72UlcrYAd7Ec2hH8DV26z3NYobNkc
+         /7B2cBARUlkAcsELj9vBUeqJm13FbqkQvw5JKG4xjrXnMQqDjXWpzUf2mPu585+SpIgZ
+         KXM43VPi+LKLbG3Y0RM4AasfwxxwIwJte4YyM3q1WRfWC0E8+ZyiiWypIX+7+gb1R3ZL
+         h5U/QWG+oZDE82ST6gr+Ie1WUkj7N0dKpsGcjSKaDDaXd69QlqBLEFouY7YHGfbn5Opy
+         eAlQMHuPGBOqZx8WUzETvPit6Yg1HjWyo6ldmBJ1AX60k1t08dAUOf9Nzu4gIi98gAlI
+         0Hrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=X0JK5ihT1MOGfyrbF7/pj0RowTruIVoP8e8CBBTi+S4=;
-        b=d+fiXOo2RE3K9dZMme4ExGrkwNOWy2/VGjPBZUPTCoeTHeKCuD+q43/6KJCEkmozbQ
-         QuYhTkcvRLCImyfDAdkde4WMrvwUcAPC4bhHfqvS4oKxdTc3pm64mvXVWlhKrfIoQOe9
-         CzBCW1mBDYuZ0+E9drVty2W2BTW1tSC5fqE4XL7INPh4uMHRkgeAoZeV1Ey7WWdl+Sm9
-         4tE3j5WMAToGz3et/Hq8wh8FoL6VJeZ/OITdxVeRFP64peynSxyD8gkKLBvk7zRnJ/aq
-         G/+WXPTQlLAN7VltypWVl1VOowbFPgYsAWZsDHWzf5n5WwT6nnMDyDm9SqTJfldqT6yn
-         j4cA==
-X-Gm-Message-State: AOAM531ysiwQGCbdA0YqP560hXETGj0UOzxZ1BybmEecazqIRa+mRKgi
-        CXLaKvxlbMSgO+FZvDzY9KaM9MSwV64=
-X-Google-Smtp-Source: ABdhPJwbmAj/TNXsyVzHxHQSIygbytu2JvhBQgA5HutAlambTIknHU9BwVfiI2XSNvpyitKPuCrnDw==
-X-Received: by 2002:a2e:a80e:0:b0:248:5819:b94a with SMTP id l14-20020a2ea80e000000b002485819b94amr14660509ljq.141.1648848676369;
-        Fri, 01 Apr 2022 14:31:16 -0700 (PDT)
-Received: from localhost.localdomain ([46.235.67.247])
-        by smtp.gmail.com with ESMTPSA id m8-20020a194348000000b0044a2ce63ef4sm349523lfj.10.2022.04.01.14.31.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 14:31:15 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     sumit.semwal@linaro.org, gustavo@padovan.org,
-        christian.koenig@amd.com, daniel.vetter@ffwll.ch
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH next v2] dma-buf/sync-file: do not allow zero size allocation
-Date:   Sat,  2 Apr 2022 00:31:14 +0300
-Message-Id: <20220401213114.11956-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <2d1f9ba9-ea2a-e41c-eae6-0ba348cdf202@gmail.com>
-References: <2d1f9ba9-ea2a-e41c-eae6-0ba348cdf202@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BPUOt269UZx0fP/hcR9t05VLgduxdLJMOsB45EbEuuM=;
+        b=cK5e6fcTeF9z//2homLcxeRv4QaJYFFcxseKORkEjzhndlpxMOqL0+nkAw4twVYxhB
+         eYMBr0tTxC4G0h7pNbsdSqIpvxCZkFe/FcuoiwWdHEjgycHZMQ335s512V4RwQyKwx+d
+         rBF7rAuhjcJYwaHhmniqdVY6v4/WliBm5Lxj3vY8Onoqt4Ct2aCNdoTvg1n4ZGN0epb8
+         vJe3c5/MkLxdS/I797yN7ZeyCE6Z+h5L31a5lG2KUro2X6ulOQk6rioFhGuXmaDzvEpf
+         sGh+O77MpPNAlEaDcpEiaMfGyfzWpdoHZQdotOBSoJ4RWqxEOc5xc/zlNk9ZiyiG6lTN
+         L2zQ==
+X-Gm-Message-State: AOAM531tFyubR9ReAND5duWPIPFue5tmmxcfaAc7G0rtc2gLhZ6D2FvY
+        QM+8h11XNkbeLuNDdv7nQzLIUo1eqnmOR7EJFcm76Q==
+X-Google-Smtp-Source: ABdhPJw5Abq6FL4cAVZAWaHZLdJogCtOBAxKooOTnZofkq1g6qvBl7rvy5TJDGMaSIB7JzT6LFfGjVlYeROYkFJ8xlU=
+X-Received: by 2002:a17:90b:4a01:b0:1c9:a552:f487 with SMTP id
+ kk1-20020a17090b4a0100b001c9a552f487mr14253315pjb.68.1648848808052; Fri, 01
+ Apr 2022 14:33:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220331154555.422506-1-milan@mdaverde.com> <20220331154555.422506-4-milan@mdaverde.com>
+ <8457bd5f-0541-e128-b033-05131381c590@isovalent.com> <CAEf4BzaqqZ+bFamrTXSzjgXgAEkBpCTmCffNR-xb8SwN6TNaOw@mail.gmail.com>
+In-Reply-To: <CAEf4BzaqqZ+bFamrTXSzjgXgAEkBpCTmCffNR-xb8SwN6TNaOw@mail.gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Date:   Fri, 1 Apr 2022 22:33:16 +0100
+Message-ID: <CACdoK4JbhtOpQeGo+NUh5t3nQG8No8Di6ce-9gwgNw3az2Fu=A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf/bpftool: handle libbpf_probe_prog_type errors
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Milan Landaverde <milan@mdaverde.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-num_fences is user-controlled value and it can be equal to 0. Code
-should not pass 0 to kcalloc(), since it will cause kcalloc() to return
-ZERO_PTR. ZERO_PTR will pass `!fences` check and kernel will panic
-because of dereferencing ZERO_PTR in add_fence()
+On Fri, 1 Apr 2022 at 19:42, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Apr 1, 2022 at 9:05 AM Quentin Monnet <quentin@isovalent.com> wrote:
+> >
+> > 2022-03-31 11:45 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
+> > > Previously [1], we were using bpf_probe_prog_type which returned a
+> > > bool, but the new libbpf_probe_bpf_prog_type can return a negative
+> > > error code on failure. This change decides for bpftool to declare
+> > > a program type is not available on probe failure.
+> > >
+> > > [1] https://lore.kernel.org/bpf/20220202225916.3313522-3-andrii@kernel.org/
+> > >
+> > > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
+> > > ---
+> > >  tools/bpf/bpftool/feature.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+> > > index c2f43a5d38e0..b2fbaa7a6b15 100644
+> > > --- a/tools/bpf/bpftool/feature.c
+> > > +++ b/tools/bpf/bpftool/feature.c
+> > > @@ -564,7 +564,7 @@ probe_prog_type(enum bpf_prog_type prog_type, bool *supported_types,
+> > >
+> > >               res = probe_prog_type_ifindex(prog_type, ifindex);
+> > >       } else {
+> > > -             res = libbpf_probe_bpf_prog_type(prog_type, NULL);
+> > > +             res = libbpf_probe_bpf_prog_type(prog_type, NULL) > 0;
+> > >       }
+> > >
+> > >  #ifdef USE_LIBCAP
+> >
+>
+> A completely unrelated question to you, Quentin. How hard is bpftool's
+> dependency on libcap? We've recently removed libcap from selftests, I
+> wonder if it would be possible to do that for bpftool as well to
+> reduce amount of shared libraries bpftool depends on.
 
-Fix it by validating num_fences and bail out early if it is equal to 0
+There's not a super-strong dependency on it. It's used in feature
+probing, for two things.
 
-Fixes: 519f490db07e ("dma-buf/sync-file: fix warning about fence containers")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
+First one is to be accurate when we check that the user has the right
+capabilities for probing efficiently the system. A workaround consists
+in checking that we run with uid=0 (root), although it's less
+accurate.
 
-Changes since v1:
-	- Dropped already merged part
-	- Removed syzkaller's tag
+Second thing is probing as an unprivileged user: if bpftool is run to
+probe as root but with the "unprivileged" keyword, libcap is used to
+drop the CAP_SYS_ADMIN and run the probes without it. I don't know if
+there's an easy alternative to libcap for that. Also I don't know how
+many people use this feature, but I remember that this was added
+because there was some demand at the time, so presumably there are
+users relying on this.
 
----
- drivers/dma-buf/sync_file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This being said, libcap is optional for compiling bpftool, so you
+should be able to have it work just as well if the library is not
+available on the system? Basically you'd just lose the ability to
+probe as an unprivileged user. Do you need to remove the optional
+dependency completely?
 
-diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
-index b8dea4ec123b..024f22193e0c 100644
---- a/drivers/dma-buf/sync_file.c
-+++ b/drivers/dma-buf/sync_file.c
-@@ -212,7 +212,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
- 	dma_fence_unwrap_for_each(b_fence, &b_iter, b->fence)
- 		++num_fences;
- 
--	if (num_fences > INT_MAX)
-+	if (num_fences > INT_MAX || !num_fences)
- 		goto err_free_sync_file;
- 
- 	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
--- 
-2.35.1
+Quentin
 
+PS: Not directly related but since we're talking of libcap, we
+recently discovered that the lib is apparently changing errno when it
+maybe shouldn't and plays badly with batch mode:
+https://stackoverflow.com/questions/71608181/bpf-xdp-bpftool-batch-file-returns-error-reading-batch-file-failed-opera

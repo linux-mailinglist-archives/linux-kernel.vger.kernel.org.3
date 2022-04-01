@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67AB4EF934
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4C54EF96A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350242AbiDAR4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        id S1350837AbiDAR7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349841AbiDAR4w (ORCPT
+        with ESMTP id S1347903AbiDAR7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:56:52 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2C158805
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:55:02 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id t2so3272690pfj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:55:02 -0700 (PDT)
+        Fri, 1 Apr 2022 13:59:51 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D12128EE
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:58:00 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bq24so6305940lfb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iongRgn393jDScHsMFqxrfWy25+LUVsFTFfMXZy7tcs=;
-        b=5DHzn4/4Gak55kwk9hNdkaIdBJXQSuh4T7djtDJzEyVrT2bs/etMzwCF9gb2kfNEul
-         9abqnu9KEtppYl4M+gl+0S68ffL7FliVVzDB1GoFjkYJOSHBLGHXOKZ/PuVRGbUYLTI1
-         T3zkvLghNRE7gM/4+Z7JwQRmRvmMSz+eOqa7Mzrt1vYFEnbdLTa4sdVm9m07qdPQSJ2y
-         KfsGbVlqcsdnpZmkuHYhDzaNI19ybF4dyu7UvVLo5JrOjFBJ11ahz2VKexnPKOps8pAc
-         JH2qWWmgdW80vC1zACuYuPpYPBuAUrx8ZY8Bmq3FiGr0NYigWvONSc/lDx6nh+sPWE5g
-         XrmQ==
+        d=fungible.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JvhYeVuiyHzD2XZ5Sv6yl6UpWLRVligCuXo9RsgwXcc=;
+        b=gus+G3NKsoMAx1p9mych9MlnHzYDB3gBK5/+lInIhjhpc4I7FWao+babG4/sJ9GNJ2
+         YYElr7WYxvEm7tE47uBGZd1aREwnvxMa+JwEgv4Ddz0lvnyK1iVOAGaIadg9J+FssOYB
+         wQQHQing6CY+riYLM2tpNTjcNVS4V2N/UQ1wQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=iongRgn393jDScHsMFqxrfWy25+LUVsFTFfMXZy7tcs=;
-        b=EReC4/Ci6wlLNgVRR4yuX7P1MY7LVIc+J01L/rhQEvy0LQjUh5sliuz7PxcMVJ/l1T
-         VpbcZKpYlI4s3a3ngCZHcnsVwLZIpBdhpG5/0dvH2bm3CjuzDjXmmVU5vDFR8o+73aIz
-         ndl6nxNHnMvhfImHGWjJ86YDiu8ebJ4WhoINTqK5nTm4p5gugmUKCemH0JLa4h1VSFkr
-         4zUO6OdnPoJWC6u5o4Sn8Ih42HI5xbjKuIW9Ba4HZoNcXL3PnjKHi6Z399Jz0mYTqgOR
-         n6KtUo3FqZCupssZTVBW7Cb1r5t81cDGZy9R2jhG4RAWB3TbPniYrdUS8RKuD36IkJLU
-         GA0Q==
-X-Gm-Message-State: AOAM531+pk7mS4JfOZ9B8+lorsY/cb9tWH2tk67pTSJoY0RVw0ezndKu
-        9LqHRjtavy3WSnooEYrNUOJNFg==
-X-Google-Smtp-Source: ABdhPJwppucEmP01bI+aWljh4lysCOjDeGg0qSPNzu3mMPX4N67PpZVKiJX3L9pbyN5EHAHvjjmBRA==
-X-Received: by 2002:a63:e716:0:b0:380:85d1:656c with SMTP id b22-20020a63e716000000b0038085d1656cmr16301723pgi.321.1648835701412;
-        Fri, 01 Apr 2022 10:55:01 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id hk16-20020a17090b225000b001ca00b81a95sm9533169pjb.22.2022.04.01.10.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 10:55:00 -0700 (PDT)
-Date:   Fri, 01 Apr 2022 10:55:00 -0700 (PDT)
-X-Google-Original-Date: Fri, 01 Apr 2022 10:54:57 PDT (-0700)
-Subject:     Re: [PATCH] riscv: fix build with binutils 2.38
-In-Reply-To: <CAHk-=wgv6rXFjTdaumFgDC4ixg6QMOL83sQ2XOqvJC0h5fLX2g@mail.gmail.com>
-CC:     mkl@pengutronix.de, aurelien@aurel32.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-sparse@vger.kernel.org, ukl@pengutronix.de,
-        luc.vanoostenryck@gmail.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-c280d48c-477d-4589-baee-255c774b5a51@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JvhYeVuiyHzD2XZ5Sv6yl6UpWLRVligCuXo9RsgwXcc=;
+        b=RS8pirP7FcxTHkT/MrZmSxyXhofW4uCFIDbnjoQL8xKOzkIj3PRr3VdqjbEDudYQro
+         Gqqm3V3WQX1QBRgBEAxhzqnjOXldd5EFCwLaw4PN1hCPp9JuC/+d6F9nEHYZwdLKkZHa
+         8jjK6CBW2UwzFmRubZKcLIbQ9hWYQWGgSQSkj2uv9Zj80LF2rhOaUJ9KbvhZ2M4bAoG0
+         E3y7yCkAQ6GkCJlvD3peDd7NUCCnk7NFDXbgDuNLDJkxgl+WsAbjgZOjOQUgAnbY0D7j
+         hFZkdJT0asZVKu4CXInQ17E0CVN5hlLAJK0wq270m1OhBV7JzFgOERTgdX7sP3qtEPW0
+         XvOQ==
+X-Gm-Message-State: AOAM533Al5NyHToJzbX2NSnrGtenz0dC5rQapnDqld9zH6jEVaijOqC7
+        70eULhr+rsVuX0uxWZ7/Y3EhL8LIHFq8QJR9BskHXg==
+X-Google-Smtp-Source: ABdhPJxWQ+i+ITn0cTBp8HpNpYi+FsZ+tLlRK5zUpDEx6eXcl5SqgGujjoEi601Spl5n8pBWofs9JC8n72Sl/3ZAbrY=
+X-Received: by 2002:a05:6512:11eb:b0:448:8cd0:7d7e with SMTP id
+ p11-20020a05651211eb00b004488cd07d7emr14517234lfs.593.1648835872472; Fri, 01
+ Apr 2022 10:57:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220401033845.8359AC2BBE4@smtp.kernel.org> <048945eb-dd6b-c1b6-1430-973f70b4dda5@infradead.org>
+ <20220401100418.7c109f81@kernel.org>
+In-Reply-To: <20220401100418.7c109f81@kernel.org>
+From:   Dimitris Michailidis <d.michailidis@fungible.com>
+Date:   Fri, 1 Apr 2022 10:57:38 -0700
+Message-ID: <CAOkoqZncM3JMQvcbaixuBPg43=Da2ac2JjZAfWRt_Ezs2CCyOg@mail.gmail.com>
+Subject: Re: mmotm 2022-03-31-20-37 uploaded (drivers/net/ethernet/fungible/funcore/fun_dev.o)
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mm-commits@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 01 Apr 2022 10:14:03 PDT (-0700), Linus Torvalds wrote:
-> On Thu, Mar 31, 2022 at 11:53 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->>
->> | WARNING: invalid argument to '-march': 'zicsr_zifencei'
+On Fri, Apr 1, 2022 at 10:04 AM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> Gaah, it works but still warns because I cut-and-pasted those
-> zicsr/zifencei options from some random source that had them
-> capitalized and I didn't look closely enough at the reports.
+> On Thu, 31 Mar 2022 22:15:15 -0700 Randy Dunlap wrote:
+> > On 3/31/22 20:38, Andrew Morton wrote:
+> > > The mm-of-the-moment snapshot 2022-03-31-20-37 has been uploaded to
+> > >
+> > >    https://www.ozlabs.org/~akpm/mmotm/
+> > >
+> > > mmotm-readme.txt says
+> > >
+> > > README for mm-of-the-moment:
+> > >
+> > > https://www.ozlabs.org/~akpm/mmotm/
+> > >
+> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > > more than once a week.
+> > >
+> > > You will need quilt to apply these patches to the latest Linus release (5.x
+> > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> > > https://ozlabs.org/~akpm/mmotm/series
+> >
+> > on i386:
+> >
+> > ld: drivers/net/ethernet/fungible/funcore/fun_dev.o: in function `fun_dev_enable':
+> > (.text+0xe1a): undefined reference to `__udivdi3'
 >
-> Anyway, hopefully somebody can bother to fix up that. Possibly by
-> changing the strncmp to a strnicmp - but I don't know what the rules
-> for lower-case vs capitals are for the other options. I'm still busy
-> with the kernel merge window, so this gets archived on my side..
+> Doesn't fail here.
+>
+> Oh... Probably this:
+>
+>         num_dbs = (pci_resource_len(pdev, 0) - NVME_REG_DBS) /
+>                   (fdev->db_stride * 4);
+>
+> The bad config must have 64b resource length. Dimitris, PTAL.
 
-I'm gluing sparse to my build tests now, so I'll sort it out (that'll 
-also make sure a failure doesn't leak again).  Might not be today, but 
-shouldn't take too long.
+I built last night with the mm tree from github tagged
+v5.17-mmotm-2022-03-31-20-37, i386 allmodconfig. It didn't reach the
+link stage due to other errors but I looked at fun_dev.o with nm, it
+didn't have a reference to __udivdi3. It may need a PAE config, I'll
+try that.

@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CF64EE57E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E5B4EE584
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243590AbiDAAp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 20:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S232079AbiDAAzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 20:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiDAApz (ORCPT
+        with ESMTP id S230257AbiDAAzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 20:45:55 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E2319322A;
-        Thu, 31 Mar 2022 17:44:06 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id q129so1298836oif.4;
-        Thu, 31 Mar 2022 17:44:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RGQN36fupBzgDgpYYq41OYqPsrM7TxMOo2nnd7qf6a8=;
-        b=p8qdyAlGldL8eXf2rGLIzU8pK9tPo67FS9Xg4IUR59I0fs0m6+q+skHM4JKmrLKK2+
-         U4TOzgIkpZBh88b6NV/NYMzfZnjLW6o4Jrph2zhkUUF4MqM+2btD6lfrSwLTU8tdE41A
-         F3izoTIyQR5g2wWDvteZF/lrEpgxzZkQUcLblvGpd54BndBfJS5JHeRTh6+R94qdxLu3
-         5oiBEzAJP8terz3LaXjm735mcUybKYw8dQtxTpZ/5ny94rcLmGayb36A+v6mOluVSPef
-         4waMRLCWEiI/YOBz6bZAYkD73ezgJ+bTKHNHepS7lVLvHBWS7etefX4uxhjYIqKTMWzO
-         hxtQ==
-X-Gm-Message-State: AOAM532ysKTeNJoWWcXeqnmJagTo3KZPlOdM9BRkbBGRcpXTrWjPQhA5
-        Y0QprwHlhibA+Bqu1EByTA==
-X-Google-Smtp-Source: ABdhPJwpD21u4oW/SUSDwMY8sZQu20PgRsvBTHW6LOzRdj1Z6666xBC0UEDvpdjX2iqcai1oRF1siw==
-X-Received: by 2002:aca:905:0:b0:2ee:f62a:e08e with SMTP id 5-20020aca0905000000b002eef62ae08emr3656953oij.54.1648773846080;
-        Thu, 31 Mar 2022 17:44:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m24-20020a9d73d8000000b005c942e2281dsm500962otk.76.2022.03.31.17.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 17:44:05 -0700 (PDT)
-Received: (nullmailer pid 1804134 invoked by uid 1000);
-        Fri, 01 Apr 2022 00:44:04 -0000
-Date:   Thu, 31 Mar 2022 19:44:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: gpio: davinci: list contents of GPIO hogs
-Message-ID: <YkZK1OzF5Wq2bDma@robh.at.kernel.org>
-References: <20220328191153.171241-1-krzysztof.kozlowski@linaro.org>
+        Thu, 31 Mar 2022 20:55:23 -0400
+Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12DF15131A;
+        Thu, 31 Mar 2022 17:53:29 -0700 (PDT)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(8686:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Fri, 01 Apr 2022 08:53:05 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Fri, 1 Apr 2022 08:53:01 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Fri, 1 Apr 2022 08:53:01 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+Subject: RE: [PATCH v5 2/2] mmc: Add mmc driver for Sunplus SP7021
+Thread-Topic: [PATCH v5 2/2] mmc: Add mmc driver for Sunplus SP7021
+Thread-Index: AQHYQ3s7ORyaR4vCu0uQF2nts2U94azV8Q6AgAM9naD//5VMAIABeSpQ
+Date:   Fri, 1 Apr 2022 00:53:01 +0000
+Message-ID: <b93772c707074f14ae3f2eeaf5e348ab@sphcmbx02.sunplus.com.tw>
+References: <cover.1648551070.git.tonyhuang.sunplus@gmail.com>
+ <46aad49867912fc57b669fc54fdb28638cccfcd9.1648551070.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a0CLA33CTerXJ=bK+myhyHp_utoLnTX-NzMgjeb7icAGg@mail.gmail.com>
+ <7c4b66f7fe4940cba1b0158803767f6e@sphcmbx02.sunplus.com.tw>
+ <CAK8P3a3edkGMyypwchiJjHDvO4ro6RsOvrhUbEDmP1Obs94mXw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3edkGMyypwchiJjHDvO4ro6RsOvrhUbEDmP1Obs94mXw@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328191153.171241-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 09:11:53PM +0200, Krzysztof Kozlowski wrote:
-> The hogs children should list allowed properties, otherwise any property
-> would be accepted.  Simplify also GPIO hog node name pattern.
-
-Only if 'gpio-hog' is missing, because the gpio-hog.yaml schema will 
-check every node with that property.
-
-Hogs are allowed on any GPIO controller, but I don't think we to 
-duplicate what's here on every schema.
-
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/gpio/gpio-davinci.yaml        | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml b/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
-> index f32e09ef937c..e5b91c65dcb0 100644
-> --- a/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
-> @@ -76,12 +76,21 @@ properties:
->      const: 2
->  
->  patternProperties:
-> -  "^(.+-hog(-[0-9]+)?)$":
-> +  "^.+-hog(-[0-9]+)?$":
->      type: object
-> +    properties:
-> +      gpio-hog: true
-> +      gpios: true
-> +      input: true
-> +      output-high: true
-> +      output-low: true
-> +      line-name: true
->  
->      required:
->        - gpio-hog
->  
-> +    additionalProperties: false
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.32.0
-> 
-> 
+RGVhciBBcm5kOg0KDQo+IDx0b255Lmh1YW5nQHN1bnBsdXMuY29tPiB3cm90ZToNCj4gPiA+ID4g
+K3N0YXRpYyB2b2lkIHNwbW1jX3JlcXVlc3Qoc3RydWN0IG1tY19ob3N0ICptbWMsIHN0cnVjdA0K
+PiA+ID4gPiArbW1jX3JlcXVlc3QNCj4gPiA+ID4gKyptcnEpIHsNCj4gPiA+ID4gKyAgICAgICBz
+dHJ1Y3Qgc3BtbWNfaG9zdCAqaG9zdCA9IG1tY19wcml2KG1tYyk7DQo+ID4gPiA+ICsgICAgICAg
+c3RydWN0IG1tY19kYXRhICpkYXRhOw0KPiA+ID4gPiArICAgICAgIHN0cnVjdCBtbWNfY29tbWFu
+ZCAqY21kOw0KPiA+ID4gPiArICAgICAgIGludCByZXQ7DQo+ID4gPiA+ICsNCj4gPiA+ID4gKyAg
+ICAgICByZXQgPSBtdXRleF9sb2NrX2ludGVycnVwdGlibGUoJmhvc3QtPm1ycV9sb2NrKTsNCj4g
+PiA+ID4gKyAgICAgICBpZiAocmV0KQ0KPiA+ID4gPiArICAgICAgICAgICAgICAgcmV0dXJuOw0K
+PiA+ID4NCj4gPiA+IEkgZG9uJ3QgdGhpbmsgaXQncyB2YWxpZCB0byBqdXN0IHJldHVybiBoZXJl
+IHdoZW4geW91IGdldCBhIHNpZ25hbC4NCj4gPiA+IElmIG5vdGhpbmcgY2FuIGhhbmRsZSB0aGUg
+c2lnbmFsLCBkb2Vzbid0IGl0IGp1c3QgaGFuZz8NCj4gPiA+DQo+ID4gPiBJdCBhbHNvIGFwcGVh
+cnMgdGhhdCB5b3UgZG9uJ3QgcmVsZWFzZSB0aGUgbXV0ZXggdW50aWwgdGhlIHRhc2tsZXQNCj4g
+PiA+IHJ1bnMsIGJ1dCBpdCBpcyBub3QgdmFsaWQgdG8gcmVsZWFzZSBhIG11dGV4IGZyb20gYSBk
+aWZmZXJlbnQgY29udGV4dC4NCj4gPiA+DQo+ID4gPiBZb3Ugc2hvdWxkIGdldCBhIHdhcm5pbmcg
+YWJvdXQgdGhpcyB3aGVuIHJ1bm5pbmcgYSBrZXJuZWwgd2l0aA0KPiA+ID4gbG9ja2RlcCBlbmFi
+bGVkIGF0IGNvbXBpbGUgdGltZS4gUGxlYXNlIHJld29yayB0aGUgbG9ja2luZyB0byBtYWtlIHRo
+aXMNCj4gd29yay4NCj4gPiA+DQo+ID4gICAgICAgICBSZW9tdmUgY29kZToNCj4gPiAgICAgcmV0
+ID0gbXV0ZXhfbG9ja19pbnRlcnJ1cHRpYmxlKCZob3N0LT5tcnFfbG9jayk7DQo+ID4gICAgIGlm
+IChyZXQpDQo+ID4gICAgICAgICAgcmV0dXJuOw0KPiA+DQo+ID4gICAgICAgICBCZWxvdyBpcyBt
+eSBtb2RpZmljYXRpb246DQo+ID4gLiAgICBtdXRleF9sb2NrKCZob3N0LT5tcnFfbG9jayk7DQo+
+IA0KPiBUaGF0IGFkZHJlc3NlcyB0aGUgcHJvYmxlbSB3aXRoIHRoZSBzaWduYWwgaGFuZGxpbmcs
+IGJ1dCBub3QgdGhlIGxvY2sNCj4gaW1iYWxhbmNlLiBQbGVhc2UgZml4IHRoYXQgYXMgd2VsbC4N
+Cg0KT2ssIEkgd2lsbCBtb2RpZnkgbG9jayBpbWJhbGFuY2UgaXNzdWUuDQoNCj4gPiA+DQo+ID4g
+PiBJdCdzIGJldHRlciB0byB1c2UgU1lTVEVNX1NMRUVQX1BNX09QUy9SVU5USU1FX1BNX09QUyBp
+bnN0ZWFkIG9mDQo+IHRoZQ0KPiA+ID4gU0VUXyB2ZXJzaW9uLCB0aGVuIHlvdSBjYW4gcmVtb3Zl
+IGFsbCB0aGUgI2lmZGVmIGNoZWNrcy4NCj4gPiA+DQo+ID4NCj4gPiAgICAgICAgIEkgdXNlIFNZ
+U1RFTV9TTEVFUF9QTV9PUFMvUlVOVElNRV9QTV9PUFMuDQo+ID4gICAgICAgICBDb21waWxlIHNo
+b3dzIGVycm9yLiBFcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24gPyA/DQo+
+IFNZU1RFTV9TTEVFUF9QTV9PUFM/ID8gRGlkIHlvdSBtZWFuID8gPyBTRVRfU1lTVEVNX1NMRUVQ
+X1BNX09QUz8gPw0KPiBbLVdlcnJvcj1pbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0NCj4g
+DQo+IE1heWJlIHlvdSBhcmUgb24gYW4gb2xkIGtlcm5lbCByZWxlYXNlPw0KPiANCg0KT0ssSSB3
+aWxsIHVzZSBuZXcga2VybmVsIHJlbGVhc2UgdG8gY29tcGlsZXIuDQoNCj4gPiAgICAgICAgIEkg
+cmVmZXJlbmNlIG90aGVyIG1tYyBkcml2ZXIuDQo+ID4gICAgICAgICBCZWxvdyBpcyBteSBtb2Rp
+ZmljYXRpb246DQo+ID4gICAgIENvbXBpbGVyIGlzIHBhc3MuDQo+ID4NCj4gPiAgICAgICAgICNp
+ZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gPiAgICAgICAgIHN0YXRpYyBpbnQgc3BtbWNfcG1fc3Vz
+cGVuZChzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ID4gICAgICAgICB7DQo+ID4gICAgICAgICAgICAg
+ICAgIHBtX3J1bnRpbWVfZm9yY2Vfc3VzcGVuZChkZXYpOw0KPiA+DQo+ID4gICAgICAgICAgICAg
+ICAgIHJldHVybiAwOw0KPiA+ICAgICAgICAgfQ0KPiANCj4gV2Ugc2hvdWxkIGZpeCB0aGUgb3Ro
+ZXIgZHJpdmVycyBhcyB3ZWxsLiBGb3IgdGhlIG1vbWVudCwganVzdCBkbyBpdCB0aGUgcmlnaHQN
+Cj4gd2F5IG5vdyBpbnN0ZWFkIG9mIGNvcHlpbmcgdGhlICNpZmRlZnMuDQo+IA0KT0ssIEkgd2ls
+bCBmb2xsb3cgcmlnaHQgd2F5IHRvIHJlbW92ZSAjaWZkZWYuDQoNCg0KDQo=

@@ -2,199 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A27D4EE8C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE30C4EE900
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343673AbiDAHGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
+        id S1343831AbiDAHVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343644AbiDAHGS (ORCPT
+        with ESMTP id S239717AbiDAHVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:06:18 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273266A06D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:04:29 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KV9zV1g9QzBrvk;
-        Fri,  1 Apr 2022 15:00:22 +0800 (CST)
-Received: from dggpeml500009.china.huawei.com (7.185.36.209) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 15:04:27 +0800
-Received: from huawei.com (10.175.127.227) by dggpeml500009.china.huawei.com
- (7.185.36.209) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 1 Apr
- 2022 15:04:27 +0800
-From:   Yufen Yu <yuyufen@huawei.com>
-To:     <jaegeuk@kernel.org>, <chao@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>, <yuyufen@huawei.com>
-Subject: [PATCH 5/5] f2fs: update doc for f2fs fault injection
-Date:   Fri, 1 Apr 2022 15:19:09 +0800
-Message-ID: <20220401071909.505086-6-yuyufen@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220401071909.505086-1-yuyufen@huawei.com>
-References: <20220401071909.505086-1-yuyufen@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500009.china.huawei.com (7.185.36.209)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 03:21:50 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC41E0D8;
+        Fri,  1 Apr 2022 00:20:00 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w25so1863164edi.11;
+        Fri, 01 Apr 2022 00:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ubG9Vku/N0fiy/2SLaUSFTnlDKcWy9tp5aypQ1g0yR0=;
+        b=qeR+po4xuMTE7NT42VMHjZFG4pDnrmbTx3qLmihDu198PJkosJh+2LD7Gm2agZ/6/n
+         Rh3REosbufMhaAtMz8tJ7FJD9RXIA6FjTXHFkvPf/Z6gNdOZGDbLGLUm6VBhWieFruzF
+         0QICo8ryhdAlaxL4mVBgaFRru05eQXUNP56zdgCWX+jyFvcSR0SqPgu3hwF3OEsvOrfe
+         w8DIfnGKoCj96ldnimavctFqxewc0rMfhOrGP6p7JHQD2kfKL3cyTRZF7nOcGy+O6+fX
+         P96Ni3tAi0wo+RBJkZZ5UDX0J9fYCuJTnFTeUWhOulbpDpF/qiq+qgTNo11gwWz/ZnMS
+         4vXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ubG9Vku/N0fiy/2SLaUSFTnlDKcWy9tp5aypQ1g0yR0=;
+        b=EXT9/EFYTXqQCXej9j49Zbx4EEHgRpDaLoWqaPeK3yt2KV1hs9RjNJ0hZtalsz4hYC
+         Wt3he//cwI7Kp+S1ejCjZAkZaFzFbquQCpp5iwp+ejRJp1YlFGuikzrBNFnZg3ItXTAS
+         hGHPr9MOt6NQ3qljauS1pNBqr9PV1BS6KMWO3ELYUYcBnwEyKvYIT79W4Kt9Ea6OHJUx
+         MXcCnOsR1031BfEqHqasdaUqQRnyfmxclSjiVhxjjHeOgHKOKheTZVJxMdggu6x8+oQJ
+         7IVRW8N3xi0nbJKLpqezab12XkyfP6irZxpLHpj/75GZSEF3/sX/RXMb6IgatpJcHc/7
+         HL8Q==
+X-Gm-Message-State: AOAM531qFMZkvBRIescTHStT2fEYtDhE7TcTgUjBrTkiiS+BkQ3PZt5I
+        AOo/uxHJVPxy19AwghKPD3XEwUNkDfD2zKMO
+X-Google-Smtp-Source: ABdhPJwtm0B3S+66CH914jkdPstqClG3Zij5v/glvefk14ehzJXJAgRaWtf3O5lM4sqoI8xhAsEyuA==
+X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id i20-20020a05640242d400b00412c26b0789mr19840232edc.232.1648797598835;
+        Fri, 01 Apr 2022 00:19:58 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id s14-20020aa7cb0e000000b00410bf015567sm782154edt.92.2022.04.01.00.19.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 01 Apr 2022 00:19:58 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] fs/proc/kcore.c: remove check of list iterator against
+ head past the loop body
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220331164843.b531fbf00d6e7afd6cdfe113@linux-foundation.org>
+Date:   Fri, 1 Apr 2022 09:19:57 +0200
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A23914B0-BFD7-48D6-ADCF-42062E1D9887@gmail.com>
+References: <20220331223700.902556-1-jakobkoschel@gmail.com>
+ <20220331164843.b531fbf00d6e7afd6cdfe113@linux-foundation.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just update doc for fault injection.
 
-Signed-off-by: Yufen Yu <yuyufen@huawei.com>
----
- Documentation/filesystems/f2fs.rst | 118 ++++++++++++++++++++++-------
- 1 file changed, 90 insertions(+), 28 deletions(-)
+> On 1. Apr 2022, at 01:48, Andrew Morton <akpm@linux-foundation.org> =
+wrote:
+>=20
+> On Fri,  1 Apr 2022 00:37:00 +0200 Jakob Koschel =
+<jakobkoschel@gmail.com> wrote:
+>=20
+>> When list_for_each_entry() completes the iteration over the whole =
+list
+>> without breaking the loop, the iterator value will be a bogus pointer
+>> computed based on the head element.
+>>=20
+>> While it is safe to use the pointer to determine if it was computed
+>> based on the head element, either with list_entry_is_head() or
+>> &pos->member =3D=3D head, using the iterator variable after the loop =
+should
+>> be avoided.
+>>=20
+>> In preparation to limit the scope of a list iterator to the list
+>> traversal loop, use a dedicated pointer to point to the found element =
+[1].
+>>=20
+>> ...
+>>=20
+>=20
+> Speaking of limiting scope...
 
-diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
-index 4a2426f0485a..e8dfe1541613 100644
---- a/Documentation/filesystems/f2fs.rst
-+++ b/Documentation/filesystems/f2fs.rst
-@@ -172,34 +172,6 @@ reserve_root=%d		 Support configuring reserved space which is used for
- 			 gid, unit: 4KB, the default limit is 0.2% of user blocks.
- resuid=%d		 The user ID which may use the reserved blocks.
- resgid=%d		 The group ID which may use the reserved blocks.
--fault_injection=%d	 Enable fault injection in all supported types with
--			 specified injection rate.
--fault_type=%d		 Support configuring fault injection type, should be
--			 enabled with fault_injection option, fault type value
--			 is shown below, it supports single or combined type.
--
--			 ===================	  ===========
--			 Type_Name		  Type_Value
--			 ===================	  ===========
--			 FAULT_KMALLOC		  0x000000001
--			 FAULT_KVMALLOC		  0x000000002
--			 FAULT_PAGE_ALLOC	  0x000000004
--			 FAULT_PAGE_GET		  0x000000008
--			 FAULT_ALLOC_BIO	  0x000000010 (obsolete)
--			 FAULT_ALLOC_NID	  0x000000020
--			 FAULT_ORPHAN		  0x000000040
--			 FAULT_BLOCK		  0x000000080
--			 FAULT_DIR_DEPTH	  0x000000100
--			 FAULT_EVICT_INODE	  0x000000200
--			 FAULT_TRUNCATE		  0x000000400
--			 FAULT_READ_IO		  0x000000800
--			 FAULT_CHECKPOINT	  0x000001000
--			 FAULT_DISCARD		  0x000002000
--			 FAULT_WRITE_IO		  0x000004000
--			 FAULT_SLAB_ALLOC	  0x000008000
--			 FAULT_DQUOT_INIT	  0x000010000
--			 FAULT_LOCK_OP		  0x000020000
--			 ===================	  ===========
- mode=%s			 Control block allocation mode which supports "adaptive"
- 			 and "lfs". In "lfs" mode, there should be no random
- 			 writes towards main area.
-@@ -367,6 +339,96 @@ The files in each per-device directory are shown in table below.
- Files in /sys/fs/f2fs/<devname>
- (see also Documentation/ABI/testing/sysfs-fs-f2fs)
- 
-+Fault Injection
-+=============
-+/sys/kernel/debug/f2fs/<devname>/fault_inject contains fault_inject control.
-+
-+Support configuring fault injection type by writing value to
-+/sys/kernel/debug/f2fs/<devname>/fault_inject/inject_type.
-+The values are shown below. They support single or combined type.
-+
-+			 ===================	  ===========
-+			 Type_Name		  Type_Value
-+			 ===================	  ===========
-+			 FAULT_KMALLOC		  0x000000001
-+			 FAULT_KVMALLOC		  0x000000002
-+			 FAULT_PAGE_ALLOC	  0x000000004
-+			 FAULT_PAGE_GET		  0x000000008
-+			 FAULT_ALLOC_BIO	  0x000000010 (obsolete)
-+			 FAULT_ALLOC_NID	  0x000000020
-+			 FAULT_ORPHAN		  0x000000040
-+			 FAULT_BLOCK		  0x000000080
-+			 FAULT_DIR_DEPTH	  0x000000100
-+			 FAULT_EVICT_INODE	  0x000000200
-+			 FAULT_TRUNCATE		  0x000000400
-+			 FAULT_READ_IO		  0x000000800
-+			 FAULT_CHECKPOINT	  0x000001000
-+			 FAULT_DISCARD		  0x000002000
-+			 FAULT_WRITE_IO		  0x000004000
-+			 FAULT_SLAB_ALLOC	  0x000008000
-+			 FAULT_DQUOT_INIT	  0x000010000
-+			 FAULT_LOCK_OP		  0x000020000
-+			 ===================	  ===========
-+
-+Example: Inject write io fail
-+---------------------------------------------------
-+
-+::
-+
-+    mount /dev/sda /mnt
-+    echo 0x000000800 > /sys/kernel/debug/f2fs/sda/fault_inject/inject_type
-+    echo 1 > /sys/kernel/debug/f2fs/sda/fault_inject/times
-+    echo 100 > /sys/kernel/debug/f2fs/sda/fault_inject/probability
-+    cp /mnt/file .
-+
-+Expected Result::
-+
-+    cat: /mnt/file: Input/output error
-+
-+Message from dmesg::
-+
-+    FAULT_INJECTION: forcing a failure.
-+    name fault_inject, interval 1, probability 100, space 0, times 1
-+    CPU: 30 PID: 0 Comm: swapper/30 Not tainted 5.17.0-rc8 #6
-+    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-build
-+    Call Trace:
-+     <IRQ>
-+     ? dump_stack_lvl+0x73/0x9f
-+     ? dump_stack+0x13/0x1b
-+     ? should_fail.cold+0x4a/0x57
-+     ? f2fs_should_fail+0x3e/0x60
-+     ? f2fs_read_end_io+0x94/0x230
-+     ? bio_endio+0x15d/0x2d0
-+     ? blk_update_request+0x188/0x5b0
-+     ? kfree+0x138/0x4a0
-+     ? scsi_end_request+0x2f/0x230
-+     ? scsi_io_completion+0x86/0x9a0
-+     ? scsi_dec_host_busy+0xc6/0xe0
-+     ? scsi_finish_command+0xf0/0x160
-+     ? scsi_complete+0x9f/0x160
-+     ? blk_complete_reqs+0x5a/0x70
-+     ? blk_done_softirq+0x34/0x40
-+     ? __do_softirq+0x14f/0x4ef
-+     ? irq_exit_rcu+0x1a7/0x210
-+     ? common_interrupt+0xa4/0xc0
-+     </IRQ>
-+     <TASK>
-+     ? asm_common_interrupt+0x1e/0x40
-+     ? default_idle+0x38/0x50
-+     ? arch_cpu_idle+0x13/0x20
-+     ? default_idle_call+0x82/0x270
-+     ? do_idle+0x37c/0x4a0
-+     ? swake_up_locked+0x38/0x80
-+     ? _raw_spin_unlock_irqrestore+0x4b/0x90
-+     ? cpu_startup_entry+0x31/0x40
-+     ? start_secondary+0x222/0x280
-+     ? secondary_startup_64_no_verify+0xc3/0xcb
-+     </TASK>
-+    F2FS-fs (sda) : inject read IO error in f2fs_read_end_io of bio_endio+0x15d/0x2d0
-+
-+Files in /sys/kernel/debug/f2fs/<devname>/fault_inject
-+(see also Documentation/fault-injection/fault-injection.rst)
-+
- Usage
- =====
- 
--- 
-2.31.1
+Fair point :-)
 
+I see you have applied this already to the -mm tree. Shall I still move =
+the iterator?
+The hope is to remove the 'iter' variable altogether when there are no =
+uses after
+the loop anymore.
+
+>=20
+> --- =
+a/fs/proc/kcore.c~fs-proc-kcorec-remove-check-of-list-iterator-against-hea=
+d-past-the-loop-body-fix
+> +++ a/fs/proc/kcore.c
+> @@ -316,7 +316,6 @@ read_kcore(struct file *file, char __use
+> 	size_t page_offline_frozen =3D 1;
+> 	size_t phdrs_len, notes_len;
+> 	struct kcore_list *m;
+> -	struct kcore_list *iter;
+> 	size_t tsz;
+> 	int nphdr;
+> 	unsigned long start;
+> @@ -480,6 +479,8 @@ read_kcore(struct file *file, char __use
+> 		 * the previous entry, search for a matching entry.
+> 		 */
+> 		if (!m || start < m->addr || start >=3D m->addr + =
+m->size) {
+> +			struct kcore_list *iter;
+> +
+> 			m =3D NULL;
+> 			list_for_each_entry(iter, &kclist_head, list) {
+> 				if (start >=3D iter->addr &&
+> _
+>=20
+
+	Jakob=

@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5584EF99D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EDA4EF9A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348134AbiDASSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S1349113AbiDASS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350993AbiDASSJ (ORCPT
+        with ESMTP id S1348195AbiDASSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:18:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E90A17941F;
-        Fri,  1 Apr 2022 11:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648836979; x=1680372979;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=SkDJz/bB0BuJ0EYcysr++p5neR48hYNr+QtKG3BG1fA=;
-  b=L8T5qVnDub3S/KEXzqonKlLYDs0BaMGZ/pw2wRd6kjHhX/yb4aKId9jS
-   VduSz+gLSQ/rh4Gl5oc2oYcA3b1dB/+u5y7wB1/NcnwuWFea3vc0JHBz9
-   Cg6HUpnMSn/YyeqRitlq7kLgYokMQpF5ahP4Rr2JBEvue5k23jEkUtU/v
-   ad2R3BcV6dKtJSXIIUaViHKmWQqCkgI0/yPZTQ1dGr41AahAnQo0M0pGa
-   Pv2Ri7ZBjk2bkNAMu8x0TAoXCPdQ4vz5iSHNOrmuuPc4Jk1I+o3pJXIZd
-   s5088Bok8HOCvTcCttHftZTV3jE8adDrm3Fc7guW2afzcwESnMNN6dCra
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260382948"
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="260382948"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 11:16:19 -0700
-X-IronPort-AV: E=Sophos;i="5.90,228,1643702400"; 
-   d="scan'208";a="567691604"
-Received: from dajones-mobl.amr.corp.intel.com (HELO [10.212.134.9]) ([10.212.134.9])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 11:16:18 -0700
-Message-ID: <1cb5ccc3-a84d-06da-a8e8-d9d3d8418d25@intel.com>
-Date:   Fri, 1 Apr 2022 11:16:19 -0700
+        Fri, 1 Apr 2022 14:18:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF2179B21;
+        Fri,  1 Apr 2022 11:16:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95754B8256A;
+        Fri,  1 Apr 2022 18:16:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E02C2BBE4;
+        Fri,  1 Apr 2022 18:16:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648836992;
+        bh=QyEJiv+glqr0H3MoECuGzd/y08s1CwNxnmVW4bLe0c4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eDKZp/mG2BSapnMZMxMM6229M1ItI14fPhjLTjHxhU4EnMMam3ZtBWA3mb9LAO+ED
+         BMOSbECp4+KoetpdabLnFubWhqvjuGz3RlOv/9Mnw2q2sXHaCRr6/hlqYP2rxTfz5e
+         wjHGkczEUyyeoBcVxfAgvYJwHOso3pWMEodk4ZC8y7W/W96MnBVQ2n6Sjc4+h8UaE6
+         cYsQWTZwYX/uHqmb6+STLufOR1XcaY46SsaEgvdMM1grjt/HGQCd5P3a5Hp5NUkw80
+         Yp6i38e/53tj6mEgMiyTLxeaDb0aI1CWRhQy9K4+XrawA3sBWJtcw7k+BjbXxlBR1m
+         fZOdjm49W9ISg==
+Date:   Fri, 1 Apr 2022 18:16:30 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     ceph-devel@vger.kernel.org, xiubli@redhat.com, idryomov@gmail.com,
+        lhenriques@suse.de, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 08/54] ceph: add a has_stable_inodes operation for
+ ceph
+Message-ID: <YkdBfkqlSUzJlNHD@gmail.com>
+References: <20220331153130.41287-1-jlayton@kernel.org>
+ <20220331153130.41287-9-jlayton@kernel.org>
+ <YkYJF07WdQZoucQ5@gmail.com>
+ <0d9311b16cae47f7a1eb417d589adc093d9dc5b9.camel@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     tglx@linutronix.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org, bp@alien8.de, rafael@kernel.org,
-        ravi.v.shankar@intel.com
-References: <20220325022219.829-1-chang.seok.bae@intel.com>
- <20220325022219.829-2-chang.seok.bae@intel.com>
- <ee82ed75-03f5-1962-6888-11491c9569c8@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v3 1/3] x86/fpu: Make XCR0 accessors immune to unwanted
- compiler reordering
-In-Reply-To: <ee82ed75-03f5-1962-6888-11491c9569c8@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0d9311b16cae47f7a1eb417d589adc093d9dc5b9.camel@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 10:58, Dave Hansen wrote:
-> On 3/24/22 19:22, Chang S. Bae wrote:
->> Some old GCC versions (4.9.x and 5.x) have an issue that incorrectly
->> reordering volatile asm statements with each other [1]. While this bug was
->> fixed on later versions (8.1, 7.3, and 6.5), and the kernel's current XCR0
->> read/write do not appear to be impacted, it is preventive to ensure them on
->> the program order.
-> I thought you *actually* saw xgetbv() be reordered, though.  Was that on
-> a buggy compiler?
+On Fri, Apr 01, 2022 at 06:37:10AM -0400, Jeff Layton wrote:
+> On Thu, 2022-03-31 at 20:03 +0000, Eric Biggers wrote:
+> > On Thu, Mar 31, 2022 at 11:30:44AM -0400, Jeff Layton wrote:
+> > >  static struct fscrypt_operations ceph_fscrypt_ops = {
+> > >  	.key_prefix		= "ceph:",
+> > >  	.get_context		= ceph_crypt_get_context,
+> > >  	.set_context		= ceph_crypt_set_context,
+> > >  	.empty_dir		= ceph_crypt_empty_dir,
+> > > +	.has_stable_inodes	= ceph_crypt_has_stable_inodes,
+> > >  };
+> > 
+> > What is the use case for implementing this?  Note the comment in the struct
+> > definition:
+> > 
+> >        /*
+> >          * Check whether the filesystem's inode numbers and UUID are stable,
+> >          * meaning that they will never be changed even by offline operations
+> >          * such as filesystem shrinking and therefore can be used in the
+> >          * encryption without the possibility of files becoming unreadable.
+> >          *
+> >          * Filesystems only need to implement this function if they want to
+> >          * support the FSCRYPT_POLICY_FLAG_IV_INO_LBLK_{32,64} flags.  These
+> >          * flags are designed to work around the limitations of UFS and eMMC
+> >          * inline crypto hardware, and they shouldn't be used in scenarios where
+> >          * such hardware isn't being used.
+> >          *
+> >          * Leaving this NULL is equivalent to always returning false.
+> >          */
+> >         bool (*has_stable_inodes)(struct super_block *sb);
+> > 
+> > I think you should just leave this NULL for now.
+> > 
+> 
+> Mostly we were just looking for ways to make all of the -g encrypt
+> xfstests pass. I'll plan to drop this patch and 07/54. I don't see any
+> need to support legacy modes or stuff that involves special storage hw.
 
-Actually, reading the gcc bug[1] a bit more, it says:
+Do generic/592 and generic/602 fail without this patch?  If so, that would be a
+test bug, since they should be skipped if the filesystem doesn't support
+FSCRYPT_POLICY_FLAG_IV_INO_LBLK_{64,32}.  I think that
+_require_encryption_policy_support() should be already taking care of that,
+though?
 
-> However, correctness here depends on the compiler honouring the
-> ordering of volatile asm statements with respect to other volatile
-> code, and this patch fixes that.
-In your case, there was presumably no volatile code, just a
-fpu_state_size_dynamic() call.  The compiler thought the xgetbv() was
-safe to reorder, and did so.
-
-So, I'm not quite sure how that bug is relevant.  It just dealt with
-multiple "asm volatile" statements that don't have memory clobbers.  We
-only have one "asm volatile" in play.  Adding the memory clobber should
-make that bug totally irrelevant.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82602
+- Eric

@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A744EE9D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB3C4EE9DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244368AbiDAIkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 04:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S244469AbiDAIlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 04:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiDAIkh (ORCPT
+        with ESMTP id S230512AbiDAIll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 04:40:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E09F03153F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 01:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648802327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jJgRufLo0Q+2TohvSo0V+grK8YPgHhb39pNmOaDe4X4=;
-        b=i1dUZuYYAqVSCyGEIlEn33F1du42TT2bGzKH2NGRzYwclcIFEsFMj6+/OA/RfSo3GacZbk
-        Im/lbOygJA9YGMJkucVlIOJ7ZZMbmTKSg9/ME8lL+5DcmmatUDaHm+q724dVVKvN42Q/Bz
-        ODM7agVwqiAfBpwzgCqXBWgP9r/UNOQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-576-bLyWL1dmM3iy4GRNK6i1pQ-1; Fri, 01 Apr 2022 04:38:46 -0400
-X-MC-Unique: bLyWL1dmM3iy4GRNK6i1pQ-1
-Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so887292wmj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 01:38:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jJgRufLo0Q+2TohvSo0V+grK8YPgHhb39pNmOaDe4X4=;
-        b=jSfoKNb6oDlw+rAC3NwmntoJbnA+EILYvHaoMhEzJq1TMZR4VllO3tR6XrLbOa3Jm6
-         9XUsGAzmDxQmufj5JzTEoAzgDQmB+IgIwOiB1SnfxVYL53ix5HoWby1cDfd6IW9PJjMd
-         g0WGNjxmjKrK4nv3wb9xHsDo4AD7+qpxWumSPuJD/wB4Ifht746AjpPj3HNPWm2I16O7
-         9mXsmFyNdRyu2ml86CUgnRtWwnd0c3692Re7Je1eIzVPVFzSYKRgEX/jp60ksGyHntJZ
-         WrawQCYFFRop3JSwOKTpPr9KMcU+WUTEnY+/UmlP3s3d+OJ9PJgUgjuueb38wYzu+7Ny
-         DtKg==
-X-Gm-Message-State: AOAM5314hWurIFogwA4SXpwHdZzSamytngqHo9MwldlMdLLxmRiY7rPR
-        TI9KL71AJfxDIdrlJKC8fLBzZbTUc02BK9ZhS4YNiXgw/2aCnk3HMfuYde1D5fOlir5Fchhezac
-        bPnOLnK99utQz1oIBmbRVuzbx
-X-Received: by 2002:a05:600c:20a:b0:38c:95bf:3289 with SMTP id 10-20020a05600c020a00b0038c95bf3289mr7846158wmi.134.1648802324816;
-        Fri, 01 Apr 2022 01:38:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyZv6I0FVV+CMTD5Ii7q1vvCTUGk/jp2epbACrhoZA7VwhBmVuCWWnjWAfbB1yDcm4RVzFGLA==
-X-Received: by 2002:a05:600c:20a:b0:38c:95bf:3289 with SMTP id 10-20020a05600c020a00b0038c95bf3289mr7846142wmi.134.1648802324598;
-        Fri, 01 Apr 2022 01:38:44 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l126-20020a1c2584000000b00387d4f35651sm9408352wml.10.2022.04.01.01.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 01:38:44 -0700 (PDT)
-Message-ID: <19fa075a-cc5a-4127-389a-bab7812d7af3@redhat.com>
-Date:   Fri, 1 Apr 2022 10:38:42 +0200
+        Fri, 1 Apr 2022 04:41:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0E84AE2E;
+        Fri,  1 Apr 2022 01:39:51 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2318BD9T007910;
+        Fri, 1 Apr 2022 08:39:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=G5ux5PrsqjCTdlNQQ3/bauu6+cMr/v2RVE88yklbG+E=;
+ b=Qnyfejn1aUQcBYsQhL85YqKJSbN56nBITnvu9+GgL94Qa/kNf4DYzoNNM3W1GMsS/qmi
+ VejqjlbGKw+W3HaXb+j8d9eYn7Fj01jAjbnJEZjTirOTsUNbrn+29S4Fv9ftx6smO+Fr
+ Ujsm0Tb9gaB6XhsyeKOSU+SOC9rJu1VvbyCENboE4ZUHuOpmQY+2dPcveCREuVb1szdC
+ 0fIHTSvR9y46SQ5K6Jvhl+FgUYG61lyYCLAgir8Xj3TXV7t3oZp2wGiVcro6TK0dhGEE
+ uEhEZI6lcGqbfnFbSLynbzcmOMHECGyNOyHxM1RqsRSYoZWc3EKVBoR4orIWS3sr5rKA bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f58a4jyc1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 08:39:41 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2318a6YB023665;
+        Fri, 1 Apr 2022 08:39:40 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f58a4jyb1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 08:39:40 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2318T1bY030174;
+        Fri, 1 Apr 2022 08:39:38 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3f1tf8tn5s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 08:39:37 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2318dZ5O46268794
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Apr 2022 08:39:35 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C50411C04A;
+        Fri,  1 Apr 2022 08:39:35 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 56E1B11C05E;
+        Fri,  1 Apr 2022 08:39:27 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.211.58.125])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Fri,  1 Apr 2022 08:39:26 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Fri, 01 Apr 2022 14:09:25 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+In-Reply-To: <20220331084151.2600229-1-yosryahmed@google.com>
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+Date:   Fri, 01 Apr 2022 14:09:25 +0530
+Message-ID: <874k3d6vuq.fsf@vajain21.in.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] efi: Allow to enable EFI runtime services by default
- on RT
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Brian Masney <bmasney@redhat.com>, Al Stone <ahs3@redhat.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>,
-        Peter Jones <pjones@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        linux-rt-users@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220331151654.184433-1-javierm@redhat.com>
- <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
- <YkYA/Wpqa/PMczkp@lx-t490>
- <CAFOAJEeKNy0HW82W6HV_49d5sc5L0m62QDfY9qA1906_ZzGRYg@mail.gmail.com>
- <Ykas9iX/D3WURx8T@linutronix.de>
- <78a0360d-1a27-5280-10bf-d27d1d306fa5@redhat.com>
- <CAMj1kXGEBtcdD+3MFK5gO6vCw8dg=ruTthdWGVUu1eJpgZXf8Q@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAMj1kXGEBtcdD+3MFK5gO6vCw8dg=ruTthdWGVUu1eJpgZXf8Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: fYnMBbHf2fqcpAFgRl4OOAvzPxfRlFzw
+X-Proofpoint-GUID: mFsW9vQ_hD_8f3vLjzxT3jZrMrJO2cNt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-01_03,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=718
+ clxscore=1011 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204010037
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ard,
 
-On 4/1/22 10:34, Ard Biesheuvel wrote:
-> On Fri, 1 Apr 2022 at 10:33, Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
+Yosry Ahmed <yosryahmed@google.com> writes:
+> From: Shakeel Butt <shakeelb@google.com>
+>
+> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
+<snip>
 
-[snip]
+> +
+> +	while (nr_reclaimed < nr_to_reclaim) {
+> +		unsigned long reclaimed;
+> +
+> +		if (signal_pending(current))
+> +			break;
+> +
+> +		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+> +						nr_to_reclaim - nr_reclaimed,
+> +						GFP_KERNEL, true);
+> +
+> +		if (!reclaimed && !nr_retries--)
+> +			break;
+> +
+> +		nr_reclaimed += reclaimed;
 
->>
->>         if (!efi_enabled(EFI_RUNTIME_SERVICES))
->>                 efi.runtime_supported_mask = 0;
->> +       else if (IS_ENABLED(CONFIG_PREEMPT_RT))
->> +               pr_warn("EFI runtime services can lead to high latencies on Real-Time kernels\n");
->>
->>         if (!efi_enabled(EFI_BOOT))
->>                 return 0;
->>
-> 
-> 
-> I don't think we need another warning.
-> 
-> The kernel log already tells you whether or not EFI runtime services
-> are enabled.
-> 
+I think there should be a cond_resched() in this loop before
+try_to_free_mem_cgroup_pages() to have better chances of reclaim
+succeding early.
 
-I'm fine with this too. As mentioned to Ahmed I was torn on this, since I
-understand the ask for the warning but also don't want to pollute the log.
+<snip>
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Cheers
+~ Vaibhav

@@ -2,178 +2,532 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42B94EF8BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175724EF8C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349653AbiDARQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        id S1344286AbiDARS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346547AbiDARQQ (ORCPT
+        with ESMTP id S1349899AbiDARSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:16:16 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CCE181171
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:14:26 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id x2so2976505plm.7
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TmJlBi2lOKilVyCE4rEH1RU4SqqxsckJUfBoRuoJ5iA=;
-        b=XswIK2+VM16bs1EyCAixrX89EKH93ezG3dB1CWqPGTee1snfa+If/AZijfKqsxCqtT
-         czAJM7L+aUj6khEGJ6GV9s++PLrO8RH4lZkcJg2KUogkm/dx0FOh6Bdu3+L9kSytbNEF
-         XG0woWBUkeuEHiLxkjZVlGyLcAV8wCqkBCs5NYAogpMbDENpW1paD3SiXOo3FOHbC/BE
-         WYgluaeEO6OycFsdtzk13mJ436B8Tm+WeKW9KRWPo6GkYNWY936IsCliUkUrYOsiKniH
-         rexTSPppoR//hQcB3ze8glrIZD0dmsOyJ/XHIq6k4cBlE7q4ChILUSTyVJwIVcd9BGxN
-         YFAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TmJlBi2lOKilVyCE4rEH1RU4SqqxsckJUfBoRuoJ5iA=;
-        b=cp9AUdEe7POZwXv0DgG53dhVxZRXBwtiQdmfyIvMs19e+fP6O6pJveFjfJQyKA8Jvp
-         r/ZHw9Xsf+mg2TQ+w2kzEV0hcdcXYlC/9jKWc3MZyUGPQLFy8rQyQ8SGHy/iVhVH6W++
-         LSPOZDJI+PaVrFF3YgjmX0XH8aKlvNrWJeDV6S1vRPzHLUZfmNeW8w5JwxRiAGxj/3+F
-         FcZKAc5JvqUQUethDkE0+W3aIGpbLP4n31QDpkf2KyOlnnd3G/qjpen99yidhvAjwSzX
-         km0d70xneKSbd3PcojG/7vUaOwkAYAizYj3Bz9Hb72ZiJA9CU/GIKMXWS9nax4QmVVPL
-         wfOg==
-X-Gm-Message-State: AOAM533qICr9nzmnRQBLKOgVN0kfeNTavsVD0ftgReM0OFGHs3eQ8g7k
-        Ke5RkkGZMMlFxvA2DgqjxmaDvw==
-X-Google-Smtp-Source: ABdhPJz12AHLKCpitPA4TCd4Qr7wvOzdMzS4bQmVFvgCp7soE2Mp/gjwDqcr67uNH6+9bYjsC7+Dhg==
-X-Received: by 2002:a17:902:ec8c:b0:154:2e86:dd51 with SMTP id x12-20020a170902ec8c00b001542e86dd51mr11082426plg.99.1648833265465;
-        Fri, 01 Apr 2022 10:14:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm3669103pfh.83.2022.04.01.10.14.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 10:14:24 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 17:14:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <Ykcy7fj/d+f9OUl/@google.com>
-References: <YjyS6A0o4JASQK+B@google.com>
- <YkHspg+YzOsbUaCf@google.com>
- <YkH32nx+YsJuUbmZ@google.com>
- <YkIFW25WgV2WIQHb@google.com>
- <YkM7eHCHEBe5NkNH@google.com>
- <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
- <YkQzfjgTQaDd2E2T@google.com>
- <YkSaUQX89ZEojsQb@google.com>
- <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
- <YkcTTY4YjQs5BRhE@google.com>
+        Fri, 1 Apr 2022 13:18:01 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5B91B7567
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:16:10 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KVRf03ZtPz9sRs;
+        Fri,  1 Apr 2022 19:16:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id guAaRcRqI9M7; Fri,  1 Apr 2022 19:16:08 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVRf01xbwz9sRj;
+        Fri,  1 Apr 2022 19:16:08 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2AE538B87E;
+        Fri,  1 Apr 2022 19:16:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 8zntGAyZIY_c; Fri,  1 Apr 2022 19:16:08 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.82])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C4AA18B879;
+        Fri,  1 Apr 2022 19:16:07 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 231HFu4s663348
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 1 Apr 2022 19:15:56 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 231HFsTQ663346;
+        Fri, 1 Apr 2022 19:15:54 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Colin Leroy <colin@colino.net>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] macintosh: Prepare cleanup of powerpc's asm/prom.h
+Date:   Fri,  1 Apr 2022 19:15:53 +0200
+Message-Id: <04961364547fe4556e30cb302b0e20a939b83426.1648833027.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkcTTY4YjQs5BRhE@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648833352; l=15069; s=20211009; h=from:subject:message-id; bh=LQjtAC9SCwjs/OP9uybaBy7SgDJjugZHETZ6+i+RzHU=; b=niiTsYmSvNCvPUeoFoQwoMGFvu+IzQQqjg5PDo4TXpE7ioBjY4O9Kw35IyXOgp6LZmp29aSUARZz f4jgKpO/CIHotraF/O2D7l3xE6nWRz9WTjVmHHeVOh3gPhWg618y
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022, Quentin Perret wrote:
-> The typical flow is as follows:
-> 
->  - the host asks the hypervisor to run a guest;
-> 
->  - the hypervisor does the context switch, which includes switching
->    stage-2 page-tables;
-> 
->  - initially the guest has an empty stage-2 (we don't require
->    pre-faulting everything), which means it'll immediately fault;
-> 
->  - the hypervisor switches back to host context to handle the guest
->    fault;
-> 
->  - the host handler finds the corresponding memslot and does the
->    ipa->hva conversion. In our current implementation it uses a longterm
->    GUP pin on the corresponding page;
-> 
->  - once it has a page, the host handler issues a hypercall to donate the
->    page to the guest;
-> 
->  - the hypervisor does a bunch of checks to make sure the host owns the
->    page, and if all is fine it will unmap it from the host stage-2 and
->    map it in the guest stage-2, and do some bookkeeping as it needs to
->    track page ownership, etc;
-> 
->  - the guest can then proceed to run, and possibly faults in many more
->    pages;
-> 
->  - when it wants to, the guest can then issue a hypercall to share a
->    page back with the host;
-> 
->  - the hypervisor checks the request, maps the page back in the host
->    stage-2, does more bookkeeping and returns back to the host to notify
->    it of the share;
-> 
->  - the host kernel at that point can exit back to userspace to relay
->    that information to the VMM;
-> 
->  - rinse and repeat.
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-I assume there is a scenario where a page can be converted from shared=>private?
-If so, is there a use case where that happens post-boot _and_ the contents of the
-page are preserved?
+In order to clean it up, first add missing headers in
+users of asm/prom.h
 
-> We currently don't allow the host punching holes in the guest IPA space.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/macintosh/adb.c                     | 2 +-
+ drivers/macintosh/ans-lcd.c                 | 2 +-
+ drivers/macintosh/macio-adb.c               | 5 ++++-
+ drivers/macintosh/macio_asic.c              | 3 ++-
+ drivers/macintosh/macio_sysfs.c             | 2 ++
+ drivers/macintosh/mediabay.c                | 2 +-
+ drivers/macintosh/rack-meter.c              | 1 -
+ drivers/macintosh/smu.c                     | 1 -
+ drivers/macintosh/therm_adt746x.c           | 1 -
+ drivers/macintosh/therm_windtunnel.c        | 1 -
+ drivers/macintosh/via-cuda.c                | 4 +++-
+ drivers/macintosh/via-pmu-backlight.c       | 1 -
+ drivers/macintosh/via-pmu-led.c             | 2 +-
+ drivers/macintosh/via-pmu.c                 | 1 -
+ drivers/macintosh/windfarm_ad7417_sensor.c  | 2 +-
+ drivers/macintosh/windfarm_core.c           | 2 --
+ drivers/macintosh/windfarm_cpufreq_clamp.c  | 2 --
+ drivers/macintosh/windfarm_fcu_controls.c   | 2 +-
+ drivers/macintosh/windfarm_lm75_sensor.c    | 1 -
+ drivers/macintosh/windfarm_lm87_sensor.c    | 2 +-
+ drivers/macintosh/windfarm_max6690_sensor.c | 2 +-
+ drivers/macintosh/windfarm_mpu.h            | 2 ++
+ drivers/macintosh/windfarm_pm112.c          | 4 +++-
+ drivers/macintosh/windfarm_pm121.c          | 3 ++-
+ drivers/macintosh/windfarm_pm72.c           | 2 +-
+ drivers/macintosh/windfarm_pm81.c           | 3 ++-
+ drivers/macintosh/windfarm_pm91.c           | 3 ++-
+ drivers/macintosh/windfarm_rm31.c           | 2 +-
+ drivers/macintosh/windfarm_smu_controls.c   | 3 ++-
+ drivers/macintosh/windfarm_smu_sat.c        | 2 +-
+ drivers/macintosh/windfarm_smu_sensors.c    | 3 ++-
+ 31 files changed, 37 insertions(+), 31 deletions(-)
 
-The hole doesn't get punched in guest IPA space, it gets punched in the private
-backing store, which is host PA space.
+diff --git a/drivers/macintosh/adb.c b/drivers/macintosh/adb.c
+index 73b396189039..439fab4eaa85 100644
+--- a/drivers/macintosh/adb.c
++++ b/drivers/macintosh/adb.c
+@@ -38,10 +38,10 @@
+ #include <linux/kthread.h>
+ #include <linux/platform_device.h>
+ #include <linux/mutex.h>
++#include <linux/of.h>
+ 
+ #include <linux/uaccess.h>
+ #ifdef CONFIG_PPC
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #endif
+ 
+diff --git a/drivers/macintosh/ans-lcd.c b/drivers/macintosh/ans-lcd.c
+index b4821c751d04..fa904b24a600 100644
+--- a/drivers/macintosh/ans-lcd.c
++++ b/drivers/macintosh/ans-lcd.c
+@@ -11,10 +11,10 @@
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <linux/fs.h>
++#include <linux/of.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/sections.h>
+-#include <asm/prom.h>
+ #include <asm/io.h>
+ 
+ #include "ans-lcd.h"
+diff --git a/drivers/macintosh/macio-adb.c b/drivers/macintosh/macio-adb.c
+index dc634c2932fd..9b63bd2551c6 100644
+--- a/drivers/macintosh/macio-adb.c
++++ b/drivers/macintosh/macio-adb.c
+@@ -9,8 +9,11 @@
+ #include <linux/spinlock.h>
+ #include <linux/interrupt.h>
+ #include <linux/pgtable.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
+ #include <linux/adb.h>
++
+ #include <asm/io.h>
+ #include <asm/hydra.h>
+ #include <asm/irq.h>
+diff --git a/drivers/macintosh/macio_asic.c b/drivers/macintosh/macio_asic.c
+index 1943a007e2d5..3f519f573a63 100644
+--- a/drivers/macintosh/macio_asic.c
++++ b/drivers/macintosh/macio_asic.c
+@@ -20,13 +20,14 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
++#include <linux/of_device.h>
+ #include <linux/of_irq.h>
+ 
+ #include <asm/machdep.h>
+ #include <asm/macio.h>
+ #include <asm/pmac_feature.h>
+-#include <asm/prom.h>
+ 
+ #undef DEBUG
+ 
+diff --git a/drivers/macintosh/macio_sysfs.c b/drivers/macintosh/macio_sysfs.c
+index 27f5eefc508f..2bbe359b26d9 100644
+--- a/drivers/macintosh/macio_sysfs.c
++++ b/drivers/macintosh/macio_sysfs.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
+ #include <linux/stat.h>
+ #include <asm/macio.h>
+ 
+diff --git a/drivers/macintosh/mediabay.c b/drivers/macintosh/mediabay.c
+index b17660c022eb..36070c6586d1 100644
+--- a/drivers/macintosh/mediabay.c
++++ b/drivers/macintosh/mediabay.c
+@@ -17,7 +17,7 @@
+ #include <linux/kthread.h>
+ #include <linux/mutex.h>
+ #include <linux/pgtable.h>
+-#include <asm/prom.h>
++
+ #include <asm/io.h>
+ #include <asm/machdep.h>
+ #include <asm/pmac_feature.h>
+diff --git a/drivers/macintosh/rack-meter.c b/drivers/macintosh/rack-meter.c
+index 60311e8d6240..c28893e41a8b 100644
+--- a/drivers/macintosh/rack-meter.c
++++ b/drivers/macintosh/rack-meter.c
+@@ -27,7 +27,6 @@
+ #include <linux/of_irq.h>
+ 
+ #include <asm/io.h>
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/pmac_feature.h>
+ #include <asm/dbdma.h>
+diff --git a/drivers/macintosh/smu.c b/drivers/macintosh/smu.c
+index a4fbc3fc713d..4350dabd9e6e 100644
+--- a/drivers/macintosh/smu.c
++++ b/drivers/macintosh/smu.c
+@@ -41,7 +41,6 @@
+ 
+ #include <asm/byteorder.h>
+ #include <asm/io.h>
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/pmac_feature.h>
+ #include <asm/smu.h>
+diff --git a/drivers/macintosh/therm_adt746x.c b/drivers/macintosh/therm_adt746x.c
+index 7e218437730c..e604cbc91763 100644
+--- a/drivers/macintosh/therm_adt746x.c
++++ b/drivers/macintosh/therm_adt746x.c
+@@ -27,7 +27,6 @@
+ #include <linux/freezer.h>
+ #include <linux/of_platform.h>
+ 
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/therm_windtunnel.c b/drivers/macintosh/therm_windtunnel.c
+index f55f6adf5e5f..9226b74fa08f 100644
+--- a/drivers/macintosh/therm_windtunnel.c
++++ b/drivers/macintosh/therm_windtunnel.c
+@@ -38,7 +38,6 @@
+ #include <linux/kthread.h>
+ #include <linux/of_platform.h>
+ 
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/via-cuda.c b/drivers/macintosh/via-cuda.c
+index 3d0d0b9d471d..3838eb459ab1 100644
+--- a/drivers/macintosh/via-cuda.c
++++ b/drivers/macintosh/via-cuda.c
+@@ -18,8 +18,10 @@
+ #include <linux/cuda.h>
+ #include <linux/spinlock.h>
+ #include <linux/interrupt.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++
+ #ifdef CONFIG_PPC
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/pmac_feature.h>
+ #else
+diff --git a/drivers/macintosh/via-pmu-backlight.c b/drivers/macintosh/via-pmu-backlight.c
+index 50ada02ae75d..2194016122d2 100644
+--- a/drivers/macintosh/via-pmu-backlight.c
++++ b/drivers/macintosh/via-pmu-backlight.c
+@@ -12,7 +12,6 @@
+ #include <linux/adb.h>
+ #include <linux/pmu.h>
+ #include <asm/backlight.h>
+-#include <asm/prom.h>
+ 
+ #define MAX_PMU_LEVEL 0xFF
+ 
+diff --git a/drivers/macintosh/via-pmu-led.c b/drivers/macintosh/via-pmu-led.c
+index ae067ab2373d..a4fb16d7db3c 100644
+--- a/drivers/macintosh/via-pmu-led.c
++++ b/drivers/macintosh/via-pmu-led.c
+@@ -25,7 +25,7 @@
+ #include <linux/leds.h>
+ #include <linux/adb.h>
+ #include <linux/pmu.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
+ 
+ static spinlock_t pmu_blink_lock;
+ static struct adb_request pmu_blink_req;
+diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+index 4b98bc26a94b..9c162d747247 100644
+--- a/drivers/macintosh/via-pmu.c
++++ b/drivers/macintosh/via-pmu.c
+@@ -59,7 +59,6 @@
+ #include <asm/pmac_feature.h>
+ #include <asm/pmac_pfunc.h>
+ #include <asm/pmac_low_i2c.h>
+-#include <asm/prom.h>
+ #include <asm/mmu_context.h>
+ #include <asm/cputable.h>
+ #include <asm/time.h>
+diff --git a/drivers/macintosh/windfarm_ad7417_sensor.c b/drivers/macintosh/windfarm_ad7417_sensor.c
+index e7dec328c7cf..6ad6441abcbc 100644
+--- a/drivers/macintosh/windfarm_ad7417_sensor.c
++++ b/drivers/macintosh/windfarm_ad7417_sensor.c
+@@ -13,7 +13,7 @@
+ #include <linux/init.h>
+ #include <linux/wait.h>
+ #include <linux/i2c.h>
+-#include <asm/prom.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_core.c b/drivers/macintosh/windfarm_core.c
+index 07f91ec1f960..5307b1e34261 100644
+--- a/drivers/macintosh/windfarm_core.c
++++ b/drivers/macintosh/windfarm_core.c
+@@ -35,8 +35,6 @@
+ #include <linux/mutex.h>
+ #include <linux/freezer.h>
+ 
+-#include <asm/prom.h>
+-
+ #include "windfarm.h"
+ 
+ #define VERSION "0.2"
+diff --git a/drivers/macintosh/windfarm_cpufreq_clamp.c b/drivers/macintosh/windfarm_cpufreq_clamp.c
+index 7b726f00f183..28d18ef22bbb 100644
+--- a/drivers/macintosh/windfarm_cpufreq_clamp.c
++++ b/drivers/macintosh/windfarm_cpufreq_clamp.c
+@@ -10,8 +10,6 @@
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ 
+-#include <asm/prom.h>
+-
+ #include "windfarm.h"
+ 
+ #define VERSION "0.3"
+diff --git a/drivers/macintosh/windfarm_fcu_controls.c b/drivers/macintosh/windfarm_fcu_controls.c
+index 2470e5a725c8..82e7b2005ae7 100644
+--- a/drivers/macintosh/windfarm_fcu_controls.c
++++ b/drivers/macintosh/windfarm_fcu_controls.c
+@@ -14,7 +14,7 @@
+ #include <linux/init.h>
+ #include <linux/wait.h>
+ #include <linux/i2c.h>
+-#include <asm/prom.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_lm75_sensor.c b/drivers/macintosh/windfarm_lm75_sensor.c
+index 29f48c2028b6..eb7e7f0bd219 100644
+--- a/drivers/macintosh/windfarm_lm75_sensor.c
++++ b/drivers/macintosh/windfarm_lm75_sensor.c
+@@ -15,7 +15,6 @@
+ #include <linux/wait.h>
+ #include <linux/i2c.h>
+ #include <linux/of_device.h>
+-#include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_lm87_sensor.c b/drivers/macintosh/windfarm_lm87_sensor.c
+index 9fab0b47cd3d..807efdde86bc 100644
+--- a/drivers/macintosh/windfarm_lm87_sensor.c
++++ b/drivers/macintosh/windfarm_lm87_sensor.c
+@@ -13,7 +13,7 @@
+ #include <linux/init.h>
+ #include <linux/wait.h>
+ #include <linux/i2c.h>
+-#include <asm/prom.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_max6690_sensor.c b/drivers/macintosh/windfarm_max6690_sensor.c
+index 1e7b03d44ad9..55ee417fb878 100644
+--- a/drivers/macintosh/windfarm_max6690_sensor.c
++++ b/drivers/macintosh/windfarm_max6690_sensor.c
+@@ -10,7 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/slab.h>
+ #include <linux/i2c.h>
+-#include <asm/prom.h>
++
+ #include <asm/pmac_low_i2c.h>
+ 
+ #include "windfarm.h"
+diff --git a/drivers/macintosh/windfarm_mpu.h b/drivers/macintosh/windfarm_mpu.h
+index 157ce6e3f32e..b5ce347d12d4 100644
+--- a/drivers/macintosh/windfarm_mpu.h
++++ b/drivers/macintosh/windfarm_mpu.h
+@@ -8,6 +8,8 @@
+ #ifndef __WINDFARM_MPU_H
+ #define __WINDFARM_MPU_H
+ 
++#include <linux/of.h>
++
+ typedef unsigned short fu16;
+ typedef int fs32;
+ typedef short fs16;
+diff --git a/drivers/macintosh/windfarm_pm112.c b/drivers/macintosh/windfarm_pm112.c
+index e8377ce0a95a..d1dec314ae30 100644
+--- a/drivers/macintosh/windfarm_pm112.c
++++ b/drivers/macintosh/windfarm_pm112.c
+@@ -12,7 +12,9 @@
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++#include <linux/slab.h>
++
+ #include <asm/smu.h>
+ 
+ #include "windfarm.h"
+diff --git a/drivers/macintosh/windfarm_pm121.c b/drivers/macintosh/windfarm_pm121.c
+index ba1ec6fc11d2..36312f163aac 100644
+--- a/drivers/macintosh/windfarm_pm121.c
++++ b/drivers/macintosh/windfarm_pm121.c
+@@ -201,7 +201,8 @@
+ #include <linux/kmod.h>
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_pm72.c b/drivers/macintosh/windfarm_pm72.c
+index e81746b87cff..e21f973551cc 100644
+--- a/drivers/macintosh/windfarm_pm72.c
++++ b/drivers/macintosh/windfarm_pm72.c
+@@ -11,7 +11,7 @@
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+-#include <asm/prom.h>
++
+ #include <asm/smu.h>
+ 
+ #include "windfarm.h"
+diff --git a/drivers/macintosh/windfarm_pm81.c b/drivers/macintosh/windfarm_pm81.c
+index 82c67a4ee5f7..e0f4743f21cc 100644
+--- a/drivers/macintosh/windfarm_pm81.c
++++ b/drivers/macintosh/windfarm_pm81.c
+@@ -102,7 +102,8 @@
+ #include <linux/kmod.h>
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_pm91.c b/drivers/macintosh/windfarm_pm91.c
+index 3f346af9e3f7..c8535855360d 100644
+--- a/drivers/macintosh/windfarm_pm91.c
++++ b/drivers/macintosh/windfarm_pm91.c
+@@ -37,7 +37,8 @@
+ #include <linux/kmod.h>
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_rm31.c b/drivers/macintosh/windfarm_rm31.c
+index 7acd1684c451..e9eb7fdde48c 100644
+--- a/drivers/macintosh/windfarm_rm31.c
++++ b/drivers/macintosh/windfarm_rm31.c
+@@ -11,7 +11,7 @@
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+-#include <asm/prom.h>
++
+ #include <asm/smu.h>
+ 
+ #include "windfarm.h"
+diff --git a/drivers/macintosh/windfarm_smu_controls.c b/drivers/macintosh/windfarm_smu_controls.c
+index 75966052819a..e9957ad49a2a 100644
+--- a/drivers/macintosh/windfarm_smu_controls.c
++++ b/drivers/macintosh/windfarm_smu_controls.c
+@@ -14,7 +14,8 @@
+ #include <linux/init.h>
+ #include <linux/wait.h>
+ #include <linux/completion.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+diff --git a/drivers/macintosh/windfarm_smu_sat.c b/drivers/macintosh/windfarm_smu_sat.c
+index e46e1153a0b4..5ade627eaa78 100644
+--- a/drivers/macintosh/windfarm_smu_sat.c
++++ b/drivers/macintosh/windfarm_smu_sat.c
+@@ -13,7 +13,7 @@
+ #include <linux/wait.h>
+ #include <linux/i2c.h>
+ #include <linux/mutex.h>
+-#include <asm/prom.h>
++
+ #include <asm/smu.h>
+ #include <asm/pmac_low_i2c.h>
+ 
+diff --git a/drivers/macintosh/windfarm_smu_sensors.c b/drivers/macintosh/windfarm_smu_sensors.c
+index c8706cfb83fd..00c6fe25fcba 100644
+--- a/drivers/macintosh/windfarm_smu_sensors.c
++++ b/drivers/macintosh/windfarm_smu_sensors.c
+@@ -14,7 +14,8 @@
+ #include <linux/init.h>
+ #include <linux/wait.h>
+ #include <linux/completion.h>
+-#include <asm/prom.h>
++#include <linux/of.h>
++
+ #include <asm/machdep.h>
+ #include <asm/io.h>
+ #include <asm/sections.h>
+-- 
+2.35.1
 
-> Once it has donated a page to a guest, it can't have it back until the
-> guest has been entirely torn down (at which point all of memory is
-> poisoned by the hypervisor obviously).
-
-The guest doesn't have to know that it was handed back a different page.  It will
-require defining the semantics to state that the trusted hypervisor will clear
-that page on conversion, but IMO the trusted hypervisor should be doing that
-anyways.  IMO, forcing on the guest to correctly zero pages on conversion is
-unnecessarily risky because converting private=>shared and preserving the contents
-should be a very, very rare scenario, i.e. it's just one more thing for the guest
-to get wrong.
-
-If there is a use case where the page contents need to be preserved, then that can
-and should be an explicit request from the guest, and can be handled through
-export/import style functions.  Export/import would be slow-ish due to memcpy(),
-which is why I asked if there's a need to do this specific action frequently (or
-at all).

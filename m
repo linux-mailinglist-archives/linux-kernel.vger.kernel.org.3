@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1A54EFC7B
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FA44EFC93
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353184AbiDAWBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 18:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S1348250AbiDAWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 18:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353189AbiDAWBp (ORCPT
+        with ESMTP id S235963AbiDAWJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 18:01:45 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EB61C6495
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:59:54 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bg10so8602607ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:59:54 -0700 (PDT)
+        Fri, 1 Apr 2022 18:09:03 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F241B8FDC
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:07:10 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bh17so8604881ejb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 15:07:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GV+7pAZohwI4MwdjqMNQX+D+U+rbeGwoLu73W6afMP4=;
-        b=ZBOh3r18k94t1Nd8We8CztDWD2n2VD6cwmAbOrOLf+nAcMXUPCIy56rg9iOC7HcMLt
-         JTSjRAF50LGJiFE7M9yHs6DT2R/UWoXzwHUyJqvhl1WnDeWGNYqZSm2527b8rclAjcY9
-         z0qwyx9LMfrq3/b8mahIzKwZgzaXuvlIf9NnPC0KsT/b2t/im4MaOt/OOYz5yuYmbBFe
-         HHWKti6/Y0CqWdTmsJTcGGivSCmpupUDqRMcpkGt3+z2HTtTopbIdNIRL8fsY2lvCB0M
-         N7gVtLQTo1Iahms9uAwLOwhK8QNWNquJlvBg97Wj2o1/NYwRRxAOPmVDxTr4rE0pLUiB
-         vBbg==
+        bh=Nm4/IXTEhukbK1qhvdT6cx0MGt+4gXe0siNI2njLEvE=;
+        b=XEbiqYRiX0UPtfD80iUEpEHKC1IaxtDCsBogJ3ndZo5COUVxm7N2lMBRs9cWmdZXVO
+         rkc2KvvA0GMPko8i1Okx2XmJYC2zijrd+pQKyW3hD/EiwuY/Cte769UQqE8yzFX+ycM2
+         J4TYOny7jbBVRgzZgev3F3EBoW8HU0K3VEhZA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GV+7pAZohwI4MwdjqMNQX+D+U+rbeGwoLu73W6afMP4=;
-        b=KuASysZMNHXkvHnRjm2xZlI/jvYrQFxwH5yhp1TS8wQJ/WUbCSFud07c0Z+zvWdd0w
-         OsrXSLxLSLOmrH7yk1s+Fpfe+uCbkhVqBCooKFPXvSKwjmZR3p+w1xjV7vMuAf9QPbcq
-         Xy7ATP8Q31uQhtQ0cgBbn7VlUJH+Si/jG84RGahL7wM2RN+X/XEWOg6oPbxn0ZwbQhWP
-         FucrGVdAP5H1toK8/Ze7J01BXW1cvvxMzGtBoz0QoL/o+6sZFSTz8206y3/B2ZyVb2rv
-         zvngLqK9t6HjOsabItQDYsUehNbPb/A76JxRivFIj4Ftl1koRCIrjAhHOu+KDrPViZsJ
-         O4oQ==
-X-Gm-Message-State: AOAM530aHymDNBPCgmHSLxbhv5iEWw+N4pyQlDFfbgcnW4YWyUfjikR9
-        BgsIn7si/7DGZczi5dww4yyWioWPH40SS0lc
-X-Google-Smtp-Source: ABdhPJxt29ToBqJIoq8d5LJdbtpfa3FI0Jelg40i4cQ33FmwhmnorZA7v0HF47cWmInhdYms2Fog+g==
-X-Received: by 2002:a17:906:4fc8:b0:6d8:5059:f998 with SMTP id i8-20020a1709064fc800b006d85059f998mr1596592ejw.487.1648850392641;
-        Fri, 01 Apr 2022 14:59:52 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id og49-20020a1709071df100b006db0dcf673esm1444995ejc.27.2022.04.01.14.59.51
+        bh=Nm4/IXTEhukbK1qhvdT6cx0MGt+4gXe0siNI2njLEvE=;
+        b=cre5qAHcJ9eQy8zTkV+C4HRul8zK0/ChjTafkHCsox1A08zQjKVW8CbecaU0XICkf9
+         cGCRjVf/EwR7tYGCDnOmyCtF2Jg1u7EoxO2aOBua1Gb2dic60og1MS20sy6oaQ673jIl
+         upAf3fWDqb4bUVj+FzUqM/WP5RPqsycboeDgx7YXN7SPnkWfAxA4BIDYl4s9F14xvB13
+         KTkXy+HoYPKlsLYmR9lHpA25WXx6K1YtGoGMBtZ/yCHQ/+0Zt2HcE+348+inJKOesXW7
+         w6677cjFWyxQ8CZuPm2+p2fI0xVBlIs182ZkaR3RG2NLdfhdk5l7qFWglTFye4TV3ZI/
+         BOHg==
+X-Gm-Message-State: AOAM5302B6BwEhFy2C3bPliEDKUwAvd6bOPGH+PAKwNfsaaoAoz1H3Ca
+        pUGoUXf+dpfZkbMzKYUnR9oE1hqKzmueabVv
+X-Google-Smtp-Source: ABdhPJy089jCiaKOTUXZv8xWaU8CK2ptzqILHk1BadP6mEIgFQaD+8+rQ2r/GQizJBqCQLFCzxcXuQ==
+X-Received: by 2002:a17:907:3ea9:b0:6df:f197:81ae with SMTP id hs41-20020a1709073ea900b006dff19781aemr1659511ejc.402.1648850828864;
+        Fri, 01 Apr 2022 15:07:08 -0700 (PDT)
+Received: from localhost.localdomain ([78.44.231.212])
+        by smtp.gmail.com with ESMTPSA id by4-20020a0564021b0400b00418fc410299sm1642324edb.62.2022.04.01.15.07.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 14:59:52 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: clock: qcom,smsm: convert to dtschema
-Date:   Fri,  1 Apr 2022 23:59:49 +0200
-Message-Id: <20220401215949.222965-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 01 Apr 2022 15:07:07 -0700 (PDT)
+From:   Michael Trimarchi <michael@amarulasolutions.com>
+To:     Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>
+Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Fabio Aiuto <fabio.aiuto@amarulasolutions.com>
+Subject: [RFC PATCH] md: dm-init: Wait devices if it's not find on first adpet
+Date:   Sat,  2 Apr 2022 00:07:05 +0200
+Message-Id: <20220401220705.82077-1-michael@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,270 +65,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm Shared Memory State Machine to DT schema.
+The device driver can be deferrable and can be a race during
+the dm-init early. We need to wait all the probe are really finished
+in a loop as is done in do_mounts. This is was tested on kernel 5.4
+but code seems was not changed since that time
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+003: imx8mq-usb-phy 381f0040.usb-phy: 381f0040.usb-phy supply vbus not found, using dummy regulator
+003: imx8mq-usb-phy 382f0040.usb-phy: 382f0040.usb-phy supply vbus not found, using dummy regulator
+003: imx-cpufreq-dt imx-cpufreq-dt: cpu speed grade 5 mkt segment 0 supported-hw 0x20 0x1
+003: caam-dma caam-dma: caam dma support with 2 job rings
+000: hctosys: unable to open rtc device (rtc0)
+000: device-mapper: init: waiting for all devices to be available before creating mapped devices
+002: device-mapper: table: 254:0: verity: Data device lookup failed
+002: device-mapper: ioctl: error adding target to table
+002: crng init done
+003: of_cfs_init
+003: of_cfs_init: OK
+003: Waiting for root device /dev/dm-0...
+001: mmc2: new HS400 Enhanced strobe MMC card at address 0001
+001: mmcblk2: mmc2:0001 IB2916 14.6 GiB
+001: mmcblk2boot0: mmc2:0001 IB2916 partition 1 4.00 MiB
+001: mmcblk2boot1: mmc2:0001 IB2916 partition 2 4.00 MiB
+001: mmcblk2rpmb: mmc2:0001 IB2916 partition 3 4.00 MiB, chardev (249:0)
+001:  mmcblk2: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11
+001: VSD_3V3: disabling
+
+with the patch
+
+003: device-mapper: init: waiting for all devices to be available before creating mapped devices
+
+000: device-mapper: table: 254:0: verity: Data device lookup failed
+000: device-mapper: ioctl: error adding target to table
+002: crng init done
+003: device-mapper: init: waiting for all devices to be available before creating mapped devices
+003: device-mapper: table: 254:0: verity: Data device lookup failed
+003: device-mapper: ioctl: error adding target to table
+003: device-mapper: init: waiting for all devices to be available before creating mapped devices
+000: device-mapper: table: 254:0: verity: Data device lookup failed
+000: device-mapper: ioctl: error adding target to table
+002: device-mapper: init: waiting for all devices to be available before creating mapped devices
+002: device-mapper: table: 254:0: verity: Data device lookup failed
+002: device-mapper: ioctl: error adding target to table
+000: device-mapper: init: waiting for all devices to be available before creating mapped devices
+000: device-mapper: table: 254:0: verity: Data device lookup failed
+000: device-mapper: ioctl: error adding target to table
+003: mmc2: new HS400 Enhanced strobe MMC card at address 0001
+003: mmcblk2: mmc2:0001 DG4016 14.7 GiB
+003: mmcblk2boot0: mmc2:0001 DG4016 partition 1 4.00 MiB
+003: mmcblk2boot1: mmc2:0001 DG4016 partition 2 4.00 MiB
+003: mmcblk2rpmb: mmc2:0001 DG4016 partition 3 4.00 MiB, chardev (249:0)
+003:  mmcblk2: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11
+002: device-mapper: init: waiting for all devices to be available before creating mapped devices
+003: device-mapper: verity: sha256 using implementation "sha256-caam"
+000: device-mapper: ioctl: dm-0 (rootfs) is ready
+
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
- .../bindings/soc/qcom/qcom,smsm.txt           | 104 -------------
- .../bindings/soc/qcom/qcom,smsm.yaml          | 138 ++++++++++++++++++
- 2 files changed, 138 insertions(+), 104 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml
+ drivers/md/dm-init.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt
-deleted file mode 100644
-index 2993b5a97dd6..000000000000
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt
-+++ /dev/null
-@@ -1,104 +0,0 @@
--Qualcomm Shared Memory State Machine
--
--The Shared Memory State Machine facilitates broadcasting of single bit state
--information between the processors in a Qualcomm SoC. Each processor is
--assigned 32 bits of state that can be modified. A processor can through a
--matrix of bitmaps signal subscription of notifications upon changes to a
--certain bit owned by a certain remote processor.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be one of:
--		    "qcom,smsm"
--
--- qcom,ipc-N:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: three entries specifying the outgoing ipc bit used for
--		    signaling the N:th remote processor
--		    - phandle to a syscon node representing the apcs registers
--		    - u32 representing offset to the register within the syscon
--		    - u32 representing the ipc bit within the register
--
--- qcom,local-host:
--	Usage: optional
--	Value type: <u32>
--	Definition: identifier of the local processor in the list of hosts, or
--		    in other words specifier of the column in the subscription
--		    matrix representing the local processor
--		    defaults to host 0
--
--- #address-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 1
--
--- #size-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 0
--
--= SUBNODES
--Each processor's state bits are described by a subnode of the smsm device node.
--Nodes can either be flagged as an interrupt-controller to denote a remote
--processor's state bits or the local processors bits.  The node names are not
--important.
--
--- reg:
--	Usage: required
--	Value type: <u32>
--	Definition: specifies the offset, in words, of the first bit for this
--		    entry
--
--- #qcom,smem-state-cells:
--	Usage: required for local entry
--	Value type: <u32>
--	Definition: must be 1 - denotes bit number
--
--- interrupt-controller:
--	Usage: required for remote entries
--	Value type: <empty>
--	Definition: marks the entry as a interrupt-controller and the state bits
--		    to belong to a remote processor
--
--- #interrupt-cells:
--	Usage: required for remote entries
--	Value type: <u32>
--	Definition: must be 2 - denotes bit number and IRQ flags
--
--- interrupts:
--	Usage: required for remote entries
--	Value type: <prop-encoded-array>
--	Definition: one entry specifying remote IRQ used by the remote processor
--		    to signal changes of its state bits
--
--
--= EXAMPLE
--The following example shows the SMEM setup for controlling properties of the
--wireless processor, defined from the 8974 apps processor's point-of-view. It
--encompasses one outbound entry and the outgoing interrupt for the wireless
--processor.
--
--smsm {
--	compatible = "qcom,smsm";
--
--	#address-cells = <1>;
--	#size-cells = <0>;
--
--	qcom,ipc-3 = <&apcs 8 19>;
--
--	apps_smsm: apps@0 {
--		reg = <0>;
--
--		#qcom,smem-state-cells = <1>;
--	};
--
--	wcnss_smsm: wcnss@7 {
--		reg = <7>;
--		interrupts = <0 144 1>;
--
--		interrupt-controller;
--		#interrupt-cells = <2>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml
-new file mode 100644
-index 000000000000..a40d7fa13325
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml
-@@ -0,0 +1,138 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,smsm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/md/dm-init.c b/drivers/md/dm-init.c
+index b0c45c6ebe0b..d3b754036484 100644
+--- a/drivers/md/dm-init.c
++++ b/drivers/md/dm-init.c
+@@ -7,7 +7,9 @@
+  * This file is released under the GPLv2.
+  */
+ 
++#include <linux/async.h>
+ #include <linux/ctype.h>
++#include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/device-mapper.h>
+ #include <linux/init.h>
+@@ -267,6 +269,7 @@ static int __init dm_init_init(void)
+ 	LIST_HEAD(devices);
+ 	char *str;
+ 	int r;
++	bool fail = false;
+ 
+ 	if (!create)
+ 		return 0;
+@@ -275,6 +278,7 @@ static int __init dm_init_init(void)
+ 		DMERR("Argument is too big. Limit is %d", DM_MAX_STR_SIZE);
+ 		return -EINVAL;
+ 	}
++retry:
+ 	str = kstrndup(create, DM_MAX_STR_SIZE, GFP_KERNEL);
+ 	if (!str)
+ 		return -ENOMEM;
+@@ -288,12 +292,21 @@ static int __init dm_init_init(void)
+ 
+ 	list_for_each_entry(dev, &devices, list) {
+ 		if (dm_early_create(&dev->dmi, dev->table,
+-				    dev->target_args_array))
++				    dev->target_args_array)) {
++			fail = true;
+ 			break;
++		}
+ 	}
 +
-+title: Qualcomm Shared Memory State Machine
+ out:
+ 	kfree(str);
+ 	dm_setup_cleanup(&devices);
++	if (fail) {
++		msleep(5);
++		fail = false;
++		goto retry;
++	}
 +
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  The Shared Memory State Machine facilitates broadcasting of single bit state
-+  information between the processors in a Qualcomm SoC. Each processor is
-+  assigned 32 bits of state that can be modified. A processor can through a
-+  matrix of bitmaps signal subscription of notifications upon changes to a
-+  certain bit owned by a certain remote processor.
-+
-+properties:
-+  compatible:
-+    const: qcom,smsm
-+
-+  '#address-cells':
-+    const: 1
-+
-+  qcom,local-host:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 0
-+    description:
-+      Identifier of the local processor in the list of hosts, or in other words
-+      specifier of the column in the subscription matrix representing the local
-+      processor.
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^qcom,ipc-[1-4]$":
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: phandle to a syscon node representing the APCS registers
-+          - description: u32 representing offset to the register within the syscon
-+          - description: u32 representing the ipc bit within the register
-+    description:
-+      Three entries specifying the outgoing ipc bit used for signaling the N:th
-+      remote processor.
-+
-+  "^.*@[0-9a-f]$":
-+    type: object
-+    description:
-+      Each processor's state bits are described by a subnode of the SMSM device
-+      node.  Nodes can either be flagged as an interrupt-controller to denote a
-+      remote processor's state bits or the local processors bits.  The node
-+      names are not important.
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+
-+      interrupt-controller:
-+        description:
-+          Marks the entry as a interrupt-controller and the state bits to
-+          belong to a remote processor.
-+
-+      '#interrupt-cells':
-+        const: 2
-+
-+      interrupts:
-+        maxItems: 1
-+        description:
-+          One entry specifying remote IRQ used by the remote processor to
-+          signal changes of its state bits.
-+
-+      '#qcom,smem-state-cells':
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        const: 1
-+        description:
-+          Required for local entry. Denotes bit number.
-+
-+    required:
-+      - reg
-+
-+    oneOf:
-+      - required:
-+          - '#qcom,smem-state-cells'
-+      - required:
-+          - interrupt-controller
-+          - '#interrupt-cells'
-+          - interrupts
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+anyOf:
-+  - required:
-+      - qcom,ipc-1
-+  - required:
-+      - qcom,ipc-2
-+  - required:
-+      - qcom,ipc-3
-+  - required:
-+      - qcom,ipc-4
-+
-+additionalProperties: false
-+
-+examples:
-+  # The following example shows the SMEM setup for controlling properties of
-+  # the wireless processor, defined from the 8974 apps processor's
-+  # point-of-view. It encompasses one outbound entry and the outgoing interrupt
-+  # for the wireless processor.
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    shared-memory {
-+        compatible = "qcom,smsm";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        qcom,ipc-3 = <&apcs 8 19>;
-+
-+        apps_smsm: apps@0 {
-+            reg = <0>;
-+            #qcom,smem-state-cells = <1>;
-+        };
-+
-+        wcnss_smsm: wcnss@7 {
-+            reg = <7>;
-+            interrupts = <GIC_SPI 144 IRQ_TYPE_EDGE_RISING>;
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+        };
-+    };
+ 	return r;
+ }
+ 
 -- 
-2.32.0
+2.25.1
 

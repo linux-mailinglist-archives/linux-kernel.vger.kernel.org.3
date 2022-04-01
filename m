@@ -2,112 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69474EFC60
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900C64EFC66
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350219AbiDAVxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S1353083AbiDAVyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353033AbiDAVxf (ORCPT
+        with ESMTP id S236805AbiDAVyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:53:35 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA2221BC51
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:51:43 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id d142so3216533qkc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:51:43 -0700 (PDT)
+        Fri, 1 Apr 2022 17:54:09 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55725234052
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:52:18 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bu29so7349762lfb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=M11X+y56T/1F4fHNq5auQu00TlcNFHXDYbY/RsKteOE=;
-        b=c99U3qkEZHhIEc7ajhsZpxJqU4l3cAi/NL5cixEEbUy7C6XoKYSnxPRQBhDUZTmgW3
-         CdaWd0g1Bby07fp/jIyG1J3+95Fzgp/LQjARdfXbFBUkPZqyz7od9HefPpO8KeihaS2q
-         AlvwqXjClIn82Ow/qtMIqMEuy5CmEAoKGT4g+DwYdedW4fXEssdeJNdj65X6UuIG3Gye
-         uo1vCgIZbKpkm4ga/owAOGsj/OUuejccn7DdhxMou/c44twsSE4v7r5tzRnQ3jKJpheT
-         vGlmiuBEeWfJ6E0nzDdCP0Neo+0FVxArhDDUs374m/wmtChQS97scg1pGgtlfoHSbhwi
-         XX8Q==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fwiPcePwyWDNqZciaQWCNtWnB3BuhnpqBpShl9WOXyA=;
+        b=htJuUB2q3lz8f+8SfEoDD7kXI4Tp5oPWQ12vaLoCeBxyc0kHpf70KpIWE93NFYl6kb
+         1HsLVEt3oiJd40d1NEg3an3DQFqKw/UsSCayKLr8ck58rI8KK2fZu5XgZWgTSK2erRQ1
+         hZVaZRKC5v5TqiFn8HhZruK+0AMihEXJ+HfGewvtEPVkn1Qjr1zgAVFwETd0sWNZl1Qt
+         epeykIL+Q+ZaNJK09Xt/YfFCwtGGD5C4U1H5Qf6rBaRQaX7XSngYzfx5dIvsEeqiA5Xf
+         ahv6TgVgQFzfTtr/2mL4xmyPJCsgikxE2TTtSzgxybkbC/MFBxWpf1I0HDrEd1cQ/V6T
+         8Vyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=M11X+y56T/1F4fHNq5auQu00TlcNFHXDYbY/RsKteOE=;
-        b=iyBr42WnmFaDuTjXoqNLeF1bMpHgOn0dfabF+5tWaPUC2NP84P48537cJYbcEzDeAm
-         Ff5xjtYPNGhBl7dy3OMd5qgzkDdZwY42M9RixSTWjxmHvNx/Ibknck0N4pDFhf9GZRsV
-         +MWVbIMUkBqNKzg8llDX4/uTvfoRC5ydtixGLec+CXusMllDo3psTa72U87wTQit7IPV
-         pj5CfBOWQkV8ALrXq7j3oDfHcO8NRGQnfuGy6YHgmq2e9e2wGIK6qQpSKYS0HnDDkXdH
-         iin7gOTIVhWQN1nqCBVd/XiMZxK7z+4uNdML2qmjF6Y9ITY+A4nxaPjY/fnvll1Q+dDY
-         YuKA==
-X-Gm-Message-State: AOAM532ToOXuklRQXzSgLqICrvnX+34Ey7ryIhWkPYR7+9dufgRQKQ3W
-        YbEXerYqHw8l3TyxwbF3pLDUjw==
-X-Google-Smtp-Source: ABdhPJz5e+/qhWGXkOB2Pdg+sYmL/Wm7bmIqKPSDgyhO5CcEvxS029Di2b+ofW5VEbb4r0PJYsKguA==
-X-Received: by 2002:a05:620a:25a:b0:67d:43a6:8892 with SMTP id q26-20020a05620a025a00b0067d43a68892mr7881250qkn.659.1648849902837;
-        Fri, 01 Apr 2022 14:51:42 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id 188-20020a3709c5000000b0067b147584c2sm1897184qkj.102.2022.04.01.14.51.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 14:51:42 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 17:51:41 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-Message-ID: <Ykdz7fiMFZeFltYy@cmpxchg.org>
-References: <YkdrEG5FlL7Gq2Vi@cmpxchg.org>
- <243A0156-D26A-47C9-982A-C8B0CDD69DA2@linux.dev>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fwiPcePwyWDNqZciaQWCNtWnB3BuhnpqBpShl9WOXyA=;
+        b=QrEqHsthO7kLI5nCAtaimRUEQvXZVMCVxI0rC2/G496oWDt9EzSnYMImCCmAtqzwyB
+         RaQ13L0n5sxng817/kJ0H//t/mSXmbSkASMrcpgD3wwR3aarrd/OmbaWGDRNJQkxvTbf
+         7EEobLydI98uSFzVVQCg/bbI1yUTXfFwbg1h0/CYjJ6rLHHA3fyU8oUR6NB9c/6eyPh1
+         4FwPmnWOB7cuvjqmfCBxKME+md0vSa+JwNI5OTfMiaDc0ZSUGFl8aI6R/7wV6uJ2VzrR
+         mjsiwQ2iuCIDPDWtuXathMqd3ol5rC7Zp0V71rHxEhr3dc5MjzhhdsozU9PJ5MRNC64E
+         nPEg==
+X-Gm-Message-State: AOAM530LgOw+f4WBH6TbFTo3AcDzHL4wC2CrDQUIbwEE0BrnzD/a5aPs
+        347LmcQ/NglrC0ztp6k5QGTIRg==
+X-Google-Smtp-Source: ABdhPJxNRGiA9PUOku8RiNabGMpnBh2xPoC51vkZT9lWkIsfmjkGmgEW4gZxzlxUQeUdZ3PhxYrIvQ==
+X-Received: by 2002:a19:3801:0:b0:444:150b:9ef5 with SMTP id f1-20020a193801000000b00444150b9ef5mr14599579lfa.523.1648849936538;
+        Fri, 01 Apr 2022 14:52:16 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id k18-20020ac24572000000b0044ae25d47d7sm208132lfm.143.2022.04.01.14.52.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 14:52:16 -0700 (PDT)
+Message-ID: <ed7d894f-1a3d-7561-cf5f-d1be22b917d1@linaro.org>
+Date:   Sat, 2 Apr 2022 00:52:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <243A0156-D26A-47C9-982A-C8B0CDD69DA2@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v12 4/4] drm/msm/dp: enable widebus feature for display
+ port
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1645824192-29670-1-git-send-email-quic_khsieh@quicinc.com>
+ <1645824192-29670-5-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1645824192-29670-5-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 02:21:52PM -0700, Roman Gushchin wrote:
-> > On Apr 1, 2022, at 2:13 PM, Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > 
-> > ﻿On Fri, Apr 01, 2022 at 11:39:30AM -0700, Roman Gushchin wrote:
-> >> The interface you're proposing is not really extensible, so we'll likely need to
-> >> introduce a new interface like memory.reclaim_ext very soon. Why not create
-> >> an extensible API from scratch?
-> >> 
-> >> I'm looking at cgroup v2 documentation which describes various interface files
-> >> formats and it seems like given the number of potential optional arguments
-> >> the best option is nested keyed (please, refer to the Interface Files section).
-> >> 
-> >> E.g. the format can be:
-> >> echo "1G type=file nodemask=1-2 timeout=30s" > memory.reclaim
-> > 
-> > Yeah, that syntax looks perfect.
-> > 
-> > But why do you think it's not extensible from the current patch? We
-> > can add those arguments one by one as we agree on them, and return
-> > -EINVAL if somebody passes an unknown parameter.
-> > 
-> > It seems to me the current proposal is forward-compatible that way
-> > (with the current set of keyword pararms being the empty set :-))
+On 26/02/2022 00:23, Kuogee Hsieh wrote:
+> Widebus feature will transmit two pixel data per pixel clock to interface.
+> This feature now is required to be enabled to easy migrant to higher
+> resolution applications in future. However since some legacy chipsets
+> does not support this feature, this feature is enabled by setting
+> wide_bus_en flag to true within msm_dp_desc struct.
 > 
-> It wasn’t obvious to me. We spoke about positional arguments and then it wasn’t clear how to add them in a backward-compatible way. The last thing we want is a bunch of memory.reclaim* interfaces :)
+> changes in v2:
+> -- remove compression related code from timing
+> -- remove op_info from  struct msm_drm_private
+> -- remove unnecessary wide_bus_en variables
+> -- pass wide_bus_en into timing configuration by struct msm_dp
 > 
-> So yeah, let’s just describe it properly in the documentation, no code changes are needed.
+> Changes in v3:
+> -- split patch into 3 patches
+> -- enable widebus feature base on chip hardware revision
+> 
+> Changes in v5:
+> -- DP_INTF_CONFIG_DATABUS_WIDEN
+> 
+> Changes in v6:
+> -- static inline bool msm_dp_wide_bus_enable() in msm_drv.h
+> 
+> Changes in v7:
+> -- add Tested-by
+> 
+> Changes in v9:
+> -- add wide_bus_en to msm_dp_desc
+> 
+> Changes in v10:
+> -- add wide_bus_en boolean to dp_catalog struc to avoid passing it as parameter
+> 
+> Changes in v11:
+> -- add const to dp_catalog_hw_revision()
+> -- add const to msm_dp_wide_bus_available()
+> 
+> Changes in v12:
+> -- dp_catalog_hw_revision(const struct dp_catalog *dp_catalog)
+> -- msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Sounds good to me!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  4 +++-
+>   drivers/gpu/drm/msm/dp/dp_catalog.c         | 34 +++++++++++++++++++++++++++--
+>   drivers/gpu/drm/msm/dp/dp_catalog.h         |  2 ++
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c            |  7 +++++-
+>   drivers/gpu/drm/msm/dp/dp_ctrl.h            |  1 +
+>   drivers/gpu/drm/msm/dp/dp_display.c         | 21 ++++++++++++++++--
+>   drivers/gpu/drm/msm/dp/dp_display.h         |  2 ++
+>   drivers/gpu/drm/msm/msm_drv.h               |  6 +++++
+>   8 files changed, 71 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 9a8d992..5356d50 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -2138,8 +2138,10 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+>   		timer_setup(&dpu_enc->vsync_event_timer,
+>   				dpu_encoder_vsync_event_handler,
+>   				0);
+> -	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
+> +	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
+>   		dpu_enc->dp = priv->dp[disp_info->h_tile_instance[0]];
+> +		dpu_enc->wide_bus_en = msm_dp_wide_bus_available(dpu_enc->dp);
+> +	}
+>   
+>   	INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+>   			dpu_encoder_off_work);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> index 6ae9b29..85f9c39 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> @@ -24,6 +24,8 @@
+>   #define DP_INTERRUPT_STATUS_ACK_SHIFT	1
+>   #define DP_INTERRUPT_STATUS_MASK_SHIFT	2
+>   
+> +#define DP_INTF_CONFIG_DATABUS_WIDEN     BIT(4)
+> +
+>   #define DP_INTERRUPT_STATUS1 \
+>   	(DP_INTR_AUX_I2C_DONE| \
+>   	DP_INTR_WRONG_ADDR | DP_INTR_TIMEOUT | \
+> @@ -80,7 +82,7 @@ static inline void dp_write_aux(struct dp_catalog_private *catalog,
+>   	writel(data, catalog->io->dp_controller.aux.base + offset);
+>   }
+>   
+> -static inline u32 dp_read_ahb(struct dp_catalog_private *catalog, u32 offset)
+> +static inline u32 dp_read_ahb(const struct dp_catalog_private *catalog, u32 offset)
+>   {
+>   	return readl_relaxed(catalog->io->dp_controller.ahb.base + offset);
+>   }
+> @@ -483,6 +485,22 @@ int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
+>   }
+>   
+>   /**
+> + * dp_catalog_hw_revision() - retrieve DP hw revision
+> + *
+> + * @dp_catalog: DP catalog structure
+> + *
+> + * Return: DP controller hw revision
+> + *
+> + */
+> +u32 dp_catalog_hw_revision(const struct dp_catalog *dp_catalog)
+> +{
+> +	const struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +				struct dp_catalog_private, dp_catalog);
+> +
+> +	return dp_read_ahb(catalog, REG_DP_HW_VERSION);
+> +}
+> +
+> +/**
+>    * dp_catalog_ctrl_reset() - reset DP controller
+>    *
+>    * @dp_catalog: DP catalog structure
+> @@ -743,6 +761,7 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>   {
+>   	struct dp_catalog_private *catalog = container_of(dp_catalog,
+>   				struct dp_catalog_private, dp_catalog);
+> +	u32 reg;
+>   
+>   	dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
+>   				dp_catalog->total);
+> @@ -751,7 +770,18 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>   	dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
+>   				dp_catalog->width_blanking);
+>   	dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER, dp_catalog->dp_active);
+> -	dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
+> +
+> +	reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
+> +
+> +	if (dp_catalog->wide_bus_en)
+> +		reg |= DP_INTF_CONFIG_DATABUS_WIDEN;
+> +	else
+> +		reg &= ~DP_INTF_CONFIG_DATABUS_WIDEN;
+> +
+> +
+> +	DRM_DEBUG_DP("wide_bus_en=%d reg=%#x\n", dp_catalog->wide_bus_en, reg);
+> +
+> +	dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> index 6965afa..383af42 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> @@ -70,6 +70,7 @@ struct dp_catalog {
+>   	enum dp_catalog_audio_sdp_type sdp_type;
+>   	enum dp_catalog_audio_header_type sdp_header;
+>   	u32 audio_data;
+> +	bool wide_bus_en;
+>   };
+>   
+>   /* Debug module */
+> @@ -95,6 +96,7 @@ void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
+>   void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
+>   				u32 stream_rate_khz, bool fixed_nvid);
+>   int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog, u32 pattern);
+> +u32 dp_catalog_hw_revision(const struct dp_catalog *dp_catalog);
+>   void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
+>   bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
+>   void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index c724cb0..b714c5c 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -1799,6 +1799,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>   	int ret = 0;
+>   	bool mainlink_ready = false;
+>   	struct dp_ctrl_private *ctrl;
+> +	unsigned long pixel_rate_orig;
+>   
+>   	if (!dp_ctrl)
+>   		return -EINVAL;
+> @@ -1807,6 +1808,10 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>   
+>   	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>   
+> +	pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
+> +	if (dp_ctrl->wide_bus_en)
+> +		ctrl->dp_ctrl.pixel_rate >>= 1;
+> +
+>   	DRM_DEBUG_DP("rate=%d, num_lanes=%d, pixel_rate=%d\n",
+>   		ctrl->link->link_params.rate,
+>   		ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
+> @@ -1846,7 +1851,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>   
+>   	dp_catalog_ctrl_config_msa(ctrl->catalog,
+>   		ctrl->link->link_params.rate,
+> -		ctrl->dp_ctrl.pixel_rate, dp_ctrl_use_fixed_nvid(ctrl));
+> +		pixel_rate_orig, dp_ctrl_use_fixed_nvid(ctrl));
+>   
+>   	dp_ctrl_setup_tr_unit(ctrl);
+>   
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> index 2363a2d..a0a5fbb 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> @@ -17,6 +17,7 @@ struct dp_ctrl {
+>   	bool orientation;
+>   	atomic_t aborted;
+>   	u32 pixel_rate;
+> +	bool wide_bus_en;
+>   };
+>   
+>   int dp_ctrl_host_init(struct dp_ctrl *dp_ctrl, bool flip, bool reset);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 7cc4d21..9927454 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -115,12 +115,15 @@ struct dp_display_private {
+>   	struct dp_event event_list[DP_EVENT_Q_MAX];
+>   	spinlock_t event_lock;
+>   
+> +	bool wide_bus_en;
+> +
+>   	struct dp_audio *audio;
+>   };
+>   
+>   struct msm_dp_desc {
+>   	phys_addr_t io_start;
+>   	unsigned int connector_type;
+> +	bool wide_bus_en;
+>   };
+>   
+>   struct msm_dp_config {
+> @@ -137,8 +140,8 @@ static const struct msm_dp_config sc7180_dp_cfg = {
+>   
+>   static const struct msm_dp_config sc7280_dp_cfg = {
+>   	.descs = (const struct msm_dp_desc[]) {
+> -		[MSM_DP_CONTROLLER_0] =	{ .io_start = 0x0ae90000, .connector_type = DRM_MODE_CONNECTOR_DisplayPort },
+> -		[MSM_DP_CONTROLLER_1] =	{ .io_start = 0x0aea0000, .connector_type = DRM_MODE_CONNECTOR_eDP },
+> +		[MSM_DP_CONTROLLER_0] =	{ .io_start = 0x0ae90000, .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+> +		[MSM_DP_CONTROLLER_1] =	{ .io_start = 0x0aea0000, .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>   	},
+>   	.num_descs = 2,
+>   };
+> @@ -808,6 +811,10 @@ static int dp_init_sub_modules(struct dp_display_private *dp)
+>   		goto error_ctrl;
+>   	}
+>   
+> +	/* populate wide_bus_en to differernt layers */
+> +	dp->ctrl->wide_bus_en = dp->wide_bus_en;
+> +	dp->catalog->wide_bus_en = dp->wide_bus_en;
+> +
+>   	return rc;
+>   
+>   error_ctrl:
+> @@ -1251,6 +1258,7 @@ static int dp_display_probe(struct platform_device *pdev)
+>   	dp->pdev = pdev;
+>   	dp->name = "drm_dp";
+>   	dp->dp_display.connector_type = desc->connector_type;
+> +	dp->wide_bus_en = desc->wide_bus_en;
+>   
+>   	rc = dp_init_sub_modules(dp);
+>   	if (rc) {
+> @@ -1437,6 +1445,15 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>   	dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+>   }
+>   
+> +bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+> +{
+> +	struct dp_display_private *dp;
+> +
+> +	dp = container_of(dp_display, struct dp_display_private, dp_display);
+> +
+> +	return dp->wide_bus_en;
+> +}
+> +
+>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+>   {
+>   	struct dp_display_private *dp;
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+> index e3adcd5..b718cc9 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+> @@ -24,6 +24,8 @@ struct msm_dp {
+>   
+>   	hdmi_codec_plugged_cb plugged_cb;
+>   
+> +	bool wide_bus_en;
+> +
+>   	u32 max_pclk_khz;
+>   
+>   	u32 max_dp_lanes;
+> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+> index d7574e6..376a524 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.h
+> +++ b/drivers/gpu/drm/msm/msm_drv.h
+> @@ -399,6 +399,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display);
+>   void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_display);
+>   
+>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor);
+> +bool msm_dp_wide_bus_available(const struct msm_dp *dp_display);
+>   
+>   #else
+>   static inline int __init msm_dp_register(void)
+> @@ -449,6 +450,11 @@ static inline void msm_dp_debugfs_init(struct msm_dp *dp_display,
+>   {
+>   }
+>   
+> +static inline bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+> +{
+> +	return false;
+> +}
+> +
+>   #endif
+>   
+>   void __init msm_mdp_register(void);
+
+
+-- 
+With best wishes
+Dmitry

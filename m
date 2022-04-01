@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A200B4EEE58
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D364EEE4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346455AbiDANlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S1346418AbiDANlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346421AbiDANl3 (ORCPT
+        with ESMTP id S233738AbiDANlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:41:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137E2377EC;
-        Fri,  1 Apr 2022 06:39:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C82A5B824FC;
-        Fri,  1 Apr 2022 13:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C567C34111;
-        Fri,  1 Apr 2022 13:39:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648820377;
-        bh=d0HYYSzBFiO0QLVb9RS/N/6MxRm6wrny8ms762htYcU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VRC13yr1gIPBER1tskAq3wkJXADYdIKDycf5He/+4t3FGoVjKP2u9bmZEJW3G/lsa
-         xP3rQFFhZEWj/YtPn6izHtNtDwKCVc60+pz1gpuTLsPZIlxV5nY1lv4faSqIwRNPQQ
-         v9HoW2+/Jz4Nm4hjQDE44wZ8y1MGMN157XQDbgoJkE0P+a6accW/f4ao6ETSbazf/9
-         RS6DAi9bsk42wM8bfqNA8dCGQlHFNntXcmBiP5vUwYdsDjftPighARN1xOZl/T3d1x
-         P7QZctG4PTuGTaGFgyhmJfwksmP6N2IHnWpKo56YkDqdNqkFjr+Ue4gK+uFkxl/xSr
-         9UtrKtYRb+kSw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1naHV3-0002kc-R7; Fri, 01 Apr 2022 15:39:37 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v2 2/2] PCI: qcom: Fix unbalanced PHY init on probe errors
-Date:   Fri,  1 Apr 2022 15:38:54 +0200
-Message-Id: <20220401133854.10421-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220401133854.10421-1-johan+linaro@kernel.org>
-References: <20220401133854.10421-1-johan+linaro@kernel.org>
+        Fri, 1 Apr 2022 09:41:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FF3369D0;
+        Fri,  1 Apr 2022 06:39:26 -0700 (PDT)
+X-UUID: 8ab153cf2a174978a12d51ea01efde35-20220401
+X-UUID: 8ab153cf2a174978a12d51ea01efde35-20220401
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1530467067; Fri, 01 Apr 2022 21:39:20 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 1 Apr 2022 21:39:16 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Apr
+ 2022 21:39:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Apr 2022 21:39:15 +0800
+Message-ID: <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+Subject: Re: [PATCH 1/3] dt-bindings: devfreq: mediatek: add mtk cci devfreq
+ dt-bindings
+From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fan.chen@mediatek.com>,
+        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
+        <Allen-yy.Lin@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hsinyi@google.com>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+Date:   Fri, 1 Apr 2022 21:39:15 +0800
+In-Reply-To: <aa34eccf-ef08-4a8f-7a6c-7fbd05bd54b6@kernel.org>
+References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
+         <20220307122513.11822-2-jia-wei.chang@mediatek.com>
+         <bf418e08-2e32-5e61-abd8-abb0d8f5c080@canonical.com>
+         <13482b1b4244df5c0c0a4d6a60cdb2a7ba88500a.camel@mediatek.com>
+         <aa34eccf-ef08-4a8f-7a6c-7fbd05bd54b6@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,36 +72,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure to undo the PHY initialisation (e.g. balance runtime PM) in
-case host initialisation fails during probe.
+On Thu, 2022-03-24 at 13:44 +0100, Krzysztof Kozlowski wrote:
+> On 24/03/2022 13:11, Jia-Wei Chang wrote:
+> > > 
+> > > Remove "driver Device Tree Bindings". "Devfreq" is Linuxism, so
+> > > this
+> > > maybe "bus frequency scaling"? Although later you call the device
+> > > node
+> > > as cci.
+> > 
+> > Should I use "Binding for MediaTek's Cache Coherent Interconnect
+> > (CCI)
+> > frequency and voltage scaling" as new title?
+> 
+> I just suggested to remove word "bindings" so do not add it again.
+> This
+> should be a title for hardware.
 
-Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-Cc: stable@vger.kernel.org      # 4.5
-Cc: Stanimir Varbanov <svarbanov@mm-sol.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Sure, I will remove the word "bindings" from title.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 0b0bd71f1bd2..df47986bda29 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1624,11 +1624,13 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	ret = dw_pcie_host_init(pp);
- 	if (ret) {
- 		dev_err(dev, "cannot initialize host\n");
--		goto err_pm_runtime_put;
-+		goto err_phy_exit;
- 	}
- 
- 	return 0;
- 
-+err_phy_exit:
-+	phy_exit(pcie->phy);
- err_pm_runtime_put:
- 	pm_runtime_put(dev);
- 	pm_runtime_disable(dev);
--- 
-2.35.1
+> 
+> Now what exactly is it - you should know better than me. :)
+> "MediaTek's Cache Coherent Interconnect (CCI) frequency and voltage
+> scaling" sounds good to me, assuming that this is the hardware we
+> talk
+> here about. :)
+
+Appreciate your comments.
+It's a bit hard to do upstream at first time, thank you for
+understanding.
+
+> 
+> > 
+> > > 
+> > > > +
+> > > > +maintainers:
+> > > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > > > +
+> > > > +description: |
+> > > > +  This module is used to create CCI DEVFREQ.
+> > > > +  The performance will depend on both CCI frequency and CPU
+> > > > frequency.
+> > > > +  For MT8186, CCI co-buck with Little core.
+> > > > +  Contain CCI opp table for voltage and frequency scaling.
+> > > 
+> > > Half of this description (first and last sentence) does not
+> > > describe
+> > > the
+> > > actual hardware. Please describe hardware, not driver.
+> > 
+> > Sure, I will fix it in the next version.
+> > 
+> > > 
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: "mediatek,mt8186-cci"
+> > > 
+> > > No need for quotes.
+> > 
+> > Sure, I will fix it in the next version.
+> > 
+> > > 
+> > > > +
+> > > > +  clocks:
+> > > > +    items:
+> > > > +      - description:
+> > > > +          The first one is the multiplexer for clock input of
+> > > > CPU
+> > > > cluster.
+> > > > +      - description:
+> > > > +          The other is used as an intermediate clock source
+> > > > when
+> > > > the original
+> > > > +          CPU is under transition and not stable yet.
+> > > > +
+> > > > +  clock-names:
+> > > > +    items:
+> > > > +      - const: "cci"
+> > > > +      - const: "intermediate"
+> > > 
+> > > No need for quotes.
+> > 
+> > Sure, I will fix it in the next version.
+> > 
+> > > 
+> > > > +
+> > > > +  operating-points-v2:
+> > > > +    description:
+> > > > +      For details, please refer to
+> > > > +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+> > > > +
+> > > > +  opp-table: true
+> > > 
+> > > Same comments as your CPU freq bindings apply.
+> > 
+> > mtk-cci-devfreq is a new driver and its arch is same as mediatek-
+> > cpufreq so that the properties of mtk-cci are refer to mediatek-
+> > cpufreq 
+> > bindings.
+> > operating-point-v2 is used to determine the voltage and frequency
+> > of
+> > dvfs which is further utilized by mtk-cci-devfreq.
+> 
+> "operating-point-v2" is understood, but the same as in cpufreq
+> bindings,
+> I am questioning why do you have "opp-table: true". It's a bit
+> confusing, so maybe I miss something?
+
+Yes, you're correct.
+"opp-table: true" should be removed.
+I messed it up.
+
+> 
+> > 
+> > > 
+> > > > +
+> > > > +  proc-supply:
+> > > > +    description:
+> > > > +      Phandle of the regulator for CCI that provides the
+> > > > supply
+> > > > voltage.
+> > > > +
+> > > > +  sram-supply:
+> > > > +    description:
+> > > > +      Phandle of the regulator for sram of CCI that provides
+> > > > the
+> > > > supply
+> > > > +      voltage. When present, the cci devfreq driver needs to
+> > > > do
+> > > > +      "voltage tracking" to step by step scale up/down Vproc
+> > > > and
+> > > > Vsram to fit
+> > > > +      SoC specific needs. When absent, the voltage scaling
+> > > > flow is
+> > > > handled by
+> > > > +      hardware, hence no software "voltage tracking" is
+> > > > needed.
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - clocks
+> > > > +  - clock-names
+> > > > +  - operating-points-v2
+> > > > +  - proc-supply
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    #include <dt-bindings/clock/mt8186-clk.h>
+> > > > +    cci: cci {
+> > > 
+> > > Node names should be generic and describe type of device. Are you
+> > > sure
+> > > this is a CCI? Maybe "interconnect" suits it better?
+> > 
+> > Yes, this is a CCI and it is generic type of device like CPU in my
+> > opinion.
+> > If my understanding is correct, CCI is more suitable.
+> 
+> OK.
+
+:)
+
+> 
+> > 
+> > > 
+> > > > +      compatible = "mediatek,mt8186-cci";
+> > > > +      clocks = <&mcusys CLK_MCU_ARMPLL_BUS_SEL>, <&apmixedsys
+> > > > CLK_APMIXED_MAINPLL>;
+> > > > +      clock-names = "cci", "intermediate";
+> > > > +      operating-points-v2 = <&cci_opp>;
+> > > > +      proc-supply = <&mt6358_vproc12_reg>;
+> > > > +      sram-supply = <&mt6358_vsram_proc12_reg>;
+> > > > +    };
+> > > 
+> > > 
+> > > Best regards,
+> > > Krzysztof
+> 
+> 
+> Best regards,
+> Krzysztof
 

@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775DB4EFA1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D424EFA2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348109AbiDASuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S1351400AbiDASxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344949AbiDASuG (ORCPT
+        with ESMTP id S233785AbiDASxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:50:06 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C985B220B10
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 11:48:16 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id k10so3745300oia.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 11:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=D9fxps+Ewc6UANsIutZd0wuOMYK+iuzQT7EbeWRMeUQ=;
-        b=X0Y+wDvLjYzdPycS2xcK3xyquS/nSm8FFz4SNtheTeLLhWUQbT4tpNhTzwHlQA1Ml1
-         kaDwoXUElWpe1nM4Dv4ZTCscEz/t9WFLfqQWwyV2um+pxmIqUgEIEv8oY+osc6jAjqgc
-         0HcnQRw5UDzHwiPbArFgO/cMHH6+aMrT1IGpQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=D9fxps+Ewc6UANsIutZd0wuOMYK+iuzQT7EbeWRMeUQ=;
-        b=gzj1PyG38l44VAllom3Eo6MN5xc+sAhN9utUebz350W8Lvh5DHiaXXiXuCy6s/g/yQ
-         vLu2Lhxb7cogkfZ/SuSBG38R4vogtV+X09AR3X0LdXeoNlcZObA/5MzMLMpJUzp4GcHh
-         tsFAGfg6gKP73eelZHWWWZZodUNUD2EMR8W4Ae9OYy9PRsTdTCARETflaHAW5sFvQohl
-         dVA1svcZvzZOld1xdIE7wLpmJ72BvIofERSY+WBZOXhU72mHxcm1j12l6rbr6MMJJiGX
-         O2G6PTK9Fr8RXO1sD5ZS+CFlqL6b5QxbGRfe3FnSSG/FhfjPZVHfPjtIEC3AakCTGZfn
-         ++gA==
-X-Gm-Message-State: AOAM530gLoCKVIB7yc3TdoEpYouatuVwCfPzEYiNPE5F3bQBuM23ISJY
-        Lq6q1FK5CN+dXueWkBkAPWYSliSm6c9ZUhsoe6cOJA==
-X-Google-Smtp-Source: ABdhPJz1TQRc5Yb6vyKTkezkbj85ZwfeXqoZaXKRnSn4CcsOsS2zY8ZrRcoyLi5/lOZh2VukBMnldkdiQH4XSVzbjFI=
-X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
- s191-20020acaa9c8000000b002da45b6b796mr5109437oie.193.1648838896186; Fri, 01
- Apr 2022 11:48:16 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 1 Apr 2022 13:48:15 -0500
+        Fri, 1 Apr 2022 14:53:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08AD40922;
+        Fri,  1 Apr 2022 11:51:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36E1161501;
+        Fri,  1 Apr 2022 18:51:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DECDAC340EC;
+        Fri,  1 Apr 2022 18:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648839110;
+        bh=GE/McCjK3IGVMdGkmFi2pR048UwzrFF4XF6/lfZGdDk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=kxITNO7glrtSZRHpI/hJmZ0fHEwLkhSAoc2bRa/5YNP6dfmobC2NUUNTA/devjXtS
+         daqtl1y3U941PoOyfIkWtbBs42b9jy2IuVS52qV4ySIDA1CvKE1qwnuJtisorWIWvY
+         dOxDODal3Uxqpt6POaCBsjlyjfL2GS1o7VivnUgIlrZ1Y2vqs9H0kYZ6IO5Hbsd9TR
+         X5C65ph0gp8XHL0wM8SWqtIJG379iaRWBkl+SVll3lrvDHOf3eDg5/eVnLjRjcxkgU
+         Yg8LrV0A9uTVUOku8lLagfWM6i4DSdzEGv+fwJf1Jv1y6iIZO9ZP7ZS9LLnEoOT9Dt
+         L43w3ADPe08wQ==
+Message-ID: <9204ba17ec7eff56d4789c35f99fc6bf6a2edbc7.camel@kernel.org>
+Subject: Re: [PATCH v12 08/54] ceph: add a has_stable_inodes operation for
+ ceph
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     ceph-devel@vger.kernel.org, xiubli@redhat.com, idryomov@gmail.com,
+        lhenriques@suse.de, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 01 Apr 2022 14:51:48 -0400
+In-Reply-To: <YkdBfkqlSUzJlNHD@gmail.com>
+References: <20220331153130.41287-1-jlayton@kernel.org>
+         <20220331153130.41287-9-jlayton@kernel.org> <YkYJF07WdQZoucQ5@gmail.com>
+         <0d9311b16cae47f7a1eb417d589adc093d9dc5b9.camel@kernel.org>
+         <YkdBfkqlSUzJlNHD@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <3b4dcf83-bb13-2159-d7c1-f0aadfc53566@quicinc.com>
-References: <1648209491-30165-1-git-send-email-quic_c_skakit@quicinc.com>
- <1648209491-30165-8-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n511eQTnJHqt0B=uiiSjigy-RHZ52YuYz4kfEpX1x6CMfw@mail.gmail.com>
- <094d8faa-c42b-be1b-cf92-04232d618a3e@quicinc.com> <CAE-0n52CVuc_kQbpwEnHEEODS8jPt52v6P=gAdVxqenPu4ehkw@mail.gmail.com>
- <3b4dcf83-bb13-2159-d7c1-f0aadfc53566@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 1 Apr 2022 13:48:15 -0500
-Message-ID: <CAE-0n5282FJ01We_mRfN69mYJk4NKwjAZvnTG9RVOyt__6xVfg@mail.gmail.com>
-Subject: Re: [PATCH V8 7/7] arm64: dts: qcom: sc7280: Add pm8008 support for sc7280-idp
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya Kakitapalli <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
-        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,15 +60,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya Kakitapalli (Temp) (2022-04-01 03:48:46)
->
-> On 4/1/2022 2:48 AM, Stephen Boyd wrote:
->
->
-> >         &pm8008_bus: &i2c1 {
->
->
-> but this still needs to be "pm8008_bus: &i2c {" right.. no '&' before
-> pm8008_bus.
+On Fri, 2022-04-01 at 18:16 +0000, Eric Biggers wrote:
+> On Fri, Apr 01, 2022 at 06:37:10AM -0400, Jeff Layton wrote:
+> > On Thu, 2022-03-31 at 20:03 +0000, Eric Biggers wrote:
+> > > On Thu, Mar 31, 2022 at 11:30:44AM -0400, Jeff Layton wrote:
+> > > >  static struct fscrypt_operations ceph_fscrypt_ops = {
+> > > >  	.key_prefix		= "ceph:",
+> > > >  	.get_context		= ceph_crypt_get_context,
+> > > >  	.set_context		= ceph_crypt_set_context,
+> > > >  	.empty_dir		= ceph_crypt_empty_dir,
+> > > > +	.has_stable_inodes	= ceph_crypt_has_stable_inodes,
+> > > >  };
+> > > 
+> > > What is the use case for implementing this?  Note the comment in the struct
+> > > definition:
+> > > 
+> > >        /*
+> > >          * Check whether the filesystem's inode numbers and UUID are stable,
+> > >          * meaning that they will never be changed even by offline operations
+> > >          * such as filesystem shrinking and therefore can be used in the
+> > >          * encryption without the possibility of files becoming unreadable.
+> > >          *
+> > >          * Filesystems only need to implement this function if they want to
+> > >          * support the FSCRYPT_POLICY_FLAG_IV_INO_LBLK_{32,64} flags.  These
+> > >          * flags are designed to work around the limitations of UFS and eMMC
+> > >          * inline crypto hardware, and they shouldn't be used in scenarios where
+> > >          * such hardware isn't being used.
+> > >          *
+> > >          * Leaving this NULL is equivalent to always returning false.
+> > >          */
+> > >         bool (*has_stable_inodes)(struct super_block *sb);
+> > > 
+> > > I think you should just leave this NULL for now.
+> > > 
+> > 
+> > Mostly we were just looking for ways to make all of the -g encrypt
+> > xfstests pass. I'll plan to drop this patch and 07/54. I don't see any
+> > need to support legacy modes or stuff that involves special storage hw.
+> 
+> Do generic/592 and generic/602 fail without this patch?  If so, that would be a
+> test bug, since they should be skipped if the filesystem doesn't support
+> FSCRYPT_POLICY_FLAG_IV_INO_LBLK_{64,32}.  I think that
+> _require_encryption_policy_support() should be already taking care of that,
+> though?
+> 
 
-Correct. Thanks for spotting my typo.
+
+My mistake. Those are just skipped with that patch dropped.
+
+Thanks,
+-- 
+Jeff Layton <jlayton@kernel.org>

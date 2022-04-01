@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877B54EFCA1
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB0E4EFCA9
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 00:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353294AbiDAWLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 18:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S1353276AbiDAWLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 18:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353274AbiDAWLF (ORCPT
+        with ESMTP id S1353258AbiDAWLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 18:11:05 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9E1F1116B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:09:04 -0700 (PDT)
-Received: from [192.168.4.54] (cpe-70-95-196-11.san.res.rr.com [70.95.196.11])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6F78220DEEC8;
-        Fri,  1 Apr 2022 15:09:03 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6F78220DEEC8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648850943;
-        bh=3MrD3cUW1U+XYym1gTZFwkaDQ5cW9n5yEHdxZIrHyCI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=K5acgI68y1Cnx3IQxmhfgG7dMuaaA8CfhZOXnILPm/GFU/cX+/E2aQ0cQNLd8iBIx
-         QyzpO4uezL/eCF8pLoaJ8gsak0Z/SaeddXBUxDzNg9xnhR4NopFiXycSgvAVPbUHxC
-         MD11XzbrauDxRl5wNeGBenGXo/CaXBxzKEg/2+oU=
-Message-ID: <d5d123db-f326-de86-6978-2f328242a35a@linux.microsoft.com>
-Date:   Fri, 1 Apr 2022 15:09:03 -0700
+        Fri, 1 Apr 2022 18:11:50 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838AB5A097
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:10:00 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-dee0378ce7so4205247fac.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 15:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=6rY8NKT6m0nS75suQ+nFywMY6wDIOo3ms5SeTbFXvxM=;
+        b=kwfOWInOCRYECvlHmEdCMRxg6iXPB40US4o+rR7nBbVs4TK8Xd3fhTJVHZw+Ipy+5/
+         vZLKw3rgc3fV8tqsLjXS82Y9etsT89es+YtpxzQ62EcKTU8JmT299mEE+wiMZ9GzeJh6
+         76DuwhxuZgF3SbR9FuuEqZa/f3t/o6hTNJ450=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=6rY8NKT6m0nS75suQ+nFywMY6wDIOo3ms5SeTbFXvxM=;
+        b=1s7eau8P0DT71q3d1Z/jJVDISK08J+47Wyh/7VmCDswnLdC2W8m16MdFKf5zqa6DkJ
+         nONTsuK/q528IheE2Xx7hBy3LFf2pxwgKyHxf8mrGpiJljjtCabf2r+F+krCdu4SZMco
+         6PamCZG3JL0SYd9JGf/rPkLjfxHmQmbwABPLX/m/9iN8keZvMuiyIzUHbSTJ1V3n4MZb
+         /VmG8hayF+I+llqeVIRAHI5+AvPnZSTJaN9lxwwrRdRfTY/T0+oJdukXKCF6Sp7exa3C
+         0KOCWyAxn8GeQmmDjfwbZS2VcID0KZ5TejqmKMlPm8EM9so2dMeCYzo4+S+r+ES66ih/
+         JbXQ==
+X-Gm-Message-State: AOAM5318slz24lYcM8qcPxa3lBQ9ksMLPtc7c36JdvyyHSvmZH974mU1
+        4K6ZxHBYQfhMyOsaMGxR3hED0kW/YVx/NWqyZYVxdw==
+X-Google-Smtp-Source: ABdhPJxQSBjHCimqKqmmEHvxpus5i7XPHVv6wtC8jb98htsIgcr/Uv9JRMFkIVcC3CNZ/kGzLXUj7+8PEY7X3yjZuXE=
+X-Received: by 2002:a05:6870:b69c:b0:dd:b74b:4099 with SMTP id
+ cy28-20020a056870b69c00b000ddb74b4099mr5768834oab.193.1648850999220; Fri, 01
+ Apr 2022 15:09:59 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 1 Apr 2022 17:09:58 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 resend 2/3] arm64: mm: Don't defer
- reserve_crashkernel() with dma_force_32bit
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>, catalin.marinas@arm.com,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     f.fainelli@gmail.com
-References: <20220331074055.125824-1-wangkefeng.wang@huawei.com>
- <20220331074055.125824-3-wangkefeng.wang@huawei.com>
-From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
-In-Reply-To: <20220331074055.125824-3-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <1647532165-6302-3-git-send-email-quic_c_sbhanu@quicinc.com>
+References: <1647532165-6302-1-git-send-email-quic_c_sbhanu@quicinc.com> <1647532165-6302-3-git-send-email-quic_c_sbhanu@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 1 Apr 2022 17:09:58 -0500
+Message-ID: <CAE-0n53BBzgU6AJ70JNUBBkDZ1c9ZmpX8ZXLcxLxmmg1=UnSLw@mail.gmail.com>
+Subject: Re: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Add reset entries for
+ SDCC controllers
+To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        robh+dt@kernel.org, ulf.hansson@linaro.org
+Cc:     quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        quic_sartgarg@quicinc.com, quic_nitirawa@quicinc.com,
+        quic_sayalil@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,154 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/31/2022 12:40 AM, Kefeng Wang wrote:
-> ARM64 enable ZONE_DMA by default, and with ZONE_DMA crash kernel
-> memory reservation is delayed until DMA zone memory range size
-> initilazation performed in zone_sizes_init(), but for most platforms
-> use 32bit dma_zone_bits, so add dma_force_32bit kernel parameter
-> if ZONE_DMA enabled, and initialize arm64_dma_phys_limit to
-> dma32_phys_limit in arm64_memblock_init() if dma_force_32bit
-> is setup, this could let the crash kernel reservation earlier,
-> and allows linear creation with block mapping.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
-I don't see any problem with the approach.  Hope you or someone can test 
-to make sure no surprises on RPi4 with the proposed change.  I do 
-understand on RPi4 --
-
-- both ZONE_DMA and ZONE_DMA32 are enabled
-- one wouldn't use dma_force_32bit kernel parameter
-- crashkernel_could_early_reserve() would return false to preserve late 
-reserve of crash kernel memory
-
-nit --
-- consider renaming crashkernel_could_early_reserve() => 
-crashkernel_early_reserve()
-
-Reviewed-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-
+Quoting Shaik Sajida Bhanu (2022-03-17 08:49:25)
+> Add gcc hardware reset entries for eMMC and SD card.
+>
+> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 > ---
->   arch/arm64/include/asm/kexec.h |  1 +
->   arch/arm64/mm/init.c           | 42 ++++++++++++++++++++++++++--------
->   arch/arm64/mm/mmu.c            |  4 ++--
->   3 files changed, 36 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
-> index 9839bfc163d7..8bea40aea359 100644
-> --- a/arch/arm64/include/asm/kexec.h
-> +++ b/arch/arm64/include/asm/kexec.h
-> @@ -95,6 +95,7 @@ void cpu_soft_restart(unsigned long el2_switch, unsigned long entry,
->   		      unsigned long arg0, unsigned long arg1,
->   		      unsigned long arg2);
->   #endif
-> +bool crashkernel_could_early_reserve(void);
->   
->   #define ARCH_HAS_KIMAGE_ARCH
->   
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index fb01eb489fa9..0aafa9181607 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -66,7 +66,8 @@ EXPORT_SYMBOL(memstart_addr);
->    * depending on DMA memory zones configs (ZONE_DMA) --
->    *
->    * In absence of ZONE_DMA and ZONE_DMA32 configs arm64_dma_phys_limit
-> - * initialized here and if only with ZONE_DMA32 arm64_dma_phys_limit
-> + * initialized here, and if only with ZONE_DMA32 or if with ZONE_DMA
-> + * and dma_force_32bit kernel parameter, the arm64_dma_phys_limit is
->    * initialised to dma32_phys_limit. This lets early reservation of
->    * crash kernel memory which has a dependency on arm64_dma_phys_limit.
->    * Reserving memory early for crash kernel allows linear creation of block
-> @@ -92,6 +93,27 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
->   phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->   #endif
->   
-> +static bool __ro_after_init arm64_dma_force_32bit;
-> +#ifdef CONFIG_ZONE_DMA
-> +static int __init arm64_dma_force_32bit_setup(char *p)
-> +{
-> +	zone_dma_bits = 32;
-> +	arm64_dma_force_32bit = true;
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index c07765d..cd50ea3 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -881,6 +881,10 @@
+>                         mmc-hs400-1_8v;
+>                         mmc-hs400-enhanced-strobe;
+>
+> +                       /* gcc hardware reset entry for eMMC */
+
+Please don't add this worthless comment.
+
+> +                       resets = <&gcc GCC_SDCC1_BCR>;
+> +                       reset-names = "core_reset";
+
+A "_reset" postfix is redundant. In fact, reset-names shouldn't even be
+required.
+
 > +
-> +	return 0;
-> +}
-> +early_param("dma_force_32bit", arm64_dma_force_32bit_setup);
-> +#endif
+>                         sdhc1_opp_table: opp-table {
+>                                 compatible = "operating-points-v2";
+>
+> @@ -2686,6 +2690,10 @@
+>
+>                         qcom,dll-config = <0x0007642c>;
+>
+> +                       /* gcc hardware reset entry for SD card */
+
+Please don't add this worthless comment.
+
+> +                       resets = <&gcc GCC_SDCC2_BCR>;
+> +                       reset-names = "core_reset";
 > +
-> +bool __init crashkernel_could_early_reserve(void)
-> +{
-> +	if (!IS_ENABLED(CONFIG_ZONE_DMA))
-> +		return true;
-> +	if (arm64_dma_force_32bit)
-> +		return true;
-> +	return false;
-> +}
-> +
->   /*
->    * reserve_crashkernel() - reserves memory for crash kernel
->    *
-> @@ -163,12 +185,14 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
->   {
->   	unsigned long max_zone_pfns[MAX_NR_ZONES]  = {0};
->   #ifdef CONFIG_ZONE_DMA
-> -	unsigned int acpi_zone_dma_bits;
-> -	unsigned int dt_zone_dma_bits;
-> +	if (!arm64_dma_force_32bit) {
-> +		unsigned int acpi_zone_dma_bits;
-> +		unsigned int dt_zone_dma_bits;
->   
-> -	acpi_zone_dma_bits = fls64(acpi_iort_dma_get_max_cpu_address());
-> -	dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
-> -	zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits);
-> +		acpi_zone_dma_bits = fls64(acpi_iort_dma_get_max_cpu_address());
-> +		dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
-> +		zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits);
-> +	}
->   	arm64_dma_phys_limit = max_zone_phys(zone_dma_bits);
->   	max_zone_pfns[ZONE_DMA] = PFN_DOWN(arm64_dma_phys_limit);
->   #endif
-> @@ -336,8 +360,8 @@ void __init arm64_memblock_init(void)
->   	early_init_fdt_scan_reserved_mem();
->   
->   	dma32_phys_limit = max_zone_phys(32);
-> -	if (!IS_ENABLED(CONFIG_ZONE_DMA)) {
-> -		if (IS_ENABLED(CONFIG_ZONE_DMA32))
-> +	if (crashkernel_could_early_reserve()) {
-> +		if (IS_ENABLED(CONFIG_ZONE_DMA32) || arm64_dma_force_32bit)
->   			arm64_dma_phys_limit = dma32_phys_limit;
->   		reserve_crashkernel();
->   	}
-> @@ -388,7 +412,7 @@ void __init bootmem_init(void)
->   	 * request_standard_resources() depends on crashkernel's memory being
->   	 * reserved, so do it here.
->   	 */
-> -	if (IS_ENABLED(CONFIG_ZONE_DMA))
-> +	if (!crashkernel_could_early_reserve())
->   		reserve_crashkernel();
->   
->   	memblock_dump_all();
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 23734481318a..8f7e8452d906 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -529,7 +529,7 @@ static void __init map_mem(pgd_t *pgdp)
->   
->   #ifdef CONFIG_KEXEC_CORE
->   	if (crash_mem_map) {
-> -		if (IS_ENABLED(CONFIG_ZONE_DMA))
-> +		if (!crashkernel_could_early_reserve())
->   			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->   		else if (crashk_res.end)
->   			memblock_mark_nomap(crashk_res.start,
-> @@ -570,7 +570,7 @@ static void __init map_mem(pgd_t *pgdp)
->   	 * through /sys/kernel/kexec_crash_size interface.
->   	 */
->   #ifdef CONFIG_KEXEC_CORE
-> -	if (crash_mem_map && !IS_ENABLED(CONFIG_ZONE_DMA)) {
-> +	if (crash_mem_map && crashkernel_could_early_reserve()) {
->   		if (crashk_res.end) {
->   			__map_memblock(pgdp, crashk_res.start,
->   				       crashk_res.end + 1,
+>                         sdhc2_opp_table: opp-table {
+>                                 compatible = "operating-points-v2";
+>

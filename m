@@ -2,270 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1504EFD07
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 01:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C98B4EFD18
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 01:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353376AbiDAXQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 19:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S1353392AbiDAXeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 19:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350461AbiDAXQs (ORCPT
+        with ESMTP id S1349225AbiDAXeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 19:16:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7803123F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 16:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648854896; x=1680390896;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ioDGD5NX34+zEQE+sNbc+PDt2a5ut+eURd+5vAGO8fw=;
-  b=FIaoPcc8Z6aI0+lqICd3jMKvT27KwE7uoVNdX9c/1alt2G9gtAYs50vD
-   h/j4hmQsn5Tx8o5BIbEOD9Z5uEbzArn9QvnpylhdneDEf4RPbaXnBZitH
-   ecthnscD3ZjGCWLJTH1zHmDA4+WJ/XsSpBmHx9khCbZlzlrIlAZ2+ObUw
-   Aiu0AV2wr35D14Wfa5dmobT/GsgyB8Mypxeioc64Txo3dK2LSrmL5C9oY
-   EJO77boEROBD6WDOzJ95QFnMzt1Xgu3m+W9xdnZ8g/Dpz6uibAdkqh/Yn
-   6fhlBpabA/Hgqzu8cAvWZOjep7jIXqGsU/40fbim9PZNjkBcotZc6eSyB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="240838345"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="240838345"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 16:14:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="656106242"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 01 Apr 2022 16:14:55 -0700
-Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 1 Apr 2022 16:14:55 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 1 Apr 2022 16:14:55 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 1 Apr 2022 16:14:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AYbHmjShjx2LDVZG/zI91oR0JTO8XVvg4l3o/O1teCkwAg+3ZoVJqBHDXby6S6+70IpZEgVklUHUdVSimaqJsYVv2hCp/EavfR/ib6rxPxg+GcbJRImJRYOj5sdWBW6QZn5BgWBJ9UCMkkWeCOox4WwSvvFb11Cd4s5ZvVRiVM/Xamb0JwZ8aiumADpPQpJlSd+LWt9/NfydaAjKAIk6RmkVLbhk45I6izr9m0bBkW9rFNJhd3kmccpc5I3qDh/5+2LMYddfgkIfRd+VDS/secTcy4HTzKL2W0h2HCFM9rMyPb5KlJh9VqVYtRjy4SygbM3Sdb3/3vGYy+sAdNGthg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ioDGD5NX34+zEQE+sNbc+PDt2a5ut+eURd+5vAGO8fw=;
- b=AphoWlWCj80nCHXASG/4jjj5YutseSYUn/r3tpCb51TJGw0GH2OwnrQMr/SRakApVrvm0cWfXswKB5wnOJmrjdLMoiIWBz/GCNyJbwC9u7eSvEp8ERwfs20kir0D5t84S5V1tQ5ppLLH1Cv5MAZFMJH9CcchQHzq4fvLv+WRgZ+q/M6CZeWHxzJf3LZolaYPCdIJQezR9005bXcKP+b/QbX6hLNvbDAW7+Qt/wUlUQWEm/SO9tt2c1R+NBowRZIXoVUqtdtxg0zrZAf/t85cQTAVHUkXQALuaNS0IN67V7jxbhaL5KPISqNiL2DvkCUYDnpBEb7xIcHNeCLHiZaZjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by MWHPR11MB1664.namprd11.prod.outlook.com (2603:10b6:301:c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.25; Fri, 1 Apr
- 2022 23:14:23 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::6439:b0f1:f43f:54d3]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::6439:b0f1:f43f:54d3%7]) with mapi id 15.20.5123.021; Fri, 1 Apr 2022
- 23:14:23 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-CC:     "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: RE: [PATCH v2] kasan: Fix sleeping function called from invalid
- context on RT kernel
-Thread-Topic: [PATCH v2] kasan: Fix sleeping function called from invalid
- context on RT kernel
-Thread-Index: AQHYRc7zp74DBEdkEUK28aFOHFLlt6zbOVYAgAB1GPA=
-Date:   Fri, 1 Apr 2022 23:14:23 +0000
-Message-ID: <PH0PR11MB588000A40081EC48536CA7A3DAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <20220401134649.2222485-1-qiang1.zhang@intel.com>
- <CACT4Y+YrKd=+uJT9UN8QvctPUGKnOgcReYfX41vNuVC0ecWXcg@mail.gmail.com>
-In-Reply-To: <CACT4Y+YrKd=+uJT9UN8QvctPUGKnOgcReYfX41vNuVC0ecWXcg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d6271626-8697-47b1-ce1a-08da14355bf9
-x-ms-traffictypediagnostic: MWHPR11MB1664:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB1664C87494689B21C8E4935CDAE09@MWHPR11MB1664.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3Z8Yf/BEIkc7/3fKWePm5KrpH9Ujn8r2ep1XSRWZF36hK2NV4cr0DOu1YjzFW4C3o/myAFkTuRY+F7LXKyEOr8aaaDNnM+T7iJTSwSjeZT9BsJGyQ+t9Fb7KGDIDATSLuZc6TWIalRHFV2kvAtrc2/janPYIR2I6BGTI8rETv8YT0QG1Xq8T0XmQnfeLBPU59KSF/EOW0ug0KJJznv+06ZKv1cgj7WYZm93m2pAMjHCg8O0H9371X3qzZD0plkaoqMFLqeg9TbwJv9RyYvFgJ0BYNM7rlfr7QUhDry4CmGprU/hoJUDEhS8iQKL0BBPq6/XpScrxtCiPqvrMVu7IV6hyoSYLpTbUdF3CVdOGxzyYF8kB+5DEtOCPfHj6Y6MR7/OIaV7nnGp3r2X7i7X96VXklv+q9YLCAd9dvpr5BLv8b9ILqB3oSpPZbVA5ukIOAFIC3EN1Q8V8b/GH/7bxHARbKnC21goeoFmnaUvgcytMxWbAkZTmC44cEQzD1a0mVjJLDaUFWNeQ+/ndOEFrfgPsayl2r5i8ON8HL7r+KgrAutmg/DXdNzAKt9kEsve7Rcgm9wyBjyhmyClraL3fQzJ6mjzW86VoXZMAfQjrH3SeJeA787qgAhGm8qsQsG33WWY7Rux1uqwUQ5WkQVhWE+BaZPuDCp9iyoFKBSOaFiHMFGi0E6Eh+miJ9/FT3FfminaNyPZiGRj9rUb5MpBGqQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(9686003)(7696005)(26005)(54906003)(6506007)(508600001)(55016003)(38070700005)(186003)(82960400001)(71200400001)(38100700002)(316002)(6916009)(83380400001)(122000001)(2906002)(8936002)(64756008)(66446008)(66556008)(66946007)(8676002)(33656002)(76116006)(5660300002)(52536014)(66476007)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V2tDNEk0aVJQUDBZM2Q3RUZnOGQ1QkdYbmxxNlNlSE03SmloM0liR0Q4T2sy?=
- =?utf-8?B?QnhUWVRLTmxLaktxNVUxeG9qek9MRnN1RlJ6VGtKTG4rN3RLVU9HdVBOTnRy?=
- =?utf-8?B?eStsenNIYzl1N0J1dWRoUzdKUFp3RmFFRUVYZ0oweG9oQ2Rub2ZCSUF6UFl5?=
- =?utf-8?B?QkMzUjV0L01qM3JsOWI1Z0dqT1JFSnBTL3BiK0FTbHY5d3d2QVE3ZURwZ2Nk?=
- =?utf-8?B?OFQ2ZHFwcUpYU2pDNk9yV1hoRFBtdnQwTGVwc3o0b1pWVnRBaGJOOURZOXJ0?=
- =?utf-8?B?TFlpeHAvM3g0Njd1WXBVT1JKNHhKQU5JdnFyRHowa3RWVjdneTF6VUNDRWlF?=
- =?utf-8?B?azd5UlNHL3d3MVpSOHRMcFplRURiMi9lbnc4WDR2S3o3VG9nd3c3SHZXazBh?=
- =?utf-8?B?SHFHKzFDcWE0OExpZldMK2VJa1BNa0J4R0t0UUtrb1hhaDVSb2dJQzM5cHRY?=
- =?utf-8?B?Ym1xRGc5OFBOR0R6U2lLTmk3T3JKeTM1eVYreHNFSHBrdWhna2t6MGh2dkZU?=
- =?utf-8?B?ZHFvazNRSU1MK3QrT3FFSVhqOWhWRW5LM3k4TnVuRCsvNkZTcXRCRnFWajVo?=
- =?utf-8?B?bVI5OSt1Y3ZvcDJUUFI5SFZPbDZtTzkxOVFXOU01LzRha2tzdFA3emxsQ21V?=
- =?utf-8?B?REJRb2J1b2ZCQ1FsS1NOK2syMHBzRlArZEtXS2N1cUNnTkZSOVF5dGtUZTFN?=
- =?utf-8?B?RVlUaEpua1pIdklVQ2o4YmNHRUtXZi9jKzc1b2htNm5kUitaY0VRWmJLcCsv?=
- =?utf-8?B?cEdzNE5tcng1REtrUm1lazVncmQ1SDJRelRyNm1DbjRZMGkxaUE4dzZpZUFM?=
- =?utf-8?B?L2Mwang2U1U5QzRiYitpeWMzSWcvRVpIeW5KOXhGK0JWMmhhQW1NRjNEYWZm?=
- =?utf-8?B?UlR1L1E5MGVxRThVWEFGQjBtcXpsMU1ZeW9VZ2hOM3dEcGpwQkliNnZrOHVL?=
- =?utf-8?B?S3hlRWZ6ZldyZkg2c2R4TnhFTC9MdlVDcnZ5Vi8xRndwUTM4RDcxL1dXeG5q?=
- =?utf-8?B?TEFCTHVhNkEwZUZzVldQS1daVHFlSG5hUjk5TFRTSVpQSWVnb1h3dHhtZHAv?=
- =?utf-8?B?VlpSNHhQeVhWN1FWS3dHbWxPb0JSNVNyUXhvNkdTSTBDcnljcXk0ZHNzTitT?=
- =?utf-8?B?OForODZIOUdWdEdSZ1ZESDNDSDlpZTd2Mk42S00yeFpLZ3N3YkI0a29SbHU1?=
- =?utf-8?B?cEJNL3hhdlVjRmNSS2Y2ckd1YlExSFhLdDBBVjF1T1ZRL0ZqK1NkNnI3Z1lU?=
- =?utf-8?B?M2R4SGx6TklKcmNRc0J1Y1R6cHB3bVJ2Q1RocGRpWkFkaGd5bFNxb2FndGM2?=
- =?utf-8?B?WVd2QjZid05qcnYyNnR3aTFlb0xEVVo1dDJYTmluM2JXSmd0eUZ1SDNUZ1hq?=
- =?utf-8?B?bkx1MktrWDB2WWNWU3AvSTE5QVA2em50eFJiV2taT0t0dmJzcVRuQ2JzTEhx?=
- =?utf-8?B?NG9zeGRXNy8wMnZ0dHVJQ3VIRHlqMFd6WEVkOER3TDdNdy9pZWg3TWRRT09M?=
- =?utf-8?B?ZmUwbVgzZ3BzRkliTXZxSURzMC9PVUJDc3ZmSEdjQk1NVWN5NkRrc201OGpG?=
- =?utf-8?B?WjFieGRwS1kvR1BxRkhrQ0dIUUlQTDZKakN1VEpGK0hVTG1xZmJPdUg2eW5G?=
- =?utf-8?B?MGNPMzQzSWtSQ0JRalFTR0pCZ2lIS2lOUW1VM3lYK1VybkNqSE5KYlJURFBo?=
- =?utf-8?B?eTF4VWdCdHgrQ1hKUWxMc01ESnpiL3FQajI4cmM3ZmVOQ0tpNjdPSWRaeUZF?=
- =?utf-8?B?Z01rYnF5WnJ0SW56VWs5OWtBUlhqWXU5ajR4UGVoa0EweWtjRXRLUWphZjlU?=
- =?utf-8?B?WnFvYnFPaW9YdUNDMUFVKzhtdlY2U3hmSmZ4YXowODBCMkNnYnVPU1dxRGFD?=
- =?utf-8?B?ZU52QkdhLzk1QWZpemIrMlUyWUlTektkTzducXE3Ti82SW9aOVdqbHBsVVBH?=
- =?utf-8?B?NlA0ZkZZNGQzdWc1MmhLTEtSZExoc2JackZFWHJLcG83ZGwyNHhPY294UFQ2?=
- =?utf-8?B?ZVpNZ0FlKzdYTmdONUhqOExDTmxNVUlnUVlOWlZEbWg0cENrSXRXRUNGNDJ6?=
- =?utf-8?B?bGM5ZmxjN2FjOUNZMWp6b1BuZFNJeDhxWnlRamxrVDh1OEt2N29wajQvUkY1?=
- =?utf-8?B?UDZpbDFCV21zTVdwZHJnNys5MmNXWXBGcS9GZFVxY0Rrc29TOGlEUlFxc0Vv?=
- =?utf-8?B?K2hwRmJycU1oVWZ0SkVDcHlPWnBEMmc2dVV0NmtiemNCa2ovUUpiQ1ZVMExJ?=
- =?utf-8?B?Um0zbmtmZU95M1ZQc3hlNk9DT3c5VGVkelNYUitZQ3hoVDlBZjVCY2cyRXVs?=
- =?utf-8?B?RXZEejhRODczS0pUWEJxNi9EMFNYY2U2T3ZQbmVYYWUyUWJwNEY0QT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6271626-8697-47b1-ce1a-08da14355bf9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 23:14:23.4485
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i4My9nPf+j1GFBmmef11qjngTVxAI7f2fkVjKIemzrZPzo57N7UPudSkvbpASdkW84+itmVFx3pOW2WCf+RxuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1664
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 19:34:19 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487781B30AA
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 16:32:28 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id y10-20020a5b0d0a000000b00633b9765410so3331007ybp.18
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 16:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3d8E+128X5z9f8vosnxqGnnLqitNYbPU/IjBxJaAUPo=;
+        b=axxG6PFb+ncrzI1pH35fvlZh1dJt8COpPy/XEVmElL2XH0nAzfZhjVSbx+UprCKYmW
+         vWj+i7LOKlty3eU1H+bVFkFMjJbVickxMXU/PbdOVNgf2CLv3msCr+nt6xwi/RdsTYHU
+         mSVSzrg0916FpXbXhA4R2tFYLUSOkHM0Lu3fHbCAc0uFTD7ybn9ShKJwOg4g187WGJf2
+         gzpPXsg6p+0n5gxmkoKBWUfkDpXyqxNiQagcgPhEeEDAaShOVt2erDLQuH9ziuDvyKb3
+         fj9Akw4dFBNKbmsWMBdYG0lZzFQzxUgE9ZHmBxyaR7wovbcOzIuOVtV/pSSLUcU/Dbdn
+         t0vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3d8E+128X5z9f8vosnxqGnnLqitNYbPU/IjBxJaAUPo=;
+        b=R3vy29H8++wrkZ6wClQVlBXM9wSL99nUttD226RgVaQFvA3AZHJ+4OHCUtCgDo5NFt
+         MZ6iHS6+4XUjbLzsn9+9LzGYa5Dct9GIYp0dXg5olQfkirgfi5kOZFX9Cw4MJj0x8Pvt
+         s3b0DhlH+NYqFQjl0YHsqkAMib8UbokezV93Ee8eSgGR/+ZReYBRSuJSB9A6OK3XB4yS
+         cAJr5SmEIj/QK/wPVm5aXKS3s0KNZYC2UDcg4yf9XZHWF+YfEpLoCIdZwHj+/CuNXNJg
+         KC4VY4vIGQgUWaV8SQiJ8HH8tuzhM72t5VnD1j7V+XPFJpvscgc6yTtctsX1KsyFzwKU
+         LFCA==
+X-Gm-Message-State: AOAM533vZdn2NmqFTKuJP+BnYFPgkuafJDMhu6RIcLo2DSyQ9nDKJKFV
+        f2r2Kw7+6wPsN/tpxgtgeGLNqvfae5ZzLqQezxSgCwiZZC3KXBkMJf9yAk2elkkV50CYrVSyAZq
+        /KItYk6CFFKWqiIlA/oxPbvsKJHWE6fBWRJQXcHKnoTcx4+k/s+aN1EVKdVuRCxCYANoIAw==
+X-Google-Smtp-Source: ABdhPJyucWdSj8v646mxln4ccteXQxyi+TELetCdgJBsA/6IPAPxC1oalXeW/IyRfs6Tj9miGTOaCo/4Jsw=
+X-Received: from colette.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:306])
+ (user=ctshao job=sendgmr) by 2002:a81:15ce:0:b0:2e5:e189:7366 with SMTP id
+ 197-20020a8115ce000000b002e5e1897366mr13146999ywv.188.1648855947323; Fri, 01
+ Apr 2022 16:32:27 -0700 (PDT)
+Date:   Fri,  1 Apr 2022 23:18:02 +0000
+Message-Id: <20220401231801.1532486-1-ctshao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v5] kbuild: Allow kernel installation packaging to override pkg-config
+From:   Chun-Tse Shao <ctshao@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Chun-Tse Shao <ctshao@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kbuild@vger.kernel.org, keyrings@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQogT24gRnJpLCAxIEFwciAyMDIyIGF0IDE1OjQ2LCBacWlhbmcgPHFpYW5nMS56aGFuZ0BpbnRl
-bC5jb20+IHdyb3RlOg0KPg0KPiBCVUc6IHNsZWVwaW5nIGZ1bmN0aW9uIGNhbGxlZCBmcm9tIGlu
-dmFsaWQgY29udGV4dCBhdCANCj4ga2VybmVsL2xvY2tpbmcvc3BpbmxvY2tfcnQuYzo0Ng0KPiBp
-bl9hdG9taWMoKTogMSwgaXJxc19kaXNhYmxlZCgpOiAxLCBub25fYmxvY2s6IDAsIHBpZDogMSwg
-bmFtZTogDQo+IHN3YXBwZXIvMA0KPiBwcmVlbXB0X2NvdW50OiAxLCBleHBlY3RlZDogMA0KPiAu
-Li4uLi4uLi4uLg0KPiBDUFU6IDAgUElEOiAxIENvbW06IHN3YXBwZXIvMCBOb3QgdGFpbnRlZCA1
-LjE3LjEtcnQxNi15b2N0by1wcmVlbXB0LXJ0IA0KPiAjMjIgSGFyZHdhcmUgbmFtZTogUUVNVSBT
-dGFuZGFyZCBQQyAoUTM1ICsgSUNIOSwgMjAwOSksIEJJT1MgDQo+IHJlbC0xLjE1LjAtMC1nMmRk
-NGI5YjNmODQwLXByZWJ1aWx0LnFlbXUub3JnIDA0LzAxLzIwMTQgQ2FsbCBUcmFjZToNCj4gPFRB
-U0s+DQo+IGR1bXBfc3RhY2tfbHZsKzB4NjAvMHg4Yw0KPiBkdW1wX3N0YWNrKzB4MTAvMHgxMg0K
-PiAgX19taWdodF9yZXNjaGVkLmNvbGQrMHgxM2IvMHgxNzMNCj4gcnRfc3Bpbl9sb2NrKzB4NWIv
-MHhmMA0KPiAgX19fY2FjaGVfZnJlZSsweGE1LzB4MTgwDQo+IHFsaXN0X2ZyZWVfYWxsKzB4N2Ev
-MHgxNjANCj4gcGVyX2NwdV9yZW1vdmVfY2FjaGUrMHg1Zi8weDcwDQo+IHNtcF9jYWxsX2Z1bmN0
-aW9uX21hbnlfY29uZCsweDRjNC8weDRmMA0KPiBvbl9lYWNoX2NwdV9jb25kX21hc2srMHg0OS8w
-eGMwDQo+IGthc2FuX3F1YXJhbnRpbmVfcmVtb3ZlX2NhY2hlKzB4NTQvMHhmMA0KPiBrYXNhbl9j
-YWNoZV9zaHJpbmsrMHg5LzB4MTANCj4ga21lbV9jYWNoZV9zaHJpbmsrMHgxMy8weDIwDQo+IGFj
-cGlfb3NfcHVyZ2VfY2FjaGUrMHhlLzB4MjANCj4gYWNwaV9wdXJnZV9jYWNoZWRfb2JqZWN0cysw
-eDIxLzB4NmQNCj4gYWNwaV9pbml0aWFsaXplX29iamVjdHMrMHgxNS8weDNiDQo+IGFjcGlfaW5p
-dCsweDEzMC8weDViYQ0KPiBkb19vbmVfaW5pdGNhbGwrMHhlNS8weDViMA0KPiBrZXJuZWxfaW5p
-dF9mcmVlYWJsZSsweDM0Zi8weDNhZA0KPiBrZXJuZWxfaW5pdCsweDFlLzB4MTQwDQo+IHJldF9m
-cm9tX2ZvcmsrMHgyMi8weDMwDQo+DQo+IFdoZW4gdGhlIGttZW1fY2FjaGVfc2hyaW5rKCkgYmUg
-Y2FsbGVkLCB0aGUgSVBJIHdhcyB0cmlnZ2VyZWQsIHRoZQ0KPiBfX19jYWNoZV9mcmVlKCkgaXMg
-Y2FsbGVkIGluIElQSSBpbnRlcnJ1cHQgY29udGV4dCwgdGhlIGxvY2FsLWxvY2sgb3IgDQo+IHNw
-aW4tbG9jayB3aWxsIGJlIGFjcXVpcmVkLiBvbiBQUkVFTVBUX1JUIGtlcm5lbCwgdGhlc2UgbG9j
-ayBpcyANCj4gcmVwbGFjZWQgd2l0aCBzbGVlcGJhbGUgcnQtc3BpbmxvY2ssIHNvIHRoZSBhYm92
-ZSBwcm9ibGVtIGlzIHRyaWdnZXJlZC4NCj4gZml4IGl0IGJ5IG1vdmUgdGhlIHFsaXN0X2ZyZWVf
-YWxsZnJvbSgpIHRoZSBJUEkgaW50ZXJydXB0IGNvbnRleHQgdG8gDQo+IHRoZSB0YXNrIGNvbnRl
-eHQgd2hlbiBQUkVFTVBUX1JUIGlzIGVuYWJsZWQuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IFpxaWFu
-ZyA8cWlhbmcxLnpoYW5nQGludGVsLmNvbT4NCj4gLS0tDQo+ICB2MS0+djI6DQo+ICBBZGQgcmF3
-X3NwaW5sb2NrIHByb3RlY3QgcGVyLWNwdSBzaHJpbmsgcWxpc3QuDQo+DQo+ICBtbS9rYXNhbi9x
-dWFyYW50aW5lLmMgfCA0MCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0t
-DQo+ICAxIGZpbGUgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4N
-Cj4gZGlmZiAtLWdpdCBhL21tL2thc2FuL3F1YXJhbnRpbmUuYyBiL21tL2thc2FuL3F1YXJhbnRp
-bmUuYyBpbmRleCANCj4gMDgyOTFlZDMzZTkzLi4wZTMzZDMwYWJiOGQgMTAwNjQ0DQo+IC0tLSBh
-L21tL2thc2FuL3F1YXJhbnRpbmUuYw0KPiArKysgYi9tbS9rYXNhbi9xdWFyYW50aW5lLmMNCj4g
-QEAgLTk5LDYgKzk5LDE3IEBAIHN0YXRpYyB1bnNpZ25lZCBsb25nIHF1YXJhbnRpbmVfc2l6ZTsg
-IHN0YXRpYyANCj4gREVGSU5FX1JBV19TUElOTE9DSyhxdWFyYW50aW5lX2xvY2spOw0KPiAgREVG
-SU5FX1NUQVRJQ19TUkNVKHJlbW92ZV9jYWNoZV9zcmN1KTsNCj4NCj4gKyNpZmRlZiBDT05GSUdf
-UFJFRU1QVF9SVA0KPiArc3RydWN0IGNwdV9zaHJpbmtfcWxpc3Qgew0KPiArICAgICAgIHJhd19z
-cGlubG9ja190IGxvY2s7DQo+ICsgICAgICAgc3RydWN0IHFsaXN0X2hlYWQgcWxpc3Q7DQo+ICt9
-Ow0KPiArDQo+ICtzdGF0aWMgREVGSU5FX1BFUl9DUFUoc3RydWN0IGNwdV9zaHJpbmtfcWxpc3Qs
-IHNocmlua19xbGlzdCkgPSB7DQo+ICsgICAgICAgLmxvY2sgPSBfX1JBV19TUElOX0xPQ0tfVU5M
-T0NLRUQoc2hyaW5rX3FsaXN0LmxvY2spLA0KPiArfTsNCj4gKyNlbmRpZg0KPiArDQo+ICAvKiBN
-YXhpbXVtIHNpemUgb2YgdGhlIGdsb2JhbCBxdWV1ZS4gKi8gIHN0YXRpYyB1bnNpZ25lZCBsb25n
-IA0KPiBxdWFyYW50aW5lX21heF9zaXplOw0KPg0KPiBAQCAtMzExLDEyICszMjIsMjMgQEAgc3Rh
-dGljIHZvaWQgcWxpc3RfbW92ZV9jYWNoZShzdHJ1Y3QgcWxpc3RfaGVhZCANCj4gKmZyb20sICBz
-dGF0aWMgdm9pZCBwZXJfY3B1X3JlbW92ZV9jYWNoZSh2b2lkICphcmcpICB7DQo+ICAgICAgICAg
-c3RydWN0IGttZW1fY2FjaGUgKmNhY2hlID0gYXJnOw0KPiAtICAgICAgIHN0cnVjdCBxbGlzdF9o
-ZWFkIHRvX2ZyZWUgPSBRTElTVF9JTklUOw0KPiAgICAgICAgIHN0cnVjdCBxbGlzdF9oZWFkICpx
-Ow0KPiAtDQo+ICsjaWZuZGVmIENPTkZJR19QUkVFTVBUX1JUDQo+ICsgICAgICAgc3RydWN0IHFs
-aXN0X2hlYWQgdG9fZnJlZSA9IFFMSVNUX0lOSVQ7ICNlbHNlDQo+ICsgICAgICAgdW5zaWduZWQg
-bG9uZyBmbGFnczsNCj4gKyAgICAgICBzdHJ1Y3QgY3B1X3Nocmlua19xbGlzdCAqc3E7DQo+ICsj
-ZW5kaWYNCj4gICAgICAgICBxID0gdGhpc19jcHVfcHRyKCZjcHVfcXVhcmFudGluZSk7DQo+ICsj
-aWZuZGVmIENPTkZJR19QUkVFTVBUX1JUDQo+ICAgICAgICAgcWxpc3RfbW92ZV9jYWNoZShxLCAm
-dG9fZnJlZSwgY2FjaGUpOw0KPiAgICAgICAgIHFsaXN0X2ZyZWVfYWxsKCZ0b19mcmVlLCBjYWNo
-ZSk7DQo+ICsjZWxzZQ0KPiArICAgICAgIHNxID0gdGhpc19jcHVfcHRyKCZzaHJpbmtfcWxpc3Qp
-Ow0KPiArICAgICAgIHJhd19zcGluX2xvY2tfaXJxc2F2ZSgmc3EtPmxvY2ssIGZsYWdzKTsNCj4g
-KyAgICAgICBxbGlzdF9tb3ZlX2NhY2hlKHEsICZzcS0+cWxpc3QsIGNhY2hlKTsNCj4gKyAgICAg
-ICByYXdfc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmc3EtPmxvY2ssIGZsYWdzKTsgI2VuZGlmDQo+
-ICB9DQo+DQo+ICAvKiBGcmVlIGFsbCBxdWFyYW50aW5lZCBvYmplY3RzIGJlbG9uZ2luZyB0byBj
-YWNoZS4gKi8gQEAgLTMyNCw2IA0KPiArMzQ2LDEwIEBAIHZvaWQga2FzYW5fcXVhcmFudGluZV9y
-ZW1vdmVfY2FjaGUoc3RydWN0IGttZW1fY2FjaGUgDQo+ICpjYWNoZSkgIHsNCj4gICAgICAgICB1
-bnNpZ25lZCBsb25nIGZsYWdzLCBpOw0KPiAgICAgICAgIHN0cnVjdCBxbGlzdF9oZWFkIHRvX2Zy
-ZWUgPSBRTElTVF9JTklUOw0KPiArI2lmZGVmIENPTkZJR19QUkVFTVBUX1JUDQo+ICsgICAgICAg
-aW50IGNwdTsNCj4gKyAgICAgICBzdHJ1Y3QgY3B1X3Nocmlua19xbGlzdCAqc3E7DQo+ICsjZW5k
-aWYNCj4NCj4gICAgICAgICAvKg0KPiAgICAgICAgICAqIE11c3QgYmUgY2FyZWZ1bCB0byBub3Qg
-bWlzcyBhbnkgb2JqZWN0cyB0aGF0IGFyZSBiZWluZyANCj4gbW92ZWQgZnJvbSBAQCAtMzM0LDYg
-KzM2MCwxNiBAQCB2b2lkIGthc2FuX3F1YXJhbnRpbmVfcmVtb3ZlX2NhY2hlKHN0cnVjdCBrbWVt
-X2NhY2hlICpjYWNoZSkNCj4gICAgICAgICAgKi8NCj4gICAgICAgICBvbl9lYWNoX2NwdShwZXJf
-Y3B1X3JlbW92ZV9jYWNoZSwgY2FjaGUsIDEpOw0KPg0KPiArI2lmZGVmIENPTkZJR19QUkVFTVBU
-X1JUDQo+ICsgICAgICAgZm9yX2VhY2hfb25saW5lX2NwdShjcHUpIHsNCj4gKyAgICAgICAgICAg
-ICAgIHNxID0gcGVyX2NwdV9wdHIoJnNocmlua19xbGlzdCwgY3B1KTsNCj4gKyAgICAgICAgICAg
-ICAgIHJhd19zcGluX2xvY2tfaXJxc2F2ZSgmc3EtPmxvY2ssIGZsYWdzKTsNCj4gKyAgICAgICAg
-ICAgICAgIHFsaXN0X21vdmVfY2FjaGUoJnNxLT5xbGlzdCwgJnRvX2ZyZWUsIGNhY2hlKTsNCj4g
-KyAgICAgICAgICAgICAgIHJhd19zcGluX3VubG9ja19pcnFyZXN0b3JlKCZzcS0+bG9jaywgZmxh
-Z3MpOw0KPiArICAgICAgIH0NCj4gKyAgICAgICBxbGlzdF9mcmVlX2FsbCgmdG9fZnJlZSwgY2Fj
-aGUpOw0KDQo+DQo+SSB0aGluayBub3cgdGhlcmUgaXMgYW5vdGhlciBzdWJ0bGUgYnVnLg0KPkkg
-YXNzdW1lIHRoYXQgYnkgdGhlIHRpbWUga2FzYW5fcXVhcmFudGluZV9yZW1vdmVfY2FjaGUoY2Fj
-aGUpIHJldHVybnMgYWxsIG9iamVjdHMgYmVsb25naW5nIHRvIHRoZSBjYWNoZSBtdXN0IGJlIGZy
-ZWVkLiBJIHRoaW5rIHRoZXJlIGFyZSBzY2VuYXJpb3Mgd2hlcmUgaXQncyBub3QgdGhlIGNhc2Uu
-DQo+Q29uc2lkZXIgdGhlcmUgaXMgdGhyZWFkIDEgdGhhdCBjYWxscyBrYXNhbl9xdWFyYW50aW5l
-X3JlbW92ZV9jYWNoZShBKSBhbmQgdGhyZWFkIDIgdGhhdCBjYWxscyBrYXNhbl9xdWFyYW50aW5l
-X3JlbW92ZV9jYWNoZShCKS4NCj5Db25zaWRlciB0aGF0IGthc2FuX3F1YXJhbnRpbmVfcmVtb3Zl
-X2NhY2hlIGNhbGxiYWNrcyBmb3IgYm90aCBBIGFuZCBCIGhhcyBmaW5pc2hlZCBhbmQgc2hyaW5r
-X3FsaXN0IGNvbnRhaW5zIGFsbCBvYmplY3RzIHRoYXQgYmVsb25nIHRvIGNhY2hlcyBBIGFuZCBC
-Lg0KPk5vdyB0aHJlYWQgMSBleGVjdXRlcyBmb3JfZWFjaF9vbmxpbmVfY3B1IHBhcnQgYW5kIGNv
-bGxlY3RzIGFsbCBvYmplY3RzIGludG8gdGhlIGxvY2FsIHRvX2ZyZWUgbGlzdC4NCg0KQWNjb3Jk
-aW5nIHRvIG15IHVuZGVyc3RhbmRpbmcNClRocmVhZCAxIG9ubHkgY29sbGVjdHMgb2JqZWN0cyB3
-aGljaCBiZWxvbmcgdG8gY2FjaGVzIEEgLCBiZWNhdXNlIHRoZSBxbGlzdF9tb3ZlX2NhY2hlKCZz
-cS0+cWxpc3QsICZ0b19mcmVlLCBjYWNoZSkNCldpbGwgZmlsdGVyZWQgYWdhaW4sICBvciBkaWQg
-SSBtaXNzIHNvbWV0aGluZz8NCg0KVGhhbmtzDQpacWlhbmcNCg0KPk5vdyB0aHJlYWQgMiBleGVj
-dXRlcyB0aGUgZm9yX2VhY2hfb25saW5lX2NwdSwgY2FsbHMgcWxpc3RfZnJlZV9hbGwgKG9uIGFu
-IGVtcHR5IGxpc3QpIGFuZCByZXR1cm5zIGZyb20ga2FzYW5fcXVhcmFudGluZV9yZW1vdmVfY2Fj
-aGUuDQo+VGhlbiBjYWNoZSBCIGlzIGNvbXBsZXRlbHkgZGVzdHJveWVkIGFuZCBmcmVlZC4NCj5O
-b3cgdGhyZWFkIDEgcmVzdW1lcyBhbmQgY2FsbHMgcWxpc3RfZnJlZV9hbGwgZm9yIG9iamVjdHMg
-ZnJvbSBjYWNoZSBCLg0KPkJhbmchDQoNCg0KDQoNCj4gKyNlbmRpZg0KPiArDQo+ICAgICAgICAg
-cmF3X3NwaW5fbG9ja19pcnFzYXZlKCZxdWFyYW50aW5lX2xvY2ssIGZsYWdzKTsNCj4gICAgICAg
-ICBmb3IgKGkgPSAwOyBpIDwgUVVBUkFOVElORV9CQVRDSEVTOyBpKyspIHsNCj4gICAgICAgICAg
-ICAgICAgIGlmIChxbGlzdF9lbXB0eSgmZ2xvYmFsX3F1YXJhbnRpbmVbaV0pKQ0KPiAtLQ0KPiAy
-LjI1LjENCj4NCg==
+Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
+what pkg-config and parameters are used.
+
+Signed-off-by: Chun-Tse Shao <ctshao@google.com>
+---
+Changes from v4: https://lore.kernel.org/all/20220306223016.2239094-1-ctshao@google.com/
+  - Fix inconsistent pkg-config in kconfig shell scripts
+  - Tested with make allmodconfig
+
+Changes from v3: https://lore.kernel.org/all/20220304041449.939308-1-ctshao@google.com
+  - Dereference variables using {} instead of () in shell scripts
+  - Tested with make allmodconfig
+
+Changes from v2: https://lore.kernel.org/all/20220302193638.11034-1-ctshao@google.com/
+  - Fix more open coded instance of pkg-config in scripts and certs
+  - Tested with make allmodconfig
+
+Changes from v1: https://lore.kernel.org/all/20220301230629.1892828-1-ctshao@google.com/
+  - Make the commit message more clearer.
+---
+ Makefile                     |  3 ++-
+ certs/Makefile               |  4 ++--
+ scripts/Makefile             |  4 ++--
+ scripts/dtc/Makefile         |  6 +++---
+ scripts/kconfig/gconf-cfg.sh | 12 ++++++------
+ scripts/kconfig/mconf-cfg.sh | 16 ++++++++--------
+ scripts/kconfig/nconf-cfg.sh | 16 ++++++++--------
+ scripts/kconfig/qconf-cfg.sh | 14 +++++++-------
+ tools/objtool/Makefile       |  4 ++--
+ 9 files changed, 40 insertions(+), 39 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index daeb5c88b50b..f6c5bef7e141 100644
+--- a/Makefile
++++ b/Makefile
+@@ -430,6 +430,7 @@ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+ endif
++HOSTPKG_CONFIG	= pkg-config
+
+ export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+ 			      -O2 -fomit-frame-pointer -std=gnu89
+@@ -525,7 +526,7 @@ KBUILD_LDFLAGS_MODULE :=
+ KBUILD_LDFLAGS :=
+ CLANG_FLAGS :=
+
+-export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
++export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC HOSTPKG_CONFIG
+ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
+ export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+ export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+diff --git a/certs/Makefile b/certs/Makefile
+index 3ea7fe60823f..fa540d14ef2d 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -89,5 +89,5 @@ targets += x509_revocation_list
+
+ hostprogs := extract-cert
+
+-HOSTCFLAGS_extract-cert.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+-HOSTLDLIBS_extract-cert = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
++HOSTCFLAGS_extract-cert.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_extract-cert = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+diff --git a/scripts/Makefile b/scripts/Makefile
+index ce5aa9030b74..f084f08ed176 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -14,8 +14,8 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
+ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
+ HOSTLDLIBS_sorttable = -lpthread
+ HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
+-HOSTCFLAGS_sign-file.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+-HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
++HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+
+ ifdef CONFIG_UNWINDER_ORC
+ ifeq ($(ARCH),x86_64)
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 95aaf7431bff..743fc08827ea 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -18,7 +18,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
+ # Source files need to get at the userspace version of libfdt_env.h to compile
+ HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
+
+-ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
++ifeq ($(shell $(HOSTPKG_CONFIG) --exists yaml-0.1 2>/dev/null && echo yes),)
+ ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
+ $(error dtc needs libyaml for DT schema validation support. \
+ 	Install the necessary libyaml development package.)
+@@ -27,9 +27,9 @@ HOST_EXTRACFLAGS += -DNO_YAML
+ else
+ dtc-objs	+= yamltree.o
+ # To include <yaml.h> installed in a non-default path
+-HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
++HOSTCFLAGS_yamltree.o := $(shell $(HOSTPKG_CONFIG) --cflags yaml-0.1)
+ # To link libyaml installed in a non-default path
+-HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
++HOSTLDLIBS_dtc	:= $(shell $(HOSTPKG_CONFIG) yaml-0.1 --libs)
+ endif
+
+ # Generated files need one more search path to include headers in source tree
+diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
+index 480ecd8b9f41..cbd90c28c05f 100755
+--- a/scripts/kconfig/gconf-cfg.sh
++++ b/scripts/kconfig/gconf-cfg.sh
+@@ -3,14 +3,14 @@
+
+ PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
+
+-if [ -z "$(command -v pkg-config)" ]; then
++if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
+ 	echo >&2 "*"
+-	echo >&2 "* 'make gconfig' requires 'pkg-config'. Please install it."
++	echo >&2 "* 'make gconfig' requires '${HOSTPKG_CONFIG}'. Please install it."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-if ! pkg-config --exists $PKG; then
++if ! ${HOSTPKG_CONFIG} --exists $PKG; then
+ 	echo >&2 "*"
+ 	echo >&2 "* Unable to find the GTK+ installation. Please make sure that"
+ 	echo >&2 "* the GTK+ 2.0 development package is correctly installed."
+@@ -19,12 +19,12 @@ if ! pkg-config --exists $PKG; then
+ 	exit 1
+ fi
+
+-if ! pkg-config --atleast-version=2.0.0 gtk+-2.0; then
++if ! ${HOSTPKG_CONFIG} --atleast-version=2.0.0 gtk+-2.0; then
+ 	echo >&2 "*"
+ 	echo >&2 "* GTK+ is present but version >= 2.0.0 is required."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-echo cflags=\"$(pkg-config --cflags $PKG)\"
+-echo libs=\"$(pkg-config --libs $PKG)\"
++echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
++echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
+diff --git a/scripts/kconfig/mconf-cfg.sh b/scripts/kconfig/mconf-cfg.sh
+index b520e407a8eb..025b565e0b7c 100755
+--- a/scripts/kconfig/mconf-cfg.sh
++++ b/scripts/kconfig/mconf-cfg.sh
+@@ -4,16 +4,16 @@
+ PKG="ncursesw"
+ PKG2="ncurses"
+
+-if [ -n "$(command -v pkg-config)" ]; then
+-	if pkg-config --exists $PKG; then
+-		echo cflags=\"$(pkg-config --cflags $PKG)\"
+-		echo libs=\"$(pkg-config --libs $PKG)\"
++if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
++	if ${HOSTPKG_CONFIG} --exists $PKG; then
++		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
++		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
+ 		exit 0
+ 	fi
+
+-	if pkg-config --exists $PKG2; then
+-		echo cflags=\"$(pkg-config --cflags $PKG2)\"
+-		echo libs=\"$(pkg-config --libs $PKG2)\"
++	if ${HOSTPKG_CONFIG} --exists $PKG2; then
++		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG2)\"
++		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG2)\"
+ 		exit 0
+ 	fi
+ fi
+@@ -46,7 +46,7 @@ echo >&2 "* Unable to find the ncurses package."
+ echo >&2 "* Install ncurses (ncurses-devel or libncurses-dev"
+ echo >&2 "* depending on your distribution)."
+ echo >&2 "*"
+-echo >&2 "* You may also need to install pkg-config to find the"
++echo >&2 "* You may also need to install ${HOSTPKG_CONFIG} to find the"
+ echo >&2 "* ncurses installed in a non-default location."
+ echo >&2 "*"
+ exit 1
+diff --git a/scripts/kconfig/nconf-cfg.sh b/scripts/kconfig/nconf-cfg.sh
+index c212255070c0..3a10bac2adb3 100755
+--- a/scripts/kconfig/nconf-cfg.sh
++++ b/scripts/kconfig/nconf-cfg.sh
+@@ -4,16 +4,16 @@
+ PKG="ncursesw menuw panelw"
+ PKG2="ncurses menu panel"
+
+-if [ -n "$(command -v pkg-config)" ]; then
+-	if pkg-config --exists $PKG; then
+-		echo cflags=\"$(pkg-config --cflags $PKG)\"
+-		echo libs=\"$(pkg-config --libs $PKG)\"
++if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
++	if ${HOSTPKG_CONFIG} --exists $PKG; then
++		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
++		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
+ 		exit 0
+ 	fi
+
+-	if pkg-config --exists $PKG2; then
+-		echo cflags=\"$(pkg-config --cflags $PKG2)\"
+-		echo libs=\"$(pkg-config --libs $PKG2)\"
++	if ${HOSTPKG_CONFIG} --exists $PKG2; then
++		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG2)\"
++		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG2)\"
+ 		exit 0
+ 	fi
+ fi
+@@ -44,7 +44,7 @@ echo >&2 "* Unable to find the ncurses package."
+ echo >&2 "* Install ncurses (ncurses-devel or libncurses-dev"
+ echo >&2 "* depending on your distribution)."
+ echo >&2 "*"
+-echo >&2 "* You may also need to install pkg-config to find the"
++echo >&2 "* You may also need to install ${HOSTPKG_CONFIG} to find the"
+ echo >&2 "* ncurses installed in a non-default location."
+ echo >&2 "*"
+ exit 1
+diff --git a/scripts/kconfig/qconf-cfg.sh b/scripts/kconfig/qconf-cfg.sh
+index fa564cd795b7..9b695e5cd9b3 100755
+--- a/scripts/kconfig/qconf-cfg.sh
++++ b/scripts/kconfig/qconf-cfg.sh
+@@ -3,22 +3,22 @@
+
+ PKG="Qt5Core Qt5Gui Qt5Widgets"
+
+-if [ -z "$(command -v pkg-config)" ]; then
++if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
+ 	echo >&2 "*"
+-	echo >&2 "* 'make xconfig' requires 'pkg-config'. Please install it."
++	echo >&2 "* 'make xconfig' requires '${HOSTPKG_CONFIG}'. Please install it."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-if pkg-config --exists $PKG; then
+-	echo cflags=\"-std=c++11 -fPIC $(pkg-config --cflags $PKG)\"
+-	echo libs=\"$(pkg-config --libs $PKG)\"
+-	echo moc=\"$(pkg-config --variable=host_bins Qt5Core)/moc\"
++if ${HOSTPKG_CONFIG} --exists $PKG; then
++	echo cflags=\"-std=c++11 -fPIC $(${HOSTPKG_CONFIG} --cflags $PKG)\"
++	echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
++	echo moc=\"$(${HOSTPKG_CONFIG} --variable=host_bins Qt5Core)/moc\"
+ 	exit 0
+ fi
+
+ echo >&2 "*"
+-echo >&2 "* Could not find Qt5 via pkg-config."
++echo >&2 "* Could not find Qt5 via ${HOSTPKG_CONFIG}."
+ echo >&2 "* Please install Qt5 and make sure it's in PKG_CONFIG_PATH"
+ echo >&2 "*"
+ exit 1
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 92ce4fce7bc7..549acc5859e9 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -19,8 +19,8 @@ LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
+ OBJTOOL    := $(OUTPUT)objtool
+ OBJTOOL_IN := $(OBJTOOL)-in.o
+
+-LIBELF_FLAGS := $(shell pkg-config libelf --cflags 2>/dev/null)
+-LIBELF_LIBS  := $(shell pkg-config libelf --libs 2>/dev/null || echo -lelf)
++LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
++LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+
+ all: $(OBJTOOL)
+
+--
+2.35.1.1094.g7c7d902a7c-goog
+

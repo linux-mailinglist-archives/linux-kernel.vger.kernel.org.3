@@ -2,44 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA274EE8CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31344EE8DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343719AbiDAHHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S1343751AbiDAHNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241247AbiDAHHl (ORCPT
+        with ESMTP id S1343773AbiDAHMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:07:41 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FC23FA213;
-        Fri,  1 Apr 2022 00:05:51 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id EBFCB1E80CC5;
-        Fri,  1 Apr 2022 15:05:21 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hKzsnrIxJeEi; Fri,  1 Apr 2022 15:05:19 +0800 (CST)
-Received: from ubuntu.localdomain (unknown [101.228.248.165])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id ABEB21E80C85;
-        Fri,  1 Apr 2022 15:05:18 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
-        linux_oss@crudebyte.com
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] 9p: remove unnecessary type castings
-Date:   Fri,  1 Apr 2022 00:05:45 -0700
-Message-Id: <20220401070545.50577-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Apr 2022 03:12:54 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC79A1D67D2
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:10:40 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(1184:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Fri, 01 Apr 2022 15:07:40 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Fri, 1 Apr 2022 15:08:39 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.018; Fri, 1 Apr 2022 15:08:39 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v12 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
+ defconfig
+Thread-Topic: [PATCH v12 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
+ defconfig
+Thread-Index: AQHYRNqKgpvhY+D7NEGLNwOJ/bBEBKzYrlGAgAGgdnA=
+Date:   Fri, 1 Apr 2022 07:08:39 +0000
+Message-ID: <334463c7f78b4b25a62ddd01bba5fe06@cqplus1.com>
+References: <cover.1648714851.git.qinjian@cqplus1.com>
+ <84a0839e7724fa39dd07fef491cf6bb357db2e7d.1648714851.git.qinjian@cqplus1.com>
+ <CAK8P3a2SQCj8pqyJvS+TpgqQu51+YyB4SOi2cd_WU9ObgAjZOw@mail.gmail.com>
+In-Reply-To: <CAK8P3a2SQCj8pqyJvS+TpgqQu51+YyB4SOi2cd_WU9ObgAjZOw@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,86 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary void* type castings.
-
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- fs/9p/fid.c            | 2 +-
- fs/9p/v9fs.c           | 2 +-
- fs/9p/vfs_inode.c      | 4 ++--
- fs/9p/vfs_inode_dotl.c | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/fs/9p/fid.c b/fs/9p/fid.c
-index 79df61fe0e59..c2b8d7fc9e53 100644
---- a/fs/9p/fid.c
-+++ b/fs/9p/fid.c
-@@ -53,7 +53,7 @@ static struct p9_fid *v9fs_fid_find_inode(struct inode *inode, kuid_t uid)
- 	p9_debug(P9_DEBUG_VFS, " inode: %p\n", inode);
- 
- 	spin_lock(&inode->i_lock);
--	h = (struct hlist_head *)&inode->i_private;
-+	h = &inode->i_private;
- 	hlist_for_each_entry(fid, h, ilist) {
- 		if (uid_eq(fid->uid, uid)) {
- 			refcount_inc(&fid->count);
-diff --git a/fs/9p/v9fs.c b/fs/9p/v9fs.c
-index e28ddf763b3b..51ddc58a7029 100644
---- a/fs/9p/v9fs.c
-+++ b/fs/9p/v9fs.c
-@@ -622,7 +622,7 @@ static void v9fs_sysfs_cleanup(void)
- 
- static void v9fs_inode_init_once(void *foo)
- {
--	struct v9fs_inode *v9inode = (struct v9fs_inode *)foo;
-+	struct v9fs_inode *v9inode = foo;
- 
- 	memset(&v9inode->qid, 0, sizeof(v9inode->qid));
- 	inode_init_once(&v9inode->vfs_inode);
-diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
-index 55367ecb9442..f415fd7a1eaf 100644
---- a/fs/9p/vfs_inode.c
-+++ b/fs/9p/vfs_inode.c
-@@ -409,7 +409,7 @@ static int v9fs_test_inode(struct inode *inode, void *data)
- 	int umode;
- 	dev_t rdev;
- 	struct v9fs_inode *v9inode = V9FS_I(inode);
--	struct p9_wstat *st = (struct p9_wstat *)data;
-+	struct p9_wstat *st = data;
- 	struct v9fs_session_info *v9ses = v9fs_inode2v9ses(inode);
- 
- 	umode = p9mode2unixmode(v9ses, st, &rdev);
-@@ -438,7 +438,7 @@ static int v9fs_test_new_inode(struct inode *inode, void *data)
- static int v9fs_set_inode(struct inode *inode,  void *data)
- {
- 	struct v9fs_inode *v9inode = V9FS_I(inode);
--	struct p9_wstat *st = (struct p9_wstat *)data;
-+	struct p9_wstat *st = data;
- 
- 	memcpy(&v9inode->qid, &st->qid, sizeof(st->qid));
- 	return 0;
-diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
-index d17502a738a9..b910fee62e25 100644
---- a/fs/9p/vfs_inode_dotl.c
-+++ b/fs/9p/vfs_inode_dotl.c
-@@ -57,7 +57,7 @@ static kgid_t v9fs_get_fsgid_for_create(struct inode *dir_inode)
- static int v9fs_test_inode_dotl(struct inode *inode, void *data)
- {
- 	struct v9fs_inode *v9inode = V9FS_I(inode);
--	struct p9_stat_dotl *st = (struct p9_stat_dotl *)data;
-+	struct p9_stat_dotl *st = data;
- 
- 	/* don't match inode of different type */
- 	if (inode_wrong_type(inode, st->st_mode))
-@@ -88,7 +88,7 @@ static int v9fs_test_new_inode_dotl(struct inode *inode, void *data)
- static int v9fs_set_inode_dotl(struct inode *inode,  void *data)
- {
- 	struct v9fs_inode *v9inode = V9FS_I(inode);
--	struct p9_stat_dotl *st = (struct p9_stat_dotl *)data;
-+	struct p9_stat_dotl *st = data;
- 
- 	memcpy(&v9inode->qid, &st->qid, sizeof(st->qid));
- 	inode->i_generation = st->st_gen;
--- 
-2.25.1
-
+PiBPbiBUaHUsIE1hciAzMSwgMjAyMiBhdCAxMDoyOSBBTSBRaW4gSmlhbiA8cWluamlhbkBjcXBs
+dXMxLmNvbT4gd3JvdGU6DQo+ID4gQWRkIGdlbmVyaWMgU3VucGx1cyBTUDcwMjEgYmFzZWQgYm9h
+cmQgZGVmY29uZmlnDQo+IA0KPiBIZXJlLCB5b3Ugc2hvdWxkIGV4cGxhaW4gd2h5IHlvdSBuZWVk
+IGEgY3VzdG9tIGRlZmNvbmZpZyBmb3IgdGhpcyBTb0MsIGFzDQo+IG1vc3QgcGxhdGZvcm1zIGFy
+ZSBmaW5lIGp1c3QgdXNpbmcgdGhlIGdlbmVyaWMgb25lLiBBcmUgeW91IHRvbyBtZW1vcnkNCj4g
+Y29uc3RyYWluZWQsDQo+IG9yIGFyZSB0aGVyZSBvdGhlciBwcm9ibGVtcz8NCj4gDQoNCkZvciBt
+ZW1vcnkgY29uc3RyYWluZWQgYm9hcmQgb25seS4NCg0KPiA+IGRpZmYgLS1naXQgYS9hcmNoL2Fy
+bS9jb25maWdzL211bHRpX3Y3X2RlZmNvbmZpZyBiL2FyY2gvYXJtL2NvbmZpZ3MvbXVsdGlfdjdf
+ZGVmY29uZmlnDQo+ID4gaW5kZXggODg2M2ZhOTY5Li5hM2JkOWRiZDggMTAwNjQ0DQo+ID4gLS0t
+IGEvYXJjaC9hcm0vY29uZmlncy9tdWx0aV92N19kZWZjb25maWcNCj4gPiArKysgYi9hcmNoL2Fy
+bS9jb25maWdzL211bHRpX3Y3X2RlZmNvbmZpZw0KPiA+IEBAIC04Niw2ICs4Niw3IEBAIENPTkZJ
+R19NQUNIX1NQRUFSMTMxMD15DQo+ID4gIENPTkZJR19NQUNIX1NQRUFSMTM0MD15DQo+ID4gIENP
+TkZJR19BUkNIX1NUST15DQo+ID4gIENPTkZJR19BUkNIX1NUTTMyPXkNCj4gPiArQ09ORklHX0FS
+Q0hfU1VOUExVUz15DQo+ID4gIENPTkZJR19BUkNIX1NVTlhJPXkNCj4gPiAgQ09ORklHX0FSQ0hf
+VEVHUkE9eQ0KPiA+ICBDT05GSUdfQVJDSF9VTklQSElFUj15DQo+IA0KPiBEb24ndCB5b3UgbmVl
+ZCBhbnkgZHJpdmVycyBoZXJlPw0KPiANCg0KQ3VycmVudGx5LCBhbGwgYmFzaWMgZHJpdmVycyBh
+dXRvIGVuYWJsZWQgYnkgbWFjaC1zdW5wbHVzL0tjb25maWc6DQouLi4NCmNvbmZpZyBTT0NfU1A3
+MDIxDQoJYm9vbCAiU3VucGx1cyBTUDcwMjEgU29DIHN1cHBvcnQiDQoJZGVwZW5kcyBvbiBBUkNI
+X1NVTlBMVVMNCglkZWZhdWx0IEFSQ0hfU1VOUExVUw0KCXNlbGVjdCBBUk1fR0lDDQoJc2VsZWN0
+IEFSTV9QU0NJDQoJc2VsZWN0IFBJTkNUUkwNCglzZWxlY3QgUElOQ1RSTF9TUFBDVEwNCglzZWxl
+Y3QgU0VSSUFMX1NVTlBMVVMNCglzZWxlY3QgU0VSSUFMX1NVTlBMVVNfQ09OU09MRQ0KDQphbmQg
+ZHJpdmVyJ3MgS2NvbmZpZzoNCi4uLg0KY29uZmlnIFJFU0VUX1NVTlBMVVMNCiAgICAgICAgYm9v
+bCAiU3VucGx1cyBTb0NzIFJlc2V0IERyaXZlciIgaWYgQ09NUElMRV9URVNUDQogICAgICAgIGRl
+ZmF1bHQgQVJDSF9TVU5QTFVTDQouLi4NCg0KPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9jb25m
+aWdzL3NwNzAyMV9kZWZjb25maWcgYi9hcmNoL2FybS9jb25maWdzL3NwNzAyMV9kZWZjb25maWcN
+Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMC4uY2RhMTZkMzNh
+DQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2FyY2gvYXJtL2NvbmZpZ3Mvc3A3MDIxX2Rl
+ZmNvbmZpZw0KPiAuLi4NCj4gPiArQ09ORklHX0hBVkVfQVJNX0FSQ0hfVElNRVI9eQ0KPiANCj4g
+SSBjaGVja2VkIHRoaXMgb25lIGFnYWluLCBhcyBtb3N0IG90aGVycyBkb24ndCBlbmFibGUgaXQg
+aW4gdGhlIGRlZmNvbmZpZy4NCj4gDQo+IEkgZG9uJ3QgcmVtZW1iZXIgaWYgSSByZWNvbW1lbmRl
+ZCByZW1vdmluZyB0aGUgJ3NlbGVjdCcgZnJvbSBLY29uZmlnDQo+IGluIGEgcHJldmlvdXMgcm91
+bmQsIGJ1dCBhcyB0aGF0IGlzIHdoZXJlIG90aGVyIHBsYXRmb3JtcyBoYXZlIGl0LCBJJ2QgYWRk
+DQo+IGl0IHRoZXJlIGFzIHdlbGwuDQo+IA0KDQpJJ2xsIG1vdmUgdGhpcyB0byBtYWNoLXN1bnBs
+dXMvS2NvbmZpZy4NCg0KPiA+ICtDT05GSUdfU1RBR0lORz15DQo+IA0KPiBEbyB5b3UgYWN0dWFs
+bHkgZW5hYmxlIGFueSBzdGFnaW5nIGRyaXZlcnMgaGVyZT8gSWYgbm90LCBJJ2QgZHJvcCB0aGF0
+IGJpdC4NCj4gDQoNCknigJlsbCBkcm9wIGl0Lg0KDQoNClRoYW5rcyBhbGwgeW91ciBjb21tZW50
+cy4NCg==

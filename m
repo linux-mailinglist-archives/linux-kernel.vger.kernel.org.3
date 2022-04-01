@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B08A4EE89C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39BC4EE89B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343546AbiDAGpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S1343542AbiDAGpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344052AbiDAGni (ORCPT
+        with ESMTP id S1344290AbiDAGnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:43:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD12B264F49
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:40:17 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1naAx7-0000ea-3L; Fri, 01 Apr 2022 08:40:09 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1naAx4-0004ye-Vn; Fri, 01 Apr 2022 08:40:06 +0200
-Date:   Fri, 1 Apr 2022 08:40:06 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "huangguangbin (A)" <huangguangbin2@huawei.com>,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
-        chenhao288@hisilicon.com
-Subject: Re: [PATCH] net: phy: genphy_loopback: fix loopback failed when
- speed is unknown
-Message-ID: <20220401064006.GB4449@pengutronix.de>
-References: <20220331114819.14929-1-huangguangbin2@huawei.com>
- <YkWdTpCsO8JhiSaT@lunn.ch>
- <130bb780-0dc1-3819-8f6d-f2daf4d9ece9@huawei.com>
- <YkW6J9rM6O/cb/lv@lunn.ch>
+        Fri, 1 Apr 2022 02:43:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EE458E41
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648795252; x=1680331252;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=F2u5reVKngNG7rsHH+KeIseuLTsishF5Wx5rk2BYJhQ=;
+  b=dTQ0XEX8EAfSqdpMV4dvHIR7aNwPfceMrbpQbBlozop1SIO8tXrjIEQK
+   jhRsnPCu4OI+rIifV6rhlck6pzpeBKJ92KV/Gp/mfPhFUNvk1ABEK3dPX
+   3S2uE/czc9IhXgMZfJ3WhJ7ysw+5xB0e02XpRw6i+2a7V4CEO7Cy8uIPE
+   LhrYBMdO8sU/BBpZgige/8fcpXsua+Eo26hHFwxHeKIY6LTExRLz6fw3h
+   bWSKnuOgw7el3oK3JhsdBmV41XIz6p5MR7ZLhAXS/e9WrSMwjvGAJANB0
+   g7NtSPSYJp4nl3zLqWJDN6CJes+CXSqsLNjSaOSQkpWli7nXBY6j1tK7Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="258884663"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="258884663"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 23:40:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="522659774"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 23:40:38 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Konstantin Khlebnikov <khlebnikov@openvz.org>,
+        Wu Fengguang <wfg@mail.ustc.edu.cn>
+Subject: Re: [PATCH 5/8] mm/vmscan: use helper folio_is_file_lru()
+References: <20220329132619.18689-1-linmiaohe@huawei.com>
+        <20220329132619.18689-6-linmiaohe@huawei.com>
+        <87y20pa3r6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <191fa86c-2548-d136-19f5-3e0a744b6da9@huawei.com>
+Date:   Fri, 01 Apr 2022 14:40:36 +0800
+In-Reply-To: <191fa86c-2548-d136-19f5-3e0a744b6da9@huawei.com> (Miaohe Lin's
+        message of "Fri, 1 Apr 2022 14:14:49 +0800")
+Message-ID: <87tubd9uhn.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YkW6J9rM6O/cb/lv@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:36:47 up 1 day, 19:06, 41 users,  load average: 0.05, 0.08, 0.07
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,65 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 04:26:47PM +0200, Andrew Lunn wrote:
-> > In this case, as speed and duplex both are unknown, ctl is just set to 0x4000.
-> > However, the follow code sets mask to ~0 for function phy_modify():
-> > int genphy_loopback(struct phy_device *phydev, bool enable)
-> > {
-> > 	if (enable) {
-> > 		...
-> > 		phy_modify(phydev, MII_BMCR, ~0, ctl);
-> > 		...
-> > }
-> > so all other bits of BMCR will be cleared and just set bit 14, I use phy trace to
-> > prove that:
-> > 
-> > $ cat /sys/kernel/debug/tracing/trace
-> > # tracer: nop
-> > #
-> > # entries-in-buffer/entries-written: 923/923   #P:128
-> > #
-> > #                                _-----=> irqs-off/BH-disabled
-> > #                               / _----=> need-resched
-> > #                              | / _---=> hardirq/softirq
-> > #                              || / _--=> preempt-depth
-> > #                              ||| / _-=> migrate-disable
-> > #                              |||| /     delay
-> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > #              | |         |   |||||     |         |
-> >   kworker/u257:2-694     [015] .....   209.263912: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
-> >   kworker/u257:2-694     [015] .....   209.263951: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-> >   kworker/u257:2-694     [015] .....   209.263990: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x01 val:0x7989
-> >   kworker/u257:2-694     [015] .....   209.264028: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x09 val:0x0200
-> >   kworker/u257:2-694     [015] .....   209.264067: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x0a val:0x0000
-> >          ethtool-1148    [007] .....   209.665693: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
-> >          ethtool-1148    [007] .....   209.665706: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x1840
-> >          ethtool-1148    [007] .....   210.588139: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1840
-> >          ethtool-1148    [007] .....   210.588152: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x1040
-> >          ethtool-1148    [007] .....   210.615900: mdio_access: mii-0000:bd:00.1 read  phy:0x03 reg:0x00 val:0x1040
-> >          ethtool-1148    [007] .....   210.615912: mdio_access: mii-0000:bd:00.1 write phy:0x03 reg:0x00 val:0x4000 //here just set bit 14
-> > 
-> > So phy speed will be set to 10M in this case, if previous speed of
-> > device before going down is 10M, loopback test is pass. Only
-> > previous speed is 100M or 1000M, loopback test is failed.
-> 
-> O.K. So it should be set into 10M half duplex. But why does this cause
-> it not to loopback packets? Does the PHY you are using not actually
-> support 10 Half? Why does it need to be the same speed as when the
-> link was up? And why does it actually set LSTATUS indicating there is
-> link?
-> 
-> Is this a generic problem, all PHYs are like this, or is this specific
-> to the PHY you are using? Maybe this PHY needs its own loopback
-> function because it does something odd?
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-It looks for me like attempt to fix loopback test for setup without active
-link partner. Correct?
+> On 2022/4/1 11:20, Huang, Ying wrote:
+>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>> 
+>>> Use helper folio_is_file_lru() to check whether folio is file lru. Minor
+>>> readability improvement.
+>>>
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>>  mm/vmscan.c | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>> index ebd8ffb63673..31e95d627448 100644
+>>> --- a/mm/vmscan.c
+>>> +++ b/mm/vmscan.c
+>>> @@ -1411,14 +1411,14 @@ static enum page_references folio_check_references(struct folio *folio,
+>>>  		/*
+>>>  		 * Activate file-backed executable folios after first usage.
+>>>  		 */
+>>> -		if ((vm_flags & VM_EXEC) && !folio_test_swapbacked(folio))
+>>> +		if ((vm_flags & VM_EXEC) && folio_is_file_lru(folio))
+>> 
+>> I think that this should be converted to
+>> 
+>> 		if ((vm_flags & VM_EXEC)))
+>> 
+>> We should activate swap-backed executable folios (e.g. tmpfs) after
+>> first usage too.
+>> 
+>
+> Dig into the git history, we can found that commit c909e99364c8 ("vmscan: activate executable pages after first usage")
+> activate swap-backed executable folios after first usage too. But later swap-backed executable folios is not activated
+> via commit b518154e59aa ("mm/vmscan: protect the workingset on anonymous LRU") to pretect the workingset from anonymous
+> LRU. So above change might not be wanted. Or am I miss something?
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I think we should restore the original behavior to protect swap backed
+executable folios too.
+
+Hi, Kim,
+
+What do you think about this?
+
+Best Regards,
+Huang, Ying
+
+> Many thanks.
+>
+>> Best Regards,
+>> Huang, Ying
+>> 
+>>>  			return PAGEREF_ACTIVATE;
+>>>  
+>>>  		return PAGEREF_KEEP;
+>>>  	}
+>>>  
+>>>  	/* Reclaim if clean, defer dirty folios to writeback */
+>>> -	if (referenced_folio && !folio_test_swapbacked(folio))
+>>> +	if (referenced_folio && folio_is_file_lru(folio))
+>>>  		return PAGEREF_RECLAIM_CLEAN;
+>>>  
+>>>  	return PAGEREF_RECLAIM;
+>> .
+>> 

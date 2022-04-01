@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD2B4EE967
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FA24EE966
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344064AbiDAH5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S1344114AbiDAH6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344061AbiDAH5i (ORCPT
+        with ESMTP id S1344157AbiDAH55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:57:38 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC02B1A8C02
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:55:48 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id w141so1493714qkb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:55:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EvMYudPMRlW+QI6mRpk+TBKOIo2CGyH38rNyym6D1Tg=;
-        b=k3c7PAaIDx5QN1SJ8NeWDznRSidczb38R2PWr3sPpbGPzb0duAsVQ4Lrn3NArdfjNE
-         2QZLRwD0nW2tbjk5QMKASyaPlq5FXdv+Dr9AYLjoYq6UXI4k6eF8Yhys15344c8vgAmN
-         SzORYxE3oQhBrOJSGuxAf5TBxsmDrFUQkzDu1WArf0lBQj0K1YaDa4ajtBq3VH8CMHAy
-         oPXA489ytyos3hR5awk9Ays8Qr0H21qd6Jm3yZ2qPRjir4nqv79piOv5Fu8P5n1BuyoK
-         AyrOpIIvuTDT0QDzrlnCv578OWoduGNqka4cddB/NI9SKUwxL5EdJImooxrb+/aeSLRA
-         K+Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EvMYudPMRlW+QI6mRpk+TBKOIo2CGyH38rNyym6D1Tg=;
-        b=Zz7vDYzNMSmPnO4xbGslSazf2wh61OIBIdpadQL2MGDxWfF0Bn0JTpnCJgtqqdBgZ8
-         pnY8wnACryh+NxZ3cdrx/meVx6748ed+NH/m95rZTukqk6oxXAsXRhQSryAlirjn0I/e
-         TfK4n3ZkohNZlrtu3JE7xCGVD/c8Ggg1P7njfwSigHe3IdUBSHbPkjiffGCrmjYNpeyb
-         tU8zIDBkdrrxf1K+KWVRrqfAZdEXwFkBg91qspJg3WxOA7KRBdKMeiwWrlfoREnixgzv
-         954UwhuIsvDsQBqQ+P+g41N9rR/9h1ZINcOokDJe6t9sqQ7gJVVbb7yYzMioV9RJ54qC
-         ruJA==
-X-Gm-Message-State: AOAM533ekE27AdlrE5ldOVvnYpXHSe59K5YEdaCDzv4m+EF6ao+TcUx2
-        cRx/g50Bmq+SKmTGRdQeXGs=
-X-Google-Smtp-Source: ABdhPJyGg0jtsxFhZt29VXKRpRVMbcVM9RS+EqR48wxTQoCmF1+xoN0RETvR8EU0AXxeBdhuhf2RIQ==
-X-Received: by 2002:a05:620a:c08:b0:67d:3b4e:229f with SMTP id l8-20020a05620a0c0800b0067d3b4e229fmr5930412qki.550.1648799747772;
-        Fri, 01 Apr 2022 00:55:47 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 78-20020a370551000000b0067e3a58c090sm905190qkf.82.2022.04.01.00.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 00:55:47 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     sudeep.holla@arm.com
-Cc:     cristian.marussi@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] firmware: arm_scmi: Replace zero-length array with flexible-array member
-Date:   Fri,  1 Apr 2022 07:55:37 +0000
-Message-Id: <20220401075537.2407376-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 1 Apr 2022 03:57:57 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0FB1AA8F5;
+        Fri,  1 Apr 2022 00:56:06 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1naC8T-0006pi-L5; Fri, 01 Apr 2022 09:55:57 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>, zhangqing@rock-chips.com,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
+Date:   Fri, 01 Apr 2022 09:55:55 +0200
+Message-ID: <3107512.vfdyTQepKt@diego>
+In-Reply-To: <20220331225134.7A0A9C340ED@smtp.kernel.org>
+References: <20220329111323.3569-1-jbx6244@gmail.com> <20220331225134.7A0A9C340ED@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Hi Stephen,
 
-There is a regular need in the kernel to provide a way to declare
-having a dynamically sized set of trailing elements in a structure.
-Kernel code should always use “flexible array members”[1] for these
-cases. The older style of one-element or zero-length arrays should
-no longer be used[2].
+Am Freitag, 1. April 2022, 00:51:32 CEST schrieb Stephen Boyd:
+> Quoting Johan Jonker (2022-03-29 04:13:22)
+> > diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+> > new file mode 100644
+> > index 000000000..ddd7e46af
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+> > @@ -0,0 +1,78 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
+> > +
+> > +maintainers:
+> > +  - Elaine Zhang <zhangqing@rock-chips.com>
+> > +  - Heiko Stuebner <heiko@sntech.de>
+> > +
+> > +description: |
+> > +  The RK3188/RK3066 clock controller generates and supplies clocks to various
+> > +  controllers within the SoC and also implements a reset controller for SoC
+> > +  peripherals.
+> > +  Each clock is assigned an identifier and client nodes can use this identifier
+> > +  to specify the clock which they consume. All available clocks are defined as
+> > +  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
+> > +  dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
+> > +  Similar macros exist for the reset sources in these files.
+> > +  There are several clocks that are generated outside the SoC. It is expected
+> > +  that they are defined using standard clock bindings with following
+> > +  clock-output-names:
+> > +    - "xin24m"    - crystal input                 - required
+> > +    - "xin32k"    - RTC clock                     - optional
+> > +    - "xin27m"    - 27mhz crystal input on RK3066 - optional
+> > +    - "ext_hsadc" - external HSADC clock          - optional
+> > +    - "ext_cif0"  - external camera clock         - optional
+> > +    - "ext_rmii"  - external RMII clock           - optional
+> > +    - "ext_jtag"  - external JTAG clock           - optional
+> 
+> I'd expect all these clks here to be inputs to this node.
 
-[1] https://en.wikipedia.org/wiki/Flexible_array_member
-[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+The optional clocks are all part of a circular dependency.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/firmware/arm_scmi/clock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So for example xin32k normally is generated by the pmic and fed
+back into the system, so to get xin32k, we need the pmic to probe,
+which needs i2c, which in turn already needs the clock controller.
 
-diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
-index cf6fed6dec77..d753c040b6e8 100644
---- a/drivers/firmware/arm_scmi/clock.c
-+++ b/drivers/firmware/arm_scmi/clock.c
-@@ -49,7 +49,7 @@ struct scmi_msg_resp_clock_describe_rates {
- 	struct {
- 		__le32 value_low;
- 		__le32 value_high;
--	} rate[0];
-+	} rate[];
- #define RATE_TO_U64(X)		\
- ({				\
- 	typeof(X) x = (X);	\
--- 
-2.25.1
+Or optional clocks may not be available at all.
+
+So for the past years we already relied on the clock-system's
+self adaptation if a clock becomes available at some point
+during later boot and hence do not have those in a clocks-property.
+
+Heiko
+
 

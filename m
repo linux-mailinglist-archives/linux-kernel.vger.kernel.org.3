@@ -2,72 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1EE4EE81B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0548E4EE823
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245343AbiDAGVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S245358AbiDAGWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiDAGVY (ORCPT
+        with ESMTP id S245346AbiDAGWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:21:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D512F157;
-        Thu, 31 Mar 2022 23:19:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0D9A7CE2402;
-        Fri,  1 Apr 2022 06:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6CC5C340EE;
-        Fri,  1 Apr 2022 06:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648793972;
-        bh=UNO2VY2szv3tnY2SSi44aAJ9/bbdp19Fi5sMykNkswE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DCHiplod743wmDADlym8FzwvFReEK1+BjoT6lMvXmE87rEM0nZFG4Tz9I7BzUNlGD
-         Q9oWAYymPkNL5IP7WKoTMSERvTZjLP41m+gQB1J5VZ7qey10gG/MJCnedYqM4ubey7
-         0quqtvVpnGcS7tEddZVn5qkvi2vFtC8DQ8K/3mv8=
-Date:   Fri, 1 Apr 2022 08:19:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Carlos Bilbao <bilbao@vt.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: allow changing interface name via
- configfs
-Message-ID: <YkaZcSsadjHp1yJZ@kroah.com>
-References: <20220331211155.412906-1-w36195@motorola.com>
+        Fri, 1 Apr 2022 02:22:02 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FC111987A;
+        Thu, 31 Mar 2022 23:20:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V8o8chS_1648794008;
+Received: from 30.240.122.30(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V8o8chS_1648794008)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 01 Apr 2022 14:20:10 +0800
+Message-ID: <f0053246-10b8-4fb9-6cc1-5db9e797b1d0@linux.alibaba.com>
+Date:   Fri, 1 Apr 2022 14:20:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331211155.412906-1-w36195@motorola.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v7 0/3] EDAC/ghes: refactor memory error reporting to
+ avoid code duplication
+Content-Language: en-US
+To:     bp@alien8.de, rric@kernel.org
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220308144053.49090-1-xueshuai@linux.alibaba.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220308144053.49090-1-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 04:11:50PM -0500, Dan Vacura wrote:
-> Add a configfs entry, "function_name", to change the iInterface field
-> for VideoControl. This name is used on host devices for user selection,
-> useful when multiple cameras are present. The default will remain "UVC
-> Camera".
+Hi, Borislav,
+
+在 2022/3/8 PM10:40, Shuai Xue 写道:
+> ghes_edac_report_mem_error() in ghes_edac.c is a Long Method and have
+> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
+> cper_mem_err_type_str() in drivers/firmware/efi/cper.c. In addition, the
+> cper_print_mem() in drivers/firmware/efi/cper.c only reports the error
+> status and misses its description.
 > 
-> Cc: <stable@vger.kernel.org> # 5.10+
+> This patch set is to refactor ghes_edac_report_mem_error with:
+> 
+> - Patch 01 is to wrap up error status decoding logics and reuse it in
+>     cper_print_mem().
+> - Patch 02 is to introduces cper_*(), into ghes_edac_report_mem_error(),
+>   this can avoid bunch of duplicate code lines;
+> - Patch 03 is to improve report format  
+> 
+> Changes since v6:
+> - Rework patch 02 by Borislav Petkov
+> - add patch 03 to improve format
+> - Link: https://lore.kernel.org/r/20220303122626.99740-3-xueshuai@linux.alibaba.com
+>   
+> Changes since v5:
+> - Delete change summary in commit log
+> - Link: https://lore.kernel.org/all/20220126081702.55167-1-xueshuai@linux.alibaba.com/
+> - Thanks Borislav Petkov for review comments.
+> 
+> Changes since v4:
+> - Fix alignment and format problem
+> - Link: https://lore.kernel.org/all/20220125024939.30635-1-xueshuai@linux.alibaba.com/
+> 
+> Changes since v3:
+> 
+> - make cper_mem_err_status_str table a lot more compact
+> - Fix alignment and format problem
+> - Link: https://lore.kernel.org/all/20220124024759.19176-1-xueshuai@linux.alibaba.com/
+> 
+> Changes since v2:
+> 
+> - delete the unified patch
+> - adjusted the order of patches
+> - Link: https://lore.kernel.org/all/20211210134019.28536-1-xueshuai@linux.alibaba.com/
+> 
+> Changes since v1:
+> 
+> - add a new patch to unify ghes and cper before removing duplication.
+> - document the changes in patch description
+> - add EXPORT_SYMBOL_GPL()s for cper_*()
+> - document and the dependency and add UEFI_CPER dependency explicitly
+> - Link: https://lore.kernel.org/all/20211207031905.61906-2-xueshuai@linux.alibaba.com/
+> 
+> Shuai Xue (3):
+>   efi/cper: add cper_mem_err_status_str to decode error description
+>   EDAC/ghes: Unify CPER memory error location reporting
+>   efi/cper: reformat CPER memory error location to more readable
+> 
+>  drivers/edac/Kconfig        |   1 +
+>  drivers/edac/ghes_edac.c    | 200 +++++++-----------------------------
+>  drivers/firmware/efi/cper.c |  64 ++++++++----
+>  include/linux/cper.h        |   3 +
+>  4 files changed, 87 insertions(+), 181 deletions(-)
 
-Why is adding a new feature a stable kernel issue?
 
-confused,
+Ping. I am wondering if you have any comments on this series of patches?
 
-greg k-h
+Best Regards,
+Shuai

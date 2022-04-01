@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC5B4EFC57
+	by mail.lfdr.de (Postfix) with ESMTP id D89F74EFC58
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353123AbiDAVra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
+        id S243462AbiDAVre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353072AbiDAVrI (ORCPT
+        with ESMTP id S1353078AbiDAVrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Apr 2022 17:47:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241FD10F6D3;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DC910F6D2;
         Fri,  1 Apr 2022 14:45:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE10CB8267F;
-        Fri,  1 Apr 2022 21:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6CE68C34111;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12C21B82680;
+        Fri,  1 Apr 2022 21:45:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C03B1C340F3;
         Fri,  1 Apr 2022 21:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1648849515;
-        bh=IPYYKYLylRZtBz2LyI1nGJyhfLZOmj7SEKU6Hy+JgmQ=;
+        bh=8WxsSKYXfHI+ZwEAmEi6yiRFZWVkJ6ThU6B6MiPl+4k=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=AFqzKbr4qwdV1DzMBVGFn5XQoFpLcyGeXqyFQ66+zptWLB1uTv/UUp2o44mtV0wds
-         BjK1pi6bcbCc+3vx36l6riOXmXou5poUTnZGSmb5Mg92WAMUdndPq+XNG99Ea6OxA3
-         mOsInBV/OAid+6c7FSocyrvuf7yovcVML+vpIUYH0+ThokpRBKrOZTKkboAT/xdaaf
-         HZajxRa/epeYNWCEFN6pL5C8xuZVh/N8S09SciwNlDOpCFikhTBB5Ol+hKy5kaCIJr
-         6tkjP8tvyv/sUO7PBaRBz3h/2Ck0IfrDLOswkrjQ1RMWvUEWqDz0ylyd9Cdhv1baSN
-         QEGbtb/TjGWtQ==
+        b=F0T5wWfkRwuUuxjW491OHVSIArlFkLwtAVg4/lDNUeqW8Hlr5QC7JyYJpb0z4KkRs
+         HDl3xRAcfrQ3weaP2BlkA/0R1JexQ8L/joqZJO1uzf8/NYUXzq9XCRrFwPh5ygIGUU
+         xHz9aE14Kq0+t3/ylS2E1iWDAzQD3fJs6LMs0zH1DbQJO7oo6gdRfu0QpBK2buHl59
+         tOfM0TP/kriKbgX2L7jDIShbYed0BYWarS9BF6jIzdehiKCZrIjGaDzjuEhS2i9c5g
+         SyPDrpPBup9PFFq4DEt6SQrCbq0/5q0IwLZIoXJUQU18WlbrYC8pGt6KoIbztChpWQ
+         WE5MPUWe8RWuQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59256EAC09C;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADA36EAC09C;
         Fri,  1 Apr 2022 21:45:15 +0000 (UTC)
-Subject: Re: [GIT PULL] cifs/smb3 fixes
+Subject: Re: [GIT PULL] ksmbd server fixes
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5msKJPqE9sMpB2=_w9ZJQ8PAPhfD3CqpR5SKJkEFtTyaFg@mail.gmail.com>
-References: <CAH2r5msKJPqE9sMpB2=_w9ZJQ8PAPhfD3CqpR5SKJkEFtTyaFg@mail.gmail.com>
+In-Reply-To: <CAH2r5mvE6YuhkO0AaPtmzA4V22T_T-bz7ttKbvgtqo0My68Kgg@mail.gmail.com>
+References: <CAH2r5mvE6YuhkO0AaPtmzA4V22T_T-bz7ttKbvgtqo0My68Kgg@mail.gmail.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5msKJPqE9sMpB2=_w9ZJQ8PAPhfD3CqpR5SKJkEFtTyaFg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-smb3-fixes-part2
-X-PR-Tracked-Commit-Id: d6f5e358452479fa8a773b5c6ccc9e4ec5a20880
+X-PR-Tracked-Message-Id: <CAH2r5mvE6YuhkO0AaPtmzA4V22T_T-bz7ttKbvgtqo0My68Kgg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/5.18-rc-ksmbd-server-fixes
+X-PR-Tracked-Commit-Id: edf5f0548fbb77e20b898460dc25281b0f4d974d
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9a005bea4f59b603c413ac1df19cda37aa3aa486
-Message-Id: <164884951536.9554.14982273407524795396.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 7a3ecddc571cc3294e5d6bb5948ff2b0cfa12735
+Message-Id: <164884951570.9554.13950030052291928613.pr-tracker-bot@kernel.org>
 Date:   Fri, 01 Apr 2022 21:45:15 +0000
 To:     Steve French <smfrench@gmail.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -62,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 1 Apr 2022 11:15:30 -0500:
+The pull request you sent on Fri, 1 Apr 2022 13:40:40 -0500:
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-smb3-fixes-part2
+> git://git.samba.org/ksmbd.git tags/5.18-rc-ksmbd-server-fixes
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9a005bea4f59b603c413ac1df19cda37aa3aa486
+https://git.kernel.org/torvalds/c/7a3ecddc571cc3294e5d6bb5948ff2b0cfa12735
 
 Thank you!
 

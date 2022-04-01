@@ -2,236 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28F34EE7E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEAE4EE7EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242924AbiDAFwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S245198AbiDAFxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245224AbiDAFwJ (ORCPT
+        with ESMTP id S237583AbiDAFwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:52:09 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46392261F1
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:50:13 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KV8QX1xWqz9sS7;
-        Fri,  1 Apr 2022 07:50:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KN0ELz2NsC3g; Fri,  1 Apr 2022 07:50:12 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KV8QX0kyJz9sRv;
-        Fri,  1 Apr 2022 07:50:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 02F5A8B78B;
-        Fri,  1 Apr 2022 07:50:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id EE3NQSXyqqMO; Fri,  1 Apr 2022 07:50:11 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.82])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B0D708B766;
-        Fri,  1 Apr 2022 07:50:11 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2315o06k636219
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 1 Apr 2022 07:50:00 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2315nxYZ636218;
-        Fri, 1 Apr 2022 07:49:59 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v2] objtool: Use target file endianness instead of a compiled constant
-Date:   Fri,  1 Apr 2022 07:49:56 +0200
-Message-Id: <8c5881d4960a4dc5e64082ecd6359f19027ca2cd.1648792104.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        Fri, 1 Apr 2022 01:52:53 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941DD4E385
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:51:03 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t25so2914111lfg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qA1v0A7dc3FV4RuMv5ZQV+qnRwKmp9V+QFkq5cmpENY=;
+        b=RMf4MzqPShODxLhq+sO4cUVTL3s/BrBvRG/EaMjOanqT3bAMiyKedu7D3sCrExpRdk
+         nYKSZHJq3Y3KMEff96G8lFu3QcAjZT0UNIGroLdVSmjshBRp3CQ/VIgP+wZtFK73kk5Y
+         1Gr1qpQNLItoN5zU/4GjpZlzsKTMTduLnNfTxZ/F6Y2GOiQPkeb/5071tQGXYLH2e5iQ
+         Hlps5YemK2FlkjzWe0fmiMtXBDFUpmwsCqVPY8oTlM8hFaIRi42+tbLBP68BWhiIf+kH
+         9pVGm4jItuyZf7pyIMruxC/4uuZSRvpMuGpySvAHCtN0fT58BvcfJQmUBmyG3Lls5Wml
+         93Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qA1v0A7dc3FV4RuMv5ZQV+qnRwKmp9V+QFkq5cmpENY=;
+        b=BpKkm4N3b1MtP22HPwfcpJ+WY8YB//NS+XdA9rvvDsLI46s5bs+iyhQmB56Kecj/qx
+         LwiO0PJO4N8b0NmVUxSrWwurLJ1AHtKO5tceV62v1NHkZzRSgYCjFTrxyeZZSVwUWala
+         T1DZYGITInxyJQSnPaCc1j+sznL2Q3LV4EM3wzvxwFVKlBesoK+GY+DvcjRky70YgQJv
+         aF1903VkfL/KMc/b8YdW0Mv/vcAZTAGwZMpD6fdrQjJqxW5z1mQmzEUNVCOt1qJW6z+2
+         PofLFsx8U2uLLxbMPxHOaEoyUAWrOV+7DocVf6fTlbuRLADYsETKxUVkwo7gWAQ94M4V
+         AMcw==
+X-Gm-Message-State: AOAM531GHcftGn3FvE6arNMFeoKVu9x90pWG6e6WQhhQc+KpWcE88c3t
+        q35ubwqht8Q0REHasHwd0gMQgpWkjf54C0tr2SG1cA==
+X-Google-Smtp-Source: ABdhPJzV5rjeNDxGrh06Y6/j6ua7W2u+B+s3R9VuN1ozC2fonLH2ANgH5N2/XarDXlE09XwQEepCNwQd97y3piadpjo=
+X-Received: by 2002:a05:6512:1051:b0:44a:5dcb:3a74 with SMTP id
+ c17-20020a056512105100b0044a5dcb3a74mr12761841lfb.51.1648792261524; Thu, 31
+ Mar 2022 22:51:01 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648792195; l=6175; s=20211009; h=from:subject:message-id; bh=4NPekWjrcRuSVKe8y44GGoUXDPqbdBzeIRnVBUxQb8k=; b=nGPXown8mH/1ECSyIvnNAOZDHx7jTZCwhIMZgWkY5WbV3kRkKI6m078eHQgXRRhqDA08uEV2UYW/ N0DaBPCUBvLyPtLv68UBqNwTDtCJUKAZi2lHibralscwl2rsx1J8
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <mhng-c6a04a4f-1e85-49e9-baee-b56b0e78c602@palmer-ri-x1c9> <mhng-5afad1be-9b06-4cd1-95e3-c21605b9086a@palmer-mbp2014>
+In-Reply-To: <mhng-5afad1be-9b06-4cd1-95e3-c21605b9086a@palmer-mbp2014>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Fri, 1 Apr 2022 13:50:50 +0800
+Message-ID: <CANXhq0oJKRVV2QyzJ2WV1fjcw3piyoKeiR5U-=DqsyDayixTGA@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] Determine the number of DMA channels by
+ 'dma-channels' property
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Vinod <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bin Meng <bin.meng@windriver.com>,
+        Green Wan <green.wan@sifive.com>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some architectures like powerpc support both endianness, it's
-therefore not possible to fix the endianness via arch/endianness.h
-because there is no easy way to get the target endianness at
-build time.
+On Fri, Apr 1, 2022 at 6:42 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Wed, 30 Mar 2022 22:54:47 PDT (-0700), Palmer Dabbelt wrote:
+> > On Wed, 30 Mar 2022 22:21:56 PDT (-0700), vkoul@kernel.org wrote:
+> >> On 30-03-22, 20:15, Palmer Dabbelt wrote:
+> >>> On Mon, 28 Mar 2022 02:52:21 PDT (-0700), zong.li@sifive.com wrote:
+> >>> > The PDMA driver currently assumes there are four channels by default, it
+> >>> > might cause the error if there is actually less than four channels.
+> >>> > Change that by getting number of channel dynamically from device tree.
+> >>> > For backwards-compatible, it uses the default value (i.e. 4) when there
+> >>> > is no 'dma-channels' information in dts.
+> >>> >
+> >>> > This patch set contains the dts and dt-bindings change.
+> >>> >
+> >>> > Changed in v8:
+> >>> >  - Rebase on master
+> >>> >  - Remove modification of microchip-mpfs.dtsi
+> >>> >  - Rename DMA node name of fu540-c000.dtsi
+> >>> >
+> >>> > Changed in v7:
+> >>> >  - Rebase on tag v5.17-rc7
+> >>> >  - Modify the subject of patch
+> >>> >
+> >>> > Changed in v6:
+> >>> >  - Rebase on tag v5.17-rc6
+> >>> >  - Change sf_pdma.chans[] to a flexible array member.
+> >>> >
+> >>> > Changed in v5:
+> >>> >  - Rebase on tag v5.17-rc3
+> >>> >  - Fix typo in dt-bindings and commit message
+> >>> >  - Add PDMA versioning scheme for compatible
+> >>> >
+> >>> > Changed in v4:
+> >>> >  - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
+> >>> >
+> >>> > Changed in v3:
+> >>> >  - Fix allocating wrong size
+> >>> >  - Return error if 'dma-channels' is larger than maximum
+> >>> >
+> >>> > Changed in v2:
+> >>> >  - Rebase on tag v5.16
+> >>> >  - Use 4 as default value of dma-channels
+> >>> >
+> >>> > Zong Li (4):
+> >>> >   dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
+> >>> >     modify compatible
+> >>> >   riscv: dts: Add dma-channels property and modify compatible
+> >>> >   riscv: dts: rename the node name of dma
+> >>> >   dmaengine: sf-pdma: Get number of channel by device tree
+> >>> >
+> >>> >  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
+> >>> >  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
+> >>> >  drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
+> >>> >  drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
+> >>> >  4 files changed, 38 insertions(+), 18 deletions(-)
+> >>>
+> >>> Thanks, these are on for-next.
+> >>
+> >> The drivers/dma/ should go thru dmaengine tree. During merge window I
+> >> dont apply the patches
+> >
+> > OK, I can drop this from my tree if you'd like?
+>
+> Just to follow up from IRC: I'm dropping these from my tree.
 
-Use the endianness recorded in the file objtool is working on.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: Pass pointer to struct elf instead of pointer to elf header. A fake struct elf needs to be built in orc_dump().
----
- .../arch/x86/include/arch/endianness.h        |  9 ------
- tools/objtool/check.c                         |  2 +-
- tools/objtool/include/objtool/endianness.h    | 29 +++++++++----------
- tools/objtool/orc_dump.c                      | 11 +++++--
- tools/objtool/orc_gen.c                       |  4 +--
- tools/objtool/special.c                       |  3 +-
- 6 files changed, 27 insertions(+), 31 deletions(-)
- delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
-
-diff --git a/tools/objtool/arch/x86/include/arch/endianness.h b/tools/objtool/arch/x86/include/arch/endianness.h
-deleted file mode 100644
-index 7c362527da20..000000000000
---- a/tools/objtool/arch/x86/include/arch/endianness.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--#ifndef _ARCH_ENDIANNESS_H
--#define _ARCH_ENDIANNESS_H
--
--#include <endian.h>
--
--#define __TARGET_BYTE_ORDER __LITTLE_ENDIAN
--
--#endif /* _ARCH_ENDIANNESS_H */
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 6de5085e3e5a..63d24f985d70 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1941,7 +1941,7 @@ static int read_unwind_hints(struct objtool_file *file)
- 			return -1;
- 		}
- 
--		cfi.cfa.offset = bswap_if_needed(hint->sp_offset);
-+		cfi.cfa.offset = bswap_if_needed(file->elf, hint->sp_offset);
- 		cfi.type = hint->type;
- 		cfi.end = hint->end;
- 
-diff --git a/tools/objtool/include/objtool/endianness.h b/tools/objtool/include/objtool/endianness.h
-index 10241341eff3..ab0515ba0538 100644
---- a/tools/objtool/include/objtool/endianness.h
-+++ b/tools/objtool/include/objtool/endianness.h
-@@ -2,33 +2,30 @@
- #ifndef _OBJTOOL_ENDIANNESS_H
- #define _OBJTOOL_ENDIANNESS_H
- 
--#include <arch/endianness.h>
- #include <linux/kernel.h>
- #include <endian.h>
--
--#ifndef __TARGET_BYTE_ORDER
--#error undefined arch __TARGET_BYTE_ORDER
--#endif
--
--#if __BYTE_ORDER != __TARGET_BYTE_ORDER
--#define __NEED_BSWAP 1
--#else
--#define __NEED_BSWAP 0
--#endif
-+#include <objtool/elf.h>
- 
- /*
-- * Does a byte swap if target endianness doesn't match the host, i.e. cross
-+ * Does a byte swap if target file endianness doesn't match the host, i.e. cross
-  * compilation for little endian on big endian and vice versa.
-  * To be used for multi-byte values conversion, which are read from / about
-  * to be written to a target native endianness ELF file.
-  */
--#define bswap_if_needed(val)						\
-+static inline bool need_bswap(struct elf *elf)
-+{
-+	return (__BYTE_ORDER == __LITTLE_ENDIAN) ^
-+	       (elf->ehdr.e_ident[EI_DATA] == ELFDATA2LSB);
-+}
-+
-+#define bswap_if_needed(elf, val)					\
- ({									\
- 	__typeof__(val) __ret;						\
-+	bool __need_bswap = need_bswap(elf);				\
- 	switch (sizeof(val)) {						\
--	case 8: __ret = __NEED_BSWAP ? bswap_64(val) : (val); break;	\
--	case 4: __ret = __NEED_BSWAP ? bswap_32(val) : (val); break;	\
--	case 2: __ret = __NEED_BSWAP ? bswap_16(val) : (val); break;	\
-+	case 8: __ret = __need_bswap ? bswap_64(val) : (val); break;	\
-+	case 4: __ret = __need_bswap ? bswap_32(val) : (val); break;	\
-+	case 2: __ret = __need_bswap ? bswap_16(val) : (val); break;	\
- 	default:							\
- 		BUILD_BUG(); break;					\
- 	}								\
-diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
-index f5a8508c42d6..4f1211fec82c 100644
---- a/tools/objtool/orc_dump.c
-+++ b/tools/objtool/orc_dump.c
-@@ -76,6 +76,7 @@ int orc_dump(const char *_objname)
- 	GElf_Rela rela;
- 	GElf_Sym sym;
- 	Elf_Data *data, *symtab = NULL, *rela_orc_ip = NULL;
-+	struct elf dummy_elf = {};
- 
- 
- 	objname = _objname;
-@@ -94,6 +95,12 @@ int orc_dump(const char *_objname)
- 		return -1;
- 	}
- 
-+	if (!elf64_getehdr(elf)) {
-+		WARN_ELF("elf64_getehdr");
-+		return -1;
-+	}
-+	memcpy(&dummy_elf.ehdr, elf64_getehdr(elf), sizeof(dummy_elf.ehdr));
-+
- 	if (elf_getshdrnum(elf, &nr_sections)) {
- 		WARN_ELF("elf_getshdrnum");
- 		return -1;
-@@ -198,11 +205,11 @@ int orc_dump(const char *_objname)
- 
- 		printf(" sp:");
- 
--		print_reg(orc[i].sp_reg, bswap_if_needed(orc[i].sp_offset));
-+		print_reg(orc[i].sp_reg, bswap_if_needed(&dummy_elf, orc[i].sp_offset));
- 
- 		printf(" bp:");
- 
--		print_reg(orc[i].bp_reg, bswap_if_needed(orc[i].bp_offset));
-+		print_reg(orc[i].bp_reg, bswap_if_needed(&dummy_elf, orc[i].bp_offset));
- 
- 		printf(" type:%s end:%d\n",
- 		       orc_type_name(orc[i].type), orc[i].end);
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index dd3c64af9db2..1f22b7ebae58 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -97,8 +97,8 @@ static int write_orc_entry(struct elf *elf, struct section *orc_sec,
- 	/* populate ORC data */
- 	orc = (struct orc_entry *)orc_sec->data->d_buf + idx;
- 	memcpy(orc, o, sizeof(*orc));
--	orc->sp_offset = bswap_if_needed(orc->sp_offset);
--	orc->bp_offset = bswap_if_needed(orc->bp_offset);
-+	orc->sp_offset = bswap_if_needed(elf, orc->sp_offset);
-+	orc->bp_offset = bswap_if_needed(elf, orc->bp_offset);
- 
- 	/* populate reloc for ip */
- 	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int), R_X86_64_PC32,
-diff --git a/tools/objtool/special.c b/tools/objtool/special.c
-index e2223dd91c37..9c8d827f69af 100644
---- a/tools/objtool/special.c
-+++ b/tools/objtool/special.c
-@@ -87,7 +87,8 @@ static int get_alt_entry(struct elf *elf, struct special_entry *entry,
- 	if (entry->feature) {
- 		unsigned short feature;
- 
--		feature = bswap_if_needed(*(unsigned short *)(sec->data->d_buf +
-+		feature = bswap_if_needed(elf,
-+					  *(unsigned short *)(sec->data->d_buf +
- 							      offset +
- 							      entry->feature));
- 		arch_handle_alternative(feature, alt);
--- 
-2.35.1
-
+Hi Palmer and Vinod,
+Many thanks for your help. As all you suggested, let's go this
+patchset by the dmaengine tree. Thanks a lot!

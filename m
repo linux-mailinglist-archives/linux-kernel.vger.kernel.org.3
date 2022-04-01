@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3614EEE30
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668E64EEE2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346391AbiDANed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S1346386AbiDANeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346390AbiDANe3 (ORCPT
+        with ESMTP id S1345975AbiDANeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:34:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464EE27E843;
-        Fri,  1 Apr 2022 06:32:38 -0700 (PDT)
-X-UUID: 6fd7bcdb20df4918b71ce6db4b724572-20220401
-X-UUID: 6fd7bcdb20df4918b71ce6db4b724572-20220401
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 849117271; Fri, 01 Apr 2022 21:32:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 1 Apr 2022 21:32:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 1 Apr 2022 21:32:32 +0800
-Message-ID: <14bfabd88ecbe8cc4ec359f8249f180128a6572e.camel@mediatek.com>
-Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: mediatek: add mt8186 cpufreq
- dt-bindings
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-Date:   Fri, 1 Apr 2022 21:32:32 +0800
-In-Reply-To: <18c791ce-059a-87a5-eaf4-057f8e232fe7@kernel.org>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
-         <20220307122151.11666-3-jia-wei.chang@mediatek.com>
-         <d5c5e3f7-7f50-6c57-f82a-41d5494ea514@canonical.com>
-         <c150e9ed7faa4c06f55f7d7623655b65c8575121.camel@mediatek.com>
-         <18c791ce-059a-87a5-eaf4-057f8e232fe7@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 1 Apr 2022 09:34:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B8227E84C;
+        Fri,  1 Apr 2022 06:32:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 779F521605;
+        Fri,  1 Apr 2022 13:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648819947; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ABdU4ym8GUS4ocgC+XnqD1ou4OCW3BeFe0yT//Yc+oQ=;
+        b=LhTvJZEXvpJhoHc/R4OxFi148eg/rq/J5JgLjVgcfRINUq7d0Tn5L4zkt2z8q7sPfWzXti
+        o184B8ALGVXxyjOJenS7t46AUCxNf9wVZIv1CGzR9NsystVqhZeQgWvSnm33jCgVM5wP5v
+        h6dZJ3AXeZQYmalX8S7BjlF/yr7uUGY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648819947;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ABdU4ym8GUS4ocgC+XnqD1ou4OCW3BeFe0yT//Yc+oQ=;
+        b=cbmek1fBuqR5pe/3fkJZ5B/WV0IXyHzbFx4NfXpniqSar6J8EOwZ8TdL+u02BKOSF/m+6x
+        drNo/5FAZFTDwvCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0CCDE132C1;
+        Fri,  1 Apr 2022 13:32:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mEIQAOv+RmJLWwAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Fri, 01 Apr 2022 13:32:26 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id b980623e;
+        Fri, 1 Apr 2022 13:32:44 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [PATCH v2] ceph: invalidate pages when doing DIO in encrypted inodes
+Date:   Fri,  1 Apr 2022 14:32:43 +0100
+Message-Id: <20220401133243.1075-1-lhenriques@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-24 at 11:35 +0100, Krzysztof Kozlowski wrote:
-> On 24/03/2022 10:42, Jia-Wei Chang wrote:
-> > On Mon, 2022-03-07 at 19:59 +0100, Krzysztof Kozlowski wrote:
-> > > On 07/03/2022 13:21, Tim Chang wrote:
-> > > > 1. add cci property.
-> > > > 2. add example of MT8186.
-> > > 
-> > > One logical change at a time. Are these related? Why entirely new
-> > > example just for "cci" node? Maybe this should be part of
-> > > existing
-> > > example?
-> > 
-> > Yes, the cci property is required in some SoC, e.g. mt8183 and
-> > mt8186,
-> > because cpu and cci share the same power supplies.
-> 
-> I asked why this cannot be part of existing example.
+When doing DIO on an encrypted node, we need to invalidate the page cache in
+the range being written to, otherwise the cache will include invalid data.
 
-I misunderstood that.
-I will update the complete example in the next version.
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+ fs/ceph/file.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-> 
-> > I will update the commit message and add an example of mt8186 to
-> > present usage of cci.
-> 
-> You added the example here, didn't you?
+Changes since v1:
+- Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+- Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
 
-Yes, I did add it here.
+Note: I'm not really sure this last change is required, it doesn't really
+affect generic/647 result, but seems to be the most correct.
 
-> 
-> Best regards,
-> Krzysztof
-
+diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+index 5072570c2203..b2743c342305 100644
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -1605,7 +1605,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ceph_fscache_invalidate(inode, false);
++	ceph_fscache_invalidate(inode, (iocb->ki_flags & IOCB_DIRECT));
+ 	ret = invalidate_inode_pages2_range(inode->i_mapping,
+ 					    pos >> PAGE_SHIFT,
+ 					    (pos + count - 1) >> PAGE_SHIFT);
+@@ -1895,6 +1895,15 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+ 		req->r_inode = inode;
+ 		req->r_mtime = mtime;
+ 
++		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT)) {
++			ret = invalidate_inode_pages2_range(
++				inode->i_mapping,
++				write_pos >> PAGE_SHIFT,
++				(write_pos + write_len - 1) >> PAGE_SHIFT);
++			if (ret < 0)
++				dout("invalidate_inode_pages2_range returned %d\n", ret);
++		}
++
+ 		/* Set up the assertion */
+ 		if (rmw) {
+ 			/*

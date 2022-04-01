@@ -2,108 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC464EF70A
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5C34EF709
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352019AbiDAPtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S1351908AbiDAPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350639AbiDAPoZ (ORCPT
+        with ESMTP id S1352804AbiDAPpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:44:25 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2FE5AA60;
-        Fri,  1 Apr 2022 08:17:16 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y10so3332042edv.7;
-        Fri, 01 Apr 2022 08:17:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TC/0oHyiUjWJOMmXPw1IkL3i67Jwm2UVoeCCCR45dxw=;
-        b=k6zoIicqLKLt5DQRctI9KCFBFUEwPjRcOWUFjr28baaSBVCiwf0j7q7noHdQjUNBzS
-         Fa8XwaTHi4VXnmf6PeICFdU2QSRF6PZXwJ8V/bg9SLNsexDLhDaiCy9tmjxQb/pcU//t
-         hbAHMaQw63bycZdQ+cgRGGt3HgSFcP9UeFvJwZhLb6jZwWUU5vVNz5VJY0DWINgvDQBD
-         rsKSttAIAsr4oI402bX51922owRDL3ihT2i9pfVXMtOKz9A90d9KApsfVI6+vCI7rFC9
-         F/u88Zr+Pn+kDskpAJ9v5sn8yEUNqJhBpc/zgkaXiiipoo7u5U5TecSDt/tZ9R9PbS3r
-         5fZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TC/0oHyiUjWJOMmXPw1IkL3i67Jwm2UVoeCCCR45dxw=;
-        b=LKkv3YveaTp4/bmqEvO/evLcg4UMoRxgjHykCaSiivEiyphogTUvtri7xWeMKMdvqT
-         7sr4YvlSTUl6mp74mzn+PLtcLQvVz3BFzSAS84+NaDttva2c3UYApQ2/QfGIKAnw9fCc
-         DyasPcFss8usXe8I2aTtm6pa1b1EWKKV7UuiKsWv6fQyrhztgqG5KL1w4Ea/sK/HOswN
-         Y93XkWTENnFWfz0CXJtTG66oLu596m5v4f8YvwWW6MkGR1wQw01tGSUStZpj/oi+INwY
-         DPuothC48+YJOZQZhqWI9WXajk9aRp9++9w8i7uJtuZCJUezKvQSwKuHEsIk60mwmYM8
-         PGug==
-X-Gm-Message-State: AOAM5306roIKcpRcoFaDDah449v+IqPReXyLYiyuZxHjprOCvHYuh1Vc
-        Mih06En7iPLPcW61z33he+Q=
-X-Google-Smtp-Source: ABdhPJzCAZ4biH2c+9CF/BG7bI+G4OkImhdk+mfdkh4mHRUIklJGO8GesP48InP4rPa17dSZHx7XeQ==
-X-Received: by 2002:a05:6402:5202:b0:419:2b9f:7dd3 with SMTP id s2-20020a056402520200b004192b9f7dd3mr21502195edd.224.1648826234593;
-        Fri, 01 Apr 2022 08:17:14 -0700 (PDT)
-Received: from Francescos-Air.fritz.box (host-79-3-210-6.business.telecomitalia.it. [79.3.210.6])
-        by smtp.googlemail.com with ESMTPSA id h30-20020a056402095e00b00412b81dd96esm1264335edz.29.2022.04.01.08.17.13
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 01 Apr 2022 08:17:14 -0700 (PDT)
-From:   FraSharp <f.duca00@gmail.com>
-X-Google-Original-From: FraSharp <s23265@iisve.it>
-Cc:     f.duca00@gmail.com, FraSharp <s23265@iisve.it>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] kbuild: use hostname -s along uname to obtain LINUX_COMPILE_HOST
-Date:   Fri,  1 Apr 2022 17:17:06 +0200
-Message-Id: <20220401151706.30697-1-s23265@iisve.it>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220330182329.52310-1-s23265@iisve.it>
-References: <20220330182329.52310-1-s23265@iisve.it>
+        Fri, 1 Apr 2022 11:45:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513A0B1E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:20:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D8ECB82500
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 15:20:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D6AC2BBE4;
+        Fri,  1 Apr 2022 15:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648826438;
+        bh=jpGvEUWglP4FEJwkhpNwyFmBIHkh/fvee0wxQQk561I=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DDyrkFtZmJwfuJ6mrWQCHrt+3kjmp8/PJTB2xaOOgwZaQWVG7gSP3NbuhHk/R2YNB
+         PsuzRRIt1/qQwCMWpGgxkTEc3/iJpgxpqvObCBb5p/MpFGg094H1qzu6/pO4mqn1ZD
+         QieQe/BtYOM2PxsSQr+ovlKjUGDMSW1cjcqOiB60hJXTbq9JMUxJ5h3bgHe3fAgfWp
+         jkm7xlllEZeCWPzN9NSm4erEgGwDEBnrrjdvTfk8jFBLg6NtP3Ewzn4BqSJcjZrB8t
+         cT+VmE9aJ8u1XX9fgKjmM64KBYpqlc0B3m1LMIo9hUmzLHIyBqc9g9jlYutGRgRIxC
+         4I9pUSzvnfGEw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EA5C25C0A15; Fri,  1 Apr 2022 08:20:37 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 08:20:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, quic_neeraju@quicinc.com
+Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
+Message-ID: <20220401152037.GD4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com>
+ <20220331224222.GY4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
+ <CANn89iJaeBneeqiDBUh_ppEQGne_eyPp-BCVYjEyvoYkUxrDxg@mail.gmail.com>
+ <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANn89i+rfrkRrdYAq8Baq04n_ACq+VdB+UcsMoq7U-dB-2hKJA@mail.gmail.com>
+ <20220401000642.GB4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANn89iJtfTiSz4v+L3YW+b_gzNoPLz_wuAmXGrNJXqNs9BU9cA@mail.gmail.com>
+ <20220401130114.GC4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANn89iLicuKS2wDjY1D5qNT4c-ob=D2n1NnRnm5fGg4LFuW1Kg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iLicuKS2wDjY1D5qNT4c-ob=D2n1NnRnm5fGg4LFuW1Kg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* On some systems (e.g. macOS, Debian, Fedora), using commands like 'uname -n' or
-  'hostname' will print something similar to "hostname.domain"
-  ("Francescos-Air.fritz.box" for example), which is very annoying.
-  What works instead is 'hostname -s', which will only write hostname
-  without the domain ("Francescos-Air" for example),
-  but also keep 'uname -n', as some systems as Arch Linux does not have
-  'hostname' as command.
+On Fri, Apr 01, 2022 at 06:24:13AM -0700, Eric Dumazet wrote:
+> On Fri, Apr 1, 2022 at 6:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Thu, Mar 31, 2022 at 09:39:02PM -0700, Eric Dumazet wrote:
+> > > On Thu, Mar 31, 2022 at 5:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Thu, Mar 31, 2022 at 04:28:04PM -0700, Eric Dumazet wrote:
+> > > > > On Thu, Mar 31, 2022 at 4:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > >
+> > > > > > The initial setting of ->percpu_enqueue_shift forces all in-range CPU
+> > > > > > IDs to shift down to zero.  The grace-period kthread is allowed to run
+> > > > > > where it likes.  The callback lists are protected by locking, even in
+> > > > > > the case of local access, so this should be safe.
+> > > > > >
+> > > > > > Or am I missing your point?
+> > > > > >
+> > > > >
+> > > > > In fact I have been looking at this code, because we bisected a
+> > > > > regression back to this patch:
+> > > > >
+> > > > > 4fe192dfbe5ba9780df699d411aa4f25ba24cf61 rcu-tasks: Shorten
+> > > > > per-grace-period sleep for RCU Tasks Trace
+> > > > >
+> > > > > It is very possible the regression comes because the RCU task thread
+> > > > > is using more cpu cycles, from 'CPU 0'  where our system daemons are
+> > > > > pinned.
+> > > >
+> > > > Heh!  I did express that concern when creating that patch, but was
+> > > > assured that the latency was much more important.
+> > > >
+> > > > Yes, that patch most definitely increases CPU utilization during RCU Tasks
+> > > > Trace grace periods.  If you can tolerate longer grace-period latencies,
+> > > > it might be worth toning it down a bit.  The ask was for about twice
+> > > > the latency I achieved in my initial attempt, and I made the mistake of
+> > > > forwarding that attempt out for testing.  They liked the shorter latency
+> > > > very much, and objected strenuously to the thought that I might detune
+> > > > it back to the latency that they originally asked for.  ;-)
+> > > >
+> > > > But I can easily provide the means to detune it through use of a kernel
+> > > > boot parameter or some such, if that would help.
+> > > >
+> > > > > But I could not spot where the RCU task kthread is forced to run on CPU 0.
+> > > >
+> > > > I never did intend this kthread be bound anywhere.  RCU's policy is
+> > > > that any binding of its kthreads is the responsibility of the sysadm,
+> > > > be that carbon-based or otherwise.
+> > > >
+> > > > But this kthread is spawned early enough that only CPU 0 is online,
+> > > > so maybe the question is not "what is binding it to CPU 0?" but rather
+> > > > "why isn't something kicking it off of CPU 0?"
+> > >
+> > > I guess the answer to this question can be found in the following
+> > > piece of code :)
+> > >
+> > > rcu_read_lock();
+> > > for_each_process_thread(g, t)
+> > >         rtp->pertask_func(t, &holdouts);
+> > > rcu_read_unlock();
+> > >
+> > >
+> > > With ~150,000 threads on a 256 cpu host, this holds current cpu for
+> > > very long times:
+> > >
+> > >  rcu_tasks_trace    11 [017]  5010.544762:
+> > > probe:rcu_tasks_wait_gp: (ffffffff963fb4b0)
+> > >  rcu_tasks_trace    11 [017]  5010.600396:
+> > > probe:rcu_tasks_trace_postscan: (ffffffff963fb7c0)
+> >
+> > So about 55 milliseconds for the tasklist scan, correct?  Or am I
+> > losing the plot here?
+> >
+> > >  rcu_tasks_trace    11 [022]  5010.618783:
+> > > probe:check_all_holdout_tasks_trace: (ffffffff963fb850)
+> > >  rcu_tasks_trace    11 [022]  5010.618840:
+> > > probe:rcu_tasks_trace_postgp: (ffffffff963fba70)
+> > >
+> > > In this case, CPU 22 is the victim, not CPU 0 :)
+> >
+> > My faith in the scheduler is restored!  ;-)
+> >
+> > My position has been that this tasklist scan does not need to be broken
+> > up because it should happen only when a sleepable BPF program is removed,
+> > which is a rare event.
+> 
+> Hmm... what about  bpf_sk_storage_free() ?
+> 
+> Definitely not a rare event.
 
-* This commit is complementary to
-  1e66d50ad3a1dbf0169b14d502be59a4b1213149
-  ("kbuild: Use uname for LINUX_COMPILE_HOST detection")
+Hmmm...  Are the BPF guys using call_rcu_tasks_trace() to free things that
+are not trampolines for sleepable BPF programs?  Kind of looks like it.
 
-Signed-off-by: Francesco Duca <s23265@iisve.it>
----
- scripts/mkcompile_h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maybe RCU Tasks Trace was too convenient to use?  ;-)
 
-diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
-index ca40a5258..3eefbafe5 100755
---- a/scripts/mkcompile_h
-+++ b/scripts/mkcompile_h
-@@ -34,7 +34,7 @@ else
- 	LINUX_COMPILE_BY=$KBUILD_BUILD_USER
- fi
- if test -z "$KBUILD_BUILD_HOST"; then
--	LINUX_COMPILE_HOST=`uname -n`
-+	LINUX_COMPILE_HOST=$(hostname -s 2>/dev/null || uname -n)
- else
- 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
- fi
--- 
-2.32.0 (Apple Git-132)
+> > In addition, breaking up this scan is not trivial, because as far as I
+> > know there is no way to force a given task to stay in the list.  I would
+> > have to instead use something like rcu_lock_break(), and restart the
+> > scan if either of the nailed-down pair of tasks was removed from the list.
+> > In a system where tasks were coming and going very frequently, it might
+> > be that such a broken-up scan would never complete.
+> >
+> > I can imagine tricks where the nailed-down tasks are kept on a list,
+> > and the nailed-downness is moved to the next task when those tasks
+> > are removed.  I can also imagine a less-than-happy response to such
+> > a proposal.
+> >
+> > So I am not currently thinking in terms of breaking up this scan.
+> >
+> > Or is there some trick that I am missing?
+> >
+> > In the meantime, a simple patch that reduces the frequency of the scan
+> > by a factor of two.  But this would not be the scan of the full tasklist,
+> > but rather the frequency of the calls to check_all_holdout_tasks_trace().
+> > And the total of these looks to be less than 20 milliseconds, if I am
+> > correctly interpreting your trace.  And most of that 20 milliseconds
+> > is sleeping.
+> >
+> > Nevertheless, the patch is at the end of this email.
+> >
+> > Other than that, I could imagine batching removal of sleepable BPF
+> > programs and using a single grace period for all of their trampolines.
+> > But are there enough sleepable BPF programs ever installed to make this
+> > a useful approach?
+> >
+> > Or is the status quo in fact acceptable?  (Hey, I can dream, can't I?)
+> >
+> >                                                         Thanx, Paul
+> >
+> > > > > I attempted to backport to our kernel all related patches that were
+> > > > > not yet backported,
+> > > > > and we still see a regression in our tests.
+> > > >
+> > > > The per-grace-period CPU consumption of rcu_tasks_trace was intentionally
+> > > > increased by the above commit, and I never have done anything to reduce
+> > > > that CPU consumption.  In part because you are the first to call my
+> > > > attention to it.
+> > > >
+> > > > Oh, and one other issue that I very recently fixed, that has not
+> > > > yet reached mainline, just in case it matters.  If you are building a
+> > > > CONFIG_PREEMPT_NONE=y or CONFIG_PREEMPT_VOLUNTARY=y kernel, but also have
+> > > > CONFIG_RCU_TORTURE_TEST=m (or, for that matter, =y, but please don't in
+> > > > production!), then your kernel will use RCU Tasks instead of vanilla RCU.
+> > > > (Note well, RCU Tasks, not RCU Tasks Trace, the latter being necessaary
+> > > > for sleepable BPF programs regardless of kernel .config).
+> > > >
+> > > > > Please ignore the sha1 in this current patch series, this is only to
+> > > > > show my current attempt to fix the regression in our tree.
+> > > > >
+> > > > > 450b3244f29b rcu-tasks: Don't remove tasks with pending IPIs from holdout list
+> > > > > 5f88f7e9cc36 rcu-tasks: Create per-CPU callback lists
+> > > > > 1a943d0041dc rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic
+> > > > > queue selection
+> > > > > ea5289f12fce rcu-tasks: Convert grace-period counter to grace-period
+> > > > > sequence number
+> > > > > 22efd5093c3b rcu/segcblist: Prevent useless GP start if no CBs to accelerate
+> > > > > 16dee1b3babf rcu: Implement rcu_segcblist_is_offloaded() config dependent
+> > > > > 8cafaadb6144 rcu: Add callbacks-invoked counters
+> > > > > 323234685765 rcu/tree: Make rcu_do_batch count how many callbacks were executed
+> > > > > f48f3386a1cc rcu/segcblist: Add additional comments to explain smp_mb()
+> > > > > 4408105116de rcu/segcblist: Add counters to segcblist datastructure
+> > > > > 4a0b89a918d6 rcu/tree: segcblist: Remove redundant smp_mb()s
+> > > > > 38c0d18e8740 rcu: Add READ_ONCE() to rcu_do_batch() access to rcu_divisor
+> > > > > 0b5d1031b509 rcu/segcblist: Add debug checks for segment lengths
+> > > > > 8a82886fbf02 rcu_tasks: Convert bespoke callback list to rcu_segcblist structure
+> > > > > cbd452a5c01f rcu-tasks: Use spin_lock_rcu_node() and friends
+> > > > > 073222be51f3 rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure
+> > > > > 5af10fb0f8fb rcu-tasks: Abstract checking of callback lists
+> > > > > d3e8be598546 rcu-tasks: Abstract invocations of callbacks
+> > > > > 65784460a392 rcu-tasks: Use workqueues for multiple
+> > > > > rcu_tasks_invoke_cbs() invocations
+> > > > > dd6413e355f1 rcu-tasks: Make rcu_barrier_tasks*() handle multiple
+> > > > > callback queues
+> > > > > 2499cb3c438e rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set
+> > > > > initial queueing
+> > > > > a859f409a503 rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention
+> > > > > 4ab253ca056e rcu-tasks: Avoid raw-spinlocked wakeups from
+> > > > > call_rcu_tasks_generic()
+> > > > > e9a3563fe76e rcu-tasks: Use more callback queues if contention encountered
+> > > > > 4023187fe31d rcu-tasks: Use separate ->percpu_dequeue_lim for callback
+> > > > > dequeueing
+> > > > > 533be3bd47c3 rcu: Provide polling interfaces for Tree RCU grace periods
+> > > > > f7e5a81d7953 rcu-tasks: Use fewer callbacks queues if callback flood ends
+> > > > > bb7ad9078e1b rcu-tasks: Fix computation of CPU-to-list shift counts
+> > > > > d9cebde55539 rcu-tasks: Use order_base_2() instead of ilog2()
+> > > > > 95606f1248f5 rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
+> >
+> >
+> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> > index 65d6e21a607a..141e2b4c70cc 100644
+> > --- a/kernel/rcu/tasks.h
+> > +++ b/kernel/rcu/tasks.h
+> > @@ -1640,10 +1640,10 @@ static int __init rcu_spawn_tasks_trace_kthread(void)
+> >                 rcu_tasks_trace.gp_sleep = HZ / 10;
+> >                 rcu_tasks_trace.init_fract = HZ / 10;
+> >         } else {
+> > -               rcu_tasks_trace.gp_sleep = HZ / 200;
+> > +               rcu_tasks_trace.gp_sleep = HZ / 100;
+> >                 if (rcu_tasks_trace.gp_sleep <= 0)
+> >                         rcu_tasks_trace.gp_sleep = 1;
+> > -               rcu_tasks_trace.init_fract = HZ / 200;
+> > +               rcu_tasks_trace.init_fract = HZ / 100;
+> >                 if (rcu_tasks_trace.init_fract <= 0)
+> >                         rcu_tasks_trace.init_fract = 1;
+> >         }
+> 
+> It seems that if the scan time is > 50ms in some common cases (at
+> least at Google scale),
+> the claim of having a latency of 10ms is not reasonable.
 
+But does the above patch make things better?  If it does, I will send
+you a proper patch with kernel boot parameters.  We can then discuss
+better autotuning, for example, making the defaults a function of the
+number of CPUs.
+
+Either way, that certainly is a fair point.  Another fair point is that
+the offending commit was in response to a bug report from your colleagues.  ;-)
+
+Except that I don't see any uses of synchronize_rcu_tasks_trace(), so
+I am at a loss as to why latency matters anymore.
+
+Is the issue the overall CPU consumption of the scan (which is my
+current guess) or the length of time that the scan runs without invoking
+cond_resched() or similar?
+
+Either way, how frequently is call_rcu_tasks_trace() being invoked in
+your setup?  If it is being invoked frequently, increasing delays would
+allow multiple call_rcu_tasks_trace() instances to be served by a single
+tasklist scan.
+
+> Given that, I do not think bpf_sk_storage_free() can/should use
+> call_rcu_tasks_trace(),
+> we probably will have to fix this soon (or revert from our kernels)
+
+Well, you are in luck!!!  This commit added call_rcu_tasks_trace() to
+bpf_selem_unlink_storage_nolock(), which is invoked in a loop by
+bpf_sk_storage_free():
+
+0fe4b381a59e ("bpf: Allow bpf_local_storage to be used by sleepable programs")
+
+This commit was authored by KP Singh, who I am adding on CC.  Or I would
+have, except that you beat me to it.  Good show!!!  ;-)
+
+If this commit provoked this issue, then the above patch might help.
+
+I am also adding Neeraj Uphadhyay on CC for his thoughts, as he has
+also been throught this code.
+
+My response time may be a bit slow next week, but I will be checking
+email.
+
+							Thanx, Paul

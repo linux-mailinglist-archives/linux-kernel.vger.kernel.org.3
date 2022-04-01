@@ -2,108 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA064EE79A
+	by mail.lfdr.de (Postfix) with ESMTP id D639E4EE79B
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244993AbiDAFLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S244997AbiDAFMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiDAFLf (ORCPT
+        with ESMTP id S229921AbiDAFMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:11:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE0E1E7465;
-        Thu, 31 Mar 2022 22:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=a4BwqPk85GvPQxl/KizQiBDKTaZ08byn7qa3hx7iA34=; b=KOJwv85m6nI+qdKCQfs1p86OPU
-        5FGO4RDDxrv9sy1p8lvRJtiwijAhVpxSL9BTzhqne/tfnoBq8NaP95VeLGBWolHJ2TZ+QLu6F8EuE
-        Tv4t4+0Itm7WEWNWgDlfdspUCl2Nw3fCn+g8Z7UlFJA1WKtzwrlvYtVuYWfH1f+Elg64l1KozGGQ8
-        WO4Dvih0mV6eDMlTyivd5mgpV8JUBTG1dmaTxa1tFf9P1JkD+H1HarQnX1QmjVAsYaZhj8ATcv52h
-        HWAJTu2xVXIX9YnJF4PtWohwzxMMxkxqDCv3alWVtz4d3Tg6SBxTnHgtc5GbvN7VoRpsFvVtmG/+V
-        VxO044TA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1na9XO-004Vvf-RF; Fri, 01 Apr 2022 05:09:30 +0000
-Date:   Thu, 31 Mar 2022 22:09:30 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Moore, Robert" <robert.moore@intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Benjamin =?iso-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "linux-atm-general@lists.sourceforge.net" 
-        <linux-atm-general@lists.sourceforge.net>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Harald Welte <laforge@gnumonks.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "wcn36xx@lists.infradead.org" <wcn36xx@lists.infradead.org>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "dennis.dalessandro@cornelisnetworks.com" 
-        <dennis.dalessandro@cornelisnetworks.com>,
-        "open list:HFI1 DRIVER" <linux-rdma@vger.kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Ingo Molnar <mingo@redhat.com>,
-        "3chas3@gmail.com" <3chas3@gmail.com>,
-        linux-input <linux-input@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Len Brown <lenb@kernel.org>,
-        "mike.marciniszyn@cornelisnetworks.com" 
-        <mike.marciniszyn@cornelisnetworks.com>,
-        Robert Richter <rric@kernel.org>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux@simtec.co.uk" <linux@simtec.co.uk>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Morse <james.morse@arm.com>,
-        netdev <netdev@vger.kernel.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH 05/22] acpica: Replace comments with C99 initializers
-Message-ID: <YkaJCjhyrRfAb3by@infradead.org>
-References: <20220326165909.506926-1-benni@stuerz.xyz>
- <20220326165909.506926-5-benni@stuerz.xyz>
- <CAHp75VeTXMAueQc_c0Ryj5+a8PrJ7gk-arugiNnxtAm03x7XTg@mail.gmail.com>
- <BYAPR11MB3256D71C02271CD434959E0187E19@BYAPR11MB3256.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR11MB3256D71C02271CD434959E0187E19@BYAPR11MB3256.namprd11.prod.outlook.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Fri, 1 Apr 2022 01:12:18 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44BE1E747A
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:10:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=liuhailong@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V8ok3FV_1648789812;
+Received: from VM20210331-77.tbsite.net(mailfrom:liuhailong@linux.alibaba.com fp:SMTPD_---0V8ok3FV_1648789812)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 01 Apr 2022 13:10:26 +0800
+From:   Hailong Liu <liuhailong@linux.alibaba.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        aniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Hailong Liu <liuhailong@linux.alibaba.com>
+Subject: [PATCH] psi: Fix trigger being fired unexpectedly at initial
+Date:   Fri,  1 Apr 2022 13:10:11 +0800
+Message-Id: <1648789811-3788971-1-git-send-email-liuhailong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,5 +47,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When a trigger being created, its win.start_value and win.start_time are
+reset to zero. If group->total[PSI_POLL][t->state] has accumulated before,
+this trigger will be fired unexpectedly in the next period, even if its
+growth time does not reach its threshold.
 
-Please fix your mailer.  This mail is completely unreadable.
+So set the window of the new trigger to the current state value.
+
+Signed-off-by: Hailong Liu <liuhailong@linux.alibaba.com>
+---
+ kernel/sched/psi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index a4fa3aadfcba..5a49a8c8783e 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1117,7 +1117,8 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 	t->state = state;
+ 	t->threshold = threshold_us * NSEC_PER_USEC;
+ 	t->win.size = window_us * NSEC_PER_USEC;
+-	window_reset(&t->win, 0, 0, 0);
++	window_reset(&t->win, sched_clock(),
++			group->total[PSI_POLL][t->state], 0);
+ 
+ 	t->event = 0;
+ 	t->last_event_time = 0;
+-- 
+2.19.1.6.gb485710b
+

@@ -2,182 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA244EE853
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218564EE865
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245687AbiDAGjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S245675AbiDAGlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245495AbiDAGip (ORCPT
+        with ESMTP id S245601AbiDAGkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:38:45 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379A81905A8
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:51 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id m24-20020a17090b069800b001c7de0243a2so813305pjz.9
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=4FXxXLJZLQEs++ONkysSkU83dsOxk/dTRI/0WYDJ8+o=;
-        b=RA/ibjQbIQjR1lmfHqDORV7no8EtnU3osUeN4xQ1ZUnoqlRqOqgvjK5NGtrBnfvt1p
-         a/eEFVUoOEVlBXA5InpwA1aNCl9qwhm8AIooMqcXR7iottezC6NwjTwpz/JNPwyBpjDz
-         b6TT4zTOG31I9iPQqxfhPINrEk+7WLYwNeM0yYQ5b/1E6pWszelF4Aikq6UxBEWW0Uip
-         F6eZdHAVN8AGyprizZD6uW38b8URzIJFsnW90Cruf7IiTC5lg9Osw3jpnlenLiShRORr
-         dUH/4iKkCROza6IQpjZ+DE5OCFZ9RQ8lk9w6Q8I1mNC0a9W2VZMvasflYjNjpOpSEK8y
-         oaqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=4FXxXLJZLQEs++ONkysSkU83dsOxk/dTRI/0WYDJ8+o=;
-        b=inK6ARsblHx6PIvlgcrGTSjxzZiBLrEuN0okiSM/4d9vhoJsTFpgRN1drqqffHBcil
-         x9XwXwRfiLaWuq+tWxiLe0RN1fWvpOzTPLTZqLoTL0NZLqOR/M/mt3Ni+Egz6RrMjrW5
-         Zq9bS7dFbIhGpf4387rfBEQTk4XIg2vU82/3kGJg08BVWwbkvaMxhE4udMSLgxGsgDZX
-         +t5pVSHMm7yRbMgGuVAX9mtdXMmCiddhic0S8KgKShQavGQOlaU0Oonyis5r6W8XtjMW
-         gqpIeiFVLa2mzSXOerDGdFs8sb6dqYU2LwCW7VttobL6POoUQldqfQg8QtY9WBcKwr4X
-         WJ0A==
-X-Gm-Message-State: AOAM5306gAHapfQdiQNZIPEKRmsw9z/rqRFvrsAVssCYUa3rBX7xlx4l
-        E5CzwJ2m2ddx3dkOZKwAe/MxE6mmom/+
-X-Google-Smtp-Source: ABdhPJxRZKW1kTO4N7PzjBjiTYtM5m2OPqUDst+Fqm/l7UQ+k1okKkthp4T79hWu30Kzi/4orYUFMKOyYFDl
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:90a:858b:b0:1c6:5bc8:781a with SMTP id
- m11-20020a17090a858b00b001c65bc8781amr332690pjn.0.1648795010348; Thu, 31 Mar
- 2022 23:36:50 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Fri,  1 Apr 2022 06:36:35 +0000
-In-Reply-To: <20220401063636.2414200-1-mizhang@google.com>
-Message-Id: <20220401063636.2414200-6-mizhang@google.com>
-Mime-Version: 1.0
-References: <20220401063636.2414200-1-mizhang@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v3 5/6] KVM: selftests: Test reading a single stat
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 02:40:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE966262D45;
+        Thu, 31 Mar 2022 23:37:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66385B823D9;
+        Fri,  1 Apr 2022 06:37:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE068C340EE;
+        Fri,  1 Apr 2022 06:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648795051;
+        bh=FPksi9QLZUz/hN/3Y5syOBRJqiWJzyPIOiHMjJvB1lk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oaw1pwRPjLP5yiVP+HeYGQI//UeM2jluS4S9BKSJfs0Giccplnt14l6005Yj10gOa
+         LottrJ/AZssBtSy7VjuF4JfYpmgk59gg31G0gZsOb6BeN6jueTm05TK66I0Zr4pgKV
+         yyvyCIGxwBQJLLdXoWDm5cTbl8xp+Al9I6S53sA8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 4.14 25/27] KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
+Date:   Fri,  1 Apr 2022 08:36:35 +0200
+Message-Id: <20220401063624.945760820@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220401063624.232282121@linuxfoundation.org>
+References: <20220401063624.232282121@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Gardon <bgardon@google.com>
+From: James Morse <james.morse@arm.com>
 
-Retrieve the value of a single stat by name in the binary stats test to
-ensure the kvm_util library functions work.
+commit a5905d6af492ee6a4a2205f0d550b3f931b03d03 upstream.
 
-CC: Jing Zhang <jingzhangos@google.com>
-Signed-off-by: Ben Gardon <bgardon@google.com>
+KVM allows the guest to discover whether the ARCH_WORKAROUND SMCCC are
+implemented, and to preserve that state during migration through its
+firmware register interface.
+
+Add the necessary boiler plate for SMCCC_ARCH_WORKAROUND_3.
+
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+[ kvm code moved to virt/kvm/arm, removed fw regs ABI. Added 32bit stub ]
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../selftests/kvm/include/kvm_util_base.h     |  1 +
- .../selftests/kvm/kvm_binary_stats_test.c     |  3 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 53 +++++++++++++++++++
- 3 files changed, 57 insertions(+)
+ arch/arm/include/asm/kvm_host.h   |    6 ++++++
+ arch/arm64/include/asm/kvm_host.h |    5 +++++
+ virt/kvm/arm/psci.c               |   12 ++++++++++++
+ 3 files changed, 23 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index c5f4a67772cb..09ee70c0df26 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -401,6 +401,7 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
- int vm_get_stats_fd(struct kvm_vm *vm);
- int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
- void dump_vm_stats(struct kvm_vm *vm);
-+uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
+--- a/arch/arm/include/asm/kvm_host.h
++++ b/arch/arm/include/asm/kvm_host.h
+@@ -26,6 +26,7 @@
+ #include <asm/kvm_asm.h>
+ #include <asm/kvm_mmio.h>
+ #include <asm/fpstate.h>
++#include <asm/spectre.h>
+ #include <kvm/arm_arch_timer.h>
  
- uint32_t guest_get_vcpuid(void);
- 
-diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-index afc4701ce8dd..97bde355f105 100644
---- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-+++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-@@ -177,6 +177,9 @@ static void vm_stats_test(struct kvm_vm *vm)
- 
- 	/* Dump VM stats */
- 	dump_vm_stats(vm);
-+
-+	/* Read a single stat. */
-+	printf("remote_tlb_flush: %lu\n", vm_get_single_stat(vm, "remote_tlb_flush"));
+ #define __KVM_HAVE_ARCH_INTC_INITIALIZED
+@@ -324,4 +325,9 @@ static inline int kvm_arm_have_ssbd(void
+ 	return KVM_SSBD_UNKNOWN;
  }
  
- static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 4d21c3b46780..1d3493d7fd55 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -2699,3 +2699,56 @@ void dump_vm_stats(struct kvm_vm *vm)
- 	close(stats_fd);
++static inline int kvm_arm_get_spectre_bhb_state(void)
++{
++	/* 32bit guests don't need firmware for this */
++	return SPECTRE_VULNERABLE; /* aka SMCCC_RET_NOT_SUPPORTED */
++}
+ #endif /* __ARM_KVM_HOST_H__ */
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -450,4 +450,9 @@ static inline int kvm_arm_have_ssbd(void
+ 	}
  }
  
-+static int vm_get_stat_data(struct kvm_vm *vm, const char *stat_name,
-+			    uint64_t **data)
++static inline enum mitigation_state kvm_arm_get_spectre_bhb_state(void)
 +{
-+	struct kvm_stats_desc *stats_desc;
-+	struct kvm_stats_header *header;
-+	struct kvm_stats_desc *desc;
-+	size_t size_desc;
-+	int stats_fd;
-+	int ret = -EINVAL;
-+	int i;
-+
-+	*data = NULL;
-+
-+	stats_fd = vm_get_stats_fd(vm);
-+
-+	header = read_vm_stats_header(stats_fd);
-+
-+	stats_desc = read_vm_stats_desc(stats_fd, header);
-+
-+	size_desc = stats_desc_size(header);
-+
-+	/* Read kvm stats data one by one */
-+	for (i = 0; i < header->num_desc; ++i) {
-+		desc = (void *)stats_desc + (i * size_desc);
-+
-+		if (strcmp(desc->name, stat_name))
-+			continue;
-+
-+		ret = read_stat_data(stats_fd, header, desc, data);
-+	}
-+
-+	free(stats_desc);
-+	free(header);
-+
-+	close(stats_fd);
-+
-+	return ret;
++	return arm64_get_spectre_bhb_state();
 +}
 +
-+uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
-+{
-+	uint64_t *data;
-+	uint64_t value;
-+	int ret;
-+
-+	ret = vm_get_stat_data(vm, stat_name, &data);
-+	TEST_ASSERT(ret == 1, "Stat %s expected to have 1 element, but has %d",
-+		    stat_name, ret);
-+	value = *data;
-+	free(data);
-+	return value;
-+}
-+
--- 
-2.35.1.1094.g7c7d902a7c-goog
+ #endif /* __ARM64_KVM_HOST_H__ */
+--- a/virt/kvm/arm/psci.c
++++ b/virt/kvm/arm/psci.c
+@@ -433,6 +433,18 @@ int kvm_hvc_call_handler(struct kvm_vcpu
+ 				break;
+ 			}
+ 			break;
++		case ARM_SMCCC_ARCH_WORKAROUND_3:
++			switch (kvm_arm_get_spectre_bhb_state()) {
++			case SPECTRE_VULNERABLE:
++				break;
++			case SPECTRE_MITIGATED:
++				val = SMCCC_RET_SUCCESS;
++				break;
++			case SPECTRE_UNAFFECTED:
++				val = SMCCC_ARCH_WORKAROUND_RET_UNAFFECTED;
++				break;
++			}
++			break;
+ 		}
+ 		break;
+ 	default:
+
 

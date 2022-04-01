@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCA84EEC80
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0034EEC85
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345575AbiDALq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S1345577AbiDALs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbiDALq4 (ORCPT
+        with ESMTP id S232012AbiDALs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:46:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B6AE33B0
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:45:06 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 13:45:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648813505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q7i6/O5ILryekqXQJ6olrqRxKKJfslH08xthB5phvm8=;
-        b=ev8Fs6xjSuQd1unPeFkOUH3G/dtkXgSvoxnrRWpsRb9EeYgvlDnpPVQs2UcY4H40TR7vLb
-        0VfRbH80ItoIE5PYreUX/vtDdPXjKoG6xM3eI5EjcGpJbPwvttbrSsTP7hONK76+EXDLEP
-        NsgA0J3ieABo5tWzGc2qeXnULdF8muI9qUhUyQNCjAYiGy9FjfOUNoCIARFxtF08eqTCGm
-        UyO6TkK0iLlCBLbjuiJYw+8tXKG/sHbuE0EAuQHQWG5lYqLy55m1oLTEkWPZEHrx495UVk
-        9+IGhQ5EgJdQ5Pwgp0Xpofat6H+8/GIhGyo/r/MSa3KmdfOPT5MbOj9ipJ1Jqw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648813505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q7i6/O5ILryekqXQJ6olrqRxKKJfslH08xthB5phvm8=;
-        b=zD26LMBkhitDATDDbfX0hFJu7yVNadjpRBFsqon7/6vBOiynr8fgGGOyVVTtD3IERsSoxc
-        V4kRyQMJevqrg6Ag==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Fri, 1 Apr 2022 07:48:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562DF105AAE
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OZFs7F262Q8FQ0CV6Jac14Udq9DNIeDRc8Lf3Vk/b6g=; b=s8F+bYxxN4swSiGTmh1gY6FZRh
+        azmBXlsL5bv1zKEOPbljlegcsa3hcQnx5N/X9OS5a2dS0Bh6NjpJ7Mm2MC1Si87WNHUm78HWS+XWk
+        XeJUZxoW/80bZEGek1z9R1qNRKqaI2zJeWuMKMgE9P2ofZCyAXHZH+0fYYeIoibN6i+K3h09jCHmY
+        CzFgfQz4prznBRuK9iaPjMZdg85dsxh8NZAp5nMWDghUJ4fnhIZd+PHp5sPim+wWYE8Do3ZchcsSJ
+        eIPokJeBGJa3mZROqlcjbbBzr2QqOx1LrMp4DWZfWS4Ezo0igrMM+t0J7pwlklJGl8mm+Of/KeM73
+        StS/poHw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1naFjP-00398p-TR; Fri, 01 Apr 2022 11:46:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4AF5D300212;
+        Fri,  1 Apr 2022 13:46:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 33AB12007DF3D; Fri,  1 Apr 2022 13:46:18 +0200 (CEST)
+Date:   Fri, 1 Apr 2022 13:46:18 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] signal/x86: Delay calling signals in atomic
-Message-ID: <Ykblv2aKh3ekqpi4@linutronix.de>
-References: <Ygq5aBB/qMQw6aP5@linutronix.de>
- <8735j2xigt.fsf@email.froward.int.ebiederm.org>
- <YkHfokLO1UGCISGc@linutronix.de>
- <87zgl9pw82.fsf@email.froward.int.ebiederm.org>
- <YkLR3rGTayl/6qIm@linutronix.de>
- <87o81nl3b6.fsf@email.froward.int.ebiederm.org>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH] sched/core: Fix forceidle balancing
+Message-ID: <YkbmCr6ojXYiWzkP@hirez.programming.kicks-ass.net>
+References: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
+ <CAEXW_YQNi42gahbSJ1skadh_8D+Ry6ZOmMqSU5BdidfCbmOtRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o81nl3b6.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <CAEXW_YQNi42gahbSJ1skadh_8D+Ry6ZOmMqSU5BdidfCbmOtRg@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-30 13:10:05 [-0500], Eric W. Biederman wrote:
-> But it looks like if we are coming from userspace then we use the same
-> stack as any other time we would come from userspace.  AKA a stack
-> that allows the kernel to sleep.
+On Thu, Mar 31, 2022 at 03:00:40PM -0400, Joel Fernandes wrote:
+> Hi,
 > 
-> So I don't see what the problem is that is trying to be fixed.
+> By the way, might be slightly related - we still see crashes with
+> pick_task_fair() in our kernel even with this change:
+> https://lkml.org/lkml/2020/11/17/2137
 
-It is not only the stack. In atomic context / disabled interrupts it is
-not possible to acquire a spinlock_t (sighand_struct::siglock) which is
-done later.
+Please as to not use lkml.org. Please use something with a MsgID in like
+lore.
 
-> I know that code has been changed over the years, perhaps this is
-> something that was fixed upstream and the real time tree didn't realize
-> there was no longer a need to fix anything?
+> Is it possible that when doing pick_task_fair() especially on a remote
+> CPU, both the "cfs_rq->curr" and the rbtree's "left" be NULL with core
+> scheduling? In this case, se will be NULL and can cause crashes right?
+> I think the code assumes this can never happen.
 > 
-> Or am I missing something subtle when reading the idtentry assembly?
+> +Guenter Roeck  kindly debugged pick_task_fair() in a crash as
+> follows. Copying some details he mentioned in a bug report:
+> 
+> Assembler/source:
+> 
+>   25:   e8 4f 11 00 00          call   0x1179             ; se =
+> pick_next_entity(cfs_rq, curr);
+>   2a:*  48 8b 98 60 01 00 00    mov    0x160(%rax),%rbx   ; trapping
+> instruction [cfs_rq = group_cfs_rq(se);]
+>   31:   48 85 db                test   %rbx,%rbx
+>   34:   75 d1                   jne    0x7
+>   36:   48 89 c7                mov    %rax,%rdi
+> 
+> At 2a: RAX = se == NULL after pick_next_entity(). Looking closely into
+> pick_next_entity(), it can indeed return NULL if curr is NULL and if
+> left in pick_next_entity() is NULL. Per line 7:, curr is in %r14 and
+> indeed 0.
+> 
+> Thoughts?
 
-It certainly is true that the code changed over the years. The per-CPU
-stack is one problem, the siglock in atomic context is the other one.
-Thank you for the input. Let me digest the informations I have here and
-get back.
-
-> Eric
-
-Sebastian
+It is possible for ->curr and ->leftmost to be NULL, but then we should
+also be having ->nr_running == 0 and not call pick in the first place.
+Because picking a task from no tasks doesn't make much sense.

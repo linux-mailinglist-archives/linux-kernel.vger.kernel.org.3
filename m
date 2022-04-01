@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4C54EF96A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7924EF968
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350837AbiDAR7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S1347553AbiDAR7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347903AbiDAR7v (ORCPT
+        with ESMTP id S244626AbiDAR7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 13:59:51 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D12128EE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:58:00 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bq24so6305940lfb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fungible.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JvhYeVuiyHzD2XZ5Sv6yl6UpWLRVligCuXo9RsgwXcc=;
-        b=gus+G3NKsoMAx1p9mych9MlnHzYDB3gBK5/+lInIhjhpc4I7FWao+babG4/sJ9GNJ2
-         YYElr7WYxvEm7tE47uBGZd1aREwnvxMa+JwEgv4Ddz0lvnyK1iVOAGaIadg9J+FssOYB
-         wQQHQing6CY+riYLM2tpNTjcNVS4V2N/UQ1wQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JvhYeVuiyHzD2XZ5Sv6yl6UpWLRVligCuXo9RsgwXcc=;
-        b=RS8pirP7FcxTHkT/MrZmSxyXhofW4uCFIDbnjoQL8xKOzkIj3PRr3VdqjbEDudYQro
-         Gqqm3V3WQX1QBRgBEAxhzqnjOXldd5EFCwLaw4PN1hCPp9JuC/+d6F9nEHYZwdLKkZHa
-         8jjK6CBW2UwzFmRubZKcLIbQ9hWYQWGgSQSkj2uv9Zj80LF2rhOaUJ9KbvhZ2M4bAoG0
-         E3y7yCkAQ6GkCJlvD3peDd7NUCCnk7NFDXbgDuNLDJkxgl+WsAbjgZOjOQUgAnbY0D7j
-         hFZkdJT0asZVKu4CXInQ17E0CVN5hlLAJK0wq270m1OhBV7JzFgOERTgdX7sP3qtEPW0
-         XvOQ==
-X-Gm-Message-State: AOAM533Al5NyHToJzbX2NSnrGtenz0dC5rQapnDqld9zH6jEVaijOqC7
-        70eULhr+rsVuX0uxWZ7/Y3EhL8LIHFq8QJR9BskHXg==
-X-Google-Smtp-Source: ABdhPJxWQ+i+ITn0cTBp8HpNpYi+FsZ+tLlRK5zUpDEx6eXcl5SqgGujjoEi601Spl5n8pBWofs9JC8n72Sl/3ZAbrY=
-X-Received: by 2002:a05:6512:11eb:b0:448:8cd0:7d7e with SMTP id
- p11-20020a05651211eb00b004488cd07d7emr14517234lfs.593.1648835872472; Fri, 01
- Apr 2022 10:57:52 -0700 (PDT)
+        Fri, 1 Apr 2022 13:59:45 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1976220D82A;
+        Fri,  1 Apr 2022 10:57:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C9C9221A90;
+        Fri,  1 Apr 2022 17:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648835873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f9SA9jeVPibQzcd8buCsF/7ncM5s4P2vkUi1q8Zs7CY=;
+        b=DxJtlKfGw7I8XKrtf1bX1ayliLJE1/HBoPKnInbfEaYnJcrTcuxIcXni+ZLHUBHHYHkk4E
+        /49/bpeH3DHKUfkY/T7GkPU02w5cKAjZhbSQNNJOSOi9DY6MaCTu8dhEr2KHH3oUcwTLse
+        874pn+g+lYgfyH5/Yb6wzTFGq2Rib+c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648835873;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f9SA9jeVPibQzcd8buCsF/7ncM5s4P2vkUi1q8Zs7CY=;
+        b=4z3k24IAgNOcQY00d6mCG8q35YEwDAyyDBO7c3g+e2U7yNs9S0W0hYwhx6y4TC8AuBl+5t
+        5DLMowwkKmvEy4DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BED3A132C1;
+        Fri,  1 Apr 2022 17:57:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SZqJLiE9R2JpWQAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 01 Apr 2022 17:57:53 +0000
+Date:   Fri, 1 Apr 2022 19:57:51 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        corbet@lwn.net, tglx@linutronix.de, x86@kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH] [v2] x86/configs: Add x86 debugging Kconfig fragment
+ plus docs
+Message-ID: <Ykc9H801hkMRUd8t@zn.tnic>
+References: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
 MIME-Version: 1.0
-References: <20220401033845.8359AC2BBE4@smtp.kernel.org> <048945eb-dd6b-c1b6-1430-973f70b4dda5@infradead.org>
- <20220401100418.7c109f81@kernel.org>
-In-Reply-To: <20220401100418.7c109f81@kernel.org>
-From:   Dimitris Michailidis <d.michailidis@fungible.com>
-Date:   Fri, 1 Apr 2022 10:57:38 -0700
-Message-ID: <CAOkoqZncM3JMQvcbaixuBPg43=Da2ac2JjZAfWRt_Ezs2CCyOg@mail.gmail.com>
-Subject: Re: mmotm 2022-03-31-20-37 uploaded (drivers/net/ethernet/fungible/funcore/fun_dev.o)
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mm-commits@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220331175728.299103A0@davehans-spike.ostc.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 10:04 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 31 Mar 2022 22:15:15 -0700 Randy Dunlap wrote:
-> > On 3/31/22 20:38, Andrew Morton wrote:
-> > > The mm-of-the-moment snapshot 2022-03-31-20-37 has been uploaded to
-> > >
-> > >    https://www.ozlabs.org/~akpm/mmotm/
-> > >
-> > > mmotm-readme.txt says
-> > >
-> > > README for mm-of-the-moment:
-> > >
-> > > https://www.ozlabs.org/~akpm/mmotm/
-> > >
-> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > > more than once a week.
-> > >
-> > > You will need quilt to apply these patches to the latest Linus release (5.x
-> > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > > https://ozlabs.org/~akpm/mmotm/series
-> >
-> > on i386:
-> >
-> > ld: drivers/net/ethernet/fungible/funcore/fun_dev.o: in function `fun_dev_enable':
-> > (.text+0xe1a): undefined reference to `__udivdi3'
->
-> Doesn't fail here.
->
-> Oh... Probably this:
->
->         num_dbs = (pci_resource_len(pdev, 0) - NVME_REG_DBS) /
->                   (fdev->db_stride * 4);
->
-> The bad config must have 64b resource length. Dimitris, PTAL.
+On Thu, Mar 31, 2022 at 10:57:28AM -0700, Dave Hansen wrote:
+> 
+> Changes from v1:
+> 
+>  * Add actual .config fragment instead of just documenting it
+>  * Note that these partially x86-specific, but the rest can be
+>    used to test all tip contributions.
 
-I built last night with the mm tree from github tagged
-v5.17-mmotm-2022-03-31-20-37, i386 allmodconfig. It didn't reach the
-link stage due to other errors but I looked at fun_dev.o with nm, it
-didn't have a reference to __udivdi3. It may need a PAE config, I'll
-try that.
+Good, that looks nice. I'll queue it next week with this hunk added:
+
+---
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 63d50f65b828..1abd7cc9d6cd 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -313,5 +313,6 @@ define archhelp
+   echo  ''
+   echo  '  kvm_guest.config	- Enable Kconfig items for running this kernel as a KVM guest'
+   echo  '  xen.config		- Enable Kconfig items for running this kernel as a Xen guest'
++  echo  '  x86_debug.config	- Enable tip tree debugging options for testing'
+ 
+ endef
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

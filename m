@@ -2,142 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0404EFC5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69474EFC60
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349970AbiDAVx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S1350219AbiDAVxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348063AbiDAVxZ (ORCPT
+        with ESMTP id S1353033AbiDAVxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:53:25 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EE620169F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:51:33 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3691853pjh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:51:33 -0700 (PDT)
+        Fri, 1 Apr 2022 17:53:35 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA2221BC51
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:51:43 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id d142so3216533qkc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:51:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tGJBlLkmgZTxVHoFIKbZU2QoQ1f35loIsBzJHpfAMdY=;
-        b=IRuzE1kOG1hxaxxmTzAYMb3FDbCSi+yGguqeIEEkb6PgEkoj8OJw0Wbp1eIB/2Me3p
-         xuGdoi2lhxv9CVVqjbuzF613Zeln3iPfWQbpeqsqnIjocqNg67KqieyA7dgqBsr6SPWw
-         6wrS6Bcn1dzQKZfr8jGNVSlBrpiQex5k5ZZVGbSMbGIQL9BBIVc8t4DjWPryYQMsaDT7
-         sBa+1gGJFgMAJ67j3nixa//B/dzXUciEMBXRawWskMuQq0oEDW6nhlEHbFTTT2BDgxot
-         fiB+GkBX8L5o3ipdqqKD5S9ccxL7FPl6wgCEKzdtwvCa6iUBtuWv0DJ6dsXGF6WD5sFu
-         Jqwg==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=M11X+y56T/1F4fHNq5auQu00TlcNFHXDYbY/RsKteOE=;
+        b=c99U3qkEZHhIEc7ajhsZpxJqU4l3cAi/NL5cixEEbUy7C6XoKYSnxPRQBhDUZTmgW3
+         CdaWd0g1Bby07fp/jIyG1J3+95Fzgp/LQjARdfXbFBUkPZqyz7od9HefPpO8KeihaS2q
+         AlvwqXjClIn82Ow/qtMIqMEuy5CmEAoKGT4g+DwYdedW4fXEssdeJNdj65X6UuIG3Gye
+         uo1vCgIZbKpkm4ga/owAOGsj/OUuejccn7DdhxMou/c44twsSE4v7r5tzRnQ3jKJpheT
+         vGlmiuBEeWfJ6E0nzDdCP0Neo+0FVxArhDDUs374m/wmtChQS97scg1pGgtlfoHSbhwi
+         XX8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tGJBlLkmgZTxVHoFIKbZU2QoQ1f35loIsBzJHpfAMdY=;
-        b=xLlUNFxZfcj5ukdSN/OET1IdJOdT+vHjSjnOnnebIdXncU/43sy5jxEqPlzFH3CUIm
-         1+xjMXL0jBliUR7QWVl0cLkD1Whs/fQ+kQKIHKSytWQyd6WYD/a4sqlW2h8smWz3ociP
-         XSxfcrUbEBPFm8Pt0dGXGqhd7GQAWuT22szqAjQ7QAQMeCUHcRGzz9EqNlxlQCUghEWc
-         1N9EEE+O3wvFYsSF7Urjbj0xAZgd0juHFfZA0vhI+0uPVzrujZ/vG5UKb4eMNO4I9pnk
-         WSZ6P8PZ2pQsVDb/B9vdVHje4atmx7eGeJ0Ux1TSmoVZcms8rb7P0rHqXFALtx6n5nHa
-         +QjQ==
-X-Gm-Message-State: AOAM531vxN81eW4Z2VPT/R3czdIRFpydtPQ+ec29+7/KwbWwil5nTsul
-        Yeo5NP+RyRX9S+sSM5a2l1qPlA==
-X-Google-Smtp-Source: ABdhPJyqYTrcktF2dqvzUqC+PSXKCwUngmQC02h4W4A2CK4ObfO87QOMayd/x3RhS8ZivUZH3XpGcQ==
-X-Received: by 2002:a17:90a:4981:b0:1c6:b6dd:d7a9 with SMTP id d1-20020a17090a498100b001c6b6ddd7a9mr13855937pjh.22.1648849892251;
-        Fri, 01 Apr 2022 14:51:32 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e10-20020a17090a630a00b001c685cfd9d1sm3392861pjj.20.2022.04.01.14.51.31
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=M11X+y56T/1F4fHNq5auQu00TlcNFHXDYbY/RsKteOE=;
+        b=iyBr42WnmFaDuTjXoqNLeF1bMpHgOn0dfabF+5tWaPUC2NP84P48537cJYbcEzDeAm
+         Ff5xjtYPNGhBl7dy3OMd5qgzkDdZwY42M9RixSTWjxmHvNx/Ibknck0N4pDFhf9GZRsV
+         +MWVbIMUkBqNKzg8llDX4/uTvfoRC5ydtixGLec+CXusMllDo3psTa72U87wTQit7IPV
+         pj5CfBOWQkV8ALrXq7j3oDfHcO8NRGQnfuGy6YHgmq2e9e2wGIK6qQpSKYS0HnDDkXdH
+         iin7gOTIVhWQN1nqCBVd/XiMZxK7z+4uNdML2qmjF6Y9ITY+A4nxaPjY/fnvll1Q+dDY
+         YuKA==
+X-Gm-Message-State: AOAM532ToOXuklRQXzSgLqICrvnX+34Ey7ryIhWkPYR7+9dufgRQKQ3W
+        YbEXerYqHw8l3TyxwbF3pLDUjw==
+X-Google-Smtp-Source: ABdhPJz5e+/qhWGXkOB2Pdg+sYmL/Wm7bmIqKPSDgyhO5CcEvxS029Di2b+ofW5VEbb4r0PJYsKguA==
+X-Received: by 2002:a05:620a:25a:b0:67d:43a6:8892 with SMTP id q26-20020a05620a025a00b0067d43a68892mr7881250qkn.659.1648849902837;
+        Fri, 01 Apr 2022 14:51:42 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id 188-20020a3709c5000000b0067b147584c2sm1897184qkj.102.2022.04.01.14.51.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 14:51:31 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 21:51:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
-Message-ID: <Ykdz4GVF4C+S/LGg@google.com>
-References: <cover.1646944472.git.maciej.szmigiero@oracle.com>
- <19c757487eeeff5344ff3684fe9c090235b07d05.1646944472.git.maciej.szmigiero@oracle.com>
- <YkdFSuezZ1XNTTfx@google.com>
- <ff29e77c-f16d-d9ef-9089-0a929d3c2fbf@maciej.szmigiero.name>
+        Fri, 01 Apr 2022 14:51:42 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 17:51:41 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+Message-ID: <Ykdz7fiMFZeFltYy@cmpxchg.org>
+References: <YkdrEG5FlL7Gq2Vi@cmpxchg.org>
+ <243A0156-D26A-47C9-982A-C8B0CDD69DA2@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ff29e77c-f16d-d9ef-9089-0a929d3c2fbf@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <243A0156-D26A-47C9-982A-C8B0CDD69DA2@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022, Maciej S. Szmigiero wrote:
-> On 1.04.2022 20:32, Sean Christopherson wrote:
-> > On Thu, Mar 10, 2022, Maciej S. Szmigiero wrote:
-> > > +	/* The return address pushed on stack by the CPU for some injected events */
-> > > +	svm->vmcb->control.next_rip            = svm->nested.ctl.next_rip;
+On Fri, Apr 01, 2022 at 02:21:52PM -0700, Roman Gushchin wrote:
+> > On Apr 1, 2022, at 2:13 PM, Johannes Weiner <hannes@cmpxchg.org> wrote:
 > > 
-> > This needs to be gated by nrips being enabled _and_ exposed to L1, i.e.
+> > ﻿On Fri, Apr 01, 2022 at 11:39:30AM -0700, Roman Gushchin wrote:
+> >> The interface you're proposing is not really extensible, so we'll likely need to
+> >> introduce a new interface like memory.reclaim_ext very soon. Why not create
+> >> an extensible API from scratch?
+> >> 
+> >> I'm looking at cgroup v2 documentation which describes various interface files
+> >> formats and it seems like given the number of potential optional arguments
+> >> the best option is nested keyed (please, refer to the Interface Files section).
+> >> 
+> >> E.g. the format can be:
+> >> echo "1G type=file nodemask=1-2 timeout=30s" > memory.reclaim
 > > 
-> > 	if (svm->nrips_enabled)
-> > 		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+> > Yeah, that syntax looks perfect.
+> > 
+> > But why do you think it's not extensible from the current patch? We
+> > can add those arguments one by one as we agree on them, and return
+> > -EINVAL if somebody passes an unknown parameter.
+> > 
+> > It seems to me the current proposal is forward-compatible that way
+> > (with the current set of keyword pararms being the empty set :-))
 > 
-> It can be done, however what if we run on a nrips-capable CPU,
-> but don't expose this capability to the L1?
-
-Oh, right, because the field will be populated by the CPU on VM-Exit.  Ah, the
-correct behavior is to grab RIP from vmcb12 to emulate nrips=0 hardware simply
-not updating RIP.  E.g. zeroing it out would send L2 into the weeds on IRET due
-the CPU pushing '0' on the stack when vectoring the injected event.
-
-	if (svm->nrips_enabled)
-		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
-	else if (boot_cpu_has(X86_FEATURE_NRIPS))
-		vmcb02->control.next_rip    = vmcb12_rip;
-
-> The CPU will then push whatever value was left in this field as
-> the return address for some L1 injected events.
+> It wasn’t obvious to me. We spoke about positional arguments and then it wasn’t clear how to add them in a backward-compatible way. The last thing we want is a bunch of memory.reclaim* interfaces :)
 > 
-> Although without nrips feature the L1 shouldn't even attempt event
-> injection, copying this field anyway will make it work if L1 just
-> expects this capability based on the current CPU model rather than
-> by checking specific CPUID feature bits.
+> So yeah, let’s just describe it properly in the documentation, no code changes are needed.
 
-L1 may still inject the exception, it just advances the RIP manually.  As above,
-the really messy thing is that, because there's no flag to say "don't use NextRIP!",
-the CPU will still consume NextRIP and push '0' on the stack for the return RIP
-from the INTn/INT3/INTO.  Yay.
-
-I found that out the hard way (patch in-progress).  The way to handle event
-injection if KVM is loaded with nrips=0 but nrips is supported in hardware is to
-stuff NextRIP on event injection even if nrips=0, otherwise the guest is hosed.
-
-> > > +	u64 next_rip;
-> > >   	u64 nested_cr3;
-> > >   	u64 virt_ext;
-> > >   	u32 clean;
-> > 
-> > I don't know why this struct has
-> > 
-> > 	u8 reserved_sw[32];
-> > 
-> > but presumably it's for padding, i.e. probably should be reduced to 24 bytes.
-> 
-> Apparently the "reserved_sw" field stores Hyper-V enlightenments state -
-> see commit 66c03a926f18 ("KVM: nSVM: Implement Enlightened MSR-Bitmap feature")
-> and nested_svm_vmrun_msrpm() in nested.c.
-
-Argh, that's a terrible name.  Thanks for doing the homework, I was being lazy.
+Sounds good to me!

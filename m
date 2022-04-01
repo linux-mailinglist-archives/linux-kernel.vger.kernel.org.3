@@ -2,240 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C562E4EE8F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670474EE8FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343813AbiDAHS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S1343825AbiDAHSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343777AbiDAHST (ORCPT
+        with ESMTP id S1343808AbiDAHSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:18:19 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6DF25CBA2;
-        Fri,  1 Apr 2022 00:16:28 -0700 (PDT)
-X-UUID: 6924b0fd02a34aeb89897902d0ca4045-20220401
-X-UUID: 6924b0fd02a34aeb89897902d0ca4045-20220401
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 328314622; Fri, 01 Apr 2022 15:16:24 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 1 Apr 2022 15:16:23 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Apr
- 2022 15:16:23 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 1 Apr 2022 15:16:22 +0800
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH V7 3/3] spi: mediatek: support hclk
-Date:   Fri, 1 Apr 2022 15:16:16 +0800
-Message-ID: <20220401071616.8874-4-leilk.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220401071616.8874-1-leilk.liu@mediatek.com>
-References: <20220401071616.8874-1-leilk.liu@mediatek.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 03:18:42 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF05C25CBB4
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:16:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id h1so1912476edj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=MoQJAWCb5O8HKuXjQ/8E9dXCWuJaKjECxVHKf1aQxtM=;
+        b=ptI2bnlTSLxejlaqrsccAxhjPJBWqtTQx37/Xejrte2+YFrPHAhgQS3HHSbWub0ZTi
+         GnH24gT/A2bx/cfmYCeJwBEyUuw+r6Xgz1J5lk6iGN6B1/MBIiBFwGnjN7TbFIudVGfk
+         18LOO9nz91Z1MSP76cXXHiKr35d0VEWOfxmBnSDAM3niOomosBZ10n0zwTum0PyHezpY
+         ajoMICOEw9XJbh8buuVNnp6V0kvix6SxBpjjcqb06eZPhhs117+795ZUIIyWPjeWDqsz
+         PpRWg1lpwjk6FQPDJ/XA8K3z9W+9CW3mD0C1sEyK8eSQ5bQmtqJdC+7LD5aE8+3ItLKy
+         MgOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=MoQJAWCb5O8HKuXjQ/8E9dXCWuJaKjECxVHKf1aQxtM=;
+        b=JAZ1OuWuGuLBn25TdgdxbF1mOJBV9IPsTn26iNSq7Br0SHMeTSjNZfqzId8pPsgxep
+         1rfixjUo+s1aeaha2+jeoyR+i6GPOUw6uprfqz9t8sbaICa7p5z2PqjXM0su+crXoU6Q
+         S1Xfsmmi4ZybepK/eETXPckDqnSj9MX4p6m+hkZ/bUGsrx3vtysxHRDPI/p1FdiBnf2e
+         bCzNluKw2xggz1BqA5SveGku7VVjAafd68B93l9hFa0ncgY/g0Y0vACisCX9PjFOs4eT
+         qAG/I16jCpTuNpiWLjMdUfIxKkU0WRYTmQmd3vmlPQymcehy+wAmPA1aPzQ7myYbAyW0
+         qdKA==
+X-Gm-Message-State: AOAM533OjRnBkQbbV12dg+HbfQg/vMs1qlIojObOAxjtEiVbN8TSx1YE
+        ilFdIbFtKV1t2LWnA3njCU0=
+X-Google-Smtp-Source: ABdhPJx1dYDEnnliev//mBN6VmW9xDfnmAP07hN2MxONU8QwngdpGSTWn6Q6fcthoaMi8aa3jNByUg==
+X-Received: by 2002:aa7:cc82:0:b0:410:d2b0:1a07 with SMTP id p2-20020aa7cc82000000b00410d2b01a07mr19817208edt.359.1648797409996;
+        Fri, 01 Apr 2022 00:16:49 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id au22-20020a170907093600b006e4ad0bf8f7sm697549ejc.91.2022.04.01.00.16.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 01 Apr 2022 00:16:49 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] virt: acrn: fix invalid check past list iterator
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220401035742.GA31162@louislifei-OptiPlex-7050>
+Date:   Fri, 1 Apr 2022 09:16:48 +0200
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rppt@kernel.org, bjohannesmeyer@gmail.com, c.giuffrida@vu.nl,
+        h.j.bos@vu.nl
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CE06BFFA-93CA-4E25-AB63-524C3F293556@gmail.com>
+References: <20220319203819.2559993-1-jakobkoschel@gmail.com>
+ <20220330075742.GA22544@louislifei-OptiPlex-7050>
+ <6E68C33F-9CBB-418C-A11D-2AD863C0B19A@gmail.com>
+ <20220401011533.GA29696@louislifei-OptiPlex-7050>
+ <F54F358F-FFBC-4D6D-AB5C-9BC4A617C9BF@gmail.com>
+ <20220401035742.GA31162@louislifei-OptiPlex-7050>
+To:     Li Fei1 <fei1.li@intel.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this patch adds hclk support.
 
-Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/spi/spi-mt65xx.c | 85 ++++++++++++++++++++++++++++++++--------
- 1 file changed, 69 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 0f91c176b878..99ce570a88a7 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -129,7 +129,7 @@ struct mtk_spi {
- 	u32 state;
- 	int pad_num;
- 	u32 *pad_sel;
--	struct clk *parent_clk, *sel_clk, *spi_clk;
-+	struct clk *parent_clk, *sel_clk, *spi_clk, *spi_hclk;
- 	struct spi_transfer *cur_transfer;
- 	u32 xfer_len;
- 	u32 num_xfered;
-@@ -1204,25 +1204,40 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 		goto err_put_master;
- 	}
- 
-+	mdata->spi_hclk = devm_clk_get_optional(&pdev->dev, "hclk");
-+	if (IS_ERR(mdata->spi_hclk)) {
-+		ret = PTR_ERR(mdata->spi_hclk);
-+		dev_err(&pdev->dev, "failed to get hclk: %d\n", ret);
-+		goto err_put_master;
-+	}
-+
-+	ret = clk_prepare_enable(mdata->spi_hclk);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "failed to enable hclk (%d)\n", ret);
-+		goto err_put_master;
-+	}
-+
- 	ret = clk_prepare_enable(mdata->spi_clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to enable spi_clk (%d)\n", ret);
--		goto err_put_master;
-+		goto err_disable_spi_hclk;
- 	}
- 
- 	ret = clk_set_parent(mdata->sel_clk, mdata->parent_clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to clk_set_parent (%d)\n", ret);
--		clk_disable_unprepare(mdata->spi_clk);
--		goto err_put_master;
-+		goto err_disable_spi_clk;
- 	}
- 
- 	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_disable(mdata->spi_clk);
--	else
-+		clk_disable(mdata->spi_hclk);
-+	} else {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	pm_runtime_enable(&pdev->dev);
- 
-@@ -1262,6 +1277,10 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
-+err_disable_spi_clk:
-+	clk_disable_unprepare(mdata->spi_clk);
-+err_disable_spi_hclk:
-+	clk_disable_unprepare(mdata->spi_hclk);
- err_put_master:
- 	spi_master_put(master);
- 
-@@ -1277,8 +1296,10 @@ static int mtk_spi_remove(struct platform_device *pdev)
- 
- 	mtk_spi_reset(mdata);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_unprepare(mdata->spi_clk);
-+		clk_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return 0;
- }
-@@ -1294,8 +1315,10 @@ static int mtk_spi_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (!pm_runtime_suspended(dev))
-+	if (!pm_runtime_suspended(dev)) {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return ret;
- }
-@@ -1312,11 +1335,20 @@ static int mtk_spi_resume(struct device *dev)
- 			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
- 			return ret;
- 		}
-+
-+		ret = clk_prepare_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-+			clk_disable_unprepare(mdata->spi_clk);
-+			return ret;
-+		}
- 	}
- 
- 	ret = spi_master_resume(master);
--	if (ret < 0)
-+	if (ret < 0) {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return ret;
- }
-@@ -1328,10 +1360,13 @@ static int mtk_spi_runtime_suspend(struct device *dev)
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_disable(mdata->spi_clk);
--	else
-+		clk_disable(mdata->spi_hclk);
-+	} else {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return 0;
- }
-@@ -1342,13 +1377,31 @@ static int mtk_spi_runtime_resume(struct device *dev)
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 	int ret;
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		ret = clk_enable(mdata->spi_clk);
--	else
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-+			return ret;
-+		}
-+		ret = clk_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-+			clk_disable(mdata->spi_clk);
-+			return ret;
-+		}
-+	} else {
- 		ret = clk_prepare_enable(mdata->spi_clk);
--	if (ret < 0) {
--		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
--		return ret;
-+		if (ret < 0) {
-+			dev_err(dev, "failed to prepare_enable spi_clk (%d)\n", ret);
-+			return ret;
-+		}
-+
-+		ret = clk_prepare_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to prepare_enable spi_hclk (%d)\n", ret);
-+			clk_disable_unprepare(mdata->spi_clk);
-+			return ret;
-+		}
- 	}
- 
- 	return 0;
--- 
-2.25.1
+> On 1. Apr 2022, at 05:57, Li Fei1 <fei1.li@intel.com> wrote:
+>=20
+> On Fri, Apr 01, 2022 at 05:22:36AM +0200, Jakob Koschel wrote:
+>>=20
+>>> On 1. Apr 2022, at 03:15, Li Fei1 <fei1.li@intel.com> wrote:
+>>>=20
+>>> On Thu, Mar 31, 2022 at 01:20:50PM +0200, Jakob Koschel wrote:
+>>>>=20
+>>>>> On 30. Mar 2022, at 09:57, Li Fei1 <fei1.li@intel.com> wrote:
+>>>>>=20
+>>>>> On Sat, Mar 19, 2022 at 09:38:19PM +0100, Jakob Koschel wrote:
+>>>>>> The condition retry =3D=3D 0 is theoretically possible even if =
+'client'
+>>>>>> does not point to a valid element because no break was hit.
+>>>>>>=20
+>>>>>> To only execute the dev_warn if actually a break within the loop =
+was
+>>>>>> hit, a separate variable is used that is only set if it is =
+ensured to
+>>>>>> point to a valid client struct.
+>>>>>>=20
+>>>>> Hi Koschel
+>>>>>=20
+>>>>> Thanks for you to help us to try to improve the code. Maybe you =
+don't get the point.
+>>>>> The dev_warn should only been called when has_pending =3D true && =
+retry =3D=3D 0
+>>>>=20
+>>>> Maybe I don't understand but looking isolated at this function I =
+could see a way to call
+>>>> the dev_warn() with has_pending =3D false && retry =3D=3D 0.
+>>> Yes, even has_pending =3D true && retry =3D=3D 0 at the beginning, =
+we could not make sure
+>>> has_pending is true after schedule_timeout_interruptible and we even =
+didn't check
+>>> there're other pending client on the ioreq_clients (because we can't =
+make sure
+>>> when we dev_warn this clent is still pending). So we just use =
+dev_warn not higher log level.
+>>=20
+>> I'm sorry, I don't quite understand what you mean by that.
+>> Do you agree that has_pending =3D false && retry =3D=3D 0 is possible =
+when calling the dev_warn()
+>> or not?
+>>=20
+> Yes, so what ? It just a hint there may have pending request.
+
+if has_pending =3D=3D false && retry =3D=3D 0 when calling dev_warn() =
+there are very clear
+dependencies met:
+
+* has_pending =3D=3D false means that the list_for_each_entry() macro it =
+*not* exit early.
+* since list_for_each_entry() did *not* exit early, client will not hold =
+a valid list entry
+* using client->name is not safe and will not point to a valid string =
+(perhaps not even an address)
+
+I'm *only* talking about the case where has_pending =3D=3D false, in =
+case that's not clear.
+
+
+> Even retry =3D=3D 0 && has_pending =3D true,
+> When we call dev_warn, the clent may not is pending.
+>=20
+>=20
+>>>>=20
+>>>>> 		list_for_each_entry(client, &vm->ioreq_clients, list) {
+>>>>> 			has_pending =3D has_pending_request(client);
+>>>>> 			if (has_pending)
+>>>>> 		}
+>>>>> 		spin_unlock_bh(&vm->ioreq_clients_lock);
+>>>>=20
+>>>> imagine has_pending =3D=3D false && retry =3D=3D 1 here, then =
+client will not hold a valid list entry.
+>>> What do you mean "client will not hold a valid list entry" ?=20
+>>=20
+>> Imagine a very simple example:
+>>=20
+>> 	struct acrn_ioreq_client *client;
+>> 	list_for_each_entry(client, &vm->ioreq_clients, list) {
+>> 		continue;
+>> 	}
+>>=20
+>> 	dev_warn(acrn_dev.this_device,
+>> 		 "%s cannot flush pending request!\n", client->name); /* =
+NOT GOOD */
+>>=20
+> If there're pending request, we would call schedule to schedule out =
+then schedule back
+> to check the list from the beginning. If there's no pending client, we =
+point to the last
+> client and break out the while loop.
+>=20
+> The code doesn't want to find the pending client and break out the =
+while loop and call
+> dev_warn. Please see the function comment.
+>=20
+>=20
+>>=20
+>> Since there is no break for the list_for_each_entry() iterator to =
+return early,
+>> client *cannot* be a valid entry of the list. In fact if you look at =
+the list_for_each_entry()
+>> macro, it will be an 'bogus' pointer, pointing somewhere into 'vm'.
+>> Essentially before the terminating condition of the list traversal =
+the following code is called:
+>>=20
+>> 	list_entry(&vm->ioreq_clients, struct acrn_ioreq_client *, =
+list);
+>>=20
+>> resulting in a:
+>>=20
+>> 	container_of(&vm->ioreq_clients, struct acrn_ioreq_client *, =
+list);
+>>=20
+>> &vm->ioreq_clients however is not contained in a struct =
+acrn_ioreq_client, making
+>> this call compute an invalid pointer.
+>> Therefore using 'client' as in the example above (e.g. client->name) =
+after the loop is
+>> not safe. Since the loop can never return early in the simple example =
+above it will
+>> always break. On other cases (the one we are discussing here) there =
+might be a chance that
+>> there is one code path (in theory) where the loop did not exit early =
+and 'client'
+>> holds that 'invalid entry'.
+>>=20
+>> This would be the case with has_pending =3D false && retry =3D=3D 0.
+>>=20
+>> I hope this makes sense.
+>>=20
+>>>=20
+>>>>=20
+>>>>>=20
+>>>>> 		if (has_pending)
+>>>>> 			schedule_timeout_interruptible(HZ / 100);
+>>>>> 	} while (has_pending && --retry > 0);
+>>>>=20
+>>>> since has_pending && --retry > 0 is no longer true the loop stops.
+>>>>=20
+>>>>> 	if (retry =3D=3D 0)
+>>>>> 		dev_warn(acrn_dev.this_device,
+>>>>> 			 "%s cannot flush pending request!\n", =
+client->name);
+>>>> client->name is accessed since retry =3D=3D 0 now, but client is =
+not a valid struct ending up
+>>>> in a type confusion.
+>>>>=20
+>>>>>=20
+>>>>> If retry > 0 and has_pending is true, we would call =
+schedule_timeout_interruptible
+>>>>> to schedule out to wait all the pending I/O requests would been =
+completed.
+>>>>>=20
+>>>>> Thanks.
+>>>>=20
+>>>> Again, I'm not sure if this is realistically possible. I'm trying =
+to remove
+>>>> any use of the list iterator after the loop to make such =
+potentially issues detectable
+>>> You may think we still in the loop (could we ?), even that we didn't =
+write the list iterator then.
+>>=20
+>> I'm not exactly sure which loop you are referring to but no, I don't =
+think we are still in
+>> the do while loop.
+>>=20
+>> The only thing we know after the do while loop is that: !has_pending =
+|| retry =3D=3D 0
+>> And iff has_pending && retry =3D=3D 0, then we shouldn't call the =
+dev_warn().
+>>=20
+>>>> at compile time instead of relying on certain (difficult to =
+maintain) conditions to be met
+>>>> to avoid the type confusion.
+>>>>=20
+>>>> Thanks,
+>>>> Jakob
+>>=20
+>> 	Jakob
+
+	Jakob
 

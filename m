@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3C14EF6D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2354EF6D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351704AbiDAPo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S1353512AbiDAPpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353857AbiDAPLI (ORCPT
+        with ESMTP id S1354593AbiDAPML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:11:08 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFFA196089
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:54:10 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id i11so2672120plr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pOFOAOjZHkVIM9Cf5IEXbes0u5Uh/OQeAWWXMddS0Bg=;
-        b=iOsOoSV9OQblL4p1l3OUbmwl/JF8l0v7RCPmXqxWk4Jw8wnbSyNT+BVb9QU8KK/O7S
-         EAHlhqMl9mdfUxz90N4rt8NWEC9EeE2UHAdi47b9XQfmcMgIrx3Bb7PJA9qeWjjGolzJ
-         wk/BjvuXiRgn6TX1CwSGlF36Phq+jBcYdv59dPSjbO0y+6Tg7dcLW6eCJqz7NgFqEzbr
-         7VNiOESgpDBZKYDQkvYlbXD3BoX2hMUvn7/xM0mYTHGhVQT0g5MMEMy97ZdwVwqkqCPX
-         mxMT7CdHBr7N98iviXLuf1gKPvATXJmvPdKo5kt6EjN6u2zGY3eIHf+6RMKqPGNDAmiG
-         uEeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pOFOAOjZHkVIM9Cf5IEXbes0u5Uh/OQeAWWXMddS0Bg=;
-        b=QyrhTscth8Xik5Zf4PMnl+9YJ02/IhX+BfjJmn1GhBhDZi+rf54yrCnl9b4XWFLxQ/
-         esFmPUfphhG1wXQA4MVDiTXatbB0E11WGxZYtye41gVzVBCOWM8LXBBfZjcMNMniYlDk
-         hrLurzWWNPV4O2AgYEUypNvQpQ4TfCxYfP2TixYKJrIfnVrCihYJ32vwAokHJrBJZbC0
-         hKQw5AvWF2W0AHvfRxmhRcRL1uU0qs5mn1VckdN76ZJX6zh9049P3/t4txBGo5moe0tP
-         yX9joV4ks8vzYOy7mfB1i44Wcg2z1cORhNp7a5tcrivqDXGinud1d0f7zOvGjfXCGDJ6
-         wrpA==
-X-Gm-Message-State: AOAM532QSTUpnee2RY4+JyLp7UUe/VZZidXA/nS9CV808Se/8LsdQ9He
-        zi8SRg7e8PANaOQiS8LBMndpgw==
-X-Google-Smtp-Source: ABdhPJxQYmCfdKoFloacVpLGDsq+pXMzsTYr3YdN943LhaTj99Is7YEwhGgGHX+l57f4aLJsWy1z1g==
-X-Received: by 2002:a17:902:7c0d:b0:155:d507:3cf0 with SMTP id x13-20020a1709027c0d00b00155d5073cf0mr10344247pll.103.1648824849356;
-        Fri, 01 Apr 2022 07:54:09 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u18-20020a056a00125200b004fb112ee9b7sm3012243pfi.75.2022.04.01.07.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 07:54:08 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 14:54:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     Peter Gonda <pgonda@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Bharata B Rao <bharata@amd.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Mingwei Zhang <mizhang@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
-Message-ID: <YkcSDeJDHOv+MZA7@google.com>
-References: <20220308043857.13652-1-nikunj@amd.com>
- <YkIh8zM7XfhsFN8L@google.com>
- <c4b33753-01d7-684e-23ac-1189bd217761@amd.com>
- <YkSz1R3YuFszcZrY@google.com>
- <5567f4ec-bbcf-4caf-16c1-3621b77a1779@amd.com>
- <CAMkAt6px4A0CyuZ8h7zKzTxQUrZMYEkDXbvZ=3v+kphRTRDjNA@mail.gmail.com>
- <YkX6aKymqZzD0bwb@google.com>
- <a1fe8fae-6587-e144-3442-93f64fa5263a@amd.com>
+        Fri, 1 Apr 2022 11:12:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2E827857D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648824924; x=1680360924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sRq3aNuvvoADqxpwEnycoxwbNQ9AKtJA/e+GBeJ1okI=;
+  b=KeDGfBz4lkkUn3IzpcW/cRYvTSItzwRDoItJs0Db+ORQfQLCkYsyfbRy
+   OlE/50Xld4/cjvZ1C5QsLcCMQzngfNbqWiRL9MQNzBAAjT3xjj1wei6XH
+   z+hFi7P635E5wSbqe3LNbkrpvsJ9fdmjXkrEPuGntsh366AcSHT74utBY
+   boTMZIewNZWLpzsi2t1CiCxFl9Td1NJwPTGt3eLTkk1zf6EDVQQ4O9w3l
+   sdFRn+msHpUQxQfNHIzuBBOduDVqc0rCwxXQRKf8hk2BuwuoENffyS+GB
+   XM60HGGdYO7anwcmuYAYll9JBdkzwUg5cA+SKdZdnEXvBPqsKYEujmBfx
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257733422"
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="257733422"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 07:55:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="522799890"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 07:55:14 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naIgE-0001KK-4h;
+        Fri, 01 Apr 2022 14:55:14 +0000
+Date:   Fri, 1 Apr 2022 22:54:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alistair Francis <alistair.francis@wdc.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-asidlen 1/1]
+ arch/riscv/mm/context.c:308:45: error: 'mm_context_t' has no member named
+ 'id'
+Message-ID: <202204012242.MvKAyz37-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a1fe8fae-6587-e144-3442-93f64fa5263a@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022, Nikunj A. Dadhania wrote:
-> 
-> On 4/1/2022 12:30 AM, Sean Christopherson wrote:
-> > On Thu, Mar 31, 2022, Peter Gonda wrote:
-> >> On Wed, Mar 30, 2022 at 10:48 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
-> >>> So with guest supporting KVM_FEATURE_HC_MAP_GPA_RANGE and host (KVM) supporting
-> >>> KVM_HC_MAP_GPA_RANGE hypercall, SEV/SEV-ES guest should communicate private/shared
-> >>> pages to the hypervisor, this information can be used to mark page shared/private.
-> >>
-> >> One concern here may be that the VMM doesn't know which guests have
-> >> KVM_FEATURE_HC_MAP_GPA_RANGE support and which don't. Only once the
-> >> guest boots does the guest tell KVM that it supports
-> >> KVM_FEATURE_HC_MAP_GPA_RANGE. If the guest doesn't we need to pin all
-> >> the memory before we run the guest to be safe to be safe.
-> > 
-> > Yep, that's a big reason why I view purging the existing SEV memory management as
-> > a long term goal.  The other being that userspace obviously needs to be updated to
-> > support UPM[*].   I suspect the only feasible way to enable this for SEV/SEV-ES
-> > would be to restrict it to new VM types that have a disclaimer regarding additional
-> > requirements.
-> 
-> For SEV/SEV-ES could we base demand pinning on my first RFC[*].
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-asidlen
+head:   bdfae0d4f28854d02d1f78fcb18b41d01ae32832
+commit: bdfae0d4f28854d02d1f78fcb18b41d01ae32832 [1/1] riscv: Ensure only ASIDLEN is used for sfence.vma
+config: riscv-nommu_k210_defconfig (https://download.01.org/0day-ci/archive/20220401/202204012242.MvKAyz37-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/bdfae0d4f28854d02d1f78fcb18b41d01ae32832
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-asidlen
+        git checkout bdfae0d4f28854d02d1f78fcb18b41d01ae32832
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
-No, because as David pointed out, elevating the refcount is not the same as actually
-pinning the page.  Things like NUMA balancing will still try to migrate the page,
-and even go so far as to zap the PTE, before bailing due to the outstanding reference.
-In other words, not actually pinning makes the mm subsystem less efficient.  Would it
-functionally work?  Yes.  Is it acceptable KVM behavior?  No.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Those patches does not touch the core KVM flow.
+All errors (new ones prefixed by >>):
 
-I don't mind touching core KVM code.  If this goes forward, I actually strongly
-prefer having the x86 MMU code handle the pinning as opposed to burying it in SEV
-via kvm_x86_ops.  The reason I don't think it's worth pursuing this approach is
-because (a) we know that the current SEV/SEV-ES memory management scheme is flawed
-and is a deadend, and (b) this is not so trivial as we (or at least I) originally
-thought/hoped it would be.  In other words, it's not that I think demand pinning
-is a bad idea, nor do I think the issues are unsolvable, it's that I think the
-cost of getting a workable solution, e.g. code churn, ongoing maintenance, reviewer
-time, etc..., far outweighs the benefits.
+   arch/riscv/mm/context.c: In function 'get_mm_asid':
+>> arch/riscv/mm/context.c:308:45: error: 'mm_context_t' has no member named 'id'
+     308 |         return atomic_long_read(&mm->context.id) & asid_mask;
+         |                                             ^
+>> arch/riscv/mm/context.c:308:52: error: 'asid_mask' undeclared (first use in this function); did you mean 'pid_task'?
+     308 |         return atomic_long_read(&mm->context.id) & asid_mask;
+         |                                                    ^~~~~~~~~
+         |                                                    pid_task
+   arch/riscv/mm/context.c:308:52: note: each undeclared identifier is reported only once for each function it appears in
+   arch/riscv/mm/context.c:309:1: error: control reaches end of non-void function [-Werror=return-type]
+     309 | }
+         | ^
+   cc1: some warnings being treated as errors
 
-> Moreover, it does not expect any guest/firmware changes.
-> 
-> [*] https://lore.kernel.org/kvm/20220118110621.62462-1-nikunj@amd.com/
+
+vim +308 arch/riscv/mm/context.c
+
+   305	
+   306	unsigned long get_mm_asid(struct mm_struct *mm)
+   307	{
+ > 308		return atomic_long_read(&mm->context.id) & asid_mask;
+   309	}
+   310	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

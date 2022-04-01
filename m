@@ -2,158 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AE54EFC35
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBA64EFC2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352810AbiDAViO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S1352766AbiDAVdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351536AbiDAViM (ORCPT
+        with ESMTP id S235288AbiDAVdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:38:12 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC557483
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:36:22 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3667470pjh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:36:22 -0700 (PDT)
+        Fri, 1 Apr 2022 17:33:08 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311DC264F6E;
+        Fri,  1 Apr 2022 14:31:18 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id a30so5473715ljq.13;
+        Fri, 01 Apr 2022 14:31:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=aYp862D2P9rwZ8w0k1RYiGcPZn0LcpIwaRufe0fXT+Y=;
-        b=cR90qpjLF0s9TN5+/tmfd7tRVhzAw6Rgcp1bmgNs6j2lfN/LDqZYdNhcaIXKiZMO/5
-         fCHJ+cLyou32ow4gj+JQD8M47sayLWMuqhytBxmsrrMgJh784Y0FcJBSjaoMZTl/a0Ee
-         uiGnFvZpZog9cICQuFau+R4G03yPe1jBNJ2LF1giFjkkEPHIMcuZel8Gu5eT7q+Whwx9
-         B88Hdsg9JO30Lea971VElBKwttjn1vh3H5gNRKgO8XdOosayy4Tq/MDyVIjp94eIVyqz
-         FPGzj7TTFGr4Y8Pw+6tnH6g7s2iWxY7x2EG4qk90xSy10Gmp79kNCIj3J/PgXJGZ6oTb
-         flrA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=X0JK5ihT1MOGfyrbF7/pj0RowTruIVoP8e8CBBTi+S4=;
+        b=C3Kf9Jm7U1BjEQwktj6mm0YSGdJta5gC611qurF0ij+1RP2Nw6zIG8ZqJlQeUPFlSR
+         4raoXNZ0GZM2xMqM+JWbTCIJOOITuhrDYmCMsyuA540wopq7D/I4dCPHjnz1L1AuC+Ed
+         fSVIkEpV+m5VcxY6+rZb96Oyp9TyTWfOOH/32rIrgph10FCwftAH2n/JjYxdXaSqv5ba
+         wRchlZZNVv2YkBrwuydSSuEW/BcDn/BkHwRj6Yqk05OS3Qo9R1p28mK9m/JTNJzoCu6N
+         I86TdUsZRQ6dD0J6GYUoSB0mZ5zPDkz8CE1W6SIxIVouoS9AipGBIMPgO+P9wu86uIro
+         jhKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=aYp862D2P9rwZ8w0k1RYiGcPZn0LcpIwaRufe0fXT+Y=;
-        b=stVUZSwdY9z2bPoVDb7B+VvIkJEOzCAvPL1eia5DkR2ZVrBZ6VauIDwcRWThb52SKt
-         mHXoQee2L8KCT6ulXPEjLIJJCY4P9+q9kr4f5ZwS6dC7VjfW31cq/j1a0F2UU5p/TKZ/
-         pcgHKJ2SWNFnMcb0vDJNFUr9SjAf3KTzxCVSyLxC8PLO62+dm22i2J6ia0gPOQ9HfizV
-         Qzvs2ndcXGqbNA13c/3ozF4MI0VhuKpYIuqc2Bt0crhrpsKnEFcVTUwsC0DDLKaubwUd
-         OgbwatKddOgnrA17z4bIHJdj7v7Bfqg4Y+sBVUjwERJr2vPtLxX+pg18m9wwcHQw4WnE
-         91oA==
-X-Gm-Message-State: AOAM531dpfCbnsZw6AG6RUiJEiXSvL6x4jmZx27E8eoXV/7LM5ZRd54q
-        I++fpmL3y1XoigMbVMCHoiIFUQ==
-X-Google-Smtp-Source: ABdhPJy2vP197SYrTV+OCDd087GwI8iQmVI39nnJ2WNSiTv31PP7MRAc4GpXIwLVD8UeXqi3YbAXsA==
-X-Received: by 2002:a17:90a:31cf:b0:1c9:f9b8:68c7 with SMTP id j15-20020a17090a31cf00b001c9f9b868c7mr14145759pjf.34.1648848981896;
-        Fri, 01 Apr 2022 14:36:21 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id d24-20020a637358000000b003823aefde04sm3228507pgn.86.2022.04.01.14.36.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=X0JK5ihT1MOGfyrbF7/pj0RowTruIVoP8e8CBBTi+S4=;
+        b=d+fiXOo2RE3K9dZMme4ExGrkwNOWy2/VGjPBZUPTCoeTHeKCuD+q43/6KJCEkmozbQ
+         QuYhTkcvRLCImyfDAdkde4WMrvwUcAPC4bhHfqvS4oKxdTc3pm64mvXVWlhKrfIoQOe9
+         CzBCW1mBDYuZ0+E9drVty2W2BTW1tSC5fqE4XL7INPh4uMHRkgeAoZeV1Ey7WWdl+Sm9
+         4tE3j5WMAToGz3et/Hq8wh8FoL6VJeZ/OITdxVeRFP64peynSxyD8gkKLBvk7zRnJ/aq
+         G/+WXPTQlLAN7VltypWVl1VOowbFPgYsAWZsDHWzf5n5WwT6nnMDyDm9SqTJfldqT6yn
+         j4cA==
+X-Gm-Message-State: AOAM531ysiwQGCbdA0YqP560hXETGj0UOzxZ1BybmEecazqIRa+mRKgi
+        CXLaKvxlbMSgO+FZvDzY9KaM9MSwV64=
+X-Google-Smtp-Source: ABdhPJwbmAj/TNXsyVzHxHQSIygbytu2JvhBQgA5HutAlambTIknHU9BwVfiI2XSNvpyitKPuCrnDw==
+X-Received: by 2002:a2e:a80e:0:b0:248:5819:b94a with SMTP id l14-20020a2ea80e000000b002485819b94amr14660509ljq.141.1648848676369;
+        Fri, 01 Apr 2022 14:31:16 -0700 (PDT)
+Received: from localhost.localdomain ([46.235.67.247])
+        by smtp.gmail.com with ESMTPSA id m8-20020a194348000000b0044a2ce63ef4sm349523lfj.10.2022.04.01.14.31.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 14:36:21 -0700 (PDT)
-Subject: [PATCH v3] dt-bindings: Fix phandle-array issues in the idle-states bindings
-Date:   Fri,  1 Apr 2022 14:26:59 -0700
-Message-Id: <20220401212658.30607-1-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 01 Apr 2022 14:31:15 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     sumit.semwal@linaro.org, gustavo@padovan.org,
+        christian.koenig@amd.com, daniel.vetter@ffwll.ch
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: [PATCH next v2] dma-buf/sync-file: do not allow zero size allocation
+Date:   Sat,  2 Apr 2022 00:31:14 +0300
+Message-Id: <20220401213114.11956-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <2d1f9ba9-ea2a-e41c-eae6-0ba348cdf202@gmail.com>
+References: <2d1f9ba9-ea2a-e41c-eae6-0ba348cdf202@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Cc:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        anup@brainfault.org, guoren@kernel.org, krzk@kernel.org,
-        lorenzo.pieralisi@arm.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Rob Herring <robh@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+num_fences is user-controlled value and it can be equal to 0. Code
+should not pass 0 to kcalloc(), since it will cause kcalloc() to return
+ZERO_PTR. ZERO_PTR will pass `!fences` check and kernel will panic
+because of dereferencing ZERO_PTR in add_fence()
 
-As per 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas"), the
-phandle-array bindings have been disambiguated.  This fixes the new
-RISC-V idle-states bindings to comply with the schema.
+Fix it by validating num_fences and bail out early if it is equal to 0
 
-Fixes: 1bd524f7e8d8 ("dt-bindings: Add common bindings for ARM and RISC-V idle states")
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Fixes: 519f490db07e ("dma-buf/sync-file: fix warning about fence containers")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 ---
-Changes since v2:
-
-* Add the missing schema requirement to riscv/cpus.yaml
 
 Changes since v1:
-
-* Only fix the RISC-V bindings, to avoid a merge conflict.
+	- Dropped already merged part
+	- Removed syzkaller's tag
 
 ---
- .../devicetree/bindings/cpu/idle-states.yaml     | 16 ++++++++--------
- .../devicetree/bindings/riscv/cpus.yaml          |  2 ++
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ drivers/dma-buf/sync_file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-index 95506ffb816c..0e89c469d0fc 100644
---- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
-+++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-@@ -719,8 +719,8 @@ examples:
-             reg = <0x0>;
-             riscv,isa = "rv64imafdc";
-             mmu-type = "riscv,sv48";
--            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
--                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
-+            cpu-idle-states = <&CPU_RET_0_0>, <&CPU_NONRET_0_0>,
-+                            <&CLUSTER_RET_0>, <&CLUSTER_NONRET_0>;
+diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+index b8dea4ec123b..024f22193e0c 100644
+--- a/drivers/dma-buf/sync_file.c
++++ b/drivers/dma-buf/sync_file.c
+@@ -212,7 +212,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
+ 	dma_fence_unwrap_for_each(b_fence, &b_iter, b->fence)
+ 		++num_fences;
  
-             cpu_intc0: interrupt-controller {
-                 #interrupt-cells = <1>;
-@@ -735,8 +735,8 @@ examples:
-             reg = <0x1>;
-             riscv,isa = "rv64imafdc";
-             mmu-type = "riscv,sv48";
--            cpu-idle-states = <&CPU_RET_0_0 &CPU_NONRET_0_0
--                            &CLUSTER_RET_0 &CLUSTER_NONRET_0>;
-+            cpu-idle-states = <&CPU_RET_0_0>, <&CPU_NONRET_0_0>,
-+                            <&CLUSTER_RET_0>, <&CLUSTER_NONRET_0>;
+-	if (num_fences > INT_MAX)
++	if (num_fences > INT_MAX || !num_fences)
+ 		goto err_free_sync_file;
  
-             cpu_intc1: interrupt-controller {
-                 #interrupt-cells = <1>;
-@@ -751,8 +751,8 @@ examples:
-             reg = <0x10>;
-             riscv,isa = "rv64imafdc";
-             mmu-type = "riscv,sv48";
--            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
--                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
-+            cpu-idle-states = <&CPU_RET_1_0>, <&CPU_NONRET_1_0>,
-+                            <&CLUSTER_RET_1>, <&CLUSTER_NONRET_1>;
- 
-             cpu_intc10: interrupt-controller {
-                 #interrupt-cells = <1>;
-@@ -767,8 +767,8 @@ examples:
-             reg = <0x11>;
-             riscv,isa = "rv64imafdc";
-             mmu-type = "riscv,sv48";
--            cpu-idle-states = <&CPU_RET_1_0 &CPU_NONRET_1_0
--                            &CLUSTER_RET_1 &CLUSTER_NONRET_1>;
-+            cpu-idle-states = <&CPU_RET_1_0>, <&CPU_NONRET_1_0>,
-+                            <&CLUSTER_RET_1>, <&CLUSTER_NONRET_1>;
- 
-             cpu_intc11: interrupt-controller {
-                 #interrupt-cells = <1>;
-diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index f62f646bc695..d632ac76532e 100644
---- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-+++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -101,6 +101,8 @@ properties:
- 
-   cpu-idle-states:
-     $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    items:
-+      maxItems: 1
-     description: |
-       List of phandles to idle state nodes supported
-       by this hart (see ./idle-states.yaml).
+ 	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
 -- 
-2.34.1
+2.35.1
 

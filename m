@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA78D4EEA9D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325154EEA9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344699AbiDAJoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 05:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S1344709AbiDAJo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344107AbiDAJoU (ORCPT
+        with ESMTP id S1344687AbiDAJoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 05:44:20 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7699B66F9A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:42:31 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2eb1ab11436so19780007b3.4
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 02:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=5bM14LmT9eRhJ5g9FBd/mcC1NH/E0MkGxXLU7hV68CA=;
-        b=OVXxMgnbHKEcpL6VB56qJFQSUZRSCOC2i9d7BL1Q7GEEoTscqfHQSBl3ZRquGCios8
-         TLbThyEFhwt6KQPteBuc5Jly37E3poF28saJYMuzjLbtIhX7sJyEC4B4iZle4XvssIIs
-         15FrIVwkDJaEJhzxFhpve+w7VPx7CzGrhu44CPdntziGZ09s5j1VeMwce1a1jULtb0nF
-         +lwPRcnJSy0CMcVgf+8D5ZkiDpUbNbY/XbnA/07jj4J5gXE6jm16g5YUU6gGosH1lc27
-         0Qiu+ktdeu2xrMqLdt0Izqdm6d/JuQXry3yVSnL8j/flpt0GSFfq1gnGQCL2X29FF18F
-         mp/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=5bM14LmT9eRhJ5g9FBd/mcC1NH/E0MkGxXLU7hV68CA=;
-        b=rZAQiHOpyN2XPEhkcZY7Cl6yktDXwHa8kdJeWxosjWyOrQImYhkg+knmAnnPZEAgKk
-         udZWpxDoEShF1AmOheqzIQ+8LSvpMGljZRTO2nPyZaSNXLeOX/TQhTrk044AT4dQe/SX
-         k1LJALlQtYaoUfuDdnLa4CuWCsaC8GuOZkIec5j0vnVNddB3KHNpanvRPvbJLRBZSK6T
-         GhKjZXioyMj3v1vioJ8WNY/8nYS+GqgVraLR2gGDL7FJma1lt1xoxReg2bh064z5UDNP
-         zGmF8Um/xZzoMB81+SaJYp5OfZvZgS3SAA+bi97J/F3d0Aa+93VmELPaxiZ/gH4rSnop
-         5ZGQ==
-X-Gm-Message-State: AOAM532k4tJhr0RRurvkp6trXbx7RGR1ZMg1JhHUE8kbbM5bqo8zszQT
-        R5h3bpuFCVADlkqJireQ/ie1T8QXbxgBOBcxYrR1YA==
-X-Google-Smtp-Source: ABdhPJyuf+EdWUjGBxYG6TPeK8QDsyTYR18oa3YGHbqLeAsM7axMRB8HB5lTnzreVqQvYezbzNoPFFTJA6qYaH+Z0Ug=
-X-Received: by 2002:a0d:ffc3:0:b0:2eb:2327:3361 with SMTP id
- p186-20020a0dffc3000000b002eb23273361mr1300759ywf.36.1648806150538; Fri, 01
- Apr 2022 02:42:30 -0700 (PDT)
+        Fri, 1 Apr 2022 05:44:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFE5102424
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:42:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCE046167F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:42:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC24C2BBE4;
+        Fri,  1 Apr 2022 09:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648806151;
+        bh=8MK1etsxuL825Aji7CJDLK+CCyk819YFJzs+mMzML+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DcupHnPxni/fpScxSsbonvIh30ygh4OsbpX6+WOdxX6QU5tF/3/QnEhPo7Blgm79F
+         qt7ZcVwrvX+xSIWRSOa2z2gio6eSwtv+v9IJFuZqgoouOL/or8pxtdrisUzOZkVfIk
+         nWRkVjUn5M6NGxjKUo/CockFf9tQhz/MlZh7lWN36ZeC4Mj7jQC1G0le33tZYc5A7W
+         2pEIjaFh/Ln+abH9YaFA3j0+Fe6MpPs214pXSmYuEpkUmAd6d+ukB7/n5SK2S4oHy8
+         NN5yuJQ2+DnxWKrsQ+ygsNUNSPAcOYY6uhvS1TgJSIS2yIP3s6FwJOU3Nbk8ILAXQw
+         wnGoMo4lKP/9w==
+Date:   Fri, 1 Apr 2022 11:42:25 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alois Wohlschlager <alwoju@gmx.de>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Hildenbrand <david@redhat.com>,
+        Rolf Eike Beer <eb@emlix.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Matthew Bobrowski <repnop@google.com>, Jan Kara <jack@suse.cz>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pid: Allow creation of pidfds to threads
+Message-ID: <20220401094225.epianrz3afrhfrqp@wittgenstein>
+References: <3412128.IC5jYiYEAv@genesis>
+ <20220401070942.odjbuc5wecfayyok@wittgenstein>
+ <5392366.5i5WIIk9Ns@genesis>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 1 Apr 2022 15:12:19 +0530
-Message-ID: <CA+G9fYvy_98dCAtCiu_SkieKXzya28CKzOmhq0d_RcJkMYYFTw@mail.gmail.com>
-Subject: [next] arm64: builds failed - stacktrace.c:(.text+0x55c): undefined
- reference to `arch_stack_walk_shadow'
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Will Deacon <will@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5392366.5i5WIIk9Ns@genesis>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,53 +64,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux next-20220401 arm64 builds failed due to below warnings / erros [1].
+On Fri, Apr 01, 2022 at 11:00:27AM +0200, Alois Wohlschlager wrote:
+> Hello Christian,
+> 
+> > We originally blocked this because it is not as easy as simply allowing
+> > pidfds to be created for non-thread-group leaders.
+> > For a start, pidfd_poll() currently doens't work if pidfd_task() isn't a
+> > thread-group leader
+> 
+> I did notice the hang there, that's why my patch changes pidfd_poll to return
+> error on tasks which are not thread-group leaders. IIRC, waiting on specific
+> threads is not supported by Linux at all, so I don't see a problem with not
+> supporting it here either.
 
-Regressions found on arm64:
-   - arm64-gcc-11-lkftconfig-kunit
-   - arm64-clang-12-lkftconfig
-   - arm64-gcc-11-lkftconfig-kselftest
-   - arm64-gcc-11-lkftconfig-rcutorture
-   - arm64-gcc-11-lkftconfig-kasan
-   - arm64-gcc-11-lkftconfig-armv8_features
-   - arm64-gcc-11-lkftconfig
-   - arm64-clang-13-lkftconfig
-   - arm64-gcc-11-lkftconfig-perf
-   - arm64-clang-14-lkftconfig
-   - arm64-gcc-11-lkftconfig-debug
-   - arm64-gcc-11-lkftconfig-devicetree
-   - arm64-gcc-11-lkftconfig-64k_page_size
-   - arm64-gcc-11-lkftconfig-debug-kmemleak
-   - arm64-clang-nightly-lkftconfig
-   - arm64-gcc-11-lkftconfig-libgpiod
+In general, it would be quite neat if we could get notified about thread
+exit through poll though. That'd be pretty useful. But maybe it's indeed
+ok to just not support this (for now at least).
 
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: Entry trampoline text too big
-aarch64-linux-gnu-ld: kernel/stacktrace.o: in function
-`stack_trace_save_shadow':
-stacktrace.c:(.text+0x55c): undefined reference to `arch_stack_walk_shadow'
-make[1]: *** [/builds/linux/Makefile:1250: vmlinux] Error 1
+I know that systemd is using pidfds in their event loop so I'd need to
+see whether they'd want support for this behavior.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> > and you'll just hang for CLONE_PIDFD | CLONE_THREAD.
+> 
+> No, CLONE_PIDFD | CLONE_THREAD behavior is unchanged, it will still fail with
+> EINVAL. I actually confirmed this by double-checking right now.
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: e5071887cd2296a7704dbcd10c1cedf0f11cdbd5
-  git_describe: next-20220401
-  kernel-config: https://builds.tuxbuild.com/27BBxWVk7aUyuYUrHdX9sgzoz3h/config
+I just used the two flags as a shorthand for pidfds referring to
+threads. That might've been misleading here.
 
-steps to reproduce:
+> 
+> > So at least that needs to be adapated as well and there's likely a bunch
+> > of other corner-cases I'm forgetting about.
+> 
+> I'd be happy to hear about other corner-cases so I can fix them.
 
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
---kconfig https://builds.tuxbuild.com/27BBxWVk7aUyuYUrHdX9sgzoz3h/config
+I need to play with this patch a little and see what current
+expectations we do have in the code.
 
+There are various consumers of pidfds and they all have been added with
+the assumption that a pidfd refers to a thread-group leader. We should
+go through them and see whether changing them to operate on threads is
+sane before we can just switch the generic helper.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Bot process_madvise() and process_mrelease() should be fine to operate
+on threads afaict from the discussion when they were added.
 
-[1] https://builds.tuxbuild.com/27BBxWVk7aUyuYUrHdX9sgzoz3h/
+For pidfd_send_signal() we likely want to at least consider adding the
+ability to send a thread-specific signal, i.e. supporting tgkill()
+behavior. As it stands it currently only supports kill()-like behavior
+where the signal that gets sent is thread-group directed.
+
+I roughly had originally envisioned this to be supportable through the
+addition of a new flag to pidfd_send_signal() so callers would be able
+to select whether to send a thread-specific signal or not. What do
+people think of that?
+
+> 
+> > Do you have a concrete use-case you want this for?
+> 
+> My use-case is basically making pidfd_getfd actually useful for its intended
+> purpose: there is a seccomp_unotify-based supervisor that wants to obtain a
+> file descriptor from its guest. This currently does not work if the action to
+> be forwarded to the supervisor is performed in a secondary thread, since there
+> is no way to obtain the required pidfd.
+
+Yeah, I'm well aware of that. I've been working around this limitation
+in our implementation for the seccomp notifier for quite a long time
+when intercepting the bpf()-syscall.

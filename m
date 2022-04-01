@@ -2,205 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1D64EEE1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1494EEE2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346342AbiDANbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S1346374AbiDANd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbiDANbU (ORCPT
+        with ESMTP id S1346368AbiDANdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:31:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115A626C2F6;
-        Fri,  1 Apr 2022 06:29:30 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 231DEDe6013751;
-        Fri, 1 Apr 2022 13:29:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=qmkl+q+uT18szoUD1dOretWcohg1KMIAJpMD2FHxU9Q=;
- b=dUEiWPT7zTWr/XteZRNVA2oaZ9i60ZsmnDRMlxIK2VDKpM/DlPp07t6DJ/7/DzL9d6S3
- YHkB76mC7uNRB9snAZLHN4xKclcaDDUSlAi2wKpuoKKmI9Cx1HdR4Q0Qqbse0a6oaUxo
- l9vuC91YxujEKneiOwUAHXd+aY0/0yGTZjUXFZsxophG17rj7WyZ9FRnVG7300+TN6Tg
- SnroMIQinwomPCJRdFbZIZnkRek9FsX0Bvu6tquhGcjHgtDl8YJCwDgflRxNgoefdifj
- AyFSIgGjSdCEa3GcxEyJLEgc+CMppvLO/8xq9L14cpbwWrM7BbXV4MG+Ylhe5rkewjM9 vA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f623qg9a6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Apr 2022 13:29:28 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 231DDjtq009363;
-        Fri, 1 Apr 2022 13:29:26 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9n3ts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Apr 2022 13:29:26 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 231DHJbC50462990
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 1 Apr 2022 13:17:19 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2877A42057;
-        Fri,  1 Apr 2022 13:29:23 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7AF5542045;
-        Fri,  1 Apr 2022 13:29:22 +0000 (GMT)
-Received: from localhost (unknown [9.171.12.244])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri,  1 Apr 2022 13:29:22 +0000 (GMT)
-Date:   Fri, 1 Apr 2022 15:29:20 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [GIT PULL] s390 patches for the 5.18 merge window #2
-Message-ID: <your-ad-here.call-01648819760-ext-9805@work.hours>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: sYMNrpzL8zVQ0_CohnULtQ0No3acwqrK
-X-Proofpoint-ORIG-GUID: sYMNrpzL8zVQ0_CohnULtQ0No3acwqrK
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 1 Apr 2022 09:33:55 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2138.outbound.protection.outlook.com [40.107.223.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB927DEB5;
+        Fri,  1 Apr 2022 06:32:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f4bjpTFJ+Xqvj0UzUD/I3SpW0/n8MikqhAtPTR0zChP1LmzdQ5qRnC1WbQKE9CGBGcVy+lLNnoVBslOCVqr8tRNKPcYB4v3O+VqgUBt+z0Lvw4rXhbO3iQPnl1nDojeYo61kiT3crqZZ8oRfGQGd5sftUpdEL5Leonb+L/Kr2Rpu3uDt8QM+q3EvRaFceAdaclDDidlXEea98EraLrmMQbZBmGAJLCTBy0tBJwuS3AZo01JsL49pUMe9Sg0pbGAWFKqZcmE5cONpDg51Sheui8PR2b+SNlXi+dy+2Hyg0zt3bcGnu/o2oPcQhrTvFoWzxsXI+MX49aO33QbcLyyvbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/qPUKTXI0xU1RdeTgvGf+7+HtufL5BZDEmu9MmfC21g=;
+ b=bBEyL/kDey5p2Qj5bSNJm/GQWM0HVsR/5kH6n7/DzABLRiLE6K5Zrx3be8SPUngCNfU7pwH3k2BiNaEmMYrKN9PPliG2+7nbrllrCMI2MidtzNgqakkOa53/7LshiTMyHscG4Wb+7nlWVGZ1jYvWHXZMbZf/3SKpXfAKW7CuRzDhHchLl4pxY9c7+fK6py0QhMFMUFWUcD9E0NWNy9JK2QBWUGjrJR4fr+q3sw7AUuj2TsYORsN0dljAIgTwhI5k/2t6HWJ2r5oAcS9zoOt+jPwvVFPAWVl4ey/2cTixyHMf2wyG+4GXpM0cFzcrQx+rey2c50KJicL6MkFTyuIvdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
+ header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/qPUKTXI0xU1RdeTgvGf+7+HtufL5BZDEmu9MmfC21g=;
+ b=NDO6jpu+YRIUnz1aTROTb65aii5Ryf7QbXdJNB5Ih9fydKHt4N7hnj3Rbdef+dBcSusRmHGW0sdyeOqovFGpueOdJE2zSzDaVDst4ecZShIQlw/YRV9Xhvp4dCgn3pINM7DJT8s0wzKmdatZO7UWDN9bti/bz3cR45DJzsrLEtyKf+ZGJ5QE2cJZms2xXOeBpvinBo/3smgsF1jRxlLjTYL0/3Zw/UJ+CP/sU6/ojLnJabHuVDMO5yL054J33rqkcvDNk+/3LBOXru7UlKILeUQjkf28/ek+1UJtXoWpaBmWa3dl9e6/PkQcQzBoe112YYfxDTG5xKffGh7WAqWSRQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
+Received: from PH0PR01MB6439.prod.exchangelabs.com (2603:10b6:510:d::22) by
+ MN2PR01MB5918.prod.exchangelabs.com (2603:10b6:208:196::29) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5123.16; Fri, 1 Apr 2022 13:32:04 +0000
+Received: from PH0PR01MB6439.prod.exchangelabs.com ([fe80::98bd:3eac:d0e:875])
+ by PH0PR01MB6439.prod.exchangelabs.com ([fe80::98bd:3eac:d0e:875%5]) with
+ mapi id 15.20.5102.025; Fri, 1 Apr 2022 13:32:04 +0000
+Message-ID: <946d2ce4-d9cc-d35f-714b-7bea5436a7c3@cornelisnetworks.com>
+Date:   Fri, 1 Apr 2022 09:32:00 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH] RDMA: Replace zero-length array with flexible-array
+ member
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>, cgel.zte@gmail.com
+Cc:     mike.marciniszyn@cornelisnetworks.com, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220401075406.2407294-1-lv.ruyi@zte.com.cn>
+ <20220401115039.GO64706@ziepe.ca>
+From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+In-Reply-To: <20220401115039.GO64706@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR11CA0002.namprd11.prod.outlook.com
+ (2603:10b6:208:23b::7) To PH0PR01MB6439.prod.exchangelabs.com
+ (2603:10b6:510:d::22)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-01_04,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 spamscore=0 mlxscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204010061
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e7eb0e15-02bb-49bb-5fa6-08da13e40281
+X-MS-TrafficTypeDiagnostic: MN2PR01MB5918:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR01MB5918C66B8A1B691B25772EA7F4E09@MN2PR01MB5918.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q6d6+1tBNrDCMGn+iIQpIksPxM5tT4SFBfj9eODCQ7mBSKYiJzdWThw+DBQTBQRwhVykMVw5nCVSmJE2vHxshyG4DRAEngsre/IXvGxMjd3/Qbg7lfDq4ZMKkAPTlqMaCcP3ize3MXh3rCIZ0WmzVBbUhZCkyc/dhb8gzw9rsULvxxLaCBPC8R2GxYY5MEtmsfZQKV9AgZ2WJ76/O2Oe0YsFn/SJqOHiCnPZmavC+tXuhFPOxUaOp4mNB6uhaXRd4aRVQ4ryHIXdBAzv9LJkmeDhR8Ur2m84nKCzgwJD3b5X/1vW7nfyWukn26PT4YjQ5q+ub6lqeWOxunZyGVDbfR28ix6FA+o88u/LwWB9rhF6Cs4G1dF0685E3LRZHDreT3+vfR+D6AyQweuQx0WPfY1Nywkq7SUWS3IHX25/asrCRUwCrrZpUArv5uKhT0NI7imhh9UcxTcjBSdD7iVxKc7tPJApPEfFfqe+fipZWUiiWEbY7KurCAuYjuUZ/n4ucEJs/dFFCtWsCUvR/KCDuJnT4pFxXZARgWqMP3YkNkL2ZK2H4OC0yzqEum/yzwcNh5LHURjSmwR39MDTnWU0FaZJRX6fBx3Vqa1UAqIQXiLjV+XqAM4CcEX225I2WIZXpxCNJ7Ng1W6KOEoNgfUV1b7HzvtGH/UazIpK3VxxuYn10EoenkyWtxjSiTW3bQAO9X7Q7qdSh6uQLVtLB5Ka+Hgj2vI3Xr30lQIzq8kbuB4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB6439.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(376002)(366004)(396003)(39840400004)(346002)(136003)(31696002)(66946007)(86362001)(44832011)(66556008)(38100700002)(8676002)(38350700002)(2906002)(66476007)(4744005)(4326008)(6512007)(5660300002)(186003)(2616005)(8936002)(53546011)(36756003)(508600001)(52116002)(26005)(6506007)(31686004)(54906003)(6666004)(316002)(6486002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0QybXNrZ01CMmRaR1NneVVvdE1OSzRtQTlVTVJQZGpUeFdDa1pJUDNFYW9v?=
+ =?utf-8?B?RUtxNlAyYXl3ZTNxeUxObTZsd2FzOVMrNTZmTnZPT05yeWE2MjZYR3BmdENh?=
+ =?utf-8?B?djc3Vk94KzYwM21WZ3F5TkVaNU9qY1NFc2V6a0RtTnhqUmhpQ3BJamxzZlZM?=
+ =?utf-8?B?TkxqMEx6VjFaMUt1aDcyUkduc0FqekhBekJBMHVPc3VUZEd2Z041MHdibkJ0?=
+ =?utf-8?B?MERZNVJVL09xd0hSYXlLeFEvakh1eHVIajFoUE5ZQitaV0FVWDVFRVp5dWJ3?=
+ =?utf-8?B?VzArQzdxWFFvQXBIWlJQdmVZbzhuRzVpSkJKdXpFd29ET1NuRU40clMyMG1w?=
+ =?utf-8?B?S2RJZUp3SGo3bDN0S2dJemc2b0F3Sjd3R0lRakRJbDNnK1g2WEplT3IzNkor?=
+ =?utf-8?B?OEhqNDA3OGZCaXNiVHdEZDkraVFKRWFRVXhYRWRaVytMdG9OU2JjeGNOM25I?=
+ =?utf-8?B?K053S2I4OTFGblQ2dFVMRGpvUUN5b3laOTNZN1NuMkJjYlpEdWpNdHp2all3?=
+ =?utf-8?B?VTZqWkFEYytHdi9oem53bkNCN0xlWXVpL2crN3MyTHFpaGV6QlVJWmttdGNT?=
+ =?utf-8?B?WWhZMDEzZnptR0ljSjlXSHg2L2p5RmVvMDF2Nml5bWtieE5CdHVqVUgxbHdY?=
+ =?utf-8?B?NmhUZDJVVFNVUEpUb1pDNlpSemFlbXZzOUJYNHVidzRQeEFkVnBLUVR0a0Ri?=
+ =?utf-8?B?aTM0RjQ0VkkyUGMyQnVNOFNidllaOVV2UmdEcXozdlIxd2FXUk0waFZKNHgr?=
+ =?utf-8?B?R1FkSVZKMXhzNUNpWmJVTVFleENLMDJOOERzTi93MmR2ZmlJUWZaTm9UWVl0?=
+ =?utf-8?B?TmZCQSt0bjdRa2dReFdhVFh6U05sNnRxdFlIazNLN3lxU0gybEhlM1UxSzZJ?=
+ =?utf-8?B?T1J2ZFJkS3dUNlhJN1NLY2NFVXFBWVQ0SW8yWHB4ZTVHeDJGQVBkRTUvSW9D?=
+ =?utf-8?B?UGYwOGR3VHNTN3Jhd0VHZEtMZzRxRXJEQ2RsUmVaRzdabHhZOHdYWGpnRDcx?=
+ =?utf-8?B?Nm5IMU5RK0dHZXVSbEg2VXJ6bzV0cGIwTno2YzJXZFV2enpocDhZZ1l6QXlF?=
+ =?utf-8?B?dnB5TjdMaytmSnhSVjR1RlV2NTlNd3hlSFZpUTQvMEltTFdVN1dLYjJremUw?=
+ =?utf-8?B?VkhDVzJaNGQzSkpHZFNHZmJYK2JHNWtESTNicjQ2cnQreDE4REJlMWhYSk8w?=
+ =?utf-8?B?T3N2M0lVSUZzN3lzRDF2TmxML2dmRWJYMFlQaUNCOTRNYkNJZjBCZEpJVW5h?=
+ =?utf-8?B?QXowM0FPeXhGdHdtWCtuTlU5UGNQaG5pU2Q1N0RqL0dTNXdkSkdmWS9XR1Jo?=
+ =?utf-8?B?M3lkZkhrV0N5dk5tZ2NVMHN4c1o3TmpxSDA0Ukg3REw3ZDJSWlUvSHJNT3RI?=
+ =?utf-8?B?dW9hZm96SnY4MGFlbHVZOE04UE9QSytlcVBGRS92eHp3VWI5REhaLzhSS1l3?=
+ =?utf-8?B?T0U3V0d4RFR2M3FlK2FJM0w0QXRpajJmZ3dpNnR0R0p5RlVuUHpwVVpoV3pF?=
+ =?utf-8?B?OGdWY2JhdHlla21sMXU0SEl2UDNuMXBWa3JDWFBQc2RlTVVCNkt2VHpKRGdT?=
+ =?utf-8?B?VmQzMVZJbnlrOFVQSE5iUWRjRy95ZS8zNVgwZTB2WWdUWEhXUmFpYnY2bEdN?=
+ =?utf-8?B?d09Eb2FRbHJCY0FKeXZTNkZjeGFjWURuQkFxV3VYNk5OaktVNjBuenJ4Sjl1?=
+ =?utf-8?B?dWsvdXhWUEZWVkNPU1NnL2hYNWZnYldRUkhsMSt6NFN3TkYyTzVZMTZWTjRN?=
+ =?utf-8?B?NVhhcExZckZra1IyVHhRTm1ncWx6MC9JYzdBOFVHOWJSWTRkdTVsNUVaWks2?=
+ =?utf-8?B?dnBBRmpINll6OWFWTUdPenlSTmNXTGg4b3VkdmJvWkM3aC9hRVNHNGdPWkpi?=
+ =?utf-8?B?UUgzWnlMZkEwQXF6Y0R4RmxydktCM1cza25WV3FnSTQ1TlZOc0pMRFFrYXp3?=
+ =?utf-8?B?K1BmaWkrTlhtZWNvQXBJb2RCV0xCeStMVElyZVZzbVptYnh2VFdZRElLZis0?=
+ =?utf-8?B?eG5pMC80UndtRTRsaHA0YXM1YjQrSFNHZDVsTExKOWN4aUJqL3Z6R21ZQWFF?=
+ =?utf-8?B?b0QzVGV5K3FQNDlCZjVpSU9ab29yLzM5ZjRvd043RkJlamYxbGhOUG4zMWxZ?=
+ =?utf-8?B?Q2dCRjBCaUFNTEwvdGdxOHAvRXJMMUxwRWdzTVpPeEgrT004OXdjYTRQOG4w?=
+ =?utf-8?B?SEtLbFJaWTkwMi90ME9TSGp5OWFLL1Q5VmhVc1YxbEVYSm5kL1dhQk1DdGRn?=
+ =?utf-8?B?MHhjQW5LdHZNMkorUGV5MjRHQTdxUVJMWFFsTlptNnk3MlN6RjloQStQVi9J?=
+ =?utf-8?B?N0dxMlVXUHhXakk3V3pPcXRLdXNMVjAwMUxOdmo3Tnh6LzRhUnAzNDBuamJC?=
+ =?utf-8?Q?dmnDU2aV7PedYRlCKXn7EFRmNNzwKZlUE2SC9?=
+X-OriginatorOrg: cornelisnetworks.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7eb0e15-02bb-49bb-5fa6-08da13e40281
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB6439.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 13:32:04.4350
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jlASNO60MzCy55GkLS0A+ssNB15nl6MmYjPkzQzmHFO5Tbv26aJmq/VFT2VpwO3l67VLezSX2UP2fXLw090m+W2MsycBiuubaUfZBJ43umL7hm2YmVfHM4HPlPEvnf0l
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR01MB5918
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On 4/1/22 7:50 AM, Jason Gunthorpe wrote:
+> On Fri, Apr 01, 2022 at 07:54:06AM +0000, cgel.zte@gmail.com wrote:
+>> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+>>
+>> There is a regular need in the kernel to provide a way to declare
+>> having a dynamically sized set of trailing elements in a structure.
+>> Kernel code should always use “flexible array members”[1] for these
+>> cases. The older style of one-element or zero-length arrays should
+>> no longer be used[2].
+> 
+> If I recall properly this doesn't work if the flex array is nested
+> inside another member.. Not sure what this thinks it is doing anyhow
 
-please pull the second round of s390 changes for 5.18.
+I was under the impression that the main goal of using the flex array was so
+that people didn't calculate sizes incorrectly. Perhaps I'm wrong though.
+I don't really see this being needed. If it even works when nested as Jason
+mentioned.
 
-Thank you,
-Vasily
+Now that being said there is some clean up that needs to be done to this code,
+but it's not this.
 
-The following changes since commit d710d370c4911e83da5d2bc43d4a2c3b56bd27e7:
-
-  Merge tag 's390-5.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux (2022-03-25 10:01:34 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.18-2
-
-for you to fetch changes up to faf79934e65aff90284725518a5ec3c2241c65ae:
-
-  s390/alternatives: avoid using jgnop mnemonic (2022-03-28 23:27:54 +0200)
-
-----------------------------------------------------------------
-s390 updates for the 5.18 merge window #2
-
-- Add kretprobes framepointer verification and return address recovery
-  in stacktrace.
-
-- Support control domain masks on custom zcrypt devices and filter admin
-  requests.
-
-- Cleanup timer API usage.
-
-- Rework absolute lowcore access helpers.
-
-- Other various small improvements and fixes.
-
-----------------------------------------------------------------
-Alexander Gordeev (4):
-      s390/smp: cleanup target CPU callback starting
-      s390/smp: cleanup control register update routines
-      s390/maccess: rework absolute lowcore accessors
-      s390/smp: use physical address for SIGP_SET_PREFIX command
-
-Haowen Bai (2):
-      s390: crypto: Use min_t() instead of doing it manually
-      s390/tape: use bitwise instead of arithmetic operator for flags
-
-Heiko Carstens (5):
-      s390/traps: improve panic message for translation-specification exception
-      s390/alternatives: use instructions instead of byte patterns
-      s390/alternatives: use insn format for new instructions
-      s390/ap: use insn format for new instructions
-      s390/ap: adjust whitespace
-
-Jakob Koschel (1):
-      s390/zcrypt: fix using the correct variable for sizeof()
-
-Juergen Christ (2):
-      s390/zcrypt: Add admask to zcdn
-      s390/zcrypt: Filter admin CPRBs on custom devices
-
-Julia Lawall (1):
-      s390/pkey: fix typos in comments
-
-Niklas Schnelle (2):
-      s390/pci: improve zpci_dev reference counting
-      s390/pci: rename get_zdev_by_bus() to zdev_from_bus()
-
-Russell Currey (1):
-      s390: fix typo in syscall_wrapper.h
-
-Tony Krowiak (1):
-      s390/vfio-ap: fix kernel doc and signature of group notifier functions
-
-Vasily Gorbik (6):
-      s390/test_unwind: extend kretprobe test
-      s390/kprobes: enable kretprobes framepointer verification
-      s390/unwind: recover kretprobe modified return address in stacktrace
-      s390/unwind: avoid duplicated unwinding entries for kretprobes
-      s390/test_unwind: verify __kretprobe_trampoline is replaced
-      s390/alternatives: avoid using jgnop mnemonic
-
-Yu Liao (1):
-      s390: cleanup timer API use
-
- arch/s390/Kconfig                       |  1 +
- arch/s390/include/asm/alternative-asm.h | 12 ++++--
- arch/s390/include/asm/alternative.h     | 15 ++++++--
- arch/s390/include/asm/ap.h              | 60 ++++++++++++++---------------
- arch/s390/include/asm/ctl_reg.h         | 16 +++++---
- arch/s390/include/asm/processor.h       | 17 ++++++---
- arch/s390/include/asm/spinlock.h        |  2 +-
- arch/s390/include/asm/syscall_wrapper.h |  2 +-
- arch/s390/include/asm/unwind.h          | 13 +++++++
- arch/s390/kernel/entry.S                | 10 ++---
- arch/s390/kernel/ipl.c                  |  4 +-
- arch/s390/kernel/kprobes.c              |  8 ++--
- arch/s390/kernel/machine_kexec.c        |  2 +-
- arch/s390/kernel/os_info.c              |  2 +-
- arch/s390/kernel/setup.c                | 19 ++++-----
- arch/s390/kernel/smp.c                  | 57 +++++++++++++--------------
- arch/s390/kernel/traps.c                |  6 +--
- arch/s390/kernel/unwind_bc.c            | 12 ++----
- arch/s390/lib/spinlock.c                |  4 +-
- arch/s390/lib/test_unwind.c             | 58 +++++++++++++++++++---------
- arch/s390/pci/pci.c                     |  5 ++-
- arch/s390/pci/pci_bus.h                 |  7 ++--
- arch/s390/pci/pci_clp.c                 |  9 ++++-
- arch/s390/pci/pci_event.c               |  7 +++-
- drivers/s390/char/sclp.c                |  4 +-
- drivers/s390/char/sclp_con.c            |  3 +-
- drivers/s390/char/sclp_vt220.c          |  6 +--
- drivers/s390/char/tape_34xx.c           |  4 +-
- drivers/s390/cio/device_fsm.c           | 12 ++----
- drivers/s390/cio/eadm_sch.c             | 12 ++----
- drivers/s390/crypto/ap_bus.h            |  1 +
- drivers/s390/crypto/pkey_api.c          |  2 +-
- drivers/s390/crypto/vfio_ap_ops.c       | 24 +++---------
- drivers/s390/crypto/zcrypt_api.c        | 68 ++++++++++++++++++++++++++++++++-
- drivers/s390/crypto/zcrypt_card.c       |  2 +-
- drivers/s390/crypto/zcrypt_ep11misc.c   |  2 +-
- 36 files changed, 296 insertions(+), 192 deletions(-)
+-Denny

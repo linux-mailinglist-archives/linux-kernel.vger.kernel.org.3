@@ -2,168 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2D64EEB0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9B84EEB13
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244997AbiDAKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S244516AbiDAKPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245030AbiDAKOC (ORCPT
+        with ESMTP id S234199AbiDAKPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:14:02 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2057.outbound.protection.outlook.com [40.107.236.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6884226E543;
-        Fri,  1 Apr 2022 03:12:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nkrPZE1YUV0WFSOkH98BzoV4x0sVQ4Af7f7yiVGH9Pnpwj/KgOSG4+YRjvwyRYGnLc3ZeGdiftKlFYaQrkGbuBTwsGFePQEIpQGxeclAnpvRyMAwi3dx2HowIgsZ/X3BthhmUNAuPZm3+OASVOygHeNPoSA+jpBRDBT0DmnlV1Kd0f2IH2JYt01VkplMEnDQh/clBEpbFMGwgAnp/T8xZAQrh8HZy99kT1zLwjuqOba3HyORIre26dMXEG3BvxOMzTNw+Lb2JJrcZcc8WiX2XGBBOdL/mT6HLuOaD3Me5beccIV5AcI2qSsgYeUTSlHTT5hBGkmqaQlHGueBD+n9Uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iYfUYLYH2iMGFPB326wCdgShRY4WBTLfXOiIeZNbyYE=;
- b=haCMZzkFW3aa66D8tJItBQFyWAZ0CgCzPNTgf6H5EhIR9/ccUIybKGAQZGUwyTs1j46RcjG2IBn9ZSx0lg8eTWvOnHv13MahuARnQdWrb9loe3C7JPqhTfF+yMu0Aq+zXxmdOWXP1LjdaD+kvTc/QfCTWAfXbjZYwlLBaSif3ZHDFrDMwNUKVj350LkijFvBcNpK8SYoFkV+GM11+bXmrEP2UrZahk2ciOCwRxPlPxxuBZ2eyR8aHKZNFd4UN5xTpWyQfczGpDi4u34rheZZPXDBKkGPBBcLJkOEi8xHB7KqKCIv6fnI5JUYGgSvDNz9Vy/KxwvNNoyGw6fvXkxncw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iYfUYLYH2iMGFPB326wCdgShRY4WBTLfXOiIeZNbyYE=;
- b=OkOVL8Y4rFDB2jxWkPERQxWwrFccRU2qG7M6JhbW2NGUvmD7Kwt+1CtzVFY7yT7vrZCmO8uPzFBUOhvsicxtYqD4gBGfKi5hmOGcI9OPyUiqpkqB0JcEaQLlET+L3jaERe9Qc/V5HMckyj38bFgBMEzBB9ql0PMk52rb8eqtbDtyTjwLuQ9sQ2oF5AKv1XamhJriJXrZJqoKUz+dU74QZAq87vyQSUQ3ekB4o5vCQUtrMGGIQXzGaOzUfIHkxMY0SS7hUv6jD1Pez5yhLvt8PODhH9o0/MaQJxAh95NlzdKncXh+0ka4pbytQ3zvde0gaj7n3llKpR2sfS+6hkre8Q==
-Received: from DM5PR12MB1628.namprd12.prod.outlook.com (2603:10b6:4:7::13) by
- DM5PR12MB2501.namprd12.prod.outlook.com (2603:10b6:4:b4::34) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5123.25; Fri, 1 Apr 2022 10:12:09 +0000
-Received: from DM5PR12MB1628.namprd12.prod.outlook.com
- ([fe80::144a:7c01:7727:1846]) by DM5PR12MB1628.namprd12.prod.outlook.com
- ([fe80::144a:7c01:7727:1846%9]) with mapi id 15.20.5123.021; Fri, 1 Apr 2022
- 10:12:09 +0000
-From:   Sandipan Patra <spatra@nvidia.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "digetx@gmail.com" <digetx@gmail.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        Bibek Basu <bbasu@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] soc/tegra: pmc: update Tegra234 reset sources
-Thread-Topic: [PATCH] soc/tegra: pmc: update Tegra234 reset sources
-Thread-Index: AQHYRACcWXPz7MPbsUCQESpH3BXaoazXpZKAgAMzNDA=
-Date:   Fri, 1 Apr 2022 10:12:09 +0000
-Message-ID: <DM5PR12MB16288BDAC52414AA65CC647FADE09@DM5PR12MB1628.namprd12.prod.outlook.com>
-References: <20220330063635.1689-1-spatra@nvidia.com>
- <YkQf13VH7RzrEcG/@smile.fi.intel.com>
-In-Reply-To: <YkQf13VH7RzrEcG/@smile.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1e686f6c-5923-467c-dfa9-08da13c8150a
-x-ms-traffictypediagnostic: DM5PR12MB2501:EE_
-x-microsoft-antispam-prvs: <DM5PR12MB2501A9CB918CA8BC704C18C8ADE09@DM5PR12MB2501.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m3xjOf3D7y8ACDM3qRr6SokIgl4DR+yXKMEzdwHjByjy94v5wRiO6QK4fEHkdtsN5K46GyJxuszr8643hOnfdhyOsUL2hGL9FsordCBR/5RoMKpgSlERcAVHQOgQqvrc17PGrcjF9c7mxbPDLOv6ci1pm8lyAjMZW7lal4h5x+Bx7RSaL5181WSNsv61F8SvOqHFZei6tgNBIdnMy3vxI+EdN64x/nO3m0LRRCfveEx/FENGmoBqFgBhKD6wTadQIWPV2XWqQ0D4d+iISK7suCsHveUy5uwO1Y9oCG6e690/tbxBUUPd99gSqD3zDEjwlPIcN0rd49WPIzRC64vnuJjo0y6MgAkYAW9Xuk+I7TJOprfi0d4TSgRvmBf4KA/aUhwJQ025y2/w8z3fIb+YfvyvuarY4pg4ukLwFvRXy9tXX6xSyC5un/pOU/ZHhuaZH7zAsaSZazf37rs4VK3V7Ov992qRCnm1+nqLU4AgO6Fx7Rgpg1ONNiPVzSYsHuRKpOBS3gGAF2gS1ASr1jscGTgjN3n4zvD1s3ubVEF/Cdr6T2bsbREHwvj6WONd3D/rxLX07ZZ3qqVuh14EuQs+i3unBpy9bKUGsk7rLeErG2U0UYczqU/WSsJg1RLwL8+1TWhLi6F5aRywGihbPeHp3ywPQKPe02rDQivmde1zEUo2xNf0j/A8MxsXRPcLDCM/AMzKjQpjxcYftQGQ1UTunw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1628.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(6916009)(186003)(26005)(53546011)(55016003)(71200400001)(54906003)(7696005)(6506007)(508600001)(122000001)(38070700005)(38100700002)(83380400001)(66556008)(86362001)(15650500001)(76116006)(33656002)(66946007)(66446008)(66476007)(4326008)(5660300002)(8936002)(8676002)(52536014)(316002)(64756008)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?R7UyUdqS+4GemEh84u0Tta6nhyRzVVb+qrbHxlZdtkSW1ts4aiUO5Q/g1W9g?=
- =?us-ascii?Q?9Tnkr/LSCSvZ7mpiSgQh1abAez/hoQzfeNdsy6uQi4eHsWrXsdzUkO4epINg?=
- =?us-ascii?Q?AwP34y1hkDoUYZxQI5/8C5F9HVQMZKDGzpFgpBKfhGoIOwJeSJWGI4XQJR58?=
- =?us-ascii?Q?ZAlxsr8VS7pZSpS2/l4Pp5Wvb3lOvjyqNDXhGaz34dVUtx2M/1/z2RKxem6r?=
- =?us-ascii?Q?QdvO8/mgEDmM7/Ynz0ogooaKxILmOFbBDug/2SH9nYK7M5184goOgxAPo+79?=
- =?us-ascii?Q?RxjEt7dMjfwGUIiGKhwZ+mBFHTR/cOm2NyXPv2B4cYX5Wl+4+1PghHZxBuVF?=
- =?us-ascii?Q?OnlVxTE6WMBgydw+dsmMknjN2W+wbAXA1mSAdTaiGBnS06CsTElEhETddxrb?=
- =?us-ascii?Q?toeyFScfq9MyHEQ5UfBNKAI6zvcjiFhoSQ38IhV/5kg2xt6sitV/ICi/u2jT?=
- =?us-ascii?Q?kNF7tJW/lIbqthzyLgiZNqaCmfpwjI3JIWqLQODzB98WmUidQLUi3XnTeig9?=
- =?us-ascii?Q?+R35P6+I1ywznXHQJJYnzxRjXoYnVlUaZs8gyO7bFL0XqQRBnMcJWmFS5N1u?=
- =?us-ascii?Q?Ne+RgXNytH1rkpsf73J3FQjozpgpqzBT+5e8uILyfiHzXLPiSXom2+cJJM46?=
- =?us-ascii?Q?g812GQSKc/moeZOg0yU33dwvcvGBOZxapke9v8NAxa8MK87jreq0HoxcELEq?=
- =?us-ascii?Q?1RZ+eaQDmi9feeDJqnLnOTkQ44YEQPBJYh/vRe9XZBsb6DLeyh8laqYHXkND?=
- =?us-ascii?Q?SoLooH0xZoKob27luCRHodvdGSAW0ufWO+qcjnXjh5l6yA2oyXrgE92oiV7s?=
- =?us-ascii?Q?BnfSCr5rVBQDELtvR2VdlwqFrqFld/O62YEyguMpGSDwL+PTo0b4gVy1BFUy?=
- =?us-ascii?Q?mGcomusy7TK0rQ1SfnIRjT/MVoUuWguGTCeJpCOdnKUAwLj1vGfbdcyQ7BEn?=
- =?us-ascii?Q?dK7iMnmQuQG6Zv3blZSmEEfZw/HHi6rv+Gy+J3sNHphT91bu6qZNe9R8dLUb?=
- =?us-ascii?Q?1aJd05M3wfzDyH/O32KQdlUm/2ZbhqbzOUvlbeV9ORhDhurpEjNvjJ+lykAD?=
- =?us-ascii?Q?a0E/Rwo288jSSdoAX6ie4kxaGDw5ZKeff48akgkKoQuS91qStNxQ6+9Gujn5?=
- =?us-ascii?Q?EmwhjfhpS32MGC5OiCk0qgv8ng4iA0D/grMDgjQpsJsKC6lA9o3r/wudwzzo?=
- =?us-ascii?Q?M77nV/ggZ7izwKEHtSqjR4yMhacxNBZk7v8dWYPlUiggwmJHZ6S+XKd55uVK?=
- =?us-ascii?Q?aN0y3/w/LwppB9W/8OUcZvCd/aYHIgmQDOeA6IjJEAfcw/PmB+mVhTrwM2jh?=
- =?us-ascii?Q?th2C96eAJXo6RRuGMxwDUwZqO1CFmERSYOXMZ7br474ebdie31CLQqJn3U9t?=
- =?us-ascii?Q?PmB8YPaUCjGpc91iCLdG8fcffc8FpUWPcCfFeHt+Vty/Kfjioa0+v6MHTmmw?=
- =?us-ascii?Q?U7/ajslrHoWIXFDjORJNxOM8LF3UdtN1CcttKtEe37yTUVrxLBFs9ex70tSM?=
- =?us-ascii?Q?t/p9fTEW9yx7oAMJQNdUIVnpdyz5hgrxV9Drtc/CwfIFAuJmQd0dcZm4DWHp?=
- =?us-ascii?Q?WuMYPS10pZqKYJjRtzXSO70p1VRyFRjkem1jHQJbC1OhCcCG9kLVA6RlnQMf?=
- =?us-ascii?Q?ipY5uGdw5nBdsCJGH4q3lMW7NujgGoEvq/xqLaZeK6uttwbpe/Dti1eCtroM?=
- =?us-ascii?Q?N39j3BzlX9BXp4kAFMDZVsiQvykg1IUgf4NWgcYjyWrKCUB5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 1 Apr 2022 06:15:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96E11195DAE
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648808021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DfvuPMWdvc4+G3JUpkqcya8XC3atgp6avWIwZAaEb+8=;
+        b=NT2H2B6GwDDnWUsenpND4SkIOkqrI/rMrs7TH961nJqMjDeCav+NvwijE6iPyaMJiYY7LT
+        Q4VW6jweByyIUBhgJ2QpR3hjdexkOEx6fZLqAoLd0XO9Rhn2lgBF8DKnV9SF3+yLNmpaQD
+        zGb3wnJbKKsKPV4wrqa7xbTExkE9k+o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-654-lR0r3DxPPJ-1YlEArRg8QA-1; Fri, 01 Apr 2022 06:13:38 -0400
+X-MC-Unique: lR0r3DxPPJ-1YlEArRg8QA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42DB41C09056;
+        Fri,  1 Apr 2022 10:13:38 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 61B451400C2F;
+        Fri,  1 Apr 2022 10:13:35 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH v1 mmotm] mm/mprotect: try avoiding write faults for exclusive anonynmous pages when changing protection
+Date:   Fri,  1 Apr 2022 12:13:34 +0200
+Message-Id: <20220401101334.68859-1-david@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1628.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e686f6c-5923-467c-dfa9-08da13c8150a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 10:12:09.2361
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uZIzCHGoJly4pjV/UnrGpmqlSjzJyMbPxyy176vp3K8oAuVpYyCZDfsPPFMhSYoK2fzBUg7tK/ng5/yoOENaeg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2501
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Andy for reviewing the patch.
+Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
+can try mapping anonymous pages writable if they are exclusive,
+the PTE is already dirty, and no special handling applies. Mapping the
+PTE writable is essentially the same thing the write fault handler would do
+in this case.
 
+Special handling is required for uffd-wp and softdirty tracking, so take
+care of that properly. Also, leave PROT_NONE handling alone for now;
+in the future, we could similarly extend the logic in do_numa_page() or
+use pte_mk_savedwrite() here. Note that we'll now also check for uffd-wp in
+case of VM_SHARED -- which is harmless and prepares for uffd-wp support for
+shmem.
 
-> -----Original Message-----
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Sent: Wednesday, March 30, 2022 2:46 PM
-> To: Sandipan Patra <spatra@nvidia.com>
-> Cc: Thierry Reding <treding@nvidia.com>; Jonathan Hunter
-> <jonathanh@nvidia.com>; digetx@gmail.com; ulf.hansson@linaro.org;
-> cai.huoqing@linux.dev; Bibek Basu <bbasu@nvidia.com>; linux-
-> tegra@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] soc/tegra: pmc: update Tegra234 reset sources
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On Wed, Mar 30, 2022 at 12:06:35PM +0530, Sandipan Patra wrote:
-> > Reset_sources list is updated to add all reset sources and removing
-> > ones that do not actually exist.
->=20
-> ...
->=20
-> > +     "SYS_RESET_N",  /*0*/
->=20
-> Missed spaces in the comment here and everywhere else.
-ACK
->=20
-> Not sure about indices. If it's going to be a part of the hardware
-> programming interface it may make sense to use hexadecimal rather than
-> decimal.
-Agree. That's a better suggestion for readability too, I will modify it to =
-have hexadecimal in next patch.
+While this improves mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE)
+performance, it should also be a valuable optimization for uffd-wp, when
+un-protecting.
 
+Applying the same logic to PMDs (anonymous THP, anonymous hugetlb) is
+probably not worth the trouble, but could similarly be added if there is
+demand.
 
-Thanks & Regards,
-Sandipan
->=20
-> --
-> With Best Regards,
-> Andy Shevchenko
->=20
+Results of a simple microbenchmark on my Ryzen 9 3900X, comparing the new
+optimization (avoiding write faults) during mrprotect() with softdirty
+tracking, where we require a write fault.
+
+  Running 1000 iterations each
+
+  ==========================================================
+  Measuring memset() of 4096 bytes
+   First write access:
+    Min: 741 ns, Max: 3566 ns, Avg: 770 ns
+   Second write access:
+    Min: 150 ns, Max: 441 ns, Avg: 158 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 170 ns, Max: 420 ns, Avg: 177 ns
+   Write access after clearing softdirty:
+    Min: 440 ns, Max: 1533 ns, Avg: 454 ns
+  -> mprotect = 1.120 * second [avg]
+  -> mprotect = 0.390 * softdirty [avg]
+  ----------------------------------------------------------
+  Measuring single byte access per page of 4096 bytes
+   First write access:
+    Min: 281 ns, Max: 1022 ns, Avg: 732 ns
+   Second write access:
+    Min: 120 ns, Max: 160 ns, Avg: 129 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 140 ns, Max: 191 ns, Avg: 146 ns
+   Write access after clearing softdirty:
+    Min: 301 ns, Max: 561 ns, Avg: 416 ns
+  -> mprotect = 1.132 * second [avg]
+  -> mprotect = 0.351 * softdirty [avg]
+  ==========================================================
+  Measuring memset() of 16384 bytes
+   First write access:
+    Min: 1923 ns, Max: 3497 ns, Avg: 1986 ns
+   Second write access:
+    Min: 211 ns, Max: 310 ns, Avg: 249 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 9 ns, Max: 361 ns, Avg: 281 ns
+   Write access after clearing softdirty:
+    Min: 1203 ns, Max: 1974 ns, Avg: 1232 ns
+  -> mprotect = 1.129 * second [avg]
+  -> mprotect = 0.228 * softdirty [avg]
+  ----------------------------------------------------------
+  Measuring single byte access per page of 16384 bytes
+   First write access:
+    Min: 961 ns, Max: 9317 ns, Avg: 1855 ns
+   Second write access:
+    Min: 130 ns, Max: 171 ns, Avg: 132 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 150 ns, Max: 191 ns, Avg: 153 ns
+   Write access after clearing softdirty:
+    Min: 1061 ns, Max: 1513 ns, Avg: 1085 ns
+  -> mprotect = 1.159 * second [avg]
+  -> mprotect = 0.141 * softdirty [avg]
+  ==========================================================
+  Measuring memset() of 65536 bytes
+   First write access:
+    Min: 6933 ns, Max: 14366 ns, Avg: 7068 ns
+   Second write access:
+    Min: 601 ns, Max: 772 ns, Avg: 614 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 671 ns, Max: 7795 ns, Avg: 715 ns
+   Write access after clearing softdirty:
+    Min: 4238 ns, Max: 11703 ns, Avg: 4367 ns
+  -> mprotect = 1.164 * second [avg]
+  -> mprotect = 0.164 * softdirty [avg]
+  ----------------------------------------------------------
+  Measuring single byte access per page of 65536 bytes
+   First write access:
+    Min: 6082 ns, Max: 13866 ns, Avg: 6637 ns
+   Second write access:
+    Min: 130 ns, Max: 190 ns, Avg: 145 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 170 ns, Max: 992 ns, Avg: 184 ns
+   Write access after clearing softdirty:
+    Min: 3367 ns, Max: 4709 ns, Avg: 3759 ns
+  -> mprotect = 1.269 * second [avg]
+  -> mprotect = 0.049 * softdirty [avg]
+  ==========================================================
+  Measuring memset() of 524288 bytes
+   First write access:
+    Min: 54712 ns, Max: 86162 ns, Avg: 55544 ns
+   Second write access:
+    Min: 4989 ns, Max: 7714 ns, Avg: 5106 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 5561 ns, Max: 7044 ns, Avg: 5710 ns
+   Write access after clearing softdirty:
+    Min: 34224 ns, Max: 41848 ns, Avg: 34610 ns
+  -> mprotect = 1.118 * second [avg]
+  -> mprotect = 0.165 * softdirty [avg]
+  ----------------------------------------------------------
+  Measuring single byte access per page of 524288 bytes
+   First write access:
+    Min: 50695 ns, Max: 56617 ns, Avg: 51353 ns
+   Second write access:
+    Min: 390 ns, Max: 1553 ns, Avg: 1090 ns
+   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
+    Min: 471 ns, Max: 2074 ns, Avg: 675 ns
+   Write access after clearing softdirty:
+    Min: 29115 ns, Max: 35076 ns, Avg: 29521 ns
+  -> mprotect = 0.619 * second [avg]
+  -> mprotect = 0.023 * softdirty [avg]
+
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Yang Shi <shy828301@gmail.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+
+This is based on:
+	"[PATCH v2 00/15] mm: COW fixes part 2: reliable GUP pins of
+	 anonymous pages"
+-> https://lkml.kernel.org/r/20220315104741.63071-1-david@redhat.com
+
+... which is in -mm but not yet in -next. Sending this out for early
+discussion.
+
+---
+ mm/mprotect.c | 70 ++++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 58 insertions(+), 12 deletions(-)
+
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 56060acdabd3..69770b547ec1 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -36,6 +36,49 @@
+ 
+ #include "internal.h"
+ 
++static inline bool can_change_pte_writable(struct vm_area_struct *vma,
++					   unsigned long addr, pte_t pte,
++					   unsigned long cp_flags)
++{
++	struct page *page;
++
++	if ((vma->vm_flags & VM_SHARED) && !(cp_flags & MM_CP_DIRTY_ACCT))
++		/*
++		 * MM_CP_DIRTY_ACCT is only expressive for shared mappings;
++		 * without MM_CP_DIRTY_ACCT, there is nothing to do.
++		 */
++		return false;
++
++	if (!(vma->vm_flags & VM_WRITE))
++		return false;
++
++	if (pte_write(pte) || pte_protnone(pte) || !pte_dirty(pte))
++		return false;
++
++	/* Do we need write faults for softdirty tracking? */
++	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !pte_soft_dirty(pte) &&
++	    (vma->vm_flags & VM_SOFTDIRTY))
++		return false;
++
++	/* Do we need write faults for uffd-wp tracking? */
++	if (userfaultfd_pte_wp(vma, pte))
++		return false;
++
++	if (!(vma->vm_flags & VM_SHARED)) {
++		/*
++		 * We can only special-case on exclusive anonymous pages,
++		 * because we know that our write-fault handler similarly would
++		 * map them writable without any additional checks while holding
++		 * the PT lock.
++		 */
++		page = vm_normal_page(vma, addr, pte);
++		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
++			return false;
++	}
++
++	return true;
++}
++
+ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 		unsigned long addr, unsigned long end, pgprot_t newprot,
+ 		unsigned long cp_flags)
+@@ -44,7 +87,6 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 	spinlock_t *ptl;
+ 	unsigned long pages = 0;
+ 	int target_node = NUMA_NO_NODE;
+-	bool dirty_accountable = cp_flags & MM_CP_DIRTY_ACCT;
+ 	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
+ 	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
+ 	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
+@@ -133,21 +175,25 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 				ptent = pte_wrprotect(ptent);
+ 				ptent = pte_mkuffd_wp(ptent);
+ 			} else if (uffd_wp_resolve) {
+-				/*
+-				 * Leave the write bit to be handled
+-				 * by PF interrupt handler, then
+-				 * things like COW could be properly
+-				 * handled.
+-				 */
+ 				ptent = pte_clear_uffd_wp(ptent);
+ 			}
+ 
+-			/* Avoid taking write faults for known dirty pages */
+-			if (dirty_accountable && pte_dirty(ptent) &&
+-					(pte_soft_dirty(ptent) ||
+-					 !(vma->vm_flags & VM_SOFTDIRTY))) {
++			/*
++			 * In some writable, shared mappings, we might want
++			 * to catch actual write access -- see
++			 * vma_wants_writenotify().
++			 *
++			 * In all writable, private mappings, we have to
++			 * properly handle COW.
++			 *
++			 * In both cases, we can sometimes still map PTEs
++			 * writable and avoid the write-fault handler, for
++			 * example, if the PTE is already dirty and no other
++			 * COW or special handling is required.
++			 */
++			if (can_change_pte_writable(vma, addr, ptent, cp_flags))
+ 				ptent = pte_mkwrite(ptent);
+-			}
++
+ 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
+ 			pages++;
+ 		} else if (is_swap_pte(oldpte)) {
+-- 
+2.35.1
 

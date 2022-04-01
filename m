@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5454EEC1F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831DE4EEC22
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345382AbiDALRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S1345409AbiDALS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiDALRj (ORCPT
+        with ESMTP id S1345431AbiDALSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:17:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C917F3D8;
-        Fri,  1 Apr 2022 04:15:50 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 13:15:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648811749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oKF9VqRTjJp3lTVoEsc7dqEf9uWuEicp/om5wBdNDCM=;
-        b=pjOSccKOS6kaXHc1+sf/OM5FG1tzRaVuwec9T6AALXzmv5XrkKS2n5d6hgG3YZpvkn6IDw
-        txBlOvu0IOY4tcHpXzRBqODjPNNqWWYExkxiU+q9Ng0N6OPWUv631TNuVKImt/Qv90QWqQ
-        KmWhOOZ4h5V2jMfigvW+ZRlMZiXYWI5otwF+mjIAn6slQ4oWhyZh5cFIlplXHb60SFp2/T
-        Ww7L797Bijz+eU/GsXmfpV1qbuH9a0X0Mn4F+nZXWB3CD31cfGea1k+hxyKFxQYxeR+b/t
-        QJlSmyKha39l1byP5XZXZyIrq1eu7/SiFe4ExAJc8CyAGvmkYAVAPxm/BAhwSA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648811749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oKF9VqRTjJp3lTVoEsc7dqEf9uWuEicp/om5wBdNDCM=;
-        b=wtjk/bOGe7M9+i4Sq/yN6vbGu9gJHveTrV30EHMFShDrD1nIlS/E2XU9/xNdndadImVuGr
-        Qfz6BM6FIIoc1LBg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>
-Subject: Re: [PATCH] kasan: Fix sleeping function called from invalid context
- in PREEMPT_RT
-Message-ID: <Ykbe46hLAfJ8TsnW@linutronix.de>
-References: <20220401091006.2100058-1-qiang1.zhang@intel.com>
- <YkbFhgN1jZPTMfnS@linutronix.de>
- <PH0PR11MB58800917A1BF8D1A76BEF84EDAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58800917A1BF8D1A76BEF84EDAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 1 Apr 2022 07:18:00 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68B518383A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:16:10 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id cm17so2153083pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 04:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=OEhuS+fxsVCDNNS1MKILSv4OXms02eQi0iGfBJLmlCc=;
+        b=Mx/784l+9YYlEEqw3tkMkrhp/CWEf9Pyp7wfMbV9tAivm7X2pHJ+motN03vf5CHEIo
+         4tR3Fa1ZoNDkpcv0q5wF9OdG17Btvg/OaIzlM088QYylOEyxgvL1IoYBJn/n0hgdoLrn
+         z/cUGx8kEvx1/cGPJj025ci8+sYK8KIX1vSv5uca0rE8R/BdzgOWpk7fEt2Cwbn30bf+
+         nQJ6t9nm7UUaTVlukBVuzDQyE3vB2l6ZJiL9NobmJo3E3AH5xcQxyLXhmVVRxZuu3yt/
+         WgBWLtUV2KvCUChEuwNOwVxp7TeF/GLs0xxeZoTj/Vmeo623jZIFREAwE/AdjmqFevGw
+         tWow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=OEhuS+fxsVCDNNS1MKILSv4OXms02eQi0iGfBJLmlCc=;
+        b=p76SxToPXbfwQoFUrzsaFgwg1gKSh75v3/gcX1NQFEdeRusKX0f8M/6KRKKvWeMhrs
+         jbJae/KO1//aPHIVO+DUp/uP84/yEfjcuMDHuc/U0hZqyDpWG4K3ojTH4zRLXncBatrD
+         eyYntFsuFQAlH+LXk8PmXCdDojBNM0Irxg4JDVekHKyHiCingf1U8UCdYxdA+21OoTNd
+         GrbFvHAN3sOd0iguAolCgBNHd4co3ifvcj2TKK116ZZoAqXz6tpOnbwGKAHhEmUgywRJ
+         S11f7fiankSpf1xaN6DjpGg7nI/2II/9yDzet8AaXvHNiGm/sgXHt9CF/2AXDveYSgps
+         PV+A==
+X-Gm-Message-State: AOAM530ZitlTps0zPzKPhnVTqU09Nipdj9VNHOy8d9/h2yM/8oG/qN3y
+        ZRk+bG4F+vp4aY3GIOMaBsI=
+X-Google-Smtp-Source: ABdhPJwpyHXGvM/g750syQ26/sjrGpjqyb2Zau7YvEDNf2rjm603jlaKXSvvWieMHYcAR9JbF0mkAA==
+X-Received: by 2002:a17:90b:4d08:b0:1c7:7567:9f6b with SMTP id mw8-20020a17090b4d0800b001c775679f6bmr11520261pjb.134.1648811770163;
+        Fri, 01 Apr 2022 04:16:10 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id ij17-20020a17090af81100b001c67c964d93sm13383703pjb.2.2022.04.01.04.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 04:16:09 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     patrik.r.jakobsson@gmail.com
+Cc:     airlied@linux.ie, airlied@redhat.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        xiam0nd.tong@gmail.com, yakui.zhao@intel.com
+Subject: Re: [PATCH 5/5] gma500: fix a missing break in psb_driver_load
+Date:   Fri,  1 Apr 2022 19:16:04 +0800
+Message-Id: <20220401111604.8106-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAMeQTsYcyk9vRO6OaBi-KsptBzJ1Jh-2bOa0UW1+F+JUnDwH=g@mail.gmail.com>
+References: <CAMeQTsYcyk9vRO6OaBi-KsptBzJ1Jh-2bOa0UW1+F+JUnDwH=g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-01 10:10:38 [+0000], Zhang, Qiang1 wrote:
-> >Could we fix in a way that we don't involve freeing memory from in-IRQ?
-> >This could trigger a lockdep splat if the local-lock in SLUB is acquired from in-IRQ context on !PREEMPT_RT.
+On Fri, 1 Apr 2022 12:10:48 +0200, Patrik Jakobsson wrote:
+> On Wed, Mar 30, 2022 at 2:03 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+> >
+> > Instead of exiting the loop as expected when an entry is found, the
+> > list_for_each_entry() continues until the traversal is complete. To
+> > avoid potential executing 'ret = gma_backlight_init(dev);' repeatly,
+> > add a break after the switch statement.
+> >
+> > Fixes: 5c49fd3aa0ab0 ("gma500: Add the core DRM files and headers")
+> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 > 
-> Hi, I  will move qlist_free_all() from IPI context to task context,
-> This operation and the next release  members
-> in the quarantine pool operate similarly
+> This is incorrect. If we always break on the first iteration we will
+> only run gma_backlight_init() if the first connector is LVDS or MIPI.
+> This might not be the case and gma_backlight_init() will never run.
+> The other loops you have been looking at have an "if (xxx != yyy)
+> continue;" statement at the top which skips all the unwanted entries
+> but this loop does not.
 > 
-> I don't know the phenomenon you described. Can you explain it in detail?
 
-If you mean by phenomenon my second sentence then the kernel option
-CONFIG_PROVE_RAW_LOCK_NESTING will trigger on !PREEMPT_RT in a code
-sequence like
-	raw_spin_lock()
-	spin_lock();
+Yes, your are correct. But it still need to break the loop when found it.
+So it is better to add if(!ret) break; after the switch statment.
+I will resend another patch if it is necessary.
 
-which is wrong on PREEMPT_RT. So we have a warning on both
-configurations.
-The call chain in your case will probably not lead to a warning since
-there is no raw_spinlock_t involved within the IPI call. We worked on
-avoiding memory allocation and freeing from in-IRQ context therefore I
-would prefer to have something that works for both and not just ifdef
-around the RT-case.
+> > ---
+> >  drivers/gpu/drm/gma500/psb_drv.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/gma500/psb_drv.c b/drivers/gpu/drm/gma500/psb_drv.c
+> > index 65cf1c79dd7c..d65a68811bf7 100644
+> > --- a/drivers/gpu/drm/gma500/psb_drv.c
+> > +++ b/drivers/gpu/drm/gma500/psb_drv.c
+> > @@ -398,6 +398,8 @@ static int psb_driver_load(struct drm_device *dev, unsigned long flags)
+> >                         ret = gma_backlight_init(dev);
+> >                         break;
+> >                 }
+> > +
+> > +               break;
+> >         }
+> >
+> >         if (ret)
+> > --
+> > 2.17.1
+> >
 
-> Thanks
-> Zqiang
-
-Sebastian
+--
+Xiaomeng Tong

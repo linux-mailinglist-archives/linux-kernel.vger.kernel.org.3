@@ -2,133 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABB44EE5F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281A14EE5FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 04:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244004AbiDACRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 22:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S244013AbiDACUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 22:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238832AbiDACRy (ORCPT
+        with ESMTP id S238038AbiDACUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:17:54 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E803422451A;
-        Thu, 31 Mar 2022 19:16:04 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 1 Apr 2022
- 10:15:57 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 1 Apr
- 2022 10:15:56 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-CC:     Haowen Bai <baihaowen@meizu.com>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
-Date:   Fri, 1 Apr 2022 10:15:54 +0800
-Message-ID: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 31 Mar 2022 22:20:09 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE5F192BA;
+        Thu, 31 Mar 2022 19:18:19 -0700 (PDT)
+X-UUID: b491eb1115b14c9188e725920ef79dbd-20220401
+X-UUID: b491eb1115b14c9188e725920ef79dbd-20220401
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1063335137; Fri, 01 Apr 2022 10:18:10 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 1 Apr 2022 10:18:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Apr 2022 10:18:08 +0800
+Message-ID: <53cb53b8614aa39e0785b99f46b708ad201c3dd8.camel@mediatek.com>
+Subject: Re: [PATCH v13 1/2] dt-bindings: mmc: mtk-sd: increase reg items
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>
+CC:     <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <ryder.lee@kernel.org>, <wenst@chromium.org>,
+        <chunfeng.yun@mediatek.com>
+Date:   Fri, 1 Apr 2022 10:18:08 +0800
+In-Reply-To: <aebbb5c8-1d27-5e66-e18a-e2b647bc8cb4@gmail.com>
+References: <20220330094532.21721-1-tinghan.shen@mediatek.com>
+         <20220330094532.21721-2-tinghan.shen@mediatek.com>
+         <aebbb5c8-1d27-5e66-e18a-e2b647bc8cb4@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.  This fixes the following warnings from coccicheck:
+Hi Matthias,
 
-./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
-return of 0/1 in function 'get_packet_dst' with return type bool
-./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
-return of 0/1 in function 'get_packet_dst' with return type bool
+On Thu, 2022-03-31 at 12:54 +0200, Matthias Brugger wrote:
+> 
+> On 30/03/2022 11:45, Tinghan Shen wrote:
+> > MediaTek has a new version of mmc IP since mt8183. Some IO registers
+> > are moved to top to improve hardware design and named as "host top
+> > registers".
+> > 
+> > Add host top register in the reg binding description for mt8183 and
+> > successors.
+> > 
+> > Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >   Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 15 ++++++++++++++-
+> >   1 file changed, 14 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > index 297ada03e3de..2a2e9fa8c188 100644
+> > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > @@ -40,7 +40,10 @@ properties:
+> >             - const: mediatek,mt8183-mmc
+> >   
+> >     reg:
+> > -    maxItems: 1
+> > +    minItems: 1
+> 
+>  From my understanding adding minItems is correct, but you need to add also 
+> maxItems: 2 as there can't be more then two register entries.
+> 
+> Regards,
+> Matthias
+> 
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- tools/testing/selftests/bpf/progs/test_l4lb_noinline.c |  2 +-
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c  | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+After add "maxItems: 2", I get following message when doing dt_binding_check.
+from this message, it looks like that maxItems is not necessary.
 
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-index 19e4d20..c8bc0c6 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-@@ -218,7 +218,7 @@ static __noinline bool get_packet_dst(struct real_definition **real,
- 
- 	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
- 	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
--		return 0;
-+		return false;
- 
- 	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
- 	if (!real_pos)
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index 596c4e7..125d872 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -564,22 +564,22 @@ static bool get_packet_dst(struct real_definition **real,
- 	hash = get_packet_hash(pckt, hash_16bytes);
- 	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
- 	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
--		return 0;
-+		return false;
- 	key = 2 * vip_info->vip_num + hash % 2;
- 	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
- 	if (!real_pos)
--		return 0;
-+		return false;
- 	key = *real_pos;
- 	*real = bpf_map_lookup_elem(&reals, &key);
- 	if (!(*real))
--		return 0;
-+		return false;
- 	if (!(vip_info->flags & (1 << 1))) {
- 		__u32 conn_rate_key = 512 + 2;
- 		struct lb_stats *conn_rate_stats =
- 		    bpf_map_lookup_elem(&stats, &conn_rate_key);
- 
- 		if (!conn_rate_stats)
--			return 1;
-+			return true;
- 		cur_time = bpf_ktime_get_ns();
- 		if ((cur_time - conn_rate_stats->v2) >> 32 > 0xffFFFF) {
- 			conn_rate_stats->v1 = 1;
-@@ -587,14 +587,14 @@ static bool get_packet_dst(struct real_definition **real,
- 		} else {
- 			conn_rate_stats->v1 += 1;
- 			if (conn_rate_stats->v1 >= 1)
--				return 1;
-+				return true;
- 		}
- 		if (pckt->flow.proto == IPPROTO_UDP)
- 			new_dst_lru.atime = cur_time;
- 		new_dst_lru.pos = key;
- 		bpf_map_update_elem(lru_map, &pckt->flow, &new_dst_lru, 0);
- 	}
--	return 1;
-+	return true;
- }
- 
- __attribute__ ((noinline))
--- 
-2.7.4
+/proj/mtk15399/2cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/mmc/mtk-sd.yaml: 
+properties:reg: {'minItems': 1, 'maxItems': 2, 'items': [{'description': 'base register
+(required).'}, {'description': 'top base register (required for MT8183).'}]} should not be valid
+under {'required': ['maxItems']}
+        hint: "maxItems" is not needed with an "items" list
+        from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+
+Best regards,
+Tinghan
+
+> > +    items:
+> > +      - description: base register (required).
+> > +      - description: top base register (required for MT8183).
+> >   
+> >     clocks:
+> >       description:
+> > @@ -168,6 +171,16 @@ required:
+> >     - vmmc-supply
+> >     - vqmmc-supply
+> >   
+> > +if:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        const: mediatek,mt8183-mmc
+> > +then:
+> > +  properties:
+> > +    reg:
+> > +      minItems: 2
+> > +
+> >   unevaluatedProperties: false
+> >   
+> >   examples:
 

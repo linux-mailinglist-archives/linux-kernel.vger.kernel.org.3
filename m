@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786BB4EFC3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72D84EFC46
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352837AbiDAVlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S231414AbiDAVme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiDAVlb (ORCPT
+        with ESMTP id S234406AbiDAVmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:41:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A310CFB93;
-        Fri,  1 Apr 2022 14:39:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 1 Apr 2022 17:42:32 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF210264F7E;
+        Fri,  1 Apr 2022 14:40:41 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9C060CE26F8;
-        Fri,  1 Apr 2022 21:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C600CC340F3;
-        Fri,  1 Apr 2022 21:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648849176;
-        bh=Gpj96KiChSJYrco1LEnEifrxak3dPMzFR8DmbI5Y51s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BMbb/oXfDAnwKuMtKiAn7XIQNQFmU1cdvrW0qNXR7OYLTHqC/3Xxv/jtng0vKnY4o
-         tzs7mcbHd95F6BvfuQ5qBvrljgv2Z/U9PN8tEGyOhneA86hbRnQONyizz7gZNwHo7k
-         bWK7BtPSxvLIL6caFDawnt2TgdA7X+u4AlmgNVyfILkcPpR++j9YEhFzmDsLaoYTU5
-         I/tbjEPcDhA++G+BqW7osamcV4gxnFOoMSxcABH51V89WZ5UtChlzIhiEjLnZwwXVU
-         fyOLMSnuu+BJrpJ2MvRNFkHfpKLvC3KvPR3tf2nMioyP/2DQdpXwG04lbyepNrwwbY
-         87Mnmm6Mbd5/A==
-Received: by mail-il1-f182.google.com with SMTP id z10so2939097iln.0;
-        Fri, 01 Apr 2022 14:39:36 -0700 (PDT)
-X-Gm-Message-State: AOAM533KrPg0iU1Ehe6bO9PMhACeAi6bSBBD0G3NVoUc0pftwnghD1tA
-        GIasXacqo1ubLQvEVN3ttH5FGAWxVx/mFc9LRg==
-X-Google-Smtp-Source: ABdhPJz67vhBzOCPrpee46biTkgz2GvmlKmq0iYmwGAecXJCtTCuJEWVeUD1D8eRi+FyDIsw/lgsheByhgZAgBHK7wA=
-X-Received: by 2002:a05:6e02:2183:b0:2c7:fe42:7b07 with SMTP id
- j3-20020a056e02218300b002c7fe427b07mr745149ila.302.1648849175895; Fri, 01 Apr
- 2022 14:39:35 -0700 (PDT)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 26C4122175;
+        Fri,  1 Apr 2022 23:40:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648849239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A4r7gbpLPTw7uIVHGZDL1psjd1Qy6q/owkzUh+0E5Lk=;
+        b=loWxT5ONk/ZsI3rHaw9O20y+SGezp66XDSqu+aap4deITrN/tsZFsKhWYrVn1R+6v4tFMC
+        LMVmzwTcPgpQl4JVHIsyY0P2QDbgvmlFUtnUd/0haEix9nurugvXxTuVrcyGStPHZCrsYB
+        MmN3m2r66k7uuMcrNte9HwYGRpcIu5Y=
+From:   Michael Walle <michael@walle.cc>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH v4 0/4] hwmon: add lan9668 driver
+Date:   Fri,  1 Apr 2022 23:40:28 +0200
+Message-Id: <20220401214032.3738095-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220401212658.30607-1-palmer@rivosinc.com>
-In-Reply-To: <20220401212658.30607-1-palmer@rivosinc.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 1 Apr 2022 16:39:24 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL8swP_NuMUiBeRrYhQ2XQct4uPxinOaE4dnn0K8mB1Wg@mail.gmail.com>
-Message-ID: <CAL_JsqL8swP_NuMUiBeRrYhQ2XQct4uPxinOaE4dnn0K8mB1Wg@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-bindings: Fix phandle-array issues in the
- idle-states bindings
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 4:36 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> As per 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas"), the
-> phandle-array bindings have been disambiguated.  This fixes the new
-> RISC-V idle-states bindings to comply with the schema.
->
-> Fixes: 1bd524f7e8d8 ("dt-bindings: Add common bindings for ARM and RISC-V idle states")
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> Changes since v2:
->
-> * Add the missing schema requirement to riscv/cpus.yaml
->
-> Changes since v1:
->
-> * Only fix the RISC-V bindings, to avoid a merge conflict.
->
-> ---
->  .../devicetree/bindings/cpu/idle-states.yaml     | 16 ++++++++--------
->  .../devicetree/bindings/riscv/cpus.yaml          |  2 ++
->  2 files changed, 10 insertions(+), 8 deletions(-)
+Add a temperature and fan controller driver for the Microchip LAN9668 SoC.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The temperature sensor uses a polynomial to calculate the actual
+temperature. Fortunately, the bt1-pvt already has such a calculation.
+It seems that the LAN9668 uses the same Analog Bits sensor as the
+BT1 although with a different characteristic. To be able to reuse the
+code move it to lib/ as it seems pretty generic to calculate any
+polynomial using integers only, which might also be used by other parts
+of the kernel. Another option might be to move the code to hwmon-poly.c,
+I'm not sure. Thoughts?
 
-Thanks for fixing quickly.
+I also plan on submitting patches to add temperature sensor support for
+the GPYxxx and LAN8814 PHYs which also use polynomial_calc().
 
-Rob
+The last two patches adds the actual driver and the dt-binding for it.
+
+changes since v3:
+ - validate input frequency in lan966x_hwmon_write_pwm_freq()
+ - enable sensor before registering hwmon device
+ - automatically disable sensor when driver is removed
+ - set the required clock devider in case someone changed the
+   hardware default before the driver is loaded
+ - remove extra empty lines
+
+changes since v2:
+ - strip unwanted copy pasta.. oops
+ - use "select REGMAP" instead of "depends on"
+
+changes since v1:
+ - add doc string to polynomial_calc(), moved the comment
+   into the function.
+ - add missing "select POLYNOMIAL" to the bt1_pvt driver
+   Kconfig symbol
+ - add hwmon driver documentation
+ - cache sys_clk rate during probe
+ - add missing ERR_CAST()
+ - adapted comment for the PPS->RPM calculation
+ - add temporary variable in lan966x_hwmon_read_pwm_freq()
+
+Michael Walle (4):
+  lib: add generic polynomial calculation
+  hwmon: (bt1-pvt) use generic polynomial functions
+  dt-bindings: hwmon: add Microchip LAN966x bindings
+  hwmon: add driver for the Microchip LAN966x SoC
+
+ .../bindings/hwmon/microchip,lan966x.yaml     |  53 +++
+ Documentation/hwmon/lan966x.rst               |  40 ++
+ drivers/hwmon/Kconfig                         |  13 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/bt1-pvt.c                       |  50 +--
+ drivers/hwmon/lan966x-hwmon.c                 | 418 ++++++++++++++++++
+ include/linux/polynomial.h                    |  35 ++
+ lib/Kconfig                                   |   3 +
+ lib/Makefile                                  |   2 +
+ lib/polynomial.c                              | 108 +++++
+ 10 files changed, 686 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+ create mode 100644 Documentation/hwmon/lan966x.rst
+ create mode 100644 drivers/hwmon/lan966x-hwmon.c
+ create mode 100644 include/linux/polynomial.h
+ create mode 100644 lib/polynomial.c
+
+-- 
+2.30.2
+

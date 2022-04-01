@@ -2,269 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D724EEAB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC2F4EEAC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344759AbiDAJu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 05:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S1344785AbiDAJzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244173AbiDAJuw (ORCPT
+        with ESMTP id S244173AbiDAJzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 05:50:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612545130A;
-        Fri,  1 Apr 2022 02:49:02 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KVFjh2F1ZzdZVZ;
-        Fri,  1 Apr 2022 17:48:40 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 17:49:00 +0800
-Received: from [10.174.178.178] (10.174.178.178) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 17:48:59 +0800
-Message-ID: <bd926b17-45c2-53bc-3c61-cda3ae442312@huawei.com>
-Date:   Fri, 1 Apr 2022 17:48:59 +0800
+        Fri, 1 Apr 2022 05:55:43 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9005045A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:53:51 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id w21so2019167pgm.7
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 02:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AXRCPy6kZ1U55kW3/L29N2LaMZY83OqdS8sA1Zw35oA=;
+        b=Iy5jo3ds2czZEHQCq5QfZphcqniK1eyOtLJ/HVzCsYUvuXTgVn1h58NLWofu4vwJS6
+         DNZU83riPfc9OEjqmyhHk9YXaIiwMSU0YAkOZfy/p9FSZURuX59f+LjHYliW/Kwo7DIy
+         1fI0htzBSYNVClUMdG5oeO3V/5t0o8IOuDY0inB72uCtv/T4VUedHmZkeRznocXc8Xo8
+         Oil9pzaIdp+FUpJGfZoOMuRDFaPhxlClS6RYKbV+WxaAdouJsJSjr33tMYP1r89oLXAw
+         uISnW6F2O58NMaBwKVCXXQoyiBrrNlZjYto1XEbi8fJwKW0mLT285VaSiNdg6Ti6EAr5
+         R4iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AXRCPy6kZ1U55kW3/L29N2LaMZY83OqdS8sA1Zw35oA=;
+        b=Q3b62hDVf/DhrUlZwrJUURgPEzCSiov+lgv6hsXQZ+rsFg8mg7d7jFit5GxgrVsIuX
+         6LTIB/w1F7OGzx72eAnXLwCZvRPMscriFwCl7y8Kxuz/+dWS3NPHyay2B1wgA8V7k50o
+         jDA3b2WID5np6wyghs5cW/lvaJ2cA4xEkG18jkAAlrrIfjO/4l4EM6uHlmrzKoAVOkgG
+         eVdJuS1t/WKmui7j7o5scmoA/RZZ79HYTjaddNmj0gsu7/j0pKqTlTE1UDQgDqzek7CC
+         0EmyeZDlhQWWu5TkagPm2QJI66XiyTcjoHLuDclocxCwOoidGrfypVIvn2fgIZLHsgSr
+         D2nw==
+X-Gm-Message-State: AOAM530m3/4QME/9OruP3VfcEbQJLOQ/dK0OZ2K4yfScaV548rYOSVJU
+        G6MJVBOXBzBWnZ4Cef1F1ZZiusCyoIJF3ZVckvqk2TnUh7E=
+X-Google-Smtp-Source: ABdhPJz8u3z3XfeUwNuVJQKS77kFNu8ObLRgS9bK4lFm7SIkzHMzygA/3PYqdU/R7H4SaHBcuvQlwFyGzFe4NP5LPwY=
+X-Received: by 2002:a63:e20:0:b0:385:fe08:52f9 with SMTP id
+ d32-20020a630e20000000b00385fe0852f9mr14458684pgl.99.1648806831267; Fri, 01
+ Apr 2022 02:53:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.3
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-To:     Yosry Ahmed <yosryahmed@google.com>
-CC:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        <cgroups@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <2025405d-c32b-338a-b668-48b07a34e4ef@huawei.com>
- <CAJD7tkZHxRY0GEhcRoa8PqLM7pnsu44_U9XKV-9u==iGqwf3=g@mail.gmail.com>
-From:   Chen Wandun <chenwandun@huawei.com>
-In-Reply-To: <CAJD7tkZHxRY0GEhcRoa8PqLM7pnsu44_U9XKV-9u==iGqwf3=g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.178]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220330120246.25580-1-xiam0nd.tong@gmail.com> <20220330120246.25580-4-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220330120246.25580-4-xiam0nd.tong@gmail.com>
+From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Fri, 1 Apr 2022 11:53:40 +0200
+Message-ID: <CAMeQTsZnNy2ToRNTBisxVwBnj8Hsdz7+zdgcW=yr8C=zbAJZhA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] gma500: fix a missing break in psb_intel_crtc_mode_set
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Zhao Yakui <yakui.zhao@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/4/1 17:20, Yosry Ahmed 写道:
-> On Thu, Mar 31, 2022 at 8:05 PM Chen Wandun <chenwandun@huawei.com> wrote:
->>
->>
->> 在 2022/3/31 16:41, Yosry Ahmed 写道:
->>> From: Shakeel Butt <shakeelb@google.com>
->>>
->>> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
->>>
->>> Use case: Proactive Reclaim
->>> ---------------------------
->>>
->>> A userspace proactive reclaimer can continuously probe the memcg to
->>> reclaim a small amount of memory. This gives more accurate and
->>> up-to-date workingset estimation as the LRUs are continuously
->>> sorted and can potentially provide more deterministic memory
->>> overcommit behavior. The memory overcommit controller can provide
->>> more proactive response to the changing behavior of the running
->>> applications instead of being reactive.
->>>
->>> A userspace reclaimer's purpose in this case is not a complete replacement
->>> for kswapd or direct reclaim, it is to proactively identify memory savings
->>> opportunities and reclaim some amount of cold pages set by the policy
->>> to free up the memory for more demanding jobs or scheduling new jobs.
->>>
->>> A user space proactive reclaimer is used in Google data centers.
->>> Additionally, Meta's TMO paper recently referenced a very similar
->>> interface used for user space proactive reclaim:
->>> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
->>>
->>> Benefits of a user space reclaimer:
->>> -----------------------------------
->>>
->>> 1) More flexible on who should be charged for the cpu of the memory
->>> reclaim. For proactive reclaim, it makes more sense to be centralized.
->>>
->>> 2) More flexible on dedicating the resources (like cpu). The memory
->>> overcommit controller can balance the cost between the cpu usage and
->>> the memory reclaimed.
->>>
->>> 3) Provides a way to the applications to keep their LRUs sorted, so,
->>> under memory pressure better reclaim candidates are selected. This also
->>> gives more accurate and uptodate notion of working set for an
->>> application.
->>>
->>> Why memory.high is not enough?
->>> ------------------------------
->>>
->>> - memory.high can be used to trigger reclaim in a memcg and can
->>>     potentially be used for proactive reclaim.
->>>     However there is a big downside in using memory.high. It can potentially
->>>     introduce high reclaim stalls in the target application as the
->>>     allocations from the processes or the threads of the application can hit
->>>     the temporary memory.high limit.
->>>
->>> - Userspace proactive reclaimers usually use feedback loops to decide
->>>     how much memory to proactively reclaim from a workload. The metrics
->>>     used for this are usually either refaults or PSI, and these metrics
->>>     will become messy if the application gets throttled by hitting the
->>>     high limit.
->>>
->>> - memory.high is a stateful interface, if the userspace proactive
->>>     reclaimer crashes for any reason while triggering reclaim it can leave
->>>     the application in a bad state.
->>>
->>> - If a workload is rapidly expanding, setting memory.high to proactively
->>>     reclaim memory can result in actually reclaiming more memory than
->>>     intended.
->>>
->>> The benefits of such interface and shortcomings of existing interface
->>> were further discussed in this RFC thread:
->>> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
->>>
->>> Interface:
->>> ----------
->>>
->>> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
->>> trigger reclaim in the target memory cgroup.
->>>
->>>
->>> Possible Extensions:
->>> --------------------
->>>
->>> - This interface can be extended with an additional parameter or flags
->>>     to allow specifying one or more types of memory to reclaim from (e.g.
->>>     file, anon, ..).
->>>
->>> - The interface can also be extended with a node mask to reclaim from
->>>     specific nodes. This has use cases for reclaim-based demotion in memory
->>>     tiering systens.
->>>
->>> - A similar per-node interface can also be added to support proactive
->>>     reclaim and reclaim-based demotion in systems without memcg.
->>>
->>> For now, let's keep things simple by adding the basic functionality.
->>>
->>> [yosryahmed@google.com: refreshed to current master, updated commit
->>> message based on recent discussions and use cases]
->>> Signed-off-by: Shakeel Butt <shakeelb@google.com>
->>> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
->>> ---
->>>    Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
->>>    mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
->>>    2 files changed, 46 insertions(+)
->>>
->>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
->>> index 69d7a6983f78..925aaabb2247 100644
->>> --- a/Documentation/admin-guide/cgroup-v2.rst
->>> +++ b/Documentation/admin-guide/cgroup-v2.rst
->>> @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
->>>        high limit is used and monitored properly, this limit's
->>>        utility is limited to providing the final safety net.
->>>
->>> +  memory.reclaim
->>> +     A write-only file which exists on non-root cgroups.
->>> +
->>> +     This is a simple interface to trigger memory reclaim in the
->>> +     target cgroup. Write the number of bytes to reclaim to this
->>> +     file and the kernel will try to reclaim that much memory.
->>> +     Please note that the kernel can over or under reclaim from
->>> +     the target cgroup.
->>> +
->>>      memory.oom.group
->>>        A read-write single value file which exists on non-root
->>>        cgroups.  The default value is "0".
->>> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->>> index 725f76723220..994849fab7df 100644
->>> --- a/mm/memcontrol.c
->>> +++ b/mm/memcontrol.c
->>> @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
->>>        return nbytes;
->>>    }
->>>
->>> +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
->>> +                           size_t nbytes, loff_t off)
->>> +{
->>> +     struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
->>> +     unsigned int nr_retries = MAX_RECLAIM_RETRIES;
->>> +     unsigned long nr_to_reclaim, nr_reclaimed = 0;
->>> +     int err;
->>> +
->>> +     buf = strstrip(buf);
->>> +     err = page_counter_memparse(buf, "", &nr_to_reclaim);
->>> +     if (err)
->>> +             return err;
->>> +
->>> +     while (nr_reclaimed < nr_to_reclaim) {
->>> +             unsigned long reclaimed;
->>> +
->>> +             if (signal_pending(current))
->>> +                     break;
->>> +
->>> +             reclaimed = try_to_free_mem_cgroup_pages(memcg,
->>> +                                             nr_to_reclaim - nr_reclaimed,
->>> +                                             GFP_KERNEL, true);
->> In some scenario there are lots of page cache,  and we only want to
->> reclaim page cache,
->> how about add may_swap option?
-> Thanks for taking a look at this!
+On Wed, Mar 30, 2022 at 2:03 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
 >
-> The first listed extension is an argument/flags to specify the type of
-do you mean nbytes in  memory_reclaim? it decide the amount of memory
-to reclaim.
-
-one more argument such as may_swap can be add into memory_reclaim, and
-pass this argument to try_to_free_mem_cgroup_pages in order to replace the
-default "true"
-
-Thanks.
-
-> memory that we want to reclaim, I think this covers this use case, or
-> am I missing something?
+> Instead of exiting the loop as expected when an entry is found, the
+> list_for_each_entry() continues until the traversal is complete. It
+> could result in multiple 'is_*' flags being set with true mistakely.
 >
->>> +
->>> +             if (!reclaimed && !nr_retries--)
->>> +                     break;
->>> +
->>> +             nr_reclaimed += reclaimed;
->>> +     }
->>> +
->>> +     return nbytes;
->>> +}
->>> +
->>>    static struct cftype memory_files[] = {
->>>        {
->>>                .name = "current",
->>> @@ -6413,6 +6445,11 @@ static struct cftype memory_files[] = {
->>>                .seq_show = memory_oom_group_show,
->>>                .write = memory_oom_group_write,
->>>        },
->>> +     {
->>> +             .name = "reclaim",
->>> +             .flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
->>> +             .write = memory_reclaim,
->>> +     },
->>>        { }     /* terminate */
->>>    };
->>>
-> .
+> To fix this, when found the entry, add a break after the switch
+> statement.
+>
+> Fixes: 89c78134cc54d (" gma500: Add Poulsbo support")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
+This patch doesn't apply for me and needs to be rebased on top of
+drm-misc-next or drm-tip.
+
+On Poulsbo there should only be one encoder per crtc so this is only a
+theoretical issue. But it is good practice to exit the loop early if
+we can so the patch still makes sense.
+
+Also, please use the correct subject prefix: drm/gma500: instead of
+just gma500:.
+
+Thanks
+Patrik
+
+> ---
+>  drivers/gpu/drm/gma500/psb_intel_display.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/gma500/psb_intel_display.c b/drivers/gpu/drm/gma500/psb_intel_display.c
+> index 42d1a733e124..85fc61bf333a 100644
+> --- a/drivers/gpu/drm/gma500/psb_intel_display.c
+> +++ b/drivers/gpu/drm/gma500/psb_intel_display.c
+> @@ -134,6 +134,8 @@ static int psb_intel_crtc_mode_set(struct drm_crtc *crtc,
+>                         is_tv = true;
+>                         break;
+>                 }
+> +
+> +               break;
+>         }
+>
+>         refclk = 96000;
+> --
+> 2.17.1
+>

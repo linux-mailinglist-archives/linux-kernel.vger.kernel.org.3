@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F614EE8A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1AF4EE8AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245702AbiDAGzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S1343558AbiDAG6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiDAGzN (ORCPT
+        with ESMTP id S243548AbiDAG6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:55:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B59389A
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:53:23 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1naB9k-00025p-1L; Fri, 01 Apr 2022 08:53:12 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-a2e4-7752-b370-a958.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:a2e4:7752:b370:a958])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B3C458411;
-        Fri,  1 Apr 2022 06:53:10 +0000 (UTC)
-Date:   Fri, 1 Apr 2022 08:53:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Aurelien Jarno <aurelien@aurel32.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        Sparse Mailing-list <linux-sparse@vger.kernel.org>,
-        ukl@pengutronix.de,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH] riscv: fix build with binutils 2.38
-Message-ID: <20220401065309.dizbkleyw44auhbo@pengutronix.de>
-References: <20220126171442.1338740-1-aurelien@aurel32.net>
- <20220331103247.y33wvkxk5vfbqohf@pengutronix.de>
- <20220331103913.2vlneq6clnheuty6@pengutronix.de>
- <20220331105112.7t3qgtilhortkiq4@pengutronix.de>
- <CAHk-=wjnuMD091mNbY=fRm-qFyhMjbtfiwkAFKyFehyR8bPB5A@mail.gmail.com>
+        Fri, 1 Apr 2022 02:58:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59191C6816
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:56:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E782D60EFD
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57182C340F2
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648796184;
+        bh=tmzuiXwE0YoCVxocrcXOwxCPWalAk7sv3NhfTwDfAgc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n8UTUSdZ4B/Q5FObugZadVAKu4c7uwaJ7PQ5ME6SVhV1p8qjrtO3cdRUaa0SzRXi9
+         63eU1efNrY57i9elJVMaMHvOEZe55atW0uMc0PKq5/IMKRToWNXoBabCnUPUlZSoEm
+         o1W2ar/aUXHLkDDSJ7n1SnMkEbeJmncVD4ifp+yxD9WO7M9OAVl9ATzwcTdoD/CmQ5
+         Yhsh5qFatwvtxB4xolwILzSH2tbtVu/7gx6d4FFkZcoiwKtrU7+1aT4YzJ7tjBxIB8
+         d+DOmeFjCta2dEisvRcuCilGQevNIH/sMtnyiJjOQaac8316QjgIqwbE0g5pud4oA6
+         /l4ZnpNa0/zFA==
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2e68c95e0f9so23244357b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:56:24 -0700 (PDT)
+X-Gm-Message-State: AOAM53314nSXajxRg4KGdZ5AdoLNXvdNuhO8POXuMaEJ9zH+ALl7uwFV
+        wEwaqerVCUlmJrVOPc8rDC9Pb7wNS3IgiZHj398=
+X-Google-Smtp-Source: ABdhPJzK/b7Hju7SnqNeAG1y6dWgvMDJnuOCRMrTT1avoROj7gRMnyg8XnjNT7Bzuak+k/h59U+jR6DgKmc+7b35F84=
+X-Received: by 2002:a81:79cc:0:b0:2e9:d3bd:b4e8 with SMTP id
+ u195-20020a8179cc000000b002e9d3bdb4e8mr8798314ywc.93.1648796183378; Thu, 31
+ Mar 2022 23:56:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5jl2rqq57omr4yri"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjnuMD091mNbY=fRm-qFyhMjbtfiwkAFKyFehyR8bPB5A@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220401041615.3296387-1-jcmvbkbc@gmail.com> <CAK8P3a19-qtAg8GD8a9nG4ZPuyoDi3n39+zvHcRV-YdPJbJfKA@mail.gmail.com>
+In-Reply-To: <CAK8P3a19-qtAg8GD8a9nG4ZPuyoDi3n39+zvHcRV-YdPJbJfKA@mail.gmail.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Fri, 1 Apr 2022 09:55:56 +0300
+X-Gmail-Original-Message-ID: <CAFCwf10hm4+WOa9JTNLTnEGtOGScOVu+PAXbk2=r+14u8d68VA@mail.gmail.com>
+Message-ID: <CAFCwf10hm4+WOa9JTNLTnEGtOGScOVu+PAXbk2=r+14u8d68VA@mail.gmail.com>
+Subject: Re: [PATCH] habanalabs: fix build warning
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Max Filippov <jcmvbkbc@gmail.com>,
+        Ohad Sharabi <osharabi@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,61 +64,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---5jl2rqq57omr4yri
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 31.03.2022 11:16:53, Linus Torvalds wrote:
-> On Thu, Mar 31, 2022 at 3:51 AM Marc Kleine-Budde <mkl@pengutronix.de> wr=
-ote:
+On Fri, Apr 1, 2022 at 9:40 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Apr 1, 2022 at 6:16 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
 > >
-> > Cc +=3D linux-sparse, Uwe, Luc Van Oostenryck
+> > allmodconfig build fails on ARCH=xtensa with the following message:
 > >
-> > tl;dr:
+> >   drivers/misc/habanalabs/common/memory.c:153:49: error: cast from pointer
+> >         to integer of different size [-Werror=pointer-to-int-cast]
+> >         (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
 > >
-> > A recent change in the kernel regarding the riscv -march handling breaks
-> > current sparse.
->=20
-> Gaah. Normally sparse doesn't even look at the -march flag, but for
-> riscv it does, because it's meaningful for the predefined macros.
->=20
-> Maybe that 'die()' shouldn't be so fatal. And maybe add a few more
-> extensions (but ignore them) to the parsing.
->=20
-> Something ENTIRELY UNTESTED like the attached.
+> > Fix it by adding intermediate conversion to uintptr_t as in other places
+> > in that driver.
+> >
+> > Fixes: e8458e20e0a3 ("habanalabs: make sure device mem alloc is page aligned")
+> > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> > ---
+> >  drivers/misc/habanalabs/common/memory.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+> > index e008d82e4ba3..f0d373171d2a 100644
+> > --- a/drivers/misc/habanalabs/common/memory.c
+> > +++ b/drivers/misc/habanalabs/common/memory.c
+> > @@ -150,9 +150,9 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+> >                 for (i = 0 ; i < num_pgs ; i++) {
+> >                         if (is_power_of_2(page_size))
+> >                                 phys_pg_pack->pages[i] =
+> > -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > -                                                                               page_size, NULL,
+> > -                                                                               page_size);
+> > +                                       (u64)(uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > +                                                                                page_size, NULL,
+> > +                                                                                page_size);
+> >                         else
+> >                                 phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+> >                                                                                 page_size);
+>
+> This addresses the warning, but I suspect there is still a problem in the code:
+> The description of that member lists it as '@pages: the physical page array',
+> but it is actually a kernel virtual address that gets passed to it. Since this
+> is a 'u64' member, it is hard to tell what type it actually is.
+>
+> gen_pool_dma_alloc_align() returns both a virtual address and a dma (bus)
+> address. The dma address is ignored here, which makes me wonder why
+> this interface is used in the first place.
+>
+> I can see four possible things that may be going on here:
+>
+> - if the pages[] array is meant to be a kernel virtual address, it should be
+>   changed from a 'u64' to a normal pointer, with the cast removed.
+>
+> - if the pages[] array is meant to be a physical address, as documented,
+>   it should be assigned using virt_to_phys() on the pointer, with a warning
+>   that this must not be used a as a dma address (which can easily get
+>   confused with a phys address as the binary representation is often the
+>   same in the absence of an iommu). In this case, it should also be
+>   changed to a phys_addr_t.
+>
+> - if the pages[] array is meant to be a dma address, it should be changed
+>   to a dma_addr_t, and passed as the third argument to
+>   gen_pool_dma_alloc_align() in order to return the correct address.
+>
+> - if there is a 'u64' member that is used for two (or all three) of the above
+>   depending on context, it should be replaced with either multiple
+>   struct members or a union.
+>
+> Looking at other uses of the pages[] array, I see a dma_addr_t assigned
+> to it in init_phys_pg_pack_from_userptr(), but map_phys_pg_pack() and
+> alloc_sgt_from_device_pages appear to treat it as a cpu-physical phys_addr_t
+> rather than a device address again.
+>
+>         Arnd
 
-Works-for-me:
+Hi,
+We use gen_pool in this function to manage our device memory
+allocations (this is why it is called alloc_device_memory).
 
-|   CHECK   /srv/work/frogger/socketcan/linux/drivers/net/can/usb/etas_es58=
-x/es58x_core.c
-| WARNING: invalid argument to '-march': 'zicsr_zifencei'
+Basically, we initialize the genpool with the total size of the device memory,
+and each bit represents a page according to a fixed page size, which
+is dependent on asic type.
+The addresses represent the physical address of the device memory, as
+our device sees them.
+As these addresses are not accessible from the host, it is appropriate
+to hold them in u64, imo.
 
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+For future asics which will support multiple page sizes, we need to
+use the gen_pool_dma_alloc_align() variant,
+because then we need the allocation to be aligned to the page size as
+requested by the user per allocation.
 
-Regards,
-Marc
+We ignore the DMA address because this is device memory, not host memory.
+Therefore, our device's dma engine addresses the memory using the
+virtual memory addresses we assign to it in our device's MMU.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Having said that, I'm wondering whether gen_pool_first_fit_align() can
+also work here, which might be less confusing.
 
---5jl2rqq57omr4yri
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJGoVIACgkQrX5LkNig
-0131+gf+OoP5mBIuthsyF3cauP7RO1sSa7VFXUnlth9PI5r6HwTL7dHAjry4lXfJ
-x4Dl/7p024mbaQcCTKyUVStHaSIVd6aze/8pCsjmBTARtMe86P9rOyWGaLcES5P7
-tp/DjsYxQrYrOt+5Fs7+UrqZP5vnXuPYrKfYz0/VP3fLoA6gFGYTvlTXgiYFj7vL
-2xdpRvS1pbZhExvNlkKnJSzKZwE6L841k292RtWWOCzogsPt5YwUlkn/Zb4FbHwR
-y8BbMJhcGHG6T+DkgQA6amREXr6Y0Z5z4vzPDZMRpTFdVVmAUaYgqO7sncdEoyDL
-qv7LdfZg11z7bYVLbk/Z7Y5oXcsG8A==
-=1XuF
------END PGP SIGNATURE-----
-
---5jl2rqq57omr4yri--
+Oded

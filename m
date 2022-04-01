@@ -2,116 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9304EF704
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090AB4EF707
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349998AbiDAPsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S1351661AbiDAPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357888AbiDAPjU (ORCPT
+        with ESMTP id S1358261AbiDAPmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:39:20 -0400
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.50.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF523F1E97
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:15:01 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 6434611A06
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:15:00 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id aIzMnsUSl22u3aIzMn3Fyz; Fri, 01 Apr 2022 10:15:00 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B6uLE9LWeBsrM9LH92gc4OCyLh9lvLjJBmhivgz69Cw=; b=Dts8U8qmYfpSekbBgyEdHboSWp
-        R8Le9lDx8re4x6IHJryX/8XgwSfk+VUJBU2AubxPtIgduhcoL5uysUfuK19Rc8rBbrWyJu9PppcWg
-        WNvLFA8t+7zsll9BX2yRDVxL9Tne470cUGyI5GfsKAhCejbBp8WzUWUr1eDCUne3NH9Wd1c5bqNMG
-        Z2ioCCqhEfqhB+YB7d41Cnsl/vqwU9IBR5nsizJC2L2yhiQ0/gHcNPkpq+1rcjTF37fKu6tlxm5jh
-        0C2WxiE5HxtHtRxPywgjDywMHZ7zK/LbAK3PWQDw6McxdDn5ghllHQZUXky4f6UJsJ8FoGvK1abD9
-        Bh0WYUsA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57800 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1naIzL-003xkZ-UX; Fri, 01 Apr 2022 15:15:00 +0000
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Ohad Sharabi <osharabi@habana.ai>
-Subject: [PATCH (RESEND)] habanalabs: Fix test build failures
-Date:   Fri,  1 Apr 2022 08:14:50 -0700
-Message-Id: <20220401151450.3414694-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1naIzL-003xkZ-UX
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57800
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 11
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 11:42:09 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD1B2B3D42;
+        Fri,  1 Apr 2022 08:16:34 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id p15so6518208ejc.7;
+        Fri, 01 Apr 2022 08:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=9jSvmrcxa3BrthKf28LR6iQlwhB8Fp11bxqRJaDoPQ4=;
+        b=c/MWb4ayrGBGC3GVIXfoAWO7GDWE/s9EEx/jK3E33PZRw4Hitr36dI810eMbHTokW+
+         WKXmAQgUtWWEufkRmtpNtzgIvAIRxOTuyTcFF2Io0UJirLHrv4FQk6S8IXnYUGEYQ5Zm
+         7T4/dvjor6irpAmhvDs9Tf5Pwfd1tE2tyTbL5LNb+OACADNLr3PmVYgQOnVJ3RWWIjIo
+         DA55mX3hUIvea4KCK9BAlCXuQ0ZAyDo+pnFn7eo7O0gzrKWgan2TYPmtFMcnde3tjQBe
+         +I/v88QEmf0bD7gktED1HOoQfZ7C47DE7wd/fo3FsDhxwsRISA2zoIKjNbg9MdwuNAcO
+         YtCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=9jSvmrcxa3BrthKf28LR6iQlwhB8Fp11bxqRJaDoPQ4=;
+        b=FliClmxM8WImDdwwz+RL/LnHPZEj29+Of0zF1Zv1Qza8aewg6VjY1ihvSr2CsFYz7/
+         zQgkP3mg0JN2ckvRJI2BtIpkfz/Usvb5jHlCXJgNVLimXrc/tmihH911mHYZVezMlFGS
+         KYw1U7kl1JYvddNhh8EfaEGSxekVVtahmNMFRo5bvTP1kmFFfeMoMjglK+kOQWSzr7tE
+         pZbbEo/4w8VHr1SGfTusgip8+SXvUtU7ZIGArq3t/9ATGqc1WDt15PlYbKz/RLn9RhZ7
+         dW07gJMFsod/tis0dCt39F5UdwoQsloD0yBmcTALKJc/VurQDieD3N7zQGUmjPUZSL1/
+         3nog==
+X-Gm-Message-State: AOAM532VlapR4YL8llsFTiBZOPI2d9NnU5CJWHIlhxmWrEAILYjnx9oP
+        IbmvClQBKgX/hbRF/x5iKVs=
+X-Google-Smtp-Source: ABdhPJyj1x5zxOKPhdW9FhcHdGg9CnDqeJtt+ellJDnNgz6FNFcycEZ2cWZwQljsY6IU7h7orVX+FQ==
+X-Received: by 2002:a17:907:72c4:b0:6df:917c:df6f with SMTP id du4-20020a17090772c400b006df917cdf6fmr291481ejc.120.1648826190736;
+        Fri, 01 Apr 2022 08:16:30 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id p24-20020a056402045800b0041614c8f79asm1285712edw.88.2022.04.01.08.16.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 01 Apr 2022 08:16:30 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] IB/hfi1: remove check of list iterator against head past
+ the loop body
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <0d3e61ea-b3b8-620a-f418-0c91b381b67d@cornelisnetworks.com>
+Date:   Fri, 1 Apr 2022 17:16:29 +0200
+Cc:     Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6CBAC9B8-F675-41B8-AE72-C0A8B5FA0303@gmail.com>
+References: <20220331224501.904039-1-jakobkoschel@gmail.com>
+ <0d3e61ea-b3b8-620a-f418-0c91b381b67d@cornelisnetworks.com>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-allmodconfig builds on 32-bit architectures fail with the following error.
 
-drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
-drivers/misc/habanalabs/common/memory.c:153:49: error:
-	cast from pointer to integer of different size
 
-Add the missing typecast.
+> On 1. Apr 2022, at 16:34, Dennis Dalessandro =
+<dennis.dalessandro@cornelisnetworks.com> wrote:
+>=20
+> On 3/31/22 6:45 PM, Jakob Koschel wrote:
+>> When list_for_each_entry() completes the iteration over the whole =
+list
+>> without breaking the loop, the iterator value will be a bogus pointer
+>> computed based on the head element.
+>>=20
+>> While it is safe to use the pointer to determine if it was computed
+>> based on the head element, either with list_entry_is_head() or
+>> &pos->member =3D=3D head, using the iterator variable after the loop =
+should
+>> be avoided.
+>>=20
+>> In preparation to limit the scope of a list iterator to the list
+>> traversal loop, use a dedicated pointer to point to the found element =
+[1].
+>=20
+> The code isn't searching the list. So there is no "found" element. It =
+is walking
+> a list of things and using each one it comes across.
 
-Fixes: e8458e20e0a3c ("habanalabs: make sure device mem alloc is page aligned")
-Cc: Ohad Sharabi <osharabi@habana.ai>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-Resend: Sorry, forgot to copy mailing list
+Ok, I can see how this is confusing. I'll change the text accordingly.
 
- drivers/misc/habanalabs/common/memory.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+>>=20
+>> Link: =
+https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXPwr9Y7k9=
+sA6cWXJ6w@mail.gmail.com/ [1]
+>> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+>> ---
+>> drivers/infiniband/hw/hfi1/tid_rdma.c | 16 +++++++++-------
+>> 1 file changed, 9 insertions(+), 7 deletions(-)
+>>=20
+>> diff --git a/drivers/infiniband/hw/hfi1/tid_rdma.c =
+b/drivers/infiniband/hw/hfi1/tid_rdma.c
+>> index 2a7abf7a1f7f..b12abf83a91c 100644
+>> --- a/drivers/infiniband/hw/hfi1/tid_rdma.c
+>> +++ b/drivers/infiniband/hw/hfi1/tid_rdma.c
+>> @@ -1239,7 +1239,7 @@ static int kern_alloc_tids(struct tid_rdma_flow =
+*flow)
+>> 	struct hfi1_ctxtdata *rcd =3D flow->req->rcd;
+>> 	struct hfi1_devdata *dd =3D rcd->dd;
+>> 	u32 ngroups, pageidx =3D 0;
+>> -	struct tid_group *group =3D NULL, *used;
+>> +	struct tid_group *group =3D NULL, *used, *iter;
+>> 	u8 use;
+>>=20
+>> 	flow->tnode_cnt =3D 0;
+>> @@ -1248,13 +1248,15 @@ static int kern_alloc_tids(struct =
+tid_rdma_flow *flow)
+>> 		goto used_list;
+>>=20
+>> 	/* First look at complete groups */
+>> -	list_for_each_entry(group, &rcd->tid_group_list.list, list) {
+>> -		kern_add_tid_node(flow, rcd, "complete groups", group,
+>> -				 group->size);
+>> +	list_for_each_entry(iter, &rcd->tid_group_list.list, list) {
+>> +		kern_add_tid_node(flow, rcd, "complete groups", iter,
+>> +				 iter->size);
+>>=20
+>> -		pageidx +=3D group->size;
+>> -		if (!--ngroups)
+>> +		pageidx +=3D iter->size;
+>> +		if (!--ngroups) {
+>> +			group =3D iter;
+>> 			break;
+>> +		}
+>> 	}
+>=20
+> The original code's intention was that if group is NULL we never =
+iterated the
+> list. If group !=3D NULL we either iterated the entire list and ran =
+out or we had
+> enough and hit the break.
 
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index e008d82e4ba3..f0d373171d2a 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -150,9 +150,9 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
- 		for (i = 0 ; i < num_pgs ; i++) {
- 			if (is_power_of_2(page_size))
- 				phys_pg_pack->pages[i] =
--						(u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
--										page_size, NULL,
--										page_size);
-+					(u64)(uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
-+										 page_size, NULL,
-+										 page_size);
- 			else
- 				phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
- 										page_size);
--- 
-2.35.1
+This is however not correct. list_for_each_entry() always sets 'group'.
+It needs to do so to check the terminating condition of the loop.
+It does so even if the list is empty and the loop body is not even =
+executed once.
+
+>=20
+> Under the proposed code, group is NULL if we never iterated the loop. =
+It will
+> also be NULL if we reach the end of the list. So the only time group =
+!=3D NULL is
+> when we iterated the list and found all the groups we needed.
+>=20
+>> 	if (pageidx >=3D flow->npagesets)
+>> @@ -1277,7 +1279,7 @@ static int kern_alloc_tids(struct tid_rdma_flow =
+*flow)
+>> 	 * However, if we are at the head, we have reached the end of =
+the
+>> 	 * complete groups list from the first loop above
+>> 	 */
+>> -	if (group && &group->list =3D=3D &rcd->tid_group_list.list)
+>> +	if (!group)
+>=20
+> So the problem here is group->list may point to gibberish if we =
+iterated the
+> entire loop?
+
+In this case it would be &group->list =3D=3D &rcd->tid_group_list.list
+So the second part of the check is correct whereas the check "if group =
+=3D=3D true"
+is just always true.
+
+Since the intention is to move the scope of the list iterator into the =
+macro
+itself I'm removing the accesses to the list iterator after the loop =
+body
+('group' in this case).
+
+>=20
+> Perhaps instead of group, add a bool, call it "need_more" or =
+something. Set it
+> to True at init time. Then when/if we hit the break set it to False. =
+Means we
+> found enough groups. Then down here we check if (need_more)....
+
+If I understand you correctly the condition here should be:
+
+	if (!list_empty(&rcd->tid_group_list.list) && !group)
+
+which will only be true if the list actually did at least one iteration =
+but did not
+break early.
+
+>=20
+> At the very least if you want to keep the code as it is, fix up the =
+comments to
+> make sense and explain the situation.
+
+The code behaves exactly as it did before my patch.
+Sorry I've missed that comment, I'll update it as well. As explain =
+above, this
+comment is a bit misleading since that's not actually what is executing =
+and therefore
+I got confused. group would be "at head" if the list being iterated
+is empty, since the list iterator macros does not differentiate between
+"not running any iteration of the loop since the list is empty" and=20
+"running to the end of the loop with at least one iteration".
+
+>=20
+> -Denny
+
+Sorry for the confusing terminology and missing the comment.
+
+Thanks,
+Jakob
+
 

@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31344EE8DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB5C4EE8D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343751AbiDAHNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S1343746AbiDAHLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343773AbiDAHMy (ORCPT
+        with ESMTP id S241278AbiDAHLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:12:54 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC79A1D67D2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:10:40 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(1184:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Fri, 01 Apr 2022 15:07:40 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Fri, 1 Apr 2022 15:08:39 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.018; Fri, 1 Apr 2022 15:08:39 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
+        Fri, 1 Apr 2022 03:11:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDC91D67C8
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:09:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648796995; x=1680332995;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x7JxNYZE4bR2Se13EgnNdI0M8Y2HG+1d7lIDBk7wNqs=;
+  b=k1pJVLwUyoCjHG/1D4A6mFt+94jvX8WcSG0yRUdwHqDu1B3NG1W/V8u4
+   xrZXJFoty7iGXY1j3nHYfcxX4xCK5npHrArjbZDqxkVGdlXaEgVraH5Vq
+   IlZ57mRr7s6R1kLjmEN/frK5Of5eNpgcr8o8w24oN2YfAVVBR06I96Kdb
+   z22Ntk2j4cpz8YDMu6hUjwbNlICodTtrt4oybJ7NxD2uHk38uPfkgd3rn
+   ZMyDTztjV1O6IoQpj0sOyHN4Ct218dMIyPJGRve6E/q/+hAryOluDduy4
+   wAROnzhbZVqWlvGiWMY3oumxpMie+WOCO4v/vfoX+t4F2yS7lPiccWI8j
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="242208282"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="242208282"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 00:09:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="504064753"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 01 Apr 2022 00:09:31 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naBPX-00012m-2V;
+        Fri, 01 Apr 2022 07:09:31 +0000
+Date:   Fri, 1 Apr 2022 15:08:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v12 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
- defconfig
-Thread-Topic: [PATCH v12 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
- defconfig
-Thread-Index: AQHYRNqKgpvhY+D7NEGLNwOJ/bBEBKzYrlGAgAGgdnA=
-Date:   Fri, 1 Apr 2022 07:08:39 +0000
-Message-ID: <334463c7f78b4b25a62ddd01bba5fe06@cqplus1.com>
-References: <cover.1648714851.git.qinjian@cqplus1.com>
- <84a0839e7724fa39dd07fef491cf6bb357db2e7d.1648714851.git.qinjian@cqplus1.com>
- <CAK8P3a2SQCj8pqyJvS+TpgqQu51+YyB4SOi2cd_WU9ObgAjZOw@mail.gmail.com>
-In-Reply-To: <CAK8P3a2SQCj8pqyJvS+TpgqQu51+YyB4SOi2cd_WU9ObgAjZOw@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Borislav Petkov <bp@suse.de>
+Subject: [intel-tdx:guest-upstream 5/32] arch/x86/coco/tdx/tdcall.o: warning:
+ objtool: __tdx_module_call()+0x3a: missing int3 after ret
+Message-ID: <202204011414.sHGf1lWN-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBUaHUsIE1hciAzMSwgMjAyMiBhdCAxMDoyOSBBTSBRaW4gSmlhbiA8cWluamlhbkBjcXBs
-dXMxLmNvbT4gd3JvdGU6DQo+ID4gQWRkIGdlbmVyaWMgU3VucGx1cyBTUDcwMjEgYmFzZWQgYm9h
-cmQgZGVmY29uZmlnDQo+IA0KPiBIZXJlLCB5b3Ugc2hvdWxkIGV4cGxhaW4gd2h5IHlvdSBuZWVk
-IGEgY3VzdG9tIGRlZmNvbmZpZyBmb3IgdGhpcyBTb0MsIGFzDQo+IG1vc3QgcGxhdGZvcm1zIGFy
-ZSBmaW5lIGp1c3QgdXNpbmcgdGhlIGdlbmVyaWMgb25lLiBBcmUgeW91IHRvbyBtZW1vcnkNCj4g
-Y29uc3RyYWluZWQsDQo+IG9yIGFyZSB0aGVyZSBvdGhlciBwcm9ibGVtcz8NCj4gDQoNCkZvciBt
-ZW1vcnkgY29uc3RyYWluZWQgYm9hcmQgb25seS4NCg0KPiA+IGRpZmYgLS1naXQgYS9hcmNoL2Fy
-bS9jb25maWdzL211bHRpX3Y3X2RlZmNvbmZpZyBiL2FyY2gvYXJtL2NvbmZpZ3MvbXVsdGlfdjdf
-ZGVmY29uZmlnDQo+ID4gaW5kZXggODg2M2ZhOTY5Li5hM2JkOWRiZDggMTAwNjQ0DQo+ID4gLS0t
-IGEvYXJjaC9hcm0vY29uZmlncy9tdWx0aV92N19kZWZjb25maWcNCj4gPiArKysgYi9hcmNoL2Fy
-bS9jb25maWdzL211bHRpX3Y3X2RlZmNvbmZpZw0KPiA+IEBAIC04Niw2ICs4Niw3IEBAIENPTkZJ
-R19NQUNIX1NQRUFSMTMxMD15DQo+ID4gIENPTkZJR19NQUNIX1NQRUFSMTM0MD15DQo+ID4gIENP
-TkZJR19BUkNIX1NUST15DQo+ID4gIENPTkZJR19BUkNIX1NUTTMyPXkNCj4gPiArQ09ORklHX0FS
-Q0hfU1VOUExVUz15DQo+ID4gIENPTkZJR19BUkNIX1NVTlhJPXkNCj4gPiAgQ09ORklHX0FSQ0hf
-VEVHUkE9eQ0KPiA+ICBDT05GSUdfQVJDSF9VTklQSElFUj15DQo+IA0KPiBEb24ndCB5b3UgbmVl
-ZCBhbnkgZHJpdmVycyBoZXJlPw0KPiANCg0KQ3VycmVudGx5LCBhbGwgYmFzaWMgZHJpdmVycyBh
-dXRvIGVuYWJsZWQgYnkgbWFjaC1zdW5wbHVzL0tjb25maWc6DQouLi4NCmNvbmZpZyBTT0NfU1A3
-MDIxDQoJYm9vbCAiU3VucGx1cyBTUDcwMjEgU29DIHN1cHBvcnQiDQoJZGVwZW5kcyBvbiBBUkNI
-X1NVTlBMVVMNCglkZWZhdWx0IEFSQ0hfU1VOUExVUw0KCXNlbGVjdCBBUk1fR0lDDQoJc2VsZWN0
-IEFSTV9QU0NJDQoJc2VsZWN0IFBJTkNUUkwNCglzZWxlY3QgUElOQ1RSTF9TUFBDVEwNCglzZWxl
-Y3QgU0VSSUFMX1NVTlBMVVMNCglzZWxlY3QgU0VSSUFMX1NVTlBMVVNfQ09OU09MRQ0KDQphbmQg
-ZHJpdmVyJ3MgS2NvbmZpZzoNCi4uLg0KY29uZmlnIFJFU0VUX1NVTlBMVVMNCiAgICAgICAgYm9v
-bCAiU3VucGx1cyBTb0NzIFJlc2V0IERyaXZlciIgaWYgQ09NUElMRV9URVNUDQogICAgICAgIGRl
-ZmF1bHQgQVJDSF9TVU5QTFVTDQouLi4NCg0KPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9jb25m
-aWdzL3NwNzAyMV9kZWZjb25maWcgYi9hcmNoL2FybS9jb25maWdzL3NwNzAyMV9kZWZjb25maWcN
-Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMC4uY2RhMTZkMzNh
-DQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2FyY2gvYXJtL2NvbmZpZ3Mvc3A3MDIxX2Rl
-ZmNvbmZpZw0KPiAuLi4NCj4gPiArQ09ORklHX0hBVkVfQVJNX0FSQ0hfVElNRVI9eQ0KPiANCj4g
-SSBjaGVja2VkIHRoaXMgb25lIGFnYWluLCBhcyBtb3N0IG90aGVycyBkb24ndCBlbmFibGUgaXQg
-aW4gdGhlIGRlZmNvbmZpZy4NCj4gDQo+IEkgZG9uJ3QgcmVtZW1iZXIgaWYgSSByZWNvbW1lbmRl
-ZCByZW1vdmluZyB0aGUgJ3NlbGVjdCcgZnJvbSBLY29uZmlnDQo+IGluIGEgcHJldmlvdXMgcm91
-bmQsIGJ1dCBhcyB0aGF0IGlzIHdoZXJlIG90aGVyIHBsYXRmb3JtcyBoYXZlIGl0LCBJJ2QgYWRk
-DQo+IGl0IHRoZXJlIGFzIHdlbGwuDQo+IA0KDQpJJ2xsIG1vdmUgdGhpcyB0byBtYWNoLXN1bnBs
-dXMvS2NvbmZpZy4NCg0KPiA+ICtDT05GSUdfU1RBR0lORz15DQo+IA0KPiBEbyB5b3UgYWN0dWFs
-bHkgZW5hYmxlIGFueSBzdGFnaW5nIGRyaXZlcnMgaGVyZT8gSWYgbm90LCBJJ2QgZHJvcCB0aGF0
-IGJpdC4NCj4gDQoNCknigJlsbCBkcm9wIGl0Lg0KDQoNClRoYW5rcyBhbGwgeW91ciBjb21tZW50
-cy4NCg==
+Hi Kuppuswamy,
+
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/intel/tdx.git guest-upstream
+head:   7d5c8afa0ebaf1731bb7ce8fe34a3248224fe0e9
+commit: c03bec7b2dad416b31b8e5d5d656dfd84430ee09 [5/32] x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220401/202204011414.sHGf1lWN-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/c03bec7b2dad416b31b8e5d5d656dfd84430ee09
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-upstream
+        git checkout c03bec7b2dad416b31b8e5d5d656dfd84430ee09
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/coco/tdx/tdcall.o: warning: objtool: __tdx_module_call()+0x3a: missing int3 after ret
+>> arch/x86/coco/tdx/tdcall.o: warning: objtool: __tdx_hypercall()+0x60: missing int3 after ret
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

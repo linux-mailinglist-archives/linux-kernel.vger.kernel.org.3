@@ -2,85 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1834EFA88
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457F94EFA92
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347805AbiDATqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
+        id S1348109AbiDATtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbiDATqe (ORCPT
+        with ESMTP id S233551AbiDATtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:46:34 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295201C5909
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 12:44:43 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id o22-20020a4ad156000000b00324910b18d2so693485oor.7
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 12:44:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eoDyR5wLKAdUvoHHm1+xh38XadYbaqhL+MtwYEWyQx4=;
-        b=VsEowxTR0k/JyCDGGuUfcIkJx6D9iJg0x4e775Hs5IF5VzVDHWy7FTWxg+JaXeooYe
-         emKqj242txx5xJs2nNhg0cZ1OOWohlr3NZfRYD69Go9l/uRSEF+kTPlL7u5/rw4MV57D
-         okE4+d+KK5c10M5p8KZrO9JnKaR8ZmpUcRv2MaCwl7TSXyCf7oL0evsV7LsN9sFy98Re
-         YTOGmJwzQIry8pY0PZWZcAKYdaSr8BqgbSEtq2WRIvFcHE8tRfRuJ9kRL0SOdicBBss4
-         5OOgf1fd31O5X5eh9dUyNtUGWPh5BBuHOdXLmo8mx+P6zbX6U24Sb8PSSmT6nQEiZbiv
-         9BRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eoDyR5wLKAdUvoHHm1+xh38XadYbaqhL+MtwYEWyQx4=;
-        b=pufFSvZ7Q3duRzYKsvE4Pq+/2viX5LYdWjx496pombfOd9nmfNSODZ8dCrwX8efBVZ
-         lpJt+K9aCW+rynIt5Um1eNzvh4cUkVEFdlo3Ox4UxE1MWX6aQi78Yee9J8XVkGwG+0nx
-         Rco14DJgCADVMwloPGyt+7MXGFyd6s1W2U7Os7wZSjN0/XTEmAULY9ryKQfWbgm/9oz5
-         LNcJbDkJIThgB1zjhdZ3zjCKG6g1L3DbhmH5QP+6jwNIAaphz0tcTG4DjdAgVORfQzY0
-         gZCyS0jeHdClx1HQHGfCOvUorX+gh3Bjp+QsXDP05fyR9jn0CpzVQ4tCy3hMtvulKnNS
-         k2RQ==
-X-Gm-Message-State: AOAM533p762u7NX/bVumv28Cd0IaHLye6FnMqV/BUSHUu3idPN76AKEf
-        ZOEiWVlOMfAu3fnnbgnmPgWDfw==
-X-Google-Smtp-Source: ABdhPJzHVq2wM1+PpnlqzdvZWU1jvshpm1Veo28hKMWOVFTl5EbwrKGHejrrf26XPj5IVBEQR+BYfw==
-X-Received: by 2002:a4a:8904:0:b0:323:7039:6c68 with SMTP id f4-20020a4a8904000000b0032370396c68mr7182992ooi.8.1648842282375;
-        Fri, 01 Apr 2022 12:44:42 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id h8-20020a056830400800b005cdceb42261sm1533435ots.66.2022.04.01.12.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 12:44:41 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 12:47:09 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] ufs: set power domain performance state when
- scaling gears
-Message-ID: <YkdWvVVp4RloGjkC@ripper>
-References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
- <20220401145820.1003826-5-krzysztof.kozlowski@linaro.org>
+        Fri, 1 Apr 2022 15:49:43 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2042.outbound.protection.outlook.com [40.107.101.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2FE1D2059;
+        Fri,  1 Apr 2022 12:47:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AY8FXS9N5atjTQ54ypSQRDyYoDuNIg2QmDoTwIz/Pl8eNb9jOiLANIbqXCKWX3CPLhgbFtJNFQAwReaxSc4IPeFD9e0z8g7SMrZuHqaDj3QhxK1Ny9BiYprKfWvr7Bat5nKS5Td/7scYuXHe+PwmOwQNxkKLMhS+SPLDduM+Z0HqPHmpEs5XGHVASikHFMb0d4nSbfYmfDdZQzYC14gHNGjQW/6w+GULSD7zeeAmj0VkzrUWstWqT9SDbpe6SVeCR+fzSnX1GxS0IW6HmwOu4sMT9BTtXisHT6Nz45cEPUWlBdhp+1uPLj+ttAIB/kcRWcEd3Fm0GUKsSepboIyXLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jrMU/uAvMO64RSmUkIx5/83aWzrt6fHQUzsYK8kKFzA=;
+ b=iVvTv/dbefg2DSKzfsTSAwEZYdLVyw79ykToRxIMs9NIpSH/+F5g96hQ0FyqbTje0HRkgbDqfRgd06TpDri4i2Ua/f8a1Hnas0nmLUChotfW7n9Il7dBdPaEreRiUvBI+LNCwVaWKlXUlpQvTXw+V/un3gZ3gInQY07Z8JeeQzMMgDgV0GA8W73Op3Tlrx5ZLiU5ffGj8ckItyDH52zDD6UYdEqV2TIqrRrY3ZHOzRHXnbAtJWzEpasavEYywCWZShY2knMs882BS6azmj4B7y9OEA3v895eh4akJuwtBfPSRhrlgMgs7d/gyKMeBgyhvL9QoFza8k/P0OL46eu1HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jrMU/uAvMO64RSmUkIx5/83aWzrt6fHQUzsYK8kKFzA=;
+ b=yEAm9BBmvOj9Z72lJGqkM0LFpn+XHjVIn/y61Rjbqm97ySm43TVYxQPoKXlOyhCSpbsarCbcjYBKP7dxVxy6KUeSqGFa8ASauEeGmJNRFngVIaNcbKSqso6Emj6Pf49/g/JaNorYRfALeyBHHcdMBCvglBNpnluJDASEnTCHk3s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
+ by BN9PR12MB5353.namprd12.prod.outlook.com (2603:10b6:408:102::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Fri, 1 Apr
+ 2022 19:47:49 +0000
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::313b:8981:d79a:52d0]) by DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::313b:8981:d79a:52d0%5]) with mapi id 15.20.5123.026; Fri, 1 Apr 2022
+ 19:47:49 +0000
+Message-ID: <0499f8ae-6966-be4b-5af8-e7e568bfcd5f@amd.com>
+Date:   Sat, 2 Apr 2022 01:17:35 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Bug 215744 - input from the accelerometer disappeared, regression
+ on amd_sfh on kernel 5.17
+Content-Language: en-US
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Cc:     Jiri Kosina <jkosina@suse.cz>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Marco <rodomar705@protonmail.com>
+References: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
+From:   Basavaraj Natikar <bnatikar@amd.com>
+In-Reply-To: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN3PR01CA0098.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:9b::11) To DM4PR12MB5040.namprd12.prod.outlook.com
+ (2603:10b6:5:38b::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401145820.1003826-5-krzysztof.kozlowski@linaro.org>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e6c587fb-e7e3-47ee-64f6-08da14188069
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5353:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB5353E84EABF14B8B0F615F76E6E09@BN9PR12MB5353.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jG2hyzoNfaW7dfjr1jiKFH6nePMxKmSnN7V9XY91MtWtach+fovD/LjApRORPDM1hGUeC/lsCMyqgPEUpDx0EEkST67GpIMfGFEXhfrUTaF6rzqUa9Ai5tkbmiUD2OiMutFS/JCMhgpXpqdUsWt/pn2Ggw7MFUVKmPUKviJEc893yx3jHcs80lxtvjIO9Eou/EdOqF96y+a+PU8sFmvn33eJ6Mdj0YHovEo7VtQpT3BRWE0C188UN8dc5JMtIKq3APAcioBFJqjM8WU07tEp1oh6zXaur42FLwt/WEpM2KrTaTTyb0RRNYXsy3OCpJr7wwK8FaEqeEA8OBRxgNS4sc1zwzba1bEbpIyPerrdxoCHK7F7sZKQwpiFSFo76zKIvN1xvQyovR5iAqwHA0Rx1f25k8Gh/0N0NDdpIRLna1M7/vZK7AUwacB/Jc6yzkWZtLlZaUQFXrVVlH+mQrKpmoV6gctLRraJciE8W1MyuT0fYVmtoB5BzumgpK/bRu2haIoI5zaJAJWKwT3kpRU8OHhIPcienuS10N99ktGWo2epQ0muiLIuRau0FHC86Yajht2ZnLZepQw4yqfBb2ftLjNMwUmg+jRWoZAjPttkiT05vX9187QsdsgpDcrt0UfK+kkxupRuegj2sA3ixRaIxHXUmJwU/LL8PgeiEzwY407B3tXwlDIV4Pvi9GiYOZz8xC40mRTL0Yp4pQ/yAblhsS7NsNfrllyY8mDvJxZOKW2AlPmRTl4xvgRTFAEyW6q/fTR8a7v3Juvaf3n+Dynb84Lnp6OdfkiRvPGsUOyrrP6px0s/PyI4/J/nXjZnZxaekBDLCXbet5ulnTuXSddW8mYMt6ES/bnqkFhM9BK3ff0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(2906002)(83380400001)(8676002)(45080400002)(6636002)(54906003)(66556008)(6512007)(4326008)(66476007)(6486002)(6666004)(36756003)(53546011)(966005)(508600001)(110136005)(66946007)(31686004)(316002)(26005)(186003)(19627235002)(31696002)(38100700002)(8936002)(2616005)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WmtMT3NOMmVWL21uU2JLOXA3dkpYMm9QODJrM0hmRk53RXo1VlcrQzJxT2Er?=
+ =?utf-8?B?SXFyTmJCaE9ad0FvQUloUVhtMkUzc1JUcmJNeUs1eURhaXI5Q0tjK0pkTjZB?=
+ =?utf-8?B?UWI5QmRKWU1lajNEMkJ1ckRycnlHcVNQWUxLWmpTV2NRN0sxOWxFTWI0WHJQ?=
+ =?utf-8?B?NlpDQkREczljc0NjQTVkb3ZlLzVxM09hU1kvcDVzS1dCekN3Zy9wcXRaVUpV?=
+ =?utf-8?B?QWk4dGZvVUdCaGNXQ0VwVW1QbTY1aDE2MExsWmQrMXFId01rT1E2Y0VPbVI1?=
+ =?utf-8?B?UlNuc05Ja2RqNkt1TTZTNXp3eEZSRzJqM1FkU3FkR2p1Mng5clhzZUliNlJ5?=
+ =?utf-8?B?UERBZGtmTUZ3dGdNQ1VRZnpKOXI2VW1ZTm9DY0lLczVGeEkzaEs0YXphZ3Y0?=
+ =?utf-8?B?VjY5a0dVZDJyMTRnTkg1YVJ2bVBYTTJoR1NiVGJlcVRIZXE0ZTNmSUZPa2ZI?=
+ =?utf-8?B?SUduUFRMUGtDb0FnSmtjK1o5djNmRktNL3h2U1hGZnBlWnZTN3FaK2Y1N25p?=
+ =?utf-8?B?RzFMckZjMElpNnBTRmpERkVNVEFOaTUyb3lseXp1NUJvSUxKbno5QXQ2UE9j?=
+ =?utf-8?B?UVRZUTh0dzdtRkI1d0RNN2w0N1dmTGNFcUhQQmI0SHJCSzJGUUVHSkVJcGNK?=
+ =?utf-8?B?RGovRjFVdnN6LzdCTTFFV3lWZ3Q3YlhrdVVzVDZlOXhYWVE2YTYyWGZMVWdq?=
+ =?utf-8?B?bnZhU2lvTjlMbXV4Mk9NVkpmK2sxQmpGVUhaRWNpVU9pVVZzYVFkenJheUJo?=
+ =?utf-8?B?WlRFVDlpZTZ3M1BJVzJHKzdZcndWQVY3WmlwekJYWlE3YWFGZU8vUWJhUHNh?=
+ =?utf-8?B?ZDhjL2NyMXlBTEZtNWg2NkVNbHgrTHIyWkFCUy9SMzFXc1hKTWNjTjk1QW9l?=
+ =?utf-8?B?VlZWQXdNTVZ5QTlXSmlnTmRwWXBTYklIa3k1R21JV3JJR0kxblgrVlZ3cDZw?=
+ =?utf-8?B?NWUyQlZTS25reU5EVFkzWjRkU3JCM1o3eElhWTJiRXk4elVLOVlxSlh1SEpM?=
+ =?utf-8?B?eHgrLzVvaDRWeDd5REQyUi9zZzNDUm4vVGhUVFBiMzNORUtQLzB5STJhNDh4?=
+ =?utf-8?B?MUJSemlSRm1hckpsRkN6R1lCUUQySlo2VVQybDNEN09rNmpSVU05VDd4NW5l?=
+ =?utf-8?B?QmZ0MVQxZWljeTRGSDdzSFlEWmxibUdzRHJuNHFtSW9LRUtKS3F5aVV3aGlo?=
+ =?utf-8?B?MlJJSmRMQjJUQmZWMG15RkdtZFhkTkZlMGhCSnhxQklHQjIvQXdSZWtvY2Ir?=
+ =?utf-8?B?SytQSjJGMVJpWGRtVmdMczJUTW05Ymw4THplZ3ErRS8ydTV5eFhpQ3dmUmlM?=
+ =?utf-8?B?ZVFUcXpLWGxxK0lZMW5acUFmMTlZNFhWay9HVmJXNlA2dWJCUVlUVGtXSEd5?=
+ =?utf-8?B?azJjeU5ka1A2WWpFVERwTlI2aWUyVUFkWWhLNTZBRXlvM05KOVlnL2V1VTF1?=
+ =?utf-8?B?R3pGbnRYR09ZMTNCMEFLWmNrTjByRWNLMWFBTUlLN1NhV1liTWxJZ3NON2tP?=
+ =?utf-8?B?WVJVU3NuU0ZOUEcxbm92WTlOdDlFYzcrdks4c1pJMzcyeFJxRWFDOHB6VDNk?=
+ =?utf-8?B?bnNTQmtMWGdjTnlZSk53ZHZTbStUZWV4MjJZeVhXS2dxcVRINU8vRkJqRmdH?=
+ =?utf-8?B?Y0NwK2tMc1Y5b01ZZ1hMNGZUcXljV3lqTHN4cmFNVWdWL2pKVGFKN0NNenNm?=
+ =?utf-8?B?TGdVM3hPMDZkWnFrTHV4SzdjU2lwWitCZy9WTHhkK3J3Ri9Nbmp5cUV6Z2pP?=
+ =?utf-8?B?bEhIZWdSY0pKMGtFdFB5ZEY4SFAySDdPMVp2bmxYdzQ2SEZRcWRHVzI2SnlQ?=
+ =?utf-8?B?cVFmN2tkUDM4eGFCeEEwTDJJbFdwdnZzNzE1NW15ZS9mVExKbi9Sb29HSnpW?=
+ =?utf-8?B?dlZZdVZ3dGtlcEluOWdYRFcwWXdvNUI1c0NMODdXaTg3RGFtb1FBRGhBellp?=
+ =?utf-8?B?Q25kMWtIQzdzT2laR3lkWkYxdVhPc0dNV1FyYjQ0Z0wwd0FvMjBYaWJGYXQx?=
+ =?utf-8?B?SnZKUzZMQzZHL3ZJMUlGVjRwZUdIUW5IdVIxZHBmTTIwdFRHdU1XU2RqR1I1?=
+ =?utf-8?B?aVdsVDVOVzQyUFBic3FrQllzL0o1dmtaM0EyeXZmTUFaVWMrVWM3SDhsWnNa?=
+ =?utf-8?B?d09DNWxCcVZIUHV1TE82VzNBTUkxYStaeDJwWTV3QWN3WnFMeVNPYWl1QStw?=
+ =?utf-8?B?bXdrc01qLzY1RjFHWXkxYmJ0MXF6cDU4LzZVWXhWNmhRSGlNdkN3cjlnMVhU?=
+ =?utf-8?B?M29UcWZGY0dEdkNIVXV2KzRSbVc0NldCOEI1dDlaV0JxVE8yeCswNXg1c1l4?=
+ =?utf-8?B?RkRIMytITndLMHl5ZmFONVlZZ1Rpc2dVK0NwRUhhbFhUK2VacitGdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6c587fb-e7e3-47ee-64f6-08da14188069
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2022 19:47:49.6100
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EBaQieawHy0qRr7OYDGsd3364OpSefbPAApol6zY68x6muUzRUWSBMBVydtuoMEUPPfkHd075mBzEBpmiu4Jyg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5353
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,184 +134,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 01 Apr 07:58 PDT 2022, Krzysztof Kozlowski wrote:
+Hi,
 
-> Scaling gears requires not only scaling clocks, but also voltage levels,
-> e.g. via performance states.
-> 
-> USe the provided OPP table, to set proper OPP frequency which through
-> required-opps will trigger performance state change.
-> 
+Committed patch is disabling the interrupt mode and does not cause any
+functionality or working issues.
 
-This looks quite nice! Just two questions about the path looking forward.
+I also cross verified on 3 system and working fine on 5.17 and not able
+to reproduce or recreate.
 
-If we where to extend the opp core to allow specifying the clock rate
-for some N first clocks (similar to how e.g. regulators are handled) it
-seems possible to extend this to replace the freq-table property as
-well. Would you agree?
+Output on 5.17:
 
+--------------------------------------------------------------
 
-The other missing required feature (in this area) from the upstream UFS
-driver is the ability of voting for interconnect bandwidth. Based on
-your path it would be trivial to specify different values for the votes
-for each speed, but looking at downstream [1] (each row represents the
-vote for the two paths in KB/s) indicates a more complex relationship
-between gear and voted bandwidth.
+root@amd-HP-ENVY-x360-Convertible-15-eu0xxx:/home/amd# uname -a
 
-This was the reason I suggested that perhaps we need to key the
-opp-table based on the gear? But I don't think there would be any issue
-detecting this in runtime...
+Linux amd-HP-ENVY-x360-Convertible-15-eu0xxx 5.17.0+ #5 SMP PREEMPT Fri
+Apr 1 23:28:34 IST 2022 x86_64 x86_64 x86_64 GNU/Linux
 
-[1] https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio.dtsi#L1982
+root@amd-HP-ENVY-x360-Convertible-15-eu0xxx:/home/amd# monitor-sensor
 
-Regards,
-Bjorn
+    Waiting for iio-sensor-proxy to appear
 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/scsi/ufs/ufshcd-pltfrm.c |  6 +++++
->  drivers/scsi/ufs/ufshcd.c        | 42 +++++++++++++++++++++++++-------
->  drivers/scsi/ufs/ufshcd.h        |  3 +++
->  3 files changed, 42 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> index cca4b2181a81..c8f19b54be92 100644
-> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> @@ -360,6 +360,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
->  		goto dealloc_host;
->  	}
->  
-> +	if (devm_pm_opp_of_add_table(dev))
-> +		dev_dbg(dev, "no OPP table (%d), no performance state control\n",
-> +			err);
-> +	else
-> +		hba->use_pm_opp = true;
-> +
->  	ufshcd_init_lanes_per_dir(hba);
->  
->  	err = ufshcd_init(hba, mmio_base, irq);
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 3f9caafa91bf..84912db86da8 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -1164,11 +1164,16 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
->  static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  {
->  	int ret = 0;
-> +	struct ufs_clk_info *clki;
-> +	unsigned long pm_opp_target_rate;
->  	struct ufs_pa_layer_attr new_pwr_info;
->  
-> +	clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
-> +
->  	if (scale_up) {
->  		memcpy(&new_pwr_info, &hba->clk_scaling.saved_pwr_info.info,
->  		       sizeof(struct ufs_pa_layer_attr));
-> +		pm_opp_target_rate = clki->max_freq;
->  	} else {
->  		memcpy(&new_pwr_info, &hba->pwr_info,
->  		       sizeof(struct ufs_pa_layer_attr));
-> @@ -1184,6 +1189,13 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  			new_pwr_info.gear_tx = hba->clk_scaling.min_gear;
->  			new_pwr_info.gear_rx = hba->clk_scaling.min_gear;
->  		}
-> +		pm_opp_target_rate = clki->min_freq;
-> +	}
-> +
-> +	if (hba->use_pm_opp && scale_up) {
-> +		ret = dev_pm_opp_set_rate(hba->dev, pm_opp_target_rate);
-> +		if (ret)
-> +			return ret;
->  	}
->  
->  	/* check if the power mode needs to be changed or not? */
-> @@ -1194,6 +1206,11 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  			hba->pwr_info.gear_tx, hba->pwr_info.gear_rx,
->  			new_pwr_info.gear_tx, new_pwr_info.gear_rx);
->  
-> +	if (ret && hba->use_pm_opp && scale_up)
-> +		dev_pm_opp_set_rate(hba->dev, hba->devfreq->previous_freq);
-> +	else if (hba->use_pm_opp && !scale_up)
-> +		ret = dev_pm_opp_set_rate(hba->dev, pm_opp_target_rate);
-> +
->  	return ret;
->  }
->  
-> @@ -1435,9 +1452,11 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  	if (list_empty(clk_list))
->  		return 0;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> -	dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	if (!hba->use_pm_opp) {
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> +		dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	}
->  
->  	ufshcd_vops_config_scaling_param(hba, &hba->vps->devfreq_profile,
->  					 &hba->vps->ondemand_data);
-> @@ -1449,8 +1468,10 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  		ret = PTR_ERR(devfreq);
->  		dev_err(hba->dev, "Unable to register with devfreq %d\n", ret);
->  
-> -		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		if (!hba->use_pm_opp) {
-> +			dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +			dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		}
->  		return ret;
->  	}
->  
-> @@ -1462,7 +1483,6 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  {
->  	struct list_head *clk_list = &hba->clk_list_head;
-> -	struct ufs_clk_info *clki;
->  
->  	if (!hba->devfreq)
->  		return;
-> @@ -1470,9 +1490,13 @@ static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  	devfreq_remove_device(hba->devfreq);
->  	hba->devfreq = NULL;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -	dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	if (!hba->use_pm_opp) {
-> +		struct ufs_clk_info *clki;
-> +
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	}
->  }
->  
->  static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 88c20f3608c2..3bd02095897f 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -776,6 +776,8 @@ struct ufs_hba_monitor {
->   * @auto_bkops_enabled: to track whether bkops is enabled in device
->   * @vreg_info: UFS device voltage regulator information
->   * @clk_list_head: UFS host controller clocks list node head
-> + * @use_pm_opp: whether OPP table is provided and scaling gears should trigger
-> + *              setting OPP
->   * @pwr_info: holds current power mode
->   * @max_pwr_info: keeps the device max valid pwm
->   * @clk_scaling_lock: used to serialize device commands and clock scaling
-> @@ -894,6 +896,7 @@ struct ufs_hba {
->  	bool auto_bkops_enabled;
->  	struct ufs_vreg_info vreg_info;
->  	struct list_head clk_list_head;
-> +	bool use_pm_opp;
->  
->  	/* Number of requests aborts */
->  	int req_abort_count;
-> -- 
-> 2.32.0
-> 
++++ iio-sensor-proxy appeared
+
+=== Has accelerometer (orientation: normal)
+
+=== No ambient light sensor
+
+    Accelerometer orientation changed: right-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: right-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: left-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: right-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: left-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: right-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: bottom-up
+
+    Accelerometer orientation changed: normal
+
+    Accelerometer orientation changed: right-up
+
+    Accelerometer orientation changed: normal
+
+root@amd-HP-ENVY-x360-Convertible-15-eu0xxx:/home/amd# dmidecode -s
+bios-version
+
+B.16T19
+
+root@amd-HP-ENVY-x360-Convertible-15-eu0xxx:/home/amd# dmidecode -s
+system-product-name
+
+HP ENVY x360 Convertible 15-eu0xxx
+
+root@amd-HP-ENVY-x360-Convertible-15-eu0xxx:/home/amd# dmidecode -s
+system-manufacturer
+
+HP
+
+root@amd-HP-ENVY-x360-Convertible-15-eu0xxx:/home/amd#
+
+------------------------------------------------
+
+Looks like this is not regression. May be some hardware/firmware bug.
+
+Just curious reverting this patch how it is working just suspecting
+firmware undefined behavior.
+
+If possible, please check on other platform/system also if same behavior
+occurs.
+
+Could you please provide me platform/system details so that I can check
+this behavior?
+
+Thanks,
+Basavaraj
+
+On 4/1/2022 1:36 PM, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
+>
+> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+> acted upon since it was reported about a week ago, that's why I decided
+> to forward it to the lists and all people that seemed to be relevant
+> here. It looks to me like this is something for Basavaraj, as it seems
+> to be caused by	b300667b33b2 ("HID: amd_sfh: Disable the interrupt for
+> all command"). But I'm not totally sure, I only looked briefly into the
+> details. Or was this discussed somewhere else already? Or even fixed?
+>
+> To quote from https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D215744&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7C9155f6987d45479f721208da13b682f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843972013904577%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=HbQ5LymDwsc94RZhNuzN83%2F0BUplqRUG7bB%2BXymViP0%3D&amp;reserved=0 :
+>
+>>  Marco 2022-03-25 15:22:19 UTC
+>>
+>> After updating to 5.17, the input from the accelerometer disappeared, completely. No devices available from IIO tree. First bad commit causing it is https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Fcommit%2Fdrivers%2Fhid%2Famd-sfh-hid%2Famd_sfh_pcie.c%3Fid%3Db300667b33b2b5a2c8e5f8f22826befb3d7f4f2b&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7C9155f6987d45479f721208da13b682f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843972013904577%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=odHA0EIxLb0xpSJJ9ShzgGL0%2BOAJ6tbG68lQe0QOqLY%3D&amp;reserved=0. Reverting this and the the other two on top fixed this. Tried to not revert only the above mentioned commit, but it's still not working.
+>>
+>> Marco.
+> Anyway, to get this tracked:
+>
+> #regzbot introduced: b300667b33b2b5a2c8e5f8f22826befb3d7f4
+> #regzbot from: Marco <rodomar705@protonmail.com>
+> #regzbot title: input: hid: input from the accelerometer disappeared due
+> to changes to amd_sfh
+> #regzbot link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D215744&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7C9155f6987d45479f721208da13b682f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843972013904577%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=HbQ5LymDwsc94RZhNuzN83%2F0BUplqRUG7bB%2BXymViP0%3D&amp;reserved=0
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>
+> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> reports on my table. I can only look briefly into most of them and lack
+> knowledge about most of the areas they concern. I thus unfortunately
+> will sometimes get things wrong or miss something important. I hope
+> that's not the case here; if you think it is, don't hesitate to tell me
+> in a public reply, it's in everyone's interest to set the public record
+> straight.
+>
+

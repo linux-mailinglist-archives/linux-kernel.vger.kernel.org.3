@@ -2,75 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676534EE95C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDFE4EE95E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344052AbiDAHzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S1344048AbiDAH4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344038AbiDAHzN (ORCPT
+        with ESMTP id S241860AbiDAH4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:55:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE09562D5
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648799602;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=B0LTjkvtyfPIo/+VUIY2xG2LMMGNvarIwNDFnhL0IykmylzmTXHExuOvRVDbVj5lFxt5tR
-        ob/hk5tDfCS0T41x8SK8gzAwV5YUU0eSAvKsXySuWSvab9vYk7Rah1e4SniEcroUcHfIZG
-        V0dpiOPohrWzQf56k4CKFTMT2MrbnNE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-c6f2-0tUOhCSb8lAAtXhnQ-1; Fri, 01 Apr 2022 03:53:17 -0400
-X-MC-Unique: c6f2-0tUOhCSb8lAAtXhnQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DD4985A5BC;
-        Fri,  1 Apr 2022 07:53:16 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 989A540CF8F4;
-        Fri,  1 Apr 2022 07:53:15 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2 0/5] x86: uaccess CMPXCHG + KVM bug fixes
-Date:   Fri,  1 Apr 2022 03:53:11 -0400
-Message-Id: <20220401075311.707166-1-pbonzini@redhat.com>
-In-Reply-To: <20220202004945.2540433-1-seanjc@google.com>
-References: 
+        Fri, 1 Apr 2022 03:56:14 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0B419894D;
+        Fri,  1 Apr 2022 00:54:25 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id bp39so1543134qtb.6;
+        Fri, 01 Apr 2022 00:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+u9zqczQO+VO7jrn2VLlynTKy/bzO3BVuchdr9Nikuo=;
+        b=nj2sbGZvbWTjn9mYX46I9W9yoLP0Ke6pKI1xrZ3pM8/rzhatGBYNMxEOq9z5CubKTV
+         cdNRSFToM6VsVIqYxR5gGtPPql08FEd+TzXe3zAGtlH4i9VhQJPlYrDDmNLtXuQlTder
+         VNSRbmk+hFZAxCZWOLilUVn8nD/OCrjwiW1qnGSrWfed/2WFGj9hNQjMTea0qJ5hUk5I
+         CVOPVfIXRbekP7JXEfp97PjGPufYEzHHCNBg+BOKqocSrJbUPDuUi5YIJ6F54iL1Xx9M
+         pnjA1PD2MwTk+6ievCg1iuYvLWXIaa3ZZoNs027Ly10EowaIAh87hqEAlsSbdUZEhEmf
+         NWXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+u9zqczQO+VO7jrn2VLlynTKy/bzO3BVuchdr9Nikuo=;
+        b=TX9CPA3LZK0Bc2lxP12LEX++ubh1TPQOn0HAb4Jex3beN2WtaZQ5nLEyJFTGJ0G0xa
+         zuzVbtzmAw0ZrbZXAIJm+nlkbDP3iWMqSE1JzTZalm9CGxQIdHKC8q9FYCIn8Iarax0W
+         ZrAO8QvUA3isbBwpBo74L+jVON34drVrWWCHFaXxEoPqnvmNqTXC3wqFFpqSDV1J5gHn
+         ETBV4ms9rMYqs3+EoUMBAJJAQwsrLKqpqc1ez7+1mUCmWDIoacAYyDlQjVnKPGBdIgmp
+         0VrMIS12JUvZkdYzOxCIbTG0Ot4+fEOshnJ/U2ZIs1cx5ll7K4bzfV6iRIrbQpRMVawL
+         dOkw==
+X-Gm-Message-State: AOAM530q7uJOSFghugO0n2cCqme9X4JgBp6kexNSUhRwmgiZ7C4pQ9Hn
+        Yy9nypD6xdij1WLDyY0n2+xaLGuEnTg=
+X-Google-Smtp-Source: ABdhPJwfuKc7yJpGenp1uWYpSA05RK1BUQFniGAYsaa1t2YAt0LFACJa0wze7ujeexNgmG9sxfT/sQ==
+X-Received: by 2002:ac8:5b87:0:b0:2e1:fe79:d65d with SMTP id a7-20020ac85b87000000b002e1fe79d65dmr7571238qta.480.1648799664556;
+        Fri, 01 Apr 2022 00:54:24 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id w22-20020ac87e96000000b002eb8e71950csm1334551qtj.71.2022.04.01.00.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 00:54:23 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     mike.marciniszyn@cornelisnetworks.com
+Cc:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] RDMA: Replace zero-length array with flexible-array member
+Date:   Fri,  1 Apr 2022 07:54:06 +0000
+Message-Id: <20220401075406.2407294-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-Paolo
+There is a regular need in the kernel to provide a way to declare
+having a dynamically sized set of trailing elements in a structure.
+Kernel code should always use “flexible array members”[1] for these
+cases. The older style of one-element or zero-length arrays should
+no longer be used[2].
 
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/infiniband/hw/hfi1/mad.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/infiniband/hw/hfi1/mad.c b/drivers/infiniband/hw/hfi1/mad.c
+index 4146a2113a95..09fe0eb87884 100644
+--- a/drivers/infiniband/hw/hfi1/mad.c
++++ b/drivers/infiniband/hw/hfi1/mad.c
+@@ -2437,7 +2437,7 @@ struct opa_port_data_counters_msg {
+ 			__be64 port_vl_xmit_wait_data;
+ 			__be64 port_vl_rcv_bubble;
+ 			__be64 port_vl_mark_fecn;
+-		} vls[0];
++		} vls[];
+ 		/* array size defined by #bits set in vl_select_mask*/
+ 	} port[1]; /* array size defined by  #ports in attribute modifier */
+ };
+@@ -2470,7 +2470,7 @@ struct opa_port_error_counters64_msg {
+ 		u8 reserved3[7];
+ 		struct _vls_ectrs {
+ 			__be64 port_vl_xmit_discards;
+-		} vls[0];
++		} vls[];
+ 		/* array size defined by #bits set in vl_select_mask */
+ 	} port[1]; /* array size defined by #ports in attribute modifier */
+ };
+-- 
+2.25.1
 

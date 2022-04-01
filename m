@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F3A4EEDDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007244EEDE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346207AbiDANMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S1346160AbiDANNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346199AbiDANMF (ORCPT
+        with ESMTP id S1346351AbiDANNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:12:05 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706984F9D7
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:10:15 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 5so4887502lfp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gwPRrwecdoFviBYk3z2czJVnElCA5iLcaTmf1cxWb3Q=;
-        b=J0kI1TPWiUfbDcU6INtuF44yG+6+VYb4YwWejocR0pfR/1QhMBaijCR5nATHp533D+
-         48bol6xx9ygzxo/MMy/TtBM4S4uHPqLeZvRg+bNzlpEPEnIZas4koX/ZIctfO4qWmc80
-         xUTPSnq87gkvMU7Fz8941ucjfq5w7QvVdqoG5fAmKKLtiKC8WKpwzjkR4uMVMUGoIC2f
-         o12iIc2UYEJV8gBVu4V/6nOiFJqH6Wmo2e+DGVEPDh4BHqYpWU04H+yxt7fEDAY4xhso
-         o5Ev0Be64G6QeSlI/VKB5/1F6n7GHgfA6Yo2S9Btx3LZnuaZaZhw+IKeapTQc3LkM9z0
-         DqDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gwPRrwecdoFviBYk3z2czJVnElCA5iLcaTmf1cxWb3Q=;
-        b=0E6iGqSPPIzNUBDQpKxjabO1RruwoNeSH9pfWkD0z9b7qLKymMeTx7kikvcR/G6Mhp
-         9TX6IRkHlcwh/4iWdHNPKJIHrA+u8oLu2DCdWjjRm7y14baQWHsipivXvnNRnliHR2Z9
-         LD5g/EQTYbEPZheWb14dQvGlNnpmvavHepnPKRdbZuOiv9dHUeh+3Xv8Xh0jeAVvE86j
-         NclM5aj2Qc9mCHi4Qrr5ZhTn1I4faShGnTpcwxWs+d5/YV0ehPbPt7NWhjh6qJTJR0o5
-         KDtLPvGEw5bjlulsn0whhje0bSlF1hesfFtyre+oLt6Z5MldE/r/V0XE+sft8cFG9gw2
-         Zmcg==
-X-Gm-Message-State: AOAM53154H/8RhEVGY/pIfuwKyWRyxpgyyMchQnik69WEdjxEVr5VpbF
-        prxgSqN1ijIO6j/CmOE9wl21ztgUXgC3khBzytJWhQ==
-X-Google-Smtp-Source: ABdhPJxUg5k+Cr6DFSPnYsg8v9GaeKdFP9j73DSS0ooOrACZdveWSjU7IuyYjHjCZ60K/ylc2e7Vk2AGRUyseOZDQIA=
-X-Received: by 2002:a19:ac42:0:b0:448:1f15:4b18 with SMTP id
- r2-20020a19ac42000000b004481f154b18mr14075861lfc.32.1648818613358; Fri, 01
- Apr 2022 06:10:13 -0700 (PDT)
+        Fri, 1 Apr 2022 09:13:18 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C261D66DE
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:11:27 -0700 (PDT)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 231DB4ub028016
+        for <linux-kernel@vger.kernel.org>; Fri, 1 Apr 2022 22:11:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 231DB4ub028016
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648818665;
+        bh=/kI3lQPTgEygcI7vmBN005HvGRQcbjUBTIDFX8fCsok=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vlVvQCkO5HP+kKJ2zs9SP8MYR167xK8MnHYtRrF8iD825i5ZfWXP5RezshrudtHAV
+         ekNu4WL0lCFYRrEgYQEJeIxhAcgstnWdT9D9JoO1wOrJuNKjkOsfXvX3+ERh+ReWR5
+         HQ6BMJ7JIXAWqsB8Yykil5Ju8sWVTrjS5e0MguhbWdw1vpXoHDwmu1P+gdVoBe5E5s
+         0KGsc1Of/ErmaSOaQXa9+bic1VtjolCwhJx7rPrHAI4Pk7TUadqCdN87UPnCV04gVq
+         p7QtxVnt43izdvv7CyDDopnwkCa2mkAlsq7wwOzgO+BjeLvZ0oQUmZtjdBYXoDiCm6
+         Lms+rHpPPX9YA==
+X-Nifty-SrcIP: [209.85.216.42]
+Received: by mail-pj1-f42.google.com with SMTP id y16so2368717pju.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:11:04 -0700 (PDT)
+X-Gm-Message-State: AOAM532TAH5Pgr0P/SI+uQ9jDItEExr0x0Rqd2JFBl1NvGlwJgLkNIZS
+        XC029v9Q46hiuuGM6dta0E0QmbIK5uDxZmyD+Ug=
+X-Google-Smtp-Source: ABdhPJxIay5Z8UU92lADQCkERH4RVzsDhwr+Hx1SjiWIoiMOqBVc5jaSrmPEqdxc4cMxCGnuhdAN/qfPy2s6hzVNF1M=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr10211008plp.162.1648818664197; Fri, 01
+ Apr 2022 06:11:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220401091127.3234638-1-zhangsong34@huawei.com>
-In-Reply-To: <20220401091127.3234638-1-zhangsong34@huawei.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 1 Apr 2022 15:09:59 +0200
-Message-ID: <CAKfTPtCNLELdiQXCdbxrXotqCkRV-2mKK7uVXQv---mbnekaUQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Allow non-idle task to preempt idle task directly
-To:     zhangsong <zhangsong34@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        zhangsong <zhangsong34@gmail.com>
+References: <20220322173547.677760-1-nathan@kernel.org> <CAK7LNAT8TcDy=iKaWZ7_+MbT84vOVEBzHxJY8Bx54Ju5fur8-w@mail.gmail.com>
+ <Yj9wyNwZWkilNbJM@dev-arch.thelio-3990X>
+In-Reply-To: <Yj9wyNwZWkilNbJM@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 1 Apr 2022 22:10:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASKg87aZTTF7heXnh1sWFm9Stxsu5unRw_rSbKB=jCr9g@mail.gmail.com>
+Message-ID: <CAK7LNASKg87aZTTF7heXnh1sWFm9Stxsu5unRw_rSbKB=jCr9g@mail.gmail.com>
+Subject: Re: [PATCH] um: Fix filtering '-mno-global-merge'
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 at 11:13, zhangsong <zhangsong34@huawei.com> wrote:
+On Sun, Mar 27, 2022 at 5:00 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> From: zhangsong <zhangsong34@gmail.com>
+> On Sat, Mar 26, 2022 at 12:29:55PM +0900, Masahiro Yamada wrote:
+> > On Wed, Mar 23, 2022 at 2:39 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > When booting a clang compiled UML kernel, the kernel panics when trying
+> > > to run init:
+> > >
+> > >   wait_stub_done : failed to wait for SIGTRAP, pid = 651294, n = 651294, errno = 0, status = 0xb7f
+> > >   Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> > >
+> > > After the commit in Fixes, many flags from KBUILD_CFLAGS do not appear
+> > > in USER_CFLAGS, likely due to USER_CFLAGS initially being a recursive
+> > > variable ("VAR =") then being switched to a simple ("VAR :=") variable.
+> > > For example, diffing arch/x86/um/.ptrace_user.o.cmd shows flags such as
+> > > '-Os' and '-fno-delete-null-pointer-checks' getting dropped, which both
+> > > impact code generation.
+> > >
+> > > Rework the filtering to use filter-out instead of patsubst, which allows
+> > > all the patterns that USER_CFLAGS cares about to be excluded in one
+> > > command and ensures all flags from KBUILD_CFLAGS are transferred over to
+> > > USER_CFLAGS properly, which resolves the boot issue noted above.
+> > >
+> > > Fixes: 6580c5c18fb3 ("um: clang: Strip out -mno-global-merge from USER_CFLAGS")
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> >
+> >
+> > Can we remove -mno-global-merge entirely?
+> >
+> >
+> > 61163efae02040f66a95 was a very old commit,
+> > without enough explanation.
+> >
+> > Shall we remove  -mno-global-merge, and do compile-tests.
+> > If we are hit by problems for arm/arm64, we can re-add it.
 >
-> In check_preempt_tick(), the sched idle task may exectue at least
-> `sysctl_sched_min_granularity` time but any other cfs tasks cannot
-> preempt it. So it is nessesary to ignore the `sysctl_sched_min_granularity`
-> resctriction for sched idle task preemption.
+> Yes, I think that was the conversation that we had on the commit that
+> this fixes:
+>
+> https://lore.kernel.org/r/YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X/
+>
+> I can test that on my Raspberry Pi 3 and 4 on Monday, although I would
+> like for this patch to be picked up in the meantime so that it is
+> possible to test UML on -next with clang. We can remove
+> -mno-global-merge in a follow up change, if you do not have any
+> objections?
+>
+> Cheers,
+> Nathano
 
-Could you explain why you need to remove this condition for sched_idle ?
-sched_idle tasks are already preempted at wakeup by others. And they
-run while others are runnable only if they has not run for a very long
-time compares to other. The ideal_runtime of a sched_idle task is
-capped to 750us min to ensure a minimum progress. But this will happen
-not more than once  every 256ms and most probably even less often.
 
->
-> Signed-off-by: zhangsong <zhangsong34@gmail.com>
-> ---
->  kernel/sched/fair.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4bd299d6..edcb33440 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4477,6 +4477,15 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->         struct sched_entity *se;
->         s64 delta;
->
-> +       se = __pick_first_entity(cfs_rq);
-> +
-> +       if ((cfs_rq->last && se_is_idle(cfs_rq->last) - se_is_idle(curr) < 0) ||
-> +           (cfs_rq->next && se_is_idle(cfs_rq->last) - se_is_idle(curr) < 0) ||
-> +           se_is_idle(se) - se_is_idle(curr) < 0) {
-> +               resched_curr(rq_of(cfs_rq));
-> +               return;
+This patch is unneeded now
+because I picked up the alternative:
 
-Why all these complex conditions ?
-if (se_is_idle(curr)) should be enough
+https://lore.kernel.org/all/CAK7LNAS6C6Uj9cCQ0o=bYF1F-EVD=VgdR8YYx-1PJc9toX_HZA@mail.gmail.com/
 
 
-> +       }
-> +
->         ideal_runtime = sched_slice(cfs_rq, curr);
->         delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
->         if (delta_exec > ideal_runtime) {
-> @@ -4497,7 +4506,6 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->         if (delta_exec < sysctl_sched_min_granularity)
->                 return;
->
-> -       se = __pick_first_entity(cfs_rq);
->         delta = curr->vruntime - se->vruntime;
->
->         if (delta < 0)
-> --
-> 2.27.0
->
+
+-- 
+Best Regards
+Masahiro Yamada

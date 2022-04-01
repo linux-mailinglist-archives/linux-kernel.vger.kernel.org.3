@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710854EEE81
+	by mail.lfdr.de (Postfix) with ESMTP id BCC5E4EEE82
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346519AbiDANxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
+        id S1346503AbiDANxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241902AbiDANw6 (ORCPT
+        with ESMTP id S1346490AbiDANw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Apr 2022 09:52:58 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A871C60F9;
-        Fri,  1 Apr 2022 06:51:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C0E1C6483;
+        Fri,  1 Apr 2022 06:51:05 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id C7F6E1F41ACC
+        with ESMTPSA id CB0561F41AD5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648821063;
-        bh=sQBT1nOGAS5f3qWyG27bCf0tVzLDuIZ4Dbng+BOtF9c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MI3Oc71fKUUdQd+OT25LDfxtxevGSQwW/GJsgMRt7sulhGBXWFUvVKph0aP1ZLdCi
-         mQtsqnkHbpEEneizGW+JPkwYF5RHGebPPpDifolJ3BVgZwLFtqKc0ct6bnBRqN4Nm3
-         z5xEgpmwyL+iU/RX3ULFqpgxeRaXGnD7SjdYM3KrAsLzpQy8ocj/H+u/ZP2Cgrqu5P
-         36Xzw48F4+ayx+E03cJhJsVpnZFALeCxiUKKKL20nY8qI2kA359BZQdTWsctaQs8ql
-         WIMdfdOTK4GtYyFjgC8nxNLn0NRLj472tWwa8FNOtGlQIUspcEpWPwO00ZWHy+3EnA
-         StA2faYBr++WQ==
+        s=mail; t=1648821064;
+        bh=D6HHjVxkjaNSQYpDgvwEk+llZiTyrRHbdq/ZOoDG6rg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LUZHUjcmCUE2VmJHiAhRDw4Ka4RbZfwKueOMM7/s3ULtLQcQX/xJYyVHGxvbjZxoc
+         GjfgSb/VcGGFvAYqU0xE8qPjtETk3gd+t6urWg1MNR0IDZV7zpeSm05fjApS/Ljr1S
+         NbDsWnGils9jKI2w5d0APf5IfNqo3g7Iz7RQyqFSL/GCaWXbmQvkjDBSjFuWvkqt3V
+         BPdIYGCYaAT2sXPneYgQAjxQjG0mFCt1+cwbo+NGxIsSvuoSsxkw0vKX6CgPjxnUCK
+         betaRPBNtOkhJOEh1U3j9lA1tuk1SJVbDIK2eWfP5oGl+YD+mLCfWKjrSOV4ImtPZ8
+         YCywSboYVwICg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     lee.jones@linaro.org
@@ -37,10 +37,12 @@ Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
         kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 0/2] Allow syscon to use spinlocks with regmap fast_io
-Date:   Fri,  1 Apr 2022 15:50:46 +0200
-Message-Id: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/2] mfd: syscon: Allow using spinlocks with regmap fast_io
+Date:   Fri,  1 Apr 2022 15:50:47 +0200
+Message-Id: <20220401135048.23245-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
+References: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,21 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for enabling the regmap's fast_io configuration
-option for SoCs featuring very fast MMIO operations, for which mutexes
-are introducing a lot of overhead / latency.
+On at least some SoCs accessing MMIO regions is very fast and in some
+cases acquiring a mutex for every IO operation brings a significant
+overhead: this is also the rationale of regmap's fast_io configuration
+parameter, which makes it switch to using a spinlock instead.
 
-This has been tested locally on some MediaTek Chromebooks (but, of course,
-that requires devicetree patches that are not included in this series).
+Since the typical use-case for syscon is to give access to misc system
+registers (not representing any specific type of device) to one or more
+other drivers, and since this is done via regmap anyway, allow such
+devices to let syscon configure regmap with fast_io enabled and to let
+this happen, add a Devicetree property "fast-io": when this is found,
+syscon will set '.fast_io = true' in the regmap config.
 
-AngeloGioacchino Del Regno (2):
-  mfd: syscon: Allow using spinlocks with regmap fast_io
-  dt-bindings: mfd: syscon: Add support for regmap fast-io
+Of course, it makes little sense to do that if a syscon node declares
+a phandle to a hardware spinlock provider node, so we check for this
+property only if no hwlock is present.
 
- Documentation/devicetree/bindings/mfd/syscon.yaml | 15 +++++++++++++++
- drivers/mfd/syscon.c                              |  4 ++++
- 2 files changed, 19 insertions(+)
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/mfd/syscon.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+index 191fdb87c424..3fcd9afdb9ef 100644
+--- a/drivers/mfd/syscon.c
++++ b/drivers/mfd/syscon.c
+@@ -101,6 +101,10 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+ 		}
+ 	}
+ 
++	/* Checking for fast-io makes sense only if not using hwspinlock */
++	if (!syscon_config.use_hwlock && of_property_read_bool(np, "fast-io"))
++		syscon_config.fast_io = true;
++
+ 	syscon_config.name = kasprintf(GFP_KERNEL, "%pOFn@%llx", np,
+ 				       (u64)res.start);
+ 	syscon_config.reg_stride = reg_io_width;
 -- 
 2.35.1
 

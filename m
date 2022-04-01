@@ -2,155 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9654EF813
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D694EF812
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348721AbiDAQi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S1349367AbiDAQjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350198AbiDAQiA (ORCPT
+        with ESMTP id S1350581AbiDAQiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:38:00 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561551017E0;
-        Fri,  1 Apr 2022 09:15:43 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id m3so5764096lfj.11;
-        Fri, 01 Apr 2022 09:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=XbXCNFwHHw/7AcxBigwapuOKfyDexeoHFsZgqSWyus4=;
-        b=A7Qi+5s7OShNNKc36z53P4uDvpSQu+/hqp7p5j1TVC27Ytu91DmHq7N7yvw/woHrbm
-         +XzmvxLEHwkNXGhttQI3+hE3X6mKE5l783VNROkI30aZGhsmAD9wnqu2YnvOqFvEsTBK
-         fuM+1wVvd49XNC5ogu2AOOMp6PPaxUqnrPUjB5yMqyySWTAlVxHlFVmkblyFLjwS4IxE
-         F9BSSvnNw5mpNNvv8ivgtlcEdmU5h/KtZxnrQGwXgMD462mfr2oBz/qiFQ13kXxBSwUB
-         ENo654fYGP2/6zYAzv4XyAx+5sCSAZdSHoyP524DobpjEdNuhRz753X3X9piFroCpOSD
-         hPiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=XbXCNFwHHw/7AcxBigwapuOKfyDexeoHFsZgqSWyus4=;
-        b=kgJASmoLD4qm/HcKyitbBVFG+ZamBnYByFc5oNOTHw76I0OFYMERqI80MADhLQTHH1
-         i7wixJjTF7NVpRUT0/VAtn7g2N6cTm5KF9M0lRvtZPNf+Nn1tAUhdvW4uDoF8FSBlBc4
-         q7WX/VDYVYKVXoDMOltOZUwcwcMei+wjQeDhcr/y0YLWvywcPThCRKEHIZMSDoZXmbq2
-         QV7nj6F40ZWn9ChWeV5SeO+6Foaom5SoRapyNwGnvIwcjSc+QOvlYTR9S4kpgotM3glb
-         yrz7jMCAVS+6Q9HTjrSHMJYuOOIYktQR688AUYz9ypon7VlbFlzk/QdhbnM+sJPYt/z5
-         EPYw==
-X-Gm-Message-State: AOAM530P40cxZ7zFoop41nyJ5pe2k2dYAbGHJlSYsYEfutF82OObdNuQ
-        RwLOTvQ6zR6RocUTrj1UoDb+onHWAWNUVfVacfMa/bRYGyY=
-X-Google-Smtp-Source: ABdhPJxm+mIZJM8q8k+iyEWVAPrlsYs1TcKqFg3TgDkek/wGBqQxDD6Y4+OE75h+uDgdr/IB/UpjG0/R3I9YNvZg8EU=
-X-Received: by 2002:a05:6512:33c3:b0:44a:8067:7ec4 with SMTP id
- d3-20020a05651233c300b0044a80677ec4mr14736397lfg.601.1648829741242; Fri, 01
- Apr 2022 09:15:41 -0700 (PDT)
+        Fri, 1 Apr 2022 12:38:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8626C1AA056;
+        Fri,  1 Apr 2022 09:16:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39351B82370;
+        Fri,  1 Apr 2022 16:16:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98425C2BBE4;
+        Fri,  1 Apr 2022 16:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648829796;
+        bh=QX63Fn0eIgqEzcIIs1tirFb9cVGOSCZjLncptockG0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q1nDlwiu9xUgQzfzc44B/c9aOelMsTe1UrKgUfsMg10qRetGAJe8yFX3jCleyVyYw
+         lBsIU54sESdNSkDqo0w2Lj5vOz6rIaqNcpHTEI+AWykxLqXyDM5PxabEOB0wKvAepF
+         eLHEzYZpDti2+zHcOFhCPAhFU51w5QLf8w/Hy0wFK2KL+QgeV+OkCYw1YuQbqSm0TX
+         tZxvF5xADvH40388zZ7kuvP2Uhl1v2dmHgi28KUYdf2wxU2kSRqFQvlJ3Xp7kQ5wIx
+         w+9MxzNbxsJZCXI0MjVyMq5Z1PyKzUd2UbcLY+c0JWrny+ZxC4bqoe4oM9aPdfi3OL
+         N3+543RJ/ds4w==
+Date:   Fri, 1 Apr 2022 17:16:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] modpost: restore the warning message for missing symbol
+ versions
+Message-ID: <YkclXzHamGiOJJGz@sirena.org.uk>
+References: <20220401155610.1280262-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 1 Apr 2022 11:15:30 -0500
-Message-ID: <CAH2r5msKJPqE9sMpB2=_w9ZJQ8PAPhfD3CqpR5SKJkEFtTyaFg@mail.gmail.com>
-Subject: [GIT PULL] cifs/smb3 fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ERM5Vcs9RzIVdQ6X"
+Content-Disposition: inline
+In-Reply-To: <20220401155610.1280262-1-masahiroy@kernel.org>
+X-Cookie: Universe, n.:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-dca65818c80cf06e0f08ba2cf94060a5236e73c2:
 
-  cifs: use a different reconnect helper for non-cifsd threads
-(2022-03-18 23:12:03 -0500)
+--ERM5Vcs9RzIVdQ6X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-are available in the Git repository at:
+On Sat, Apr 02, 2022 at 12:56:10AM +0900, Masahiro Yamada wrote:
+> This log message was accidentally chopped off.
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-smb3-fixes-part2
+Acked-by: Mark Brown <broonie@kernel.org>
 
-for you to fetch changes up to d6f5e358452479fa8a773b5c6ccc9e4ec5a20880:
+--ERM5Vcs9RzIVdQ6X
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  cifs: fix NULL ptr dereference in smb2_ioctl_query_info()
-(2022-03-31 09:39:58 -0500)
+-----BEGIN PGP SIGNATURE-----
 
-----------------------------------------------------------------
-14 fixes to cifs client and to smbfs_common code
-(used by both cifs.ko client and ksmbd server), 4 for stable
-- three fixes for big endian issues in how Persistent and Volatile
-file ids were stored
-- Various misc. fixes: including some for oops, 2 for ioctls, 1 for writeback
-- cleanup of how tcon (tree connection) status is tracked
-- Four changesets to move various duplicated protocol definitions
-(defined both in cifs.ko and ksmbd) into smbfs_common/smb2pdu.h
-- important performance improvement to use cached handles in some key
-compounding code paths (reduces numbers of opens/closes sent in some
-workloads)
-- fix to allow alternate DFS target to be used to retry on a failed i/o
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJHJV8ACgkQJNaLcl1U
+h9BPZgf/Sfv3McX+bh3xSWnkxUleIIraRJQKSsPAS01PUQQ//vHzAJX+OBvTYA3S
+w1u4K6JSQaVyoDSxLUVrT4fVbxrRNESImFDhDl7cFoFtkHAhS1UC010i4UR+g50r
+KOIT5Jqyb7QghVkMo6Ak+bLWfeBf+o49JVz/5l2m6ek6er/QPrKO3/rcSN9dExgS
+PzaAe2y0bkLIxQ04UCudAtF8agSvW4mLQU098KR3zviDAMKRMoAgbEfePS8JgWxE
+RB0wWLaeuBEBSI22a255kd8Z4l4agADtv2QudSH0/mipUySVm/OgOtqxY6GHhRFP
+pgVuBaU+AuIWUmUVU8yKHeagfF6LnA==
+=tYvk
+-----END PGP SIGNATURE-----
 
-There is a trivial merge conflict (fixed in linux-next) with recent
-upstream commit:
-" 5224f7909617 ("treewide: Replace zero-length arrays with
-flexible-array members")" .
-
-Here is a link to a rebased version that resolves the conflict if you
-prefer using this:
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-rc-rebased-cifs-merge
-----------------------------------------------------------------
-David Howells (1):
-      cifs: writeback fix
-
-Paulo Alcantara (5):
-      cifs: do not skip link targets when an I/O fails
-      cifs: fix bad fids sent over wire
-      ksmbd: store fids as opaque u64 integers
-      cifs: prevent bad output lengths in smb2_ioctl_query_info()
-      cifs: fix NULL ptr dereference in smb2_ioctl_query_info()
-
-Ronnie Sahlberg (2):
-      cifs: convert the path to utf16 in smb2_query_info_compound
-      cifs: change smb2_query_info_compound to use a cached fid, if available
-
-Steve French (5):
-      [smb3] move more common protocol header definitions to smbfs_common
-      smb3: move defines for ioctl protocol header and SMB2 sizes to
-smbfs_common
-      smb3: move defines for query info and query fsinfo to smbfs_common
-      smb3: cleanup and clarify status of tree connections
-      smb3: fix ksmbd bigendian bug in oplock break, and move its
-struct to smbfs_common
-
-Xiaomeng Tong (1):
-      cifs: fix incorrect use of list iterator after the loop
-
- fs/cifs/cifs_debug.c      |   2 +-
- fs/cifs/cifsfs.c          |   4 +-
- fs/cifs/cifsglob.h        |  24 +--
- fs/cifs/cifspdu.h         |  14 +-
- fs/cifs/cifssmb.c         |  11 +-
- fs/cifs/connect.c         |  46 +++--
- fs/cifs/file.c            |   8 +-
- fs/cifs/misc.c            |   2 +-
- fs/cifs/smb2glob.h        |  11 --
- fs/cifs/smb2misc.c        |  14 +-
- fs/cifs/smb2ops.c         | 246 +++++++++++++----------
- fs/cifs/smb2pdu.c         |  73 ++++---
- fs/cifs/smb2pdu.h         | 560
-+---------------------------------------------------
- fs/cifs/smb2proto.h       |   2 +-
- fs/ksmbd/oplock.c         |   4 +-
- fs/ksmbd/smb2pdu.c        | 108 +++++-----
- fs/ksmbd/smb2pdu.h        | 533
-+-------------------------------------------------
- fs/smbfs_common/smb2pdu.h | 639
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 18 files changed, 924 insertions(+), 1377 deletions(-)
-
-
--- 
-Thanks,
-
-Steve
+--ERM5Vcs9RzIVdQ6X--

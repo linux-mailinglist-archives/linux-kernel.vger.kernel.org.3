@@ -2,156 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A22E4EFA0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9A84EFA12
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351338AbiDASnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S1351358AbiDASo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349997AbiDASnk (ORCPT
+        with ESMTP id S1344949AbiDASo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:43:40 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3D9215936
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 11:41:50 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dr20so7599622ejc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 11:41:50 -0700 (PDT)
+        Fri, 1 Apr 2022 14:44:27 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4669215934;
+        Fri,  1 Apr 2022 11:42:37 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id r11so2598284ila.1;
+        Fri, 01 Apr 2022 11:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DLtOWenxXCw5vQfabcGIJp+Je2gVQjc6VzKW0XdhyiQ=;
-        b=h+rLLWbMQ/iHnS5/pj19fhLvsaEM9Wtdy1qxj2U1tvLPMxqJCjQosFe2F24w4FuEik
-         zSrjnDN8RVUqsGTehE0RLFU9iAnAgsZLy6+HaVFpgiQgyaH0bi2nNoUnW/PN++7erDWp
-         RX2laVeByhssITiwvlf5JqxR9o7iIybqO73rq6iDBg0II0FI27oeey/L41eoch8FqdX9
-         HSLjysJJ9QsP1Keic9p/q3hcmxjndegS2Td9/sQ/qsgWCFS7CVf9el3ursRzkfzAihRs
-         Haf70E3SoFpNKPytMrE2H1AsOY13tYTorkjDKu54Gzzinf56UPzglOwHHVZBMjHJCiR4
-         t3yQ==
+         :cc;
+        bh=WwpAK3+BlmoGoKiUbBAI9EOaiCPyjOkskkGU3mSNOAA=;
+        b=gp7VObEnEF9sTPUemKvfL/S219VI3l/lMTxp36UMxKcPhbvGQKKWFUJqZ/2qud069v
+         3rKd0H0agbytfoUk9bFAIbUUO+OOWRm3gu8WllMUIbmYLHSscZKrh5enQPb8iNGNOnA/
+         MErWUKASXY71EE6SKEUqCF5ipDOzEkdeZ+20ElQ8MlMuyP5kpIwL0aqk0+bEeTj8/OO1
+         3ZmSbtOZvEXqcxFOassSjktFokJs2lpZNmbV7V6J0iwLblr2aN8wwcKxq9Vz+l4+/yR9
+         UFMca8EzZq/6LGCmxpllMnso+KEe4oPnp1GDpIG3wELPViqUWqzj4RfFRO64WBXE08eN
+         dYMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DLtOWenxXCw5vQfabcGIJp+Je2gVQjc6VzKW0XdhyiQ=;
-        b=ymAWtn8GFzugSV6mquWoehIvLej/VQlNFdUTrICCwlpOFSe+7zyiLmUQ+NRk39oa38
-         /82PVIDnP9qbBxzGRaB0GBLCebw2XhW9wlahOJ786KxNQaFGJSsWWDrequpq/PD3Yem6
-         jN40jeye/OQbiA/jJaZdnxghOfiusMxUc+HtGg+NUtW4W1NwLrRl1JjceAP1FyWJaqZo
-         XYcsbo8JP4zzVNsokeQA3nFpLEd4puhqVXDnYp0RnQYuRda6LGW0p0H+vkQ2yIeZybq2
-         Ie7F6qywDJE9LiS2ts1ICXy6DhXAAexF6W1TlE1KjOROEUBVjG/ET524lMFQ2YsSZMnC
-         95Dg==
-X-Gm-Message-State: AOAM530nVJ7IOFh6eK+fUTYS/FxBvwSjYLqV4zcwZ/5iIGCGRzgvHncN
-        ikgEnrTmlgso850qSrlmRuJpIYCTUKFMW//+hqWP+Q==
-X-Google-Smtp-Source: ABdhPJwrYPj1kC3SIVIUHr/U2Akla60gayN+BoFrbJkPw1P4im/SamWlkUSDfJabqc8psCgCaTuKJc519X3Csg6+YUY=
-X-Received: by 2002:a17:907:3eaa:b0:6df:b058:96a with SMTP id
- hs42-20020a1709073eaa00b006dfb058096amr1028056ejc.368.1648838508127; Fri, 01
- Apr 2022 11:41:48 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=WwpAK3+BlmoGoKiUbBAI9EOaiCPyjOkskkGU3mSNOAA=;
+        b=I3S5PZVzG+RJajpi/EIggWaeiTZQacwga8QxXZTn2O99HZbx5t4idoCWbgio1TdzkF
+         RONj9nSFP2zf0C2r33IYIzcNT5kH9oR22of5rOer/YVWHg98dIDflkAnnE9BsEMOZI7R
+         4kRS9oKWrvDkDLdU5JJigfNnCJafpZxWyrEWlTBETbyYOXDTPnGUaCHGDlKSrqSImRyn
+         y61CaP8Z0hbQG63lwgR9h0TOrs0YzQQ9NnnLv/kerVSN3N+HlmBTzB1ffpTOPsR2VgsT
+         s92i7PTSCejCIcO+AOmgg3SGElktZjA9pa7uGYZRVdxv6/Pu0iQvezWb9jFcW44t82ju
+         pRBg==
+X-Gm-Message-State: AOAM533nkTUucAh5O87mK7+RPLnthlXWHqVgE0O5kcPGcsuEir6CFh7Y
+        GEozIjIEa480u/V7Sawq8YCSF/3jFgfBJZXA8bFUtaAl
+X-Google-Smtp-Source: ABdhPJx2AYXghttKZ0/hmuzpmYNV3HGuZmiizL0qWKvJWioaKcZAtNAnJj4AK6FuiaHJprszUdBDuvmo6xTEMFEqmUU=
+X-Received: by 2002:a92:cd89:0:b0:2c9:bdf3:c5dd with SMTP id
+ r9-20020a92cd89000000b002c9bdf3c5ddmr511748ilb.252.1648838557218; Fri, 01 Apr
+ 2022 11:42:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-6-tjmercier@google.com> <20220329152142.GA15794@blackbody.suse.cz>
-In-Reply-To: <20220329152142.GA15794@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Fri, 1 Apr 2022 11:41:36 -0700
-Message-ID: <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com>
-Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+References: <20220331154555.422506-1-milan@mdaverde.com> <20220331154555.422506-4-milan@mdaverde.com>
+ <8457bd5f-0541-e128-b033-05131381c590@isovalent.com>
+In-Reply-To: <8457bd5f-0541-e128-b033-05131381c590@isovalent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 1 Apr 2022 11:42:26 -0700
+Message-ID: <CAEf4BzaqqZ+bFamrTXSzjgXgAEkBpCTmCffNR-xb8SwN6TNaOw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf/bpftool: handle libbpf_probe_prog_type errors
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Milan Landaverde <milan@mdaverde.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 8:21 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
+On Fri, Apr 1, 2022 at 9:05 AM Quentin Monnet <quentin@isovalent.com> wrote:
 >
-> Hi.
->
-> On Mon, Mar 28, 2022 at 03:59:44AM +0000, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > From: Hridya Valsaraju <hridya@google.com>
+> 2022-03-31 11:45 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
+> > Previously [1], we were using bpf_probe_prog_type which returned a
+> > bool, but the new libbpf_probe_bpf_prog_type can return a negative
+> > error code on failure. This change decides for bpftool to declare
+> > a program type is not available on probe failure.
 > >
-> > The dma_buf_charge_transfer function provides a way for processes to
+> > [1] https://lore.kernel.org/bpf/20220202225916.3313522-3-andrii@kernel.org/
+> >
+> > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
+> > ---
+> >  tools/bpf/bpftool/feature.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+> > index c2f43a5d38e0..b2fbaa7a6b15 100644
+> > --- a/tools/bpf/bpftool/feature.c
+> > +++ b/tools/bpf/bpftool/feature.c
+> > @@ -564,7 +564,7 @@ probe_prog_type(enum bpf_prog_type prog_type, bool *supported_types,
+> >
+> >               res = probe_prog_type_ifindex(prog_type, ifindex);
+> >       } else {
+> > -             res = libbpf_probe_bpf_prog_type(prog_type, NULL);
+> > +             res = libbpf_probe_bpf_prog_type(prog_type, NULL) > 0;
+> >       }
+> >
+> >  #ifdef USE_LIBCAP
 >
-> (s/dma_bug_charge_transfer/dma_bug_transfer_charge/)
+
+A completely unrelated question to you, Quentin. How hard is bpftool's
+dependency on libcap? We've recently removed libcap from selftests, I
+wonder if it would be possible to do that for bpftool as well to
+reduce amount of shared libraries bpftool depends on.
+
+> Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 >
-Doh! Thanks.
-
-> > transfer charge of a buffer to a different process. This is essential
-> > for the cases where a central allocator process does allocations for
-> > various subsystems, hands over the fd to the client who requested the
-> > memory and drops all references to the allocated memory.
->
-> I understood from [1] some buffers are backed by regular RAM. How are
-> these charges going to be transferred (if so)?
->
-This link doesn't work for me, but I think you're referring to the
-discussion about your "RAM_backed_buffers" comment from March 23rd. I
-wanted to do a simple test to confirm my own understanding here, but
-that got delayed due to some problems on my end. Anyway the test I did
-goes like this: enable memcg and gpu cgoups tracking and run a process
-that allocates 100MiB of dmabufs. Observe memcg and gpu accounting
-values before and after the allocation.
-
-Before
-# cat memory.current gpu.memory.current
-14909440
-system 0
-
-<Test program does the allocation of 100MiB of dmabufs>
-
-After
-# cat memory.current gpu.memory.current
-48025600
-system 104857600
-
-So the memcg value increases by about 30 MiB while the gpu values
-increases by 100 MiB. This is with kmem enabled, and the /proc/maps
-file for this process indicates that the majority of that 30 MiB is
-kernel memory. I think this result shows that neither the kernel nor
-process memory overlap with the gpu cgroup tracking of these
-allocations. So despite the fact that these buffers are in main
-memory, they are allocated in a way that does not result in memcg
-attribution. (It looks to me like __GFP_ACCOUNT is not set for these.)
-
->
-> Thanks,
-> Michal
->
-> [1]
-> https://lore.kernel.org/r/CABdmKX2NSAKMC6rReMYfo2SSVNxEXcS466hk3qF6YFt-j-=
-+_NQ@mail.gmail.com
+> Thanks!

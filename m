@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D389C4EECF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A994EECF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344007AbiDAMQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S240693AbiDAMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233311AbiDAMQg (ORCPT
+        with ESMTP id S233311AbiDAMRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:16:36 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0EE48324;
-        Fri,  1 Apr 2022 05:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=1a08m7oCoTyT3vyebCtJrAAbyoaDY0BfUc5X7KZ+S6Y=; b=PgIb6SmNQZkBQNTjnLbSzEwvLj
-        glBM954zE+h6fjwoY+Fjz3HlLAKNbUF3XgBISA2yQXEiBOr+W16eyEwr1b1NDtAecFSiagVZ0zlyh
-        Ccabi4/XSwEnJeHEXgb9vePRH/2c6e40JU0QcOOZt2FBIprAplcqnjKKD1w0yL/qWLaU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1naGAn-00DfLD-5a; Fri, 01 Apr 2022 14:14:37 +0200
-Date:   Fri, 1 Apr 2022 14:14:37 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "huangguangbin (A)" <huangguangbin2@huawei.com>,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
-        chenhao288@hisilicon.com
-Subject: Re: [PATCH] net: phy: genphy_loopback: fix loopback failed when
- speed is unknown
-Message-ID: <YkbsraBQ5ynYG9wz@lunn.ch>
-References: <20220331114819.14929-1-huangguangbin2@huawei.com>
- <YkWdTpCsO8JhiSaT@lunn.ch>
- <130bb780-0dc1-3819-8f6d-f2daf4d9ece9@huawei.com>
- <YkW6J9rM6O/cb/lv@lunn.ch>
- <20220401064006.GB4449@pengutronix.de>
+        Fri, 1 Apr 2022 08:17:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51A5048324
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:15:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D21841FB;
+        Fri,  1 Apr 2022 05:15:29 -0700 (PDT)
+Received: from airbuntu (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49A443F718;
+        Fri,  1 Apr 2022 05:15:27 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 13:15:25 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, linux-kernel@vger.kernel.org,
+        parth@linux.ibm.com, chris.hyser@oracle.com,
+        pkondeti@codeaurora.org, Valentin.Schneider@arm.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, Wei Wang <wvw@google.com>
+Subject: Re: [PATCH 0/6] Add latency_nice priority
+Message-ID: <20220401121525.flngciwjtkn3mwlv@airbuntu>
+References: <20220311161406.23497-1-vincent.guittot@linaro.org>
+ <7a7e1e21-df3d-4623-d9cd-51f5272919d5@arm.com>
+ <CAKfTPtC36OLqrQ57bnGDi93N+3Ozk5cX-+KHHTWHkwCGp=z4gA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220401064006.GB4449@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAKfTPtC36OLqrQ57bnGDi93N+3Ozk5cX-+KHHTWHkwCGp=z4gA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > O.K. So it should be set into 10M half duplex. But why does this cause
-> > it not to loopback packets? Does the PHY you are using not actually
-> > support 10 Half? Why does it need to be the same speed as when the
-> > link was up? And why does it actually set LSTATUS indicating there is
-> > link?
-> > 
-> > Is this a generic problem, all PHYs are like this, or is this specific
-> > to the PHY you are using? Maybe this PHY needs its own loopback
-> > function because it does something odd?
++CC Wei
+
+On 03/28/22 14:56, Vincent Guittot wrote:
+> Hi Dietmar,
 > 
-> It looks for me like attempt to fix loopback test for setup without active
-> link partner. Correct?
+> 
+> On Mon, 28 Mar 2022 at 11:24, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >
+> > On 11/03/2022 17:14, Vincent Guittot wrote:
+> > > This patchset restarts the work about adding a latency nice priority to
+> > > describe the latency tolerance of cfs tasks.
+> > >
+> > > The patches [1-4] have been done by Parth:
+> > > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
+> > >
+> > > I have just rebased and moved the set of latency priority outside the
+> > > priority update. I have removed the reviewed tag because the patches
+> > > are 2 years old.
+> > >
+> > > The patches [5-6] use latency nice priority to decide if a cfs task can
+> > > preempt the current running task. Patch 5 gives some tests results with
+> > > cyclictests and hackbench to highlight the benefit of latency nice
+> > > priority for short interactive task or long intensive tasks.
+> >
+> > The Android specific `latency_nice` (in Android `latency_sensitive`
+> > [latency_nice < 0]) use case `Skip energy aware task placement` favors
+> > an idle CPU over the EAS search path for a `latency_sensitive` task.
+> >
+> > https://lkml.kernel.org/r/2aa4b838-c298-ec7d-08f3-caa50cc87dc2@arm.com
+> >
+> > This is Android proprietary code similar to what we have in
+> > find_idlest_group_cpu() in mainline.
+> > We talked to the Android folks last week and IMHO they are not convinced
+> > that they can switch this to the proposed `latency_nice->tweak
+> > preemption` use case.
+> 
+> Thanks for discussing this with Android folks. It's not always easy to
+> change the behavior of a product and I would be interested to discuss
+> this with them. Sometimes you need a PoC to get convinced
 
-You should not need a link partner for loopback to work. This is local
-loopback. The PHY is also saying it has link, if the LSTATUS bit is
-set. So i don't see why previous speed is relevant hear. This seems to
-me to be an issue for this particular PHY.
+I think it's good to clarify for me at least here whether you intend this as
+a replacement for disable EAS and revert to CAS or you see this as an
+additional thing? As I understood from the discussion we had on the cover
+letter, this is an additional improvement and not intended to replace any of
+the previous use cases we brought up before.
 
-What i don't like about this patch is that it is not deterministic
-what mode the PHY will end up in if speed is unknown. Without the
-patch, it is 10Mbps, which is historically a sensible default.
+Wei/Quentin, any thoughts on this?
 
-If this PHY has never had link, what speed does it use? Does it still
-work in that case?
+Thanks
 
-   Andrew
+--
+Qais Yousef

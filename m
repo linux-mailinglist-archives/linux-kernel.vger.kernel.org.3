@@ -2,134 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD85F4EE845
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441AC4EE85A
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 08:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245440AbiDAGgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 02:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S240195AbiDAGjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 02:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244416AbiDAGgV (ORCPT
+        with ESMTP id S245462AbiDAGig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 02:36:21 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D111544A5
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:34:31 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r23so1848851edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 23:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=VQ9dInbN1MIbDpNZ3yhXf78kn1bDUy2UR64X9mj+xE8=;
-        b=KjvLVqIt1cJBJcaGY0wPZRu5D/ym4w/vcqDpPPQ1QuGVqxsjNExImrzLzTKOgbF3nT
-         GLxfzNhoAlQAAU920jo/RtVCvPrF3eiHVgWkqAsI4zVu2ZwgjN74/+plZGQ8DIVoZoXH
-         eRJ/pVXsupKEZB+nsA7YqjO1w+W1NYA9Teq1tNfODfOFwd03Zp/RU2cbKB8zwC7jJ5/F
-         TOMdOdOdCVDPC3vBudLhq/ok/sHmNbJW+RyUeUU+HQkZfsbL3Sg0F556O3PxZISBTzwx
-         kPM0T4HGeoKTuMgulqt9z4zvl8urEnBQHgsOxpENCKYL7euXEtPfKdPpwCR40Rq36et2
-         HJqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=VQ9dInbN1MIbDpNZ3yhXf78kn1bDUy2UR64X9mj+xE8=;
-        b=XWUZ6o3wW1BEulonfQfmMN4YS7C5Q5+QdlB6/0+Ddfy7mTR3jzJYiuC8H4fSNRggf9
-         clhOdF/kHGcOU+1vMzJNfToEml3LaKlHVz7lFyjsd1EvxRFZJmGwtHt3nW/beQIQo3hY
-         HPZzUeZ34Lo9CZ4CcLo8OF09Cx9Vh8gpyo1U4OGVXL92Ci3VAnl7MiIQFz3jrs+S4b3t
-         T2H00DoqKoNmszZFS2sNjFvps/akdgrf5nKu1blTcfl6HVhWMKKppePr0V5ovLUkz0yX
-         Na2tskd+Y5KSrc7N0NFDU11WpXqHzVXVSWufpDNdVICTiRJwxPGAL3DbRqLtrdrFiYss
-         fz+Q==
-X-Gm-Message-State: AOAM531s2BcrgQhcS60PVVEz+xExvBihabPo5RGevfEAzsJnmi0tVJsW
-        SBng7SvFswAhQ22zXIJeXBUd+BFVyfWaN59cH2k=
-X-Google-Smtp-Source: ABdhPJxe/nXEOdSnbLjj9SQqwGpdB7DLMEPTtY1e/RCzyO7/w2isO7hubMGdTWKrBPttE9SLQOvzU8uZChoZBxKeCdE=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr19764333edb.342.1648794869607; Thu, 31
- Mar 2022 23:34:29 -0700 (PDT)
+        Fri, 1 Apr 2022 02:38:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77A218DAB9;
+        Thu, 31 Mar 2022 23:36:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F99DB823D9;
+        Fri,  1 Apr 2022 06:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B43F9C2BBE4;
+        Fri,  1 Apr 2022 06:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648795004;
+        bh=xBXlQCMtFbWUMpyKpU6xZl2vpjdaAwZgL0XinuyoEy4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fsLaZ2YmsTHPnn56D7sX0K6mTtxfyjaJ5nsKsjUZ3hTVr5AqxQ5m1JuXySTWhuH9m
+         UVSb8cV5CYyJdBb93xu9VPVayG+YJPcTAw/paCWFcX5Gd9xRpXXuFPI7LHn82HTr4/
+         yYEPSESyPE07Gv4AiOg4ZIY4JN3ppKbNXtcY5/14=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.14 00/27] 4.14.275-rc1 review
+Date:   Fri,  1 Apr 2022 08:36:10 +0200
+Message-Id: <20220401063624.232282121@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 1 Apr 2022 07:34:28 +0100
-Message-ID: <CAHpNFcOJJPTSnhKCyAk-B8hSvoe4hPoC2rz0cTDqNXMKPh1L0g@mail.gmail.com>
-Subject: VecSR - Vector Standard Render VESA Standards : Vector Graphics,
- Boxes, Ellipses, Curves & Fonts : Consolas & other brilliant fonts
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.275-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.14.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.14.275-rc1
+X-KernelTest-Deadline: 2022-04-03T06:36+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VecSR - Vector Standard Render
+This is the start of the stable review cycle for the 4.14.275 release.
+There are 27 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
+Responses should be made by Sun, 03 Apr 2022 06:36:16 +0000.
+Anything received after that time might be too late.
 
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.275-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+and the diffstat can be found below.
 
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
+thanks,
 
-Improve Console & TV & BIOS & General Animated Render
+greg k-h
 
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
+-------------
+Pseudo-Shortlog of commits:
 
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.14.275-rc1
 
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
+James Morse <james.morse@arm.com>
+    arm64: Use the clearbhb instruction in mitigations
 
-High precision for AVX 32Bit to 256Bit width precision.
+James Morse <james.morse@arm.com>
+    arm64: add ID_AA64ISAR2_EL1 sys register
 
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
+James Morse <james.morse@arm.com>
+    KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
 
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+James Morse <james.morse@arm.com>
+    arm64: Mitigate spectre style branch history side channels
 
-https://science.n-helix.com/2019/06/vulkan-stack.html
+James Morse <james.morse@arm.com>
+    KVM: arm64: Add templates for BHB mitigation sequences
 
-https://science.n-helix.com/2019/06/kernel.html
+James Morse <james.morse@arm.com>
+    arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
 
-https://science.n-helix.com/2022/03/fsr-focal-length.html
+James Morse <james.morse@arm.com>
+    arm64: Add percpu vectors for EL1
 
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
+James Morse <james.morse@arm.com>
+    arm64: entry: Add macro for reading symbol addresses from the trampoline
 
-https://bit.ly/VESA_BT
+James Morse <james.morse@arm.com>
+    arm64: entry: Add vectors that have the bhb mitigation sequences
 
-*
+James Morse <james.morse@arm.com>
+    arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
 
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
+James Morse <james.morse@arm.com>
+    arm64: entry: Allow the trampoline text to occupy multiple pages
 
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
+James Morse <james.morse@arm.com>
+    arm64: entry: Make the kpti trampoline's kpti sequence optional
 
-3rd dimensional access with vector fonts by a simple method:
+James Morse <james.morse@arm.com>
+    arm64: entry: Move trampoline macros out of ifdef'd section
 
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
+James Morse <james.morse@arm.com>
+    arm64: entry: Don't assume tramp_vectors is the start of the vectors
 
-Bitmap/Texture,
+James Morse <james.morse@arm.com>
+    arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
 
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+James Morse <james.morse@arm.com>
+    arm64: entry: Move the trampoline data page before the text page
 
-Can be higher resolution & we can sub sample with closer view priority...
+James Morse <james.morse@arm.com>
+    arm64: entry: Free up another register on kpti's tramp_exit path
 
-We then rotate the texture on our output polygon & factor size differential.
+James Morse <james.morse@arm.com>
+    arm64: entry: Make the trampoline cleanup optional
 
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
+James Morse <james.morse@arm.com>
+    arm64: entry.S: Add ventry overflow sanity checks
 
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
+Anshuman Khandual <anshuman.khandual@arm.com>
+    arm64: Add Cortex-X2 CPU part definition
 
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
+Suzuki K Poulose <suzuki.poulose@arm.com>
+    arm64: Add Neoverse-N2, Cortex-A710 CPU part definition
 
-https://science.n-helix.com/2022/04/vecsr.html
+Rob Herring <robh@kernel.org>
+    arm64: Add part number for Arm Cortex-A77
+
+Marc Zyngier <marc.zyngier@arm.com>
+    arm64: Add part number for Neoverse N1
+
+Marc Zyngier <marc.zyngier@arm.com>
+    arm64: Make ARM64_ERRATUM_1188873 depend on COMPAT
+
+Marc Zyngier <marc.zyngier@arm.com>
+    arm64: Add silicon-errata.txt entry for ARM erratum 1188873
+
+Arnd Bergmann <arnd@arndb.de>
+    arm64: arch_timer: avoid unused function warning
+
+Marc Zyngier <marc.zyngier@arm.com>
+    arm64: arch_timer: Add workaround for ARM erratum 1188873
+
+
+-------------
+
+Diffstat:
+
+ Documentation/arm64/silicon-errata.txt |   1 +
+ Makefile                               |   4 +-
+ arch/arm/include/asm/kvm_host.h        |   6 +
+ arch/arm64/Kconfig                     |  24 ++
+ arch/arm64/include/asm/assembler.h     |  34 +++
+ arch/arm64/include/asm/cpu.h           |   1 +
+ arch/arm64/include/asm/cpucaps.h       |   4 +-
+ arch/arm64/include/asm/cpufeature.h    |  39 ++++
+ arch/arm64/include/asm/cputype.h       |  20 ++
+ arch/arm64/include/asm/fixmap.h        |   6 +-
+ arch/arm64/include/asm/kvm_host.h      |   5 +
+ arch/arm64/include/asm/kvm_mmu.h       |   2 +-
+ arch/arm64/include/asm/mmu.h           |   8 +-
+ arch/arm64/include/asm/sections.h      |   6 +
+ arch/arm64/include/asm/sysreg.h        |   5 +
+ arch/arm64/include/asm/vectors.h       |  74 ++++++
+ arch/arm64/kernel/bpi.S                |  55 +++++
+ arch/arm64/kernel/cpu_errata.c         | 395 ++++++++++++++++++++++++++++++++-
+ arch/arm64/kernel/cpufeature.c         |  21 ++
+ arch/arm64/kernel/cpuinfo.c            |   1 +
+ arch/arm64/kernel/entry.S              | 196 ++++++++++++----
+ arch/arm64/kernel/vmlinux.lds.S        |   2 +-
+ arch/arm64/kvm/hyp/hyp-entry.S         |   4 +
+ arch/arm64/kvm/hyp/switch.c            |   9 +-
+ arch/arm64/mm/mmu.c                    |  11 +-
+ drivers/clocksource/arm_arch_timer.c   |  15 ++
+ include/linux/arm-smccc.h              |   7 +
+ virt/kvm/arm/psci.c                    |  12 +
+ 28 files changed, 909 insertions(+), 58 deletions(-)
+
+

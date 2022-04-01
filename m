@@ -2,123 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F374EE75F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0FD4EE766
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244874AbiDAEc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
+        id S244876AbiDAEiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbiDAEcq (ORCPT
+        with ESMTP id S232741AbiDAEhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:32:46 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B235C1FF431
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:30:56 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id t11so2966100ybi.6
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PjBvR0dAm80PmgfJzJt2hGMFU/x9BOyTDKcoptqgwx0=;
-        b=kJMay4fVLDENECNlphQ79WBRJP0IoZbVeM9+X+XSCsug4JDCxGAvzvPx8XhpmbczvQ
-         +Mez9GVXTxH6cTHpmydV6Zl9jFW7BFu5L57zVVZtKCB8rmr5rl2OOlMXeLjth7/p/n/W
-         6NZtCsncV1WI4uVA+R2rK+ww0E7hReTFAPIAg4x6WxD6lEb24azdIojUTn5Im+XbT/eU
-         1zkfBy33KTZ2m6exL6gWTUUinKcIeiwqL3JyPxte68Su/HOBtH5UX/ueHuuHvtvHN4mC
-         X3pSDOaqSnYxtowsabCd8VlQvs/7C4Pd4okFYEZ2YNyXw61mQgDgNRJSatC7kYT9NP2w
-         zv7A==
+        Fri, 1 Apr 2022 00:37:52 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18FA243713;
+        Thu, 31 Mar 2022 21:36:03 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id h23so2431141wrb.8;
+        Thu, 31 Mar 2022 21:36:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PjBvR0dAm80PmgfJzJt2hGMFU/x9BOyTDKcoptqgwx0=;
-        b=3c20Ga0YJxA/Yhgf8pk7Q0wjuxOytwSE79QhSpNeVOlwGQPwfjQ82Oj9wwqNn6pqwX
-         jaxfhpuIW/DTXCOm7sEpPXr0j+LxssQLN3RuGRCF6QrDA8IWyuAGe99zpa0+6ALjkACm
-         4OwjUBhXze1qp84Ka8RXq+dxlvK2SnJwhaGpeu4Fc3wlCE3ltT6U9ZQk8orAzxlaY2nx
-         NsvP1PI8QNFnV+vTf313pidSBVTBYWmc1xjtc7fZthuAQfbQtHWYI9svtg+3dFKQJl7K
-         UMGn/ikJKDdiNNL9/OCnbjabpAK58MEBwsHlQQlc1Gc0bmvt7tdSAnc/KxEH6NanK/3j
-         SItg==
-X-Gm-Message-State: AOAM530W/OugLsZtoMw+HD9kWK5/OwegDKNPzqpu+x6hy6/dlH99f8Hg
-        AtUW3tPk/ak3O3inyk8+smQIlwga3GB24+mG8x2JotdTDHVMHA==
-X-Google-Smtp-Source: ABdhPJyc1iNDbSeZ01gaX2/NC8f4Pgl0sHX3EafzDNf7c6y1fcJCaMSsQqApSzbhQhpc25GxuLUZzgehCLNXwMjlgNw=
-X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
- c70-20020a25c049000000b006346751e8d2mr7293293ybf.6.1648787455925; Thu, 31 Mar
- 2022 21:30:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=olW/xLwuiQra0w+84+rmqpMcAO9wN+Sku9gVx0ollFo=;
+        b=julqckNObXM5HJ743nwZ/yFGool+34eAu9o9Dq86iWJm4//8lJfAkR+Al1BtsdHe7n
+         4M23xx4jDPhF103GFAshfFbY3/wLfBe8lVINtum20ueiYYKtWHj4uqTlReIjm+x9Q/qU
+         HoFrNCPLWU/+qEQlvLkKB0NgUqC+l/iLS8VRL/0QXbTF15nF74FF5C/7+uTptMZ0dK2H
+         4Ocn2tuclJo4mwGN0NzF7qTd2qWnVk71e5xYdyXIeVyy9UYJbmDK1ncN63USvZB5mQTD
+         GvaVCFxFg/l1EoiItvawcdsfMUfJbXPTYl6Us+XzvJ/sfv6MZK8bAqQG+R1CSj3hbn/o
+         +a3g==
+X-Gm-Message-State: AOAM531CTqouTuPUpIWtlbKng/GZrSCMrc1LGMfBhxYt7GPCeegRBfwp
+        ziqpBt9dRlnBqXixQBTiQXY=
+X-Google-Smtp-Source: ABdhPJyv+IBI4CGl6Q1AzmNDsJMYYp7uyj/VURBMSErPvxbpLB2F+eOKSl02X9xcbUiYDXLPR3jLeQ==
+X-Received: by 2002:a05:6000:f:b0:203:d97a:947 with SMTP id h15-20020a056000000f00b00203d97a0947mr6366606wrx.654.1648787762171;
+        Thu, 31 Mar 2022 21:36:02 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05600c198600b0038cafe3d47dsm857337wmq.42.2022.03.31.21.36.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 21:36:01 -0700 (PDT)
+Message-ID: <4767809d-5818-ad40-a0e7-b3af40aa071e@kernel.org>
+Date:   Fri, 1 Apr 2022 06:35:58 +0200
 MIME-Version: 1.0
-References: <20220330191440.1cc1b2de2b849d1ba93d2ba7@linux-foundation.org>
- <89B53D3A-FCC5-4107-8D49-81D5B9AE5172@linux.dev> <20220331063956.5uqnab64cqnmcwyr@google.com>
- <YkVcbElWjomA7ofF@dhcp22.suse.cz> <20220331181126.815cfe2b05b4281d32b7bf49@linux-foundation.org>
-In-Reply-To: <20220331181126.815cfe2b05b4281d32b7bf49@linux-foundation.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 1 Apr 2022 12:30:19 +0800
-Message-ID: <CAMZfGtUfsGECdA8Nj=_xCurs3LgnB9ATc7J=dFA4_V_Zy-1FnQ@mail.gmail.com>
-Subject: Re: [PATCH v2] mm/list_lru: Fix possible race in memcg_reparent_list_lru_node()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Waiman Long <longman@redhat.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v5 1/1] serial/8250: Use fifo in 8250 console driver
+Content-Language: en-US
+To:     Wander Lairson Costa <wander@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     rostedt@goodmis.org, senozhatsky@chromium.org,
+        andre.goddard@gmail.com, sudipm.mukherjee@gmail.com,
+        andy.shevchenko@gmail.com, David.Laight@aculab.com,
+        jonathanh@nvidia.com, phil@raspberrypi.com
+References: <20220331190257.101781-1-wander@redhat.com>
+ <20220331190257.101781-2-wander@redhat.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220331190257.101781-2-wander@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 9:11 AM Andrew Morton <akpm@linux-foundation.org> wr=
-ote:
->
-> On Thu, 31 Mar 2022 09:46:52 +0200 Michal Hocko <mhocko@suse.com> wrote:
->
-> > On Thu 31-03-22 06:39:56, Shakeel Butt wrote:
-> > > On Wed, Mar 30, 2022 at 07:48:45PM -0700, Roman Gushchin wrote:
-> > > >
-> > > >
-> > > [...]
-> > > >
-> > > >
-> > > > But honestly, I=E2=80=99d drop the original optimization together w=
-ith
-> > > > the fix, if only there is no _real world_ data on the problem and
-> > > > the improvement. It seems like it has started as a nice simple
-> > > > improvement, but the race makes it complex and probably not worth
-> > > > the added complexity and fragility.
-> > >
-> > > I agree with dropping the original optimization as it is not really
-> > > fixing an observed issue which may justify adding some complexity.
-> >
-> > Completely agreed. The patch as it is proposed is not really acceptable
-> > IMHO and I have to say I am worried that this is not the first time we
-> > are in a situation when a follow up fixes or unrelated patches are
-> > growing in complexity to fit on top of a performance optimizations whic=
-h
-> > do not refer to any actual numbers.
->
-> Yup.  I did this:
->
-> From: Andrew Morton <akpm@linux-foundation.org>
-> Subject: mm/list_lru.c: revert "mm/list_lru: optimize memcg_reparent_list=
-_lru_node()"
->
-> 405cc51fc1049c73 ("mm/list_lru: optimize memcg_reparent_list_lru_node()")
-> has subtle races which are proving ugly to fix.  Revert the original
-> optimization.  If quantitative testing indicates that we have a
-> significant problem here then other implementations can be looked at.
->
-> Fixes: 405cc51fc1049c73 ("mm/list_lru: optimize memcg_reparent_list_lru_n=
-ode()")
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Muchun Song <songmuchun@bytedance.com>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+On 31. 03. 22, 21:02, Wander Lairson Costa wrote:
+> Note: I am using a small test app + driver located at [0] for the
+> problem description. serco is a driver whose write function dispatches
+> to the serial controller. sertest is a user-mode app that writes n bytes
+> to the serial console using the serco driver.
+> 
+> While investigating a bug in the RHEL kernel, I noticed that the serial
+> console throughput is way below the configured speed of 115200 bps in
+> a HP Proliant DL380 Gen9. I was expecting something above 10KB/s, but
+> I got 2.5KB/s.
+> 
+> $ time ./sertest -n 2500 /tmp/serco
+> 
+> real    0m0.997s
+> user    0m0.000s
+> sys     0m0.997s
+> 
+> With the help of the function tracer, I then noticed the serial
+> controller was taking around 410us seconds to dispatch one single byte:
+> 
+> $ trace-cmd record -p function_graph -g serial8250_console_write \
+>     ./sertest -n 1 /tmp/serco
+> 
+> $ trace-cmd report
+> 
+>              |  serial8250_console_write() {
+>   0.384 us   |    _raw_spin_lock_irqsave();
+>   1.836 us   |    io_serial_in();
+>   1.667 us   |    io_serial_out();
+>              |    uart_console_write() {
+>              |      serial8250_console_putchar() {
+>              |        wait_for_xmitr() {
+>   1.870 us   |          io_serial_in();
+>   2.238 us   |        }
+>   1.737 us   |        io_serial_out();
+>   4.318 us   |      }
+>   4.675 us   |    }
+>              |    wait_for_xmitr() {
+>   1.635 us   |      io_serial_in();
+>              |      __const_udelay() {
+>   1.125 us   |        delay_tsc();
+>   1.429 us   |      }
+> ...
+> ...
+> ...
+>   1.683 us   |      io_serial_in();
+>              |      __const_udelay() {
+>   1.248 us   |        delay_tsc();
+>   1.486 us   |      }
+>   1.671 us   |      io_serial_in();
+>   411.342 us |    }
+> 
+> In another machine, I measured a throughput of 11.5KB/s, with the serial
+> controller taking between 80-90us to send each byte. That matches the
+> expected throughput for a configuration of 115200 bps.
+> 
+> This patch changes the serial8250_console_write to use the 16550 fifo
+> if available. In my benchmarks I got around 25% improvement in the slow
+> machine, and no performance penalty in the fast machine.
+> 
+> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> ---
+>   drivers/tty/serial/8250/8250_port.c | 68 ++++++++++++++++++++++++++---
+>   1 file changed, 62 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 318af6f13605..8f7eba5e71cf 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -2077,10 +2077,7 @@ static void serial8250_break_ctl(struct uart_port *port, int break_state)
+>   	serial8250_rpm_put(up);
+>   }
+>   
+> -/*
+> - *	Wait for transmitter & holding register to empty
+> - */
+> -static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+> +static void wait_for_lsr(struct uart_8250_port *up, int bits)
+>   {
+>   	unsigned int status, tmout = 10000;
+>   
+> @@ -2097,6 +2094,16 @@ static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+>   		udelay(1);
+>   		touch_nmi_watchdog();
+>   	}
+> +}
+> +
+> +/*
+> + *	Wait for transmitter & holding register to empty
+> + */
+> +static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+> +{
+> +	unsigned int tmout;
+> +
+> +	wait_for_lsr(up, bits);
+>   
+>   	/* Wait up to 1s for flow control if necessary */
+>   	if (up->port.flags & UPF_CONS_FLOW) {
+> @@ -3332,6 +3339,35 @@ static void serial8250_console_restore(struct uart_8250_port *up)
+>   	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
+>   }
+>   
+> +/*
+> + * Print a string to the serial port using the device FIFO
+> + *
+> + * It sends fifosize bytes and then waits for the fifo
+> + * to get empty.
+> + */
+> +static void serial8250_console_fifo_write(struct uart_8250_port *up,
+> +					  const char *s, unsigned int count)
+> +{
+> +	int i;
+> +	const char *end = s + count;
+> +	unsigned int fifosize = up->tx_loadsz;
+> +	bool cr_sent = false;
+> +
+> +	while (s != end) {
+> +		wait_for_lsr(up, UART_LSR_THRE);
+> +
+> +		for (i = 0; i < fifosize && s != end; ++i) {
+> +			if (*s == '\n' && !cr_sent) {
+> +				serial_out(up, UART_TX, '\r');
+> +				cr_sent = true;
+> +			} else {
+> +				serial_out(up, UART_TX, *s++);
+> +				cr_sent = false;
+> +			}
+> +		}
+> +	}
+> +}
+> +
+>   /*
+>    *	Print a string to the serial port trying not to disturb
+>    *	any possible real use of the port...
+> @@ -3347,7 +3383,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
+>   	struct uart_8250_em485 *em485 = up->em485;
+>   	struct uart_port *port = &up->port;
+>   	unsigned long flags;
+> -	unsigned int ier;
+> +	unsigned int ier, use_fifo;
+>   	int locked = 1;
+>   
+>   	touch_nmi_watchdog();
+> @@ -3379,7 +3415,27 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
+>   		mdelay(port->rs485.delay_rts_before_send);
+>   	}
+>   
+> -	uart_console_write(port, s, count, serial8250_console_putchar);
+> +	use_fifo = (up->capabilities & UART_CAP_FIFO) &&
+> +		/*
+> +		 * BCM283x requires to check the fifo
+> +		 * after each byte.
+> +		 */
+> +		!(up->capabilities & UART_CAP_MINI) &&
+> +		up->tx_loadsz > 1 &&
+> +		(up->fcr & UART_FCR_ENABLE_FIFO) &&
+> +		port-state &&
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+">" missing here. Doesn't a compiler warn about subtracting different types?
+
+regards,
+-- 
+js
+suse labs

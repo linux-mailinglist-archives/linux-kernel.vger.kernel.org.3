@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFEE4EEEB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6954EEEBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 16:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346635AbiDAOBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 10:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S1346642AbiDAOCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 10:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242987AbiDAOBx (ORCPT
+        with ESMTP id S242987AbiDAOCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:01:53 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF052B34;
-        Fri,  1 Apr 2022 07:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=co65ZWBKBEpVb/JZUyvmTOVLiqIJkjXOz+FJoKbVHAw=; b=uHaLW2QFVeu3KNPr3p7uoEs7lv
-        UYG72BCbFruHtqJAh8YsIKwPMKboPaMFohvV10qffImed2PGJhtbqMlaNRwGUboTBH/CCCO3BCoIS
-        4L6kb3RHpuoZMdJ9L9JNfKdJ/rCHJBhTNEyFs9rYDhKIJR52qfU9JuJk3tyroyg+iZL4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1naHon-00DgNg-RB; Fri, 01 Apr 2022 16:00:01 +0200
-Date:   Fri, 1 Apr 2022 16:00:01 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, Divya.Koppera@microchip.com,
-        davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net 2/3] net: phy: micrel: Remove latency from driver
-Message-ID: <YkcFYb1SInTCDjIh@lunn.ch>
-References: <20220401094805.3343464-1-horatiu.vultur@microchip.com>
- <20220401094805.3343464-3-horatiu.vultur@microchip.com>
- <Ykb0RgM+fnzOUTNx@lunn.ch>
- <20220401133454.ic6jxnripuxjhp5g@soft-dev3-1.localhost>
+        Fri, 1 Apr 2022 10:02:12 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D159C5FF09
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:00:22 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id u16so4419980wru.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=81peZBmLl1P8MoxcBKe75OzMzjaOe8BW5vGSNP3oTXE=;
+        b=Hdh90bsQfQulbfzNnj8rBKM2RkpMeOff3GwqzbmItaBJlvpZWpIN4aoVoScFoR68au
+         DY7xCCwSduhD8QEdLwhChipugpkXwCQe5b9LgascBxXen/2w3UZqKkqvEMLVWCeJvnbf
+         19THXr24xyg9RT2QWUDyOiz7xXwTgUlyQzPNLVnlCnRO6YPKt7jzfSai5SpkQE1WyNbn
+         BjRag587ypYj8P4ltLpckaVeCO9TTTyJGcpYoOQV7vqCxld2ZIoXpfj/9GkzJBfKi899
+         qegJgNs2sQApu2KDACf3wkMACwWvLSvZp/Is0A8g/CGzFA9RRteTkNs/9+1l7QZmcqDO
+         LSiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=81peZBmLl1P8MoxcBKe75OzMzjaOe8BW5vGSNP3oTXE=;
+        b=D4Osbng5suwOc43RNS4YWGr8Lxw8Xq0jrPEttiYzrF4zyOGqk2gN7fG8kDPTSP4tDr
+         5xTfOVHESlE2JR5WfdC/DpTGUdT0mEyi4Dlp3ulh5GbZkKA5Ugqfl8cuNePPOKUTA/He
+         ttXUPTIlJlY/+J0uhDJfx5hJF6L3cMMFhhln3+rlH3/VdOiu4xMvXaOsKN6PYnMmkm68
+         nLefo80zXgRKcmpIj59A5UhfS3HCnm72pD5+/6UPbiLkTg0DqLWEtcCy1Jqy8qHqItXB
+         NAO+sqZ0dAc4aXXJRDlxcUe2YqUSw4DCEQKwiPYBT03EoNAsgFJ0iaRF8jgLdA+HhvW9
+         ra8Q==
+X-Gm-Message-State: AOAM532QIWtrCwhynj2tYlogjIb5V4VUCkW6pa7mYs/BCrwrAi4zlp69
+        +q9FC2p0PY8xKqHmvwbrQz5uoQ==
+X-Google-Smtp-Source: ABdhPJyCu9IMphhIOyUvpdqAUVDOPHIsymxVBgBJ9ednqPNXmoIk17Kb4I6XSEUVbLRpacJ5viDp0A==
+X-Received: by 2002:a05:6000:22a:b0:203:f7f8:e006 with SMTP id l10-20020a056000022a00b00203f7f8e006mr7866808wrz.175.1648821621323;
+        Fri, 01 Apr 2022 07:00:21 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:e6f2:bb17:31a5:c2ca])
+        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm2197824wre.22.2022.04.01.07.00.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 07:00:20 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: fixes for v5.18-rc1
+Date:   Fri,  1 Apr 2022 16:00:16 +0200
+Message-Id: <20220401140016.831088-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401133454.ic6jxnripuxjhp5g@soft-dev3-1.localhost>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,37 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 03:34:54PM +0200, Horatiu Vultur wrote:
-> The 04/01/2022 14:47, Andrew Lunn wrote:
-> > 
-> > On Fri, Apr 01, 2022 at 11:48:04AM +0200, Horatiu Vultur wrote:
-> > > Based on the discussions here[1], the PHY driver is the wrong place
-> > > to set the latencies, therefore remove them.
-> > >
-> > > [1] https://lkml.org/lkml/2022/3/4/325
-> > >
-> > > Fixes: ece19502834d84 ("net: phy: micrel: 1588 support for LAN8814 phy")
-> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > 
-> > Thanks for the revert.
-> > 
-> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> > 
-> > > -static struct kszphy_latencies lan8814_latencies = {
-> > > -     .rx_10          = 0x22AA,
-> > > -     .tx_10          = 0x2E4A,
-> > > -     .rx_100         = 0x092A,
-> > > -     .tx_100         = 0x02C1,
-> > > -     .rx_1000        = 0x01AD,
-> > > -     .tx_1000        = 0x00C9,
-> > > -};
-> > 
-> > What are the reset defaults of these? 
-> 
-> Those are actually the reset values.
+Linus,
 
-Does the driver do a reset, so we can assume the hardware is actually
-using these?
+Please pull the following documentation and comment fixes for the
+upcoming rc.
 
-      Andrew
+Best regards,
+Bartosz Golaszewski
 
+The following changes since commit f443e374ae131c168a065ea1748feac6b2e76613:
+
+  Linux 5.17 (2022-03-20 13:14:17 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.18-rc1
+
+for you to fetch changes up to 24f71ae5447e661813228677d343208d624fc141:
+
+  gpio: ts5500: Fix Links to Technologic Systems web resources (2022-03-31 16:44:57 +0200)
+
+----------------------------------------------------------------
+gpio fixes for v5.18-rc1
+
+- grammar and formatting fixes in comments for gpio-ts4900
+- correct links in gpio-ts5500
+- fix a warning in doc generation for the core GPIO documentation
+
+----------------------------------------------------------------
+Joey Gouly (1):
+      gpio: Properly document parent data union
+
+Kris Bahnsen (2):
+      gpio: ts4900: Fix comment formatting and grammar
+      gpio: ts5500: Fix Links to Technologic Systems web resources
+
+ drivers/gpio/gpio-ts4900.c  | 12 +++++++-----
+ drivers/gpio/gpio-ts5500.c  |  4 ++--
+ include/linux/gpio/driver.h | 13 ++++++++-----
+ 3 files changed, 17 insertions(+), 12 deletions(-)

@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984F84EF7DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7984EF7DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240201AbiDAQ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S235825AbiDAQaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234975AbiDAQ10 (ORCPT
+        with ESMTP id S1346368AbiDAQ1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:27:26 -0400
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEEB164D0D;
-        Fri,  1 Apr 2022 08:57:03 -0700 (PDT)
-Received: from grover.RMN.KIBA.LAB.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 231FuN80009424;
-        Sat, 2 Apr 2022 00:56:24 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 231FuN80009424
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1648828584;
-        bh=PlEZwHX2+oLbHS/OqLyTr6a9Ci0j5vWgM7qqdsKDhzc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ow5IqK3pQ4IJMKql6ksgcJN7wkIsnA8Ups89tDhP45d4FRq/wJYky4S59luOnrIgh
-         9QaoBMD24OLkzdraqnKEMq+Uyp+A23zYu2Zry4/sWh+suZXE1zQ4UTgbbhfVqgWn8d
-         YhuNF/nyk2lOPdyy+bf2vhGasY17nawl83qc3PJAFYIa1g2jNTFHo7RADGf1gdUKBr
-         wQat478uKPxbQwzKblmIQQB4ZdPyNE0IO+lQBakoRmxZVEUSImFOQrONZwghU+oy0D
-         9r3ycCufKlv82DQUvFc0FQCbBHW+Kw7B+CFfoAe6c+tJEs1G+RWoQ5FXk00/JMnaQh
-         UaHlWLnQ71oRQ==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH] modpost: restore the warning message for missing symbol versions
-Date:   Sat,  2 Apr 2022 00:56:10 +0900
-Message-Id: <20220401155610.1280262-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 1 Apr 2022 12:27:54 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915C4BC2
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:58:12 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id p21so3681595ioj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
+        b=ea/IE/fe0VT/Rd2tjIq/T5uvj1KigQvyuF63fwmr58Epj4H7G6yUy7U1w0tkzNRX3d
+         stblNmSfNTlJOAyYOqhZUihlV//5gdYlfbG3FJPVku+U8s+os579AyHpvO9YKhFvdXxe
+         7ns9sglzF7d4QqAVTR+/QJBAyRghLLTY5DvAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
+        b=rS/DBewrGs0gLCYDR0PD5OpvYQUGAq73gRdqgLPRitH1FgEowA6mOfdaruBj37kRTc
+         X9/rZyQFtIpmUUX5BS1wsGP/kO2BIGRXFvGveFtz8HksHH8onnEtIoyhe8KeOfY6Ug4o
+         N+w3P8tlrxGeZ7EAWeZpNnsEFou7S1mjzmIm8IV24eYc8pA7l/8gdZfMimYfRlkGxoN5
+         xG4ZXxnyogMMqgjs2KlIg4u/uH2Tr62V256jS9pQ4V/Ju4A6Qq0j6k2pkl0eW/fqU5YS
+         08AHrHNpXq3yMlV3r+6m+WTpmN28zX1UCbFr1EAGs92q2WZeOFOcGyFB/kjeopwbZE+9
+         e7EQ==
+X-Gm-Message-State: AOAM5323dpT9/QdSG62UsJ7bChGr38QXNcI/WI18hxUEvYVkDL6OVubD
+        lPtzQxwyh174mM6mcuNFEfO/U+KVfKnvtA==
+X-Google-Smtp-Source: ABdhPJyVm5eJ6v6Sn0EKwc9zkAf28JqyDggWSu+3Pg9ORPXF0VPnMhMj12LBcd0SANEOxBPO/LSt/Q==
+X-Received: by 2002:a05:6602:3787:b0:649:ec10:183b with SMTP id be7-20020a056602378700b00649ec10183bmr185159iob.117.1648828691712;
+        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c15-20020a92b74f000000b002c9cc44ede9sm1458833ilm.86.2022.04.01.08.58.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
+Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
+ functions
+To:     Haowen Bai <baihaowen@meizu.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7af611e7-88dd-9525-dccc-92bda4d1fb8d@linuxfoundation.org>
+Date:   Fri, 1 Apr 2022 09:58:10 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This log message was accidentally chopped off.
+On 3/31/22 8:15 PM, Haowen Bai wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
+> 
+> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
+> return of 0/1 in function 'get_packet_dst' with return type bool
+> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
+> return of 0/1 in function 'get_packet_dst' with return type bool
+> 
 
-I was wondering why this happened, but checking the ML log, Mark
-precisely followed my suggestion [1].
+Thank you for including details on how the problem was found.
 
-I just used "..." because I was too lazy to type the sentence fully.
-Sorry for the confusion.
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
 
-[1]: https://lore.kernel.org/all/CAK7LNAR6bXXk9-ZzZYpTqzFqdYbQsZHmiWspu27rtsFxvfRuVA@mail.gmail.com/
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Fixes: 4a6795933a89 ("kbuild: modpost: Explicitly warn about unprototyped symbols")
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/mod/modpost.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index d10f93aac1c8..ed9d056d2108 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -674,7 +674,7 @@ static void handle_modversion(const struct module *mod,
- 	unsigned int crc;
- 
- 	if (sym->st_shndx == SHN_UNDEF) {
--		warn("EXPORT symbol \"%s\" [%s%s] version ...\n"
-+		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
- 		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
- 		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
- 		     symname);
--- 
-2.32.0
-
+thanks,
+-- Shuah

@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DE54EEC07
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879EC4EEC10
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344269AbiDALJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S1345358AbiDALMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiDALJJ (ORCPT
+        with ESMTP id S1345347AbiDALMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:09:09 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8688F1207E9;
-        Fri,  1 Apr 2022 04:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648811240; x=1680347240;
+        Fri, 1 Apr 2022 07:12:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9587A2742B1
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648811430; x=1680347430;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PQKYqlplQ+YtuM+4DhzNPUAAGz0mJYlg4m/LCeRhK/E=;
-  b=Cd1BaCjyCrLbVAcDo3A3kWZ+qljw256c4nMTcLjOhX1odbCm84BE+qKH
-   vX+Qn5gU0e1aeBnGHmkslvK8pNJZ7z9rTRxUK0k5lTwCmLSKi9Qrha0zt
-   AyZWtKsPKzg1+nooghbLyKl2RJkes0YYe5jWkEUJcH7YjRA60ObX8SH2M
-   Y=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Apr 2022 04:07:20 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 04:07:18 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Apr 2022 04:07:18 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Apr 2022
- 04:07:14 -0700
-Date:   Fri, 1 Apr 2022 07:07:12 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Ralph Campbell" <rcampbell@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        "Muchun Song" <smuchun@gmail.com>
-Subject: Re: [PATCH v5 0/6] Fix some bugs related to ramp and dax
-Message-ID: <Ykbc4N+Q1CH43CQ/@qian>
-References: <20220318074529.5261-1-songmuchun@bytedance.com>
- <YkXPA69iLBDHFtjn@qian>
- <CAMZfGtWFg=khjaHsjeHA24G8DMbjbRYRhGytBHaD7FbORa+iMg@mail.gmail.com>
+  bh=p4E+B+WB4n2uTrmipGexvxPJZUAHUcZLMSq08FhPXbo=;
+  b=LglLDZa2Ja3mESSzDTfq2uFl9aLdwD+Azsqioy2mfbXHfrmk16/ZAx9N
+   vUDxvztZxCTf8muquxay/hY85F/PXQuBAAhUWHrsNi2ZJLIBgnkKAfPNf
+   zGySzN7EVi6rBZo+7Kg/miU6TCTSzyIckblig2ckcAX01+ljHgebR1O7x
+   Xcuew2jzWd21BPEOydPEjyjTPnM2+q3eV/3YfyN4lIKzd73mRiLRsVHZr
+   fVef2/vF6vFUxZIxLa59Clb9A8JUsGutr/jQ+j0Ua+MxU/8ACgJFRgWtj
+   mIax4yeHVkuu6ZEGgl89+pKmZiAH80jUctvPXwepdc4RmDaB/0bjnXCaz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="285035284"
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="285035284"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 04:08:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="522735972"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 04:08:55 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naF9D-0001CS-4D;
+        Fri, 01 Apr 2022 11:08:55 +0000
+Date:   Fri, 1 Apr 2022 19:07:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Robert Foss <robert.foss@linaro.org>
+Subject: [PATCH] drm: bridge: icn6211: fix platform_no_drv_owner.cocci
+ warnings
+Message-ID: <YkbdDw8wt/AP+ktu@4f141e9bb993>
+References: <202204011947.10abPzIP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZfGtWFg=khjaHsjeHA24G8DMbjbRYRhGytBHaD7FbORa+iMg@mail.gmail.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202204011947.10abPzIP-lkp@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 11:44:16AM +0800, Muchun Song wrote:
-> Thanks for your report. Would you mind providing the .config?
+From: kernel test robot <lkp@intel.com>
 
-$ make ARCH=arm64 defconfig debug.config
+drivers/gpu/drm/bridge/chipone-icn6211.c:645:3-8: No need to set .owner here. The core will do it.
+
+ Remove .owner field if calls are used which set it automatically
+
+Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
+
+Fixes: 8dde6f7452a1 ("drm: bridge: icn6211: Add I2C configuration support")
+CC: Marek Vasut <marex@denx.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   3d7039e1e64980a5eb424373b3a5843b7d7891aa
+commit: 8dde6f7452a198a870f74a38118bb1a63da7632e [28/38] drm: bridge: icn6211: Add I2C configuration support
+:::::: branch date: 19 hours ago
+:::::: commit date: 20 hours ago
+
+ drivers/gpu/drm/bridge/chipone-icn6211.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/drivers/gpu/drm/bridge/chipone-icn6211.c
++++ b/drivers/gpu/drm/bridge/chipone-icn6211.c
+@@ -642,7 +642,6 @@ static struct i2c_driver chipone_i2c_dri
+ 	.id_table = chipone_i2c_id,
+ 	.driver = {
+ 		.name = "chipone-icn6211-i2c",
+-		.owner = THIS_MODULE,
+ 		.of_match_table = chipone_of_match,
+ 	},
+ };

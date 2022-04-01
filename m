@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8924EE9F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28034EE9F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245444AbiDAIvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 04:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S1343905AbiDAIwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 04:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245193AbiDAIvr (ORCPT
+        with ESMTP id S236874AbiDAIwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 04:51:47 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F5725AEC4
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 01:49:57 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id yy13so4442120ejb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 01:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gyxaGkdBaFbFDBr0XmiSIvVcCyMDB5oUwgvGK5gLUz4=;
-        b=HwTRGKsANBcBbiq4uCmILV5o70O9u5TO3NcYg7vCaepmazGHHkxf83ZWDqsmaGKpl9
-         bPUGqtwo4WFsAnlA/ovSf3/JSDDqg44hsuUKnRuqeEisN7KYBjpli1Zgiban1/q/EwAy
-         FB17iCg+us+vXAWdlVFHcsjIEnMkSMzr2yAEZIFcQKeiD/vXhuApeI28hGPdLQuyMztR
-         PILFll/Lo7yVAhuKmjpOUaiYcfIbJeNN1S3nJ4gknmPBoCOe9yaFIa+rthzJZMo2zfdb
-         9xQYNOIL5f7Wrv9D7AeUwqJWs0NGyzGhsFz9JVgEgG9uMHptV+pFK91TPlaZfUAhu+Ut
-         2h/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gyxaGkdBaFbFDBr0XmiSIvVcCyMDB5oUwgvGK5gLUz4=;
-        b=AE7eWSELRpU3ct4yrjrEDQw9X8yx5yFSF5SA8ACuB+QPOYihmLRq5DvLva6yiPwy/f
-         uJTeLrJo6LOtMYcvPfJgfvBAMDGUAkOmtIN3gH9n0wqInpJKnOe7+m2OkwbMABxFhdxx
-         c6cZgR1nK8G2y1vMqv5hJVrn7DBF1QwNwgFuS4+lDPJ4Bk0cK1fAp5K+eFgrQcGdanpC
-         Uz7i8ZGhRFiY5kxBrKNsGBJsRYKrQoyW+dp1kn21o5fg7MpzHh0ZYEdOjkeMpfpbI8um
-         DGjMEkzHWwVI/BfcNrbqlvaA206dPXxL53lqiQvIK59ARwgH1QAkd5luVuBWHmoDE+oq
-         2unQ==
-X-Gm-Message-State: AOAM530FiXnjFGNYKA1lhB3PHo4xbg9weM780EA2PyL6OogrmP2DwhjF
-        nvQwcShz1F3G53pAVZK2GK6jFg==
-X-Google-Smtp-Source: ABdhPJzAnKpzvuNc8xtUDGSi4nQwIexbeJOFciJ4pqF5qnxo6KsMiAq8ta3Q2qmXSdXORspNRuyqXg==
-X-Received: by 2002:a17:907:7da5:b0:6e4:e40f:60a0 with SMTP id oz37-20020a1709077da500b006e4e40f60a0mr225232ejc.486.1648802995649;
-        Fri, 01 Apr 2022 01:49:55 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id r16-20020a056402019000b00418ed60c332sm905361edv.65.2022.04.01.01.49.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 01:49:55 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] PM: Domains: Extend dev_pm_domain_detach() doc
-Date:   Fri,  1 Apr 2022 10:49:50 +0200
-Message-Id: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 1 Apr 2022 04:52:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083C21F9759
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 01:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648803042; x=1680339042;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Xsjc6JVDeLKGlaloug0/oweGPwuW9yusfFSj8jCkWgQ=;
+  b=gEd456gU0/Pt9FxCssH73+nP12qt/iAjDYnFAKVz3ZeWJ2oHrDbNqPBz
+   35HaqA73d84mc2L0UrIXV/m6thYZK+acwkzR18metZydC63GObMhJpd3L
+   L3rcYK82O/0iaBgE5x/eh+P3AE7C+Ca9NRTABWf2oGuzHtV4xzAiwxzfh
+   8HNyjcRS8KaixxKFofye3fLRF3gCBrz46vmDwRYYx3vTAw4DpJMO08GYW
+   6rVqsrCU6fbx5Nbr0q0PjG+SFQbuRvo/pPfHfNdEx2hUmTlvYa4FyG2zQ
+   4TxUYTD44qa3Nlas1vnF1tF8sq2CY4GQmKC8hceMKo+ItQNdzd5+d90tr
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="258914010"
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="258914010"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 01:50:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
+   d="scan'208";a="522699478"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 01:50:40 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naCzP-00016J-Kt;
+        Fri, 01 Apr 2022 08:50:39 +0000
+Date:   Fri, 1 Apr 2022 16:50:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: dtbs_check: ERROR: dtschema minimum version is v2022.3
+Message-ID: <202204011633.0XlAbzBd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,33 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mention all domain attach menthods which dev_pm_domain_detach()
-reverses.
+Hi Rob,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/base/power/common.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+FYI, the error/warning still remains.
 
-diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-index bbddb267c2e6..72115917e0bd 100644
---- a/drivers/base/power/common.c
-+++ b/drivers/base/power/common.c
-@@ -172,10 +172,10 @@ EXPORT_SYMBOL_GPL(dev_pm_domain_attach_by_name);
-  * @dev: Device to detach.
-  * @power_off: Used to indicate whether we should power off the device.
-  *
-- * This functions will reverse the actions from dev_pm_domain_attach() and
-- * dev_pm_domain_attach_by_id(), thus it detaches @dev from its PM domain.
-- * Typically it should be invoked during the remove phase, either from
-- * subsystem level code or from drivers.
-+ * This functions will reverse the actions from dev_pm_domain_attach(),
-+ * dev_pm_domain_attach_by_id() and dev_pm_domain_attach_by_name(), thus it
-+ * detaches @dev from its PM domain.  Typically it should be invoked during the
-+ * remove phase, either from subsystem level code or from drivers.
-  *
-  * Callers must ensure proper synchronization of this function with power
-  * management callbacks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8b767f5e04097aaedcd6e06e2270f9fe5282696
+commit: 2783a7f56f9980f61ca809b826bcd14dc77eb7b9 dt-bindings: kbuild: Pass DT_SCHEMA_FILES to dt-validate
+date:   3 weeks ago
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220401/202204011633.0XlAbzBd-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce: make ARCH=arm dtbs_check
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   sort: -:2: disorder: 2022.1
+>> ERROR: dtschema minimum version is v2022.3
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

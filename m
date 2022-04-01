@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF114EEE8C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE6C4EED67
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346537AbiDANzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S1345951AbiDAMsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346361AbiDANzK (ORCPT
+        with ESMTP id S241268AbiDAMsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:55:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2447CC57
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648821201; x=1680357201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NxPLj+EOCmrCwV6lNB3BH9LIzEApUxGmlciC9PV9DKM=;
-  b=IVBtvX3ba58e1PCDHPacPYFFjCbOtOuZ7eww/XqSe5y3UtPFTGtoTo3x
-   9fuUPGLxVPcLphRj5RYZVbOo1dbDUViKQs/LdbsZnhuEzroGLzefoRuCN
-   vVVc2ukjf6kFcvEW6dhPLHAfd0W9qrNeXOjDAzOPla3lA1SfKfBpl2YWl
-   QTEh4oVFk5nWz5HpKqzf8LHsckv38Y5Dere4/72lOoxin3VFHabiOLBoe
-   HmaZZIFPpgM54lXF4qlMO8kYBILfJeDP9oOaWcP8E+Tn/Rx68cPzPW0nN
-   eOcABZqBOj6v7fZnqvEQ8UgS3UwDRqBnjCwnYHLFHfLQhLdCXWrwrc0Xc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="240732658"
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="240732658"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 06:53:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="547805163"
-Received: from unknown (HELO localhost) ([10.238.155.175])
-  by orsmga007.jf.intel.com with ESMTP; 01 Apr 2022 06:53:18 -0700
-Date:   Fri, 1 Apr 2022 20:45:19 +0800
-From:   Youquan Song <youquan.song@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Youquan Song <youquan.song@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Zhiquan Li <zhiquan1.li@intel.com>,
-        Youquan Song <youquan.song@intel.com>
-Subject: Re: [PATCH] x86/uaccess: restore get_user exception type to
- EX_TYPE_UACCESS
-Message-ID: <20220401124519.GA6935@linux-youquan.bj.intel.com>
-References: <20220328201748.1864491-1-tony.luck@intel.com>
- <20220330123205.GL8939@worktop.programming.kicks-ass.net>
- <20220331113125.GA2628@linux-youquan.bj.intel.com>
- <20220331175113.GV8939@worktop.programming.kicks-ass.net>
+        Fri, 1 Apr 2022 08:48:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68016276804;
+        Fri,  1 Apr 2022 05:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Y0armm1KiIuoc6DnVg3dMpBaEu3JBi1aG/XPYwHQLCc=; b=YhRUSYvRc5nlh03A/sSx8rIsSV
+        dRigeXcD/bsUY5xVTIun0eYV6I+vsPeWrHYsjObydh8MWhMQJevAXmp+rcpcdL0jgJ53SPgRwG6At
+        K4gK5oK6z1bVNRuBaTiNCe7X8SawKJRCPaBbNmGF+z7tjpR0THiiFLg6jWW19X7eCVBg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1naGgA-00DfeL-8s; Fri, 01 Apr 2022 14:47:02 +0200
+Date:   Fri, 1 Apr 2022 14:47:02 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, Divya.Koppera@microchip.com,
+        davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 2/3] net: phy: micrel: Remove latency from driver
+Message-ID: <Ykb0RgM+fnzOUTNx@lunn.ch>
+References: <20220401094805.3343464-1-horatiu.vultur@microchip.com>
+ <20220401094805.3343464-3-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331175113.GV8939@worktop.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220401094805.3343464-3-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 07:51:13PM +0200, Peter Zijlstra wrote:
-> On Thu, Mar 31, 2022 at 07:31:25PM +0800, Youquan Song wrote:
-> > > Did you do your testing on RHEL or something daft like that?
-> > Tested on RHEL8.x
+On Fri, Apr 01, 2022 at 11:48:04AM +0200, Horatiu Vultur wrote:
+> Based on the discussions here[1], the PHY driver is the wrong place
+> to set the latencies, therefore remove them.
 > 
-> Right; the home of obsolete software.. :-)
+> [1] https://lkml.org/lkml/2022/3/4/325
 > 
-> > > Something like the below can also work, I suppose. But please, add
-> > > coherent comments to the extable code with useful references to the MCE
-> > > code that does this abuse.
-> > Here is the full fix patch depending on your suggestion. Thanks a lot!
-> 
-> Did you verify this was indeed the only UACCESS I lost?
+> Fixes: ece19502834d84 ("net: phy: micrel: 1588 support for LAN8814 phy")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-The full fix patch has included a change in error_context to identify
-this case to be MCE_IN_KERNEL_COPYIN. I verfied it fix the issue.
-In addition, LTP was run and no issues were reported.
+Thanks for the revert.
 
-@@ -286,6 +286,7 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- 	switch (fixup_type) {
- 	case EX_TYPE_UACCESS:
- 	case EX_TYPE_COPY:
-+	case EX_TYPE_UA_IMM_REG:
- 		if (!copy_user)
- 			return IN_KERNEL;
- 		m->kflags |= MCE_IN_KERNEL_COPYIN;
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
--Youquan
+> -static struct kszphy_latencies lan8814_latencies = {
+> -	.rx_10		= 0x22AA,
+> -	.tx_10		= 0x2E4A,
+> -	.rx_100		= 0x092A,
+> -	.tx_100		= 0x02C1,
+> -	.rx_1000	= 0x01AD,
+> -	.tx_1000	= 0x00C9,
+> -};
+
+What are the reset defaults of these? I'm just wondering if we should
+explicitly set them to 0, so we don't get into a mess where some
+vendor bootloader sets values but mainline bootloader does not,
+breaking a configuration where the userspace daemon does the correct?
+
+	 Andrew

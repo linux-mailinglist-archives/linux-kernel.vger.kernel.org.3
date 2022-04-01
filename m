@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076334EFBDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9822F4EFBE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352565AbiDAUzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S1352682AbiDAUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234080AbiDAUzH (ORCPT
+        with ESMTP id S1352548AbiDAUzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:55:07 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15221C34B2;
-        Fri,  1 Apr 2022 13:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648846385;
-        bh=XBQN4Y8cY6863locdXVbzi2Vq6V+H1v2SxPMFzNkCPo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=OYTqi2prkndGI/ORGpjS+vnKtXl+OmGYiTqwelq0yTAS7/Jjgk+SIjpx0vY3eX+9Y
-         Cpen5R+JveUaI3t44wRlqs9rF/FH7IYYmVz6t8wgx6jcmUYu6Szv5crjYh3cWyJ0hM
-         M6arbyu7Bz3DghRqe/joNvt2qfAYXTtuqBFjO6yo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.191.12]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtOGa-1nsbwV1DuI-00uupR; Fri, 01
- Apr 2022 22:53:05 +0200
-Message-ID: <f6802e83-0fc6-ffe6-cea1-d2a39d768514@gmx.de>
-Date:   Fri, 1 Apr 2022 22:53:02 +0200
+        Fri, 1 Apr 2022 16:55:17 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07974BF65
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:53:24 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3583559pjh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mHLh8My82O30ijWT2CaqlkU7mxd2+At9ryY0q+QdE1E=;
+        b=B762xOIZU8w1otSUFbNgZa11LhxJXQ0WaaMSTXleOWdrxn9gvmtla0RQjvL8i2vAph
+         05dEOmTrgqdnXdXmb4/X1eLRb+j3UVksXXBWnwFrSD+azG3dmUJ8HtkR+PF6xYH0wbYh
+         ZKzgNGnZn7qmAoSsHUNTVN6J890SI4yH+W52bdgg4iz8C5KdTyDnG5FFfyBUFu03yeFm
+         bWFAznFpm9+cNnp9LbaGOuqs4nqkBBeCnvNA+J5WoHmwb/mmsVG70dUNydI9xg0ESfCX
+         Fs2i1a3fyyVU5Aq61YQtzTvmctv7NE7VTByO9kaU/ai11XFZyxfpgqgJA5l8pQ3MK96d
+         csmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mHLh8My82O30ijWT2CaqlkU7mxd2+At9ryY0q+QdE1E=;
+        b=VrBW6JYeRYv0sww4tzv6G610qWh9hLMdikEo/UZZA+e5OlMbji25dgGfphi1gQgnkx
+         JfWE+t1wUtiQC26ala25LXcCHB1j5Zqcn6e79ejeKPMzwjYcQiYIuQSjMYEMkU0SEFOm
+         +lglZ5vsgbSKkmFKY73ViuLu5lAWJ27ko3q7PVuNDTKuXDiXyH1Ll5iDnpvnrZZvE+dm
+         N8LmucjH2JdPlsEpQW1xJ8ZWAML4f+csKOofj9dye8klptLc/L/gpwVrZCOoWe5vvXWe
+         89/+CeCo4RAP2RayTSf5fpJLc5cLckaNrtrs2B5i4tYgWfz5Bz7ZG0Pf/9pu7FnaB05x
+         LCeA==
+X-Gm-Message-State: AOAM532JpF+uPsTJS0vrYxqvQjHc2VT65qaVIowWrCDy1e7YtN9ijLOX
+        x5mhCmRdJinvzBlNmiqOLzUeXQ==
+X-Google-Smtp-Source: ABdhPJxbwfXUbZ2I2sySCUv3f4On2pEXDAIDArTPvZ8iTqJzAysD28T2Sr6cmNOepDZp2fEQ9rbaKg==
+X-Received: by 2002:a17:90b:4b02:b0:1c7:1bc3:690b with SMTP id lx2-20020a17090b4b0200b001c71bc3690bmr13920857pjb.174.1648846403298;
+        Fri, 01 Apr 2022 13:53:23 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm4182824pfc.98.2022.04.01.13.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 13:53:22 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 20:53:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 038/104] KVM: x86/mmu: Allow per-VM override of
+ the TDP max page level
+Message-ID: <YkdmP5BW4d9WF0u3@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <5cc4b1c90d929b7f4f9829a42c0b63b52af0c1ed.1646422845.git.isaku.yamahata@intel.com>
+ <c6fb151ced1675d1c93aa18ad8c57c2ffc4e9fcb.camel@intel.com>
+ <YkcHZo3i+rki+9lK@google.com>
+ <20220401202847.GA560021@private.email.ne.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] video: fbdev: sis: fix potential NULL dereference in
- sisfb_post_sis300()
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <1648784476-20803-1-git-send-email-baihaowen@meizu.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <1648784476-20803-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jqSUrZEkWBRjiAbZGSBMpExq4v+hgcH4biJGJErpd8gmlIXCNtj
- HSBeMgO224TpGgAVQdXvF2pmAs9LVA+J89TQNBpsezoHFqUgLMPEPevYjjkn8JlDQbPZ36b
- lQ8n0RY3EDclGiYEIetK31BqjjXu6e82as1P3vma4VwQb8B3MAsqxOWmPaC47ilbSCyrwYL
- RGFONn2o0MSQv+kZTN1Cg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8KFcAgyHg6o=:11aIfxQ0Zlsyeanjppqz0z
- OLNfjn00nnTIgmKHvnUhJ8klyMyGa7czYWsXDdBhiUv2dMESFbBa+ll/lAv4kMnfaXxLzoDxP
- DSaMrtArtBVxzE9vFHMzopDwDrYxEiqXkGU4me+SEnCmI//LZKBeRoBSTnW3rlj4vyK5d06P6
- EVyvtQcRuQEGRR2erhzUoGzg02RHdBz34oMC3zHJ0Nvod/3iL3t6pztdgM4zg+02TQv7K6tKt
- LXXmVS+0RYDMWo0/fx54WcxjboICJCT4al+Rh13ieDpmC5SVSbYo9t3B+kFg2e1ZSbc08mEWK
- isJ9ZoArTrwabqfz8zjazBwtECiHkwb1VW9eUm+AQCbQYOAIlDcAcrtyvzNvVUiMUQRX3vLIs
- 0gIdEcX3IXY4S1HPo0Gp94qhq0Z5XTsHK3yncfLIP4j2N3j/yu7S2ZbtCXS7xMvgRlZdmGCxK
- 0Vpwf4coxclXBqM7O1tRdPFwBc7ucZH1RHymZO0aP7vRnv53IqO5tlRIPMO5C5jmpcWvWejzr
- TwWFZNKsp+jq6yNkPxMK2q4DB0I7IEFcDl4N6/AyDV8zPF3Krjob+6pXtUUIOEKrc09BNx+kY
- feTd7dZMlO9VWDNw9lk01o69ss0PxuDK4X5CztukKXpsaJ33XPD1xdpt8MdeJNnJmtGbsNVGs
- DAiIfGDxB+LzLkCue+oids+pGAKEA5CoMkzHbReqGd8PZLLrl+NZzVdJOQrIQ2tDjIFkMiwPM
- CyvmIPQBZyFvvRckE0qGS1ELL0jzhIcohc/h6PJjCKVNsCCdJWZoQltfy/9gyZKKIeQwwdT2W
- /PydMo6n/qsr/crSmzyRdMAymNOt6qV6G1RSF5eNq2zThoKuGWP78FPNZRZh3OhJHmIT6YGvA
- BT6zcofyzQyisXI3VR1Znh2OposN+zUqRVYwzBytr6rY6y3dbURQ/jB4n1q7819ii8+O1DG+m
- 22QgFmNy5/gpqCo1B38asxfFlBLd5eTg1J/UtuIUFMPEBRCdkBcmzGdbt2WcYynIiFGu6VD5s
- ablP2n2qanFtPOKQpleUWMT6CDFeB4i0H96Q6D9qozBQ4eewJOFr57PC/V2A9OiOq8QIY9BAh
- i3RPaaAulys7Rw=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401202847.GA560021@private.email.ne.jp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 05:41, Haowen Bai wrote:
-> bios could be null without checking null and return in this function,
-> but still dereference bios[0xf5].
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+On Fri, Apr 01, 2022, Isaku Yamahata wrote:
+> On Fri, Apr 01, 2022 at 02:08:38PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Fri, Apr 01, 2022, Kai Huang wrote:
+> > > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> > > > 
+> > > > In the existing x86 KVM MMU code, there is already max_level member in
+> > > > struct kvm_page_fault with KVM_MAX_HUGEPAGE_LEVEL initial value.  The KVM
+> > > > page fault handler denies page size larger than max_level.
+> > > > 
+> > > > Add per-VM member to indicate the allowed maximum page size with
+> > > > KVM_MAX_HUGEPAGE_LEVEL as default value and initialize max_level in struct
+> > > > kvm_page_fault with it.
+> > > > 
+> > > > For the guest TD, the set per-VM value for allows maximum page size to 4K
+> > > > page size.  Then only allowed page size is 4K.  It means large page is
+> > > > disabled.
+> > > 
+> > > Do not support large page for TD is the reason that you want this change, but
+> > > not the result.  Please refine a little bit.
+> > 
+> > Not supporting huge pages was fine for the PoC, but I'd prefer not to merge TDX
+> > without support for huge pages.  Has any work been put into enabling huge pages?
+> > If so, what's the technical blocker?  If not...
+> 
+> I wanted to get feedback on the approach (always set SPTE to REMOVED_SPTE,
+> callback, set the SPTE to the final value instead of relying atomic update SPTE)
+> before going further for large page.
 
-applied.
-Thanks!
-Helge
-
-> ---
->  drivers/video/fbdev/sis/sis_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/sis/sis_main.c b/drivers/video/fbdev/si=
-s/sis_main.c
-> index 742f629..24a0299 100644
-> --- a/drivers/video/fbdev/sis/sis_main.c
-> +++ b/drivers/video/fbdev/sis/sis_main.c
-> @@ -4463,7 +4463,7 @@ static void sisfb_post_sis300(struct pci_dev *pdev=
-)
->  		SiS_SetReg(SISCR, 0x37, 0x02);
->  		SiS_SetReg(SISPART2, 0x00, 0x1c);
->  		v4 =3D 0x00; v5 =3D 0x00; v6 =3D 0x10;
-> -		if(ivideo->SiS_Pr.UseROM) {
-> +		if (ivideo->SiS_Pr.UseROM && bios) {
->  			v4 =3D bios[0xf5];
->  			v5 =3D bios[0xf6];
->  			v6 =3D bios[0xf7];
-
+Pretty please with a cherry on top, send an email calling out which areas and
+patches you'd like "immediate" feedback on.  Putting that information in the cover
+letter would have been extremely helpful.  I realize it's hard to balance providing
+context for folks who don't know TDX with "instructions" for reviewers, but one of
+the most helpful things you can do for reviewers is to make it explicitly clear
+what _your_ expectations and wants are, _why_ you posted the series.   Usually that
+information is implied, i.e. you want your patches merged, but that's obviously not
+the case here.

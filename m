@@ -2,214 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E3C4EF796
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E518B4EF7BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349216AbiDAQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S244281AbiDAQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350404AbiDAQNw (ORCPT
+        with ESMTP id S1349367AbiDAQRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:13:52 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBD8CC53A;
-        Fri,  1 Apr 2022 08:39:40 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bg10so6685734ejb.4;
-        Fri, 01 Apr 2022 08:39:40 -0700 (PDT)
+        Fri, 1 Apr 2022 12:17:46 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712B21C4B3D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:41:23 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id t13so2666190pgn.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PeXk7Ks+fNVGI2/bl+W72hWsR2c/g3dfM5gY6CT867Q=;
-        b=Rp7ne8oDad6XcRIlLfpw/9pQd8HXNWf99qahudH0TbQmMk/jdKmCop8mweJieYHEoh
-         m5nkE6Mz/JFKIq+8Lx1O+UbVzwoNyRDG+CnH6DJjlAXnBqjUNiG8qICQCLAYjyzrOgij
-         XKRvYmijSQy5NsQNNEAxvjrhum6RQkB4xYBWDi3h6FL0QnI4BbNDvpvjkDbC9Xp9krUW
-         //NQBllwVlBRCu1/IxgcuXmmar8POPpLY7yiO2zSwUF2AOCV4vOpf6gYSCKBJWrZcu8O
-         RCzLt0mdHcl+gg+ya4zfRgVkvJeEgrzZ16w65ALX9nmd/PDNN0onEHY1HmqkdlomHEMZ
-         NSdw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pqJWbvvbg0qdWklwqs2qhrfKKi69liUYvCt62FUbnWk=;
+        b=Fn5jpMZAmMPReAvL0Tyf7tj5rAcmThNhnq1xKoKFkJI0vR0fJhwRbtqFchPRvfX4q1
+         ONoUm1fDJi9X/SdotI5xdBPmgeBbrWo8/YaW2ybUubSt1izJy97NcFaxs+dJxWC0WBMf
+         6z+iwlN+sbK2nfsp4T5xwzKsl3sE9+883flPy03nnksy67+Yj2ZYN4oSkYQiIHtJaUUH
+         6+GoJw85rhIbSF3mvBhZg+VFZFkJaWhhkPhJhHoJqg/NLIlaGVi7lJF460tom7CJNf71
+         QLXswXjH3yWTPwjM8DWIfiObLitVJeSiXu0UH1DAOa8qNyI5WVPl/7tgONlEth6eYrLf
+         Uwag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PeXk7Ks+fNVGI2/bl+W72hWsR2c/g3dfM5gY6CT867Q=;
-        b=wum/EfsrYwt7qmsYHM43ez4fKBTETinXGFMNyNdPhz6oXIDgBf5sesrlaMJ2C1x+if
-         yBuOqjnypvoVPQR/8alaROmRej+OuXoifCymC34ZF8YcEOR/FG2ngHH2jNCrOyuAFAvk
-         IHovNLA/WbNRgKJULGoaGqoYD4UY+tlPw3accDsKZnE/ty3t5BJDq8GYc0In/orzP/F7
-         Vy4LZwqyECnsujB8ZIjykOXx2fyQK5Iwy8tUeVXFGTsfzR5BGhk/6hHbl8PNsOYJjYHT
-         C6mWl/rWJRI5qC1e4wR/tAENUr30JJ65rOTJ5Mp3zkL1DEqd2ZfvjIrBijjtPwLEJtfR
-         lE8Q==
-X-Gm-Message-State: AOAM531mxLSryJyiBSzo7msUbXE3cxfMkpT7kZGOc4wxRqJS93xvZfZz
-        pdmn6zcUsrNNhG0GV0y8qhE=
-X-Google-Smtp-Source: ABdhPJyWp/Eh2olp3U5NWRmn07izDA0NLguhIkEt6HwxOfA08cYF3QYfMQFEQswwwVAQOSiMOvttxg==
-X-Received: by 2002:a17:907:6d19:b0:6db:89c8:52e3 with SMTP id sa25-20020a1709076d1900b006db89c852e3mr348766ejc.754.1648827578994;
-        Fri, 01 Apr 2022 08:39:38 -0700 (PDT)
-Received: from Francescos-Air.fritz.box (host-79-3-210-6.business.telecomitalia.it. [79.3.210.6])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b006cee1bceddasm1134220ejn.130.2022.04.01.08.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 08:39:38 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 17:39:36 +0200
-From:   Francesco Duca <f.duca00@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Francesco Duca <s23265@iisve.it>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kbuild: use hostname -s along uname to obtain
- LINUX_COMPILE_HOST
-Message-ID: <YkccuNfZOjQ0FQEJ@Francescos-Air.fritz.box>
-References: <20220330182329.52310-1-s23265@iisve.it>
- <CAK7LNARvEsh3+dix+EdcXnm2L0rh8hndQD5N2vyc0q_c0Vf7gQ@mail.gmail.com>
- <CAK7LNAQ3cj2M0+k2H0O30wdOwONGE3OVrFJfTHicpqaKPRgG3Q@mail.gmail.com>
- <YkcU4mpNX7AsJgbg@Francescos-Air.fritz.box>
- <CAK7LNATvFnac4sSFkbtMT-+h6-jGNuCaJpNZOua0g5wg56vRjQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pqJWbvvbg0qdWklwqs2qhrfKKi69liUYvCt62FUbnWk=;
+        b=c5g8JG4OqgcfWCh00G4mGOGw2BmHj7UqqrU4M+vto+lR2aHHaJZuW3+xoe+/8VaH5b
+         SyvMhNaEu/ipxiotDiwfLhT0PVj280NHnJ8hAVPctnLMd3k85hdj44jeVbtQXW4GieVs
+         CLsyOEi29T1tUZFLfr+et4wO/ke4pi/dqncmi6ZdbOnkeZwtLnHTeBAYPYfUCIpMUoNB
+         8ZTRHP+Fy+QVWiMRz+/B7nPL+b0YHi2NDRb/SvReg7MM+fZflg+FpLZQpqKERk8EaSvn
+         uR9sTIQyGupNTQPx96WvfYYtekNc+tAByy0NAZwXt+FSMZIFxWjOOGi8hvH0+p82hhX4
+         PlHA==
+X-Gm-Message-State: AOAM530zojLarJWlKgSkhe+c14uwMLwA8oVYZf9f8e8t0oo8cl+/qRHg
+        G2kwMMmecReyHBo0l1fsC3Tp/wtkIYbPyy+yBroCPg==
+X-Google-Smtp-Source: ABdhPJxICFXuqj/lX5mtK0KnO7e8FwZzOC70mH0krkoDwxL8TroQr5Ghmg+DK+Zw9WUBYtZMvmLXl8GvFlOCo2bG5as=
+X-Received: by 2002:a05:6a00:2392:b0:4fa:dcd2:5bc1 with SMTP id
+ f18-20020a056a00239200b004fadcd25bc1mr11451248pfc.8.1648827682692; Fri, 01
+ Apr 2022 08:41:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNATvFnac4sSFkbtMT-+h6-jGNuCaJpNZOua0g5wg56vRjQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <YkXkA+Oh1Bx33PrU@carbon.dhcp.thefacebook.com> <CAJD7tkZxqWg2NRi=83wSWLiykZBfrP8Kx_C5JWy48=rZoBWoHw@mail.gmail.com>
+In-Reply-To: <CAJD7tkZxqWg2NRi=83wSWLiykZBfrP8Kx_C5JWy48=rZoBWoHw@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 1 Apr 2022 08:41:11 -0700
+Message-ID: <CALvZod7TSQ2RdL4iKx5egYOtDvZdGY--T90As_guZK+BoBvAOw@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Jonathan Corbet <corbet@lwn.net>,
+        Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> ( <hostname> on Debian vs <hostname>.<domainname> on Arch Linux)
+On Fri, Apr 1, 2022 at 2:16 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+[...]
+> > > +     {
+> > > +             .name = "reclaim",
+> > > +             .flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
+> > > +             .write = memory_reclaim,
+> >
+> > Btw, why not on root?
+>
+> I missed the root question in my first reply. I think this was
+> originally modeled after the memory.high interface, but I don't know
+> if there are other reasons. Shakeel would know better.
+>
+> AFAIK this should work naturally on root as well, but I think it makes
+> more sense then to use a global interface (hopefully introduced soon)?
+> I don't have an opinion here let me know what you prefer for v2.
 
-Actually, every time i compiled a kernel (on Arch/Ubuntu), KBUILD_BUILD_HOST it's always <hostname>
-without <domainname>, while on macOS, KBUILD_BUILD_HOST is <hostname>.<domainname>
-
-> As I said, it is not annoying.
-
-I said it is annoying just because <hostname>.<domainname> is set on
-macOS only and not on Linux (Arch or Ubuntu).
-
-Now, it may be a "me only" problem, so i'm not sure, but from my
-experience it only happens on macOS.
-
-On Sat, Apr 02, 2022 at 12:22:55AM +0900, Masahiro Yamada wrote:
-> On Sat, Apr 2, 2022 at 12:06 AM Francesco Duca <f.duca00@gmail.com> wrote:
-> >
-> > >And, the intention of this patch is,
-> > >print  Francescos-Air if the 'hostname -s' command is available,
-> > >but Francescos-Air.fritz.box  otherwise, correct  ?
-> >
-> > Yes exactly, this is the intention of this patch
-> >
-> > >error message because   "2>/dev/null" is missing ?
-> >
-> > It is missing indeed, i forgot to add it.
-> >
-> > I will send a new v2 patch in a while
-> >
-> > On Fri, Apr 01, 2022 at 11:19:22PM +0900, Masahiro Yamada wrote:
-> > > On Fri, Apr 1, 2022 at 11:04 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > >
-> > > > On Thu, Mar 31, 2022 at 3:23 AM FraSharp <f.duca00@gmail.com> wrote:
-> > > > >
-> > > > > From: Francesco Duca <s23265@iisve.it>
-> > > > >
-> > > > > * On some systems (e.g. macOS), using commands like 'uname -n' or
-> > > > >   'hostname' will print something similar to "hostname.domain"
-> > > >
-> > > >
-> > > > Not only macOS, but also on Linux systems such as Fedora, Debian.
-> > > >
-> > > > 'uname -s' or 'hostname' prints "hostname.domain"
-> > >
-> > > I mean,
-> > >
-> > >     'uname -n' or 'hostname' prints "hostname.domain"
-> > >
-> > >
-> > >
-> > > >
-> > > >
-> > > >
-> > > > >   ("Francescos-Air.fritz.box" for example), which is very annoying.
-> > > >
-> > > > I do not think so.
-> > > >
-> > > >
-> > > > >   What works instead is 'hostname -s', which will only write hostname
-> > > > >   without the domain ("Francescos-Air" for example),
-> > > > >   but also keep 'uname -n', as some systems as Arch Linux does not have
-> > > > >   'hostname' as command.
-> > > >
-> > > > If so, on Arch Linux, will this patch spit
-> > > >   hostname: command not found
-> > > > error message because   "2>/dev/null" is missing ?
-> > > >
-> > > >
-> > > > And, the intention of this patch is,
-> > > > print  Francescos-Air if the 'hostname -s' command is available,
-> > > > but Francescos-Air.fritz.box  otherwise, correct  ?
-> 
-> I do not see a good reason to output different strings on different
-> distributions.
-> ( <hostname> on Debian vs <hostname>.<domainname> on Arch Linux)
-> 
-> 
-> <hostname>.<domainname> is just fine.
-> As I said, it is not annoying.
-> 
-> NACK.
-> 
-> 
-> 
-> 
-> 
-> 
-> > > >
-> > > >
-> > > >
-> > > >
-> > > >
-> > > >
-> > > > >
-> > > > > * This commit is complementary to
-> > > > >   1e66d50ad3a1dbf0169b14d502be59a4b1213149
-> > > > >   ("kbuild: Use uname for LINUX_COMPILE_HOST detection")
-> > > > >
-> > > > > Signed-off-by: Francesco Duca <s23265@iisve.it>
-> > > > > ---
-> > > > >  scripts/mkcompile_h | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
-> > > > > index ca40a5258..6054e3eee 100755
-> > > > > --- a/scripts/mkcompile_h
-> > > > > +++ b/scripts/mkcompile_h
-> > > > > @@ -34,7 +34,7 @@ else
-> > > > >         LINUX_COMPILE_BY=$KBUILD_BUILD_USER
-> > > > >  fi
-> > > > >  if test -z "$KBUILD_BUILD_HOST"; then
-> > > > > -       LINUX_COMPILE_HOST=`uname -n`
-> > > > > +       LINUX_COMPILE_HOST=$(hostname -s || uname -n)
-> > > > >  else
-> > > > >         LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
-> > > > >  fi
-> > > > > --
-> > > > > 2.32.0 (Apple Git-132)
-> > > > >
-> > > >
-> > > >
-> > > > --
-> > > > Best Regards
-> > > > Masahiro Yamada
-> > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > > Masahiro Yamada
-> 
-> 
-> 
-> --
-> Best Regards
-> Masahiro Yamada
+We will follow the psi example which is exposed for root as well as
+for system level in procfs but both of these (for memory.reclaim) are
+planned as the followup feature.

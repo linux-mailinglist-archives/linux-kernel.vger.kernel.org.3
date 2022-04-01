@@ -2,170 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444824EE7ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127484EE7F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245217AbiDAFxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S245224AbiDAF4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245205AbiDAFxM (ORCPT
+        with ESMTP id S233606AbiDAF4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:53:12 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BD45748C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648792283; x=1680328283;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LUsDrFG9Q2jR0CDaosZ9jtW3pqzl1RrqwD0iH4NmVd8=;
-  b=cfcWb8Bppbf2WVi07QcIrVBWRqVmcn9KhsZ+pVfYbZzUNC7Fx+cbOp/8
-   eGIwdBwWnH9/WsJAnaGMSwgATtcDNjL/9Rz/hpXhZNoiNfOkiLN25bWkE
-   +oY5Lg46wrcvr1JQ4kaksLaYqnvXBwndTsmBw0X7R40WvkjI3AAhD8ykn
-   Xrt53qMOJ1Sfc2i8NIz0ExCpd/N3JQ0GMAz3z54DTapJmrSyrXTC88hLD
-   Xqo57+kK+/zj6A0/4FBOS4n9+KgxgsoXIBat6zL1+yD0as8HQGIKvhe2X
-   XMSV+W5VExqqI658M0+0EwEwmHLwRsH1UoC7EGgbkVaks6f/Lvndkfcj1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="247555560"
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="247555560"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:51:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="655426752"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2022 22:51:21 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1naABs-0000zW-Uv;
-        Fri, 01 Apr 2022 05:51:20 +0000
-Date:   Fri, 01 Apr 2022 13:50:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:core/urgent] BUILD SUCCESS
- 7dd5ad2d3e82fb55229e3fe18e09160878e77e20
-Message-ID: <624692c2.5vOTXb1kGbSIggw1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 1 Apr 2022 01:56:20 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADB78A32E
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:54:31 -0700 (PDT)
+Received: from [192.168.0.4] (ip5f5aef67.dynamic.kabel-deutschland.de [95.90.239.103])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id A9F4761EA192A;
+        Fri,  1 Apr 2022 07:54:29 +0200 (CEST)
+Message-ID: <2a2b1f76-7e9b-9561-e190-16d808eb5399@molgen.mpg.de>
+Date:   Fri, 1 Apr 2022 07:54:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm/amdgpu/vcn: remove Unneeded semicolon
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <1648706190-4596-1-git-send-email-baihaowen@meizu.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <1648706190-4596-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/urgent
-branch HEAD: 7dd5ad2d3e82fb55229e3fe18e09160878e77e20  Revert "signal, x86: Delay calling signals in atomic on RT enabled kernels"
+Dear Haowen,
 
-elapsed time: 1029m
 
-configs tested: 88
-configs skipped: 3
+Thank you for your patch.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Am 31.03.22 um 07:56 schrieb Haowen Bai:
 
-gcc tested configs:
-arm                              allyesconfig
-arm                                 defconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-sh                            titan_defconfig
-sparc                       sparc64_defconfig
-m68k                       m5275evb_defconfig
-arm                            zeus_defconfig
-x86_64                        randconfig-c001
-i386                          randconfig-c001
-arm                  randconfig-c002-20220331
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
+In the commit message summary, please use:
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220331
-hexagon              randconfig-r041-20220331
-riscv                randconfig-r042-20220331
+Remove unneeded semicolon
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> report by coccicheck:
+> drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c:1951:2-3: Unneeded semicolon
+> 
+> fixed c543dcb ("drm/amdgpu/vcn: Add VCN ras error query support")
+
+Please use
+
+Fixes: …
+
+and a commit hash length of 12 characters. (`scripts/checkpatch.pl …` 
+should tell you about this.)
+
+
+Kind regards,
+
+Paul
+
+
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c b/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> index 3e1de8c..17d44be 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> @@ -1948,7 +1948,7 @@ static uint32_t vcn_v2_6_query_poison_by_instance(struct amdgpu_device *adev,
+>   		break;
+>   	default:
+>   		break;
+> -	};
+> +	}
+>   
+>   	if (poison_stat)
+>   		dev_info(adev->dev, "Poison detected in VCN%d, sub_block%d\n",

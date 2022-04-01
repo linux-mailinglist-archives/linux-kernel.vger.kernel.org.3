@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40BD4EFAB2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE1C4EFAB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348048AbiDAUIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S1351525AbiDAUK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbiDAUII (ORCPT
+        with ESMTP id S1351459AbiDAUKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:08:08 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B191100E25;
-        Fri,  1 Apr 2022 13:06:08 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 231K5wGL060226;
-        Fri, 1 Apr 2022 15:05:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648843558;
-        bh=/Fa41M7WpEnzzkUG/Dcr3RaYCMlEH4p6C+CVR6sjCcw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=VZNgr+tMOy10A9z0lsvbaF5WM/Yiemppa3ydri0lXiu0jRzEWkijc9JkXqQylqu1t
-         8XncyDuG0Bidp2aWGYTPiwgW9Y6hc1o9uRSF18+GCAhlPEk8uaZXplElKYsKCZv85p
-         PDYcyUEGLhGlwGIkTc2aYy2tqF1Zcl+Dk71DhTEA=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 231K5wSj050036
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 1 Apr 2022 15:05:58 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 1
- Apr 2022 15:05:57 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 1 Apr 2022 15:05:57 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 231K5uiQ001449;
-        Fri, 1 Apr 2022 15:05:57 -0500
-Date:   Sat, 2 Apr 2022 01:35:56 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] mtd: spi-nor: core: Skip setting erase types when
- SPI_NOR_NO_ERASE is set
-Message-ID: <20220401200556.d6amfxdvyf66npyj@ti.com>
-References: <20220308091135.88615-1-tudor.ambarus@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220308091135.88615-1-tudor.ambarus@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 16:10:25 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58926E2
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:08:35 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id p8so3584912pfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lb/3ljB0Z+nyG5ugSaAJ2btRazfgku/tmL1wo62IQnM=;
+        b=bdsivsEBTI/uPp3I7z2vs5Rdqn3dxYrsYVC1Eezw4DSBAI+Q4VDwVntQrvdr3ec9EP
+         PY9plz3V6Kwr5eTjYSZZc2i0p5khLNi2GCuCVr8o4Mzd56iQlpvtKGBB7OkQIQvQBIeb
+         lCUN8hUW9gXeryM0gYc5jY4HrlYKTzUFlCwDLbvkAs2G9Zf3F6hNKrMuQ6y1nd0FEZj+
+         DUw4+qAxiRfC3+YT1WzpsHbC7bUKDVn8BZHaamNcHuJjUlL7aiJ1HfDu721XW/6TaaIw
+         FvoBsof5GEuELCistCX7f8QpqVexGbOgIeEVpxLyCGNpgObECokQ6yWzqlzczTJNDs3x
+         AwdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=lb/3ljB0Z+nyG5ugSaAJ2btRazfgku/tmL1wo62IQnM=;
+        b=uVyZx61tJgzENetb53MMuOKm4qGChh/fO+J/tkLztnbDda0cmplfc+wma3bwtspZqj
+         nin/WMwjmxgvd2Uy6VtazYpnTJLkdHYB5FIY9tpz3lDTIsUrT1uXy74BGBjVgf10g1DF
+         3R2lh3J9MT27p7mpqy4HQDAVgF8ho9OCv1e2VF8/eG3BwSAy3CgirnBWipaAs5OUjEJH
+         +tMZMhDGjxQHSKvM8GOc/T1jxD7l13RdnoiEm5AZLUsC69jJqLYes8RIs2kvHf4L6dyj
+         kS/r/2EZaLTQbFHDSL2g88UVbQdYUEQEl/wbDFlfI4W6gGaM8JdmateacgGTXbONeNEW
+         MU2g==
+X-Gm-Message-State: AOAM530mqe2/FaJ7ddxSm0ZVpbwLM5RXw51kpQz35KXxCDlph01Xm3fY
+        BPFvfHF2cpqwj3Mdyk1giYxU2A==
+X-Google-Smtp-Source: ABdhPJziEmbLprb0blXlYUPOyBkK1XbuSWyCZyHlxDi5Vvh8NROKeXLmHx886EHC2jKAi+UHKs49FQ==
+X-Received: by 2002:a05:6a00:15c6:b0:4fa:aaec:ef42 with SMTP id o6-20020a056a0015c600b004faaaecef42mr12629312pfu.74.1648843714720;
+        Fri, 01 Apr 2022 13:08:34 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id p128-20020a625b86000000b004fa666a1327sm3925052pfb.102.2022.04.01.13.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 13:08:34 -0700 (PDT)
+Date:   Fri, 01 Apr 2022 13:08:34 -0700 (PDT)
+X-Google-Original-Date: Fri, 01 Apr 2022 13:08:32 PDT (-0700)
+Subject:     Re: [PATCH] dt-bindings: Fix phandle-array issues in the idle-states bindings
+In-Reply-To: <CAL_Jsq+ALvAUR5V4Fv1RohA=-PB0Ry05ETm6OqJ+f=ediGc7HA@mail.gmail.com>
+CC:     anup@brainfault.org, guoren@kernel.org, lorenzo.pieralisi@arm.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Rob Herring <robh@kernel.org>
+Message-ID: <mhng-40701558-3769-432e-a22e-9a93a270868e@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/22 11:11AM, Tudor Ambarus wrote:
-> Even if SPI_NOR_NO_ERASE was specified at flash declaration, the erase
-> type of size nor->info->sector_size was incorrectly set as supported.
-> Don't set erase types when SPI_NOR_NO_ERASE is set.
+On Fri, 01 Apr 2022 12:50:39 PDT (-0700), Rob Herring wrote:
+> On Fri, Apr 1, 2022 at 2:32 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> As per 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas"), the
+>> phandle-array bindings have been disambiguated.  This fixes the new
+>> generic idle-states bindings to comply with the schema.
+>>
+>> Fixes: 1bd524f7e8d8 ("dt-bindings: Add common bindings for ARM and RISC-V idle states")
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> ---
+>>  .../devicetree/bindings/cpu/idle-states.yaml  | 96 +++++++++----------
+>>  1 file changed, 48 insertions(+), 48 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+>> index 95506ffb816c..6f5223659950 100644
+>> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
+>> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+>> @@ -385,8 +385,8 @@ examples:
+>>              compatible = "arm,cortex-a57";
+>>              reg = <0x0 0x0>;
+>>              enable-method = "psci";
+>> -            cpu-idle-states = <&CPU_RETENTION_0_0 &CPU_SLEEP_0_0
+>> -                   &CLUSTER_RETENTION_0 &CLUSTER_SLEEP_0>;
+>> +            cpu-idle-states = <&CPU_RETENTION_0_0>, <&CPU_SLEEP_0_0>,
+>> +                   <&CLUSTER_RETENTION_0>, <&CLUSTER_SLEEP_0>;
+>
+> All the Arm examples are already fixed. You need to fix just the RiscV
+> examples added in your branch. Otherwise, it is a bunch of merge
+> conflicts.
 
-Does this have any practical implications? Since we set MTD_NO_ERASE, 
-erase should never be called for this flash anyway, right?
-
-> 
-> Fixes: b199489d37b2 ("mtd: spi-nor: add the framework for SPI NOR")
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> Cc: stable@vger.kernel.org
-> ---
-> v2:
-> - add comment, update commit message, split change in individual commit
-> - add fixes tag and cc to stable.
-> 
->  drivers/mtd/spi-nor/core.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index b4f141ad9c9c..64cf7b9df621 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2392,6 +2392,10 @@ static void spi_nor_no_sfdp_init_params(struct spi_nor *nor)
->  					SPINOR_OP_PP, SNOR_PROTO_8_8_8_DTR);
->  	}
->  
-> +	/* Skip setting erase types when SPI_NOR_NO_ERASE is set. */
-> +	if (nor->info->flags & SPI_NOR_NO_ERASE)
-> +		return;
-> +
->  	/*
->  	 * Sector Erase settings. Sort Erase Types in ascending order, with the
->  	 * smallest erase size starting at BIT(0).
-> -- 
-> 2.25.1
-> 
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Sorry, I'd missed that.  I sent a v2 (still trying to figure out what's 
+wrong with the checkers locally).

@@ -2,115 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBD04EE7B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E624EE7BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245057AbiDAFTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S245084AbiDAFUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbiDAFTm (ORCPT
+        with ESMTP id S237334AbiDAFUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:19:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BB1261338
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:17:52 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KV7gG2dbkzgYHW;
-        Fri,  1 Apr 2022 13:16:10 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 13:17:50 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 13:17:49 +0800
-Message-ID: <52ed7607-a4bb-947e-d76d-00715ad7634e@huawei.com>
-Date:   Fri, 1 Apr 2022 13:17:49 +0800
+        Fri, 1 Apr 2022 01:20:36 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21A64B85F;
+        Thu, 31 Mar 2022 22:18:46 -0700 (PDT)
+Received: from [192.168.0.4] (ip5f5aef67.dynamic.kabel-deutschland.de [95.90.239.103])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2A7EF61EA192A;
+        Fri,  1 Apr 2022 07:18:44 +0200 (CEST)
+Message-ID: <67950993-2eb9-c180-7c80-98c9954c9b22@molgen.mpg.de>
+Date:   Fri, 1 Apr 2022 07:18:43 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 resend 2/3] arm64: mm: Don't defer
- reserve_crashkernel() with dma_force_32bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 3/3] ata: ahci: Skip 200 ms debounce delay for AMD 300
+ Series Chipset SATA Controller
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <kbuild-all@lists.01.org>, <vijayb@linux.microsoft.com>,
-        <f.fainelli@gmail.com>
-References: <20220331074055.125824-3-wangkefeng.wang@huawei.com>
- <202204010040.RUk6NuNS-lkp@intel.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <202204010040.RUk6NuNS-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme708-chm.china.huawei.com (10.1.199.104) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Mario Limonciello <Mario.Limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-ide@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Nehal-bakulchandra Shah <Nehal-bakulchandra.Shah@amd.com>
+References: <20220321212431.13717-1-pmenzel@molgen.mpg.de>
+ <20220321212431.13717-3-pmenzel@molgen.mpg.de>
+ <BL1PR12MB5157DDFD5E75360F032346D3E2169@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <cc7b4426-f6a6-e6b1-4aaf-0a713ee3d388@opensource.wdc.com>
+ <5fb6af7b-d84f-cbae-7eb1-543f3a7e53e4@molgen.mpg.de>
+ <d9837420-1cbb-ed5e-7043-985d9eb9d065@opensource.wdc.com>
+ <b3e4435d-335c-1aba-1920-c225b46d09e7@molgen.mpg.de>
+ <f6c78650-f22f-fcaf-a660-b1fc4ea7f641@molgen.mpg.de>
+ <22f69d9a-7d0d-a408-70b3-11295f14b82d@opensource.wdc.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <22f69d9a-7d0d-a408-70b3-11295f14b82d@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Damien,
 
-On 2022/4/1 0:14, kernel test robot wrote:
-> Hi Kefeng,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on next-20220330]
-> [cannot apply to arm64/for-next/core v5.17 v5.17-rc8 v5.17-rc7 v5.17]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/arm64-mm-Do-not-defer-reserve_crashkernel/20220331-152839
-> base:    a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57
-> config: arm64-buildonly-randconfig-r001-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010040.RUk6NuNS-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/970ec526bd69287a4eb9838600aaf66c46fde350
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Kefeng-Wang/arm64-mm-Do-not-defer-reserve_crashkernel/20220331-152839
->          git checkout 970ec526bd69287a4eb9838600aaf66c46fde350
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> arch/arm64/mm/init.c:108:13: warning: no previous prototype for 'crashkernel_could_early_reserve' [-Wmissing-prototypes]
->       108 | bool __init crashkernel_could_early_reserve(void)
->           |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let's wait for some feedback, add <asm/kexec.h> into init.c could 
-silence the warning.
+Thank you for your reply.
 
-thanks.
 
->
-> vim +/crashkernel_could_early_reserve +108 arch/arm64/mm/init.c
->
->     107	
->   > 108	bool __init crashkernel_could_early_reserve(void)
->     109	{
->     110		if (!IS_ENABLED(CONFIG_ZONE_DMA))
->     111			return true;
->     112		if (arm64_dma_force_32bit)
->     113			return true;
->     114		return false;
->     115	}
->     116	
->
+Am 01.04.22 um 01:04 schrieb Damien Le Moal:
+> On 3/31/22 23:42, Paul Menzel wrote:
+
+>> Am 23.03.22 um 09:36 schrieb Paul Menzel:
+>>
+>>> Am 23.03.22 um 09:24 schrieb Damien Le Moal:
+>>>> On 3/23/22 15:55, Paul Menzel wrote:
+>>>
+>>>>> Am 23.03.22 um 06:01 schrieb Damien Le Moal:
+>>>>>> On 3/22/22 06:51, Limonciello, Mario wrote:
+>>>
+>>>>>>>> -----Original Message-----
+>>>>>>>> From: Paul Menzel <pmenzel@molgen.mpg.de>
+>>>>>>>> Sent: Monday, March 21, 2022 16:25
+>>>>>
+>>>>> […]
+>>>>>
+>>>>>>> I seem to recall that we were talking about trying to drop the
+>>>>>>> debounce delay for everything, weren't we?
+>>>>>>>
+>>>>>>> So perhaps it would be right to add a 4th patch in the series to do
+>>>>>>> just that.  Then If this turns out to be problematic for
+>>>>>>> anything other than the controllers in the series that you
+>>>>>>> identified as not problematic then that 4th patch can
+>>>>>>> potentially be reverted alone?
+>>>>>>
+>>>>>> Not quite everything :) But you are right, let's try to switch the
+>>>>>> default to no delay. I will be posting patches today for that.
+>>>>>> With these patches, your patches are not necessary anymore as the AMD
+>>>>>> chipset falls under the default no-delay.
+>>>>>
+>>>>> I am all for improving the situation for all devices, but I am unable to
+>>>>> judge the regression potential of changing this, as it affects a lot of
+>>>>> devices. I guess it’d would go through the next tree, and hopefully the
+>>>>> company QA teams can give it a good spin. I hoped that my patches, as I
+>>>>> have tested them, and AMD will hopefully too, could go into the current
+>>>>> merge window.
+>>>>
+>>>> Yes, correct, the plan is to get the generic series queued as soon
+>>>> as rc1 so that it can spend plenty of time in linux-next for people
+>>>> to test. That will hopefully reduce the risk of breaking things in
+>>>> the field. Same for  the default LPM change.
+>>>
+>>> But 5.18 or 5.19? If 5.18, sounds good to me, if 5.19, I’d be great if
+>>> my patches go into 5.18 cycle, as they have been tested, and it would
+>>> mean the whole change gets tested more widely already.
+>>>
+>>>> With the default removal of the debounce delay, your patches addressing
+>>>> only the AMD adapter are not needed anymore: this adapter will not have a
+>>>> debounce delay unless the ATA_LFLAG_DEBOUNCE_DELAY flag is set.
+>>>
+>>> Yes, I understand.
+>>
+>> The merge window for Linux 5.18 is going to close in three days this
+>> Sunday. It’d be really great if my patches, tested on hardware, could go
+>> into that.
+>>
+>>>>>> It would be nice if you can test though.
+>>>>>
+>>>>> Of course, I am going to that either way.
+>>>>
+>>>> Series posted with you on CC. Please test !
+>>>
+>>> Thank you. I am going to test it in the coming days, and report back.
+>>>
+>>> Maybe more people should be put in Cc (Dell, Lenovo, IBM, x86 subsystem)
+>>> with a request to test this?
+>> Thank you for the patches, which are a big improvement. Let’s hope, you
+>> can re-roll them, so they get into Linux very soon for everyone’s benefit.
+> 
+> I am waiting for 5.18-rc1 to rebase the patches and re-post them. Given
+> reviewed-by and tested-by tags, I will queue them for 5.19.
+
+As discussed in the other thread, it’s impossible to be 100 % certain, 
+it won’t break anything.
+
+> With that in mind, I am not planning to apply your previous patches
+> for 5.18, as they would conflict and would only end up being churn
+> since the delay removal by default will undo your changes.
+Obviously, I do not agree, as this would give the a little bit more 
+testing already, if changing the default is a good idea. Also, if the 
+conflict will be hard to resolve, I happily do it (the patches could 
+even be reverted on top – git commits are cheap and easy to handle).
+
+Anyway, I wrote my piece, but you are the maintainer, so it’s your call 
+and I stop bothering you.
+
+
+Kind regards,
+
+Paul

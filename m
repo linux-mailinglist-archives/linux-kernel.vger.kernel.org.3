@@ -2,380 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03934EE75B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F374EE75F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244866AbiDAE05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 00:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S244874AbiDAEc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244848AbiDAE0s (ORCPT
+        with ESMTP id S232741AbiDAEcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 00:26:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FB173E5F2
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648787097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ngfjwdhVZSu9Mc3F7Z2MPp/um/FKqEmWpTPRXSs708=;
-        b=RgP3wSTQmDixth3JT3j7Og1NQnWT4U/5PdM/hiTYtvIq70LOSBpljENHVNQGwPN+h1UvJD
-        zyILIFVZoKd6Y6stefKIfID91tyXItu3GsGARq7Q0DGIYc+cRITylzhuTh3Ei750OGrv0b
-        AQKhAMU2/Yx7bZxEqSjdpsFO7kG6oV4=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-365-dLVkFkWJPxqzKnMt2e2i-Q-1; Fri, 01 Apr 2022 00:24:48 -0400
-X-MC-Unique: dLVkFkWJPxqzKnMt2e2i-Q-1
-Received: by mail-lf1-f69.google.com with SMTP id q19-20020ac24a73000000b0044a100bb508so695621lfp.14
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:24:48 -0700 (PDT)
+        Fri, 1 Apr 2022 00:32:46 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B235C1FF431
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:30:56 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id t11so2966100ybi.6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PjBvR0dAm80PmgfJzJt2hGMFU/x9BOyTDKcoptqgwx0=;
+        b=kJMay4fVLDENECNlphQ79WBRJP0IoZbVeM9+X+XSCsug4JDCxGAvzvPx8XhpmbczvQ
+         +Mez9GVXTxH6cTHpmydV6Zl9jFW7BFu5L57zVVZtKCB8rmr5rl2OOlMXeLjth7/p/n/W
+         6NZtCsncV1WI4uVA+R2rK+ww0E7hReTFAPIAg4x6WxD6lEb24azdIojUTn5Im+XbT/eU
+         1zkfBy33KTZ2m6exL6gWTUUinKcIeiwqL3JyPxte68Su/HOBtH5UX/ueHuuHvtvHN4mC
+         X3pSDOaqSnYxtowsabCd8VlQvs/7C4Pd4okFYEZ2YNyXw61mQgDgNRJSatC7kYT9NP2w
+         zv7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ngfjwdhVZSu9Mc3F7Z2MPp/um/FKqEmWpTPRXSs708=;
-        b=x587N/QSKU00I+svp4R1/WZAQdoU1Eoe3UZwO0F7L1CL6Y55ZxksJ71962Frd0f2hO
-         fHNdyhXMY3WdP/onmccrlqFrYOoetZ/H6OtuFYQgw05SUKev9CW5Nq4DoJ9jSQ9f7t2t
-         np60Ceshl6LQQ/b0MSZ6gcEPfkzhew1EXcUwDV//uNpLZrLyt4Qbqz40vjYtg3Sr9FDh
-         c8xsszTqGoPZoqYuJPGllyFW/gmN8pPmb0gY7aTtuGRYiMYmiD1YIFEHj0oHH4KpRX6n
-         zUJxUq1Sn69lScUZN+RHyAp8XEd18Qk3qk9xMD+UuYAjbJXhrXikx4cXBgMAlHcfV50W
-         gNpQ==
-X-Gm-Message-State: AOAM5328Df8tHX4y7wwLkXqTkNjTXq+jjucDBT/lMrAGE96vXLsFWZgS
-        4ChHYTBtzhLOTN2cHtZb3pKrAiAztxY87nzB3fvTvFqSYMrgourlKH9XK/DxabFlfdxKnGxgYv+
-        ZT0y5lDE4CDBMm6lyD5oscs2OIGPv0i0zSHeE+u6T
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id p21-20020a056512139500b00446d38279a5mr12490040lfa.210.1648787087299;
-        Thu, 31 Mar 2022 21:24:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx9R2mzN/stqtfZWnKEocfbmqN5IU2O2NX6QZ4/iAncqxL9S9h+PhStfyraQ1/OGqGXcE8DbSQ65e20i4S9MOA=
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id
- p21-20020a056512139500b00446d38279a5mr12490018lfa.210.1648787086976; Thu, 31
- Mar 2022 21:24:46 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PjBvR0dAm80PmgfJzJt2hGMFU/x9BOyTDKcoptqgwx0=;
+        b=3c20Ga0YJxA/Yhgf8pk7Q0wjuxOytwSE79QhSpNeVOlwGQPwfjQ82Oj9wwqNn6pqwX
+         jaxfhpuIW/DTXCOm7sEpPXr0j+LxssQLN3RuGRCF6QrDA8IWyuAGe99zpa0+6ALjkACm
+         4OwjUBhXze1qp84Ka8RXq+dxlvK2SnJwhaGpeu4Fc3wlCE3ltT6U9ZQk8orAzxlaY2nx
+         NsvP1PI8QNFnV+vTf313pidSBVTBYWmc1xjtc7fZthuAQfbQtHWYI9svtg+3dFKQJl7K
+         UMGn/ikJKDdiNNL9/OCnbjabpAK58MEBwsHlQQlc1Gc0bmvt7tdSAnc/KxEH6NanK/3j
+         SItg==
+X-Gm-Message-State: AOAM530W/OugLsZtoMw+HD9kWK5/OwegDKNPzqpu+x6hy6/dlH99f8Hg
+        AtUW3tPk/ak3O3inyk8+smQIlwga3GB24+mG8x2JotdTDHVMHA==
+X-Google-Smtp-Source: ABdhPJyc1iNDbSeZ01gaX2/NC8f4Pgl0sHX3EafzDNf7c6y1fcJCaMSsQqApSzbhQhpc25GxuLUZzgehCLNXwMjlgNw=
+X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
+ c70-20020a25c049000000b006346751e8d2mr7293293ybf.6.1648787455925; Thu, 31 Mar
+ 2022 21:30:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220330180436.24644-1-gdawar@xilinx.com> <20220330180436.24644-16-gdawar@xilinx.com>
-In-Reply-To: <20220330180436.24644-16-gdawar@xilinx.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 1 Apr 2022 12:24:35 +0800
-Message-ID: <CACGkMEvL3rFaw9WP2ARmEkY4t-VppJ73NnapdUgwO=vCZ_Eg6A@mail.gmail.com>
-Subject: Re: [PATCH v2 15/19] vhost-vdpa: support ASID based IOTLB API
-To:     Gautam Dawar <gautam.dawar@xilinx.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Martin Porter <martinpo@xilinx.com>, pabloc@xilinx.com,
-        dinang@xilinx.com, tanuj.kamde@amd.com, habetsm.xilinx@gmail.com,
-        ecree.xilinx@gmail.com, eperezma <eperezma@redhat.com>,
-        Gautam Dawar <gdawar@xilinx.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eli Cohen <elic@nvidia.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
+References: <20220330191440.1cc1b2de2b849d1ba93d2ba7@linux-foundation.org>
+ <89B53D3A-FCC5-4107-8D49-81D5B9AE5172@linux.dev> <20220331063956.5uqnab64cqnmcwyr@google.com>
+ <YkVcbElWjomA7ofF@dhcp22.suse.cz> <20220331181126.815cfe2b05b4281d32b7bf49@linux-foundation.org>
+In-Reply-To: <20220331181126.815cfe2b05b4281d32b7bf49@linux-foundation.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 1 Apr 2022 12:30:19 +0800
+Message-ID: <CAMZfGtUfsGECdA8Nj=_xCurs3LgnB9ATc7J=dFA4_V_Zy-1FnQ@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/list_lru: Fix possible race in memcg_reparent_list_lru_node()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Waiman Long <longman@redhat.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 2:17 AM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
+On Fri, Apr 1, 2022 at 9:11 AM Andrew Morton <akpm@linux-foundation.org> wr=
+ote:
 >
-> This patch extends the vhost-vdpa to support ASID based IOTLB API. The
-> vhost-vdpa device will allocated multiple IOTLBs for vDPA device that
-> supports multiple address spaces. The IOTLBs and vDPA device memory
-> mappings is determined and maintained through ASID.
+> On Thu, 31 Mar 2022 09:46:52 +0200 Michal Hocko <mhocko@suse.com> wrote:
 >
-> Note that we still don't support vDPA device with more than one
-> address spaces that depends on platform IOMMU. This work will be done
-> by moving the IOMMU logic from vhost-vDPA to vDPA device driver.
+> > On Thu 31-03-22 06:39:56, Shakeel Butt wrote:
+> > > On Wed, Mar 30, 2022 at 07:48:45PM -0700, Roman Gushchin wrote:
+> > > >
+> > > >
+> > > [...]
+> > > >
+> > > >
+> > > > But honestly, I=E2=80=99d drop the original optimization together w=
+ith
+> > > > the fix, if only there is no _real world_ data on the problem and
+> > > > the improvement. It seems like it has started as a nice simple
+> > > > improvement, but the race makes it complex and probably not worth
+> > > > the added complexity and fragility.
+> > >
+> > > I agree with dropping the original optimization as it is not really
+> > > fixing an observed issue which may justify adding some complexity.
+> >
+> > Completely agreed. The patch as it is proposed is not really acceptable
+> > IMHO and I have to say I am worried that this is not the first time we
+> > are in a situation when a follow up fixes or unrelated patches are
+> > growing in complexity to fit on top of a performance optimizations whic=
+h
+> > do not refer to any actual numbers.
 >
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
-> ---
->  drivers/vhost/vdpa.c  | 109 ++++++++++++++++++++++++++++++++++--------
->  drivers/vhost/vhost.c |   2 +-
->  2 files changed, 91 insertions(+), 20 deletions(-)
+> Yup.  I did this:
 >
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 6c7ee0f18892..1f1d1c425573 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -28,7 +28,8 @@
->  enum {
->         VHOST_VDPA_BACKEND_FEATURES =
->         (1ULL << VHOST_BACKEND_F_IOTLB_MSG_V2) |
-> -       (1ULL << VHOST_BACKEND_F_IOTLB_BATCH),
-> +       (1ULL << VHOST_BACKEND_F_IOTLB_BATCH) |
-> +       (1ULL << VHOST_BACKEND_F_IOTLB_ASID),
->  };
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: mm/list_lru.c: revert "mm/list_lru: optimize memcg_reparent_list=
+_lru_node()"
 >
->  #define VHOST_VDPA_DEV_MAX (1U << MINORBITS)
-> @@ -57,12 +58,20 @@ struct vhost_vdpa {
->         struct eventfd_ctx *config_ctx;
->         int in_batch;
->         struct vdpa_iova_range range;
-> +       u32 batch_asid;
->  };
+> 405cc51fc1049c73 ("mm/list_lru: optimize memcg_reparent_list_lru_node()")
+> has subtle races which are proving ugly to fix.  Revert the original
+> optimization.  If quantitative testing indicates that we have a
+> significant problem here then other implementations can be looked at.
 >
->  static DEFINE_IDA(vhost_vdpa_ida);
->
->  static dev_t vhost_vdpa_major;
->
-> +static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
-> +{
-> +       struct vhost_vdpa_as *as = container_of(iotlb, struct
-> +                                               vhost_vdpa_as, iotlb);
-> +       return as->id;
-> +}
-> +
->  static struct vhost_vdpa_as *asid_to_as(struct vhost_vdpa *v, u32 asid)
->  {
->         struct hlist_head *head = &v->as[asid % VHOST_VDPA_IOTLB_BUCKETS];
-> @@ -75,6 +84,16 @@ static struct vhost_vdpa_as *asid_to_as(struct vhost_vdpa *v, u32 asid)
->         return NULL;
->  }
->
-> +static struct vhost_iotlb *asid_to_iotlb(struct vhost_vdpa *v, u32 asid)
-> +{
-> +       struct vhost_vdpa_as *as = asid_to_as(v, asid);
-> +
-> +       if (!as)
-> +               return NULL;
-> +
-> +       return &as->iotlb;
-> +}
-> +
->  static struct vhost_vdpa_as *vhost_vdpa_alloc_as(struct vhost_vdpa *v, u32 asid)
->  {
->         struct hlist_head *head = &v->as[asid % VHOST_VDPA_IOTLB_BUCKETS];
-> @@ -83,6 +102,9 @@ static struct vhost_vdpa_as *vhost_vdpa_alloc_as(struct vhost_vdpa *v, u32 asid)
->         if (asid_to_as(v, asid))
->                 return NULL;
->
-> +       if (asid >= v->vdpa->nas)
-> +               return NULL;
-> +
->         as = kmalloc(sizeof(*as), GFP_KERNEL);
->         if (!as)
->                 return NULL;
-> @@ -94,6 +116,17 @@ static struct vhost_vdpa_as *vhost_vdpa_alloc_as(struct vhost_vdpa *v, u32 asid)
->         return as;
->  }
->
-> +static struct vhost_vdpa_as *vhost_vdpa_find_alloc_as(struct vhost_vdpa *v,
-> +                                                     u32 asid)
-> +{
-> +       struct vhost_vdpa_as *as = asid_to_as(v, asid);
-> +
-> +       if (as)
-> +               return as;
-> +
-> +       return vhost_vdpa_alloc_as(v, asid);
-> +}
-> +
->  static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
->  {
->         struct vhost_vdpa_as *as = asid_to_as(v, asid);
-> @@ -692,6 +725,7 @@ static int vhost_vdpa_map(struct vhost_vdpa *v, struct vhost_iotlb *iotlb,
->         struct vhost_dev *dev = &v->vdev;
->         struct vdpa_device *vdpa = v->vdpa;
->         const struct vdpa_config_ops *ops = vdpa->config;
-> +       u32 asid = iotlb_to_asid(iotlb);
->         int r = 0;
->
->         r = vhost_iotlb_add_range_ctx(iotlb, iova, iova + size - 1,
-> @@ -700,10 +734,10 @@ static int vhost_vdpa_map(struct vhost_vdpa *v, struct vhost_iotlb *iotlb,
->                 return r;
->
->         if (ops->dma_map) {
-> -               r = ops->dma_map(vdpa, 0, iova, size, pa, perm, opaque);
-> +               r = ops->dma_map(vdpa, asid, iova, size, pa, perm, opaque);
->         } else if (ops->set_map) {
->                 if (!v->in_batch)
-> -                       r = ops->set_map(vdpa, 0, iotlb);
-> +                       r = ops->set_map(vdpa, asid, iotlb);
->         } else {
->                 r = iommu_map(v->domain, iova, pa, size,
->                               perm_to_iommu_flags(perm));
-> @@ -725,17 +759,24 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
->  {
->         struct vdpa_device *vdpa = v->vdpa;
->         const struct vdpa_config_ops *ops = vdpa->config;
-> +       u32 asid = iotlb_to_asid(iotlb);
->
->         vhost_vdpa_iotlb_unmap(v, iotlb, iova, iova + size - 1);
->
->         if (ops->dma_map) {
-> -               ops->dma_unmap(vdpa, 0, iova, size);
-> +               ops->dma_unmap(vdpa, asid, iova, size);
->         } else if (ops->set_map) {
->                 if (!v->in_batch)
-> -                       ops->set_map(vdpa, 0, iotlb);
-> +                       ops->set_map(vdpa, asid, iotlb);
->         } else {
->                 iommu_unmap(v->domain, iova, size);
->         }
-> +
-> +       /* If we are in the middle of batch processing, delay the free
-> +        * of AS until BATCH_END.
-> +        */
-> +       if (!v->in_batch && !iotlb->nmaps)
-> +               vhost_vdpa_remove_as(v, asid);
->  }
->
->  static int vhost_vdpa_va_map(struct vhost_vdpa *v,
-> @@ -943,19 +984,38 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
->         struct vhost_vdpa *v = container_of(dev, struct vhost_vdpa, vdev);
->         struct vdpa_device *vdpa = v->vdpa;
->         const struct vdpa_config_ops *ops = vdpa->config;
-> -       struct vhost_vdpa_as *as = asid_to_as(v, 0);
-> -       struct vhost_iotlb *iotlb = &as->iotlb;
-> +       struct vhost_iotlb *iotlb = NULL;
-> +       struct vhost_vdpa_as *as = NULL;
->         int r = 0;
->
-> -       if (asid != 0)
-> -               return -EINVAL;
-> -
->         mutex_lock(&dev->mutex);
->
->         r = vhost_dev_check_owner(dev);
->         if (r)
->                 goto unlock;
->
-> +       if (msg->type == VHOST_IOTLB_UPDATE ||
-> +           msg->type == VHOST_IOTLB_BATCH_BEGIN) {
-> +               as = vhost_vdpa_find_alloc_as(v, asid);
+> Fixes: 405cc51fc1049c73 ("mm/list_lru: optimize memcg_reparent_list_lru_n=
+ode()")
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Muchun Song <songmuchun@bytedance.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
-I wonder if it's better to mandate the ASID to [0, dev->nas),
-otherwise user space is free to use arbitrary IDs which may exceeds
-the #address spaces that is supported by the device.
-
-Thanks
-
-> +               if (!as) {
-> +                       dev_err(&v->dev, "can't find and alloc asid %d\n",
-> +                               asid);
-> +                       return -EINVAL;
-> +               }
-> +               iotlb = &as->iotlb;
-> +       } else
-> +               iotlb = asid_to_iotlb(v, asid);
-> +
-> +       if ((v->in_batch && v->batch_asid != asid) || !iotlb) {
-> +               if (v->in_batch && v->batch_asid != asid) {
-> +                       dev_info(&v->dev, "batch id %d asid %d\n",
-> +                                v->batch_asid, asid);
-> +               }
-> +               if (!iotlb)
-> +                       dev_err(&v->dev, "no iotlb for asid %d\n", asid);
-> +               return -EINVAL;
-> +       }
-> +
->         switch (msg->type) {
->         case VHOST_IOTLB_UPDATE:
->                 r = vhost_vdpa_process_iotlb_update(v, iotlb, msg);
-> @@ -964,12 +1024,15 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
->                 vhost_vdpa_unmap(v, iotlb, msg->iova, msg->size);
->                 break;
->         case VHOST_IOTLB_BATCH_BEGIN:
-> +               v->batch_asid = asid;
->                 v->in_batch = true;
->                 break;
->         case VHOST_IOTLB_BATCH_END:
->                 if (v->in_batch && ops->set_map)
-> -                       ops->set_map(vdpa, 0, iotlb);
-> +                       ops->set_map(vdpa, asid, iotlb);
->                 v->in_batch = false;
-> +               if (!iotlb->nmaps)
-> +                       vhost_vdpa_remove_as(v, asid);
->                 break;
->         default:
->                 r = -EINVAL;
-> @@ -1057,9 +1120,17 @@ static void vhost_vdpa_set_iova_range(struct vhost_vdpa *v)
->
->  static void vhost_vdpa_cleanup(struct vhost_vdpa *v)
->  {
-> +       struct vhost_vdpa_as *as;
-> +       u32 asid;
-> +
->         vhost_dev_cleanup(&v->vdev);
->         kfree(v->vdev.vqs);
-> -       vhost_vdpa_remove_as(v, 0);
-> +
-> +       for (asid = 0; asid < v->vdpa->nas; asid++) {
-> +               as = asid_to_as(v, asid);
-> +               if (as)
-> +                       vhost_vdpa_remove_as(v, asid);
-> +       }
->  }
->
->  static int vhost_vdpa_open(struct inode *inode, struct file *filep)
-> @@ -1095,12 +1166,9 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
->         vhost_dev_init(dev, vqs, nvqs, 0, 0, 0, false,
->                        vhost_vdpa_process_iotlb_msg);
->
-> -       if (!vhost_vdpa_alloc_as(v, 0))
-> -               goto err_alloc_as;
-> -
->         r = vhost_vdpa_alloc_domain(v);
->         if (r)
-> -               goto err_alloc_as;
-> +               goto err_alloc_domain;
->
->         vhost_vdpa_set_iova_range(v);
->
-> @@ -1108,7 +1176,7 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
->
->         return 0;
->
-> -err_alloc_as:
-> +err_alloc_domain:
->         vhost_vdpa_cleanup(v);
->  err:
->         atomic_dec(&v->opened);
-> @@ -1233,8 +1301,11 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
->         int minor;
->         int i, r;
->
-> -       /* Only support 1 address space and 1 groups */
-> -       if (vdpa->ngroups != 1 || vdpa->nas != 1)
-> +       /* We can't support platform IOMMU device with more than 1
-> +        * group or as
-> +        */
-> +       if (!ops->set_map && !ops->dma_map &&
-> +           (vdpa->ngroups > 1 || vdpa->nas > 1))
->                 return -EOPNOTSUPP;
->
->         v = kzalloc(sizeof(*v), GFP_KERNEL | __GFP_RETRY_MAYFAIL);
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index d1e58f976f6e..5022c648d9c0 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -1167,7 +1167,7 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
->                                 ret = -EINVAL;
->                                 goto done;
->                         }
-> -                       offset = sizeof(__u16);
-> +                       offset = 0;
->                 } else
->                         offset = sizeof(__u32);
->                 break;
-> --
-> 2.30.1
->
-
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

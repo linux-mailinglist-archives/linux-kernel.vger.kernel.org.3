@@ -2,249 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441154EEE1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1D64EEE1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346334AbiDAN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S1346342AbiDANbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346244AbiDAN3p (ORCPT
+        with ESMTP id S232890AbiDANbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:29:45 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126AD1E5A76;
-        Fri,  1 Apr 2022 06:27:54 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 231BUmw4027845;
-        Fri, 1 Apr 2022 15:27:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=ElyEUf9JCJQXOazaKJYNboK1xn5OQrksAiKV8eW767U=;
- b=vhKi4FgQnAF5ptR1H221aD6E3KJYIObp00x0Pttr5CtAjm4l6HdTHieO1xqsbwB03Iz7
- nY/CK5PSy5KwVyf7Mo8XJuWBKBW5z4wyk0CunIZyDiUc0+tc22IYCNrq67g03ESZQFYz
- cWwXkvpejBWz4DdCydUQH02f21cfRRP4niDctS9Hwb/1F1gbt9AWyLlgguRRuG/G25Cc
- xtBYF/TV5K/t2vYK65qzDt0G+uGlXRO8lJ1F0YGNlxN/Y5vb8iK36PRecFtt96tpgE1Z
- 7z3EvYzGIlkniZWz2uDXLIRaW1xNAyXqS1WhH0cL9QtYk/MdaUEYw2M/4Ini5hwq4ARV jg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f5vjk2chu-1
+        Fri, 1 Apr 2022 09:31:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115A626C2F6;
+        Fri,  1 Apr 2022 06:29:30 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 231DEDe6013751;
+        Fri, 1 Apr 2022 13:29:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=qmkl+q+uT18szoUD1dOretWcohg1KMIAJpMD2FHxU9Q=;
+ b=dUEiWPT7zTWr/XteZRNVA2oaZ9i60ZsmnDRMlxIK2VDKpM/DlPp07t6DJ/7/DzL9d6S3
+ YHkB76mC7uNRB9snAZLHN4xKclcaDDUSlAi2wKpuoKKmI9Cx1HdR4Q0Qqbse0a6oaUxo
+ l9vuC91YxujEKneiOwUAHXd+aY0/0yGTZjUXFZsxophG17rj7WyZ9FRnVG7300+TN6Tg
+ SnroMIQinwomPCJRdFbZIZnkRek9FsX0Bvu6tquhGcjHgtDl8YJCwDgflRxNgoefdifj
+ AyFSIgGjSdCEa3GcxEyJLEgc+CMppvLO/8xq9L14cpbwWrM7BbXV4MG+Ylhe5rkewjM9 vA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f623qg9a6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Apr 2022 15:27:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 767DF100034;
-        Fri,  1 Apr 2022 15:27:38 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6D1D622D194;
-        Fri,  1 Apr 2022 15:27:38 +0200 (CEST)
-Received: from [10.211.9.74] (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 1 Apr
- 2022 15:27:37 +0200
-Message-ID: <57c63984-ddf1-6cd7-40a3-aadf9405da5a@foss.st.com>
-Date:   Fri, 1 Apr 2022 15:27:36 +0200
+        Fri, 01 Apr 2022 13:29:28 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 231DDjtq009363;
+        Fri, 1 Apr 2022 13:29:26 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9n3ts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 13:29:26 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 231DHJbC50462990
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Apr 2022 13:17:19 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2877A42057;
+        Fri,  1 Apr 2022 13:29:23 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7AF5542045;
+        Fri,  1 Apr 2022 13:29:22 +0000 (GMT)
+Received: from localhost (unknown [9.171.12.244])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri,  1 Apr 2022 13:29:22 +0000 (GMT)
+Date:   Fri, 1 Apr 2022 15:29:20 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [GIT PULL] s390 patches for the 5.18 merge window #2
+Message-ID: <your-ad-here.call-01648819760-ext-9805@work.hours>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sYMNrpzL8zVQ0_CohnULtQ0No3acwqrK
+X-Proofpoint-ORIG-GUID: sYMNrpzL8zVQ0_CohnULtQ0No3acwqrK
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2 2/3] rpmsg: glink: Add support to handle signals
- command
-Content-Language: en-US
-To:     Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <swboyd@chromium.org>, <quic_clew@quicinc.com>,
-        <mathieu.poirier@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>
-References: <1642534993-6552-1-git-send-email-quic_deesin@quicinc.com>
- <1642534993-6552-3-git-send-email-quic_deesin@quicinc.com>
- <Yiu6guYrKYRhGtei@builder.lan>
- <e59b5d03-0737-56ac-c0af-058799bcb88d@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <e59b5d03-0737-56ac-c0af-058799bcb88d@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-01_05,2022-03-31_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ definitions=2022-04-01_04,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0 impostorscore=0
+ malwarescore=0 mlxlogscore=999 spamscore=0 mlxscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204010061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Linus,
 
+please pull the second round of s390 changes for 5.18.
 
-On 3/23/22 08:20, Deepak Kumar Singh wrote:
-> 
-> On 3/12/2022 2:39 AM, Bjorn Andersson wrote:
->> On Tue 18 Jan 13:43 CST 2022, Deepak Kumar Singh wrote:
->>
->>> Remote peripherals send signal notifications over glink with
->>> commandID 15.
->>>
->>> Add support to send and receive the signal command and convert the
->>> signals
->>> from NATIVE to TIOCM while receiving and vice versa while sending.
->>>
->>> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
->> Co-developed-by: seems appropriate here, or you need to ensure the
->> author remains Chris, as his S-o-b comes first.
->>
->>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
->>> ---
->>>   drivers/rpmsg/qcom_glink_native.c | 77
->>> +++++++++++++++++++++++++++++++++++++++
->>>   1 file changed, 77 insertions(+)
->>>
->>> diff --git a/drivers/rpmsg/qcom_glink_native.c
->>> b/drivers/rpmsg/qcom_glink_native.c
->>> index 3f377a7..d673d65 100644
->>> --- a/drivers/rpmsg/qcom_glink_native.c
->>> +++ b/drivers/rpmsg/qcom_glink_native.c
->>> @@ -17,6 +17,7 @@
->>>   #include <linux/rpmsg.h>
->>>   #include <linux/sizes.h>
->>>   #include <linux/slab.h>
->>> +#include <linux/termios.h>
->>>   #include <linux/workqueue.h>
->>>   #include <linux/mailbox_client.h>
->>>   @@ -205,9 +206,16 @@ static const struct rpmsg_endpoint_ops
->>> glink_endpoint_ops;
->>>   #define RPM_CMD_TX_DATA_CONT        12
->>>   #define RPM_CMD_READ_NOTIF        13
->>>   #define RPM_CMD_RX_DONE_W_REUSE        14
->>> +#define RPM_CMD_SIGNALS            15
->>>     #define GLINK_FEATURE_INTENTLESS    BIT(1)
->>>   +#define NATIVE_DTR_SIG            BIT(31)
->> Seems reasonable to prefix these with GLINK_, perhaps GLINK_SIGNAL_DTR?
->>
->>> +#define NATIVE_CTS_SIG            BIT(30)
->>> +#define NATIVE_CD_SIG            BIT(29)
->>> +#define NATIVE_RI_SIG            BIT(28)
->>> +#define    SIG_MASK            0x0fff;
->>> +
->>>   static void qcom_glink_rx_done_work(struct work_struct *work);
->>>     static struct glink_channel *qcom_glink_alloc_channel(struct
->>> qcom_glink *glink,
->>> @@ -1003,6 +1011,70 @@ static int qcom_glink_rx_open_ack(struct
->>> qcom_glink *glink, unsigned int lcid)
->>>       return 0;
->>>   }
->>>   +/**
->>> + * qcom_glink_set_flow_control() - convert a signal cmd to wire
->>> format and
->>> + *                    transmit
->>> + * @ept:    Rpmsg endpoint for channel.
->>> + * @enable:    True/False - enable or disable flow control
->> "enable flow control" sounds sufficient (i.e. no need for True/False)
->> part.
->>
->> Regards,
->> Bjorn
-> 
-> There are some user space clients which require both flow control on and
-> off (DTR high/low).
-> 
-> So i guess true and false both are needed.
-> 
->>> + *
->>> + * Return: 0 on success or standard Linux error code.
->>> + */
->>> +static int qcom_glink_set_flow_control(struct rpmsg_endpoint *ept,
->>> bool enable)
->>> +{
->>> +    struct glink_channel *channel = to_glink_channel(ept);
->>> +    struct qcom_glink *glink = channel->glink;
->>> +    struct glink_msg msg;
->>> +    u32 sigs;
->>> +
->>> +    /**
->>> +     * convert signals from TIOCM to NATIVE
->>> +     * sigs = TIOCM_DTR|TIOCM_RTS
->>> +     */
->>> +    if (enable)
->>> +        sigs |= NATIVE_DTR_SIG | NATIVE_CTS_SIG;
->>> +    else
->>> +        sigs |= ~(NATIVE_DTR_SIG | NATIVE_CTS_SIG);
->>> +
->>> +    msg.cmd = cpu_to_le16(RPM_CMD_SIGNALS);
->>> +    msg.param1 = cpu_to_le16(channel->lcid);
->>> +    msg.param2 = cpu_to_le32(sigs);
->>> +
->>> +    return qcom_glink_tx(glink, &msg, sizeof(msg), NULL, 0, true);
->>> +}
->>> +
->>> +static int qcom_glink_handle_signals(struct qcom_glink *glink,
->>> +                     unsigned int rcid, unsigned int sigs)
->>> +{
->>> +    struct glink_channel *channel;
->>> +    unsigned long flags;
->>> +
->>> +    spin_lock_irqsave(&glink->idr_lock, flags);
->>> +    channel = idr_find(&glink->rcids, rcid);
->>> +    spin_unlock_irqrestore(&glink->idr_lock, flags);
->>> +    if (!channel) {
->>> +        dev_err(glink->dev, "signal for non-existing channel\n");
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    if (!channel->ept.sig_cb)
->>> +        return 0;
->>> +
->>> +    /* convert signals from NATIVE to TIOCM */
->>> +    if (sigs & NATIVE_DTR_SIG)
+Thank you,
+Vasily
 
-Regarding specs seems that DTR is from the DTE (Data Terminal Equipment)
-to the DCE (Data Communication Equipement)
-NATIVE_DSR_SIG instead?
+The following changes since commit d710d370c4911e83da5d2bc43d4a2c3b56bd27e7:
 
-Regards
-Arnaud
+  Merge tag 's390-5.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux (2022-03-25 10:01:34 -0700)
 
->>> +        sigs |= TIOCM_DSR;
->>> +    if (sigs & NATIVE_CTS_SIG)
->>> +        sigs |= TIOCM_CTS;
->>> +    if (sigs & NATIVE_CD_SIG)
->>> +        sigs |= TIOCM_CD;
->>> +    if (sigs & NATIVE_RI_SIG)
->>> +        sigs |= TIOCM_RI;
->>> +    sigs &= SIG_MASK;
->>> +
->>> +    channel->ept.sig_cb(channel->ept.rpdev, channel->ept.priv, sigs);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>>   static irqreturn_t qcom_glink_native_intr(int irq, void *data)
->>>   {
->>>       struct qcom_glink *glink = data;
->>> @@ -1067,6 +1139,10 @@ static irqreturn_t qcom_glink_native_intr(int
->>> irq, void *data)
->>>               qcom_glink_handle_intent_req_ack(glink, param1, param2);
->>>               qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
->>>               break;
->>> +        case RPM_CMD_SIGNALS:
->>> +            qcom_glink_handle_signals(glink, param1, param2);
->>> +            qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
->>> +            break;
->>>           default:
->>>               dev_err(glink->dev, "unhandled rx cmd: %d\n", cmd);
->>>               ret = -EINVAL;
->>> @@ -1442,6 +1518,7 @@ static const struct rpmsg_endpoint_ops
->>> glink_endpoint_ops = {
->>>       .sendto = qcom_glink_sendto,
->>>       .trysend = qcom_glink_trysend,
->>>       .trysendto = qcom_glink_trysendto,
->>> +    .set_flow_control = qcom_glink_set_flow_control,
->>>   };
->>>     static void qcom_glink_rpdev_release(struct device *dev)
->>> -- 
->>> 2.7.4
->>>
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.18-2
+
+for you to fetch changes up to faf79934e65aff90284725518a5ec3c2241c65ae:
+
+  s390/alternatives: avoid using jgnop mnemonic (2022-03-28 23:27:54 +0200)
+
+----------------------------------------------------------------
+s390 updates for the 5.18 merge window #2
+
+- Add kretprobes framepointer verification and return address recovery
+  in stacktrace.
+
+- Support control domain masks on custom zcrypt devices and filter admin
+  requests.
+
+- Cleanup timer API usage.
+
+- Rework absolute lowcore access helpers.
+
+- Other various small improvements and fixes.
+
+----------------------------------------------------------------
+Alexander Gordeev (4):
+      s390/smp: cleanup target CPU callback starting
+      s390/smp: cleanup control register update routines
+      s390/maccess: rework absolute lowcore accessors
+      s390/smp: use physical address for SIGP_SET_PREFIX command
+
+Haowen Bai (2):
+      s390: crypto: Use min_t() instead of doing it manually
+      s390/tape: use bitwise instead of arithmetic operator for flags
+
+Heiko Carstens (5):
+      s390/traps: improve panic message for translation-specification exception
+      s390/alternatives: use instructions instead of byte patterns
+      s390/alternatives: use insn format for new instructions
+      s390/ap: use insn format for new instructions
+      s390/ap: adjust whitespace
+
+Jakob Koschel (1):
+      s390/zcrypt: fix using the correct variable for sizeof()
+
+Juergen Christ (2):
+      s390/zcrypt: Add admask to zcdn
+      s390/zcrypt: Filter admin CPRBs on custom devices
+
+Julia Lawall (1):
+      s390/pkey: fix typos in comments
+
+Niklas Schnelle (2):
+      s390/pci: improve zpci_dev reference counting
+      s390/pci: rename get_zdev_by_bus() to zdev_from_bus()
+
+Russell Currey (1):
+      s390: fix typo in syscall_wrapper.h
+
+Tony Krowiak (1):
+      s390/vfio-ap: fix kernel doc and signature of group notifier functions
+
+Vasily Gorbik (6):
+      s390/test_unwind: extend kretprobe test
+      s390/kprobes: enable kretprobes framepointer verification
+      s390/unwind: recover kretprobe modified return address in stacktrace
+      s390/unwind: avoid duplicated unwinding entries for kretprobes
+      s390/test_unwind: verify __kretprobe_trampoline is replaced
+      s390/alternatives: avoid using jgnop mnemonic
+
+Yu Liao (1):
+      s390: cleanup timer API use
+
+ arch/s390/Kconfig                       |  1 +
+ arch/s390/include/asm/alternative-asm.h | 12 ++++--
+ arch/s390/include/asm/alternative.h     | 15 ++++++--
+ arch/s390/include/asm/ap.h              | 60 ++++++++++++++---------------
+ arch/s390/include/asm/ctl_reg.h         | 16 +++++---
+ arch/s390/include/asm/processor.h       | 17 ++++++---
+ arch/s390/include/asm/spinlock.h        |  2 +-
+ arch/s390/include/asm/syscall_wrapper.h |  2 +-
+ arch/s390/include/asm/unwind.h          | 13 +++++++
+ arch/s390/kernel/entry.S                | 10 ++---
+ arch/s390/kernel/ipl.c                  |  4 +-
+ arch/s390/kernel/kprobes.c              |  8 ++--
+ arch/s390/kernel/machine_kexec.c        |  2 +-
+ arch/s390/kernel/os_info.c              |  2 +-
+ arch/s390/kernel/setup.c                | 19 ++++-----
+ arch/s390/kernel/smp.c                  | 57 +++++++++++++--------------
+ arch/s390/kernel/traps.c                |  6 +--
+ arch/s390/kernel/unwind_bc.c            | 12 ++----
+ arch/s390/lib/spinlock.c                |  4 +-
+ arch/s390/lib/test_unwind.c             | 58 +++++++++++++++++++---------
+ arch/s390/pci/pci.c                     |  5 ++-
+ arch/s390/pci/pci_bus.h                 |  7 ++--
+ arch/s390/pci/pci_clp.c                 |  9 ++++-
+ arch/s390/pci/pci_event.c               |  7 +++-
+ drivers/s390/char/sclp.c                |  4 +-
+ drivers/s390/char/sclp_con.c            |  3 +-
+ drivers/s390/char/sclp_vt220.c          |  6 +--
+ drivers/s390/char/tape_34xx.c           |  4 +-
+ drivers/s390/cio/device_fsm.c           | 12 ++----
+ drivers/s390/cio/eadm_sch.c             | 12 ++----
+ drivers/s390/crypto/ap_bus.h            |  1 +
+ drivers/s390/crypto/pkey_api.c          |  2 +-
+ drivers/s390/crypto/vfio_ap_ops.c       | 24 +++---------
+ drivers/s390/crypto/zcrypt_api.c        | 68 ++++++++++++++++++++++++++++++++-
+ drivers/s390/crypto/zcrypt_card.c       |  2 +-
+ drivers/s390/crypto/zcrypt_ep11misc.c   |  2 +-
+ 36 files changed, 296 insertions(+), 192 deletions(-)

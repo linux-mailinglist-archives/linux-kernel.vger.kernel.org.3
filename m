@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79A54EEBDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38DF4EEBE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 12:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345237AbiDAKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 06:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S1345249AbiDAK5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 06:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345307AbiDAKxF (ORCPT
+        with ESMTP id S244943AbiDAK5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 06:53:05 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CE44C796
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648810277; x=1680346277;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=TyVT+WjrsnNzGE/O8TBVzv7J/PJ+lB7TDwLm8MQk4cM=;
-  b=dQz5+NOfzRmjIk5NNOhOAmyEusEpACbdTztzWq/XWpzM+Mm4xoWW8BiR
-   71h2ESZBfts89OcfEFJPPpJZs04oeU69tajvlBS2jNqV59WJAJ3WSoBnO
-   YDjL8oYzAomNEJ/lXZjuJYV1OpChSnS6bX2RmhpS6qjQIeHjvagrs+N49
-   RFa3MVmLMfaS1F6AbFCKc8oMXfgDMh231ma3JkODNiSnm39u+bbTZbSKO
-   gfUC0YIoRfyoJiQA6mMqDu3FAlUnXAJQbZZPuq3xjAopt4lWpt5SCEAg9
-   q+oyDa6trUYWU4Ohruw+iKzQMIDZyln0eCIZ00yQQMMUyldETaQSiAMdx
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="259806989"
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="259806989"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:51:16 -0700
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="567386650"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.168.167]) ([10.249.168.167])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 03:51:14 -0700
-Subject: Re: dtbs_check: ERROR: dtschema minimum version is v2022.3
-To:     kernel test robot <lkp@intel.com>, Rob Herring <robh@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202204011633.0XlAbzBd-lkp@intel.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <bc9be279-a130-d5e7-4397-bbb389d14403@intel.com>
-Date:   Fri, 1 Apr 2022 18:51:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Fri, 1 Apr 2022 06:57:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8953A141FD6
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 03:55:15 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 231AsuXu124777;
+        Fri, 1 Apr 2022 05:54:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648810496;
+        bh=4HIXpALjFZpmMLhAmSpJsQ6CIq1LSBSVmVQUaofI1I0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=QmdRXub247mCr9A3y6Nq3ypnVs+jJ+f67zJkGnLeB+Gylg9IkXdYAJkz3DztARsUO
+         KjA6RAgMSDq178rcAv3Wc2mF7SvpWdtAD0veDWqlgGUbYDZ7eBO95avga+ZOoSF2nC
+         9ck6B+YOJEII66H8dUZSd3FRgdtO/4+AvRRklGwk=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 231AsuZi130439
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 1 Apr 2022 05:54:56 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 1
+ Apr 2022 05:54:55 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 1 Apr 2022 05:54:55 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 231AstgX011130;
+        Fri, 1 Apr 2022 05:54:55 -0500
+Date:   Fri, 1 Apr 2022 16:24:54 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <nicolas.ferre@microchip.com>
+Subject: Re: [PATCH v2 1/4] mtd: spi-nor: Parse BFPT to determine the 4-Byte
+ Address Mode methods
+Message-ID: <20220401105454.7qfkoq2li36m3qyk@ti.com>
+References: <20220309144215.179449-1-tudor.ambarus@microchip.com>
+ <20220309144215.179449-2-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <202204011633.0XlAbzBd-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220309144215.179449-2-tudor.ambarus@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 09/03/22 04:42PM, Tudor Ambarus wrote:
+> BFPT[DWORD(16)] defines the methods to enter and exit the 4-Byte Address
+> Mode. Parse BFPT to determine the method. Will rename the methods with
+> generic names in a further patch, to keep things trackable in this one.
+> 
+> Some regressions may be introduced by this patch, because the
+> params->set_4byte_addr_mode method that was set either in
+> spi_nor_init_default_params() or later overwritten in default_init() hooks,
+> may now be overwritten with a different value based on the BFPT data. If
+> that's the case, the fix is to introduce a post_bfpt fixup hook where one
+> should fix the wrong BFPT info.
 
-Sorry for the inconvenience, please ignore this false positive.
+Okay. Let's try to queue this series (and its dependencies) early in the 
+rc cycle to give some time to catch bugs.
 
-Best Regards,
-Rong Chen
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
-On 4/1/2022 4:50 PM, kernel test robot wrote:
-> Hi Rob,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   e8b767f5e04097aaedcd6e06e2270f9fe5282696
-> commit: 2783a7f56f9980f61ca809b826bcd14dc77eb7b9 dt-bindings: kbuild: Pass DT_SCHEMA_FILES to dt-validate
-> date:   3 weeks ago
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20220401/202204011633.0XlAbzBd-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-> reproduce: make ARCH=arm dtbs_check
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     sort: -:2: disorder: 2022.1
->>> ERROR: dtschema minimum version is v2022.3
-> 
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

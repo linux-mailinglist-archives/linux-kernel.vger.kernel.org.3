@@ -2,128 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156C74EF9C6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60054EF9CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236324AbiDAS0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S1349906AbiDAS0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbiDAS0G (ORCPT
+        with ESMTP id S1347368AbiDAS0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:26:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126DE17FD3E;
-        Fri,  1 Apr 2022 11:24:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4955B825B1;
-        Fri,  1 Apr 2022 18:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643DDC340EE;
-        Fri,  1 Apr 2022 18:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648837453;
-        bh=rcBit4D+cJoPaMnAkofaQ1xtj/Y+I4p055Ym5x4wpfg=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=RHgJE8FS1xd73mO0tEcxy32mK8k0oW+n5FvSrRwp7qXoCHklunZnWADnIxsgwHIkx
-         LSFEc8hkCjv6tHrZp8kOKfD3Sh34+R8VuWKmHeXT1cE9+Ru5aSOvubifCsmPUWgvO8
-         2uD8kjzvMZPcQY4IbzO3rIWu9T9GAZZ/tMn/GCx6AjvjJpf89wObMEcMxTt2OsGKwb
-         EUn+Up6C/MUZjFApbX4rlQ0eOVEVMp+FXnwZ6RlkXKXXbcHM/Gh6+ZPaHQ3BmXmKcv
-         9ROrR2SNVB/R5DVLrk58YeiCLevP5lQsukCQRa5nAeojjWdmavQZzh4nHJF9mnSfag
-         rybfMxJ6QHerQ==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 1 Apr 2022 14:26:39 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1020319752E
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 11:24:49 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so3297715pjo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 11:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=u8pAbwXuVZ7sCmxLVbJSUFO5pNLY6s4GVBTnQJD82aI=;
+        b=YYzb/Ra45v4lgC8Mo/lsfCtm73X48xfnKrwB54MwA5wPabpTz4mmwu8S2I8qAYyJj5
+         Kn8uWkEGKw42ptlWD2HrRNgNxXueDq73aO//NsxdRXksW3j8tF8LEZ9TNnOWeavfn4mS
+         ZnUNSezrBOtvRZXs/fW/nfMTjCy5B2muTjyglf0mxjSXQ6YnqfEviq2D7D++dUzYgxcG
+         UdF4Qru6HTQXhc6znRvUaCdL76qs761lqxWW05blkvDbtrYsJVEI4tJZNsF09hAOBLyT
+         1WnaRrSyuvDFbGtFyDjWoiF7bOi7Ge6us5fAD3EwikvFCxEpyQbi8pGe9Fn/yt7zc2oz
+         m/pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u8pAbwXuVZ7sCmxLVbJSUFO5pNLY6s4GVBTnQJD82aI=;
+        b=NLMq0B4MCGacqspfd5elaSiil7V0lsC8L9k4/zKG5KjnZ+cS12G+fGsIaPH38g8kkl
+         r+0TgXr3P3VgK15qCi+vFzW2Zfc3cj1EBfMnSIyt3Oe/B7zA/ux2vSDEKN72h/ReVhK7
+         8pnlQQXXRGKmneo8RVEhhHlUXJu0oDICE1CZo2Ey3sIqlfrRuywg1zOeJsU6BjLVyBWg
+         Z1rNLDRau+Ovt5zXk4G5Fx82XoiYBRNI0Q1B6djAepl/K1eDG0dU8tSI7wh87pXaKR6K
+         3Fo0W4Z2qqI1cu54dS8BAFBUQmoobSi146kBuXMZX07jStWZYNBEGlouJCAUykseD0SE
+         UJwQ==
+X-Gm-Message-State: AOAM532kK0b4Pd9DX/GoM4jdpuIZzpNBTziOU8WRP3H/8IlTvHGpu7gt
+        3jAiUDksGeAShY0ugT1g1KUDxg==
+X-Google-Smtp-Source: ABdhPJwlAe0fXT7OVI7wEJgZhusGac4WQ7Y+Hjw0pJaGrpLtvXvp7Ss9UWdSc1InlU9W2r2G1vWIkQ==
+X-Received: by 2002:a17:90b:1c86:b0:1bf:2a7e:5c75 with SMTP id oo6-20020a17090b1c8600b001bf2a7e5c75mr13348243pjb.145.1648837488223;
+        Fri, 01 Apr 2022 11:24:48 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id oc10-20020a17090b1c0a00b001c7510ed0c8sm14589897pjb.49.2022.04.01.11.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 11:24:47 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 18:24:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YkdDbCdFy1Fp06K2@google.com>
+References: <YkH32nx+YsJuUbmZ@google.com>
+ <YkIFW25WgV2WIQHb@google.com>
+ <YkM7eHCHEBe5NkNH@google.com>
+ <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
+ <YkQzfjgTQaDd2E2T@google.com>
+ <YkSaUQX89ZEojsQb@google.com>
+ <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
+ <YkcTTY4YjQs5BRhE@google.com>
+ <Ykcy7fj/d+f9OUl/@google.com>
+ <Ykc+ZNWlsXCaOrM9@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <3107512.vfdyTQepKt@diego>
-References: <20220329111323.3569-1-jbx6244@gmail.com> <20220331225134.7A0A9C340ED@smtp.kernel.org> <3107512.vfdyTQepKt@diego>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-To:     Heiko =?utf-8?q?St=C3=BCbner?= <heiko@sntech.de>,
-        Johan Jonker <jbx6244@gmail.com>, zhangqing@rock-chips.com
-Date:   Fri, 01 Apr 2022 11:24:11 -0700
-User-Agent: alot/0.10
-Message-Id: <20220401182413.643DDC340EE@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ykc+ZNWlsXCaOrM9@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Heiko St=C3=BCbner (2022-04-01 00:55:55)
-> Hi Stephen,
->=20
-> Am Freitag, 1. April 2022, 00:51:32 CEST schrieb Stephen Boyd:
-> > Quoting Johan Jonker (2022-03-29 04:13:22)
-> > > diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-=
-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
-> > > new file mode 100644
-> > > index 000000000..ddd7e46af
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
-> > > @@ -0,0 +1,78 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
-> > > +
-> > > +maintainers:
-> > > +  - Elaine Zhang <zhangqing@rock-chips.com>
-> > > +  - Heiko Stuebner <heiko@sntech.de>
-> > > +
-> > > +description: |
-> > > +  The RK3188/RK3066 clock controller generates and supplies clocks t=
-o various
-> > > +  controllers within the SoC and also implements a reset controller =
-for SoC
-> > > +  peripherals.
-> > > +  Each clock is assigned an identifier and client nodes can use this=
- identifier
-> > > +  to specify the clock which they consume. All available clocks are =
-defined as
-> > > +  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
-> > > +  dt-bindings/clock/rk3066-cru.h headers and can be used in device t=
-ree sources.
-> > > +  Similar macros exist for the reset sources in these files.
-> > > +  There are several clocks that are generated outside the SoC. It is=
- expected
-> > > +  that they are defined using standard clock bindings with following
-> > > +  clock-output-names:
-> > > +    - "xin24m"    - crystal input                 - required
-> > > +    - "xin32k"    - RTC clock                     - optional
-> > > +    - "xin27m"    - 27mhz crystal input on RK3066 - optional
-> > > +    - "ext_hsadc" - external HSADC clock          - optional
-> > > +    - "ext_cif0"  - external camera clock         - optional
-> > > +    - "ext_rmii"  - external RMII clock           - optional
-> > > +    - "ext_jtag"  - external JTAG clock           - optional
-> >=20
-> > I'd expect all these clks here to be inputs to this node.
->=20
-> The optional clocks are all part of a circular dependency.
->=20
-> So for example xin32k normally is generated by the pmic and fed
-> back into the system, so to get xin32k, we need the pmic to probe,
-> which needs i2c, which in turn already needs the clock controller.
->=20
-> Or optional clocks may not be available at all.
->=20
-> So for the past years we already relied on the clock-system's
-> self adaptation if a clock becomes available at some point
-> during later boot and hence do not have those in a clocks-property.
->=20
+On Fri, Apr 01, 2022, Quentin Perret wrote:
+> On Friday 01 Apr 2022 at 17:14:21 (+0000), Sean Christopherson wrote:
+> > On Fri, Apr 01, 2022, Quentin Perret wrote:
+> > I assume there is a scenario where a page can be converted from shared=>private?
+> > If so, is there a use case where that happens post-boot _and_ the contents of the
+> > page are preserved?
+> 
+> I think most our use-cases are private=>shared, but how is that
+> different?
 
-Are you saying that we can't have these clks in the clocks property
-because there's a circular driver probe dependency? I don't see how that
-matters for the dt binding. What is broken if they're put in the binding
-and specified in the node?
+Ah, it's not really different.  What I really was trying to understand is if there
+are post-boot conversions that preserve data.  I asked about shared=>private because
+there are known pre-boot conversions, e.g. populating the initial guest image, but
+AFAIK there are no use cases for post-boot conversions, which might be more needy in
+terms of performance.
+
+> > > We currently don't allow the host punching holes in the guest IPA space.
+> > 
+> > The hole doesn't get punched in guest IPA space, it gets punched in the private
+> > backing store, which is host PA space.
+> 
+> Hmm, in a previous message I thought that you mentioned when a whole
+> gets punched in the fd KVM will go and unmap the page in the private
+> SPTEs, which will cause a fatal error for any subsequent access from the
+> guest to the corresponding IPA?
+
+Oooh, that was in the context of TDX.  Mixing VMX and arm64 terminology... TDX has
+two separate stage-2 roots, one for private IPAs and one for shared IPAs.  The
+guest selects private/shared by toggling a bit stolen from the guest IPA space.
+Upon conversion, KVM will remove from one stage-2 tree and insert into the other.
+
+But even then, subsequent accesses to the wrong IPA won't be fatal, as KVM will
+treat them as implicit conversions.  I wish they could be fatal, but that's not
+"allowed" given the guest/host contract dictated by the TDX specs.
+
+> If that's correct, I meant that we currently don't support that - the
+> host can't unmap anything from the guest stage-2, it can only tear it
+> down entirely. But again, I'm not too worried about that, we could
+> certainly implement that part without too many issues.
+
+I believe for the pKVM case it wouldn't be unmapping, it would be a PFN change.
+
+> > > Once it has donated a page to a guest, it can't have it back until the
+> > > guest has been entirely torn down (at which point all of memory is
+> > > poisoned by the hypervisor obviously).
+> > 
+> > The guest doesn't have to know that it was handed back a different page.  It will
+> > require defining the semantics to state that the trusted hypervisor will clear
+> > that page on conversion, but IMO the trusted hypervisor should be doing that
+> > anyways.  IMO, forcing on the guest to correctly zero pages on conversion is
+> > unnecessarily risky because converting private=>shared and preserving the contents
+> > should be a very, very rare scenario, i.e. it's just one more thing for the guest
+> > to get wrong.
+> 
+> I'm not sure I agree. The guest is going to communicate with an
+> untrusted entity via that shared page, so it better be careful. Guest
+> hardening in general is a major topic, and of all problems, zeroing the
+> page before sharing is probably one of the simplest to solve.
+
+Yes, for private=>shared you're correct, the guest needs to be paranoid as
+there are no guarantees as to what data may be in the shared page.
+
+I was thinking more in the context of shared=>private conversions, e.g. the guest
+is done sharing a page and wants it back.  In that case, forcing the guest to zero
+the private page upon re-acceptance is dicey.  Hmm, but if the guest needs to
+explicitly re-accept the page, then putting the onus on the guest to zero the page
+isn't a big deal.  The pKVM contract would just need to make it clear that the
+guest cannot make any assumptions about the state of private data 
+
+Oh, now I remember why I'm biased toward the trusted entity doing the work.
+IIRC, thanks to TDX's lovely memory poisoning and cache aliasing behavior, the
+guest can't be trusted to properly initialize private memory with the guest key,
+i.e. the guest could induce a #MC and crash the host.
+
+Anywho, I agree that for performance reasons, requiring the guest to zero private
+pages is preferable so long as the guest must explicitly accept/initiate conversions.
+
+> Also, note that in pKVM all the hypervisor code at EL2 runs with
+> preemption disabled, which is a strict constraint. As such one of the
+> main goals is the spend as little time as possible in that context.
+> We're trying hard to keep the amount of zeroing/memcpy-ing to an
+> absolute minimum. And that's especially true as we introduce support for
+> huge pages. So, we'll take every opportunity we get to have the guest
+> or the host do that work.
+
+FWIW, TDX has the exact same constraints (they're actually worse as the trusted
+entity runs with _all_ interrupts blocked).  And yeah, it needs to be careful when
+dealing with huge pages, e.g. many flows force the guest/host to do 512 * 4kb operations.

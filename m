@@ -2,133 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9FB4EF7F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064B54EF7EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245438AbiDAQa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        id S236548AbiDAQak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348714AbiDAQ2A (ORCPT
+        with ESMTP id S1350361AbiDAQ2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:28:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE1B22513;
-        Fri,  1 Apr 2022 09:00:46 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id yy13so6836121ejb.2;
-        Fri, 01 Apr 2022 09:00:46 -0700 (PDT)
+        Fri, 1 Apr 2022 12:28:46 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D3292D15
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 09:02:06 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y10so3475942edv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 09:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9jHgBZFPUit49TSD+W0vcWqdUpO3LWDl0zvqR1OYTQU=;
-        b=BsOyCfH9ORI2nZzbH2g35bwoxed+qvcrU4SidE+0rO+cW4Q2BiKEdUfs1IOK65bqQJ
-         kmBeDHc1KB2uUHHtgRmqtotncTR3ZXPqkihXVwYZna8VX0gsPmFgakoNB1nAjXZq5W/4
-         pIf5ucClXaSqWIZUNRBZ7EEUm5ZwArgN4Cun0Z0lkiDUmxEWsOFIegHUCP0IKu/6fNDI
-         wiypDEWT0b+cGAUjXeD/zbLlw5jnPl86pgSD4bcbF6x/8sakRcLTQQhTy2EGQiW3rTVV
-         0ky9PxC4fjOmxjMdLz1ytCREtWe2yJf5t7EJCP+WvJbwwdKDVUR9ssFocXMD3yaI4vAy
-         PcRA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ExGJe5cWYQRnXJ1osjFcvPm+UZ2yv4UWoz5QaiWRplI=;
+        b=uwpOMZKtLcWcwXl2V362svB7yw04DH35KzVh4W9E/jPqYvLuEwK20933Fn75hA5aAT
+         U5N2goSzcbM3L4pFygI/ID3CJTgvYfhLEJ8pBnzFbPLkxFI+vpTzsjXr+MbIuporCZcf
+         E66oZs9z8EkBW7qk6ixUMysKFIvMuayi88YL0lwomQ3uHUY6qyaXJxMqJmydZHqz9vio
+         UIPsAAgaznXpVY5qnNqGkP4DTmJfb91+bDI3/nGS4nnf3VPPvdg8r3hspRNKugtz90xb
+         eOU/k11RGFrJ/PgU11R49Njr1OTg8d3QKFHD9cJFQbXpnTvDoh0OEAw12HVrIoKfQ8nA
+         R5mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9jHgBZFPUit49TSD+W0vcWqdUpO3LWDl0zvqR1OYTQU=;
-        b=KKzlvucaLBC8ZGXlEfJfCkLh3zio02Gwq3Ba46Cz1r81ZE/DnxCejBW9MH8HxnapOM
-         zpUj4X+d24NBdHpewncrAqgJk0YW454bF/75PYRZQK615fq9AjJT5lD31H/+qklxysR6
-         H/klzghEJMoOr7M0BsbIrt8UxIz9mDEnNwSgk8soN3GRSlKkHo8THp0q7GtbbK2WJuyZ
-         GWsri8a9xJzOyvpOg3NgT8rXTcoJnYYTKavgWhVteyBo91OOWwtEE0hl2BmIjgDV83Ir
-         EkWCZkixPSKs4Yris9Gn/wM+2mfuFqQysedpPGK099xrc2quMqV9ySPLXGTz+bTBsCJ0
-         5l/A==
-X-Gm-Message-State: AOAM532rK9OontEJHvg/LKcIJBb3yP98G/AJ0MjY+nqEaTG9vJflSZQA
-        QB4S4VoOF+hhcp97Ne+jn+Y=
-X-Google-Smtp-Source: ABdhPJxwTLUF5gE9o2QdBV/5AMlb7dmQqN2evGxOiB/eEU3n8mrZHqeb4+4NLQr/Tt3aBF5S/5txwQ==
-X-Received: by 2002:a17:907:7ea5:b0:6e1:13c3:e35f with SMTP id qb37-20020a1709077ea500b006e113c3e35fmr409386ejc.99.1648828845097;
-        Fri, 01 Apr 2022 09:00:45 -0700 (PDT)
-Received: from anparri (host-82-59-4-232.retail.telecomitalia.it. [82.59.4.232])
-        by smtp.gmail.com with ESMTPSA id ds5-20020a170907724500b006df8f39dadesm1162174ejc.218.2022.04.01.09.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 09:00:44 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 18:00:36 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Wei Hu <weh@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 2/4] PCI: hv: Use vmbus_requestor to generate
- transaction IDs for VMbus hardening
-Message-ID: <20220401160036.GA437893@anparri>
-References: <20220328144244.100228-1-parri.andrea@gmail.com>
- <20220328144244.100228-3-parri.andrea@gmail.com>
- <PH0PR21MB3025A45FCFD77242EB9EAB27D7E19@PH0PR21MB3025.namprd21.prod.outlook.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ExGJe5cWYQRnXJ1osjFcvPm+UZ2yv4UWoz5QaiWRplI=;
+        b=Gwwl1uSwYX0p6LlzR1ECi5zFmwpR48TQnPciGnAGY/R7xLjlTeRuZdGvektTO7KDdh
+         GlybChhg/vhcddNJji685wdzLPOXxvyYd16BsMG4cu3m27cZ9IuZZW6TKOpmqI2RoVeA
+         oK+LP0TPmlU5PAOSlo8i54BFi0FKYFos7gS2z0UOjS3UdIFuYS8RPZvX0yeh3rMw8ZDV
+         vFDN2p+IuVG2sKmNUzitNXun13Ga3py/pVnVoqgffnMSEPcApod36U5dCYym6DiCnfNj
+         XlqQ0qJwP3Vz5O7UK0LpUaHMfkhQjMJr6pbVeLMLk6lp0ZB9MQJ7eOCNiV9OSEE+HzpN
+         jtag==
+X-Gm-Message-State: AOAM531LEWAy12lU4/VJsnPfjwMRYJvGzdTrwhnUw5uH1OREqTWu68aB
+        Qi2ND5jSgIQW/2XhjXatyMBtnA==
+X-Google-Smtp-Source: ABdhPJzFWUQNx1pWDoEZnKblaJ7Cspvi3M/M+Gk0b4Pyy+p35Cnf+/2U6e2eIE82vGbBpXCzstOGBw==
+X-Received: by 2002:a05:6402:3489:b0:419:88f0:4bcd with SMTP id v9-20020a056402348900b0041988f04bcdmr21736645edc.401.1648828925441;
+        Fri, 01 Apr 2022 09:02:05 -0700 (PDT)
+Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id gb29-20020a170907961d00b006e00c7b0f5asm1144831ejc.0.2022.04.01.09.02.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 09:02:04 -0700 (PDT)
+Message-ID: <c4b1e34f-453c-11b6-c083-2e5a638e8db1@linaro.org>
+Date:   Fri, 1 Apr 2022 18:02:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025A45FCFD77242EB9EAB27D7E19@PH0PR21MB3025.namprd21.prod.outlook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ASoC: samsung: Constify snd_soc_dapm_{route,widget}
+ structs
+Content-Language: en-US
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+References: <20220330204227.25081-1-rikard.falkeborn@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220330204227.25081-1-rikard.falkeborn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > @@ -91,6 +91,9 @@ static enum pci_protocol_version_t pci_protocol_versions[] = {
-> >  /* space for 32bit serial number as string */
-> >  #define SLOT_NAME_SIZE 11
-> > 
-> > +/* Size of requestor for VMbus */
-> > +#define HV_PCI_RQSTOR_SIZE 64
+On 30/03/2022 22:42, Rikard Falkeborn wrote:
+> These structs only have their address assigned to the
+> dapm_{routes,widget} fields in the snd_soc_card struct,
+> both which are pointers to const data. Make them const to
+> allow the compiler to put them in read-only memory.
 > 
-> Might include a comment about how this value was derived.  I *think*
-> it is an arbitrary value based on the assumption that having more than
-> one request outstanding is rare, and so 64 should be extremely generous
-> in ensuring that we don't ever run out.
-
-Right, I've added a comment to that effect.
-
-
-> > @@ -2696,8 +2699,9 @@ static void hv_pci_onchannelcallback(void *context)
-> >  	const int packet_size = 0x100;
-> >  	int ret;
-> >  	struct hv_pcibus_device *hbus = context;
-> > +	struct vmbus_channel *chan = hbus->hdev->channel;
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> ---
+>  sound/soc/samsung/bells.c      | 4 ++--
+>  sound/soc/samsung/littlemill.c | 4 ++--
+>  sound/soc/samsung/lowland.c    | 4 ++--
+>  sound/soc/samsung/speyside.c   | 4 ++--
+>  sound/soc/samsung/tobermory.c  | 4 ++--
+>  5 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> Having gotten the channel as a local variable, could also use the local as
-> the first argument to vmbus_recvpacket_raw().
 
-Applied.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-
-> > @@ -2743,11 +2747,13 @@ static void hv_pci_onchannelcallback(void *context)
-> >  		switch (desc->type) {
-> >  		case VM_PKT_COMP:
-> > 
-> > -			/*
-> > -			 * The host is trusted, and thus it's safe to interpret
-> > -			 * this transaction ID as a pointer.
-> > -			 */
-> > -			comp_packet = (struct pci_packet *)req_id;
-> > +			req_addr = chan->request_addr_callback(chan, req_id);
-> > +			if (req_addr == VMBUS_RQST_ERROR) {
-> > +				dev_warn_ratelimited(&hbus->hdev->device,
-> > +						     "Invalid request ID\n");
-> 
-> Could you include the req_id value in the error message that is output?  I
-> was recently debugging a problem in the storvsc driver where having that
-> value would have been handy.
-
-Sure.
-
-Thanks,
-  Andrea
+Best regards,
+Krzysztof

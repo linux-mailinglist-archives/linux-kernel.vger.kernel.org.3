@@ -2,122 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FF44EED2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9DF4EED2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 14:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345586AbiDAMdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 08:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        id S1345839AbiDAMdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 08:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242811AbiDAMdW (ORCPT
+        with ESMTP id S1345861AbiDAMdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 08:33:22 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE425F254
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:31:31 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id q20so1610994wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 05:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DjHen8SjurGesv2/euau4gflSw1KQFpZxY2bQ80GWWc=;
-        b=4nmMhJBetoYm1lZlMCb31TT7Q/YqTMXFw/vdDDCiqMQui8pdlrPAgDSr4iLNLk81lt
-         P4L7OZEbahfo6oNPilxT3fAnrGwcQemIOCzIyvg/Jlh9luW+74eaHIsWgXQ+gSacnCtb
-         quzW+wSAWHt89ynaCi6u/Sj4hKMIoRbGzKbW6CNEkgHiqiVKMDz4hm6MKC1FT8vqXI9w
-         nMfOLDSgBfsbypS1MRrXzUKuBFkal+Mbdyu2Qhh1tSMRWO6k0YAvAst4gto2/HjQG8rs
-         a98p7sGLSQxmKh6G2U/AXLdknnV7dKcKKbiCZtcPkkj6GoAfqV0ctTLKiSYTQ7kvjnFk
-         lyew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DjHen8SjurGesv2/euau4gflSw1KQFpZxY2bQ80GWWc=;
-        b=IUUIgkAH0vpxN0z7N6nWfw0PB1b5+drgF98vSQ6AzoBWBXZ5qnOk8S3P6EAdNOHVhi
-         4d2mE3OexhvGIL58EGdk+MEC8a2vvGOp0OoAbvOlVZaYHlwYwv+0SCgeve9p+/ULtl+f
-         168eVO6zQ2tsIPMuOzaq2KZhTIQTani9eKz0Ibu0JhKKztcu9IwXRMzGvjCW6hpEAgQY
-         3dNDHAEtIB1f/vHuOtFvsBkoZcp4Dh9EiuhkPAmRlnOMPTWQeVwiQmgZU0q28kJnXJ8c
-         IfjTFJV6whNfAKD91hSGcyFruL4Rj8POhtf61vrRmznMOeDSpPYo8t6fMinIb9nXV+V/
-         PhCg==
-X-Gm-Message-State: AOAM530NBJwXSvKJcnVfUOnt/S2grz6d9Rf7d5EgZxTrUp79E81DynTr
-        cJDoD5PWYWwXzqGIEKtsgv4RwJ2EX0W0SDtlJOUAEQ==
-X-Google-Smtp-Source: ABdhPJz4Cw8Lc3YzkpvNHzTnf1J5O+dJbnkNlNzONropveVyQes/R3govCZ1BmuhcVKV3tOg49L9fnv0+pqgJWj6/OM=
-X-Received: by 2002:a05:600c:3009:b0:381:194a:8cb5 with SMTP id
- j9-20020a05600c300900b00381194a8cb5mr8871178wmh.43.1648816289933; Fri, 01 Apr
- 2022 05:31:29 -0700 (PDT)
+        Fri, 1 Apr 2022 08:33:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3E8188A0C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 05:31:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6BB141FCFF;
+        Fri,  1 Apr 2022 12:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648816300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cP5GUDWML73h6kuyRp+hR2t4fRQn3Mfk1Ujn3Y5Be1o=;
+        b=KKxoiQfV81wR/8BIfKlrq7w9RQxMHjcFkb8pejY9nl24aMLyv6ptR9hCzZsiwlbZjz6I/S
+        /vke2JjzzwO604QKGSqUz4CCOFvCNFBq/+ncfaYUhEDjpeOyqZSS7i8Bo9hUVK/p6Hk4Q4
+        0w3Wcu/e/xL1gmBMZH/6HpnnSFXrOsM=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4B61BA3B92;
+        Fri,  1 Apr 2022 12:31:40 +0000 (UTC)
+Date:   Fri, 1 Apr 2022 14:31:39 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH] MAINTAINERS: Add printk indexing maintainers on mention
+ of printk_index
+Message-ID: <YkbuovatudROyl4b@alley>
+References: <YkRp9IhToTmTnkl7@chrisdown.name>
 MIME-Version: 1.0
-References: <20220401083637.2407766-1-lv.ruyi@zte.com.cn>
-In-Reply-To: <20220401083637.2407766-1-lv.ruyi@zte.com.cn>
-From:   Philipp Reisner <philipp.reisner@linbit.com>
-Date:   Fri, 1 Apr 2022 14:31:18 +0200
-Message-ID: <CADGDV=Wf9MpS7_3C6=RNTBO5rqxjtWOz170=7K215R9X38yc5w@mail.gmail.com>
-Subject: Re: [PATCH] block: fix potential dereference null pointer
-To:     cgel.zte@gmail.com
-Cc:     Lars Ellenberg <lars.ellenberg@linbit.com>,
-        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkRp9IhToTmTnkl7@chrisdown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lv Ruyi,
+On Wed 2022-03-30 15:32:20, Chris Down wrote:
+> This will primarily catch new and changed printk_index_subsys_emit
+> calls, but it's also worth catching changes to other printk indexing
+> infrastructure outside of kernel/printk/index.c.
+> 
+> This avoids churn due to missing ccs when adding new printk indexes, as
+> was the case recently for the first round of the XFS printk indexing
+> patches.
+> 
+> Signed-off-by: Chris Down <chris@chrisdown.name>
+> Cc: Petr Mladek <pmladek@suse.com>
 
-This patch does not make sense to me. A request can only get "TO_BE_SENT"
-when the connection is established with the corresponding
-cstate. Establishing a connection can only work if net_conf is set. net_conf
-can be exchanged to a new one, but never become NULL.
+Nice trick. I was not aware of that K: entries.
 
-Please share more details why you think this NULL check is necessary here?
+I have pushed the patch into printk/linux.git, branch for-5.19.
 
+We missed the direct 5.18 train. I will add the commit into
+a printk pull request for 5.18-rcX if there is any. But I think
+that it is not worth creating a pull request just with this change.
 
+I am going to make sure that you are added into CC in the meantime.
+I hope that they will add me at least ;-)
 
-On Fri, Apr 1, 2022 at 10:36 AM <cgel.zte@gmail.com> wrote:
->
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
->
-> rcu_dereference may return NULL, so check the returned pointer.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->  drivers/block/drbd/drbd_req.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
-> index e1e58e91ee58..8ab6da155e2f 100644
-> --- a/drivers/block/drbd/drbd_req.c
-> +++ b/drivers/block/drbd/drbd_req.c
-> @@ -577,6 +577,10 @@ int __req_mod(struct drbd_request *req, enum drbd_req_event what,
->                 D_ASSERT(device, !(req->rq_state & RQ_NET_MASK));
->                 rcu_read_lock();
->                 nc = rcu_dereference(connection->net_conf);
-> +               if (!nc) {
-> +                       rcu_read_unlock();
-> +                       break;
-> +               }
->                 p = nc->wire_protocol;
->                 rcu_read_unlock();
->                 req->rq_state |=
-> @@ -690,6 +694,10 @@ int __req_mod(struct drbd_request *req, enum drbd_req_event what,
->                 /* close the epoch, in case it outgrew the limit */
->                 rcu_read_lock();
->                 nc = rcu_dereference(connection->net_conf);
-> +               if (!nc) {
-> +                       rcu_read_unlock();
-> +                       break;
-> +               }
->                 p = nc->max_epoch_size;
->                 rcu_read_unlock();
->                 if (connection->current_tle_writes >= p)
-> --
-> 2.25.1
->
+Best Regards,
+Petr

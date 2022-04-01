@@ -2,44 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1214EE97F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014424EE9B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 10:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbiDAIIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 04:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
+        id S241288AbiDAI2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 04:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiDAIIM (ORCPT
+        with ESMTP id S229568AbiDAI2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 04:08:12 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2701C267590;
-        Fri,  1 Apr 2022 01:06:23 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1naCIX-0001XJ-Is; Fri, 01 Apr 2022 10:06:21 +0200
-Message-ID: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
-Date:   Fri, 1 Apr 2022 10:06:19 +0200
+        Fri, 1 Apr 2022 04:28:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C796324B5CF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 01:26:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y10so2060671edv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 01:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9hsMF7BCfjYirFT1IksTwNQVIId/FnL7I37gK+LNZTY=;
+        b=coHjGKP2dzde1Xd07Zjvj7YNaOPUdCjyk2t2tfXmsE0tcUE75ziOcdpt1fFPR6xlE0
+         qhPrIoZTrHX3XDBZcbWK2JV7qu2xXdArmEcIh9e1fUmmuE/nxFwhA56aFiL3+1Pap3Zx
+         R6uwSoW2crKgJRdu0mrbKFaVinGAyfij3jgLGZCw2R0yOkP5cYuDTt61e54mU2h28yzV
+         1vjZDKpMxE1TnESzbHi2TGM5AORJN4oJuRwahUv6pnzkuGlTvZKT1G5QyJ+cQcmdhtth
+         Rp+G/R7kq8XRHRaDQ8G/DeUtQeK9c77P/vGz71SLP3eoNjwTOWqGaiJu/C843q/R4Cnn
+         /WDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9hsMF7BCfjYirFT1IksTwNQVIId/FnL7I37gK+LNZTY=;
+        b=N9zjY9dUvaCU9scuaG9AfMLUI538T5ttYm+Wheh96vVv4yD+5iwOvIbldBAAHpoonB
+         7dPtTGMejrc6iVbnhqm3w2wAHkQnYAJ/CnMW77OzGx4jH4fm2X+Sgl5rnL21xcjmbhCH
+         tz7CLJmLdtappw9kMVsBth0RcARUVYz6JdXDrAMTSztIMVCOplFuC3ZT5GRiWv77azPn
+         sGM7684gZiYlYqvVJuqQZ5Ki5wK1BgVhYr9f3vXkCmhIXuAh9T+LQCz33mC121GrJxsr
+         sG5WivR7ZSDfVafXyQz0CkK/SiHwUuiIfMWuaHvPX//gKWCMXHXUSPKbFzbL2TCq1O5v
+         OLWg==
+X-Gm-Message-State: AOAM5311gAn047b2+rkG++Jphx7ZqYElRllvnJSAHWgw6wOXr9fhFKxv
+        p8Fdo+6YPMWOPWpluJbn9ug=
+X-Google-Smtp-Source: ABdhPJwtVEmM1Ovd0jOYKQpen33GZA28WERT42Fptm2WeHbobCIIXTD/T9VT5RllPkXMqD/pA8yRkA==
+X-Received: by 2002:a05:6402:524c:b0:419:4d8c:e959 with SMTP id t12-20020a056402524c00b004194d8ce959mr20062285edd.398.1648801605184;
+        Fri, 01 Apr 2022 01:26:45 -0700 (PDT)
+Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm757857ejz.57.2022.04.01.01.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 01:26:43 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        ira.weiny@intel.com, outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: vc04_services: Convert kmap() to kmap_local_page()
+Date:   Fri, 01 Apr 2022 10:07:36 +0200
+Message-ID: <3162339.aeNJFYEL58@leap>
+In-Reply-To: <20220330191414.23141-1-fmdefrancesco@gmail.com>
+References: <20220330191414.23141-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Cc:     Jiri Kosina <jkosina@suse.cz>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Marco <rodomar705@protonmail.com>
-Subject: Bug 215744 - input from the accelerometer disappeared, regression on
- amd_sfh on kernel 5.17
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648800383;b40de995;
-X-HE-SMSGID: 1naCIX-0001XJ-Is
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,65 +74,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On mercoled=EC 30 marzo 2022 21:14:14 CEST Fabio M. De Francesco wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page()
+> where it is feasible. In file interface/vchiq_arm/vchiq_arm.c,
+> function free_pagelist() calls kmap() / kunmap() from two places.
+>=20
+> With kmap_local_page(), the mapping is per thread, CPU local and not
+> globally visible. Therefore, free_pagelist() is a function where the
+> use of kmap_local_page() in place of kmap() is correctly suited.
+>=20
+> Convert to kmap_local_page() but, instead of open coding it, use the
+> memcpy_to_page() helper.
+>=20
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  .../vc04_services/interface/vchiq_arm/vchiq_arm.c   | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.=
+c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> index f0bfacfdea80..efb1383b5218 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> @@ -431,21 +431,18 @@ free_pagelist(struct vchiq_pagelist_info *pagelisti=
+nfo,
+>  			if (head_bytes > actual)
+>  				head_bytes =3D actual;
+> =20
+> -			memcpy((char *)kmap(pages[0]) +
+> +			memcpy_to_page(pages[0],
+>  				pagelist->offset,
+>  				fragments,
+>  				head_bytes);
+> -			kunmap(pages[0]);
+>  		}
+>  		if ((actual >=3D 0) && (head_bytes < actual) &&
+> -		    (tail_bytes !=3D 0)) {
+> -			memcpy((char *)kmap(pages[num_pages - 1]) +
+> -				((pagelist->offset + actual) &
+> -				(PAGE_SIZE - 1) & ~(g_cache_line_size - 1)),
+> +		    (tail_bytes !=3D 0))
+> +			memcpy_to_page(pages[num_pages - 1],
+> +				(pagelist->offset + actual) &
+> +				(PAGE_SIZE - 1) & ~(g_cache_line_size - 1),
+>  				fragments + g_cache_line_size,
+>  				tail_bytes);
+> -			kunmap(pages[num_pages - 1]);
+> -		}
+> =20
+>  		down(&g_free_fragments_mutex);
+>  		*(char **)fragments =3D g_free_fragments;
+> --=20
+> 2.34.1
+>=20
+Hi Greg,
 
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported about a week ago, that's why I decided
-to forward it to the lists and all people that seemed to be relevant
-here. It looks to me like this is something for Basavaraj, as it seems
-to be caused by	b300667b33b2 ("HID: amd_sfh: Disable the interrupt for
-all command"). But I'm not totally sure, I only looked briefly into the
-details. Or was this discussed somewhere else already? Or even fixed?
+I've just received a message from you that says that a patch that I sent
+on March 31 has been applied to staging testing. I know that you usually
+apply patches in first come first served fashion (FIFO), therefore I wonder
+why this patch has not yet been applied.
 
-To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215744 :
+Please don't misunderstand me: I have no hurry. I'm asking only because=20
+I suspect that this patch, sent on March 30th) could have been overlooked=20
+since it has the very identical subject of another patch that I sent on=20
+the same day (or the day before, I'm not sure about it now) and which has=20
+already been applied. Therefore, they may appear to be the same patch,
+because the only difference is that the drivers are different.
 
->  Marco 2022-03-25 15:22:19 UTC
-> 
-> After updating to 5.17, the input from the accelerometer disappeared, completely. No devices available from IIO tree. First bad commit causing it is https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c?id=b300667b33b2b5a2c8e5f8f22826befb3d7f4f2b. Reverting this and the the other two on top fixed this. Tried to not revert only the above mentioned commit, but it's still not working.
-> 
-> Marco.
+Thanks,
 
-Anyway, to get this tracked:
+=46abio
 
-#regzbot introduced: b300667b33b2b5a2c8e5f8f22826befb3d7f4
-#regzbot from: Marco <rodomar705@protonmail.com>
-#regzbot title: input: hid: input from the accelerometer disappeared due
-to changes to amd_sfh
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215744
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
--- 
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.

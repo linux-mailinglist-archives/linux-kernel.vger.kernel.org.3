@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EB04EEE20
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F834EEE11
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346352AbiDANbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S1346313AbiDAN2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbiDANbu (ORCPT
+        with ESMTP id S1346305AbiDAN2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:31:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C73276FBE;
-        Fri,  1 Apr 2022 06:30:00 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7C173210EC;
-        Fri,  1 Apr 2022 13:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648819799;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pbRJr7IPn8qeEu81RK3Y+vqOSQRcbz2LMBzi+HgbIr8=;
-        b=TPMSwncJZtNw918WLa+hnrGEKvZieut+mublksy1AsW1fKAp3kqDx6QhzYCm0gjr3DjKGN
-        YIDrpzZHz16i7J5g8VXY6aFuHmhgqgL8UI1CrMfMNrvT18N2Fzp1rLZ811jHeJ9xjbbRKS
-        sBU+HNsM4/tzebwGmFzotiQvkWHA6QQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648819799;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pbRJr7IPn8qeEu81RK3Y+vqOSQRcbz2LMBzi+HgbIr8=;
-        b=PnsAKlVlpalyVK/QMAf1uoZqLPQbGAE63ACdZs5Q8Waq0BcpDskylPQby35lqHnyrLZvYw
-        itMrDdGmwU/ZZODg==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 6F8B4A3B93;
-        Fri,  1 Apr 2022 13:29:59 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 64C3DDA7F3; Fri,  1 Apr 2022 15:26:00 +0200 (CEST)
-Date:   Fri, 1 Apr 2022 15:26:00 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
-        Nikolay Borisov <nborisov@suse.com>
-Subject: Re: [PATCH v3 2/2] btrfs: allocate page arrays using bulk page
- allocator
-Message-ID: <20220401132600.GI15609@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        kernel-team@fb.com, Nikolay Borisov <nborisov@suse.com>
-References: <cover.1648669832.git.sweettea-kernel@dorminy.me>
- <ede1d39f7878ee2ed12c1526cc2ec358a2d862cf.1648669832.git.sweettea-kernel@dorminy.me>
- <20220331173525.GF15609@twin.jikos.cz>
- <f9493291-9981-d684-bf49-a551aaf08061@dorminy.me>
+        Fri, 1 Apr 2022 09:28:19 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079321E5A76
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:26:29 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-dacc470e03so2673620fac.5
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lSOTdsVE0ZLDEykC7YpcLsTm8m5xnJaxpsAzG7AskyA=;
+        b=DPjOVqd6sczWiem7CVMNGNIsxfRmqaAw0T7Vr3T+7ra3ub8PliNU6apv5gb5/0VTaJ
+         +VZWu9Zf61/miMv8qdkDDOQCEtQa7dn3DzGxPlfXFBLF94FCJkoPfzk5SrZMuF/JWAYO
+         te2pEENMNzGA+l39vajx8HsOUy/kSQgIhQDAMVdGXyHzsnQ3qQF7bjcey2cZFMRlbZC6
+         YCBjmJpal0oOr4yMVtwlzVuueWvUPxlbmi0f5syjcKawKtEVEPaUZ4ojGsr8Wn9isahV
+         +upeEgosPhLb59qGTPXofzgjPbvwYsaA1G1ttCQzZnYnElTeXxDa6WYIq1reJqYyvaKW
+         keYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lSOTdsVE0ZLDEykC7YpcLsTm8m5xnJaxpsAzG7AskyA=;
+        b=ZdkLZnl7bEqjaxATaNS903km44EndKMJGwIN2hKVv9sb//q/6yxM6FPrXoOQT7WYcI
+         fQV0hDWSW1fp+Lo66128em9PozbwtxhqsxK8Jwbx22+2TiS3ju9wSFKF13OoXQ83YFPQ
+         XmIPvLEiS2wJF+t/S6BSeiTD9yImQoPfhXbeopRv735F32zhIHWKkApxAI8n2tjHiPaL
+         E7DeL6M0DrN9mSh0rs5gDQWGyENqPkXePaMzMSOF+s8Yi1WD2wK+C5p5YoNxk2+mT3Nv
+         ZiHaPwTmiQmhjHGcXVXPjs1VMzehS/RQxd7dRSk91lXcWtA61wG4pH0ymwjyzhm92Ulm
+         o7rA==
+X-Gm-Message-State: AOAM532vK0UfUQTraVaZmDNG21wrf5vEoipSEynM5YXPSLQKHeYMrYkW
+        Z0AwH89WBh27zieegoxpvsVpHIrXzMuq564u9kbNl3l9
+X-Google-Smtp-Source: ABdhPJxgN9DZ7VfGH4Ogv6rAyXbwrEE6/Fq4Zz5D3iZ1jysSTFxGBV4Q5s/n9B+qBB0Ua0dP70POnievRyeeTITMBVo=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr4721650oaa.200.1648819586647; Fri, 01
+ Apr 2022 06:26:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9493291-9981-d684-bf49-a551aaf08061@dorminy.me>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1648706190-4596-1-git-send-email-baihaowen@meizu.com> <2a2b1f76-7e9b-9561-e190-16d808eb5399@molgen.mpg.de>
+In-Reply-To: <2a2b1f76-7e9b-9561-e190-16d808eb5399@molgen.mpg.de>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 1 Apr 2022 09:26:15 -0400
+Message-ID: <CADnq5_Nc7BU7235ZGN6iBq9iV50UcjC6aUpGr2qBnAA1fwMpKQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu/vcn: remove Unneeded semicolon
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Haowen Bai <baihaowen@meizu.com>, David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 02:19:07PM -0400, Sweet Tea Dorminy wrote:
-> > Also in the xfs code there's memalloc_retry_wait() which is supposed to be
-> > called when repeated memory allocation is retried. What was the reason
-> > you removed it?
-> 
-> Trying to keep the behavior as close as possible to the existing behavior.
+On Fri, Apr 1, 2022 at 1:54 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Dear Haowen,
+>
+>
+> Thank you for your patch.
+>
+> Am 31.03.22 um 07:56 schrieb Haowen Bai:
+>
+> In the commit message summary, please use:
+>
+> Remove unneeded semicolon
+>
+> > report by coccicheck:
+> > drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c:1951:2-3: Unneeded semicolon
+> >
+> > fixed c543dcb ("drm/amdgpu/vcn: Add VCN ras error query support")
+>
+> Please use
+>
+> Fixes: =E2=80=A6
+>
+> and a commit hash length of 12 characters. (`scripts/checkpatch.pl =E2=80=
+=A6`
+> should tell you about this.)
 
-I see, makes sense.
+I don't know that you need to add a fixes tag unless the patch is an
+actual bug fix.  Coding style or spelling fixes are not really
+critical for getting into stable trees.
 
-> The current behavior of each alloc_page loop is to fail if alloc_page() 
-> fails; in the worst case, alloc_pages_bulk_array() calls alloc_page() 
-> after trying to get a batch, so I figured the worst case is still 
-> basically a loop calling alloc_page() and failing if it ever fails.
-> 
-> Reading up on it, though, arguably the memalloc_retry_wait() should 
-> already be in all the callsites, so maybe I should insert a patch in the 
-> middle that just adds the memalloc_retry_wait() into 
-> btrfs_alloc_page_array()? Since it's an orthogonal fixup to either the 
-> refactoring or the conversion to alloc_pages_bulk_array()?
+Alex
 
-Yeah a separate patch with the reasonig about the potential effects is
-better. The v3 is now in misc-next with the suggested loop refactoring,
-so please send the memalloc_retry_wait() update on top of that. Thanks.
+>
+>
+> Kind regards,
+>
+> Paul
+>
+>
+> > Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c b/drivers/gpu/drm/am=
+d/amdgpu/vcn_v2_5.c
+> > index 3e1de8c..17d44be 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> > @@ -1948,7 +1948,7 @@ static uint32_t vcn_v2_6_query_poison_by_instance=
+(struct amdgpu_device *adev,
+> >               break;
+> >       default:
+> >               break;
+> > -     };
+> > +     }
+> >
+> >       if (poison_stat)
+> >               dev_info(adev->dev, "Poison detected in VCN%d, sub_block%=
+d\n",

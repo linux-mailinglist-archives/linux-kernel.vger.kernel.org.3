@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6B04EF96E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290FA4EF986
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 20:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347853AbiDASBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 14:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S1349165AbiDASJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 14:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346539AbiDASBa (ORCPT
+        with ESMTP id S236250AbiDASJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:01:30 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6A36440
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:59:39 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id v12so4936833ljd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yVo2yneeaoxV8R6Z7eFrjSGIjEuANhXKz6InNmADjE4=;
-        b=VGVRglkQ5qT4QrFHTstzXLRNvKIXaFc/bd4yzqo+pIEHf/eHKnIB9w4H/LXNbkJgoi
-         07dUE722eMqQPOTQz5VtHjFY4MwJEeQpXLP1cH+bPNKnIJ1wS69+6xZB5jlhq7T9ex8K
-         C92uUGXEqPBNFrHhCfgEe/wnGQjH7eqVizKBxwOeW2xNEMV1/HnyClk7uxDwRjre2+2u
-         OeRWnfIATizFCQmWuUwDf+090/sQv9OT0MQFhF+M+6mMQ8/jZlC2Bna3mKdQnrSNXrGH
-         wFXSkgUYzcHtYdldWljBvbwgz0q96wDMuaAId8QiyjgvR6puPJLuaEAjji9l5sN+N/vl
-         ePgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yVo2yneeaoxV8R6Z7eFrjSGIjEuANhXKz6InNmADjE4=;
-        b=m/8q2TqVOS5eam5GVwXcwJN7KeFMcAjerdR3dLXEetSsWt49FNZZeTlvXqdyEwYMvb
-         fMfl8yMek9X2RC0x0BoKE+a443j4qib104mV/Vo/fduN6qRJ02xVfin8R3h6JpBwEdWK
-         mCpT5rmHpwIzNjj+QJc03QPw5ZdBK2A/hnowTuMzmsebHXxIwX2h/59qKiWa7caUbtf6
-         dXLwzgnbcY/OWyzQHXPh4l+9wY9CumdDRv9jyAL30Uh98ZJ6LV60/p0VztqiGoND7mlh
-         OnElBff4SKxupQ19fn5dbjEqXr0Aypdb74V5mrRXCYQxJ/UwPJDXSAlJMg5NN3pNolZU
-         sLrQ==
-X-Gm-Message-State: AOAM532Z1sv74qQxZqIYFdQkjLOny/Tr4OSPileoBeLfGLJOvDLIqwCy
-        M9EFrRxtuW5V5mk/MO7PBEmblbN9qJ9FabM64dHE51WWhI84cA==
-X-Google-Smtp-Source: ABdhPJz52xEbRMdX+J6RoF1PxIaVh4m7s0dsr5oimFatM/w31uwQdcfsTkc+f2SlEfD8uh7GODGMndZxkW2SY+pQS/k=
-X-Received: by 2002:a05:651c:19a8:b0:249:a7f3:25e7 with SMTP id
- bx40-20020a05651c19a800b00249a7f325e7mr13589488ljb.352.1648835977151; Fri, 01
- Apr 2022 10:59:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220401155610.1280262-1-masahiroy@kernel.org>
-In-Reply-To: <20220401155610.1280262-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 1 Apr 2022 10:59:25 -0700
-Message-ID: <CAKwvOdnwSnoiP3Vnf-77VGeD6nKc7gLa-nc-ipoCsRBk2m3ueQ@mail.gmail.com>
-Subject: Re: [PATCH] modpost: restore the warning message for missing symbol versions
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Apr 2022 14:09:21 -0400
+X-Greylist: delayed 1466 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Apr 2022 11:07:31 PDT
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72B511A9BA;
+        Fri,  1 Apr 2022 11:07:31 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1naLIS-00C92z-8l; Fri, 01 Apr 2022 17:42:52 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tim Harvey <tharvey@gateworks.com>, stable@vger.kernel.org
+Subject: [PATCH] ARM: dts: imx8mm-venice-gw{72xx,73xx}: fix OTG controller OC mode
+Date:   Fri,  1 Apr 2022 10:42:49 -0700
+Message-Id: <20220401174249.10252-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 8:56 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> This log message was accidentally chopped off.
->
-> I was wondering why this happened, but checking the ML log, Mark
-> precisely followed my suggestion [1].
->
-> I just used "..." because I was too lazy to type the sentence fully.
-> Sorry for the confusion.
->
-> [1]: https://lore.kernel.org/all/CAK7LNAR6bXXk9-ZzZYpTqzFqdYbQsZHmiWspu27rtsFxvfRuVA@mail.gmail.com/
->
-> Fixes: 4a6795933a89 ("kbuild: modpost: Explicitly warn about unprototyped symbols")
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Both the GW72xx and GW73xx boards have USB1 routed to a USB OTG
+connector and USB2 routed to a USB hub.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+The OTG connector has over-current protection with an active-low
+pin and the USB1 to HUB connection has no over-current protection (as
+the HUB itself implements this for its downstream ports).
 
-> ---
->
->  scripts/mod/modpost.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index d10f93aac1c8..ed9d056d2108 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -674,7 +674,7 @@ static void handle_modversion(const struct module *mod,
->         unsigned int crc;
->
->         if (sym->st_shndx == SHN_UNDEF) {
-> -               warn("EXPORT symbol \"%s\" [%s%s] version ...\n"
-> +               warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
->                      "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
->                      symname, mod->name, mod->is_vmlinux ? "" : ".ko",
->                      symname);
-> --
-> 2.32.0
->
+Add proper dt nodes to specify the over-current pin polarity for USB1
+and disable over-current protection for USB2.
 
+Fixes: 6f30b27c5ef5 ("arm64: dts: imx8mm: Add Gateworks i.MX 8M Mini Development Kits")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi | 2 ++
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi | 2 ++
+ 2 files changed, 4 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+index 27afa46a253a..b0de99b4a608 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+@@ -139,12 +139,14 @@
+ 
+ &usbotg1 {
+ 	dr_mode = "otg";
++	over-current-active-low;
+ 	vbus-supply = <&reg_usb_otg1_vbus>;
+ 	status = "okay";
+ };
+ 
+ &usbotg2 {
+ 	dr_mode = "host";
++	disable-over-current;
+ 	vbus-supply = <&reg_usb_otg2_vbus>;
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+index a59e849c7be2..3c26c125678d 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+@@ -166,12 +166,14 @@
+ 
+ &usbotg1 {
+ 	dr_mode = "otg";
++	over-current-active-low;
+ 	vbus-supply = <&reg_usb_otg1_vbus>;
+ 	status = "okay";
+ };
+ 
+ &usbotg2 {
+ 	dr_mode = "host";
++	disable-over-current;
+ 	vbus-supply = <&reg_usb_otg2_vbus>;
+ 	status = "okay";
+ };
 -- 
-Thanks,
-~Nick Desaulniers
+2.17.1
+

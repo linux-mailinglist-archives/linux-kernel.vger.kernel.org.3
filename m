@@ -2,80 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7998F4EEA51
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746754EEA4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344497AbiDAJYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 05:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S1344471AbiDAJYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344501AbiDAJYn (ORCPT
+        with ESMTP id S237354AbiDAJYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 05:24:43 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A084C269A6C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:22:51 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 5so3814780lfp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 02:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kqDhQ6uz5tP7E/u76ETFJKOp+CrWLSoKcxKKyX0RqW4=;
-        b=VvgYSKL81nZLAs4hoT9cuIsMhmP8h+p1g8wsI7YmSZnBeQWKpXBsjn0tFPK6mWo+U2
-         38yZO++R3yRrPbTkM8dEjkga/lPr9tEW/5pUICD57kN2HDO3BhHC5axSG09Ik5EDogUC
-         odEYy8MIWeo6kBwh2h5eip/pRRkKQhCifIcNTOZB3KSe2PCRUY+eZnDarzCNA6n2gYST
-         SOkZAmrZ5l3VSV9pwY4R233uVdLQNubqwwsEHybGBF3sXnxmo5DLZK7DHk/Hj+e+73GQ
-         p8Fz+9RGcb5+Sjw4wE9P5FkohTTgEP7sHGYookmt7H+nWkL+ROTUng18DaKcREcp96yR
-         6G4w==
+        Fri, 1 Apr 2022 05:24:20 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4042A269367
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 02:22:31 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h13-20020a056e021d8d00b002c7fb1ec601so1454032ila.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 02:22:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kqDhQ6uz5tP7E/u76ETFJKOp+CrWLSoKcxKKyX0RqW4=;
-        b=CDCsDhrZcvOngj2YNAvLkKc8VWl290tofuoEaWMdPank32NENsvRp3ZzHktNLPU8Rk
-         kkjUW5cmSrIIsPvan1bDAHiYJG274lWyQ/q2GWrhpl8h6QrFoYKeUwdPobvfvhtIJXGB
-         gt+3I7wFyp+9OzFLO42ghRwBaaCA3DhTH1GmI4w+cSmn3CRUHm4huNW/Jbf8q+9YpjyL
-         02D32BHyVvt0hC6BXWbemqZQ7rsSEU08u77jBXTLYx8+CaaTSCr/j9IVEk0KmX43XgD8
-         4U0pWCEuwu9dd8CMsSDxrZG05/mcf9V7xSBLFaSjuFAurN2NygXRbaUex1Dnva8sR2bz
-         yx0w==
-X-Gm-Message-State: AOAM533Lb8fP/nHgGd3qlV4kB8CID9K4uCsYt64OJrM67ALKHC+ZyhSj
-        LpXprWc5hqjchytrQIbSioNHPXZP1XcZmmUGUy4Qog==
-X-Google-Smtp-Source: ABdhPJwJrDnSzRPA1QW45MFiPs0C/KCemCmZtTlay3kzIbYxlsxllBZdkUFbUM0hK5gl/cOTN43YhXEhrJYg4D4w6LI=
-X-Received: by 2002:a05:6512:3b0e:b0:44a:547d:c8b8 with SMTP id
- f14-20020a0565123b0e00b0044a547dc8b8mr13429451lfv.373.1648804969656; Fri, 01
- Apr 2022 02:22:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=SiA6SGYJJIZ5dSSuu0urRTJnO2w3RknAKYRvrA5F5nY=;
+        b=q46oGYznVFOWSmC8mRbN4QrEhs0FGGUEqur6YcjMQP8eGboTlTlwYmAk2vP/JuCLKj
+         IyrVS1UuQWg5g5VxQLJzn6IOFxvbBOS1pOXLnK165DyzNH27C7Z50UMGY5v9joSea6Ll
+         OsV9KP5Em7wTARFZBaqlU83mrpU17jERGfP//Gq8fens5ezeQEAUhEeYHl2Pl71wAELh
+         q5lx5D3ySKuuK3sey9eknC7aAkgpV4Vej0dI1aZU5f35VqJNCQSaq2BmwQBkyX9vzBfJ
+         vMfHOrkaru5FZIWOy7+Gibcg2sc3SozkerHe85NJ5zhcDjjOqZWzAJbmXqQ4yFDcVl+1
+         PY0Q==
+X-Gm-Message-State: AOAM531ETwykVLH3I9n/vpXhUInCPDZDqfaOqnkSh0E8O3Gz8UFWMYgZ
+        jHAgea6RXV2C0KLdsl5+trYgh1iyYCwGXCLBOoTqt9BzZiE+
+X-Google-Smtp-Source: ABdhPJwIlEf20SuiayZwei8JX5zZOt1ZlKFN06RW8QPp1ET9O17XMgisVehnNnpxaab7p2qZ1jfxPJyP9MGeE06rKoTzANM8Sli2
 MIME-Version: 1.0
-References: <20220329032913.8750-1-axe.yang@mediatek.com> <20220329032913.8750-2-axe.yang@mediatek.com>
-In-Reply-To: <20220329032913.8750-2-axe.yang@mediatek.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Apr 2022 11:22:13 +0200
-Message-ID: <CAPDyKFqoTN1pF-L6qCHxpdMCmPtHP0aHHaDURN2QJsN3v+wZBw@mail.gmail.com>
-Subject: Re: [PATCH v9 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
- pinctrls properties
-To:     Axe Yang <axe.yang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+X-Received: by 2002:a92:1e09:0:b0:2c6:304e:61fa with SMTP id
+ e9-20020a921e09000000b002c6304e61famr16320640ile.211.1648804950620; Fri, 01
+ Apr 2022 02:22:30 -0700 (PDT)
+Date:   Fri, 01 Apr 2022 02:22:30 -0700
+In-Reply-To: <00000000000065061a05d85b8262@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000062c05a05db9451e4@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in io_poll_check_events
+From:   syzbot <syzbot+edb9c7738ba8cbdbf197@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,70 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 at 05:29, Axe Yang <axe.yang@mediatek.com> wrote:
->
-> Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
-> This feature allow SDIO devices alarm asynchronous interrupt to host
-> even when host stop providing clock to SDIO card. An extra wakeup
-> interrupt and pinctrl states for SDIO DAT1 pin state switching are
-> required in this scenario.
->
-> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> ---
->  .../devicetree/bindings/mmc/mtk-sd.yaml         | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> index 297ada03e3de..3872a6ce2867 100644
-> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> @@ -69,12 +69,22 @@ properties:
->        - const: ahb_cg
->
->    interrupts:
-> -    maxItems: 1
-> +    description:
-> +      Should at least contain MSDC GIC interrupt. To support SDIO in-band wakeup, an extended
-> +      interrupt is required and be configured as wakeup source irq.
+syzbot has found a reproducer for the following issue on:
 
-If I understand correctly, the extended interrupt (a GPIO irq) may not
-necessarily share the same interrupt parent as the primary device
-interrupt.
+HEAD commit:    e5071887cd22 Add linux-next specific files for 20220401
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1672d26b700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=17fed8f59a304eee
+dashboard link: https://syzkaller.appspot.com/bug?extid=edb9c7738ba8cbdbf197
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1016f8f3700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14907c5b700000
 
-Perhaps it's then better to extend this with "interrupts-extended"
-instead. See Documentation/devicetree/bindings/interrupt-controller/interrupts.txt.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+edb9c7738ba8cbdbf197@syzkaller.appspotmail.com
 
-> +    minItems: 1
-> +    maxItems: 2
->
->    pinctrl-names:
-> +    description:
-> +      Should at least contain default and state_uhs. To support SDIO in-band wakeup, dat1 pin
-> +      will be switched between GPIO mode and SDIO DAT1 mode, state_eint and state_dat1 are
-> +      mandatory in this scenarios.
-> +    minItems: 2
->      items:
->        - const: default
->        - const: state_uhs
-> +      - const: state_eint
->
->    pinctrl-0:
->      description:
-> @@ -86,6 +96,11 @@ properties:
->        should contain uhs mode pin ctrl.
->      maxItems: 1
->
-> +  pinctrl-2:
-> +    description:
-> +      should switch dat1 pin to GPIO mode.
-> +    maxItems: 1
-> +
->    assigned-clocks:
->      description:
->        PLL of the source clock.
-> --
-> 2.25.1
->
+general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+CPU: 1 PID: 3567 Comm: syz-executor893 Not tainted 5.17.0-next-20220401-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:vfs_poll include/linux/poll.h:86 [inline]
+RIP: 0010:io_poll_check_events+0x1e0/0x800 fs/io_uring.c:5960
+Code: e8 03 48 c7 44 24 60 00 00 00 00 44 89 74 24 68 42 80 3c 28 00 0f 85 ac 05 00 00 48 8b 5d 00 48 8d 7b 28 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 88 05 00 00 48 8b 43 28 48 8d 78 48 48 89 fa
+RSP: 0018:ffffc900038ffa00 EFLAGS: 00010206
+RAX: 0000000000000005 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801cea0000 RSI: ffffffff81eba128 RDI: 0000000000000028
+RBP: ffff8880182d28c0 R08: 0000000000000000 R09: ffff8880182d2947
+R10: ffffffff81eba2f4 R11: 0000000000000006 R12: 0000000000000001
+R13: dffffc0000000000 R14: 0000000040002038 R15: ffff8880182d2944
+FS:  0000555556048300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff954a2e140 CR3: 000000001a5af000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ io_poll_task_func+0x41/0x500 fs/io_uring.c:5995
+ handle_tw_list fs/io_uring.c:2462 [inline]
+ tctx_task_work+0x1a4/0x1460 fs/io_uring.c:2496
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ get_signal+0x1c5/0x24c0 kernel/signal.c:2681
+ arch_do_signal_or_restart+0x88/0x1a10 arch/x86/kernel/signal.c:867
+ exit_to_user_mode_loop kernel/entry/common.c:180 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:215
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:297 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:308
+ do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7ff9549bcff9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd1be31e78 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
+RAX: 0000000000000200 RBX: 0000000000000000 RCX: 00007ff9549bcff9
+RDX: 0000000000000000 RSI: 000000000000146f RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff954980880
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:vfs_poll include/linux/poll.h:86 [inline]
+RIP: 0010:io_poll_check_events+0x1e0/0x800 fs/io_uring.c:5960
+Code: e8 03 48 c7 44 24 60 00 00 00 00 44 89 74 24 68 42 80 3c 28 00 0f 85 ac 05 00 00 48 8b 5d 00 48 8d 7b 28 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 88 05 00 00 48 8b 43 28 48 8d 78 48 48 89 fa
+RSP: 0018:ffffc900038ffa00 EFLAGS: 00010206
+RAX: 0000000000000005 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801cea0000 RSI: ffffffff81eba128 RDI: 0000000000000028
+RBP: ffff8880182d28c0 R08: 0000000000000000 R09: ffff8880182d2947
+R10: ffffffff81eba2f4 R11: 0000000000000006 R12: 0000000000000001
+R13: dffffc0000000000 R14: 0000000040002038 R15: ffff8880182d2944
+FS:  0000555556048300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff954a2e140 CR3: 000000001a5af000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	e8 03 48 c7 44       	callq  0x44c74808
+   5:	24 60                	and    $0x60,%al
+   7:	00 00                	add    %al,(%rax)
+   9:	00 00                	add    %al,(%rax)
+   b:	44 89 74 24 68       	mov    %r14d,0x68(%rsp)
+  10:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
+  15:	0f 85 ac 05 00 00    	jne    0x5c7
+  1b:	48 8b 5d 00          	mov    0x0(%rbp),%rbx
+  1f:	48 8d 7b 28          	lea    0x28(%rbx),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
+  2f:	0f 85 88 05 00 00    	jne    0x5bd
+  35:	48 8b 43 28          	mov    0x28(%rbx),%rax
+  39:	48 8d 78 48          	lea    0x48(%rax),%rdi
+  3d:	48 89 fa             	mov    %rdi,%rdx
 
-Kind regards
-Uffe

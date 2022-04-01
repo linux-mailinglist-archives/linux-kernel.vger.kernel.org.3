@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5CA4EE92D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBB44EE92F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343906AbiDAHn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S1343913AbiDAHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbiDAHnw (ORCPT
+        with ESMTP id S236779AbiDAHoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:43:52 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DEB25E32B;
-        Fri,  1 Apr 2022 00:42:00 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2e592e700acso23421367b3.5;
-        Fri, 01 Apr 2022 00:42:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D57KhCyXWppjWMlxegqq8QrdaCvKLyGDT+/mDhkcfao=;
-        b=oEwgIAvR84Cr82p6tkGSq/QGT+3Am17w4Qxl+9/7YvSlHkGmnBuKnkeahOHeWvuDjd
-         C6bkPcTnsNEidPruyaKA4HtVqTCWDNu1LyyDfy2Uf3A8boKJojoFDFSnEA3qngUkis8L
-         uPYnrka0B3CYolh/bQ2FaRFg4jpg9XfM3tGeAB+KYCltvKOZv/WNII/p3tHEbngIix1o
-         3oVuZT3ORu4DKG6S43zeOfj3yh/RGL+GevIeCd60tUaKV+a8nH39EPW7dVRuaBCGnYWq
-         V0Fz/vSqL0gStvTBnwR5Tca8RSzmpvRXLt8J5Ce0M9lZoTiyq/81GA4y8s8Em6lbw6gr
-         rFgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D57KhCyXWppjWMlxegqq8QrdaCvKLyGDT+/mDhkcfao=;
-        b=NnF3wrqwfBzfQDqt9PFPnUjaD793+ZJhmo2d/4icp11AUlpXOB00p6v8/ozGJVvFfE
-         A81xapKr8wp7l8U4RA2XF0JJvQIYszFp3ggqFw7vMVjf7DKpMraE7bwg2lPKm0JorYGR
-         YY4JGC4D3lISAN45nVXneMLsM8eKB4d6WOn0GkN1MHb8A62TBTDG8liNAL8JqqKMkXrI
-         A7uAmjIhfaigdQ88E/UUndbNFXrkHHC/BOyhmo8uGtZGtyEwcKo7o+HqmWXDxYCFbAKu
-         D3hY0N2ZFsom/YF+yxfSj7ARscqI1vr4YTAPkfMF+bGbC4N0ukZHQdZ7HuIGAZToe3xH
-         2pwg==
-X-Gm-Message-State: AOAM530WNP69hWUVQ7O+mso2eJ8S2PX0dVp6g4GDk3vN+rKwymi/tQth
-        hmUB6DXCq24UD+h90/4DjIQ/hWGwyPd/5d+6/FuyQUPOpHUvNw==
-X-Google-Smtp-Source: ABdhPJwc9fh3Rv/jfT3zBI2wuBLJmieHUjQD1s8VKau3ct3ymn1EXNYUXDqKWn9oH8HbQHtRaQQlfEwBQEfLJq8Oxbk=
-X-Received: by 2002:a81:d0d:0:b0:2ea:61b1:181d with SMTP id
- 13-20020a810d0d000000b002ea61b1181dmr8729677ywn.16.1648798919207; Fri, 01 Apr
- 2022 00:41:59 -0700 (PDT)
+        Fri, 1 Apr 2022 03:44:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728D525ECAF;
+        Fri,  1 Apr 2022 00:42:49 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 09:42:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648798967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TrMSX3+gQilz8a7VNHdVxgsogGZEoAnFBXl8tPxCkps=;
+        b=xRcTCcl+csECfBYuNeNbcoKWCk5bkTzdHZkh5H4ondpwyQ+mRfNAxVURLZ7BZMZ1nXodyz
+        0RdC+akthA17UUMCGhlJJGtTRKpueBs+Mv0k07cJ0OQyxrvgsPNrQZDxjKTzAbDXkK3O3k
+        K/76cJx6ROrJi1G0DpVO/Qed01wyS1nCY/CNwBzsweCWieBVUi+jK6mJolTX4GWKFZmaJh
+        xPBXvtjwjN4BOJPzegIWlxJ85o4ZDRJp6XnOG8IcMcERx1iHygjV9hYJ6uiRCBtQZ7TyPO
+        mJ8wQzuIVRADijqlu6b8jOb0rZuUVe7njPkkt5K3wFpYzrgKpftD5QDE0NT4nA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648798967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TrMSX3+gQilz8a7VNHdVxgsogGZEoAnFBXl8tPxCkps=;
+        b=vntOswetkOSyBNw8nZmY0lvQccpo4n9jTQXXWNro3shzUqYzmw8U7y18KhVz7XtmsQ0jUP
+        lu4mxX+xZNpxX9DA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Brian Masney <bmasney@redhat.com>, Al Stone <ahs3@redhat.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] efi: Allow to enable EFI runtime services by default
+ on RT
+Message-ID: <Ykas9iX/D3WURx8T@linutronix.de>
+References: <20220331151654.184433-1-javierm@redhat.com>
+ <CAMj1kXHgyjB_BVzXx+CK0tBuJpZ3h=8XKus7nWiyovECjVQ0gw@mail.gmail.com>
+ <YkYA/Wpqa/PMczkp@lx-t490>
+ <CAFOAJEeKNy0HW82W6HV_49d5sc5L0m62QDfY9qA1906_ZzGRYg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220316200633.28974-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YkYWzf7J17AfXgLl@robh.at.kernel.org>
-In-Reply-To: <YkYWzf7J17AfXgLl@robh.at.kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 1 Apr 2022 08:41:33 +0100
-Message-ID: <CA+V-a8sia2YgWmry+SxJu3asD47PSD6UnND33599ygTBymPy_g@mail.gmail.com>
-Subject: Re: [RFC PATCH] of/platform: Drop static setup of IRQ resource from
- DT core
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAFOAJEeKNy0HW82W6HV_49d5sc5L0m62QDfY9qA1906_ZzGRYg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 2022-04-01 00:19:57 [+0200], Javier Martinez Canillas wrote:
+> > In case of (CONFIG_PREEMPT_RT=y && CONFIG_EFI_DISABLE_RUNTIME=n),
+> > shouldn't we add a small message in the kernel log warning that EFI
+> > runtime services are enabled for the RT kernel?
+> >
+> > In almost all HW, except custom ones with "verified" firmware, such a
+> > warning would be useful... This is especially true since in the embedded
+> 
+> I considered that as well but was not sure about what that message should be.
 
-On Thu, Mar 31, 2022 at 10:02 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Mar 16, 2022 at 08:06:33PM +0000, Lad Prabhakar wrote:
-> > Now that all the DT drivers have switched to platform_get_irq() we can now
-> > safely drop the static setup of IRQ resource from DT core code.
-> >
-> > With the above change hierarchical setup of irq domains is no longer
-> > bypassed and thus allowing hierarchical interrupt domains to describe
-> > interrupts using "interrupts" DT property.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > Hi All,
-> >
-> > Sending this as RFC as couple of more drivers need to hit -rc yet with
-> > the platform_get_irq() change while that is in progress I wanted to get
-> > some feedback on this patch.
->
-> I just applied this on top of current master and pushed to my
-> for-kernelci branch. It should show up in kernelCI in a bit. I did this
-> before all the fixes too and there were definitely a couple of test
-> regressions.
->
-Any chance you can share the regressions or maybe the CI script so
-that I can reproduce it locally.
+This makes sense and we had this in the past but dropped it for some
+reason.
 
-Cheers,
-Prabhakar
+> Since it will be printed even on systems whose EFI firmwares do not
+> have such long call times as the ones described in the commit that
+> disabled the runtime services for RT.
+> 
+> And in that case the warning may be misleading and make users believe
+> that a problem exists, which might not be accurate.
+
+Does this matter? The efi-rtc driver is known to cause latencies but it
+does not happen if the driver is not used. The same is probably true for
+efi-vars: It won't cause high latencies on _read_ but then a certain
+number of bit flips during read _may_ lead to write+erase which will
+cause higher latencies.
+Having a warning at boot (similar to trace_printk's warning) with the
+options listed that are known to case high latencies might be a help.
+There are some options that nobody will argue about like LOCKDEP. Then
+there are other like WATCHDOG or this one, where a debate might start ;)
+
+> Best regards,
+> Javier
+
+Sebastian

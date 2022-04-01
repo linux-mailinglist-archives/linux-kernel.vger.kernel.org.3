@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C514EFBBA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BB24EFBBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352104AbiDAUmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S1352560AbiDAUmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238330AbiDAUmK (ORCPT
+        with ESMTP id S1352462AbiDAUmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:42:10 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E632E174BB3
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:40:19 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id bn33so5403899ljb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XoSP3hMLfu85/1JEUuOtPJh8kpd6w7SHg/LZEyV60Ps=;
-        b=BmxvnjiSUtj1QaEfWViPd99IiS4Iovkvs/qZCvlsIYl13dHqNSDTC0hWMuOpMiKHPV
-         kI+Bx1QVp/F0NbIypef3IbNmkvMBfPNwHiR6qRlH0sYUIoo7Kt0hvOrkVUDdf0s2snq9
-         KBplvRS39sVsg7Ih4Ngj4cTRUzJMAJ4y2iGUA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XoSP3hMLfu85/1JEUuOtPJh8kpd6w7SHg/LZEyV60Ps=;
-        b=ALP6SVTjf6xyVqvlzcgcQxwQnh4hInyKa/WPT93aGYspHZOR1xEMs118+twSHe9gQC
-         l7FCwwJIpdn5i1CtkATzRyWA08AHAvYSWJgc6zo2ReL/Ip+UbuiTXxBoxLqntQ5Hxxlk
-         HlCIT1OyzuF8EqTEey+07b9W85jghyEF0iteLZ/vK8BxwCKyU4LPVSWwleFMo9rZAEOm
-         JCL+Sfr9Sr3vjNcXT/g5yYK4+kBVIeav4pbgi2njs4nacQSx10uoQeUmlZ1np+ce5U5m
-         o8HPrU6mXfw578hVvfqns5kE8zXw5ocRHqtDLO9oSPonpv9FfLV0hT6U1HBP6/ejNocA
-         Gr4Q==
-X-Gm-Message-State: AOAM530KFT0K20XRJanvuJAN3hBy5qZEOoG2xTWgaBKpwBcN6OwE2/4r
-        ZtEzt6maBP6YWoNQ8sA+sZf6IPKpJmdeIZs2J18=
-X-Google-Smtp-Source: ABdhPJxHjvPIlrLSBWib3KnLNUaJ1MWxD6W1tCcif8Q3PmUlEzezzBas4Tftol4jwaciMQreJKosAw==
-X-Received: by 2002:a2e:9a98:0:b0:247:e29f:fbd7 with SMTP id p24-20020a2e9a98000000b00247e29ffbd7mr14362523lji.509.1648845617894;
-        Fri, 01 Apr 2022 13:40:17 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id x20-20020a2e9dd4000000b00249b92a166asm281565ljj.48.2022.04.01.13.40.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 13:40:17 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id by7so5489498ljb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:40:16 -0700 (PDT)
-X-Received: by 2002:a2e:a549:0:b0:249:9ec3:f2b with SMTP id
- e9-20020a2ea549000000b002499ec30f2bmr14333618ljn.358.1648845616539; Fri, 01
- Apr 2022 13:40:16 -0700 (PDT)
+        Fri, 1 Apr 2022 16:42:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BF8174BB5;
+        Fri,  1 Apr 2022 13:40:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C1F7B82648;
+        Fri,  1 Apr 2022 20:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 083B8C34110;
+        Fri,  1 Apr 2022 20:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648845624;
+        bh=iBSbCmnJn0tLSWLCsWdFOU49SO8FzjCl2RMQsZ/9F3s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FhDRsYYlDiduPJ8mWW2mUyblB4vYl7KnAKxN4oG6Fw+IYhQNMoG1Lg+hzxN82iARO
+         kKOvg/zfzOkKrxJIZpHTBc1o+AKPC9zdpqGglHVSCa3ndBI+8kUfmo+/e25Mpb7p+3
+         lRJHU3dReukWjhNsEDqJU8po37gDCxbNUfRNLQAp7fIefbEYHG4qoyDYjMiE6Sz1wX
+         KH1vGrzZK62J9MaO1gWWI4f9TI7P9aBcJnzCLy/8tjN6UV/SlklEjfxfsYvSl6FHX1
+         32c60E+DGIZ699MpOO5/q90CLmLh/KeZhge7vM/4KUWRw/vCBEhAHvIP6iyGa35cJN
+         eU5uEonpc8TXQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9B1EF03849;
+        Fri,  1 Apr 2022 20:40:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220401153256.103938-1-pbonzini@redhat.com>
-In-Reply-To: <20220401153256.103938-1-pbonzini@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 1 Apr 2022 13:40:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgSqvsP08ox-KwAU4TztVsjx07cMQni-rFEzxZQw6+iiA@mail.gmail.com>
-Message-ID: <CAHk-=wgSqvsP08ox-KwAU4TztVsjx07cMQni-rFEzxZQw6+iiA@mail.gmail.com>
-Subject: Re: [GIT PULL] Second batch of KVM changes for Linux 5.18
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: Use swap() instead of open coding it
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164884562388.7178.8772575945736654263.git-patchwork-notify@kernel.org>
+Date:   Fri, 01 Apr 2022 20:40:23 +0000
+References: <20220322062149.109180-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220322062149.109180-1-jiapeng.chong@linux.alibaba.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, abaci@linux.alibaba.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 8:33 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> The larger change here is support for in-kernel delivery of Xen events
-> and timers, but there are also several other smaller features and fixes,
-> consisting of 1-2 patches each.
+Hello:
 
-No.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-I've had enough with the big random kvm pull requests.
+On Tue, 22 Mar 2022 14:21:49 +0800 you wrote:
+> Clean the following coccicheck warning:
+> 
+> ./kernel/trace/bpf_trace.c:2263:34-35: WARNING opportunity for swap().
+> ./kernel/trace/bpf_trace.c:2264:40-41: WARNING opportunity for swap().
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> 
+> [...]
 
-NONE of this has been in linux-next before the merge window. In fact,
-None of it was there even the first week of the merge window.
+Here is the summary with links:
+  - bpf: Use swap() instead of open coding it
+    https://git.kernel.org/bpf/bpf-next/c/11e17ae42377
 
-So by all means send me fixes.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-But no more of this last-minute development stuff, which clearfly was
-not ready to go before the merge window started, and must have been
-some wild last-minute merging thing.
 
-kvm needs to make stability as a priority.
-
-              Linus

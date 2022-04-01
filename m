@@ -2,100 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FD94EF8BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42B94EF8BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 19:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349759AbiDARQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 13:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S1349653AbiDARQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 13:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbiDARQQ (ORCPT
+        with ESMTP id S1346547AbiDARQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Apr 2022 13:16:16 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36A718115D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:14:25 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id h7so6138686lfl.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:14:25 -0700 (PDT)
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CCE181171
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 10:14:26 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id x2so2976505plm.7
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=utfv8DeU9QsQM5/Vhd4xkBU7PeKTZq1L4vDvZwcxU/A=;
-        b=RnYrwK0OqKnAVMAa4S1NjLBhVOO5o1T9pT3+R/Z0DJQ7ZgcmyVh1fGfFWydC77Dqk6
-         hTO+1etbZAy6rFIPVfziiLYn8Bbd9Z/nyH1w1uyvvh+s3For3BVIs9E5KDS2UJIJ/4fI
-         s8CBuVIr9splx36gLjUC3J3QaGOu8QUc2VPlA=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TmJlBi2lOKilVyCE4rEH1RU4SqqxsckJUfBoRuoJ5iA=;
+        b=XswIK2+VM16bs1EyCAixrX89EKH93ezG3dB1CWqPGTee1snfa+If/AZijfKqsxCqtT
+         czAJM7L+aUj6khEGJ6GV9s++PLrO8RH4lZkcJg2KUogkm/dx0FOh6Bdu3+L9kSytbNEF
+         XG0woWBUkeuEHiLxkjZVlGyLcAV8wCqkBCs5NYAogpMbDENpW1paD3SiXOo3FOHbC/BE
+         WYgluaeEO6OycFsdtzk13mJ436B8Tm+WeKW9KRWPo6GkYNWY936IsCliUkUrYOsiKniH
+         rexTSPppoR//hQcB3ze8glrIZD0dmsOyJ/XHIq6k4cBlE7q4ChILUSTyVJwIVcd9BGxN
+         YFAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=utfv8DeU9QsQM5/Vhd4xkBU7PeKTZq1L4vDvZwcxU/A=;
-        b=3UXfF4IQY5ekbmZWu9hntUyH6uqicA7Ng823XqyZjawvH6WPusOVPa2pVesb9V8OmS
-         UIT3dS2cRDqNibFsJt8Q3kzMgt+gguS48igyahfNie9gAqrOcwWLP1IlNb6Q9x8b39bs
-         3jLt7CqORUa4V0wmHjXzoNkkTApPX3C5tXDFdzad4/RtXs2E6NSrDIudBac5X58iZzG/
-         kwBf0ip02VnmVYkeGv+x5yhokHsJ2RTqtFxAwK+0q7551zigTg0CAn4K+uQvi2/7pm9u
-         Pj4uX9eUwKtiu4UpFRytr56uMh3/pA6OIPxi+Otr5DC2zba3QVk5LU5Y4C4TQooCFXaP
-         2fbg==
-X-Gm-Message-State: AOAM531Qn5UlvEc7Lfahr0I7MmThS6Ug1Xe/GJ9XLXIqVLvNgRDmXIRK
-        YIVVSPo+6juYbkV7DA6Cl4sz8xOU8Pi3UuZm7rc=
-X-Google-Smtp-Source: ABdhPJxHxgD/AeweVaUKBAvj360ZrqLJ08lPuBmxTpPbLG8Hk+h8N6r3uhoHYLa6zV8ZsEQN87RPvQ==
-X-Received: by 2002:a05:6512:31cd:b0:44a:9e36:a9d with SMTP id j13-20020a05651231cd00b0044a9e360a9dmr14766203lfe.271.1648833263634;
-        Fri, 01 Apr 2022 10:14:23 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id s26-20020a2e151a000000b002497f775347sm235795ljd.104.2022.04.01.10.14.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 10:14:21 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id g24so4771636lja.7
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 10:14:20 -0700 (PDT)
-X-Received: by 2002:a2e:9041:0:b0:24a:ce83:dcb4 with SMTP id
- n1-20020a2e9041000000b0024ace83dcb4mr14079887ljg.291.1648833259843; Fri, 01
- Apr 2022 10:14:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220126171442.1338740-1-aurelien@aurel32.net>
- <20220331103247.y33wvkxk5vfbqohf@pengutronix.de> <20220331103913.2vlneq6clnheuty6@pengutronix.de>
- <20220331105112.7t3qgtilhortkiq4@pengutronix.de> <CAHk-=wjnuMD091mNbY=fRm-qFyhMjbtfiwkAFKyFehyR8bPB5A@mail.gmail.com>
- <20220401065309.dizbkleyw44auhbo@pengutronix.de>
-In-Reply-To: <20220401065309.dizbkleyw44auhbo@pengutronix.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 1 Apr 2022 10:14:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgv6rXFjTdaumFgDC4ixg6QMOL83sQ2XOqvJC0h5fLX2g@mail.gmail.com>
-Message-ID: <CAHk-=wgv6rXFjTdaumFgDC4ixg6QMOL83sQ2XOqvJC0h5fLX2g@mail.gmail.com>
-Subject: Re: [PATCH] riscv: fix build with binutils 2.38
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Aurelien Jarno <aurelien@aurel32.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TmJlBi2lOKilVyCE4rEH1RU4SqqxsckJUfBoRuoJ5iA=;
+        b=cp9AUdEe7POZwXv0DgG53dhVxZRXBwtiQdmfyIvMs19e+fP6O6pJveFjfJQyKA8Jvp
+         r/ZHw9Xsf+mg2TQ+w2kzEV0hcdcXYlC/9jKWc3MZyUGPQLFy8rQyQ8SGHy/iVhVH6W++
+         LSPOZDJI+PaVrFF3YgjmX0XH8aKlvNrWJeDV6S1vRPzHLUZfmNeW8w5JwxRiAGxj/3+F
+         FcZKAc5JvqUQUethDkE0+W3aIGpbLP4n31QDpkf2KyOlnnd3G/qjpen99yidhvAjwSzX
+         km0d70xneKSbd3PcojG/7vUaOwkAYAizYj3Bz9Hb72ZiJA9CU/GIKMXWS9nax4QmVVPL
+         wfOg==
+X-Gm-Message-State: AOAM533qICr9nzmnRQBLKOgVN0kfeNTavsVD0ftgReM0OFGHs3eQ8g7k
+        Ke5RkkGZMMlFxvA2DgqjxmaDvw==
+X-Google-Smtp-Source: ABdhPJz12AHLKCpitPA4TCd4Qr7wvOzdMzS4bQmVFvgCp7soE2Mp/gjwDqcr67uNH6+9bYjsC7+Dhg==
+X-Received: by 2002:a17:902:ec8c:b0:154:2e86:dd51 with SMTP id x12-20020a170902ec8c00b001542e86dd51mr11082426plg.99.1648833265465;
+        Fri, 01 Apr 2022 10:14:25 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm3669103pfh.83.2022.04.01.10.14.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 10:14:24 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 17:14:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        kvm list <kvm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Kito Cheng <kito.cheng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        Sparse Mailing-list <linux-sparse@vger.kernel.org>,
-        ukl@pengutronix.de,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <Ykcy7fj/d+f9OUl/@google.com>
+References: <YjyS6A0o4JASQK+B@google.com>
+ <YkHspg+YzOsbUaCf@google.com>
+ <YkH32nx+YsJuUbmZ@google.com>
+ <YkIFW25WgV2WIQHb@google.com>
+ <YkM7eHCHEBe5NkNH@google.com>
+ <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
+ <YkQzfjgTQaDd2E2T@google.com>
+ <YkSaUQX89ZEojsQb@google.com>
+ <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
+ <YkcTTY4YjQs5BRhE@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkcTTY4YjQs5BRhE@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:53 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> | WARNING: invalid argument to '-march': 'zicsr_zifencei'
+On Fri, Apr 01, 2022, Quentin Perret wrote:
+> The typical flow is as follows:
+> 
+>  - the host asks the hypervisor to run a guest;
+> 
+>  - the hypervisor does the context switch, which includes switching
+>    stage-2 page-tables;
+> 
+>  - initially the guest has an empty stage-2 (we don't require
+>    pre-faulting everything), which means it'll immediately fault;
+> 
+>  - the hypervisor switches back to host context to handle the guest
+>    fault;
+> 
+>  - the host handler finds the corresponding memslot and does the
+>    ipa->hva conversion. In our current implementation it uses a longterm
+>    GUP pin on the corresponding page;
+> 
+>  - once it has a page, the host handler issues a hypercall to donate the
+>    page to the guest;
+> 
+>  - the hypervisor does a bunch of checks to make sure the host owns the
+>    page, and if all is fine it will unmap it from the host stage-2 and
+>    map it in the guest stage-2, and do some bookkeeping as it needs to
+>    track page ownership, etc;
+> 
+>  - the guest can then proceed to run, and possibly faults in many more
+>    pages;
+> 
+>  - when it wants to, the guest can then issue a hypercall to share a
+>    page back with the host;
+> 
+>  - the hypervisor checks the request, maps the page back in the host
+>    stage-2, does more bookkeeping and returns back to the host to notify
+>    it of the share;
+> 
+>  - the host kernel at that point can exit back to userspace to relay
+>    that information to the VMM;
+> 
+>  - rinse and repeat.
 
-Gaah, it works but still warns because I cut-and-pasted those
-zicsr/zifencei options from some random source that had them
-capitalized and I didn't look closely enough at the reports.
+I assume there is a scenario where a page can be converted from shared=>private?
+If so, is there a use case where that happens post-boot _and_ the contents of the
+page are preserved?
 
-Anyway, hopefully somebody can bother to fix up that. Possibly by
-changing the strncmp to a strnicmp - but I don't know what the rules
-for lower-case vs capitals are for the other options. I'm still busy
-with the kernel merge window, so this gets archived on my side..
+> We currently don't allow the host punching holes in the guest IPA space.
 
-             Linus
+The hole doesn't get punched in guest IPA space, it gets punched in the private
+backing store, which is host PA space.
+
+> Once it has donated a page to a guest, it can't have it back until the
+> guest has been entirely torn down (at which point all of memory is
+> poisoned by the hypervisor obviously).
+
+The guest doesn't have to know that it was handed back a different page.  It will
+require defining the semantics to state that the trusted hypervisor will clear
+that page on conversion, but IMO the trusted hypervisor should be doing that
+anyways.  IMO, forcing on the guest to correctly zero pages on conversion is
+unnecessarily risky because converting private=>shared and preserving the contents
+should be a very, very rare scenario, i.e. it's just one more thing for the guest
+to get wrong.
+
+If there is a use case where the page contents need to be preserved, then that can
+and should be an explicit request from the guest, and can be handled through
+export/import style functions.  Export/import would be slow-ish due to memcpy(),
+which is why I asked if there's a need to do this specific action frequently (or
+at all).

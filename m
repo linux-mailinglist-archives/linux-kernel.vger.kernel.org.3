@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CCC4EE5D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8884EE5D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243880AbiDABxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 21:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S243866AbiDABxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 21:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243869AbiDABxi (ORCPT
+        with ESMTP id S229572AbiDABxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 21:53:38 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5B82571B9;
-        Thu, 31 Mar 2022 18:51:50 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id 10so1070210qtz.11;
-        Thu, 31 Mar 2022 18:51:50 -0700 (PDT)
+        Thu, 31 Mar 2022 21:53:20 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3A12571AF;
+        Thu, 31 Mar 2022 18:51:32 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id x2so1195129plm.7;
+        Thu, 31 Mar 2022 18:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5dbe41dvMeibhzpqOSIQnkhPlg4dZw5Ah44FWg9H4CM=;
-        b=NNOnVEr19neIM7273P28aPKE9z7zRSXH889QcLQTa17aFwCGYWyoOjGZq7agLkuR/A
-         InpsvR1AP9H4yyco9jZiHjV6ZXr5gY1eGXsQGrPfsBBBZQXLq5eU/0eZYY9xusv5Y5g5
-         ul3y4ser5TjHRk3ToUENstkT9vmPN3sTyG72qBStx5y0JCsDie9YO3bY7Va16uEWEnog
-         2X9qzH7FSmwQh4flfr7TTaXc0I0+v06FBNUjYcZ5ljTCckVrBAWJiLuFlbaTR99p32Ue
-         HqIx2lCXjUKa0VFbqMXi0SFcKPClu1rvpWyXp2Tn82RQZjlsU4/psD1MUh3FmLarTCaF
-         Ycyw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZYoSvb6p0GaeXDPQELvHBRkenVkA39eLEuirDVFeehA=;
+        b=odp7QeR+amh5tY1+VtPwLjejVfDCLPZE6pLOu/7hf9AM3c5k06MY6KIt6N4BYuVyuw
+         Eob6IjyMnyd06ar4Y0wR/XLNAk9jhW4juQnJjRa1P1jxqrfaqkL2eCCKILPKgSZ4/NxM
+         2uyHIWcFHEpY/F1c8iIXv44HM3Y8j18LiIMnLALGOHY/gTew8+xneK6XsZTMFBBmptsb
+         9JcS7P9HPDDP9//e1ZstGs62JBjJU8Vl4Hn9apViVkyHXvE1To/H9CpwtbHzIpqzwK5y
+         r9zOQ2AuX7xTHTJFDlLEEn9wv7LRdJnHPZPdv8nSt1oDnXp6Fi86+X6JZTvQ7nWq6MxD
+         04mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5dbe41dvMeibhzpqOSIQnkhPlg4dZw5Ah44FWg9H4CM=;
-        b=KbaevM0w1sqrQyTWiBBmr3HzlbIk1aVYKw4qMfcxdV+LG/L6+ZUMq8yuQBlLSB05kT
-         EHiC61VabIR1RU6nozHQpdN59xzJ9jEvCQ73uLQAQlGf1zmEVYepTNHZHuxQjpUiIQUV
-         32cimOIvucJXtzSXC+1Sqh2z5N9MSpNa5ICWFEzx3WltSmqlEqf9dvrW0h1USzH/gOoB
-         O8m4jCP4EGCsW4Y7KGblza3bIe0JXtLkTL+KU56yF+NJeMesEbc4dNQ6hKCnM16YKne0
-         uXUnMVI1qmNAi+6FsqgdhgC8/cGU3bjQS8A4LTcixLbmHPKp7X2lh/Oi1M9BkA9+8FAt
-         GZxQ==
-X-Gm-Message-State: AOAM530SN6X/cnKHvJcsa9/sEJsznqmJFRirgQ9J9e98Rc1eMMsV+eTp
-        0aYlM09O6BXCDVks878hmQ9PR0zWG4QlE7vyY6R6SVCnC3+GmQ==
-X-Google-Smtp-Source: ABdhPJywTnT+U8KMGgzIv+XUbU+uuDZ2RzXK9qs3iQ2wgtBd8IFekfiG/jvTsl+kpqT6vv7mc34LdOJ2OCelcPw/1sw=
-X-Received: by 2002:a05:622a:1013:b0:2e1:c9c0:9831 with SMTP id
- d19-20020a05622a101300b002e1c9c09831mr6891444qte.245.1648777909152; Thu, 31
- Mar 2022 18:51:49 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZYoSvb6p0GaeXDPQELvHBRkenVkA39eLEuirDVFeehA=;
+        b=f9cYbIxTBxhJV9e6DL70VM8LYdOwCVKQP5Jz8m9ZntFW+CyXVx63M4VvFuI09XUDUm
+         9IqKfSePL4Yi4+JBVQP5AfhSBt5EfKEia5gF2t+BuqB04Z4roBRS5ldyOo0IUh0C5B18
+         yI9RYd5BXvSwqZtUdc1ZRxRz4y5G3CUSLxY64y9DY96BtseG47Kl9804GFZkhzGyzmFC
+         H2S2Iziec4sRPNgi8NQ8f0JnOyzDRH8xanhV33K8Jcr9+ZzsGHDD1aDASq+TKrx/llK7
+         /CeH4Hs5ze8dJcXZPG4rncL7DX7OzPLpLjdBIb+dgrn78s1rTzlVh3B+Z0Txmy7P6xE/
+         PSeQ==
+X-Gm-Message-State: AOAM533Er2Xc33gKv0Sf8eKqDpVw5KMz8yqH0JkDMgESLzASLmHHrHPc
+        W0YkTMNdaiJFXbnqCj0WLjX1ggUZjSo=
+X-Google-Smtp-Source: ABdhPJwSheKj8vhKz/bOcOxSoksiXtFZD09d8VgskzQfnfm2+Ay77WWjUocoUEjZhachDqMbzYjmSw==
+X-Received: by 2002:a17:90b:17c3:b0:1c6:b0ff:abf with SMTP id me3-20020a17090b17c300b001c6b0ff0abfmr9091598pjb.24.1648777891876;
+        Thu, 31 Mar 2022 18:51:31 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id b16-20020a056a000cd000b004fadb6f0290sm816866pfv.11.2022.03.31.18.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 18:51:31 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 18:51:30 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 032/104] KVM: x86/mmu: introduce config for
+ PRIVATE KVM MMU
+Message-ID: <20220401015130.GE2084469@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <770235e7fed04229b81c334e2477374374cea901.1646422845.git.isaku.yamahata@intel.com>
+ <55fa888b31bae80bf72cbdbdf6f27401ea4ccc5c.camel@intel.com>
 MIME-Version: 1.0
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAJuCfpFgi+Dph-dcDAvGQXwgeZVDBhok1UQ3X5kxFEfPQnxSSg@mail.gmail.com>
-In-Reply-To: <CAJuCfpFgi+Dph-dcDAvGQXwgeZVDBhok1UQ3X5kxFEfPQnxSSg@mail.gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Fri, 1 Apr 2022 09:51:21 +0800
-Message-ID: <CAGWkznHyAG1wZcUrGE4-amptT_MkSnpZCrDLy0vUWBm3z2cmJw@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <55fa888b31bae80bf72cbdbdf6f27401ea4ccc5c.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,86 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 3:26 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Mar 31, 2022 at 4:35 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> > > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > >
-> > > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > > > by loading an special algorithm into its virtual address space and make it hard
-> > > > > to protect the expanded usage without userspace's interaction.
-> > > >
-> > > > Do I get it correctly that the concern you have is that you do not know
-> > > > how much memory your workload will need because that depends on some
-> > > > parameters?
-> > > right. such as a camera APP will expand the usage from 50MB to 500MB
-> > > because of launching a special function(face beauty etc need special
-> > > algorithm)
-> > > >
-> > > > > Furthermore, fixed
-> > > > > memory.low is a little bit against its role of soft protection as it will response
-> > > > > any system's memory pressure in same way.
-> > > >
-> > > > Could you be more specific about this as well?
-> > > As the camera case above, if we set memory.low as 200MB to keep the
-> > > APP run smoothly, the system will experience high memory pressure when
-> > > another high load APP launched simultaneously. I would like to have
-> > > camera be reclaimed under this scenario.
-> >
-> > OK, so you effectivelly want to keep the memory protection when there is
-> > a "normal" memory pressure but want to relax the protection on other
-> > high memory utilization situations?
-> >
-> > How do you exactly tell a difference between a steady memory pressure
-> > (say stream IO on the page cache) from "high load APP launched"? Should
-> > you reduce the protection on the stram IO situation as well?
->
-> IIUC what you are implementing here is a "memory allowance boost"
-> feature and it seems you are implementing it entirely inside the
-> kernel, while only userspace knows when to apply this boost (say at
-> app launch time). This does not make sense to me.
-I am wondering if it could be more helpful to apply this patch on the
-background services(system_server etc) than APP, while the latter ones
-are persistent to the system.
->
-> >
-> > [...]
-> > > > One very important thing that I am missing here is the overall objective of this
-> > > > tuning. From the above it seems that you want to (ab)use memory->low to
-> > > > protect some portion of the charged memory and that the protection
-> > > > shrinks over time depending on the the global PSI metrict and time.
-> > > > But why this is a good thing?
-> > > 'Good' means it meets my original goal of keeping the usage during a
-> > > period of time and responding to the system's memory pressure. For an
-> > > android like system, memory is almost forever being in a tight status
-> > > no matter how many RAM it has. What we need from memcg is more than
-> > > control and grouping, we need it to be more responsive to the system's
-> > > load and could  sacrifice its usage  under certain criteria.
-> >
-> > Why existing tools/APIs are insufficient for that? You can watch for
-> > both global and memcg memory pressure including PSI metrics and update
-> > limits dynamically. Why is it necessary to put such a logic into the
-> > kernel?
->
-> I had exactly the same thought while reading through this.
-> In Android you would probably need to implement a userspace service
-> which would temporarily relax the memcg limits when required, monitor
-> PSI levels and adjust the limits accordingly.
-As my response to Michal's comment. Userspace monitors introduce
-latency. Take LMKD as an example, it is actually driven by the
-PSI_POLL_PERIOD_XXX_MS after first wakeup, which means
-PSI_WINDOW_SIZE_MS could be too big to rely on. IMHO, with regards to
-the responding time, LMKD is less efficient than lmk driver but more
-strong in strategy things. I would like to test this patch in real
-android's work load and feedback in next version.
->
-> >
-> > --
-> > Michal Hocko
-> > SUSE Labs
+On Fri, Apr 01, 2022 at 12:23:28AM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
+
+> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > To Keep the case of non TDX intact, introduce a new config option for
+> > private KVM MMU support.  At the moment, this is synonym for
+> > CONFIG_INTEL_TDX_HOST && CONFIG_KVM_INTEL.  The new flag make it clear
+> > that the config is only for x86 KVM MMU.
+> > 
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/Kconfig | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> > index 2b1548da00eb..2db590845927 100644
+> > --- a/arch/x86/kvm/Kconfig
+> > +++ b/arch/x86/kvm/Kconfig
+> > @@ -136,4 +136,8 @@ config KVM_MMU_AUDIT
+> >  config KVM_EXTERNAL_WRITE_TRACKING
+> >  	bool
+> >  
+> > +config KVM_MMU_PRIVATE
+> > +	def_bool y
+> > +	depends on INTEL_TDX_HOST && KVM_INTEL
+> > +
+> >  endif # VIRTUALIZATION
+> 
+> I am really not sure why need this.  Roughly looking at MMU related patches this
+> new config option is hardly used.  You have many code changes related to
+> handling private/shared but they are not under this config option.
+
+I don't want to use CONFIG_INTEL_TDX_HOST in KVM MMU code.  I think the change
+to KVM MMU should be a sort of independent from TDX.  But it seems failed based
+on your feedback.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

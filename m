@@ -2,132 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7EF4EE6CB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE094EE6CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244650AbiDADjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 23:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S244654AbiDADj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 23:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244625AbiDADjA (ORCPT
+        with ESMTP id S241470AbiDADj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 23:39:00 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1D1D1D66CA;
-        Thu, 31 Mar 2022 20:37:10 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:56850.577092616
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 7D5331002AF;
-        Fri,  1 Apr 2022 11:37:08 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-749df8664c-mvcg4 with ESMTP id a969fd7db226468788809b02151552bc for yhs@fb.com;
-        Fri, 01 Apr 2022 11:37:09 CST
-X-Transaction-ID: a969fd7db226468788809b02151552bc
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-Message-ID: <306ab457-9f3d-4d90-bb31-e6fb08b6a5ad@189.cn>
-Date:   Fri, 1 Apr 2022 11:37:07 +0800
+        Thu, 31 Mar 2022 23:39:57 -0400
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 321A923F3A6
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 20:38:06 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowABnSQaVc0Ziz_T6AA--.41623S2;
+        Fri, 01 Apr 2022 11:37:58 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hch@infradead.org
+Cc:     rpeterso@redhat.com, agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: [Cluster-devel] [PATCH] gfs2: Add check for mempool_alloc
+Date:   Fri,  1 Apr 2022 11:37:55 +0800
+Message-Id: <20220401033755.1892644-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] sample: bpf: syscall_tp_user: print result of verify_map
-Content-Language: en-US
-To:     Yonghong Song <yhs@fb.com>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1648777272-21473-1-git-send-email-chensong_2000@189.cn>
- <882349c0-123d-3deb-88e8-d400ec702d1f@fb.com>
-From:   Song Chen <chensong_2000@189.cn>
-In-Reply-To: <882349c0-123d-3deb-88e8-d400ec702d1f@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: zQCowABnSQaVc0Ziz_T6AA--.41623S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrGr4xXr1UXrW3CFyxZF17trb_yoWxWFX_WF
+        Z7Cr4DA3yvkFn7tan0yr15urn5Kw45WF4xXry5Arnaq3s5Xa47Xw1DW3yrZrs7WrZ0qrnx
+        uF9IkaySvrya9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/4/1 11:01, Yonghong Song 写道:
+On Wed, 30 Mar 2022 11:56:41 +0800 Christoph Hellwig wrote:
+>> As the potential failure of mempool_alloc(),
+>> it could return NULL pointer.
+>> Therefore, it should be better to check it
+>> in order to avoid the dereference of the NULL
+>> pointer.
+>> 
+>> Fixes: e8c92ed76900 ("GFS2: Clean up log write code path")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > 
-> 
-> On 3/31/22 6:41 PM, Song Chen wrote:
->> syscall_tp only prints the map id and messages when something goes wrong,
->> but it doesn't print the value passed from bpf map. I think it's better
->> to show that value to users.
->>
->> What's more, i also added a 2-second sleep before calling verify_map,
->> to make the value more obvious.
->>
->> Signed-off-by: Song Chen <chensong_2000@189.cn>
->> ---
->>   samples/bpf/syscall_tp_user.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/samples/bpf/syscall_tp_user.c 
->> b/samples/bpf/syscall_tp_user.c
->> index a0ebf1833ed3..1faa7f08054e 100644
->> --- a/samples/bpf/syscall_tp_user.c
->> +++ b/samples/bpf/syscall_tp_user.c
->> @@ -36,6 +36,9 @@ static void verify_map(int map_id)
->>           fprintf(stderr, "failed: map #%d returns value 0\n", map_id);
->>           return;
->>       }
->> +
->> +    printf("verify map:%d val: %d\n", map_id, val);
-> 
-> I am not sure how useful it is or anybody really cares.
-> This is just a sample to demonstrate how bpf tracepoint works.
-> The error path has error print out already.
-> 
->> +
->>       val = 0;
->>       if (bpf_map_update_elem(map_id, &key, &val, BPF_ANY) != 0) {
->>           fprintf(stderr, "map_update failed: %s\n", strerror(errno));
->> @@ -98,6 +101,7 @@ static int test(char *filename, int num_progs)
->>       }
->>       close(fd);
->> +    sleep(2);
-> 
-> The commit message mentioned this sleep(2) is
-> to make the value more obvious. I don't know what does this mean.
-> sleep(2) can be added only if it fixed a bug.
+> Please explain how it could fail to start with.
 
-The value in bpf map means how many times trace_enter_open_at are 
-triggered with tracepoint,sys_enter_openat. Sleep(2) is to enlarge the 
-result, tell the user how many files are opened in the last 2 seconds.
+I think that for safety, the cost of redundant and harmless
+check is acceptable.
+Also, checking after allocation is a good program pattern.
+Therefore, it should be better to check it although it is
+hard to fail.
 
-It shows like this:
+Thanks,
+Jiang
 
-sudo ./samples/bpf/syscall_tp
-prog #0: map ids 4 5
-verify map:4 val: 253
-verify map:5 val: 252
-
-If we work harder, we can also print those files' name and opened by 
-which process.
-
-It's just an improvement instead of a bug fix, i will drop it if 
-reviewers think it's unnecessary.
-
-Thanks.
-
-BR
-
-chensong
-> 
->>       /* verify the map */
->>       for (i = 0; i < num_progs; i++) {
->>           verify_map(map0_fds[i]);
-> 

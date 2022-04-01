@@ -2,169 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1865D4EFC5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0404EFC5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 23:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344925AbiDAVvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 17:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S1349970AbiDAVx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 17:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiDAVve (ORCPT
+        with ESMTP id S1348063AbiDAVxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 17:51:34 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B5F141FF2;
-        Fri,  1 Apr 2022 14:49:43 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 231LiLMC008796;
-        Fri, 1 Apr 2022 14:49:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=Z3tIO2ex4XoeXqRyQWxh7cKmJCtYjFHkMYVpkb7mTXY=;
- b=oMFzdwGkmk3aGN6Dc/48pnBN0pgxXcLUh6Yv5KPOtH7e6dpu0Mxlhuk9jBtqByYh8rtk
- 02UEWNQErwVEfm0UaGs28sJgwjVzoFSOrE0Y4Op52luAzBUtVJAyJHq1JIgwG4Qhxweb
- tvjL6rPGJdH2LAoNW3/r6d2xqZCOtOOSYA4= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f5gpf1wd5-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Apr 2022 14:49:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fULbw3z0pFM+NHHJCLGkBAQ6mXiu7G34DPoj9LsqhMwMT6mqo05bJOZHMNDRzxWQhb3WTPtOm7d//IMwv/6429hEWsBewHXXTBPjNE1SP5IOGWB/ERCRGAEZdkhH7QY6i4zsvetySwq7/F9qWJ3vYZGM0p+zqVSiDXul7e0qOdBWFp3y10zt+OMviR4tahyTqzprkCcjzyGUiRPLf56NtCsdQnPH15zv6KVGCFLVvPzB6aKrqgbswhKh42owT+GI8X7XyGyGS+IubU3LXb+Oxhi+tETQeB/s5ahj58j1RQh/LHwO28LhGzKT3qpnND41vXxY7F+UvanT+grEJ3figw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z3tIO2ex4XoeXqRyQWxh7cKmJCtYjFHkMYVpkb7mTXY=;
- b=mtXp0BspGUn8yrogqM2z6fZLqQrr0m1ufzHGhXyyyq+lhDES+F2O/OroebHmPZIFgeQrg6R3bRzsZOycQfjb3LuFWy45rdH7j44Q10Gvu7Q/S7B4E2Bki9lV3pt2r2RdRL+cib7JYFRcQJM9oB73MGmsicjRxIQENBHsTkb7qHAfz16walJryMjWH8JhXqkOfPoLy3IYRG/6VY6/QzuV93BGWv4uqxEvD7IfoyuU1BmpNF3JkR4oXlD7eNcUDF3SAgazU3qz3dXTHj65SU5XnZJa3oztrv9ob5z7Ld5vMdNEAqlFxmUSfxljpDBQKpjHl1tSsU3s1EFDJB0cle7/ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by BYAPR15MB3222.namprd15.prod.outlook.com (2603:10b6:a03:10d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.25; Fri, 1 Apr
- 2022 21:49:40 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::58c9:859d:dc03:3bb4]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::58c9:859d:dc03:3bb4%3]) with mapi id 15.20.5123.021; Fri, 1 Apr 2022
- 21:49:40 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: ftrace_direct (used by bpf trampoline) conflicts with live patch
-Thread-Topic: ftrace_direct (used by bpf trampoline) conflicts with live patch
-Thread-Index: AQHYRWVaJiYl6f5MqkeH0dgryMR1Y6zaSmkAgAABGoCAAU54gA==
-Date:   Fri, 1 Apr 2022 21:49:39 +0000
-Message-ID: <F5F02F6F-EEC1-4EB9-9755-97FF29D28A39@fb.com>
-References: <0962AC9B-2FBD-4578-8B2F-A376A6B3B83F@fb.com>
- <20220331214836.663bc7cf@rorschach.local.home>
- <20220331215233.496479fc@rorschach.local.home>
-In-Reply-To: <20220331215233.496479fc@rorschach.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.80.82.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 618dc060-9e9b-4126-a30d-08da14298607
-x-ms-traffictypediagnostic: BYAPR15MB3222:EE_
-x-microsoft-antispam-prvs: <BYAPR15MB3222EF0CADA6FF7AD4963F4DB3E09@BYAPR15MB3222.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0WA2qYhBeDiwqGCBq4Hy/syOYbCeMDGAw6f8VOyccwJBl48vqu1BEcVyv+Cvi85zhCjsjjGkbWOaVa/7l/3+tt6AJ834lRVUaFjhf7i0ASNDMvk6hVagIPzp2IEEt5E0LbMs+x1ZNGGoiZQbG96lR6H8ulhJ8yVxX28j4CqfpQ5et+kbfi4DXSM9mfZFMBGFrtKAHSsXEFFEhGqxyd2sJODiw1Ps8Bvr7pSd2jDEGtY5TBL4kpfKirBgGb0qrh+u08SlomWyzMvzvP7RjpP+Zz/oxvcEtPHvvxd7EtTN/gzfveMBttyLwjhJf89hmCLZ44nrOystlxcUPvfzZqov3O/j78+hzYNzJ9gmuXJVcR32Dazds0cxK1tB4KL+GJ/o72jnCgMVCfp5say9DX5AKVHuMSsuuuuFHwpEjB11hHK88IJmkR643Wj2rOfRv2oXbQw7JJ+/4w4bZvldmE9OlEQn8wb+5fXzRWlf77RxAm+FpKs7JvqWSkWS/s2vdWUi2HqWP3XBowBqRISF5X10kUuoY5tFNeW9r/Iu1pZ56wNLMZzAVynAskBEv3ZgZHIERp42dci6mKCR+O6rcISNLlEVoINm6bsztM+H4hqN8MdZa+kWal2kvSjiy2hF2mffN9I+yOBPhLfDrbZispJpmmEc7YuxmUkAIm9zltSl1ruXlyKNTbtxwf6DkadqJYFhB5fUUKXyOIOBn/CrYI7xLZKtuH/y/SpfSmVORWZ7AFbtbgkGyal4jgNrZBtHACms
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(71200400001)(91956017)(66476007)(4326008)(66946007)(33656002)(186003)(66556008)(6486002)(66446008)(54906003)(76116006)(316002)(6916009)(508600001)(2906002)(8676002)(64756008)(6506007)(36756003)(122000001)(6512007)(53546011)(38100700002)(8936002)(38070700005)(86362001)(4744005)(2616005)(5660300002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9s2LO7Ah/USa63GVtCTI+XOP/PiMaK8EO2kZHviJjiFIMJOl1HYADWZRWvyt?=
- =?us-ascii?Q?PSLKmPTNe7NeHqbthCN1g6TU5lOoBx5b3j90P4tA35rH775HTt2gjCvkkhVe?=
- =?us-ascii?Q?biC9YYbmr16EigzMRDQPDRG+zZJhpo05NV+3znhBcsx51tgexCL1nVWccwo+?=
- =?us-ascii?Q?2W6juIbQqRouucxlZiWRfHSYft4qVpRhtcXbfkE+vn+2/opTRqDo+PsqKOgo?=
- =?us-ascii?Q?44Wrb6VJFTDDQMdojIzsahyaVzI5RRGgJ0CnVUQn2/+y9Ng9j3MfC/MPTxG2?=
- =?us-ascii?Q?TMGaH5iuIM101Y+AqHu/6L49OwUbttfvUDkAF/t/LwKG0EVNd82jmniZoud6?=
- =?us-ascii?Q?DbxuBqiNtLL3nfN/2HY4Nd8VvtnFLlkVbIwJtSFBFF7gWUoHDuyb6Op3vvzK?=
- =?us-ascii?Q?Ojqm+vcIfz2Hd/vd9hccokImexiM/q8T2TKH0ABpMl8KkQ9pRSKCaM801aEK?=
- =?us-ascii?Q?GibczAhU+7rARZIsBaaj8YJBwdqdRh1DYcxdE8zGDuoVGFq4w47GvppZCCgK?=
- =?us-ascii?Q?ACoicJMG3wnfSOSKefvFu7XxjhSBF0OMALwBOYhfh+1B3X+jw4geDkT8TehD?=
- =?us-ascii?Q?1uxys1mCLAgL32DJkGhJbNbKiafoq9MLqh28jOhmUf+yuNaW+nQuELri1ds1?=
- =?us-ascii?Q?FXANLu9KJnW/hgE2yNMAuwWjvZ1h3J2j6UAxBdThTkJZweBvUVoQe/kdNmmN?=
- =?us-ascii?Q?pxK4suQUT0Fe8lEs1uz83WQUX6gdNG0b92TGeLY8Si2XWZmuqqBpT56MGBrq?=
- =?us-ascii?Q?G+soSCt00ep9EUINthgykOlyhDgTFc9NCa8uSMuXqoVOHMbHWT57cxl2ifWE?=
- =?us-ascii?Q?IXAz8Rq0/dCiHfmP9m6nAEKRPDPuNIg8zb6ExGqW/YEi24jHlVnvnaiX1m9s?=
- =?us-ascii?Q?OnpoMOwyqLqxvib2yElZGGFV6khNRVq69InY9yHR7LKNS7kZ8rUshwwZQzeJ?=
- =?us-ascii?Q?xWv9A5XnEj3rnDunphQGCUJlDx2m08mTds41jLiBTZCXNMAbtESI5Yw7hRV5?=
- =?us-ascii?Q?Pe4qIqDKegQefRkvCpMnr/CFQPkEFzIqq3fOIwjwxQ2dyO+ET8wnGMhTYblT?=
- =?us-ascii?Q?xAza9CCYpSrQAzfulvW0BUmv/ejflrAwaYmj1nZzv0RX6DAJNqdGsgxRT7CF?=
- =?us-ascii?Q?NpqkdAAMosEkwxdnUnYOd5H03UWpJHDg/2tcpt/1eSpgZLEyiv5buF9Ri4be?=
- =?us-ascii?Q?u7BptN6qeKFOzRonblMLjR9cMIOTK7PcrXen1vaMy+xeN+AdtZfzchNJHaqj?=
- =?us-ascii?Q?hgtX7BANA1pTrG7mpn7QCQ9oYgrYXfoAwq89ScCj1QU6mJ+S0qYy+nIKmbit?=
- =?us-ascii?Q?zu+asomUBuqK6pJx1OCu9kDMHj0BSklIZmbOSkTXul49ieq8hW8fefn4y6TV?=
- =?us-ascii?Q?h49GVLsjGoDubD0S7+y5dIFt65NEpD5apzza21M8SrteVG3RIF5zvUZckWnp?=
- =?us-ascii?Q?1JOB1VrCnci2CfCPP2+c6cQJZYmNapjMQQtuRdi8+m9hXs+EZcmrw3sqLqX9?=
- =?us-ascii?Q?5FKphYHB/KXGvf4IQXD8i9dbJ/hz9LyE9+DNqQjcSipTnj1pa2fdAegm/rjc?=
- =?us-ascii?Q?nEfkTIUoyLc5MeBB7fiotN2HfmVmqdz/w6wv9vqVMNDYB3IU5yrlJLi2iEHl?=
- =?us-ascii?Q?aUraj+VGEe/D55FOLSOlX6tYrLU1Z4oGa4F3Lx/i/ai5Ca6tPS/levchcKTj?=
- =?us-ascii?Q?wVlj5Qt75UJUKX0HpjMPrvpcCyBTWgz2RL6PI7TU7v/5uctyUkcAWoKDPi2G?=
- =?us-ascii?Q?TAHPhIESkQ5bE5gnyGl6CzIJIT/1DvoSDWliBjN4ll3hSf/lHras?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <BFC9CD529EEE50438E7E996CD5B17825@namprd15.prod.outlook.com>
+        Fri, 1 Apr 2022 17:53:25 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EE620169F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 14:51:33 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3691853pjh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 14:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tGJBlLkmgZTxVHoFIKbZU2QoQ1f35loIsBzJHpfAMdY=;
+        b=IRuzE1kOG1hxaxxmTzAYMb3FDbCSi+yGguqeIEEkb6PgEkoj8OJw0Wbp1eIB/2Me3p
+         xuGdoi2lhxv9CVVqjbuzF613Zeln3iPfWQbpeqsqnIjocqNg67KqieyA7dgqBsr6SPWw
+         6wrS6Bcn1dzQKZfr8jGNVSlBrpiQex5k5ZZVGbSMbGIQL9BBIVc8t4DjWPryYQMsaDT7
+         sBa+1gGJFgMAJ67j3nixa//B/dzXUciEMBXRawWskMuQq0oEDW6nhlEHbFTTT2BDgxot
+         fiB+GkBX8L5o3ipdqqKD5S9ccxL7FPl6wgCEKzdtwvCa6iUBtuWv0DJ6dsXGF6WD5sFu
+         Jqwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tGJBlLkmgZTxVHoFIKbZU2QoQ1f35loIsBzJHpfAMdY=;
+        b=xLlUNFxZfcj5ukdSN/OET1IdJOdT+vHjSjnOnnebIdXncU/43sy5jxEqPlzFH3CUIm
+         1+xjMXL0jBliUR7QWVl0cLkD1Whs/fQ+kQKIHKSytWQyd6WYD/a4sqlW2h8smWz3ociP
+         XSxfcrUbEBPFm8Pt0dGXGqhd7GQAWuT22szqAjQ7QAQMeCUHcRGzz9EqNlxlQCUghEWc
+         1N9EEE+O3wvFYsSF7Urjbj0xAZgd0juHFfZA0vhI+0uPVzrujZ/vG5UKb4eMNO4I9pnk
+         WSZ6P8PZ2pQsVDb/B9vdVHje4atmx7eGeJ0Ux1TSmoVZcms8rb7P0rHqXFALtx6n5nHa
+         +QjQ==
+X-Gm-Message-State: AOAM531vxN81eW4Z2VPT/R3czdIRFpydtPQ+ec29+7/KwbWwil5nTsul
+        Yeo5NP+RyRX9S+sSM5a2l1qPlA==
+X-Google-Smtp-Source: ABdhPJyqYTrcktF2dqvzUqC+PSXKCwUngmQC02h4W4A2CK4ObfO87QOMayd/x3RhS8ZivUZH3XpGcQ==
+X-Received: by 2002:a17:90a:4981:b0:1c6:b6dd:d7a9 with SMTP id d1-20020a17090a498100b001c6b6ddd7a9mr13855937pjh.22.1648849892251;
+        Fri, 01 Apr 2022 14:51:32 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e10-20020a17090a630a00b001c685cfd9d1sm3392861pjj.20.2022.04.01.14.51.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 14:51:31 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 21:51:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
+Message-ID: <Ykdz4GVF4C+S/LGg@google.com>
+References: <cover.1646944472.git.maciej.szmigiero@oracle.com>
+ <19c757487eeeff5344ff3684fe9c090235b07d05.1646944472.git.maciej.szmigiero@oracle.com>
+ <YkdFSuezZ1XNTTfx@google.com>
+ <ff29e77c-f16d-d9ef-9089-0a929d3c2fbf@maciej.szmigiero.name>
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 618dc060-9e9b-4126-a30d-08da14298607
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 21:49:40.0271
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: um7uozFSNjIyd8m2Z/mtP9tbYU+9lfFzap3SuHSJ5VoG6nyjkoyxm2qqiDSyTou6E9pLATct3qPgCzhOe3gMPA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3222
-X-Proofpoint-ORIG-GUID: 0GQ6-o7mhuB6x9cRNjp2Ri4zoW8yWCoj
-X-Proofpoint-GUID: 0GQ6-o7mhuB6x9cRNjp2Ri4zoW8yWCoj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-01_07,2022-03-31_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff29e77c-f16d-d9ef-9089-0a929d3c2fbf@maciej.szmigiero.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Mar 31, 2022, at 6:52 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Apr 01, 2022, Maciej S. Szmigiero wrote:
+> On 1.04.2022 20:32, Sean Christopherson wrote:
+> > On Thu, Mar 10, 2022, Maciej S. Szmigiero wrote:
+> > > +	/* The return address pushed on stack by the CPU for some injected events */
+> > > +	svm->vmcb->control.next_rip            = svm->nested.ctl.next_rip;
+> > 
+> > This needs to be gated by nrips being enabled _and_ exposed to L1, i.e.
+> > 
+> > 	if (svm->nrips_enabled)
+> > 		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
 > 
-> On Thu, 31 Mar 2022 21:48:36 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+> It can be done, however what if we run on a nrips-capable CPU,
+> but don't expose this capability to the L1?
+
+Oh, right, because the field will be populated by the CPU on VM-Exit.  Ah, the
+correct behavior is to grab RIP from vmcb12 to emulate nrips=0 hardware simply
+not updating RIP.  E.g. zeroing it out would send L2 into the weeds on IRET due
+the CPU pushing '0' on the stack when vectoring the injected event.
+
+	if (svm->nrips_enabled)
+		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+	else if (boot_cpu_has(X86_FEATURE_NRIPS))
+		vmcb02->control.next_rip    = vmcb12_rip;
+
+> The CPU will then push whatever value was left in this field as
+> the return address for some L1 injected events.
 > 
->>> Does this make sense to you? Did I miss something?  
->> 
->> I thought the BPF trampoline does:
->> 
->> 	call bpf_trace_before_function
->> 	call original_function + X86_PATCH_SIZE
->> 	call bpf_trace_after_function
->> 
->> Thus, the bpf direct trampoline calls the unpatched version of the
->> function call making the live patch useless. Or is this not what it
->> does?
+> Although without nrips feature the L1 shouldn't even attempt event
+> injection, copying this field anyway will make it work if L1 just
+> expects this capability based on the current CPU model rather than
+> by checking specific CPUID feature bits.
+
+L1 may still inject the exception, it just advances the RIP manually.  As above,
+the really messy thing is that, because there's no flag to say "don't use NextRIP!",
+the CPU will still consume NextRIP and push '0' on the stack for the return RIP
+from the INTn/INT3/INTO.  Yay.
+
+I found that out the hard way (patch in-progress).  The way to handle event
+injection if KVM is loaded with nrips=0 but nrips is supported in hardware is to
+stuff NextRIP on event injection even if nrips=0, otherwise the guest is hosed.
+
+> > > +	u64 next_rip;
+> > >   	u64 nested_cr3;
+> > >   	u64 virt_ext;
+> > >   	u32 clean;
+> > 
+> > I don't know why this struct has
+> > 
+> > 	u8 reserved_sw[32];
+> > 
+> > but presumably it's for padding, i.e. probably should be reduced to 24 bytes.
 > 
-> Or perhaps you are only talking about the part of bpf that does not
-> trace the end of a function?
+> Apparently the "reserved_sw" field stores Hyper-V enlightenments state -
+> see commit 66c03a926f18 ("KVM: nSVM: Implement Enlightened MSR-Bitmap feature")
+> and nested_svm_vmrun_msrpm() in nested.c.
 
-Yeah, we do call original_function + X86_PATCH_SIZE if there is 
-fexit or fmod_ret programs. So this alone is not enough to make the 
-two work together. :(
-
-Let me see how can we fix it...
-
-Thanks,
-Song
-
+Argh, that's a terrible name.  Thanks for doing the homework, I was being lazy.

@@ -2,124 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973FF4EEE9D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7711D4EEE96
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346571AbiDAN4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
+        id S1346579AbiDAN4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346559AbiDAN4s (ORCPT
+        with ESMTP id S1346560AbiDAN4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:56:48 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8081DE6D7
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:54:59 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id y142so5097012ybe.11
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RTRXw+jgIWbLNHXOv9v+56Mv+zUPD6iW+b0omSppcHw=;
-        b=FZ3K9XHmNes7RLB8Fkt+C0d0UO301AbdRo3mNmfLXK4LI5+Zm/7L7Z6iUg3RVJTEer
-         iCVvoYnwcEQaFFx80WkeJ/q7xNQpiqMV+LZ/gQ0UuQgC/jCql9UGB4TYP1LYYQCtbC2O
-         NvE5O1UTzh5i1Ce8w02ymOL2AZx/B00AUQf3F9tJ0MoaDKt2pSRC+SYkMcQu9l7fcOjD
-         kC1wk6BAaBDvcntpfgq+QSoPBhx3vI1QO4oJs3ZkdiXZST458O1Bm7soAGjQy+mRACN2
-         nBqafY1ExTSxCzTnLD9m5MMfU6DFbv3kXZePCQQGCSzTV0ScOeLRPcgjS/x/DfcjSBxK
-         3Kyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RTRXw+jgIWbLNHXOv9v+56Mv+zUPD6iW+b0omSppcHw=;
-        b=c5/8zEK7gpD210ZxZeZ1R4fgFFqM9e9dkybwh9t20LFmbtFYbcKOWj0lSrs1oPewy9
-         KtNqYXKaTRdLg3paT7SF3fMZaRgcYEKdzOfjcfH9clQC0tza9tW1F9s0oUmI3Wfjy6R+
-         rop+47LqhvNkf22j7YJ0xQWpNK+zGC/9jwNTQd+DFv621HQG+0fRLjDKg0Fql0s9OWHy
-         l3dZz0xnNSux6PgUU3gCXr9M/Jo6PLZ6iHTlsQkMQuHbhquhw1ji1J/rxc3TDsQcMLvm
-         HIhMuMnyBWN/bhIYcbXzjSzIV1VMuYpL+dtBKuE4xPYyonq4wuQYo/zF8gOO8vOjE1kU
-         JI1w==
-X-Gm-Message-State: AOAM530+ECm41tv6jyaPEpMF5a2toCTCiIoEqt7YzTUMuCbcdedmeKRS
-        LGIah76F19DGB3c5nz5X520soT0Z3ztkJm3/CtpX8g==
-X-Google-Smtp-Source: ABdhPJyhnaWjscK1FH7yecMTp/D05/vVfyJXpOdWBCPPcWESkr61dGx7YUpnk/Q05YzLYJSdtOBgbNw3XNnSir0REio=
-X-Received: by 2002:a25:4003:0:b0:633:8ab5:b93e with SMTP id
- n3-20020a254003000000b006338ab5b93emr8738001yba.387.1648821298015; Fri, 01
- Apr 2022 06:54:58 -0700 (PDT)
+        Fri, 1 Apr 2022 09:56:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCE31DEA96;
+        Fri,  1 Apr 2022 06:54:59 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CF9901FD00;
+        Fri,  1 Apr 2022 13:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648821297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Frp3tIInEka3P2Yr15DFPHMIzz3d44O44QCWyD0Pr5c=;
+        b=PDXrAaej6QpQVD7IiCDYtXp8jX4AEsXSuJr27twRHZcxS5CjCoDTKkdTfsGU37Nj2kezwE
+        Rb3A9Nw0y6VvRZnolWrXOHyzp1cXzmPB98fySjUhUhsKVjp9FuMqWAa7B2+Wj5dFMibqMC
+        Cc/IydVHKdStWNk37bnYbWX7Qp333HE=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9D223A3B82;
+        Fri,  1 Apr 2022 13:54:57 +0000 (UTC)
+Date:   Fri, 1 Apr 2022 15:54:57 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+Message-ID: <YkcEMdsi9G5y8mX4@dhcp22.suse.cz>
+References: <20220331084151.2600229-1-yosryahmed@google.com>
 MIME-Version: 1.0
-References: <E1nZMdl-0006nG-0J@plastiekpoot> <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
- <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za> <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
- <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za> <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
- <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za> <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
- <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
- <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za> <CANn89i+KsjGUppc3D8KLa4XUd-dzS3A+yDxbv2bRkDEkziS1qw@mail.gmail.com>
- <4b4ff443-f8a9-26a8-8342-ae78b999335b@uls.co.za> <CANn89iL203ZuRdcyxh16yKXqxXJW2u+4559DsDFmW=8S+_n7fg@mail.gmail.com>
- <CANn89i+6LCWOZahAi_vPf9H=SKw-4vdMTj5T0dYsp1Se4g9-yw@mail.gmail.com> <628a909d-1090-dc62-a730-fd9514079218@uls.co.za>
-In-Reply-To: <628a909d-1090-dc62-a730-fd9514079218@uls.co.za>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 1 Apr 2022 06:54:46 -0700
-Message-ID: <CANn89iL38aCi4TWMePFwHDbUzJgV+mGEVMVukx8Z636EPCWEag@mail.gmail.com>
-Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP connections
-To:     Jaco Kroon <jaco@uls.co.za>
-Cc:     Neal Cardwell <ncardwell@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Yuchung Cheng <ycheng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331084151.2600229-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 4:36 AM Jaco Kroon <jaco@uls.co.za> wrote:
->
-> Hi Eric,
->
-> On 2022/04/01 02:54, Eric Dumazet wrote:
-> > On Thu, Mar 31, 2022 at 5:41 PM Eric Dumazet <edumazet@google.com> wrote:
-> >> On Thu, Mar 31, 2022 at 5:33 PM Jaco Kroon <jaco@uls.co.za> wrote:
-> >>
-> >>> I'll deploy same on a dev host we've got in the coming week and start a
-> >>> bisect process.
-> >> Thanks, this will definitely help.
-> > One thing I noticed in your pcap is a good amount of drops, as if
-> > Hystart was not able to stop slow-start before the drops are
-> > happening.
-> >
-> > TFO with one less RTT at connection establishment could be the trigger.
-> >
-> > If you are still using cubic, please try to revert.
-> Sorry, I understand TCP itself a bit, but I've given up trying to
-> understand the various schedulers a long time ago and am just using the
-> defaults that the kernel provides.  How do I check what I'm using, and
-> how can I change that?  What is recommended at this stage?
+On Thu 31-03-22 08:41:51, Yosry Ahmed wrote:
+> From: Shakeel Butt <shakeelb@google.com>
+> 
+> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
+> 
+> Use case: Proactive Reclaim
+> ---------------------------
+> 
+> A userspace proactive reclaimer can continuously probe the memcg to
+> reclaim a small amount of memory. This gives more accurate and
+> up-to-date workingset estimation as the LRUs are continuously
+> sorted and can potentially provide more deterministic memory
+> overcommit behavior. The memory overcommit controller can provide
+> more proactive response to the changing behavior of the running
+> applications instead of being reactive.
+> 
+> A userspace reclaimer's purpose in this case is not a complete replacement
+> for kswapd or direct reclaim, it is to proactively identify memory savings
+> opportunities and reclaim some amount of cold pages set by the policy
+> to free up the memory for more demanding jobs or scheduling new jobs.
+> 
+> A user space proactive reclaimer is used in Google data centers.
+> Additionally, Meta's TMO paper recently referenced a very similar
+> interface used for user space proactive reclaim:
+> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+> 
+> Benefits of a user space reclaimer:
+> -----------------------------------
+> 
+> 1) More flexible on who should be charged for the cpu of the memory
+> reclaim. For proactive reclaim, it makes more sense to be centralized.
+> 
+> 2) More flexible on dedicating the resources (like cpu). The memory
+> overcommit controller can balance the cost between the cpu usage and
+> the memory reclaimed.
+> 
+> 3) Provides a way to the applications to keep their LRUs sorted, so,
+> under memory pressure better reclaim candidates are selected. This also
+> gives more accurate and uptodate notion of working set for an
+> application.
+> 
+> Why memory.high is not enough?
+> ------------------------------
+> 
+> - memory.high can be used to trigger reclaim in a memcg and can
+>   potentially be used for proactive reclaim.
+>   However there is a big downside in using memory.high. It can potentially
+>   introduce high reclaim stalls in the target application as the
+>   allocations from the processes or the threads of the application can hit
+>   the temporary memory.high limit.
+> 
+> - Userspace proactive reclaimers usually use feedback loops to decide
+>   how much memory to proactively reclaim from a workload. The metrics
+>   used for this are usually either refaults or PSI, and these metrics
+>   will become messy if the application gets throttled by hitting the
+>   high limit.
+> 
+> - memory.high is a stateful interface, if the userspace proactive
+>   reclaimer crashes for any reason while triggering reclaim it can leave
+>   the application in a bad state.
+> 
+> - If a workload is rapidly expanding, setting memory.high to proactively
+>   reclaim memory can result in actually reclaiming more memory than
+>   intended.
+> 
+> The benefits of such interface and shortcomings of existing interface
+> were further discussed in this RFC thread:
+> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+> 
+> Interface:
+> ----------
+> 
+> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> trigger reclaim in the target memory cgroup.
+> 
+> 
+> Possible Extensions:
+> --------------------
+> 
+> - This interface can be extended with an additional parameter or flags
+>   to allow specifying one or more types of memory to reclaim from (e.g.
+>   file, anon, ..).
+> 
+> - The interface can also be extended with a node mask to reclaim from
+>   specific nodes. This has use cases for reclaim-based demotion in memory
+>   tiering systens.
+> 
+> - A similar per-node interface can also be added to support proactive
+>   reclaim and reclaim-based demotion in systems without memcg.
+> 
+> For now, let's keep things simple by adding the basic functionality.
 
-How to check: cat /proc/sys/net/ipv4/tcp_congestion_control"
+Yes, I am for the simplicity and this really looks like a bare minumum
+interface. But it is not really clear who do you want to add flags on
+top of it?
 
-This is of course orthogonal to the buf we are tracking here,
-but given your long RTT, I would recommend using fq packet scheduler and bbr.
+I am not really sure we really need a node aware interface for memcg.
+The global reclaim interface will likely need a different node because
+we do not want to make this CONFIG_MEMCG constrained.
+ 
+> [yosryahmed@google.com: refreshed to current master, updated commit
+> message based on recent discussions and use cases]
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-tc qd replace dev eth0 root fq   # or use mq+fq if your NIC is multi
-queue and you need a good amount of throughput
+All that being said. I haven't been a great fan for explicit reclaim
+triggered from the userspace but I do recognize that limitations of the 
+existing interfaces is just too restrictive.
 
-insmod tcp_bbr   # (after enabling CONFIG_TCP_CONG_BBR=m)
-echo bbr >/proc/sys/net/ipv4/tcp_congestion_control
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-
-> >
-> >
-> > commit 4e1fddc98d2585ddd4792b5e44433dcee7ece001
-> > Author: Eric Dumazet <edumazet@google.com>
-> > Date:   Tue Nov 23 12:25:35 2021 -0800
-> >
-> >     tcp_cubic: fix spurious Hystart ACK train detections for
-> > not-cwnd-limited flows
-> Ok, instead of starting with bisect, if I can reproduce in dev I'll use
-> this one first.
-
-Thanks ! (again this won't fix the bug, this is really a shoot in the dark)
+Thanks!
+-- 
+Michal Hocko
+SUSE Labs

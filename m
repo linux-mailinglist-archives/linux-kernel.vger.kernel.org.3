@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1796E4EE5B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08F84EE5BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 03:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243761AbiDABdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 21:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S243812AbiDABgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 21:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243760AbiDABdY (ORCPT
+        with ESMTP id S243787AbiDABgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 21:33:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0202D1EC98D
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 18:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648776695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ur4bX7kLocMyHlMkWd6be/nI5FhdYUXpSu22PLx25Yc=;
-        b=aqZ+EIXIA4O/Mqq2bl8PAmSC5TQiRkElAuUSLFqwRgI6MCxv2odbLTWaxSDXX8xRWQH/22
-        up+gjHVBxM2qSaRO02nk7jY6lkbTrt+7TF6aTBq1euUTn6TcE2M/RUEEb4zU6UokAKqwVk
-        j0lG7naEid0NMOINgosXmMtZeGGSQkQ=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-8rcCG8FzORiYSYiZJc9eHg-1; Thu, 31 Mar 2022 21:31:34 -0400
-X-MC-Unique: 8rcCG8FzORiYSYiZJc9eHg-1
-Received: by mail-pj1-f71.google.com with SMTP id k11-20020a17090a658b00b001c9ef91ee64so433592pjj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 18:31:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ur4bX7kLocMyHlMkWd6be/nI5FhdYUXpSu22PLx25Yc=;
-        b=A3Iy6i65e07fei9C1caseaE6GPXQVvVTrolXFJxMJs9+scAXePCh5+7HkN/3SRfjYE
-         Bxn/EtXBTc0DkTe8V/yLesEGNdS+nvDXzjW8oDTywmTtC0A4wE/K/cAV3flMm0ZvHElR
-         df6QScT/0saGszW3hlpu7LdOpN6rWo2LCHtikB4OlUL9cKPTv/Md0TePWMYrTB+5QpMz
-         /kMxIJXFzmm03KrnpowixHeozTsh+1cn6DurGdO778M0x1/lPQIBFb3SWqj1PRF5AlTR
-         NbEuh/CQ7L7IMw/2z30WtEAiaHN3RPpiqkG46ixWNR6dHB4sCE0iG1lbyAQ/EqlUNTzQ
-         tfBA==
-X-Gm-Message-State: AOAM531sxB08rTm/3l/ptpSJH9aElj77Hn/4K8zruaCy7Q6E/y4ZF88y
-        jbifpJrLj+G3+eMo4IgmeM+5giWmDKfdz4dmjn8iimU75ezJYguw24wRmO7NZu22S8ABm4mefd9
-        s6NmvJxT72OCogVo0uJyoyTGn
-X-Received: by 2002:a17:902:708b:b0:156:1a0a:5c3d with SMTP id z11-20020a170902708b00b001561a0a5c3dmr7767915plk.18.1648776691480;
-        Thu, 31 Mar 2022 18:31:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJytKI0smTf2h5pDtZ1Ru/oJPC2Djio4Q2XzblwlhHZObk3685LSZ1jxpUWN1pqTW4oEpdgQqA==
-X-Received: by 2002:a17:902:708b:b0:156:1a0a:5c3d with SMTP id z11-20020a170902708b00b001561a0a5c3dmr7767892plk.18.1648776691177;
-        Thu, 31 Mar 2022 18:31:31 -0700 (PDT)
-Received: from localhost ([240e:3a1:31c:360:52fc:c968:cb41:efbc])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm544181pjy.35.2022.03.31.18.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 18:31:30 -0700 (PDT)
-From:   Coiby Xu <coxu@redhat.com>
-To:     kexec@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5 3/3] arm64: kexec_file: use more system keyrings to verify kernel image signature
-Date:   Fri,  1 Apr 2022 09:31:18 +0800
-Message-Id: <20220401013118.348084-4-coxu@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401013118.348084-1-coxu@redhat.com>
-References: <20220401013118.348084-1-coxu@redhat.com>
+        Thu, 31 Mar 2022 21:36:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC251EFE05
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 18:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648776887; x=1680312887;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xKoMUE8P90EXj7e0aBSDGOtBFreVHfFzlRwIybfTyBc=;
+  b=AVtJ2ty3R9n/5Z4uq1aFtID/Es0et0YqgPrdzWq867B6l8iVHHVGPKDw
+   7A6u32jbDhq9jp9RgOAdk9ClskWuV5jplvaj/5lAb0veVN2Av5qR2lAwI
+   Ylrw696TPdWyTT7eJv0eiWHGgu4Ux1V8T3sd66CVDKq+3Ivu5KEJln5fP
+   jjLnyZ6/kmO0ARG6v6jHdR3WsfZmLuPXUAGnxM2A1pzS6bwCDVC8bI8b1
+   wy3Xt874yhrThPx6yiWUFCIxWgz1MQQI7xMlNbxMka85ZMN7nHwOx1ZAf
+   6vvas7zOT+AbZvKcVwzO+cHvfYKK2zuqcf1rdKs9znhbtWem+9puXP8EN
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="259721404"
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="259721404"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 18:34:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
+   d="scan'208";a="720701523"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2022 18:34:44 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1na6BY-0000oy-8e;
+        Fri, 01 Apr 2022 01:34:44 +0000
+Date:   Fri, 1 Apr 2022 09:33:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Will Deacon <willdeacon@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-01
+ 2099/9999] arch/arm64/kvm/perf.c:58:43: error: implicit declaration of
+ function 'perf_num_counters'; did you mean 'dec_mm_counter'?
+Message-ID: <202204010933.P6eBPa2u-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,43 +67,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, a problem faced by arm64 is if a kernel image is signed by a
-MOK key, loading it via the kexec_file_load() system call would be
-rejected with the error "Lockdown: kexec: kexec of unsigned images is
-restricted; see man kernel_lockdown.7".
+Hi Marc,
 
-This patch allows to verify arm64 kernel image signature using not only
-.builtin_trusted_keys but also .platform and .secondary_trusted_key
-keyring.
+FYI, the error/warning still remains.
 
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- arch/arm64/kernel/kexec_image.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-01
+head:   17c6a0da4bb1ee0407e1e9f366517c4133cbbb72
+commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [2099/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
+config: arm64-randconfig-r035-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010933.P6eBPa2u-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-01
+        git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-diff --git a/arch/arm64/kernel/kexec_image.c b/arch/arm64/kernel/kexec_image.c
-index 9ec34690e255..51af1c22d6da 100644
---- a/arch/arm64/kernel/kexec_image.c
-+++ b/arch/arm64/kernel/kexec_image.c
-@@ -14,7 +14,6 @@
- #include <linux/kexec.h>
- #include <linux/pe.h>
- #include <linux/string.h>
--#include <linux/verification.h>
- #include <asm/byteorder.h>
- #include <asm/cpufeature.h>
- #include <asm/image.h>
-@@ -133,8 +132,7 @@ static void *image_load(struct kimage *image,
- #ifdef CONFIG_KEXEC_IMAGE_VERIFY_SIG
- static int image_verify_sig(const char *kernel, unsigned long kernel_len)
- {
--	return verify_pefile_signature(kernel, kernel_len, NULL,
--				       VERIFYING_KEXEC_PE_SIGNATURE);
-+	return kexec_kernel_verify_pe_sig(kernel, kernel_len);
- }
- #endif
- 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/arm64/kvm/perf.c: In function 'kvm_perf_init':
+>> arch/arm64/kvm/perf.c:58:43: error: implicit declaration of function 'perf_num_counters'; did you mean 'dec_mm_counter'? [-Werror=implicit-function-declaration]
+      58 |         if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
+         |                                           ^~~~~~~~~~~~~~~~~
+         |                                           dec_mm_counter
+   cc1: some warnings being treated as errors
+
+
+vim +58 arch/arm64/kvm/perf.c
+
+    50	
+    51	int kvm_perf_init(void)
+    52	{
+    53		/*
+    54		 * Check if HW_PERF_EVENTS are supported by checking the number of
+    55		 * hardware performance counters. This could ensure the presence of
+    56		 * a physical PMU and CONFIG_PERF_EVENT is selected.
+    57		 */
+  > 58		if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
+    59			static_branch_enable(&kvm_arm_pmu_available);
+    60	
+    61		return perf_register_guest_info_callbacks(&kvm_guest_cbs);
+    62	}
+    63	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D174EEDAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B14F4EEDB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 15:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346102AbiDANEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 09:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S1346101AbiDANE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 09:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346072AbiDANEF (ORCPT
+        with ESMTP id S245752AbiDANE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:04:05 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945AB21FC5C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:02:15 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bt26so4822291lfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:02:15 -0700 (PDT)
+        Fri, 1 Apr 2022 09:04:58 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F875220FD7
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 06:03:08 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id kl29so1948358qvb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 06:03:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g3YdE7NZj+L8Dg/chDHlwxEN35uclyYb0VXoHTgKIhw=;
-        b=nfVXaACmCvFErHHLmNFXvYLypWAxntbQhOofhVv7ZNsll0iXH7oC2baijOofqH55tl
-         ocaVjxe21bM+Po4QV0VsMrwJBUEd08ytEQRibXrlPAg4QTN6ioVivclEaDWT1LnyEWEx
-         8jAlXp8JIhhCPXZavsM4YpGUxzJJMDxUJvZQQuXujz+Db+429L0Gp8YXugIIseHVbtcP
-         O/APz+MB2/JCJ/erH8dsKo4GwrOtcW5hoK4y48UOly6cL7/KwsV5n+5QVPftBNnqUaNE
-         NBzltQ3wWRi7k0Mn50dLAFjZzLkurSmhPYdviABfBO4NDKlNUBYtE+wsBToRBTwX8Jv0
-         7yHA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cuEZGYCDTIg4hAs18A6RZQYja/XtuoYHfBwjj8fnnZ0=;
+        b=FnP/rNV7/WXimg+zgn3ZqWYzD72kkxZ/ONysifSpqL/1K7GEgH19xEywvc/NBFTB67
+         /fR/Qc2j32gxCUahzaVZJ9DXaVZULmEjajoKBSjIa5Xd+pKVSaxeu+JgLGjDdJXPqRHP
+         1C/h8SdDjkKTBqNEjYbYg/hnkBSlVZSPHtdzdgRLr3QS0czqcsXEuNs8p9mZ3Vjyu2eo
+         lu2m4KQpjSUwls5Cp9s32l6HbNcuT6KdcGYRs3oEk2xosAk28ZaTlNAbRIYJmjJfBWZ0
+         C/PUuBgVfsMTuMA51hheK8DvaccF7J47dgy4LTtQ9QS8ngwCa2kAENdsCOcaycTdfaoW
+         rEQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g3YdE7NZj+L8Dg/chDHlwxEN35uclyYb0VXoHTgKIhw=;
-        b=O9z3lTPJ6E4/wAJJlykV5SVhEXthsqdMWT98NcsxpuIkkkmpeUBb1LCqmWTXgvFKXw
-         D3RqghaTaj00qbvut/YczxqCAc8EEMUkWbLtB/1YsiVLf6dW7HILTLX4/Iwa/98lAe0b
-         BAS8FJ5lplFRpqJkes4skm/e9YirP92Jc223aGV5PALrlgz9vwYZpf8EUbiAm1xawydc
-         8ECENKeDwbScejQueMgbkCTIJSPFKZfn2DQfpmSBQbG8OlpuYGLmzyi048efw5WUFvJM
-         feT4olzib8zDHzIjv4UlxcfSwSi5YfzCNSV842yNgvmf0dw9JYuxT4bJFs3khebXlomb
-         G11Q==
-X-Gm-Message-State: AOAM530B8EvWhXpSvQD1MOHpiut/gW2e3Ooc0YKA7WH5UXsLG6LQkSlb
-        P5HwADdiky9Z2G3W1hZ3gqE=
-X-Google-Smtp-Source: ABdhPJzk84w1oS7F4Lq6lobVV06BlLC92rk92/31hnu9QaUGvz0sy6uwPZ81oOHeM5CsMNbd2NlRug==
-X-Received: by 2002:a05:6512:908:b0:44a:e242:2876 with SMTP id e8-20020a056512090800b0044ae2422876mr960482lft.511.1648818133696;
-        Fri, 01 Apr 2022 06:02:13 -0700 (PDT)
-Received: from inno-pc.lan (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id y22-20020a056512045600b0044a997dea9esm235574lfk.283.2022.04.01.06.02.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cuEZGYCDTIg4hAs18A6RZQYja/XtuoYHfBwjj8fnnZ0=;
+        b=yxauyUcvlWKWB6eVplA0Ym8d5ZLNdJU32HYzIzDL8WZx8ZxXh49yLJrt7hVAKw0vCA
+         +v3W3uNr8DU70s67LkEq0DmtXDTrqWgiBhSJ6SFT2cMhk8vO+JE39LCfpbd7SPnWsMzc
+         4eT4760Enw6Tx+khh1P5olmez6MVozJhcuWoQV/9itO54gaznfnfIqFL2/r4AVpAtgqY
+         RWIQphm3iJuu11IBs0wR5j3ILNesvJxKgBZhAVbS9iLM2eEqFNgooXTgOF4I4prfrt04
+         A4ebJZnGi4oYC5oTgbINYVnbBFqIHDmBLF9nJEvfbgx/CKACoGmRX1hqcJmG71uCOwOH
+         YxMA==
+X-Gm-Message-State: AOAM5302sirepJ+zkGeZpwk+Sl4C36RO24jOza3Kyh6jAw63rhEGLmRp
+        euU6cQZu3CugWI7XjduxcBjKb7G6pKF/9Idv
+X-Google-Smtp-Source: ABdhPJxDLw2zhT+Jeb4LonUp4ejui9EfOEDSyMLbQER+MBQC28/Iq33mx1o7adfNF3glFSgma3LaEQ==
+X-Received: by 2002:ad4:5dca:0:b0:441:6063:e235 with SMTP id m10-20020ad45dca000000b004416063e235mr7845530qvh.48.1648818186806;
+        Fri, 01 Apr 2022 06:03:06 -0700 (PDT)
+Received: from euclid ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm1348581qki.49.2022.04.01.06.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 06:02:13 -0700 (PDT)
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-X-Google-Original-From: Zhi Wang <zhi.a.wang@intel.com>
-To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org
-Cc:     Zhi Wang <zhi.a.wang@intel.com>, Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Vivi Rodrigo <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: [PATCH v8 3/3] i915/gvt: Use the initial HW state snapshot saved in i915
-Date:   Fri,  1 Apr 2022 09:02:07 -0400
-Message-Id: <20220401130207.33944-4-zhi.a.wang@intel.com>
+        Fri, 01 Apr 2022 06:03:06 -0700 (PDT)
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Subject: [PATCH 0/3] rlt8723bs cleanup
+Date:   Fri,  1 Apr 2022 09:02:44 -0400
+Message-Id: <cover.1648817213.git.sevinj.aghayeva@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220401130207.33944-1-zhi.a.wang@intel.com>
-References: <20220401130207.33944-1-zhi.a.wang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,75 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code of saving initial HW state snapshot has been moved into i915.
-Let the GVT-g core logic use that snapshot.
+These patches fix three categories of checkpatch warnings (redundant
+braces, redundant else branches after return/break, and constant
+placements on tests) in file rtw_mlme_ext.c, which is part of the
+rtl8723bs driver. False positives, such as
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Vivi Rodrigo <rodrigo.vivi@intel.com>
-Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc: Zhi Wang <zhi.a.wang@intel.com>
-Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
----
- drivers/gpu/drm/i915/gvt/firmware.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+if (foo) {
+	/* TODO: ... */
+}
 
-diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/gvt/firmware.c
-index 1a8274a3f4b1..54fe442238c6 100644
---- a/drivers/gpu/drm/i915/gvt/firmware.c
-+++ b/drivers/gpu/drm/i915/gvt/firmware.c
-@@ -66,22 +66,16 @@ static struct bin_attribute firmware_attr = {
- 	.mmap = NULL,
- };
- 
--static int mmio_snapshot_handler(struct intel_gvt *gvt, u32 offset, void *data)
--{
--	*(u32 *)(data + offset) = intel_uncore_read_notrace(gvt->gt->uncore,
--							    _MMIO(offset));
--	return 0;
--}
--
- static int expose_firmware_sysfs(struct intel_gvt *gvt)
- {
- 	struct intel_gvt_device_info *info = &gvt->device_info;
--	struct pci_dev *pdev = to_pci_dev(gvt->gt->i915->drm.dev);
-+	struct drm_i915_private *i915 = gvt->gt->i915;
-+	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
- 	struct gvt_firmware_header *h;
- 	void *firmware;
- 	void *p;
- 	unsigned long size, crc32_start;
--	int i, ret;
-+	int ret;
- 
- 	size = sizeof(*h) + info->mmio_size + info->cfg_space_size;
- 	firmware = vzalloc(size);
-@@ -99,17 +93,16 @@ static int expose_firmware_sysfs(struct intel_gvt *gvt)
- 
- 	p = firmware + h->cfg_space_offset;
- 
--	for (i = 0; i < h->cfg_space_size; i += 4)
--		pci_read_config_dword(pdev, i, p + i);
--
--	memcpy(gvt->firmware.cfg_space, p, info->cfg_space_size);
-+	memcpy(gvt->firmware.cfg_space, i915->vgpu.initial_cfg_space,
-+	       info->cfg_space_size);
-+	memcpy(p, gvt->firmware.cfg_space, info->cfg_space_size);
- 
- 	p = firmware + h->mmio_offset;
- 
--	/* Take a snapshot of hw mmio registers. */
--	intel_gvt_for_each_tracked_mmio(gvt, mmio_snapshot_handler, p);
-+	memcpy(gvt->firmware.mmio, i915->vgpu.initial_mmio,
-+	       info->mmio_size);
- 
--	memcpy(gvt->firmware.mmio, p, info->mmio_size);
-+	memcpy(p, gvt->firmware.mmio, info->mmio_size);
- 
- 	crc32_start = offsetof(struct gvt_firmware_header, crc32) + 4;
- 	h->crc32 = crc32_le(0, firmware + crc32_start, size - crc32_start);
+were not altered.
+
+Sevinj Aghayeva (3):
+  staging: rtl8723bs: remove redundant braces in if statements
+  staging: rtl8723bs: place constants on the right side of tests
+  staging: rtl8723bs: remove redundant else branches
+
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 167 ++++++++----------
+ 1 file changed, 70 insertions(+), 97 deletions(-)
+
 -- 
 2.25.1
 

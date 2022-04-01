@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025904EE93D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C594EE935
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 09:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343932AbiDAHsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 03:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S1343960AbiDAHtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 03:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343926AbiDAHsA (ORCPT
+        with ESMTP id S243493AbiDAHtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:48:00 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394551877C2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 00:46:11 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u3so2973991wrg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 00:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LCK4dl8vS+URWlqWXwwTuaXKgNuAXF8HAeyZxE1LFL8=;
-        b=BpbnJzDgr4hcsVzm1oW1UkpOJL1mxsvWBqxwP9Pkn+dLZROp8D3MfzEya/xvto6CWr
-         5Hpy51yFe7FUyHZMj+ten4o6iHyYLGOYzGiFVa8ijakXUpvVAtHFLKterEGzz3KKQxlz
-         ETKbdvSE/Hmbzm22TEyc/WygvjyFzFpHmwzsVIN4Dp/uQh1Q2uw9t6rGy1POR0K7WLPh
-         tdLAt39eVc8KbF4Zm1vgyjPDgcyoVfk4wDMpQaiuzMPcSq4CvpRQr/y9jblbSlvajQzw
-         wQoKcnKDtm3F84FSiVXrvhUmevYn2ZnpxpLRmKJS3rANa0ROOBR36YhB11AHzuGMrMep
-         xe1g==
+        Fri, 1 Apr 2022 03:49:02 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AB218C0F8;
+        Fri,  1 Apr 2022 00:47:13 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id t2so1521844qtw.9;
+        Fri, 01 Apr 2022 00:47:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LCK4dl8vS+URWlqWXwwTuaXKgNuAXF8HAeyZxE1LFL8=;
-        b=yKwjCkIhLiJ4jA+U2DLwmoD/dhsx5EcrMvhqmZ8fuucNrCZHHf001mHWhRlVI8k5DJ
-         RZdFr87VXIYKXpJJN4DGDD+y1KXPNwjIkqlT/PshQ+Mg0etGyLaz2HYJFZr6DvEsTfUP
-         OE/QSqBImbSRRfLijo+zYx0cgI1uNx3UBrfNYPdiW8rLm2eEJCOiQSVy0RaKg/yg/Pxe
-         ycQ3ci4OYrf+i3xsPCUicgjSu5yLWzeyrVr84lNJpxIk+0JfVs6+AWSPucG4nvZMOKFK
-         Lj+6GC+ZsrcInrg0XDb0TBHtXn5ssrcaUt4C5pPcUBEo8bIrI/Np0HWhXBmvw5k/Ltvd
-         EcwA==
-X-Gm-Message-State: AOAM530hEvNRTm722btuaeFQQdnl8OwQUmQDrwRBl8C8a2smL6opHwOT
-        606+iYZRIO39HsnLfvsXlxv84hdKnARS5w==
-X-Google-Smtp-Source: ABdhPJx6WEFbSKf1cYZCJRp8RN1ZQmUurhpYge2WRdcRyKlEUox2QLvhk0FjNYGG4Dxt998JIXmRyQ==
-X-Received: by 2002:a5d:4e08:0:b0:205:89b6:1d4d with SMTP id p8-20020a5d4e08000000b0020589b61d4dmr6821818wrt.124.1648799169763;
-        Fri, 01 Apr 2022 00:46:09 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id r4-20020a05600c35c400b0038cbd8c41e9sm9192704wmq.12.2022.04.01.00.46.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 00:46:08 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 08:46:06 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 0/2] mfd: twlx030: i2c remove callback cleanup
-Message-ID: <Ykatvp3RuNA8IXZ7@google.com>
-References: <20220113101430.12869-1-u.kleine-koenig@pengutronix.de>
- <20220331131722.wt5uik3izzr7kewq@pengutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hsgG5k1IRB7JkkSvYRKFqt0X90anL2wVYww9yxyb0VA=;
+        b=lnOnBBtJyi+ptYHryHFTbrSIM8RtWYeGSVrzVT8ziC8F/Nvt53QglIDMITc2ZX7AhZ
+         lrvLKKpXG1PL5hdaAM8vmXsVVGAU/Vd2+aC8GketleM3dPW9YNP0ai6RePkDhl5LVzT0
+         FObZUBHwcESGALGiPZLUAugR1xpF5buIXSAhIe4UiaFHlj5D4UyufWZTWiAr2DoDJIfu
+         eQ2fID1iWNGcmc5ctX+QJgdx9dPAF5llfXwhwMa/75goEfEsOtIvFwx/nQ6sHtAz8MSD
+         Jn0hfb2U4f41ebz2Qndq/UuapX/YJ5UBpzplb0f//nqX69RyWMR3tkk5kQG+00TfP5O8
+         Z3yw==
+X-Gm-Message-State: AOAM5337dPgbNs8vtYMzN2DFDS9dvLaeg979Rh6dNmtx6Af/MNsw5pmj
+        M9Svs/HHxLvSBtctklh2Hg6p3+hxKUWgVw==
+X-Google-Smtp-Source: ABdhPJwZE4sp1jfUL16KYUDF2Yg41lwFL597VHQxrQFo3hwFvOCVshdhzRqByH59tiWLWbTzIE+Mzg==
+X-Received: by 2002:a05:622a:2d5:b0:2e1:ea60:231 with SMTP id a21-20020a05622a02d500b002e1ea600231mr7530800qtx.460.1648799232308;
+        Fri, 01 Apr 2022 00:47:12 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id y17-20020a05622a121100b002e0702457b2sm1303952qtx.20.2022.04.01.00.47.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 00:47:12 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2e592e700acso23523827b3.5;
+        Fri, 01 Apr 2022 00:47:11 -0700 (PDT)
+X-Received: by 2002:a81:5c2:0:b0:2e5:e4eb:c3e7 with SMTP id
+ 185-20020a8105c2000000b002e5e4ebc3e7mr8846053ywf.62.1648799231230; Fri, 01
+ Apr 2022 00:47:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220331131722.wt5uik3izzr7kewq@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 1 Apr 2022 09:46:59 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVX-6A5KH1+WodNviq1LKqZ4qo7aq92S-j+zf79xQD0gQ@mail.gmail.com>
+Message-ID: <CAMuHMdVX-6A5KH1+WodNviq1LKqZ4qo7aq92S-j+zf79xQD0gQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] regulator: dt-bindings: maxim,max8997: correct array
+ of voltages
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022, Uwe Kleine-König wrote:
+On Thu, Mar 31, 2022 at 11:17 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> uint32-array with voltages should be within one bracket pair <>, not
+> each number in its own <>.  Also the number of elements in the array
+> should be defined within "items:".
+>
+> This fixes DT schema warnings like:
+>
+>   maxim,max8997.example.dtb: pmic@66: max8997,pmic-buck1-dvs-voltage:
+>     [[1350000, 1300000, 1250000, 1200000, 1150000, 1100000, 1000000, 950000]] is too short
+>
+> Fixes: 1d2104f21618 ("regulator: dt-bindings: maxim,max8997: convert to dtschema")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> On Thu, Jan 13, 2022 at 11:14:28AM +0100, Uwe Kleine-König wrote:
-> > Hello,
-> > 
-> > the remove paths of the twl4030 chip can fail and then returns an error
-> > code in twl_remove() early. This isn't a good thing, because the device
-> > will still go away with some resources not freed.
-> > For the twl6030 this cannot happen, and the first patch is just a small
-> > cleanup. For the twl4030 the situation is improved a bit: When the
-> > failure happens, the dummy slave devices are removed now.
-> > 
-> > Note that twl4030_exit_irq() is incomplete. The irq isn't freed and
-> > maybe some more cleanup is missing which might boom if an irq triggers
-> > after the device is removed. Not sure that twl6030_exit_irq() is better
-> > in this regard.
-> > 
-> > I noticed this issue because I work on making i2c_driver::remove return
-> > void as returning a value != 0 there is almost always an error attached
-> > to wrong expectations.
-> 
-> It's one merge window ago now that I sent these two patches and didn't
-> get any feedback. Did this series fell through the cracks?
+Thanks!
+Warning going, and if I add one entry too much, it still complains, so:
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Yes they did.
+Gr{oetje,eeting}s,
 
-Feel free to submit [RESEND]s any time after 2 weeks with no reply.
+                        Geert
 
-They are now on my TODO list.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

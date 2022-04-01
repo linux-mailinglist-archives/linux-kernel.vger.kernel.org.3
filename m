@@ -2,113 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C014EFAA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4684EFAAE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351358AbiDAT7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S1351400AbiDAUCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350329AbiDAT7J (ORCPT
+        with ESMTP id S1344680AbiDAUCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:59:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735BC208245;
-        Fri,  1 Apr 2022 12:57:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23C3CB82635;
-        Fri,  1 Apr 2022 19:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD89BC34111;
-        Fri,  1 Apr 2022 19:57:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648843036;
-        bh=g4Or6vlnQ5XPFOlbOvyFGMvehoU1w6Tr33vBEF06cv4=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=kUAF1W6opB6kX4aqHlrwqR4mizGnR/LCCRP2w89k7wNaETPt2sgVJyFtrqbjm3i5S
-         e5XCLsZejvIOaJZJsuCmx2v1E8LpTcZ0q0wecQAdgwFQLn/VJCRsgW/k3ueJUaECsX
-         4OerVqkd94oCxK0suf9ng8r6FFbIneHH99uAy0fLXVkzY+zpT+3DR6Q0JpvX+DBdke
-         1uoUBEr+qj/Yk6Vf0YyBfZopwqQeCr+prjwk9Yx1mu3FLvPuyg+mhWHa0w8mA11WSI
-         s4dzbUfILFfinHBykc2QAbio9JC9mObxejFCM8k4D2b+QlrRwACD6WToFkfZb3L9Z1
-         u1RC2bu92QzxA==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 4990827C0054;
-        Fri,  1 Apr 2022 15:57:14 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Fri, 01 Apr 2022 15:57:14 -0400
-X-ME-Sender: <xms:GFlHYiRokfAQEOXS3JGVQ8fGEt9aARJbPyMM3ymgS2p4KiiRM0LYyA>
-    <xme:GFlHYnzLn5LXF0Y7iJiXJZD1GYvvbWvvTWmoH3r3L8GGKqyKyHXaxNm38fZUMC73C
-    sBCFRvt0e5DrZ7B_zg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiiedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnheptdfhheettddvtedvtedugfeuuefhtddugedvleevleefvdetleff
-    gfefvdekgeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:GFlHYv1jixSdphTgcgBt4k3ApxFLLREmwzVtH2R4FpXJdYAzolT8DQ>
-    <xmx:GFlHYuBMTtOSj8Tvkpa1ZxH5VAnOs_iojIWHPKc2ofrldE_VY-TwKg>
-    <xmx:GFlHYri_K6w69VmxOC5PmjtQo9sfLoKQOJBISmJk3ApiuCpGFiiQXA>
-    <xmx:GllHYkBzqd9lROHtGLpI27JhxgidDn8BgzezBQqjYAPE7wh_2Gh2xg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 39BD021E0073; Fri,  1 Apr 2022 15:57:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-382-g88b93171a9-fm-20220330.001-g88b93171
-Mime-Version: 1.0
-Message-Id: <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
-In-Reply-To: <YkcTTY4YjQs5BRhE@google.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <YjyS6A0o4JASQK+B@google.com> <YkHspg+YzOsbUaCf@google.com>
- <YkH32nx+YsJuUbmZ@google.com> <YkIFW25WgV2WIQHb@google.com>
- <YkM7eHCHEBe5NkNH@google.com> <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
- <YkQzfjgTQaDd2E2T@google.com> <YkSaUQX89ZEojsQb@google.com>
- <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
- <YkcTTY4YjQs5BRhE@google.com>
-Date:   Fri, 01 Apr 2022 12:56:50 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Quentin Perret" <qperret@google.com>
-Cc:     "Sean Christopherson" <seanjc@google.com>,
-        "Steven Price" <steven.price@arm.com>,
-        "Chao Peng" <chao.p.peng@linux.intel.com>,
-        "kvm list" <kvm@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        "Linux API" <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        "Wanpeng Li" <wanpengli@tencent.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Hugh Dickins" <hughd@google.com>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Vishal Annapurve" <vannapurve@google.com>,
-        "Yu Zhang" <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "David Hildenbrand" <david@redhat.com>,
-        "Marc Zyngier" <maz@kernel.org>, "Will Deacon" <will@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM guest
- private memory
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 1 Apr 2022 16:02:21 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECB62AEC;
+        Fri,  1 Apr 2022 13:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648843231; x=1680379231;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AHjGeo02Ca2ePy2WHzeNWo/c2lQyqMCENzgeyKbJpAk=;
+  b=wx5w0vmtdXX3+mQue0f+gmR37y01cxCbjf7V8A0PJDiFh3W1pXLWd+UI
+   Nupsd4zoJGEqjYiQw6CVYPDTKvqitKURyvML5AuczjjFIJXpLK9nHAL/L
+   q2jVjTnXrGc8zUAOTbfxjM3WL2BSemLJxLG80pOKVLu8YyAgWy9G0MmZN
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Apr 2022 13:00:31 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 13:00:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 1 Apr 2022 13:00:29 -0700
+Received: from [10.110.60.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Apr 2022
+ 13:00:28 -0700
+Message-ID: <ccd8e82d-6121-3d2a-6a63-4fc7c0896881@quicinc.com>
+Date:   Fri, 1 Apr 2022 13:00:27 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v12 4/4] drm/msm/dp: enable widebus feature for display
+ port
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1645824192-29670-1-git-send-email-quic_khsieh@quicinc.com>
+ <1645824192-29670-5-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n53s11KHrj-rzRkjV4q775XCoxzZCLK-HRCt=H1++DR-YQ@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n53s11KHrj-rzRkjV4q775XCoxzZCLK-HRCt=H1++DR-YQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,25 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022, at 7:59 AM, Quentin Perret wrote:
-> On Thursday 31 Mar 2022 at 09:04:56 (-0700), Andy Lutomirski wrote:
+Hi Stephen,
 
 
-> To answer your original question about memory 'conversion', the key
-> thing is that the pKVM hypervisor controls the stage-2 page-tables for
-> everyone in the system, all guests as well as the host. As such, a page
-> 'conversion' is nothing more than a permission change in the relevant
-> page-tables.
->
+Would you please to help land this serial of 4 patch into msm-next?
 
-So I can see two different ways to approach this.
+Thanks,
 
-One is that you split the whole address space in half and, just like SEV and TDX, allocate one bit to indicate the shared/private status of a page.  This makes it work a lot like SEV and TDX.
-
-The other is to have shared and private pages be distinguished only by their hypercall history and the (protected) page tables.  This saves some address space and some page table allocations, but it opens some cans of worms too.  In particular, the guest and the hypervisor need to coordinate, in a way that the guest can trust, to ensure that the guest's idea of which pages are private match the host's.  This model seems a bit harder to support nicely with the private memory fd model, but not necessarily impossible.
-
-Also, what are you trying to accomplish by having the host userspace mmap private pages?  Is the idea that multiple guest could share the same page until such time as one of them tries to write to it?  That would be kind of like having a third kind of memory that's visible to host and guests but is read-only for everyone.  TDX and SEV can't support this at all (a private page belongs to one guest and one guest only, at least in SEV and in the current TDX SEAM spec).  I imagine that this could be supported with private memory fds with some care without mmap, though -- the host could still populate the page with memcpy.  Or I suppose a memslot could support using MAP_PRIVATE fds and have approximately the right semantics.
-
---Andy
-
-
+On 2/25/2022 2:17 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-02-25 13:23:12)
+>> Widebus feature will transmit two pixel data per pixel clock to interface.
+>> This feature now is required to be enabled to easy migrant to higher
+>> resolution applications in future. However since some legacy chipsets
+>> does not support this feature, this feature is enabled by setting
+>> wide_bus_en flag to true within msm_dp_desc struct.
+>>
+>> changes in v2:
+>> -- remove compression related code from timing
+>> -- remove op_info from  struct msm_drm_private
+>> -- remove unnecessary wide_bus_en variables
+>> -- pass wide_bus_en into timing configuration by struct msm_dp
+>>
+>> Changes in v3:
+>> -- split patch into 3 patches
+>> -- enable widebus feature base on chip hardware revision
+>>
+>> Changes in v5:
+>> -- DP_INTF_CONFIG_DATABUS_WIDEN
+>>
+>> Changes in v6:
+>> -- static inline bool msm_dp_wide_bus_enable() in msm_drv.h
+>>
+>> Changes in v7:
+>> -- add Tested-by
+>>
+>> Changes in v9:
+>> -- add wide_bus_en to msm_dp_desc
+>>
+>> Changes in v10:
+>> -- add wide_bus_en boolean to dp_catalog struc to avoid passing it as parameter
+>>
+>> Changes in v11:
+>> -- add const to dp_catalog_hw_revision()
+>> -- add const to msm_dp_wide_bus_available()
+>>
+>> Changes in v12:
+>> -- dp_catalog_hw_revision(const struct dp_catalog *dp_catalog)
+>> -- msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> ---
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>

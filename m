@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9822F4EFBE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F023D4EFBE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 22:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352682AbiDAUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 16:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S1352700AbiDAU46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 16:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352548AbiDAUzR (ORCPT
+        with ESMTP id S1351348AbiDAU4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:55:17 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07974BF65
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:53:24 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso3583559pjh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:53:24 -0700 (PDT)
+        Fri, 1 Apr 2022 16:56:55 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EDA1C4B10
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 13:55:03 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id e22so4563201ioe.11
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 13:55:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mHLh8My82O30ijWT2CaqlkU7mxd2+At9ryY0q+QdE1E=;
-        b=B762xOIZU8w1otSUFbNgZa11LhxJXQ0WaaMSTXleOWdrxn9gvmtla0RQjvL8i2vAph
-         05dEOmTrgqdnXdXmb4/X1eLRb+j3UVksXXBWnwFrSD+azG3dmUJ8HtkR+PF6xYH0wbYh
-         ZKzgNGnZn7qmAoSsHUNTVN6J890SI4yH+W52bdgg4iz8C5KdTyDnG5FFfyBUFu03yeFm
-         bWFAznFpm9+cNnp9LbaGOuqs4nqkBBeCnvNA+J5WoHmwb/mmsVG70dUNydI9xg0ESfCX
-         Fs2i1a3fyyVU5Aq61YQtzTvmctv7NE7VTByO9kaU/ai11XFZyxfpgqgJA5l8pQ3MK96d
-         csmA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zxdKMcfYeDJl9VEeQV5qTQKbRI36bdOnubpQqFT5Dsc=;
+        b=VwlCrhVv95bdY6Xvn636FGICBwdC53ZsHE0X8eiAXzNCA8X1yA8mnM+bXTgrnVvm39
+         0q3bKePS4uw2NnrV31eBbKglSewWfiWfCo6Ph7+LtBdZcTR2LnDxPxVb2aw2Lo2XS0/C
+         RP5s/2T/GI8uCQhVeBHSOCU4dDCmri/fKKHtU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mHLh8My82O30ijWT2CaqlkU7mxd2+At9ryY0q+QdE1E=;
-        b=VrBW6JYeRYv0sww4tzv6G610qWh9hLMdikEo/UZZA+e5OlMbji25dgGfphi1gQgnkx
-         JfWE+t1wUtiQC26ala25LXcCHB1j5Zqcn6e79ejeKPMzwjYcQiYIuQSjMYEMkU0SEFOm
-         +lglZ5vsgbSKkmFKY73ViuLu5lAWJ27ko3q7PVuNDTKuXDiXyH1Ll5iDnpvnrZZvE+dm
-         N8LmucjH2JdPlsEpQW1xJ8ZWAML4f+csKOofj9dye8klptLc/L/gpwVrZCOoWe5vvXWe
-         89/+CeCo4RAP2RayTSf5fpJLc5cLckaNrtrs2B5i4tYgWfz5Bz7ZG0Pf/9pu7FnaB05x
-         LCeA==
-X-Gm-Message-State: AOAM532JpF+uPsTJS0vrYxqvQjHc2VT65qaVIowWrCDy1e7YtN9ijLOX
-        x5mhCmRdJinvzBlNmiqOLzUeXQ==
-X-Google-Smtp-Source: ABdhPJxbwfXUbZ2I2sySCUv3f4On2pEXDAIDArTPvZ8iTqJzAysD28T2Sr6cmNOepDZp2fEQ9rbaKg==
-X-Received: by 2002:a17:90b:4b02:b0:1c7:1bc3:690b with SMTP id lx2-20020a17090b4b0200b001c71bc3690bmr13920857pjb.174.1648846403298;
-        Fri, 01 Apr 2022 13:53:23 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm4182824pfc.98.2022.04.01.13.53.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 13:53:22 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 20:53:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 038/104] KVM: x86/mmu: Allow per-VM override of
- the TDP max page level
-Message-ID: <YkdmP5BW4d9WF0u3@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <5cc4b1c90d929b7f4f9829a42c0b63b52af0c1ed.1646422845.git.isaku.yamahata@intel.com>
- <c6fb151ced1675d1c93aa18ad8c57c2ffc4e9fcb.camel@intel.com>
- <YkcHZo3i+rki+9lK@google.com>
- <20220401202847.GA560021@private.email.ne.jp>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zxdKMcfYeDJl9VEeQV5qTQKbRI36bdOnubpQqFT5Dsc=;
+        b=nEAZ+HKGHcIr+ouue+FrpKA2v7dW/+CSUYt+h2piHGwoqMCWreMJS/F2/CUQiz8hbw
+         muXgsm8LuObxgcM1mQeYieIP03fYGzfUArKLIbCgbo4lMU0lr+k3fKpu764mnTg2Gzdl
+         cDMCE33bR33WL4ncaYy8mE7XNBA7Jewjg/vqgR8ehHS5mpT3RXHFeDMwkEjnwmc39ye6
+         33h14Qb77E1HoQ1IhVq6ZGaE3ETimxzD+sXl20Za7adfI61r0LA27ytyl/ZBixsqFQs7
+         6ZimLs7WFVrQHWN/chWU51aozm0ijPHcdSks+yZLn/8gjYXI47sQa11vRscA71JfyTln
+         f/7g==
+X-Gm-Message-State: AOAM530AUa+aO1Q1CdscIbcJe+pTdoYTnz4JtSSQtLhA9r/0mTsk0wKg
+        41Wj15pbdFW2SXy+GysxqpA2sXAkKLnfuWy0EekoTQ==
+X-Google-Smtp-Source: ABdhPJxmivihRzSeIJe8SsSHZgn0rvB4pN75ADkEmltV9+C+9ga7+Ptqw3/wvSK7dEe0fAODnxEhRVHBoaTGNDj619M=
+X-Received: by 2002:a05:6602:3281:b0:648:d45d:22e with SMTP id
+ d1-20020a056602328100b00648d45d022emr657622ioz.7.1648846503250; Fri, 01 Apr
+ 2022 13:55:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401202847.GA560021@private.email.ne.jp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220331210425.3908278-1-swboyd@chromium.org>
+In-Reply-To: <20220331210425.3908278-1-swboyd@chromium.org>
+From:   Gwendal Grignou <gwendal@chromium.org>
+Date:   Fri, 1 Apr 2022 13:54:51 -0700
+Message-ID: <CAPUE2uvpBaE+YLkg6RXq4CCEFBr5ZFhjS1dXkbse9nyH8C=2Jg@mail.gmail.com>
+Subject: Re: [PATCH] iio:proximity:sx_common: Fix device property parsing on
+ DT systems
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,42 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022, Isaku Yamahata wrote:
-> On Fri, Apr 01, 2022 at 02:08:38PM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > On Fri, Apr 01, 2022, Kai Huang wrote:
-> > > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > > > 
-> > > > In the existing x86 KVM MMU code, there is already max_level member in
-> > > > struct kvm_page_fault with KVM_MAX_HUGEPAGE_LEVEL initial value.  The KVM
-> > > > page fault handler denies page size larger than max_level.
-> > > > 
-> > > > Add per-VM member to indicate the allowed maximum page size with
-> > > > KVM_MAX_HUGEPAGE_LEVEL as default value and initialize max_level in struct
-> > > > kvm_page_fault with it.
-> > > > 
-> > > > For the guest TD, the set per-VM value for allows maximum page size to 4K
-> > > > page size.  Then only allowed page size is 4K.  It means large page is
-> > > > disabled.
-> > > 
-> > > Do not support large page for TD is the reason that you want this change, but
-> > > not the result.  Please refine a little bit.
-> > 
-> > Not supporting huge pages was fine for the PoC, but I'd prefer not to merge TDX
-> > without support for huge pages.  Has any work been put into enabling huge pages?
-> > If so, what's the technical blocker?  If not...
-> 
-> I wanted to get feedback on the approach (always set SPTE to REMOVED_SPTE,
-> callback, set the SPTE to the final value instead of relying atomic update SPTE)
-> before going further for large page.
-
-Pretty please with a cherry on top, send an email calling out which areas and
-patches you'd like "immediate" feedback on.  Putting that information in the cover
-letter would have been extremely helpful.  I realize it's hard to balance providing
-context for folks who don't know TDX with "instructions" for reviewers, but one of
-the most helpful things you can do for reviewers is to make it explicitly clear
-what _your_ expectations and wants are, _why_ you posted the series.   Usually that
-information is implied, i.e. you want your patches merged, but that's obviously not
-the case here.
+On Thu, Mar 31, 2022 at 2:04 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> After commit 7a3605bef878 ("iio: sx9310: Support ACPI property") we
+> started using the 'indio_dev->dev' to extract device properties for
+> various register settings in sx9310_get_default_reg(). This broke DT
+> based systems because dev_fwnode() used in the device_property*() APIs
+> can't find an 'of_node'. That's because the 'indio_dev->dev.of_node'
+> pointer isn't set until iio_device_register() is called. Set the pointer
+> earlier, next to where the ACPI companion is set, so that the device
+> property APIs work on DT systems.
+>
+> Cc: Gwendal Grignou <gwendal@chromium.org>
+> Fixes: 7a3605bef878 ("iio: sx9310: Support ACPI property")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
+> ---
+>  drivers/iio/proximity/sx_common.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/iio/proximity/sx_common.c b/drivers/iio/proximity/sx_common.c
+> index a7c07316a0a9..8ad814d96b7e 100644
+> --- a/drivers/iio/proximity/sx_common.c
+> +++ b/drivers/iio/proximity/sx_common.c
+> @@ -521,6 +521,7 @@ int sx_common_probe(struct i2c_client *client,
+>                 return dev_err_probe(dev, ret, "error reading WHOAMI\n");
+>
+>         ACPI_COMPANION_SET(&indio_dev->dev, ACPI_COMPANION(dev));
+> +       indio_dev->dev.of_node = client->dev.of_node;
+>         indio_dev->modes = INDIO_DIRECT_MODE;
+>
+>         indio_dev->channels =  data->chip_info->iio_channels;
+> --
+> https://chromeos.dev
+>

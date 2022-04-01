@@ -2,195 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401B64EE6FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 05:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E4B4EE707
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 06:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiDAD6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 23:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S234635AbiDAEHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 00:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238315AbiDAD6n (ORCPT
+        with ESMTP id S233366AbiDAEHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 23:58:43 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3F51E5A58
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 20:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648785414; x=1680321414;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rltqYO8zfprKIvlGQqshwiwS+GG5pzSco8Z2iya0gw4=;
-  b=aT280unJNyQVZ5npfQQ0A/+3XeLIqyT3/jcZCJMVqa4NCf7SYGLByLCv
-   xscPkUSie4rtBfXPHDMhsRLJNGOF14iq2ROBpR7N4KM5uplC/EOJjFee+
-   NMAvP3ioEGlycG8+iUJGhR7vXjw3jdt//AMSQ2c3loxDEh0NdyKcqOESo
-   m6xTxITqe8yY85jVe4J9F75jVfW0Ctq6FbrUY6FIz7J9MYTNC8O1hGuZW
-   HKcV5/Ret9kBm6WYR+jSXWjZzWdatxbAbhEN9JCyau8LIPoUh/XLTmb2N
-   VHmseA0+ZmNumbjSGKqY3rnP4pqzlZPRioKFgpMmcAILr+7ZpdCp9pLbs
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="320724431"
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="320724431"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 20:56:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="522621436"
-Received: from louislifei-optiplex-7050.sh.intel.com (HELO louislifei-OptiPlex-7050) ([10.239.81.43])
-  by orsmga006.jf.intel.com with ESMTP; 31 Mar 2022 20:56:49 -0700
-Date:   Fri, 1 Apr 2022 11:57:42 +0800
-From:   Li Fei1 <fei1.li@intel.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, rppt@kernel.org,
-        bjohannesmeyer@gmail.com, c.giuffrida@vu.nl, h.j.bos@vu.nl,
-        fei1.li@intel.com
-Subject: Re: [PATCH] virt: acrn: fix invalid check past list iterator
-Message-ID: <20220401035742.GA31162@louislifei-OptiPlex-7050>
-References: <20220319203819.2559993-1-jakobkoschel@gmail.com>
- <20220330075742.GA22544@louislifei-OptiPlex-7050>
- <6E68C33F-9CBB-418C-A11D-2AD863C0B19A@gmail.com>
- <20220401011533.GA29696@louislifei-OptiPlex-7050>
- <F54F358F-FFBC-4D6D-AB5C-9BC4A617C9BF@gmail.com>
+        Fri, 1 Apr 2022 00:07:17 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEF73E5F7
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:05:27 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id p21so1904288ioj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 21:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B+CLss0WbItuifu72dHflWYaudPs9OpOIrtnBZ+LuaU=;
+        b=W4lP36K+Sb0fsBGicZNNHA2PdXSFLxGLOGu+QIo0Pr+K09Bfb/JQ9y7h29SJTwHCkL
+         qo9Meye8l/bh5ZdCafGJlboKfyAh3OTCZiwV615CLHt7foV27/crahdWIZpXP9o5zyDT
+         f4B0knRfleCmNsT7S/1gVtK/jnuLe8dMnvgnkEw7P3BsrmJSWJR0z6u8myMWpvrwhycC
+         K0MJjUxswzx2hsClKurU0lxBklqJnt5jCMfdXO/WkmQApUMQX+vefGDz6SReFNqKkDvo
+         OLqXgs1GpET++yDSsieKbkumlNIePUfHJvkrEdI24CUoKeH4Ge+57mvK0e8QEpJiPpQ6
+         0WeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B+CLss0WbItuifu72dHflWYaudPs9OpOIrtnBZ+LuaU=;
+        b=QbWFL6n44ViWDHZZ8cd7Eeswi1RmX6Kuwtu5Gvb0L1ZMZ8A05lo+wFZiumK/xfh9c7
+         P1dpXQWOeTHk2vWWPQmSuz7amltKDhPDxfGLjPJsVkA6t+a4z3R+qjU1E/jAs9znHrwS
+         fUKX9b3PLxOGR+/XlibwH4uXiL0saGKySbQ8ncYr0F/FSTL99b22WMnWKyUrOS5JnvS+
+         VhHh7XpqdSgiTWuOV5vZ8LPgZ4jEFsCAouNjDZi+AYm8Hezed/uweGRdZ7U9c/842Uw9
+         vmAqHgFXoGHesOvFaWYl4EGSGr+yUMmjyJzZjPaxw5bIUsIxWCjKFAFn0Y4wnwPHYwf8
+         fhUQ==
+X-Gm-Message-State: AOAM533ACwNcPw3LG4w/5Uggu8tCdwOYNdNS3ALG6p/nIehq1xRk1rcg
+        YOSa13Nhl5VxwOTbcTGltg+ddGU4nLIfJ7Yov9Rbgw==
+X-Google-Smtp-Source: ABdhPJxTpgpr2IYgcO6o0NsQkkbran/YiQB177+6APQAT+EOzydrNcz9ySUynHUNFST25lY4tTlWweAtwwYoDAybsGU=
+X-Received: by 2002:a05:6638:4128:b0:323:62b4:30c3 with SMTP id
+ ay40-20020a056638412800b0032362b430c3mr4994319jab.318.1648785926987; Thu, 31
+ Mar 2022 21:05:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <F54F358F-FFBC-4D6D-AB5C-9BC4A617C9BF@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+In-Reply-To: <20220331084151.2600229-1-yosryahmed@google.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 31 Mar 2022 21:05:15 -0700
+Message-ID: <CAAPL-u8g2qkhdTQtFtBS3GNYz0WnyahWEXvR4g_OSaKv+7EozA@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 05:22:36AM +0200, Jakob Koschel wrote:
-> 
-> > On 1. Apr 2022, at 03:15, Li Fei1 <fei1.li@intel.com> wrote:
-> > 
-> > On Thu, Mar 31, 2022 at 01:20:50PM +0200, Jakob Koschel wrote:
-> >> 
-> >>> On 30. Mar 2022, at 09:57, Li Fei1 <fei1.li@intel.com> wrote:
-> >>> 
-> >>> On Sat, Mar 19, 2022 at 09:38:19PM +0100, Jakob Koschel wrote:
-> >>>> The condition retry == 0 is theoretically possible even if 'client'
-> >>>> does not point to a valid element because no break was hit.
-> >>>> 
-> >>>> To only execute the dev_warn if actually a break within the loop was
-> >>>> hit, a separate variable is used that is only set if it is ensured to
-> >>>> point to a valid client struct.
-> >>>> 
-> >>> Hi Koschel
-> >>> 
-> >>> Thanks for you to help us to try to improve the code. Maybe you don't get the point.
-> >>> The dev_warn should only been called when has_pending = true && retry == 0
-> >> 
-> >> Maybe I don't understand but looking isolated at this function I could see a way to call
-> >> the dev_warn() with has_pending = false && retry == 0.
-> > Yes, even has_pending = true && retry == 0 at the beginning, we could not make sure
-> > has_pending is true after schedule_timeout_interruptible and we even didn't check
-> > there're other pending client on the ioreq_clients (because we can't make sure
-> > when we dev_warn this clent is still pending). So we just use dev_warn not higher log level.
-> 
-> I'm sorry, I don't quite understand what you mean by that.
-> Do you agree that has_pending = false && retry == 0 is possible when calling the dev_warn()
-> or not?
-> 
-Yes, so what ? It just a hint there may have pending request.
-Even retry == 0 && has_pending = true,
-When we call dev_warn, the clent may not is pending.
+On Thu, Mar 31, 2022 at 1:42 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> From: Shakeel Butt <shakeelb@google.com>
+>
+> Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
+>
+> Use case: Proactive Reclaim
+> ---------------------------
+>
+> A userspace proactive reclaimer can continuously probe the memcg to
+> reclaim a small amount of memory. This gives more accurate and
+> up-to-date workingset estimation as the LRUs are continuously
+> sorted and can potentially provide more deterministic memory
+> overcommit behavior. The memory overcommit controller can provide
+> more proactive response to the changing behavior of the running
+> applications instead of being reactive.
+>
+> A userspace reclaimer's purpose in this case is not a complete replacement
+> for kswapd or direct reclaim, it is to proactively identify memory savings
+> opportunities and reclaim some amount of cold pages set by the policy
+> to free up the memory for more demanding jobs or scheduling new jobs.
+>
+> A user space proactive reclaimer is used in Google data centers.
+> Additionally, Meta's TMO paper recently referenced a very similar
+> interface used for user space proactive reclaim:
+> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+>
+> Benefits of a user space reclaimer:
+> -----------------------------------
+>
+> 1) More flexible on who should be charged for the cpu of the memory
+> reclaim. For proactive reclaim, it makes more sense to be centralized.
+>
+> 2) More flexible on dedicating the resources (like cpu). The memory
+> overcommit controller can balance the cost between the cpu usage and
+> the memory reclaimed.
+>
+> 3) Provides a way to the applications to keep their LRUs sorted, so,
+> under memory pressure better reclaim candidates are selected. This also
+> gives more accurate and uptodate notion of working set for an
+> application.
+>
+> Why memory.high is not enough?
+> ------------------------------
+>
+> - memory.high can be used to trigger reclaim in a memcg and can
+>   potentially be used for proactive reclaim.
+>   However there is a big downside in using memory.high. It can potentially
+>   introduce high reclaim stalls in the target application as the
+>   allocations from the processes or the threads of the application can hit
+>   the temporary memory.high limit.
+>
+> - Userspace proactive reclaimers usually use feedback loops to decide
+>   how much memory to proactively reclaim from a workload. The metrics
+>   used for this are usually either refaults or PSI, and these metrics
+>   will become messy if the application gets throttled by hitting the
+>   high limit.
+>
+> - memory.high is a stateful interface, if the userspace proactive
+>   reclaimer crashes for any reason while triggering reclaim it can leave
+>   the application in a bad state.
+>
+> - If a workload is rapidly expanding, setting memory.high to proactively
+>   reclaim memory can result in actually reclaiming more memory than
+>   intended.
+>
+> The benefits of such interface and shortcomings of existing interface
+> were further discussed in this RFC thread:
+> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+>
+> Interface:
+> ----------
+>
+> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> trigger reclaim in the target memory cgroup.
+>
+>
+> Possible Extensions:
+> --------------------
+>
+> - This interface can be extended with an additional parameter or flags
+>   to allow specifying one or more types of memory to reclaim from (e.g.
+>   file, anon, ..).
+>
+> - The interface can also be extended with a node mask to reclaim from
+>   specific nodes. This has use cases for reclaim-based demotion in memory
+>   tiering systens.
+>
+> - A similar per-node interface can also be added to support proactive
+>   reclaim and reclaim-based demotion in systems without memcg.
+>
+> For now, let's keep things simple by adding the basic functionality.
+>
+> [yosryahmed@google.com: refreshed to current master, updated commit
+> message based on recent discussions and use cases]
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst |  9 ++++++
+>  mm/memcontrol.c                         | 37 +++++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 69d7a6983f78..925aaabb2247 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1208,6 +1208,15 @@ PAGE_SIZE multiple when read back.
+>         high limit is used and monitored properly, this limit's
+>         utility is limited to providing the final safety net.
+>
+> +  memory.reclaim
+> +       A write-only file which exists on non-root cgroups.
+> +
+> +       This is a simple interface to trigger memory reclaim in the
+> +       target cgroup. Write the number of bytes to reclaim to this
+> +       file and the kernel will try to reclaim that much memory.
+> +       Please note that the kernel can over or under reclaim from
+> +       the target cgroup.
+> +
+>    memory.oom.group
+>         A read-write single value file which exists on non-root
+>         cgroups.  The default value is "0".
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 725f76723220..994849fab7df 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -6355,6 +6355,38 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+>         return nbytes;
+>  }
+>
+> +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+> +                             size_t nbytes, loff_t off)
+> +{
+> +       struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+> +       unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+> +       unsigned long nr_to_reclaim, nr_reclaimed = 0;
+> +       int err;
+> +
+> +       buf = strstrip(buf);
+> +       err = page_counter_memparse(buf, "", &nr_to_reclaim);
+> +       if (err)
+> +               return err;
+> +
+> +       while (nr_reclaimed < nr_to_reclaim) {
+> +               unsigned long reclaimed;
+> +
+> +               if (signal_pending(current))
+> +                       break;
+> +
+> +               reclaimed = try_to_free_mem_cgroup_pages(memcg,
+> +                                               nr_to_reclaim - nr_reclaimed,
+> +                                               GFP_KERNEL, true);
+> +
+> +               if (!reclaimed && !nr_retries--)
+> +                       break;
+> +
+> +               nr_reclaimed += reclaimed;
+> +       }
+> +
+> +       return nbytes;
 
+It is better to return an error code (e.g. -EBUSY) when
+memory_reclaim() fails to reclaim nr_to_reclaim bytes of memory,
+except if the cgroup memory usage is already 0.  We can also return
+-EINVAL if nr_to_reclaim is too large (e.g. > limit).
 
-> >> 
-> >>> 		list_for_each_entry(client, &vm->ioreq_clients, list) {
-> >>> 			has_pending = has_pending_request(client);
-> >>> 			if (has_pending)
-> >>> 		}
-> >>> 		spin_unlock_bh(&vm->ioreq_clients_lock);
-> >> 
-> >> imagine has_pending == false && retry == 1 here, then client will not hold a valid list entry.
-> > What do you mean "client will not hold a valid list entry" ? 
-> 
-> Imagine a very simple example:
-> 
-> 	struct acrn_ioreq_client *client;
-> 	list_for_each_entry(client, &vm->ioreq_clients, list) {
-> 		continue;
-> 	}
-> 
-> 	dev_warn(acrn_dev.this_device,
-> 		 "%s cannot flush pending request!\n", client->name); /* NOT GOOD */
-> 
-If there're pending request, we would call schedule to schedule out then schedule back
-to check the list from the beginning. If there's no pending client, we point to the last
-client and break out the while loop.
-
-The code doesn't want to find the pending client and break out the while loop and call
-dev_warn. Please see the function comment.
-
-
-> 
-> Since there is no break for the list_for_each_entry() iterator to return early,
-> client *cannot* be a valid entry of the list. In fact if you look at the list_for_each_entry()
-> macro, it will be an 'bogus' pointer, pointing somewhere into 'vm'.
-> Essentially before the terminating condition of the list traversal the following code is called:
-> 
-> 	list_entry(&vm->ioreq_clients, struct acrn_ioreq_client *, list);
-> 
-> resulting in a:
-> 
-> 	container_of(&vm->ioreq_clients, struct acrn_ioreq_client *, list);
-> 
-> &vm->ioreq_clients however is not contained in a struct acrn_ioreq_client, making
-> this call compute an invalid pointer.
-> Therefore using 'client' as in the example above (e.g. client->name) after the loop is
-> not safe. Since the loop can never return early in the simple example above it will
-> always break. On other cases (the one we are discussing here) there might be a chance that
-> there is one code path (in theory) where the loop did not exit early and 'client'
-> holds that 'invalid entry'.
-> 
-> This would be the case with has_pending = false && retry == 0.
-> 
-> I hope this makes sense.
-> 
-> > 
-> >> 
-> >>> 
-> >>> 		if (has_pending)
-> >>> 			schedule_timeout_interruptible(HZ / 100);
-> >>> 	} while (has_pending && --retry > 0);
-> >> 
-> >> since has_pending && --retry > 0 is no longer true the loop stops.
-> >> 
-> >>> 	if (retry == 0)
-> >>> 		dev_warn(acrn_dev.this_device,
-> >>> 			 "%s cannot flush pending request!\n", client->name);
-> >> client->name is accessed since retry == 0 now, but client is not a valid struct ending up
-> >> in a type confusion.
-> >> 
-> >>> 
-> >>> If retry > 0 and has_pending is true, we would call schedule_timeout_interruptible
-> >>> to schedule out to wait all the pending I/O requests would been completed.
-> >>> 
-> >>> Thanks.
-> >> 
-> >> Again, I'm not sure if this is realistically possible. I'm trying to remove
-> >> any use of the list iterator after the loop to make such potentially issues detectable
-> > You may think we still in the loop (could we ?), even that we didn't write the list iterator then.
-> 
-> I'm not exactly sure which loop you are referring to but no, I don't think we are still in
-> the do while loop.
-> 
-> The only thing we know after the do while loop is that: !has_pending || retry == 0
-> And iff has_pending && retry == 0, then we shouldn't call the dev_warn().
-> 
-> >> at compile time instead of relying on certain (difficult to maintain) conditions to be met
-> >> to avoid the type confusion.
-> >> 
-> >> Thanks,
-> >> Jakob
-> 
-> 	Jakob
-> 
+> +}
+> +
+>  static struct cftype memory_files[] = {
+>         {
+>                 .name = "current",
+> @@ -6413,6 +6445,11 @@ static struct cftype memory_files[] = {
+>                 .seq_show = memory_oom_group_show,
+>                 .write = memory_oom_group_write,
+>         },
+> +       {
+> +               .name = "reclaim",
+> +               .flags = CFTYPE_NOT_ON_ROOT | CFTYPE_NS_DELEGATABLE,
+> +               .write = memory_reclaim,
+> +       },
+>         { }     /* terminate */
+>  };
+>
+> --
+> 2.35.1.1021.g381101b075-goog
+>

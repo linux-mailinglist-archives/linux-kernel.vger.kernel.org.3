@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C244EE7B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBD04EE7B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 07:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245052AbiDAFRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 01:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S245057AbiDAFTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 01:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245051AbiDAFR1 (ORCPT
+        with ESMTP id S233367AbiDAFTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 01:17:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518CD261331;
-        Thu, 31 Mar 2022 22:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648790139; x=1680326139;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xZIr+KdNh2N/rlw/ANBNWbrIxZR/TQJ4qv2aCPwfiR0=;
-  b=VZy1KHUNtTM0uMoQtzGzrfzH7ij0mgHYsPjCH+Fu/dQCErcZ/2BpcB2M
-   GSZomRbVhXH8SoeZWBCv/+BsnP7AZ1Iug2Ad2Fo6w4sT4rX7uNWe8Y1F+
-   r3dYy+mZMJM5dxNbUH+i0p6gibJoDyzgedk5vOC1I3lKgtatho7D9aZi6
-   GeUqNF63gmzcYnBfZLHNMTkId8ZM5hB47XNxY4zIEbaIFRXqoMs7SFq5i
-   LW1QiNLzUWG0OzB3wdIjYGC/eDJX2Bw5/z8n4K8XYE6qbyWSDjfdOjdrW
-   TmIGw+FlnviiXv7Rf5QzjtayMMBgE/MDLcqoIaTjTbNObiHMczMUa79VB
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10303"; a="257623902"
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="257623902"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:15:38 -0700
-X-IronPort-AV: E=Sophos;i="5.90,226,1643702400"; 
-   d="scan'208";a="650585733"
-Received: from tswork-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.29.39])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 22:15:36 -0700
-Message-ID: <c6fb151ced1675d1c93aa18ad8c57c2ffc4e9fcb.camel@intel.com>
-Subject: Re: [RFC PATCH v5 038/104] KVM: x86/mmu: Allow per-VM override of
- the TDP max page level
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 01 Apr 2022 18:15:34 +1300
-In-Reply-To: <5cc4b1c90d929b7f4f9829a42c0b63b52af0c1ed.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <5cc4b1c90d929b7f4f9829a42c0b63b52af0c1ed.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 1 Apr 2022 01:19:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BB1261338
+        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 22:17:52 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KV7gG2dbkzgYHW;
+        Fri,  1 Apr 2022 13:16:10 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 1 Apr 2022 13:17:50 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.21; Fri, 1 Apr 2022 13:17:49 +0800
+Message-ID: <52ed7607-a4bb-947e-d76d-00715ad7634e@huawei.com>
+Date:   Fri, 1 Apr 2022 13:17:49 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 resend 2/3] arm64: mm: Don't defer
+ reserve_crashkernel() with dma_force_32bit
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <kbuild-all@lists.01.org>, <vijayb@linux.microsoft.com>,
+        <f.fainelli@gmail.com>
+References: <20220331074055.125824-3-wangkefeng.wang@huawei.com>
+ <202204010040.RUk6NuNS-lkp@intel.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <202204010040.RUk6NuNS-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme708-chm.china.huawei.com (10.1.199.104) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> In the existing x86 KVM MMU code, there is already max_level member in
-> struct kvm_page_fault with KVM_MAX_HUGEPAGE_LEVEL initial value.  The KVM
-> page fault handler denies page size larger than max_level.
-> 
-> Add per-VM member to indicate the allowed maximum page size with
-> KVM_MAX_HUGEPAGE_LEVEL as default value and initialize max_level in struct
-> kvm_page_fault with it.
-> 
-> For the guest TD, the set per-VM value for allows maximum page size to 4K
-> page size.  Then only allowed page size is 4K.  It means large page is
-> disabled.
 
-Do not support large page for TD is the reason that you want this change, but
-not the result.  Please refine a little bit.
+On 2022/4/1 0:14, kernel test robot wrote:
+> Hi Kefeng,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on next-20220330]
+> [cannot apply to arm64/for-next/core v5.17 v5.17-rc8 v5.17-rc7 v5.17]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/arm64-mm-Do-not-defer-reserve_crashkernel/20220331-152839
+> base:    a67ba3cf9551f8c92d5ec9d7eae1aadbb9127b57
+> config: arm64-buildonly-randconfig-r001-20220331 (https://download.01.org/0day-ci/archive/20220401/202204010040.RUk6NuNS-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/970ec526bd69287a4eb9838600aaf66c46fde350
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Kefeng-Wang/arm64-mm-Do-not-defer-reserve_crashkernel/20220331-152839
+>          git checkout 970ec526bd69287a4eb9838600aaf66c46fde350
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> arch/arm64/mm/init.c:108:13: warning: no previous prototype for 'crashkernel_could_early_reserve' [-Wmissing-prototypes]
+>       108 | bool __init crashkernel_could_early_reserve(void)
+>           |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-> 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 1 +
->  arch/x86/kvm/mmu.h              | 2 +-
->  arch/x86/kvm/mmu/mmu.c          | 2 ++
->  3 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index d8b78d6abc10..d33d79f2af2d 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1053,6 +1053,7 @@ struct kvm_arch {
->  	unsigned long n_requested_mmu_pages;
->  	unsigned long n_max_mmu_pages;
->  	unsigned int indirect_shadow_pages;
-> +	int tdp_max_page_level;
->  	u8 mmu_valid_gen;
->  	struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
->  	struct list_head active_mmu_pages;
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index 0ae91b8b25df..650989c37f2e 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -192,7 +192,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
->  		.nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(),
->  
-> -		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
-> +		.max_level = vcpu->kvm->arch.tdp_max_page_level,
->  		.req_level = PG_LEVEL_4K,
->  		.goal_level = PG_LEVEL_4K,
->  	};
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index a474f2e76d78..e9212394a530 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5782,6 +5782,8 @@ void kvm_mmu_init_vm(struct kvm *kvm)
->  	node->track_write = kvm_mmu_pte_write;
->  	node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
->  	kvm_page_track_register_notifier(kvm, node);
-> +
-> +	kvm->arch.tdp_max_page_level = KVM_MAX_HUGEPAGE_LEVEL;
->  }
->  
->  void kvm_mmu_uninit_vm(struct kvm *kvm)
+Let's wait for some feedback, add <asm/kexec.h> into init.c could 
+silence the warning.
 
+thanks.
+
+>
+> vim +/crashkernel_could_early_reserve +108 arch/arm64/mm/init.c
+>
+>     107	
+>   > 108	bool __init crashkernel_could_early_reserve(void)
+>     109	{
+>     110		if (!IS_ENABLED(CONFIG_ZONE_DMA))
+>     111			return true;
+>     112		if (arm64_dma_force_32bit)
+>     113			return true;
+>     114		return false;
+>     115	}
+>     116	
+>

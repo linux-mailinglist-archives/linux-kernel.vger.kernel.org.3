@@ -2,52 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175A24EFA4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20674EFA4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 21:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351523AbiDATLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 15:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S1351525AbiDATOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 15:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241780AbiDATLJ (ORCPT
+        with ESMTP id S236407AbiDATOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 15:11:09 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD92617D;
-        Fri,  1 Apr 2022 12:09:17 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1naMdl-00012l-6n; Fri, 01 Apr 2022 21:08:57 +0200
-Message-ID: <ff29e77c-f16d-d9ef-9089-0a929d3c2fbf@maciej.szmigiero.name>
-Date:   Fri, 1 Apr 2022 21:08:51 +0200
+        Fri, 1 Apr 2022 15:14:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174E6617D;
+        Fri,  1 Apr 2022 12:12:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB536B82604;
+        Fri,  1 Apr 2022 19:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C023C340F3;
+        Fri,  1 Apr 2022 19:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648840359;
+        bh=YApioM8rRksuAEkG5aeY8aT6WHhUt0SJ/cvtvDy3mIQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mq9ioClIwWzL8dm0dnfl9fxy3t4LppiDFcfjh+24Q3lbf5r5aI+7zIrT8zfKATY/q
+         nHZaT8suCYmK5RCUOlW0HGDkK1Gpifed4aFZVab0KxfKzX/wsA0Dq9JTKIBXeCV+nh
+         FxuJ6zg82piHE1mdtgXYUyUpzImSADdk7KMl4aktptJcxUDYyCQTO+UfjnIqJ9E7aw
+         NoO1GVnHIfT2tOSDLmQ6pK6M2bqd6lE9lx5sTGPiXQQK1/NcwxCYqxxgz7gXgzMz55
+         GS4yfivU4CP7GzH//pqv3av34vTRFUdxXzAbfn8HgNMFMldQr2J67V1qtKQ0WOo1RB
+         FtnUqAt+slLDg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5EE5040407; Fri,  1 Apr 2022 16:12:36 -0300 (-03)
+Date:   Fri, 1 Apr 2022 16:12:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 5/6] perf cpumap: Add intersect function.
+Message-ID: <YkdOpJDnknrOPq2t@kernel.org>
+References: <20220328232648.2127340-1-irogers@google.com>
+ <20220328232648.2127340-6-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1646944472.git.maciej.szmigiero@oracle.com>
- <19c757487eeeff5344ff3684fe9c090235b07d05.1646944472.git.maciej.szmigiero@oracle.com>
- <YkdFSuezZ1XNTTfx@google.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 1/5] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
-In-Reply-To: <YkdFSuezZ1XNTTfx@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220328232648.2127340-6-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,93 +87,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1.04.2022 20:32, Sean Christopherson wrote:
-> On Thu, Mar 10, 2022, Maciej S. Szmigiero wrote:
->> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
->>
->> The next_rip field of a VMCB is *not* an output-only field for a VMRUN.
->> This field value (instead of the saved guest RIP) in used by the CPU for
->> the return address pushed on stack when injecting a software interrupt or
->> INT3 or INTO exception.
->>
->> Make sure this field gets synced from vmcb12 to vmcb02 when entering L2 or
->> loading a nested state.
->>
->> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
->> ---
->>   arch/x86/kvm/svm/nested.c | 4 ++++
->>   arch/x86/kvm/svm/svm.h    | 1 +
->>   2 files changed, 5 insertions(+)
->>
->> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
->> index d736ec6514ca..9656f0d6815c 100644
->> --- a/arch/x86/kvm/svm/nested.c
->> +++ b/arch/x86/kvm/svm/nested.c
->> @@ -366,6 +366,7 @@ void __nested_copy_vmcb_control_to_cache(struct kvm_vcpu *vcpu,
->>   	to->nested_ctl          = from->nested_ctl;
->>   	to->event_inj           = from->event_inj;
->>   	to->event_inj_err       = from->event_inj_err;
->> +	to->next_rip            = from->next_rip;
->>   	to->nested_cr3          = from->nested_cr3;
->>   	to->virt_ext            = from->virt_ext;
->>   	to->pause_filter_count  = from->pause_filter_count;
->> @@ -638,6 +639,8 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
->>   	svm->vmcb->control.int_state           = svm->nested.ctl.int_state;
->>   	svm->vmcb->control.event_inj           = svm->nested.ctl.event_inj;
->>   	svm->vmcb->control.event_inj_err       = svm->nested.ctl.event_inj_err;
->> +	/* The return address pushed on stack by the CPU for some injected events */
->> +	svm->vmcb->control.next_rip            = svm->nested.ctl.next_rip;
+Em Mon, Mar 28, 2022 at 04:26:47PM -0700, Ian Rogers escreveu:
+> The merge function gives the union of two cpu maps. Add an intersect
+> function which will be used in the next change.
+
+So I really don't think intersect() shouldn't modify the contents of any
+of its arguments, at most return one of them with a bumped refcount, as
+an optimization.
+
+The merge() operation is different in the sense that one expects that
+one of the operands will be inserted into the other, and even then it
+would be better to have a clearer semantic, i.e. merge(a, b) should mean
+get the contents of b and insert into a.
+
+Since we're talking about CPUs, it doesn't make sense to have a CPU
+multiple times in the cpu_map, so we eliminate duplicates while doing
+it.
+
+Also perhaps the merge() operation should not even change any of the
+operands, but instead return a new cpuset if one of the operands isn't
+contained in the other, in which case a bump in the reference count of
+the superset would be a valid optimization.
+
+But that boat has departed already, i.e. perf_cpu_map__merge() is
+already an exported libperf API, sigh.
+
+This is something we're exporting, so I think this warrants further
+discussion, even with a fix depending on the merge of this new API.
+
+- Arnaldo
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/perf/cpumap.c              | 38 ++++++++++++++++++++++++++++
+>  tools/lib/perf/include/perf/cpumap.h |  2 ++
+>  2 files changed, 40 insertions(+)
 > 
-> This needs to be gated by nrips being enabled _and_ exposed to L1, i.e.
-> 
-> 	if (svm->nrips_enabled)
-> 		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+> diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
+> index 384d5e076ee4..60cccd05f243 100644
+> --- a/tools/lib/perf/cpumap.c
+> +++ b/tools/lib/perf/cpumap.c
+> @@ -390,3 +390,41 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
+>  	perf_cpu_map__put(orig);
+>  	return merged;
+>  }
+> +
+> +struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
+> +					     struct perf_cpu_map *other)
+> +{
+> +	struct perf_cpu *tmp_cpus;
+> +	int tmp_len;
+> +	int i, j, k;
+> +	struct perf_cpu_map *merged = NULL;
+> +
+> +	if (perf_cpu_map__is_subset(other, orig))
+> +		return orig;
+> +	if (perf_cpu_map__is_subset(orig, other)) {
+> +		perf_cpu_map__put(orig);
+> +		return perf_cpu_map__get(other);
+> +	}
+> +
+> +	tmp_len = max(orig->nr, other->nr);
+> +	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
+> +	if (!tmp_cpus)
+> +		return NULL;
+> +
+> +	i = j = k = 0;
+> +	while (i < orig->nr && j < other->nr) {
+> +		if (orig->map[i].cpu < other->map[j].cpu)
+> +			i++;
+> +		else if (orig->map[i].cpu > other->map[j].cpu)
+> +			j++;
+> +		else {
+> +			j++;
+> +			tmp_cpus[k++] = orig->map[i++];
+> +		}
+> +	}
+> +	if (k)
+> +		merged = cpu_map__trim_new(k, tmp_cpus);
+> +	free(tmp_cpus);
+> +	perf_cpu_map__put(orig);
+> +	return merged;
+> +}
+> diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
+> index 4a2edbdb5e2b..a2a7216c0b78 100644
+> --- a/tools/lib/perf/include/perf/cpumap.h
+> +++ b/tools/lib/perf/include/perf/cpumap.h
+> @@ -19,6 +19,8 @@ LIBPERF_API struct perf_cpu_map *perf_cpu_map__read(FILE *file);
+>  LIBPERF_API struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map);
+>  LIBPERF_API struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
+>  						     struct perf_cpu_map *other);
+> +LIBPERF_API struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
+> +							 struct perf_cpu_map *other);
+>  LIBPERF_API void perf_cpu_map__put(struct perf_cpu_map *map);
+>  LIBPERF_API struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx);
+>  LIBPERF_API int perf_cpu_map__nr(const struct perf_cpu_map *cpus);
+> -- 
+> 2.35.1.1021.g381101b075-goog
 
-It can be done, however what if we run on a nrips-capable CPU,
-but don't expose this capability to the L1?
+-- 
 
-The CPU will then push whatever value was left in this field as
-the return address for some L1 injected events.
-
-Although without nrips feature the L1 shouldn't even attempt event
-injection, copying this field anyway will make it work if L1 just
-expects this capability based on the current CPU model rather than
-by checking specific CPUID feature bits.
-
-> though I don't see any reason to add the condition to the copy to/from cache flows.
->
->>   	if (!nested_vmcb_needs_vls_intercept(svm))
->>   		svm->vmcb->control.virt_ext |= VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
->> @@ -1348,6 +1351,7 @@ static void nested_copy_vmcb_cache_to_control(struct vmcb_control_area *dst,
->>   	dst->nested_ctl           = from->nested_ctl;
->>   	dst->event_inj            = from->event_inj;
->>   	dst->event_inj_err        = from->event_inj_err;
->> +	dst->next_rip             = from->next_rip;
->>   	dst->nested_cr3           = from->nested_cr3;
->>   	dst->virt_ext              = from->virt_ext;
->>   	dst->pause_filter_count   = from->pause_filter_count;
->> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
->> index 93502d2a52ce..f757400fc933 100644
->> --- a/arch/x86/kvm/svm/svm.h
->> +++ b/arch/x86/kvm/svm/svm.h
->> @@ -138,6 +138,7 @@ struct vmcb_ctrl_area_cached {
->>   	u64 nested_ctl;
->>   	u32 event_inj;
->>   	u32 event_inj_err;
->> +	u64 next_rip;
->>   	u64 nested_cr3;
->>   	u64 virt_ext;
->>   	u32 clean;
-> 
-> I don't know why this struct has
-> 
-> 	u8 reserved_sw[32];
-> 
-> but presumably it's for padding, i.e. probably should be reduced to 24 bytes.
-
-Apparently the "reserved_sw" field stores Hyper-V enlightenments state -
-see commit 66c03a926f18 ("KVM: nSVM: Implement Enlightened MSR-Bitmap feature")
-and nested_svm_vmrun_msrpm() in nested.c.
-
-Thanks,
-Maciej
+- Arnaldo

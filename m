@@ -2,98 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20234EEC73
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365034EEC77
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 13:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345560AbiDALjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 07:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
+        id S239257AbiDALl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 07:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236414AbiDALjv (ORCPT
+        with ESMTP id S230426AbiDALl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 07:39:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDA21D7DB1;
-        Fri,  1 Apr 2022 04:38:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E235521A91;
-        Fri,  1 Apr 2022 11:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648813080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LAYvz0hJSPWBWZb7wY9ZS6Pxs0R0ipWo+Er9FVtXgGs=;
-        b=T7PCMC5IwEpXOrp3gNwYDyC2GaJwgBQTaLvY+QPCpmAjzg4P78kD8ngCrlqpzDoMqu1D6n
-        vxAL0XtXAi/oDEPr8sn7oY4Lgk5tlbpcKDHFpHLNMuMW26xMXC2Wpfet4pZdtoYDzI/kLh
-        VFAlGG6+8bVKOeUCTsrYxN2DZs0h4Lk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648813080;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LAYvz0hJSPWBWZb7wY9ZS6Pxs0R0ipWo+Er9FVtXgGs=;
-        b=L+phv4ITqea8XFzQrAHlKewz37vEdvAUQ5yB+MwLpk4TyusSHcEbhyaw9gw9CrhGrJjry4
-        /4gyP1vUlkcZTPCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 787F81331E;
-        Fri,  1 Apr 2022 11:38:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QYZYGhjkRmL4HgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Fri, 01 Apr 2022 11:38:00 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 41960ec0;
-        Fri, 1 Apr 2022 11:38:22 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [PATCH] ceph: truncate page cache when doing DIO in encrypted inodes
-Date:   Fri,  1 Apr 2022 12:38:22 +0100
-Message-Id: <20220401113822.32545-1-lhenriques@suse.de>
+        Fri, 1 Apr 2022 07:41:28 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95CB46B1C
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 04:39:38 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-deb9295679so2375498fac.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 04:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+8Dv18kj8IAp5BXzcoVdvPm3aoVZ9KkfAIFlQfRSHMc=;
+        b=aoPZa1pn34n3/UbbBEmBNxfGoFIYfhjDeJHZb7LC5OAYcrTuPJuXuocMHswRPmqFN8
+         mjbIP5IeObSQsfZl60QvvIGmZfUITORtgwwe/TDNFBkaOuYwN6mSh5Ra0NfFu8CYU21F
+         6knBvpWyYhTljKSJlwD0nNFZzNn/ZxCAtX5COK2NJXAQB6vLv0/+Z/iZ41KqW61I2jIY
+         XaxAhwNl6rCY8DjhtBsr1bQIufr3ujRnIHuF4uqEUKMFGn1J8sF/OFzbzbLNtw+et2rR
+         Eh85+s/sqdhBsV4HMHo2QU2em9WRSibZUtaTc30I5aOcAPaAMBhcPfr2XDBUNQIwZqbj
+         fd7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+8Dv18kj8IAp5BXzcoVdvPm3aoVZ9KkfAIFlQfRSHMc=;
+        b=LEWfFY3LN738RRtDowCU2nGlVJa0hzxl/Dc178jKA6zFwyBwDRs8I/GKjDtZ6T+pJ8
+         juSwQNgud1hVmQDzaPepeV8pa/QDlt4YGfpJe43uLAwhqEJebo5dpb+KBz/YtEXhIuWu
+         0rpLMzkCqmUOMlm5tHDvciLpgjhXm2lD89f1xaYd9SCh9VOgLsHDToyyeYzOOheeM3QU
+         gGW8P47idkjfP2cmf+V9/hBXS4ZcqNFyitf668qExosV09Vjq++7RqY5rsYbn8EXqKIN
+         chazF4JaYNZ6tOkSYvWDQG/f4js5UVwA57K+7q4uBooU883g+abHuSvziHG3cQemzVn7
+         CzWg==
+X-Gm-Message-State: AOAM531+L4rwtyx3VRrvPpfG72PsJfadq2/QlVGx4AuEWS7o8nvmdPvA
+        iUCu+2nSMB+NsRIM7RrErGn0wd5P4RJkmFf2D2TA3Q==
+X-Google-Smtp-Source: ABdhPJxWLxR+hwwbMPprX/38Wf8W+ylowuP0eojFUEJsF+C6PtS475L2/4YSCEJpDavKonwYTJhiNL5h4z5MIUgdJjw=
+X-Received: by 2002:a05:6870:b629:b0:de:a293:bf74 with SMTP id
+ cm41-20020a056870b62900b000dea293bf74mr4791423oab.163.1648813176421; Fri, 01
+ Apr 2022 04:39:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220401091006.2100058-1-qiang1.zhang@intel.com>
+In-Reply-To: <20220401091006.2100058-1-qiang1.zhang@intel.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 1 Apr 2022 13:39:23 +0200
+Message-ID: <CACT4Y+Zw7FJ6Rp0+DB_crXJ0rwZHNM9n-z+V2E-e_=87c6ewgg@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Fix sleeping function called from invalid context
+ in PREEMPT_RT
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        bigeasy@linutronix.de, akpm@linux-foundation.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing DIO on an encrypted node, we need to truncate the page cache in
-the range being written to, otherwise the cache will include invalid data.
+On Fri, 1 Apr 2022 at 11:09, Zqiang <qiang1.zhang@intel.com> wrote:
+>
+> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+> in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1, name: swapper/0
+> preempt_count: 1, expected: 0
+> ...........
+> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt16-yocto-preempt-rt #22
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+> BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+> Call Trace:
+> <TASK>
+> dump_stack_lvl+0x60/0x8c
+> dump_stack+0x10/0x12
+>  __might_resched.cold+0x13b/0x173
+> rt_spin_lock+0x5b/0xf0
+>  ___cache_free+0xa5/0x180
+> qlist_free_all+0x7a/0x160
+> per_cpu_remove_cache+0x5f/0x70
+> smp_call_function_many_cond+0x4c4/0x4f0
+> on_each_cpu_cond_mask+0x49/0xc0
+> kasan_quarantine_remove_cache+0x54/0xf0
+> kasan_cache_shrink+0x9/0x10
+> kmem_cache_shrink+0x13/0x20
+> acpi_os_purge_cache+0xe/0x20
+> acpi_purge_cached_objects+0x21/0x6d
+> acpi_initialize_objects+0x15/0x3b
+> acpi_init+0x130/0x5ba
+> do_one_initcall+0xe5/0x5b0
+> kernel_init_freeable+0x34f/0x3ad
+> kernel_init+0x1e/0x140
+> ret_from_fork+0x22/0x30
+>
+> When the kmem_cache_shrink() be called, the IPI was triggered, the
+> ___cache_free() is called in IPI interrupt context, the local lock
+> or spin lock will be acquired. on PREEMPT_RT kernel, these lock is
+> replaced with sleepbale rt spin lock, so the above problem is triggered.
+> fix it by migrating the release action from the IPI interrupt context
+> to the task context on RT kernel.
+>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  mm/kasan/quarantine.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
+> index 08291ed33e93..c26fa6473119 100644
+> --- a/mm/kasan/quarantine.c
+> +++ b/mm/kasan/quarantine.c
+> @@ -90,6 +90,7 @@ static void qlist_move_all(struct qlist_head *from, struct qlist_head *to)
+>   */
+>  static DEFINE_PER_CPU(struct qlist_head, cpu_quarantine);
+>
+> +static DEFINE_PER_CPU(struct qlist_head, cpu_shrink_qlist);
+>  /* Round-robin FIFO array of batches. */
+>  static struct qlist_head global_quarantine[QUARANTINE_BATCHES];
+>  static int quarantine_head;
+> @@ -311,12 +312,14 @@ static void qlist_move_cache(struct qlist_head *from,
+>  static void per_cpu_remove_cache(void *arg)
+>  {
+>         struct kmem_cache *cache = arg;
+> -       struct qlist_head to_free = QLIST_INIT;
+> +       struct qlist_head *to_free;
+>         struct qlist_head *q;
+>
+> +       to_free = this_cpu_ptr(&cpu_shrink_qlist);
+>         q = this_cpu_ptr(&cpu_quarantine);
+> -       qlist_move_cache(q, &to_free, cache);
+> -       qlist_free_all(&to_free, cache);
+> +       qlist_move_cache(q, to_free, cache);
+> +       if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> +               qlist_free_all(to_free, cache);
+>  }
+>
+>  /* Free all quarantined objects belonging to cache. */
+> @@ -324,6 +327,7 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
+>  {
+>         unsigned long flags, i;
+>         struct qlist_head to_free = QLIST_INIT;
+> +       int cpu;
+>
+>         /*
+>          * Must be careful to not miss any objects that are being moved from
+> @@ -334,6 +338,11 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
+>          */
+>         on_each_cpu(per_cpu_remove_cache, cache, 1);
+>
+> +       if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> +               for_each_possible_cpu(cpu)
+> +                       qlist_free_all(per_cpu_ptr(&cpu_shrink_qlist, cpu), cache);
+> +       }
 
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ceph/file.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Hi Zqiang,
 
-This patch should fix generic/647 fstest when run with test_dummy_encryption.
+This code is not protected by any kind of mutex, right? If so, I think
+it can lead to subtle memory corruptions, double-frees and leaks when
+several tasks move to/free from cpu_shrink_qlist list.
 
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 5072570c2203..0f31c4d352a4 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -1895,6 +1895,11 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
- 		req->r_inode = inode;
- 		req->r_mtime = mtime;
- 
-+		if (IS_ENCRYPTED(inode) && (iocb->ki_flags & IOCB_DIRECT))
-+			truncate_inode_pages_range(
-+				inode->i_mapping, write_pos,
-+				PAGE_ALIGN(write_pos + write_len) - 1);
-+
- 		/* Set up the assertion */
- 		if (rmw) {
- 			/*
+
+>         raw_spin_lock_irqsave(&quarantine_lock, flags);
+>         for (i = 0; i < QUARANTINE_BATCHES; i++) {
+>                 if (qlist_empty(&global_quarantine[i]))

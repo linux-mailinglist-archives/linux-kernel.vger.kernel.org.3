@@ -2,165 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FB34EF6D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3C14EF6D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 17:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352360AbiDAPpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 11:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S1351704AbiDAPo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 11:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353738AbiDAPKz (ORCPT
+        with ESMTP id S1353857AbiDAPLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:10:55 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1998A19315A
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:53:56 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id kk12so2159324qvb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:53:56 -0700 (PDT)
+        Fri, 1 Apr 2022 11:11:08 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFFA196089
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 07:54:10 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id i11so2672120plr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 07:54:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=Qd7+UMiN3Jrll9fNOSYkpHLr2EKG3gIqE6IEorWFPTo=;
-        b=frhnIWwX5xEJfxxbkE/n9nEd6dE/TeDbW4SLwUwBveOv2aw7Dz1nk5aApc1nvf8271
-         pLwhEcIZXPWFnuLMEPuh4Xo+HviPV7y6uyxVowzlLGed/+eMajBWaaoyAAb+HUfQ0A/1
-         rCJ3N9Cn68SJFgAWkQL0H2BKx1CLbjuLYO5NPKkooHJ7k9A4nMNvdPuXkqfGRwpFyJFa
-         akkMzxvvoSPZg0cAUJFX8gwoIm6Ib6peqfsZegtq2NwpLcbySC8S6ttsC5Zq1T0OpB5V
-         GS4fTPDFal55l3KY9ramCBrqwpX61mlvQAkawS6oydb1GnExWqjrJ6y8xFlkhuCpxuSS
-         hxUw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pOFOAOjZHkVIM9Cf5IEXbes0u5Uh/OQeAWWXMddS0Bg=;
+        b=iOsOoSV9OQblL4p1l3OUbmwl/JF8l0v7RCPmXqxWk4Jw8wnbSyNT+BVb9QU8KK/O7S
+         EAHlhqMl9mdfUxz90N4rt8NWEC9EeE2UHAdi47b9XQfmcMgIrx3Bb7PJA9qeWjjGolzJ
+         wk/BjvuXiRgn6TX1CwSGlF36Phq+jBcYdv59dPSjbO0y+6Tg7dcLW6eCJqz7NgFqEzbr
+         7VNiOESgpDBZKYDQkvYlbXD3BoX2hMUvn7/xM0mYTHGhVQT0g5MMEMy97ZdwVwqkqCPX
+         mxMT7CdHBr7N98iviXLuf1gKPvATXJmvPdKo5kt6EjN6u2zGY3eIHf+6RMKqPGNDAmiG
+         uEeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=Qd7+UMiN3Jrll9fNOSYkpHLr2EKG3gIqE6IEorWFPTo=;
-        b=HNpj4HqkpCdey79W1dgKNtZDw+3LPYCPiDUl4YnauSsA5xE8h4wSBC4iUWkAh+bQYH
-         utlOT1g0QYT7PXXvg1nmyHCrWUE0FlJu8H7B9Fxb9QPrXqyt6eqX6lbVEpa+qENzH4EU
-         DtuTz2j+zwfElQC0Kui+CNRwgU8HBUH6APe7Yiv86boU7YoKHoKRrub+udPIMNTuT8c1
-         sW4JLrIDMCr4SnyZq4zHUsp1I/X4S/BkQxvalHqGiDC2pknaKoQ3yHeQUOxo39JLocvS
-         ykqB/fcqzefi+g8TX+C4EALBrZshIbMxKee9rA3du8MSoVYSa7zBE3NbxsmdrF+74req
-         XpiQ==
-X-Gm-Message-State: AOAM532YVEobRYOXT2LHihivtCm3XzwQeIawUbUagaGRmqvOyMj27b2r
-        dygL9SaDccyLuYHI7AJXCBfkAa33kraKvy7S
-X-Google-Smtp-Source: ABdhPJy03H5LmOvAHNjNyWo4gCVB0lYUhUS1sgLswcBnnNIHvMqyZuLbnB1sbi1joMr9KqFX9Idebw==
-X-Received: by 2002:a05:6214:2388:b0:443:865c:5623 with SMTP id fw8-20020a056214238800b00443865c5623mr8396733qvb.72.1648824835916;
-        Fri, 01 Apr 2022 07:53:55 -0700 (PDT)
-Received: from jaehee-ThinkPad-X1-Extreme ([4.34.18.218])
-        by smtp.gmail.com with ESMTPSA id i68-20020a375447000000b006809e0adfffsm1511818qkb.25.2022.04.01.07.53.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pOFOAOjZHkVIM9Cf5IEXbes0u5Uh/OQeAWWXMddS0Bg=;
+        b=QyrhTscth8Xik5Zf4PMnl+9YJ02/IhX+BfjJmn1GhBhDZi+rf54yrCnl9b4XWFLxQ/
+         esFmPUfphhG1wXQA4MVDiTXatbB0E11WGxZYtye41gVzVBCOWM8LXBBfZjcMNMniYlDk
+         hrLurzWWNPV4O2AgYEUypNvQpQ4TfCxYfP2TixYKJrIfnVrCihYJ32vwAokHJrBJZbC0
+         hKQw5AvWF2W0AHvfRxmhRcRL1uU0qs5mn1VckdN76ZJX6zh9049P3/t4txBGo5moe0tP
+         yX9joV4ks8vzYOy7mfB1i44Wcg2z1cORhNp7a5tcrivqDXGinud1d0f7zOvGjfXCGDJ6
+         wrpA==
+X-Gm-Message-State: AOAM532QSTUpnee2RY4+JyLp7UUe/VZZidXA/nS9CV808Se/8LsdQ9He
+        zi8SRg7e8PANaOQiS8LBMndpgw==
+X-Google-Smtp-Source: ABdhPJxQYmCfdKoFloacVpLGDsq+pXMzsTYr3YdN943LhaTj99Is7YEwhGgGHX+l57f4aLJsWy1z1g==
+X-Received: by 2002:a17:902:7c0d:b0:155:d507:3cf0 with SMTP id x13-20020a1709027c0d00b00155d5073cf0mr10344247pll.103.1648824849356;
+        Fri, 01 Apr 2022 07:54:09 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u18-20020a056a00125200b004fb112ee9b7sm3012243pfi.75.2022.04.01.07.54.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 07:53:55 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 10:53:50 -0400
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH] staging: wfx: change variable name to be consistent
-Message-ID: <20220401145350.GA45053@jaehee-ThinkPad-X1-Extreme>
+        Fri, 01 Apr 2022 07:54:08 -0700 (PDT)
+Date:   Fri, 1 Apr 2022 14:54:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Bharata B Rao <bharata@amd.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Mingwei Zhang <mizhang@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
+Message-ID: <YkcSDeJDHOv+MZA7@google.com>
+References: <20220308043857.13652-1-nikunj@amd.com>
+ <YkIh8zM7XfhsFN8L@google.com>
+ <c4b33753-01d7-684e-23ac-1189bd217761@amd.com>
+ <YkSz1R3YuFszcZrY@google.com>
+ <5567f4ec-bbcf-4caf-16c1-3621b77a1779@amd.com>
+ <CAMkAt6px4A0CyuZ8h7zKzTxQUrZMYEkDXbvZ=3v+kphRTRDjNA@mail.gmail.com>
+ <YkX6aKymqZzD0bwb@google.com>
+ <a1fe8fae-6587-e144-3442-93f64fa5263a@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a1fe8fae-6587-e144-3442-93f64fa5263a@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change variable name to be consistent with the naming conventions.
-ssidlen was changed to ssid_len and ssidie was changed to ssid_ie to be
-consistent. This makes the variables more readable. The other ssid
-names in the code are separated by an underscore. For example,
-bssid_filter and num_of_ssids have the ssid separated from the rest of
-the words with an underscore.
+On Fri, Apr 01, 2022, Nikunj A. Dadhania wrote:
+> 
+> On 4/1/2022 12:30 AM, Sean Christopherson wrote:
+> > On Thu, Mar 31, 2022, Peter Gonda wrote:
+> >> On Wed, Mar 30, 2022 at 10:48 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
+> >>> So with guest supporting KVM_FEATURE_HC_MAP_GPA_RANGE and host (KVM) supporting
+> >>> KVM_HC_MAP_GPA_RANGE hypercall, SEV/SEV-ES guest should communicate private/shared
+> >>> pages to the hypervisor, this information can be used to mark page shared/private.
+> >>
+> >> One concern here may be that the VMM doesn't know which guests have
+> >> KVM_FEATURE_HC_MAP_GPA_RANGE support and which don't. Only once the
+> >> guest boots does the guest tell KVM that it supports
+> >> KVM_FEATURE_HC_MAP_GPA_RANGE. If the guest doesn't we need to pin all
+> >> the memory before we run the guest to be safe to be safe.
+> > 
+> > Yep, that's a big reason why I view purging the existing SEV memory management as
+> > a long term goal.  The other being that userspace obviously needs to be updated to
+> > support UPM[*].   I suspect the only feasible way to enable this for SEV/SEV-ES
+> > would be to restrict it to new VM types that have a disclaimer regarding additional
+> > requirements.
+> 
+> For SEV/SEV-ES could we base demand pinning on my first RFC[*].
 
-Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
----
- drivers/staging/wfx/hif_tx.c | 10 +++++-----
- drivers/staging/wfx/sta.c    | 20 ++++++++++----------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+No, because as David pointed out, elevating the refcount is not the same as actually
+pinning the page.  Things like NUMA balancing will still try to migrate the page,
+and even go so far as to zap the PTE, before bailing due to the outstanding reference.
+In other words, not actually pinning makes the mm subsystem less efficient.  Would it
+functionally work?  Yes.  Is it acceptable KVM behavior?  No.
 
-diff --git a/drivers/staging/wfx/hif_tx.c b/drivers/staging/wfx/hif_tx.c
-index ae3cc5919dcd..9c653d0e9034 100644
---- a/drivers/staging/wfx/hif_tx.c
-+++ b/drivers/staging/wfx/hif_tx.c
-@@ -280,7 +280,7 @@ int wfx_hif_stop_scan(struct wfx_vif *wvif)
- }
- 
- int wfx_hif_join(struct wfx_vif *wvif, const struct ieee80211_bss_conf *conf,
--		 struct ieee80211_channel *channel, const u8 *ssid, int ssidlen)
-+		 struct ieee80211_channel *channel, const u8 *ssid, int ssid_len)
- {
- 	int ret;
- 	struct wfx_hif_msg *hif;
-@@ -288,8 +288,8 @@ int wfx_hif_join(struct wfx_vif *wvif, const struct ieee80211_bss_conf *conf,
- 
- 	WARN_ON(!conf->beacon_int);
- 	WARN_ON(!conf->basic_rates);
--	WARN_ON(sizeof(body->ssid) < ssidlen);
--	WARN(!conf->ibss_joined && !ssidlen, "joining an unknown BSS");
-+	WARN_ON(sizeof(body->ssid) < ssid_len);
-+	WARN(!conf->ibss_joined && !ssid_len, "joining an unknown BSS");
- 	if (!hif)
- 		return -ENOMEM;
- 	body->infrastructure_bss_mode = !conf->ibss_joined;
-@@ -300,8 +300,8 @@ int wfx_hif_join(struct wfx_vif *wvif, const struct ieee80211_bss_conf *conf,
- 	body->basic_rate_set = cpu_to_le32(wfx_rate_mask_to_hw(wvif->wdev, conf->basic_rates));
- 	memcpy(body->bssid, conf->bssid, sizeof(body->bssid));
- 	if (ssid) {
--		body->ssid_length = cpu_to_le32(ssidlen);
--		memcpy(body->ssid, ssid, ssidlen);
-+		body->ssid_length = cpu_to_le32(ssid_len);
-+		memcpy(body->ssid, ssid, ssid_len);
- 	}
- 	wfx_fill_header(hif, wvif->id, HIF_REQ_ID_JOIN, sizeof(*body));
- 	ret = wfx_cmd_send(wvif->wdev, hif, NULL, 0, false);
-diff --git a/drivers/staging/wfx/sta.c b/drivers/staging/wfx/sta.c
-index b1e9fb14d2b4..03025ef7f1be 100644
---- a/drivers/staging/wfx/sta.c
-+++ b/drivers/staging/wfx/sta.c
-@@ -392,8 +392,8 @@ static void wfx_join(struct wfx_vif *wvif)
- 	struct ieee80211_bss_conf *conf = &wvif->vif->bss_conf;
- 	struct cfg80211_bss *bss = NULL;
- 	u8 ssid[IEEE80211_MAX_SSID_LEN];
--	const u8 *ssidie = NULL;
--	int ssidlen = 0;
-+	const u8 *ssid_ie = NULL;
-+	int ssid_len = 0;
- 
- 	wfx_tx_lock_flush(wvif->wdev);
- 
-@@ -404,21 +404,21 @@ static void wfx_join(struct wfx_vif *wvif)
- 		return;
- 	}
- 
--	rcu_read_lock(); /* protect ssidie */
-+	rcu_read_lock(); /* protect ssid_ie */
- 	if (bss)
--		ssidie = ieee80211_bss_get_ie(bss, WLAN_EID_SSID);
--	if (ssidie) {
--		ssidlen = ssidie[1];
--		if (ssidlen > IEEE80211_MAX_SSID_LEN)
--			ssidlen = IEEE80211_MAX_SSID_LEN;
--		memcpy(ssid, &ssidie[2], ssidlen);
-+		ssid_ie = ieee80211_bss_get_ie(bss, WLAN_EID_SSID);
-+	if (ssid_ie) {
-+		ssid_len = ssid_ie[1];
-+		if (ssid_len > IEEE80211_MAX_SSID_LEN)
-+			ssid_len = IEEE80211_MAX_SSID_LEN;
-+		memcpy(ssid, &ssid_ie[2], ssid_len);
- 	}
- 	rcu_read_unlock();
- 
- 	cfg80211_put_bss(wvif->wdev->hw->wiphy, bss);
- 
- 	wvif->join_in_progress = true;
--	ret = wfx_hif_join(wvif, conf, wvif->channel, ssid, ssidlen);
-+	ret = wfx_hif_join(wvif, conf, wvif->channel, ssid, ssid_len);
- 	if (ret) {
- 		ieee80211_connection_loss(wvif->vif);
- 		wfx_reset(wvif);
--- 
-2.25.1
+> Those patches does not touch the core KVM flow.
 
+I don't mind touching core KVM code.  If this goes forward, I actually strongly
+prefer having the x86 MMU code handle the pinning as opposed to burying it in SEV
+via kvm_x86_ops.  The reason I don't think it's worth pursuing this approach is
+because (a) we know that the current SEV/SEV-ES memory management scheme is flawed
+and is a deadend, and (b) this is not so trivial as we (or at least I) originally
+thought/hoped it would be.  In other words, it's not that I think demand pinning
+is a bad idea, nor do I think the issues are unsolvable, it's that I think the
+cost of getting a workable solution, e.g. code churn, ongoing maintenance, reviewer
+time, etc..., far outweighs the benefits.
+
+> Moreover, it does not expect any guest/firmware changes.
+> 
+> [*] https://lore.kernel.org/kvm/20220118110621.62462-1-nikunj@amd.com/

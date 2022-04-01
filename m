@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F059B4EF787
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476EA4EF788
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 18:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344628AbiDAQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 12:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
+        id S1348865AbiDAQEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 12:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349537AbiDAP6u (ORCPT
+        with ESMTP id S1351950AbiDAQCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 11:58:50 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314666378
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:28:43 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so2316120otq.13
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:28:43 -0700 (PDT)
+        Fri, 1 Apr 2022 12:02:00 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795AB1E375F
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 08:29:48 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id j83so3156121oih.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 08:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=S2r7fRVo+SDwb9PoKS073Z4FNCpCz2xt1aUwpzgKYYE=;
-        b=VQkzFQjH3jayS+KzQ35Yjy19gVTMDC5MhpUMAlAUbqNS+gkHfNtDagx0QxnpcMYPhP
-         awCo+eQfv8LItW6p3o+iwtP1cspQrIlzDrS/CRxlfuXBbKHZlB2r9kJOd0h+LutBBaBI
-         b3Av0UGhC/799+BGbTKFSReDC74hMAsPCwO49FGRMrUWoe8oAzaoQgM5IHpIX/wS/T8D
-         UxhTxkpMvYMvpCTHEcn0MxF7JGSQOrGl0BAmMLFKC3QV5lxKETY+WRAjpccWUxWjTk7V
-         hLEa/phzaj9Gb6PF7/RIquxPgKMyhNMfcioLDM2ZvRI64N78vfJCBMpXkI5CUorvReW0
-         OhOQ==
+        bh=Gyt7OhDDJG/Jjk7Y/BmbMpmUgwu226u2PaT2lDpwvxc=;
+        b=j0CYlUEivF/RCALCdJ2Z4wBED5Vbr8IWDxV7p4iIFjdEPkXzwTWODhj30CjLvZmhe7
+         2UFCyytz3MgGot99GXMHJIHAVUXsGifPAMzVoAGEz6haXmV9xVL4H6iEFgRz73A/vW/b
+         29CVR98yCdyUfqh0UAPAjP3ZbeD46Sh1qT+yaQ1UN1jsn3QMZoCYa8ERKMjHfHjidTF9
+         lFwKqatt6pTzk/OJxda5PyWzuYt9NX8ZI/j8WUd1wXS1/sEINWSM1JxS60XJ0msC3Y14
+         8opdr8vTS0FJnpA3d+EwYGG8S8YqmX/+EluBLGit5cQrhQrEr84rf6ar3uqf/I5BA2Qj
+         o2cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=S2r7fRVo+SDwb9PoKS073Z4FNCpCz2xt1aUwpzgKYYE=;
-        b=aSa1CJzu0qOjds/qyMLmk6jJ8LhT0HtVEnxwzU/2mYgwvCobq9b3ea7hiOiLU92lz7
-         ravTGSVOLCkf3bCp84ICGnU70KFeQz7TrVi3pPTfRyLZCxgcQBytI0j0U+VuijzcWNOm
-         DuNlDsyYDFm6aCq9VY09MD18atWuhslMI6EpX2mwWtlY5FXJ4Nj1Bkk/tJylOS2uC11w
-         UCTJBI4Dlb0Z12nwzc0rhrYLz1z9PvMZxqGs3iQIHsdpqpCZ8GF8IWOTAPQox0Plda49
-         0vtyuZJnQwbJ0sUl/D08E6+ktp1RQ0cPJxEtlIFZWtSsEqz7Fi1O0sJ1j3lr4WVgWLq9
-         moFA==
-X-Gm-Message-State: AOAM530mgLOkTV5G88ZboWIYpnqBRpNgr3DS7fNW+dWX88ooY3AGCU3g
-        YGkCt99Nyv+bQCZI9re7UIs1zoS8huhaA0wgfqQ=
-X-Google-Smtp-Source: ABdhPJwWFucrD+Zmo2lOnzUOch/2fcBZJtQUF7mE2PyRD9jYXcM1O9tSChQwAW+/Cg6rugZ9hNTsc1NFq0pmQoySsKQ=
-X-Received: by 2002:a05:6830:1552:b0:5cd:bc6e:62b1 with SMTP id
- l18-20020a056830155200b005cdbc6e62b1mr7783681otp.357.1648826922905; Fri, 01
- Apr 2022 08:28:42 -0700 (PDT)
+        bh=Gyt7OhDDJG/Jjk7Y/BmbMpmUgwu226u2PaT2lDpwvxc=;
+        b=bvljmOF8GU9v4ioDzNvQoo5yxyUMj5Xyh0JqknF4tNMIyPVWEQtBQNdYiZO5OCi6VP
+         IDI7INRAbYsyfxQ48grqXUuQ372Et/b3OjEZjTGFHvEl4Luy5TDtmzF0nn1X4m9xQN0K
+         PzThy+sWZMPXc07MxOzQylrv3sVtPtTmzkSizVLlT5bc2YMS2HbUY+OLIxMUVpwVf6kQ
+         oSO8R+l4qIdGsbVX356rywqVe1FWve+Co3HPFJkydmjN1UQghEf+sD3pd+8M3UjJzATT
+         /rPz9eTNPi+Vx/X3yhvBr7cMr+00q1Y6IZinlpbg1o3m7OvR/W2tc737Az/0cPVHs2Cp
+         OpTw==
+X-Gm-Message-State: AOAM531IrymE6mAzzf/4iaKmgymxRb5HCpVxDlc7pLjwQEBR2hDwDyNe
+        tCHgYI47JNySa9iNZborYR+7wJ5yBiaXDrcvU0ZT+yHo
+X-Google-Smtp-Source: ABdhPJwyrU8W6jyhWPl9Bn2XENn1UJZ4nH2sM7UDccpjUlXDCe8pBNG9QRtRKHuBY2hCPZOYMIk9gwEPzLWS1mVKl+0=
+X-Received: by 2002:a05:6808:df1:b0:2ec:b193:ad6c with SMTP id
+ g49-20020a0568080df100b002ecb193ad6cmr4719251oic.200.1648826987831; Fri, 01
+ Apr 2022 08:29:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220324134031.2648315-1-shraash@google.com>
-In-Reply-To: <20220324134031.2648315-1-shraash@google.com>
+References: <2a2b1f76-7e9b-9561-e190-16d808eb5399@molgen.mpg.de> <1648794486-23302-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <1648794486-23302-1-git-send-email-baihaowen@meizu.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 1 Apr 2022 11:28:31 -0400
-Message-ID: <CADnq5_NTkB3xrZnT44pCBXercCT7225V2Ui5XTKsY4H45EcXrA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/amd/display: Fix unused-but-set-variable warning
-To:     Aashish Sharma <shraash@google.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
+Date:   Fri, 1 Apr 2022 11:29:36 -0400
+Message-ID: <CADnq5_MyjrUus0BZpzRKLei-asBepNGjZanLgHiFVUFWSmggcQ@mail.gmail.com>
+Subject: Re: [PATCH V2] drm/amdgpu/vcn: Remove unneeded semicolon
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         David Airlie <airlied@linux.ie>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Jake Wang <haonan.wang2@amd.com>,
-        Anson Jacob <Anson.Jacob@amd.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mohammad Zafar Ziya <Mohammadzafar.ziya@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
         Maling list - DRI developers 
         <dri-devel@lists.freedesktop.org>,
         amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <wayne.lin@amd.com>,
-        Anthony Koo <Anthony.Koo@amd.com>
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -86,47 +80,33 @@ Applied.  Thanks!
 
 Alex
 
-On Thu, Mar 24, 2022 at 9:46 AM Aashish Sharma <shraash@google.com> wrote:
+On Fri, Apr 1, 2022 at 3:23 AM Haowen Bai <baihaowen@meizu.com> wrote:
 >
-> Fix the kernel test robot warning below:
+> report by coccicheck:
+> drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c:1951:2-3: Unneeded semicolon
 >
-> drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2893:12:
-> warning: variable 'temp' set but not used [-Wunused-but-set-variable]
+> Fixes: c543dcbe4237 ("drm/amdgpu/vcn: Add VCN ras error query support")
 >
-> Replaced the assignment to the unused temp variable with READ_ONCE()
-> macro to flush the writes. READ_ONCE() helps avoid the use of
-> volatile and makes it obvious from the code that the read here is
-> intentional. Also verified on x86 that the generated code is exactly the
-> same as before.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Aashish Sharma <shraash@google.com>
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 > ---
-> v2: Removed unnecessary volatile qualifier in the typecast and an unnecessary comment. Also reworded the commit message.
-> ---
->  drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> V1->V2: change title; change Fixed info;
 >
-> diff --git a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-> index 873ecd04e01d..a58f460f431d 100644
-> --- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-> +++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-> @@ -2913,13 +2913,11 @@ static inline void dmub_rb_flush_pending(const struct dmub_rb *rb)
->         uint32_t wptr = rb->wrpt;
+>  drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->         while (rptr != wptr) {
-> -               uint64_t volatile *data = (uint64_t volatile *)((uint8_t *)(rb->base_address) + rptr);
-> -               //uint64_t volatile *p = (uint64_t volatile *)data;
-> -               uint64_t temp;
-> +               uint64_t *data = (uint64_t *)((uint8_t *)(rb->base_address) + rptr);
->                 uint8_t i;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c b/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> index 3e1de8c..17d44be 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+> @@ -1948,7 +1948,7 @@ static uint32_t vcn_v2_6_query_poison_by_instance(struct amdgpu_device *adev,
+>                 break;
+>         default:
+>                 break;
+> -       };
+> +       }
 >
->                 for (i = 0; i < DMUB_RB_CMD_SIZE / sizeof(uint64_t); i++)
-> -                       temp = *data++;
-> +                       (void)READ_ONCE(*data++);
->
->                 rptr += DMUB_RB_CMD_SIZE;
->                 if (rptr >= rb->capacity)
+>         if (poison_stat)
+>                 dev_info(adev->dev, "Poison detected in VCN%d, sub_block%d\n",
 > --
-> 2.35.1.894.gb6a874cedc-goog
+> 2.7.4
 >

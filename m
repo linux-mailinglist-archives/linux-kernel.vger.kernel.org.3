@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1FF4EEA22
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACC24EEA24
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 11:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344363AbiDAJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 05:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S1344379AbiDAJMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 05:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344353AbiDAJMM (ORCPT
+        with ESMTP id S1344353AbiDAJMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 05:12:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CB91C405F;
-        Fri,  1 Apr 2022 02:10:23 -0700 (PDT)
+        Fri, 1 Apr 2022 05:12:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FFB1C6EFE;
+        Fri,  1 Apr 2022 02:10:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C3760EFE;
-        Fri,  1 Apr 2022 09:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29923C2BBE4;
-        Fri,  1 Apr 2022 09:10:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F16761239;
+        Fri,  1 Apr 2022 09:10:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31529C2BBE4;
+        Fri,  1 Apr 2022 09:10:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648804222;
-        bh=sZUdxyJpwlCAHGNffYBZjBlpZuN2X4FgRJngFC/Lcps=;
+        s=korg; t=1648804244;
+        bh=LQombThtfiPPOh/Qz1IUNS3ey8nXXAvBl/8UCn9TYoo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XVZZO7m+37QiNX9O50oI0w+iC2LF66qs7q8hwxwJ3+hipTUQOQ7ENSeuxTcWkgaFH
-         5Rplt9cVyxLJHDdu3p1hlUa0KrN7gBSu4P7gLqYGDX1RRP358uot8o9e/b0v36EQ6D
-         uaGGVEPQMQZZBAoCNdyPZDlNbmCp/NgfhB0FR40o=
-Date:   Fri, 1 Apr 2022 11:10:19 +0200
+        b=scUIDmw0nMVwUtqwsfgDy7AJITvNlUh8YrIN8W2z0s3zhmRyjS60VEXAmNHctljOU
+         ErdFRneQiialRXKLwXWrZXdY4DsD2YEuy4HjmYVH5Z/xj2GZKkDJww75vFz1pQ4x+9
+         y++WB7TQ6SUe31QNkJaWSy6SYZI0nTkVzOT3rF10=
+Date:   Fri, 1 Apr 2022 11:10:42 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     cgel.zte@gmail.com
-Cc:     weiyongjun1@huawei.com, colin.king@intel.com, lv.ruyi@zte.com.cn,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] usb: ftdi-elan: Fix undefined behaviour
-Message-ID: <YkbBe823hCSNzZ8X@kroah.com>
-References: <20220401075747.2407536-1-lv.ruyi@zte.com.cn>
+Cc:     mailhol.vincent@wanadoo.fr, lv.ruyi@zte.com.cn,
+        cai.huoqing@linux.dev, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] usb: host: replace zero-length array with flexible-array
+ member
+Message-ID: <YkbBktBbsWJakSZo@kroah.com>
+References: <20220401080337.2407622-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220401075747.2407536-1-lv.ruyi@zte.com.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220401080337.2407622-1-lv.ruyi@zte.com.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,57 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 07:57:47AM +0000, cgel.zte@gmail.com wrote:
+On Fri, Apr 01, 2022 at 08:03:37AM +0000, cgel.zte@gmail.com wrote:
 > From: Lv Ruyi <lv.ruyi@zte.com.cn>
 > 
-> The use of zero-sized array causes undefined behaviour when it is not
-> the last member in a structure. As it happens to be in this case.
-
-What do you mean by "undefined behavior" here?  How is this working now?
-
-> Also, the current code makes use of a language extension to the C90
-> standard, but the preferred mechanism to declare variable-length
-> types such as this one is a flexible array member, introduced in
-> C99:
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use “flexible array members”[1] for these
+> cases. The older style of one-element or zero-length arrays should
+> no longer be used[2].
 > 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
-
-gcc and clang both support [0] for a very long time so this isn't an
-issue.
-
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last. Which is beneficial
-> to cultivate a high-quality code.
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
 > 
 > Reported-by: Zeal Robot <zealci@zte.com.cn>
 > Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 > ---
->  drivers/usb/misc/ftdi-elan.c | 2 +-
+>  drivers/usb/host/oxu210hp-hcd.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
-> index 6c38c62d29b2..e818d2ed6831 100644
-> --- a/drivers/usb/misc/ftdi-elan.c
-> +++ b/drivers/usb/misc/ftdi-elan.c
-> @@ -171,7 +171,6 @@ struct usb_ftdi {
->  	struct delayed_work command_work;
->  	struct delayed_work respond_work;
->  	struct u132_platform_data platform_data;
-> -	struct resource resources[0];
->  	struct platform_device platform_dev;
->  	unsigned char *bulk_in_buffer;
->  	size_t bulk_in_size;
-> @@ -185,6 +184,7 @@ struct usb_ftdi {
->  	int expected;
->  	int received;
->  	int ed_found;
-> +	struct resource resources[];
+> diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+> index b741670525e3..86f92aadeb0e 100644
+> --- a/drivers/usb/host/oxu210hp-hcd.c
+> +++ b/drivers/usb/host/oxu210hp-hcd.c
+> @@ -169,7 +169,7 @@ struct ehci_regs {
+>  #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+>  
+>  	/* PORTSC: offset 0x44 */
+> -	u32		port_status[0];	/* up to N_PORTS */
+> +	u32		port_status[];	/* up to N_PORTS */
+>  /* 31:23 reserved */
+>  #define PORT_WKOC_E	(1<<22)		/* wake on overcurrent (enable) */
+>  #define PORT_WKDISC_E	(1<<21)		/* wake on disconnect (enable) */
+> -- 
+> 2.25.1
+> 
 
-How did you test and verify that this change is correct?
-
-thanks,
-
-greg k-h
+How did you test to verify that this change is correct?

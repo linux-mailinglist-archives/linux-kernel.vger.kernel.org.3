@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F69A4EE505
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35774EE509
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Apr 2022 02:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243247AbiDAAKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 31 Mar 2022 20:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S243263AbiDAAL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 31 Mar 2022 20:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiDAAKW (ORCPT
+        with ESMTP id S230495AbiDAAL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 31 Mar 2022 20:10:22 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5925359A5C
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:08:31 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id s11so1044233pfu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 31 Mar 2022 17:08:31 -0700 (PDT)
+        Thu, 31 Mar 2022 20:11:57 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C0E3C732;
+        Thu, 31 Mar 2022 17:10:08 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g20so1111445edw.6;
+        Thu, 31 Mar 2022 17:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IZ4FH1HFMQ9mXITlQE0Gyv9mvEtQBeiej3Vyh2T9nz8=;
-        b=cFHEz6HMbQjlw8QC5Ye/EripQGXjLY/aGNbFm3K+FOm+j4YZUbng5ke4HA/SxB5jLF
-         ncnIwXd/sAhuh03We3N1yX5wayto//QxBoS3cVfBFjq0X6Wiar2joHgM8qMOrtkHF0fD
-         gQPkeZW4PZ3TH6pFBewGBUvfph6pIHzw0vIH+jUEUx8oFRWTMBuaUHzVFFxBxC/HOTJK
-         GOaKN6Q9OfUFSNzPF8U6xzuagBsoJWlMwK5fX+Bd5uZ0UswoW3lOYK50dXQCNVjmJ4ZL
-         wZ/eTQ1br8kt8s7GLFC9ZMxir7UT3yeIkzONj5PAAElV9m2hLqT5+9HmVZIqR+asGLxz
-         S1JQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iQ35mcHW9PpHQYH0T0kI8l/DH4WYfOppOS30rqmBEbs=;
+        b=btc/twgw5RlR+yat5KbCqymtiEM/wuE9wnD6UaafOxguLb1AjOIZqAz2abP/yKurZr
+         DcdNPGkFq/Q/ftQOYt9LtkyWEKuGiYTGk4JFi6ElkZSOs4G369jhffT3AG7JpzYLylde
+         ntJCo067c/rNwfhYbOqz/f2G0zGK9MbMiIIrEnIvSC0TwacTH6BriCi831jWo7fLJL1W
+         /qJXnUNN1w3d9dedJYiDzP9VPqyCbnEa+2Ysi3s9lwhqQ+jmmzd7/UoBn46nx/Twqr1J
+         0kIncpALbxxARdrcHjsA9SG60BAAV85qDKOKnlrCtZfvO3YNsOKADjqdyB4GDl3JV7WB
+         ZTLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IZ4FH1HFMQ9mXITlQE0Gyv9mvEtQBeiej3Vyh2T9nz8=;
-        b=1zzuBrsDTAUL1HnIQzc7aQhZ3FSgnCKCLKP8y2pyblSshy9EwvASjOaUZtRl019L2F
-         ZcFxHAFFW4wDA9zRa7S9RWd4FLhS0XRfLu9gi0D1ah2mxvZuFsveenS1OiS1SBa+TQsQ
-         mNomvZc56zgZbDnVKweu7J01Biqjwu13hipxxagnw2HIPXwkJOu2hudf1pmN/qvSq6Iz
-         WOHr51Of3vpxoItE5WiEhXSoB5wQTwHrxhQN0T1wpqK8f70yB9Jx/XzclZcjb+ZyWQB6
-         1AI0p57zirsE0ByWiyQmMNKJRFeGO0C71r9Z4UpEEGmag90jmqPj+SXwHr0qCLNoQFpB
-         qMmQ==
-X-Gm-Message-State: AOAM533gjtLTsy/7yTrEfHuchJ7H7LmyExA8A0nZKEirtVpBakQRAwDr
-        P60gteWy/V31QUeGLb3f+qQrew==
-X-Google-Smtp-Source: ABdhPJw3GqF7SeihbZVezx4oNqsissdHDweCnVsBd+zuEy2qgYzJntFKa1xOSuan68dUA1OXwY5yEw==
-X-Received: by 2002:a63:35c3:0:b0:380:6a04:cecc with SMTP id c186-20020a6335c3000000b003806a04ceccmr12903672pga.455.1648771710570;
-        Thu, 31 Mar 2022 17:08:30 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ot17-20020a17090b3b5100b001c746bfba10sm11861087pjb.35.2022.03.31.17.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 17:08:29 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 00:08:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jon Grimm <Jon.Grimm@amd.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] KVM: nSVM: Don't forget about L1-injected events
-Message-ID: <YkZCeoDhMg1wOU1f@google.com>
-References: <cover.1646944472.git.maciej.szmigiero@oracle.com>
- <a28577564a7583c32f0029f2307f63ca8869cf22.1646944472.git.maciej.szmigiero@oracle.com>
- <YkTSul0CbYi/ae0t@google.com>
- <8f9ae64a-dc64-6f46-8cd4-ffd2648a9372@maciej.szmigiero.name>
- <YkTlxCV9wmA3fTlN@google.com>
- <f4cdaf45-c869-f3bb-2ba2-3c0a4da12a6d@maciej.szmigiero.name>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iQ35mcHW9PpHQYH0T0kI8l/DH4WYfOppOS30rqmBEbs=;
+        b=NDp+wM36euPSsZY1WYtBmGC4gdrxuNnYjTjpn7hqE6VJ7sRmphOpyvdA0l/0UPzqZh
+         as38XWM3wi8+0eAu1v9daqr0EXvN+d95U+6Vn8u0N/ehkBPBXrbStiVh0DFMaiERb2XS
+         kGuoF4v9a1VtJEwqpySh57XMiqiJclJdQY+gjiVnK/7XB2rkxB4/dHly1Lb7IAAvYaKK
+         3aO30jQ5uMQpQjVrLnCm/s/3jZzd4VlP8H7PrfA5f6IMJps5CRBZm4eAt3w2G6t3+BoT
+         0wbZhhodF8zoH9+7fpZqwT14j8E88y6sElvOGmBpKDcgcqt8buRY3GG+QsSgNrePzUq3
+         z7lg==
+X-Gm-Message-State: AOAM531SvxFf5AaV5e5mDisWlKPxQFkULhdKX39UgxteeTZxZZXGof7t
+        bX0me5hPCvf/9FRVyPCFqu/TYYQXzrYMw1GFrKw=
+X-Google-Smtp-Source: ABdhPJyHhPquQJAF43FHs2QL0FzQYEQoV+71yuTm2UT9QUAaWqMXek9tYvze6kAgf0o9WaluBRBZxaVsmcZwgmkedvs=
+X-Received: by 2002:a05:6402:454:b0:416:2db7:685b with SMTP id
+ p20-20020a056402045400b004162db7685bmr18669177edw.43.1648771807089; Thu, 31
+ Mar 2022 17:10:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4cdaf45-c869-f3bb-2ba2-3c0a4da12a6d@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <0dfee8c9d17c20f9a87c39dbc57f635d998b08d2.1648609552.git.jamie.bainbridge@gmail.com>
+ <YkSzLJ72M5f5EL2L@t14s.localdomain>
+In-Reply-To: <YkSzLJ72M5f5EL2L@t14s.localdomain>
+From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Date:   Fri, 1 Apr 2022 10:09:56 +1000
+Message-ID: <CAAvyFNgL1_YsnkGdJM8t9L1zT60AEfUMeReVx=2DTtLZ_WLScQ@mail.gmail.com>
+Subject: Re: [PATCH v3 net] sctp: count singleton chunks in assoc user stats
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,78 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022, Maciej S. Szmigiero wrote:
-> On 31.03.2022 01:20, Sean Christopherson wrote:
-> > Re-executing the INTn is wrong, the instruction has already completed decode and
-> > execution.  E.g. if there's there's a code breakpoint on the INTn, rewinding will
-> > cause a spurious #DB.
-> > 
-> > KVM's INT3 shenanigans are bonkers, but I guess there's no better option given
-> > that the APM says "Software interrupts cannot be properly injected if the processor
-> > does not support the NextRIP field.".  What a mess.
-> 
-> Note that KVM currently always tries to re-execute the current instruction
-> when asked to re-inject a #BP or a #OF, even when nrips are enabled.
+On Thu, 31 Mar 2022 at 05:44, Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> On Wed, Mar 30, 2022 at 01:06:02PM +1000, Jamie Bainbridge wrote:
+> > Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
+> > COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
+> > counter available to the assoc owner.
+> >
+> > These are all control chunks so they should be counted as such.
+> >
+> > Add counting of singleton chunks so they are properly accounted for.
+> >
+> > Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
+> > Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+> > ---
+> >  net/sctp/outqueue.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
+> > index a18609f608fb786b2532a4febbd72a9737ab906c..bed34918b41f24810677adc0cd4fbd0859396a02 100644
+> > --- a/net/sctp/outqueue.c
+> > +++ b/net/sctp/outqueue.c
+> > @@ -914,6 +914,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+> >                               ctx->asoc->base.sk->sk_err = -error;
+> >                               return;
+> >                       }
+> > +                     ctx->asoc->stats.octrlchunks++;
+> >                       break;
+> >
+> >               case SCTP_CID_ABORT:
+> > @@ -939,6 +940,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+> >               case SCTP_CID_HEARTBEAT:
+> >                       if (chunk->pmtu_probe) {
+> >                               sctp_packet_singleton(ctx->transport, chunk, ctx->gfp);
+> > +                             ctx->asoc->stats.octrlchunks++;
+>
+> sctp_packet_singleton can fail. It shouldn't be propagated to the
+> socket but octrlchunks shouldn't be incremented then. Not too diferent
+> from the one above.
 
-Yep, and my vote is to fix that.
+Ah, thanks for the catch! Is this syntax assigning to error okay?
 
-> Also, #BP (and #OF, too) is returned as type SVM_EXITINTINFO_TYPE_EXEPT,
-> not as SVM_EXITINTINFO_TYPE_SOFT (soft interrupt), so it should be
-> re-injected accordingly.
+error = sctp_packet_singleton(ctx->transport, chunk, ctx->gfp);
+if (!error)
+          ctx->asoc->stats.octrlchunks++;
+break;
 
-Ahhh, SVM doesn't differentiate between software exceptions and hardware exceptions.
-Finally found the relevant section in the APM:
-
-  Despite the instruction name, the events raised by the INT1 (also known as ICEBP),
-  INT3 and INTO instructions (opcodes F1h, CCh and CEh) are considered exceptions for
-  the purposes of EXITINTINFO, not software interrupts. Only events raised by the INTn
-  instruction (opcode CDh) are considered software interrupts.
-
-VMX has separate identifiers for software interrupts and for software exceptions,
-where as SVM unconditionally treats #BP and #OF as soft:
-
-  Injecting an exception (TYPE = 3) with vectors 3 or 4 behaves like a trap raised by
-  INT3 and INTO instructions
-
-Now I'm curious why Intel doesn't do the same...
-
-> > Anyways, for the common nrips=true case, I strongly prefer that we properly fix
-> > the non-nested case and re-inject software interrupts, which should in turn
-> > naturally fix this nested case.
-> 
-> This would also need making the #BP or #OF current instruction
-> re-execution conditional on (at least) nrips support.
-> 
-> I am not sure, however, whether this won't introduce any regressions.
-> That's why this patch set changed the behavior here only for the
-> L1 -> L2 case.
-> 
-> Another issue is whether a L1 hypervisor can legally inject a #VC
-> into its L2 (since these are never re-injected).
-
-I would expect to work, and it's easy to find out.  I know VMX allows injecting
-non-existent exceptions, but the APM is vague as usual and says VMRUN will fail...
-
-  If the VMM attempts to inject an event that is impossible for the guest mode
-
-> We still need L1 -> L2 event injection detection to restore the NextRIP
-> field when re-injecting an event that uses it.
-
-You lost me on this one.  KVM L0 is only (and always!) responsible for saving the
-relevant info into vmcb12, why does it need to detect where the vectoring exception
-came from?
-
-> > And for nrips=false, my vote is to either punt
-> > and document it as a "KVM erratum", or straight up make nested require nrips.
-> 
-> A quick Internet search shows that the first CPUs with NextRIP were the
-> second-generation Family 10h CPUs (Phenom II, Athlon II, etc.).
-> They started being released in early 2009, so we probably don't need to
-> worry about the non-nrips case too much.
-> 
-> For the nested case, orthodox reading of the aforementioned APM sentence
-> would mean that a L1 hypervisor is not allowed either to make use of such
-> event injection in the non-nrips case.
-
-Heh, my reading of it is that it's not disallowed, it just won't work correctly,
-i.e. the INTn won't be skipped.
+> >                               break;
+> >                       }
+> >                       fallthrough;
+> > --
+> > 2.35.1
+> >

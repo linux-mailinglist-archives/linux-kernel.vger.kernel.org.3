@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62494F0019
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEFB4F0024
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354164AbiDBJ0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S240785AbiDBJfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354130AbiDBJZk (ORCPT
+        with ESMTP id S232062AbiDBJe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:25:40 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCA05418E
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:23:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bq8so10398171ejb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:23:47 -0700 (PDT)
+        Sat, 2 Apr 2022 05:34:58 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB31C108;
+        Sat,  2 Apr 2022 02:33:07 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id k14so4251550pga.0;
+        Sat, 02 Apr 2022 02:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=p1nCazU2RR08u9chSBMxQI9AzP6gAEkfhwUIFi0LIXg=;
-        b=Wg7mpw7XUE4bov9iBjuBYKFcVHyxOb+b9cnznxNDNvkRKByMlQ7DM4l1oY7shpcn7Z
-         Mp3duqVwKMMQS0k8odTmhEn8wBwbhUff89OkcdqppYTImkQ8/2eE2brZQC8XLFBqlUIG
-         WvLby9+1lF2IxSRDIQ0MWXsPzcCasBitTAqHvgLm78AtAkSour981+e+X5gAWiqMifo9
-         cyhclO/5zGCHK0PsB83VIND20i/wKTfkIEsbKX4vMG519BakSPP+inVty+D44YTYbl7r
-         d4myFPDQ3GKa3SOpY42ShIFERYpO7YhTAXTzNAHtoh7/BD18u96vVjRkGIyBBeFHdpK7
-         FV+g==
+        bh=oIRSTzpeogZQegTxy3HsXL8f2cTTP9W4dlr8OKiUWvM=;
+        b=MmNDOwVEm9/LVOFVLRabwEeZP2ohnfVDJl4b6rWpmqY7ck/S6PpyIGOmyHKtqdnrB6
+         MmfTPtCYh59zgoCCuotESVOzKCOJ20495cIfFbDPXFXedRy7EgZnpyR0z61XHHDKi7Mt
+         gmO1GhLb9kfH1Lh1ZdRn7shLVz2Ep9pM2fKO/nUXKIyWd+toxIbk4mE8NamZjm/Fx7Ra
+         C+KKcTcPRgmyi3AYRXyJ/9y1Gy43XNHxl4MDcMGP8V6Uokjsfi6ZyrJNHaDMuG3muHUr
+         rCoAARHhh/CuKf93dFKNmSRFUR34oFcKJE/tyq+XjKnmAa3nBzkxqGDpM2BR18YAuaa3
+         Xzxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=p1nCazU2RR08u9chSBMxQI9AzP6gAEkfhwUIFi0LIXg=;
-        b=CxwMazAhKo8uLhSApTG8poGCujM6DfKpwC2ogIHt4rwaJPMuhMLFXucaHqH6Wdyuiq
-         YdWX009NZtcbM7wEwYcAqywVD8HItn5YolWzZgTlkppO67JKn0dOKyNjs/XWKzTdAQTh
-         B1LC1QRIjh78DV9oGFWFp+Rl59aoxwt5J5IojOtbKct0KmP18KhJfzrnibfqPmig1qjw
-         zmmp+q6m0fDotn7pgqUqKasaJ2R3Gx3prsEwaXv7Yz0muNeVSpgRnriBK2MpzE6bfEBG
-         ORy3pjls68KidbsnvqAg9GPorLqg+tnOfyOSbDePuO/3utkmD0sS8TZy94CYqw4vJTfH
-         7NUQ==
-X-Gm-Message-State: AOAM532+b8kI3a4GNrrN4psGCrse6dm+f9K5eQQWbUNZmTN2YVNwsmLC
-        AxHtQpniNCbqh0ALdXZXUJpz1QRWo/g=
-X-Google-Smtp-Source: ABdhPJyrGqa254pGglGEIFCVEPeMoDDg7oWpzf0Pv4SVMvPPifEA4K17QwjnhZRW3g/ZSTqFTJ5DRg==
-X-Received: by 2002:a17:907:7da5:b0:6e4:e40f:60a0 with SMTP id oz37-20020a1709077da500b006e4e40f60a0mr3240474ejc.486.1648891426020;
-        Sat, 02 Apr 2022 02:23:46 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id jv19-20020a170907769300b006e095c047d6sm1897679ejc.109.2022.04.02.02.23.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 02:23:45 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 7/7] staging: r8188eu: remove HW_VAR_H2C_FW_P2P_PS_OFFLOAD from SetHwReg8188EU()
-Date:   Sat,  2 Apr 2022 11:23:32 +0200
-Message-Id: <20220402092332.6627-8-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220402092332.6627-1-straube.linux@gmail.com>
-References: <20220402092332.6627-1-straube.linux@gmail.com>
+        bh=oIRSTzpeogZQegTxy3HsXL8f2cTTP9W4dlr8OKiUWvM=;
+        b=H3DLIo1QlE3AZyVElpOk3BX6nfiywbF9mp2uxtG4FMgA1C3RvlzDW+jIXeCnCzR9ax
+         w/0mmAgjnVX9QF+E8ZLg91YuswjUX8zfWD5r6xA8k2w/AFrswEJ6jmxCI1LNryXkPVzy
+         xzlPxKqCYI+5IpOUSH7kb/EbU8BzGu1GbaEPv+K+h7m7ZDt1EIepZnv/N5APq/HOVaij
+         cgxY1zd0qez+N1VYx/+YQ/zOWrb+zMX4ysOlr9H2ypdXybxGWuMQClIoy919/37POVA4
+         ztzoEvrzHQ612XYQYP7GK9/9LMRTnb4QnlXmGysEtd9PhJYON5N8U4e1vejznFVjpOv5
+         /9HA==
+X-Gm-Message-State: AOAM531W0IW3nkwPKUvpZePUeOheP8oTx+vNC7RpWZQ59CrtV3+Nb98R
+        G4rz4utIoDN2jvd39siyNAEkm2/yFVAxgQ==
+X-Google-Smtp-Source: ABdhPJwTBN78sVwN2HktnnEhYPi7sExtecHxxHkCS/Jzrfc7VDfZ0PtiiKIkHMUvO3GW0yIF9EAOsg==
+X-Received: by 2002:aa7:8d47:0:b0:4f6:a7f9:1ead with SMTP id s7-20020aa78d47000000b004f6a7f91eadmr14749693pfe.42.1648891987038;
+        Sat, 02 Apr 2022 02:33:07 -0700 (PDT)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id f66-20020a62db45000000b004fa8a7b8ad3sm5593956pfg.77.2022.04.02.02.33.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 02 Apr 2022 02:33:06 -0700 (PDT)
+Date:   Sat, 2 Apr 2022 17:32:21 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     "Yue Hu" <huyue2@coolpad.com>
+Cc:     <dhowells@redhat.com>, <sfrench@samba.org>,
+        <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
+        <linux-cachefs@redhat.com>, <linux-cifs@vger.kernel.org>,
+        <samba-technical@lists.samba.org>, <linux-nfs@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zbestahu@163.com>,
+        <zhangwen@coolpad.com>
+Subject: Re: [PATCH] fscache: Expose fscache_end_operation() helper
+Message-ID: <20220402173221.00002170.zbestahu@gmail.com>
+In-Reply-To: <20220402021841.22285-1-huyue2@coolpad.com>
+References: <20220402021841.22285-1-huyue2@coolpad.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,78 +75,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HW_VAR_H2C_FW_P2P_PS_OFFLOAD case in SetHwReg8188EU() just calls a
-function. Call the function directly and remove the
-HW_VAR_H2C_FW_P2P_PS_OFFLOAD case from SetHwReg8188EU(). This is part
-of the ongoing effort to get rid of the unwanted hal layer.
+On Sat, 02 Apr 2022 10:18:55 +0800
+"Yue Hu" <huyue2@coolpad.com> wrote:
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_p2p.c     | 6 +++---
- drivers/staging/r8188eu/hal/usb_halinit.c  | 6 ------
- drivers/staging/r8188eu/include/hal_intf.h | 1 -
- 3 files changed, 3 insertions(+), 10 deletions(-)
+> Currently, nfs and cifs have same fscache_end_operaion() as fscache.
+> We may put the helper in linux/fscache.h so that fscache internal
+> and client filesystem can all use it.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-index 48500fb82250..1e728a03e0ac 100644
---- a/drivers/staging/r8188eu/core/rtw_p2p.c
-+++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-@@ -1602,7 +1602,7 @@ void p2p_ps_wk_hdl(struct adapter *padapter, u8 p2p_ps_state)
- 	case P2P_PS_DISABLE:
- 		pwdinfo->p2p_ps_state = p2p_ps_state;
- 
--		SetHwReg8188EU(padapter, HW_VAR_H2C_FW_P2P_PS_OFFLOAD, (u8 *)(&p2p_ps_state));
-+		rtl8188e_set_p2p_ps_offload_cmd(padapter, p2p_ps_state);
- 
- 		pwdinfo->noa_index = 0;
- 		pwdinfo->ctwindow = 0;
-@@ -1626,7 +1626,7 @@ void p2p_ps_wk_hdl(struct adapter *padapter, u8 p2p_ps_state)
- 					SetHwReg8188EU(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&padapter->pwrctrlpriv.pwr_mode));
- 				}
- 			}
--			SetHwReg8188EU(padapter, HW_VAR_H2C_FW_P2P_PS_OFFLOAD, (u8 *)(&p2p_ps_state));
-+			rtl8188e_set_p2p_ps_offload_cmd(padapter, p2p_ps_state);
- 		}
- 		break;
- 	case P2P_PS_SCAN:
-@@ -1634,7 +1634,7 @@ void p2p_ps_wk_hdl(struct adapter *padapter, u8 p2p_ps_state)
- 	case P2P_PS_ALLSTASLEEP:
- 		if (pwdinfo->p2p_ps_mode > P2P_PS_NONE) {
- 			pwdinfo->p2p_ps_state = p2p_ps_state;
--			SetHwReg8188EU(padapter, HW_VAR_H2C_FW_P2P_PS_OFFLOAD, (u8 *)(&p2p_ps_state));
-+			rtl8188e_set_p2p_ps_offload_cmd(padapter, p2p_ps_state);
- 		}
- 		break;
- 	default:
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index cbd49183be13..4bc6b08fb282 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1150,12 +1150,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 			rtl8188e_set_FwPwrMode_cmd(Adapter, psmode);
- 		}
- 		break;
--	case HW_VAR_H2C_FW_P2P_PS_OFFLOAD:
--		{
--			u8 p2p_ps_state = (*(u8 *)val);
--			rtl8188e_set_p2p_ps_offload_cmd(Adapter, p2p_ps_state);
--		}
--		break;
- 	case HW_VAR_INITIAL_GAIN:
- 		{
- 			struct rtw_dig *pDigTable = &podmpriv->DM_DigTable;
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 0f64cb41cca6..e222ab89bfc5 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -22,7 +22,6 @@ enum hw_variables {
- 	HW_VAR_AC_PARAM_BE,
- 	HW_VAR_AMPDU_FACTOR,
- 	HW_VAR_H2C_FW_PWRMODE,
--	HW_VAR_H2C_FW_P2P_PS_OFFLOAD,
- 	HW_VAR_INITIAL_GAIN,
- 	HW_VAR_FIFO_CLEARN_UP,
- 	HW_VAR_H2C_MEDIA_STATUS_RPT,
--- 
-2.35.1
+Sorry, please ignore the patch due to my earlier code base.
+
+Thanks.
+
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> ---
+>  fs/cifs/fscache.c       |  8 --------
+>  fs/fscache/internal.h   | 11 -----------
+>  fs/nfs/fscache.c        |  8 --------
+>  include/linux/fscache.h | 12 ++++++++++++
+>  4 files changed, 12 insertions(+), 27 deletions(-)
+> 
+> diff --git a/fs/cifs/fscache.c b/fs/cifs/fscache.c
+> index 33af72e0ac0c..b47c2011ce5b 100644
+> --- a/fs/cifs/fscache.c
+> +++ b/fs/cifs/fscache.c
+> @@ -134,14 +134,6 @@ void cifs_fscache_release_inode_cookie(struct inode *inode)
+>  	}
+>  }
+>  
+> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
+> -{
+> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+> -
+> -	if (ops)
+> -		ops->end_operation(cres);
+> -}
+> -
+>  /*
+>   * Fallback page reading interface.
+>   */
+> diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
+> index f121c21590dc..ed1c9ed737f2 100644
+> --- a/fs/fscache/internal.h
+> +++ b/fs/fscache/internal.h
+> @@ -70,17 +70,6 @@ static inline void fscache_see_cookie(struct fscache_cookie *cookie,
+>  			     where);
+>  }
+>  
+> -/*
+> - * io.c
+> - */
+> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
+> -{
+> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+> -
+> -	if (ops)
+> -		ops->end_operation(cres);
+> -}
+> -
+>  /*
+>   * main.c
+>   */
+> diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
+> index cfe901650ab0..39654ca72d3d 100644
+> --- a/fs/nfs/fscache.c
+> +++ b/fs/nfs/fscache.c
+> @@ -249,14 +249,6 @@ void nfs_fscache_release_file(struct inode *inode, struct file *filp)
+>  	}
+>  }
+>  
+> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
+> -{
+> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+> -
+> -	if (ops)
+> -		ops->end_operation(cres);
+> -}
+> -
+>  /*
+>   * Fallback page reading interface.
+>   */
+> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+> index 296c5f1d9f35..79bb40b92e0f 100644
+> --- a/include/linux/fscache.h
+> +++ b/include/linux/fscache.h
+> @@ -557,6 +557,18 @@ int fscache_write(struct netfs_cache_resources *cres,
+>  	return ops->write(cres, start_pos, iter, term_func, term_func_priv);
+>  }
+>  
+> +/*
+> + * Clean up at the end of an operation
+> + */
+> +static inline
+> +void fscache_end_operation(struct netfs_cache_resources *cres)
+> +{
+> +	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
+> +
+> +	if (ops)
+> +		ops->end_operation(cres);
+> +}
+> +
+>  /**
+>   * fscache_clear_page_bits - Clear the PG_fscache bits from a set of pages
+>   * @cookie: The cookie representing the cache object
 

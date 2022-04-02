@@ -2,73 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFC54EFEF0
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84ED4EFF0A
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353834AbiDBFUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 01:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S1353926AbiDBF0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 01:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353842AbiDBFUo (ORCPT
+        with ESMTP id S1353885AbiDBFZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 01:20:44 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB6A260A;
-        Fri,  1 Apr 2022 22:18:38 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id f3so3543452qvz.10;
-        Fri, 01 Apr 2022 22:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fFgx1E3N9Tuj4d3VeX4UvzGd1gLHWD/bK6Ty1lgjGzQ=;
-        b=XkGit5fFj+hszUIdcJiTienq0VkGmWOgOqCztNcjsQemceNX3iWKz1j7pCoLC7TImb
-         BRJGBNNBRf3sc+9FHeICc4OYO1EAxNtc+ajkaqiW25kiKox59qIRRLW1MvPDQH8jcrPi
-         wHWHfxBNI4XDMWCyml7yXHOsZbrnulMwcbjLs4Mx/J1uWWoMJR49+XGBRl7+C04lIna/
-         vu2YHWH38R/BuzvXr50Su5iB53riBNFYXEXRPnhDYmk8Z4YYYZKWbNQpeBDhy2ppWkrT
-         d9aL6jAK7O2Cam6chQsjlf1Vysdb34wn5hOp/MqR0jGeeae2wmsgdY1ZbBk4RoK15fIY
-         2G3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fFgx1E3N9Tuj4d3VeX4UvzGd1gLHWD/bK6Ty1lgjGzQ=;
-        b=BpvQKr/Ht0i+JjtY2FPmU1T1V8DXsfyQKD6ZANzhYZHilcf2MBfKH6NHvh/yZeTUyc
-         Ew/z0EWQ28J/M8hc6ryLAKKRJZ8DKRsQnJRO9y2T95yaOCSIx2ZLLmrX89RyYe79rlF9
-         iYK3sPqyL1Bd8Q/oea6s9QD/eWIwsUG/k0BaUx24gjGFHbRcc4cLmTPlnHALRSpT0K7p
-         I3FnwiyzoErhJAJE3lLCm4Ejf2RFR1Fy9HrD3PwdfZon2ysGwhRAP8NofdPZcoXx7ZBL
-         3GeRpEholq6aW3IKq6mFu2O0o+hOUu620O9TjAp4pi4RotjJcRS880A2bDH+RmPtAEQ5
-         DTKQ==
-X-Gm-Message-State: AOAM533K0Usew5IeAZ7JgatIGUENgfeilq0XvnM/K5HiCCi9mx4eIw8J
-        71qqVbuY+xygUSL+bmCdLSbmQ+OKstZ9PusqqTs=
-X-Google-Smtp-Source: ABdhPJxKU9pQBTf9BjMoQ92OQi3Ukfw98xwcIFdCVWWU9nd+jUtUESm3xqkK/NTBNg1O9IPcTKyLIAwPR+aXThqnd2Q=
-X-Received: by 2002:ad4:5d49:0:b0:441:5682:9b92 with SMTP id
- jk9-20020ad45d49000000b0044156829b92mr10415186qvb.10.1648876717610; Fri, 01
- Apr 2022 22:18:37 -0700 (PDT)
+        Sat, 2 Apr 2022 01:25:44 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6909B21800
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 22:23:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V8yNhsR_1648877029;
+Received: from 30.225.24.59(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V8yNhsR_1648877029)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 02 Apr 2022 13:23:49 +0800
+Message-ID: <75ca360f-48a6-38dc-c0cc-d9b0e0d003ce@linux.alibaba.com>
+Date:   Sat, 2 Apr 2022 13:23:49 +0800
 MIME-Version: 1.0
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
- <YkbjNYMY8VjHoSHR@dhcp22.suse.cz>
-In-Reply-To: <YkbjNYMY8VjHoSHR@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Sat, 2 Apr 2022 13:18:10 +0800
-Message-ID: <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [xiang:jeffle/fscache 2/19] fs/cachefiles/namei.c:478:17: error:
+ label 'out_unuse' used but not defined
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, Xiang Gao <xiang@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+References: <202204021359.3SIrp1y5-lkp@intel.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <202204021359.3SIrp1y5-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,94 +47,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 7:34 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Fri 01-04-22 09:34:02, Zhaoyang Huang wrote:
-> > On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> > > > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > > >
-> > > > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > >
-> > > > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > > > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > > > > by loading an special algorithm into its virtual address space and make it hard
-> > > > > > to protect the expanded usage without userspace's interaction.
-> > > > >
-> > > > > Do I get it correctly that the concern you have is that you do not know
-> > > > > how much memory your workload will need because that depends on some
-> > > > > parameters?
-> > > > right. such as a camera APP will expand the usage from 50MB to 500MB
-> > > > because of launching a special function(face beauty etc need special
-> > > > algorithm)
-> > > > >
-> > > > > > Furthermore, fixed
-> > > > > > memory.low is a little bit against its role of soft protection as it will response
-> > > > > > any system's memory pressure in same way.
-> > > > >
-> > > > > Could you be more specific about this as well?
-> > > > As the camera case above, if we set memory.low as 200MB to keep the
-> > > > APP run smoothly, the system will experience high memory pressure when
-> > > > another high load APP launched simultaneously. I would like to have
-> > > > camera be reclaimed under this scenario.
-> > >
-> > > OK, so you effectivelly want to keep the memory protection when there is
-> > > a "normal" memory pressure but want to relax the protection on other
-> > > high memory utilization situations?
-> > >
-> > > How do you exactly tell a difference between a steady memory pressure
-> > > (say stream IO on the page cache) from "high load APP launched"? Should
-> > > you reduce the protection on the stram IO situation as well?
-> > We can take either system's io_wait or PSI_IO into consideration for these.
->
-> I do not follow. Let's say you have a stream IO workload which is mostly
-> RO. Reclaiming those pages means effectivelly to drop them from the
-> cache so there is no IO involved during the reclaim. This will generate
-> a constant flow of reclaim that shouldn't normally affect other
-> workloads (as long as kswapd keeps up with the IO pace). How does your
-> scheme cope with this scenario? My understanding is that it will simply
-> relax the protection.
-You are right. This scheme treats the system's memory pressure
-equally, no matter if it comes from in-kernel page allocation with
-high order or cache drop by IO like things. The decay_factor composed
-of PSI_SOME and PSI_FULL which represent the system is tight on
-memory, every entity has the obligation to donate to solve this issue.
->
-> > > [...]
-> > > > > One very important thing that I am missing here is the overall objective of this
-> > > > > tuning. From the above it seems that you want to (ab)use memory->low to
-> > > > > protect some portion of the charged memory and that the protection
-> > > > > shrinks over time depending on the the global PSI metrict and time.
-> > > > > But why this is a good thing?
-> > > > 'Good' means it meets my original goal of keeping the usage during a
-> > > > period of time and responding to the system's memory pressure. For an
-> > > > android like system, memory is almost forever being in a tight status
-> > > > no matter how many RAM it has. What we need from memcg is more than
-> > > > control and grouping, we need it to be more responsive to the system's
-> > > > load and could  sacrifice its usage  under certain criteria.
-> > >
-> > > Why existing tools/APIs are insufficient for that? You can watch for
-> > > both global and memcg memory pressure including PSI metrics and update
-> > > limits dynamically. Why is it necessary to put such a logic into the
-> > > kernel?
-> > Poll and then React method in userspace requires a polling interval
-> > and response time. Take PSI as an example, it polls ten times during
-> > POLLING_INTERVAL while just report once, which introduce latency in
-> > some extend.
->
-> Do workload transitions happen so often in your situation that the
-> interval really matters? As Suren already pointed out starting a new
-> application is usually an explicit event which can pro-activelly update
-> limits.
-Yes. As my reply to Suren's comment, even a positive monitor service
-which could be aware of the activity starting(APP launching etc) at
-the very first time, has to 1. read PSI and memcg->watermark/usage 2.
-make a decision. 3. write memcg->memory.low to adjust memory
-allowance. Furthermore, monitors could not supervise the APP for whole
-life time, while the reclaiming could arise at any time.
 
-> --
-> Michal Hocko
-> SUSE Labs
+
+On 4/2/22 1:18 PM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git jeffle/fscache
+> head:   c536a60b958806d427fb66e3f53a1201826fdcf4
+> commit: 6e3731398f863eec9b10f9e0cead9f2ec09d8b4d [2/19] cachefiles: notify user daemon with anon_fd when looking up cookie
+> config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220402/202204021359.3SIrp1y5-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git/commit/?id=6e3731398f863eec9b10f9e0cead9f2ec09d8b4d
+>         git remote add xiang https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git
+>         git fetch --no-tags xiang jeffle/fscache
+>         git checkout 6e3731398f863eec9b10f9e0cead9f2ec09d8b4d
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    fs/cachefiles/namei.c: In function 'cachefiles_create_tmpfile':
+>>> fs/cachefiles/namei.c:478:17: error: label 'out_unuse' used but not defined
+>      478 |                 goto out_unuse;
+>          |                 ^~~~
+> 
+> 
+
+This patchset depends on "cachefiles: unmark inode in use in error path"
+[1].
+
+[1]
+https://github.com/lostjeffle/linux/commit/3c71705e777fa75d37f784640a232db14ce62c31
+
+
+-- 
+Thanks,
+Jeffle

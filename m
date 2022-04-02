@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB344F0690
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 00:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58A04F0695
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 00:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349735AbiDBWQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 18:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S229678AbiDBWcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 18:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiDBWQi (ORCPT
+        with ESMTP id S229540AbiDBWcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 18:16:38 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C42F3E5C2
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 15:14:45 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id D531792009C; Sun,  3 Apr 2022 00:14:43 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id CEAFF92009B;
-        Sat,  2 Apr 2022 23:14:43 +0100 (BST)
-Date:   Sat, 2 Apr 2022 23:14:43 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     James Jones <linux@theinnocuous.com>
-cc:     Kees Cook <keescook@chromium.org>, bp@alien8.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86: Remove a.out support
-In-Reply-To: <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
-Message-ID: <alpine.DEB.2.21.2204022255430.47162@angie.orcam.me.uk>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com> <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com> <202203151150.1CDB1D8DA@keescook> <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sat, 2 Apr 2022 18:32:03 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBBF102;
+        Sat,  2 Apr 2022 15:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648938609; x=1680474609;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wSti71aWkOb2v8VteWSnKapOKuwvs3NnbTj6GfMJf68=;
+  b=YVz85yYx9AWQ5wORbJGjVm5F9/ig+zFVdPSRAJFct/M7vYn+AAU6WFE+
+   vd2zamMOsoP2HMdxuatnrO785CgyIIzGWGTZq8ou6Wj1eLqkNCYCHT4SQ
+   nQJWqMX2k6t6kDeBhUE3HalpjFcN6qNdewDhzPD3x/wlS6XqYRT35wi2D
+   aFNfv8Oh3AYXMM+HneqTSUMvb+pN1GZz/rlXXr9a2PJd8f/WWyLez+za+
+   o9AXGf97PfCyCQ97KnvkGYpEQ81SJTa5yqtoP1XNn4iX7AzcBklRITs5m
+   09e0dl8GeFlSXgkxHYI5EqiHjA84/OZ5Du1dZvzVW670M0My+Q5h8fyGv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="259169271"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="259169271"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 15:30:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="721256778"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 02 Apr 2022 15:30:07 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1namFy-0000U3-F0;
+        Sat, 02 Apr 2022 22:30:06 +0000
+Date:   Sun, 3 Apr 2022 06:29:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15:9:
+ warning: 'RST' macro redefined
+Message-ID: <202204030631.cIrcwimr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022, James Jones wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   2 weeks ago
+config: mips-randconfig-r001-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030631.cIrcwimr-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/
 
-> Probably getting a bit off topic, but I did spend a few hours searching
-> around for any existing tools to convert a binary from a.out->ELF, and
-> trying to come up with something myself by extracting the sections with
-> objdump and re-combining them into an ELF using a linker script placing
-> the sections at the same locations. I couldn't get it working in an
-> evening or two messing with it so I moved on, but I agree something like
-> this seems possible in theory.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- Chiming in late as I'm scanning outstanding mailing list traffic: if this 
-is as you say all statically linked stuff, then converting from a.out to 
-ELF might be as easy as:
+All warnings (new ones prefixed by >>):
 
-$ objcopy -I a.out-i386-linux -O elf32-i386 a.out-binary elf-binary
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15:9: warning: 'RST' macro redefined [-Wmacro-redefined]
+   #define RST     0xd0
+           ^
+   arch/mips/include/asm/mach-rc32434/rb.h:13:9: note: previous definition is here
+   #define RST             (1 << 15)
+           ^
+   1 warning generated.
 
-though you may have to build yourself suitably old i386-linux-gnu binutils 
-(from ftp.gnu.org), e.g. this version does support a.out:
 
-$ objcopy --info
-BFD header file version 2.15.91 20040527
-elf32-i386
- (header little endian, data little endian)
-  i386
-a.out-i386-linux
- (header little endian, data little endian)
-  i386
-efi-app-ia32
- (header little endian, data little endian)
-  i386
-elf32-little
- (header little endian, data little endian)
-  i386
-elf32-big
- (header big endian, data big endian)
-  i386
-srec
- (header endianness unknown, data endianness unknown)
-  i386
-symbolsrec
- (header endianness unknown, data endianness unknown)
-  i386
-tekhex
- (header endianness unknown, data endianness unknown)
-  i386
-binary
- (header endianness unknown, data endianness unknown)
-  i386
-ihex
- (header endianness unknown, data endianness unknown)
-  i386
-trad-core
- (header endianness unknown, data endianness unknown)
+vim +/RST +15 drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c
 
-               elf32-i386 a.out-i386-linux efi-app-ia32 elf32-little elf32-big 
-          i386 elf32-i386 a.out-i386-linux efi-app-ia32 elf32-little elf32-big 
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  12  
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  13  #define TEM	0x01
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  14  #define SOF0	0xc0
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14 @15  #define RST	0xd0
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  16  #define SOI	0xd8
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  17  #define EOI	0xd9
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  18  
 
-               srec symbolsrec tekhex binary ihex trad-core 
-          i386 srec symbolsrec tekhex binary ihex --------- 
+:::::: The code at line 15 was first introduced by commit
+:::::: b2f0d2724ba477d326e9d654d4db1c93e98f8b93 [media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver
 
-The last binutils version to support a.out-i386-linux was 2.30 I believe.  
-Just configuring for i386-linux-gnu should do as a.out used to be included 
-as a secondary BFD target (you can also do `--enable-targets=all' to get 
-support for all kinds of the exotic and less exotic BFD targets).
+:::::: TO: Rick Chang <rick.chang@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 
- HTH,
-
-  Maciej
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

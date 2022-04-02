@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A450D4F042F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 16:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07CF4F040B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 16:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356581AbiDBOim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 10:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
+        id S1356601AbiDBOip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 10:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356564AbiDBOii (ORCPT
+        with ESMTP id S1356566AbiDBOii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 2 Apr 2022 10:38:38 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B564181B19;
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D74182AE9;
         Sat,  2 Apr 2022 07:36:46 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id yy13so11446214ejb.2;
+Received: by mail-ej1-x62b.google.com with SMTP id r13so11403622ejd.5;
         Sat, 02 Apr 2022 07:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ay5bIkDMN0uWXFaucFOQ03lqhqXOzPmmv54m4o8auLE=;
-        b=RvgbPEG3WIiL//B+ubI3vbRFJWsOVYJku3J9ODjBbgB1bLKL0HE6yHEpz7c0zAEFoN
-         w7WiczXcCXezSPwFP5LqpDHoGG9De5viqdBAgEgAwa4apaYbR/mU093W6ZqzW6QZXbbM
-         t8ch6M0V6mJsKJJo0+crOv8cGXYX7AOfq4sQYQsYhGmEn9qj05qYEK0OA1yz/01L1Dun
-         U1Dw0nWZPGiSSWZ9wJNcGBci24sNtT1Ssyj4TQ42/d32seY0xLUMdSBUaAf9LY2Al6pv
-         RS9XH11lyqWAD70gS/S22z5YUM9Vp6Jm7Do8nTPDYtnJfHD6SZN231AI1+Vm8KfFLg7h
-         BZmw==
+        bh=ufsyFzWX+CGvBkTM6+OlUoN/PVXoz5psm+dkWM18YxY=;
+        b=CsaViOiw1wtT2ca0hqNq2k4rPL0P4BrLEaUK1vr8ezWHE1usaWJ2+tB3i8Kv79/nvT
+         TFILa3c3gvlnXjwMS0EIt1ggkKsWjo+veW6SYhiStX7rLApFks72dsviBFHLURZZJkpt
+         sD2HtG+lUOW9vnqPX9LpNxuip2v6tw+wzE1xZCFpD8ymIF2EscZD79/UY7m7TzBmqnQI
+         zudasWsdDTIKctuaezV3psE930pYYQ5KNo3YfR9P6bOpBp3pVGs7y7NNvxl+Z3Oi9NjM
+         jRRbuBfLT8NX6gKucTpIG5drpaM8qJPkAdMsfsgUcALbYxzIMM05qCtwX2tESkJVa/yW
+         9wqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ay5bIkDMN0uWXFaucFOQ03lqhqXOzPmmv54m4o8auLE=;
-        b=5skUcvBqT7ozUNxiZTRFv7lsipqhUOa8VE6LGBBNgtK1XXHUskh4mECB/ZsPjFJHdv
-         kjd/n69ckXrqEb+IZHdHn2QKA5Uy3zzj6yBBjRXRfXvB5k2p0DevB9Fk/RpeSq+2cGcr
-         OpcGkRy0iNnUjVNK9P2ao1lLLgktGvefzVfmuvUbfkVkT/JWxPQI2FfpFLhLAapxjjI+
-         CKYM+SZcZ1Jx4XxqGtW9sekh39UQHmhZrf5ms1pYQWmGPTjfCI6eOZbNYcFXdnYRzAAr
-         M162HNauya52tdu3IpcTNXe5K9wgtuUj8vWs4fyDGMp6fIJm63RU4x6U0jbVqeQxmDIN
-         DLYg==
-X-Gm-Message-State: AOAM530TkGqI0cjLVyiXqPNonpqNox9+qauySVb1DqSP6McovSqc4nfF
-        QV0wAfY0lGIXPyyyj+avzZ0frPcch7I=
-X-Google-Smtp-Source: ABdhPJxm4mqwNr+KeTDo/7qreofruqZueesSFWpUFtS4m+sFct+MNlyiLH22R+eW/XGiaHx72ivOSQ==
-X-Received: by 2002:a17:907:2cc3:b0:6e6:45fb:39fa with SMTP id hg3-20020a1709072cc300b006e645fb39famr2593392ejc.545.1648910204514;
-        Sat, 02 Apr 2022 07:36:44 -0700 (PDT)
+        bh=ufsyFzWX+CGvBkTM6+OlUoN/PVXoz5psm+dkWM18YxY=;
+        b=bOdIdTfeA6/FkFVAccNB+nA7B+Rkf72WlGq+uupL5Sed0utals0o+fpXZvzwnOraXd
+         sksw5/FYjOAiOODpQTOoKuXLuKhsBS3/FZ369tv3OQmxkbl7z61dUNIqM3bwsXm2U+3C
+         /aFc9wmm2e1bKdxsV0OdAir1IQ3yn00YgGsJyz3yF8PZsOvJM3wn4lEu80rqPv3bkJSB
+         qTkHDn9AJH9v/h54N0A4wUcekL09QNGvedKT7MvHiKJxymbznQJU5oJNctTWxoebR0Zl
+         3JgjHUhUYBPkVi4qBWUC3TFRYgjJNwEdMgloKuO/GRcD6IxpkTpV6ZPU5QlVqWYX3ivv
+         OYPg==
+X-Gm-Message-State: AOAM533fMXHVEgwxfeSDrNcz7zRevete3I3AagrwdM1eLaoQYH4DBGFe
+        Ze1FxWnhvYLVXNW2x5wTIIY=
+X-Google-Smtp-Source: ABdhPJyKu2ptLDRlztPlfYTVwwF23IydRosnHQX9fwIkOdiZ72WUzQaJsA7kY6ipIsV6HPAerSZIFA==
+X-Received: by 2002:a17:906:7943:b0:6df:e5b3:6553 with SMTP id l3-20020a170906794300b006dfe5b36553mr3994573ejo.398.1648910205452;
+        Sat, 02 Apr 2022 07:36:45 -0700 (PDT)
 Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id bp8-20020a170907918800b006e0daaa63ddsm2169557ejb.60.2022.04.02.07.36.43
+        by smtp.gmail.com with ESMTPSA id bp8-20020a170907918800b006e0daaa63ddsm2169557ejb.60.2022.04.02.07.36.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 07:36:44 -0700 (PDT)
+        Sat, 02 Apr 2022 07:36:45 -0700 (PDT)
 From:   Johan Jonker <jbx6244@gmail.com>
 To:     heiko@sntech.de, zhangqing@rock-chips.com
 Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
         sboyd@kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 01/16] dt-bindings: clock: convert rockchip,px30-cru.txt to YAML
-Date:   Sat,  2 Apr 2022 16:36:21 +0200
-Message-Id: <20220402143636.15222-2-jbx6244@gmail.com>
+Subject: [PATCH v4 02/16] dt-bindings: clock: convert rockchip,rk3036-cru.txt to YAML
+Date:   Sat,  2 Apr 2022 16:36:22 +0200
+Message-Id: <20220402143636.15222-3-jbx6244@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220402143636.15222-1-jbx6244@gmail.com>
 References: <20220402143636.15222-1-jbx6244@gmail.com>
@@ -72,60 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rockchip,px30-cru.txt to YAML.
+Convert rockchip,rk3036-cru.txt to YAML.
 
 Changes against original bindings:
-  Use compatible string: "rockchip,px30-pmucru"
+  Add clocks and clock-names because the device has to have
+  at least one input clock.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
 
 Changed V4:
   add more clocks
-
-Changed V2:
-  add allOf:if:then: constraining
+  add clocks to example
+  add clocks requirement
 ---
- .../bindings/clock/rockchip,px30-cru.txt      |  70 ----------
- .../bindings/clock/rockchip,px30-cru.yaml     | 120 ++++++++++++++++++
- 2 files changed, 120 insertions(+), 70 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml
+ .../bindings/clock/rockchip,rk3036-cru.txt    | 56 -------------
+ .../bindings/clock/rockchip,rk3036-cru.yaml   | 80 +++++++++++++++++++
+ 2 files changed, 80 insertions(+), 56 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.txt
 deleted file mode 100644
-index 55e78cdde..000000000
---- a/Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt
+index 20df350b9..000000000
+--- a/Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.txt
 +++ /dev/null
-@@ -1,70 +0,0 @@
--* Rockchip PX30 Clock and Reset Unit
+@@ -1,56 +0,0 @@
+-* Rockchip RK3036 Clock and Reset Unit
 -
--The PX30 clock controller generates and supplies clock to various
+-The RK3036 clock controller generates and supplies clock to various
 -controllers within the SoC and also implements a reset controller for SoC
 -peripherals.
 -
 -Required Properties:
 -
--- compatible: PMU for CRU should be "rockchip,px30-pmu-cru"
--- compatible: CRU should be "rockchip,px30-cru"
+-- compatible: should be "rockchip,rk3036-cru"
 -- reg: physical base address of the controller and length of memory mapped
 -  region.
--- clocks: A list of phandle + clock-specifier pairs for the clocks listed
--          in clock-names
--- clock-names: Should contain the following:
--  - "xin24m" for both PMUCRU and CRU
--  - "gpll" for CRU (sourced from PMUCRU)
 -- #clock-cells: should be 1.
 -- #reset-cells: should be 1.
 -
 -Optional Properties:
 -
 -- rockchip,grf: phandle to the syscon managing the "general register files"
--  If missing, pll rates are not changeable, due to the missing pll lock status.
+-  If missing pll rates are not changeable, due to the missing pll lock status.
 -
 -Each clock is assigned an identifier and client nodes can use this identifier
 -to specify the clock which they consume. All available clocks are defined as
--preprocessor macros in the dt-bindings/clock/px30-cru.h headers and can be
+-preprocessor macros in the dt-bindings/clock/rk3036-cru.h headers and can be
 -used in device tree sources. Similar macros exist for the reset sources in
 -these files.
 -
@@ -135,23 +129,16 @@ index 55e78cdde..000000000
 -that they are defined using standard clock bindings with following
 -clock-output-names:
 - - "xin24m" - crystal input - required,
-- - "xin32k" - rtc clock - optional,
-- - "i2sx_clkin" - external I2S clock - optional,
-- - "gmac_clkin" - external GMAC clock - optional
+- - "ext_i2s" - external I2S clock - optional,
+- - "rmii_clkin" - external EMAC clock - optional
 -
 -Example: Clock controller node:
 -
--	pmucru: clock-controller@ff2bc000 {
--		compatible = "rockchip,px30-pmucru";
--		reg = <0x0 0xff2bc000 0x0 0x1000>;
--		#clock-cells = <1>;
--		#reset-cells = <1>;
--	};
--
--	cru: clock-controller@ff2b0000 {
--		compatible = "rockchip,px30-cru";
--		reg = <0x0 0xff2b0000 0x0 0x1000>;
+-	cru: cru@20000000 {
+-		compatible = "rockchip,rk3036-cru";
+-		reg = <0x20000000 0x1000>;
 -		rockchip,grf = <&grf>;
+-
 -		#clock-cells = <1>;
 -		#reset-cells = <1>;
 -	};
@@ -159,40 +146,39 @@ index 55e78cdde..000000000
 -Example: UART controller node that consumes the clock generated by the clock
 -  controller:
 -
--	uart0: serial@ff030000 {
--		compatible = "rockchip,px30-uart", "snps,dw-apb-uart";
--		reg = <0x0 0xff030000 0x0 0x100>;
--		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&pmucru SCLK_UART0_PMU>, <&pmucru PCLK_UART0_PMU>;
--		clock-names = "baudclk", "apb_pclk";
+-	uart0: serial@20060000 {
+-		compatible = "snps,dw-apb-uart";
+-		reg = <0x20060000 0x100>;
+-		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
 -		reg-shift = <2>;
 -		reg-io-width = <4>;
+-		clocks = <&cru SCLK_UART0>;
 -	};
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.yaml
 new file mode 100644
-index 000000000..c88e7e3db
+index 000000000..121b298a6
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml
-@@ -0,0 +1,120 @@
++++ b/Documentation/devicetree/bindings/clock/rockchip,rk3036-cru.yaml
+@@ -0,0 +1,80 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/clock/rockchip,px30-cru.yaml#
++$id: http://devicetree.org/schemas/clock/rockchip,rk3036-cru.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Rockchip PX30 Clock and Reset Unit (CRU)
++title: Rockchip RK3036 Clock and Reset Unit (CRU)
 +
 +maintainers:
 +  - Elaine Zhang <zhangqing@rock-chips.com>
 +  - Heiko Stuebner <heiko@sntech.de>
 +
 +description: |
-+  The PX30 clock controller generates and supplies clocks to various
++  The RK3036 clock controller generates and supplies clocks to various
 +  controllers within the SoC and also implements a reset controller for SoC
 +  peripherals.
 +  Each clock is assigned an identifier and client nodes can use this identifier
 +  to specify the clock which they consume. All available clocks are defined as
-+  preprocessor macros in the dt-bindings/clock/px30-cru.h headers and can be
++  preprocessor macros in the dt-bindings/clock/rk3036-cru.h headers and can be
 +  used in device tree sources. Similar macros exist for the reset sources in
 +  these files.
 +  There are several clocks that are generated outside the SoC. It is expected
@@ -202,19 +188,23 @@ index 000000000..c88e7e3db
 +properties:
 +  compatible:
 +    enum:
-+      - rockchip,px30-cru
-+      - rockchip,px30-pmucru
++      - rockchip,rk3036-cru
 +
 +  reg:
 +    maxItems: 1
 +
 +  clocks:
 +    minItems: 1
-+    maxItems: 5
++    maxItems: 3
 +
 +  clock-names:
 +    minItems: 1
-+    maxItems: 5
++    maxItems: 3
++    items:
++      enum:
++        - xin24m
++        - ext_i2s
++        - rmii_clkin
 +
 +  rockchip,grf:
 +    $ref: /schemas/types.yaml#/definitions/phandle
@@ -237,59 +227,15 @@ index 000000000..c88e7e3db
 +  - "#clock-cells"
 +  - "#reset-cells"
 +
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: rockchip,px30-cru
-+
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 1
-+          maxItems: 5
-+
-+        clock-names:
-+          minItems: 1
-+          maxItems: 5
-+          items:
-+            enum:
-+              - xin24m
-+              - xin32k
-+              - gpll
-+              - gmac_clkin
-+              - i2sx_clkin
-+
-+    else:
-+      properties:
-+        clocks:
-+          maxItems: 1
-+
-+        clock-names:
-+          const: xin24m
-+
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/px30-cru.h>
-+
-+    pmucru: clock-controller@ff2bc000 {
-+      compatible = "rockchip,px30-pmucru";
-+      reg = <0xff2bc000 0x1000>;
++    cru: clock-controller@20000000 {
++      compatible = "rockchip,rk3036-cru";
++      reg = <0x20000000 0x1000>;
 +      clocks = <&xin24m>;
 +      clock-names = "xin24m";
-+      rockchip,grf = <&grf>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
-+
-+    cru: clock-controller@ff2b0000 {
-+      compatible = "rockchip,px30-cru";
-+      reg = <0xff2b0000 0x1000>;
-+      clocks = <&xin24m>, <&pmucru PLL_GPLL>;
-+      clock-names = "xin24m", "gpll";
 +      rockchip,grf = <&grf>;
 +      #clock-cells = <1>;
 +      #reset-cells = <1>;

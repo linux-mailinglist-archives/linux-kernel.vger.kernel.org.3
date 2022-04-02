@@ -2,121 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0C74EFE46
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 05:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431564EFE4B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 05:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237849AbiDBDtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 23:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S241781AbiDBDys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 23:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiDBDtV (ORCPT
+        with ESMTP id S230161AbiDBDyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 23:49:21 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718A517667D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 20:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648871249; x=1680407249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A+GukEuzxsNgXQg5OiqZVWnBj8YCzhgWRSUf1ag8iRk=;
-  b=L5xJskTPA0ggLSvZ9QR042f3w1wbLEH318dl5fgf0Z2AkX+BFK00LBC7
-   8Jo4RYTPjHkFsYJa3l9eDdg/lFCFvIIBIdi/94dmZVCRi1HV2svKzi0In
-   V4XDVUkRSF0wpO2PjCgEMgiEMZaRh3TXMMdfbwRdmFCYGQus1llRkO2fT
-   47ljBFw2xvQ7p8nnK932ac0mhZn8Ok4sNeceoRc3VH9pJfaAvMLUeHwR1
-   vvfYOkI54v7fIcdOvHGorjAkTjm2s6MouRYbq40BI3KRTqm6stg/sMYOD
-   OwmEGe47Nv0rkqMm4jrwmG0dO7LnBk3ov4waz5C8f8EW4cmpHuDOOVpZc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="320973192"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="320973192"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 20:47:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="721097660"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2022 20:47:26 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1naUjW-0001im-3P;
-        Sat, 02 Apr 2022 03:47:26 +0000
-Date:   Sat, 2 Apr 2022 11:47:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Will Deacon <willdeacon@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-03
- 199/9999] arch/arm64/kvm/perf.c:58:36: error: implicit declaration of
- function 'perf_num_counters'
-Message-ID: <202204021112.ErKMELRr-lkp@intel.com>
+        Fri, 1 Apr 2022 23:54:45 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69C20A953
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 20:52:51 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Sat, 2 Apr
+ 2022 20:03:16 +0800
+Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Sat, 2 Apr
+ 2022 11:52:48 +0800
+Message-ID: <94f5e266-4412-cf45-9ac3-bbe78477f0c4@meizu.com>
+Date:   Sat, 2 Apr 2022 11:52:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ipmi: ssif: potential NULL dereference in
+ msg_done_handler()
+To:     <minyard@acm.org>
+CC:     <openipmi-developer@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+References: <1648783665-19237-1-git-send-email-baihaowen@meizu.com>
+ <20220401124809.GF29333@minyard.net>
+From:   baihaowen <baihaowen@meizu.com>
+In-Reply-To: <20220401124809.GF29333@minyard.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-123.meizu.com (172.16.1.123) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Dear Corey
+Thank you for your kindly reply and suggestion. :)
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-03
-head:   64099431c232d4a95f621411747a3972cc1c8061
-commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [199/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
-config: arm64-randconfig-r024-20220331 (https://download.01.org/0day-ci/archive/20220402/202204021112.ErKMELRr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-03
-        git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters' [-Werror,-Wimplicit-function-declaration]
-           if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
-                                             ^
-   1 error generated.
-
-
-vim +/perf_num_counters +58 arch/arm64/kvm/perf.c
-
-    50	
-    51	int kvm_perf_init(void)
-    52	{
-    53		/*
-    54		 * Check if HW_PERF_EVENTS are supported by checking the number of
-    55		 * hardware performance counters. This could ensure the presence of
-    56		 * a physical PMU and CONFIG_PERF_EVENT is selected.
-    57		 */
-  > 58		if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
-    59			static_branch_enable(&kvm_arm_pmu_available);
-    60	
-    61		return perf_register_guest_info_callbacks(&kvm_guest_cbs);
-    62	}
-    63	
+在 4/1/22 8:48 PM, Corey Minyard 写道:
+> On Fri, Apr 01, 2022 at 11:27:45AM +0800, Haowen Bai wrote:
+>> msg could be null without checking null and return, but still dereference
+>> msg->rsp[2] and will lead to a null pointer trigger.
+> Actually:
+>
+>   If you look at the big picture (how the rest of the code works), it's
+>   not possible for msg to be NULL in these cases.  However, being
+>   defensive here is probably a good idea.
+>
+>   There are two of these cases, why didn't you fix both of them?
+>
+>   This still doesn't fix the problem.  There is an "else if" in both
+>   cases that also uses msg.
+>
+> You can't just look at the output of some code analysis tool and make a
+> blind decision like this.  You have to look at the big picture.  And you
+> have to analyze the code carefully.
+>
+> The right way to be defensive here is to add:
+> 	if (!msg) {
+> 		ipmi_ssif_unlock_cond(ssif_info, flags);
+> 		break;
+> 	}
+> in both cases.  And probably add a log, since this means something else
+> went wrong.
+>
+> Anyway, I'll add a patch for defensive measure and give you credit for
+> pointing it out.
+>
+> -corey
+>
+>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+>> ---
+>>  drivers/char/ipmi/ipmi_ssif.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+>> index f199cc1..9383de3 100644
+>> --- a/drivers/char/ipmi/ipmi_ssif.c
+>> +++ b/drivers/char/ipmi/ipmi_ssif.c
+>> @@ -814,7 +814,7 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+>>  		break;
+>>  
+>>  	case SSIF_GETTING_EVENTS:
+>> -		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
+>> +		if ((result < 0) || (len < 3) || (msg && (msg->rsp[2] != 0))) {
+>>  			/* Error getting event, probably done. */
+>>  			msg->done(msg);
+>>  
+>> -- 
+>> 2.7.4
+>>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Haowen Bai
+

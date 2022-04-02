@@ -2,113 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9C64F066D
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5AA4F0684
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245631AbiDBV2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 17:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S1354100AbiDBVyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 17:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiDBV2j (ORCPT
+        with ESMTP id S1346078AbiDBVx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 17:28:39 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8883252A8;
-        Sat,  2 Apr 2022 14:26:46 -0700 (PDT)
-Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MbAYo-1o7c323umW-00bY9M; Sat, 02 Apr 2022 23:26:44 +0200
-Received: by mail-wm1-f44.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso3413631wmn.1;
-        Sat, 02 Apr 2022 14:26:44 -0700 (PDT)
-X-Gm-Message-State: AOAM5322Clzfnf/qwSNK/kgsENGPMT97WynnqBMnVAe1Wso/xJZokitl
-        60brgr31KhgccU3BFtc1bt3r0VQiBzLt3Id0ccU=
-X-Google-Smtp-Source: ABdhPJylADU8u1Uad2avcKqoy4J12Y7Ldo8r2ly4hCBr2blS2EVb+EGXxI00qvmV4NpEdPUxq7mTzkMgGKL7bOTsU7M=
-X-Received: by 2002:a05:600c:4e11:b0:38c:bd19:e72c with SMTP id
- b17-20020a05600c4e1100b0038cbd19e72cmr13758469wmq.174.1648934804584; Sat, 02
- Apr 2022 14:26:44 -0700 (PDT)
+        Sat, 2 Apr 2022 17:53:57 -0400
+X-Greylist: delayed 1467 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 14:52:05 PDT
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.55.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E04F3A5EB
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 14:52:05 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 56F81400C5548
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 16:27:38 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id alHWnfWxfb6UBalHWneeUq; Sat, 02 Apr 2022 16:27:38 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+fqVS2YHoB85ngIYgaaiabTFUqnbMkVGBsGk+DSrzAU=; b=PyeH8okZjcl6Hb8vuAVnEJ/WIA
+        ZOdJgvCd5kHIgpAILfxvGh6RiqquW3yB/bHt6OvbMHoaeLo2kfalL4iCMXnpKkErXmmMwTLJtH2+c
+        btf95l4gZFxp3e0QuNryCkUkj3HwtPr9YTR/xjJvj+7GBqP3/mOPOmeBkJ6b09rbCs28hjZ5vRTa1
+        HylW0lU/enP9O4fvxQtnL/3zW8RjbN3I/xg/3RD1I5HGLuM3tRTRqETofPzp+AeS8vdss9kNVVM5w
+        H6U+nWz8ha8IUE2oMi2pqrhdt+AHnTt+PJ09q1MOVflPA6heVHW6rC+V1Yv2mikPE5MVp3yxe4Nv0
+        l1OBfm7g==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54666)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nalHW-0012pj-0x; Sat, 02 Apr 2022 21:27:38 +0000
+Message-ID: <6353bc69-901e-32e7-e736-00dd6a09a1ea@roeck-us.net>
+Date:   Sat, 2 Apr 2022 14:27:36 -0700
 MIME-Version: 1.0
-References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-7-sven@svenpeter.dev>
- <CAK8P3a27-eWP=krGQOp29krcc7bVME9=MbN6B3Rs7Q4Ran_VFw@mail.gmail.com> <7876eb84-9803-48dc-ab6b-27d49858e27a@www.fastmail.com>
-In-Reply-To: <7876eb84-9803-48dc-ab6b-27d49858e27a@www.fastmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 2 Apr 2022 23:26:28 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3d5XmtXxGwVHFSyNraOJdTaFCG1s+LNev=39eLXxGFHg@mail.gmail.com>
-Message-ID: <CAK8P3a3d5XmtXxGwVHFSyNraOJdTaFCG1s+LNev=39eLXxGFHg@mail.gmail.com>
-Subject: Re: [PATCH 6/9] nvme-apple: Add initial Apple SoC NVMe driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QVlumoECcVTiHC5u2S6Rwvxgn5vdkFihYQYtznc++DhQvJ0F2RK
- ZxtOtoSPeY5khKzM3uVVpREH9ML7BSTfAkH/Kj5Numjl7p5Glx7Phv10C+9LYZkQDTXQ5Bh
- WWGgTGgHnVD6jrRIi+ysVHNwFuLGJyUIFOasFbT8BF0CXjq1kucH06rq8MRM6ih2Q7EpAD0
- qGlZDBI9aTNflsiDx3vAQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pFhRKGiCbjo=:1N0YG1QrJF/QXWd9niqOW7
- 0Gtz5sVAx85pNw/WcR406dvkC1b2nta17SmsrgEDR/S9uIJYCBXF3SAPDVPBq0mTULFglJA2b
- mVrhPKo7KM7MKvIpd1C3Fy9lmlP6qUwRAQXgXkYahkhSn0W0EXk4DnmCn6C509wTe4A/x9AK9
- eh5GQxhekhq91CsLoiOMWsBYdVSlMaYDD4WgD7f9iVjKibAR+AGcCpvnpaILbU69BRVpMjpln
- +rGEDkBhJAX46bn+Ux6ujeThhOcC8S0J/iSfFGO7R3phB6gKbXaosUJJoFEZlcDV3+pHmLK1N
- otnGRRP0Cju3bBp5RpGwHC8GbVGJcRbbcLobejJVdL+boBCBV6qyAjVpY8SdHOexFD7hXpH5B
- YsvI+TuJdzfyjJUtfBXsV61+jtS37U+T0HV8PC6z8VwTGkXn2jAdFZIp0SusPsODFuDYpP2E4
- Y1FZS87VbbvRyF4RAcKP3Y32D405L/JiN01gSmLWmOW2liFw8DIgXwW1m4E2iHuI9c65Mypa0
- N+vXLekHd5OW87k9Gpe3MqjLTRbQfW49vg5wm+ErDYk26HD4yaKPjMwz+dWdzKxVNDJtbpblW
- SBcQSdGgfnatGe/T4Az0SbO448nmqPMHMNMi6svahoNAqxGt5mCajxp3e1+UIJMkZSGhnkzW6
- zmsMdnYmRcylLg7ETIRSipMkmcmcGQiu9qZ84XJBUiGL+HXXckZq+lXmZcYieNFzYtDA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] parisc: Switch from GENERIC_CPU_DEVICES to
+ GENERIC_ARCH_TOPOLOGY
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>
+Cc:     James.Bottomley@hansenpartnership.com,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220401154137.GA3745625@roeck-us.net>
+ <57e79014-25e6-62d3-27de-64797e43992b@gmx.de>
+ <927a54f9-b413-0c71-461d-28ed9d5ece96@roeck-us.net> <YkdiDJZ/XHODymRk@p100>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YkdiDJZ/XHODymRk@p100>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nalHW-0012pj-0x
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54666
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 10
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 3:34 PM Sven Peter <sven@svenpeter.dev> wrote:
-> On Tue, Mar 22, 2022, at 14:38, Arnd Bergmann wrote:
-> > On Mon, Mar 21, 2022 at 5:50 PM Sven Peter <sven@svenpeter.dev> wrote:
+On 4/1/22 13:35, Helge Deller wrote:
+> Hi Günter,
+> 
+> * Guenter Roeck <linux@roeck-us.net>:
+>> On 4/1/22 09:47, Helge Deller wrote:
+>>> Hi Günter,
+>>>
+>>> On 4/1/22 17:41, Guenter Roeck wrote:
+>>>> On Thu, Mar 24, 2022 at 07:46:50PM +0100, Helge Deller wrote:
+>>>>> Switch away from the own cpu topology code to common code which is used
+>>>>> by ARM64 and RISCV. That will allow us to enable CPU hotplug later on.
+>>>>>
+>>>>> Signed-off-by: Helge Deller <deller@gmx.de>
+>>>>
+>>>> This patch results in the following traceback when
+>>>> booting generic-32bit_defconfig - SMP in qemu.
+>>>
+>>> That's strange, because I just built this generic-32bit_defconfig myself and
+>>> it boots up nicely in qemu for me. The only thing missing is CONFIG_CGROUPS=y so that
+>>> systemd can start.
+>>>
+>>
+>> Did you disable SMP (that is what - SMP was supposed to mean) ?
+>> Also, note that the system does boot fine, it just spits out the warning.
+> 
+> The patch below fixes the warning for me.
+> Could you try?
+> 
 
-> >> +bad_sgl:
-> >> +       WARN(DO_ONCE(apple_nvme_print_sgl, iod->sg, iod->nents),
-> >> +            "Invalid SGL for payload:%d nents:%d\n", blk_rq_payload_bytes(req),
-> >> +            iod->nents);
-> >
-> > I think you mean WARN_ONCE() here?
->
-> This is taken from pci.c which used to use WARN_ONCE but was replaced in
-> d08774738446e77734777adcf5d1045237b4475a with this construction here.
-> The commit message mentions
->
->     The WARN_ONCE macro returns true if the condition is true, not if the
->     warn was raised, so we're printing the scatter list every time it's
->     invalid. This is excessive and makes debugging harder, so this patch
->     prints it just once.
->
+I did, and it fixes the problem. I just sent a Tested-by: in response to
+your patch.
 
-Ok, makes sense. If we get more of these in the kernel, we may want to
-add a helper that makes this more obvious, but it appears that for now
-these two are the only ones.
+Guenter
 
-It could also be expressed by moving the WARN_ONCE() into the
-condition above the 'goto', but I don't see a reason to change the other
-driver and it's better to keep the two consistent.
+> Helge
+> 
+> 
+> From: Helge Deller <deller@gmx.de>
+> Subject: [PATCH] parisc: Re-enable GENERIC_CPU_DEVICES for !SMP
+> 
+> In commit 62773112acc5 ("parisc: Switch from GENERIC_CPU_DEVICES to
+> GENERIC_ARCH_TOPOLOGY") GENERIC_CPU_DEVICES was unconditionally turned
+> off, but this triggers a warning in topology_add_dev(). Turning it back
+> on for the !SMP case avoids this warning.
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Fixes: 62773112acc5 ("parisc: Switch from GENERIC_CPU_DEVICES to GENERIC_ARCH_TOPOLOGY")
+> Signed-off-by: Helge Deller <deller@gmx.de>
+> 
+> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+> index 52e550b45692..bd22578859d0 100644
+> --- a/arch/parisc/Kconfig
+> +++ b/arch/parisc/Kconfig
+> @@ -38,6 +38,7 @@ config PARISC
+>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>   	select GENERIC_SMP_IDLE_THREAD
+>   	select GENERIC_ARCH_TOPOLOGY if SMP
+> +	select GENERIC_CPU_DEVICES if !SMP
+>   	select GENERIC_LIB_DEVMEM_IS_ALLOWED
+>   	select SYSCTL_ARCH_UNALIGN_ALLOW
+>   	select SYSCTL_EXCEPTION_TRACE
 
-> Agreed, I've actually tried replacing all non-relaxed ones with the normal
-> accessors (even those inside the hot path) and didn't see any performance
-> difference.
-> I can use the normal ones here and I'll consider using the non-relaxed ones
-> in the hot path together with a comment why they are safe in those places.
-
-Sounds good. If you find any instances in the hot path that have a
-corresponding version in the pci.c file, it would be good to keep these
-two in sync, hopefully making the non-apple case faster as well.
-
-        Arnd

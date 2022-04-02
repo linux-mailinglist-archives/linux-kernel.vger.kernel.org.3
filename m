@@ -2,291 +2,768 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217D04EFDAD
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E654EFDA4
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353695AbiDBBLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 21:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S1353681AbiDBBLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 21:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353675AbiDBBLO (ORCPT
+        with ESMTP id S1353608AbiDBBLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:11:14 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E0A145D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:09:19 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id z8-20020a170903018800b001566875e0f5so1668480plg.21
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:09:19 -0700 (PDT)
+        Fri, 1 Apr 2022 21:11:03 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70C8FE44
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:09:10 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id t25so7784484lfg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=OExX1Igb+SEI7PdUVeKXKi/G1aHbfTSQe6uvI8ZE66s=;
-        b=QoWYxsIze+C3Ee47cmi+k5goTPGx2Io4H2IyLGbi5BL+YuSOtk8JZB9VbBiKfn+5KE
-         tyrkF6Zyy4naj8XbTkWvhkg/sFU+thgF+DR7zGxHaU0Zufu1ol74uxq4AXOtb0GAHX2+
-         RCwbWhRxvZMYnWlv5Pel0agogKAldZa+yRq1pBY6qslSIaYI1EsqNARyskD1VinUqj37
-         0o4B7ukkXknlytvlvFrKfIN3Log0v9sa7s+sDwVihw3X5My32CK4QQgkdwX9QMxI0OCg
-         rolELI0I7ldjj+6WJTt4XTF7oYy1R+nt/GzVXksOb23zb7L7SLrRPoB+qBeferqjl3zT
-         i/Qg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=muFiWbTmuvw5Qn9yVQvGbOTZvgDepscx3Y1KNT9aggA=;
+        b=CtVe6SsxNfS5f8SrqkHY2l/AMVeFCMNDQWKVhH2lG0EDRttpdKxg9h6p1URE9yfJMe
+         5hb1j+VR51dKFhUlVLGQDuh7UAutSPDpLy5NEpup+JW2JyKaTixVzTHu9W6yh8iyCUML
+         +lbZjcXllBVdFEsSxxQ/a9FFB/pqLeGfs1hfuph23ylMW94CXVbqnSoaS7+VJ2nWvsnD
+         4zMD/WvH/UX7wA14b4emEyjsaS5AbXszUi/8GF8ARfdNLWUZe5CcFoaJ9bKHxOgIjTgD
+         rMBYrKdX2SomGOtNtpjS1ja3kct6GmfejY9lr3aVxDsHqlsJl3JgC+nABpZGpkerN7X9
+         z8Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=OExX1Igb+SEI7PdUVeKXKi/G1aHbfTSQe6uvI8ZE66s=;
-        b=pNtPBwdUOHqGAUkj/ukfOwn/c14196ZqQD26UxgS5MIbGZvWAz5D00qtYxakYDSMro
-         gEiE4kW1fo2+hUPUkbe/w9BdbztSjOvWDh7YFUSZdktv0A2TTjhspV0vCA5Gwvg3EWsQ
-         reNhrNFl1UJEVI2ckBrPDvc7+Eruak7bFJbkMK0hQ/1dum8xEp6TAa7V8l7zBO1nw1Ic
-         C/AeLDriILP486aD5EWT2Hq9WfAJIGJCcRMc7z/xFdW/0a//Wz8WlT3M/BzN1W0Ze96G
-         PR4rwdmekiw/kI1IM8DQ37rFHq9Bk+LcKGz54xJ9zoJcQ6KrrXnk4suThUHtQJ4E7KxN
-         v2aQ==
-X-Gm-Message-State: AOAM533zN8NkGR4f7eEUz2xw/+A3/ceCiT/MHiT7Y4cXmDXgl4MDWH3D
-        rb4rHUz7g99mB39FzIjjXsqYmNzkLpY=
-X-Google-Smtp-Source: ABdhPJySbHKlONilMxgSTz0tRz1iIrI+IQGst6MP1o+Dhm9cpdIUyvg75yFzuaUSapncQePMHGO9Y0zty3A=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a63:6d4c:0:b0:398:7c40:c160 with SMTP id
- i73-20020a636d4c000000b003987c40c160mr17309928pgc.109.1648861758524; Fri, 01
- Apr 2022 18:09:18 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  2 Apr 2022 01:09:03 +0000
-In-Reply-To: <20220402010903.727604-1-seanjc@google.com>
-Message-Id: <20220402010903.727604-9-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220402010903.727604-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH 8/8] KVM: selftests: nSVM: Add svm_nested_soft_inject_test
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=muFiWbTmuvw5Qn9yVQvGbOTZvgDepscx3Y1KNT9aggA=;
+        b=3cDxXHRhoAI3ElDJFMeyTNkyUnFP+XZvh+IHeWSuL+gUt9tWRQGipYgGnxL+3wwE1T
+         lpqkqhtitxXvTi0u6oazqBIFLF8jhJlj4X+6XyPMiGRlrI8btrf6LpJLojNOxnyspQew
+         s9K50Yqt+wVwbBmwqj76cQUn8k0rTeMrAC3Pis66aiB/XYhSJ9hng2jImwn1Yu5NISHk
+         ZTuBs3N4Ru2HWeSNNt2CR6B5asFFY+qrX88ekDjLsXRK8bdQOPfYj/ebSInUp92vvmLV
+         f+rDufWsrO7F2vLtxK3DVCPLXESH+KW6K7gm/hk1oFUue1H6t2mENK41nCSoTeNPb7HL
+         e3VQ==
+X-Gm-Message-State: AOAM532pW30lL9ghdbnyHAtdFUBLHNEFTQ/uKyivKjYOZPrnc+/eB1cR
+        iB6dY4khagS17H/6KrCersf2aQ==
+X-Google-Smtp-Source: ABdhPJzrJWY6V8Z1I2SUnqVJR4uS6XhB+ADZ/CZ4svNlizDEjHXjf+pqZA4Xivd2GGoBWRj1kwe7ig==
+X-Received: by 2002:a05:6512:3341:b0:44a:ea52:9735 with SMTP id y1-20020a056512334100b0044aea529735mr762548lfd.593.1648861748823;
+        Fri, 01 Apr 2022 18:09:08 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id r6-20020ac25f86000000b0044a54de0d15sm384914lfe.177.2022.04.01.18.09.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 18:09:08 -0700 (PDT)
+Message-ID: <31bb9df5-51cc-f92a-a573-5e1d116c2650@linaro.org>
+Date:   Sat, 2 Apr 2022 04:09:07 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6] drm/msm/disp/dpu1: add inline rotation support for
+ sc7280 target
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, quic_kalyant@quicinc.com
+References: <1647971700-31592-1-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1647971700-31592-1-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+On 22/03/2022 20:55, Vinod Polimera wrote:
+> - Some DPU versions support inline rot90. It is supported only for
+> limited amount of UBWC formats.
+> - There are two versions of inline rotators, v1 (present on sm8250 and
+> sm7250) and v2 (sc7280). These versions differ in the list of supported
+> formats and in the scaler possibilities.
+> 
+> Changes in RFC:
+> - Rebase changes to the latest code base.
+> - Append rotation config variables with v2 and
+> remove unused variables.(Dmitry)
+> - Move pixel_ext setup separately from scaler3 config.(Dmitry)
+> - Add 270 degree rotation to supported rotation list.(Dmitry)
+> 
+> Changes in V2:
+> - Remove unused macros and fix indentation.
+> - Add check if 90 rotation is supported and
+> add supported rotations to rot_cfg.
+> 
+> Changes in V3:
+> - Fix indentation.
+> - Move rot_supported to sspp capabilities. (Dmitry)
+> - Config pixel_ext based on src_h/src_w directly. (Dmitry)
+> - Misc changes.
+> 
+> Changes in V4:
+> - Pass boolean value to sspp blk based on supported rotations for each hw.
+> 
+> Changes in V5:
+> - Update boolean value to true/false and add it for qcm2290.
+> 
+> Changes in V6:
+> - Add changes that are missed as part of v5.
+> - Add dpu_find_format inline function to find valid format. (Dmitry)
+> 
+> Co-developed-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h    |  21 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 185 ++++++++++++++-----------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  18 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c      | 109 ++++++++++++---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h      |   2 +
+>   5 files changed, 230 insertions(+), 105 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h
+> index 418f5ae..8e26ea5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h
+> @@ -31,6 +31,27 @@ const struct msm_format *dpu_get_msm_format(
+>   		struct msm_kms *kms,
+>   		const uint32_t format,
+>   		const uint64_t modifiers);
+> +/**
+> + * dpu_find_format - validate if the pixel format is supported
+> + * @fmt:		pointer to the dpu format
+> + * @supported_formats:	supported formats by dpu HW
+> + * @num_formatss:	total number of formats
+> + *
+> + * Return: false if not valid format, true on success
+> + */
+> +static inline bool dpu_find_format(const struct dpu_format *fmt, const u32 *supported_formats,
+> +					size_t num_formats)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < num_formats; i++) {
+> +		/* check for valid formats supported by inline rotation */
+> +		if (fmt->base.pixel_format == supported_formats[i])
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
 
-Add a KVM self-test that checks whether a nSVM L1 is able to successfully
-inject a software interrupt and a soft exception into its L2 guest.
+Could you please change dpu_plane_format_mod_supported() to use this 
+function? This function plus dpu_plane_format_mod_supported() change 
+should go to a separate commit.
 
-In practice, this tests both the next_rip field consistency and
-L1-injected event with intervening L0 VMEXIT during its delivery:
-the first nested VMRUN (that's also trying to inject a software interrupt)
-will immediately trigger a L0 NPF.
-This L0 NPF will have zero in its CPU-returned next_rip field, which if
-incorrectly reused by KVM will trigger a #PF when trying to return to
-such address 0 from the interrupt handler.
+>   
+>   /**
+>    * dpu_format_check_modified_format - validate format and buffers for
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index a4fe77c..ced7fb3 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -35,6 +35,9 @@
+>   	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
+>   	BIT(DPU_SSPP_CDP) | BIT(DPU_SSPP_EXCL_RECT))
+>   
+> +#define VIG_SC7280_MASK \
+> +	(VIG_SC7180_MASK | BIT(DPU_SSPP_INLINE_ROTATION))
+> +
+>   #define DMA_SDM845_MASK \
+>   	(BIT(DPU_SSPP_SRC) | BIT(DPU_SSPP_QOS) | BIT(DPU_SSPP_QOS_8LVL) |\
+>   	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
+> @@ -203,6 +206,11 @@ static const uint32_t plane_formats_yuv[] = {
+>   	DRM_FORMAT_YVU420,
+>   };
+>   
+> +static const u32 rotation_v2_formats[] = {
+> +	DRM_FORMAT_NV12,
+> +	/* TODO add formats after validation */
+> +};
+> +
+>   /*************************************************************
+>    * DPU sub blocks config
+>    *************************************************************/
+> @@ -642,8 +650,7 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
+>    *************************************************************/
+>   
+>   /* SSPP common configuration */
+> -
+> -#define _VIG_SBLK(num, sdma_pri, qseed_ver) \
+> +#define _VIG_SBLK(num, sdma_pri, qseed_ver, rot_cfg) \
 
-Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/svm_util.h   |   2 +
- .../kvm/x86_64/svm_nested_soft_inject_test.c  | 147 ++++++++++++++++++
- 4 files changed, 151 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+The more I looked into this, the more I hated adding NULL to each and 
+every _VIG_SBLK. So I came with the following suggestion:
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 1f1b6c978bf7..1354d3f4a362 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -33,6 +33,7 @@
- /x86_64/state_test
- /x86_64/svm_vmcall_test
- /x86_64/svm_int_ctl_test
-+/x86_64/svm_nested_soft_inject_test
- /x86_64/sync_regs_test
- /x86_64/tsc_msrs_test
- /x86_64/userspace_io_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index c9cdbd248727..cef6d583044b 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -66,6 +66,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/state_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
-+TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_soft_inject_test
- TEST_GEN_PROGS_x86_64 += x86_64/tsc_scaling_sync
- TEST_GEN_PROGS_x86_64 += x86_64/sync_regs_test
- TEST_GEN_PROGS_x86_64 += x86_64/userspace_io_test
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm_util.h b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-index a25aabd8f5e7..d49f7c9b4564 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-@@ -16,6 +16,8 @@
- #define CPUID_SVM_BIT		2
- #define CPUID_SVM		BIT_ULL(CPUID_SVM_BIT)
- 
-+#define SVM_EXIT_EXCP_BASE	0x040
-+#define SVM_EXIT_HLT		0x078
- #define SVM_EXIT_MSR		0x07c
- #define SVM_EXIT_VMMCALL	0x081
- 
-diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-new file mode 100644
-index 000000000000..d39be5d885c1
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Oracle and/or its affiliates.
-+ *
-+ * Based on:
-+ *   svm_int_ctl_test
-+ *
-+ *   Copyright (C) 2021, Red Hat, Inc.
-+ *
-+ */
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+
-+#define VCPU_ID		0
-+#define INT_NR			0x20
-+#define X86_FEATURE_NRIPS	BIT(3)
-+
-+#define vmcall()		\
-+	__asm__ __volatile__(	\
-+		"vmmcall\n"	\
-+		)
-+
-+#define ud2()			\
-+	__asm__ __volatile__(	\
-+		"ud2\n"	\
-+		)
-+
-+#define hlt()			\
-+	__asm__ __volatile__(	\
-+		"hlt\n"	\
-+		)
-+
-+static unsigned int bp_fired;
-+static void guest_bp_handler(struct ex_regs *regs)
-+{
-+	bp_fired++;
-+}
-+
-+static unsigned int int_fired;
-+static void guest_int_handler(struct ex_regs *regs)
-+{
-+	int_fired++;
-+}
-+
-+static void l2_guest_code(void)
-+{
-+	GUEST_ASSERT(int_fired == 1);
-+	vmcall();
-+	ud2();
-+
-+	GUEST_ASSERT(bp_fired == 1);
-+	hlt();
-+}
-+
-+static void l1_guest_code(struct svm_test_data *svm)
-+{
-+	#define L2_GUEST_STACK_SIZE 64
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb = svm->vmcb;
-+
-+	/* Prepare for L2 execution. */
-+	generic_svm_setup(svm, l2_guest_code,
-+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	vmcb->control.intercept_exceptions |= BIT(PF_VECTOR) | BIT(UD_VECTOR);
-+	vmcb->control.intercept |= BIT(INTERCEPT_HLT);
-+
-+	vmcb->control.event_inj = INT_NR | SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_SOFT;
-+	/* The return address pushed on stack */
-+	vmcb->control.next_rip = vmcb->save.rip;
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT_3(vmcb->control.exit_code == SVM_EXIT_VMMCALL,
-+		       vmcb->control.exit_code,
-+		       vmcb->control.exit_info_1, vmcb->control.exit_info_2);
-+
-+	/* Skip over VMCALL */
-+	vmcb->save.rip += 3;
-+
-+	vmcb->control.event_inj = BP_VECTOR | SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_EXEPT;
-+	/* The return address pushed on stack, skip over UD2 */
-+	vmcb->control.next_rip = vmcb->save.rip + 2;
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT_3(vmcb->control.exit_code == SVM_EXIT_HLT,
-+		       vmcb->control.exit_code,
-+		       vmcb->control.exit_info_1, vmcb->control.exit_info_2);
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_cpuid_entry2 *cpuid;
-+	struct kvm_vm *vm;
-+	vm_vaddr_t svm_gva;
-+	struct kvm_guest_debug debug;
-+
-+	nested_svm_check_supported();
-+
-+	cpuid = kvm_get_supported_cpuid_entry(0x8000000a);
-+	if (!(cpuid->edx & X86_FEATURE_NRIPS)) {
-+		print_skip("nRIP Save unavailable");
-+		exit(KSFT_SKIP);
-+	}
-+
-+	vm = vm_create_default(VCPU_ID, 0, (void *) l1_guest_code);
-+
-+	vm_init_descriptor_tables(vm);
-+	vcpu_init_descriptor_tables(vm, VCPU_ID);
-+
-+	vm_install_exception_handler(vm, BP_VECTOR, guest_bp_handler);
-+	vm_install_exception_handler(vm, INT_NR, guest_int_handler);
-+
-+	vcpu_alloc_svm(vm, &svm_gva);
-+	vcpu_args_set(vm, VCPU_ID, 1, svm_gva);
-+
-+	memset(&debug, 0, sizeof(debug));
-+	vcpu_set_guest_debug(vm, VCPU_ID, &debug);
-+
-+	struct kvm_run *run = vcpu_state(vm, VCPU_ID);
-+	struct ucall uc;
-+
-+	vcpu_run(vm, VCPU_ID);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+
-+	switch (get_ucall(vm, VCPU_ID, &uc)) {
-+	case UCALL_ABORT:
-+		TEST_FAIL("%s at %s:%ld, vals = 0x%lx 0x%lx 0x%lx", (const char *)uc.args[0],
-+			  __FILE__, uc.args[1], uc.args[2], uc.args[3], uc.args[4]);
-+		break;
-+		/* NOT REACHED */
-+	case UCALL_DONE:
-+		goto done;
-+	default:
-+		TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
-+	}
-+done:
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+Please rename this define to _VIG_SBLK_ROT(). Define _VIG_SBLK having 
+old set of arguments, passing them directly to _VIG_SBLK_ROT() and 
+adding NULL for rot_cfg. I think this will be easier to handle and to 
+review.
+
+>   	{ \
+>   	.maxdwnscale = MAX_DOWNSCALE_RATIO, \
+>   	.maxupscale = MAX_UPSCALE_RATIO, \
+> @@ -660,6 +667,7 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
+>   	.num_formats = ARRAY_SIZE(plane_formats_yuv), \
+>   	.virt_format_list = plane_formats, \
+>   	.virt_num_formats = ARRAY_SIZE(plane_formats), \
+> +	.rotation_cfg = rot_cfg, \
+>   	}
+>   
+>   #define _DMA_SBLK(num, sdma_pri) \
+> @@ -676,22 +684,28 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
+>   	}
+>   
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =
+> -				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =
+> -				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_2 =
+> -				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =
+> -				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+> +
+> +static const struct dpu_rotation_cfg dpu_rot_sc7280_cfg_v2 = {
+> +	.rot_maxheight = 1088,
+> +	.rot_num_formats = ARRAY_SIZE(rotation_v2_formats),
+> +	.rot_format_list = rotation_v2_formats,
+> +};
+>   
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_0 =
+> -				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_1 =
+> -				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_2 =
+> -				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_3 =
+> -				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3, NULL);
+>   
+>   static const struct dpu_sspp_sub_blks sdm845_dma_sblk_0 = _DMA_SBLK("8", 1);
+>   static const struct dpu_sspp_sub_blks sdm845_dma_sblk_1 = _DMA_SBLK("9", 2);
+> @@ -699,7 +713,7 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_2 = _DMA_SBLK("10", 3);
+>   static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
+>   
+>   #define SSPP_BLK(_name, _id, _base, _features, \
+> -		_sblk, _xinid, _type, _clkctrl) \
+> +		_sblk, _xinid, _type, _clkctrl, _rotsupported) \
+
+If we use features & BIT(DPU_SSPP_INLINE_ROTATION), we don't need this 
+extra argument.
+
+>   	{ \
+>   	.name = _name, .id = _id, \
+>   	.base = _base, .len = 0x1c8, \
+> @@ -707,98 +721,103 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
+>   	.sblk = &_sblk, \
+>   	.xin_id = _xinid, \
+>   	.type = _type, \
+> -	.clk_ctrl = _clkctrl \
+> +	.clk_ctrl = _clkctrl, \
+> +	.rot_supported = _rotsupported ? DRM_MODE_ROTATE_MASK | DRM_MODE_REFLECT_MASK : \
+> +			DRM_MODE_ROTATE_0 | DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK, \
+>   	}
+>   
+>   static const struct dpu_sspp_cfg msm8998_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> -	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> -	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_MSM8998_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_MSM8998_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_MSM8998_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_MSM8998_MASK,
+> -		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_MSM8998_MASK, msm8998_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, false),
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_MSM8998_MASK, msm8998_vig_sblk_1,
+> +		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, false),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_MSM8998_MASK, msm8998_vig_sblk_2,
+> +		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, false),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_MSM8998_MASK, msm8998_vig_sblk_3,
+> +		12, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, false),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_MSM8998_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, false),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_MSM8998_MASK, sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, false),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_MSM8998_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, false),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_MSM8998_MASK, sdm845_dma_sblk_3,
+> +		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, false),
+>   };
+>   
+>   static const struct dpu_sspp_cfg sdm845_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> -	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> -	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK, sdm845_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, false),
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK, sdm845_vig_sblk_1,
+> +		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, false),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK, sdm845_vig_sblk_2,
+> +		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, false),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK, sdm845_vig_sblk_3,
+> +		12, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, false),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, false),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, false),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, false),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
+> +		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, false),
+>   };
+>   
+>   static const struct dpu_sspp_sub_blks sc7180_vig_sblk_0 =
+> -				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4);
+> +				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4, NULL);
+> +
+> +static const struct dpu_sspp_sub_blks sc7280_vig_sblk_0 =
+> +				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4, &dpu_rot_sc7280_cfg_v2);
+>   
+>   static const struct dpu_sspp_cfg sc7180_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
+> -		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK, sc7180_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, false),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, false),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,	sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, false),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, false),
+>   };
+>   
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_0 =
+> -				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_1 =
+> -				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_2 =
+> -				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_3 =
+> -				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   
+>   static const struct dpu_sspp_cfg sm8250_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> -	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> -	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SM8250_MASK, sm8250_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, false),
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SM8250_MASK, sm8250_vig_sblk_1,
+> +		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, false),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SM8250_MASK, sm8250_vig_sblk_2,
+> +		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, false),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SM8250_MASK, sm8250_vig_sblk_3,
+> +		12, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, false),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, false),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, false),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, false),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
+> +		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, false),
+>   };
+>   
+>   static const struct dpu_sspp_cfg sc7280_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
+> -		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7280_MASK, sc7280_vig_sblk_0,
+> +		0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, true),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, false),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,	sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, false),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, false),
+>   };
+>   
+>   
+> @@ -820,9 +839,9 @@ static const struct dpu_sspp_sub_blks qcm2290_dma_sblk_0 = _DMA_SBLK("8", 1);
+>   
+>   static const struct dpu_sspp_cfg qcm2290_sspp[] = {
+>   	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_QCM2290_MASK,
+> -		 qcm2290_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> +		qcm2290_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, false),
+>   	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		 qcm2290_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> +		qcm2290_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, false),
+>   };
+>   
+>   /*************************************************************
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index b85b24b..d009d83 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -112,6 +112,7 @@ enum {
+>    * @DPU_SSPP_TS_PREFILL      Supports prefill with traffic shaper
+>    * @DPU_SSPP_TS_PREFILL_REC1 Supports prefill with traffic shaper multirec
+>    * @DPU_SSPP_CDP             Supports client driven prefetch
+> + * @DPU_SSPP_INLINE_ROTATION Support inline rotation
+>    * @DPU_SSPP_MAX             maximum value
+>    */
+>   enum {
+> @@ -132,6 +133,7 @@ enum {
+>   	DPU_SSPP_TS_PREFILL,
+>   	DPU_SSPP_TS_PREFILL_REC1,
+>   	DPU_SSPP_CDP,
+> +	DPU_SSPP_INLINE_ROTATION,
+>   	DPU_SSPP_MAX
+>   };
+>   
+> @@ -315,6 +317,18 @@ struct dpu_qos_lut_tbl {
+>   };
+>   
+>   /**
+> + * struct dpu_rotation_cfg - define inline rotation config
+> + * @rot_maxheight: max pre rotated height allowed for rotation
+> + * @rot_num_formats: number of elements in @rot_format_list
+> + * @rot_format_list: list of supported rotator formats
+> + */
+> +struct dpu_rotation_cfg {
+> +	u32 rot_maxheight;
+> +	size_t rot_num_formats;
+> +	const u32 *rot_format_list;
+> +};
+> +
+> +/**
+>    * struct dpu_caps - define DPU capabilities
+>    * @max_mixer_width    max layer mixer line width support.
+>    * @max_mixer_blendstages max layer mixer blend stages or
+> @@ -369,6 +383,7 @@ struct dpu_caps {
+>    * @num_formats: Number of supported formats
+>    * @virt_format_list: Pointer to list of supported formats for virtual planes
+>    * @virt_num_formats: Number of supported formats for virtual planes
+> + * @dpu_rotation_cfg: inline rotation configuration
+>    */
+>   struct dpu_sspp_sub_blks {
+>   	u32 creq_vblank;
+> @@ -390,6 +405,7 @@ struct dpu_sspp_sub_blks {
+>   	u32 num_formats;
+>   	const u32 *virt_format_list;
+>   	u32 virt_num_formats;
+> +	const struct dpu_rotation_cfg *rotation_cfg;
+>   };
+>   
+>   /**
+> @@ -492,6 +508,7 @@ struct dpu_ctl_cfg {
+>    * @xin_id:            bus client identifier
+>    * @clk_ctrl           clock control identifier
+>    * @type               sspp type identifier
+> + * @rot_supported      allowed rotations
+>    */
+>   struct dpu_sspp_cfg {
+>   	DPU_HW_BLK_INFO;
+> @@ -499,6 +516,7 @@ struct dpu_sspp_cfg {
+>   	u32 xin_id;
+>   	enum dpu_clk_ctrl_type clk_ctrl;
+>   	u32 type;
+> +	u32 rot_supported;
+>   };
+>   
+>   /**
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> index 6565682..ff854cc 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> @@ -528,11 +528,19 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
+>   		struct dpu_plane_state *pstate,
+>   		uint32_t src_w, uint32_t src_h, uint32_t dst_w, uint32_t dst_h,
+>   		struct dpu_hw_scaler3_cfg *scale_cfg,
+> -		struct dpu_hw_pixel_ext *pixel_ext,
+>   		const struct dpu_format *fmt,
+>   		uint32_t chroma_subsmpl_h, uint32_t chroma_subsmpl_v)
+>   {
+>   	uint32_t i;
+> +	bool inline_rotation = pstate->rotation & DRM_MODE_ROTATE_90;
+> +
+> +	/*
+> +	 * For inline rotation cases, scaler config is post-rotation,
+> +	 * so swap the dimensions here. However, pixel extension will
+> +	 * need pre-rotation settings.
+> +	 */
+> +	if (inline_rotation)
+> +		swap(src_w, src_h);
+>   
+>   	scale_cfg->phase_step_x[DPU_SSPP_COMP_0] =
+>   		mult_frac((1 << PHASE_STEP_SHIFT), src_w, dst_w);
+> @@ -571,11 +579,6 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
+>   			scale_cfg->preload_x[i] = DPU_QSEED3_DEFAULT_PRELOAD_H;
+>   			scale_cfg->preload_y[i] = DPU_QSEED3_DEFAULT_PRELOAD_V;
+>   		}
+> -
+> -		pixel_ext->num_ext_pxls_top[i] =
+> -			scale_cfg->src_height[i];
+> -		pixel_ext->num_ext_pxls_left[i] =
+> -			scale_cfg->src_width[i];
+>   	}
+>   	if (!(DPU_FORMAT_IS_YUV(fmt)) && (src_h == dst_h)
+>   		&& (src_w == dst_w))
+> @@ -591,6 +594,24 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
+>   	scale_cfg->enable = 1;
+>   }
+>   
+> +static void _dpu_plane_setup_pixel_ext(struct dpu_hw_scaler3_cfg *scale_cfg,
+> +				struct dpu_hw_pixel_ext *pixel_ext,
+> +				uint32_t src_w, uint32_t src_h,
+> +				uint32_t chroma_subsmpl_h, uint32_t chroma_subsmpl_v)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < DPU_MAX_PLANES; i++) {
+> +		if (i == DPU_SSPP_COMP_1_2 || i == DPU_SSPP_COMP_2) {
+> +			src_w /= chroma_subsmpl_h;
+> +			src_h /= chroma_subsmpl_v;
+> +		}
+> +
+> +		pixel_ext->num_ext_pxls_top[i] = src_h;
+> +		pixel_ext->num_ext_pxls_left[i] = src_w;
+> +	}
+> +}
+> +
+>   static const struct dpu_csc_cfg dpu_csc_YUV2RGB_601L = {
+>   	{
+>   		/* S15.16 format */
+> @@ -665,7 +686,12 @@ static void _dpu_plane_setup_scaler(struct dpu_plane *pdpu,
+>   			drm_rect_height(&pipe_cfg->src_rect),
+>   			drm_rect_width(&pipe_cfg->dst_rect),
+>   			drm_rect_height(&pipe_cfg->dst_rect),
+> -			&scaler3_cfg, &pixel_ext, fmt,
+> +			&scaler3_cfg, fmt,
+> +			info->hsub, info->vsub);
+> +
+> +	/* configure pixel extension based on scalar config */
+> +	_dpu_plane_setup_pixel_ext(&scaler3_cfg, &pixel_ext,
+> +			drm_rect_width(&pipe_cfg->src_rect), drm_rect_height(&pipe_cfg->src_rect),
+
+Define local variables src_width and src_height. Use them both here and 
+in the previous call.
+
+>   			info->hsub, info->vsub);
+>   
+>   	if (pdpu->pipe_hw->ops.setup_pe)
+> @@ -956,6 +982,33 @@ static bool dpu_plane_validate_src(struct drm_rect *src,
+>   		drm_rect_equals(fb_rect, src);
+>   }
+>   
+> +static int dpu_plane_check_inline_rotation(struct dpu_plane *pdpu,
+> +						const struct dpu_sspp_sub_blks *sblk,
+> +						struct drm_rect src, const struct dpu_format *fmt)
+> +{
+> +	size_t num_formats;
+> +	const u32 *supported_formats;
+> +
+> +	if (!sblk->rotation_cfg) {
+> +		DPU_ERROR("invalid rotation cfg\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (drm_rect_width(&src) > sblk->rotation_cfg->rot_maxheight) {
+> +		DPU_DEBUG_PLANE(pdpu, "invalid height for inline rot:%d max:%d\n",
+> +				src.y2, sblk->rotation_cfg->rot_maxheight);
+> +		return -EINVAL;
+> +	}
+> +
+> +	supported_formats = sblk->rotation_cfg->rot_format_list;
+> +	num_formats = sblk->rotation_cfg->rot_num_formats;
+> +
+> +	if (!DPU_FORMAT_IS_UBWC(fmt) || !dpu_find_format(fmt, supported_formats, num_formats))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+>   static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   				  struct drm_atomic_state *state)
+>   {
+> @@ -968,15 +1021,19 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   	const struct dpu_format *fmt;
+>   	struct drm_rect src, dst, fb_rect = { 0 };
+>   	uint32_t min_src_size, max_linewidth;
+> +	unsigned int rotation = 0;
+
+No need to init it here.
+
+> +	uint32_t supported_rotations = DRM_MODE_REFLECT_MASK | DRM_MODE_ROTATE_0;
+> +	const struct dpu_sspp_cfg *pipe_hw_caps = pdpu->pipe_hw->cap;
+> +	const struct dpu_sspp_sub_blks *sblk = pdpu->pipe_hw->cap->sblk;
+>   
+>   	if (new_plane_state->crtc)
+>   		crtc_state = drm_atomic_get_new_crtc_state(state,
+>   							   new_plane_state->crtc);
+>   
+> -	min_scale = FRAC_16_16(1, pdpu->pipe_hw->cap->sblk->maxupscale);
+> +	min_scale = FRAC_16_16(1, sblk->maxupscale);
+>   	ret = drm_atomic_helper_check_plane_state(new_plane_state, crtc_state,
+>   						  min_scale,
+> -						  pdpu->pipe_hw->cap->sblk->maxdwnscale << 16,
+> +						  sblk->maxdwnscale << 16,
+>   						  true, true);
+>   	if (ret) {
+>   		DPU_DEBUG_PLANE(pdpu, "Check plane state failed (%d)\n", ret);
+> @@ -1002,8 +1059,8 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   	min_src_size = DPU_FORMAT_IS_YUV(fmt) ? 2 : 1;
+>   
+>   	if (DPU_FORMAT_IS_YUV(fmt) &&
+> -		(!(pdpu->pipe_hw->cap->features & DPU_SSPP_SCALER) ||
+> -		 !(pdpu->pipe_hw->cap->features & DPU_SSPP_CSC_ANY))) {
+> +		(!(pipe_hw_caps->features & DPU_SSPP_SCALER) ||
+> +		 !(pipe_hw_caps->features & DPU_SSPP_CSC_ANY))) {
+>   		DPU_DEBUG_PLANE(pdpu,
+>   				"plane doesn't have scaler/csc for yuv\n");
+>   		return -EINVAL;
+> @@ -1036,6 +1093,20 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   		return -E2BIG;
+>   	}
+>   
+
+Please move supported_rotations initialization here, so that it's clear 
+that it is initialized conditionally.
+
+> +	if (pipe_hw_caps->features & BIT(DPU_SSPP_INLINE_ROTATION))
+> +		supported_rotations |= DRM_MODE_ROTATE_90;
+> +
+> +	rotation = drm_rotation_simplify(new_plane_state->rotation,
+> +					supported_rotations);
+> +
+> +	if ((pipe_hw_caps->features & BIT(DPU_SSPP_INLINE_ROTATION)) &&
+> +		(rotation & DRM_MODE_ROTATE_90)) {
+> +		ret = dpu_plane_check_inline_rotation(pdpu, sblk, src, fmt);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	pstate->rotation = rotation;
+>   	pstate->needs_qos_remap = drm_atomic_crtc_needs_modeset(crtc_state);
+>   
+>   	return 0;
+> @@ -1151,21 +1222,19 @@ static void dpu_plane_sspp_atomic_update(struct drm_plane *plane)
+>   				pstate->multirect_mode);
+>   
+>   	if (pdpu->pipe_hw->ops.setup_format) {
+> -		unsigned int rotation;
+> +		unsigned int rotation = pstate->rotation;
+>   
+>   		src_flags = 0x0;
+>   
+> -		rotation = drm_rotation_simplify(state->rotation,
+> -						 DRM_MODE_ROTATE_0 |
+> -						 DRM_MODE_REFLECT_X |
+> -						 DRM_MODE_REFLECT_Y);
+> -
+>   		if (rotation & DRM_MODE_REFLECT_X)
+>   			src_flags |= DPU_SSPP_FLIP_LR;
+>   
+>   		if (rotation & DRM_MODE_REFLECT_Y)
+>   			src_flags |= DPU_SSPP_FLIP_UD;
+>   
+> +		if (rotation & DRM_MODE_ROTATE_90)
+> +			src_flags |= DPU_SSPP_ROT_90;
+> +
+>   		/* update format */
+>   		pdpu->pipe_hw->ops.setup_format(pdpu->pipe_hw, fmt, src_flags,
+>   				pstate->multirect_index);
+> @@ -1531,11 +1600,7 @@ struct drm_plane *dpu_plane_init(struct drm_device *dev,
+>   			BIT(DRM_MODE_BLEND_COVERAGE));
+>   
+>   	drm_plane_create_rotation_property(plane,
+> -			DRM_MODE_ROTATE_0,
+> -			DRM_MODE_ROTATE_0 |
+> -			DRM_MODE_ROTATE_180 |
+> -			DRM_MODE_REFLECT_X |
+> -			DRM_MODE_REFLECT_Y);
+> +		    DRM_MODE_ROTATE_0, pdpu->pipe_hw->cap->rot_supported);
+
+You remember, I thought that we might be able to use a common mask here 
+and in drm_rotation_simplify. As it's not the case, let's move 
+rot_supported calculation here.
+
+You won't need to store any additional data in the dpu_sspp_cfg, please 
+check the features' DPU_SSPP_INLINE_ROTATION bit.
+
+>   
+>   	drm_plane_enable_fb_damage_clips(plane);
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
+> index 50781e2..e146310 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
+> @@ -26,6 +26,7 @@
+>    * @plane_fetch_bw: calculated BW per plane
+>    * @plane_clk: calculated clk per plane
+>    * @needs_dirtyfb: whether attached CRTC needs pixel data explicitly flushed
+> + * @rotation: simplified drm rotation hint
+>    */
+>   struct dpu_plane_state {
+>   	struct drm_plane_state base;
+> @@ -40,6 +41,7 @@ struct dpu_plane_state {
+>   	u64 plane_clk;
+>   
+>   	bool needs_dirtyfb;
+> +	unsigned int rotation;
+>   };
+>   
+>   /**
+
+
 -- 
-2.35.1.1094.g7c7d902a7c-goog
-
+With best wishes
+Dmitry

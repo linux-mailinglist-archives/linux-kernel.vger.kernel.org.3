@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB9F4F02C7
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 15:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A684F02CF
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 15:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345202AbiDBNo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 09:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S1352376AbiDBNpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 09:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiDBNo1 (ORCPT
+        with ESMTP id S232226AbiDBNpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 09:44:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF88CB018;
-        Sat,  2 Apr 2022 06:42:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4818961480;
-        Sat,  2 Apr 2022 13:42:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F09C34114;
-        Sat,  2 Apr 2022 13:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648906954;
-        bh=Gu+xq607wcJLBd5767EU4rcp1lhQFK3gX5NsYIlfwpk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P5SNXXiZYJlwtDY9K7ILgja4Zc87hqaPdzZuA4XcIfQiCgWqgEAqauONat3Oymksi
-         87Z+SmQtQCTWwkSUosNSjXfEN/6Jo7qguivEZVbHhPO+6f6ILrIyWD7+UlL+sR9eJi
-         vcVJx+BsnnC1yfzFNFurIc6kR9rmo9R49wRg7UcSyTRxRPxKcLrwpgVt+0sOVwfu6c
-         4Rw1eHf9eLdaWDKUZgEDb0kGbGBBTkThcnsCarYvj8Dv8khaCb4nOXAguU3V3I6XGi
-         Mm/KhWYBr79E28kngvHTPnvvO3WVy6LkMMukedXIJwUV/9UhFvHbYbapjP7HcxRTx/
-         Tr0ioD8VxBNgA==
-Received: by mail-vs1-f46.google.com with SMTP id u207so5117304vsu.10;
-        Sat, 02 Apr 2022 06:42:34 -0700 (PDT)
-X-Gm-Message-State: AOAM530nhgSzGqX/lBewz8Y+FWZung9MFpUku/jdJLcJoRmYEi9mRMG+
-        JbSgi2Xp7JOIKD49bnoXCq80arfjY1uuNJJm+Hk=
-X-Google-Smtp-Source: ABdhPJzkOByPICbGCNWRRHvRte+HkSIGERCcxR6bEJaVQtPFOc687kt90hJEYHoJbA8dMpQCnDf3561ZC2qPkk8E2t0=
-X-Received: by 2002:a05:6102:1241:b0:325:6bfb:ab75 with SMTP id
- p1-20020a056102124100b003256bfbab75mr22778557vsg.2.1648906953574; Sat, 02 Apr
- 2022 06:42:33 -0700 (PDT)
+        Sat, 2 Apr 2022 09:45:05 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47903CB01B;
+        Sat,  2 Apr 2022 06:43:14 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id p17so4665704plo.9;
+        Sat, 02 Apr 2022 06:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=N8etPJfuUrvLrKv9T6LO2m8SvHPCKKB3qu2VSt8v9nA=;
+        b=Qp3+sVxlu/4x2lmjo3UD6aZziSa9jal43jqrKm2zfWl/+omelI65Sp70InHvggNa1+
+         dGEAUUFAYSJWl4YNTFsF690kPBMgF0ljYslIfFYbuFzkUCtKqBZ13DVeSni8ev2KM45R
+         KBQ/QdEE/hnJvi+9Ecy2YihzUtvXtoLiIerIpsoA7MDGIEtjRwX9T7xa4Wh8ulgNKgwD
+         VstjGeu3kBWRLzOzoKKCX75uOS7Zlzl/Mz4Wv/Uijy5YP68V6ao1GXRsL9DTwA/meEP/
+         yo3kupGKARFrIoPAXsYystH/UCnUlHoguq8wqCBtV/V2GcALzMIxS5ihfP5cDKVjm61b
+         DHpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=N8etPJfuUrvLrKv9T6LO2m8SvHPCKKB3qu2VSt8v9nA=;
+        b=D2Yc/8pAR+qqjC2QAk0SmjMHs//KXhKoLrC/2966kZ8K3KyfMNMoa40b28PQp4lDQT
+         LfWhvVS25Cxe94U7+GR2Eaewx0NQZSZ6TxjIgsbDNJP2UUhGvETTqgmpeyPY7iFHwOdj
+         XVfmLfxj6M2K1WNFs3ktEbQT9Enm4rli0DVofgzhK4xzrk4+51JrSq55VVSHtCvQ1S/x
+         ZXmbw06RnaYacRUDvOkGNxWjUKpXYOWyyqu+hqH9GUX1RHXJm/IgIRVxAsryVs1AvZ2h
+         78Ey4INpcYwoZEvYOtHN37KCvuO8lr3ot0VdS9h1Ir8sH8B+CoSsZjSHWhn/eVxwkg9A
+         Dfrg==
+X-Gm-Message-State: AOAM530l55srcXsuJaCpqUZXXtM91/wr5lRot1KH4w0ZEVnB71JIKG8s
+        SBediYJ+UjaYEPJfRBRLoMk=
+X-Google-Smtp-Source: ABdhPJwvOBfL3ZRn/xSf/hbyHwVlboZe2IeZAwoTcZlIhaFsDkEQ/OYHNBO1xsJqjlDjHs0OZpXsNQ==
+X-Received: by 2002:a17:902:bd88:b0:14f:8ddf:e373 with SMTP id q8-20020a170902bd8800b0014f8ddfe373mr15196047pls.89.1648906993722;
+        Sat, 02 Apr 2022 06:43:13 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm6610999pfu.202.2022.04.02.06.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 06:43:12 -0700 (PDT)
+Date:   Sat, 2 Apr 2022 06:43:09 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Allan W. Nielsen" <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, Divya.Koppera@microchip.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net v2 0/3] net: phy: micrel: Remove latencies support
+ lan8814
+Message-ID: <20220402134309.GA19675@hoboy.vegasvil.org>
+References: <20220401110522.3418258-1-horatiu.vultur@microchip.com>
+ <Ykb2yoXHib6l9gkT@lunn.ch>
+ <20220401141120.imsolvsl2xpnnf4q@lx-anielsen>
+ <YkcOjlR++GwLWyT5@lunn.ch>
 MIME-Version: 1.0
-References: <20220402133544.2690231-1-guoren@kernel.org> <20220402133544.2690231-5-guoren@kernel.org>
- <CAK7LNAS8i2xe2zFQo7mcJeujymhWB7hyp36UWS4Rp9T9dMUu2g@mail.gmail.com>
-In-Reply-To: <CAK7LNAS8i2xe2zFQo7mcJeujymhWB7hyp36UWS4Rp9T9dMUu2g@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 2 Apr 2022 21:42:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQvDHFijfq+ekjZV4qj75Yyer84tY_eggsdxz3dL3SrYA@mail.gmail.com>
-Message-ID: <CAJF2gTQvDHFijfq+ekjZV4qj75Yyer84tY_eggsdxz3dL3SrYA@mail.gmail.com>
-Subject: Re: [PATCH V10 04/20] kconfig: Add SYSVIPC_COMPAT for all architectures
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkcOjlR++GwLWyT5@lunn.ch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 9:39 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sat, Apr 2, 2022 at 10:36 PM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > The existing per-arch definitions are pretty much historic cruft.
-> > Move SYSVIPC_COMPAT into init/Kconfig.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > ---
->
-> Please use "arch:" or something for the commit subject.
->
-> I want to see "kconfig:" for
-> changes under scripts/kconfig/.
-Okay
+On Fri, Apr 01, 2022 at 04:39:10PM +0200, Andrew Lunn wrote:
 
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+> Are you also saying that ptp4l needs to read the values from the
+> driver, calculate the differ from the defaults, and then apply that
+> difference to the correction specified in the configuration file it
+> will apply in userspace?
 
+Personally I wouldn't bother with that.  At the end of day, users who
+care about sub-microsecond performance will need to calibrate their
+particular setup.  The output of the calibration will be the system
+delay asymmetry correction.  That number will be applied in ONE place,
+namely the user space PTP stack.  Breaking it up into little bits is
+just extra work for no benefit.
 
+That is why I'm against any of this driver nonsense.  The only purpose
+of putting values in to the driver is to unpleasantly surprise the end
+users after kernel upgrade.
 
--- 
-Best Regards
- Guo Ren
+If this driver defaults + run time query/setting stuff goes mainline,
+I'll never use it.
 
-ML: https://lore.kernel.org/linux-csky/
+> Does the PTP API enforce mutual exclusion for a device? Can there be
+> multiple applications running on an interface, some which assume the
+> hardware is configured to perform corrections and some which will
+> apply the correction in user space?
+
+There is no mutual exclusion at the kernel API.  The main hindrance is
+the SIOCSHWTSTAMP ioctl which is at the device level.  The setting
+applies system wide and is a root caps operation.  There is the "Get"
+variant that allows co-operation but does not enforce it.
+
+Thanks,
+Richard

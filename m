@@ -2,144 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4E24F05B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1190A4F05B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiDBTJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 15:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S238770AbiDBTK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 15:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiDBTJ2 (ORCPT
+        with ESMTP id S237654AbiDBTKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 15:09:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F208E12A8DD;
-        Sat,  2 Apr 2022 12:07:35 -0700 (PDT)
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MC3H1-1niiuB0qkv-00CPnt; Sat, 02 Apr 2022 21:07:34 +0200
-Received: by mail-wm1-f54.google.com with SMTP id q20so3573896wmq.1;
-        Sat, 02 Apr 2022 12:07:34 -0700 (PDT)
-X-Gm-Message-State: AOAM532WvDSooXWBhNNyCjvEapY+WnlGKEn1DBemeZgATB8czEOj0tbf
-        5BP0b7UWbSV5IXQyBeqYHcHpTdKtN05SHuPcuQA=
-X-Google-Smtp-Source: ABdhPJwIAkpxl+JZt9LjgRq9lJWnGHnJOqkbLJpfn319rdmgWy77pOsaUi8rkQeJc/4Nv+hf1X3LMml3uCdwMixVHak=
-X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
- f19-20020a7bcd13000000b0038bf39c1181mr13827152wmj.20.1648926453781; Sat, 02
- Apr 2022 12:07:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-5-sven@svenpeter.dev>
- <CAK8P3a19F8K0MvZV_R6HrmmR+WBsDge+u6U3iEVEjZ74i6+nEg@mail.gmail.com> <f06576c8-76c6-41ae-874d-81ea0b5b5603@www.fastmail.com>
-In-Reply-To: <f06576c8-76c6-41ae-874d-81ea0b5b5603@www.fastmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 2 Apr 2022 21:07:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3xioqJDb7hQ3dvxQyHPg2hgJbeJywEP+N4cDzpo=8VhQ@mail.gmail.com>
-Message-ID: <CAK8P3a3xioqJDb7hQ3dvxQyHPg2hgJbeJywEP+N4cDzpo=8VhQ@mail.gmail.com>
-Subject: Re: [PATCH 4/9] soc: apple: Add SART driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sat, 2 Apr 2022 15:10:55 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20B344C1;
+        Sat,  2 Apr 2022 12:09:02 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so1405981pjb.0;
+        Sat, 02 Apr 2022 12:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2u46UfW6kIuGqw2fEWOMbQ8vmrbpCAIrB+DNSu9kic0=;
+        b=OyL5oa6mwmQ4Nhi+Vbzst8I61BXM/9lXgchFPVrLkEEGNTW3n6CmmBxGgRuuX7gyxX
+         EBCjiO0yqy8X0rYIvpxmsMq7tBHfc+Jg+6f2LVHVPXNaWWq6mg/zqMK9wHk2ZpJXR+wm
+         mS25FPcfk+mfyXxvy2m109uV8sGWMbPBiUQjemFA199Yav1bypOnwHt4YvH7bQ0lYg+Z
+         hO3hanTooAaY3zJRYAgB82qrC1r/P5tCrSy2cqd3Ar+6ouwunnkGwH1nuZGvcu/LFLaP
+         Ww4NmfwZMfUiKp3aIo3TU+6R5N9CFFFIgtur8o6pL5F94Hmyj6R+lXKPXSv+6j2cpxzu
+         eHLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2u46UfW6kIuGqw2fEWOMbQ8vmrbpCAIrB+DNSu9kic0=;
+        b=S+PGtTGzEisPWnCYqDPXXrOlwaUtQWD2JeJD4FNUQ0bSigtEKr/0lxmIVKl4CLCr5H
+         1jRgLGy5LznrqmK7dE5HW7L9ZIHI5DXdXIv3GlrRJu6IX+IxOqLJ5c9nhSyJjwzAkXzo
+         JGCbXL045b9TeIFXZSyCJ8ulako2476qR5feGV06Epk8w05faYnJJWYDmgdt1PNSk+Dc
+         PCoK63NytR6LZCupHheFTlI+rgQvN/FI/47of3buTj4/9GLgpg4fkGAXvpRsu52Zw/98
+         C4TbUqypRQ0Yziytdceil8/LdcZum/2Ucrj42GDG8xRroFkxR2vs8UQfkiE57WjKyZd9
+         AY9w==
+X-Gm-Message-State: AOAM533F7PHCOaDMqG16N9ulepDD54luSHsIGAVqIGq+jzxvENt2IlRy
+        pdz0x0qKU5yAIPiyqF9WlMzacNClHJU=
+X-Google-Smtp-Source: ABdhPJwPvY2t1ET5chnedD9sLhAFQk+HC1hdO6ndJ6R85Uepwzb1AXQwmznUUlfj4CYJ7xg8Jx8Wyw==
+X-Received: by 2002:a17:903:1205:b0:151:8ae9:93ea with SMTP id l5-20020a170903120500b001518ae993eamr16475211plh.37.1648926542122;
+        Sat, 02 Apr 2022 12:09:02 -0700 (PDT)
+Received: from localhost.localdomain ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b001c779e82af6sm5682112pjf.48.2022.04.02.12.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 12:09:01 -0700 (PDT)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:u5NOoiQ4rEi4dh4tfDGxLExnqqNZSURzhc/HD4eZvY96ATyEZlC
- foNU9lXJjj6QTWCgD3EVneljiwx196JRipv8X4NVhVfLK+Gb3IdwtCIiCgv6PcSjl8he9IP
- m3fNXVPT+NcSOzt8t1JjFqgGpfaWGWTmz78zOmgmTsdZA2LY9xgw9nrmnrHCf1yKaNON+rO
- HrKXMFTndMPv40EF+n9oQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:R/NA65EZX+s=:i+QXtWZDna6xQuE85HNZAt
- f17BOhoLSXQPnpsy0dwCJ/yZCWaCW+77RNvtqRRgDUM0nNdM5LUG9N4nrTl6ZZUYjTMYRV9RL
- 5AgbT/o1iDfm3Ax8hNFZ6et1OdP1g1bqDD3uenLZGs2msasK5ihumIsSJJI0Tvh2d5kXcdMZY
- ASzFG77Yqh/VFLFNPFmTPmu/rCQZXztI5hsJ0mlUHuWoRi0cAQI/41p7QCgam8Zrl8qH98rub
- 7IP1bNLwMigmz7VwMhJxPRkrOu3bWGPWq6f3O0qlZmVfIkYXmqf9zzAK+Z+Vm+rQ95GXF3/jV
- eXBDLoTKbOOujaCfE9PkGRziJd/D3rgAcc1TcXkk2eLFkcH8VWsqAE8pOZ7/qFuVlHJvKtXkl
- 4E/rny11gdYrHRXM/NjYARukeCGmMinWD/e/jgMWNtfBUGNI/ybyUs5z9aLYqVdenrkYhFPx7
- piE1GCrNwsgylxbAF52LfChJ4ydRDICyaLsq69iqo3dzlvHItUA5TvZUk82tbI+tygvjVTNjn
- hZbOwitVrtQMI8R+Rf9FaoZzqb40oL+MHU2LRXdeUylcoNLtaeYfmGpaPL7xTB8Kw1pa4Gjwf
- Ss2TGm2HHBV8QgNYbwBZOPHM/54iDWO0AD0pCCyI7D5NJvlaZ36n/DKvIgWeSCNPRmDgc6jz/
- sqDoNWNgFg0Kj1k/yTBbfJwWdbR4YGTIirkxw8Z+lLj3KeE93MS0wVPSqQIcryfZuKnLMinYz
- H6a5lVWj+D+0LMOC5hsQXLcIUYiL6Sekgb3XMnmb5MCaSKx9WoxfUJPPXYAClHw0PXYAE5p9L
- x6hzrOazIbGWOi3TF3BHkCyeU3QE16FDu62m5AEwCvPXSXnVIk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: lx2160a: Update can node property
+Date:   Sun,  3 Apr 2022 00:38:55 +0530
+Message-Id: <20220402190855.35530-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 2:38 PM Sven Peter <sven@svenpeter.dev> wrote:
-> On Mon, Mar 21, 2022, at 18:07, Arnd Bergmann wrote:
-> > On Mon, Mar 21, 2022 at 5:50 PM Sven Peter <sven@svenpeter.dev> wrote:
-> >> The NVMe co-processor on the Apple M1 uses a DMA address filter called
-> >> SART for some DMA transactions. This adds a simple driver used to
-> >> configure the memory regions from which DMA transactions are allowed.
-> >>
-> >> Co-developed-by: Hector Martin <marcan@marcan.st>
-> >> Signed-off-by: Hector Martin <marcan@marcan.st>
-> >> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> >
-> > Can you add some explanation about why this uses a custom interface
-> > instead of hooking into the dma_map_ops?
->
-> Sure.
-> In a perfect world this would just be an IOMMU implementation but since
-> SART can't create any real IOVA space using pagetables it doesn't fit
-> inside that subsytem.
->
-> In a slightly less perfect world I could just implement dma_map_ops here
-> but that won't work either because not all DMA buffers of the NVMe
-> device have to go through SART and those allocations happen
-> inside the same device and would use the same dma_map_ops.
->
-> The NVMe controller has two separate DMA filters:
->
->    - NVMMU, which must be set up for any command that uses PRPs and
->      ensures that the DMA transactions only touch the pages listed
->      inside the PRP structure. NVMMU itself is tightly coupled
->      to the NVMe controller: The list of allowed pages is configured
->      based on command's tag id and even commands that require no DMA
->      transactions must be listed inside NVMMU before they are started.
->    - SART, which must be set up for some shared memory buffers (e.g.
->      log messages from the NVMe firmware) and for some NVMe debug
->      commands that don't use PRPs.
->      SART is only loosely coupled to the NVMe controller and could
->      also be used together with other devices. It's also the only
->      thing that changed between M1 and M1 Pro/Max/Ultra and that's
->      why I decided to separate it from the NVMe driver.
->
-> I'll add this explanation to the commit message.
+fsl,clk-source property is of type uint8 and need to be defined as
+"/bits/ 8 <0>". Simply setting value to 0 raise warning:
+can@2180000: fsl,clk-source:0: [0, 0, 0, 0] is too long
 
-Ok, thanks.
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> >> +static void sart2_get_entry(struct apple_sart *sart, int index, u8 *flags,
-> >> +                           phys_addr_t *paddr, size_t *size)
-> >> +{
-> >> +       u32 cfg = readl_relaxed(sart->regs + APPLE_SART2_CONFIG(index));
-> >> +       u32 paddr_ = readl_relaxed(sart->regs + APPLE_SART2_PADDR(index));
-> >
-> > Why do you use the _relaxed() accessors here and elsewhere in the driver?
->
-> This device itself doesn't do any DMA transactions so it needs no memory
-> synchronization barriers. Only the consumer (i.e. rtkit and nvme) read/write
-> from/to these buffers (multiple times) and they have the required barriers
-> in place whenever they are used.
->
-> These buffers so far are only allocated at probe time though so even using
-> the normal writel/readl here won't hurt performance at all. I can just use
-> those if you prefer or alternatively add a comment why _relaxed is fine here.
->
-> This is a bit similar to the discussion for the pinctrl series last year [1].
+diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+index c5daa15b020d..82bd8c0f318b 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+@@ -909,7 +909,7 @@ can0: can@2180000 {
+ 					    QORIQ_CLK_PLL_DIV(8)>,
+ 				 <&clockgen QORIQ_CLK_SYSCLK 0>;
+ 			clock-names = "ipg", "per";
+-			fsl,clk-source = <0>;
++			fsl,clk-source = /bits/ 8 <0>;
+ 			status = "disabled";
+ 		};
+ 
+@@ -921,7 +921,7 @@ can1: can@2190000 {
+ 					    QORIQ_CLK_PLL_DIV(8)>,
+ 				 <&clockgen QORIQ_CLK_SYSCLK 0>;
+ 			clock-names = "ipg", "per";
+-			fsl,clk-source = <0>;
++			fsl,clk-source = /bits/ 8 <0>;
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.25.1
 
-I think it's better to only use the _relaxed version where it actually helps,
-with a comment about it, and use the normal version elsewhere, in
-particular in functions that you have copied from the normal nvme driver.
-I had tried to compare some of your code with the other version and
-was rather confused by that.
-
-        Arnd

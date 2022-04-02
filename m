@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C124EFFF9
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9FD4EFFFD
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239621AbiDBJJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S1354024AbiDBJLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiDBJJo (ORCPT
+        with ESMTP id S244053AbiDBJLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:09:44 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D2B1B0BD0;
-        Sat,  2 Apr 2022 02:07:53 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id u14so615636pjj.0;
-        Sat, 02 Apr 2022 02:07:53 -0700 (PDT)
+        Sat, 2 Apr 2022 05:11:32 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC5A532DA
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:09:40 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id c10so10311719ejs.13
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Pb/qK6YwYo8qBEXpAf6pyRs0qHEh+AFav1X8QEAR8os=;
-        b=Ug1O3E84tV4pjJHKzV1eDj3dKs8QJdO2HQSbI0/0yBfsrcso5teAp+siFcwf5VJQxF
-         G5MypeLuXGb7c/1L8avpx5B4K7JeWwksRAW/Z7bzVr08hwNEds6Z7hHEDij1EeS8rbvB
-         Oh/6cBYAcCLhIKPSbbwLEf/6ghMB/De/bBE0Nfow5yWmnZsyLyjLsy7Vnb5JgdrRWHEe
-         YDEM7tHRY8ze3gtpVuG74VrMYkmh9kR8oX6c0LnWua/33hmELOxZU4fgVEPxRHhkxzht
-         MHDhv9pgSgv5qZjsby1aC29bMh9yr3kkBGvXt8KsqvYnw1ZsjMWRRy5Kmx9ndRhxokpq
-         8mvw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=kd0NXB1Zpr99nwzhwykwjlZXPnel4cWxpQfKUpkCMHk=;
+        b=IPrXv9vJtuIqqczOLMSmbtbpxKLQMRqoHRQqRTjVRFt4XO+cn+jGv3A0ddYp/tq7gY
+         Zg7teYhVeEfjJ8csVKtGys1Y6/lrBvrxsdVaGEio7GpsGA26NvKIok57F6Ww8nbIHQye
+         rXmxl63yx1oW+DKpT22urlehfD/nbAMpo9LvOn1G6icNPf2NIzuPi1KPPEaHk5bXYQ2L
+         yfj9ZgvUPumDQ7S7kDptsISup59+tDCEC99Hw/VHbN6fEhZp+NoZ6CIxy1fjYa9XekPR
+         serYvl4TidGxyJu9quyVUhjNX3aQyNJjetX9Z2KkDWVzjwvoeVb0n+VdPnbOPkm+mK4A
+         0aQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Pb/qK6YwYo8qBEXpAf6pyRs0qHEh+AFav1X8QEAR8os=;
-        b=lwjIL5D+SWNZ0mplnAIByvGDhxQUZUslzfcJ8xEOWdB48dsxN9VpMgYu9xiZLJwgSQ
-         /VjhFtSJWAtqSOcNaytwt7QhXQ9Hksfj1OsJVJpxgOzbYaGhmRyfgyCIRiDTx9qOAIQL
-         zJJxrr017MywbrT1arFT0KfQICtdiYz7b4uMuxK9LGWMwUFZ4k8PtPjaQ+0BwIj6RB4E
-         VHWJb9hZxkM0m90RohXB9c+l0Mu89PVu4cYUAT3PCvgg8FIyY+okzw70S7DGk2kKuuXN
-         UTxKLm4EACBHFtNwxT+qA4YMCphuo04CC0+cSvmB0kGnXGwAvM7SbdrjQ+9bZvMN+qyj
-         qEQg==
-X-Gm-Message-State: AOAM530XhXuzDjQ4rDjl1L0ez4WjWd03cvvJXNKaaqOZ9sAAfRj4Zls/
-        qESo8P2PIWhaNlFLBatUBks=
-X-Google-Smtp-Source: ABdhPJya5XWCnmEHVuRWundyGrsOfeggYaR9HeA7tSAZyW8bgeg2P20LbFIKpRTRGZgTeLeUDHcF0w==
-X-Received: by 2002:a17:902:bb8d:b0:156:51a1:3f5a with SMTP id m13-20020a170902bb8d00b0015651a13f5amr13824226pls.65.1648890472953;
-        Sat, 02 Apr 2022 02:07:52 -0700 (PDT)
-Received: from ubuntu.localdomain (218-166-170-128.dynamic-ip.hinet.net. [218.166.170.128])
-        by smtp.gmail.com with ESMTPSA id z16-20020a056a00241000b004f3a647ae89sm5931216pfh.174.2022.04.02.02.07.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 02:07:52 -0700 (PDT)
-From:   Chin Yik Ming <yikming2222@gmail.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chin Yik Ming <yikming2222@gmail.com>
-Subject: [PATCH] ext4: Fix typo
-Date:   Sat,  2 Apr 2022 02:07:44 -0700
-Message-Id: <20220402090744.8918-1-yikming2222@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=kd0NXB1Zpr99nwzhwykwjlZXPnel4cWxpQfKUpkCMHk=;
+        b=4TgWSM3QLbwtTOzakR1MrQmQFg9E83PJYmPvi04WgjMWS20lkDwVCEjhENqgoXAUgn
+         nzaef2OnbrkaaYU5bmDP6ICxsxRn1LAQ2if9LAbbRF3NCr7pORu9dIS9gH5v2LEMmz6F
+         6cdlJQi2MZ6EP9tpLglD40PfdyquXU8DZhc4gTCAsXAg8Pt/CGK68TcG/7Zpa0sQZ6fK
+         YcEJ2q4FyqNdhLWdUekL/fsPh/S3iui5S4eSiIJvk6jqnYvX8X8fB0L1ValMVdiaMKon
+         TFrgn32cl8PfFBlrzrkMoLOsVOZS612jDwZmeEiZHHqQ6etoRoBwd/cxz6Gbt5IlxQUR
+         H0NQ==
+X-Gm-Message-State: AOAM531IjaJz4b3l8UXlaG9shWV80RPQIQft9mwN/o0kJGtv7n0jAO0t
+        nAEMFg05rvD0YRi9iBkG6ORDzg==
+X-Google-Smtp-Source: ABdhPJwqleeVWzZcqz6QlP7/awNnzIZNAP/RE/+/3JTo9Oc/kx/lPCi9SIvYHyQ5AoA0h5pDpTMV4w==
+X-Received: by 2002:a17:907:3e16:b0:6df:b4f0:5cc2 with SMTP id hp22-20020a1709073e1600b006dfb4f05cc2mr3180696ejc.285.1648890579004;
+        Sat, 02 Apr 2022 02:09:39 -0700 (PDT)
+Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o12-20020a50c90c000000b0041907e62024sm2192677edh.85.2022.04.02.02.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 02:09:38 -0700 (PDT)
+Message-ID: <c93bdf12-bf53-9277-0394-5eaeea081183@linaro.org>
+Date:   Sat, 2 Apr 2022 11:09:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 1/4] dt-bindings: clock: qcom,gcc-sdm845: add parent
+ power domain
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
+ <20220401145820.1003826-2-krzysztof.kozlowski@linaro.org>
+ <20220401232451.1B7A9C340F3@smtp.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401232451.1B7A9C340F3@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'functoin' and 'entres' should be 'function' and 'entries' respectively
+On 02/04/2022 01:24, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2022-04-01 07:58:17)
+>> Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
+>> properly pass performance state from children.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+>> index d902f137ab17..5fe1b2c42d5a 100644
+>> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+>> @@ -43,6 +43,9 @@ properties:
+>>    '#reset-cells':
+>>      const: 1
+>>  
+>> +  powert-domains:
+> 
+> s/powert/power/
 
-Signed-off-by: Chin Yik Ming <yikming2222@gmail.com>
----
- fs/ext4/dir.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks. This actually points to the fact I did not test this bindings
+change :(
 
-diff --git a/fs/ext4/dir.c b/fs/ext4/dir.c
-index a6bb86f52..52ebc40c8 100644
---- a/fs/ext4/dir.c
-+++ b/fs/ext4/dir.c
-@@ -412,7 +412,7 @@ struct fname {
- };
- 
- /*
-- * This functoin implements a non-recursive way of freeing all of the
-+ * This function implements a non-recursive way of freeing all of the
-  * nodes in the red-black tree.
-  */
- static void free_rb_tree_fname(struct rb_root *root)
-@@ -515,7 +515,7 @@ int ext4_htree_store_dirent(struct file *dir_file, __u32 hash,
- 
- /*
-  * This is a helper function for ext4_dx_readdir.  It calls filldir
-- * for all entres on the fname linked list.  (Normally there is only
-+ * for all entries on the fname linked list.  (Normally there is only
-  * one entry on the linked list, unless there are 62 bit hash collisions.)
-  */
- static int call_filldir(struct file *file, struct dir_context *ctx,
--- 
-2.25.1
-
+Best regards,
+Krzysztof

@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340304EFF71
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC464EFF81
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238797AbiDBHrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 03:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S1346885AbiDBHv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 03:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiDBHra (ORCPT
+        with ESMTP id S233833AbiDBHvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 03:47:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C3D43485
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:45:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7C8160FD6
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:45:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D45C340EC;
-        Sat,  2 Apr 2022 07:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648885538;
-        bh=MJ7b9c3E+nr51fYg+bLs09xCaDLg+mwoHo8xrQPdmdM=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=gTe9FQEsGX2DWtwkxFAeywtDpdPuha8W9QpuiHLMEAzbkE7nXyZcMTxrFprvpBSA2
-         FOR78HTNENSKY2Z/VXpyFhlkjjZBUKQCXAy3VK8y37uX4OzJCoJ/j0uwfgufnQfDqj
-         Xrge3R3OcL5eTLVsbSIBRz1bFyQJGge8/91/Q0438loexWSJTjGJEwutT6IzzZzhe6
-         1rdcESLeMrY7Am8/mAZAYBNzBls8XgctDbnoxAPomA2foOShPoue9+1Qx13EWEnobR
-         YjcwJAiFnbSaaZ8A9Rw39n6c1adNszVr0ekrD2FVA+pmHYrGd7BGNi23gqMCwV6F/h
-         91v8Fh87O0pyg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: page_alloc: simplify pageblock migratetype check in __free_one_page().
-References: <20220401135820.1453829-1-zi.yan@sent.com>
-        <134f56da-e827-2d29-75ba-1ec88ae2b118@redhat.com>
-        <66F9766D-A7D8-4310-9FA9-5EC8B2CC341C@nvidia.com>
-        <85520c49-5ef9-25f2-d6fa-f8b26e5dfec2@redhat.com>
-        <6696fb21-090c-37c6-77a7-79423cc9c703@redhat.com>
-Date:   Sat, 02 Apr 2022 10:45:33 +0300
-In-Reply-To: <6696fb21-090c-37c6-77a7-79423cc9c703@redhat.com> (David
-        Hildenbrand's message of "Fri, 1 Apr 2022 16:32:58 +0200")
-Message-ID: <87sfqwszc2.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Sat, 2 Apr 2022 03:51:19 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74135851;
+        Sat,  2 Apr 2022 00:49:27 -0700 (PDT)
+Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Sat, 2 Apr 2022
+ 15:49:25 +0800
+From:   Liang Yang <liang.yang@amlogic.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v4 0/2]  refine the NFC clock framework
+Date:   Sat, 2 Apr 2022 15:49:18 +0800
+Message-ID: <20220402074921.13316-1-liang.yang@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.21]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+Background firstly, 
+Both EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK' which is
+defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider and
+bit6~7 is the mux for fix pll and xtal.
+Previously a common MMC sub clock framework is implemented and shared by EMMC and
+NAND, but that is coupling the EMMC and NAND, although EMMC and NAND is mutually
+exclusive. see the link:
+[https://lore.kernel.org/all/1jy23226sa.fsf@starbuckisacylon.baylibre.com/]
+Now we plan to abandon common mmc sub clock framework and recovery the series.
 
-> On 01.04.22 16:22, David Hildenbrand wrote:
->> On 01.04.22 16:19, Zi Yan wrote:
->>> On 1 Apr 2022, at 10:12, David Hildenbrand wrote:
->>>
->>>> On 01.04.22 15:58, Zi Yan wrote:
->>>>
->>>> It's weird, your mails arrive on my end as empty body with attachment. I
->>>> first suspected Thunderbird, but I get the same result on the google
->>>> mail web client.
->>>>
->>>> Not sure why that happens.
->>>
->>> No idea. They look fine (except mangled links by outlook) on my outlook
->>> desk client and web client on my side. lore looks OK too:
->>> https://lore.kernel.org/linux-mm/20220401135820.1453829-1-zi.yan@sent.com/
->> 
->> I can spot in the raw mail I receive
->> 
->> "Content-Type: application/octet-stream; x-default=true"
->> 
->> But that seems to differ to the lore mail:
->> 
->> https://lore.kernel.org/linux-mm/20220401135820.1453829-1-zi.yan@sent.com/raw
->> 
->> 
->> Maybe something in my mail server chain decides to do some nasty
->> conversion (grml, wouldn't be the first time)
->> 
->
-> Weird thing is that this only happens with your mails. I opened an
-> internal ticket, sorry for the noise.
+Changes since v3 [4]
+ - use devm_platform_ioremap_resource_byname
+ - dt_binding_check for mtd/amlogic,meson-nand.yaml
 
-Zi's patch emails I received didn't have Content-Type, that might have
-something to do with this. (But his reply later in the thread did have
-one.) Also last week I got one patch email with no Content-Type either
-and my Gnus decided to convert it to octet-stream, I guess to be on the
-safe side. No idea if something similar is happening to you, but wanted
-to mention it anyway.
+Changes since v2 [3]
+ - use fw_name from dts, instead the wrong way using __clk_get_name
+ - reg resource size change to 0x800
+ - use reg-names
+
+Changes since v1 [2]
+ - use clk_parent_data instead of parent_names
+ - define a reg resource instead of sd_emmc_c_clkc 
+
+[1] https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+    https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+[2] https://lore.kernel.org/all/20220217063346.21691-1-liang.yang@amlogic.com
+[3] https://lore.kernel.org/all/20220318124121.26117-1-liang.yang@amlogic.com
+
+Liang Yang (2):
+  mtd: rawnand: meson: discard the common MMC sub clock framework
+  dt-bindings: nand: meson: refine Amlogic NAND controller driver
+
+ .../bindings/mtd/amlogic,meson-nand.txt       | 60 -------------
+ .../bindings/mtd/amlogic,meson-nand.yaml      | 80 +++++++++++++++++
+ drivers/mtd/nand/raw/meson_nand.c             | 89 +++++++++----------
+ 3 files changed, 122 insertions(+), 107 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.34.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

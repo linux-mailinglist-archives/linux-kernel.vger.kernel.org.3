@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10464F01CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 14:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110474F01D1
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 14:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354826AbiDBNAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 09:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S1354838AbiDBNAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 09:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349733AbiDBNAR (ORCPT
+        with ESMTP id S238974AbiDBNAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 09:00:17 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF86E93;
-        Sat,  2 Apr 2022 05:58:23 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5F01D5C0143;
-        Sat,  2 Apr 2022 08:58:23 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Sat, 02 Apr 2022 08:58:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=e72bX3p4b48wpbYJ/u6Hs+Uz3FIweL
-        zhnqtPOQPMPjM=; b=SJwtH7IQ/BxZxuwom9tizbP2N+RQW8uL17YE5OF//JiVVe
-        cLilGzTSKohekRmUXFU7VltAHtTqKkz8im8q3zbV84T9C3rRJmWoNYbCXaEoen4a
-        fnimMZXOFjcNTwZXn9lOaMSPGAfOYpCZYRYd5eHIbDRvLUgfr7GBHaQ/vvMTgASj
-        0CliNzPO/ASRsjOkKgVxgR4zp3rlUKVmSJbW2nZu3d8YQFqpZyrarYwn5CRfx6Vc
-        WbFiI4WX3yKNfFv42LIHwUGymAeSTmIl8R2beeqUhEOVoj2N2W0N8HpyWhUeH1Cg
-        Vfe1PdCMDiwlK53Yd3cPTNUT8ZDSs3FkLlsSFaTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=e72bX3p4b48wpbYJ/
-        u6Hs+Uz3FIweLzhnqtPOQPMPjM=; b=k8hPoDsiwXAQxi3pWhyRQKJznH3xEShQZ
-        IYwqTWouxkaiOeQ3ChYl8nP7gse1DKbNsPbHB58UuZXvX2A8ucrc9nPPCr5Bl62U
-        fJLcnqNutSRDtEZT5DgFBmMULg94wAzIRGybaq6U4LvTKmbuo+xAwWHsys5EbffY
-        GKrVZPTMURcJwqsXQ0S9FY/OKawTIovSdfV4NCT1yCZ15vgfsRBqGaTG//BFXKOW
-        6Fngvo0HVyLCWI0goaBd2NClyho2p0nkl3e0JepihUOqgIOJa3CJMfxhy7VILHSQ
-        M188UTqKwN6/E4s2cVc0IN64t9dkWplYohDeaV8ScgvKqwIYVNSkw==
-X-ME-Sender: <xms:b0hIYklJIM0pX0JCJbnUbgE9TXJFFEoKY8FYPh4i3B_7xKssGG3ukQ>
-    <xme:b0hIYj3m2H0a6GkAiIVaW1HiXktpnzt59XqO6FdnRcifGJInw8kZAvPOzNlDd6gU7
-    zWZknAfDUDX7XG0Ixo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeikedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:b0hIYiou0ZEGp6VP7aorJi682Sz8P-MSYgSoI1ZDF98DcJKTqz7Ohg>
-    <xmx:b0hIYgnQJUVedkTs5RTHn7YwpiTpx_fwKJQA4SxMqxHXVd4PkBCB1A>
-    <xmx:b0hIYi1ukTyTo3BRzPeTX1Cx4OmVtRInRnvwpdN4lBprihjaZRrIiQ>
-    <xmx:b0hIYrvlk-Do-LciSK47g_WhX_h0Jq8Wnf3rg7-OUfZYgFomO4a5kg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2514527402C7; Sat,  2 Apr 2022 08:58:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-382-g88b93171a9-fm-20220330.001-g88b93171
-Mime-Version: 1.0
-Message-Id: <076879ce-242e-4c24-9052-003de63d3f63@www.fastmail.com>
-In-Reply-To: <YkYbubNBD+J2XUCg@robh.at.kernel.org>
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-2-sven@svenpeter.dev>
- <YkYbubNBD+J2XUCg@robh.at.kernel.org>
-Date:   Sat, 02 Apr 2022 14:58:01 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Arnd Bergmann" <arnd@arndb.de>, "Keith Busch" <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "Marc Zyngier" <maz@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 1/9] dt-bindings: soc: apple: Add Apple SART
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 2 Apr 2022 09:00:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B0413DE9;
+        Sat,  2 Apr 2022 05:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648904332; x=1680440332;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1oh9WbktFqlG6EG6X9CN0PCZbltAesQdU2DAWj+J/rg=;
+  b=CKr++QeL2Wdaz4JQnjNr+yh8hR1Y4geLMbdcHxigFxFzNuW6P8PI3nuL
+   VXwIphV6wrv8pYlAxY8vAQOLJTd2n9Qv0nMvvouZCSpUMRGJBJ6xb2bM5
+   E/d89jpy8ox7rwrbw55I4vQ63yplQzY3/j/9UyhBgV1kWFb4LHnFrYN0o
+   en94PqMN+4NuTyqLGPFgL6Bh+xOUtqc0OP2FepTxlujaUF5sebUu+JLOM
+   gHURBOJxHWcA9BccMCANS8s+kHX9duVlpcBc6ER67Pwauun8T097085Rw
+   qYvYPJPF48V0Z4pZTdCOvyYndG8vkFHg90qqNTX7jvIOR0GL65U7lAO2p
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260286864"
+X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
+   d="scan'208";a="260286864"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 05:58:52 -0700
+X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
+   d="scan'208";a="548132631"
+Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.254.208.38]) ([10.254.208.38])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 05:58:45 -0700
+Message-ID: <1c6ad344-299c-bd78-c6e7-79a815e15ef1@intel.com>
+Date:   Sat, 2 Apr 2022 20:58:38 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 3/8] KVM: VMX: Detect Tertiary VM-Execution control
+ when setup VMCS config
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        Robert Hoo <robert.hu@linux.intel.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+ <20220304080725.18135-4-guang.zeng@intel.com> <YkYuDo3hOmcwA1iF@google.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <YkYuDo3hOmcwA1iF@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022, at 23:23, Rob Herring wrote:
-> On Mon, Mar 21, 2022 at 05:50:41PM +0100, Sven Peter wrote:
->> Apple SoCs such as the M1 come with a simple DMA address filter called
->> SART. Unlike a real IOMMU no pagetables can be configured but instead
->> DMA transactions can be allowed for up to 16 paddr regions.
->> 
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->>  .../bindings/soc/apple/apple,sart.yaml        | 52 +++++++++++++++++++
+
+On 4/1/2022 6:41 AM, Sean Christopherson wrote:
+> On Fri, Mar 04, 2022, Zeng Guang wrote:
+>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>> index c569dc2b9192..8a5713d49635 100644
+>> --- a/arch/x86/kvm/vmx/vmx.c
+>> +++ b/arch/x86/kvm/vmx/vmx.c
+>> @@ -2422,6 +2422,21 @@ static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
+>>   	return 0;
+>>   }
+>>   
+>> +static __init int adjust_vmx_controls_64(u64 ctl_min, u64 ctl_opt,
+> I slightly prefer controls64 over controls_64.  As usual, KVM is inconsistent as
+> a whole, but vmcs_read/write64 omit the underscore, so we can at least be somewhat
+> consistent within VMX.
 >
-> Close enough to an IOMMU in terms of its purpose, so put in 
-> bindings/iommu/
+>> +					 u32 msr, u64 *result)
+>> +{
+>> +	u64 allowed1;
+>> +
+>> +	rdmsrl(msr, allowed1);
+>> +
+>> +	/* Ensure minimum (required) set of control bits are supported. */
+>> +	if (ctl_min & ~allowed1)
+> Eh, just drop @ctl_min.  Practically speaking, there is zero chance tertiary
+> controls or any other control of this nature will ever be mandatory.  Secondary
+> controls would fall into the same boat, but specifying min=0 allows it to share
+> helpers, so it's the lesser of evils.
+>
+> With the error return gone, this can be
+>
+>    static __init u64 adjust_vmx_controls64(u64 ctl_opt, u32 msr)
+>    {
+> 	u64 allowed;
+>
+> 	rdmsrl(msr, allowed);
+>
+> 	return ctl_opt & allowed;
+>    }
 
-Ok, will put it there. I guess I can also use iommu for the node name
-then, e.g.
-
-    iommu@7bc50000 {
-      compatible = "apple,t8103-sart";
-      reg = <0x7bc50000 0x4000>;
-    };
+Make sense. I will change it.  Thanks.
 
 
-Thanks,
-
-
-Sven
+> Alternatively, we could take the control-to-modify directly and have no return,
+> but I like having the "u64 opt = ..." in the caller.

@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AED54F0568
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812E04F0570
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244981AbiDBSdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 14:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S245160AbiDBSmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 14:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiDBSdH (ORCPT
+        with ESMTP id S229851AbiDBSmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 14:33:07 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A521809;
-        Sat,  2 Apr 2022 11:31:14 -0700 (PDT)
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MXXhv-1nW8CN2sud-00YxDO; Sat, 02 Apr 2022 20:31:12 +0200
-Received: by mail-wr1-f52.google.com with SMTP id b19so8553791wrh.11;
-        Sat, 02 Apr 2022 11:31:12 -0700 (PDT)
-X-Gm-Message-State: AOAM5319j6kWjF5/v3am3fkZ/D+hDKh5bbIW7eksoqUsTNPierwopnXx
-        y9Z29B/ZdCL1TVrpUqLgaGkbstVX9sh7SoAXbS0=
-X-Google-Smtp-Source: ABdhPJxXeRBLN1ONxP6bjTAJFl4VK2LisOlNtuuiDZwD1HmyapvUcRapW/HdMhWyARa4Q7Topnt9ATX3Riix9x+xc68=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr11517977wrw.12.1648924272343; Sat, 02
- Apr 2022 11:31:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-6-sven@svenpeter.dev>
- <CAK8P3a2VgrWHerXTX4_wS8UU7fpN9-JZ5xESaWrr-WGYqGty=g@mail.gmail.com> <3166b80d-d8a6-45d5-9e3b-2f9998aca0d3@www.fastmail.com>
-In-Reply-To: <3166b80d-d8a6-45d5-9e3b-2f9998aca0d3@www.fastmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 2 Apr 2022 20:30:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=Q7JSBLOmxZxGArUx+3Ex8SjDx7Z5csms5k+_yES9zA@mail.gmail.com>
-Message-ID: <CAK8P3a1=Q7JSBLOmxZxGArUx+3Ex8SjDx7Z5csms5k+_yES9zA@mail.gmail.com>
-Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sat, 2 Apr 2022 14:42:10 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDA647AFA
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:40:18 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id w4so8553495wrg.12
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0bwaoRy8YP0Kka6d0PR4kRnGp6k/gPNidKoi7gvCCI=;
+        b=URDJ3cCHTnlp0bYj+GpNw8EIKiC1517X/uMlkAr23rxB/6VlQHcy/jrd0G6QM65nZX
+         2Luj++y1IZb5rOWXfFShm94mRf+nigTy7tk8+eiRNSXmVSUA07YeV8/G97iDXbAoySFP
+         wtrkxCHLyhLHZXrDRoMbnW0AFkVAsb18orB2ZK0Z0Cv0QD2unyangyc7QXsFHPjYOXpL
+         8GglQZrPbQSNPWHhMzsfoAWjBOF3ddtl1U3te8n8yEn7LmKtTNDeL/wO/j8yzMPDi0wd
+         d1Qc2LmnDf8Hkm2wZSQ0NW+bcExEihlFBUGL2EhfHKzYp4q8vERtnhJuda6dEG07gAHZ
+         /cWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0bwaoRy8YP0Kka6d0PR4kRnGp6k/gPNidKoi7gvCCI=;
+        b=4/EhXUslHUAuLHfhVjZZVftIo78y1t6bVYvGpPGc/TEaouHDspI18PDnOQIV6twbLn
+         vSDcuODuVPz43QIANFFb6Q6uSEeVzbe5p9Hs6n7kH72mT2GlxMTqU6vla9YG91TQ9TIy
+         cJMTew+LXL5zWU1E6oNudeDFz2uDJ6endZSzbcVDtMPV5xoMwuRx1vktWXs8bG9RNxgQ
+         ikVZDQd4GRhGRfLdURyCL5ssaUQOiO5+D83Bw52jnMHrYQUvYN6iT0cZrAD9vixgX/ek
+         gseYDxlAjEvVl8NQiaIipBNa7mzx9mNXWaj+Et9GcCqaI9JuC59llyUgrigdSpnDUkCu
+         hfgQ==
+X-Gm-Message-State: AOAM532W4YbXK6Gy9qtg3clqGRNjwPBw/WT4wc/LGBzHXXzWtMQQ02yM
+        fy2/jHoT2r2a4meBgiuXnC+/yg==
+X-Google-Smtp-Source: ABdhPJyr8f7Kmujacwvt6D5jb632G4JW2j0OdeTO8iHDHsAdsWcTY+7h1E41JoLr7Iu+uJ1G3+sN2g==
+X-Received: by 2002:a05:6000:1887:b0:204:2917:ad3e with SMTP id a7-20020a056000188700b002042917ad3emr11877380wri.138.1648924816609;
+        Sat, 02 Apr 2022 11:40:16 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id m20-20020a05600c4f5400b0038b5162260csm6760502wmq.23.2022.04.02.11.40.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 11:40:16 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lvDJJbjN0pkxrwEZ0rhM+kJtjSIYljW0mLHlIlnog5Bgc8qmWA3
- 9p2Ugkrag/2XVf0s68xp4q5iRmYZT3w5hIqB5AYLAUjICla2tmhSKJSi8XIRmyNsMc4yNJ9
- 49SO2fwaPEgNIW7l1NLvwEhGqm4m/iH0ONCpOTX2Os5GW1UcEmN4SMNhdc+aOwwvfdGrtO8
- EtoCFsowTj/I3WEHQozbQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eR2O3ZL9wiE=:dEjxpD1zZgLViDkpqbQ8Jo
- HM3ofhCIxlDCjegz8mvTSMtlThRkMmhbGG4T/S863lpLxI9oXqo+vFZfcL7dMwknQCOoSdLTQ
- ts7X7TYHgM8P1saZ++Lh0ElCSjNv63ae1cX1Ns4j3CogxHEAU7I7v0LYFIfV+q1eq6AU3QG/D
- Xnvy6ARU01j8jsDzL6cjpkJgU0VU6GZ+kBk9OZhpiO1EBCSp6o2QCCUvYPub5ahuzgFYMGKJz
- dSJyERE5R3WRlkocHABIfsrTsAHPoTsq0ROOBb2ux9nt+rjWYvWkPsmq3XxXUHkEdAQbnVxRC
- VRODgCaDZPJZfxA8+12ZSh4BumnLTf4kzcGwLTlgNGKpNiRR3Tuae0MIQc1cEE4/ey9Ua00+t
- 924n+xynOeQL0Z6NMKRTgk0/4Q20TRCmKykkNQL4CQ/tDytmGzmHZV5uBP9vyYIqEauFY9P2v
- wuoDgQ2DOe9b7boAr/Cg/2gtUVmov0QZNZ+ObcgD3OJjus1QXsOeER+CxCdRCCNi9uwZyDmR+
- bzd4tD552kpGPq7p4u1qqIc1NLC9wa5F+34xdo9QqAmBg6FvreI6Yxzsltv3tBNjy5LPLiL6u
- QM/Z546molSRCb7fRz6ixTlvhL/DaivJUYAJieZgSey92ar2p0NwezsgPcRfl2YD/WsxCk9/q
- /pxioLFDv6In49wOhsOR1rMr/2TSFQCFLp6NugOX8H9sYlHolQ3YIEIBxMV3y8FNGw6k=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/9] dt-bindings: qcom: convert entire GSBI (QUP I2C/SPI/UART) to DT schema
+Date:   Sat,  2 Apr 2022 20:40:02 +0200
+Message-Id: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 2:56 PM Sven Peter <sven@svenpeter.dev> wrote:
-> On Tue, Mar 22, 2022, at 14:13, Arnd Bergmann wrote:
-> >> +static int apple_rtkit_worker(void *data)
-> >> +{
-> >> +       struct apple_rtkit *rtk = data;
-> >> +       struct apple_rtkit_work work;
-> >> +
-> >> +       while (!kthread_should_stop()) {
-> >> +               wait_event_interruptible(rtk->wq,
-> >> +                                        kfifo_len(&rtk->work_fifo) > 0 ||
-> >> +                                                kthread_should_stop());
-> >> +
-> >> +               if (kthread_should_stop())
-> >> +                       break;
-> >> +
-> >> +               while (kfifo_out_spinlocked(&rtk->work_fifo, &work, 1,
-> >> +                                           &rtk->work_lock) == 1) {
-> >> +                       switch (work.type) {
-> >> +                       case APPLE_RTKIT_WORK_MSG:
-> >> +                               apple_rtkit_rx(rtk, &work.msg);
-> >> +                               break;
-> >> +                       case APPLE_RTKIT_WORK_REINIT:
-> >> +                               apple_rtkit_do_reinit(rtk);
-> >> +                               break;
-> >> +                       }
-> >> +               }
-> >
-> > It looks like you add quite a bit of complexity by using a custom
-> > worker thread implementation. Can you explain what this is
-> > needed for? Isn't this roughly the same thing that one would
-> > get more easily with create_singlethread_workqueue()?
->
-> I originally had just a workqueue here but I can only put
-> one instance of e.g. APPLE_RTKIT_WORK_MSG onto these.
-> There could however be a new incoming message while the previous
-> one is still being handled and I couldn't figure out a way
-> to handle that with workqueues without introducing a race.
+Hi,
 
-Are you trying to avoid dynamic allocation of the messages then
-and have no other place that you can embed it in?
+Changes since v2
+================
+1. Several new schema patches (GSBI, I2C and UART schema).
+2. Several DTS fixes for clocks and DMAs. The choice of dma tx-rx
+   and clocks core-iface was by more-or-less number of fixes needed.
+3. Add Kuldeep acks to patches without changes.
 
-If you kmalloc() a messages that embeds a work_struct, you can
-enqueue as many of those as you want, but the allocation adds
-complexity through the need for error handling etc.
+Changes since v1
+================
+1. Fix path in com/qcom,gsbi.txt.
+2. Merge clock-names in example, correct $ref path (Kuldeep).
 
-I wonder if you can change the mailbox driver to use a threaded
-irq handler, which I think should ensure that the callback here
-is run in process context, avoiding the need to defer execution
-within the rtkit driver.
+Merging
+=======
+1. The DTS patches are independent and silence warnings pointed
+    out by schema.
 
-         Arnd
+2. The DT schema patches should be taken together as GSBI (final patch)
+   depends on previous bindings.
+
+Best regards,
+Krzysztof
+
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+
+Krzysztof Kozlowski (9):
+  arm64: dts: qcom: align dmas in I2C/SPI/UART with DT schema
+  arm64: dts: qcom: align clocks in I2C/SPI with DT schema
+  ARM: dts: qcom: ipq4019: align dmas in SPI/UART with DT schema
+  ARM: dts: qcom: ipq4019: align clocks in I2C with DT schema
+  ARM: dts: qcom: msm8660: disable GSBI8
+  spi: dt-bindings: qcom,spi-qup: convert to dtschema
+  dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
+  dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
+  dt-bindings: qcom: qcom,gsbi: convert to dtschema
+
+ .../devicetree/bindings/i2c/qcom,i2c-qup.txt  |  40 ------
+ .../devicetree/bindings/i2c/qcom,i2c-qup.yaml |  89 ++++++++++++
+ .../bindings/serial/qcom,msm-uartdm.txt       |  81 -----------
+ .../bindings/serial/qcom,msm-uartdm.yaml      | 112 +++++++++++++++
+ .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
+ .../bindings/soc/qcom/qcom,gsbi.yaml          | 133 ++++++++++++++++++
+ .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 --------------
+ .../devicetree/bindings/spi/qcom,spi-qup.yaml |  81 +++++++++++
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |  36 ++---
+ arch/arm/boot/dts/qcom-msm8660.dtsi           |   1 +
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  20 +--
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |  40 +++---
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |  68 ++++-----
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         |  48 +++----
+ arch/arm64/boot/dts/qcom/msm8994.dtsi         |  42 +++---
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  36 ++---
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  92 ++++++------
+ 17 files changed, 607 insertions(+), 502 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
+
+-- 
+2.32.0
+

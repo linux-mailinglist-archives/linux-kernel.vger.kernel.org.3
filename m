@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115F24EFFC3
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2104EFFC8
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353969AbiDBIxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 04:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S1353978AbiDBIx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 04:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353945AbiDBIxK (ORCPT
+        with ESMTP id S1353946AbiDBIxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 04:53:10 -0400
-Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4081544BC
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:51:18 -0700 (PDT)
-Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-de48295467so5195495fac.2
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 01:51:18 -0700 (PDT)
+        Sat, 2 Apr 2022 04:53:12 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3E41544BC
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:51:20 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id i7so5060806oie.7
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 01:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vf9XrnRNNEu/g7WX3Cp+ZJwmHe6lW1eduApC7K6BbhE=;
-        b=j4xXeAsTbXwdT377xyxJfFrgd59iWXp7ELSyJv/EanKnQ6DUqM7TKGIHzdUAJwBhho
-         IfP92/Mu4xkb7coNtVbXepdb/BDiVtnO/ri84k0s5IenWecqphAeZiDhCpKLiikTU+Le
-         iJxeo8FeZ5r55plXaqBWsRyfw9tioVsq2pyYtxMggElcaVnSqMJ4rjjgn1lnJ2bmnACv
-         m6HfGppRv2L5jJYOFopWEj9iTHX1qjv1kHfy3BOqaZg1vPUL6Vwx7TQ48KeRQfZmrEc9
-         8p8IPjIaOIflSh+Klx1YPKYCicJ4SqF7Ep6mWy6uzd/Tur6gHbU4eZjvbZwcukbbeZBb
-         t+mw==
+        bh=dsvg2OPb+FuOq6QpPd6PmHwu11pbVJX0wlikRs5/Wus=;
+        b=RGOfLxghPwV+kPX7AQTR+zDf/CJEWHKRESbsvHUIpiBM6PEga0LCzHFs66cHxpzgKm
+         jsvZLVPrNUTRm9n52Qz8RmGluY2lEVgCxoko5jofqv3ei1S9+m9iOOmQuxP8GBZPaxQX
+         YCOLiVl9utI4JNC9PuBKgqa6Ynmy5nwIlJloCA+DwI4Pf8n1oWzWz+u0aMfOpLIuRGje
+         POK1WBHC+bKlEVFdyqS7U7YsAWSKOnNtTecYR830P3bwcWQCGH8NmZ29MoHBMtTDn/mx
+         OORf/gDhMe1uKP0C96pbWUUWdE8WP3ak5JdiTaS5luhJIje71/O4hXJFXhKbm7tUMiMH
+         UCaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vf9XrnRNNEu/g7WX3Cp+ZJwmHe6lW1eduApC7K6BbhE=;
-        b=2MgqSbUSEk8FOF29ZnkHsY0RzNK9RlJ18zpReLeg39s9JpgAVWqaAz2+nJ3JPiJULt
-         tl9Mx3mJrtn8upsTrrm8jrFMCo3FNnzohAnHU8X2Z/K51VPmQNB1T/RSgej1f09MTjrr
-         TYelcVPE0Upi7xBHLvqtUKyy+ZwJF/ChTIZEDOLOxy4M+Pk9z9haTHQa5goOSD8tHYLq
-         I2BBJ3a6bMklCtCtTdBaF188yybvhAloFJnOzrj8Tj8oKC5aIJBgrwXxbQZ+mk2WxJ5W
-         oTypWMPp7PmACoFd8/d6rj1sQpl/3ioz2OpJMK60STVSP7beb8hW27yUDGmT/OWaJRZB
-         lXwQ==
-X-Gm-Message-State: AOAM531ep+DVE0tad62DCnmke/ApjxJVzgmocDsmU7Td5sOx/tgDb9l4
-        i8h2GAuU1v/pjiZ1zilKxqJ5QWzaY+F+EA==
-X-Google-Smtp-Source: ABdhPJz0isEyVWmgEv8MhEfi7jtm1pbgdsRBYf6wjvSELYX1zdlwt+fTQ0mw2iorYuRZP969f1KQXw==
-X-Received: by 2002:a05:6871:787:b0:df:f1a:2d9c with SMTP id o7-20020a056871078700b000df0f1a2d9cmr6599085oap.1.1648889477542;
-        Sat, 02 Apr 2022 01:51:17 -0700 (PDT)
+        bh=dsvg2OPb+FuOq6QpPd6PmHwu11pbVJX0wlikRs5/Wus=;
+        b=YErGdGVW0tg1VUWNK3jD9/rMXP0LMGCKKRcUCFgmm1SpHmz29UDkDTHksfDQEovMWy
+         cDqaQ2CVZV19/dKRKmsCyUg8EUtvVgSJpAtQPg7KfHWeEFSbsNvq6V3Itu39WaQyDkgl
+         gCAJy9+ZdQys3C8h9hLOEiq2w8LODF6H30kv0vqUgruuX3lGNd6ocPU+ZrLP03IjonXk
+         doNLZUEjG/U3YvWdDBKXCDW645uFD0WpruyGIJBrH5vztzxJ2Az2HlMmkTghP76tKOGq
+         9IkhuvWYKUlXMW8mMKRZR3OPaBalKtlTV11YtIEjdbyL2kOtkH3Ly9BiWTH/WYyNSuP2
+         //FA==
+X-Gm-Message-State: AOAM532LR/XIVQyA+N/Oa6Lvomp7sXvPR+XEqY09K/LVnS7HtotE2myg
+        khVOedt+JnpgiY7Fbc14sb8=
+X-Google-Smtp-Source: ABdhPJwoPr/yNxlNco+MBnjGbe6z2GYhCoF34vsMysOvLuORVPIv7QjCe6vQqUcHd8o8Nyro437AZw==
+X-Received: by 2002:a05:6808:1883:b0:2da:3ed2:68cf with SMTP id bi3-20020a056808188300b002da3ed268cfmr6561466oib.204.1648889480241;
+        Sat, 02 Apr 2022 01:51:20 -0700 (PDT)
 Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id bg39-20020a056820082700b00324c8eba341sm2074930oob.18.2022.04.02.01.51.17
+        by smtp.gmail.com with ESMTPSA id q11-20020a4a330b000000b003289cbe97c6sm2057675ooq.13.2022.04.02.01.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 01:51:17 -0700 (PDT)
+        Sat, 02 Apr 2022 01:51:19 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     outreachy@lists.linux.dev
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -55,9 +55,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH 3/6] staging: r8188eu: correct misspelling in comment "conider" -> "consider"
-Date:   Sat,  2 Apr 2022 03:50:45 -0500
-Message-Id: <5799315f84e50db2a7d05b74cd4ed9ec2f28a8e2.1648888461.git.remckee0@gmail.com>
+Subject: [PATCH 4/6] staging: r8188eu: format block comments
+Date:   Sat,  2 Apr 2022 03:50:46 -0500
+Message-Id: <0387f3df49d89c17acf96cf072e70c98e81e58f7.1648888462.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1648888461.git.remckee0@gmail.com>
 References: <cover.1648888461.git.remckee0@gmail.com>
@@ -73,28 +73,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling typo. Reported by checkpatch:
+Add ' * ' or ' ' to beginning of block comment lines
+to conform to Linux kernel coding style.
 
-CHECK: 'conider' may be misspelled - perhaps 'consider'?
+Reported by checkpatch:
+
+WARNING: Block comments use * on subsequent lines
 
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_cmd.c | 29 +++++++++++++-------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 09fde5b23ce2..2e135bbd836a 100644
+index 2e135bbd836a..0c659b40aa1c 100644
 --- a/drivers/staging/r8188eu/core/rtw_cmd.c
 +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -293,7 +293,7 @@ int rtw_cmd_thread(void *context)
- 				rtw_free_cmd_obj(pcmd);
- 			else
- 				/* todo: !!! fill rsp_buf to pcmd->rsp if (pcmd->rsp!= NULL) */
--				pcmd_callback(pcmd->padapter, pcmd);/* need conider that free cmd_obj in rtw_cmd_callback */
-+				pcmd_callback(pcmd->padapter, pcmd);/* need consider that free cmd_obj in rtw_cmd_callback */
- 		} else {
- 			rtw_free_cmd_obj(pcmd);
- 		}
+@@ -12,9 +12,9 @@
+ #include "../include/rtl8188e_dm.h"
+ 
+ /*
+-Caller and the rtw_cmd_thread can protect cmd_q by spin_lock.
+-No irqsave is necessary.
+-*/
++ * Caller and the rtw_cmd_thread can protect cmd_q by spin_lock.
++ * No irqsave is necessary.
++ */
+ 
+ static int _rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
+ {
+@@ -97,14 +97,13 @@ static void _rtw_free_cmd_priv(struct cmd_priv *pcmdpriv)
+ }
+ 
+ /*
+-Calling Context:
+-
+-rtw_enqueue_cmd can only be called between kernel thread,
+-since only spin_lock is used.
+-
+-ISR/Call-Back functions can't call this sub-function.
+-
+-*/
++ * Calling Context:
++ *
++ * rtw_enqueue_cmd can only be called between kernel thread,
++ * since only spin_lock is used.
++ *
++ * ISR/Call-Back functions can't call this sub-function.
++ */
+ 
+ static int _rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
+ {
+@@ -319,10 +318,10 @@ int rtw_cmd_thread(void *context)
+ }
+ 
+ /*
+-rtw_sitesurvey_cmd(~)
+-	### NOTE:#### (!!!!)
+-	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock
+-*/
++ * rtw_sitesurvey_cmd(~)
++ *	### NOTE:#### (!!!!)
++ *	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock
++ */
+ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid, int ssid_num,
+ 	struct rtw_ieee80211_channel *ch, int ch_num)
+ {
 -- 
 2.32.0
 

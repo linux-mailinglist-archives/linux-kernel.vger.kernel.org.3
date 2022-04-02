@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51384F061F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9535C4F0627
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiDBUVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 16:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S237985AbiDBU23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 16:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344372AbiDBUVB (ORCPT
+        with ESMTP id S236741AbiDBU21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 16:21:01 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D057336E01
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 13:19:07 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id u16so8840316wru.4
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 13:19:07 -0700 (PDT)
+        Sat, 2 Apr 2022 16:28:27 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DED512109F
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 13:26:35 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id jo24so4595370qvb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 13:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=efzOv4dIr4tgBETsjp5OsgnPN6Aum/KcEtDZ5+WY/5s=;
-        b=NWCjcZfwqzrcjp5G5OuxNnq/23Iby1ljMuBql2dbBOBMNfS6NzDqEVqTbC0EETLXxw
-         9U9H72AWN9sdKdf4Ds5vMKB0jy7J8JqOVB8NWX6zyWmv1ZNy9P71C9heOmKCvJhSX9sB
-         rJhUI5CgZwfD5XZxm7gS9hELr3qWF9wY3KHePW5cvO9ismWLhNC+9vbjVaawNAWYHt3E
-         t1OtmWsPSjuP1X4If5aUxoxG3bxQBBSDeMfnljMbpCyH/JvOStbnsesYxBL1Tg+gVmPi
-         r7ZDAFCaXKIaNjkgnKj9OOtz03dpR6cthm3YvqSBnJZ+8bELz8fvkBGlhVL8ViSPc9RW
-         6wFw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QB0eo72y6FVZ0oU4JIps4fOnMAO+oClDWy1YjIZjL/c=;
+        b=WsjkuDwwoa3g9mvKJsL+Y+5IhFD3xsQFVDkNUAS3Mzmr/ZWiDeLtX6UdpE5KCpPAkU
+         4DYT/K9KCCotzJ6zlWueDyGuQXB68VflTcz212Ml55fDJYI+Jn7XFwfnxiXCrUr5xZ2B
+         yVwU+edqQJ1OkNakKYD+55rEMoNOl15O0DluBw7AgLSZ3ABcDzs48xYfRVTTeHIqPOhb
+         S9pl6SmynSKzB4zo3/xu9Puf6lk6lja5bR9vMXBQQKYyqiBJAFInLhgZLZXEnaDFxXr+
+         ZtpdliCY5R9nlEndcV3coBblNz9gs7fbixEw9JuNVFMHtHxipiW40TTbzpcGXCOr+BRr
+         dBAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=efzOv4dIr4tgBETsjp5OsgnPN6Aum/KcEtDZ5+WY/5s=;
-        b=RiuC6r2DVtLZZqgsbHX5xs1z937UrEoly1tocdv+Z7U3uUb6r9ussSNrTJxwvPTotJ
-         O4/WgwEzZWM7uMM7AlhsaB+RYu7/C8CrBG8qJLzz3QvD4Jc3DS4Jd4JPjpIaS3eOmHPp
-         YS4VdEaiaawSmyJTuHqsJ9AijB6PAIo/T+BtT5nA5yKOC3lEJzRYau6fahiXxU7g2QC3
-         b6suOHxJe/nmUyAFkiCPEbFHa1FRmYX6d5hred7tN3715d0o/YEqeNTkSqkTLYNlbIzb
-         rxjegoETeQmoDTewplxKUvGTSmJTsKQwSYKezIEE6iYcT0AX3Co88UvISfa5HtbxBgbg
-         yYdw==
-X-Gm-Message-State: AOAM530GXHanlQcPXwTEZ3czId1Cf984kgItBGomdLxsuYzp5N5ytJ4t
-        8lTWTnCZlRkjqlkNykSDMGuY6g==
-X-Google-Smtp-Source: ABdhPJwwADkU22Qt/uwzkEAdoHaiz77EIhH44oK6ZYfgfzgGV14uHRVicGD7jKPWsdyDYtAt/fb4Sg==
-X-Received: by 2002:a5d:58d9:0:b0:203:fc5c:ba87 with SMTP id o25-20020a5d58d9000000b00203fc5cba87mr11845270wrf.79.1648930746405;
-        Sat, 02 Apr 2022 13:19:06 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id 2-20020a056000154200b00203ee1fd1desm5810812wry.64.2022.04.02.13.19.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 13:19:05 -0700 (PDT)
-Message-ID: <793a88b8-148e-c9a0-3c21-4f15380e1085@linaro.org>
-Date:   Sat, 2 Apr 2022 22:19:05 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QB0eo72y6FVZ0oU4JIps4fOnMAO+oClDWy1YjIZjL/c=;
+        b=hPyfSrNV+YZubik+5LroGohP86GgGISEzBcEzdpryMvWG/WVa2KYF4k76JmX6nYgjv
+         eIQOIvoEhVVEFenDEOV+3iDlPW184O0TGZ2tkN7zjyqsFF1Sxo4VnqMIhgj9fWaLQdTt
+         3jiPsrwvjXLBKziQPgEahzuGWznKW/qHnaeJN2J0dOABjnRp27/mstFii7Sh8tnh3iZg
+         QZpIwQzF7SPcXrlETJ4jvyy1FRStkvlqr/tZ3s4d3adqZPSzdC2+Wr058X7/ZE04VOjj
+         kCl/DNO/pWRVEmDDSHJxviSIfVNWMhfbYhroEc6tPWmGZ2pgjWZhdj/cH6G5+ZSY2C41
+         rKtw==
+X-Gm-Message-State: AOAM5314hxd7C+BLohq0KFWxpgT8eHDWdxqe3mgjWENLCHDYCJkExEzQ
+        r5pOppXYQUtQJqnIW5EXhHqA0DPPthPpZFqnVXzgDQ==
+X-Google-Smtp-Source: ABdhPJyOclbx6ZxnfFkNqKq1SFZp9RuXDLSvl9rQ8srJRugzrvyKznh3ayrfvwqMdnFoa8uizhMrAJf2kev/oVHQDZs=
+X-Received: by 2002:a05:6214:921:b0:443:ce3d:577b with SMTP id
+ dk1-20020a056214092100b00443ce3d577bmr1502390qvb.122.1648931194181; Sat, 02
+ Apr 2022 13:26:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 28/33] dt-bindings: crypto: rockchip: convert to new
- driver bindings
-Content-Language: en-US
-To:     LABBE Corentin <clabbe@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-References: <20220401201804.2867154-1-clabbe@baylibre.com>
- <20220401201804.2867154-29-clabbe@baylibre.com>
- <30305936-4b69-e1ce-44c2-0d1d113b460e@linaro.org> <Ykitm1uLmQtNy3b2@Red>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Ykitm1uLmQtNy3b2@Red>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
+ <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
+In-Reply-To: <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 2 Apr 2022 23:26:22 +0300
+Message-ID: <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        quic_aravindh@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,31 +84,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/04/2022 22:10, LABBE Corentin wrote:
-> Le Sat, Apr 02, 2022 at 01:53:58PM +0200, Krzysztof Kozlowski a écrit :
->> On 01/04/2022 22:17, Corentin Labbe wrote:
->>> The latest addition to the rockchip crypto driver need to update the
->>> driver bindings.
->>>
+On Sat, 2 Apr 2022 at 20:06, Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Sat, Apr 2, 2022 at 3:37 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On 01/04/2022 02:22, Doug Anderson wrote:
+> > > Hi,
+> > >
+> > > On Wed, Mar 30, 2022 at 9:03 AM Sankeerth Billakanti
+> > > <quic_sbillaka@quicinc.com> wrote:
+> > >>
+> > >> @@ -1547,6 +1593,10 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+> > >>
+> > >>          dp_display->encoder = encoder;
+> > >>
+> > >> +       ret = dp_display_get_next_bridge(dp_display);
+> > >> +       if (ret)
+> > >> +               return ret;
+> > >
+> > > It feels weird to me that this is in a function called "modeset_init",
+> > > though I certainly don't know the structure of the MSM display code
+> > > well enough to fully comment.
+> >
+> > It's called modeset_init() as it initializes KMS objects used by DP
+> > driver. We have similar functions for dsi and hdmi
+>
+> Sorry, I wasn't meaning to imply that modeset_init() was a bad name or
+> anything. Mostly saying that I wasn't sure that modeset init was the
+> proper time to populate the aux bus. ...but then again, perhaps it is
+> given the current structure of this driver?
+>
+>
+> > > My expectation would have been that
+> > > devm_of_dp_aux_populate_ep_devices() would have been called from your
+> > > probe routine and then you would have returned -EPROBE_DEFER from your
+> > > probe if you were unable to find the panel afterwards.
+> >
+> > I don't think it's possible to call it from probe() since
+> > drm_dp_aux_register() is called only from dp_display_bind().
+> > The PHY also isn't initialized at that moment, so we can not probe AUX
+> > devices.
+> >
+> > The overall semantics of the AUX bus is not clear to me.
+> > Typically the bus is populated (and probed) when devices are accessible.
+> > But for the display related buses this might not be the case.
+>
+> In general the AUX bus is modeled much like the i2c bus. You probe the
+> sub-device when you're able to transfer. Then you can confirm that the
+> device is actually there and init the device.
+>
+>
+> > For example for the DSI bus we clearly define that DSI transfer are not
+> > possible before the corresponding bridge's (or panel's) enable call.
+> >
+> > Maybe the same approach should be adopted for the AUX bus. This would
+> > allow us to populate the AUX bus before hardware access is actually
+> > possible, thus creating all the DRM bridges before the hardware is
+> > actually up and running.
+>
+> So I guess what you're proposing is that you could probe the devices
+> under the AUX bus and they could acquire resources (and possibly
+> return EPROBE_DEFER) at a point in time _before_ it's actually
+> possible to transfer. Then I guess you'd later do the transfer?
 
->>>  
->>>    reset-names:
->>> -    maxItems: 1
->>> +    deprecated: true
->>
->> Why reset-names are being deprecated? Did we talk about this?
->>
-> 
-> Since I use the devm_reset_control_array_get_exclusive, there is no need to have reset-names.
+Exactly.
 
-The reset-names are not only for Linux driver. In any case, Linux driver
-could get always reset/clock/gpio by index, not by name.
+>
+> I guess conceivably one could re-design the DRM subsystem like that,
+> but I don't think it's trivial.
 
-Additionally, there can be different implementation in different
-system/user of bindings.
+The problem is that the DRM subsystem is already designed like that.
+All the bridge chains are static. They are created during the device
+probe. And the modes are populated later (via the get_modes()
+callback), after the HPD signal is delivered.
+For the encoder/bridge chains it is explicitly stated that the display
+pipe (clocks and timing signals) are not running before bridge's
+enable() callback or after the disable() callback being called.
 
-Therefore the driver implementation does not matter (or matters little)
-for the bindings, so for multi entries the reset-names are needed.
+> Why? I believe that we need to know
+> things about the panel at probe time. For instance, we need to be able
+> to populate the panel's modes.
 
-Best regards,
-Krzysztof
+As I said, panel modes are not needed at the probe time. The fact that
+most (if not all) of the panel drivers provide them in the platform
+data (and thus modes are typically populated at the probe time) comes
+from the fact that the panel is usually a known static piece of
+hardware. With the generic edp-panel this is no longer the case. A
+single device handles a (probed) variety of panels.
+
+Compare it with the generic monitor:
+We have a known bridge (display-connector.c), so the driver can build
+the display chain. However a set of modes is not known till the actual
+monitor is plugged into the device.
+
+> To get this information we need the
+> EDID which means we need to be able to do a transfer. If we're using
+> an AUX backlight we also need to add info about the backlight at probe
+> time and that also needs the transfer to work.
+
+Yes, the backlight is the problem in the suggested design. I'm not
+sure when panel->backlight has to  be populated for things to work.
+If we can set it after the probe but before calling into
+mode_set/drm_bridge_chain_enable(), then it should be fine.
+
+> So I guess the net result is maybe we should just keep it where it is.
+> Long term I'd be interested in knowing if there's a reason why we
+> can't structure the driver so that AUX transfers can happen with less
+> intertwining with the rest of the code, but that can happen later. I
+> would expect that you'd basically just need clocks and regulators on
+> and maybe your PHY on. Ideally with some pm_runtime fun we should be
+> able to do that independently with anything else the driver needs to
+> do?
+
+Not really. The driver is shared between the DP and eDP. And the DP
+(well, combo DP+USB-C) part has quite logical expectations that e.g.
+AUX channel is not up until all negotiations about the USB-C altmodes
+are done and the HPD event is delivered. This is the source for my
+suggestion regarding AUX bus rework/redesign. For non-eDP cases the
+connected device becomes known much later than the dp_parser code runs
+(and much later than all the bridges are to be instantiated).
+
+Another option would be to keep common drm/msm/dp core code and split
+the actual driver code into two distinct code paths: one supporting
+DP, another one supporting eDP. I think, up to now we were trying hard
+to stay away from such a split.
+
+-- 
+With best wishes
+Dmitry

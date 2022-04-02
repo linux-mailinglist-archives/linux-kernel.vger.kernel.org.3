@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1234EFD9B
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260AC4EFDA0
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353570AbiDBBLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 21:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S1353619AbiDBBLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 21:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiDBBK5 (ORCPT
+        with ESMTP id S1345558AbiDBBK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:10:57 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1BE6D94B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:09:06 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id s16-20020a170902ea1000b00156547b6480so2249653plg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:09:06 -0700 (PDT)
+        Fri, 1 Apr 2022 21:10:59 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15568A328
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:09:07 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id 138-20020a621690000000b004fa807ac59aso2421061pfw.19
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=/1wxMj6jCJrsK/pQsyLWuXEZU/vcrnhmetMutoLaFvY=;
-        b=CvNjCgpZkc+ER6pdWcmdyEtG+rzW/ZolNjH6uaIxWBctfKYnNBLzWoGvpRrRjLxPxL
-         bgDYWN8WTGeRM1F3zmDjFRByRmX74vFkCJUuhvPxm+D5dmEkWDzYJTnsw4dhh/qoKFrt
-         Ry8T0Dfrm30U3tXSDHEcVSNJA7U/usImovQ1uz2yKF5wm5U719ZMAlim7qSTjLvXHdcy
-         PTGgqbXkFuQVMdouyWIOMEhHrjeefioCyj5dCSaaKKzlmgm75bgl0qlKFoxNfRLyjSUP
-         mMC7t4R+TPMp3xFwtgGbas9vCvaj91hhm9wVUa69qQ8HsaR2Iekw2Vlg3YY7qqrA6nNa
-         fgOg==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=QQuySiCRGCJ6RvPIQ/BSFIhGVMRh766oWZ6w5lwsmv4=;
+        b=HBsk46CaOocW/1oIhQTdaU2YWrEICiKdWGKu4ZKgs7qvpVBmvildZd/bEgCiEKbqiO
+         RPYXO+Ret09cI0WIspij5+anNJWHBVMruj+veU56AX1l7pHRbJl1bt6hq3X3C0yk8ema
+         pZAj0YysYkR4F/fSdoGF1rC94qijWnVQ1PiDiZWrmBZXbPY3EBGGf7NW1p2KdGsDZ/ez
+         uyRWg0eY1nOvK7E2k2YRd5M8lCQUg8gzdcwrjmlJ4snsL21qUAOrq63TrmrrOyo0uc/2
+         uKIur0FCevxRs4x5oT4sgQLPIxFvx9EdHiA93RdQY1sdz7SWnnl66RBxDPWlvVGVPNbq
+         aZUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=/1wxMj6jCJrsK/pQsyLWuXEZU/vcrnhmetMutoLaFvY=;
-        b=O/Bj/20G7p0LwcCABX0dzfP08H4gXdC/oCVvnKMcCr3Dg2O6sQTsiMc1QgHV7G2Pp8
-         8P3Z6xhHaC9F8/MDYC/S5jpFrvzdzqB2vy1bEMFNMPzmt2ZM9E6GUrl4y8xGkGrcNJtY
-         tA1pTwof5SaalNf5ZGaqAjaqiD+8aGV2x8WcR6DLbQOEScPAfSSAsyF/f+nNaOSwmJzk
-         P9IWwWYBCncsNTx2mAzfSMqfxTL6qt2Rv//UuFMQe1ovVSomr6hADA2BWNZLlX9pdmNr
-         Pg+ixClynr7Q6CD13JoCDPGiAgB6KvuOeRy9vsvwjcB0Nf4cK54iQoqsV0cOI/N4udr2
-         GRfQ==
-X-Gm-Message-State: AOAM5328SntXJDVSjmgFzX6RRnOBPsozkILlzZ0OCD6NhsOAgko+4/cp
-        ovLpIUEPvxicKGT9I49YLjV364MPcqw=
-X-Google-Smtp-Source: ABdhPJxNbjj3Vl+VEt342h9Nhha05W09e+MKtMj/sK89bcHH0ZUQfiIceLYmQ/ZSb7UqAC2YYU6m1MkpKU8=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=QQuySiCRGCJ6RvPIQ/BSFIhGVMRh766oWZ6w5lwsmv4=;
+        b=ZMCu73Ofj5h14RNkoMZxmnkvu2jcWui821lcwBwNPgUJTqtjMT8E9tHngJJ+f3mr9U
+         Hpeyv6xXrRh0A8vqfABUN5TnqFK/3lP8MM4dHz7ORl2asryfy6HGSpdmj9bnqInMdoPJ
+         /ahrH2s+/Q6hgVl/cUsMaNgyGHYWBCR9QWOcLsKfBd+Zkz8/T5jnZdBwy78iZd8hrM0Z
+         POMg0qa2RvOvd4+uot3neHehX8LHj1KXOsgXJHo/AzTKIHbnNwRf0Kn/LDQQNqNbeqDk
+         Qem90Vq/wud13g1+IeRajd0MVy+Eiqi1z7LOsv4b7+Qegc6Rwol1FJa4QullzSKVtHOT
+         eqdw==
+X-Gm-Message-State: AOAM531gpzjuEbfdqehrPRtql3EtMtXq7SEd2rmKZMyp4Te/SYhxvHz0
+        YjofBYCyjpF+3iu81M99IJuYGYWSJRU=
+X-Google-Smtp-Source: ABdhPJxcxwbjgBmS5S7Od5qo4C/vjgUz/Mr0NzGn5XnSKA7RaYrosjsr0mT7mv79D4saIgkrMnnPAakU9Zc=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:1ad3:0:b0:4fa:9adc:7680 with SMTP id
- a202-20020a621ad3000000b004fa9adc7680mr13639453pfa.25.1648861745619; Fri, 01
- Apr 2022 18:09:05 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:24c6:b0:4fd:9038:74f0 with SMTP id
+ d6-20020a056a0024c600b004fd903874f0mr13594229pfv.63.1648861747326; Fri, 01
+ Apr 2022 18:09:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  2 Apr 2022 01:08:55 +0000
-Message-Id: <20220402010903.727604-1-seanjc@google.com>
+Date:   Sat,  2 Apr 2022 01:08:56 +0000
+In-Reply-To: <20220402010903.727604-1-seanjc@google.com>
+Message-Id: <20220402010903.727604-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220402010903.727604-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH 0/8] KVM: SVM: Fix soft int/ex re-injection
+Subject: [PATCH 1/8] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -64,62 +67,114 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a continuation/alternative of Maciej's series[*] to fix soft
-interrupt/exception reinjection.  The core difference is that this version
-fixes the underlying issue of not doing proper reinjection, which
-manifests most readily as the nested virtualization bugs Maciej's series
-addressed.
+From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 
-The underlying issue is that SVM simply retries INT* instructions instead
-of reinjecting the soft interupt/exception if an exception VM-Exit occurred
-during vectoring.  Lack of reinjection breaks nested virtualization if
-the injected event came from L1 and the VM-Exit is not forwarded to L1,
-as there is no instruction to retry.  More fundamentally, retrying the
-instruction is wrong as it can produce side effects that shouldn't occur,
-e.g. code #DBs.
+The next_rip field of a VMCB is *not* an output-only field for a VMRUN.
+This field value (instead of the saved guest RIP) in used by the CPU for
+the return address pushed on stack when injecting a software interrupt or
+INT3 or INTO exception.
 
-VMX has been fixed since commit 66fd3f7f901f ("KVM: Do not re-execute
-INTn instruction."), but SVM was left behind.  Probably because fixing
-SVM is a mess due to NRIPS not being supported on all architectures, and
-due to it being poorly implemented (with respect to soft events) when it
-is supported.
+Make sure this field gets synced from vmcb12 to vmcb02 when entering L2 or
+loading a nested state and NRIPS is exposed to L1.  If NRIPS is supported
+in hardware but not exposed to L1 (nrips=0 or hidden by userspace), stuff
+vmcb02's next_rip from the new L2 RIP to emulate a !NRIPS CPU (which
+saves RIP on the stack as-is).
 
-[*] https://lore.kernel.org/all/cover.1646944472.git.maciej.szmigiero@oracle.com
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Co-developed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/nested.c | 22 +++++++++++++++++++---
+ arch/x86/kvm/svm/svm.h    |  1 +
+ 2 files changed, 20 insertions(+), 3 deletions(-)
 
-Maciej S. Szmigiero (3):
-  KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
-  KVM: SVM: Downgrade BUG_ON() to WARN_ON() in svm_inject_irq()
-  KVM: selftests: nSVM: Add svm_nested_soft_inject_test
-
-Sean Christopherson (5):
-  KVM: SVM: Unwind "speculative" RIP advancement if INTn injection
-    "fails"
-  KVM: SVM: Stuff next_rip on emualted INT3 injection if NRIPS is
-    supported
-  KVM: SVM: Re-inject INT3/INTO instead of retrying the instruction
-  KVM: SVM: Re-inject INTn instead of retrying the insn on "failure"
-  KVM: x86: Trace re-injected exceptions
-
- arch/x86/kvm/svm/nested.c                     |  22 ++-
- arch/x86/kvm/svm/svm.c                        | 135 ++++++++++++----
- arch/x86/kvm/svm/svm.h                        |   5 +-
- arch/x86/kvm/x86.c                            |   8 +-
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/svm_util.h   |   2 +
- .../kvm/x86_64/svm_nested_soft_inject_test.c  | 147 ++++++++++++++++++
- 8 files changed, 279 insertions(+), 42 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-
-
-base-commit: 81d50efcff6cf4310aaf6a19806416ffeccf1cdb
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 73b545278f5f..9a6dc2b38fcf 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -369,6 +369,7 @@ void __nested_copy_vmcb_control_to_cache(struct kvm_vcpu *vcpu,
+ 	to->nested_ctl          = from->nested_ctl;
+ 	to->event_inj           = from->event_inj;
+ 	to->event_inj_err       = from->event_inj_err;
++	to->next_rip            = from->next_rip;
+ 	to->nested_cr3          = from->nested_cr3;
+ 	to->virt_ext            = from->virt_ext;
+ 	to->pause_filter_count  = from->pause_filter_count;
+@@ -606,7 +607,8 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
+ 	}
+ }
+ 
+-static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
++static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
++					  unsigned long vmcb12_rip)
+ {
+ 	u32 int_ctl_vmcb01_bits = V_INTR_MASKING_MASK;
+ 	u32 int_ctl_vmcb12_bits = V_TPR_MASK | V_IRQ_INJECTION_BITS_MASK;
+@@ -660,6 +662,19 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+ 	vmcb02->control.event_inj           = svm->nested.ctl.event_inj;
+ 	vmcb02->control.event_inj_err       = svm->nested.ctl.event_inj_err;
+ 
++	/*
++	 * next_rip is consumed on VMRUN as the return address pushed on the
++	 * stack for injected soft exceptions/interrupts.  If nrips is exposed
++	 * to L1, take it verbatim from vmcb12.  If nrips is supported in
++	 * hardware but not exposed to L1, stuff the actual L2 RIP to emulate
++	 * what a nrips=0 CPU would do (L1 is responsible for advancing RIP
++	 * prior to injecting the event).
++	 */
++	if (svm->nrips_enabled)
++		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
++	else if (boot_cpu_has(X86_FEATURE_NRIPS))
++		vmcb02->control.next_rip    = vmcb12_rip;
++
+ 	vmcb02->control.virt_ext            = vmcb01->control.virt_ext &
+ 					      LBR_CTL_ENABLE_MASK;
+ 	if (svm->lbrv_enabled)
+@@ -743,7 +758,7 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
+ 	nested_svm_copy_common_state(svm->vmcb01.ptr, svm->nested.vmcb02.ptr);
+ 
+ 	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+-	nested_vmcb02_prepare_control(svm);
++	nested_vmcb02_prepare_control(svm, vmcb12->save.rip);
+ 	nested_vmcb02_prepare_save(svm, vmcb12);
+ 
+ 	ret = nested_svm_load_cr3(&svm->vcpu, svm->nested.save.cr3,
+@@ -1422,6 +1437,7 @@ static void nested_copy_vmcb_cache_to_control(struct vmcb_control_area *dst,
+ 	dst->nested_ctl           = from->nested_ctl;
+ 	dst->event_inj            = from->event_inj;
+ 	dst->event_inj_err        = from->event_inj_err;
++	dst->next_rip             = from->next_rip;
+ 	dst->nested_cr3           = from->nested_cr3;
+ 	dst->virt_ext              = from->virt_ext;
+ 	dst->pause_filter_count   = from->pause_filter_count;
+@@ -1606,7 +1622,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+ 	nested_copy_vmcb_control_to_cache(svm, ctl);
+ 
+ 	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+-	nested_vmcb02_prepare_control(svm);
++	nested_vmcb02_prepare_control(svm, save->rip);
+ 
+ 	/*
+ 	 * While the nested guest CR3 is already checked and set by
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index e246793cbeae..47e7427d0395 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -139,6 +139,7 @@ struct vmcb_ctrl_area_cached {
+ 	u64 nested_ctl;
+ 	u32 event_inj;
+ 	u32 event_inj_err;
++	u64 next_rip;
+ 	u64 nested_cr3;
+ 	u64 virt_ext;
+ 	u32 clean;
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 

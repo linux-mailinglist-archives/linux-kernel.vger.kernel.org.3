@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FD74F012E
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AE04F0132
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240907AbiDBLkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 07:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S241362AbiDBLlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 07:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237614AbiDBLkh (ORCPT
+        with ESMTP id S241322AbiDBLlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 07:40:37 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2751DECA
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:38:43 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r13so7594785wrr.9
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:38:43 -0700 (PDT)
+        Sat, 2 Apr 2022 07:41:53 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567768CDAD
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:39:58 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n35so3133653wms.5
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8FFVolbjt7YQtgOwSMGhmxxnSOZEEydEW3XCqGYcvHI=;
-        b=e6+pufWUWXMYXP2ayV2VVAJMz1VRBg6uRkjboRcQIz+HUhpny5gKBWS1u6h0hBubf6
-         VQRvvmEasxGHwA4YloPoMW1pOXmn+nVScFSVI8SGHv2gx5rFxGiZqX6yhbQ7F9R3/HKj
-         /d4BW7h6PYY8/H8zZeOlymb/0qLB2u0RneOkDDMU/6P0Gj2cF5hsKeullDmLlaRCksLQ
-         LR7YlWQd6Cx87wlBCcnaIyDtweohWF8yoeSKH6hdNZKTNl80BTslil2CpCgOWob1DxRP
-         ZkVZbN+0QTuWX9yg/SlBSTufRF6GYF3bFmA6axIrYq30xIbcG12alnNXz6Z2MI74Xf2Z
-         R8SQ==
+        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
+        b=OCcipaDDf9yd6e+SAB1jG2Pu61JoysxDu7Xh5IkBfEfV05Id7giu2MWVGfJbIVxAS1
+         Th2jEi6XkBu2cMKGD4NsXCEKll//buTp90ViuTWQz2PwHFxNXRnDs/fbiZRJx8H2El1a
+         bnI/bcRXXX+qnUIpXHuQkuqHi4a92Afi1tt5Q4NaWcdG8fPkjWX9+tMImm4tOgk9rEfJ
+         1PPmJDDVxDUCB4m++M4Wjqdk3FmQNoDIwG+hBcjX5HwMwm8bqdDMVFbKBqXN1wDxhAco
+         zrl7Ye1RcfFnVg1LYOosi4oSQK536Tzr6AwePFy50YA0V10RNJ2lsGlU0TzaTGDPdh4M
+         kAVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=8FFVolbjt7YQtgOwSMGhmxxnSOZEEydEW3XCqGYcvHI=;
-        b=Q003CJBQae4NOfqE44UvApkxxzexWLyaTWnRvvn1+kEweG+TVlcyAF3nplIeMt83+G
-         MFYwguiwZmg0F+W+BcRaRqGMaGiyJ78vCHzo/3FScT2aTme/4ZNseTT2F6dPKcLFEuHp
-         QlOl52HdyMWFMpWXr+LHvnFJYdNTTrgBgHQjdEYAFWTdBz6pNVZceVTaPUojlZKNAF/T
-         jUI13QLIQ3yEud3YlkTnLyIh5qpmoo7cHlg3lkXMqLwX4Z+Fm8+jRv3jPun/JhkcEWp2
-         Hklo+PqM655DC51BjyFW6y8RdthyQAdKruV8FAo6VKR2LvyX9p2Dl32TU5EB+AuHP34M
-         QwWA==
-X-Gm-Message-State: AOAM531MwUEt4XP1xYQqkSYQ3xKLJLXb0/BPjvc/cDa6sSd6wZAQwMoI
-        AdbjBvags07O2caahQO+1Isr3PKvQkr3rbBQ
-X-Google-Smtp-Source: ABdhPJzieEb8o87Ny7opSK6xjHHmcl1p7dLVnehn/hiuzdAE+8zJ43hgHIA62CpYaa+w0Zmx73s6Kw==
-X-Received: by 2002:adf:ee87:0:b0:203:de0b:b236 with SMTP id b7-20020adfee87000000b00203de0bb236mr10658770wro.337.1648899522201;
-        Sat, 02 Apr 2022 04:38:42 -0700 (PDT)
+        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
+        b=pOPGztai3xky6Dr2q7IcxE0sBUtoIcSSx+4rDmcf9A+IfopD9NJn3HB8fU9Z4ptYta
+         c3vMcQ2LA8Z8hOu0674RpoWqGvxicNYoxcE1qBVEyylSOHnh1s9vFe3mqSoqWEGQPzFr
+         9d0a7MKTZGCy8NMp8lPEOmDvR+qBcI53TaOi12NtHMSXRs2ASdNLVDAlnlM34Q8YnWld
+         e3EtL6XIgNc/4RJer76DwX0m+M6zGScJsTzPHz0SsMh4nyxHJMERC33GbaVlMas2Im3s
+         t95CXY1O2QydlKjqgHx4vOZb3Qi9z90EfE57VQhhuwJ8M2zXSfqEAhobpnLqi4n8Kh0S
+         aj9Q==
+X-Gm-Message-State: AOAM533h3NLip/snRcLfhRBP3t8wajAjtoiKh8SUiPvqXQxdvo7r/h8s
+        oBu4yJgQ9L/ej6LLI9vWZZzS4A==
+X-Google-Smtp-Source: ABdhPJxgPwxQ3TFzbEw3GEzSFdVxepamnd3EAiTRzIuDXOYZeDHeEn98CWlqmTuyc43WWvkuoedIEw==
+X-Received: by 2002:a7b:cd01:0:b0:38c:9142:2006 with SMTP id f1-20020a7bcd01000000b0038c91422006mr12362990wmj.4.1648899596890;
+        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
 Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id y13-20020adffa4d000000b00203e3ca2701sm5909866wrr.45.2022.04.02.04.38.41
+        by smtp.gmail.com with ESMTPSA id o9-20020a1c4d09000000b0038ca75056e2sm16692104wmh.45.2022.04.02.04.39.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 04:38:41 -0700 (PDT)
-Message-ID: <8588a941-6d3e-9e14-cb21-d7af29b4b2bd@linaro.org>
-Date:   Sat, 2 Apr 2022 13:38:40 +0200
+        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
+Message-ID: <6d1353c4-7ecc-c65f-73c0-5f856b72d25e@linaro.org>
+Date:   Sat, 2 Apr 2022 13:39:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] dt-bindings: mfd: syscon: Add support for regmap
- fast-io
+Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, lee.jones@linaro.org
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nfraprado@collabora.com,
-        kernel@collabora.com
-References: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
- <20220401135048.23245-3-angelogioacchino.delregno@collabora.com>
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        - <patches@opensource.cirrus.com>, linux-media@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220401141247.2993925-1-robh@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401135048.23245-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,65 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/2022 15:50, AngeloGioacchino Del Regno wrote:
-> The syscon driver now enables the .fast_io regmap configuration when
-> the 'fast-io' property is found in a syscon node.
+On 01/04/2022 16:12, Rob Herring wrote:
+> There's no reason to list the same value twice in an 'enum'. Fix all the
+> occurrences in the tree. A meta-schema change will catch future ones.
 > 
-> Keeping in mind that, in regmap, fast_io is checked only if we are
-> not using hardware spinlocks, allow the fast-io property only if
-> there is no hwlocks reference (and vice-versa).
-
-I have doubts you need a property for this. "fast" is subjective in
-terms of hardware, so this looks more like a software property, not
-hardware.
-
-I think most of MMIOs inside a SoC are considered fast. Usually also the
-syscon/regmap consumer knows which regmap it gets, so knows that it is
-fast or not.
-
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+> Cc: - <patches@opensource.cirrus.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+> There's also one other occurrence in snps,dwmac.yaml I didn't fix as 
+> there's a patch[1] for it which prompted this patch.
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> index 13baa452cc9d..85a2e83b5861 100644
-> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> @@ -83,11 +83,26 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      enum: [1, 2, 4, 8]
->  
-> +  fast-io:
-> +    description:
-> +      Indicates that this bus has a very fast IO, for which
-> +      acquiring a mutex would be significant overhead.
-> +      When present, regmap will use a spinlock instead.
+> Rob
+> 
+> [1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
+> 
+>  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
+>  Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
+>  .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
+>  .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
+>  .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
+>  5 files changed, 5 insertions(+), 10 deletions(-)
+> 
 
-Regmap is current implementation behind this, but it's not related to
-hardware, so how about removing it from the description? Something like:
-"..., for which different locking methods should be used to reduce
-overhead (e.g. spinlock instead of mutex)."
-
-> +    type: boolean
-> +
->    hwlocks:
->      maxItems: 1
->      description:
->        Reference to a phandle of a hardware spinlock provider node.
->  
-> +if:
-> +  required:
-> +    - hwlocks
-> +then:
-> +  not:
-> +    required:
-> +      - fast-io
-> +
->  required:
->    - compatible
->    - reg
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

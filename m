@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92494F05F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5869F4F05FC
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243021AbiDBTrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 15:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
+        id S241114AbiDBT7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 15:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiDBTq5 (ORCPT
+        with ESMTP id S235168AbiDBT7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 15:46:57 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1882A21837
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 12:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648928705; x=1680464705;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x4DPq9dY05g2mfooonPHQqJf1rYJgFV3UH94ojfxpg0=;
-  b=e3/tJWosKn1wHEzynJJsMqgvKgGsZCBDm/rJtOY4O38lcG++4U3D/2kc
-   KekkLsysKtDH6FSDfQaxq+w1kWh3bd7IDZW3Fy8kckZ62Sw9NmY2ELUe4
-   4Zc7bzRvULcstIHXLGq7UfGEZMN5aHrHa2J7fYj6MW3F47Hu58PqJCzVk
-   WDTZHpaUgZPipo6td0iM3xTndMC+rra+igKzNY+azNbTBovm6Sd27gsCu
-   qhQWWZvJLx95uiUuLy/XJVh1YUnuu1o082Em4LOOnfwIk0YGy+ePYgVNG
-   xV2EPXdEsvQQKfh5Am4DED3Nx/NNhBBjNHg9v15MZS3VFyGcSAKEToy7v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="285274973"
-X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
-   d="scan'208";a="285274973"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 12:45:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
-   d="scan'208";a="548197292"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 02 Apr 2022 12:45:03 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1najgE-0000NH-7y;
-        Sat, 02 Apr 2022 19:45:02 +0000
-Date:   Sun, 3 Apr 2022 03:44:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [bvanassche:ufs-for-next 29/29] drivers/ufs/host/ufs-hisi.c:561:34:
- warning: unused variable 'ufs_hisi_of_match'
-Message-ID: <202204030304.ueflBFlz-lkp@intel.com>
+        Sat, 2 Apr 2022 15:59:47 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E430FFFB72
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 12:57:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id o10so12447815ejd.1
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 12:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CTS+Ip4BTGEFZUlSMz44QvTyeeBYV9kdeaNljtycro8=;
+        b=YWgHiPOBHJ6swM4FsJenjmz2o24qpjOZKscmp3Zk1ZwZ4lJsH+ADdisZOewKJpPsMd
+         GFlXINxMCaAPEGpW1G5chekViYD8CyGGA25i6dmBy6Yngtdsmc5uE518+IdEhV2KbzKx
+         1e8d8dR1PGPgrey3CCjakXigighu/SQqpmxLHryw+IcOHdgvGWDumUBZtLfaHstYQ45s
+         ktbH0oHsN2g4iSASoX9gk0Nl4JcJqXyF1mowX/9iCbsjxpv8ZlbvKl7moZJMRgbPr/Oo
+         QUki0FD/YdSWcHcJv9ao1LxLNCbvJn0eyF/fkqC/pUF2ywQ7OYyLQnI0Yw1gUMW2AZzY
+         fBMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CTS+Ip4BTGEFZUlSMz44QvTyeeBYV9kdeaNljtycro8=;
+        b=WKVOFbxd4nEoOsDLsSkZg0kkat2H0nbHJstAy8ib3ncHPRVBCsytXThjyDPHcD2xcW
+         trE6d4K64lOg9QTBOqJuGJ7VtvglFT7N1qQbUjlDsJ+uwVKw9BpkeNWlCwvPpp4tpoKX
+         fpx0Pk/PLFWOdawOAT1vD1NuTCfkkGmWGKYusAHR6MXvTzVWq6StHjb9SaebW0GRGDn/
+         c2HvdPnITFMF6z41ycE/vxDl1t+cV9rVxZdOLmUdCUe3DBmu9dNK0uxotIqeX2O9Rh1U
+         OI/MyHBubXPUqieaCvWuaFksEBLPN3bpcpumqy7P7aI22iCGiI8mSRIcT9LoiCl/85Nr
+         5I/g==
+X-Gm-Message-State: AOAM530Q1xOL0pJgIDJVnroAl0PrfHK3OH6DutZvNQQ+ORQDDRWPpTg1
+        /ensVkjWBkL3MM7RPVLqvQKjVA==
+X-Google-Smtp-Source: ABdhPJxfx3xopyMVaLrIzERU4TjCwEaY/+buz+oZUEOJcank761ouAdg/mVhW2nFrc8qBWKStXWNsg==
+X-Received: by 2002:a17:907:3e0d:b0:6e0:daaa:63e0 with SMTP id hp13-20020a1709073e0d00b006e0daaa63e0mr4786049ejc.657.1648929472243;
+        Sat, 02 Apr 2022 12:57:52 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id t19-20020a056402525300b0041952a1a764sm2834201edd.33.2022.04.02.12.57.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 12:57:51 -0700 (PDT)
+Message-ID: <a25961c9-3e37-46d7-844d-01b0c8a1eaba@linaro.org>
+Date:   Sat, 2 Apr 2022 21:57:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add Qualcomm Geni based QUP i2c
+ bindings
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+ <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
+ <b27db209-d146-e104-6f0c-b0d860e9cc8c@linaro.org>
+ <20220402194453.GE35664@9a2d8922b8f1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220402194453.GE35664@9a2d8922b8f1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+On 02/04/2022 21:44, Kuldeep Singh wrote:
+> On Sat, Apr 02, 2022 at 02:29:59PM +0200, Krzysztof Kozlowski wrote:
+>> On 02/04/2022 07:12, Kuldeep Singh wrote:
+>>> GENI(generic interface) based Qualcomm Universal Peripheral controller
+>>> can support multiple serial interfaces like spi,uart and i2c.
+>>>
+	
+>>> +
+>>> +  power-domains:
+>>> +    maxItems: 1
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  required-opps:
+>>> +    maxItems: 1
+>>
+>> I have doubts this is correct property. Usually it is part of the
+>> opp-table. I see sc7180 needs this, but I think it is a mistake. Do you
+>> know how it is supposed to work?
+> 
+> Not sure how exactly it works. I took reference from
+> Documentation/devicetree/bindings/clock/qcom,videocc.yaml on how to add
+> required-opps.
+>
 
-First bad commit (maybe != root cause):
+I see now that power domains consumer bindings also mention it:
+Documentation/devicetree/bindings/power/power_domain.txt
+and it might be actually used via __genpd_dev_pm_attach().
 
-tree:   https://github.com/bvanassche/linux ufs-for-next
-head:   0b5d222740b4462f5e306b363f0684b902ac1298
-commit: 0b5d222740b4462f5e306b363f0684b902ac1298 [29/29] scsi: ufs: Split the drivers/scsi/ufs directory
-config: hexagon-randconfig-r045-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030304.ueflBFlz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/0b5d222740b4462f5e306b363f0684b902ac1298
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche ufs-for-next
-        git checkout 0b5d222740b4462f5e306b363f0684b902ac1298
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/host/
+Let's keep it then.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/ufs/host/ufs-hisi.c:561:34: warning: unused variable 'ufs_hisi_of_match' [-Wunused-const-variable]
-   static const struct of_device_id ufs_hisi_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/ufs_hisi_of_match +561 drivers/ufs/host/ufs-hisi.c
-
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  560  
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05 @561  static const struct of_device_id ufs_hisi_of_match[] = {
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  562  	{ .compatible = "hisilicon,hi3660-ufs", .data = &ufs_hba_hi3660_vops },
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  563  	{ .compatible = "hisilicon,hi3670-ufs", .data = &ufs_hba_hi3670_vops },
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  564  	{},
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  565  };
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  566  
-
-:::::: The code at line 561 was first introduced by commit
-:::::: 653fcb07d95eda58b72a5e715230b582c4d6d69e scsi: ufs: Add HI3670 SoC UFS driver support
-
-:::::: TO: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

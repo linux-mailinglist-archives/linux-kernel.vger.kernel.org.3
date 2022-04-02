@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159694F069F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 00:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CF34F06A9
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 01:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiDBW7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 18:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
+        id S230217AbiDBXXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 19:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiDBW67 (ORCPT
+        with ESMTP id S230079AbiDBXXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 18:58:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC0CA46B1E
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 15:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648940226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=q9g7ZsPBUq2KbhsQ1GnRu1ODv/xqvwL/CkNOSGjLsLA=;
-        b=U3y/EWPKnbjyhwfYlVEDXsPzhTBj5lDUaiEbi90ULxVZXnIPuDrJuM86RS4fWuVi8xiB3t
-        S8Ntbol2/mH/pnksvhcEYcjeGpKzF2xzFViBnwTaK20hjc3tr0fmauE6JD8ENX8/XtYMGU
-        eRl25CNZqkthW9DWxmzuOoZv7LMVxz0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-247-GJrQ-8-4Njycu3A-N4UXdg-1; Sat, 02 Apr 2022 18:57:01 -0400
-X-MC-Unique: GJrQ-8-4Njycu3A-N4UXdg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88ECA80005D;
-        Sat,  2 Apr 2022 22:57:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 64493553373;
-        Sat,  2 Apr 2022 22:56:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] afs: Enable multipage folio support
-From:   David Howells <dhowells@redhat.com>
-To:     willy@infradead.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        kent.overstreet@gmail.com, asmadeus@codewreck.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 02 Apr 2022 23:56:58 +0100
-Message-ID: <164894021882.451253.10589736224896457507.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Sat, 2 Apr 2022 19:23:04 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504F222BCC
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 16:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648941671; x=1680477671;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9bAMqXpF1SQCOLUP/s6o++cHeCunNqb7YmV/wXSB7Fs=;
+  b=Ttdm5gs0YZo/GYICSNYlEx4bJp+VQFHJTI/EEyUymnK6X39dJ7p8seXO
+   tQVgi2ati4CGL98NcWyUzju5vvsWwVr6RkiKbmESM0Pkl/AA+w++YqbDJ
+   fP/C2s+t74pSWE9aGRoV9KP9wsPDWmufg0AUjOvuNffZmZmI12o4LarU+
+   Y1qJJF438FawpWKZjjzeMYjg609efxfwPlxGf69k76neei6f7NKaOX9Ej
+   49QIUtrhc+WSnBVM1CC9DTyC69xzNY6SVgekl8AerCpBQTM0rZhM8pDbs
+   1CAa5DYN6xyKLVHGz7x98/ZlrCFdo+Rz6A/FZnYFuPLU58gY+ZNZ2RLdZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="321039666"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="321039666"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 16:21:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="656714220"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 02 Apr 2022 16:21:09 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nan3M-0000Wc-Cr;
+        Sat, 02 Apr 2022 23:21:08 +0000
+Date:   Sun, 3 Apr 2022 07:20:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [lunn:v5.17-rc8-mdio-c45 1/12] drivers/net/phy/mdio_bus.c:904:5:
+ warning: no previous prototype for '__mdiobus_c45_modify_changed'
+Message-ID: <202204030746.rsVzhrNr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable multipage folio support for the afs filesystem.  This is on top of
-Matthew Wilcox's for-next branch.
+tree:   https://github.com/lunn/linux.git v5.17-rc8-mdio-c45
+head:   21ffc4381ec731f5e9521dec8925c0089b14920b
+commit: 0e5fe1025245189f58a0321314592b6c8a9090e9 [1/12] net: mdio: Add dedicates C45 API to MDIO bus drivers
+config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220403/202204030746.rsVzhrNr-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/lunn/linux/commit/0e5fe1025245189f58a0321314592b6c8a9090e9
+        git remote add lunn https://github.com/lunn/linux.git
+        git fetch --no-tags lunn v5.17-rc8-mdio-c45
+        git checkout 0e5fe1025245189f58a0321314592b6c8a9090e9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/net/phy/
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- fs/afs/inode.c |    2 ++
- fs/afs/write.c |    2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/fs/afs/inode.c b/fs/afs/inode.c
-index 2fe402483ad5..c899977493b4 100644
---- a/fs/afs/inode.c
-+++ b/fs/afs/inode.c
-@@ -104,12 +104,14 @@ static int afs_inode_init_from_status(struct afs_operation *op,
- 		inode->i_op	= &afs_file_inode_operations;
- 		inode->i_fop	= &afs_file_operations;
- 		inode->i_mapping->a_ops	= &afs_file_aops;
-+		mapping_set_large_folios(inode->i_mapping);
- 		break;
- 	case AFS_FTYPE_DIR:
- 		inode->i_mode	= S_IFDIR |  (status->mode & S_IALLUGO);
- 		inode->i_op	= &afs_dir_inode_operations;
- 		inode->i_fop	= &afs_dir_file_operations;
- 		inode->i_mapping->a_ops	= &afs_dir_aops;
-+		mapping_set_large_folios(inode->i_mapping);
- 		break;
- 	case AFS_FTYPE_SYMLINK:
- 		/* Symlinks with a mode of 0644 are actually mountpoints. */
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 6bcf1475511b..445a79db0192 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -91,7 +91,7 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
- 			goto flush_conflicting_write;
- 	}
- 
--	*_page = &folio->page;
-+	*_page = folio_file_page(folio, pos / PAGE_SIZE);
- 	_leave(" = 0");
- 	return 0;
- 
+>> drivers/net/phy/mdio_bus.c:904:5: warning: no previous prototype for '__mdiobus_c45_modify_changed' [-Wmissing-prototypes]
+     904 | int __mdiobus_c45_modify_changed(struct mii_bus *bus, int addr, int devad,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+vim +/__mdiobus_c45_modify_changed +904 drivers/net/phy/mdio_bus.c
+
+   889	
+   890	/**
+   891	 * __mdiobus_c45_modify_changed - Unlocked version of the mdiobus_modify function
+   892	 * @bus: the mii_bus struct
+   893	 * @addr: the phy address
+   894	 * @devad: device address to read
+   895	 * @regnum: register number to modify
+   896	 * @mask: bit mask of bits to clear
+   897	 * @set: bit mask of bits to set
+   898	 *
+   899	 * Read, modify, and if any change, write the register value back to the
+   900	 * device. Any error returns a negative number.
+   901	 *
+   902	 * NOTE: MUST NOT be called from interrupt context.
+   903	 */
+ > 904	int __mdiobus_c45_modify_changed(struct mii_bus *bus, int addr, int devad,
+   905					 u32 regnum, u16 mask, u16 set)
+   906	{
+   907		int new, ret;
+   908	
+   909		ret = __mdiobus_c45_read(bus, addr, devad, regnum);
+   910		if (ret < 0)
+   911			return ret;
+   912	
+   913		new = (ret & ~mask) | set;
+   914		if (new == ret)
+   915			return 0;
+   916	
+   917		ret = __mdiobus_c45_write(bus, addr, devad, regnum, new);
+   918	
+   919		return ret < 0 ? ret : 1;
+   920	}
+   921	EXPORT_SYMBOL_GPL(__mdiobus_c45_modify_changed);
+   922	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

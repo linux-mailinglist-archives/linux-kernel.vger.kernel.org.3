@@ -2,226 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C294EFF3B
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9479D4EFF44
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238460AbiDBHF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 03:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S238553AbiDBHNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 03:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiDBHFz (ORCPT
+        with ESMTP id S229714AbiDBHNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 03:05:55 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABAA10241F
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:04:03 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id r8so4931173oib.5
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 00:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6Z03HddOiBT6dfJtiuyG7zdlSX2bpfFdVHZctOvlZUw=;
-        b=qEJvsgmcxWTm42tFtAWR1reTgdh+i8WSkwU+M6T/NSKk2Fz5DZ9Zo7eqUhzlhJZwyR
-         HNvTH5/06JXV2B7MeO4tsGacm+DTsUXiPjp33hrN3fw/gDolMmzbQ1geE/k017wUY1iM
-         cbtg+Shx4R7nJEgcQ2ffVLyTHyqsaamBTbQLW0tFZBTRerL+nd7L4Z+bwXPuUN3zB4Sk
-         wCeDnTz933RzH+oe3jKminHtolc/VEIWWiytlnow7DNWxwwaeWUX+IzTN9gttJ/7lZG9
-         748IvAgRz15o0twIAGPOCvcVGBUw15aSbA3W9xJxXymJ1FYfrS+1SaTWKJQiFeZNfiDx
-         MWIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6Z03HddOiBT6dfJtiuyG7zdlSX2bpfFdVHZctOvlZUw=;
-        b=gaCdNIdgdpNj2c70XiufCltQyI/x+fFTxEqE5+3NxkVT3VrzXLNH9WJX+JpczAkL1F
-         EbZeFuYTni/1sAd5kwa77914z6a68u7JYqiTyBOrmxk65Avnu17xmDYAqiQtRtDlC/Wj
-         tx5iTkG4TzmfHoAdfLdwm4qTitjeeVIBCjBI07cqEGsUrLn1foktO6u8T9cURS1CB+Kz
-         lZXwp9gX9f/+Ev18kSDgiv39uwjPO67uRD71/JsVUDshIyB4tZlUeAEPbsMaG4tZuzaR
-         5HHpZlTs/oF2dRaPV5ZWKULljr7QTTnlZAvtL0V7xMjmYPPR3x5nXn4btlt9ST9cZ6Na
-         Pbzg==
-X-Gm-Message-State: AOAM533xxG3gcIHzmS42mbliHcSGHevoVUMMkt916QUpQFm8+Mai+ky5
-        fHiQuzleyhmqzveXhukBVcUlbSw8ddf+PWpoyc4Gvg==
-X-Google-Smtp-Source: ABdhPJzrg7OvXpoML6OsioH16mOuj1gnsTHrk5CU+q1S4ig/M9YoXt7dszUieXy+QhCsKmjD5YH4cQWkuP5VwNUOA2Q=
-X-Received: by 2002:a05:6808:16a4:b0:2f7:1fd1:f48 with SMTP id
- bb36-20020a05680816a400b002f71fd10f48mr6285983oib.163.1648883042276; Sat, 02
- Apr 2022 00:04:02 -0700 (PDT)
+        Sat, 2 Apr 2022 03:13:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 837D5205D6
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648883475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MHkMY/gjWD4ayMgnmR9Ub7v0rfA5e49jqyy9dp2VcPM=;
+        b=NrJbxxE+E05yl0HjBD+hyc+aeM8tf7ruug5VY4PallJGo2nTyxSivuItcucWBoq8eo1Got
+        3q2q7XvP5G4fUULBbAXsPnJ1y6imPSlrBoYwF00ODzF94Vbvir93sz0ZajjcWwZPETnpU5
+        gAnKa/d+WoYUQx+dwxpsOT3Mi4l2DKg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-beyOVKkxMM66W9dohVyjag-1; Sat, 02 Apr 2022 03:11:12 -0400
+X-MC-Unique: beyOVKkxMM66W9dohVyjag-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 120A42A2AD45;
+        Sat,  2 Apr 2022 07:11:12 +0000 (UTC)
+Received: from sparkplug.usersys.redhat.com (unknown [10.40.192.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 71F2840885AD;
+        Sat,  2 Apr 2022 07:11:09 +0000 (UTC)
+Date:   Sat, 2 Apr 2022 09:11:09 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org, netdev@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        dsahern@kernel.org
+Subject: Re: [net]  6ef3f95797:
+ UBSAN:shift-out-of-bounds_in_kernel/time/timer.c
+Message-ID: <Ykf3DZ4VJQ0yLJss@sparkplug.usersys.redhat.com>
+References: <20220330082046.3512424-3-asavkov@redhat.com>
+ <20220402030939.GA19395@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-References: <20220401134649.2222485-1-qiang1.zhang@intel.com>
- <CACT4Y+YrKd=+uJT9UN8QvctPUGKnOgcReYfX41vNuVC0ecWXcg@mail.gmail.com> <PH0PR11MB588000A40081EC48536CA7A3DAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB588000A40081EC48536CA7A3DAE09@PH0PR11MB5880.namprd11.prod.outlook.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 2 Apr 2022 09:03:50 +0200
-Message-ID: <CACT4Y+YdRTu=5JhGcbzSra5mTJA4n6mimPSSwXtS=GswRa8CAA@mail.gmail.com>
-Subject: Re: [PATCH v2] kasan: Fix sleeping function called from invalid
- context on RT kernel
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220402030939.GA19395@xsang-OptiPlex-9020>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2 Apr 2022 at 01:15, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
->
->
->  On Fri, 1 Apr 2022 at 15:46, Zqiang <qiang1.zhang@intel.com> wrote:
-> >
-> > BUG: sleeping function called from invalid context at
-> > kernel/locking/spinlock_rt.c:46
-> > in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1, name:
-> > swapper/0
-> > preempt_count: 1, expected: 0
-> > ...........
-> > CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt16-yocto-preempt-rt
-> > #22 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
-> > rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014 Call Trace:
-> > <TASK>
-> > dump_stack_lvl+0x60/0x8c
-> > dump_stack+0x10/0x12
-> >  __might_resched.cold+0x13b/0x173
-> > rt_spin_lock+0x5b/0xf0
-> >  ___cache_free+0xa5/0x180
-> > qlist_free_all+0x7a/0x160
-> > per_cpu_remove_cache+0x5f/0x70
-> > smp_call_function_many_cond+0x4c4/0x4f0
-> > on_each_cpu_cond_mask+0x49/0xc0
-> > kasan_quarantine_remove_cache+0x54/0xf0
-> > kasan_cache_shrink+0x9/0x10
-> > kmem_cache_shrink+0x13/0x20
-> > acpi_os_purge_cache+0xe/0x20
-> > acpi_purge_cached_objects+0x21/0x6d
-> > acpi_initialize_objects+0x15/0x3b
-> > acpi_init+0x130/0x5ba
-> > do_one_initcall+0xe5/0x5b0
-> > kernel_init_freeable+0x34f/0x3ad
-> > kernel_init+0x1e/0x140
-> > ret_from_fork+0x22/0x30
-> >
-> > When the kmem_cache_shrink() be called, the IPI was triggered, the
-> > ___cache_free() is called in IPI interrupt context, the local-lock or
-> > spin-lock will be acquired. on PREEMPT_RT kernel, these lock is
-> > replaced with sleepbale rt-spinlock, so the above problem is triggered.
-> > fix it by move the qlist_free_allfrom() the IPI interrupt context to
-> > the task context when PREEMPT_RT is enabled.
-> >
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> >  v1->v2:
-> >  Add raw_spinlock protect per-cpu shrink qlist.
-> >
-> >  mm/kasan/quarantine.c | 40 ++++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 38 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c index
-> > 08291ed33e93..0e33d30abb8d 100644
-> > --- a/mm/kasan/quarantine.c
-> > +++ b/mm/kasan/quarantine.c
-> > @@ -99,6 +99,17 @@ static unsigned long quarantine_size;  static
-> > DEFINE_RAW_SPINLOCK(quarantine_lock);
-> >  DEFINE_STATIC_SRCU(remove_cache_srcu);
-> >
-> > +#ifdef CONFIG_PREEMPT_RT
-> > +struct cpu_shrink_qlist {
-> > +       raw_spinlock_t lock;
-> > +       struct qlist_head qlist;
-> > +};
-> > +
-> > +static DEFINE_PER_CPU(struct cpu_shrink_qlist, shrink_qlist) = {
-> > +       .lock = __RAW_SPIN_LOCK_UNLOCKED(shrink_qlist.lock),
-> > +};
-> > +#endif
-> > +
-> >  /* Maximum size of the global queue. */  static unsigned long
-> > quarantine_max_size;
-> >
-> > @@ -311,12 +322,23 @@ static void qlist_move_cache(struct qlist_head
-> > *from,  static void per_cpu_remove_cache(void *arg)  {
-> >         struct kmem_cache *cache = arg;
-> > -       struct qlist_head to_free = QLIST_INIT;
-> >         struct qlist_head *q;
-> > -
-> > +#ifndef CONFIG_PREEMPT_RT
-> > +       struct qlist_head to_free = QLIST_INIT; #else
-> > +       unsigned long flags;
-> > +       struct cpu_shrink_qlist *sq;
-> > +#endif
-> >         q = this_cpu_ptr(&cpu_quarantine);
-> > +#ifndef CONFIG_PREEMPT_RT
-> >         qlist_move_cache(q, &to_free, cache);
-> >         qlist_free_all(&to_free, cache);
-> > +#else
-> > +       sq = this_cpu_ptr(&shrink_qlist);
-> > +       raw_spin_lock_irqsave(&sq->lock, flags);
-> > +       qlist_move_cache(q, &sq->qlist, cache);
-> > +       raw_spin_unlock_irqrestore(&sq->lock, flags); #endif
-> >  }
-> >
-> >  /* Free all quarantined objects belonging to cache. */ @@ -324,6
-> > +346,10 @@ void kasan_quarantine_remove_cache(struct kmem_cache
-> > *cache)  {
-> >         unsigned long flags, i;
-> >         struct qlist_head to_free = QLIST_INIT;
-> > +#ifdef CONFIG_PREEMPT_RT
-> > +       int cpu;
-> > +       struct cpu_shrink_qlist *sq;
-> > +#endif
-> >
-> >         /*
-> >          * Must be careful to not miss any objects that are being
-> > moved from @@ -334,6 +360,16 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
-> >          */
-> >         on_each_cpu(per_cpu_remove_cache, cache, 1);
-> >
-> > +#ifdef CONFIG_PREEMPT_RT
-> > +       for_each_online_cpu(cpu) {
-> > +               sq = per_cpu_ptr(&shrink_qlist, cpu);
-> > +               raw_spin_lock_irqsave(&sq->lock, flags);
-> > +               qlist_move_cache(&sq->qlist, &to_free, cache);
-> > +               raw_spin_unlock_irqrestore(&sq->lock, flags);
-> > +       }
-> > +       qlist_free_all(&to_free, cache);
->
-> >
-> >I think now there is another subtle bug.
-> >I assume that by the time kasan_quarantine_remove_cache(cache) returns all objects belonging to the cache must be freed. I think there are scenarios where it's not the case.
-> >Consider there is thread 1 that calls kasan_quarantine_remove_cache(A) and thread 2 that calls kasan_quarantine_remove_cache(B).
-> >Consider that kasan_quarantine_remove_cache callbacks for both A and B has finished and shrink_qlist contains all objects that belong to caches A and B.
-> >Now thread 1 executes for_each_online_cpu part and collects all objects into the local to_free list.
->
-> According to my understanding
-> Thread 1 only collects objects which belong to caches A , because the qlist_move_cache(&sq->qlist, &to_free, cache)
-> Will filtered again,  or did I miss something?
+On Sat, Apr 02, 2022 at 11:09:40AM +0800, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-9):
+> 
+> commit: 6ef3f95797546781829db3bb6228c9990ba1d49f ("[PATCH v3 2/2] net: make tcp keepalive timer upper bound")
+> url: https://github.com/intel-lab-lkp/linux/commits/Artem-Savkov/timer-add-a-function-to-adjust-timeouts-to-be-upper-bound/20220330-172140
+> base: https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git b166e52541f2357ce126a92ce1d9a580fdca719d
+> patch link: https://lore.kernel.org/netdev/20220330082046.3512424-3-asavkov@redhat.com
+> 
+> in testcase: kernel-selftests
+> version: kernel-selftests-x86_64-a17aac1b-1_20220328
+> with following parameters:
+> 
+> 	group: tc-testing
+> 	ucode: 0xec
+> 
+> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
+> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
+> 
+> 
+> on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz with 16G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> 
+> [  158.913672][    C1] UBSAN: shift-out-of-bounds in kernel/time/timer.c:584:32
+> [  158.922603][    C1] shift exponent -3 is negative
 
-You are right. I missed that kasan_quarantine_remove_cache also
-filters based on cache.
+This is caused by LVL_START(0). Levels 0 and 1 need to be handled
+separately to insure we don't end up with negative values.
 
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
+-- 
+ Artem
 
-> >Now thread 2 executes the for_each_online_cpu, calls qlist_free_all (on an empty list) and returns from kasan_quarantine_remove_cache.
-> >Then cache B is completely destroyed and freed.
-> >Now thread 1 resumes and calls qlist_free_all for objects from cache B.
-> >Bang!
->
->
->
->
-> > +#endif
-> > +
-> >         raw_spin_lock_irqsave(&quarantine_lock, flags);
-> >         for (i = 0; i < QUARANTINE_BATCHES; i++) {
-> >                 if (qlist_empty(&global_quarantine[i]))
-> > --
-> > 2.25.1
-> >

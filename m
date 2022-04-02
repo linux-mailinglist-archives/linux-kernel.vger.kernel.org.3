@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00EC4F045A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2374C4F0470
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357250AbiDBPUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 11:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S1357317AbiDBPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 11:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354802AbiDBPUq (ORCPT
+        with ESMTP id S231587AbiDBPcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:20:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6493211C20;
-        Sat,  2 Apr 2022 08:18:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1866EB80883;
-        Sat,  2 Apr 2022 15:18:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F582C340F0;
-        Sat,  2 Apr 2022 15:18:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648912731;
-        bh=rx3+JliMGIpaZApdgMUkzyOqNL+m0ef+I2pUyVfu2+U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HvL+FHkqpZDJifWDwb32vEGkreVa/vjqyXMbqo5MIFfX3ZvTW+lUGJMUJRyJO7Aav
-         QBv6D0QkUOFhIucwsLeFb/L8RK6ywPKPNyJKEe/xIxT39Cf9LjUUrWfUvYpeJqkIqy
-         /adz/syA7EU0IUWo9xGaADeFyN5o0S3z+n4p3RwBMBaKmEQpC/UlwhUu2fELqHeLz3
-         fTdxAQDZ4Nj05OmqZdCe+EO6AkE0Ok4946es8UwhJKz+KZV7n+x4RnO+EGTMS44Qs5
-         scYrzXg+4eVj7wesjsnzhfJms0voI25hmuFjl21IwhSKrvUs54a69Oe76MYcybmDxx
-         eXmithQccLKaA==
-Date:   Sat, 2 Apr 2022 16:26:33 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Gwendal Grignou <gwendal@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH] iio:proximity:sx_common: Fix device property parsing on
- DT systems
-Message-ID: <20220402162633.0050d289@jic23-huawei>
-In-Reply-To: <CAPUE2uvpBaE+YLkg6RXq4CCEFBr5ZFhjS1dXkbse9nyH8C=2Jg@mail.gmail.com>
-References: <20220331210425.3908278-1-swboyd@chromium.org>
-        <CAPUE2uvpBaE+YLkg6RXq4CCEFBr5ZFhjS1dXkbse9nyH8C=2Jg@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 2 Apr 2022 11:32:19 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1355F12342E;
+        Sat,  2 Apr 2022 08:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648913415;
+        bh=qbwQAiVMk58tGGoiDErQltrxLS9k74j45rz0UOdmUWQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Pxd0aROwUk9/A9tQ0k2UKk1KJoSoKhHq8Hj4Hpv1A7iu7KUxhx5vCRGpEqVBGA1Un
+         mKXYQkU168aFSMXIcm0y9RKJqg4GkaXqqmB/CVeejjpeF8pUggsHnMhYuX6obqH68G
+         nNl7Hr0HJQDuN+Zr9P+2yxKLJB3u0fTAW+Czfsqc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.166]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MeU0q-1oB6Rv2kaa-00aTDi; Sat, 02 Apr 2022 17:30:15 +0200
+From:   Peter Seiderer <ps.report@gmx.net>
+To:     linux-wireless@vger.kernel.org
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] ath9k: fix ath_get_rate_txpower() to respect the rate list end tag
+Date:   Sat,  2 Apr 2022 17:30:13 +0200
+Message-Id: <20220402153014.31332-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:MohT/QwUArtXl+6vE+K5BnfsY+AJOMTC9brnN5PqrveWj7Xtzwa
+ j1ywHVQK9DWdQWyIXP9CE9NW9jemaU8t4AxgAof4IwMWM2AQ640M5+fARZa1dCkmw+s6/vd
+ REm3JcmbEf9nGryy7qUj6rjx30DwGAL9zFd5X0HWciAmqhhMAGiYwkYgkI/FcDVisB3+lE0
+ 5KI3gPozFDIhgaqbkyazg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2AFzgIAydoo=:gxx+/aJDdCMsTVrHZa6T7x
+ IFEhbQNpZasl2nJDKQO3OdsvBzEWesDMBPVFR4wz7DoNc1YUWWHev9hNJ3pDOKNSlzIHiCDmJ
+ FC/J2YymhG86K3UqwZzZIT9TSU0MzGrzGreaUP8LMhZjt0UTrsCYXW4BNbXcYaIOfJXEzwZkj
+ gblK6j5dE/aEJlGsMxTatBJe6VyD69ZglbNz/wcemnAFLoV0+twLaO715CEjsDUSWUvODiBkt
+ 4udQQGG2ptTKh8fyhaD9fiYeX3qX/KXIRgjBF9PCqs0kKjDfTcE/WTTSLc5jZRf6fiFp61GHv
+ g60vkct2wveZXnwqf+Jh3ywT92tuRyRiXvoB/trXKJvUrGj9d+ktuMxAkXANSBtQkQ/KTyXin
+ 33ss4mCoLf++M8GM380Hj8wUUUdICx+Ovrwa+10I1XhlEueGiAkQKZl4ZO7C8A2FdPsMcyyeW
+ V4jF3MLeGHDj7W7K5Go2TqXPTIFMyU/aHqhcHKBoZX8QikEbUOz80Ql/icf9V2Mh1a3xkQ/0R
+ FejqxUaQBE7Y6jxs3z1VngMtwH9ear9Keu97Y+DagdOkHvnpjEKU7KhXvCpRW8T+KmRFt4CV1
+ 6G7XFbl7hUqD4Qmn1JtkV0+dD4EYGouE9Ury7StHJeLskRMEAihpp51lA7Nuns2bL8ftUOe89
+ S2MT6Mfzp2/N3foX+OljyT0gDwfPorEIaIxux2RelPDSjP7yQgR1bDRgJTLtFJWivwoDrEt+m
+ /y7GR5ckyIBDkyrtfCWtT1oRXv1h4+J260DUOMNQi2ijKfIlMrrhJTG6YfO6tzue9AHGzWxC6
+ BAjBUaZ7DmJl6GQzsfOj4h7ZvcKVQU6reJLD9aOQi1wIsaiDEWDz8vszssLuxZtKqfLOUqItE
+ IpaMTm3+Nya5QYZ2imVpxTQmcuL5BbuYzGyQfxIaeM50N5Np3PaJNKuRYRsIT7asmrHXySUIh
+ ZA0P57MjG9gwnbiwzsZyckYaB8AN1PuHWcHgH3MTwSxxvUk4ph43i5Jv5BNrFcEbpnMuw59hD
+ LaczuQA9RLLNkTpATHzAe2y0HsxlTuSQR69kqfdYaf1sCX0cPmPSRRg5DkOrltjmKTsC1qQE+
+ pW4fVQxb8cA+ak=
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 13:54:51 -0700
-Gwendal Grignou <gwendal@chromium.org> wrote:
-
-> On Thu, Mar 31, 2022 at 2:04 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > After commit 7a3605bef878 ("iio: sx9310: Support ACPI property") we
-> > started using the 'indio_dev->dev' to extract device properties for
-> > various register settings in sx9310_get_default_reg(). This broke DT
-> > based systems because dev_fwnode() used in the device_property*() APIs
-> > can't find an 'of_node'. That's because the 'indio_dev->dev.of_node'
-> > pointer isn't set until iio_device_register() is called. Set the pointer
-> > earlier, next to where the ACPI companion is set, so that the device
-> > property APIs work on DT systems.
-> >
-> > Cc: Gwendal Grignou <gwendal@chromium.org>
-> > Fixes: 7a3605bef878 ("iio: sx9310: Support ACPI property")
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>  
-> Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
-
-Applied to the fixes-togreg branch of iio.git though I'll not push
-that out until rc1 is out in a few days time and I can rebase appropriately.
-
-Thinking on the cause of this problem it seems like we should really be setting
-the indio_dev->dev.of_node in iio_device_alloc() and then let a driver
-override it if desired rather than this approach of fill it in if not set.
-Such a change only affects a few drivers based on a dumb bit of grepping.
-I'd treat such a change as a cleanup though, so having this fix in place
-makes sense anyway. 
-
-Jonathan
-
-> > ---
-> >  drivers/iio/proximity/sx_common.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/iio/proximity/sx_common.c b/drivers/iio/proximity/sx_common.c
-> > index a7c07316a0a9..8ad814d96b7e 100644
-> > --- a/drivers/iio/proximity/sx_common.c
-> > +++ b/drivers/iio/proximity/sx_common.c
-> > @@ -521,6 +521,7 @@ int sx_common_probe(struct i2c_client *client,
-> >                 return dev_err_probe(dev, ret, "error reading WHOAMI\n");
-> >
-> >         ACPI_COMPANION_SET(&indio_dev->dev, ACPI_COMPANION(dev));
-> > +       indio_dev->dev.of_node = client->dev.of_node;
-> >         indio_dev->modes = INDIO_DIRECT_MODE;
-> >
-> >         indio_dev->channels =  data->chip_info->iio_channels;
-> > --
-> > https://chromeos.dev
-> >  
-
+U3RvcCByZWFkaW5nIChhbmQgY29weWluZykgZnJvbSBpZWVlODAyMTFfdHhfcmF0ZSB0byBhdGhf
+dHhfaW5mby5yYXRlcwphZnRlciBsaXN0IGVuZCB0YWcgKGNvdW50ID09IDAsIGlkeCA8IDApLCBw
+cmV2ZW50cyBjb3B5aW5nIG9mIGdhcmJhZ2UKdG8gY2FyZCByZWdpc3RlcnMuCgpOb3RlOiBubyBu
+ZWVkIHRvIHdyaXRlIHRvIHRoZSByZW1haW5pbmcgYXRoX3R4X2luZm8ucmF0ZXMgZW50cmllcwph
+cyB0aGUgY29tcGxldGUgYXRoX3R4X2luZm8gc3RydWN0IGlzIGFscmVhZHkgaW5pdGlhbGl6ZWQg
+dG8gemVybyBmcm9tCmJvdGggY2FsbCBzaXRlcy4KClNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRl
+cmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCiBkcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRo
+OWsveG1pdC5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
+aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3htaXQu
+YyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay94bWl0LmMKaW5kZXggZDBjYWYxZGUy
+YmRlLi5lYzliYWQyZDk1MTAgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9h
+dGg5ay94bWl0LmMKKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3htaXQuYwpA
+QCAtMTI3MSw3ICsxMjcxLDcgQEAgc3RhdGljIHZvaWQgYXRoX2J1Zl9zZXRfcmF0ZShzdHJ1Y3Qg
+YXRoX3NvZnRjICpzYywgc3RydWN0IGF0aF9idWYgKmJmLAogCQlpbnQgcGh5OwogCiAJCWlmICgh
+cmF0ZXNbaV0uY291bnQgfHwgKHJhdGVzW2ldLmlkeCA8IDApKQotCQkJY29udGludWU7CisJCQli
+cmVhazsKIAogCQlyaXggPSByYXRlc1tpXS5pZHg7CiAJCWluZm8tPnJhdGVzW2ldLlRyaWVzID0g
+cmF0ZXNbaV0uY291bnQ7Ci0tIAoyLjM1LjEKCg==

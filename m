@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45FF4F05DC
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349CB4F05E0
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245737AbiDBTgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 15:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S245682AbiDBTjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 15:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiDBTgt (ORCPT
+        with ESMTP id S230298AbiDBTjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 15:36:49 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8ACC5594;
-        Sat,  2 Apr 2022 12:34:57 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id p8so5457208pfh.8;
-        Sat, 02 Apr 2022 12:34:57 -0700 (PDT)
+        Sat, 2 Apr 2022 15:39:39 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4AC625D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 12:37:47 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b19so8700964wrh.11
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 12:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=astier-eu.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=013L1S5NasV2n9G+gcZ5vDiuVC6AUnzPa8ca+juX9NA=;
-        b=OyuchNJKTM3kf8o74NLy6CYnAK4iJ9pZz9uFHe5MiPeTt/sn5juX12/x+KuyPx/bDr
-         t9lmubfH4yfFZa3/qJr50KtoHtjpBYsbR8HR+u3bRPCDhl0KE6QNlDjh8U+v7dWzP6yY
-         hl5HBzUgWV/2cKqeqBHt12PpeL55KW2jABhAjgfbD3hAgoei4KHuvmi+rtag4CXXRZog
-         bOMvsmgL7yO+gHJ5MddUG9yI8LhgdbES0cGdeEp/eSa2LkdulRwEX5/2zNEGKI6fqiPG
-         wvC5GTWiFz40FzlZ6V3dQjLh4QdwWnBUVEqRTzK8MYS+UM5rFTsfEhd5T1ZTHqJh+z+j
-         OByg==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=80wofTwbxJqppPX/gKsG/MIQEWwl0NPubl49Nu0tXCc=;
+        b=sWKLVd+x2DbLhiDnbts76cHlkFQEQHsmlx6qJ6nxYCvQlpVs+QDMyZC4OAVm5yENNZ
+         dmTE3oRApLfp54aGaApEC3lWdpn3tW7makqGRG1e3fUJr9BjZ3pr6B9FuJbTXY2XGkfj
+         CHjIP/7S3u7QgdxB2gEMBijjDRZFO7QnsThw8owkGCiYzw6JnxUlkENZmy1ijsCykVEv
+         0nCqaamI/cFQcVMRYFwRsY9eo7yz15n7nqrSHvEtN9nRNrm8ndytQkH9r2GOcl7YAfuL
+         mXPCrq0v5Y+rWzbGW4RT1gnupsb3D1aRitry+HPWnrUqB+mKphJdfPD3vwH7LjZ6hL+o
+         VkOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=013L1S5NasV2n9G+gcZ5vDiuVC6AUnzPa8ca+juX9NA=;
-        b=BTIHZsqA9nbHurKtczCiY9uo+L90q6mInQOTaHpB+ESAReYLqcPsioF50ak/lPwGZW
-         TlhINF6/t+wffnm32FDzxOYvOixQQ1gznXRhvrGLEQBrGrI/L0KpiFhK0i5WUmI6f3pt
-         6pHX+dPcUhangaKwOWU6A1JInMuVS7tsctUcBfcvyko2kTaao//g2cuRynWuKtNhxcsw
-         SVjXYN+sNamWPGpM5NHs9wipQwzrCCovDSNegEgCAc76O2bmpV7oXKdmpSadXPiwNWlB
-         l5RebB3SGAManZkWIr9lfHMh10uOUutjt15Fm+Y8xlYaU7VGFP0LHxPgHuIqL0x/G5fY
-         2y1g==
-X-Gm-Message-State: AOAM533LrniAyyq5wYsH/zv60OBjs7Ak4PlNd0uHyTb+g0s3SdDsEF2/
-        JleZtXVPgSuOi+1DDd4qCCp+bwPgUA8=
-X-Google-Smtp-Source: ABdhPJw4CbbZW9c/Ju1yu5pk5Dk4iAgMrh57D88CxdNkJyCODeTAB44jPG27DJH48jNOPVtVyRVwdA==
-X-Received: by 2002:a63:79c4:0:b0:386:5a8a:e2a5 with SMTP id u187-20020a6379c4000000b003865a8ae2a5mr19744665pgc.458.1648928097301;
-        Sat, 02 Apr 2022 12:34:57 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id o14-20020a056a0015ce00b004fab49cd65csm6871745pfu.205.2022.04.02.12.34.54
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=80wofTwbxJqppPX/gKsG/MIQEWwl0NPubl49Nu0tXCc=;
+        b=fehkgDloGYybF1Nx+IBuUvHfHbVzbv+co8mpwbm7AACZ8i3rMIXoR2r1ULoPC/GbQB
+         yYiCTipT7VXSKU4/MqVbbui6x6wWbelf2nCzCQH+aeKmtoF8AxDgj97H2F66pqeWpixY
+         Yy+QYMVtxxdFISiJp2dpH6xyU9M6oHMNp3QhVa2s3Qxz2j2qiWjLYTajNzO2qSnrDr1E
+         yYEhYlxAv1DgIKd9A+jzd68bteomxXoeefofTXX3P9+NAoDfXc2vFR3o8pLSKKyhthvs
+         gZrureMs0pBI2sxI7mIwulAj+Oe1HGwoFjq1EwDW7d3aiNG/wzyjvdUK3FtuD5qQ+JCn
+         YUcg==
+X-Gm-Message-State: AOAM530WctrdW1Jyw0MwTEArelAbnWcISoDWHCqovhB7Dv7Aq2PC+Avs
+        x2os+KrxIFSofqMJK/qlumrHYQ==
+X-Google-Smtp-Source: ABdhPJzTVam/vm4DE1k8FMuXemOpPbS4zYtmup8fzVrX6VI7CelNUeeNzpxvBUgZEQYY2gni86+dAw==
+X-Received: by 2002:a5d:6d0c:0:b0:204:d77:313a with SMTP id e12-20020a5d6d0c000000b002040d77313amr12191546wrq.405.1648928265626;
+        Sat, 02 Apr 2022 12:37:45 -0700 (PDT)
+Received: from bilrost ([2a01:e0a:28f:75b0:dea6:32ff:fe0d:99f9])
+        by smtp.gmail.com with ESMTPSA id az26-20020adfe19a000000b00204154a1d1fsm5262746wrb.88.2022.04.02.12.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 12:34:56 -0700 (PDT)
-Date:   Sun, 3 Apr 2022 01:04:51 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add Qualcomm Geni based QUP i2c
- bindings
-Message-ID: <20220402193451.GD35664@9a2d8922b8f1>
-References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
- <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
- <dcca767e-2ad6-4d81-d273-3878b07bbc8c@linaro.org>
+        Sat, 02 Apr 2022 12:37:45 -0700 (PDT)
+Date:   Sat, 2 Apr 2022 21:37:43 +0200
+From:   Anisse Astier <anisse@astier.eu>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH AUTOSEL 5.17 001/149] drm: Add orientation quirk for GPD
+ Win Max
+Message-ID: <YkimB7AoV27gXFc9@bilrost>
+References: <20220401142536.1948161-1-sashal@kernel.org>
+ <YkdhftH7tyPU8Gqt@bilrost>
+ <dcc41ac1-107b-7ada-ff41-da69d94f1274@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <dcca767e-2ad6-4d81-d273-3878b07bbc8c@linaro.org>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dcc41ac1-107b-7ada-ff41-da69d94f1274@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 08:24:25PM +0200, Krzysztof Kozlowski wrote:
-> On 02/04/2022 07:12, Kuldeep Singh wrote:
-> > GENI(generic interface) based Qualcomm Universal Peripheral controller
-> > can support multiple serial interfaces like spi,uart and i2c.
+Le Sat, Apr 02, 2022 at 11:14:58AM +0200, Hans de Goede a écrit :
+> Hi,
+> 
+> On 4/1/22 22:33, Anisse Astier wrote:
+> > Hi Sasha,
 > > 
+> > Le Fri, Apr 01, 2022 at 10:23:08AM -0400, Sasha Levin a écrit :
+> >> From: Anisse Astier <anisse@astier.eu>
+> >>
+> >> [ Upstream commit 0b464ca3e0dd3cec65f28bc6d396d82f19080f69 ]
+> >>
+> >> Panel is 800x1280, but mounted on a laptop form factor, sideways.
+> >>
+> >> Signed-off-by: Anisse Astier <anisse@astier.eu>
+> >> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> >> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> >> Link: https://patchwork.freedesktop.org/patch/msgid/20211229222200.53128-3-anisse@astier.eu
+> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > 
+> > I don't think this patch will be very useful, because it won't fix the
+> > device's display orientation without the previous patch it came with,
+> > titled "drm/i915/opregion: add support for mailbox #5 EDID"
+> > (e35d8762b04f89f9f5a188d0c440d3a2c1d010ed); while I'd like both to be
+> > added
 > 
-> Few more comments.
+> Well actually it will already put e.g. the text console the right way up
+> since efifb also uses this quirks and gives a hint to fbcon to rotate
+> the text. So it is not entirely useless.
 > 
-> (...)
+> And since all quirks added to drivers/gpu/drm/drm_panel_orientation_quirks.c
+> typically get backported having this one in place now will avoid conflicts
+> with future backports.
 > 
-> > +
-> > +  clock-frequency:
-> > +    description: Desired I2C bus clock frequency in Hz
+> That combined with not really seeing a downside to already having
+> this in place even without the i915 support being sorted out makes
+> me lean more towards the direction of believing that having this
+> in 5.17 is fine...
 > 
-> Skip description, it's common for I2C controllers.
 
-ok.
+Good points; lets's keep it in the stable queues.
 
-> 
-> > +    default: 100000
-> > +
-> > +  interconnects:
-> > +    maxItems: 3
-> > +
-> > +  interconnect-names:
-> > +    items:
-> > +      - const: qup-core
-> > +      - const: qup-config
-> > +      - const: qup-memory
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  required-opps:
-> > +    maxItems: 1
-> > +
-> > +  dmas:
-> > +    maxItems: 2
-> > +
-> > +  dma-names:
-> > +    items:
-> > +      - const: tx
-> > +      - const: rx
-> > +
-> > +  pinctrl-0: true
-> > +  pinctrl-1: true
-> > +
-> > +  pinctrl-names:
-> > +    minItems: 1
-> > +    items:
-> > +      - const: default
-> > +      - const: sleep
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> 
-> These are not needed, they come from schema.
+Thanks,
 
-Yes. I will update in v2. Thanks!
-
--Kuldeep
+Anisse

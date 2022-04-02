@@ -2,170 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7570C4F04B5
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BA84F04B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357661AbiDBQFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 12:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S1357698AbiDBQIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 12:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352942AbiDBQFd (ORCPT
+        with ESMTP id S1357687AbiDBQIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 12:05:33 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DAD29835
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:03:40 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id w7so5157753pfu.11
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 09:03:40 -0700 (PDT)
+        Sat, 2 Apr 2022 12:08:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221F31255AB
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:06:39 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bh17so11680448ejb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 09:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mnneJ6Ho0S+IA/D1ZV6cBxZg4vItd7oSWatM2pfG5Pg=;
-        b=W5xsRbbpSLi9p1T6Laus3rnc5bGfdBkLjIkZ/QY9875Zszcx8AxGQn7R+lEbw4aQd9
-         cmTn4S2OM9wUBWaZCSqB+MRLmKhXcO4Nc0YbGUFBTF9xVdsBhuGy1Q7YOz/+XgdNrqm/
-         OmyFJ+YeNVw6W3EzgIlGFTKlEqwA0LCLm0GpVMfl6bzOfEAGx+J4t6plSWsfWNEpEkoP
-         RhRRTsMcq553SQXzqBCf47WxBS1EsjEcVFICBzyOEpNfoM5tAnRg4wvEndLo8WaOFVy1
-         o7WnqkHR73KTuHJ8dUmaktGxFwmxCbIv4yG/y+N9bPJ7BJ3hfqZhTtlwxUcbGJMFVtg/
-         bBtQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2dLCpFjGJHcbliLHP8vYjYtyDcLFIAxcHG+FWPlYX0Y=;
+        b=tBbneEJqkuWEmHvvIZ2sj5QjCxHGS/7MF+6hk0BfAE8Xwu14gShr3VDv9Mdxg+Nu0L
+         PBWZp0jZXBL2NekdL4AVdzt5ZswjSTTAOmS2JJhNXmmwX1hKTWhiCpmf63LX/AQE+UtY
+         y10dH21hYS4ZUw9S3dHRaGIpAN6S5pQeH3zOTfIl6Gj1aBMiyGH9Ud0wiDh7JBY+1zRz
+         /0JANA/gvz/x7iDVE9OVEmHqb7f0/BIa815oh6GRJKVwguhCA+BrgGH6VYvwZ9p5VxbP
+         8vqh+aIKx4jkPkQngehsTaqVvSG2klXmfuGhFtyp/dmQ0vCrIN08vKgGIrMEK2S2ZzVd
+         1yWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=mnneJ6Ho0S+IA/D1ZV6cBxZg4vItd7oSWatM2pfG5Pg=;
-        b=bU+P7PQrHHgYGLfpEcJleB9skzHDMpLH9R037SMb0K6fktvN2DlnrgZFfKqmrT4B/f
-         m789dyNtUM9HGfQT8iuKFEAHKxtj91seesKjTOxaQ0M82NYRK/VnxwLtmhcvYpLpLCyM
-         uf0hRt+ABr2xHIGJVR9NYLHcMZzwHebMhCm7kSKM5QXo1xUor73S/l0z1Q7UZQWJIC+7
-         HwG1+eJ8vwXOX+Ll60PA2xr7qF5XEzE6flrx+UB6U/m/weuezE5cujLrKdeKI1sgIG7J
-         1gV5sRtfjXjRUIJc4RUdu+BUhWJP+1miQM8iJXA0Cc2Zhu6kigipPiQ68rfNdc5NF8rr
-         x6Qw==
-X-Gm-Message-State: AOAM533icWrR+kE2ZqDlkHpx37GVg871gcIhOodqI3adwnVmv0kY0shM
-        AzcwXkwchbx24T0jA20iq9o=
-X-Google-Smtp-Source: ABdhPJwQSFddjPPGwDTDrCrAyDtU8UoQsvWTSrQlSFtt+quKPSBuORiJM8uSNZHpJoKZHQF/gH0ZCQ==
-X-Received: by 2002:a05:6a00:ac1:b0:4f1:29e4:b3a1 with SMTP id c1-20020a056a000ac100b004f129e4b3a1mr49940986pfl.63.1648915420250;
-        Sat, 02 Apr 2022 09:03:40 -0700 (PDT)
-Received: from guoguo-omen.lan ([222.201.153.219])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm6733974pfo.155.2022.04.02.09.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 09:03:39 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-mtd@lists.infradead.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        RogerCC Lin <rogercc.lin@mediatek.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] mtd: rawnand: fix ecc parameters for mt7622
-Date:   Sun,  3 Apr 2022 00:03:13 +0800
-Message-Id: <20220402160315.919094-1-gch981213@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=2dLCpFjGJHcbliLHP8vYjYtyDcLFIAxcHG+FWPlYX0Y=;
+        b=0lqizp1Qlk39XZBa3wYfhZjzUQx6KyXUO4vZvVw12pK9FsU5G/DM5TnXRd6d303tu4
+         2K8hN0DTM/e1OXHLVN8koA8hfMFFKhwwpQAxIB5HB4gUU76LhsTqXmZX6t+XiV9lMQkf
+         e/TLU/L12RYHypxT8EnJP20eVLUF5IupCFbUNYUcKCw2EuJPlO8gaaklQG2PiUT6sdft
+         O70CQI5XmU8/k25OyaD0zSOs9WDwlgxSkE9XrHwyCCAge47sckxerBxmiDa7fGHSM34M
+         XxQRuW1V5D4fnD1NOYnbZEvZRqIBaqkQZ8qJanDRbagZlKUxZFgD3IhQ6Y+7hwyfYtq4
+         JuPQ==
+X-Gm-Message-State: AOAM533jIE62kmVUIqEHzlrEakPt1b/fqgu1awyUR4Q34RguyAprVSvW
+        hHcPfzAtlzh2PQy7+cwKfKEiVw==
+X-Google-Smtp-Source: ABdhPJyjLMYxJ0JD5o8civ66zWl9Ru0vm3ZudlXy8sQnWNkm60+Uf6naquLmpxZS2J/JRuxzyTi5Aw==
+X-Received: by 2002:a17:907:d8d:b0:6df:b214:392a with SMTP id go13-20020a1709070d8d00b006dfb214392amr4305563ejc.669.1648915597714;
+        Sat, 02 Apr 2022 09:06:37 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id u25-20020a170906b11900b006e08588afedsm2209474ejy.132.2022.04.02.09.06.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 09:06:37 -0700 (PDT)
+Message-ID: <871296de-76f6-c587-9000-ce38ad14f519@linaro.org>
+Date:   Sat, 2 Apr 2022 18:06:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/9] dt-bindings: soc: apple: Add ANS NVMe
+Content-Language: en-US
+To:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+References: <20220321165049.35985-1-sven@svenpeter.dev>
+ <20220321165049.35985-3-sven@svenpeter.dev>
+ <40f7c074-198a-5ce0-02b3-e6042975e228@kernel.org>
+ <692ae417-f0c6-4932-95f3-2a0984df5ad0@www.fastmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <692ae417-f0c6-4932-95f3-2a0984df5ad0@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the datasheet, mt7622 only has 5 ECC capabilities instead
-of 7, and the decoding error register is arranged  as follows:
-+------+---------+---------+---------+---------+
-| Bits |  19:15  |  14:10  |   9:5   |   4:0   |
-+------+---------+---------+---------+---------+
-| Name | ERRNUM3 | ERRNUM2 | ERRNUM1 | ERRNUM0 |
-+------+---------+---------+---------+---------+
-This means err_mask should be 0x1f instead of 0x3f and the number of
-bits shifted in mtk_ecc_get_stats should be 5 instead of 8.
+On 02/04/2022 15:05, Sven Peter wrote:
+> Hi,
+> 
+> thanks for the review!
+> 
+> On Wed, Mar 23, 2022, at 12:14, Krzysztof Kozlowski wrote:
+>> On 21/03/2022 17:50, Sven Peter wrote:
+>>> Apple SoCs such as the M1 come with an embedded NVMe coprocessor called
+>>> ANS2.
+>>>
+>>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>>> ---
+>>>  .../bindings/soc/apple/apple,nvme-ans.yaml    | 75 +++++++++++++++++++
+>>>  1 file changed, 75 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/soc/apple/apple,nvme-ans.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/apple/apple,nvme-ans.yaml b/Documentation/devicetree/bindings/soc/apple/apple,nvme-ans.yaml
+>>> new file mode 100644
+>>> index 000000000000..e1f4c1c572aa
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/soc/apple/apple,nvme-ans.yaml
+>>> @@ -0,0 +1,75 @@
+>>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/soc/apple/apple,nvme-ans.yaml#
+>>
+>> Do not drop all code in soc/apple, but please use respective subsystems.
+>> Apple is not a subsystem, is not special.
+>>
+> 
+> Sure, the code is already inside drivers/nvme/host but I'll also create
+> Documentation/devicetree/bindings/nvme and put the bindings in there as
+> well.
 
-This commit introduces err_shift for the difference in this register
-and fix other existing parameters.
+Yes, please. We have also Documentation/devicetree/bindings/nvmem/ but
+it seems its entirely different stuff.
 
-Public MT7622 reference manual can be found on [0] and the info this
-commit is based on is from page 656 and page 660.
 
-[0]: https://wiki.banana-pi.org/Banana_Pi_BPI-R64#Documents
-
-Fixes: 98dea8d71931 ("mtd: nand: mtk: Support MT7622 NAND flash controller.")
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
- drivers/mtd/nand/raw/mtk_ecc.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/mtk_ecc.c b/drivers/mtd/nand/raw/mtk_ecc.c
-index e7df3dac705e..49ab3448b9b1 100644
---- a/drivers/mtd/nand/raw/mtk_ecc.c
-+++ b/drivers/mtd/nand/raw/mtk_ecc.c
-@@ -43,6 +43,7 @@
- 
- struct mtk_ecc_caps {
- 	u32 err_mask;
-+	u32 err_shift;
- 	const u8 *ecc_strength;
- 	const u32 *ecc_regs;
- 	u8 num_ecc_strength;
-@@ -76,7 +77,7 @@ static const u8 ecc_strength_mt2712[] = {
- };
- 
- static const u8 ecc_strength_mt7622[] = {
--	4, 6, 8, 10, 12, 14, 16
-+	4, 6, 8, 10, 12
- };
- 
- enum mtk_ecc_regs {
-@@ -221,7 +222,7 @@ void mtk_ecc_get_stats(struct mtk_ecc *ecc, struct mtk_ecc_stats *stats,
- 	for (i = 0; i < sectors; i++) {
- 		offset = (i >> 2) << 2;
- 		err = readl(ecc->regs + ECC_DECENUM0 + offset);
--		err = err >> ((i % 4) * 8);
-+		err = err >> ((i % 4) * ecc->caps->err_shift);
- 		err &= ecc->caps->err_mask;
- 		if (err == ecc->caps->err_mask) {
- 			/* uncorrectable errors */
-@@ -449,6 +450,7 @@ EXPORT_SYMBOL(mtk_ecc_get_parity_bits);
- 
- static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
- 	.err_mask = 0x3f,
-+	.err_shift = 8,
- 	.ecc_strength = ecc_strength_mt2701,
- 	.ecc_regs = mt2701_ecc_regs,
- 	.num_ecc_strength = 20,
-@@ -459,6 +461,7 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
- 
- static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
- 	.err_mask = 0x7f,
-+	.err_shift = 8,
- 	.ecc_strength = ecc_strength_mt2712,
- 	.ecc_regs = mt2712_ecc_regs,
- 	.num_ecc_strength = 23,
-@@ -468,10 +471,11 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
- };
- 
- static const struct mtk_ecc_caps mtk_ecc_caps_mt7622 = {
--	.err_mask = 0x3f,
-+	.err_mask = 0x1f,
-+	.err_shift = 5,
- 	.ecc_strength = ecc_strength_mt7622,
- 	.ecc_regs = mt7622_ecc_regs,
--	.num_ecc_strength = 7,
-+	.num_ecc_strength = 5,
- 	.ecc_mode_shift = 4,
- 	.parity_bits = 13,
- 	.pg_irq_sel = 0,
--- 
-2.35.1
-
+Best regards,
+Krzysztof

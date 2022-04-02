@@ -2,170 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840B04F04EF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376904F04F2
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358171AbiDBQeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 12:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S1358205AbiDBQgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 12:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358167AbiDBQem (ORCPT
+        with ESMTP id S1358194AbiDBQgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 12:34:42 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A69DF07;
-        Sat,  2 Apr 2022 09:32:50 -0700 (PDT)
-Received: from integral2.. (unknown [182.2.36.61])
-        by gnuweeb.org (Postfix) with ESMTPSA id 900A07E312;
-        Sat,  2 Apr 2022 16:32:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648917170;
-        bh=L0dEr0Og4BkrupUP+ZQZiQjoUM1WFhoD9Klvx4qS97o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V8xd221KsZYF1WR1tPJeNVdbfQePpjfHvsUHIg7oCvxMy1oqkRPIL7/QIJZXhaKcn
-         1pRJm9hRORB0334+T5XXOijW4+YuN4CDb2szcY/LZmHKF2D5HHIx0LA0zQnJlJd4l+
-         hsORtjS3CUyddm92h2mK/b+sS6b22DADUG5pEtE+Wgj52brEl03e0I+6FRZXs6Pc90
-         7KmC0GPv3r4ZxSr9L18dhRgZQvkYDl1gPUxMB5Y/vzLHMr6xxq/jIuY9BlldFcttxX
-         k/sm1CC8h13t6xlmyMaB5qm94HgjJWF4tgBMdO0mw/FYkZ61RA8cz31eEeL1DuJma+
-         Kouy0eV6onRWg==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH linux-5.10.y] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
-Date:   Sat,  2 Apr 2022 23:32:26 +0700
-Message-Id: <20220402163226.12209-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220402163026.11299-1-ammarfaizi2@gnuweeb.org>
-References: 
+        Sat, 2 Apr 2022 12:36:38 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D7A5E764
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:34:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r13so11790847ejd.5
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 09:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/FUIvc/vDnMsC8g3By0xz2o93YIAaNo0DmbUPR75Tlc=;
+        b=Ioi61ehSCrXnxLXiUDHyumdLEB4WVYi0QVlxNUL2ed3iV843fKZaDve+2MpfC/8G5J
+         x4KZDzHzRvf5A9KYLawd2xkLz3U3C2lc/ofNKczlkanAj5jwaZVkKKkrmeaKbbiaLeof
+         oi8LgC+BF5j3duxC/OEIitiA/o+xBkNhgB09T3wwbJ40k1yBS2K+6FatLnxPu0GHZUrs
+         KmuipXAqwxdBUFU+O19jfc2TBpM2iLafe8ARV9lZaphs7EYb+0iDUvB1wKN/rS0Qt4+s
+         bkHGMxghC9ZADEqlsTctvDu7TyNIYX17XomcLzYbJ5dMwVBxVI7/VkFC/caEdkepdKuL
+         i9dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/FUIvc/vDnMsC8g3By0xz2o93YIAaNo0DmbUPR75Tlc=;
+        b=zNVQWwAgQswbDHBVQ9X5dxeKe4/APca9+kUuP3tQAcGp1WtQ4MVsmp+SO/ZR/qyptO
+         CPm/5Y2ExG0ZxxlUVn3v3kV2fE0n691EA2Q5oh0x/SxTh+Y8iaQsHhKjQLiZ/WafS+iR
+         flCgPwMXfdH1jpI6JKh8NhWwtk7xzfk8rfqMBmKAjAQ7NwsXtOKNJ0vqY5O89Oc4SYZG
+         14QOD+/xVgEXiwKqlkl+JG6tGaplxUActlbB4/ZFrH1YS+46dUvbGqo3LEp3UUv01e+D
+         GYdMlyZhGIZropUsvAkVL5mHFivLsVAExnkj0K908S9/9MTbYAHj3Fzfm4GoCtIGmkj8
+         5OqQ==
+X-Gm-Message-State: AOAM530YJUBwSD6DNJwKR1EdrHYDGi2fSqHGemBBSV/pe/yyLKNa57Vx
+        isxA6ufVAuTkYzxf/hiSeEw=
+X-Google-Smtp-Source: ABdhPJy2M5JbKf2OjnCPA6qJuPiQbgigSFQO/VYzmNX4uOlglDcSFd71pcHoDc/5PYlOC4uf4RS7eg==
+X-Received: by 2002:a17:906:b107:b0:6e0:a25a:af6e with SMTP id u7-20020a170906b10700b006e0a25aaf6emr4308839ejy.359.1648917284171;
+        Sat, 02 Apr 2022 09:34:44 -0700 (PDT)
+Received: from localhost.localdomain (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id ka22-20020a170907921600b006e4c1ab0bbdsm2191216ejb.207.2022.04.02.09.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 09:34:42 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] staging: r8188eu: Use the ARRAY_SIZE() macro
+Date:   Sat,  2 Apr 2022 18:34:39 +0200
+Message-Id: <20220402163439.20457-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b7fb0ae09009d076964afe4c1a2bde1ee2bd88a9 upstream.
+Use the ARRAY_SIZE() macro in places where there are open coded
+calculations of the size of arrays.
 
-Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
--ENOMEM because it leads to a NULL pointer dereference bug.
+ARRAY_SIZE(arr) makes sure that "arr" is an array, it's safer than
+sizeof(arr) / sizeof(arr[0]), and improves readibility.
 
-The dmesg says:
+Detected with the help of Coccinelle.
 
-  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
-  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
-  [ T1387] #PF: supervisor read access in kernel mode
-  [ T1387] #PF: error_code(0x0000) - not-present page
-  [ T1387] PGD 0 P4D 0
-  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
-  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3
-  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
-  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
-  [ T1387] Code: [... snip ...]
-  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
-  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
-  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
-  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
-  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
-  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
-  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
-  [ T1387] PKRU: 55555554
-  [ T1387] Call Trace:
-  [ T1387]  <TASK>
-  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
-  [... snip ...]
-  [ T1387]  </TASK>
-
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Keyon Jie <yang.jie@linux.intel.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Rander Wang <rander.wang@intel.com>
-Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: sound-open-firmware@alsa-project.org
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.2+
-Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
-Link: https://lore.kernel.org/lkml/20220224145124.15985-1-ammarfaizi2@gnuweeb.org/ # v1
-Link: https://lore.kernel.org/lkml/20220224180850.34592-1-ammarfaizi2@gnuweeb.org/ # v2
-Link: https://lore.kernel.org/lkml/20220224182818.40301-1-ammarfaizi2@gnuweeb.org/ # v3
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Link: https://lore.kernel.org/r/20220224185836.44907-1-ammarfaizi2@gnuweeb.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-[ammarfaizi2: Backport to Linux 5.10 LTS]
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- sound/soc/sof/intel/hda-loader.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c     | 2 +-
+ drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c  | 6 +++---
+ drivers/staging/r8188eu/hal/HalHWImg8188E_MAC.c | 2 +-
+ drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c  | 2 +-
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c    | 6 +++---
+ 5 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
-index 2707a16c6a4d..347636a80b48 100644
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -47,7 +47,7 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
- 	if (ret < 0) {
- 		dev_err(sdev->dev, "error: memory alloc failed: %x\n", ret);
--		goto error;
-+		goto out_put;
- 	}
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index 10d5f1222936..2ce130165b39 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -3985,7 +3985,7 @@ unsigned int OnAction(struct adapter *padapter, struct recv_frame *precv_frame)
  
- 	hstream->period_bytes = 0;/* initialize period_bytes */
-@@ -58,22 +58,23 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- 		ret = hda_dsp_iccmax_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: iccmax stream prepare failed: %x\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 	} else {
- 		ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: hdac prepare failed: %x\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 		hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
- 	}
+ 	category = frame_body[0];
  
- 	return dsp_stream;
+-	for (i = 0; i < sizeof(OnAction_tbl) / sizeof(struct action_handler); i++) {
++	for (i = 0; i < ARRAY_SIZE(OnAction_tbl); i++) {
+ 		ptable = &OnAction_tbl[i];
+ 		if (category == ptable->num)
+ 			ptable->func(padapter, precv_frame);
+diff --git a/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c b/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
+index e7f834b02567..7901d0afa2e7 100644
+--- a/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
++++ b/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
+@@ -170,7 +170,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
+ {
+ 	u32     hex         = 0;
+ 	u32     i           = 0;
+-	u32     arraylen    = sizeof(array_agc_tab_1t_8188e) / sizeof(u32);
++	u32     arraylen    = ARRAY_SIZE(array_agc_tab_1t_8188e);
+ 	u32    *array       = array_agc_tab_1t_8188e;
+ 	bool		biol = false;
+ 	struct adapter *adapter =  dm_odm->Adapter;
+@@ -446,7 +446,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
+ {
+ 	u32     hex         = 0;
+ 	u32     i           = 0;
+-	u32     arraylen    = sizeof(array_phy_reg_1t_8188e) / sizeof(u32);
++	u32     arraylen    = ARRAY_SIZE(array_phy_reg_1t_8188e);
+ 	u32    *array       = array_phy_reg_1t_8188e;
+ 	bool	biol = false;
+ 	struct adapter *adapter =  dm_odm->Adapter;
+@@ -651,7 +651,7 @@ void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
+ {
+ 	u32  hex;
+ 	u32  i           = 0;
+-	u32  arraylen    = sizeof(array_phy_reg_pg_8188e) / sizeof(u32);
++	u32  arraylen    = ARRAY_SIZE(array_phy_reg_pg_8188e);
+ 	u32 *array       = array_phy_reg_pg_8188e;
  
--error:
--	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
-+out_free:
- 	snd_dma_free_pages(dmab);
-+out_put:
-+	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
- 	return ERR_PTR(ret);
- }
+ 	hex = ODM_ITRF_USB << 8;
+diff --git a/drivers/staging/r8188eu/hal/HalHWImg8188E_MAC.c b/drivers/staging/r8188eu/hal/HalHWImg8188E_MAC.c
+index 20ce1571fc26..77b25885c63b 100644
+--- a/drivers/staging/r8188eu/hal/HalHWImg8188E_MAC.c
++++ b/drivers/staging/r8188eu/hal/HalHWImg8188E_MAC.c
+@@ -132,7 +132,7 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
  
-
-base-commit: d9c5818a0bc09e4cc9fe663edb69e4d6cdae4f70
+ 	u32     hex         = 0;
+ 	u32     i;
+-	u32     array_len    = sizeof(array_MAC_REG_8188E) / sizeof(u32);
++	u32     array_len    = ARRAY_SIZE(array_MAC_REG_8188E);
+ 	u32    *array       = array_MAC_REG_8188E;
+ 	bool	biol = false;
+ 
+diff --git a/drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c b/drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c
+index 9dc888a66d09..08cbfce3808d 100644
+--- a/drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c
++++ b/drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c
+@@ -138,7 +138,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
+ 
+ 	u32     hex         = 0;
+ 	u32     i           = 0;
+-	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E) / sizeof(u32);
++	u32     ArrayLen    = ARRAY_SIZE(Array_RadioA_1T_8188E);
+ 	u32    *Array       = Array_RadioA_1T_8188E;
+ 	bool		biol = false;
+ 	struct adapter *Adapter =  pDM_Odm->Adapter;
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index eb9375b0c660..dd2f9ae59c3f 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -3958,10 +3958,10 @@ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
+ 
+ struct iw_handler_def rtw_handlers_def = {
+ 	.standard = rtw_handlers,
+-	.num_standard = sizeof(rtw_handlers) / sizeof(iw_handler),
++	.num_standard = ARRAY_SIZE(rtw_handlers),
+ 	.private = rtw_private_handler,
+ 	.private_args = (struct iw_priv_args *)rtw_private_args,
+-	.num_private = sizeof(rtw_private_handler) / sizeof(iw_handler),
+-	.num_private_args = sizeof(rtw_private_args) / sizeof(struct iw_priv_args),
++	.num_private = ARRAY_SIZE(rtw_private_handler),
++	.num_private_args = ARRAY_SIZE(rtw_private_args),
+ 	.get_wireless_stats = rtw_get_wireless_stats,
+ };
 -- 
-2.32.0
+2.34.1
 

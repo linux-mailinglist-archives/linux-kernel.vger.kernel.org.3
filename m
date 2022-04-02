@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E814F04CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDA04F04E1
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357953AbiDBQW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 12:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S1358086AbiDBQai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 12:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357947AbiDBQW0 (ORCPT
+        with ESMTP id S1358084AbiDBQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 12:22:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3102583B9;
-        Sat,  2 Apr 2022 09:20:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6313ECE094D;
-        Sat,  2 Apr 2022 16:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2845C340EC;
-        Sat,  2 Apr 2022 16:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648916431;
-        bh=XgXaNNuEeJ937JoBXfirPFs0iHTDR3KVxroTM16ZOXU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vPb4/LeXLtPgTtnh7SrubheryX+KZ17p/OHrO4TkrXgkO9FhxVggv5bJT9FYBWDrq
-         aX80NsOmWenz6OU8e9MeBUpt9eM1o/xRzR4aMdWW3XEdLd7p3eWfolcg+xSuyfd60B
-         n5JblRKN3D6nc5uLOCywV5qK78+9yFd+FcFAwAnUQLfk0ZaPMwuQcM9Q9LOoX7fV5K
-         7Kv5IGozbe4fWdJ4UGunY6520k0GykjiGT1PqlGyK1DWkv22CdDNf/ftWTFqS1/UJV
-         vmK0qLUku6ASQSQuYINzy5BNWPBxfQhm+voxZoWDjDNa51CgFNI67kAIbUb4hnMQpw
-         TjnqwWrgwZwyQ==
-Date:   Sat, 2 Apr 2022 17:28:14 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IIO: accel: dmard09: fixed code styling issues
-Message-ID: <20220402172814.5117cdb7@jic23-huawei>
-In-Reply-To: <YkItIE5sp3P4sZdY@hp-amd-paul>
-References: <YkItIE5sp3P4sZdY@hp-amd-paul>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 2 Apr 2022 12:30:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BD66337
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:28:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bh17so11750206ejb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 09:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DSB2bZhZo75SSWCziQt2t9Zgl7ePoq+TzKjDyyRKIhM=;
+        b=CdAM6q4dxl6fxdnqGxDYrzuFWlpgZHARUlO6m8ZQWVHXoLL8GzUgEGFQ9nYeEXFbF/
+         QEvdxMBjShvDOMsgyIvePkgZCnGrsPhBiLX5mZrDBOO7kMlSMUbA486htIWteJxPMrEY
+         F98RdgozoM7Aq9GHkhjPR9DKQbHBpowK/JQikESmA7J1c+6qlLLXpJzSYAMnJ/ng+e53
+         cibleewvc1eJy0P9F6YEP8CS/LshBzlQ6GVyHFw2vmN0n6zGMVUtUFTSDI5HyJVND3Io
+         QIgJYWCMV3GECCWmybW+SDQKxCHEzR0V/aEudcCwdZqGbW+rdk8qigdLpUIPrAc1GFr4
+         WijQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DSB2bZhZo75SSWCziQt2t9Zgl7ePoq+TzKjDyyRKIhM=;
+        b=EBs6dmoValDS7P9u/UsiDTUn096QgWxSaqllwliAzvczSNrOtXzrKLVg5Ei4ekazXg
+         cNuJXkD/mPdDwZOlKu7RGAknvOh04GYnlOUhn2/cBOpHR2OJ1CxhM+hv5YCZun5Jvw8L
+         U1T+Gyzt0FmnbHQUoNVLsKR7YdySe1h5s0f4HJLQRM3b0KYzn3q2E2r2kMqXas3aFCCj
+         vnujUiBrmFxfPasstatc5nXIhWu8p/w0tVBC8aKy0zDCkSwRcRT4CXu3RkWE3xaAoxp4
+         dqAOIwe1J97f6eIg9NeGOQTGVd1lfn8hKrT3/L0sy1EFd5HNelC/7meewCw34l4ePQzJ
+         ax0w==
+X-Gm-Message-State: AOAM533TVRNEV5+zj8OGxlyUUq9qV1LFu9RXQ16h9lf/31AvamWLQRCQ
+        BXyBPucxAl6Am+TdMWIIvvJJ8A==
+X-Google-Smtp-Source: ABdhPJxwjjPCUC3hgZgk+ER1LyMOtHSTUdEWAISi3E6mNi9/P8EnyHGRuK7vcUs4ZlnWvNYBxnS2wQ==
+X-Received: by 2002:a17:907:c05:b0:6db:f118:8834 with SMTP id ga5-20020a1709070c0500b006dbf1188834mr4412970ejc.536.1648916920033;
+        Sat, 02 Apr 2022 09:28:40 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id x3-20020a50d9c3000000b0041c8ce4bcd7sm1319798edj.63.2022.04.02.09.28.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 09:28:39 -0700 (PDT)
+Message-ID: <a85dc713-a0b7-372f-1284-e8488b5b11a2@linaro.org>
+Date:   Sat, 2 Apr 2022 18:28:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] dt-bindings: arm: bcm: add bindings for Asus RT-AC88U
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Christian Lamparter <chunkeey@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+References: <20220401172427.2806-1-arinc.unal@arinc9.com>
+ <20220401172427.2806-2-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401172427.2806-2-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,37 +81,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 16:48:16 -0500
-Paul Lemmermann <thepaulodoom@thepaulodoom.com> wrote:
-
-> Cleaning up code.
+On 01/04/2022 19:24, Arınç ÜNAL wrote:
+> Add Asus RT-AC88U under BCM47094 based boards.
 > 
-> Signed-off-by: Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-Applied to the togreg branch of iio.git and pushed out as testing
-for 0-day to see if it can find anything we did wrong.
-
-BTW.  You seem to have sent two identical copies of this patch.
-I randomly decided to apply this second one.
-
-Thanks,
-
-Jonathan
-
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  drivers/iio/accel/dmard09.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/iio/accel/dmard09.c b/drivers/iio/accel/dmard09.c
-> index 53ab6078c..cb0246ca7 100644
-> --- a/drivers/iio/accel/dmard09.c
-> +++ b/drivers/iio/accel/dmard09.c
-> @@ -24,7 +24,7 @@
->  #define DMARD09_AXIS_Y 1
->  #define DMARD09_AXIS_Z 2
->  #define DMARD09_AXIS_X_OFFSET ((DMARD09_AXIS_X + 1) * 2)
-> -#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1 )* 2)
-> +#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1) * 2)
->  #define DMARD09_AXIS_Z_OFFSET ((DMARD09_AXIS_Z + 1) * 2)
->  
->  struct dmard09_data {
 
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

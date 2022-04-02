@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05D74F049B
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723F44F04A0
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357460AbiDBPwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 11:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        id S1357519AbiDBP57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 11:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352654AbiDBPwR (ORCPT
+        with ESMTP id S1357512AbiDBP55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:52:17 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41C51FCEB
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 08:50:24 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id k23so8187713ejd.3
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 08:50:24 -0700 (PDT)
+        Sat, 2 Apr 2022 11:57:57 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BF517AA6
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 08:56:01 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ot30so1744695ejb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 08:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6975MKU9sTkhbv+L8Y2u10WML0H3VB/iCkjt87HVcpo=;
-        b=Uq6rZIzCcG2AALKeKDE+g/YwFx0tGeWA6eaEST4TXreWflRtRMKfMjC2DJ3/fkcY1n
-         sPsVpDvCjUlKz7TFK4la4f75DBvo4iBuv3dFuB68E9HzMGUV0rVueljK6I81uWdV7qPk
-         btZti3rQacMT3uQsMlYyBzJIBgsADoFB4raO9ib0WhiIuahEr55lRnq9sbGP9kfFRtZk
-         P0n3DVTR2h8E5ZOuJMukHJzCM63tKkID6ddUVcwbcWMl8SoGAmyoaHjsiF+Vns5ASJfX
-         4w9nhuQPUkgGYgUDVBtTR/pP/E8v6Ugc6nBFH4Zw1HFoGO83LdjXRyh+WVHZ7UyNz4+o
-         vYRQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EuVHQKj00KiyE/jfkOjZYn3vY7PV3FTcEesPbvXU4jo=;
+        b=eiKtSHZaOzxi0xEi2h4siGI7VE6mBVjFN6OJR24q1WgvVZ6kSRaOUEDYuBaigafCPm
+         zJJwX0s57Try+onBevGkRSMSRmMjtD2jnHEnGMA7LKBMXjK7P3pPp92V5LzK7crnLpka
+         gNzmNC+uGs1cNb83fwTIhpyAsCze1i38mKbswtxQVju+eTgpR1OMheczD7S1Lro8XjKd
+         F1it+0NbsGC9TPrDGfdKtPmpX5XwS64ATtDTieFE40f87SbPMhMZnflYrRgzPXrgYuYH
+         ofePZTxy65EZlp8mPIp02snTHluS3UJDHZ/KiIN4N+GHk4Ab3R8TYdHC3M7KIdx3Z25h
+         xSiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6975MKU9sTkhbv+L8Y2u10WML0H3VB/iCkjt87HVcpo=;
-        b=ilm1CnWOz48H1xAaK4WeYCXFXkP5HGfOEVoXdkV2A2Sco9Q3dh0l7K9BAOZfMXBEOU
-         WIh+vYqWLp+vB6USNCgbhlyD30rQ1nrl/iWEnd9egVAJY3kj8Z5Yjis4P/l/dKGERSd3
-         gjwgmNhz2hcyozkpU1T7fOXFsmAdTI4c7aIlhYsrKhZilniC7jAUqJvtL8vbbpmChl4n
-         MJL4hkhPh1h3C30BskWd/LDz+mu9C3cRPRAGVhRXNAa/1GDjG2XSx8Hh6GDHl6N16Jj4
-         8i8YOtULELBEUGcxrjimCfC5NrRiQnwL+WUs8OPoD8a0YUcMxY/uU55SZAY03qeLr3ND
-         dtRw==
-X-Gm-Message-State: AOAM5330siVcHy0CcHRpNs8F5y4BmZkdiOflBimoLPRj6sNzy+TKCv34
-        QvWfXjDlk2QgkEaQW4D24Pi8OQ==
-X-Google-Smtp-Source: ABdhPJx8QAoYvVoNwXcpqzI0cVtIj6iw6TjQJw6cn1Dy2UVjJulY+JTWr3wZAJBGvvRkcqAd9ZS9TQ==
-X-Received: by 2002:a17:906:32cf:b0:6d5:83bc:e962 with SMTP id k15-20020a17090632cf00b006d583bce962mr4390724ejk.108.1648914623488;
-        Sat, 02 Apr 2022 08:50:23 -0700 (PDT)
-Received: from [192.168.0.33] (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
-        by smtp.gmail.com with ESMTPSA id s3-20020a1709067b8300b006e4a6dee49dsm2241404ejo.184.2022.04.02.08.50.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 08:50:23 -0700 (PDT)
-Message-ID: <e981064e-50a3-05f3-a013-564aea5fe99b@linaro.org>
-Date:   Sat, 2 Apr 2022 16:50:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,smb2: add bindings
- for smb2 driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        bh=EuVHQKj00KiyE/jfkOjZYn3vY7PV3FTcEesPbvXU4jo=;
+        b=CRgcbZ/0Gb0NtIHLfi+1bERzO2sA/NlnlfoqmHdbG/KnReHHfmDEh7gXm7PEVdM08W
+         fWlHUAnAKuajwUg9JX2HgKOTeV8Jql9DdcoUIzordbI0rwTal5kC8NW53gaMLnqI5Esr
+         AxOpe9KFxGz1Ypekyrf8MMjY+SOqKYXr4i0cQrhh012Ju1ZakMzIxSC25wBmFEvJfIpL
+         hHEAbnQOWqFTSILLveg8ho17o5tVHWs/vfKSA0/c4Vwag0ibFFNuyy8EqV+yj8Er5SBK
+         CkhvSe3bh9DucPAR7wyDQ9b45ZUcWcu9BhP2tsXz7TM4G6pwiMCbXC/EyJn39VLr/zik
+         EA7w==
+X-Gm-Message-State: AOAM531ngSpy9ZgiOqW8okmjkNAQspbFn6D1Xiu95GEzyu4j747EdxHq
+        SxOmOFpCTfwZvnBU/OVsnJ1NiA==
+X-Google-Smtp-Source: ABdhPJxfLuqMATYwK9iSwU7NsddkjCUqupSmfKJN4fjzjdy/zsVfgOnyfdOxpAIE3kuLumpuxTC3uA==
+X-Received: by 2002:a17:907:1ca8:b0:6df:f192:cf4a with SMTP id nb40-20020a1709071ca800b006dff192cf4amr4469091ejc.620.1648914960455;
+        Sat, 02 Apr 2022 08:56:00 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170906038c00b006e4e48969d2sm1479331eja.88.2022.04.02.08.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 08:55:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <20220401202643.877609-1-caleb.connolly@linaro.org>
- <20220401202643.877609-7-caleb.connolly@linaro.org>
- <f737fd47-e557-45af-035b-af29a88e22e6@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <f737fd47-e557-45af-035b-af29a88e22e6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alex Elder <elder@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 1/2] dt-bindings: mailbox: qcom-ipcc: simplify the example
+Date:   Sat,  2 Apr 2022 17:55:50 +0200
+Message-Id: <20220402155551.16509-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,110 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Consumer examples in the bindings of resource providers are trivial,
+useless and duplicating code.  Additionally the incomplete qcom,smp2p
+example triggers DT schema warnings.
 
+Cleanup the example by removing the consumer part and fixing the
+indentation to DT schema convention.
 
-On 02/04/2022 15:22, Krzysztof Kozlowski wrote:
-> On 01/04/2022 22:26, Caleb Connolly wrote:
->> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
->> drivers.
->>
->> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
->> ---
->>   .../bindings/power/supply/qcom,smb2.yaml      | 68 +++++++++++++++++++
->>   1 file changed, 68 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
->> new file mode 100644
->> index 000000000000..1bea1fef78b8
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
->> @@ -0,0 +1,68 @@
->> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/qcom,smb2.yaml#
-> 
-> Hi,
-Hi Krzysztof,
-> 
-> Are you sure "smb2" is a real Qualcomm versioning? IOW, is there going
-> to be smb3 in the future? If not, better to just name the file according
-> to model, so like compatible and like other existing schemas from Qualcomm.
-Qualcomm versioning is a complete mystery to me 😅, downstream kernels have a 
-"pmi8998_charger" which uses the qpnp-smb2 driver, there is also an "smb5" 
-driver presumably for newer PMICs. This driver is used for the charger block 
-found on the PMI8998 and PM660 at least, a name like "pmi8998_charger" might be 
-more suitable.
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/mailbox/qcom-ipcc.yaml           | 29 +++++++------------
+ 1 file changed, 10 insertions(+), 19 deletions(-)
 
-> 
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
->> +
->> +maintainers:
->> +  - Caleb Connolly <caleb.connolly@linaro.org>
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - qcom,pmi8998-smb2
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    items:
->> +      - description: usb plugin
-> 
-> Just maxItems:1 (description is obvious and matches names).
-> 
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: usb-plugin
->> +
->> +  io-channels:
->> +    items:
->> +      - description: USB in current in uA
->> +      - description: USB in voltage in uV
->> +
->> +  io-channel-names:
->> +    items:
->> +      - const: usbin_i
->> +      - const: usbin_v
->> +
-> 
-> What about monitored-battery? How do you configure the battery
-> characteristics?
-> 
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - interrupt-names
->> +  - io-channels
->> +  - io-channel-names
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    pmic {
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +      #interrupt-cells = <4>;
->> +
->> +      smb2@1000 {
-> 
-> Generic node name please, so "charger".
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-
+diff --git a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+index 866efb278813..dfdc72345a2a 100644
+--- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
++++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+@@ -61,23 +61,14 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-        #include <dt-bindings/interrupt-controller/arm-gic.h>
+-        #include <dt-bindings/mailbox/qcom-ipcc.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/mailbox/qcom-ipcc.h>
+ 
+-        mailbox@408000 {
+-                compatible = "qcom,sm8250-ipcc", "qcom,ipcc";
+-                reg = <0x408000 0x1000>;
+-                interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
+-                interrupt-controller;
+-                #interrupt-cells = <3>;
+-                #mbox-cells = <2>;
+-        };
+-
+-        smp2p-modem {
+-                compatible = "qcom,smp2p";
+-                interrupts-extended = <&ipcc_mproc IPCC_CLIENT_MPSS
+-                                IPCC_MPROC_SIGNAL_SMP2P IRQ_TYPE_EDGE_RISING>;
+-                mboxes = <&ipcc_mproc IPCC_CLIENT_MPSS IPCC_MPROC_SIGNAL_SMP2P>;
+-
+-                /* Other SMP2P fields */
+-        };
++    mailbox@408000 {
++        compatible = "qcom,sm8250-ipcc", "qcom,ipcc";
++        reg = <0x408000 0x1000>;
++        interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-controller;
++        #interrupt-cells = <3>;
++        #mbox-cells = <2>;
++    };
 -- 
-Kind Regards,
-Caleb (they/them)
+2.32.0
+

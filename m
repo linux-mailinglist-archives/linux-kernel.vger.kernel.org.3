@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78E34F00DF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8134F00E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354595AbiDBK7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 06:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S1354614AbiDBLC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 07:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiDBK7n (ORCPT
+        with ESMTP id S239157AbiDBLCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:59:43 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D89C17869B;
-        Sat,  2 Apr 2022 03:57:52 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 62EC51C0B79; Sat,  2 Apr 2022 12:57:51 +0200 (CEST)
-Date:   Sat, 2 Apr 2022 12:57:49 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <20220402105749.GB16346@amd>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220222221614.GC3061737@dread.disaster.area>
+        Sat, 2 Apr 2022 07:02:51 -0400
+Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29E95BD32;
+        Sat,  2 Apr 2022 04:00:58 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout4.routing.net (Postfix) with ESMTP id 4D71A1012AB;
+        Sat,  2 Apr 2022 11:00:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1648897257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AzwyT+mHzC7B+wiMi8w60y3FU2UPOMZ1lb1gM889PVM=;
+        b=CuQ/AgBl9PPPDb+yFe4jDBtgKKbTdvqHxbCd/Fb54e7J3hPLno9VY4LNdGzQ1TIxoerzvP
+        xR9ifnMmuEjvVdgGjyEjxlRf9OrPfgDOtC+O3wbql08KiyNrKutgpY7zEyZmwNfjNyJy23
+        oSKjR3YP0G72L+h6ty5HQG2HUFhARis=
+Received: from localhost.localdomain (fttx-pool-80.245.79.107.bambit.de [80.245.79.107])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 7E6AB3602D1;
+        Sat,  2 Apr 2022 11:00:56 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] Change Bananapi-R2-Pro board to match V1.0
+Date:   Sat,  2 Apr 2022 13:00:43 +0200
+Message-Id: <20220402110045.104031-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="gj572EiMnwbLXET9"
-Content-Disposition: inline
-In-Reply-To: <20220222221614.GC3061737@dread.disaster.area>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 43103d1d-1e1a-412a-a386-c44869064607
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Frank Wunderlich <frank-w@public-files.de>
 
---gj572EiMnwbLXET9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Mainline Devicetree was created for v00 prototype that was not in
+public sale and only shipped to few developers. V1.0 of the board
+has some changes in io-domain and gmacs are swapped.
 
-> > So from my distro experience installed userbase of reiserfs is pretty s=
-mall
-> > and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
-> > for enterprise offerings it is unsupported (for like 3-4 years) and the=
- module
-> > is not in the default kernel rpm anymore.
-> >=20
-> > So clearly the filesystem is on the deprecation path, the question is
-> > whether it is far enough to remove it from the kernel completely. Maybe
-> > time to start deprecation by printing warnings when reiserfs gets mount=
-ed
-> > and then if nobody yells for year or two, we'll go ahead and remove it?
->=20
-> Yup, I'd say we should deprecate it and add it to the removal
-> schedule. The less poorly tested legacy filesystem code we have to
-> maintain the better.
->=20
-> Along those lines, I think we really need to be more aggressive
-> about deprecating and removing filesystems that cannot (or will not)
-> be made y2038k compliant in the new future. We're getting to close
-> to the point where long term distro and/or product development life
-> cycles will overlap with y2038k, so we should be thinking of
-> deprecating and removing such filesystems before they end up in
-> products that will still be in use in 15 years time.
->=20
-> And just so everyone in the discussion is aware: XFS already has a
-> deprecation and removal schedule for the non-y2038k-compliant v4
-> filesystem format. It's officially deprecated right now, we'll stop
-> building kernels with v4 support enabled by default in 2025, and
-> we're removing the code that supports the v4 format entirely in
-> 2030.
+Change mainline DTS to match the current hardware.
 
-Haha.
+Frank Wunderlich (2):
+  arm64: dts: rockchip: Change io-domains of bpi-r2-pro
+  arm64: dts: rockchip: Add gmac1 and change network settings
 
-It is not up to you. You can't remove feature people are
-using. Sorry. Talk to Linus about that.
+ .../boot/dts/rockchip/rk3568-bpi-r2-pro.dts   | 40 ++++++++++++++++---
+ 1 file changed, 35 insertions(+), 5 deletions(-)
 
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+-- 
+2.25.1
 
---gj572EiMnwbLXET9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmJILCwACgkQMOfwapXb+vL+cwCeKoWjLgQyQtZxSVPyZ3fSK+va
-2y4AnRvT6XFyi/Bb7fAtHmBi382Irkrc
-=Kv/y
------END PGP SIGNATURE-----
-
---gj572EiMnwbLXET9--

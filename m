@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA8C4EFDB3
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CE44EFDBB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiDBBUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 21:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S1351603AbiDBBWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 21:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233906AbiDBBUQ (ORCPT
+        with ESMTP id S233906AbiDBBWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:20:16 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D97D6272
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:18:22 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso6693645pju.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:18:22 -0700 (PDT)
+        Fri, 1 Apr 2022 21:22:05 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816DE2D1E8
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:20:14 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id o10so9284550ejd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=vmXDNGRwxvJV5bPtlpMkGelkiXgueKiUQe5KobqRJ/4=;
-        b=NONBFM1nyA+/a7X1odEhyipKm4YHgfni3MSDXOxb6N8k5EUYH4qxjuoDq91WCTjCCD
-         cOdWI2ICvv9C6sOLtkNw0eCSqL/I8XXSMfhyEuImA7vgv1rE328wNQIRD/YD0buKz0Bb
-         P7Cx7V6CYDgfLMbHlTWyzbVut0ZPAfsrjYmHD7rc4+uwNldLB14weJKla4ntc8EwEuTH
-         dkUJH/VlFeQpwqp3hk+XFt1y4V2pyinXZgLrV+EZ4Vyy4boyROI8ZGF6SGRAlcnyYi3u
-         utaG2CJDL3dJHfhr3/svxdKf5SMbutxmype1xxxsy7mT21Pq/TuLLlrCbjcbd5C7/xdA
-         uKbw==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
+        b=DkN2+IoGQRNVn9I3tQluJaEc0MtViO8LRtF2NJ4s7IaMBLZLmCvQWoKwHzIenK2Uvt
+         oM6wyR7cpVpw/DP2N18V03yoXgGRVrapdyCInNpevW5rlrzsyvf5gqZL4sA2Rw4B9ZJg
+         3UOY3d8SQ47sXetoK5U9iEEGwQTb8Ff0UQw5PtcJEam5PYMgJASsTyuSg/uaNe/g3fMz
+         yqwj0iiYgM3HaLEVT5o3TRcIIHaIQnbEZiSbYiR2x9jyWrHznvIUDRuJBO5JN4SX+MQD
+         8mzqNLGq4bG6euGysH79oPKXg+fJLacgaCYuRQu3I8s681Fy18Rz98Cx4bqbek74Luqn
+         hifw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=vmXDNGRwxvJV5bPtlpMkGelkiXgueKiUQe5KobqRJ/4=;
-        b=mv3TnRuBVVm9c1OPEfXtdEJ1RWD7MDz8rlTdKvjwvrAWGqA4zvSMHWCBawnIAhAm9o
-         flhqxB3Rp1UXrurAYZNY6B0Yn4LECgOLsGP3030a2zRViCAeeU5T1XQL/uBhVthc6Khs
-         LEZsWSAiwRoV5AgXaqRNio/yniGgeDSeK/lQgGE7/cnq+Lg+fNl9A+vUzcIOcg8QzJzh
-         o+cxwN6NjAUdbvetRPHQkNFzJlcpQa4OkfH52D+r8Wm0WGy6fBWz01/lOeKYTQG9nGdl
-         VTfNOUVt+cYFsSftkBapjNZoVQpzqQ9+33wzktqC3dhPtxgO03zU127Px8CimJawWhrH
-         kMIg==
-X-Gm-Message-State: AOAM532a7slP5HvO/EToV6dGRPL4GoA1XhqCAQrHBjJ6bF0NH7mNGbGy
-        lkr5gQHqHkSqnI1/AE6RP06IqQ==
-X-Google-Smtp-Source: ABdhPJy+bnbcPBXRDI8Tq5oOepqEmiWjEb84NCjTl7AXKfF37y7W7ZWFY8F4nxzb2yiKOYPjDVi0AQ==
-X-Received: by 2002:a17:902:e851:b0:156:3cbd:22d0 with SMTP id t17-20020a170902e85100b001563cbd22d0mr18151216plg.33.1648862301431;
-        Fri, 01 Apr 2022 18:18:21 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:b43e:b2a3:f165:61a1])
-        by smtp.gmail.com with ESMTPSA id ot17-20020a17090b3b5100b001c746bfba10sm15020578pjb.35.2022.04.01.18.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 18:18:19 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 18:18:13 -0700
-From:   Benson Leung <bleung@google.com>
-To:     torvalds@linux-foundation.org
-Cc:     pmalani@chromium.org, bleung@chromium.org, bleung@google.com,
-        bleung@kernel.org, chrome-platform@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tzungbi@kernel.org
-Subject: [GIT PULL] chrome-platform changes for v5.18
-Message-ID: <YkekVRh9Ixdfa5qL@google.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
+        b=74MAkt5Q3aFLSnGC9LEILzqoaUzbvb44Modt4RY7afhhWaC1PWFWSQdTuDEBsqwWVJ
+         k+3N3CqL2ei1GG7qKrrxCWTetBkO9pz5ER7dN9pco0G7QEFUr1DxCcF2q8fsmVXPnjGg
+         ODlCaAg2JXBptID0EzeXWOYUvjc/zZ3A17UsY2DS9xvlzy5z/q5uSBEnf1qY81EaXwUi
+         QBgBVycxf3HxtEdE/kyBZbx1kiHX5QJCsNgGyWTMxniw0OAacapuSxoGyGTxc6A6tkQ0
+         0VqDAgd/Bw/OEszZClVghe0hK8uEpWYsdxww6tzKtjib/uuP9eCVfglJe7y7YVFG1V2+
+         pZ2w==
+X-Gm-Message-State: AOAM532ZmXWenEMBtIjRK2IHiLvzztwDj9Of7md4Cik5eOU0SYpMhW1i
+        dc5wr4W/ezP2Gf21HSDJ7p9EDPTixU1qdNNrSoM=
+X-Google-Smtp-Source: ABdhPJxdMQmVZLNF+7vq8tj4btDtW9ROcnQCx3SXwX2vXAT2C3lTN7xw3dnuRurNZE+ZiQItXzYYUylWjK6AIFqxWz8=
+X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
+ sd6-20020a1709076e0600b006e4dae79574mr2172572ejc.540.1648862413069; Fri, 01
+ Apr 2022 18:20:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AJDRZfkVlpKTNT5V"
-Content-Disposition: inline
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Sat, 2 Apr 2022 02:20:14 +0100
+Message-ID: <CAHpNFcOpX0JwcqrPSQkP0oV10EFhJmCiMZOYKis+xSQO5C_rDg@mail.gmail.com>
+Subject: Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
+ Class VESA Console + With Console in VecSR you can 3DText & Audio + VecSR
+ Firmware update 2022 For immediate implementation in all operating systems & ROM's
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,108 +62,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+VecSR Firmware update 2022 For immediate implementation in all
+operating systems, monitors, TV's & equipment such as Mouses, Audio
+Systems & Webcams
 
---AJDRZfkVlpKTNT5V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+VecSR - Vector Standard Render
 
-Hi Linus,
+VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
+Consolas & other brilliant fonts : (c)RS
 
-Here's chrome-platform's changes for v5.18-rc1.
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
 
-Of note, the last two commits of this PR had to be reworded (actually just
-the second to last one) since it hit linux-next for a minor commit message
-fixup. Content wise, the two are the same as they are on linux-next right n=
-ow.
+OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
+Mode & Desktop Rendering modes
 
-Thanks,
-Benson
+Improve Console & TV & BIOS & General Animated Render
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
 
-are available in the Git repository at:
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git t=
-ags/tag-chrome-platform-for-v5.18
+High precision for AVX 32Bit to 256Bit width precision.
 
-for you to fetch changes up to 0e8eb5e8acbad19ac2e1856b2fb2320184299b33:
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
 
-  platform/chrome: cros_ec_debugfs: detach log reader wq from devm (2022-03=
--31 16:56:48 -0700)
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
 
-----------------------------------------------------------------
-chrome platform changes for 5.18
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
 
-cros_ec_typec:
-* platform/chrome: cros_ec_typec: Check for EC device - Fix a crash when us=
-ing
-  the cros_ec_typec driver on older hardware not capable of typec commands.
-* Make try power role optional.
-* Mux configuration reorganization series from Prashant.
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
 
-cros_ec_debugfs:
-* Fix use after free. Thanks Tzung-bi.
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
 
-sensorhub:
-* cros_ec_sensorhub fixup - Split trace include file
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
 
-misc:
-* Add new mailing list for chrome-platform development.
-  chrome-platform@lists.linux.dev. Now with patchwork!
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
 
-----------------------------------------------------------------
-Benson Leung (1):
-      MAINTAINERS: platform-chrome: Add new chrome-platform@lists.linux.dev=
- list
+(c)Rupert S
 
-Gwendal Grignou (1):
-      platform: chrome: Split trace include file
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
 
-Prashant Malani (6):
-      platform/chrome: cros_ec_typec: Make try power role optional
-      platform/chrome: cros_ec_typec: Check for EC device
-      platform/chrome: cros_ec_typec: Move mux flag checks
-      platform/chrome: cros_ec_typec: Get mux state inside configure_mux
-      platform/chrome: cros_ec_typec: Configure muxes at start of port upda=
-te
-      platform/chrome: cros_ec_typec: Update mux flags during partner remov=
-al
+https://science.n-helix.com/2019/06/vulkan-stack.html
 
-Tzung-Bi Shih (1):
-      platform/chrome: cros_ec_debugfs: detach log reader wq from devm
+https://science.n-helix.com/2019/06/kernel.html
 
- MAINTAINERS                                       |   5 +
- drivers/platform/chrome/Makefile                  |   3 +-
- drivers/platform/chrome/cros_ec_debugfs.c         |  12 +--
- drivers/platform/chrome/cros_ec_sensorhub_ring.c  |   3 +-
- drivers/platform/chrome/cros_ec_sensorhub_trace.h | 123 ++++++++++++++++++=
-++++
- drivers/platform/chrome/cros_ec_trace.h           |  95 -----------------
- drivers/platform/chrome/cros_ec_typec.c           |  97 +++++++++--------
- 7 files changed, 186 insertions(+), 152 deletions(-)
- create mode 100644 drivers/platform/chrome/cros_ec_sensorhub_trace.h
+https://science.n-helix.com/2022/03/fsr-focal-length.html
 
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
 
---AJDRZfkVlpKTNT5V
-Content-Type: application/pgp-signature; name="signature.asc"
+https://bit.ly/VESA_BT
 
------BEGIN PGP SIGNATURE-----
+*
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYkekVQAKCRBzbaomhzOw
-wvn5AQDWkhaopvlzCZno1F1xRKy2RLugOwMNRZTw7KIVbpaoaQD+PGaExSaXegl7
-4SpRXDVGTgKnfg183XocNISMZzJ3+wI=
-=J0ly
------END PGP SIGNATURE-----
+*Application of SiMD Polygon Font Method Render
+*3D Render method with Console input DEMO : RS
 
---AJDRZfkVlpKTNT5V--
+3D Display access to correct display of fonts at angles in games &
+apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
+font or shape. (c)Rupert S
+
+3rd dimensional access with vector fonts by a simple method:
+
+Render text to virtual screen layer AKA a fully rendered monochrome, 2
+colour or multi colour..
+
+Bitmap/Texture,
+
+Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+
+Can be higher resolution & we can sub sample with closer view priority...
+
+We then rotate the texture on our output polygon & factor size differential.
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize
+
+Why ? Because rotating a polygon is harder than subtracting or adding
+width, Hight & direction to fully complex polygon Fonts & Polygon
+lines or curves...
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize.
+
+https://science.n-helix.com/2022/04/vecsr.html

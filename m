@@ -2,100 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A12D4F046F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157614F046A
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357304AbiDBPcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 11:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S1345304AbiDBPbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 11:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiDBPcT (ORCPT
+        with ESMTP id S232006AbiDBPbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:32:19 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F38123BC1;
-        Sat,  2 Apr 2022 08:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648913416;
-        bh=lZSOBxnkYshkouLS0XGvOyWTUsSm5nmlSADx/QK6Sfw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=kVQc5hIpXWsPIBo4CqyEoFtkrTTHR+l8ZKsnDBawQvRMO4d4OgLfptcilNjQPRmnP
-         aGj5zk6Jd8xd0un09eFMrNQpKa9YzJNTRldjakHpkqr+fCrGEx5+yoEGK4BafWBypY
-         i3kG9YNc2vhwGc7jleG6KxEMx+H3hSr7dsFSS9cA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.166]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M6ll8-1neWn80Xq2-008JPY; Sat, 02 Apr 2022 17:30:16 +0200
-From:   Peter Seiderer <ps.report@gmx.net>
-To:     linux-wireless@vger.kernel.org
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] mac80211: minstrel_ht: fill all requested rates
-Date:   Sat,  2 Apr 2022 17:30:14 +0200
-Message-Id: <20220402153014.31332-2-ps.report@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220402153014.31332-1-ps.report@gmx.net>
-References: <20220402153014.31332-1-ps.report@gmx.net>
+        Sat, 2 Apr 2022 11:31:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B3212342E;
+        Sat,  2 Apr 2022 08:29:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBF0BB80990;
+        Sat,  2 Apr 2022 15:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C983EC340EC;
+        Sat,  2 Apr 2022 15:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648913382;
+        bh=Ef9VlYwPAyUnvztGaMgffvzv4Ib7J175ViIcW3rXYpw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c1zDfDzzrSDB2gkDsugjNMvLx2Vl3oS4zbI8A9Dnrh0mbCNvL/fsnK9WFQwjargvV
+         S9LJJw7Ho4ezy2Q8E8bwfAcmOqvE5uUySEGaePlW2FReEfZdUM0ZKa/dBz80KYchuF
+         wiBhGlUZ0S78IYoc4SZRQOBazdWnau25x4CHk7Pf09ZSWwdjTC8G4PfJ2tpFG/4nr5
+         fE+0iOVwyDe2S4+loWEouYUqfh0SwR3YotDcEAPY7BHWjc5AmfMFQzN353XgCQXqHz
+         1ltA5xvzCSkv7LUzTl7zbujWud7xiEMcYtiwqnAtU/sRjaZKABSc7isemeU6WhQqWK
+         aX4oqKM9JS9wA==
+Date:   Sat, 2 Apr 2022 16:37:23 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH 1/3] iio: buffer: remove usage of list iterator variable
+ for list_for_each_entry_continue_reverse()
+Message-ID: <20220402163645.17e911fd@jic23-huawei>
+In-Reply-To: <20220331230632.957634-1-jakobkoschel@gmail.com>
+References: <20220331230632.957634-1-jakobkoschel@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:0wr3EzeN+lXmgwruwVbHbIItUpzgHp396SesflJa0YdqyVF7t9q
- AAfaD+Bqk5Z8ghMD22ji/bpePDOkXCm5iQpJqWksXImYnUzRj3IAFShCWrAk5OvIJiWvQYV
- omYoq8j7QN2w//ZnHY94nI4eiXh194ZMZ/01En5eiderY913paxogcTgjPukBO9nqPK6iGd
- Doyvjg7XAqbkVVFsgTaTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dQFF1XUE+VA=:+9BjDVBnY0wpvaIt/MzbH9
- pmGlfNEofzMulJnqM4e7NunE/2BHfI4EF4+aFHgR9G6w0cdeTeOZEujNlRBfUn+aDwuyOSoZZ
- jSEfcVb+rjw779miOENlYOfJWH4c0n74Vq8eUyEoaX8ZhYkddxLQAtNsjZQKQedXJFZ/AnNvY
- vcIc0BScF7Mt99WUQ7DUXxzj39AGkyRveARAvot6Nt6U2zPCdmqR7rCsEhMzusqkb0FrxR4Xd
- knNEbGPFU/LzzkCsVtV5hnLaCYPvx4w8OLso8z7RHYqWQgpUVr35Erd5jOAYRDBgRA94GE97p
- qX4IC2VxUuOw9rSLJJ5ysCtmgqoZY/Vb7N0zaabHdpF5QqwlpEpxiddiYuvhJ2jQTTVnzIThd
- 8vjmbpcGEUIFGG6EoezQ0exDBoC6jSQVa+2kBixxluHZOBgscNqSKUPb2H3PRpXxAojc0tec7
- 2uZon9zKNlviNUkvq/hZnN91YmdbqsecbE4gewXwzLWyUjH8oaJtbD5KDXSNcxod6tBPcw0JA
- JAJZ8ioMVb/ngpRW/LxoVlXMRkDIxzQb1xVxFLkH5Pp8Cobent8dSVJNMPyHPN17Aw6YlaQXu
- vtHq8gP6fRrRVL1RreRGmaOsHIhA4T6kdSux9OgJphSYz0z6YFTPqCUYik8GCzV3Htf9a2dVV
- lKT40dR5lF+jOly03fVVpFm6M2zEtFZFyVyqKztM48IS5Jd8dVDzZI/dhLvdwmlJYzvxXM4vR
- QrTQriskVhB2IynDyi9D9vp8KUgHLTxjY9nm/mMGB3nP6k3RBjzUqWV0/8sWdDighPD8oF0ao
- Ile0c7EaWDFVijVLkVFDl/roacDv5IMoEpkYIJHxU1rMaR0h/oKu3G5gjSEXNZCJRLJcWZj5h
- o0zJhHNwtDZi6iCUS4W9kRu1Q0oHw0ymjcPMuySxvR5RlDXrZ0N8w9V+scOJdOh8bdjv7d3lw
- q/kVvZjFHx7S6uiPeJ79Iy3CKH+G3W7DPma/qWkVyzbpWFJcumcmXlE7Q05cds9XYjSShygtF
- Sxvn8N0FfBA/nP1mGJTOv7A3Gts/ikY4r1Kzocg/NhkVkodaSjrSSwIA3gscDrWaxz+5w6LOc
- 6Gh/cNOWpDAJr4=
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RmlsbCBhbGwgcmVxdWVzdGVkIHJhdGVzIChpbiBjYXNlIG9mIGF0aDlrIDQgcmF0ZSBzbG90cyBh
-cmUKYXZhaWxhYmxlLCBzbyBmaWxsIGFsbCA0IGluc3RlYWQgb2Ygb25seSAzKSwgaW1wcm92ZXMg
-dGhyb3VnaHB1dCBpbgpub2lzeSBlbnZpcm9ubWVudC4KClNpZ25lZC1vZmYtYnk6IFBldGVyIFNl
-aWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCiBuZXQvbWFjODAyMTEvcmM4MDIxMV9taW5z
-dHJlbF9odC5jIHwgMTQgKysrKysrKy0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlv
-bnMoKyksIDcgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbmV0L21hYzgwMjExL3JjODAyMTFf
-bWluc3RyZWxfaHQuYyBiL25ldC9tYWM4MDIxMS9yYzgwMjExX21pbnN0cmVsX2h0LmMKaW5kZXgg
-OWM2YWNlODU4MTA3Li5jZDZhMGYxNTM2ODggMTAwNjQ0Ci0tLSBhL25ldC9tYWM4MDIxMS9yYzgw
-MjExX21pbnN0cmVsX2h0LmMKKysrIGIvbmV0L21hYzgwMjExL3JjODAyMTFfbWluc3RyZWxfaHQu
-YwpAQCAtMTQzNiwxNyArMTQzNiwxNyBAQCBtaW5zdHJlbF9odF91cGRhdGVfcmF0ZXMoc3RydWN0
-IG1pbnN0cmVsX3ByaXYgKm1wLCBzdHJ1Y3QgbWluc3RyZWxfaHRfc3RhICptaSkKIAkvKiBTdGFy
-dCB3aXRoIG1heF90cF9yYXRlWzBdICovCiAJbWluc3RyZWxfaHRfc2V0X3JhdGUobXAsIG1pLCBy
-YXRlcywgaSsrLCBtaS0+bWF4X3RwX3JhdGVbMF0pOwogCi0JaWYgKG1wLT5ody0+bWF4X3JhdGVz
-ID49IDMpIHsKLQkJLyogQXQgbGVhc3QgMyB0eCByYXRlcyBzdXBwb3J0ZWQsIHVzZSBtYXhfdHBf
-cmF0ZVsxXSBuZXh0ICovCi0JCW1pbnN0cmVsX2h0X3NldF9yYXRlKG1wLCBtaSwgcmF0ZXMsIGkr
-KywgbWktPm1heF90cF9yYXRlWzFdKTsKLQl9CisJLyogRmlsbCB1cCByZW1haW5pbmcsIGtlZXAg
-b25lIGVudHJ5IGZvciBtYXhfcHJvYmVfcmF0ZSAqLworCWZvciAoOyBpIDwgKG1wLT5ody0+bWF4
-X3JhdGVzIC0gMSk7IGkrKykKKwkJbWluc3RyZWxfaHRfc2V0X3JhdGUobXAsIG1pLCByYXRlcywg
-aSwgbWktPm1heF90cF9yYXRlW2ldKTsKIAotCWlmIChtcC0+aHctPm1heF9yYXRlcyA+PSAyKSB7
-CisJaWYgKGkgPCBtcC0+aHctPm1heF9yYXRlcykKIAkJbWluc3RyZWxfaHRfc2V0X3JhdGUobXAs
-IG1pLCByYXRlcywgaSsrLCBtaS0+bWF4X3Byb2JfcmF0ZSk7Ci0JfQorCisJaWYgKGkgPCBJRUVF
-ODAyMTFfVFhfUkFURV9UQUJMRV9TSVpFKQorCQlyYXRlcy0+cmF0ZVtpXS5pZHggPSAtMTsKIAog
-CW1pLT5zdGEtPm1heF9yY19hbXNkdV9sZW4gPSBtaW5zdHJlbF9odF9nZXRfbWF4X2Ftc2R1X2xl
-bihtaSk7Ci0JcmF0ZXMtPnJhdGVbaV0uaWR4ID0gLTE7CiAJcmF0ZV9jb250cm9sX3NldF9yYXRl
-cyhtcC0+aHcsIG1pLT5zdGEsIHJhdGVzKTsKIH0KIAotLSAKMi4zNS4xCgo=
+On Fri,  1 Apr 2022 01:06:30 +0200
+Jakob Koschel <jakobkoschel@gmail.com> wrote:
+
+> In preparation to limit the scope of the list iterator variable to the
+> list traversal loop, use a dedicated pointer to iterate through the
+> list [1].
+> 
+> Since that variable should not be used past the loop iteration, a
+> separate variable is used to 'remember the current location within the
+> loop'.
+> 
+> To either continue iterating from that position or start a new
+> iteration (if the previous iteration was complete) list_prepare_entry()
+> is used.
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+
+Hi Jakob,
+
+Series applied to the togreg branch of iio.git and pushed out as testing to let
+0-day take a poke at it. Note I'll be rebasing that branch on rc1 once available
+before pushing it out for linux-next to pick up.
+
+Note I'm happy to add additional tags if anyone else takes a look at it.
+
+Thanks
+
+Jonathan
+
+> ---
+>  drivers/iio/industrialio-buffer.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+> index 208b5193c621..151a77c2affd 100644
+> --- a/drivers/iio/industrialio-buffer.c
+> +++ b/drivers/iio/industrialio-buffer.c
+> @@ -1059,7 +1059,7 @@ static int iio_enable_buffers(struct iio_dev *indio_dev,
+>  	struct iio_device_config *config)
+>  {
+>  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+> -	struct iio_buffer *buffer;
+> +	struct iio_buffer *buffer, *tmp = NULL;
+>  	int ret;
+> 
+>  	indio_dev->active_scan_mask = config->scan_mask;
+> @@ -1097,8 +1097,10 @@ static int iio_enable_buffers(struct iio_dev *indio_dev,
+> 
+>  	list_for_each_entry(buffer, &iio_dev_opaque->buffer_list, buffer_list) {
+>  		ret = iio_buffer_enable(buffer, indio_dev);
+> -		if (ret)
+> +		if (ret) {
+> +			tmp = buffer;
+>  			goto err_disable_buffers;
+> +		}
+>  	}
+> 
+>  	if (indio_dev->currentmode == INDIO_BUFFER_TRIGGERED) {
+> @@ -1125,6 +1127,7 @@ static int iio_enable_buffers(struct iio_dev *indio_dev,
+>  					     indio_dev->pollfunc);
+>  	}
+>  err_disable_buffers:
+> +	buffer = list_prepare_entry(tmp, &iio_dev_opaque->buffer_list, buffer_list);
+>  	list_for_each_entry_continue_reverse(buffer, &iio_dev_opaque->buffer_list,
+>  					     buffer_list)
+>  		iio_buffer_disable(buffer, indio_dev);
+> 
+> base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+> --
+> 2.25.1
+> 
+

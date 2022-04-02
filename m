@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DB84F055A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4074F0561
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244728AbiDBSMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 14:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S241481AbiDBS0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 14:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244192AbiDBSMf (ORCPT
+        with ESMTP id S231172AbiDBS0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 14:12:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FE91AF1B
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:10:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 383E260DE3
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 18:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 92552C340EC;
-        Sat,  2 Apr 2022 18:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648923042;
-        bh=WpNqyFOqyBiFNnWAg3vAHgSDi48Ads2iTRKIlnmMmIU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fVUKt7Mg72XVEa2fksqCFtGICZVHg8Pvra1QDruqb0AM4Zrtz/N90l2RjL8kpUv0f
-         gvOwsvl4WY2yvBt1xcroitSKoLhuCos34DeIQxUE9mPd93G5y3Q+Dyp2/17WLFPKZ3
-         4595BF+FCYxHXgLokHNYwDSe1pUoPvUAOGuwGKWoVBMQk3C2hUUhfRJ4dQiYyj7t9N
-         c97uM9feTMI0nRwQBs84riRNd+BriAVK5uCYJJpa1oUUqB8I6I2qQskhVS53mx1ESc
-         4u5pmxEcQmjHTdyNlmNY5BWac145IZKta2VCUBVy6cJKwZDsa0Q4fhzh1nQ9ZO02WY
-         nKq7dvFYWGdMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F512E6BBCA;
-        Sat,  2 Apr 2022 18:10:42 +0000 (UTC)
-Subject: Re: [GIT PULL] chrome-platform changes for v5.18
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YkekVRh9Ixdfa5qL@google.com>
-References: <YkekVRh9Ixdfa5qL@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YkekVRh9Ixdfa5qL@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-for-v5.18
-X-PR-Tracked-Commit-Id: 0e8eb5e8acbad19ac2e1856b2fb2320184299b33
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 02d4f8a3e05b4d09fcd20bd7dbe4046757e151e2
-Message-Id: <164892304251.15050.10163111732751999015.pr-tracker-bot@kernel.org>
-Date:   Sat, 02 Apr 2022 18:10:42 +0000
-To:     Benson Leung <bleung@google.com>
-Cc:     torvalds@linux-foundation.org, pmalani@chromium.org,
-        bleung@chromium.org, bleung@google.com, bleung@kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        tzungbi@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Sat, 2 Apr 2022 14:26:21 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBF0DB4B5
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:24:29 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id q19so1641368wrc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MpP5tMzlVT97DCsXRGEb24iOg+E3Ct/YpLQmX1mvqMo=;
+        b=HgXWNE/hFd3yEXhfRAlqQosWSph7ZcBbIdzrEVWa5k88aYzA5NqgBw6PTdAQqTvE3r
+         pnsBONHYxFPRbcQ0EOhq5j7K/ulf/jL0nljM1dHaVgiu8unnZ3avcCLKbhpHiUk3NKt1
+         n66ncWS7ZnJrbfgtqNV6d6p3G3mUG23ECU1artSWceXo3sRRQ7OY7OZiwSVKUM5e8h5g
+         v+OOOQT9WrLTAA3HWgYcnTlxUn7c5MjU06EzJrHUyvEaR1bAShlGNw2F0C5d72kY0Rpi
+         5+dDq4Co2/43+xlj1Q/cZJvOlkXyQu7cik71r2xzWKOe+FtVwFYshUBvCnzC/pwpUfS9
+         MKzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MpP5tMzlVT97DCsXRGEb24iOg+E3Ct/YpLQmX1mvqMo=;
+        b=uRXCzyJqZMI2vykiwsAUeGfXYsrM2XEs/r0bEO2YE2nE3B08HLZpDXWouOqeKAyuYs
+         RWviBRRiY1mxOQHqz1MXxgxzTVeEbKm7M9qWbL+WjUFtcdzWPfXNWhWm0qAB0qeeUCKE
+         lQ88IJndqxhP0ZlahHOkFP6PSMMdaRo2UvdZvCmlmL9CtgLzGp+oLo8mvUjgpA9WliqJ
+         fqjPJRJqSB8f/HVspIFHSxBXWLYkVZOvPL7IP2pIARbPUuRflJPykR58Hgkt/Sba2o9W
+         sORFSKl7f2tuI0qalVUE30M+H3RME0RZuhY8aXj+eY/su7Uw9UQEtAvBNmBlydikCo74
+         yT4w==
+X-Gm-Message-State: AOAM531LiP2DhsN+2oSN3XOu60NyGJ3OS1Ms2HOrJ2UqD6XxyaXVzJ2i
+        Pe1XKcZ9a+pGCWMFVuc0od7gHTicqBeNus+k
+X-Google-Smtp-Source: ABdhPJxwj6OiIV5XsBWzlet7KuFQwDDTn3qzeMv3EQDAImRrUp/htKknULpYtWY9PjbEo8tdtAShIw==
+X-Received: by 2002:a5d:4c82:0:b0:204:d78:7635 with SMTP id z2-20020a5d4c82000000b002040d787635mr11827185wrs.318.1648923867619;
+        Sat, 02 Apr 2022 11:24:27 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm5899277wmp.44.2022.04.02.11.24.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 11:24:27 -0700 (PDT)
+Message-ID: <dcca767e-2ad6-4d81-d273-3878b07bbc8c@linaro.org>
+Date:   Sat, 2 Apr 2022 20:24:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add Qualcomm Geni based QUP i2c
+ bindings
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+ <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,15 +80,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 1 Apr 2022 18:18:13 -0700:
+On 02/04/2022 07:12, Kuldeep Singh wrote:
+> GENI(generic interface) based Qualcomm Universal Peripheral controller
+> can support multiple serial interfaces like spi,uart and i2c.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-for-v5.18
+Few more comments.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/02d4f8a3e05b4d09fcd20bd7dbe4046757e151e2
+(...)
 
-Thank you!
+> +
+> +  clock-frequency:
+> +    description: Desired I2C bus clock frequency in Hz
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Skip description, it's common for I2C controllers.
+
+> +    default: 100000
+> +
+> +  interconnects:
+> +    maxItems: 3
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: qup-core
+> +      - const: qup-config
+> +      - const: qup-memory
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  required-opps:
+> +    maxItems: 1
+> +
+> +  dmas:
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +
+> +  pinctrl-0: true
+> +  pinctrl-1: true
+> +
+> +  pinctrl-names:
+> +    minItems: 1
+> +    items:
+> +      - const: default
+> +      - const: sleep
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+
+These are not needed, they come from schema.
+
+Best regards,
+Krzysztof

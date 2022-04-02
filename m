@@ -2,144 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66344F0635
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DF34F0637
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352127AbiDBUk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 16:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        id S1345735AbiDBUnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 16:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345203AbiDBUkT (ORCPT
+        with ESMTP id S236254AbiDBUnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 16:40:19 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD5B269
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 13:38:26 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id u3so8886659wrg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 13:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DaSE7ULJOB4VxQX7AgKGqYahg9TkFoibRaqDkyl52xM=;
-        b=Nf/J8rLvBLHtIWMts7FPOG5zve1MCpb0B3B8dIoRxKi5I2F4fU6dATO2UbdJGeJwCh
-         V7tTCd4GVXYUquBf/em/Ze1vUYOQ2hPO7gDrGPtUmofvbWHebSmDtD/JlIqUm76evwEW
-         ZIIAtxKyca/gO7VmLeOvvUiVCBp+MPneZBZdPqRlp/V40fC9tG/rpyuSILddgym8/G/T
-         eawyfTOThuK00gLrCvj6sKXMdJ0PUDlyRssa3kBXRA2U7eHCWt5m+5CKM6uXa9RGhSjx
-         bwZEXHmy98jDfNtwey8NgXmdZS9R9XnF/qY0wYtRzTGP3wp4JrxZiwpQPlQkDet6VXVY
-         MaYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DaSE7ULJOB4VxQX7AgKGqYahg9TkFoibRaqDkyl52xM=;
-        b=H2J/o8k1P/Otv8VaK+1dVfrR7NAJ5agFaLuYs8929YlH2aPt4e05gLlXiyp+BE9fvi
-         H/9MWRV5RaEhqzEsVnZQ8ss1rSePcQ55QKzeAGft5P6KIROhbBAnHzNzV/R9VuTpH8Go
-         ItrxmbuS1llsxBtqZUADVw/WMlq9dBCP6Im1erJ4cpogaoPycgpso5azNi/wnkExHTQN
-         lDmcvTp2inK1R76tl9R4DWi8kmzPGZ3qT4/1J9qrEb7JZLZ8bjpG25W0zYk9OiutXRAE
-         cWMu3AZpr9N1uwnHMG52BHfuGAo5IxVvWo/CkyOXtwC+98cIjWotkLcPypEbn6T6ho6t
-         31Tw==
-X-Gm-Message-State: AOAM533ruQ16Lnd3KuADSDrzDOC8XmwZws6+2ZQAd4vek09Z2REysgcT
-        N9TA+d6UHN0CVNSLGhZhpXvHPw==
-X-Google-Smtp-Source: ABdhPJxlZFShJSotZ4ap67uraKENWXMz9kwuTh/ClWcepN0MdbvmowjSzVO+TUQHaBz+xPYi+v0T7A==
-X-Received: by 2002:a5d:6944:0:b0:203:e024:7cdd with SMTP id r4-20020a5d6944000000b00203e0247cddmr11838810wrw.503.1648931905090;
-        Sat, 02 Apr 2022 13:38:25 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05600c3b0800b0038cc8f116d3sm13112262wms.44.2022.04.02.13.38.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 13:38:24 -0700 (PDT)
-Message-ID: <9a584eac-6ac9-e4ed-ef90-49569f4a4baa@linaro.org>
-Date:   Sat, 2 Apr 2022 22:38:23 +0200
+        Sat, 2 Apr 2022 16:43:52 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A765A5D1A4;
+        Sat,  2 Apr 2022 13:41:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1648932087; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=cxCXJ5ZUtSYPG7vW7hSxEAccR9bEs2MbAtgJ+5IFb6WFeCswEzYACBoczyhED11heVpBmInFLZsL14riOJ8HunTGAL7kdPStjtr3PUMN+PpCKc4353SKoSBSkJW7VDrhyElLazCF/FvVvCgOpcox/dLazNaf3k+DnnNv/31eiYM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1648932087; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=AI1CWy+vPCL4wJICPiReEnWqJXsxDqhOFVpnH4rLfIo=; 
+        b=CvlrV2zE3EuZWh2q4DDrEVvNo+7QdbWglYHkkQpcOYLetZ02E5XanTvjJ6Jxi9U2ZB/Cvwx35Oc2CKiapbsCGRMTVSHNmv9/Qoy/+dc7EbkPBMQPB+SgOZtl3kES2jXTLQuup+fQOvaejRgZwwUxWtrEyJly8Sls0CXe9jbVsXA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1648932087;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=AI1CWy+vPCL4wJICPiReEnWqJXsxDqhOFVpnH4rLfIo=;
+        b=kaEcM0BcaN7ZiPmSZoD3QvFbwweveaaN0nzDxEIWP09xOu4Zx6JMROjfGHGHqj9e
+        7YPodsOHpBR82lEnJng4gw4SMkNKJeuNMy3wdTI8MOSxPgwFciUkHDqGHa+m3wl1Pfi
+        Ju0JVnRwuItIC3H2KN27jxV2mi9OCEDv69gW/9A8=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1648932083496229.1744985746061; Sat, 2 Apr 2022 13:41:23 -0700 (PDT)
+Message-ID: <bf363c60-3432-7b98-97c5-0dbeddad8a4d@arinc9.com>
+Date:   Sat, 2 Apr 2022 23:41:18 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v3 9/9] dt-bindings: qcom: qcom,gsbi: convert to dtschema
+Subject: Re: [PATCH 1/2] dt-bindings: arm: bcm: fix BCM53012 and BCM53016 SoC
+ strings
 Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
- <20220402184011.132465-10-krzysztof.kozlowski@linaro.org>
- <20220402202917.GA36054@9a2d8922b8f1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220402202917.GA36054@9a2d8922b8f1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Scott Branden <scott.branden@broadcom.com>,
+        Christian Lamparter <chunkeey@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+References: <20220401172427.2806-1-arinc.unal@arinc9.com>
+ <fbbd44cc-e839-9532-962a-538ce834930c@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <fbbd44cc-e839-9532-962a-538ce834930c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/04/2022 22:29, Kuldeep Singh wrote:
-> On Sat, Apr 02, 2022 at 08:40:11PM +0200, Krzysztof Kozlowski wrote:
->> Convert the Qualcomm General Serial Bus Interface (GSBI) to DT
->> Schema.
+On 02/04/2022 19:28, Krzysztof Kozlowski wrote:
+> On 01/04/2022 19:24, Arınç ÜNAL wrote:
+>> Fix inaccurate SoC strings brcm,brcm53012 and brcm,brcm53016 to respectively
+>> brcm,bcm53012 and brcm,bcm53016.
 >>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Create a new description for BCM53016 and move Meraki MR32 under it.
+>>
+>> Fixes: 4cb5201fcb5d ("dt-bindings: arm: bcm: Convert BCM4708 to YAML")
+>> Fixes: a2e385f5374d ("dt-bindings: ARM: add bindings for the Meraki MR32")
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 >> ---
->>  .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
->>  .../bindings/soc/qcom/qcom,gsbi.yaml          | 133 ++++++++++++++++++
->>  2 files changed, 133 insertions(+), 87 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
->>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+>> brcm,bcm53012 string was silently changed to brcm,brcm53012 after
+>> converting to YAML. Let me know if this was intentional.
+>>
 > 
-> Great initiative to convert everything in one go!
-> 
-> [...]
-> 
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
->> new file mode 100644
->> index 000000000000..b97e359f3f90
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
->> @@ -0,0 +1,133 @@
->> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/qcom/qcom,gsbi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm General Serial Bus Interface (GSBI)
->> +
->> +maintainers:
->> +  - Andy Gross <agross@kernel.org>
->> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
->> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> +
->> +description:
->> +  The GSBI controller is modeled as a node with zero or more child nodes, each
->> +  representing a serial sub-node device that is mux'd as part of the GSBI
->> +  configuration settings.  The mode setting will govern the input/output mode
->> +  of the 4 GSBI IOs.
->> +
->> +  A GSBI controller node can contain 0 or more child nodes representing serial
->> +  devices.  These serial devices can be a QCOM UART, I2C controller, spi
->> +  controller, or some combination of aforementioned devices.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - qcom,gsbi-v1.0.0
-> 
-> Only 1 entry? const.
+> Thanks for your patch. This looks like 2 or 3 separate patches:
+> 1. Correct meraki and BCM53016 bindings,
+> 2. Rename brcm->bcm, in bindings,
+> 3. Change DTS.
 
-v1.0.0 looks like there could be some more, although they did not reach
-mainline. The GSBI seems to be replaced by different blocks, so maybe
-there will be no new entries here.
+Will send v2, thanks.
 
-
-Best regards,
-Krzysztof
+Arınç

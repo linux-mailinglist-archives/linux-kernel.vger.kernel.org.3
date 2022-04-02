@@ -2,96 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE684F0605
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6094F060A
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345746AbiDBUEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 16:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S1350435AbiDBUGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 16:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243739AbiDBUEI (ORCPT
+        with ESMTP id S237684AbiDBUGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 16:04:08 -0400
-Received: from mail.thepaulodoom.com (www.thepaulodoom.com [45.77.108.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFD3910FD2;
-        Sat,  2 Apr 2022 13:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thepaulodoom.com;
-        s=mail; t=1648929731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fJ4mwsha3lQSqlBrzoJlxnsLLf/Tzlgc86esu7PtlcA=;
-        b=MNNXOUkVP5cBP8wi+pvh/BperKoqa8Vb/0jWXD9lJYD3lzBlvhX25xDPiNQGv6uwQadte3
-        H6zLAQJLX8qRhnkaOoC65lq3v9te975SvGdHtlRHaSdVL81t463f+ZX8z1O6bvg5/fugmo
-        Tyt4W4QPLOs0vtvBiDf/88OXBaC3LEPeRUYeea/DPsXqyPDGC4V+AqrmiAUniGBMBQgfa/
-        FiF512e/zKirwKzHm0AzhFTly4sy5xLMzL4XmGr6rJ1TLiDgmvQ1tXpYrxmPfAASoX9o00
-        kaFM0BcVLvGka9M5FkkHPu49Zt+FfOfv1A3Ky/m4SENjWOIj24k+s9YeT42XzhVsGWpW6J
-        TAPSTnc2mzHg306zmMLPEwdcqG0QsvIbfSpZMkBSa5vTaQ4IX8hEn0fD1v4QlXElTwdgBp
-        +BIbBGA3MPNEf7+DRtrlQSwm9CpHzHZBuXkqwFxgDEgZyeV+jkaOwJRAdiHFhwbH5PmA1+
-        ZXB0TOMYM8+bnQp8x09JkTK4vgKVoFkwSG/V2hA+/ZfFaixFNuZhbaVXpl4XH2AurWE5ax
-        kyh2eInBZCNfOMHUM4t16a0IL8YilMTpNSvc0hEaqq3VPw2L4uMQNlTDd2gkCBqPEwvjKI
-        tEO4rfKSSTbVjFwd9KAJrX1CgO0MnFKVUTNVhQp9FhG68jYcodYlg=
-Received: from hp-amd-paul (c-98-240-189-147.hsd1.mn.comcast.net [98.240.189.147])
-        by vultr.guest (OpenSMTPD) with ESMTPSA id cdd70f66 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 2 Apr 2022 20:02:11 +0000 (UTC)
-Date:   Sat, 2 Apr 2022 15:02:09 -0500
-From:   Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IIO: accel: dmard09: fixed code styling issues
-Message-ID: <YkirwZaMWfgNTtS1@hp-amd-paul>
-References: <YkItIE5sp3P4sZdY@hp-amd-paul>
- <20220402172814.5117cdb7@jic23-huawei>
+        Sat, 2 Apr 2022 16:06:10 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1663EB99
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 13:04:16 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r10-20020a1c440a000000b0038ccb70e239so336069wma.3
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 13:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=yQeqwIeqI5CMAgG8hDfKbZn0Debf8w0vr8QNNYkJmUI=;
+        b=rg468YkTGw4qq+7BTqNb+9e2AW7798nZyQsEw7APtpHfEScIn4mAxPp40epSJ/DqqM
+         FW1ukFdIVMS8churmP06RZyQPTzPyQdeidOkNAX+hpVRYnSNHIas4ePrAYUdilNlEtP6
+         yhnuvRTNyZSAysfMJPll2xZUF3wAuxL6zspWSXz5gwdt66ugNBr5eNsZNqbFT3zYWfIS
+         xF11MED8ko9Bbk+x/u3f9nXO5nIl3PYMXVFAdWugobCvQR8MjCmx7qd9kQCp38gnhfrO
+         fC+b2Ptuhb93WvKGvSwgJ6rFJy4o9pM7VSVPTbWuBDCRyrqbelhElQJYJEsZnujnWVO5
+         McYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=yQeqwIeqI5CMAgG8hDfKbZn0Debf8w0vr8QNNYkJmUI=;
+        b=2oeYSsDswb5olIB4kKCU5Do3KfHiu4e/aUh/LEpwC4DF6IvsGx9iDBdN0MppPrpm6w
+         L4EjXrwUzBHbbzTzmqUqIKUYe18qOv3PHEe7JWy3novFq972fNKAzPTepvBan8DPgeJo
+         MbgzFt4qrFMR6xg4mhDQ4cLAXPsYPyFXxfGqAF1dMgn2uRrkY3Lfv7CW39uSMk0lKfDd
+         eZl0av+jxyRufaENdNFqcT5RDn/OZs3aotuhNvyU9Ve1p1rQ9O5TUcJ89smW1m8hLNaM
+         JVMcbvE/4BNCWeXQMcPQH1+h8dKTk3AzJjdePgiqub2Ihaaejp6tTfe0hXlQ3kfnoCuA
+         6eEA==
+X-Gm-Message-State: AOAM533DROPadbEDVaqOuWrXD8JFyklLojWGeOCnddbIz9O15GMBcXQl
+        LkjD/+8P5jKnT/O205ePqLIP/A==
+X-Google-Smtp-Source: ABdhPJy6NaiDP7v3t/VgL9bpERiXPtZ6xlytZQf5riyEAwmfhgWKXXpEcvulkX/plHpsKoVk6W8Z4A==
+X-Received: by 2002:a05:600c:5029:b0:38c:9768:b4c with SMTP id n41-20020a05600c502900b0038c97680b4cmr13117148wmr.123.1648929854661;
+        Sat, 02 Apr 2022 13:04:14 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id h10-20020a05600c144a00b0038ccc75a6adsm13008386wmi.37.2022.04.02.13.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 13:04:13 -0700 (PDT)
+Date:   Sat, 2 Apr 2022 22:04:11 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
+        robh+dt@kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v4 10/33] crypto: rockchip: rework by using crypto_engine
+Message-ID: <YkisOxklZgCejfad@Red>
+References: <20220401201804.2867154-11-clabbe@baylibre.com>
+ <202204021634.IhyHrjoT-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220402172814.5117cdb7@jic23-huawei>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202204021634.IhyHrjoT-lkp@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 05:28:14PM +0100, Jonathan Cameron wrote:
-> On Mon, 28 Mar 2022 16:48:16 -0500
-> Paul Lemmermann <thepaulodoom@thepaulodoom.com> wrote:
+Le Sat, Apr 02, 2022 at 04:22:56PM +0800, kernel test robot a écrit :
+> Hi Corentin,
 > 
-> > Cleaning up code.
-> > 
-> > Signed-off-by: Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-> Applied to the togreg branch of iio.git and pushed out as testing
-> for 0-day to see if it can find anything we did wrong.
+> I love your patch! Perhaps something to improve:
 > 
-> BTW.  You seem to have sent two identical copies of this patch.
-> I randomly decided to apply this second one.
+> [auto build test WARNING on next-20220331]
+> [also build test WARNING on v5.17]
+> [cannot apply to rockchip/for-next herbert-cryptodev-2.6/master herbert-crypto-2.6/master v5.17 v5.17-rc8 v5.17-rc7]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220402-042221
+> base:    fdcbcd1348f4ef713668bae1b0fa9774e1811205
+> config: arm64-buildonly-randconfig-r001-20220402 (https://download.01.org/0day-ci/archive/20220402/202204021634.IhyHrjoT-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/be381eb03ba20a6e06f0e880a9929d14a1e13064
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Corentin-Labbe/crypto-rockchip-permit-to-pass-self-tests/20220402-042221
+>         git checkout be381eb03ba20a6e06f0e880a9929d14a1e13064
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/crypto/rockchip/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/crypto/rockchip/rk3288_crypto_skcipher.c:21:46: error: use of undeclared identifier 'tfm'
+>            unsigned int bs = crypto_skcipher_blocksize(tfm);
+>                                                        ^
+> >> drivers/crypto/rockchip/rk3288_crypto_skcipher.c:328:6: warning: variable 'n' set but not used [-Wunused-but-set-variable]
+>            int n = 0;
+>                ^
+>    1 warning and 1 error generated.
+> 
 
-Yes, I accidentally sent two identical patches. Sorry!
+Argh, I didnt retry to compile this serie one patch by one.
 
-Thank you so much for applying my patch,
-Paul
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/accel/dmard09.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iio/accel/dmard09.c b/drivers/iio/accel/dmard09.c
-> > index 53ab6078c..cb0246ca7 100644
-> > --- a/drivers/iio/accel/dmard09.c
-> > +++ b/drivers/iio/accel/dmard09.c
-> > @@ -24,7 +24,7 @@
-> >  #define DMARD09_AXIS_Y 1
-> >  #define DMARD09_AXIS_Z 2
-> >  #define DMARD09_AXIS_X_OFFSET ((DMARD09_AXIS_X + 1) * 2)
-> > -#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1 )* 2)
-> > +#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1) * 2)
-> >  #define DMARD09_AXIS_Z_OFFSET ((DMARD09_AXIS_Z + 1) * 2)
-> >  
-> >  struct dmard09_data {
-> 
+Thanks, I will fix that in v5.

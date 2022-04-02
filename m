@@ -2,325 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97B94F05A6
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4E24F05B1
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245086AbiDBSmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 14:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S236279AbiDBTJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 15:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357227AbiDBSme (ORCPT
+        with ESMTP id S229629AbiDBTJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 14:42:34 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED4B50040
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:40:28 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id q20so3550986wmq.1
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Sp/oLqlbge5GU7mZsZW/vx3cnsSFA9iABPk+CXY4wNg=;
-        b=uQermoBxdAv6ihdtqTEbNjddI5LOjv2sgP8uaq/x7bM+rs+7OvofhXs1aFzKnXMqXs
-         VqZ9BIvz2+6qyO6KrBEjovUZvAY3RjAJXc+uk2MUj4xYKyfTyipQBym0Lyar3l6iTFye
-         gMChWkuyapkbpPU8fzvoZ8OzqRq7u7pUS5FWnSvzAjItqng+dJXb48A1IctyOJhTfL0y
-         wGc/+JvG2Sx4PcyZlO6YEyO/JEDehtr8sUeWLNLSHNCsIcDfupzDab8ij3duScj2m4YB
-         KfFLHIfkAIA7kIhfMJkQOS5xv55ZPFI8q9gLrlD+HUgU2kW+cwQ1eyQTSpOUIbDoi2qt
-         /+Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Sp/oLqlbge5GU7mZsZW/vx3cnsSFA9iABPk+CXY4wNg=;
-        b=M6k9XOdNHmfXGnbt+GxXxWRGDkcOwNfv/CYemdEFhQ/c2V/jzK8w3QOwexsAjTsmBY
-         Fmb0e1UFGXecVT5oiDryzgBQkSgWfWJiyPRG4DEE8mxY3WuiYKoWel/S4ITiMgMdTV3t
-         AIFV7XkckkcI6czCgMyl1mtCKacfFoFnt9W+Sldo6gkJv9Dyw40uw9WoqYshZt/crcCi
-         62PmzVCgYiymxzr2ZD15QdJOU6bOkm3D4NeKnNR9hGfNNP8s5wjuuvMECbjuWUWSt/Hk
-         KuYkGpaNWUhWS59pQCeXxu1zOHp+NgWUvqoYt1eVMc1g3xLubbBoS67FxUG9k/J565DY
-         eFuA==
-X-Gm-Message-State: AOAM532yt6keDe+PeTpnNX4+XJb9v2iEV4UQIlda9/J41bOawA25fWXs
-        ZoJgiBS4IRraLzKIDIKjdk53rg==
-X-Google-Smtp-Source: ABdhPJzKWhMSetsdvl9+noYgz+2YR/oqaR3HdqGzxC62zE4oTWSrcJcdEMLv0GwYLxCeb80tJWa+MA==
-X-Received: by 2002:a05:600c:600a:b0:38c:f953:adc0 with SMTP id az10-20020a05600c600a00b0038cf953adc0mr13523252wmb.188.1648924827120;
-        Sat, 02 Apr 2022 11:40:27 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m20-20020a05600c4f5400b0038b5162260csm6760502wmq.23.2022.04.02.11.40.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 11:40:26 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 9/9] dt-bindings: qcom: qcom,gsbi: convert to dtschema
-Date:   Sat,  2 Apr 2022 20:40:11 +0200
-Message-Id: <20220402184011.132465-10-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
-References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
+        Sat, 2 Apr 2022 15:09:28 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F208E12A8DD;
+        Sat,  2 Apr 2022 12:07:35 -0700 (PDT)
+Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MC3H1-1niiuB0qkv-00CPnt; Sat, 02 Apr 2022 21:07:34 +0200
+Received: by mail-wm1-f54.google.com with SMTP id q20so3573896wmq.1;
+        Sat, 02 Apr 2022 12:07:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532WvDSooXWBhNNyCjvEapY+WnlGKEn1DBemeZgATB8czEOj0tbf
+        5BP0b7UWbSV5IXQyBeqYHcHpTdKtN05SHuPcuQA=
+X-Google-Smtp-Source: ABdhPJwIAkpxl+JZt9LjgRq9lJWnGHnJOqkbLJpfn319rdmgWy77pOsaUi8rkQeJc/4Nv+hf1X3LMml3uCdwMixVHak=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr13827152wmj.20.1648926453781; Sat, 02
+ Apr 2022 12:07:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-5-sven@svenpeter.dev>
+ <CAK8P3a19F8K0MvZV_R6HrmmR+WBsDge+u6U3iEVEjZ74i6+nEg@mail.gmail.com> <f06576c8-76c6-41ae-874d-81ea0b5b5603@www.fastmail.com>
+In-Reply-To: <f06576c8-76c6-41ae-874d-81ea0b5b5603@www.fastmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 2 Apr 2022 21:07:17 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3xioqJDb7hQ3dvxQyHPg2hgJbeJywEP+N4cDzpo=8VhQ@mail.gmail.com>
+Message-ID: <CAK8P3a3xioqJDb7hQ3dvxQyHPg2hgJbeJywEP+N4cDzpo=8VhQ@mail.gmail.com>
+Subject: Re: [PATCH 4/9] soc: apple: Add SART driver
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:u5NOoiQ4rEi4dh4tfDGxLExnqqNZSURzhc/HD4eZvY96ATyEZlC
+ foNU9lXJjj6QTWCgD3EVneljiwx196JRipv8X4NVhVfLK+Gb3IdwtCIiCgv6PcSjl8he9IP
+ m3fNXVPT+NcSOzt8t1JjFqgGpfaWGWTmz78zOmgmTsdZA2LY9xgw9nrmnrHCf1yKaNON+rO
+ HrKXMFTndMPv40EF+n9oQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:R/NA65EZX+s=:i+QXtWZDna6xQuE85HNZAt
+ f17BOhoLSXQPnpsy0dwCJ/yZCWaCW+77RNvtqRRgDUM0nNdM5LUG9N4nrTl6ZZUYjTMYRV9RL
+ 5AgbT/o1iDfm3Ax8hNFZ6et1OdP1g1bqDD3uenLZGs2msasK5ihumIsSJJI0Tvh2d5kXcdMZY
+ ASzFG77Yqh/VFLFNPFmTPmu/rCQZXztI5hsJ0mlUHuWoRi0cAQI/41p7QCgam8Zrl8qH98rub
+ 7IP1bNLwMigmz7VwMhJxPRkrOu3bWGPWq6f3O0qlZmVfIkYXmqf9zzAK+Z+Vm+rQ95GXF3/jV
+ eXBDLoTKbOOujaCfE9PkGRziJd/D3rgAcc1TcXkk2eLFkcH8VWsqAE8pOZ7/qFuVlHJvKtXkl
+ 4E/rny11gdYrHRXM/NjYARukeCGmMinWD/e/jgMWNtfBUGNI/ybyUs5z9aLYqVdenrkYhFPx7
+ piE1GCrNwsgylxbAF52LfChJ4ydRDICyaLsq69iqo3dzlvHItUA5TvZUk82tbI+tygvjVTNjn
+ hZbOwitVrtQMI8R+Rf9FaoZzqb40oL+MHU2LRXdeUylcoNLtaeYfmGpaPL7xTB8Kw1pa4Gjwf
+ Ss2TGm2HHBV8QgNYbwBZOPHM/54iDWO0AD0pCCyI7D5NJvlaZ36n/DKvIgWeSCNPRmDgc6jz/
+ sqDoNWNgFg0Kj1k/yTBbfJwWdbR4YGTIirkxw8Z+lLj3KeE93MS0wVPSqQIcryfZuKnLMinYz
+ H6a5lVWj+D+0LMOC5hsQXLcIUYiL6Sekgb3XMnmb5MCaSKx9WoxfUJPPXYAClHw0PXYAE5p9L
+ x6hzrOazIbGWOi3TF3BHkCyeU3QE16FDu62m5AEwCvPXSXnVIk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm General Serial Bus Interface (GSBI) to DT
-Schema.
+On Sat, Apr 2, 2022 at 2:38 PM Sven Peter <sven@svenpeter.dev> wrote:
+> On Mon, Mar 21, 2022, at 18:07, Arnd Bergmann wrote:
+> > On Mon, Mar 21, 2022 at 5:50 PM Sven Peter <sven@svenpeter.dev> wrote:
+> >> The NVMe co-processor on the Apple M1 uses a DMA address filter called
+> >> SART for some DMA transactions. This adds a simple driver used to
+> >> configure the memory regions from which DMA transactions are allowed.
+> >>
+> >> Co-developed-by: Hector Martin <marcan@marcan.st>
+> >> Signed-off-by: Hector Martin <marcan@marcan.st>
+> >> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> >
+> > Can you add some explanation about why this uses a custom interface
+> > instead of hooking into the dma_map_ops?
+>
+> Sure.
+> In a perfect world this would just be an IOMMU implementation but since
+> SART can't create any real IOVA space using pagetables it doesn't fit
+> inside that subsytem.
+>
+> In a slightly less perfect world I could just implement dma_map_ops here
+> but that won't work either because not all DMA buffers of the NVMe
+> device have to go through SART and those allocations happen
+> inside the same device and would use the same dma_map_ops.
+>
+> The NVMe controller has two separate DMA filters:
+>
+>    - NVMMU, which must be set up for any command that uses PRPs and
+>      ensures that the DMA transactions only touch the pages listed
+>      inside the PRP structure. NVMMU itself is tightly coupled
+>      to the NVMe controller: The list of allowed pages is configured
+>      based on command's tag id and even commands that require no DMA
+>      transactions must be listed inside NVMMU before they are started.
+>    - SART, which must be set up for some shared memory buffers (e.g.
+>      log messages from the NVMe firmware) and for some NVMe debug
+>      commands that don't use PRPs.
+>      SART is only loosely coupled to the NVMe controller and could
+>      also be used together with other devices. It's also the only
+>      thing that changed between M1 and M1 Pro/Max/Ultra and that's
+>      why I decided to separate it from the NVMe driver.
+>
+> I'll add this explanation to the commit message.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
- .../bindings/soc/qcom/qcom,gsbi.yaml          | 133 ++++++++++++++++++
- 2 files changed, 133 insertions(+), 87 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+Ok, thanks.
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-deleted file mode 100644
-index fe1855f09dcc..000000000000
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-+++ /dev/null
-@@ -1,87 +0,0 @@
--QCOM GSBI (General Serial Bus Interface) Driver
--
--The GSBI controller is modeled as a node with zero or more child nodes, each
--representing a serial sub-node device that is mux'd as part of the GSBI
--configuration settings.  The mode setting will govern the input/output mode of
--the 4 GSBI IOs.
--
--Required properties:
--- compatible:	Should contain "qcom,gsbi-v1.0.0"
--- cell-index:	Should contain the GSBI index
--- reg: Address range for GSBI registers
--- clocks: required clock
--- clock-names: must contain "iface" entry
--- qcom,mode : indicates MUX value for configuration of the serial interface.
--  Please reference dt-bindings/soc/qcom,gsbi.h for valid mux values.
--
--Optional properties:
--- qcom,crci : indicates CRCI MUX value for QUP CRCI ports.  Please reference
--  dt-bindings/soc/qcom,gsbi.h for valid CRCI mux values.
--- syscon-tcsr: indicates phandle of TCSR syscon node.  Required if child uses
--  dma.
--
--Required properties if child node exists:
--- #address-cells: Must be 1
--- #size-cells: Must be 1
--- ranges: Must be present
--
--Properties for children:
--
--A GSBI controller node can contain 0 or more child nodes representing serial
--devices.  These serial devices can be a QCOM UART, I2C controller, spi
--controller, or some combination of aforementioned devices.
--
--See the following for child node definitions:
--Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
--Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
--Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
--
--Example for APQ8064:
--
--#include <dt-bindings/soc/qcom,gsbi.h>
--
--	gsbi4@16300000 {
--		compatible = "qcom,gsbi-v1.0.0";
--		cell-index = <4>;
--		reg = <0x16300000 0x100>;
--		clocks = <&gcc GSBI4_H_CLK>;
--		clock-names = "iface";
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges;
--		qcom,mode = <GSBI_PROT_I2C_UART>;
--		qcom,crci = <GSBI_CRCI_QUP>;
--
--		syscon-tcsr = <&tcsr>;
--
--		/* child nodes go under here */
--
--		i2c_qup4: i2c@16380000 {
--			compatible = "qcom,i2c-qup-v1.1.1";
--			reg = <0x16380000 0x1000>;
--			interrupts = <0 153 0>;
--
--			clocks = <&gcc GSBI4_QUP_CLK>, <&gcc GSBI4_H_CLK>;
--			clock-names = "core", "iface";
--
--			clock-frequency = <200000>;
--
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--		};
--
--		uart4:	serial@16340000 {
--			compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
--			reg = <0x16340000 0x1000>,
--				<0x16300000 0x1000>;
--			interrupts = <0 152 0x0>;
--			clocks = <&gcc GSBI4_UART_CLK>, <&gcc GSBI4_H_CLK>;
--			clock-names = "core", "iface";
--		};
--	};
--
--	tcsr: syscon@1a400000 {
--		compatible = "qcom,apq8064-tcsr", "syscon";
--		reg = <0x1a400000 0x100>;
--	};
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-new file mode 100644
-index 000000000000..b97e359f3f90
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-@@ -0,0 +1,133 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,gsbi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm General Serial Bus Interface (GSBI)
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  The GSBI controller is modeled as a node with zero or more child nodes, each
-+  representing a serial sub-node device that is mux'd as part of the GSBI
-+  configuration settings.  The mode setting will govern the input/output mode
-+  of the 4 GSBI IOs.
-+
-+  A GSBI controller node can contain 0 or more child nodes representing serial
-+  devices.  These serial devices can be a QCOM UART, I2C controller, spi
-+  controller, or some combination of aforementioned devices.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,gsbi-v1.0.0
-+
-+  '#address-cells':
-+    const: 1
-+
-+  cell-index:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      The GSBI index.
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: iface
-+
-+  qcom,crci:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      CRCI MUX value for QUP CRCI ports.  Please reference
-+      include/dt-bindings/soc/qcom,gsbi.h for valid CRCI mux values.
-+
-+  qcom,mode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      MUX value for configuration of the serial interface.  Please reference
-+      include/dt-bindings/soc/qcom,gsbi.h for valid mux values.
-+
-+  '#size-cells':
-+    const: 1
-+
-+  syscon-tcsr:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle of TCSR syscon node.Required if child uses dma.
-+
-+  ranges: true
-+
-+  reg:
-+    maxItems: 1
-+
-+patternProperties:
-+  "spi@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/spi/qcom,spi-qup.yaml#
-+
-+  "i2c@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/i2c/qcom,i2c-qup.yaml#
-+
-+  "serial@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/serial/qcom,msm-uartdm.yaml#
-+
-+required:
-+  - compatible
-+  - cell-index
-+  - clocks
-+  - clock-names
-+  - qcom,mode
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-msm8960.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/soc/qcom,gsbi.h>
-+
-+    gsbi@12440000 {
-+        compatible = "qcom,gsbi-v1.0.0";
-+        reg = <0x12440000 0x100>;
-+        cell-index = <1>;
-+        clocks = <&gcc GSBI1_H_CLK>;
-+        clock-names = "iface";
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges;
-+
-+        syscon-tcsr = <&tcsr>;
-+        qcom,mode = <GSBI_PROT_I2C_UART>;
-+
-+        serial@12450000 {
-+            compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
-+            reg = <0x12450000 0x100>,
-+                  <0x12400000 0x03>;
-+            interrupts = <0 193 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&gcc GSBI1_UART_CLK>, <&gcc GSBI1_H_CLK>;
-+            clock-names = "core", "iface";
-+        };
-+
-+        i2c@12460000 {
-+            compatible = "qcom,i2c-qup-v1.1.1";
-+            reg = <0x12460000 0x1000>;
-+            pinctrl-0 = <&i2c1_pins>;
-+            pinctrl-1 = <&i2c1_pins_sleep>;
-+            pinctrl-names = "default", "sleep";
-+            interrupts = <0 194 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&gcc GSBI1_QUP_CLK>, <&gcc GSBI1_H_CLK>;
-+            clock-names = "core", "iface";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            status = "disabled"; /* UART chosen */
-+        };
-+    };
--- 
-2.32.0
+> >> +static void sart2_get_entry(struct apple_sart *sart, int index, u8 *flags,
+> >> +                           phys_addr_t *paddr, size_t *size)
+> >> +{
+> >> +       u32 cfg = readl_relaxed(sart->regs + APPLE_SART2_CONFIG(index));
+> >> +       u32 paddr_ = readl_relaxed(sart->regs + APPLE_SART2_PADDR(index));
+> >
+> > Why do you use the _relaxed() accessors here and elsewhere in the driver?
+>
+> This device itself doesn't do any DMA transactions so it needs no memory
+> synchronization barriers. Only the consumer (i.e. rtkit and nvme) read/write
+> from/to these buffers (multiple times) and they have the required barriers
+> in place whenever they are used.
+>
+> These buffers so far are only allocated at probe time though so even using
+> the normal writel/readl here won't hurt performance at all. I can just use
+> those if you prefer or alternatively add a comment why _relaxed is fine here.
+>
+> This is a bit similar to the discussion for the pinctrl series last year [1].
 
+I think it's better to only use the _relaxed version where it actually helps,
+with a comment about it, and use the normal version elsewhere, in
+particular in functions that you have copied from the normal nvme driver.
+I had tried to compare some of your code with the other version and
+was rather confused by that.
+
+        Arnd

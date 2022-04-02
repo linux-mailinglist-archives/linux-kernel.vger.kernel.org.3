@@ -2,199 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DB4EFEAA
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 06:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341494EFEB0
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 06:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242973AbiDBEdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 00:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S239501AbiDBEhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 00:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239501AbiDBEcc (ORCPT
+        with ESMTP id S232489AbiDBEhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 00:32:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA6EE17AA2
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 21:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648873839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SwoSDylHa6/85uX5t9YhtzPHgxh2vrcpIjVJxcFxtaQ=;
-        b=g64mMdY/6XDS8abqT709CAAm/GYc73kkhw4IUnnMGZLGFlKlbG8rZD5eIyo0oV4AeXTlys
-        NliZNg4sj3pF9jOyCpvTKDnUT7DnwBSTsfZrtNOUt8YTEg7n1gNmzGODIZnIPpP2IwXwpH
-        wjDGt6QrNU8Nm+w4qbSY2ZO/U6g2OWc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-sShT0NKGNMec6hI3k5AlBg-1; Sat, 02 Apr 2022 00:30:36 -0400
-X-MC-Unique: sShT0NKGNMec6hI3k5AlBg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 10FF183395F;
-        Sat,  2 Apr 2022 04:30:36 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-21.pek2.redhat.com [10.72.12.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F2FF40FF416;
-        Sat,  2 Apr 2022 04:30:30 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     akpm@linux-foundation.org, willy@infradead.org
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        yangtiezhu@loongson.cn, amit.kachhap@arm.com, hch@lst.de,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        bhe@redhat.com
-Subject: [PATCH v5 3/3] vmcore: Convert read_from_oldmem() to take an iov_iter
-Date:   Sat,  2 Apr 2022 12:30:08 +0800
-Message-Id: <20220402043008.458679-4-bhe@redhat.com>
-In-Reply-To: <20220402043008.458679-1-bhe@redhat.com>
-References: <20220402043008.458679-1-bhe@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 2 Apr 2022 00:37:38 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4964647D
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 21:35:46 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id ml1-20020a17090b360100b001ca140b56ffso2610269pjb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 21:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=zyrVWi3eHGXqwO/PAUfW0hT/y7AsGTlfR6Cmc9pUvak=;
+        b=q3Kjbu44DZyXkKCF1mY3KZ2OalLQjz4MK5N6yHZRgSAoh1jUVv6YVTYE1lmVnWpOna
+         IGgwnh6lMzb/l0T5/aVuQcShrGv0h2JQ6wxuSGxp5RAWx0krKRspKjBOowTIG/Sg+jqA
+         BAGh6kFIm9JmcE745XEc5GvIDmonb9rNLjLe1J9pXuu/RmrVhJunSiph7UTSyKOCeTal
+         J1MREfxm4Rzkx63/NEcUgoz4Pw58+2u5HpacnXZVNOUvgYjdCWuMBiSAPq0HIUNPaa51
+         Ciet5yDZm01TWyQQoVRSnGzVmH/Q3i7XLsHcXhMJL9ix7yQ5ukH1v5WvJUS4OC+1Vm35
+         mfVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=zyrVWi3eHGXqwO/PAUfW0hT/y7AsGTlfR6Cmc9pUvak=;
+        b=cy5Ef5LRVsRn+EnkKR6iecBmUxQe3MFY9J28+mArZ1WJnqKX38vhws9FmuQN5czny/
+         2Zr2M47SEjgIukxqMIoXUZwqngt67c3hvJ+BlnjShA9BwDaPG1PU8U6WLW/5tzq0rzIl
+         K79y9/wcL1hKYTU4Kou/hkTOoeEck3fBAzmxgbaxAIr76B3A2MLH+WWZWSB0bGRC2Hvi
+         N0HMHfEu04zwzp5h65Dk+lvkiNfyIUPQiTn4iTQ3E2nJoCk+a3OgdoFHWjJ0dcPBxG9v
+         hn3Asn0deXPCwRJTuQToAbZy21pPTS/oPlvm5hdr5fFNmDiYUepCEpppcOi5jF8QDJYc
+         78cA==
+X-Gm-Message-State: AOAM5334hKq5+EaZYX0cccuzG9YQ91eSYR5maIYV396LmAkbdmrH0zAa
+        xwGH39eqx+06K4hTi8coweheo3y/s0LjOA==
+X-Google-Smtp-Source: ABdhPJyvq3IT8PQCrPzDGfmGfW7P0YXSEoo254Y9El8NUclS+I0IGtOVKeJztQKUnFxjvHPAZE2Q2z9SOQG2Rw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90b:3b44:b0:1c7:9ca8:a19e with SMTP
+ id ot4-20020a17090b3b4400b001c79ca8a19emr15183745pjb.245.1648874146285; Fri,
+ 01 Apr 2022 21:35:46 -0700 (PDT)
+Date:   Sat,  2 Apr 2022 12:35:29 +0800
+Message-Id: <20220402043530.923747-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v2 1/2] kunit: Make kunit_remove_resource() idempotent
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+The kunit_remove_resource() function is used to unlink a resource from
+the list of resources in the test, making it no longer show up in
+kunit_find_resource().
 
-Remove the read_from_oldmem() wrapper introduced earlier and convert
-all the remaining callers to pass an iov_iter.
+However, this could lead to a race condition if two threads called
+kunit_remove_resource() on the same resource at the same time: the
+resource would be removed from the list twice (causing a crash at the
+second list_del()), and the refcount for the resource would be
+decremented twice (instead of once, for the reference held by the
+resource list).
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Baoquan He <bhe@redhat.com>
+Fix both problems, the first by using list_del_init(), and the second by
+checking if the resource has already been removed using list_empty(),
+and only decrementing its refcount if it has not.
+
+Also add a KUnit test for the kunit_remove_resource() function which
+tests this behaviour.
+
+Reported-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- arch/x86/kernel/crash_dump_64.c |  7 +++++-
- fs/proc/vmcore.c                | 40 +++++++++++++--------------------
- include/linux/crash_dump.h      | 10 ++++-----
- 3 files changed, 25 insertions(+), 32 deletions(-)
 
-diff --git a/arch/x86/kernel/crash_dump_64.c b/arch/x86/kernel/crash_dump_64.c
-index f922d51c9d1f..0fa87648e55c 100644
---- a/arch/x86/kernel/crash_dump_64.c
-+++ b/arch/x86/kernel/crash_dump_64.c
-@@ -55,6 +55,11 @@ ssize_t copy_oldmem_page_encrypted(struct iov_iter *iter, unsigned long pfn,
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220318064959.3298768-1-davidgow@google.com/
+- Rebased on top of Daniel's split of the resource system into
+  resource.{c,h}
+  - https://lore.kernel.org/linux-kselftest/20220328174143.857262-1-dlatypov@google.com/
+  - https://lore.kernel.org/linux-kselftest/20220328174143.857262-2-dlatypov@google.com/
+
+ lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++++++++++++++
+ lib/kunit/resource.c   |  8 ++++++--
+ 2 files changed, 41 insertions(+), 2 deletions(-)
+
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 555601d17f79..9005034558aa 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -190,6 +190,40 @@ static void kunit_resource_test_destroy_resource(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
+ }
  
- ssize_t elfcorehdr_read(char *buf, size_t count, u64 *ppos)
++static void kunit_resource_test_remove_resource(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++	struct kunit_resource *res = kunit_alloc_and_get_resource(
++			&ctx->test,
++			fake_resource_init,
++			fake_resource_free,
++			GFP_KERNEL,
++			ctx);
++
++	/* The resource is in the list */
++	KUNIT_EXPECT_FALSE(test, list_empty(&ctx->test.resources));
++
++	/* Remove the resource. The pointer is still valid, but it can't be
++	 * found.
++	 */
++	kunit_remove_resource(test, res);
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++	/* We haven't been freed yet. */
++	KUNIT_EXPECT_TRUE(test, ctx->is_resource_initialized);
++
++	/* Removing the resource multiple times is valid. */
++	kunit_remove_resource(test, res);
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++	/* Despite having been removed twice (from only one reference), the
++	 * resource still has not been freed.
++	 */
++	KUNIT_EXPECT_TRUE(test, ctx->is_resource_initialized);
++
++	/* Free the resource. */
++	kunit_put_resource(res);
++	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
++}
++
+ static void kunit_resource_test_cleanup_resources(struct kunit *test)
  {
--	return read_from_oldmem(buf, count, ppos, 0,
-+	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-+	struct iov_iter iter;
-+
-+	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-+
-+	return read_from_oldmem(&iter, count, ppos,
- 				cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
- }
-diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-index 4a721865b5cd..4eaeb645e759 100644
---- a/fs/proc/vmcore.c
-+++ b/fs/proc/vmcore.c
-@@ -129,7 +129,7 @@ static int open_vmcore(struct inode *inode, struct file *file)
- }
- 
- /* Reads a page from the oldmem device from given offset. */
--static ssize_t read_from_oldmem_iter(struct iov_iter *iter, size_t count,
-+ssize_t read_from_oldmem(struct iov_iter *iter, size_t count,
- 			 u64 *ppos, bool encrypted)
+ 	int i;
+@@ -387,6 +421,7 @@ static struct kunit_case kunit_resource_test_cases[] = {
+ 	KUNIT_CASE(kunit_resource_test_init_resources),
+ 	KUNIT_CASE(kunit_resource_test_alloc_resource),
+ 	KUNIT_CASE(kunit_resource_test_destroy_resource),
++	KUNIT_CASE(kunit_resource_test_remove_resource),
+ 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
+ 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
+ 	KUNIT_CASE(kunit_resource_test_static),
+diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
+index b8bced246217..09ec392d2323 100644
+--- a/lib/kunit/resource.c
++++ b/lib/kunit/resource.c
+@@ -98,11 +98,15 @@ EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
+ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
  {
- 	unsigned long pfn, offset;
-@@ -178,27 +178,6 @@ static ssize_t read_from_oldmem_iter(struct iov_iter *iter, size_t count,
- 	return read;
- }
+ 	unsigned long flags;
++	bool was_linked;
  
--ssize_t read_from_oldmem(char *buf, size_t count,
--			 u64 *ppos, int userbuf,
--			 bool encrypted)
--{
--	struct iov_iter iter;
--	struct iovec iov;
--	struct kvec kvec;
--
--	if (userbuf) {
--		iov.iov_base = (__force void __user *)buf;
--		iov.iov_len = count;
--		iov_iter_init(&iter, READ, &iov, 1, count);
--	} else {
--		kvec.iov_base = buf;
--		kvec.iov_len = count;
--		iov_iter_kvec(&iter, READ, &kvec, 1, count);
--	}
--
--	return read_from_oldmem_iter(&iter, count, ppos, encrypted);
--}
--
- /*
-  * Architectures may override this function to allocate ELF header in 2nd kernel
-  */
-@@ -218,7 +197,12 @@ void __weak elfcorehdr_free(unsigned long long addr)
-  */
- ssize_t __weak elfcorehdr_read(char *buf, size_t count, u64 *ppos)
- {
--	return read_from_oldmem(buf, count, ppos, 0, false);
-+	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-+	struct iov_iter iter;
+ 	spin_lock_irqsave(&test->lock, flags);
+-	list_del(&res->node);
++	was_linked = !list_empty(&res->node);
++	list_del_init(&res->node);
+ 	spin_unlock_irqrestore(&test->lock, flags);
+-	kunit_put_resource(res);
 +
-+	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-+
-+	return read_from_oldmem(&iter, count, ppos, false);
++	if (was_linked)
++		kunit_put_resource(res);
  }
+ EXPORT_SYMBOL_GPL(kunit_remove_resource);
  
- /*
-@@ -226,7 +210,13 @@ ssize_t __weak elfcorehdr_read(char *buf, size_t count, u64 *ppos)
-  */
- ssize_t __weak elfcorehdr_read_notes(char *buf, size_t count, u64 *ppos)
- {
--	return read_from_oldmem(buf, count, ppos, 0, cc_platform_has(CC_ATTR_MEM_ENCRYPT));
-+	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-+	struct iov_iter iter;
-+
-+	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-+
-+	return read_from_oldmem(&iter, count, ppos,
-+			cc_platform_has(CC_ATTR_MEM_ENCRYPT));
- }
- 
- /*
-@@ -402,7 +392,7 @@ static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
- 					    m->offset + m->size - *fpos,
- 					    iov_iter_count(iter));
- 			start = m->paddr + *fpos - m->offset;
--			tmp = read_from_oldmem_iter(iter, tsz, &start,
-+			tmp = read_from_oldmem(iter, tsz, &start,
- 					cc_platform_has(CC_ATTR_MEM_ENCRYPT));
- 			if (tmp < 0)
- 				return tmp;
-diff --git a/include/linux/crash_dump.h b/include/linux/crash_dump.h
-index a1cf7d5c03c7..0f3a656293b0 100644
---- a/include/linux/crash_dump.h
-+++ b/include/linux/crash_dump.h
-@@ -134,13 +134,11 @@ static inline int vmcore_add_device_dump(struct vmcoredd_data *data)
- #endif /* CONFIG_PROC_VMCORE_DEVICE_DUMP */
- 
- #ifdef CONFIG_PROC_VMCORE
--ssize_t read_from_oldmem(char *buf, size_t count,
--			 u64 *ppos, int userbuf,
--			 bool encrypted);
-+ssize_t read_from_oldmem(struct iov_iter *iter, size_t count,
-+			 u64 *ppos, bool encrypted);
- #else
--static inline ssize_t read_from_oldmem(char *buf, size_t count,
--				       u64 *ppos, int userbuf,
--				       bool encrypted)
-+static inline ssize_t read_from_oldmem(struct iov_iter *iter, size_t count,
-+				       u64 *ppos, bool encrypted)
- {
- 	return -EOPNOTSUPP;
- }
 -- 
-2.34.1
+2.35.1.1094.g7c7d902a7c-goog
 

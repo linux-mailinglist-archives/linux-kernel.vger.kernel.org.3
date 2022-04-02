@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D61D4EFDAE
+	by mail.lfdr.de (Postfix) with ESMTP id B9A944EFDAF
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353655AbiDBBLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 21:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S1353666AbiDBBLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 21:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351069AbiDBBK7 (ORCPT
+        with ESMTP id S1353506AbiDBBLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:10:59 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC148CCEE
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:09:09 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id h15-20020a17090aa88f00b001c9de032a8cso2414478pjq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:09:09 -0700 (PDT)
+        Fri, 1 Apr 2022 21:11:01 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBF8FE68
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:09:11 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id fh22-20020a17090b035600b001c6a163499cso1894334pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=8RHA9aUNJxFpM8yTJhP4ef1t/aKUFmzX6SMgtUXeSlU=;
-        b=mu6m/a5O3VjsafgbIgGavNyaMXeK5i+9etdubuU+TMNUVKvHADJfk8RbYW9jX8JI6L
-         fGcg3as7WwEUTD6BKHO8x+X8rl/KoQ0vXmuQKH+tbFQNlDrVvXZfTE7zAoIuYPNuYoyG
-         4rF6f4FEvRvKghKoT+T7LWlsqJkTfx+WAiA7dIFsjZBYLQK5i2aQ5Q3aDkknDP5IkLuK
-         8PZqwQKJXWZbP5fXXW8tZzVRpDTNYrHK2DY3GJtJN+1PdWtwqmiueLkl/nNduvbKONov
-         n1k+OwCK0aN+DiRconoQP9ZKaQXkMGXCPrWjncL4jUH0SPVC14/yi5H2rq2jZXbaJ8IA
-         nYUw==
+        bh=Czzn9i/2i6B1OBdabyWFgGFqRWslyQJuAsyXE6/7mj0=;
+        b=I/sR5Eyp0KnE20qAVSatSC9Qd8LA6B9L+YQcL1RO6LZoG+nQbxj7gR8VC+pSt159MB
+         naW8IqzSxUtZ1tkcXuzCgT7fC4s7FNy2JBiqGuFCUJMOnwXaad4wfxO+RSJlGt2nKvta
+         x8Lqh+z04e0vhr5s2mHUvv8LFCb7ORgxG0nTuZlyOWuMpkrGsYZOh+d9zG7eljfwEmpg
+         lois9n6XSdpXL+FfqvQIWupDiB7tQCpF6alcGuoKdBg/DJVmUNxbOxLfSqj8ntciaMlV
+         8uVjEXlWKdmoAfv9fKjNkGOjM2f5M55lgONHC2aG3W0wwH5Z8xplGambc5G8kWZWdUA3
+         GhGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=8RHA9aUNJxFpM8yTJhP4ef1t/aKUFmzX6SMgtUXeSlU=;
-        b=Zlb1Vs2W2hIPtvP07lITFFugPTb3Hh/ylsPx+xjQxxLay1+dlo2DO4Hd1zR4IqTbCj
-         j2U1PqAgPXGKWgzrUalks4GTuzJR3p0ny+NnSxw8hPl/1sn2W4ws/U1Ie2xvYpQer3GZ
-         k2z7vj3C4jzZm5iw7hfjlbfQZpwpdStmTZbgrLTbqnp+bhX9p7SDS1gH4UQeMaWU9EB1
-         Or48Y8CAyjh7Y7WGA+BDL4QjbHWMgXGHEXdOKn2Szn46Riq4bY4GODWkJP9npUTzNkts
-         zxqtJf/SjQ63N20m7Weq0toFIuVDAM+7BEhLyGWDsvJ3xFxLSwNP/tVRsGjWLJ5QME3M
-         wwtg==
-X-Gm-Message-State: AOAM530sjSE8AOhgjS+EFghB2Tj/bL4Mocj37ycNz4dZBaGW/muoNSMI
-        3PFTWIrCjf+iZcWva60uvUA9fHzyf+g=
-X-Google-Smtp-Source: ABdhPJz6eEt/o/RMT6jRF4o5mIUgYCP3Lxw3z5+HYs6xIhuayeX7wPusWKnd7JasHteXF2zCH0UcWHuQWv8=
+        bh=Czzn9i/2i6B1OBdabyWFgGFqRWslyQJuAsyXE6/7mj0=;
+        b=X1yjQcIxpxtq1dtvTlHdA4WHX8Fv6pin6gSZljG/aMEtHarH9b1cJAlN44bUvudL7p
+         xIWfp5weqRgYRoHRcw4QWGPZMiGNU7wNBZ2i6Ukxo8zQJ05gL6p5qYgFv+OIZ3tJWhfY
+         1V6yxZBHfpEGYSkB2pmKyky/534XMLMFSu4oiO8QGt/G273Yps67s6V+T/NxnOFzIqTi
+         LzP76I+mQU3C2Hcwp10Du9lZrac4b/etG14INlBuFUv35FUQ/JE9TCgrlMeDjW7HBCdT
+         +HfHYHOzFWke+VtFvBzmrtZoTEu1/JAMnDth2dkUlcyrR3QVbdls7PCLtn28UpaWxeJe
+         Kd/Q==
+X-Gm-Message-State: AOAM531/133Ntr3fQ0ZaWn/nj6yXb2uBuBh5uqFPOO1gMC2R/UkJudgO
+        57uRniQzWadwUdLNdw1Y7JfQkGD87O8=
+X-Google-Smtp-Source: ABdhPJxUeBeLfnRYVU4NNoaIAkOp173uUFizIUjEgmhgVSqVzzTW/5EspfQz0Niq83TzQz2SLpLto22aL1Q=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:114e:b0:4c8:55f7:faad with SMTP id
- b14-20020a056a00114e00b004c855f7faadmr13709370pfm.86.1648861749019; Fri, 01
- Apr 2022 18:09:09 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:8c81:b0:156:7fee:643b with SMTP id
+ t1-20020a1709028c8100b001567fee643bmr203850plo.59.1648861750610; Fri, 01 Apr
+ 2022 18:09:10 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  2 Apr 2022 01:08:57 +0000
+Date:   Sat,  2 Apr 2022 01:08:58 +0000
 In-Reply-To: <20220402010903.727604-1-seanjc@google.com>
-Message-Id: <20220402010903.727604-3-seanjc@google.com>
+Message-Id: <20220402010903.727604-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220402010903.727604-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH 2/8] KVM: SVM: Downgrade BUG_ON() to WARN_ON() in svm_inject_irq()
+Subject: [PATCH 3/8] KVM: SVM: Unwind "speculative" RIP advancement if INTn
+ injection "fails"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -74,30 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Unwind the RIP advancement done by svm_queue_exception() when injecting
+an INT3 ultimately "fails" due to the CPU encountering a VM-Exit while
+vectoring the injected event, even if the exception reported by the CPU
+isn't the same event that was injected.  If vectoring INT3 encounters an
+exception, e.g. #NP, and vectoring the #NP encounters an intercepted
+exception, e.g. #PF when KVM is using shadow paging, then the #NP will
+be reported as the event that was in-progress.
 
-There is no need to bring down the whole host just because there might be
-some issue with respect to guest GIF handling in KVM.
+Note, this is still imperfect, as it will get a false positive if the
+INT3 is cleanly injected, no VM-Exit occurs before the IRET from the INT3
+handler in the guest, the instruction following the INT3 generates an
+exception (directly or indirectly), _and_ vectoring that exception
+encounters an exception that is intercepted by KVM.  The false positives
+could theoretically be solved by further analyzing the vectoring event,
+e.g. by comparing the error code against the expected error code were an
+exception to occur when vectoring the original injected exception, but
+SVM without NRIPS is a complete disaster, trying to make it 100% correct
+is a waste of time.
 
-Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Fixes: 66b7138f9136 ("KVM: SVM: Emulate nRIP feature when reinjecting INT3")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/svm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/svm/svm.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 95b26dbfd561..2c86bd9176c6 100644
+index 2c86bd9176c6..30cef3b10838 100644
 --- a/arch/x86/kvm/svm/svm.c
 +++ b/arch/x86/kvm/svm/svm.c
-@@ -3383,7 +3383,7 @@ static void svm_inject_irq(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -3699,6 +3699,18 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
+ 	vector = exitintinfo & SVM_EXITINTINFO_VEC_MASK;
+ 	type = exitintinfo & SVM_EXITINTINFO_TYPE_MASK;
  
--	BUG_ON(!(gif_set(svm)));
-+	WARN_ON(!gif_set(svm));
- 
- 	trace_kvm_inj_virq(vcpu->arch.interrupt.nr);
- 	++vcpu->stat.irq_injections;
++	/*
++	 * If NextRIP isn't enabled, KVM must manually advance RIP prior to
++	 * injecting the soft exception/interrupt.  That advancement needs to
++	 * be unwound if vectoring didn't complete.  Note, the _new_ event may
++	 * not be the injected event, e.g. if KVM injected an INTn, the INTn
++	 * hit a #NP in the guest, and the #NP encountered a #PF, the #NP will
++	 * be the reported vectored event, but RIP still needs to be unwound.
++	 */
++	if (int3_injected && type == SVM_EXITINTINFO_TYPE_EXEPT &&
++	   kvm_is_linear_rip(vcpu, svm->int3_rip))
++		kvm_rip_write(vcpu, kvm_rip_read(vcpu) - int3_injected);
++
+ 	switch (type) {
+ 	case SVM_EXITINTINFO_TYPE_NMI:
+ 		vcpu->arch.nmi_injected = true;
+@@ -3715,13 +3727,9 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
+ 		 * but re-execute the instruction instead. Rewind RIP first
+ 		 * if we emulated INT3 before.
+ 		 */
+-		if (kvm_exception_is_soft(vector)) {
+-			if (vector == BP_VECTOR && int3_injected &&
+-			    kvm_is_linear_rip(vcpu, svm->int3_rip))
+-				kvm_rip_write(vcpu,
+-					      kvm_rip_read(vcpu) - int3_injected);
++		if (kvm_exception_is_soft(vector))
+ 			break;
+-		}
++
+ 		if (exitintinfo & SVM_EXITINTINFO_VALID_ERR) {
+ 			u32 err = svm->vmcb->control.exit_int_info_err;
+ 			kvm_requeue_exception_e(vcpu, vector, err);
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 

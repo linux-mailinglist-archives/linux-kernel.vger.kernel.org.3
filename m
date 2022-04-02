@@ -2,133 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8223C4F0689
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 00:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB344F0690
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 00:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354565AbiDBWE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 18:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S1349735AbiDBWQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 18:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349735AbiDBWEY (ORCPT
+        with ESMTP id S231216AbiDBWQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 18:04:24 -0400
-Received: from uriel.iewc.co.za (uriel.iewc.co.za [IPv6:2c0f:f720:0:3:d6ae:52ff:feb8:f27b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5DA1104;
-        Sat,  2 Apr 2022 15:02:31 -0700 (PDT)
-Received: from [2c0f:f720:fe16:c400::1] (helo=tauri.local.uls.co.za)
-        by uriel.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <jaco@uls.co.za>)
-        id 1nalpA-0001KM-Cw; Sun, 03 Apr 2022 00:02:24 +0200
-Received: from [192.168.42.201]
-        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
-        (envelope-from <jaco@uls.co.za>)
-        id 1nalp7-0000Ow-Nr; Sun, 03 Apr 2022 00:02:22 +0200
-Message-ID: <59762d2f-d4e3-c748-5d41-ef3be85537ed@uls.co.za>
-Date:   Sun, 3 Apr 2022 00:02:20 +0200
+        Sat, 2 Apr 2022 18:16:38 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C42F3E5C2
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 15:14:45 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id D531792009C; Sun,  3 Apr 2022 00:14:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id CEAFF92009B;
+        Sat,  2 Apr 2022 23:14:43 +0100 (BST)
+Date:   Sat, 2 Apr 2022 23:14:43 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     James Jones <linux@theinnocuous.com>
+cc:     Kees Cook <keescook@chromium.org>, bp@alien8.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: Remove a.out support
+In-Reply-To: <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+Message-ID: <alpine.DEB.2.21.2204022255430.47162@angie.orcam.me.uk>
+References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com> <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com> <202203151150.1CDB1D8DA@keescook> <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
- connections
-Content-Language: en-GB
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Neal Cardwell <ncardwell@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Wei Wang <weiwan@google.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sven Auhagen <sven.auhagen@voleatech.de>
-References: <E1nZMdl-0006nG-0J@plastiekpoot>
- <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
- <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za>
- <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
- <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
- <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
- <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za>
- <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
- <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
- <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za>
- <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
- <CADVnQy=GX0J_QbMJXogGzPwD=f0diKDDxLiHV0gzrb4bo=4FjA@mail.gmail.com>
- <429dd56b-8a6c-518f-ccb4-fa5beae30953@uls.co.za>
- <CANn89iKSFXBx9zYuBFH4-uS3UzAUW+fY7d5aiUkfOa1DdbHDxQ@mail.gmail.com>
-From:   Jaco Kroon <jaco@uls.co.za>
-Organization: Ultimate Linux Solutions (Pty) Ltd
-In-Reply-To: <CANn89iKSFXBx9zYuBFH4-uS3UzAUW+fY7d5aiUkfOa1DdbHDxQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 16 Mar 2022, James Jones wrote:
 
-On 2022/04/02 15:20, Eric Dumazet wrote:
+> Probably getting a bit off topic, but I did spend a few hours searching
+> around for any existing tools to convert a binary from a.out->ELF, and
+> trying to come up with something myself by extracting the sections with
+> objdump and re-combining them into an ELF using a linker script placing
+> the sections at the same locations. I couldn't get it working in an
+> evening or two messing with it so I moved on, but I agree something like
+> this seems possible in theory.
 
-> Great. This confirms our suspicions.
->
-> Please try the following patch that landed in 5.18-rc
->
-> f2dd495a8d589371289981d5ed33e6873df94ecc netfilter: nf_conntrack_tcp:
-> preserve liberal flag in tcp options
+ Chiming in late as I'm scanning outstanding mailing list traffic: if this 
+is as you say all statically linked stuff, then converting from a.out to 
+ELF might be as easy as:
 
-Will track this down and deploy in the next day or two.  Thank you, Neal
-and Florian for all the assistance!
+$ objcopy -I a.out-i386-linux -O elf32-i386 a.out-binary elf-binary
 
-As an aside, would really like to engage with someone that can assist on
-the known congestion w.r.t. Google services in JHB, so if you're willing
-- or can get me in contact with the right people, please do contact me
-direct off-list (we've alleviated the issue by upgrading out IPT but
-would like to understand what is going on, can provide ticket references).
+though you may have to build yourself suitably old i386-linux-gnu binutils 
+(from ftp.gnu.org), e.g. this version does support a.out:
 
+$ objcopy --info
+BFD header file version 2.15.91 20040527
+elf32-i386
+ (header little endian, data little endian)
+  i386
+a.out-i386-linux
+ (header little endian, data little endian)
+  i386
+efi-app-ia32
+ (header little endian, data little endian)
+  i386
+elf32-little
+ (header little endian, data little endian)
+  i386
+elf32-big
+ (header big endian, data big endian)
+  i386
+srec
+ (header endianness unknown, data endianness unknown)
+  i386
+symbolsrec
+ (header endianness unknown, data endianness unknown)
+  i386
+tekhex
+ (header endianness unknown, data endianness unknown)
+  i386
+binary
+ (header endianness unknown, data endianness unknown)
+  i386
+ihex
+ (header endianness unknown, data endianness unknown)
+  i386
+trad-core
+ (header endianness unknown, data endianness unknown)
 
-Kind Regards,
-Jaco
+               elf32-i386 a.out-i386-linux efi-app-ia32 elf32-little elf32-big 
+          i386 elf32-i386 a.out-i386-linux efi-app-ia32 elf32-little elf32-big 
 
->
-> CC netfilter folks.
->
-> Condition triggering the bug :
->    before(seq, sender->td_maxend + 1),
->
-> I took a look at the code, and it is not clear if td_maxend is
-> properly setup (or if td_scale is cleared at some point while it
-> should not)
->
-> Alternatively, if conntracking does not know if the connection is
-> using wscale (or what is the scale), the "before(seq,
-> sender->td_maxend + 1),"
-> should not be evaluated/used.
->
-> Also, I do not see where td_maxend is extended in tcp_init_sender()
->
-> Probably wrong patch, just to point to the code I do not understand yet.
->
-> diff --git a/net/netfilter/nf_conntrack_proto_tcp.c
-> b/net/netfilter/nf_conntrack_proto_tcp.c
-> index 8ec55cd72572e0cca076631e2cc1c11f0c2b86f6..950082785d61b7a2768559c7500d3aee3aaea7c2
-> 100644
-> --- a/net/netfilter/nf_conntrack_proto_tcp.c
-> +++ b/net/netfilter/nf_conntrack_proto_tcp.c
-> @@ -456,9 +456,10 @@ static void tcp_init_sender(struct ip_ct_tcp_state *sender,
->         /* SYN-ACK in reply to a SYN
->          * or SYN from reply direction in simultaneous open.
->          */
-> -       sender->td_end =
-> -       sender->td_maxend = end;
-> -       sender->td_maxwin = (win == 0 ? 1 : win);
-> +       sender->td_end = end;
-> +       sender->td_maxwin = max(win, 1U);
-> +       /* WIN in SYN & SYNACK is not scaled */
-> +       sender->td_maxend = end + sender->td_maxwin;
->
->         tcp_options(skb, dataoff, tcph, sender);
->         /* RFC 1323:
+               srec symbolsrec tekhex binary ihex trad-core 
+          i386 srec symbolsrec tekhex binary ihex --------- 
+
+The last binutils version to support a.out-i386-linux was 2.30 I believe.  
+Just configuring for i386-linux-gnu should do as a.out used to be included 
+as a secondary BFD target (you can also do `--enable-targets=all' to get 
+support for all kinds of the exotic and less exotic BFD targets).
+
+ HTH,
+
+  Maciej

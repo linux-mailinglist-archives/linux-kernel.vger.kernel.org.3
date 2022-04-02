@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028FF4F065B
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314B74F0660
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238884AbiDBVC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 17:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S234537AbiDBVPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 17:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiDBVCz (ORCPT
+        with ESMTP id S231334AbiDBVPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 17:02:55 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DF0654B3;
-        Sat,  2 Apr 2022 14:01:02 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so1535439pjb.0;
-        Sat, 02 Apr 2022 14:01:02 -0700 (PDT)
+        Sat, 2 Apr 2022 17:15:52 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956ED17E20
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 14:13:59 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d5so10669087lfj.9
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 14:13:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ep31zfzXgtGPRrK4JzjcT4OsqwVUibu1oi7iQV6wMvk=;
-        b=omQXM9rtM1ebTOd9z8Ztav/WBoT+BCHziqEXwKWAlkioz9DLMeAftY4UcrbPRF9dvo
-         iMHIqhBJ9HMNXG//Hjyk0XTZSaeCqnlM2A5aofHxAibbOUdnvHBjxiXOGuQ5tYYhIyO1
-         SoXc5o5jQ0DrsbD4yjkJKCSXvYG4amJfPA2Kl0VW5lUg4Ji/H072psVjvLOq6Wyy1tRq
-         OINubE8bnpoZEu78zYfE05TRpk/YnxYkPzAbOMIat9Dv63xoS16Tkya1xAs9dogtMaQW
-         BNpctb9fvWMaxbp4kOsrdI33JWavTeVRlusI9oeNfS4484++uizErQPu/8lBwlZB9K7w
-         TX9A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QaKZqz8gJE1qe33eHsaYAKuzr4In/J4ciy0i99MvKqc=;
+        b=GAmnS0ip/T3wLkz/ApnSMSBM2P9vtOlPl0eEi0yjY4MEq6oWfRPTcCi1fxZ+wfR9Yb
+         vMXaufdzR03LTtwRUN+wXDE8zBC3BO0eOZPj3HB39JABha10yb63hslqDeEET5ub+yCn
+         lojCN3kzxwY3uJ4tc81jXhmvzxWSnMgX+pQcy7y91hn6KTgqXTfJ8QioBzOTp7LemkJG
+         bYz7HpqRntwME02jOlnwZS3BtQakBBlQVeczbw8TQm5vQSI7vJLvdNkdn4MEExsRoUyl
+         4MGsC47fsnjGg/LJDl1y9PKJESaV9hZFL3zHbKXmQGjAw+WTbenyi4qpEChBdYw6T/S3
+         CcUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ep31zfzXgtGPRrK4JzjcT4OsqwVUibu1oi7iQV6wMvk=;
-        b=pS+aCfcY64YNuluT25mIeNvPiwO1FvhYmZRJf04esUAYUJNRGO+Fb20feZgXrVLJEU
-         6Uq0XA3W+IQhVBS8DR/sO95liNb+4LrXjJhSO054kFgq+qrMexwTez2/GJmIvdXF5FIP
-         8J5xmxbjdM7gCPIDIrntKOYs7WFpLsxmrNve9yJ3Wl9prSlAzwEIJSsrlrJkCZ/NfkIJ
-         lxMu7vB0+z0YRDp05b1OWZvsJvnnecfXVQxDNWlLxAbeA8KJMuraeRDJVtpfNJYdVEqU
-         +IF+4ioLDJO9b2iSdM59WM6Ia8ET+I71+gN6yjzWfuz5aQ+dcjX59QLEl5lHUGl3jS7D
-         8GlA==
-X-Gm-Message-State: AOAM531i0021svKiu1G/hS/byACrDxNz8ZG8BY0srKPoLHUMAI6u0W7e
-        7Rgc4e4u6p9r1M0OghOWMPMYZd2fU4E=
-X-Google-Smtp-Source: ABdhPJxj78ez9xkFhutTGi0ECjYCluuCwbPoK7lVzjaR9HcfVHQxlmELJUaq1hfN74k4vofie6i9Kg==
-X-Received: by 2002:a17:902:bb92:b0:153:4eae:c77e with SMTP id m18-20020a170902bb9200b001534eaec77emr51730419pls.93.1648933261795;
-        Sat, 02 Apr 2022 14:01:01 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056a001acf00b004fb2ad05521sm7259339pfv.215.2022.04.02.14.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 14:01:01 -0700 (PDT)
-Date:   Sun, 3 Apr 2022 02:30:54 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] dt-bindings: qcom: qcom,gsbi: convert to dtschema
-Message-ID: <20220402210054.GA36286@9a2d8922b8f1>
-References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
- <20220402184011.132465-10-krzysztof.kozlowski@linaro.org>
- <20220402202917.GA36054@9a2d8922b8f1>
- <9a584eac-6ac9-e4ed-ef90-49569f4a4baa@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QaKZqz8gJE1qe33eHsaYAKuzr4In/J4ciy0i99MvKqc=;
+        b=PcbYb1YCBnG8Tdwlv/cCBiMvG9Fl7i3X731M8P/AYaWI1JC9H+gKB4B4WBlkobVnaH
+         tFFfnXOfw1Fjonce0p9wRCOq82H7mtvAdDgVA7C6ua0KCQbYllqbT+O3TYvNjDTkaqjV
+         AZEAW8B4x61B5ik55v3TRXmAdNwynigFnsDX4R6gjg77NgMAJ9kCKnkqrmoTvltNuCsL
+         GaMYjZp76OXwJQAEQGJROyb9fR10ICrtEZ3o5gljIu0VJfeeVNmKb9O3lEDIF03bfaZi
+         5wugTzHFPItyUpGltltWX5h7zvAk9auJGkI/BLikNn6+NZx60kUWS3ZcF9nkkhJzk965
+         DLyQ==
+X-Gm-Message-State: AOAM530pntlXNr2Dfm2vdHYeRxgAJX2+ZHSUAMGLwDkGvi/0FVyBtGgX
+        jSW1IA24onLYBHAwUkiH40U=
+X-Google-Smtp-Source: ABdhPJwXF0R9QqVwGSt8GTxxjZ1498E6u00uhTiNBNhVextQI5GgSulcWpEV23NHITec8j76XpMf3g==
+X-Received: by 2002:a05:6512:16a2:b0:448:1fbb:8ca1 with SMTP id bu34-20020a05651216a200b004481fbb8ca1mr18023319lfb.125.1648934037132;
+        Sat, 02 Apr 2022 14:13:57 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.247])
+        by smtp.gmail.com with ESMTPSA id n12-20020a19ef0c000000b0044a2aea14bdsm616812lfh.277.2022.04.02.14.13.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 14:13:56 -0700 (PDT)
+Message-ID: <feba8981-5568-fa2f-ccc3-c5debf3c7091@gmail.com>
+Date:   Sun, 3 Apr 2022 00:13:55 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a584eac-6ac9-e4ed-ef90-49569f4a4baa@linaro.org>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 10:38:23PM +0200, Krzysztof Kozlowski wrote:
-> On 02/04/2022 22:29, Kuldeep Singh wrote:
-> > On Sat, Apr 02, 2022 at 08:40:11PM +0200, Krzysztof Kozlowski wrote:
-> >> Convert the Qualcomm General Serial Bus Interface (GSBI) to DT
-> >> Schema.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
-> >>  .../bindings/soc/qcom/qcom,gsbi.yaml          | 133 ++++++++++++++++++
-> >>  2 files changed, 133 insertions(+), 87 deletions(-)
-> >>  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-> >>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-> > 
-> > Great initiative to convert everything in one go!
-> > 
-> > [...]
-> > 
-> >> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-> >> new file mode 100644
-> >> index 000000000000..b97e359f3f90
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-> >> @@ -0,0 +1,133 @@
-> >> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/soc/qcom/qcom,gsbi.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Qualcomm General Serial Bus Interface (GSBI)
-> >> +
-> >> +maintainers:
-> >> +  - Andy Gross <agross@kernel.org>
-> >> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> >> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> +
-> >> +description:
-> >> +  The GSBI controller is modeled as a node with zero or more child nodes, each
-> >> +  representing a serial sub-node device that is mux'd as part of the GSBI
-> >> +  configuration settings.  The mode setting will govern the input/output mode
-> >> +  of the 4 GSBI IOs.
-> >> +
-> >> +  A GSBI controller node can contain 0 or more child nodes representing serial
-> >> +  devices.  These serial devices can be a QCOM UART, I2C controller, spi
-> >> +  controller, or some combination of aforementioned devices.
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - qcom,gsbi-v1.0.0
-> > 
-> > Only 1 entry? const.
-> 
-> v1.0.0 looks like there could be some more, although they did not reach
-> mainline. The GSBI seems to be replaced by different blocks, so maybe
-> there will be no new entries here.
+Hi Michael,
 
-Yes, GSBI seems pretty old and only v1 rolled out.
-Don't think there are more revisions on the cards. Still can't say so.
+On 4/2/22 23:47, Michael Straube wrote:
+> Hi all,
+> 
+> smatch reported a sleeping in atomic context.
+> 
+> rtw_set_802_11_disassociate() <- disables preempt
+> -> _rtw_pwr_wakeup()
+>      -> ips_leave()
+> 
+> rtw_set_802_11_disassociate() takes a spinlock and ips_leave() uses a
+> mutex.
+> 
+> I'm fairly new to the locking stuff, but as far as I know this is not a
+> false positive since mutex can sleep, but that's not allowed under a
+> spinlock.
+> 
+> What is the best way to handle this?
+> I'm not sure if converting the mutex to a spinlock (including all the
+> other places where the mutex is used) is the right thing to do?
+> 
+
+I've looked into this like a month ago.
+
+IMO, this code just need to be redesigned, since locking scheme is very 
+complicated there and, as smatch says, not correct.
+
+Simple s/mutex_lock/spin_lock/ may work in that case, but one day 
+locking scheme should be reworked... Or just some code parts should be 
+dropped :))
+
+
+
+
+With regards,
+Pavel Skripkin

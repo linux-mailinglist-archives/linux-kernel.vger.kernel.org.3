@@ -2,111 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97684F0565
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AED54F0568
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244934AbiDBSba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 14:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S244981AbiDBSdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 14:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbiDBSb2 (ORCPT
+        with ESMTP id S231178AbiDBSdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 14:31:28 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2301FCCC;
-        Sat,  2 Apr 2022 11:29:35 -0700 (PDT)
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 232IT7Js009212;
-        Sun, 3 Apr 2022 03:29:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 232IT7Js009212
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1648924148;
-        bh=Oa7oBLuRLvD/B7fBD4A000HXNjk6EOGgj48TivDZZhY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=2oGfyH3YM4bnjNI1QwZuCo7SvRcGN5MbaRsi4cX3CMl7dwxLSJv2f3h/6QBR7Mg6O
-         e50y7KYhpZ0xPq5WkGOAA7Ghb+8qfEWhwhRf1Vi1AG8FrFDTNpdzHD4F5V7D0N5p/z
-         L98mUPNzFdtxG6BJYdPbDrqPZAalszOCYzSe0XkdLnXjdkjPtdmSrT+o9tMUqLRFKf
-         JUO59R8PFOMhNK8iAd1TZIDRa9YD01HEJRSD74nqwgxnRWphl5DJWstebZHYcrk/pa
-         c2vzVDdtHYDnrWCw/W0ywsObVe9bsmK3jaYQKMxIoKeSM+xLgkJqFUWgp+89/BuQDh
-         AKhDoghVmgUmA==
-X-Nifty-SrcIP: [209.85.216.50]
-Received: by mail-pj1-f50.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so5349271pjf.1;
-        Sat, 02 Apr 2022 11:29:07 -0700 (PDT)
-X-Gm-Message-State: AOAM531Oc8wI+LjN8LJgqmFTU3sMLmjxdyH51eopjHIKkpOx1bDvwk6q
-        ZbJ88fmLUZNT6PN8awt+DJ0b1OTNEGO/yFvUP6Y=
-X-Google-Smtp-Source: ABdhPJz4kNlWZBvw0huT8+eWzttVQiQiFECQGXxgdgQFtP4Ii8nFHk/bSvJJ1YP5irmZvarnbSecgAxunGxY2/3ya6g=
-X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
- s3-20020a170902b18300b0014fc26620d5mr16203020plr.136.1648924147091; Sat, 02
- Apr 2022 11:29:07 -0700 (PDT)
+        Sat, 2 Apr 2022 14:33:07 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A521809;
+        Sat,  2 Apr 2022 11:31:14 -0700 (PDT)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXXhv-1nW8CN2sud-00YxDO; Sat, 02 Apr 2022 20:31:12 +0200
+Received: by mail-wr1-f52.google.com with SMTP id b19so8553791wrh.11;
+        Sat, 02 Apr 2022 11:31:12 -0700 (PDT)
+X-Gm-Message-State: AOAM5319j6kWjF5/v3am3fkZ/D+hDKh5bbIW7eksoqUsTNPierwopnXx
+        y9Z29B/ZdCL1TVrpUqLgaGkbstVX9sh7SoAXbS0=
+X-Google-Smtp-Source: ABdhPJxXeRBLN1ONxP6bjTAJFl4VK2LisOlNtuuiDZwD1HmyapvUcRapW/HdMhWyARa4Q7Topnt9ATX3Riix9x+xc68=
+X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
+ k10-20020a5d66ca000000b00203fb72a223mr11517977wrw.12.1648924272343; Sat, 02
+ Apr 2022 11:31:12 -0700 (PDT)
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 3 Apr 2022 03:28:19 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASN9Q40P6dUGSidT5=y0FA4pd+U93L17r8sH0j3VPum4A@mail.gmail.com>
-Message-ID: <CAK7LNASN9Q40P6dUGSidT5=y0FA4pd+U93L17r8sH0j3VPum4A@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v5.18-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+References: <20220321165049.35985-1-sven@svenpeter.dev> <20220321165049.35985-6-sven@svenpeter.dev>
+ <CAK8P3a2VgrWHerXTX4_wS8UU7fpN9-JZ5xESaWrr-WGYqGty=g@mail.gmail.com> <3166b80d-d8a6-45d5-9e3b-2f9998aca0d3@www.fastmail.com>
+In-Reply-To: <3166b80d-d8a6-45d5-9e3b-2f9998aca0d3@www.fastmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 2 Apr 2022 20:30:56 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1=Q7JSBLOmxZxGArUx+3Ex8SjDx7Z5csms5k+_yES9zA@mail.gmail.com>
+Message-ID: <CAK8P3a1=Q7JSBLOmxZxGArUx+3Ex8SjDx7Z5csms5k+_yES9zA@mail.gmail.com>
+Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:lvDJJbjN0pkxrwEZ0rhM+kJtjSIYljW0mLHlIlnog5Bgc8qmWA3
+ 9p2Ugkrag/2XVf0s68xp4q5iRmYZT3w5hIqB5AYLAUjICla2tmhSKJSi8XIRmyNsMc4yNJ9
+ 49SO2fwaPEgNIW7l1NLvwEhGqm4m/iH0ONCpOTX2Os5GW1UcEmN4SMNhdc+aOwwvfdGrtO8
+ EtoCFsowTj/I3WEHQozbQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eR2O3ZL9wiE=:dEjxpD1zZgLViDkpqbQ8Jo
+ HM3ofhCIxlDCjegz8mvTSMtlThRkMmhbGG4T/S863lpLxI9oXqo+vFZfcL7dMwknQCOoSdLTQ
+ ts7X7TYHgM8P1saZ++Lh0ElCSjNv63ae1cX1Ns4j3CogxHEAU7I7v0LYFIfV+q1eq6AU3QG/D
+ Xnvy6ARU01j8jsDzL6cjpkJgU0VU6GZ+kBk9OZhpiO1EBCSp6o2QCCUvYPub5ahuzgFYMGKJz
+ dSJyERE5R3WRlkocHABIfsrTsAHPoTsq0ROOBb2ux9nt+rjWYvWkPsmq3XxXUHkEdAQbnVxRC
+ VRODgCaDZPJZfxA8+12ZSh4BumnLTf4kzcGwLTlgNGKpNiRR3Tuae0MIQc1cEE4/ey9Ua00+t
+ 924n+xynOeQL0Z6NMKRTgk0/4Q20TRCmKykkNQL4CQ/tDytmGzmHZV5uBP9vyYIqEauFY9P2v
+ wuoDgQ2DOe9b7boAr/Cg/2gtUVmov0QZNZ+ObcgD3OJjus1QXsOeER+CxCdRCCNi9uwZyDmR+
+ bzd4tD552kpGPq7p4u1qqIc1NLC9wa5F+34xdo9QqAmBg6FvreI6Yxzsltv3tBNjy5LPLiL6u
+ QM/Z546molSRCb7fRz6ixTlvhL/DaivJUYAJieZgSey92ar2p0NwezsgPcRfl2YD/WsxCk9/q
+ /pxioLFDv6In49wOhsOR1rMr/2TSFQCFLp6NugOX8H9sYlHolQ3YIEIBxMV3y8FNGw6k=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On Sat, Apr 2, 2022 at 2:56 PM Sven Peter <sven@svenpeter.dev> wrote:
+> On Tue, Mar 22, 2022, at 14:13, Arnd Bergmann wrote:
+> >> +static int apple_rtkit_worker(void *data)
+> >> +{
+> >> +       struct apple_rtkit *rtk = data;
+> >> +       struct apple_rtkit_work work;
+> >> +
+> >> +       while (!kthread_should_stop()) {
+> >> +               wait_event_interruptible(rtk->wq,
+> >> +                                        kfifo_len(&rtk->work_fifo) > 0 ||
+> >> +                                                kthread_should_stop());
+> >> +
+> >> +               if (kthread_should_stop())
+> >> +                       break;
+> >> +
+> >> +               while (kfifo_out_spinlocked(&rtk->work_fifo, &work, 1,
+> >> +                                           &rtk->work_lock) == 1) {
+> >> +                       switch (work.type) {
+> >> +                       case APPLE_RTKIT_WORK_MSG:
+> >> +                               apple_rtkit_rx(rtk, &work.msg);
+> >> +                               break;
+> >> +                       case APPLE_RTKIT_WORK_REINIT:
+> >> +                               apple_rtkit_do_reinit(rtk);
+> >> +                               break;
+> >> +                       }
+> >> +               }
+> >
+> > It looks like you add quite a bit of complexity by using a custom
+> > worker thread implementation. Can you explain what this is
+> > needed for? Isn't this roughly the same thing that one would
+> > get more easily with create_singlethread_workqueue()?
+>
+> I originally had just a workqueue here but I can only put
+> one instance of e.g. APPLE_RTKIT_WORK_MSG onto these.
+> There could however be a new incoming message while the previous
+> one is still being handled and I couldn't figure out a way
+> to handle that with workqueues without introducing a race.
 
-Please pull a couple of Kbuild fixes.
-Thanks.
+Are you trying to avoid dynamic allocation of the messages then
+and have no other place that you can embed it in?
 
+If you kmalloc() a messages that embeds a work_struct, you can
+enqueue as many of those as you want, but the allocation adds
+complexity through the need for error handling etc.
 
+I wonder if you can change the mailbox driver to use a threaded
+irq handler, which I think should ensure that the callback here
+is run in process context, avoiding the need to defer execution
+within the rtkit driver.
 
-The following changes since commit e8b767f5e04097aaedcd6e06e2270f9fe5282696:
-
-  Merge tag 'for-linus-5.18-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rw/uml (2022-03-31
-16:16:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v5.18
-
-for you to fetch changes up to bf5c0c2231bcab677e5cdfb7f73e6c79f6d8c2d4:
-
-  modpost: restore the warning message for missing symbol versions
-(2022-04-03 03:11:51 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v5.18
-
- - Fix empty $(PYTHON) expansion.
-
- - Fix UML, which got broken by the attempt to suppress Clang warnings.
-
- - Fix warning message in modpost.
-
-----------------------------------------------------------------
-Masahiro Yamada (3):
-      kconfig: remove stale comment about removed kconfig_print_symbol()
-      kbuild: fix empty ${PYTHON} in scripts/link-vmlinux.sh
-      modpost: restore the warning message for missing symbol versions
-
-Nathan Chancellor (2):
-      kbuild: Remove '-mno-global-merge'
-      Revert "um: clang: Strip out -mno-global-merge from USER_CFLAGS"
-
- Makefile                   | 4 ----
- arch/um/Makefile           | 4 ----
- scripts/kconfig/confdata.c | 7 -------
- scripts/link-vmlinux.sh    | 2 +-
- scripts/mod/modpost.c      | 2 +-
- 5 files changed, 2 insertions(+), 17 deletions(-)
-
-
--- 
-Best Regards
-Masahiro Yamada
+         Arnd

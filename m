@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004CC4F0015
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE534F001A
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354118AbiDBJZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S1354129AbiDBJZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239698AbiDBJZb (ORCPT
+        with ESMTP id S239740AbiDBJZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:25:31 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25CB4090A
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:23:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z92so5503674ede.13
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:23:39 -0700 (PDT)
+        Sat, 2 Apr 2022 05:25:32 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA07A47572
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:23:40 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id o10so10480252ejd.1
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hgjJrokkXW7Ziu+fxR7JRBXcinNIm/xAaNlTUHhZFuU=;
-        b=Z2Un54v4t6eamg3GVvDZNvNGPyBCOn2DYh9tZbI07SlbWX8HpWAGtsjMgEFO9b3APT
-         hCp8EcJyTni8mLwNKwYg8sGkodA6XDIJ/qy11swr1JiwkcHMaBXMQzGWfYs0CZTgu+yK
-         zKJlulq72LFuurHa6xJf0zfVvUMTDUu3jvpkDPxQIm2koNZL3GkvbnHKU3E2BrPIcOQK
-         ANzmKU02RVZR3YoH3CwvGKGu8t+1kPDRIqVfPPq8TiomytzCY3kd75LI8dSVsTfeMFDX
-         DoOMO3CQGYHHh9WZ94wVbCwtLODDMFacJKM54JxTgv9aXZF/zqaRmGnm4c2lj5xKv0lF
-         mEOQ==
+        bh=CMIGyrKRIzwf4OHg6GTOimV0qeMIV89zyETvl4jfxmY=;
+        b=qxQXERQUhKHA33AWb96zh4x7gi+dTC4uVeO3P3erxfJ2ccnYvDzhjP5huNYaPBOBRd
+         fQdQabkT0ag+GwT8B0R4Acjj9czvZrHsz8N1mt4C0Jt/NrAlLbn03MfjBKfjk9+EcjWY
+         usTkX1yPbrpibhSJx3ns5XWXpsht6H4ke5Qb0XWiJK1Idj+tchfrrKggfd2Tydyoztj4
+         G3L5ECeoHdZTTbs0KY5KEzaC3jToPu1Flk1v7ZOIRpB4sktbTx5HxwIhsLq8ajgH9a3X
+         Ex5RXC/2qMV93cxc1ppYPRnXzwDOC9cBTOQsYa9Qfd0rx44/ZfAIRTT2rojXl0YK3w3P
+         APrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hgjJrokkXW7Ziu+fxR7JRBXcinNIm/xAaNlTUHhZFuU=;
-        b=Ic4sbajmFsUjeVvLX6/BKEO22XVXihgoBL2naYsmIIiAIojpks4upO5hOslIkdMorN
-         9hkFkVg49cV+tgdcoQCaXw06R2m7XVx4Bzeh1cAesSwH/rpw6aRJ6hkTKB1gnc2bR8YV
-         oJfbzqvdLm2olKkjN5OvKQCm9ozK+ozRbgd1LrMASlh4Y+TALu/axIw3NO0E1mLtPz0R
-         i2XXxVPCRKjOAoUpzr04SuKduTfJHPWNTwPETKOWnMBkNey8PPAWRhFHcdtktNJH7NkG
-         WU/8QAvBYnAfMPupmii0yqonAgPrzONqd0zIC0H9YVXj+CM6w8ilTHzXUikuXeQ9DIKi
-         9r4A==
-X-Gm-Message-State: AOAM532IMJRSYq6VQaLcrdEeQK+9VXGsKhVxYECJ168NKvhCg2y+U3zL
-        r5/oDCYfiVdvqyP7RvKk7rg=
-X-Google-Smtp-Source: ABdhPJx4/vvkLW28QmKU8BZiJ65P4P8VuYoazr+kH+MkJ69+NCRK6N6hIwkrGojB5JuIyYFYDu1s3g==
-X-Received: by 2002:aa7:c157:0:b0:418:f8e3:4c87 with SMTP id r23-20020aa7c157000000b00418f8e34c87mr24371555edp.271.1648891418569;
-        Sat, 02 Apr 2022 02:23:38 -0700 (PDT)
+        bh=CMIGyrKRIzwf4OHg6GTOimV0qeMIV89zyETvl4jfxmY=;
+        b=SeNH+XYboe2QrF5JI9MG25fKpWlXHSAXc5JoaLXMm5q6XZPoiiQN6HRnTyzVd/tGtL
+         cny7QsYGbjCfP7ouQS4Aohx0aua+H6vdfb8vMSbIptUXZ2Bs9agPpiCGwLIoGJ6JFOs+
+         cFcu6yy0e0p0VkD/mwJR804zCk9QrYwBG1A8sX6D6SjDNvYFNX5J7Efsi4cQeEsCTwEl
+         dHGXUJxyezNEzLEZhrlC61c4ace95kM8S5CYpLXBZioBlNb/RHP4jKZq4RvOi0O9OU4p
+         z90QskPeUCfbfCpgETrsNdaVhgoGdi3v7xlu61nUX8IHiO3nBqnVU5+qFb9HP/+8U+oF
+         Pngw==
+X-Gm-Message-State: AOAM533GVQN+hluCglN5jbybWumJKNzYML45Z0g+dmhoRltEGoIxHGY1
+        AfZZtMRkgbWFDTwTV3T6/4Y=
+X-Google-Smtp-Source: ABdhPJy9n3o43+IUFCWkr8QOG0kXNRC5rP/SV0HLxLjedxpaT50XikzqJIhW3CHWwV2Q+jTScXgZ6Q==
+X-Received: by 2002:a17:907:2d2a:b0:6df:c027:a3ac with SMTP id gs42-20020a1709072d2a00b006dfc027a3acmr3075835ejc.179.1648891419319;
+        Sat, 02 Apr 2022 02:23:39 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id jv19-20020a170907769300b006e095c047d6sm1897679ejc.109.2022.04.02.02.23.37
+        by smtp.gmail.com with ESMTPSA id jv19-20020a170907769300b006e095c047d6sm1897679ejc.109.2022.04.02.02.23.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 02 Apr 2022 02:23:38 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
@@ -53,9 +53,9 @@ To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 1/7] staging: r8188eu: remove HW_VAR_BSSID from SetHwReg8188EU()
-Date:   Sat,  2 Apr 2022 11:23:26 +0200
-Message-Id: <20220402092332.6627-2-straube.linux@gmail.com>
+Subject: [PATCH 2/7] staging: r8188eu: remove HW_VAR_ACK_PREAMBLE from SetHwReg8188EU()
+Date:   Sat,  2 Apr 2022 11:23:27 +0200
+Message-Id: <20220402092332.6627-3-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220402092332.6627-1-straube.linux@gmail.com>
 References: <20220402092332.6627-1-straube.linux@gmail.com>
@@ -71,125 +71,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the HW_VAR_BSSID case from SetHwReg8188EU() and move its
-functionality to rtw_mlme_ext.c where it is actually used. This is
-part of the ongoing effort to get rid of the unwanted hal layer.
+Remove the HW_VAR_ACK_PREAMBLE case from SetHwReg8188EU() and move
+its functionality to rtw_wlan_util.c where it is actually used. This
+is part of the ongoing effort to get rid of the unwanted hal layer.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 18 +++++++++++++-----
- drivers/staging/r8188eu/hal/usb_halinit.c   | 14 --------------
- drivers/staging/r8188eu/include/hal_intf.h  |  1 -
- 3 files changed, 13 insertions(+), 20 deletions(-)
+ drivers/staging/r8188eu/core/rtw_wlan_util.c | 20 +++++++++++++++-----
+ drivers/staging/r8188eu/hal/usb_halinit.c    | 12 ------------
+ drivers/staging/r8188eu/include/hal_intf.h   |  1 -
+ 3 files changed, 15 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 6166baa64091..d409e98f8795 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -6096,6 +6096,14 @@ u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame, st
- 	return _SUCCESS;
- }
- 
-+static void rtw_set_bssid(struct adapter *adapter, u8 *bssid)
-+{
-+	int i;
-+
-+	for (i = 0; i < ETH_ALEN; i++)
-+		rtw_write8(adapter, REG_BSSID + i, bssid[i]);
-+}
-+
- void start_create_ibss(struct adapter *padapter)
- {
- 	unsigned short	caps;
-@@ -6130,7 +6138,7 @@ void start_create_ibss(struct adapter *padapter)
- 			report_join_res(padapter, -1);
- 			pmlmeinfo->state = WIFI_FW_NULL_STATE;
- 		} else {
--			SetHwReg8188EU(padapter, HW_VAR_BSSID, padapter->registrypriv.dev_network.MacAddress);
-+			rtw_set_bssid(padapter, padapter->registrypriv.dev_network.MacAddress);
- 			join_type = 0;
- 			SetHwReg8188EU(padapter, HW_VAR_MLME_JOIN, (u8 *)(&join_type));
- 
-@@ -6711,7 +6719,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
- 	if (join_res < 0) {
- 		join_type = 1;
- 		SetHwReg8188EU(padapter, HW_VAR_MLME_JOIN, (u8 *)(&join_type));
--		SetHwReg8188EU(padapter, HW_VAR_BSSID, null_addr);
-+		rtw_set_bssid(padapter, null_addr);
- 
- 		/* restore to initial setting. */
- 		update_tx_basic_rate(padapter, padapter->registrypriv.wireless_mode);
-@@ -6830,7 +6838,7 @@ void mlmeext_sta_del_event_callback(struct adapter *padapter)
- 
- 	if (is_client_associated_to_ap(padapter) || is_IBSS_empty(padapter)) {
- 		mlme_disconnect(padapter);
--		SetHwReg8188EU(padapter, HW_VAR_BSSID, null_addr);
-+		rtw_set_bssid(padapter, null_addr);
- 
- 		/* restore to initial setting. */
- 		update_tx_basic_rate(padapter, padapter->registrypriv.wireless_mode);
-@@ -7266,7 +7274,7 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
- 
- 	/* config the initial gain under linking, need to write the BB registers */
- 
--	SetHwReg8188EU(padapter, HW_VAR_BSSID, pmlmeinfo->network.MacAddress);
-+	rtw_set_bssid(padapter, pmlmeinfo->network.MacAddress);
- 	join_type = 0;
- 	SetHwReg8188EU(padapter, HW_VAR_MLME_JOIN, (u8 *)(&join_type));
- 
-@@ -7290,7 +7298,7 @@ u8 disconnect_hdl(struct adapter *padapter, unsigned char *pbuf)
- 		issue_deauth_ex(padapter, pnetwork->MacAddress, WLAN_REASON_DEAUTH_LEAVING, param->deauth_timeout_ms / 100, 100);
- 
- 	mlme_disconnect(padapter);
--	SetHwReg8188EU(padapter, HW_VAR_BSSID, null_addr);
-+	rtw_set_bssid(padapter, null_addr);
- 
- 	/* restore to initial setting. */
- 	update_tx_basic_rate(padapter, padapter->registrypriv.wireless_mode);
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 6b4b0b0c4f53..cf34645b3de5 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -942,17 +942,6 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 *val)
+diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+index f005bd3c9ff2..acc554627adc 100644
+--- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
++++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+@@ -1304,26 +1304,36 @@ void update_IOT_info(struct adapter *padapter)
  	}
  }
  
--static void hw_var_set_bssid(struct adapter *Adapter, u8 *val)
--{
--	u8 idx = 0;
--	u32 reg_bssid;
--
--	reg_bssid = REG_BSSID;
--
--	for (idx = 0; idx < 6; idx++)
--		rtw_write8(Adapter, (reg_bssid + idx), val[idx]);
--}
--
- void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
++static void set_ack_preamble(struct adapter *adapter, bool short_preamble)
++{
++	struct hal_data_8188e *haldata = &adapter->haldata;
++	u8 val8;
++
++	/*  Joseph marked out for Netgear 3500 TKIP channel 7 issue.(Temporarily) */
++	val8 = haldata->nCur40MhzPrimeSC << 5;
++	if (short_preamble)
++		val8 |= 0x80;
++
++	rtw_write8(adapter, REG_RRSR + 2, val8);
++};
++
+ void update_capinfo(struct adapter *Adapter, u16 updateCap)
  {
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
-@@ -963,9 +952,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 	case HW_VAR_SET_OPMODE:
- 		hw_var_set_opmode(Adapter, val);
+ 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+ 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+-	bool		ShortPreamble;
+ 
+ 	/*  Check preamble mode, 2005.01.06, by rcnjko. */
+ 	/*  Mark to update preamble value forever, 2008.03.18 by lanhsin */
+ 
+ 	if (updateCap & cShortPreamble) { /*  Short Preamble */
+ 		if (pmlmeinfo->preamble_mode != PREAMBLE_SHORT) { /*  PREAMBLE_LONG or PREAMBLE_AUTO */
+-			ShortPreamble = true;
+ 			pmlmeinfo->preamble_mode = PREAMBLE_SHORT;
+-			SetHwReg8188EU(Adapter, HW_VAR_ACK_PREAMBLE, (u8 *)&ShortPreamble);
++			set_ack_preamble(Adapter, true);
+ 		}
+ 	} else { /*  Long Preamble */
+ 		if (pmlmeinfo->preamble_mode != PREAMBLE_LONG) {  /*  PREAMBLE_SHORT or PREAMBLE_AUTO */
+-			ShortPreamble = false;
+ 			pmlmeinfo->preamble_mode = PREAMBLE_LONG;
+-			SetHwReg8188EU(Adapter, HW_VAR_ACK_PREAMBLE, (u8 *)&ShortPreamble);
++			set_ack_preamble(Adapter, false);
+ 		}
+ 	}
+ 
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index cf34645b3de5..9326a6080819 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -1094,18 +1094,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+ 			}
+ 		}
  		break;
--	case HW_VAR_BSSID:
--		hw_var_set_bssid(Adapter, val);
+-	case HW_VAR_ACK_PREAMBLE:
+-		{
+-			u8 regTmp;
+-			u8 bShortPreamble = *((bool *)val);
+-			/*  Joseph marked out for Netgear 3500 TKIP channel 7 issue.(Temporarily) */
+-			regTmp = (haldata->nCur40MhzPrimeSC) << 5;
+-			if (bShortPreamble)
+-				regTmp |= 0x80;
+-
+-			rtw_write8(Adapter, REG_RRSR + 2, regTmp);
+-		}
 -		break;
- 	case HW_VAR_BASIC_RATE:
- 		{
- 			u16 BrateCfg = 0;
+ 	case HW_VAR_DM_FLAG:
+ 		podmpriv->SupportAbility = *((u8 *)val);
+ 		break;
 diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 9b465001975c..591322c20f7d 100644
+index 591322c20f7d..c2b97fa4e372 100644
 --- a/drivers/staging/r8188eu/include/hal_intf.h
 +++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -10,7 +10,6 @@
- 
- enum hw_variables {
- 	HW_VAR_SET_OPMODE,
--	HW_VAR_BSSID,
- 	HW_VAR_BASIC_RATE,
- 	HW_VAR_CORRECT_TSF,
+@@ -15,7 +15,6 @@ enum hw_variables {
  	HW_VAR_MLME_SITESURVEY,
+ 	HW_VAR_MLME_JOIN,
+ 	HW_VAR_SLOT_TIME,
+-	HW_VAR_ACK_PREAMBLE,
+ 	HW_VAR_DM_FLAG,
+ 	HW_VAR_DM_FUNC_OP,
+ 	HW_VAR_DM_FUNC_RESET,
 -- 
 2.35.1
 

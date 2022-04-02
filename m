@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E944D4F04F3
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806914F04F6
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358219AbiDBQhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S1358242AbiDBQhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 12:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358211AbiDBQhL (ORCPT
+        with ESMTP id S1358223AbiDBQhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 12:37:11 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49556104A5F
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:35:19 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KW2hP62wJz9sSX;
-        Sat,  2 Apr 2022 18:35:17 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MEtE9mW9L07m; Sat,  2 Apr 2022 18:35:17 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KW2hP54N8z9sS6;
-        Sat,  2 Apr 2022 18:35:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9808D8B76D;
-        Sat,  2 Apr 2022 18:35:17 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 1mhd8NZeBHsu; Sat,  2 Apr 2022 18:35:17 +0200 (CEST)
-Received: from [192.168.202.137] (unknown [192.168.202.137])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 231568B768;
-        Sat,  2 Apr 2022 18:35:17 +0200 (CEST)
-Message-ID: <9d02405a-793e-bcf5-a424-470d9c82ec7d@csgroup.eu>
-Date:   Sat, 2 Apr 2022 18:35:15 +0200
+        Sat, 2 Apr 2022 12:37:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38851066DB;
+        Sat,  2 Apr 2022 09:35:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F79360B64;
+        Sat,  2 Apr 2022 16:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75363C340EE;
+        Sat,  2 Apr 2022 16:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648917345;
+        bh=mkH8uJWXxF9WDJTF9GQSX6lH/7+pN83clSgWCPk/tJo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D+vCMtlg9wDUXQg/1cudIhkrlzFEBvMJLjDtXPGF/NvH4Xf47sqh62KthhKdR+JXa
+         LJGA1LnSyvtEtBiRRRWGRHlWjGwVChU+dKFQyWnB9XKz44tXdU8ojeIEPt20lhsUtg
+         mEkd/l2Dv/uBr5Pi9MLjTNSQWYRnPpuD3kWCBMui0SB4o1OaAQcJah9ziEcge2NAqL
+         6SgZCAg/Lyz6Rt4hqR5sjYWqYq7z/eVM51i+Ht/Lfg8QqCDHaMXZTYt+0+/BZxyj9E
+         VbXvm2Chj8ah0B5D05Vl0Ncwohdjc9LuLajNvi9IMkw70d+p3+XeVeYN3RK0jo4Sbb
+         vygZfZxO56STA==
+Date:   Sat, 2 Apr 2022 18:35:39 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        =?UTF-8?B?UMOpdGVy?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: Re: [PATCH AUTOSEL 5.16 54/59] ASoC: Intel: sof_es8336: log all
+ quirks
+Message-ID: <20220402183539.738ffb7b@coco.lan>
+In-Reply-To: <20220330114831.1670235-54-sashal@kernel.org>
+References: <20220330114831.1670235-1-sashal@kernel.org>
+        <20220330114831.1670235-54-sashal@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] powerpc/drmem: Don't compute the NUMA node for each
- LMB
-Content-Language: fr-FR
-To:     Laurent Dufour <ldufour@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     nathanl@linux.ibm.com, cheloha@linux.ibm.com
-References: <202008051807.Vi8NDJtX%lkp@intel.com>
- <20200805133502.33723-1-ldufour@linux.ibm.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20200805133502.33723-1-ldufour@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,82 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+HI Sasha,
 
+Em Wed, 30 Mar 2022 07:48:26 -0400
+Sasha Levin <sashal@kernel.org> escreveu:
 
-Le 05/08/2020 à 15:35, Laurent Dufour a écrit :
-> All the LMB from the same set of ibm,dynamic-memory-v2 property are
-> sharing the same NUMA node. Don't compute that node for each one.
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 > 
-> Tested on a system with 1022 LMBs spread on 4 NUMA nodes, only 4 calls to
-> lmb_set_nid() have been made instead of 1022.
+> [ Upstream commit 9c818d849192491a8799b1cb14ca0f7aead4fb09 ]
 > 
-> This should prevent some soft lockups when starting large guests
-> 
-> Code has meaning only if CONFIG_MEMORY_HOTPLUG is set, otherwise the nid
-> field is not present in the drmem_lmb structure.
-> 
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+> We only logged the SSP quirk, make sure the GPIO and DMIC quirks are
+> exposed.
 
-It looks like this patch was superseded by e5e179aa3a39 ("pseries/drmem: 
-don't cache node id in drmem_lmb struct").
+Checking the backports for sof_es8336, it would be nice to also
+backport this one:
 
-If not, anyway it conflicts with that patch so it has to be rebased.
+	https://lore.kernel.org/all/20220308192610.392950-20-pierre-louis.bossart@linux.intel.com/
 
-Thanks
-Christophe
+Without that, UCM won't detect a digital microphone and would fallback
+to analog mic, which won't work on machines with digital mic.
 
+-
 
-> ---
->   arch/powerpc/mm/drmem.c | 25 ++++++++++++++++++++++++-
->   1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/mm/drmem.c b/arch/powerpc/mm/drmem.c
-> index b2eeea39684c..c11b6ec99ea3 100644
-> --- a/arch/powerpc/mm/drmem.c
-> +++ b/arch/powerpc/mm/drmem.c
-> @@ -402,6 +402,9 @@ static void __init init_drmem_v2_lmbs(const __be32 *prop)
->   	const __be32 *p;
->   	u32 i, j, lmb_sets;
->   	int lmb_index;
-> +#ifdef CONFIG_MEMORY_HOTPLUG
-> +	struct drmem_lmb *first = NULL;
-> +#endif
->   
->   	lmb_sets = of_read_number(prop++, 1);
->   	if (lmb_sets == 0)
-> @@ -426,6 +429,15 @@ static void __init init_drmem_v2_lmbs(const __be32 *prop)
->   	for (i = 0; i < lmb_sets; i++) {
->   		read_drconf_v2_cell(&dr_cell, &p);
->   
-> +#ifdef CONFIG_MEMORY_HOTPLUG
-> +		/*
-> +		 * Fetch the NUMA node id for the fist set or if the
-> +		 * associativity index is different from the previous set.
-> +		 */
-> +		if (first && dr_cell.aa_index != first->aa_index)
-> +			first = NULL;
-> +#endif
-> +
->   		for (j = 0; j < dr_cell.seq_lmbs; j++) {
->   			lmb = &drmem_info->lmbs[lmb_index++];
->   
-> @@ -438,7 +450,18 @@ static void __init init_drmem_v2_lmbs(const __be32 *prop)
->   			lmb->aa_index = dr_cell.aa_index;
->   			lmb->flags = dr_cell.flags;
->   
-> -			lmb_set_nid(lmb);
-> +#ifdef CONFIG_MEMORY_HOTPLUG
-> +			/*
-> +			 * All the LMB in the set share the same NUMA
-> +			 * associativity property. So read that node only once.
-> +			 */
-> +			if (!first) {
-> +				lmb_set_nid(lmb);
-> +				first = lmb;
-> +			} else {
-> +				lmb->nid = first->nid;
-> +			}
-> +#endif
->   		}
->   	}
->   }
+Btw, I'm testing those using upstream UCM plus a couple of fixes
+I applied on the top of it:
+
+	https://github.com/mchehab/alsa-ucm-conf/commits/master
+
+there's a pending PR#144 for upstream's alsa-ucm-conf fixing 3
+issues at the UCM logic for essx8336.
+
+Tested on a Huawei Matebook D15 notebook.
+
+Thanks,
+Mauro

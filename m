@@ -2,222 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CF54EFF7F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5CF4EFF7E
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352912AbiDBHve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 03:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244824AbiDBHvV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S244564AbiDBHvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 2 Apr 2022 03:51:21 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01B3369FB
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:49:30 -0700 (PDT)
-Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Sat, 2 Apr 2022
- 15:49:30 +0800
-From:   Liang Yang <liang.yang@amlogic.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-mtd@lists.infradead.org>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 2/2] dt-bindings: nand: meson: refine Amlogic NAND controller driver
-Date:   Sat, 2 Apr 2022 15:49:20 +0800
-Message-ID: <20220402074921.13316-3-liang.yang@amlogic.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220402074921.13316-1-liang.yang@amlogic.com>
-References: <20220402074921.13316-1-liang.yang@amlogic.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230150AbiDBHvT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 2 Apr 2022 03:51:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD84F3586B
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:49:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 290C86104D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DAFC340EC;
+        Sat,  2 Apr 2022 07:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648885766;
+        bh=n5LErFXRESNWybe75JSAh5NCeQt0jrP61FM5XFBKGkI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kNtFpBeSmonWdZyVB6qCDjlQOeTN4J2lVP1d924C8kEH+x0gZ9rrTOCIhhBAE5frI
+         jq8GQp/qz7U+ld7ULy5Ki9RyDRH2LQeT+XQexFGVlcBkUvx54z7bcznFTJiJ0tX+P6
+         yhrLGNogbVGHWmRKIQQ5fM/p0ftHGcdUtnyx2uHs=
+Date:   Sat, 2 Apr 2022 09:49:22 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Ohad Sharabi <osharabi@habana.ai>
+Subject: Re: [PATCH] habanalabs: Elide a warning on 32-bit targets
+Message-ID: <YkgAAqAb+9UKDEtn@kroah.com>
+References: <20220401163909.20343-1-palmer@rivosinc.com>
+ <CAFCwf13-o=kUR61xjWt=F-Q-Vfy=kF6fpMP7iB+83Gfqw7+2HA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.21]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFCwf13-o=kUR61xjWt=F-Q-Vfy=kF6fpMP7iB+83Gfqw7+2HA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-convert txt to yaml and refine the meson NFC clock document.
+On Fri, Apr 01, 2022 at 09:13:48PM +0300, Oded Gabbay wrote:
+> On Fri, Apr 1, 2022 at 7:41 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+> >
+> > From: Palmer Dabbelt <palmer@rivosinc.com>
+> >
+> > This double-cast pattern looks a bit awkward, but it already exists
+> > elsewhere in the driver.  Without this patch I get
+> >
+> > drivers/misc/habanalabs/common/memory.c: In function ‘alloc_device_memory’:
+> > drivers/misc/habanalabs/common/memory.c:153:49: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+> >   153 |                                                 (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> >       |                                                 ^
+> >
+> > which ends up promoted to a build error in my test setup.
+> >
+> > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> >
+> > ---
+> >
+> > I don't know anything about this driver, I'm just pattern-matching the
+> > warning away.
+> > ---
+> >  drivers/misc/habanalabs/common/memory.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+> > index e008d82e4ba3..f1fc79c1fc10 100644
+> > --- a/drivers/misc/habanalabs/common/memory.c
+> > +++ b/drivers/misc/habanalabs/common/memory.c
+> > @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+> >                 for (i = 0 ; i < num_pgs ; i++) {
+> >                         if (is_power_of_2(page_size))
+> >                                 phys_pg_pack->pages[i] =
+> > -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > -                                                                               page_size, NULL,
+> > -                                                                               page_size);
+> > +                                               (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > +                                                                                          page_size, NULL,
+> > +                                                                                          page_size);
+> >                         else
+> > -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+> > -                                                                               page_size);
+> > +                               phys_pg_pack->pages[i] = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool,
+> > +                                                                                         page_size);
+> >                         if (!phys_pg_pack->pages[i]) {
+> >                                 dev_err(hdev->dev,
+> >                                         "Failed to allocate device memory (out of memory)\n");
+> > --
+> > 2.34.1
+> >
+> 
+> This patch is:
+> Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+> 
+> Greg,
+> Could you please apply this directly to your misc tree and send it to
+> Linus at your next pull request ?
 
-Signed-off-by: Liang Yang <liang.yang@amlogic.com>
----
- .../bindings/mtd/amlogic,meson-nand.txt       | 60 --------------
- .../bindings/mtd/amlogic,meson-nand.yaml      | 80 +++++++++++++++++++
- 2 files changed, 80 insertions(+), 60 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
- create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+So ignore https://lore.kernel.org/r/20220401041615.3296387-1-jcmvbkbc@gmail.com ?
 
-diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-deleted file mode 100644
-index 5794ab1147c1..000000000000
---- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-+++ /dev/null
-@@ -1,60 +0,0 @@
--Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
--
--This file documents the properties in addition to those available in
--the MTD NAND bindings.
--
--Required properties:
--- compatible : contains one of:
--  - "amlogic,meson-gxl-nfc"
--  - "amlogic,meson-axg-nfc"
--- clocks     :
--	A list of phandle + clock-specifier pairs for the clocks listed
--	in clock-names.
--
--- clock-names: Should contain the following:
--	"core" - NFC module gate clock
--	"device" - device clock from eMMC sub clock controller
--	"rx" - rx clock phase
--	"tx" - tx clock phase
--
--- amlogic,mmc-syscon	: Required for NAND clocks, it's shared with SD/eMMC
--				controller port C
--
--Optional children nodes:
--Children nodes represent the available nand chips.
--
--Other properties:
--see Documentation/devicetree/bindings/mtd/nand-controller.yaml for generic bindings.
--
--Example demonstrate on AXG SoC:
--
--	sd_emmc_c_clkc: mmc@7000 {
--		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
--		reg = <0x0 0x7000 0x0 0x800>;
--	};
--
--	nand-controller@7800 {
--		compatible = "amlogic,meson-axg-nfc";
--		reg = <0x0 0x7800 0x0 0x100>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
--
--		clocks = <&clkc CLKID_SD_EMMC_C>,
--			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
--			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
--			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
--		clock-names = "core", "device", "rx", "tx";
--		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
--
--		pinctrl-names = "default";
--		pinctrl-0 = <&nand_pins>;
--
--		nand@0 {
--			reg = <0>;
--			#address-cells = <1>;
--			#size-cells = <1>;
--
--			nand-on-flash-bbt;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
-new file mode 100644
-index 000000000000..965a2dd20645
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mtd/amlogic,meson-nand.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
-+
-+maintainers:
-+  - liang.yang@amlogic.com
-+
-+properties:
-+  compatible:
-+    enum:
-+      - "amlogic,meson-gxl-nfc"
-+      - "amlogic,meson-axg-nfc"
-+
-+  reg:
-+    maxItems: 2
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  reg-names:
-+    items:
-+      - const: nfc
-+      - const: emmc
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: core
-+      - const: device
-+
-+  "#clock-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#address-cells'
-+  - '#size-cells'
-+  - reg-names
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/axg-clkc.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    apb {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+      nand-controller@7800 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        compatible = "amlogic,meson-axg-nfc";
-+        reg = <0x0 0x7800 0x0 0x100>,
-+              <0x0 0x7000 0x0 0x800>;
-+        reg-names = "nfc", "emmc";
-+
-+        interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
-+        clocks = <&clkc CLKID_SD_EMMC_C>,
-+                 <&clkc CLKID_FCLK_DIV2>;
-+        clock-names = "core", "device";
-+
-+      };
-+    };
-+...
--- 
-2.34.1
+> I don't have any other fixes pending for 5.18.
 
+Yes, I will queue this up after -rc1 is out.
+
+thanks,
+
+greg k-h

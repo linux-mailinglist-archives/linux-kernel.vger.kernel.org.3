@@ -2,374 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70514F0031
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685FF4F0033
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354167AbiDBJld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S1354179AbiDBJsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239797AbiDBJlY (ORCPT
+        with ESMTP id S1354173AbiDBJsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:41:24 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01075143446
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:39:31 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id p26-20020a05600c1d9a00b0038ccbff1951so4277716wms.1
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KREN+AabFyAtaAW7Vfs0QIZLiq7RaWCj552NjbUfAnc=;
-        b=T+5eT04oZR8EPIk6JOx/jGHj/mDX5yyHaTLBfakEcGWxgF7ewG0+ehkhTF6I6FAzic
-         kL/nMbByfd/xuXFFOQCaTUTf0y/xAxo5vw/maunV/Wk+9WEF+AgINs/FEIMEZEfkhual
-         qDRGGqoGxJFUXGWJrh2RwZ7NmvnRAM+jPS8/5zR3PFufI5eUFDPwshswwdP7q3/+jT/4
-         Q2vOL2O6lg7MpvOFy2OM9r4zmKzrSSA9oOdLDbbmSDSiy2+v4q9epVTd6DFaxYN6F7GW
-         UUM8fSGWuAMxN1fCComany4aimAIYlwQG6JHQjoPS7qdvtP9Jnms8u4t2ua3z460Olhe
-         gY2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KREN+AabFyAtaAW7Vfs0QIZLiq7RaWCj552NjbUfAnc=;
-        b=M/s1txu3MJi3UvLwk3Iy6sEhs2eoiSLlzABgEMLnXdeAWEr5LSR5aeyxeNiPzogcqq
-         R1PXaZUTnOqxqshoYxU9gyR51GHgfKbsV0nRIWfN6O26PAtvu15/BP0l3bTCm+sDwZxM
-         wplMExdMPpwLo4hkUlWt3hsKXRjI25F03yeU61LXuZMNqsXAHF3KKhh+7Xny3hM7K5oP
-         vPN4XMYKJb2V/PORuG3utZNTrAMSzMBYuTSjh/g+muZRqu5DjtFsRr7sELqzoquQhzlr
-         jmxTZJvIfarHyNv4MnIPAWh6nqJlCl6bqjkOV89xHxF2RwWwE+y7RaHxFmBHVJh6WkOI
-         nPVw==
-X-Gm-Message-State: AOAM5319mf3gtstZacK6yRqVDp1tNmHd28nS7cYKZwT8vb0Pm3W+FvN3
-        4LGQ6PW+7niBNW5gBP/sumrZzg==
-X-Google-Smtp-Source: ABdhPJyTJOylDZ+3CAwbtCGDEx+/Fv47boVaquqNG6Oq+5Tbfn/AcmYdWx72lofYn3cVgqf26jXikw==
-X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr12449343wml.160.1648892370480;
-        Sat, 02 Apr 2022 02:39:30 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm5265713wry.53.2022.04.02.02.39.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 02:39:30 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] dt-bindings: soc: qcom,wcnss: convert to dtschema
-Date:   Sat,  2 Apr 2022 11:39:19 +0200
-Message-Id: <20220402093919.50084-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220402093919.50084-1-krzysztof.kozlowski@linaro.org>
-References: <20220402093919.50084-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
+        Sat, 2 Apr 2022 05:48:19 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2057.outbound.protection.outlook.com [40.107.117.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC83B1770A2
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:46:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kUdvJe6rWcn/+gt2GeKcsSdbkENUwS8oe5hLUaC8tIAchQjk/TlH4w94P5odVQCO3u/yw/coaOEFW/5g4RuT4FeoWzul5LJYpSQsr8/k38Sz3DfvwwfS1ZjFI7MuEW5sZ2kHuxPY6VZb2mm/XttKZmtVfOI3/pQa2kIdh7syROaFPyjEq8A1VPbw7Cf7BFrF0ITVOvF6Sgq31pXjOV2m45gGTtfYTrADI3z1cFimyKdL2910C1uR5xFj/j/rN1KR3c+4AAkpDjxxaG9lTqttsMe8PYilo+IBC2lJRED46Axnai7wcwHo5JJZ+fCT3HXP7KFKucAdfqkGSwQPwGRcSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FaEiVu3Dkr6DswYO9aapdedp4RyokbNmtyTMytJzlJs=;
+ b=eMrtbXYMG/+74XQFJyvIx33hu+HepwhTpBwrmRIoLSPNEf/lgSg3cAvkmCenylwbRHj+OSAL45U1E4ITn+5+EI+FClj7q8leccKcjKOEczS/sEYpa4jfGQETvnd15huCgtofGVWZ70XRYDhSesGMXx95ApuquC+tuvJOMUlwAbIIOhq9EeBMUpsXmIi+jbMbNIopg4FidtjX7Zi8aO5tfFMY4xkSu26QyRb6lVk65hudeyReSIFxTIymjuoyIuY47CKlbQw8n6HhFMHc9/dbkb02OQ6X5FDn4MFx7bOeyBAC6Oc0hc8wx3uv5Hha0jrxKm/CXePQ25Kl2pXSXwfMVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FaEiVu3Dkr6DswYO9aapdedp4RyokbNmtyTMytJzlJs=;
+ b=V3slYjLjp0opIyA2j8DIiwOcqWBwfa5g+qQ8rAGfqeyMaw9gJSr1OuI/lkHHAsFUGvlKXKzWWxRi81W0C9zoM7OSuWo2xQll7JuWfg3WdtS1u96rRVKSQ3uXHAJlp0tkNUevOsl/c2wKNXGngMsv1ZJgKw1Bo3mMchqqWOfK6ng=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from TY2PR02MB4431.apcprd02.prod.outlook.com
+ (2603:1096:404:8003::13) by TY2PR02MB2896.apcprd02.prod.outlook.com
+ (2603:1096:404:43::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.30; Sat, 2 Apr
+ 2022 09:46:23 +0000
+Received: from TY2PR02MB4431.apcprd02.prod.outlook.com
+ ([fe80::3c58:2561:8343:dbb2]) by TY2PR02MB4431.apcprd02.prod.outlook.com
+ ([fe80::3c58:2561:8343:dbb2%4]) with mapi id 15.20.5123.029; Sat, 2 Apr 2022
+ 09:46:23 +0000
+From:   lipeifeng@oppo.com
+To:     akpm@linux-foundation.org
+Cc:     peifeng55@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, 21cnbao@gmail.com,
+        zhangshiming@oppo.com, lipeifeng <lipeifeng@oppo.com>
+Subject: [PATCH] mm: modify the method to search addr in unmapped_area_topdown
+Date:   Sat,  2 Apr 2022 17:45:50 +0800
+Message-Id: <20220402094550.129-1-lipeifeng@oppo.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR0401CA0016.apcprd04.prod.outlook.com
+ (2603:1096:202:2::26) To TY2PR02MB4431.apcprd02.prod.outlook.com
+ (2603:1096:404:8003::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 240f696e-f295-4e09-5b42-08da148da5c3
+X-MS-TrafficTypeDiagnostic: TY2PR02MB2896:EE_
+X-Microsoft-Antispam-PRVS: <TY2PR02MB28960E33FF0DE11712B56EB2C6E39@TY2PR02MB2896.apcprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b9uHkqk8uPbf8MboKstr4aNgSL70oZ7h54A3UJeXRKM2r2dlsFqks6h2NHVUpGMdcf9Y+nzUtxzuRtrFavabOU8EoYdIB4Z/i/Un8fGm3pfd5MIQQqbrmeUqJpOVs77naOd9C+921RkPH1qqcCjMDsMnudXk2yi+Mz9Ybw90kYim4iONX6IjNS1bLNzeoKKbPwpZI2RzA6kC0240Lpvf8qG513oCWd3vmvH9EXRve1qqwkxt7O6XmCrebcqZkHGnY9pE4q5IpVS1hee7ZBhOnbMUeT/c2wZmWPLiw/Y7oCmOGyTMFqpZaXEno+9OKUAxcpyLCg8uNFH63tg7c4CWahU/X+qf8fbqjw9+T5Cg8TvFHSPx4coQSRE90ogCOm5gbSPELjDgGI+aoWLR4Y3XS7VXxkBGn8KqNgOesCutX7tCdMuvnRQ74wnY1GK1OPjINgzHIL5p9IFwmrB4Q2TVpT6tvXGqQ1wBMRlLEudDHjZkK5ElwmBm+t4qnOtqmOXWCkhkJVq9yz0WHadUVb285XCzgSTCtay5lxaJnj2LEi9nAJf4qhK4PLgAr0a7SyLRN1n/xTcf2EnTCFvmn3DxwjNMflZZ5TJx6NabtI5hi9gcy34/h+fmGVzx7nTLL/+4nXLMrARbgA6onSdVbqtyqws9quLlr9Eje6MV0478Qxa+YZ/Ie9Zj/Wq86BXpIdHgrF4YErMnQsPxPDIUv4s6fw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4431.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(2906002)(6666004)(2616005)(83380400001)(107886003)(26005)(186003)(1076003)(9686003)(6512007)(52116002)(36756003)(86362001)(316002)(6916009)(6486002)(66556008)(4326008)(66476007)(508600001)(66946007)(5660300002)(38100700002)(8936002)(38350700002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vFGVkSthCJaaLhjIjzt17jRIXvA3w1/sB5C3gfRjg0NCPyVClMMyn/rs4yv8?=
+ =?us-ascii?Q?AMPGyxyxejWzJxm0gsnvkcr/8i6kjv6v9gxljX1PSIXo9ye5en+SAF6JB8gN?=
+ =?us-ascii?Q?TNpMaDwZS7vSYsO4ySNTwiZfcpw7Bs+EMOqBaCOVZNVQ9lyOgvc0I9AaDLpc?=
+ =?us-ascii?Q?qkgtWxKgKdUoVddjQYDFGy6J+deg1WxbNhl6Oc1bU4xYYOOXpTPObrxRiMPS?=
+ =?us-ascii?Q?xklFocnwvA0NzfHL2i9tPwCh60WZMruKYtBURer2YVinFsAo3YAZb6zeIA6h?=
+ =?us-ascii?Q?K/kkkczuWEXDGaMyki2Ku0DMK2K+p95sE7+3VO9jA441WZn0sY9en+C8qou6?=
+ =?us-ascii?Q?gnKR/buzc0AcR/WVeDbgHy9eo1uZawZzlHzG/3nZR7LpNOoF/LWRboBlXJG+?=
+ =?us-ascii?Q?lRrmh4Hx1YZhXTYfPHOs55aGIynpj4luDOI4gs+Gg24T+U7Z1QjSPUrms7jI?=
+ =?us-ascii?Q?iAyljPcr0zduJSqatGKwBw41RlFp5TWHtCiOJbmXgratHpLYMxsAZ0ZWvvEN?=
+ =?us-ascii?Q?z54Yh1bsAYl1ISZM7o3LXlBTMwFBSbag8aQr1Q5zF/ZxHd7499DP5IQkN73j?=
+ =?us-ascii?Q?5OGJbLWylard1YMmpzC8YWuNHToBWD5FKBubCV5Nbhi5T48xv5G3XqChsbgP?=
+ =?us-ascii?Q?z8gaECFGcNp26IB5x5hDJZK/KSmXdlIXCZlSBARe1+b2ZfoLHYuSAhoRB4T5?=
+ =?us-ascii?Q?5c1ovm0a8cau5KLPjMYe9o2QHdjjPVZsJS1TFJmakV1f81JpIhoVz5K7zAp9?=
+ =?us-ascii?Q?u87nTMoXCsanJrYauOMZfWYYu9CkdluNihBXi7+bDJBfW5Rvi3grMGe7LUA/?=
+ =?us-ascii?Q?TennZZPmljj0LCSFN9ruOWreH9mFUnA9TZ9FvOC98GkSLUzVbPtQZzGL7NmW?=
+ =?us-ascii?Q?b+0g0JIX3TdfvCnLFH/zpkn01l124kuJf0VrtPbXAFwn4UKB6AVcggosw+YS?=
+ =?us-ascii?Q?7bRqMsix5geGMMMqEBr+fxMGThm/WclHonlzEyFGml9tycoUzd9Q9sdIvVZi?=
+ =?us-ascii?Q?lkZMS9SEuLtf4NEDHdMcM7tJvQ0R1L4OwkuYco9X7mKlW+BtUyxL9OrKw1Ke?=
+ =?us-ascii?Q?bnSvi2dr59VnZ90Bqlt0Vuu28T8N2Hd9SxHTzSuJaTcgX+fAlfW6N8ZiYf5Q?=
+ =?us-ascii?Q?XQ4ZnKY7MmHXioFRA0gK3K8xLFq21elDCKqzno7sUHta3rWT4yMAu1z2373z?=
+ =?us-ascii?Q?LgE78DRunN+VT+x4zkIty9YZod4YaJod1FBI3pb4lj73KIioxFpfzf825OxR?=
+ =?us-ascii?Q?UIPr3wzWtUXltCgycFPtJP9VcOp7Nex9hVKGVtb7mLC7gDGWkCarqU2ontof?=
+ =?us-ascii?Q?TpMubcTaLTEdP87Irk1W22a+ApXZE5J/e9H1qInlLbedjuP3kqJqRTMsRfbq?=
+ =?us-ascii?Q?GAqzEfTEYFZi+/9mVD2wwTIxTGLU4AsUi6Phr4EKpPehKTBslcE06NdXUuZp?=
+ =?us-ascii?Q?RN3RhcEApCawM9epAPmVVWLL7ht6uUIPjY/SDAh4Cy8jQXsIVQ8C6pO1Kz4z?=
+ =?us-ascii?Q?sghZpfFmh6l3p2tIyvTfmIglulEzqAlFjEjsZ3i0XBCaai7jQw4qt9tdIyFG?=
+ =?us-ascii?Q?xhqpM2aYuOaohuL6aOfAEx5XWNmdS025RjPSUijAUwIIPLy35qRMFKJykcJJ?=
+ =?us-ascii?Q?0X6URjXhjTH97Nb1djA6UHxUlFI7YM0sp8SjDFLy3wvH18PweNGBfCVlrynX?=
+ =?us-ascii?Q?37KhLBZ1aI+iTEQYGlkwppJ5kZnBlTpv63DbUHrvgo8hpRQGMczGggsM8mCF?=
+ =?us-ascii?Q?FZX/SUFH7Rbph9n4t04WhBDEcTPodTI=3D?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 240f696e-f295-4e09-5b42-08da148da5c3
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4431.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2022 09:46:23.2272
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xhHshOXBoh4tVmNII/CoEA2d7vUSzNagvTlapgBRiN5uEUjL52JAw9ZfNjiinYs+Gt28oQM1K92SAdK5misXXA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR02MB2896
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm WCNSS bindings to DT Schema.
+From: lipeifeng <lipeifeng@oppo.com>
 
-Changes against original bindings: fix qcom,smd-channels and
-qcom,smem-states names (how they are used in DTS and driver), enforce
-child node naming of bluetooth and wifi.
+The old method will firstly find the space in len(info->length
++ info->align_mask), and get address at the desired alignment.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Sometime, addr  would be failed if there are enough
+addr space in kernel by above method, e.g., you can't get a
+addr sized in 1Mbytes, align_mask 1Mbytes successfully although
+there are still (2M-1)bytes space in kernel.
+
+This patch would fix thr problem above by the new method: find the
+space in info->length and judge if at the desired info->align_mask
+at the same time.
+
+Do a simple test in TIF_32BIT:
+- Try to malloc (size:1M align:2M) until allocation fails;
+- Try to malloc (size:1M align:1M) and account how to space can be
+alloced successfully.
+
+Before optimization: alloced 1.9G+ bytes.
+After  optimization: alloced 0     bytes.
+
+Signed-off-by: lipeifeng <lipeifeng@oppo.com>
 ---
- .../bindings/soc/qcom/qcom,wcnss.txt          | 131 -----------------
- .../bindings/soc/qcom/qcom,wcnss.yaml         | 139 ++++++++++++++++++
- 2 files changed, 139 insertions(+), 131 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
+ mm/mmap.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.txt
-deleted file mode 100644
-index 1382b64e1381..000000000000
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.txt
-+++ /dev/null
-@@ -1,131 +0,0 @@
--Qualcomm WCNSS Binding
--
--This binding describes the Qualcomm WCNSS hardware. It consists of control
--block and a BT, WiFi and FM radio block, all using SMD as command channels.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be: "qcom,wcnss",
--
--- qcom,smd-channel:
--	Usage: required
--	Value type: <string>
--	Definition: standard SMD property specifying the SMD channel used for
--		    communication with the WiFi firmware.
--		    Should be "WCNSS_CTRL".
--
--- qcom,mmio:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: reference to a node specifying the wcnss "ccu" and "dxe"
--		    register blocks. The node must be compatible with one of
--		    the following:
--		    "qcom,riva",
--		    "qcom,pronto"
--
--- firmware-name:
--	Usage: optional
--	Value type: <string>
--	Definition: specifies the relative firmware image path for the WLAN NV
--		    blob. Defaults to "wlan/prima/WCNSS_qcom_wlan_nv.bin" if
--		    not specified.
--
--= SUBNODES
--The subnodes of the wcnss node are optional and describe the individual blocks in
--the WCNSS.
--
--== Bluetooth
--The following properties are defined to the bluetooth node:
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be:
--		    "qcom,wcnss-bt"
--
--- local-bd-address:
--	Usage: optional
--	Value type: <u8 array>
--	Definition: see Documentation/devicetree/bindings/net/bluetooth.txt
--
--== WiFi
--The following properties are defined to the WiFi node:
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be one of:
--		    "qcom,wcnss-wlan",
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the "rx" and "tx" interrupts
--
--- interrupt-names:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must contain "rx" and "tx"
--
--- qcom,smem-state:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should reference the tx-enable and tx-rings-empty SMEM states
--
--- qcom,smem-state-names:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must contain "tx-enable" and "tx-rings-empty"
--
--= EXAMPLE
--The following example represents a SMD node, with one edge representing the
--"pronto" subsystem, with the wcnss device and its wcn3680 BT and WiFi blocks
--described; as found on the 8974 platform.
--
--smd {
--	compatible = "qcom,smd";
--
--	pronto-edge {
--		interrupts = <0 142 1>;
--
--		qcom,ipc = <&apcs 8 17>;
--		qcom,smd-edge = <6>;
--
--		wcnss {
--			compatible = "qcom,wcnss";
--			qcom,smd-channels = "WCNSS_CTRL";
--
--			#address-cells = <1>;
--			#size-cells = <1>;
--
--			qcom,mmio = <&pronto>;
--
--			bt {
--				compatible = "qcom,wcnss-bt";
--
--				/* BD address 00:11:22:33:44:55 */
--				local-bd-address = [ 55 44 33 22 11 00 ];
--			};
--
--			wlan {
--				compatible = "qcom,wcnss-wlan";
--
--				interrupts = <0 145 0>, <0 146 0>;
--				interrupt-names = "tx", "rx";
--
--				qcom,smem-state = <&apps_smsm 10>, <&apps_smsm 9>;
--				qcom,smem-state-names = "tx-enable", "tx-rings-empty";
--			};
--		};
--	};
--};
--
--soc {
--	pronto: pronto {
--		compatible = "qcom,pronto";
--
--		reg = <0xfb204000 0x2000>, <0xfb202000 0x1000>, <0xfb21b000 0x3000>;
--		reg-names = "ccu", "dxe", "pmu";
--	};
--};
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-new file mode 100644
-index 000000000000..1e37ec871185
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-@@ -0,0 +1,139 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,wcnss.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/mm/mmap.c b/mm/mmap.c
+index f61a154..30e33d3 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2002,13 +2002,14 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+-	unsigned long length, low_limit, high_limit, gap_start, gap_end;
++	unsigned long length, low_limit, high_limit, gap_start, gap_end, gap_end_tmp;
+ 
+ 	/* Adjust search length to account for worst case alignment overhead */
+ 	length = info->length + info->align_mask;
+ 	if (length < info->length)
+ 		return -ENOMEM;
+ 
++	length = info->length;
+ 	/*
+ 	 * Adjust search limits by the desired length.
+ 	 * See implementation comment at top of unmapped_area().
+@@ -2024,8 +2025,12 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
+ 
+ 	/* Check highest gap, which does not precede any rbtree node */
+ 	gap_start = mm->highest_vm_end;
+-	if (gap_start <= high_limit)
+-		goto found_highest;
++	if (gap_start <= high_limit) {
++		gap_end_tmp = gap_end - info->length;
++		gap_end_tmp -= (gap_end_tmp - info->align_offset) & info->align_mask;
++		if (gap_end_tmp >= gap_start)
++			goto found_highest;
++	}
+ 
+ 	/* Check if rbtree root looks promising */
+ 	if (RB_EMPTY_ROOT(&mm->mm_rb))
+@@ -2053,8 +2058,13 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
+ 		if (gap_end < low_limit)
+ 			return -ENOMEM;
+ 		if (gap_start <= high_limit &&
+-		    gap_end > gap_start && gap_end - gap_start >= length)
+-			goto found;
++		    gap_end > gap_start && gap_end - gap_start >= length) {
++			gap_end_tmp = gap_end - info->length;
++			gap_end_tmp -= (gap_end_tmp - info->align_offset) & info->align_mask;
++			if (gap_end_tmp >= gap_start)
++				goto found;
 +
-+title: Qualcomm WCNSS
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+
-+description:
-+  The Qualcomm WCNSS hardware consists of control block and a BT, WiFi and FM
-+  radio block, all using SMD as command channels.
-+
-+properties:
-+  compatible:
-+    const: qcom,wcnss
-+
-+  firmware-name:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    default: "wlan/prima/WCNSS_qcom_wlan_nv.bin"
-+    description:
-+      Relative firmware image path for the WLAN NV blob.
-+
-+  qcom,mmio:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      Reference to a node specifying the wcnss "ccu" and "dxe" register blocks.
-+      The node must be compatible with one of the following::
-+           - qcom,riva"
-+           - qcom,pronto"
-+
-+  qcom,smd-channels:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    const: WCNSS_CTRL
-+    description:
-+      Standard SMD property specifying the SMD channel used for communication
-+      with the WiFi firmware.
-+
-+  bluetooth:
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      compatible:
-+        const: qcom,wcnss-bt
-+
-+      local-bd-address:
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+        items:
-+          minItems: 6
-+          maxItems: 6
-+        description:
-+          See Documentation/devicetree/bindings/net/bluetooth.txt
-+
-+    required:
-+      - compatible
-+
-+  wifi:
-+    additionalProperties: false
-+    type: object
-+    properties:
-+      compatible:
-+        const: qcom,wcnss-wlan
-+
-+      interrupts:
-+        maxItems: 2
-+
-+      interrupt-names:
-+        items:
-+          - const: tx
-+          - const: rx
-+
-+      qcom,smem-states:
-+        $ref: /schemas/types.yaml#/definitions/phandle-array
-+        maxItems: 2
-+        description:
-+          Should reference the tx-enable and tx-rings-empty SMEM states.
-+
-+      qcom,smem-state-names:
-+        $ref: /schemas/types.yaml#/definitions/string-array
-+        items:
-+          - const: tx-enable
-+          - const: tx-rings-empty
-+        description:
-+          Names of SMEM states.
-+
-+    required:
-+      - compatible
-+      - interrupts
-+      - interrupt-names
-+      - qcom,smem-states
-+      - qcom,smem-state-names
-+
-+required:
-+  - compatible
-+  - qcom,mmio
-+  - qcom,smd-channels
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    smd-edge {
-+        interrupts = <GIC_SPI 142 IRQ_TYPE_EDGE_RISING>;
-+
-+        qcom,ipc = <&apcs 8 17>;
-+        qcom,smd-edge = <6>;
-+        qcom,remote-pid = <4>;
-+
-+        label = "pronto";
-+
-+        wcnss {
-+            compatible = "qcom,wcnss";
-+            qcom,smd-channels = "WCNSS_CTRL";
-+
-+            qcom,mmio = <&pronto>;
-+
-+            bluetooth {
-+                compatible = "qcom,wcnss-bt";
-+                /* BD address 00:11:22:33:44:55 */
-+                local-bd-address = [ 55 44 33 22 11 00 ];
-+            };
-+
-+            wifi {
-+                compatible = "qcom,wcnss-wlan";
-+
-+                interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
-+                             <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
-+                interrupt-names = "tx", "rx";
-+
-+                qcom,smem-states = <&apps_smsm 10>, <&apps_smsm 9>;
-+                qcom,smem-state-names = "tx-enable", "tx-rings-empty";
-+            };
-+        };
-+    };
++		}
+ 
+ 		/* Visit left subtree if it looks promising */
+ 		if (vma->vm_rb.rb_left) {
 -- 
-2.32.0
+2.7.4
 

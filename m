@@ -2,55 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82924F04E3
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526E44F04FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358104AbiDBQbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 12:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S1358295AbiDBQj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 12:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349268AbiDBQbR (ORCPT
+        with ESMTP id S1358233AbiDBQjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 12:31:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B496556;
-        Sat,  2 Apr 2022 09:29:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CA5760B0B;
-        Sat,  2 Apr 2022 16:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1BAC340EE;
-        Sat,  2 Apr 2022 16:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648916964;
-        bh=0zTZVCqwikHoAkGPgno+BTuZyaWtzijYrNpFzKqJ33M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D3sNX+PDnxEVBgBLoyl/H0BCVQAtjYdWojhjsdti04zD0d0hHa8tqx/bfxguMzeVI
-         TxvCDp/8oVW2QmUGNYd98MS4k85VTsrn9zLw1s9+XPYQmB+Uzp2mewNgEgMqnnKBPs
-         wtzydlwqx3z2w9zoXW7WtqOqgLOeGvl28ObSa25s1VZeaUGoI2vupaINCbRBRr/OdO
-         37M1iBVIVtAx+hvAhGNCeDJLET8nu3v+Pj0egVM9ePucO7bhGq8NgWMDFoj1iH9YOb
-         rv2OFfmL5HLGFLAn5f3CfggRypBgV2BFpj1htHzprg+NhOEcRq/2rCCXBAwdIMtgYT
-         sOEL6Gpu6Oorw==
-Date:   Sat, 2 Apr 2022 17:37:07 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] iio: accel: bma400: Add step change event
-Message-ID: <20220402173707.426cb005@jic23-huawei>
-In-Reply-To: <20220328203710.GA8027@jagath-PC>
-References: <20220326194146.15549-1-jagathjog1996@gmail.com>
-        <20220326194146.15549-6-jagathjog1996@gmail.com>
-        <20220327175036.4b026481@jic23-huawei>
-        <20220328203710.GA8027@jagath-PC>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 2 Apr 2022 12:39:24 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D0310F6EB
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:37:31 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id r8so5787947oib.5
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 09:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+SrOdpKkibueEZ8eDGW7T0xC56oTL11h6V+jlJthOQ4=;
+        b=DsLi3EnN3YFbOVIJLaRoUhsgy/G0bmJh3Nn+pHdw4dxkDNV51PiTWHOioyO1/AIPR/
+         ntrq5xU2V8b6NKpldeo+sKZDbTnB3bql3YT3691vtY7PGqi0w6mU6JqshXIdnYxqa4c4
+         WasqcgIWXKJgB7I3Vgt/T/HjTVROp8+v2bzUeSeS+CBM88/7wSCCfA3hLsC+2PKIFUPX
+         8NU2T01o+mlGVWZHe14VJtExQOh8ewctAeYfU/9RteMpHUZgg7VDnLcG8ZctUTxVKDGp
+         Nh+hTQmYjh0niTcGvNjWMmBrMYY+dYuKYMsfygHhypxSesXtXgLnLuRRbjwHj/dD7T9v
+         CMSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+SrOdpKkibueEZ8eDGW7T0xC56oTL11h6V+jlJthOQ4=;
+        b=UG53Ym81Ij/XAHmuJKhkfkxaHEoY0N5oGugrAXg/RJBCWqQDLgYw5sDpHAunkFuAFa
+         42BgV8F13uEqVT6nTA93N39Xfag6QJvEdJtKjUYsu/pW3DfJL+L2ABTbXdiGVqr50u2x
+         4U+CUfHXE0RxgDKWcA32Ocx1wTYmn5PR+bOScoiAAwJ/UJjj7n/thWvkHFLoDHbW1Jtb
+         UD8VgxagFW+ucXK4ovPwEN58m3CcQ5vvpE8CEwscHAmr45lF5spUSeGJ7tT6sY0YqKlK
+         FdmnCKCYWD7gswbH/6EC2nTnt5JvhK5IJZq69i721er1Nkhi/Lk9NtJ6KIy2YrJ0+kBW
+         U75w==
+X-Gm-Message-State: AOAM531XOpLUs64WVEIbCjHU6Fb3msl4lhyt1cdt+j1q635e7+6/Cjja
+        wPwWU4MtOl/3B+0sSxdGp8peuXPNe9E=
+X-Google-Smtp-Source: ABdhPJy/wqNp3hVjUDNjyBYFhnwTLbEVb2FrtK2I7HzzwTh3kUcZMXjmsIW5K+jVgs3+sybmcjibFw==
+X-Received: by 2002:a05:6808:1444:b0:2ed:a247:e5e2 with SMTP id x4-20020a056808144400b002eda247e5e2mr7064762oiv.115.1648917450991;
+        Sat, 02 Apr 2022 09:37:30 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::1004? (2603-8090-2005-39b3-0000-0000-0000-1004.res6.spectrum.com. [2603:8090:2005:39b3::1004])
+        by smtp.gmail.com with ESMTPSA id s24-20020a056808209800b002da3b9bf8e0sm2235436oiw.32.2022.04.02.09.37.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 09:37:30 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <563ddd2d-b8b2-dde6-a0de-c7bbebcc834e@lwfinger.net>
+Date:   Sat, 2 Apr 2022 11:37:27 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/6] staging: r8188eu: format block comments
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev
+Cc:     Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1648888461.git.remckee0@gmail.com>
+ <0387f3df49d89c17acf96cf072e70c98e81e58f7.1648888462.git.remckee0@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <0387f3df49d89c17acf96cf072e70c98e81e58f7.1648888462.git.remckee0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,203 +79,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 02:07:11 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
+On 4/2/22 03:50, Rebecca Mckeever wrote:
+> Add ' * ' or ' ' to beginning of block comment lines
+> to conform to Linux kernel coding style.
+> 
+> Reported by checkpatch:
+> 
+> WARNING: Block comments use * on subsequent lines
+> 
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_cmd.c | 29 +++++++++++++-------------
+>   1 file changed, 14 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+> index 2e135bbd836a..0c659b40aa1c 100644
+> --- a/drivers/staging/r8188eu/core/rtw_cmd.c
+> +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+> @@ -12,9 +12,9 @@
+>   #include "../include/rtl8188e_dm.h"
+>   
+>   /*
+> -Caller and the rtw_cmd_thread can protect cmd_q by spin_lock.
+> -No irqsave is necessary.
+> -*/
+> + * Caller and the rtw_cmd_thread can protect cmd_q by spin_lock.
+> + * No irqsave is necessary.
+> + */
+>   
+>   static int _rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
+>   {
+> @@ -97,14 +97,13 @@ static void _rtw_free_cmd_priv(struct cmd_priv *pcmdpriv)
+>   }
+>   
+>   /*
+> -Calling Context:
+> -
+> -rtw_enqueue_cmd can only be called between kernel thread,
+> -since only spin_lock is used.
+> -
+> -ISR/Call-Back functions can't call this sub-function.
+> -
+> -*/
+> + * Calling Context:
+> + *
+> + * rtw_enqueue_cmd can only be called between kernel thread,
+> + * since only spin_lock is used.
+> + *
+> + * ISR/Call-Back functions can't call this sub-function.
+> + */
+>   
+>   static int _rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
+>   {
+> @@ -319,10 +318,10 @@ int rtw_cmd_thread(void *context)
+>   }
+>   
+>   /*
+> -rtw_sitesurvey_cmd(~)
+> -	### NOTE:#### (!!!!)
+> -	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock
+> -*/
+> + * rtw_sitesurvey_cmd(~)
+> + *	### NOTE:#### (!!!!)
+> + *	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock
+> + */
+>   u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid, int ssid_num,
+>   	struct rtw_ieee80211_channel *ch, int ch_num)
+>   {
 
-> Hi Jonathan,
-> 
-> On Sun, Mar 27, 2022 at 05:50:36PM +0100, Jonathan Cameron wrote:
-> > On Sun, 27 Mar 2022 01:11:46 +0530
-> > Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >   
-> > > Added support for event when there is a detection of step change.
-> > > INT1 pin is used to interrupt and event is pushed to userspace.
-> > > 
-> > > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>  
-> > 
-> > These last two patches look fine to me.  Simply having the
-> > event enable the channel makes things simpler.  
-> 
-> Means do I need to drop the step _INFO_ENABLE and handle the
-> enabling and disabling of step channel through the event enable and
-> disable?
+These changes are OK, but the rules in drivers/net/wireless specify using
 
-No.  I was trying to say I like the solution you have now.
+/* abcd
 
-> 
-> > I briefly wondered if we need to care about sequences like
-> > 
-> > 1) Enable event
-> > 2) Enable channel (already enabled, but perhaps this indicates separate intent)
-> > 3) Disable event.
-> > 4) Is the channel still enabled?
-> > 
-> > or the simpler case of whether we should disable the channel if the event is
-> > disabled and it wasn't otherwise turned on.
-> > 
-> > However, I can't see a sensible way to do so. Hence I think what you have
-> > gone with is the best we can do.
-> > 
-> > Thanks,
-> > 
-> > Jonathan  
-> 
-> Thanks for reviewing the patch series. I will also address all the comments
-> from Andy in the next patch v3.
-> 
-> Thank you
-> Jagath
-> >   
-> > > ---
-> > >  drivers/iio/accel/bma400.h      |  2 +
-> > >  drivers/iio/accel/bma400_core.c | 73 +++++++++++++++++++++++++++++++++
-> > >  2 files changed, 75 insertions(+)
-> > > 
-> > > diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> > > index c9b856b37021..c4ec0cf6dc00 100644
-> > > --- a/drivers/iio/accel/bma400.h
-> > > +++ b/drivers/iio/accel/bma400.h
-> > > @@ -39,6 +39,7 @@
-> > >  #define BMA400_INT_STAT0_REG        0x0e
-> > >  #define BMA400_INT_STAT1_REG        0x0f
-> > >  #define BMA400_INT_STAT2_REG        0x10
-> > > +#define BMA400_INT12_MAP_REG	    0x23
-> > >  
-> > >  /* Temperature register */
-> > >  #define BMA400_TEMP_DATA_REG        0x11
-> > > @@ -54,6 +55,7 @@
-> > >  #define BMA400_STEP_CNT3_REG        0x17
-> > >  #define BMA400_STEP_STAT_REG        0x18
-> > >  #define BMA400_STEP_INT_MSK	    BIT(0)
-> > > +#define BMA400_STEP_STAT_MASK	    GENMASK(9, 8)
-> > >  
-> > >  /*
-> > >   * Read-write configuration registers
-> > > diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-> > > index ec2f9c380bda..aaa104a2698b 100644
-> > > --- a/drivers/iio/accel/bma400_core.c
-> > > +++ b/drivers/iio/accel/bma400_core.c
-> > > @@ -24,6 +24,7 @@
-> > >  #include <linux/iio/iio.h>
-> > >  #include <linux/iio/sysfs.h>
-> > >  #include <linux/iio/buffer.h>
-> > > +#include <linux/iio/events.h>
-> > >  #include <linux/iio/trigger.h>
-> > >  #include <linux/iio/trigger_consumer.h>
-> > >  #include <linux/iio/triggered_buffer.h>
-> > > @@ -70,6 +71,7 @@ struct bma400_data {
-> > >  	int scale;
-> > >  	struct iio_trigger *trig;
-> > >  	int steps_enabled;
-> > > +	bool step_event_en;
-> > >  	/* Correct time stamp alignment */
-> > >  	struct {
-> > >  		__le16 buff[3];
-> > > @@ -167,6 +169,12 @@ static const struct iio_chan_spec_ext_info bma400_ext_info[] = {
-> > >  	{ }
-> > >  };
-> > >  
-> > > +static const struct iio_event_spec bma400_step_detect_event = {
-> > > +	.type = IIO_EV_TYPE_CHANGE,
-> > > +	.dir = IIO_EV_DIR_NONE,
-> > > +	.mask_separate = BIT(IIO_EV_INFO_ENABLE),
-> > > +};
-> > > +
-> > >  #define BMA400_ACC_CHANNEL(_index, _axis) { \
-> > >  	.type = IIO_ACCEL, \
-> > >  	.modified = 1, \
-> > > @@ -209,6 +217,8 @@ static const struct iio_chan_spec bma400_channels[] = {
-> > >  		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
-> > >  				      BIT(IIO_CHAN_INFO_ENABLE),
-> > >  		.scan_index = -1, /* No buffer support */
-> > > +		.event_spec = &bma400_step_detect_event,
-> > > +		.num_event_specs = 1,
-> > >  	},
-> > >  	IIO_CHAN_SOFT_TIMESTAMP(4),
-> > >  };
-> > > @@ -878,6 +888,58 @@ static int bma400_write_raw_get_fmt(struct iio_dev *indio_dev,
-> > >  	}
-> > >  }
-> > >  
-> > > +static int bma400_read_event_config(struct iio_dev *indio_dev,
-> > > +				    const struct iio_chan_spec *chan,
-> > > +				    enum iio_event_type type,
-> > > +				    enum iio_event_direction dir)
-> > > +{
-> > > +	struct bma400_data *data = iio_priv(indio_dev);
-> > > +
-> > > +	switch (type) {
-> > > +	case IIO_EV_TYPE_CHANGE:
-> > > +		return data->step_event_en;
-> > > +	default:
-> > > +		return -EINVAL;
-> > > +	}
-> > > +}
-> > > +
-> > > +static int bma400_write_event_config(struct iio_dev *indio_dev,
-> > > +				     const struct iio_chan_spec *chan,
-> > > +				     enum iio_event_type type,
-> > > +				     enum iio_event_direction dir, int state)
-> > > +{
-> > > +	int ret;
-> > > +	struct bma400_data *data = iio_priv(indio_dev);
-> > > +
-> > > +	switch (type) {
-> > > +	case IIO_EV_TYPE_CHANGE:
-> > > +		mutex_lock(&data->mutex);
-> > > +		if (!data->steps_enabled) {
-> > > +			ret = regmap_update_bits(data->regmap,
-> > > +						 BMA400_INT_CONFIG1_REG,
-> > > +						 BMA400_STEP_INT_MSK,
-> > > +						 FIELD_PREP(BMA400_STEP_INT_MSK,
-> > > +							    1));
-> > > +			if (ret)
-> > > +				return ret;
-> > > +			data->steps_enabled = 1;
-> > > +		}
-> > > +
-> > > +		ret = regmap_update_bits(data->regmap,
-> > > +					 BMA400_INT12_MAP_REG,
-> > > +					 BMA400_STEP_INT_MSK,
-> > > +					 FIELD_PREP(BMA400_STEP_INT_MSK,
-> > > +						    state));
-> > > +		mutex_unlock(&data->mutex);
-> > > +		if (ret)
-> > > +			return ret;
-> > > +		data->step_event_en = state;
-> > > +		return 0;
-> > > +	default:
-> > > +		return -EINVAL;
-> > > +	}
-> > > +}
-> > > +
-> > >  static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
-> > >  					     bool state)
-> > >  {
-> > > @@ -910,6 +972,8 @@ static const struct iio_info bma400_info = {
-> > >  	.read_avail        = bma400_read_avail,
-> > >  	.write_raw         = bma400_write_raw,
-> > >  	.write_raw_get_fmt = bma400_write_raw_get_fmt,
-> > > +	.read_event_config = bma400_read_event_config,
-> > > +	.write_event_config = bma400_write_event_config,
-> > >  };
-> > >  
-> > >  static const struct iio_trigger_ops bma400_trigger_ops = {
-> > > @@ -965,6 +1029,15 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
-> > >  		ret = IRQ_HANDLED;
-> > >  	}
-> > >  
-> > > +	if (FIELD_GET(BMA400_STEP_STAT_MASK, le16_to_cpu(status))) {
-> > > +		iio_push_event(indio_dev,
-> > > +			       IIO_EVENT_CODE(IIO_STEPS, 0, IIO_NO_MOD,
-> > > +					      IIO_EV_DIR_NONE,
-> > > +					      IIO_EV_TYPE_CHANGE, 0, 0, 0),
-> > > +			       iio_get_time_ns(indio_dev));
-> > > +		ret = IRQ_HANDLED;
-> > > +	}
-> > > +
-> > >  	return ret;
-> > >  }
-> > >    
-> >   
+rather than
 
+/*
+  * abcd
+
+Thus, if and when this driver is accepted into the drivers/net/wireless tree, 
+another change will be needed. I suggest doing that now.
+
+Larry

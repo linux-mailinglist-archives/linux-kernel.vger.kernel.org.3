@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1190A4F05B3
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36A04F05C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238770AbiDBTK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 15:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S239052AbiDBT0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 15:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbiDBTKz (ORCPT
+        with ESMTP id S229525AbiDBT03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 15:10:55 -0400
+        Sat, 2 Apr 2022 15:26:29 -0400
 Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20B344C1;
-        Sat,  2 Apr 2022 12:09:02 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so1405981pjb.0;
-        Sat, 02 Apr 2022 12:09:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDECD630B;
+        Sat,  2 Apr 2022 12:24:37 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so5458971pjm.0;
+        Sat, 02 Apr 2022 12:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2u46UfW6kIuGqw2fEWOMbQ8vmrbpCAIrB+DNSu9kic0=;
-        b=OyL5oa6mwmQ4Nhi+Vbzst8I61BXM/9lXgchFPVrLkEEGNTW3n6CmmBxGgRuuX7gyxX
-         EBCjiO0yqy8X0rYIvpxmsMq7tBHfc+Jg+6f2LVHVPXNaWWq6mg/zqMK9wHk2ZpJXR+wm
-         mS25FPcfk+mfyXxvy2m109uV8sGWMbPBiUQjemFA199Yav1bypOnwHt4YvH7bQ0lYg+Z
-         hO3hanTooAaY3zJRYAgB82qrC1r/P5tCrSy2cqd3Ar+6ouwunnkGwH1nuZGvcu/LFLaP
-         Ww4NmfwZMfUiKp3aIo3TU+6R5N9CFFFIgtur8o6pL5F94Hmyj6R+lXKPXSv+6j2cpxzu
-         eHLg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZnjVaHo269IMr+SUq74LCC3uGMfBdmt7GCaF3QmVvCE=;
+        b=GHB/uJM+vJX+vvTn2qUCwpTkk8vOGsPT8Tr1nh95oL/VKpjppciF6MJw6Trp8vhRhi
+         0wH+6gBwKmTNBeHyLUSVxfLeA9Fz/GnxzlarmEYJ8FRoyFSttJy/goe//b5Es8xwYWy7
+         H3cMxhPpWJpIqbCQ+3WKGhUQg4qyqPFmldOLWzP/zb/vo4vwNEnlZcTUFpiTO49O0O1B
+         MwoTC5jz2HAXrCUC55opvn69sS/maMNPibpyKA+cWnNzvQgLRX5ByqEBKf72XcE/YAwL
+         CcacsTg1DGNsJfna/O2OrWeaj4mZctbDKj4xjIUkEer3V+NKhBFlSjI9FfdepTknKYqg
+         1pcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2u46UfW6kIuGqw2fEWOMbQ8vmrbpCAIrB+DNSu9kic0=;
-        b=S+PGtTGzEisPWnCYqDPXXrOlwaUtQWD2JeJD4FNUQ0bSigtEKr/0lxmIVKl4CLCr5H
-         1jRgLGy5LznrqmK7dE5HW7L9ZIHI5DXdXIv3GlrRJu6IX+IxOqLJ5c9nhSyJjwzAkXzo
-         JGCbXL045b9TeIFXZSyCJ8ulako2476qR5feGV06Epk8w05faYnJJWYDmgdt1PNSk+Dc
-         PCoK63NytR6LZCupHheFTlI+rgQvN/FI/47of3buTj4/9GLgpg4fkGAXvpRsu52Zw/98
-         C4TbUqypRQ0Yziytdceil8/LdcZum/2Ucrj42GDG8xRroFkxR2vs8UQfkiE57WjKyZd9
-         AY9w==
-X-Gm-Message-State: AOAM533F7PHCOaDMqG16N9ulepDD54luSHsIGAVqIGq+jzxvENt2IlRy
-        pdz0x0qKU5yAIPiyqF9WlMzacNClHJU=
-X-Google-Smtp-Source: ABdhPJwPvY2t1ET5chnedD9sLhAFQk+HC1hdO6ndJ6R85Uepwzb1AXQwmznUUlfj4CYJ7xg8Jx8Wyw==
-X-Received: by 2002:a17:903:1205:b0:151:8ae9:93ea with SMTP id l5-20020a170903120500b001518ae993eamr16475211plh.37.1648926542122;
-        Sat, 02 Apr 2022 12:09:02 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b001c779e82af6sm5682112pjf.48.2022.04.02.12.08.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZnjVaHo269IMr+SUq74LCC3uGMfBdmt7GCaF3QmVvCE=;
+        b=m+z1ookDyrougdqM2l1hTuHewOjchbmXvEikcd/1czjhGDE4nnb9JG79IW81bSJHI8
+         mew3p7lgDHPDsPvevK+Fz2lMctJpc301amXe4uasdrLndQU24lc215wXsIulq51l0p7W
+         gn+sqgJlNh1rNnIkJRGfHuFX2XwaTebmJ0qcj2yD/mFS3o2kR4UDQ+lgYhVGsMDJ8H6w
+         9Ox5jWEWvQchoRuQfqQyLMxzFW39Lh/L2/bSYCyLTEI5sLmHRYyYwavKxvFJ7dYjWDQa
+         Yr1ApIZPbQVREGnUGCcQVO0fXSn9cWXyK9ERorG41KnkgjvpwOAJxTfnGN8bTIGqjIdT
+         OiOg==
+X-Gm-Message-State: AOAM531IyuB5s1aHFaR7IFKn3vVyLCla9xtNCpLCjQvMylY+mihM1LLq
+        5Fv1WpnqUP1PzuDcVO8evlk=
+X-Google-Smtp-Source: ABdhPJyC4Q480HCFcbIyNWI1F3oGALRY+TSJBGuxxw98j5g+bj4mFyZLE42zQgrlhwu4zxU2ToWdjg==
+X-Received: by 2002:a17:90a:de83:b0:1c7:3d7b:7a5d with SMTP id n3-20020a17090ade8300b001c73d7b7a5dmr18067420pjv.242.1648927477342;
+        Sat, 02 Apr 2022 12:24:37 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id d23-20020a17090a02d700b001bf6ef9daafsm5832785pjd.38.2022.04.02.12.24.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 12:09:01 -0700 (PDT)
+        Sat, 02 Apr 2022 12:24:37 -0700 (PDT)
+Date:   Sun, 3 Apr 2022 00:54:30 +0530
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: lx2160a: Update can node property
-Date:   Sun,  3 Apr 2022 00:38:55 +0530
-Message-Id: <20220402190855.35530-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/5] dt-bindings: serial: Update Qualcomm geni based QUP
+ uart bindings
+Message-ID: <20220402192430.GA35664@9a2d8922b8f1>
+References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+ <20220402051206.6115-4-singh.kuldeep87k@gmail.com>
+ <523c6f46-54eb-22f0-221c-981879b8311e@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <523c6f46-54eb-22f0-221c-981879b8311e@linaro.org>
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
@@ -71,37 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fsl,clk-source property is of type uint8 and need to be defined as
-"/bits/ 8 <0>". Simply setting value to 0 raise warning:
-can@2180000: fsl,clk-source:0: [0, 0, 0, 0] is too long
+On Sat, Apr 02, 2022 at 05:37:57PM +0200, Krzysztof Kozlowski wrote:
+> On 02/04/2022 07:12, Kuldeep Singh wrote:
+> > Similar to i2c controller, move geni based QUP uart controller bindings
+> 
+> s/i2c/I2C/
+> s/uart/UART/
+> 
+> > out from parent schema to an individual binding and let parent refer to
+> > child schema later on. Uart bindings also stand incomplete right now
+> 
+> s/Uart/UART/
+> 
+> > similar to i2c, complete it along this process.
+> 
+> s/i2c/I2C/
+> 
+> 
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
- arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Great thanks!
+Will update accordingly.
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-index c5daa15b020d..82bd8c0f318b 100644
---- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-@@ -909,7 +909,7 @@ can0: can@2180000 {
- 					    QORIQ_CLK_PLL_DIV(8)>,
- 				 <&clockgen QORIQ_CLK_SYSCLK 0>;
- 			clock-names = "ipg", "per";
--			fsl,clk-source = <0>;
-+			fsl,clk-source = /bits/ 8 <0>;
- 			status = "disabled";
- 		};
- 
-@@ -921,7 +921,7 @@ can1: can@2190000 {
- 					    QORIQ_CLK_PLL_DIV(8)>,
- 				 <&clockgen QORIQ_CLK_SYSCLK 0>;
- 			clock-names = "ipg", "per";
--			fsl,clk-source = <0>;
-+			fsl,clk-source = /bits/ 8 <0>;
- 			status = "disabled";
- 		};
- 
--- 
-2.25.1
-
+-Kuldeep

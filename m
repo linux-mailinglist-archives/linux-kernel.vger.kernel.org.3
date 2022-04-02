@@ -2,219 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5A44F0465
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00EC4F045A
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357251AbiDBPZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 11:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S1357250AbiDBPUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 11:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244336AbiDBPZz (ORCPT
+        with ESMTP id S1354802AbiDBPUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:25:55 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864E5338B4
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 08:24:02 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z92so6142793ede.13
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 08:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=pR6BQtJb61in8LI2RFfYMWRuA6qssaKJHiA8Szyk98E=;
-        b=dZ6B0rmBbn6QRB2CGYnKiqt+A9OfjP0b9Jb+mdx5Mab9Pr83Xz22KmJlJg5iGhjeSJ
-         FPAmXXt7CqZ7Em9Azz3XvAHCuLPogY98MjzgGQosw8tedERX4o2r/q86H0MpYGCu2LTz
-         dBAKpzc404DUv66B57/Gj7sL8T25YCTSr6+aTvfytSgvSXYAlJticmMXCmICrWQE2W5q
-         YvdZiQfvaqPre0TPUbZXMgxcXrJyEt6blc35OU1IH4k0ymKi2BmzECb9sTYnbeAxPuTG
-         9wnLW+SYrRDLcqdP+oxwcFHqOKSQV1LWVLU55Z67H5kf1Cve/6zCw+c4A52w80Dmn0LH
-         ussA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=pR6BQtJb61in8LI2RFfYMWRuA6qssaKJHiA8Szyk98E=;
-        b=7F9md6At1LI+wg6iGfYUMBELU1qzs4OH4cxZTzLcBzQ+bEaEs8BGz/fHgLDJv8jNgi
-         3nnho/wyjnUYd8gxvqsrcGzZ+jS8dgEZPZQHxDI7/Pyd5MUkfqfSi450ClfoY7vXleeX
-         rZ06y2szENNa0odk2ecYAMRWy3zUiLSm3PcppUlARS3vBYm4Sn6CBfWeYHZ9OU7JEiZR
-         p1up3FqxZnYyAGEtMhGy2KMXcbkI0+ul6PsZllzeMovVUHo9hEEdX0keafQGGu593Siv
-         66H3WJcN8qRogycWLC1TYJxtsiAGfnmDOg0qtI/UOFpDm2dMx9BvDueofPa563Pi7fyh
-         W07w==
-X-Gm-Message-State: AOAM533AcL91ugvpYxU4GVApzekJlF9OjQdx5yWOb2l/o82o+17kGTsX
-        QmDRTluKUQcaPYeevyHqEbn4J8ILHr8w+qqHBXlDaWUKqqksh+hx
-X-Google-Smtp-Source: ABdhPJzfpO9x/irXYPkJ+ByoIvEYWhB4lC8ADz0LH3KvLOarjg5u+B3PSgy9KA+2ojraLBe96jZg8Byr6KLOqqlpQQU=
-X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
- f11-20020a0564021e8b00b0041c59f62c26mr8136977edf.156.1648913040944; Sat, 02
- Apr 2022 08:24:00 -0700 (PDT)
+        Sat, 2 Apr 2022 11:20:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6493211C20;
+        Sat,  2 Apr 2022 08:18:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1866EB80883;
+        Sat,  2 Apr 2022 15:18:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F582C340F0;
+        Sat,  2 Apr 2022 15:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648912731;
+        bh=rx3+JliMGIpaZApdgMUkzyOqNL+m0ef+I2pUyVfu2+U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HvL+FHkqpZDJifWDwb32vEGkreVa/vjqyXMbqo5MIFfX3ZvTW+lUGJMUJRyJO7Aav
+         QBv6D0QkUOFhIucwsLeFb/L8RK6ywPKPNyJKEe/xIxT39Cf9LjUUrWfUvYpeJqkIqy
+         /adz/syA7EU0IUWo9xGaADeFyN5o0S3z+n4p3RwBMBaKmEQpC/UlwhUu2fELqHeLz3
+         fTdxAQDZ4Nj05OmqZdCe+EO6AkE0Ok4946es8UwhJKz+KZV7n+x4RnO+EGTMS44Qs5
+         scYrzXg+4eVj7wesjsnzhfJms0voI25hmuFjl21IwhSKrvUs54a69Oe76MYcybmDxx
+         eXmithQccLKaA==
+Date:   Sat, 2 Apr 2022 16:26:33 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Gwendal Grignou <gwendal@chromium.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH] iio:proximity:sx_common: Fix device property parsing on
+ DT systems
+Message-ID: <20220402162633.0050d289@jic23-huawei>
+In-Reply-To: <CAPUE2uvpBaE+YLkg6RXq4CCEFBr5ZFhjS1dXkbse9nyH8C=2Jg@mail.gmail.com>
+References: <20220331210425.3908278-1-swboyd@chromium.org>
+        <CAPUE2uvpBaE+YLkg6RXq4CCEFBr5ZFhjS1dXkbse9nyH8C=2Jg@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 16:24:03 +0100
-Message-ID: <CAHpNFcM_1BnAzzSYbpQ1gX8H3u+FY_nLag3OY8+3CJ44N7tU8Q@mail.gmail.com>
-Subject: submit it for inclusion in the standard along with Vector Compression
- VESA Standard Display protocol 3
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-is QFT a Zero compression or low level compression version of DSC
-1.2b? Maybe X-OR X=3D1 New Data & X=3D0 being not sent ? Therefore Masking
-The Frame Buffer!
+On Fri, 1 Apr 2022 13:54:51 -0700
+Gwendal Grignou <gwendal@chromium.org> wrote:
 
-If not i dually submit it for inclusion in the standard along with
-Vector Compression VESA Standard Display protocol 3
-https://lkml.org/lkml/2022/4/2/295
+> On Thu, Mar 31, 2022 at 2:04 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > After commit 7a3605bef878 ("iio: sx9310: Support ACPI property") we
+> > started using the 'indio_dev->dev' to extract device properties for
+> > various register settings in sx9310_get_default_reg(). This broke DT
+> > based systems because dev_fwnode() used in the device_property*() APIs
+> > can't find an 'of_node'. That's because the 'indio_dev->dev.of_node'
+> > pointer isn't set until iio_device_register() is called. Set the pointer
+> > earlier, next to where the ACPI companion is set, so that the device
+> > property APIs work on DT systems.
+> >
+> > Cc: Gwendal Grignou <gwendal@chromium.org>
+> > Fixes: 7a3605bef878 ("iio: sx9310: Support ACPI property")
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>  
+> Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
 
-"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
-latency=E2=80=9D, which is the amount of time between a frame being ready f=
-or
-transport in the GPU and that frame being completely displayed. This
-latency is the sum of the transport time through the source=E2=80=99s outpu=
-t
-circuits, the transport time across the interface, the processing of
-the video data in the display, and the painting of the screen with the
-new data. This overall latency affects the responsiveness of games:
-how long it appears between a button is pressed to the time at which
-the resultant action is observed on the screen.
+Applied to the fixes-togreg branch of iio.git though I'll not push
+that out until rc1 is out in a few days time and I can rebase appropriately.
 
-While there are a lot of variables in this equation, not many are
-adjustable from an HDMI specification perspective. QFT operates on the
-transport portion of this equation by reducing the time it takes to
-send only the active video across the cable. This results in reduced
-display latency and increased responsiveness."
+Thinking on the cause of this problem it seems like we should really be setting
+the indio_dev->dev.of_node in iio_device_alloc() and then let a driver
+override it if desired rather than this approach of fill it in if not set.
+Such a change only affects a few drivers based on a dumb bit of grepping.
+I'd treat such a change as a cleanup though, so having this fix in place
+makes sense anyway. 
 
-*****
+Jonathan
 
-VecSR - Vector Standard Render
+> > ---
+> >  drivers/iio/proximity/sx_common.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/iio/proximity/sx_common.c b/drivers/iio/proximity/sx_common.c
+> > index a7c07316a0a9..8ad814d96b7e 100644
+> > --- a/drivers/iio/proximity/sx_common.c
+> > +++ b/drivers/iio/proximity/sx_common.c
+> > @@ -521,6 +521,7 @@ int sx_common_probe(struct i2c_client *client,
+> >                 return dev_err_probe(dev, ret, "error reading WHOAMI\n");
+> >
+> >         ACPI_COMPANION_SET(&indio_dev->dev, ACPI_COMPANION(dev));
+> > +       indio_dev->dev.of_node = client->dev.of_node;
+> >         indio_dev->modes = INDIO_DIRECT_MODE;
+> >
+> >         indio_dev->channels =  data->chip_info->iio_channels;
+> > --
+> > https://chromeos.dev
+> >  
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
-
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
-
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
-
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-(c)Rupert S
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
-ml
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential=
-.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-*
-
-VecSR is really good for secondary loading of sprites & text; In these
-terms very good for pre loading on for example the X86, RISC, AMIGA &
-Famicon type devices,
-With appropriate loading into Sprite buffers or Emulated Secondaries
-(Special Animations) or Font Buffers.
-
-Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
-with Integer & Emulated Float (Library); Traditional BitMap fonts work
-well in a Set Size & can resize well if cached!
-
-The full process leads upto the terminal & how to optimise CON,
-We can & will need to exceed capacities of any system & To improve them!
-
-presenting: Dev-Con-VectorE=C2=B2
-Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
-Class VESA Console +
-
-With Console in VecSR you can 3DText & Audio,
-
-VecSR Firmware update 2022 For immediate implementation in all
-operating systems & ROM's
-
-Potential is fast & useful.
-
-*
-
-https://science.n-helix.com/2022/04/vecsr.html

@@ -2,143 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECF14F019D
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 14:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2198B4F01A1
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 14:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354746AbiDBMt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 08:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S1354760AbiDBMt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 08:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344635AbiDBMt1 (ORCPT
+        with ESMTP id S1354750AbiDBMty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 08:49:27 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CD03AA69;
-        Sat,  2 Apr 2022 05:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648903655; x=1680439655;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VBH8DaxfPRE0Sm3wGsVRsa5H0Vj+YGtrUbWzbb7wQHI=;
-  b=bk0HoOPNIW0pRWX21x6g/RvBFo8Jbi7fND6w/Q3hU3ompAe46hij8WJQ
-   g+LTAJP/jg8HTUbJ8yR/E9FFLf0bfYVDb9C2QodJFoEsbzdpVB/bzIEbX
-   MPk61Dx+wwAkh3TFdvMptTcMYyyUQeYcf+QYaz08X8HB5WhlJnm99RN4Z
-   PWqMzXYXbj/PkdqNXnTSvimY1Ota3F0xQRtiTx64fptCO14LVyzl/olHH
-   y+xUoL8RSTaceiECob/bu6X9Rst72XZiFRwZyem6QqGH53GNQjicZLxPV
-   oNQC2odw7I1SZzUcYMbuElgGkvdEhZDCQdjWQ8FVRZRabcSWAGhL9fIXx
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="285237935"
-X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
-   d="scan'208";a="285237935"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 05:47:35 -0700
-X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
-   d="scan'208";a="548131492"
-Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.254.208.38]) ([10.254.208.38])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 05:47:29 -0700
-Message-ID: <23fbc97f-05e9-2609-46cc-4320ddc9df12@intel.com>
-Date:   Sat, 2 Apr 2022 20:47:20 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 2/8] KVM: VMX: Extend BUILD_CONTROLS_SHADOW macro to
- support 64-bit variation
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        Robert Hoo <robert.hu@linux.intel.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-3-guang.zeng@intel.com> <YkYquqLOduNlQntZ@google.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <YkYquqLOduNlQntZ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 2 Apr 2022 08:49:54 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12C93EF0E;
+        Sat,  2 Apr 2022 05:48:02 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 55B435C015C;
+        Sat,  2 Apr 2022 08:48:02 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Sat, 02 Apr 2022 08:48:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=F1G7MAN3XjEeRj
+        SELWEKW2o5UMZe0NatNffQWEI3lu0=; b=OHw2USsW2ISE+49T5S7RqLyRraE0DT
+        Y1JRXPXWJRIsb4uIl0Q/SeLnjeghbj5RUU9jYALgTto76oXuPYQGiynX2Xgakvev
+        hPMnJ0A0kG8Vnk7sYr760TNw4xJnmoA6T//cez0a+3/GMQdiyjRU9D7/s3R4HMK3
+        SuoCTjvgPfGEMKFEe4JmVlFjDLaS5g+blti0o3aDeXZ09PXLhCqPF5EZvz0cmhsE
+        GTqXgL5BXDnYm3shZkUwbJ6AkZNvMhUERgDsc8pxU59luiubBAfdX9JCxL/thMQG
+        hO3THEo/QxSKzvYmWGMaQbd3q1hSuztnO8ilFaGKPrllVIT+SMfKhdfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=F1G7MAN3XjEeRjSELWEKW2o5UMZe0NatNffQWEI3l
+        u0=; b=IKUfMzOu6WEJOXdgdPPMWcMtpJtHKfA9URXSipevmN8omSFZ1KEoDbGLz
+        3FOhBOaAtwJqeX2fsh5EO6NjyEzfxaZJlKlDpy2VTpjuP5F3o/aKSbSHA4hOu4db
+        L+DTgdDcKJ7qEDvpkudcQ6uv0KraU0e1MLmvApwbpNDYz1dBO8NSl9POgV3GKdsw
+        8SQe0MjbDNaJF3Gyjyaoge6Pjp10e6p15UTgZU56qAabumYbFlPsUtPz8Rt5vXFo
+        0oJza4eMn+u8xvFf7lfxoTSh8Aem0OPNM7RtVNtXEBU8iCycVUVsIs4oPRXZAybd
+        smi3qUSKX66S2nq8+KgmaloGRr3RA==
+X-ME-Sender: <xms:AkZIYgqyztkZDAPS2Bgta2fD0_ezCYD3ghxx-kpsG3AwfoXuP-L2KA>
+    <xme:AkZIYmrmJIaPW1TWZ9XjAksJE_9y33EGkZScyhSXeIC7fqDKedp7KlkbluGeIEwmz
+    PmZ2mxYR6rYsFsqI2s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeikedgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepteeuudelteefueelvdelheehieevvdfhkeehjeejudfhieelffffudfh
+    keeileegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:AkZIYlOv0ZFsmv1krGdmscbs_03S0v6bCQd-Te8vLpoFPCkIEH0QxQ>
+    <xmx:AkZIYn6kM1mro4aAuYoyVW2K_ifJwGzm-muynDsLwZA0S5eUdlsiqA>
+    <xmx:AkZIYv4BMoW3KbxHAbXGiWbpIMEjYGQxpsHl5yrI3hENqYJcJHpdbw>
+    <xmx:AkZIYswPNe2uMx7cUrSbErB9_GkYGRuYF68GOteYI_Xh4H6_yoOLbw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 249A927402C7; Sat,  2 Apr 2022 08:48:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-382-g88b93171a9-fm-20220330.001-g88b93171
+Mime-Version: 1.0
+Message-Id: <bd8d9596-6f04-48c1-b72b-b3ba1d45e891@www.fastmail.com>
+In-Reply-To: <20220324061620.GA12330@lst.de>
+References: <20220321165049.35985-1-sven@svenpeter.dev>
+ <20220321165049.35985-7-sven@svenpeter.dev> <20220324061620.GA12330@lst.de>
+Date:   Sat, 02 Apr 2022 14:47:41 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "hch@lst.de" <hch@lst.de>
+Cc:     "Keith Busch" <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>, "Marc Zyngier" <maz@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 6/9] nvme-apple: Add initial Apple SoC NVMe driver
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 4/1/2022 6:27 AM, Sean Christopherson wrote:
-> On Fri, Mar 04, 2022, Zeng Guang wrote:
->> +#define BUILD_CONTROLS_SHADOW(lname, uname, bits)			\
->> +static inline								\
->> +void lname##_controls_set(struct vcpu_vmx *vmx, u##bits val)		\
->> +{									\
->> +	if (vmx->loaded_vmcs->controls_shadow.lname != val) {		\
->> +		vmcs_write##bits(uname, val);				\
->> +		vmx->loaded_vmcs->controls_shadow.lname = val;		\
->> +	}								\
->> +}									\
->> +static inline u##bits __##lname##_controls_get(struct loaded_vmcs *vmcs)\
->> +{									\
->> +	return vmcs->controls_shadow.lname;				\
->> +}									\
->> +static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)	\
->> +{									\
->> +	return __##lname##_controls_get(vmx->loaded_vmcs);		\
->> +}									\
->> +static inline								\
-> Drop the newline, there's no need to split this across two lines.  Aligning the
-> backslashes will mean they all poke past the 80 char soft limit, but that's totally
-> ok.  The whole point of the line limit is to improve readability, and a trivial
-> runover is much less painful than a split function declaration.  As a bonus, all
-> the backslashes are aligned, have leading whitespace, and still land on a tab stop :-)
->
-> #define BUILD_CONTROLS_SHADOW(lname, uname, bits)				\
-> static inline void lname##_controls_set(struct vcpu_vmx *vmx, u##bits val)	\
-> {										\
-> 	if (vmx->loaded_vmcs->controls_shadow.lname != val) {			\
-> 		vmcs_write##bits(uname, val);					\
-> 		vmx->loaded_vmcs->controls_shadow.lname = val;			\
-> 	}									\
-> }										\
-> static inline u##bits __##lname##_controls_get(struct loaded_vmcs *vmcs)	\
-> {										\
-> 	return vmcs->controls_shadow.lname;					\
-> }										\
-> static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)		\
-> {										\
-> 	return __##lname##_controls_get(vmx->loaded_vmcs);			\
-> }										\
-> static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
-> {										\
-> 	lname##_controls_set(vmx, lname##_controls_get(vmx) | val);		\
-> }										\
-> static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
-> {										\
-> 	lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);		\
-> }
->
-> With that fixed,
->
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+Thanks for the review!
 
-OK. I'll revise it.
+On Thu, Mar 24, 2022, at 07:16, Christoph Hellwig wrote:
+>> +
+>> +//#define DEBUG
+>
+> This should not leak into the driver=E1=B9=A1
+
+Agreed, I'll remove it.
+
+>
+>> +#include <linux/blk-integrity.h>
+>
+> As far as I can tell this driver does not support metadata or PI,
+> so why is this include needed?
+
+Yup, you're right, it's not required at all. It's a left-over from
+when I hadn't realized that this controller doesn't support metadata
+and still had it implemented.
+
+>
+>> +/* NVM Express NVM Command Set Specification, Revision 1.0a, Figure =
+18 */
+>> +#define NVME_OPCODE_DATA_XFER_HOST_TO_CTRL BIT(0)
+>> +#define NVME_OPCODE_DATA_XFER_CTRL_TO_HOST BIT(1)
+>
+> Please just use the nvme_is_write helper where you are using these.
+
+I didn't realize that helper exists, will use it!
+
+
+>
+>> +static int apple_nvme_sart_dma_setup(void *cookie, struct apple_rtki=
+t_shmem *bfr,
+>
+> Please avoid > 80 character lines.
+
+Will fix it.
+
+>
+>> +static void apple_nvme_free_ctrl(struct nvme_ctrl *ctrl)
+>> +{
+>> +}
+>
+> So where are the apple specific resources free?  ->free_ctrl is
+> the callback from the struct device release callback, so without
+> one the resource release can't be tried to the device release.
+
+The resources are all devres managed but I only just realized that
+the nvme_ctrl creates its own struct device that has to be tied to
+the platform device. I think I'll at least need a get_device in _probe
+and a put_device here just like in pci.c to tie those two together.
+I'll also double check to make sure that all resources are indeed
+devres-managed.
+
+
+Thanks,
+
+
+Sven
 

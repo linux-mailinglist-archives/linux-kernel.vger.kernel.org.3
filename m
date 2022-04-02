@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FE74EFEE7
+	by mail.lfdr.de (Postfix) with ESMTP id 700BD4EFEE6
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350503AbiDBFUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 01:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S245702AbiDBFUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 01:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiDBFUA (ORCPT
+        with ESMTP id S1353858AbiDBFUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 01:20:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6341AC738;
-        Fri,  1 Apr 2022 22:18:06 -0700 (PDT)
-X-UUID: 6b356b269a73439f8f02d88d62df5c0d-20220402
-X-UUID: 6b356b269a73439f8f02d88d62df5c0d-20220402
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1942133482; Sat, 02 Apr 2022 13:18:02 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 2 Apr 2022 13:18:01 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 2 Apr
- 2022 13:18:00 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 2 Apr 2022 13:17:59 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <tzungbi@google.com>
-CC:     <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
-        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
-        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [v8 4/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
-Date:   Sat, 2 Apr 2022 13:17:54 +0800
-Message-ID: <20220402051754.17513-5-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220402051754.17513-1-jiaxin.yu@mediatek.com>
-References: <20220402051754.17513-1-jiaxin.yu@mediatek.com>
+        Sat, 2 Apr 2022 01:20:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEA62AE07
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 22:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648876718; x=1680412718;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qdBvea340ni/B2V5RQAVdReTxPRWNedDvc0ZrPw39Oc=;
+  b=bId9OWSMR++naQ2J+b64HR1Tz81u3E0zvL2XwQxdYB3/s35qKgeaFD8u
+   zhjgWnG3Rpb0vDFrARwPBhwiSFt/EznfoTeiLYpKyIvkfQjwrT/he4pE3
+   v/CySNdlnl+xKnv3WpQELVFGU25OhVkMg0XcExwcSAAHalhUIsPY/BAjp
+   3VdG2q7WUdQa2FKK5QZgk9dHYsCx52vcVhAvMhI67W4oeBAk602cgEcpl
+   HDJKY+Ae6AickiqoSgRsTdnWzGY10YPOuZ65/g+GvURSa+Enogb6dna14
+   r8p1WTQqZFZaBTlYPjtZprPMoNWzG317eW8cA6K5qeqvbvDUuUrquCD3v
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260265269"
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="260265269"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 22:18:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="523013267"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Apr 2022 22:18:33 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naW9g-0001ki-J8;
+        Sat, 02 Apr 2022 05:18:32 +0000
+Date:   Sat, 2 Apr 2022 13:18:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org, Xiang Gao <xiang@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [xiang:jeffle/fscache 2/19] fs/cachefiles/namei.c:478:17: error:
+ label 'out_unuse' used but not defined
+Message-ID: <202204021359.3SIrp1y5-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,184 +64,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support machine that only choose one of the rt5682s and rt5682 as
-headset codec, adds new compatible string "mt8192_mt6359_rt1015p_rt5682s".
-Meanwhile, using macros to simplifies card name and compatible name.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git jeffle/fscache
+head:   c536a60b958806d427fb66e3f53a1201826fdcf4
+commit: 6e3731398f863eec9b10f9e0cead9f2ec09d8b4d [2/19] cachefiles: notify user daemon with anon_fd when looking up cookie
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220402/202204021359.3SIrp1y5-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git/commit/?id=6e3731398f863eec9b10f9e0cead9f2ec09d8b4d
+        git remote add xiang https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git
+        git fetch --no-tags xiang jeffle/fscache
+        git checkout 6e3731398f863eec9b10f9e0cead9f2ec09d8b4d
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
- sound/soc/mediatek/Kconfig                    |  1 +
- .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 63 ++++++++++++-------
- 2 files changed, 41 insertions(+), 23 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/sound/soc/mediatek/Kconfig b/sound/soc/mediatek/Kconfig
-index d515613a79da..cacfbab4262d 100644
---- a/sound/soc/mediatek/Kconfig
-+++ b/sound/soc/mediatek/Kconfig
-@@ -176,6 +176,7 @@ config SND_SOC_MT8192_MT6359_RT1015_RT5682
- 	select SND_SOC_RT1015
- 	select SND_SOC_RT1015P
- 	select SND_SOC_RT5682_I2C
-+	select SND_SOC_RT5682S
- 	select SND_SOC_DMIC
- 	help
- 	  This adds ASoC driver for Mediatek MT8192 boards
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index fd140df0fd23..780ba7106d9f 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -28,6 +28,14 @@
- #define RT1015_DEV0_NAME	"rt1015.1-0028"
- #define RT1015_DEV1_NAME	"rt1015.1-0029"
- 
-+#define RT1015_RT5682_CARD_NAME "mt8192_mt6359_rt1015_rt5682"
-+#define RT1015P_RT5682_CARD_NAME "mt8192_mt6359_rt1015p_rt5682"
-+#define RT1015P_RT5682S_CARD_NAME "mt8192_mt6359_rt1015p_rt5682s"
-+
-+#define RT1015_RT5682_OF_NAME "mediatek,mt8192_mt6359_rt1015_rt5682"
-+#define RT1015P_RT5682_OF_NAME "mediatek,mt8192_mt6359_rt1015p_rt5682"
-+#define RT1015P_RT5682S_OF_NAME "mediatek,mt8192_mt6359_rt1015p_rt5682s"
-+
- struct mt8192_mt6359_priv {
- 	struct snd_soc_jack headset_jack;
- 	struct snd_soc_jack hdmi_jack;
-@@ -68,8 +76,8 @@ static int mt8192_rt1015_i2s_hw_params(struct snd_pcm_substream *substream,
- 	return snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_fs, SND_SOC_CLOCK_OUT);
- }
- 
--static int mt8192_rt5682_i2s_hw_params(struct snd_pcm_substream *substream,
--				       struct snd_pcm_hw_params *params)
-+static int mt8192_rt5682x_i2s_hw_params(struct snd_pcm_substream *substream,
-+					struct snd_pcm_hw_params *params)
- {
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
- 	struct snd_soc_card *card = rtd->card;
-@@ -118,8 +126,8 @@ static const struct snd_soc_ops mt8192_rt1015_i2s_ops = {
- 	.hw_params = mt8192_rt1015_i2s_hw_params,
- };
- 
--static const struct snd_soc_ops mt8192_rt5682_i2s_ops = {
--	.hw_params = mt8192_rt5682_i2s_hw_params,
-+static const struct snd_soc_ops mt8192_rt5682x_i2s_ops = {
-+	.hw_params = mt8192_rt5682x_i2s_hw_params,
- };
- 
- static int mt8192_mt6359_mtkaif_calibration(struct snd_soc_pcm_runtime *rtd)
-@@ -950,7 +958,7 @@ static struct snd_soc_dai_link mt8192_mt6359_dai_links[] = {
- 		.init = mt8192_rt5682_init,
- 		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
- 		SND_SOC_DAILINK_REG(i2s8),
--		.ops = &mt8192_rt5682_i2s_ops,
-+		.ops = &mt8192_rt5682x_i2s_ops,
- 	},
- 	{
- 		.name = "I2S9",
-@@ -959,7 +967,7 @@ static struct snd_soc_dai_link mt8192_mt6359_dai_links[] = {
- 		.ignore_suspend = 1,
- 		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
- 		SND_SOC_DAILINK_REG(i2s9),
--		.ops = &mt8192_rt5682_i2s_ops,
-+		.ops = &mt8192_rt5682x_i2s_ops,
- 	},
- 	{
- 		.name = "CONNSYS_I2S",
-@@ -1039,7 +1047,7 @@ static struct snd_soc_codec_conf rt1015_amp_conf[] = {
- };
- 
- static struct snd_soc_card mt8192_mt6359_rt1015_rt5682_card = {
--	.name = "mt8192_mt6359_rt1015_rt5682",
-+	.name = RT1015_RT5682_CARD_NAME,
- 	.owner = THIS_MODULE,
- 	.dai_link = mt8192_mt6359_dai_links,
- 	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
-@@ -1053,14 +1061,13 @@ static struct snd_soc_card mt8192_mt6359_rt1015_rt5682_card = {
- 	.num_configs = ARRAY_SIZE(rt1015_amp_conf),
- };
- 
--static const struct snd_soc_dapm_widget
--mt8192_mt6359_rt1015p_rt5682_widgets[] = {
-+static const struct snd_soc_dapm_widget mt8192_mt6359_rt1015p_rt5682x_widgets[] = {
- 	SND_SOC_DAPM_SPK("Speakers", NULL),
- 	SND_SOC_DAPM_HP("Headphone Jack", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
- };
- 
--static const struct snd_soc_dapm_route mt8192_mt6359_rt1015p_rt5682_routes[] = {
-+static const struct snd_soc_dapm_route mt8192_mt6359_rt1015p_rt5682x_routes[] = {
- 	/* speaker */
- 	{ "Speakers", NULL, "Speaker" },
- 	/* headset */
-@@ -1069,23 +1076,22 @@ static const struct snd_soc_dapm_route mt8192_mt6359_rt1015p_rt5682_routes[] = {
- 	{ "IN1P", NULL, "Headset Mic" },
- };
- 
--static const struct snd_kcontrol_new mt8192_mt6359_rt1015p_rt5682_controls[] = {
-+static const struct snd_kcontrol_new mt8192_mt6359_rt1015p_rt5682x_controls[] = {
- 	SOC_DAPM_PIN_SWITCH("Speakers"),
- 	SOC_DAPM_PIN_SWITCH("Headphone Jack"),
- 	SOC_DAPM_PIN_SWITCH("Headset Mic"),
- };
- 
--static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682_card = {
--	.name = "mt8192_mt6359_rt1015p_rt5682",
-+static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682x_card = {
- 	.owner = THIS_MODULE,
- 	.dai_link = mt8192_mt6359_dai_links,
- 	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
--	.controls = mt8192_mt6359_rt1015p_rt5682_controls,
--	.num_controls = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_controls),
--	.dapm_widgets = mt8192_mt6359_rt1015p_rt5682_widgets,
--	.num_dapm_widgets = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_widgets),
--	.dapm_routes = mt8192_mt6359_rt1015p_rt5682_routes,
--	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
-+	.controls = mt8192_mt6359_rt1015p_rt5682x_controls,
-+	.num_controls = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682x_controls),
-+	.dapm_widgets = mt8192_mt6359_rt1015p_rt5682x_widgets,
-+	.num_dapm_widgets = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682x_widgets),
-+	.dapm_routes = mt8192_mt6359_rt1015p_rt5682x_routes,
-+	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682x_routes),
- };
- 
- static int mt8192_mt6359_card_set_be_link(struct snd_soc_card *card,
-@@ -1119,9 +1125,16 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	card->dev = &pdev->dev;
- 
-+	if (of_device_is_compatible(pdev->dev.of_node, RT1015P_RT5682_OF_NAME))
-+		card->name = RT1015P_RT5682_CARD_NAME;
-+	else if (of_device_is_compatible(pdev->dev.of_node, RT1015P_RT5682S_OF_NAME))
-+		card->name = RT1015P_RT5682S_CARD_NAME;
-+	else
-+		dev_dbg(&pdev->dev, "No need to set card name\n");
-+
- 	hdmi_codec = of_parse_phandle(pdev->dev.of_node, "mediatek,hdmi-codec", 0);
- 	if (!hdmi_codec)
--		dev_info(&pdev->dev, "The machine don't have hdmi-codec\n");
-+		dev_dbg(&pdev->dev, "The machine don't have hdmi-codec\n");
- 
- 	platform_node = of_parse_phandle(pdev->dev.of_node, "mediatek,platform", 0);
- 	if (!platform_node) {
-@@ -1209,12 +1222,16 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- #ifdef CONFIG_OF
- static const struct of_device_id mt8192_mt6359_dt_match[] = {
- 	{
--		.compatible = "mediatek,mt8192_mt6359_rt1015_rt5682",
-+		.compatible = RT1015_RT5682_OF_NAME,
- 		.data = &mt8192_mt6359_rt1015_rt5682_card,
- 	},
- 	{
--		.compatible = "mediatek,mt8192_mt6359_rt1015p_rt5682",
--		.data = &mt8192_mt6359_rt1015p_rt5682_card,
-+		.compatible = RT1015P_RT5682_OF_NAME,
-+		.data = &mt8192_mt6359_rt1015p_rt5682x_card,
-+	},
-+	{
-+		.compatible = RT1015P_RT5682S_OF_NAME,
-+		.data = &mt8192_mt6359_rt1015p_rt5682x_card,
- 	},
- 	{}
- };
+All errors (new ones prefixed by >>):
+
+   fs/cachefiles/namei.c: In function 'cachefiles_create_tmpfile':
+>> fs/cachefiles/namei.c:478:17: error: label 'out_unuse' used but not defined
+     478 |                 goto out_unuse;
+         |                 ^~~~
+
+
+vim +/out_unuse +478 fs/cachefiles/namei.c
+
+   434	
+   435	/*
+   436	 * Create a temporary file and leave it unattached and un-xattr'd until the
+   437	 * time comes to discard the object from memory.
+   438	 */
+   439	struct file *cachefiles_create_tmpfile(struct cachefiles_object *object)
+   440	{
+   441		struct cachefiles_volume *volume = object->volume;
+   442		struct cachefiles_cache *cache = volume->cache;
+   443		const struct cred *saved_cred;
+   444		struct dentry *fan = volume->fanout[(u8)object->cookie->key_hash];
+   445		struct file *file;
+   446		struct path path;
+   447		uint64_t ni_size;
+   448		long ret;
+   449	
+   450	
+   451		cachefiles_begin_secure(cache, &saved_cred);
+   452	
+   453		path.mnt = cache->mnt;
+   454		ret = cachefiles_inject_write_error();
+   455		if (ret == 0)
+   456			path.dentry = vfs_tmpfile(&init_user_ns, fan, S_IFREG, O_RDWR);
+   457		else
+   458			path.dentry = ERR_PTR(ret);
+   459		if (IS_ERR(path.dentry)) {
+   460			trace_cachefiles_vfs_error(object, d_inode(fan), PTR_ERR(path.dentry),
+   461						   cachefiles_trace_tmpfile_error);
+   462			if (PTR_ERR(path.dentry) == -EIO)
+   463				cachefiles_io_error_obj(object, "Failed to create tmpfile");
+   464			file = ERR_CAST(path.dentry);
+   465			goto out;
+   466		}
+   467	
+   468		trace_cachefiles_tmpfile(object, d_backing_inode(path.dentry));
+   469	
+   470		if (!cachefiles_mark_inode_in_use(object, path.dentry)) {
+   471			file = ERR_PTR(-EBUSY);
+   472			goto out_dput;
+   473		}
+   474	
+   475		ret = cachefiles_ondemand_init_object(object);
+   476		if (ret < 0) {
+   477			file = ERR_PTR(ret);
+ > 478			goto out_unuse;
+   479		}
+   480	
+   481		ni_size = object->cookie->object_size;
+   482		ni_size = round_up(ni_size, CACHEFILES_DIO_BLOCK_SIZE);
+   483	
+   484		if (ni_size > 0) {
+   485			trace_cachefiles_trunc(object, d_backing_inode(path.dentry), 0, ni_size,
+   486					       cachefiles_trunc_expand_tmpfile);
+   487			ret = cachefiles_inject_write_error();
+   488			if (ret == 0)
+   489				ret = vfs_truncate(&path, ni_size);
+   490			if (ret < 0) {
+   491				trace_cachefiles_vfs_error(
+   492					object, d_backing_inode(path.dentry), ret,
+   493					cachefiles_trace_trunc_error);
+   494				file = ERR_PTR(ret);
+   495				goto out_dput;
+   496			}
+   497		}
+   498	
+   499		file = open_with_fake_path(&path, O_RDWR | O_LARGEFILE | O_DIRECT,
+   500					   d_backing_inode(path.dentry), cache->cache_cred);
+   501		if (IS_ERR(file)) {
+   502			trace_cachefiles_vfs_error(object, d_backing_inode(path.dentry),
+   503						   PTR_ERR(file),
+   504						   cachefiles_trace_open_error);
+   505			goto out_dput;
+   506		}
+   507		if (unlikely(!file->f_op->read_iter) ||
+   508		    unlikely(!file->f_op->write_iter)) {
+   509			fput(file);
+   510			pr_notice("Cache does not support read_iter and write_iter\n");
+   511			file = ERR_PTR(-EINVAL);
+   512		}
+   513	
+   514	out_dput:
+   515		dput(path.dentry);
+   516	out:
+   517		cachefiles_end_secure(cache, saved_cred);
+   518		return file;
+   519	}
+   520	
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CE44EFDBB
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5114EFDC7
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351603AbiDBBWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 21:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S237120AbiDBBfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 21:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233906AbiDBBWF (ORCPT
+        with ESMTP id S229819AbiDBBfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:22:05 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816DE2D1E8
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:20:14 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id o10so9284550ejd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:20:14 -0700 (PDT)
+        Fri, 1 Apr 2022 21:35:20 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25705C1CAD
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:33:30 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id d142so3505792qkc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 18:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
-        b=DkN2+IoGQRNVn9I3tQluJaEc0MtViO8LRtF2NJ4s7IaMBLZLmCvQWoKwHzIenK2Uvt
-         oM6wyR7cpVpw/DP2N18V03yoXgGRVrapdyCInNpevW5rlrzsyvf5gqZL4sA2Rw4B9ZJg
-         3UOY3d8SQ47sXetoK5U9iEEGwQTb8Ff0UQw5PtcJEam5PYMgJASsTyuSg/uaNe/g3fMz
-         yqwj0iiYgM3HaLEVT5o3TRcIIHaIQnbEZiSbYiR2x9jyWrHznvIUDRuJBO5JN4SX+MQD
-         8mzqNLGq4bG6euGysH79oPKXg+fJLacgaCYuRQu3I8s681Fy18Rz98Cx4bqbek74Luqn
-         hifw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kLWion0WCWSkquD591asRO6YeUmhw3poQH4Z8c7saLc=;
+        b=AS5E31wWp8dtOG+Ko/3LoMKkYtXTOdAEJU2Qu96ynB/NskCvZkBk6VPgbN19h8GCLt
+         De1f0l8I8bOFMqBiwmiSlLR1yggy4tgPYFfvlT61gbZRl/yK3MhvSjQF/cDbMMt6oA54
+         NvqH9tzbqoJXU56LU1Fu58yk9uC/h+dw9jUnNp3QK6NGjNmcefsdGa8uQLDxkQ92lPFs
+         9HKrE5cq6zUFAsY9GRPiCx696/suc++ZsHnw2dh9OKxZ5Pl/9n2wskwGsvIkNHfha797
+         BGYm5Cp4ZBXlevonyf1pmvT2enAGBn0ieE1k5levVI1kmodvSqtM33HL7DkziDqO91q1
+         M5qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
-        b=74MAkt5Q3aFLSnGC9LEILzqoaUzbvb44Modt4RY7afhhWaC1PWFWSQdTuDEBsqwWVJ
-         k+3N3CqL2ei1GG7qKrrxCWTetBkO9pz5ER7dN9pco0G7QEFUr1DxCcF2q8fsmVXPnjGg
-         ODlCaAg2JXBptID0EzeXWOYUvjc/zZ3A17UsY2DS9xvlzy5z/q5uSBEnf1qY81EaXwUi
-         QBgBVycxf3HxtEdE/kyBZbx1kiHX5QJCsNgGyWTMxniw0OAacapuSxoGyGTxc6A6tkQ0
-         0VqDAgd/Bw/OEszZClVghe0hK8uEpWYsdxww6tzKtjib/uuP9eCVfglJe7y7YVFG1V2+
-         pZ2w==
-X-Gm-Message-State: AOAM532ZmXWenEMBtIjRK2IHiLvzztwDj9Of7md4Cik5eOU0SYpMhW1i
-        dc5wr4W/ezP2Gf21HSDJ7p9EDPTixU1qdNNrSoM=
-X-Google-Smtp-Source: ABdhPJxdMQmVZLNF+7vq8tj4btDtW9ROcnQCx3SXwX2vXAT2C3lTN7xw3dnuRurNZE+ZiQItXzYYUylWjK6AIFqxWz8=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr2172572ejc.540.1648862413069; Fri, 01
- Apr 2022 18:20:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kLWion0WCWSkquD591asRO6YeUmhw3poQH4Z8c7saLc=;
+        b=5VZRzl5G77Z57DBKWNxVZn3yrchbY/XUvBeEp79J+u3MjBnWwDCNGnvLPqLsQKsgNz
+         pRiLmlN9cDCD6NDoz/w640NkyyzsSXsg76wHdXqpn3cyfJNIS8/617er6PL9fwW4q3Qr
+         yTbuI/cDLbxSVhw3UlW8bgPzgbava0c/RcCtJth04imT/92RMeRI/QCyOEcQp7CMwoDf
+         2EzlPHo3KmC08D6Nwd6t29DBDruBAnH9DHjPlRGKKthFAMWnJJ26yJQq3q8B99VkFBxk
+         OZdF4/ArOh2YTwbiQ9zXcpanFNMXII1MERuBSk12qQu4sIYxql2QOBtQlcnvWvszVcUs
+         YmsA==
+X-Gm-Message-State: AOAM5301zVR4A5Q2DneDZi5vCv3YshvIvb4eT0FCYf90b3rHIXVXAcr1
+        QHC67dWD97/ODwSu7bpmyr4=
+X-Google-Smtp-Source: ABdhPJz2SRTRv7nbuDJAZndFiet4TJg9EdzD2xnBacNnU2ZyilSwMGe86m0ftqxPY+xfEmDd1scC+A==
+X-Received: by 2002:a37:2717:0:b0:680:b3ea:cff3 with SMTP id n23-20020a372717000000b00680b3eacff3mr8273564qkn.573.1648863209329;
+        Fri, 01 Apr 2022 18:33:29 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87d04000000b002e06b4674a1sm3120968qtb.61.2022.04.01.18.33.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 18:33:28 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     linux@armlinux.org.uk
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, lv.ruyi@zte.com.cn,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] fix refcount leak in mxs_get_ocotp()
+Date:   Sat,  2 Apr 2022 01:33:22 +0000
+Message-Id: <20220402013322.2410228-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 02:20:14 +0100
-Message-ID: <CAHpNFcOpX0JwcqrPSQkP0oV10EFhJmCiMZOYKis+xSQO5C_rDg@mail.gmail.com>
-Subject: Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
- Class VESA Console + With Console in VecSR you can 3DText & Audio + VecSR
- Firmware update 2022 For immediate implementation in all operating systems & ROM's
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -62,103 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VecSR Firmware update 2022 For immediate implementation in all
-operating systems, monitors, TV's & equipment such as Mouses, Audio
-Systems & Webcams
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-VecSR - Vector Standard Render
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, use of_node_put() on it when done.
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ arch/arm/mach-mxs/mach-mxs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+diff --git a/arch/arm/mach-mxs/mach-mxs.c b/arch/arm/mach-mxs/mach-mxs.c
+index 25c9d184fa4c..6eb731f38727 100644
+--- a/arch/arm/mach-mxs/mach-mxs.c
++++ b/arch/arm/mach-mxs/mach-mxs.c
+@@ -98,6 +98,7 @@ static const u32 *mxs_get_ocotp(void)
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "fsl,ocotp");
+ 	ocotp_base = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!ocotp_base);
+ 
+ 	mutex_lock(&ocotp_mutex);
+-- 
+2.25.1
 
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
-
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-(c)Rupert S
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-https://science.n-helix.com/2022/04/vecsr.html

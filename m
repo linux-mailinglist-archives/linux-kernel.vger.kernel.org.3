@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FD34EFDF8
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 04:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6E54EFDFB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 04:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiDBCiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 22:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S237482AbiDBCku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 22:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiDBCiy (ORCPT
+        with ESMTP id S229807AbiDBCkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 22:38:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E06F18460F;
-        Fri,  1 Apr 2022 19:37:01 -0700 (PDT)
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KVh3C1kL4zgYK5;
-        Sat,  2 Apr 2022 10:35:19 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 2 Apr 2022 10:36:59 +0800
-Received: from [10.174.179.19] (10.174.179.19) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 2 Apr 2022 10:36:59 +0800
-Message-ID: <6900c697-2eaa-9e91-4d37-7a11c71d021f@huawei.com>
-Date:   Sat, 2 Apr 2022 10:36:58 +0800
+        Fri, 1 Apr 2022 22:40:47 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14186189A27;
+        Fri,  1 Apr 2022 19:38:51 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:42730.2126972100
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id C2B7B1002B0;
+        Sat,  2 Apr 2022 10:38:41 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-749df8664c-nmrf6 with ESMTP id d99a69e77d364b26a9abcb0ecc6ee1f3 for yhs@fb.com;
+        Sat, 02 Apr 2022 10:38:50 CST
+X-Transaction-ID: d99a69e77d364b26a9abcb0ecc6ee1f3
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <1952745a-40bc-1f42-350b-ed8437e252ce@189.cn>
+Date:   Sat, 2 Apr 2022 10:38:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 1/2] hugetlb: Fix hugepages_setup when deal with
- pernode
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] sample: bpf: syscall_tp_user: print result of verify_map
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, <mike.kravetz@oracle.com>,
-        <akpm@linux-foundation.org>, <yaozhenguo1@gmail.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20220401101232.2790280-1-liupeng256@huawei.com>
- <20220401101232.2790280-2-liupeng256@huawei.com>
- <0aefbc18-4232-0bae-b37a-d4c6995e3d00@redhat.com>
-From:   "liupeng (DM)" <liupeng256@huawei.com>
-In-Reply-To: <0aefbc18-4232-0bae-b37a-d4c6995e3d00@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.19]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+To:     Yonghong Song <yhs@fb.com>, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1648777272-21473-1-git-send-email-chensong_2000@189.cn>
+ <882349c0-123d-3deb-88e8-d400ec702d1f@fb.com>
+ <306ab457-9f3d-4d90-bb31-e6fb08b6a5ad@189.cn>
+ <b0b8be03-04e7-eb87-474d-b1584ebe2060@fb.com>
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <b0b8be03-04e7-eb87-474d-b1584ebe2060@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,41 +59,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 2022/4/1 18:43, David Hildenbrand wrote:
-> On 01.04.22 12:12, Peng Liu wrote:
->> Hugepages can be specified to pernode since "hugetlbfs: extend
->> the definition of hugepages parameter to support node allocation",
->> but the following problem is observed.
+在 2022/4/2 00:28, Yonghong Song 写道:
+> 
+> 
+> On 3/31/22 8:37 PM, Song Chen wrote:
 >>
->> Confusing behavior is observed when both 1G and 2M hugepage is set
->> after "numa=off".
->>   cmdline hugepage settings:
->>    hugepagesz=1G hugepages=0:3,1:3
->>    hugepagesz=2M hugepages=0:1024,1:1024
->>   results:
->>    HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
->>    HugeTLB registered 2.00 MiB page size, pre-allocated 1024 pages
 >>
->> Furthermore, confusing behavior can be also observed when invalid
->> node behind valid node.
+>> 在 2022/4/1 11:01, Yonghong Song 写道:
+>>>
+>>>
+>>> On 3/31/22 6:41 PM, Song Chen wrote:
+>>>> syscall_tp only prints the map id and messages when something goes 
+>>>> wrong,
+>>>> but it doesn't print the value passed from bpf map. I think it's better
+>>>> to show that value to users.
+>>>>
+>>>> What's more, i also added a 2-second sleep before calling verify_map,
+>>>> to make the value more obvious.
+>>>>
+>>>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>>>> ---
+>>>>   samples/bpf/syscall_tp_user.c | 4 ++++
+>>>>   1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/samples/bpf/syscall_tp_user.c 
+>>>> b/samples/bpf/syscall_tp_user.c
+>>>> index a0ebf1833ed3..1faa7f08054e 100644
+>>>> --- a/samples/bpf/syscall_tp_user.c
+>>>> +++ b/samples/bpf/syscall_tp_user.c
+>>>> @@ -36,6 +36,9 @@ static void verify_map(int map_id)
+>>>>           fprintf(stderr, "failed: map #%d returns value 0\n", map_id);
+>>>>           return;
+>>>>       }
+>>>> +
+>>>> +    printf("verify map:%d val: %d\n", map_id, val);
+>>>
+>>> I am not sure how useful it is or anybody really cares.
+>>> This is just a sample to demonstrate how bpf tracepoint works.
+>>> The error path has error print out already.
+> 
+> Considering we already have
+>     printf("prog #%d: map ids %d %d\n", i, map0_fds[i], map1_fds[i]);
+> I think your proposed additional printout
+>     printf("verify map:%d val: %d\n", map_id, val);
+> might be okay. The commit message should be rewritten
+> to justify this change something like:
+>     we already print out
+>       prog <some number>: map ids <..> <...>
+>     further print out
+>        verify map: ...
+>     will help user to understand the program runs successfully.
+> 
+> I think sleep(2) is unnecessary.
+
+will do, many thanks.
+
+BR
+
+Song
+
+> 
+>>>
+>>>> +
+>>>>       val = 0;
+>>>>       if (bpf_map_update_elem(map_id, &key, &val, BPF_ANY) != 0) {
+>>>>           fprintf(stderr, "map_update failed: %s\n", strerror(errno));
+>>>> @@ -98,6 +101,7 @@ static int test(char *filename, int num_progs)
+>>>>       }
+>>>>       close(fd);
+>>>> +    sleep(2);
+>>>
+>>> The commit message mentioned this sleep(2) is
+>>> to make the value more obvious. I don't know what does this mean.
+>>> sleep(2) can be added only if it fixed a bug.
 >>
->> To fix this, hugetlb_hstate_alloc_pages should be called even when
->> hugepages_setup going to invalid.
-> Shouldn't we bail out if someone requests node-specific allocations but
-> we are not running with NUMA?
->
-> What's the result after your change?
->
->> Cc: <stable@vger.kernel.org>
-> I am not sure if this is really stable material.
-
-This change will make 1G-huge-page consistent with 2M-huge-page when
-an invalid node is configured. After this patch, all per node huge pages
-will allocate until an invalid node.
-
-Thus, the basic question is "what will lead to an invalid node".
-1) Some debugging and test cases as Mike suggested.
-2) When part of physical memory or cpu is broken and bios not report
-the node with physical damage, but still use the original grub.
-
+>> The value in bpf map means how many times trace_enter_open_at are 
+>> triggered with tracepoint,sys_enter_openat. Sleep(2) is to enlarge the 
+>> result, tell the user how many files are opened in the last 2 seconds.
+>>
+>> It shows like this:
+>>
+>> sudo ./samples/bpf/syscall_tp
+>> prog #0: map ids 4 5
+>> verify map:4 val: 253
+>> verify map:5 val: 252
+>>
+>> If we work harder, we can also print those files' name and opened by 
+>> which process.
+>>
+>> It's just an improvement instead of a bug fix, i will drop it if 
+>> reviewers think it's unnecessary.
+>>
+>> Thanks.
+>>
+>> BR
+>>
+>> chensong
+>>>
+>>>>       /* verify the map */
+>>>>       for (i = 0; i < num_progs; i++) {
+>>>>           verify_map(map0_fds[i]);
+>>>
+> 

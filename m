@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2234F0118
+	by mail.lfdr.de (Postfix) with ESMTP id 883F34F0119
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354659AbiDBLb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 07:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S1354668AbiDBLd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 07:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiDBLbz (ORCPT
+        with ESMTP id S241104AbiDBLd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 07:31:55 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F43F49FA9
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:30:03 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so4761844pjf.1
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=NqY2TCOszCZkPSHwC0/0PBFkk/WFKJTEsan/Bnl2loc=;
-        b=I5eMPNCdZy4QHVXW2k78M78CbiuKNzdWuoQw7dj/ph3lSbA7w0OCb3gZ2LG2r2oih3
-         /9niWAGUPhDx4CYQHYfFqrGcd+HTC8wuuvCse2HIquoJOlhPYJgKp7GV9DoV5LnUx5cs
-         ANN9AUPUhhUm5h0e6ZuWlY0JQi/WEbkWi92U0c63VssY+xf4Jsuszq8voU9Zw/pE2bdJ
-         scs+fE/Fb0EFJ8mYeFmePiw1s4W43k9Qw/BSXbR16gqqN+36VP/BzXt6EIJeftlyHg7T
-         hs4EU1iCIfN6e+ZjfsK2B/opMgEfCR4E5FNoe04P2JFpeqNvZDe7shjVv4ZMBxmfEhwO
-         mdkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=NqY2TCOszCZkPSHwC0/0PBFkk/WFKJTEsan/Bnl2loc=;
-        b=6rqntQygrBF67wNRR3vwjJszFzkgrTgKExf8kiTqWXE9t8MXO4Riz2hn6/5OCFTVKT
-         V4geU1MdQLM7zsbXU6PpYKbcxDRKe9UPnhaYK3h+FO5Box9ElhPZ0bnOMMqyN2qHmJQj
-         BQsV7L/vXueZyw0cZl3/qzn6i0pXth2tVln17rlV/DTHASZrQqhbOdCU2YFPHTSWgJRr
-         75JHcfWQ6y/RMzgFXdQYZQvLOXnGSMbh+D0BO4gd06oBXwMpufNaB1e5QgJR9UdNDhxK
-         MQRFfew/nMsxOv9NVPnLhBw+LCeVQeQQW4Q2xbtjkxWUImZt2UdCRGcfkXUk3bh76SHD
-         XtMw==
-X-Gm-Message-State: AOAM531+OOowSzStM3ekirpDgbo1HR43FsUroBqAQh2Bv1kjmBRk8v2q
-        0rpQ+UWzVi7iXrV0zt1AWgPapEsdZXn6T7pCAQ==
-X-Google-Smtp-Source: ABdhPJzZf6QN5YYeG3w/LxvQpN6gNmoj4hIbeF4Jx0NrZKiFUJFFXg1/+Xm310/lTrAFXhBHSHQ0V078DubfWXFo6B8=
-X-Received: by 2002:a17:903:18c:b0:154:9ee:cedc with SMTP id
- z12-20020a170903018c00b0015409eecedcmr51600938plg.123.1648899001742; Sat, 02
- Apr 2022 04:30:01 -0700 (PDT)
+        Sat, 2 Apr 2022 07:33:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95B14A3E4;
+        Sat,  2 Apr 2022 04:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B974B8075A;
+        Sat,  2 Apr 2022 11:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C65C340EC;
+        Sat,  2 Apr 2022 11:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648899092;
+        bh=hHiaN9oQ8ExvCLuAqHVX8GhGvr0JDcc8KoNUT7YzQeQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XKuIRDL43MpBpxr/RptIaKZKJR6EGeGWNkYtaNMCtIGwGXVqzA5i57XwxM54tVZ2N
+         SjEfIUs8wDBMf81/FJiWI633TR1Bqh5IbwxY44eD1obDH5wSpDPvoGug1iLEbJ9zl9
+         dF1SrQrFYf4IhpClRUs2MejERVXmb/nr9GW+YaBI2kfjIx6xNg5XE/DEuHkTwCKDZb
+         O2itFS38dngcTS/XWun70RifGDQFMBuryMyU/DyVxwpJ040NeR7+L9eAfaXo8lFnrU
+         4E+xDrArOnbh4T5cLQkNUSgcuoNZyvBWF1OM+aRt90V9CuznkyCNGqjf2JwyKD3IEg
+         jiimG0s8JPYjw==
+Message-ID: <ac0e3336-f9eb-def9-68ea-ab49e2c467a1@kernel.org>
+Date:   Sat, 2 Apr 2022 13:31:22 +0200
 MIME-Version: 1.0
-Sender: cliffordmama534@gmail.com
-Received: by 2002:a05:6a10:8e8b:0:0:0:0 with HTTP; Sat, 2 Apr 2022 04:30:01
- -0700 (PDT)
-From:   "Mrs Yu. Ging Yunnan" <yunnanmrsyuging@gmail.com>
-Date:   Sat, 2 Apr 2022 11:30:01 +0000
-X-Google-Sender-Auth: LWNhgMImPCH_E7LbdRSPoMOktg8
-Message-ID: <CAOAvPBt6YVwfuSak0f0FFT6mQMVv2ZpDdWa026gPDPQeryXZbQ@mail.gmail.com>
-Subject: hello dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MILLION_USD,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cliffordmama534[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cliffordmama534[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.4 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  1.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] dt-bindings: devfreq: mediatek: add mtk cci devfreq
+ dt-bindings
+Content-Language: en-US
+To:     Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        roger.lu@mediatek.com, Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
+ <20220307122513.11822-2-jia-wei.chang@mediatek.com>
+ <bf418e08-2e32-5e61-abd8-abb0d8f5c080@canonical.com>
+ <13482b1b4244df5c0c0a4d6a60cdb2a7ba88500a.camel@mediatek.com>
+ <aa34eccf-ef08-4a8f-7a6c-7fbd05bd54b6@kernel.org>
+ <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hello dear
-I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
-will not survive it because all vaccines has been given to me but to
-no avian, am a China woman but I base here in France because am
-married here and I have no child for my late husband and now am a
-widow. My reason of communicating you is that i have $10.2million USD
-which was deposited in BNP Paribas Bank here in France by my late
-husband which  am the next of  kin to and I want you to stand as the
-beneficiary for the claim now that am about to end my race according
-to my doctor.I will want you to use the fund to build an orphanage
-home in my name there in   country, please kindly reply to this
-message urgently if willing to handle this project. God bless you and
-i wait your swift response asap.  Yours fairly friend,
-Mrs Yu. Ging Yunnan.
+On 01/04/2022 15:39, Jia-Wei Chang wrote:
+>>>>
+>>>>> +
+>>>>> +  operating-points-v2:
+>>>>> +    description:
+>>>>> +      For details, please refer to
+>>>>> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+>>>>> +
+>>>>> +  opp-table: true
+>>>>
+>>>> Same comments as your CPU freq bindings apply.
+>>>
+>>> mtk-cci-devfreq is a new driver and its arch is same as mediatek-
+>>> cpufreq so that the properties of mtk-cci are refer to mediatek-
+>>> cpufreq 
+>>> bindings.
+>>> operating-point-v2 is used to determine the voltage and frequency
+>>> of
+>>> dvfs which is further utilized by mtk-cci-devfreq.
+>>
+>> "operating-point-v2" is understood, but the same as in cpufreq
+>> bindings,
+>> I am questioning why do you have "opp-table: true". It's a bit
+>> confusing, so maybe I miss something?
+> 
+> Yes, you're correct.
+> "opp-table: true" should be removed.
+> I messed it up.
+
+No, I think I was wrong. The opp-table pretty frequently is embedded in
+the the device node itself. The operating-points-v2 references it.
+
+You don't use it in the example, but it might be a valid usage, so it
+can stay. Sorry for the confusion, it passed some time since I looked at
+OPP bindings.
+
+
+Best regards,
+Krzysztof

@@ -2,148 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197F34F0556
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0564F055B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244680AbiDBSG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 14:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S244883AbiDBSMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 14:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiDBSGW (ORCPT
+        with ESMTP id S244778AbiDBSMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 14:06:22 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23176467
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:04:25 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id r127so4532564qke.13
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C8/TSHx2WIRZ4mg+7W1FRBHfUQ9TPY5mCHEMry5F6Oo=;
-        b=STG9gBRSziyPzGSlvVuVU1RLRV5O6nMSwYsfGL1kHXqs+OVkpUsnLx3GDZ1/x7G+ml
-         7xG6xfInwz1zfBM0RfinPkCXcN/WKDMCN48Zip+qn2An3DKtUX8UcuSUH47ZRI53++12
-         Eh0n3+6xVKgPoybXNPJ4xdR8BwCfulthmGk6feDgVrwqdI1EAtYO2FRiJ146l8Naf2n1
-         0QuhafZlOPtwEoQRApcPQt7SQ5sUH/7rlJPh4eYUNwBCTklAUnzCXIUkTKW7Yyx6XaHI
-         uXhcB5o/EYDQAirMzCMuhBURUVdbQI/wVqUVva3xqvkxUKegnwUtKZxFIbtjBPjqjBYU
-         i4+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C8/TSHx2WIRZ4mg+7W1FRBHfUQ9TPY5mCHEMry5F6Oo=;
-        b=bz+cfruKcRM7fL7rx2MWh7bGbf/e5LB0pZcowA4zpHZhQXJbg0lAEE3suD/guS4wab
-         6wdEkMTK4v5Gvg3r2UPGz4a+aTDxKPpm0F3J+GdPsO+SljRdzT/fHDbk1cHVUPLa85no
-         yxafbkBm0eeqUQwHHqJVpd0ejPyRCopDCSewNM4MmTi0zbMz109DQw0Co+rcsFjKTV97
-         PSdPgJvyK89mSjhsPLCjEdJzdaFlCK1HVhM+/vNSZ66CJJtKFv92/t10isum9Fz1UpaG
-         Vh+H4V1KOG0dGYh9on5f/OD+wGZebe+/sF9nNwrBzppUaA8jYpdgplBkIBqc6J+lTyvw
-         S0yA==
-X-Gm-Message-State: AOAM532uDiH6N0qHI8/ovm6RggjizPPIAxv2bpmtcxBMAY1Ip6sY9zoW
-        pQxXPJKj0S6Zt8IRgjcbuXTaP20PiCTI8criIGlU8Q==
-X-Google-Smtp-Source: ABdhPJxOj/IsytEQpuni6qOJbl0uUQTwdj5v1Vjg6QYzfoysQpo8pzEr8yCEJ/n0mvvXWcrpHiL12+AkGi5nlV0HDkQ=
-X-Received: by 2002:a05:620a:1424:b0:67d:2bc6:856b with SMTP id
- k4-20020a05620a142400b0067d2bc6856bmr10190075qkj.434.1648922664855; Sat, 02
- Apr 2022 11:04:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <E1nZMdl-0006nG-0J@plastiekpoot> <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
- <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za> <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
- <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za> <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
- <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za> <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
- <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
- <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za> <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
- <CADVnQy=GX0J_QbMJXogGzPwD=f0diKDDxLiHV0gzrb4bo=4FjA@mail.gmail.com>
- <429dd56b-8a6c-518f-ccb4-fa5beae30953@uls.co.za> <CADVnQynGT7pGBT4PJ=vYg-bj9gnHTsKYHMU_6W0RFZb2FOoxiw@mail.gmail.com>
- <CANn89iJqKmjvJGtRHVumfP0T_SSa1uioFLgUvW+MF2ov2Ec2vQ@mail.gmail.com>
-In-Reply-To: <CANn89iJqKmjvJGtRHVumfP0T_SSa1uioFLgUvW+MF2ov2Ec2vQ@mail.gmail.com>
-From:   Neal Cardwell <ncardwell@google.com>
-Date:   Sat, 2 Apr 2022 14:04:08 -0400
-Message-ID: <CADVnQykexgJ+NEUojiKrt=HTomF0nL8CncF401+mEFkvuge7Rg@mail.gmail.com>
-Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP connections
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Jaco Kroon <jaco@uls.co.za>, Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Yuchung Cheng <ycheng@google.com>, Wei Wang <weiwan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 2 Apr 2022 14:12:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2D41B780;
+        Sat,  2 Apr 2022 11:10:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26C3EB80B51;
+        Sat,  2 Apr 2022 18:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE934C34111;
+        Sat,  2 Apr 2022 18:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648923042;
+        bh=KJjrQrWl2FusWB1BVg5NXpOJOA99gIR/4LmDUjDO/fk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=l4Ksr5IL3SAy58z6ZubEiACfLegz/qUAaB37BZrEqnGQZCiPaMJ+R3/iy28GS03dK
+         tOYjnxQ2GZrSRe1J+pdJJhkJQ1YQoC0w314cVR5K7wo/tb664bM7k12mHlriPMCNyj
+         vZ68Ll5r9QZAH1AXNkyqFPvHU8kye2n3WVMimvGCZj2WYseaxA70UkYfe2crYduwCu
+         w9FDU++meSpXVB2Fwcj+pwF5eLTP6f4TMLnsXLAdTfdRm+vsEdbZghO4ekJxy7XY01
+         VHtnbm1C3PIkW1dQa5Rj+uJ1JsNRza4bwqb/08mqAv6QRsPRKv6MOELSR8+yMxpFuC
+         QPHCiZKnYN/Sg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A882FF0384A;
+        Sat,  2 Apr 2022 18:10:42 +0000 (UTC)
+Subject: Re: [GIT PULL] PCI changes for v5.18, part 2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220402172137.GA272816@bhelgaas>
+References: <20220402172137.GA272816@bhelgaas>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220402172137.GA272816@bhelgaas>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git pci-v5.18-changes-2
+X-PR-Tracked-Commit-Id: 22ef7ee3eeb2a41e07f611754ab9a2663232fedf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9a212aaf95369d56f811b60a1ebdfa7e6b0ca030
+Message-Id: <164892304268.15050.6825968175560781882.pr-tracker-bot@kernel.org>
+Date:   Sat, 02 Apr 2022 18:10:42 +0000
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        YueHaibing <yuehaibing@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 12:32 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Sat, Apr 2, 2022 at 9:29 AM Neal Cardwell <ncardwell@google.com> wrote:
-> >
-> > FWIW those log entries indicate netfilter on the mail client machine
-> > dropping consecutive outbound skbs with 2*MSS of payload. So that
-> > explains the large consecutive losses of client data packets to the
-> > e-mail server. That seems to confirm my earlier hunch that those drops
-> > of consecutive client data packets "do not look like normal congestive
-> > packet loss".
->
->
-> This also explains why we have all these tiny 2-MSS packets in the pcap.
->
-> Under normal conditions, autocorking should kick in, allowing TCP to
-> build bigger TSO packets.
+The pull request you sent on Sat, 2 Apr 2022 12:21:37 -0500:
 
-I have not looked at the conntrack code before today, but AFAICT this
-is the buggy section of  nf_conntrack_proto_tcp.c:
+> git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git pci-v5.18-changes-2
 
-        } else if (((state->state == TCP_CONNTRACK_SYN_SENT
-                     && dir == IP_CT_DIR_ORIGINAL)
-                   || (state->state == TCP_CONNTRACK_SYN_RECV
-                     && dir == IP_CT_DIR_REPLY))
-                   && after(end, sender->td_end)) {
-                /*
-                 * RFC 793: "if a TCP is reinitialized ... then it need
-                 * not wait at all; it must only be sure to use sequence
-                 * numbers larger than those recently used."
-                 */
-                sender->td_end =
-                sender->td_maxend = end;
-                sender->td_maxwin = (win == 0 ? 1 : win);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9a212aaf95369d56f811b60a1ebdfa7e6b0ca030
 
-                tcp_options(skb, dataoff, tcph, sender);
+Thank you!
 
-Note that the tcp_options() function implicitly assumes it is being
-called on a SYN, because it sets state->td_scale to 0 and only sets
-state->td_scale to something non-zero if it sees a wscale option. So
-if we ever call that on an skb that's not a SYN, we will forget that
-the connection is using the wscale option.
-
-But at this point in the code it is calling tcp_options() without
-first checking that this is a SYN.
-
-For this TFO scenario like the one in the trace, where the server
-sends its first data packet after the SYNACK packet and before the
-client's first ACK, presumably the conntrack state machine is
-(correctly) SYN_RECV, and then (incorrectly) executes this code,
-including the call to tcp_options(), on this first data packet, which
-has no SYN bit, and no wscale option. Thus tcp_options() zeroes out
-the server's sending state td_scale and does not set it to a non-zero
-value. So now conntrack thinks the server is not using the wscale
-option. So when conntrack interprets future receive windows from the
-server, it does not scale them (with: win <<= sender->td_scale;), so
-in this scenario the estimated right edge of the server's receive
-window (td_maxend) is never advanced past the roughly 64KB value
-offered in the SYN. Thus when the client sends data packets beyond
-64KBytes, conntrack declares them invalid and drops them, due to
-failing the condition Eric noted above:
-
-   before(seq, sender->td_maxend + 1),
-
-This explains my previous observation that the client's original data
-packet transmissions are always dropped after the first 64KBytes.
-
-Someone more familiar with conntrack may have a good idea about how to
-best fix this?
-
-neal
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

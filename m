@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163824F00A4
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4974F00AA
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354397AbiDBKbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 06:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S1354371AbiDBKeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 06:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354368AbiDBKbj (ORCPT
+        with ESMTP id S229630AbiDBKeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:31:39 -0400
+        Sat, 2 Apr 2022 06:34:13 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E465D22;
-        Sat,  2 Apr 2022 03:29:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65271AF7C7;
+        Sat,  2 Apr 2022 03:32:21 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KVtZV0sj3z9sSb;
-        Sat,  2 Apr 2022 12:29:38 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4KVtdc3jtZz9sSZ;
+        Sat,  2 Apr 2022 12:32:20 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id um39nUGiJxRy; Sat,  2 Apr 2022 12:29:38 +0200 (CEST)
+        with ESMTP id 7csE0CeWtf1c; Sat,  2 Apr 2022 12:32:20 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVtZT5tNpz9sSQ;
-        Sat,  2 Apr 2022 12:29:37 +0200 (CEST)
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVtdc2mp9z9sSQ;
+        Sat,  2 Apr 2022 12:32:20 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B70DC8B76D;
-        Sat,  2 Apr 2022 12:29:37 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 40C358B76D;
+        Sat,  2 Apr 2022 12:32:15 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id UhIJN4BzORPW; Sat,  2 Apr 2022 12:29:37 +0200 (CEST)
+        with ESMTP id ojO2rBaO92SZ; Sat,  2 Apr 2022 12:32:15 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 78EB78B768;
-        Sat,  2 Apr 2022 12:29:37 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F1F148B768;
+        Sat,  2 Apr 2022 12:32:14 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 232ATWE1685821
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 232AW44C685938
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 2 Apr 2022 12:29:32 +0200
+        Sat, 2 Apr 2022 12:32:04 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 232ATUIE685820;
-        Sat, 2 Apr 2022 12:29:30 +0200
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 232AW344685937;
+        Sat, 2 Apr 2022 12:32:03 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-integrity@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] char: tpm: Prepare cleanup of powerpc's asm/prom.h
-Date:   Sat,  2 Apr 2022 12:29:19 +0200
-Message-Id: <cfd3a718e147b39620dfa7c779a7ae1af2f6b575.1648895074.git.christophe.leroy@csgroup.eu>
+        linux-wireless@vger.kernel.org
+Subject: [PATCH wireless-next] orinoco: Prepare cleanup of powerpc's asm/prom.h
+Date:   Sat,  2 Apr 2022 12:32:02 +0200
+Message-Id: <4e3bfd4ffe2ed6b713ddd99b69dcc3d96adffe34.1648833427.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <7a522d9029737d7a1fb513529659321ed62d50d9.1648895070.git.christophe.leroy@csgroup.eu>
-References: <7a522d9029737d7a1fb513529659321ed62d50d9.1648895070.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648895353; l=1196; s=20211009; h=from:subject:message-id; bh=wSCumnp9XggBlThPYk0xbVFOfQCfn4BwRASVoIH+/0g=; b=tnQ/Y9RsTkls/KJxmWUPV5nyCGpquPxpDvauKKLqkHRj4JYZxDyZt1lzDpHJhE11NE92qKg2soTA yVOoy2x4BiD4uqZz2DwSg7tP5jTcWi4nRbirFWc2EqLMB+30xpdp
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648895522; l=835; s=20211009; h=from:subject:message-id; bh=GUx5U0qn3qbDEa/zJ9S/ekEfNR8yOyXRHdvd7h8rtUI=; b=pn1f1qnmiPgEGXep2zpCysDtoWbf9q5rH5Xd6EmCGz49l5R3pHnWa5yZt8sIHMcedIEzmKAUpH4A 1WSO2XFkDxm5sESa0ujdS5jn2qmfNhG6OgsfuURqtYrjEODZarIf
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -83,35 +76,23 @@ users of asm/prom.h
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/char/tpm/tpm_atmel.h   | 2 --
- drivers/char/tpm/tpm_ibmvtpm.c | 1 -
- 2 files changed, 3 deletions(-)
+ Resending for application on wireless-next (per Kalle)
 
-diff --git a/drivers/char/tpm/tpm_atmel.h b/drivers/char/tpm/tpm_atmel.h
-index ba37e77e8af3..959f7cce8301 100644
---- a/drivers/char/tpm/tpm_atmel.h
-+++ b/drivers/char/tpm/tpm_atmel.h
-@@ -26,8 +26,6 @@ struct tpm_atmel_priv {
+ drivers/net/wireless/intersil/orinoco/airport.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/wireless/intersil/orinoco/airport.c b/drivers/net/wireless/intersil/orinoco/airport.c
+index 77e6c53040a3..a890bfa0d5cc 100644
+--- a/drivers/net/wireless/intersil/orinoco/airport.c
++++ b/drivers/net/wireless/intersil/orinoco/airport.c
+@@ -18,6 +18,7 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
++#include <linux/of_device.h>
+ #include <asm/pmac_feature.h>
  
- #ifdef CONFIG_PPC64
- 
--#include <asm/prom.h>
--
- #define atmel_getb(priv, offset) readb(priv->iobase + offset)
- #define atmel_putb(val, priv, offset) writeb(val, priv->iobase + offset)
- #define atmel_request_region request_mem_region
-diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-index 3af4c07a9342..1180cce7067a 100644
---- a/drivers/char/tpm/tpm_ibmvtpm.c
-+++ b/drivers/char/tpm/tpm_ibmvtpm.c
-@@ -20,7 +20,6 @@
- #include <linux/spinlock.h>
- #include <linux/interrupt.h>
- #include <linux/wait.h>
--#include <asm/prom.h>
- 
- #include "tpm.h"
- #include "tpm_ibmvtpm.h"
+ #include "orinoco.h"
 -- 
 2.35.1
 

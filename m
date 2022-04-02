@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759F04EFDD7
+	by mail.lfdr.de (Postfix) with ESMTP id C16B74EFDD8
 	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 03:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbiDBByK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 21:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S237353AbiDBByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 21:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiDBByJ (ORCPT
+        with ESMTP id S237303AbiDBByV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:54:09 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE6D121099
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=2IOznadgyKy/ui5EodindoIw3741NjkdXcIjACRZPL8=; b=uQZoTz7oK2sAF3fENaM1Z4ubTZ
-        FEte8jR7XkPzbDyD2dhWltdW07ePGP74j5lo1SZrLQVMlfrmjFJCsC+7L9nx3/ZwuItrD39ELlFGf
-        XY407kDdgCznUdqKpuj7bXjUJBCM2Uz63hsMZ7aMwNdoW3oK46GYWkbTkVDpURWF/ctBPPSaL7Ss+
-        2eBWAN0C1SlSaS6p7UeGTAXef8HOSi33gL9Yg8eJqrCPfAHA3/GU7JF/eIjiyKA9cMUAkTtf2tibn
-        /Tsmua6S2+yI9kEQ7mSsnrmRWuYLNDDl0LzGws+HfAV2L7AruwPw0kAJczDDZQ53Q4XrYruL9ls0o
-        WOhl50gQ==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1naSw5-001j9V-RM; Sat, 02 Apr 2022 01:52:17 +0000
-Date:   Sat, 2 Apr 2022 01:52:17 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [git pull] vfs.git misc stuff
-Message-ID: <YkesUZwCNJcHxIv4@zeniv-ca.linux.org.uk>
+        Fri, 1 Apr 2022 21:54:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D159141FF2
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 18:52:29 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KVg3p6x1QzRBsm;
+        Sat,  2 Apr 2022 09:50:46 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 2 Apr 2022 09:52:27 +0800
+Subject: Re: [PATCH] mm/mremap: avoid unneeded do_munmap call
+To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220401081023.37080-1-linmiaohe@huawei.com>
+ <3059b709-7d9a-079d-f7c4-f7cda6b7351e@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <18cb65e5-e124-57be-31ed-9ea227c869df@huawei.com>
+Date:   Sat, 2 Apr 2022 09:52:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3059b709-7d9a-079d-f7c4-f7cda6b7351e@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Assorted bits and pieces.  5.17-rc1-based, one trivial conflict in
-arch/x86/um/Kconfig (two selects added here and in mainline next to each other).
-Sorry about being that late in cycle with that...
+On 2022/4/1 18:38, David Hildenbrand wrote:
+> On 01.04.22 10:10, Miaohe Lin wrote:
+>> When old_len == new_len, do_munmap will return -EINVAL due to len == 0.
+>> This errno will be simply ignored because of old_len != new_len check.
+>> So it is unnecessary to call do_munmap when old_len == new_len because
+>> nothing is actually done.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/mremap.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/mremap.c b/mm/mremap.c
+>> index e776d4c2345c..dd966621a056 100644
+>> --- a/mm/mremap.c
+>> +++ b/mm/mremap.c
+>> @@ -817,9 +817,9 @@ static unsigned long mremap_to(unsigned long addr, unsigned long old_len,
+>>  			goto out;
+>>  	}
+>>  
+>> -	if (old_len >= new_len) {
+>> +	if (old_len > new_len) {
+>>  		ret = do_munmap(mm, addr+new_len, old_len - new_len, uf_unmap);
+>> -		if (ret && old_len != new_len)
+>> +		if (ret)
+>>  			goto out;
+>>  		old_len = new_len;
+>>  	}
+> 
+> I remember stumbling over that myself a year ago or so but dig not
+> deeper. But indeed, both variants (mmu, nommu) return -EINVAL in case
+> len (old_len - new_len) == 0.
+> 
+> Maybe that used to be different before ecc1a8993751 ("do_mremap()
+> untangling, part 2"), but it doesn't look like it.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+It could be really hard to trace back to the reason. But it's clear that
+this change does the same thing now and simplifies the code a bit.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+> 
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-are available in the Git repository at:
+Many thanks for your comment and Acked-by tag! Have a nice weekend! :)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.misc
+> 
 
-for you to fetch changes up to 61e02cdb6ac68a84f1bb95026632d63677f26202:
-
-  aio: drop needless assignment in aio_read() (2022-03-15 19:43:19 -0400)
-
-----------------------------------------------------------------
-Al Viro (4):
-      constify struct path argument of finish_automount()/do_add_mount()
-      asm/user.h: killed unused macros
-      uml/x86: use x86 load_unaligned_zeropad()
-      clean overflow checks in count_mounts() a bit
-
-Lukas Bulwahn (1):
-      aio: drop needless assignment in aio_read()
-
-Maíra Canal (1):
-      seq_file: fix NULL pointer arithmetic warning
-
-Tal Zussman (1):
-      fs: Remove FIXME comment in generic_write_checks()
-
- arch/alpha/include/asm/user.h   |  6 ------
- arch/arm/include/asm/user.h     |  4 ----
- arch/h8300/include/asm/user.h   |  4 ----
- arch/ia64/include/asm/user.h    |  6 ------
- arch/m68k/include/asm/user.h    |  4 ----
- arch/powerpc/include/asm/user.h |  5 -----
- arch/s390/include/asm/user.h    |  4 ----
- arch/sh/include/asm/user.h      |  6 ------
- arch/um/include/asm/Kbuild      |  1 -
- arch/x86/include/asm/user_32.h  |  4 ----
- arch/x86/include/asm/user_64.h  |  4 ----
- arch/x86/lib/csum-partial_64.c  | 26 --------------------------
- arch/x86/um/Kconfig             |  1 +
- fs/aio.c                        |  1 -
- fs/internal.h                   |  2 +-
- fs/kernfs/file.c                |  7 +------
- fs/namespace.c                  | 23 ++++++++++++-----------
- fs/read_write.c                 |  1 -
- fs/seq_file.c                   |  4 ++--
- include/linux/seq_file.h        |  1 +
- 20 files changed, 18 insertions(+), 96 deletions(-)

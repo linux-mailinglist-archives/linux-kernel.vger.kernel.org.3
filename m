@@ -2,80 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7754F03E8
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 16:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B1A4F03EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 16:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243677AbiDBOYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 10:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S1350455AbiDBO1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 10:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238914AbiDBOYP (ORCPT
+        with ESMTP id S1356255AbiDBO1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 10:24:15 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754F613CA0B
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:22:23 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id u26so6019394eda.12
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 07:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AMgcOOw5r9mv38XuA+c8CRwaFDTkeUsZRRq+V0PdcsY=;
-        b=ndRjC0RhMOJGBf5NZc9mOkR/bHebZ8B8V39sgXEZvBTOMKfN380968Na2TPAfrha+l
-         ZI9WodBoHES0w0Bp3iahPcQvrSvLGyEdKN9nzlOXYAno8LFwZbSXtL+Lc/tAJqOwEg1l
-         c+zclPub3nlJoZhvRhuCtyRf+bRdwySxsoovuLIJFRXx6ZDcMEoTBdzqNo267URsQr5J
-         7Sf8LB6qW65GLnhp6kQmzqluNbDqQxS41UCAI/nSNGTt8Wgzg19qt+gXBvZEupBKpxYx
-         IhHDskUw5bYaqEZWs8fz0XJt1vP+kkRC7pCQCmYequPos6I4Ouk9G9NfRueZhZHJ7Lq8
-         sFtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AMgcOOw5r9mv38XuA+c8CRwaFDTkeUsZRRq+V0PdcsY=;
-        b=h02Zic20NEBXBUOte1FhJ6Qaj3vGrqT0Hiy3jPQshdXBVkwoC/4ybUrf6YSUTy95Cc
-         2I5JdS9geI6zT5qZNgoeS7v6LvOCyAsqq7pOzbiUZ5wFuHWDxS/FfkRyc8vKh0vGgB0q
-         fbGwj1/JX31Mdck1qnFqF/iN1QkWep2BgJyFPIsIYjKJUs76sNI5rg2+bzXp/lLTndb8
-         ys6KoEBlXTUdw8wWJi7Gjarr18B6irE89Q7OF7wkuJ5XOczEw5opPIJgn1NCnEjcZi2u
-         jGzK564xsJSHGCnLsHuZaIpsdrs455eYY6bCR1MLF7VWa2EJyv40AWoNbtfw/vWv0nx4
-         tayg==
-X-Gm-Message-State: AOAM532D7V1AbZi6V+byWMz/LoURZfuoy16He0nNKtCFwkDSYjSing0z
-        qcZ49Esym1svWJcapRGQUyhoBBZlciGS/Ade
-X-Google-Smtp-Source: ABdhPJyO41m5nOt35fQMdoxrpqwQOe/Hbl42lUbDUic9chKbI6pE3cOvTVsoxLEMtoeouWLa4B+qbw==
-X-Received: by 2002:aa7:d517:0:b0:419:16c0:f313 with SMTP id y23-20020aa7d517000000b0041916c0f313mr25542499edq.379.1648909342042;
-        Sat, 02 Apr 2022 07:22:22 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id h30-20020a056402095e00b00412b81dd96esm2461485edz.29.2022.04.02.07.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 07:22:21 -0700 (PDT)
-Message-ID: <f737fd47-e557-45af-035b-af29a88e22e6@linaro.org>
-Date:   Sat, 2 Apr 2022 16:22:20 +0200
+        Sat, 2 Apr 2022 10:27:19 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9591B7AE
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648909528; x=1680445528;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=R6M6OmbRe4RMZI555C8KBCJG/enQgm/jqTKIB6tEdlU=;
+  b=LO0nKSIfMA7PkutT3TXnpO1IM74hoxqiCL+Lna1ofz7VBvzmFOzIfZTs
+   cUivUkhK6jk9yQ4WfSw25doR7h/FBzq44dxYjEgwUTCZ5yqwLaJ7VghlL
+   SEy5epdpqaIyo0n7NYQXTUEjnuQwuN79MaJl1NE69u9KGtERgQhoXS8y3
+   2r4UBaUUAi4Et1KiJxp8NhBs9ZbO3bCikZoQDFa2i4B87DCUVhQRg8GMv
+   kygik1LPrc164BrWV6cKTrjljIiHQmpen9rC6PUxg15hptbyl4p4fSYs1
+   5pf8yZJreIfTWfld5Xv4PRpw72fYxpSTMpT9IgR0rt/70I4aBxW8xsCR0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="240242657"
+X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
+   d="scan'208";a="240242657"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 07:25:27 -0700
+X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
+   d="scan'208";a="548145044"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 07:25:25 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] irq_work: Use kasan_record_aux_stack_noalloc() record callstack
+Date:   Sat,  2 Apr 2022 22:25:55 +0800
+Message-Id: <20220402142555.2699582-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,smb2: add bindings
- for smb2 driver
-Content-Language: en-US
-To:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <20220401202643.877609-1-caleb.connolly@linaro.org>
- <20220401202643.877609-7-caleb.connolly@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401202643.877609-7-caleb.connolly@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,96 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/2022 22:26, Caleb Connolly wrote:
-> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-> drivers.
-> 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
->  .../bindings/power/supply/qcom,smb2.yaml      | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
-> new file mode 100644
-> index 000000000000..1bea1fef78b8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/qcom,smb2.yaml#
+[    4.113128] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+[    4.113132] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 239, name: bootlogd
+[    4.113149] Preemption disabled at:
+[    4.113149] [<ffffffffbab1a531>] rt_mutex_slowunlock+0xa1/0x4e0
+[    4.113154] CPU: 3 PID: 239 Comm: bootlogd Tainted: G        W
+5.17.1-rt17-yocto-preempt-rt+ #105
+[    4.113157] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+[    4.113159] Call Trace:
+[    4.113160]  <TASK>
+[    4.113161]  dump_stack_lvl+0x60/0x8c
+[    4.113165]  dump_stack+0x10/0x12
+[    4.113167]  __might_resched.cold+0x13b/0x173
+[    4.113172]  rt_spin_lock+0x5b/0xf0
+[    4.113179]  get_page_from_freelist+0x20c/0x1610
+[    4.113208]  __alloc_pages+0x25e/0x5e0
+[    4.113222]  __stack_depot_save+0x3c0/0x4a0
+[    4.113228]  kasan_save_stack+0x3a/0x50
+[    4.113322]  __kasan_record_aux_stack+0xb6/0xc0
+[    4.113326]  kasan_record_aux_stack+0xe/0x10
+[    4.113329]  irq_work_queue_on+0x6a/0x1c0
+[    4.113333]  pull_rt_task+0x631/0x6b0
+[    4.113343]  do_balance_callbacks+0x56/0x80
+[    4.113346]  __balance_callbacks+0x63/0x90
+[    4.113350]  rt_mutex_setprio+0x349/0x880
+[    4.113366]  rt_mutex_slowunlock+0x22a/0x4e0
+[    4.113377]  rt_spin_unlock+0x49/0x80
+[    4.113380]  uart_write+0x186/0x2b0
+[    4.113385]  do_output_char+0x2e9/0x3a0
+[    4.113389]  n_tty_write+0x306/0x800
+[    4.113413]  file_tty_write.isra.0+0x2af/0x450
+[    4.113422]  tty_write+0x22/0x30
+[    4.113425]  new_sync_write+0x27c/0x3a0
+[    4.113446]  vfs_write+0x3f7/0x5d0
+[    4.113451]  ksys_write+0xd9/0x180
+[    4.113463]  __x64_sys_write+0x43/0x50
+[    4.113466]  do_syscall_64+0x44/0x90
+[    4.113469]  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Hi,
+On PREEMPT_RT kernel and KASAN is enabled. the kasan_record_aux_stack()
+may call alloc_pages(), and the rt-spinlock will be acquired, if
+currently in atomic context, will trigger warning. fix it by use
+kasan_record_aux_stack_noalloc() to avoid call alloc_pages().
 
-Are you sure "smb2" is a real Qualcomm versioning? IOW, is there going
-to be smb3 in the future? If not, better to just name the file according
-to model, so like compatible and like other existing schemas from Qualcomm.
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/irq_work.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-> +
-> +maintainers:
-> +  - Caleb Connolly <caleb.connolly@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pmi8998-smb2
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: usb plugin
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index f7df715ec28e..7afa40fe5cc4 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -137,7 +137,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
+ 	if (!irq_work_claim(work))
+ 		return false;
+ 
+-	kasan_record_aux_stack(work);
++	kasan_record_aux_stack_noalloc(work);
+ 
+ 	preempt_disable();
+ 	if (cpu != smp_processor_id()) {
+-- 
+2.25.1
 
-Just maxItems:1 (description is obvious and matches names).
-
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: usb-plugin
-> +
-> +  io-channels:
-> +    items:
-> +      - description: USB in current in uA
-> +      - description: USB in voltage in uV
-> +
-> +  io-channel-names:
-> +    items:
-> +      - const: usbin_i
-> +      - const: usbin_v
-> +
-
-What about monitored-battery? How do you configure the battery
-characteristics?
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - io-channels
-> +  - io-channel-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    pmic {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      #interrupt-cells = <4>;
-> +
-> +      smb2@1000 {
-
-Generic node name please, so "charger".
-
-
-
-Best regards,
-Krzysztof

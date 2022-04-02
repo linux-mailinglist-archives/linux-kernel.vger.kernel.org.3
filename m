@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE504F054F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 19:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197F34F0556
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244649AbiDBR64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 13:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S244680AbiDBSG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 14:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiDBR6y (ORCPT
+        with ESMTP id S231678AbiDBSGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 13:58:54 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1118F13F8DF;
-        Sat,  2 Apr 2022 10:57:02 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id o10so12085423ejd.1;
-        Sat, 02 Apr 2022 10:57:01 -0700 (PDT)
+        Sat, 2 Apr 2022 14:06:22 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23176467
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:04:25 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id r127so4532564qke.13
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BVxMHUicLbUH3Hvb1PPfVYvYyoskkvyv49vbgbrFCNo=;
-        b=l4c6G01X/mM7+1GnZ7oTuCLmtLgPbKG3mx7SbFPIku+ccwGTElZ0p+W8JpJcckG2wh
-         /lF6CkMeckAATTx3qq8eCxC0mdDSJ0VT019mKzu8JOetLhqQuR09W5RVyrR1UzGEDt7H
-         knZw+WaqR0Sidvgu5QJrnqYYMGo1Y1pb08ICafpgzDjkd/Q6yIWrf7dgseR/JD945Em3
-         9BH+Nb3SU6TlJBW8YtlSz/fuKkv3a9zHjIUAn2x7LKtTPE+BqSFW9l9bishHF4Eei2fe
-         fJhs+n3r7vBmF7oQn92ysEu3AeNjnZ7OlVofn2YH8295+lgWegZ90Ap6GMNXlUY+LxGh
-         c2sw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C8/TSHx2WIRZ4mg+7W1FRBHfUQ9TPY5mCHEMry5F6Oo=;
+        b=STG9gBRSziyPzGSlvVuVU1RLRV5O6nMSwYsfGL1kHXqs+OVkpUsnLx3GDZ1/x7G+ml
+         7xG6xfInwz1zfBM0RfinPkCXcN/WKDMCN48Zip+qn2An3DKtUX8UcuSUH47ZRI53++12
+         Eh0n3+6xVKgPoybXNPJ4xdR8BwCfulthmGk6feDgVrwqdI1EAtYO2FRiJ146l8Naf2n1
+         0QuhafZlOPtwEoQRApcPQt7SQ5sUH/7rlJPh4eYUNwBCTklAUnzCXIUkTKW7Yyx6XaHI
+         uXhcB5o/EYDQAirMzCMuhBURUVdbQI/wVqUVva3xqvkxUKegnwUtKZxFIbtjBPjqjBYU
+         i4+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BVxMHUicLbUH3Hvb1PPfVYvYyoskkvyv49vbgbrFCNo=;
-        b=ZuGYeZYiUHLKCbhIkK2JhN9wQNBD40VMaoOofC50oIHn7kYCkc881k+M7Py3RDJFJ4
-         Kh6tBCrOwcq9zdX9Guk2zcTDwbdiPIl1nRx9zkYQU1VGdo+3L9eTE/KhzfcqPSVML78Z
-         8ot3ZdXNP0TSjnAeBgj2YPlY0U6u66AmgW2Le8cpzkF/dShMMQ+CLSQG+5j4s6+fE+A3
-         PYLIzXewKj2eGwhP4/MNobn3DkQsLOe8FHeEDXHVbzvPiAIIYIYJHnKfdx//a+/AIPHN
-         1eaobQKP++AzLBzK+S1ZGwjBgBBOLKwu8m4Z4npHE7pAhdPRP25lBj8UX/+OpHfQLMDW
-         lYCw==
-X-Gm-Message-State: AOAM530lOyga1/NAwu8ATbOnwbtK1hkNVGfdOJ6Z5Dxmae/L+J4ceUBT
-        V8TYlidUsJOS7SYgxmB7rOc=
-X-Google-Smtp-Source: ABdhPJxRkR3w6MzpTeXo9b3BtpKvfUhBJrw6SYUseLvbqksVCDq8E3opTpW2w3JsDEAmAT8cwPaL5Q==
-X-Received: by 2002:a17:907:62a9:b0:6da:7953:4df0 with SMTP id nd41-20020a17090762a900b006da79534df0mr4472210ejc.316.1648922220505;
-        Sat, 02 Apr 2022 10:57:00 -0700 (PDT)
-Received: from localhost.localdomain (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id hs12-20020a1709073e8c00b006dfd7dee980sm2330857ejc.30.2022.04.02.10.56.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 10:56:59 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] staging: sm750fb: Call iounmap() to free mapped bus memory
-Date:   Sat,  2 Apr 2022 19:56:55 +0200
-Message-Id: <20220402175655.31512-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C8/TSHx2WIRZ4mg+7W1FRBHfUQ9TPY5mCHEMry5F6Oo=;
+        b=bz+cfruKcRM7fL7rx2MWh7bGbf/e5LB0pZcowA4zpHZhQXJbg0lAEE3suD/guS4wab
+         6wdEkMTK4v5Gvg3r2UPGz4a+aTDxKPpm0F3J+GdPsO+SljRdzT/fHDbk1cHVUPLa85no
+         yxafbkBm0eeqUQwHHqJVpd0ejPyRCopDCSewNM4MmTi0zbMz109DQw0Co+rcsFjKTV97
+         PSdPgJvyK89mSjhsPLCjEdJzdaFlCK1HVhM+/vNSZ66CJJtKFv92/t10isum9Fz1UpaG
+         Vh+H4V1KOG0dGYh9on5f/OD+wGZebe+/sF9nNwrBzppUaA8jYpdgplBkIBqc6J+lTyvw
+         S0yA==
+X-Gm-Message-State: AOAM532uDiH6N0qHI8/ovm6RggjizPPIAxv2bpmtcxBMAY1Ip6sY9zoW
+        pQxXPJKj0S6Zt8IRgjcbuXTaP20PiCTI8criIGlU8Q==
+X-Google-Smtp-Source: ABdhPJxOj/IsytEQpuni6qOJbl0uUQTwdj5v1Vjg6QYzfoysQpo8pzEr8yCEJ/n0mvvXWcrpHiL12+AkGi5nlV0HDkQ=
+X-Received: by 2002:a05:620a:1424:b0:67d:2bc6:856b with SMTP id
+ k4-20020a05620a142400b0067d2bc6856bmr10190075qkj.434.1648922664855; Sat, 02
+ Apr 2022 11:04:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <E1nZMdl-0006nG-0J@plastiekpoot> <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za> <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za> <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za> <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+ <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za> <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
+ <CADVnQy=GX0J_QbMJXogGzPwD=f0diKDDxLiHV0gzrb4bo=4FjA@mail.gmail.com>
+ <429dd56b-8a6c-518f-ccb4-fa5beae30953@uls.co.za> <CADVnQynGT7pGBT4PJ=vYg-bj9gnHTsKYHMU_6W0RFZb2FOoxiw@mail.gmail.com>
+ <CANn89iJqKmjvJGtRHVumfP0T_SSa1uioFLgUvW+MF2ov2Ec2vQ@mail.gmail.com>
+In-Reply-To: <CANn89iJqKmjvJGtRHVumfP0T_SSa1uioFLgUvW+MF2ov2Ec2vQ@mail.gmail.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Sat, 2 Apr 2022 14:04:08 -0400
+Message-ID: <CADVnQykexgJ+NEUojiKrt=HTomF0nL8CncF401+mEFkvuge7Rg@mail.gmail.com>
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP connections
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Jaco Kroon <jaco@uls.co.za>, Florian Westphal <fw@strlen.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>, Wei Wang <weiwan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +77,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If ioremap_wc() fails, the code jumps to the "exit" label and forgets to
-free the bus memory mapped into "sm750_dev->pvReg". Mapped bus memory must
-always be freed by calling iounmap().
+On Sat, Apr 2, 2022 at 12:32 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Sat, Apr 2, 2022 at 9:29 AM Neal Cardwell <ncardwell@google.com> wrote:
+> >
+> > FWIW those log entries indicate netfilter on the mail client machine
+> > dropping consecutive outbound skbs with 2*MSS of payload. So that
+> > explains the large consecutive losses of client data packets to the
+> > e-mail server. That seems to confirm my earlier hunch that those drops
+> > of consecutive client data packets "do not look like normal congestive
+> > packet loss".
+>
+>
+> This also explains why we have all these tiny 2-MSS packets in the pcap.
+>
+> Under normal conditions, autocorking should kick in, allowing TCP to
+> build bigger TSO packets.
 
-Call iounmap(sm750_dev->pvReg) when the above-mentioned failures happen.
+I have not looked at the conntrack code before today, but AFAICT this
+is the buggy section of  nf_conntrack_proto_tcp.c:
 
-The site of the missing iounmap() has been detected by Smatch.
+        } else if (((state->state == TCP_CONNTRACK_SYN_SENT
+                     && dir == IP_CT_DIR_ORIGINAL)
+                   || (state->state == TCP_CONNTRACK_SYN_RECV
+                     && dir == IP_CT_DIR_REPLY))
+                   && after(end, sender->td_end)) {
+                /*
+                 * RFC 793: "if a TCP is reinitialized ... then it need
+                 * not wait at all; it must only be sure to use sequence
+                 * numbers larger than those recently used."
+                 */
+                sender->td_end =
+                sender->td_maxend = end;
+                sender->td_maxwin = (win == 0 ? 1 : win);
 
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/staging/sm750fb/sm750_hw.c | 1 +
- 1 file changed, 1 insertion(+)
+                tcp_options(skb, dataoff, tcph, sender);
 
-diff --git a/drivers/staging/sm750fb/sm750_hw.c b/drivers/staging/sm750fb/sm750_hw.c
-index a7c6eb07b62e..55cb00e8b0d1 100644
---- a/drivers/staging/sm750fb/sm750_hw.c
-+++ b/drivers/staging/sm750fb/sm750_hw.c
-@@ -81,6 +81,7 @@ int hw_sm750_map(struct sm750_dev *sm750_dev, struct pci_dev *pdev)
- 	sm750_dev->pvMem =
- 		ioremap_wc(sm750_dev->vidmem_start, sm750_dev->vidmem_size);
- 	if (!sm750_dev->pvMem) {
-+		iounmap(sm750_dev->pvReg);
- 		pr_err("Map video memory failed\n");
- 		ret = -EFAULT;
- 		goto exit;
--- 
-2.34.1
+Note that the tcp_options() function implicitly assumes it is being
+called on a SYN, because it sets state->td_scale to 0 and only sets
+state->td_scale to something non-zero if it sees a wscale option. So
+if we ever call that on an skb that's not a SYN, we will forget that
+the connection is using the wscale option.
 
+But at this point in the code it is calling tcp_options() without
+first checking that this is a SYN.
+
+For this TFO scenario like the one in the trace, where the server
+sends its first data packet after the SYNACK packet and before the
+client's first ACK, presumably the conntrack state machine is
+(correctly) SYN_RECV, and then (incorrectly) executes this code,
+including the call to tcp_options(), on this first data packet, which
+has no SYN bit, and no wscale option. Thus tcp_options() zeroes out
+the server's sending state td_scale and does not set it to a non-zero
+value. So now conntrack thinks the server is not using the wscale
+option. So when conntrack interprets future receive windows from the
+server, it does not scale them (with: win <<= sender->td_scale;), so
+in this scenario the estimated right edge of the server's receive
+window (td_maxend) is never advanced past the roughly 64KB value
+offered in the SYN. Thus when the client sends data packets beyond
+64KBytes, conntrack declares them invalid and drops them, due to
+failing the condition Eric noted above:
+
+   before(seq, sender->td_maxend + 1),
+
+This explains my previous observation that the client's original data
+packet transmissions are always dropped after the first 64KBytes.
+
+Someone more familiar with conntrack may have a good idea about how to
+best fix this?
+
+neal

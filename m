@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCFF4EFFCD
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9576D4EFFD2
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353983AbiDBIxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 04:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S239456AbiDBIzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 04:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353961AbiDBIxS (ORCPT
+        with ESMTP id S229984AbiDBIzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 04:53:18 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB650156C7D
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:51:25 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso3692790otj.7
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 01:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ldid4ljpTipmsQhOv6JPWoqFhKtbXsLDYhk2KntAovc=;
-        b=KAFQGvZ0NJ9rVgGYrPkiRPInodeyew81EEkXVadDRY8N6ktZRH5Iqs0gGptd9EAKuV
-         6DEo+8wnwOddDm5nibVVRniAPDTbdG17FbEYMgEA+AbRQwJ/wzei2H3fxkHWEZ0ULFis
-         KOZsrbpkCnfNEPpgbO4LXQnlQHw7QBL18Yqo0mPBEYs2rv1vhRW/sz59H95Jdsh4F6NO
-         pPxC15AqnyFI8YjGJhBU6ekW88/fQk015anivwUZIZeIvTB6Rh0RCsp+bXIi0/ua1ZTl
-         hOaPZC82HOlxvXkey8SypmVvqqbyOcrjYe9WUxDANfP0q7Y9QWCn1RQQxfWn7gNRG+5Q
-         807Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ldid4ljpTipmsQhOv6JPWoqFhKtbXsLDYhk2KntAovc=;
-        b=KlXW3xDgEKkFeSGyyBq8VBuJ6yWNXzMT0QtLb8vPgHiw+Onz9NFL0ZTpj6qYwSPgfN
-         PT6b4+xt0OdogxZkVQISKDaSd4wLNuNAGVtfd6JlILwAs9N2BdXnQIHmPglU1+qY4RjN
-         3inS52C5FpNMVbZDjoYexsBI63HxyYszrq1Hrcy6ovh/ZAqm2GKgcBTrgDeLdz2kst/A
-         1tVE0ckaKn/VCSrhUMctICUBQ9LPWaIzrWpNQgOrUwkeZhSJSZvXobriwchhcz7nPDB/
-         6iCMeAT9IKmhf9dglfDM/1cy+rzcY1h+rMvy/kiAlPI1OayAiZQ95mi6wG1xRRfVBYPv
-         4LXA==
-X-Gm-Message-State: AOAM530B/RgXnTkmctntMOFFQI3zNo7yAqU6nBVmwt2hnfHIkcER5HDO
-        jZJHnpJDUonRyvekcznXyHqHnEifWhqtdA==
-X-Google-Smtp-Source: ABdhPJzJtFaXbMcy+64yaYYRroXmyTyK8j8Gkg7Uj2Kv573XC8okNjixo4oiA7R0G6MyTG46ipjrAQ==
-X-Received: by 2002:a9d:7d96:0:b0:5cd:ae1e:3043 with SMTP id j22-20020a9d7d96000000b005cdae1e3043mr8942959otn.284.1648889485183;
-        Sat, 02 Apr 2022 01:51:25 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id g25-20020a544f99000000b002da70c710b8sm1947556oiy.54.2022.04.02.01.51.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 01:51:24 -0700 (PDT)
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH 6/6] staging: r8188eu: remove spaces before tabs
-Date:   Sat,  2 Apr 2022 03:50:48 -0500
-Message-Id: <2fd10f393e3bc7381a85d0bfc1ec04a80af4eabb.1648888462.git.remckee0@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1648888461.git.remckee0@gmail.com>
-References: <cover.1648888461.git.remckee0@gmail.com>
+        Sat, 2 Apr 2022 04:55:49 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7D929C83
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648889637; x=1680425637;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OsDbHI/cRT5Q/uLzBEUBDLB9FC/AmZf0xIpeMnx3+6Q=;
+  b=RxHrF8ontJIYPrYvJV+QjyEi+Tv1HUkb3FArsXQcMGvsVqNTCh4aEIW4
+   UHqHfVLkXt1WsF2mUIklJ6Gyq4brZz7AUvhpPr37jzuFGI+UNWBUm5tYs
+   TSHgkWRu0vk5F9u65B6tSAUgSIdwFipSYt28Gty5wQn5sJ5ia8SelpwGm
+   wodMx7rl+KhLQPv9+mT72ENmiXBfcz5X56deXEJprzX+0Iz1GnkrH5A+E
+   I7rXIZ5WNo0tt/pbuZMkYYJ+OY5fDSghthMqVV2+CXk/JPyvPmUbFSXHZ
+   TvabBQdkBy8hVRDvpEBp0AIvfB/NgE0JiV96UYYT2SYxivg9JhwVI/akq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="285226391"
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="285226391"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 01:53:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="587105430"
+Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 02 Apr 2022 01:53:54 -0700
+Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1naZW6-00026N-3G;
+        Sat, 02 Apr 2022 08:53:54 +0000
+Date:   Sat, 2 Apr 2022 16:53:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/clk/clk-fixed-mmio.c:26: undefined reference to `of_iomap'
+Message-ID: <202204021621.QxSalFbt-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,65 +67,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conform to Linux kernel coding style.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   88e6c0207623874922712e162e25d9dafd39661e
+commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
+date:   9 days ago
+config: s390-buildonly-randconfig-r001-20220402 (https://download.01.org/0day-ci/archive/20220402/202204021621.QxSalFbt-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f9b3cd24578401e7a392974b3353277286e49cee
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Reported by checkpatch:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-WARNING: please, no space before tabs
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_cmd.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+>> drivers/clk/clk-fixed-mmio.c:26: undefined reference to `of_iomap'
+>> s390-linux-ld: drivers/clk/clk-fixed-mmio.c:33: undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+>> drivers/char/xillybus/xillybus_of.c:50: undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/crypto/ccree/cc_driver.o: in function `init_cc_resources':
+>> drivers/crypto/ccree/cc_driver.c:355: undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/crypto/ccree/cc_debugfs.o: in function `cc_debugfs_init':
+>> drivers/crypto/ccree/cc_debugfs.c:80: undefined reference to `debugfs_create_regset32'
+>> s390-linux-ld: drivers/crypto/ccree/cc_debugfs.c:100: undefined reference to `debugfs_create_regset32'
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 832bf25b1a83..8ae25cb4246b 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -548,9 +548,9 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network *pnetwork)
- 
- 	phtpriv->ht_option = false;
- 	if (pregistrypriv->ht_enable) {
--		/* 	Added by Albert 2010/06/23 */
--		/* 	For the WEP mode, we will use the bg mode to do the connection to avoid some IOT issue. */
--		/* 	Especially for Realtek 8192u SoftAP. */
-+		/*	Added by Albert 2010/06/23 */
-+		/*	For the WEP mode, we will use the bg mode to do the connection to avoid some IOT issue. */
-+		/*	Especially for Realtek 8192u SoftAP. */
- 		if ((padapter->securitypriv.dot11PrivacyAlgrthm != _WEP40_) &&
- 		    (padapter->securitypriv.dot11PrivacyAlgrthm != _WEP104_) &&
- 		    (padapter->securitypriv.dot11PrivacyAlgrthm != _TKIP_)) {
-@@ -1010,7 +1010,7 @@ u8 rtw_lps_ctrl_wk_cmd(struct adapter *padapter, u8 lps_ctrl_type, u8 enqueue)
- 	u8	res = _SUCCESS;
- 
- 	/* if (!pwrctrlpriv->bLeisurePs) */
--	/* 	return res; */
-+	/*	return res; */
- 
- 	if (enqueue) {
- 		ph2c = kzalloc(sizeof(struct cmd_obj), GFP_ATOMIC);
-@@ -1151,8 +1151,8 @@ u8 p2p_protocol_wk_cmd(struct adapter *padapter, int intCmdType)
- 	}
- 
- 	pdrvextra_cmd_parm->ec_id = P2P_PROTO_WK_CID;
--	pdrvextra_cmd_parm->type_size = intCmdType;	/* 	As the command tppe. */
--	pdrvextra_cmd_parm->pbuf = NULL;		/* 	Must be NULL here */
-+	pdrvextra_cmd_parm->type_size = intCmdType;	/*	As the command tppe. */
-+	pdrvextra_cmd_parm->pbuf = NULL;		/*	Must be NULL here */
- 
- 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
- 
-@@ -1378,8 +1378,8 @@ u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf)
- 		p2p_ps_wk_hdl(padapter, pdrvextra_cmd->type_size);
- 		break;
- 	case P2P_PROTO_WK_CID:
--		/* 	Commented by Albert 2011/07/01 */
--		/* 	I used the type_size as the type command */
-+		/*	Commented by Albert 2011/07/01 */
-+		/*	I used the type_size as the type command */
- 		p2p_protocol_wk_hdl(padapter, pdrvextra_cmd->type_size);
- 		break;
- 	case CHECK_HIQ_WK_CID:
+
+vim +26 drivers/clk/clk-fixed-mmio.c
+
+50cc4caf531abb Jan Kotas 2018-12-13  17  
+50cc4caf531abb Jan Kotas 2018-12-13  18  static struct clk_hw *fixed_mmio_clk_setup(struct device_node *node)
+50cc4caf531abb Jan Kotas 2018-12-13  19  {
+50cc4caf531abb Jan Kotas 2018-12-13  20  	struct clk_hw *clk;
+50cc4caf531abb Jan Kotas 2018-12-13  21  	const char *clk_name = node->name;
+50cc4caf531abb Jan Kotas 2018-12-13  22  	void __iomem *base;
+50cc4caf531abb Jan Kotas 2018-12-13  23  	u32 freq;
+50cc4caf531abb Jan Kotas 2018-12-13  24  	int ret;
+50cc4caf531abb Jan Kotas 2018-12-13  25  
+50cc4caf531abb Jan Kotas 2018-12-13 @26  	base = of_iomap(node, 0);
+50cc4caf531abb Jan Kotas 2018-12-13  27  	if (!base) {
+50cc4caf531abb Jan Kotas 2018-12-13  28  		pr_err("%pOFn: failed to map address\n", node);
+50cc4caf531abb Jan Kotas 2018-12-13  29  		return ERR_PTR(-EIO);
+50cc4caf531abb Jan Kotas 2018-12-13  30  	}
+50cc4caf531abb Jan Kotas 2018-12-13  31  
+50cc4caf531abb Jan Kotas 2018-12-13  32  	freq = readl(base);
+50cc4caf531abb Jan Kotas 2018-12-13 @33  	iounmap(base);
+50cc4caf531abb Jan Kotas 2018-12-13  34  	of_property_read_string(node, "clock-output-names", &clk_name);
+50cc4caf531abb Jan Kotas 2018-12-13  35  
+50cc4caf531abb Jan Kotas 2018-12-13  36  	clk = clk_hw_register_fixed_rate(NULL, clk_name, NULL, 0, freq);
+50cc4caf531abb Jan Kotas 2018-12-13  37  	if (IS_ERR(clk)) {
+50cc4caf531abb Jan Kotas 2018-12-13  38  		pr_err("%pOFn: failed to register fixed rate clock\n", node);
+50cc4caf531abb Jan Kotas 2018-12-13  39  		return clk;
+50cc4caf531abb Jan Kotas 2018-12-13  40  	}
+50cc4caf531abb Jan Kotas 2018-12-13  41  
+50cc4caf531abb Jan Kotas 2018-12-13  42  	ret = of_clk_add_hw_provider(node, of_clk_hw_simple_get, clk);
+50cc4caf531abb Jan Kotas 2018-12-13  43  	if (ret) {
+50cc4caf531abb Jan Kotas 2018-12-13  44  		pr_err("%pOFn: failed to add clock provider\n", node);
+50cc4caf531abb Jan Kotas 2018-12-13  45  		clk_hw_unregister(clk);
+50cc4caf531abb Jan Kotas 2018-12-13  46  		clk = ERR_PTR(ret);
+50cc4caf531abb Jan Kotas 2018-12-13  47  	}
+50cc4caf531abb Jan Kotas 2018-12-13  48  
+50cc4caf531abb Jan Kotas 2018-12-13  49  	return clk;
+50cc4caf531abb Jan Kotas 2018-12-13  50  }
+50cc4caf531abb Jan Kotas 2018-12-13  51  
+
+:::::: The code at line 26 was first introduced by commit
+:::::: 50cc4caf531abb2075c6973451fccdaba9f02715 clk: Add Fixed MMIO clock driver
+
+:::::: TO: Jan Kotas <jank@cadence.com>
+:::::: CC: Stephen Boyd <sboyd@kernel.org>
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9794F00B2
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244D24F00AE
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354425AbiDBKgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 06:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S1354435AbiDBKgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 06:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353429AbiDBKfu (ORCPT
+        with ESMTP id S1354399AbiDBKfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:35:50 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3BAFFB58
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 03:33:59 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id g22so5685315edz.2
+        Sat, 2 Apr 2022 06:35:51 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3B4F55C7
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 03:34:00 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id d10so866782edj.0
         for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 03:33:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GSFi2Vbaam24zbQ2UHEtgn0YLJt9Gjcf9TUTQdEKRhk=;
-        b=ANo/ZBjzbJxD1fwLzVN2KY63i4HMkcnGpsETHRyILMum/mnT6bI7w7rQSLm+j/jV5h
-         mUUI85lGIAF+muhNt0EFB1H1SvFpwPqgWN6MxROdPqctbENACn7gql4ZGuYxSGUJ7Ke0
-         HoVWf6dS6pughzdsThZDx4RH9+xEXNeObqYHuzeyo0M1yrW8i7FZMV9/5klIgYH2KlN8
-         DV841lG3axZZHoVHBMyxatjYTz9Dy/i8QobsUwqm/CRqLLrl2sJ3ntWiDmPDImRsSOd3
-         js3BrqsZJ1YJ9m3E32qBe4FbNHFkgEynskq1mDln3T7ia8OadbVW45OWOPewB5DhAEq2
-         VvfQ==
+        bh=YxLyiVAe1fZmParic2Rf8qrKN3jJ4OFw0+uxZzajL5E=;
+        b=nqQGArzkAlBLj5t1PKnCWmvItxL90TmoVvVLBsK/RQfOz6HeoALDrcHdCOj5I3sdOu
+         OZ0xdR1182QGoFpRAsTrOppkrQa/kJ//544WWcOZWpqpaN9k9E2quTPuj9THPAMarIrr
+         ak+M2vSpPkXcNv/8z5Rj/FsQ80ug17wolv4tAzwYmzhg84goFf48A7LOeZnryhcnPCrO
+         aJ6zjK0mw4E8C/gZW6bD2bupGRbtGPfvy/VJApkmuNMRFkIjP09UwIv2htXat7L50bKI
+         9RFH3m2PJaHKbzfJIm5L5hyfMPsJ2BwTgIJIYOlfFG29KHyORW9zriw9AC76mUkEv3bw
+         vbAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GSFi2Vbaam24zbQ2UHEtgn0YLJt9Gjcf9TUTQdEKRhk=;
-        b=l79rA53gURhF0q1eBr359WFx4ZM/CoVEdnAq84t7U0hPnGIQ2jA3Munusegy1qbkeD
-         PabMZfOXco7DEzJpEuLwGt0QBsCI0M+6ZIjsLBNw7RDuroG7dOfnZZ6ZXRz+VWkTf6gV
-         /9e0F3K9S8XSVNSbYiQKB9vUw/8JpM1KTShsjDmgRTKjmdbrhHsuXWTTvSCRIPNbQA7t
-         IVfpREmuxcuScKiios9SEXjv0GyYKdWIaEJ3T4PgZdpIPO1y6u/ObOZod+HBaDgil0jZ
-         2HaFBDq1t2+sv5jpZU9SK+ZpidYxvy4CGgSlNVDfBp/GC7Zucj2hhpIa2xFmEPdJCIO6
-         EUhQ==
-X-Gm-Message-State: AOAM532JX7eyg06f4+dZpZWqdEoQjvHehJsq9kH5KGkbHdbYuTHjS3Uj
-        PDyk0Wb9HG8f7MsoULsUt/8pepYsZktFZA==
-X-Google-Smtp-Source: ABdhPJzz5skU9XAsb8nwsYzCfNOufYhY+mQd7sbgLahPCs9cXcMI5utFQeUaXbA/iTRfW4PrxRH1oQ==
-X-Received: by 2002:a05:6402:40c9:b0:419:4b81:162e with SMTP id z9-20020a05640240c900b004194b81162emr25135170edb.380.1648895637722;
-        Sat, 02 Apr 2022 03:33:57 -0700 (PDT)
+        bh=YxLyiVAe1fZmParic2Rf8qrKN3jJ4OFw0+uxZzajL5E=;
+        b=insSxrkakobDBIfj/1c1PgGAoQdj7+rODphXLFgbSxJ1KlySD72TCtGPDkRrFOi4lW
+         46Ld2TlMebpFD3FmdSO23cP9OI00f3rvdx81t/oUWeHD5EjIcFB5EqefZNKFAzCM7xtH
+         dBuSMr/Ca5zIlpgP+u+2I2VbTE49yYSnlAkZPG6Dh40dP0rL8AsJiewjGtjT07IbBtrS
+         +16ft/+o9xdDB6K2xG7/CgThONgfKE8KgZp0bL7w6oAz+rvyqF6GyOBb2eh8PC8ixb/N
+         OjO/TE57jsh5lUTSRrHZiiePo471pTI8p8Cy/QwzcbZlYbRFkuZj8D0DHk7JxcJ5pWsP
+         5GNw==
+X-Gm-Message-State: AOAM532A+9c8ExFgPwrXUPbI27PcdjqFHgOf6hOGHQH3tmZEOE1xUsQw
+        dWl9ryNGQiuvEjvrCF5v5zKcLBzd3Q7DaA==
+X-Google-Smtp-Source: ABdhPJy8bCxxNAMxlikFqLvo0tREKpqZ+r87LOf/cVQumDaHaOArO+YZeZo19fKQmO+LNy54wDMHdQ==
+X-Received: by 2002:aa7:dbd6:0:b0:408:4a31:97a5 with SMTP id v22-20020aa7dbd6000000b004084a3197a5mr24868574edt.186.1648895638550;
+        Sat, 02 Apr 2022 03:33:58 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
         by smtp.googlemail.com with ESMTPSA id ka22-20020a170907921600b006e4c1ab0bbdsm1886965ejb.207.2022.04.02.03.33.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 03:33:57 -0700 (PDT)
+        Sat, 02 Apr 2022 03:33:58 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH v2 2/4] tracing: Remove usage of list iterator variable after the loop
-Date:   Sat,  2 Apr 2022 12:33:39 +0200
-Message-Id: <20220402103341.1763932-3-jakobkoschel@gmail.com>
+Subject: [PATCH v2 3/4] tracing: Replace usage of found with dedicated list iterator variable
+Date:   Sat,  2 Apr 2022 12:33:40 +0200
+Message-Id: <20220402103341.1763932-4-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220402103341.1763932-1-jakobkoschel@gmail.com>
 References: <20220402103341.1763932-1-jakobkoschel@gmail.com>
@@ -73,63 +73,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to point to the found element
-[1].
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
+
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
+
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- kernel/trace/trace_events.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ kernel/trace/trace_events_hist.c    | 17 ++++++++---------
+ kernel/trace/trace_events_trigger.c | 28 +++++++++++++---------------
+ 2 files changed, 21 insertions(+), 24 deletions(-)
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index e11e167b7809..97c7eb2f55e5 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -1723,9 +1723,9 @@ static LIST_HEAD(event_subsystems);
- 
- static int subsystem_open(struct inode *inode, struct file *filp)
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 44db5ba9cabb..7f60d04d5b6e 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -6089,32 +6089,31 @@ static void hist_unregister_trigger(char *glob,
+ 				    struct event_trigger_data *data,
+ 				    struct trace_event_file *file)
  {
-+	struct trace_subsystem_dir *dir = NULL, *iter_dir;
-+	struct trace_array *tr = NULL, *iter_tr;
- 	struct event_subsystem *system = NULL;
--	struct trace_subsystem_dir *dir = NULL; /* Initialize for gcc */
--	struct trace_array *tr;
- 	int ret;
++	struct event_trigger_data *test = NULL, *iter, *named_data = NULL;
+ 	struct hist_trigger_data *hist_data = data->private_data;
+-	struct event_trigger_data *test, *named_data = NULL;
+-	bool unregistered = false;
  
- 	if (tracing_is_disabled())
-@@ -1734,14 +1734,16 @@ static int subsystem_open(struct inode *inode, struct file *filp)
- 	/* Make sure the system still exists */
- 	mutex_lock(&event_mutex);
- 	mutex_lock(&trace_types_lock);
--	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
--		list_for_each_entry(dir, &tr->systems, list) {
--			if (dir == inode->i_private) {
-+	list_for_each_entry(iter_tr, &ftrace_trace_arrays, list) {
-+		list_for_each_entry(iter_dir, &iter_tr->systems, list) {
-+			if (iter_dir == inode->i_private) {
- 				/* Don't open systems with no events */
--				if (dir->nr_events) {
-+				if (iter_dir->nr_events) {
- 					__get_system_dir(dir);
- 					system = dir->subsystem;
- 				}
-+				tr = iter_tr;
-+				dir = iter_dir;
- 				goto exit_loop;
- 			}
+ 	lockdep_assert_held(&event_mutex);
+ 
+ 	if (hist_data->attrs->name)
+ 		named_data = find_named_trigger(hist_data->attrs->name);
+ 
+-	list_for_each_entry(test, &file->triggers, list) {
+-		if (test->cmd_ops->trigger_type == ETT_EVENT_HIST) {
+-			if (!hist_trigger_match(data, test, named_data, false))
++	list_for_each_entry(iter, &file->triggers, list) {
++		if (iter->cmd_ops->trigger_type == ETT_EVENT_HIST) {
++			if (!hist_trigger_match(data, iter, named_data, false))
+ 				continue;
+-			unregistered = true;
+-			list_del_rcu(&test->list);
++			test = iter;
++			list_del_rcu(&iter->list);
+ 			trace_event_trigger_enable_disable(file, 0);
+ 			update_cond_flag(file);
+ 			break;
  		}
-@@ -1753,9 +1755,6 @@ static int subsystem_open(struct inode *inode, struct file *filp)
- 	if (!system)
- 		return -ENODEV;
+ 	}
  
--	/* Some versions of gcc think dir can be uninitialized here */
--	WARN_ON(!dir);
--
- 	/* Still need to increment the ref count of the system */
- 	if (trace_array_get(tr) < 0) {
- 		put_system(dir);
+-	if (unregistered && test->ops->free)
++	if (test && test->ops->free)
+ 		test->ops->free(test->ops, test);
+ 
+ 	if (hist_data->enable_timestamps) {
+-		if (!hist_data->remove || unregistered)
++		if (!hist_data->remove || test)
+ 			tracing_set_filter_buffering(file->tr, false);
+ 	}
+ }
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index 7eb9d04f1c2e..1ba54a489416 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -614,22 +614,21 @@ static void unregister_trigger(char *glob,
+ 			       struct event_trigger_data *test,
+ 			       struct trace_event_file *file)
+ {
+-	struct event_trigger_data *data;
+-	bool unregistered = false;
++	struct event_trigger_data *data = NULL, *iter;
+ 
+ 	lockdep_assert_held(&event_mutex);
+ 
+-	list_for_each_entry(data, &file->triggers, list) {
+-		if (data->cmd_ops->trigger_type == test->cmd_ops->trigger_type) {
+-			unregistered = true;
+-			list_del_rcu(&data->list);
++	list_for_each_entry(iter, &file->triggers, list) {
++		if (iter->cmd_ops->trigger_type == test->cmd_ops->trigger_type) {
++			data = iter;
++			list_del_rcu(&iter->list);
+ 			trace_event_trigger_enable_disable(file, 0);
+ 			update_cond_flag(file);
+ 			break;
+ 		}
+ 	}
+ 
+-	if (unregistered && data->ops->free)
++	if (data && data->ops->free)
+ 		data->ops->free(data->ops, data);
+ }
+ 
+@@ -1976,27 +1975,26 @@ void event_enable_unregister_trigger(char *glob,
+ 				     struct trace_event_file *file)
+ {
+ 	struct enable_trigger_data *test_enable_data = test->private_data;
++	struct event_trigger_data *data = NULL, *iter;
+ 	struct enable_trigger_data *enable_data;
+-	struct event_trigger_data *data;
+-	bool unregistered = false;
+ 
+ 	lockdep_assert_held(&event_mutex);
+ 
+-	list_for_each_entry(data, &file->triggers, list) {
+-		enable_data = data->private_data;
++	list_for_each_entry(iter, &file->triggers, list) {
++		enable_data = iter->private_data;
+ 		if (enable_data &&
+-		    (data->cmd_ops->trigger_type ==
++		    (iter->cmd_ops->trigger_type ==
+ 		     test->cmd_ops->trigger_type) &&
+ 		    (enable_data->file == test_enable_data->file)) {
+-			unregistered = true;
+-			list_del_rcu(&data->list);
++			data = iter;
++			list_del_rcu(&iter->list);
+ 			trace_event_trigger_enable_disable(file, 0);
+ 			update_cond_flag(file);
+ 			break;
+ 		}
+ 	}
+ 
+-	if (unregistered && data->ops->free)
++	if (data && data->ops->free)
+ 		data->ops->free(data->ops, data);
+ }
+ 
 -- 
 2.25.1
 

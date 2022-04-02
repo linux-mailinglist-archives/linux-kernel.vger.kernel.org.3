@@ -2,63 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F4B4F006A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3BB4F006C
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345624AbiDBKTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 06:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S1347520AbiDBKT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 06:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245212AbiDBKTX (ORCPT
+        with ESMTP id S240469AbiDBKT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:19:23 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443DA1A9CA1;
-        Sat,  2 Apr 2022 03:17:32 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KVtJV6xYFz9sSZ;
-        Sat,  2 Apr 2022 12:17:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pu8Do0A9rX-Y; Sat,  2 Apr 2022 12:17:30 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVtJV6CYbz9sSY;
-        Sat,  2 Apr 2022 12:17:30 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BA6748B76D;
-        Sat,  2 Apr 2022 12:17:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 1Z9HyIuRztQM; Sat,  2 Apr 2022 12:17:30 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 84C8F8B768;
-        Sat,  2 Apr 2022 12:17:30 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 232AHJLb685017
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 2 Apr 2022 12:17:19 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 232AHIsU685016;
-        Sat, 2 Apr 2022 12:17:18 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next] sungem: Prepare cleanup of powerpc's asm/prom.h
-Date:   Sat,  2 Apr 2022 12:17:13 +0200
-Message-Id: <fa778bf9c0a23df8a9e6fe2e2b20d936bd0a89af.1648833433.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        Sat, 2 Apr 2022 06:19:56 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58E31A9CB0
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 03:18:04 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 397BC1C0B79; Sat,  2 Apr 2022 12:18:02 +0200 (CEST)
+Date:   Sat, 2 Apr 2022 12:18:01 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, michael@michaelkloos.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: Work to remove kernel dependence on the
+ M-extension
+Message-ID: <20220402101801.GA9428@amd>
+References: <CAK8P3a3mzax-OiaxBcxM_RgKNsd6N8HW0odRmw38u2jKE5aYaQ@mail.gmail.com>
+ <mhng-3e1f2147-7acb-4dd7-8fce-41ec72def1d7@palmer-ri-x1c9>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648894632; l=755; s=20211009; h=from:subject:message-id; bh=9P9V6Pv5hiX1Na4XsdsHt3zj0YkBYgBCqV+2yPXlZ2k=; b=qSjN7zD0KZ/O6iTYUpPx5xKWjmnCoIvCkoCQ/tBsKdpacal4jBZNFB3IfB5FunDN1netmdy6u37p r7dq9YvkAmHluM8vMXwW5WlT5g1G9qVhf4SDDYFjjJeN8HeNs3v0
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="fUYQa+Pmc3FrFX/N"
+Content-Disposition: inline
+In-Reply-To: <mhng-3e1f2147-7acb-4dd7-8fce-41ec72def1d7@palmer-ri-x1c9>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,34 +44,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-powerpc's asm/prom.h brings some headers that it doesn't
-need itself.
 
-In order to clean it up, first add missing headers in
-users of asm/prom.h
+--fUYQa+Pmc3FrFX/N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/net/sungem_phy.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Hi!
 
-diff --git a/drivers/net/sungem_phy.c b/drivers/net/sungem_phy.c
-index 4daac5fda073..ff22b6b1c686 100644
---- a/drivers/net/sungem_phy.c
-+++ b/drivers/net/sungem_phy.c
-@@ -29,11 +29,7 @@
- #include <linux/mii.h>
- #include <linux/ethtool.h>
- #include <linux/delay.h>
--
--#ifdef CONFIG_PPC_PMAC
--#include <asm/prom.h>
--#endif
--
-+#include <linux/of.h>
- #include <linux/sungem_phy.h>
- 
- /* Link modes of the BCM5400 PHY */
--- 
-2.35.1
+> >>That'd be wonderful, but unfortunately we're trending the other way --
+> >>we're at the point where "words in the specification have meaning" is
+> >>controversial, so trying to talk about which flavors of the
+> >>specification are standard is just meaningless.  I obviously hope that
+> >>gets sorted out, as we've clearly been pointed straight off a cliff for
+> >>a while now, but LMKL isn't the place to have that discussion.  We've
+> >>all seen this before, nobody needs to be convinced this leads to a mess.
+> >>
+> >>Until we get to the point where "I wrote 'RISC-V' on that potato I found
+> >>in my couch" can be conclusively determined not compliant with the spec,
+> >>it's just silly to try and talk about what is.
+> >
+> >I would argue that codifying the required extensions through kernel sour=
+ce
+>=20
+> The problem here isn't the required extensions, it's that vendors can cla=
+im
+> to implement an extension on hardware that doesn't exhibit any of the
+> behavior the specification expresses that systems with those extensions m=
+ust
+> have.  The D1 is a very concrete example of this.
 
+Sounds like someone interested should make a webpage listing available
+CPUs that claim RISC-V compatibility but far short of advertised
+claims?
+
+I'd like to get RISC-V board to play with sometime soon, and some help
+in what board to get would be welcome...
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--fUYQa+Pmc3FrFX/N
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmJIItgACgkQMOfwapXb+vIdfQCaAgXDlqG17hztlH0G92GavUtD
+yZAAn13P0BpPSIS+L3ydlZhmPdM2ROWs
+=9jvG
+-----END PGP SIGNATURE-----
+
+--fUYQa+Pmc3FrFX/N--

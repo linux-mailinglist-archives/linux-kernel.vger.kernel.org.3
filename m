@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343774EFEE2
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A734EFEE9
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353785AbiDBFR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 01:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S1353794AbiDBFUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 01:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiDBFRX (ORCPT
+        with ESMTP id S231700AbiDBFUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 01:17:23 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E21AC72A;
-        Fri,  1 Apr 2022 22:15:30 -0700 (PDT)
-Received: from [192.168.165.80] (unknown [182.2.36.61])
-        by gnuweeb.org (Postfix) with ESMTPSA id 0A80C7E356;
-        Sat,  2 Apr 2022 05:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648876529;
-        bh=Y01PgXHrUoAQRiCbzvaK0s1BZI4Z5mxJMR1GYxrrdVg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QOoNnEQVweFm7+5mdZPgNSNXRlwjrnkQlF3HXxICZaF+d7QVxXjySgkRNpDOHs24B
-         3LrIT/ouZF2ofwpm3Zc4Sz66mA6tC1jSBXgY28in5Wysjqr63ie6CPBc1UBAs59c4C
-         aO9bcjughMrLMQJCWyy+QJslnTVqGNUQBMyG6Jn/w5Dx9h9Ip2PJo9b3lQr7cQg8eF
-         q1ZYz+q+8ttgx90jxD3aWX6kngJyMIPorANmJKJDzMffWBXLWDh0ti4pUgWc63YQVC
-         DFFRSOHyBZ09q6JLlnsG+fTva9Rn+b3oLkbn/dC02ipbZY8hTPnxe+ZeMju6KcRn+/
-         6/rdXb9khCOxA==
-Message-ID: <c768b141-e463-5b4b-daba-794a02da3f1f@gnuweeb.org>
-Date:   Sat, 2 Apr 2022 12:15:18 +0700
+        Sat, 2 Apr 2022 01:20:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7CE1AC72E;
+        Fri,  1 Apr 2022 22:18:04 -0700 (PDT)
+X-UUID: 08833e10c2624593a6c5ee6a6193b403-20220402
+X-UUID: 08833e10c2624593a6c5ee6a6193b403-20220402
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1983533025; Sat, 02 Apr 2022 13:17:58 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 2 Apr 2022 13:17:57 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 2 Apr
+ 2022 13:17:56 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 2 Apr 2022 13:17:56 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <tzungbi@google.com>
+CC:     <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [v8 0/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Date:   Sat, 2 Apr 2022 13:17:50 +0800
+Message-ID: <20220402051754.17513-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 1/2] x86/delay: Fix the wrong asm constraint in
- `delay_loop()`
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable Kernel <stable@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        x86 Mailing List <x86@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jiri Hladky <hladky.jiri@googlemail.com>
-References: <20220329104705.65256-1-ammarfaizi2@gnuweeb.org>
- <20220329104705.65256-2-ammarfaizi2@gnuweeb.org>
- <13463eca-03a2-da0d-c274-fb576a8a051f@intel.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <13463eca-03a2-da0d-c274-fb576a8a051f@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/22 12:42 AM, Dave Hansen wrote:
-> Was this found by inspection or was it causing real-world problems?
+The series reuses mt8192-mt6359-rt10150rt5682.c for supporting machine
+driver with rt1015p speaker amplifier and rt5682s headset codec.
 
-It was found by inspection, no real-world problems found so far.
+Changes from v7:
+  - "mediatek,hdmi-codec" is an optional property, the code and the
+    binding document should match.
+
+Changes from v6:
+  - "speaker-codec" changes to "speaker-codecs" due to there may be two
+    speaker codec.
+
+Changes from v5:
+  - "mediatek,headset-codec" and "mediatek,speaker-codec" drop prefix
+    and move to properties from patternProperties.
+
+Changes form v4:
+  - split a large patch into three small patches for easy reviewing
+  - correct coding style
+
+Changes from v3:
+  - fix build error: too many arguments for format
+    [-Werror-format-extra-args]
+
+Changes from v2:
+  - fix build warnings such as "data argument not used by format string"
+
+Changes from v1:
+  - uses the snd_soc_of_get_dai_link_codecs to complete the
+  configuration of dai_link's codecs
+  - uses definitions to simplifies card name and compatible name
+
+Jiaxin Yu (4):
+  ASoC: dt-bindings: mt8192-mt6359: add new compatible and new
+    properties
+  ASoC: mediatek: mt8192: refactor for I2S3 DAI link of speaker
+  ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI links of headset
+  ASoC: mediatek: mt8192: support rt1015p_rt5682s
+
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |  32 +++
+ sound/soc/mediatek/Kconfig                    |   1 +
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 199 +++++++++++-------
+ 3 files changed, 153 insertions(+), 79 deletions(-)
 
 -- 
-Ammar Faizi
+2.18.0
+

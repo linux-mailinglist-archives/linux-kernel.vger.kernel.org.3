@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E3C4EFF82
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F144EFF86
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238895AbiDBHy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 03:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S238996AbiDBICf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 04:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbiDBHyZ (ORCPT
+        with ESMTP id S229948AbiDBICc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 03:54:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CED41AC418
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:52:34 -0700 (PDT)
+        Sat, 2 Apr 2022 04:02:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69FA12757
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:00:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4EB06106D
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358E6C340EE;
-        Sat,  2 Apr 2022 07:52:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 679216106D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 08:00:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AAFC340EE;
+        Sat,  2 Apr 2022 08:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648885953;
-        bh=YIMugAx6SP0UDoekYs2akzusEyckH9HLDYh5AdeaFY4=;
+        s=k20201202; t=1648886439;
+        bh=wq71YjT4VK4NpO8aXHJFi/aLVMrLZFB2XCi5LUTwopE=;
         h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Zq8CHYF4q6TCoaJj1RLtHjmm9eKoGFkckU54LCpjZrpq1iTjgFPpoTm9KGgMTxLDn
-         s53givX6Rsw3o4cW+mPLC+hOwPGurmOqUs2SGpg0Db6fOTUIkUd3TjYp5Wi1rg83O0
-         WvQIAZmgerkPR2H1SYSFaJOChde6BJ3Onz0cU2vDazmYyPAw1Etb52N9wjd/5wnlCM
-         RDB9O7nRpUj6+RATkXq8zloTFnSLVgGkMXK92X1YB5soXdcnYwcYuyMaQUpQq6A670
-         SlpidCSKQrWC9EVOerpQGl9JI85szZoqT4hZNLyxosfgZfdol3dRgeCXinRlN2oWoe
-         9GDaZnYAmmoaQ==
+        b=h3ACeUYNzpeH6caC6qbaNu6bBEfb6YMB9EM520Xz9BWMbMiICgClavXffLoGsxDjE
+         FOhruj6Ca/3/KMqrl6IiXqMi5f23RzxL4xPNZpCrtcWgAHWiev/eKyHchMOhzbuTq5
+         BGevzVtSXk+tDCeV6q1l546ZplpogRRj4DXUXFoJufSlm0AAor5u8NnhXJGUFxDBeI
+         v3km8T9gQVhPL/LtZWqyLS4MlXirqLT99wm6mO+vjSDuJnwQ7qALq6YPUMkQFEuFk4
+         Li9W3oIYOQ8xrI5i/GmQ5FF+fQAfutuFBy4IGfhcdmSrLQApmv2oty2SAK3r48Zlp2
+         F5R3ThNKTtrdg==
 From:   Kalle Valo <kvalo@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: page_alloc: simplify pageblock migratetype check in __free_one_page().
-References: <20220401135820.1453829-1-zi.yan@sent.com>
-        <134f56da-e827-2d29-75ba-1ec88ae2b118@redhat.com>
-        <66F9766D-A7D8-4310-9FA9-5EC8B2CC341C@nvidia.com>
-        <85520c49-5ef9-25f2-d6fa-f8b26e5dfec2@redhat.com>
-        <6696fb21-090c-37c6-77a7-79423cc9c703@redhat.com>
-        <87sfqwszc2.fsf@tynnyri.adurom.net>
-Date:   Sat, 02 Apr 2022 10:52:25 +0300
-In-Reply-To: <87sfqwszc2.fsf@tynnyri.adurom.net> (Kalle Valo's message of
-        "Sat, 02 Apr 2022 10:45:33 +0300")
-Message-ID: <87mth3udl2.fsf@tynnyri.adurom.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>
+Subject: Re: [PATCH] checkpatch: add warning for non-lore mailing list URLs
+References: <20220401212639.GA131100@bhelgaas>
+Date:   Sat, 02 Apr 2022 11:00:33 +0300
+In-Reply-To: <20220401212639.GA131100@bhelgaas> (Bjorn Helgaas's message of
+        "Fri, 1 Apr 2022 16:26:39 -0500")
+Message-ID: <87ilrrud7i.fsf@tynnyri.adurom.net>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -67,58 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> writes:
+Bjorn Helgaas <helgaas@kernel.org> writes:
 
-> David Hildenbrand <david@redhat.com> writes:
+> [+cc David, Marc for possibly archiving linux-afs on lore]
 >
->> On 01.04.22 16:22, David Hildenbrand wrote:
->>> On 01.04.22 16:19, Zi Yan wrote:
->>>> On 1 Apr 2022, at 10:12, David Hildenbrand wrote:
->>>>
->>>>> On 01.04.22 15:58, Zi Yan wrote:
->>>>>
->>>>> It's weird, your mails arrive on my end as empty body with attachment. I
->>>>> first suspected Thunderbird, but I get the same result on the google
->>>>> mail web client.
->>>>>
->>>>> Not sure why that happens.
->>>>
->>>> No idea. They look fine (except mangled links by outlook) on my outlook
->>>> desk client and web client on my side. lore looks OK too:
->>>> https://lore.kernel.org/linux-mm/20220401135820.1453829-1-zi.yan@sent.com/
->>> 
->>> I can spot in the raw mail I receive
->>> 
->>> "Content-Type: application/octet-stream; x-default=true"
->>> 
->>> But that seems to differ to the lore mail:
->>> 
->>> https://lore.kernel.org/linux-mm/20220401135820.1453829-1-zi.yan@sent.com/raw
->>> 
->>> 
->>> Maybe something in my mail server chain decides to do some nasty
->>> conversion (grml, wouldn't be the first time)
->>> 
->>
->> Weird thing is that this only happens with your mails. I opened an
->> internal ticket, sorry for the noise.
+> On Fri, Apr 01, 2022 at 01:50:12PM -0700, Randy Dunlap wrote:
 >
-> Zi's patch emails I received didn't have Content-Type, that might have
-> something to do with this. (But his reply later in the thread did have
-> one.) Also last week I got one patch email with no Content-Type either
-> and my Gnus decided to convert it to octet-stream, I guess to be on the
-> safe side. No idea if something similar is happening to you, but wanted
-> to mention it anyway.
+>> There seem to be some mailing lists from lists.infradead.org that are not (yet?)
+>> archived on lore.
+>> Is there a plan to add more list archives from infradead to lore?
+>
+> Good question.  I don't know how to find out what things are hosted at
+> infradead (it redirects to https://lists.openwrt.org/mailman/listinfo),
+> but in the linux git history, I found URLs for these lists that are
+> not on lore:
+>
+>   barebox             1 link from 2014
+>   kexec               5 links, most recent from 2021
+>   lede-commits        1 link from 2017
+>   linux-afs          16 links, most recent 2021
+>   linux-parport       1 link from 2005
+>   linux-pcmcia        6 links, most recent 2010
+>   linux-rpi-kernel    1 link from 2019
+>   linux-um            1 link from 2020
+>
+> linux-afs looks like a good candidate for lore.  Possibly kexec, too.
+>
+> linux-rpi-kernel seems like it might be of interest and
+> https://lists.infradead.org/pipermail/linux-rpi-kernel/ still shows
+> some activity.  Unfortunately the only URL I see in the git logs
+> (http://lists.infradead.org/pipermail/linux-rpi-kernel/2019-March/008615.html)
+> is already dead.
+>
+> The following infradead lists appear to be archived on lore already:
+>
+>   ath10k
+>   b43-dev
+>   linux-amlogic
+>   linux-arm-kernel
+>   linux-mediatek
+>   linux-mtd
+>   linux-nvme
+>   linux-riscv
+>   linux-snps-arc
 
-Just to clarify, I assumed Gnus was doing the conversion to octet-stream
-but I never verified that.
-
-Heh, interestingly enough that patch was sent from redhat.com:
-
-https://lore.kernel.org/all/877d8eyz61.fsf@kernel.org/
-
-Is that just a coincidence or are Redhat servers doing something
-strange? If you find out, do let me know. I'm very curious :)
+FWIW, ath11k list is also archived on lore. Thanks to your suggestion :)
 
 -- 
 https://patchwork.kernel.org/project/linux-wireless/list/

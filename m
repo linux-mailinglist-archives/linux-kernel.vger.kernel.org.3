@@ -2,116 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B08E4EFEBF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FB94EFECC
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242703AbiDBFCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 01:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S238089AbiDBFOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 01:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiDBFC3 (ORCPT
+        with ESMTP id S229992AbiDBFOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 01:02:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FA717665D;
-        Fri,  1 Apr 2022 22:00:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 664EA60B8D;
-        Sat,  2 Apr 2022 05:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBFDC34112;
-        Sat,  2 Apr 2022 05:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648875636;
-        bh=Hz7kYmvNHLmUo+Fbdi0YWMcptfDXOGSuYlcfxuUkStc=;
-        h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-        b=lU0hiw/4HgFogs4Ag8R004CYeWmnJbioSL+0u13uzyw6ZsGgrruW/dybMTuqMZkmg
-         jmuLe0dIwFkdsYNbfryNalUZBA3dAa9ELbzvCHftsOKfQQGOH7xuaqlwNGZ0ewuIn/
-         Hb062xB37iPEQ63gB3HAEw3rqfRM3XZEziVXjAdrrgkwv0qfsGIBxLlCbb1g8QRaQZ
-         5cv3J4Hio5BlMUQ0FAQFxRIrILLqp/5kfKVU1/jp34lqIVuMWzGFldTxPawcUvvCET
-         hRJeH2Qz/YLGTeDTDomGhJNzeVSdlynNIyIWbCrvUtxg6WHfKhI0HHzoKgofa9t+lx
-         32pqv/RITubDA==
-Received: by mail-vs1-f54.google.com with SMTP id i10so4483142vsr.6;
-        Fri, 01 Apr 2022 22:00:36 -0700 (PDT)
-X-Gm-Message-State: AOAM532HSIwI/AikuvPYcJ+yX49OB13HL9G/FUyUVlNtu5cDuXrL1IjC
-        98SJ8xqOsQNXp3Zuc6YCD6N9Q+KFycGJggT6FaA=
-X-Google-Smtp-Source: ABdhPJycmGstAuCXAQsD2Nsc99K3qy+1EqIeB5p1HI2zgeQm3shBqWqwPW/yuzIYB8e5JHRRSrZwLuoSs2Jc5fvfGlc=
-X-Received: by 2002:a67:c383:0:b0:327:2c5:d483 with SMTP id
- s3-20020a67c383000000b0032702c5d483mr1957242vsj.42.1648875635613; Fri, 01 Apr
- 2022 22:00:35 -0700 (PDT)
+        Sat, 2 Apr 2022 01:14:04 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51780189A25
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 22:12:13 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id q142so2123525pgq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 22:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UTM8xNHGKuJEA3ShhoH5h99TEkwNiTbrXpQiCcWtSkc=;
+        b=V95uFUsXfsQ4PLUA+A/KOpaUYdBNXSckWjLscw/JJNT50MlTmwZYudC1EtAun097Lg
+         ZFKFkRU7IXaVjkKsUDU5+z6QtzCQk4FHeLgtazBqGBpI2xzBGucrg3+OzcPQbgVrl9DJ
+         sFrsldz4JI09hgp4Kpkv+tmN72IdF1eDpQFac2t5DQgIyCkGeLynbaxdpnea24pyXbMc
+         9aWVTxL7SsrmAoLa81P9bBYbfmWDti/pf0O4e3tvk0fp7Inyrb9rckiMcNmtPIoBUyqg
+         o3wu9A5CfwMtifEXGGdfsjEZ6iRg9zZUWKZI0CtXGWehvxpmN934nQ6Y7qLZ6ZidcLa4
+         fR2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UTM8xNHGKuJEA3ShhoH5h99TEkwNiTbrXpQiCcWtSkc=;
+        b=7eD4/QywTjvBtJqKduAgEMvFy2i7jS1FsEWfAShXPEKnPypz5oHUIWdNXyeTwF65tf
+         IWZi9u6eQtQN820/Un7K72AX28U7f+uzCyZdxSF9Z1cbBGW0pmTxULqrORb8Ic2ewhqX
+         7ZS6RJHBorwymhMaD6g7ZRTFjR7sP8wHpYjTBOhCBf/2+dFZWaf04HGrvL0yPve5l2ma
+         aNumTIvhU7mVd51Gkt4JiE0xyCv6DRgiUimhCfK29RfCpvaZEfWrlUc+kIgh5nx77k+W
+         KRRAXyvHzRZNbjO6mCow7s4CYWpNW4HUvxQ5029UuHf6ZoUpovgstsioBwB1ZtYJp4Xr
+         +ryA==
+X-Gm-Message-State: AOAM531yPgkakWHu+ka7sxM9vW4zNLaEKL093InGbXtwWeeLO2N6HVJP
+        nE/8iq8cuqxz5nTzhflFIxy0VApfB3w=
+X-Google-Smtp-Source: ABdhPJzYGS3ttgJbek5s04y3iENSjmzpi42FDwtvTW3Wc7EV2Hh3du57G+cdOa4L2KXLRzeKPt2ijg==
+X-Received: by 2002:a05:6a00:23c1:b0:4fa:efcb:9c81 with SMTP id g1-20020a056a0023c100b004faefcb9c81mr14054466pfc.75.1648876332674;
+        Fri, 01 Apr 2022 22:12:12 -0700 (PDT)
+Received: from localhost.localdomain ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm3834721pgo.6.2022.04.01.22.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 22:12:12 -0700 (PDT)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] Geni based QUP controller binding cleanups
+Date:   Sat,  2 Apr 2022 10:42:01 +0530
+Message-Id: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220331184832.16316-1-wens@kernel.org> <20220401214158.7346bd62@kernel.org>
-In-Reply-To: <20220401214158.7346bd62@kernel.org>
-Reply-To: wens@kernel.org
-From:   Chen-Yu Tsai <wens@kernel.org>
-Date:   Sat, 2 Apr 2022 13:00:36 +0800
-X-Gmail-Original-Message-ID: <CAGb2v647CqCbd4ZK7OpbG0YihUjviUB-4cM4P5g0LFuQJbzoSA@mail.gmail.com>
-Message-ID: <CAGb2v647CqCbd4ZK7OpbG0YihUjviUB-4cM4P5g0LFuQJbzoSA@mail.gmail.com>
-Subject: Re: [PATCH RESEND2] net: stmmac: Fix unset max_speed difference
- between DT and non-DT platforms
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 12:42 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri,  1 Apr 2022 02:48:32 +0800 Chen-Yu Tsai wrote:
-> > From: Chen-Yu Tsai <wens@csie.org>
-> >
-> > In commit 9cbadf094d9d ("net: stmmac: support max-speed device tree
-> > property"), when DT platforms don't set "max-speed", max_speed is set to
-> > -1; for non-DT platforms, it stays the default 0.
-> >
-> > Prior to commit eeef2f6b9f6e ("net: stmmac: Start adding phylink support"),
-> > the check for a valid max_speed setting was to check if it was greater
-> > than zero. This commit got it right, but subsequent patches just checked
-> > for non-zero, which is incorrect for DT platforms.
-> >
-> > In commit 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-> > the conversion switched completely to checking for non-zero value as a
-> > valid value, which caused 1000base-T to stop getting advertised by
-> > default.
-> >
-> > Instead of trying to fix all the checks, simply leave max_speed alone if
-> > DT property parsing fails.
-> >
-> > Fixes: 9cbadf094d9d ("net: stmmac: support max-speed device tree property")
-> > Fixes: 92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-> > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> > Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >
-> > Resend2: CC Srinivas at Linaro instead of ST. Collected Russell's ack.
-> > Resend: added Srinivas (author of first fixed commit) to CC list.
-> >
-> > This was first noticed on ROC-RK3399-PC, and also observed on ROC-RK3328-CC.
-> > The fix was tested on ROC-RK3328-CC and Libre Computer ALL-H5-ALL-CC.
->
-> This patch got marked Changes Requested in pw, but I can't see why,
-> so I went on a limb and applied it. LMK if that was a mistake,
-> otherwise its commit c21cabb0fd0b ("net: stmmac: Fix unset max_speed
-> difference between DT and non-DT platforms") in net.
+Geni based QUP controller currently has child nodes bindings defined in
+same parent schema. Documentation of few other properties were also
+omitted intially. The list becomes too long with addition of these
+properties. Therefore, move out child bindings from parent schema to
+respective places as a part of cleanup process and update reference for
+it. Please note, individual bindings will now stand complete as
+previously some properties were defined in core and rest in parent
+schema.
 
-I don't remember anyone asking for any changes.
+This patchset adds individual bindings for uart and i2c controller, spi
+controller is taken care by Krzystof. SPI patches[1] are required for
+complete changes. Once all bindings gets places correctly, remove common
+properties defined in parent as the final step.
 
-Thanks
-ChenYu
+[1] https://lore.kernel.org/linux-spi/20220331175817.GA91341@9a2d8922b8f1/T/#m2ef266d9f5cf643bb5be17f3a175c638bde3a680
+
+Looking forward for feeback and review comments. Thanks!
+
+Kuldeep Singh (5):
+  dt-bindings: i2c: Add Qualcomm Geni based QUP i2c bindings
+  dt-bindings: qcom: geni-se: Update i2c schema reference
+  dt-bindings: serial: Update Qualcomm geni based QUP uart bindings
+  dt-bindings: qcom: geni-se: Update uart schema reference
+  dt-bindings: qcom: geni-se: Remove common controller properties
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 110 ++++++++++++++++++
+ .../serial/qcom,serial-geni-qcom.yaml         |  86 ++++++++++++++
+ .../bindings/soc/qcom/qcom,geni-se.yaml       |  77 +-----------
+ 3 files changed, 198 insertions(+), 75 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+
+-- 
+2.25.1
+

@@ -2,273 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542854F03CE
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 16:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16FB4F03D3
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 16:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354102AbiDBOLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 10:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S1354287AbiDBOLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 10:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240764AbiDBOKu (ORCPT
+        with ESMTP id S1346612AbiDBOL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 10:10:50 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19FA13D56
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:08:54 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id c10so11219884ejs.13
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 07:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
-        b=bEnc5Xu/f9tfdiQvw1VrBF2c4hTnQpn+nPJhfMCv6Uo62aLg32LRqUa/V0O8NyeDs+
-         oGzc7pjI8mfm90kVDggKmmPs9A+imFq05/mujxsbIUMNqlLFTOcdFzCTUa5Nvvs3+Qs7
-         gIJDnFn2L4mf0tmeGZuDBfKvJmYLTf0Us2u0sWZj5IO7e/MVBT8CuNo1UUhqYLdgmhpV
-         Ds6wFwqrrp0bo+/LzOcimtgax7LIiXXOzVLY/tsKcAOmX4spmFduBxYGXCuXkZWLeJvb
-         aPwHSmwOHbH4oTkp96PDay3Yl3mloYzwDHcYhlKTDrox8vTJDtbXEK36R6Icw0QGb03r
-         tLQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
-        b=fhzxXHzaxaprgIsYY8bIYgtpajwCmbJWIjWUq8sdI5ETeN1UFiAIDBFTDQFQxbsmf2
-         GxhQQgFfHxYBGch2AgT5lkjZeopJjogQfPioeuUWLUi59Nk04YhbcDta5axgWa0x01V7
-         OZGqtCGQ5CbNXlyGQ9q8jdYqYkxr6o3+Mui517lHsN9valYLF9i2bXDH95PNA2KwfTvD
-         TQuExFEw2k4M8Ucn0N65Vqwtl2iGYA6FGuqt4UiRKcfXtg59mrYoFqzmQpSknjXtskaF
-         AH3TLRTqVO4MV+DAC5TJym+SkUxvnxl8G3YB6NtaM58SnW2nEQukrKskKDDzW3cfvvEI
-         YncQ==
-X-Gm-Message-State: AOAM532QxmZt2nDeukDmyLuXxrPOtFggmJ4IY3sjvSj3OAdbK6T7MU57
-        x3Qx/iZuP8YJCpT3orHeLXmz5BF9JMCgAQOG0mE=
-X-Google-Smtp-Source: ABdhPJwbdc+fO0hy1xLt8T9rkKjD8XTsqwFzNGDzOaWO9aTsShzwErg/VRYPXMBWsyxM8Fp6u1qLzpwZ12jx9Xc4U3g=
-X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
- e20-20020a1709061e9400b006cc4382f12emr3929722ejj.482.1648908533020; Sat, 02
- Apr 2022 07:08:53 -0700 (PDT)
-MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 15:08:55 +0100
-Message-ID: <CAHpNFcNSzf8OQfX0MEVyYrZxVpR23qBG-_FDqAyAfuySvtP__A@mail.gmail.com>
-Subject: VecSR Wins another global Feat - The font-palette CSS property -
- font-palette and Custom @font-palette-values Palettes
-To:     torvalds@linux-foundation.org
+        Sat, 2 Apr 2022 10:11:28 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ADB13D45
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 07:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=zWvGZKI9SeXG33QH0VHAxJwyqLjTHGSTR8wnBkMrRiA=;
+        t=1648908576; x=1650118176; b=lvTXhxeYBpyqUGZ33w4DsAOnnl+bzRrCjQoOolk9Aw5caSb
+        Yuk7xhqEV9ZWh0Uuh168F5xENm/2wk+yQ7NCsQcEkcumieqFdI6Xz5FZFNrNjfgWDnRlGIeIEiivx
+        tDn5A/ddOQ6edT6x/CmxuiOUBZPvDNYpUQ8hnfM4rU9PFIkouZxfKk5zWAra9LgrOfGm2PCjCHA1V
+        AM/LL1+rDd3jE92GRJ7sBfkmSzKqH4J4VIXKtSZ2Nd6zJijXWXYOpY9C+iLjTampT7WKPG9YuNceH
+        /XCcAVDv8oPXCiuQIRe+mt+AnG+d3G71w6v9YbsXRxQIn/7biw4Xw1H2XNs5FUGQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1naeRW-003sRf-PW;
+        Sat, 02 Apr 2022 16:09:30 +0200
+Message-ID: <84f9d627092660c38400b607198c3b83f795be7f.camel@sipsolutions.net>
+Subject: Re: UML time-travel warning from __run_timers
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Date:   Sat, 02 Apr 2022 16:09:29 +0200
+In-Reply-To: <20220330110156.GA9250@axis.com>
+References: <20220330110156.GA9250@axis.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VecSR Wins another global Feat - The font-palette CSS property -
-font-palette and Custom @font-palette-values Palettes
+Hi Vincent,
 
-https://science.n-helix.com/2022/04/vecsr.html
 
-font-palette and Custom @font-palette-values Palettes
+> [10737482.720000][    C0] ------------[ cut here ]------------
+> [10737482.720000][    C0] WARNING: CPU: 0 PID: 0 at kernel/time/timer.c:1729 __run_timers+0x36d/0x380
+> 
 
-The font-palette CSS property allows selecting a palette from a color
-font. In combination with the @font-palette-values at-rule, custom
-palettes can be defined. This feature is useful in designs where an
-icon or emoji font is used with dark or light mode, or when using
-multi-colored icon fonts that use the font-palette to harmonize with
-the content's color scheme.
+[for those new on the thread, full message and config here:
+https://lore.kernel.org/r/20220330110156.GA9250@axis.com]
 
-hwb() CSS function
 
-HWB (short for 'hue whiteness blackness') is another method of
-specifying sRGB colors, similar to HSL, but often even easier for
-humans to work with. The hwb() function specifies HWB values in CSS.
-The function takes three arguments. The first, hue, specifies hue in
-degrees (not constrained to the range [0, 360]). The next two,
-whiteness and blackness, are specified as percentages.
+I think maybe you found a bug in the timers code?
 
-***
+Your config has CONFIG_NO_HZ_COMMON, so we have both BASE_STD and
+BASE_DEF.
 
-VecSR - Vector Standard Render
+Evidently, in your config, we *never* have any timer with
+TIMER_DEFERRABLE, which would put it into BASE_DEF.
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
+(I put a WARN_ON into get_timer_cpu_base() and get_timer_this_cpu_base()
+in the if, and it never triggered; I guess my config has something that
+creates a deferrable timer, so it didn't trigger, but I didn't check
+that now.)
 
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+Therefore, base->next_expiry never changes or something?
 
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
+At init, we get
 
-Improve Console & TV & BIOS & General Animated Render
+init_timer_cpu(0) base 0 clk=0xffff8ad0, next_expiry=0x13fff8acf
+init_timer_cpu(0) base 1 clk=0xffff8ad0, next_expiry=0x13fff8acf
 
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
+which makes sense, jiffies is set up to wrap very quickly after boot.
 
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
+The warning triggers when we have jiffies=0x13fff9600, so it's just
+after the "next_expiry", so in this code:
 
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
+static inline void __run_timers(struct timer_base *base)
+{
+   struct hlist_head heads[LVL_DEPTH];
+   int levels;
 
-High precision for AVX 32Bit to 256Bit width precision.
+   if (time_before(jiffies, base->next_expiry))
+           return;
 
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
 
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+we no longer return. Previously, we've *never* executed past that if for
+BASE_DEF.
 
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
+But we never touched this timer base nor did we ever want to recalc it I
+guess, so
 
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+    WARN_ON_ONCE(!levels && !base->next_expiry_recalc);
 
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
+triggers.
 
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
 
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
+I thought about changing that condition to
 
-(c)Rupert S
+  if (time_before(...) || !base->timers_pending)
+          return;
 
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+and that *does* make the splat go away, but I fear that might make it
+not recalculate when needed, so perhaps in the condition we should have
 
-https://science.n-helix.com/2019/06/vulkan-stack.html
+  if (time_before(...) ||
+      (!base->timers_pending && !base->next_expiry_recalc))
+          return;
 
-https://science.n-helix.com/2019/06/kernel.html
+or something? (which also avoids hitting the warning)
 
-https://science.n-helix.com/2022/03/fsr-focal-length.html
+But I really don't know anything about this code, so adding a few CCs.
+Can you help?
 
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
-ml
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential=
-.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-*
-
-VecSR is really good for secondary loading of sprites & text; In these
-terms very good for pre loading on for example the X86, RISC, AMIGA &
-Famicon type devices,
-With appropriate loading into Sprite buffers or Emulated Secondaries
-(Special Animations) or Font Buffers.
-
-Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
-with Integer & Emulated Float (Library); Traditional BitMap fonts work
-well in a Set Size & can resize well if cached!
-
-The full process leads upto the terminal & how to optimise CON,
-We can & will need to exceed capacities of any system & To improve them!
-
-presenting: Dev-Con-VectorE=C2=B2
-Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
-Class VESA Console +
-
-With Console in VecSR you can 3DText & Audio,
-
-VecSR Firmware update 2022 For immediate implementation in all
-operating systems & ROM's
-
-Potential is fast & useful.
-
-*
-
-https://science.n-helix.com/2022/04/vecsr.html
-
-
-**********
-
-Other Features in this Release
-
-AudioContext.outputLatency
-
-AudioContext.outputLatency property is an estimation in seconds of the
-interval between when the user agent requests a host system to play a
-buffer and when the first sample in the buffer is processed by the
-audio output device. For devices such as speakers or headphones that
-produce an acoustic signal, 'processed by the audio output device'
-refers to the time when a sample's sound is produced. This property
-helps developers compensate for the latency between the input and the
-output. It's also useful for synchronization of video and audio
-streams.
-
-This property is already implemented in Firefox.
-
-font-palette and Custom @font-palette-values Palettes
-
-The font-palette CSS property allows selecting a palette from a color
-font. In combination with the @font-palette-values at-rule, custom
-palettes can be defined. This feature is useful in designs where an
-icon or emoji font is used with dark or light mode, or when using
-multi-colored icon fonts that use the font-palette to harmonize with
-the content's color scheme.
-
-hwb() CSS function
-
-HWB (short for 'hue whiteness blackness') is another method of
-specifying sRGB colors, similar to HSL, but often even easier for
-humans to work with. The hwb() function specifies HWB values in CSS.
-The function takes three arguments. The first, hue, specifies hue in
-degrees (not constrained to the range [0, 360]). The next two,
-whiteness and blackness, are specified as percentages.
-
-Make Popup Argument for window.open() Evaluate to 'true'
-
-This feature follows a recent change to the spec for parsing the popup
-argument for window.open(). Previously, when popup was set equal to
-true, window.open() was interpreted to mean false. This is
-counterintuitive and confusing. This change makes boolean features
-easier to use and understand.
-
-MediaCapabilities API for WebRTC
-
-The MediaCapabilities API has been extended to support WebRTC streams.
-The MediaCapabilities API helps websites make informed decisions on
-what codec, resolution, etc. to use for video playback by indicating
-whether a configuration is supported and also whether the playback is
-expected to be smooth.
-Without this feature, web apps need to guess about suitable
-configurations. This can result in poor quality such as when an
-application uses low resolution or frame rates unnecessarily, or
-stuttering when the frame rate is too high.
+Thanks,
+johannes

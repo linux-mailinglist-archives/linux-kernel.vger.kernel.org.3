@@ -2,130 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00EA4F067F
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB6E4F0683
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345543AbiDBVuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 17:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S1345697AbiDBVxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 17:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345098AbiDBVur (ORCPT
+        with ESMTP id S233305AbiDBVxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 17:50:47 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5445140AA;
-        Sat,  2 Apr 2022 14:48:54 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d29so2933795wra.10;
-        Sat, 02 Apr 2022 14:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=us6aSVa3J8Fz7ggtoxcbQ4SWfzc0yNq+6rwiUrC9dBk=;
-        b=FRQmTwiC8OS41y5Pt5IJbdlzekXrE20q+difrm7MNa718iKxjy81n+c4Rg1RKgFq1V
-         UNEYuLkNA7UlAzZ79SQMGfCRc6F3/9tbyFB0jR7xEd7JgF73CZMosSbAR9x7xyLVNDZY
-         iYPuOVamVxtaHQOwqtNG3d/k//bS8S4QASczFZKwahefDJTMwVlaDN2e3AuOc9lJdTH+
-         4fd6seJJguJnHNKsgn5Lw0F2cwKB4yFxZ4F2nLSm++ATArRAXHm65rWN0/7bTaOpjgzZ
-         MU5oTfA+i3zN+E2cdZUEfIV/ybpV/4NHOfwghm52XqZVuT8uJr7EsbuiktDgjGVKCzOz
-         Yesg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=us6aSVa3J8Fz7ggtoxcbQ4SWfzc0yNq+6rwiUrC9dBk=;
-        b=4OCCjzOlD0/PXFCUN4Lh65aFEQaJi4zW1N13H5ycnJKdxy8l13fcy0mmiG+H3uhgDg
-         3HCImUZ/srLW6aZAN3hnqKQGhkizo3U/2RGvMGNht27WT+vqXAMH0uqIdqc+n+MGOVmL
-         H824lG80rsixzGvSLwl1MFXBHsVybbZnYU0j7JNNooCAZe2a7gWBgVAYRkebv9s1Y4KQ
-         i5SEMI7/IrBDx8WZG2hMxSJJcKUAnA424bNCTlregzSkaJ2RUqc4GD01nmB8MeCHoAdV
-         syZbTpJza4gm6bwlC+ynERegQuDZjgRFz6+yjT8b+S0HBmCb31hpkmXuFhIdW4Gcco3Q
-         OG2Q==
-X-Gm-Message-State: AOAM531kNCVg0+lejRNwVoe4j2pmoFJ19tXbBWxHAhOx7qWu9A3nrPpT
-        AdmzQ/+muhC+W3J7w0hNRWU=
-X-Google-Smtp-Source: ABdhPJwtLky+OmeRw3EQtHVZFNNp8l429KkJLvaIuy7XhOkWnQObkFWvBDI21i1UMECswI5jk0iffg==
-X-Received: by 2002:a5d:660e:0:b0:203:eda6:e983 with SMTP id n14-20020a5d660e000000b00203eda6e983mr12070443wru.544.1648936133424;
-        Sat, 02 Apr 2022 14:48:53 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id k129-20020a1ca187000000b0038e6e789f08sm704877wme.39.2022.04.02.14.48.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 14:48:53 -0700 (PDT)
-Message-ID: <cb85e759-d272-e165-beee-b0d1c8f87405@gmail.com>
-Date:   Sat, 2 Apr 2022 23:48:51 +0200
+        Sat, 2 Apr 2022 17:53:37 -0400
+Received: from uriel.iewc.co.za (uriel.iewc.co.za [IPv6:2c0f:f720:0:3:d6ae:52ff:feb8:f27b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BF21FA60;
+        Sat,  2 Apr 2022 14:51:41 -0700 (PDT)
+Received: from [2c0f:f720:fe16:c400::1] (helo=tauri.local.uls.co.za)
+        by uriel.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1nalej-0000AW-Q1; Sat, 02 Apr 2022 23:51:37 +0200
+Received: from [192.168.42.201]
+        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
+        (envelope-from <jaco@uls.co.za>)
+        id 1nalei-0001Pv-Ao; Sat, 02 Apr 2022 23:51:36 +0200
+Message-ID: <e70a253d-da38-1acb-544f-81d29b72fc21@uls.co.za>
+Date:   Sat, 2 Apr 2022 23:51:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] ioctl_userfaultfd.2, userfaultfd.2: add minor fault
- mode
-Content-Language: en-US
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-man@vger.kernel.org,
-        Linux MM <linux-mm@kvack.org>
-References: <20210604195622.1249588-1-axelrasmussen@google.com>
- <CAJHvVcjzi-7Wvrho1LqWiQC2WNbtg0XGf6-JBRcDZS1=banbVA@mail.gmail.com>
- <YQfVRuV2Ab2rlKVI@kernel.org>
- <1add2552-ea36-12a2-b3b1-6e97f6f84e00@gmail.com>
- <CAJHvVcggpJ7hE8VbhL09mT0=eJ5C+iH1poi_-V2v_dMLjSbVnQ@mail.gmail.com>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <CAJHvVcggpJ7hE8VbhL09mT0=eJ5C+iH1poi_-V2v_dMLjSbVnQ@mail.gmail.com>
+ Thunderbird/91.6.1
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
+ connections
+Content-Language: en-GB
+To:     Florian Westphal <fw@strlen.de>
+Cc:     Neal Cardwell <ncardwell@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>, Wei Wang <weiwan@google.com>
+References: <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
+ <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za>
+ <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+ <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za>
+ <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
+ <CADVnQy=GX0J_QbMJXogGzPwD=f0diKDDxLiHV0gzrb4bo=4FjA@mail.gmail.com>
+ <429dd56b-8a6c-518f-ccb4-fa5beae30953@uls.co.za>
+ <20220402141410.GE28321@breakpoint.cc>
+From:   Jaco Kroon <jaco@uls.co.za>
+Organization: Ultimate Linux Solutions (Pty) Ltd
+In-Reply-To: <20220402141410.GE28321@breakpoint.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Axel,
+Hi Florian,
 
-On 3/22/22 17:31, Axel Rasmussen wrote:
-> On Mon, Aug 2, 2021 at 5:21 AM Alejandro Colomar (man-pages)
-> <alx.manpages@gmail.com> wrote:
->>>>> +mode, user-space will receive a page-fault notification
+On 2022/04/02 16:14, Florian Westphal wrote:
+> Jaco Kroon <jaco@uls.co.za> wrote:
+>> Including sysctl net.netfilter.nf_conntrack_log_invalid=6- which
+>> generates lots of logs, something specific I should be looking for?  I
+>> suspect these relate:
 >>
->> s/user-space/user space/
->>
->> See the following extract from man-pages(7):
->>
->>     Preferred terms
->>         The  following  table  lists some preferred terms to use in
->>         man pages, mainly to ensure consistency across pages.
->>
->>         Term                 Avoid using              Notes
->>         ─────────────────────────────────────────────────────────────
->>         [...]
->>         user space           userspace
->>
->> However, when user space is used as an adjective, per the usual English
->> rules, we write "user-space".  Example: "a user-space program".
-> 
-> 100% agreed that "user space" is more correct, but this man page
-> already has many instances of "user-space" in it. I'd suggest we
-> either fix all of them, or just follow the existing convention within
-> this page.
-> 
-> How about, leaving this as-is for this patch, to keep the diff tidy,
-> and I can send a follow-up patch to fix all the instances of this in
-> this page?
-> 
+>> [Sat Apr  2 10:31:53 2022] nf_ct_proto_6: SEQ is over the upper bound
+>> (over the window of the receiver) IN= OUT=bond0
+>> SRC=2c0f:f720:0000:0003:d6ae:52ff:feb8:f27b
+>> DST=2a00:1450:400c:0c08:0000:0000:0000:001a LEN=2928 TC=0 HOPLIMIT=64
+>> FLOWLBL=867133 PROTO=TCP SPT=48920 DPT=25 SEQ=2689938314 ACK=4200412020
+>> WINDOW=447 RES=0x00 ACK PSH URGP=0 OPT (0101080A2F36C1C120EDFB91) UID=8
+>> GID=12
+> I thought this had "liberal mode" enabled for tcp conntrack?
+> The above implies its off.
 
-Sure.  Sorry for the delay.
+We have liberal on the core firewalls, not on the endpoints ... yes, we
+do double firewall :).
 
-Thanks,
+So the firewalls into the subnets has liberal mode (which really was an
+oversight when axing conntrackd), but the servers themselves do not.
 
-Alex
+Kind Regards,
+Jaco
 
--- 
-Alejandro Colomar
-Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/

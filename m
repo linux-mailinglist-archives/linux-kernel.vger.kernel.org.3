@@ -2,73 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715EE4EFD85
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 02:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786CF4EFD89
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 02:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244032AbiDBAuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 20:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S1345558AbiDBA7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 20:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiDBAug (ORCPT
+        with ESMTP id S229560AbiDBA7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 20:50:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303036444
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 17:48:43 -0700 (PDT)
+        Fri, 1 Apr 2022 20:59:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B10D200967;
+        Fri,  1 Apr 2022 17:57:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0235CB8268D
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:48:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6700BC34114
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:48:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2ED260C42;
+        Sat,  2 Apr 2022 00:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCB5C3410F;
+        Sat,  2 Apr 2022 00:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648860520;
-        bh=g2ku+IXTdPUjzpc9uGwZZDiqSIt6z79v7mm5DWhbJAE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WuGpKBHDoMaDzuIH+RXMsUKmT7qq8Axfs4hCXO9ODGluWd0APLpyTIL5etM6yBdSx
-         tXz1qtcIqIbG/Yctz7bzvlrPs1oWPn0fyaNRezr+6h0+5FHXYZUso3o8sqV0H7a/uU
-         pbaUQjUThIqEiNIApvo5NYRh0A4aea/j9gK1oFiPD0z22ETf1FLy0CwkqKSWD6wi8u
-         ztik7pwDLlHhSwxUDRtNgmcEI3N8w455dxBOm/zM875MtOVBmGXZvz04244MXh5wlz
-         nod2JArd5CeH0wqlBQ3lTMzgT6eSKQYajJTbu0R5c9cPrOWx9Wchy1Q2kCdRWtDhrB
-         +9wWoHMwzf3mQ==
-Received: by mail-ej1-f50.google.com with SMTP id lr4so9052746ejb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 17:48:40 -0700 (PDT)
-X-Gm-Message-State: AOAM530mxOzoHcHPp/o5XuGYGFGw8Uo7JdR3m+5dvluzGc2bcPwTyU9a
-        3cjMZQ1Xw2LRJ0z5l72GFDTp1MC2sZ9SgG1W+RrGxg==
-X-Google-Smtp-Source: ABdhPJz84ZH61q/VETjTA9+6u+HizO/lNHffZ3rie8t4hRMEUVnYkUEYGZWlCEMxg62QJD36lUYzh4z5Yfq7it0c9yo=
-X-Received: by 2002:a17:907:6089:b0:6db:a3d7:3fa9 with SMTP id
- ht9-20020a170907608900b006dba3d73fa9mr2066375ejc.593.1648860518513; Fri, 01
- Apr 2022 17:48:38 -0700 (PDT)
+        s=k20201202; t=1648861042;
+        bh=IFDwE594DCzQsjq0x5FHSp+rW4qKz3sHzkIG9fgrfmE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WtWvxvjafEr07RE05fbUzMD/naoKD8oMvA61OaHALbc7kwo+VzC9L1Q/eq8cKIsQQ
+         jVb7f8Yfl4RQyqqEf4neU43Kt5IhSv40x5EsOKjuykOyh8x5nGGb/MC8QHrOp35bzI
+         BYsUp/9beLuYdAsF1Y5y7TxW9BD3XArifUmUC18S3cHW7KSyqqqFHrGQ+ujEII9EUW
+         xgM8BlYRn5X4NGrub7RLxaUCK8cI7fS3K6Of8MrVJTFHnObWISL9ghgqTUzsVPbB+H
+         tPNO6U3pUDSRZ95s/jlS+kkfjVUCETp5s/VmX1j62o+iNWaZYRpiwjZ+WViMrjSp8I
+         V6Y1axZFWigAQ==
+Date:   Fri, 1 Apr 2022 17:57:21 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de, fstests <fstests@vger.kernel.org>
+Subject: [GIT PULL] xfs: bug fixes for 5.18-rc1
+Message-ID: <20220402005721.GO27690@magnolia>
 MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
- <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
- <20220329093753.26wc3noelqrwlrcj@apollo.legion> <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
- <20220329232956.gbsr65jdbe4lw2m6@ast-mbp> <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
- <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com>
- <CA+khW7iqiKTLi75oSPe+ibV8afR_SPgtg7Q+nEswmMOFZaAebA@mail.gmail.com>
- <CACYkzJ6-csGkdMQiGYYr5_DgShPWrUFfs92sUOhwzQt=T13+SA@mail.gmail.com> <CAADnVQJtBFuJxCfawdaK=ce2PfeS23SeYb0i_9dnEm1j5BpUiw@mail.gmail.com>
-In-Reply-To: <CAADnVQJtBFuJxCfawdaK=ce2PfeS23SeYb0i_9dnEm1j5BpUiw@mail.gmail.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Sat, 2 Apr 2022 02:48:27 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4ngOGUG8mkL9OgJX6bOjyVwF=BS+tQLFkERi1VSASTSg@mail.gmail.com>
-Message-ID: <CACYkzJ4ngOGUG8mkL9OgJX6bOjyVwF=BS+tQLFkERi1VSASTSg@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Hao Luo <haoluo@google.com>, Jann Horn <jannh@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,139 +53,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 1:06 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Mar 31, 2022 at 3:32 PM KP Singh <kpsingh@kernel.org> wrote:
-> >
-> > On Wed, Mar 30, 2022 at 8:26 PM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > On Wed, Mar 30, 2022 at 11:16 AM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Wed, Mar 30, 2022 at 11:06 AM Hao Luo <haoluo@google.com> wrote:
-> > > > >
-> > > > > On Tue, Mar 29, 2022 at 4:30 PM Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > >
-> > > > > > On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
-> > > > > > > On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
-> > > > > > > <memxor@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
-> > > > > > > > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
-> > > > > > > > > >
-> > > > > > > > > > Hi Yonghong,
-> > > > > > > > > >
-> > > > > > > > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > > > > > > > > > > Some map types support mmap operation, which allows userspace to
-> > > > > > > > > > > > communicate with BPF programs directly. Currently only arraymap
-> > > > > > > > > > > > and ringbuf have mmap implemented.
-> > > > > > > > > > > >
-> > > > > > > > > > > > However, in some use cases, when multiple program instances can
-> > > > > > > > > > > > run concurrently, global mmapable memory can cause race. In that
-> > > > > > > > > > > > case, userspace needs to provide necessary synchronizations to
-> > > > > > > > > > > > coordinate the usage of mapped global data. This can be a source
-> > > > > > > > > > > > of bottleneck.
-> > > > > > > > > > >
-> > > > > > > > > > > I can see your use case here. Each calling process can get the
-> > > > > > > > > > > corresponding bpf program task local storage data through
-> > > > > > > > > > > mmap interface. As you mentioned, there is a tradeoff
-> > > > > > > > > > > between more memory vs. non-global synchronization.
-> > > > > > > > > > >
-> > > > > > > > > > > I am thinking that another bpf_iter approach can retrieve
-> > > > > > > > > > > the similar result. We could implement a bpf_iter
-> > > > > > > > > > > for task local storage map, optionally it can provide
-> > > > > > > > > > > a tid to retrieve the data for that particular tid.
-> > > > > > > > > > > This way, user space needs an explicit syscall, but
-> > > > > > > > > > > does not need to allocate more memory than necessary.
-> > > > > > > > > > >
-> > > > > > > > > > > WDYT?
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
-> > > > > > > > > >
-> > > > > > > > > > - mmap prevents the calling task from reading other task's value.
-> > > > > > > > > > Using bpf_iter, one can pass other task's tid to get their values. I
-> > > > > > > > > > assume there are two potential ways of passing tid to bpf_iter: one is
-> > > > > > > > > > to use global data in bpf prog, the other is adding tid parameterized
-> > > > > > > > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
-> > > > > > > > > > the second, we need to create one iter_link object for each interested
-> > > > > > > > > > tid. It may not be easy to use either.
-> > > > > > > > > >
-> > > > > > > > > > - Regarding adding an explicit syscall. I thought about adding
-> > > > > > > > > > write/read syscalls for task local storage maps, just like reading
-> > > > > > > > > > values from iter_link. Writing or reading task local storage map
-> > > > > > > > > > updates/reads the current task's value. I think this could achieve the
-> > > > > > > > > > same effect as mmap.
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Actually, my use case of using mmap on task local storage is to allow
-> > > > > > > > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
-> > > > > > > > > need to take an FD as parameter and the bpf progs can run
-> > > > > > > > > concurrently, thus using global data is racy. Mmapable task local
-> > > > > > > > > storage is the best solution I can find for this purpose.
-> > > > > > > > >
-> > > > > > > > > Song also mentioned to me offline, that mmapable task local storage
-> > > > > > > > > may be useful for his use case.
-> > > > > > > > >
-> > > > > > > > > I am actually open to other proposals.
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > You could also use a syscall prog, and use bpf_prog_test_run to update local
-> > > > > > > > storage for current. Data can be passed for that specific prog invocation using
-> > > > > > > > ctx. You might have to enable bpf_task_storage helpers in it though, since they
-> > > > > > > > are not allowed to be called right now.
-> > > > > > > >
-> > > > > > >
-> > > > > > > The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
-> > > > > > > thinking of allowing any thread including unpriv ones to be able to
-> > > > > > > pass data to the prog and update their own storage.
-> > > > > >
-> > > > > > If I understand the use case correctly all of this mmap-ing is only to
-> > > > > > allow unpriv userspace to access a priv map via unpriv mmap() syscall.
-> > > > > > But the map can be accessed as unpriv already.
-> > > > > > Pin it with the world read creds and do map_lookup sys_bpf cmd on it.
-> > > > >
-> > > > > Right, but, if I understand correctly, with
-> > > > > sysctl_unprivileged_bpf_disabled, unpriv tasks are not able to make
-> > > > > use of __sys_bpf(). Is there anything I missed?
-> > > >
-> > > > That sysctl is a heavy hammer. Let's fix it instead.
-> > > > map lookup/update/delete can be allowed for unpriv for certain map types.
-> > > > There are permissions checks in corresponding lookup/update calls already.
-> > >
-> >
-> > (Adding Jann)
-> >
-> > I wonder if we can tag a map as BPF_F_UNPRIVILEGED and allow the writes to
-> > only maps that are explicitly marked as writable by unprivileged processes.
->
-> I think it's overkill for existing unpriv maps like hash and array.
-> These maps by themself don't pose a security threat.
-> The sysctl was/is in the wrong place.
->
-> > We will have task local storage in LSM programs that we
-> > won't like unprivileged processes to write to as well.
-> >
-> > struct {
-> >         __uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-> >         __uint(map_flags, BPF_F_NO_PREALLOC | BPF_F_UNPRIVILEGED);
-> >         __type(key, int);
-> >         __type(value, struct fd_storage);
-> > } task_fd_storage_map SEC(".maps");
->
-> local storage map was not exposed to unpriv before.
-> This would be a different consideration.
-> But even in such a case the extra flag looks unnecessary.
+Hi Linus,
 
-I took a look at the code and it makes sense to allow maps like hash and array
-which are already mmapable. These should not really need the BPF_F_UNPRIVILEGED.
+Please pull this second branch containing more bug fixes for XFS for
+5.18-rc1.  This branch fixes multiple problems in the reserve pool
+sizing functions: an incorrect free space calculation, a pointless
+infinite loop, and even more braindamage that could result in the pool
+being overfilled.  The pile of patches from Dave fix myriad races and
+UAF bugs in the log recovery code that much to our mutual surprise
+nobody's tripped over.  Dave also fixed a performance optimization that
+had turned into a regression.
 
-Hao, I think you can send a patch that removes these map operations
-from the scope of
-the sysctl. Regarding the local storages, let's do them separately
-since it would be a newer
-access surface.
+Dave Chinner is taking over as XFS maintainer starting Sunday and
+lasting until 5.19-rc1 is tagged so that I can focus on starting a
+massive design review for the (feature complete after five years) online
+repair feature.  From then on, he and I will be moving XFS to a
+co-maintainership model by trading duties every other release.
+
+NOTE: I hope very strongly that the other pieces of the (X)FS ecosystem
+(fstests and xfsprogs) will make similar changes to spread their
+maintenance load.
+
+As usual, I did a test-merge with upstream master as of a few minutes
+ago.  Stephen Rothwell reported a merge conflict[1] with the "drop async
+cache flushes" patch, which I think you can resolve by deleting
+xfs_flush_bdev_async_endio and xfs_flush_bdev_async no matter what their
+contents.  At least, it worked for me.
+
+Please let me know if you encounter any problems.  At worst, we can
+rebase the branch against -rc1 and resubmit.
+
+--D
+
+[1] https://lore.kernel.org/linux-xfs/20220331090047.7c6f2e1e@canb.auug.org.au/T/#u
+
+The following changes since commit 01728b44ef1b714756607be0210fbcf60c78efce:
+
+  xfs: xfs_is_shutdown vs xlog_is_shutdown cage fight (2022-03-20 08:59:50 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.18-merge-4
+
+for you to fetch changes up to 919edbadebe17a67193533f531c2920c03e40fa4:
+
+  xfs: drop async cache flushes from CIL commits. (2022-03-29 18:22:02 -0700)
+
+----------------------------------------------------------------
+Bug fixes for 5.18:
+- Fix an incorrect free space calculation in xfs_reserve_blocks that
+  could lead to a request for free blocks that will never succeed.
+- Fix a hang in xfs_reserve_blocks caused by an infinite loop and the
+  incorrect free space calculation.
+- Fix yet a third problem in xfs_reserve_blocks where multiple racing
+  threads can overfill the reserve pool.
+- Fix an accounting error that lead to us reporting reserved space as
+  "available".
+- Fix a race condition during abnormal fs shutdown that could cause UAF
+  problems when memory reclaim and log shutdown try to clean up inodes.
+- Fix a bug where log shutdown can race with unmount to tear down the
+  log, thereby causing UAF errors.
+- Disentangle log and filesystem shutdown to reduce confusion.
+- Fix some confusion in xfs_trans_commit such that a race between
+  transaction commit and filesystem shutdown can cause unlogged dirty
+  inode metadata to be committed, thereby corrupting the filesystem.
+- Remove a performance optimization in the log as it was discovered that
+  certain storage hardware handle async log flushes so poorly as to
+  cause serious performance regressions.  Recent restructuring of other
+  parts of the logging code mean that no performance benefit is seen on
+  hardware that handle it well.
+
+----------------------------------------------------------------
+Darrick J. Wong (6):
+      xfs: document the XFS_ALLOC_AGFL_RESERVE constant
+      xfs: don't include bnobt blocks when reserving free block pool
+      xfs: remove infinite loop when reserving free block pool
+      xfs: always succeed at setting the reserve pool size
+      xfs: fix overfilling of reserve pool
+      xfs: don't report reserved bnobt space as available
+
+Dave Chinner (8):
+      xfs: aborting inodes on shutdown may need buffer lock
+      xfs: shutdown in intent recovery has non-intent items in the AIL
+      xfs: run callbacks before waking waiters in xlog_state_shutdown_callbacks
+      xfs: log shutdown triggers should only shut down the log
+      xfs: xfs_do_force_shutdown needs to block racing shutdowns
+      xfs: xfs_trans_commit() path must check for log shutdown
+      xfs: shutdown during log recovery needs to mark the log shutdown
+      xfs: drop async cache flushes from CIL commits.
+
+ fs/xfs/libxfs/xfs_alloc.c |  28 ++++++--
+ fs/xfs/libxfs/xfs_alloc.h |   1 -
+ fs/xfs/xfs_bio_io.c       |  35 ----------
+ fs/xfs/xfs_fsops.c        |  60 ++++++++---------
+ fs/xfs/xfs_icache.c       |   2 +-
+ fs/xfs/xfs_inode.c        |   2 +-
+ fs/xfs/xfs_inode_item.c   | 164 +++++++++++++++++++++++++++++++++++++---------
+ fs/xfs/xfs_inode_item.h   |   1 +
+ fs/xfs/xfs_linux.h        |   2 -
+ fs/xfs/xfs_log.c          | 109 ++++++++++++++++--------------
+ fs/xfs/xfs_log_cil.c      |  46 +++++--------
+ fs/xfs/xfs_log_priv.h     |  14 +++-
+ fs/xfs/xfs_log_recover.c  |  56 ++++++----------
+ fs/xfs/xfs_mount.c        |   3 +-
+ fs/xfs/xfs_mount.h        |  15 +++++
+ fs/xfs/xfs_super.c        |   3 +-
+ fs/xfs/xfs_trans.c        |  48 +++++++++-----
+ fs/xfs/xfs_trans_ail.c    |   8 +--
+ 18 files changed, 348 insertions(+), 249 deletions(-)

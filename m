@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A894F0005
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF94F4F0009
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347679AbiDBJPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S1354035AbiDBJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiDBJPE (ORCPT
+        with ESMTP id S232851AbiDBJQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:15:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6750F532D5
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:13:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01229611A5
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3227C340EC;
-        Sat,  2 Apr 2022 09:13:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648890792;
-        bh=CKBGdL4fzfJl0zSr2Nh3CRBUsgg+gNUR9uNnFCWZvD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tiAiScO5KLfylFnjuy07u7WjweWKlRN0OVQ6Qtw32oL1RBje1SaKAU55EIpB568MR
-         KQNDNFBmx3mabrkDXLB8V99V+j9Iq5PBX62V4SOobkAnzVZuXXcCTDifa5XUBPl9Ol
-         X424QJCXSCHPRzZlORv/yBhlHRf/DCLXzRqyXl6A=
-Date:   Sat, 2 Apr 2022 11:13:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: simplify control flow
-Message-ID: <YkgTpS+pzhWPgVIh@kroah.com>
-References: <20220401114635.GA567659@euclid>
- <YkdvzIyz/WGlm2uy@iweiny-desk3>
- <20220401224619.GA71483@euclid>
+        Sat, 2 Apr 2022 05:16:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E034767C
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648890902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FXdqP9zE7LBfSRWNpgzsUsb+Q78+F/WT2YIOnHUTmfQ=;
+        b=NUnrhFXp7iA/wyphM8RM4egembC3nsFZ/fLxwyMQPMjsTdKf7xJSoBsvK+jhsCrzrqQ8lr
+        h7viaqZKuqbCzAvVOSNv53cHn5lWktUgkHjFFcoi8/C3IhwpNWoV2sm/rUom4asL4oPuOR
+        9TDJvX17np7y9qoTZYndTwLdwG1Xm9E=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-348-JyvEKR71NjWeS8AqMu-Ghg-1; Sat, 02 Apr 2022 05:15:01 -0400
+X-MC-Unique: JyvEKR71NjWeS8AqMu-Ghg-1
+Received: by mail-ed1-f69.google.com with SMTP id l24-20020a056402231800b00410f19a3103so2752622eda.5
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:15:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FXdqP9zE7LBfSRWNpgzsUsb+Q78+F/WT2YIOnHUTmfQ=;
+        b=joF4cel/gBZgd3ocBcLTyNOF6qaZuqotx9gT43ip4IIVljQZvOpEDcsj420UJStl0r
+         mL6uKqUV/f5+RAIpJ2asiHh2LlgSPcOfUayQn7HI8QYNXGO8KByE2lglCh0cOtAK5yu/
+         l4BJyJVoosdy93M8PL5BDLSt31kCV/bm1lncNc1RpLiyqJiVrrXNthXoFsyZzzcHkIJY
+         ASS/akAj430oWH8v6x6lEXzW4noDyqq1oIXjulZi9GMZMq8OmJozIfk7aCtlKMomyMAJ
+         YGdMRe5k8nxBAtzyWzFbuqyvv4Qei+H+HlAZkl13U6CCKoU9Y6g5wqKSFiGLijMDb7l0
+         /qLg==
+X-Gm-Message-State: AOAM530KzZHP8hSYhazm2qQj1nlzG3UVqwlMSVlxk4dtfgLNQ91GPj/l
+        8kxlIDDpu0im0xTXPyX7qXCuZN63b4o2RwNxhryQG6OKCJ7cT+qmrnn8h2CwBjxe0w4PeQidece
+        JegeRSOeyFrrAIukYoJ8P5cDK
+X-Received: by 2002:a17:906:4786:b0:6e0:c7b:d267 with SMTP id cw6-20020a170906478600b006e00c7bd267mr3133445ejc.115.1648890899881;
+        Sat, 02 Apr 2022 02:14:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwmctKj/v9mEgm3bFTAayqwUgHbGVFGNbKm1A5bUq5M707BxXCi0ZcxpQ4c72TKk4YGOmhvSw==
+X-Received: by 2002:a17:906:4786:b0:6e0:c7b:d267 with SMTP id cw6-20020a170906478600b006e00c7bd267mr3133435ejc.115.1648890899682;
+        Sat, 02 Apr 2022 02:14:59 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id d7-20020a50cd47000000b004187eacb4d6sm2229189edj.37.2022.04.02.02.14.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 02:14:59 -0700 (PDT)
+Message-ID: <dcc41ac1-107b-7ada-ff41-da69d94f1274@redhat.com>
+Date:   Sat, 2 Apr 2022 11:14:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401224619.GA71483@euclid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH AUTOSEL 5.17 001/149] drm: Add orientation quirk for GPD
+ Win Max
+Content-Language: en-US
+To:     Anisse Astier <anisse@astier.eu>, Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jani Nikula <jani.nikula@intel.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org
+References: <20220401142536.1948161-1-sashal@kernel.org>
+ <YkdhftH7tyPU8Gqt@bilrost>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YkdhftH7tyPU8Gqt@bilrost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 06:46:19PM -0400, Sevinj Aghayeva wrote:
-> On Fri, Apr 01, 2022 at 02:34:04PM -0700, Ira Weiny wrote:
-> > On Fri, Apr 01, 2022 at 07:46:35AM -0400, Sevinj Aghayeva wrote:
-> > > The function iterates an index from 0 to NUM_PMKID_CACHE and returns
-> > > the first index for which the condition is true. If no such index is
-> > > found, the function returns -1. Current code has a complex control
-> > > flow that obfuscates this simple task. Replace it with a loop.
-> > > 
-> > > Also, given the shortened function body, replace the long variable
-> > > name psecuritypriv with a short variable name p.
-> > > 
-> > > Reported by checkpatch:
-> > > 
-> > > WARNING: else is not generally useful after a break or return
-> > > 
-> > > Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-> > 
-> > Wow!  Nice find!  This is a huge clean up.  Extra kudos recognizing that it is
-> > not just the else statement which is broken here!
-> 
-> Thanks! It took me a while to realize what this loop is doing.
-> 
-> > The only issue for the patch is that I don't see any maintainer emailed?
-> > However, I don't see a maintainer listed in the MAINTAINERS file so ...
-> > 
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> Thanks for the review!
-> 
-> Greg, please do not apply this yet. After I sent out the patch, I
-> noticed the comment at the top of the function:
-> 
-> /*  Ported from 8185: IsInPreAuthKeyList(). (Renamed from SecIsInPreAuthKeyList(), 2006-10-13.) */
-> 
-> So I did a git grep to find the original function and fix it as well,
-> and it looks like there are three copies of the same function in
-> different files:
-> 
-> $ git grep IsInPreAuthKeyList
-> r8188eu/core/rtw_mlme.c:/*  Ported from 8185: IsInPreAuthKeyList(). (Renamed from SecIsInPreAuthKeyList(), 2006-10-13.) */
-> rtl8712/rtl871x_mlme.c: * Ported from 8185: IsInPreAuthKeyList().
-> rtl8723bs/core/rtw_mlme.c:/*  Ported from 8185: IsInPreAuthKeyList(). (Renamed from SecIsInPreAuthKeyList(), 2006-10-13.) */
-> 
-> I will later send a v2 patch that replaces all of them.
+Hi,
 
-No, please do one patch per driver.  These are all different drivers
-(cut/pasted from some original source), so this patch is fine as-is.
-You can make 2 other patches as well for the other drivers.
+On 4/1/22 22:33, Anisse Astier wrote:
+> Hi Sasha,
+> 
+> Le Fri, Apr 01, 2022 at 10:23:08AM -0400, Sasha Levin a écrit :
+>> From: Anisse Astier <anisse@astier.eu>
+>>
+>> [ Upstream commit 0b464ca3e0dd3cec65f28bc6d396d82f19080f69 ]
+>>
+>> Panel is 800x1280, but mounted on a laptop form factor, sideways.
+>>
+>> Signed-off-by: Anisse Astier <anisse@astier.eu>
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+>> Link: https://patchwork.freedesktop.org/patch/msgid/20211229222200.53128-3-anisse@astier.eu
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> I don't think this patch will be very useful, because it won't fix the
+> device's display orientation without the previous patch it came with,
+> titled "drm/i915/opregion: add support for mailbox #5 EDID"
+> (e35d8762b04f89f9f5a188d0c440d3a2c1d010ed); while I'd like both to be
+> added
 
-thanks,
+Well actually it will already put e.g. the text console the right way up
+since efifb also uses this quirks and gives a hint to fbcon to rotate
+the text. So it is not entirely useless.
 
-greg k-h
+And since all quirks added to drivers/gpu/drm/drm_panel_orientation_quirks.c
+typically get backported having this one in place now will avoid conflicts
+with future backports.
+
+That combined with not really seeing a downside to already having
+this in place even without the i915 support being sorted out makes
+me lean more towards the direction of believing that having this
+in 5.17 is fine...
+
+Regards,
+
+Hans
+

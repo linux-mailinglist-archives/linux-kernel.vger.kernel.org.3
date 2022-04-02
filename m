@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFF54F012A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FD74F012E
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345096AbiDBLjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 07:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S240907AbiDBLkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 07:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241009AbiDBLjm (ORCPT
+        with ESMTP id S237614AbiDBLkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 07:39:42 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7795055487
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:37:50 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r7so3153301wmq.2
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:37:50 -0700 (PDT)
+        Sat, 2 Apr 2022 07:40:37 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2751DECA
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:38:43 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r13so7594785wrr.9
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UNK8OhCeK4rmwZvR4A3qAZLXLFUIr17oQ7dG4uqRe6A=;
-        b=ELPhKmWuSQKrDY4BEa3MKUAqJF1yY1ZI0idrpW1+DxhhugWw2GK8dy9P9PML4TdVI/
-         dNKz/RmqH59NgHuqS7+XHMRxAn/fa0t/j4BRXMsx57S63M7hJVyrJbxkV7JwYcb2e0Ql
-         hMeUDFGpTQU7c9YCDW/5aR+4+wolzmmiRcmtY4py0KJ2dbFUxpH0uW/NqOEXMOf4cJY4
-         RJa81IFzU/JUIFIAVLPA+O+L8ImbuyTNoJKjzqWZFT+FHRYsg5WcWRdF8ohLgYMKtOhj
-         +yFehLsVRUmTq+XvJzKyZ9kGjuVhT4pE1jNNiQaTcxD9Q4tcz30SCyoIRYlpGkz5/w7A
-         wsEQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8FFVolbjt7YQtgOwSMGhmxxnSOZEEydEW3XCqGYcvHI=;
+        b=e6+pufWUWXMYXP2ayV2VVAJMz1VRBg6uRkjboRcQIz+HUhpny5gKBWS1u6h0hBubf6
+         VQRvvmEasxGHwA4YloPoMW1pOXmn+nVScFSVI8SGHv2gx5rFxGiZqX6yhbQ7F9R3/HKj
+         /d4BW7h6PYY8/H8zZeOlymb/0qLB2u0RneOkDDMU/6P0Gj2cF5hsKeullDmLlaRCksLQ
+         LR7YlWQd6Cx87wlBCcnaIyDtweohWF8yoeSKH6hdNZKTNl80BTslil2CpCgOWob1DxRP
+         ZkVZbN+0QTuWX9yg/SlBSTufRF6GYF3bFmA6axIrYq30xIbcG12alnNXz6Z2MI74Xf2Z
+         R8SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UNK8OhCeK4rmwZvR4A3qAZLXLFUIr17oQ7dG4uqRe6A=;
-        b=iNjjceFewHHLTLa3/aVWjvyuzlksHfdAopO3G27Ewlf3J+qg1ZGC3VZeX7/wdyC2XH
-         cKk1cnkigrPGrevv9Z4Bc2JIyHWCnqNU6s1wEvpXG933irWuQPh0Vlg0gddcQsZ+fvDA
-         fo9yZSARe/AzaUeWIEQA4Ge8bmdMzOkH3Os0B1kuf9idJIEFp3wChV+RbVNhFtN6Hlwv
-         qfYu04gxxn76L7/AnJEkq2AuQ3zkI2apJnhYQTcVwI0304l6Id4uoD5GR5k5TJoFkfcz
-         Va8y4/UP+PGzxC1VRN92jOkMYZcyKtA1OUybL/ASnWSThKgShIYMitPJlsf2gYk4qLUr
-         nAOw==
-X-Gm-Message-State: AOAM530YSuR8c2QSE36uwum9L7VYVOY/wy/pzmwXyDQpxrxg+OgXbWLg
-        6hPRtfxTQOGe3eh1AAsMiao=
-X-Google-Smtp-Source: ABdhPJxYQqilR+RsfX9il5l3P37nHrs4rE4fexyfQ9QHCWriRz+cHYB8jomIVj7JjfJgz++5+wlauA==
-X-Received: by 2002:a05:600c:1d04:b0:38c:ba2f:88ba with SMTP id l4-20020a05600c1d0400b0038cba2f88bamr12142174wms.137.1648899468986;
-        Sat, 02 Apr 2022 04:37:48 -0700 (PDT)
-Received: from alaa-emad ([197.57.138.121])
-        by smtp.gmail.com with ESMTPSA id az19-20020a05600c601300b0038cadf3aa69sm18132376wmb.36.2022.04.02.04.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 04:37:48 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH 2/2] staging: wlan-ng: Fix Alignment with parenthesis
-Date:   Sat,  2 Apr 2022 13:37:33 +0200
-Message-Id: <08641d36aaee60797f8c68683b013ebf0215ba2e.1648899123.git.eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1648899123.git.eng.alaamohamedsoliman.am@gmail.com>
-References: <cover.1648899123.git.eng.alaamohamedsoliman.am@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8FFVolbjt7YQtgOwSMGhmxxnSOZEEydEW3XCqGYcvHI=;
+        b=Q003CJBQae4NOfqE44UvApkxxzexWLyaTWnRvvn1+kEweG+TVlcyAF3nplIeMt83+G
+         MFYwguiwZmg0F+W+BcRaRqGMaGiyJ78vCHzo/3FScT2aTme/4ZNseTT2F6dPKcLFEuHp
+         QlOl52HdyMWFMpWXr+LHvnFJYdNTTrgBgHQjdEYAFWTdBz6pNVZceVTaPUojlZKNAF/T
+         jUI13QLIQ3yEud3YlkTnLyIh5qpmoo7cHlg3lkXMqLwX4Z+Fm8+jRv3jPun/JhkcEWp2
+         Hklo+PqM655DC51BjyFW6y8RdthyQAdKruV8FAo6VKR2LvyX9p2Dl32TU5EB+AuHP34M
+         QwWA==
+X-Gm-Message-State: AOAM531MwUEt4XP1xYQqkSYQ3xKLJLXb0/BPjvc/cDa6sSd6wZAQwMoI
+        AdbjBvags07O2caahQO+1Isr3PKvQkr3rbBQ
+X-Google-Smtp-Source: ABdhPJzieEb8o87Ny7opSK6xjHHmcl1p7dLVnehn/hiuzdAE+8zJ43hgHIA62CpYaa+w0Zmx73s6Kw==
+X-Received: by 2002:adf:ee87:0:b0:203:de0b:b236 with SMTP id b7-20020adfee87000000b00203de0bb236mr10658770wro.337.1648899522201;
+        Sat, 02 Apr 2022 04:38:42 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id y13-20020adffa4d000000b00203e3ca2701sm5909866wrr.45.2022.04.02.04.38.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 04:38:41 -0700 (PDT)
+Message-ID: <8588a941-6d3e-9e14-cb21-d7af29b4b2bd@linaro.org>
+Date:   Sat, 2 Apr 2022 13:38:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] dt-bindings: mfd: syscon: Add support for regmap
+ fast-io
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, lee.jones@linaro.org
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nfraprado@collabora.com,
+        kernel@collabora.com
+References: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
+ <20220401135048.23245-3-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401135048.23245-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix " CHECK: Alignment should match open parenthesis "
-Reported by checkpath
+On 01/04/2022 15:50, AngeloGioacchino Del Regno wrote:
+> The syscon driver now enables the .fast_io regmap configuration when
+> the 'fast-io' property is found in a syscon node.
+> 
+> Keeping in mind that, in regmap, fast_io is checked only if we are
+> not using hardware spinlocks, allow the fast-io property only if
+> there is no hwlocks reference (and vice-versa).
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
- drivers/staging/wlan-ng/cfg80211.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I have doubts you need a property for this. "fast" is subjective in
+terms of hardware, so this looks more like a software property, not
+hardware.
 
-diff --git a/drivers/staging/wlan-ng/cfg80211.c b/drivers/staging/wlan-ng/cfg80211.c
-index 69d616f19cff..87379edce9a8 100644
---- a/drivers/staging/wlan-ng/cfg80211.c
-+++ b/drivers/staging/wlan-ng/cfg80211.c
-@@ -475,7 +475,7 @@ static int prism2_connect(struct wiphy *wiphy, struct net_device *dev,
- 				return -EINVAL;
- 
- 			result = prism2_domibset_uint32(wlandev,
--				DIDMIB_DOT11SMT_PRIVACYTABLE_WEPDEFAULTKEYID,
-+							DIDMIB_DOT11SMT_PRIVACYTABLE_WEPDEFAULTKEYID,
- 				sme->key_idx);
- 			if (result)
- 				goto exit;
-@@ -587,7 +587,7 @@ static int prism2_set_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev,
- 		data = MBM_TO_DBM(mbm);
- 
- 	result = prism2_domibset_uint32(wlandev,
--		DIDMIB_DOT11PHY_TXPOWERTABLE_CURRENTTXPOWERLEVEL,
-+					DIDMIB_DOT11PHY_TXPOWERTABLE_CURRENTTXPOWERLEVEL,
- 		data);
- 
- 	if (result) {
--- 
-2.35.1
+I think most of MMIOs inside a SoC are considered fast. Usually also the
+syscon/regmap consumer knows which regmap it gets, so knows that it is
+fast or not.
 
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 13baa452cc9d..85a2e83b5861 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -83,11 +83,26 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [1, 2, 4, 8]
+>  
+> +  fast-io:
+> +    description:
+> +      Indicates that this bus has a very fast IO, for which
+> +      acquiring a mutex would be significant overhead.
+> +      When present, regmap will use a spinlock instead.
+
+Regmap is current implementation behind this, but it's not related to
+hardware, so how about removing it from the description? Something like:
+"..., for which different locking methods should be used to reduce
+overhead (e.g. spinlock instead of mutex)."
+
+> +    type: boolean
+> +
+>    hwlocks:
+>      maxItems: 1
+>      description:
+>        Reference to a phandle of a hardware spinlock provider node.
+>  
+> +if:
+> +  required:
+> +    - hwlocks
+> +then:
+> +  not:
+> +    required:
+> +      - fast-io
+> +
+>  required:
+>    - compatible
+>    - reg
+
+
+Best regards,
+Krzysztof

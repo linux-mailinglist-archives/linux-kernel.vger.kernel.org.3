@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3CD4EFF51
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4E94EFF61
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238801AbiDBHb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 03:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S240106AbiDBHbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 03:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238857AbiDBHbQ (ORCPT
+        with ESMTP id S238722AbiDBHbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 03:31:16 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFC0174E92
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:29:23 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id o10so10170854ejd.1
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 00:29:23 -0700 (PDT)
+        Sat, 2 Apr 2022 03:31:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BCD173F6D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:29:29 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i27so2995906ejd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 00:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=HVq5l4DEGGu5eDsQOm9+fxU3g/O+ru6NFRfeksiXUpY=;
-        b=nMzCegp4ex+gSCJ5748N8CSkptydtg96MXwKP+c5MwrPRbQ/rbCwPcMc0038+NfXKG
-         3pGDAqepOL5TRAIiHlkUKAWv1dvfKxdUDUOye2HGiRY9h0VfGfBuIK3Gf8T8BSLu00bQ
-         u4bX0tJi7NXcI2n8Vp+ZPgqdXBu/sEy7uxIO229lHpNbEEe1ceWm6Zh5zTqyAtOkbqO1
-         AtOC3K4DQyZzx5384FuQ2wjRncZ08phZCyoHAsHya4DH45VnryNweSA//71Ykz4+RBJE
-         S29xG9j9qIu8aUHu6ju6qpOdIQWKnxmU4isNvqH8+updFhlH/ObBJJItd80Fh6TOsBps
-         NSmg==
+        bh=GBBvzxregCkjrG0nIJdKGZ1Gb8mYJTSvUt4XwV6bAho=;
+        b=J2nnEKvnYT6lu3MNze+z0bnxPxwcnSdA9LjONIl7dziCuGf5C8CdES4pBwcIxOgBj3
+         pMyxuWURBbC//ZDkBuOuoISR8kiFXpvic2sMZr8Q/lYzvc71mQX898caW8MLxuACkT7y
+         bejspNPOShI8hbYG/O8KdFBzC1eVluwwjMuG9MAqKWkG8gbNcRkdNxdQn0j9AZ01/vil
+         NWxW33K2VAn/U6NhDrZE/MCHwcULl3ZBAk4k77cnOtj81wNROl7MByeqAK6m38cUD5JS
+         Jxn/fgNFdS8w7mLHYwk7Tz/4PXI+lD8XfM+MatqRDZMIVoxfuEJQAX2WRb2Utr7t3BTW
+         QCAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HVq5l4DEGGu5eDsQOm9+fxU3g/O+ru6NFRfeksiXUpY=;
-        b=vNQf3EB4APCnLDDznEFMxmO/4iQfyd7Kt+rO19ukm92xi3vvI4UKyJzkBHQh9ropV7
-         tLTBYtDS9hO2ESd/w0nHccxLnHYgHUlCbBLio1NDdCzbrmGZWY3F/dF9MftUNw4nPlFG
-         w2BNe9wQUzUlVo2ghMClzU+/2ZAPDHurgl80bV59PIjOBPpLWbtVZwW5fY+zSvkyq2NC
-         QMvGnzYkRBpvP1tlB/0GrwQIO/Kx3m7/UfTvhSgQ5IRziinCAC6dZ8hskAhUTd5MEb05
-         mGWzQCKc+d6PIQS66kqv3MZ/r8YEKF1+CNYF41O/yZRXV6u1Jf09/f7BG9GZqwvJ4L5b
-         cXkg==
-X-Gm-Message-State: AOAM533pSLl4kXvIKjcoTCggqEP+NmcO0AtgUsIp9CHxgVGereqoGrj5
-        K+bLlX6Na5S/kR715FP0ipU=
-X-Google-Smtp-Source: ABdhPJyaelKkWpK/klTy7DyTRaqYPKpyimKx2n2JdfVCIaLph+RadQ5xtzftJJ43D8M9AqYZNRHdQQ==
-X-Received: by 2002:a17:906:d789:b0:6e0:bdd5:a884 with SMTP id pj9-20020a170906d78900b006e0bdd5a884mr2861344ejb.201.1648884562487;
-        Sat, 02 Apr 2022 00:29:22 -0700 (PDT)
+        bh=GBBvzxregCkjrG0nIJdKGZ1Gb8mYJTSvUt4XwV6bAho=;
+        b=NCIqjitB1HSOONVdJnRMmb65tzwKL48RtAQ4OAk6JFKA2evOVJU8Qhlpq+ifdDFiNI
+         6Kgkammk+8W/NSJtlPPUKIhehevO62skosiIw31P5rtdiaP1AX7U53DvExIrnDXatA1g
+         RvCiGiu5WSzutn9NcG2cifjn6BQUB0K6Xn5zrqGsAnfYDV9B4rNTlZ2/qGNgVGDfisBe
+         SRj3bRndblhrvvt6OI+9s6ablY9zB63natEyfS6xPHY5fj5hwDnVBxYWiUcJ/edjWP3a
+         C0s+6Pv2FtgWuYI1MamlFkGXzsf5GHTckhH/J3ntzw0BWaGiSyMOo1hx+hMh9Qu4QMEz
+         yXvA==
+X-Gm-Message-State: AOAM532Ctn9BkPythc8IcfOGkkuQbBz7eDSkIp8NApCEyPFLZVquFOEe
+        f3F371nb/uVve9sb4FGuoSk=
+X-Google-Smtp-Source: ABdhPJz65PPWYyuQAdbFCSwkQLSiZH6e642nFJdVdQez6ZsW2j3S/PMHGZ4BlimY1Y3H22ly876suQ==
+X-Received: by 2002:a17:906:6a17:b0:6e1:13c3:e35c with SMTP id qw23-20020a1709066a1700b006e113c3e35cmr2944056ejc.760.1648884567601;
+        Sat, 02 Apr 2022 00:29:27 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p54a074e9.dip0.t-ipconnect.de. [84.160.116.233])
-        by smtp.gmail.com with ESMTPSA id y27-20020a170906519b00b006dfaf4466ebsm1822635ejk.116.2022.04.02.00.29.21
+        by smtp.gmail.com with ESMTPSA id v17-20020a170906339100b006e11af84acasm1813424eja.128.2022.04.02.00.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 00:29:22 -0700 (PDT)
-Date:   Sat, 2 Apr 2022 09:29:20 +0200
+        Sat, 02 Apr 2022 00:29:27 -0700 (PDT)
+Date:   Sat, 2 Apr 2022 09:29:25 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Forest Bond <forest@alittletooquiet.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] staging: vt6655: Remove unused macros with do while(0)
-Message-ID: <8e1ff43ff0bd636d0a64c977291bb06eee3a1ab6.1648882847.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 2/7] staging: vt6655: Remove unused macros with CamelCase in
+ mac.h
+Message-ID: <646acd285c1239f301692456bd9f46eda449d02b.1648882847.git.philipp.g.hortmann@gmail.com>
 References: <cover.1648882847.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,141 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused macros with do-while(0) loop in mac.h as
+Remove unused macros with CamelCase variables in mac.h as
 they are not accepted by checkpatch.pl
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/vt6655/mac.h | 85 ------------------------------------
- 1 file changed, 85 deletions(-)
+ drivers/staging/vt6655/mac.h | 48 ------------------------------------
+ 1 file changed, 48 deletions(-)
 
 diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index 550dc4da80a9..c8bc4b6d2938 100644
+index c8bc4b6d2938..a1576e006d69 100644
 --- a/drivers/staging/vt6655/mac.h
 +++ b/drivers/staging/vt6655/mac.h
-@@ -552,21 +552,6 @@ do {									\
- 	VNSvOutPortW(iobase + byRegOfs, wData | (wBits));		\
- } while (0)
- 
--#define MACvDWordRegBitsOn(iobase, byRegOfs, dwBits)			\
--do {									\
--	unsigned long dwData;						\
--	VNSvInPortD(iobase + byRegOfs, &dwData);			\
--	VNSvOutPortD(iobase + byRegOfs, dwData | (dwBits));		\
--} while (0)
--
--#define MACvRegBitsOnEx(iobase, byRegOfs, byMask, byBits)		\
--do {									\
--	unsigned char byData;						\
--	VNSvInPortB(iobase + byRegOfs, &byData);			\
--	byData &= byMask;						\
--	VNSvOutPortB(iobase + byRegOfs, byData | (byBits));		\
--} while (0)
--
- #define MACvRegBitsOff(iobase, byRegOfs, byBits)			\
- do {									\
- 	unsigned char byData;						\
-@@ -581,13 +566,6 @@ do {									\
+@@ -566,30 +566,6 @@ do {									\
  	VNSvOutPortW(iobase + byRegOfs, wData & ~(wBits));		\
  } while (0)
  
--#define MACvDWordRegBitsOff(iobase, byRegOfs, dwBits)			\
--do {									\
--	unsigned long dwData;						\
--	VNSvInPortD(iobase + byRegOfs, &dwData);			\
--	VNSvOutPortD(iobase + byRegOfs, dwData & ~(dwBits));		\
--} while (0)
+-#define MACvGetCurrRx0DescAddr(iobase, pdwCurrDescAddr)	\
+-	VNSvInPortD(iobase + MAC_REG_RXDMAPTR0,		\
+-		    (unsigned long *)pdwCurrDescAddr)
 -
- #define MACvGetCurrRx0DescAddr(iobase, pdwCurrDescAddr)	\
- 	VNSvInPortD(iobase + MAC_REG_RXDMAPTR0,		\
- 		    (unsigned long *)pdwCurrDescAddr)
-@@ -622,24 +600,6 @@ do {									\
- 	VNSvOutPortW(iobase + MAC_REG_BCNDMACTL + 2,		\
- 		     wCurrBCNLength)
- 
--#define MACvReadBSSIDAddress(iobase, pbyEtherAddr)		\
--do {								\
--	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 1);		\
--	VNSvInPortB(iobase + MAC_REG_BSSID0,			\
--		    (unsigned char *)pbyEtherAddr);		\
--	VNSvInPortB(iobase + MAC_REG_BSSID0 + 1,		\
--		    pbyEtherAddr + 1);				\
--	VNSvInPortB(iobase + MAC_REG_BSSID0 + 2,		\
--		    pbyEtherAddr + 2);				\
--	VNSvInPortB(iobase + MAC_REG_BSSID0 + 3,		\
--		    pbyEtherAddr + 3);				\
--	VNSvInPortB(iobase + MAC_REG_BSSID0 + 4,		\
--		    pbyEtherAddr + 4);				\
--	VNSvInPortB(iobase + MAC_REG_BSSID0 + 5,		\
--		    pbyEtherAddr + 5);				\
--	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 0);		\
--} while (0)
+-#define MACvGetCurrRx1DescAddr(iobase, pdwCurrDescAddr)	\
+-	VNSvInPortD(iobase + MAC_REG_RXDMAPTR1,		\
+-		    (unsigned long *)pdwCurrDescAddr)
 -
- #define MACvWriteBSSIDAddress(iobase, pbyEtherAddr)		\
- do {								\
- 	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 1);		\
-@@ -676,24 +636,6 @@ do {								\
+-#define MACvGetCurrTx0DescAddr(iobase, pdwCurrDescAddr)	\
+-	VNSvInPortD(iobase + MAC_REG_TXDMAPTR0,		\
+-		    (unsigned long *)pdwCurrDescAddr)
+-
+-#define MACvGetCurrAC0DescAddr(iobase, pdwCurrDescAddr)	\
+-	VNSvInPortD(iobase + MAC_REG_AC0DMAPTR,		\
+-		    (unsigned long *)pdwCurrDescAddr)
+-
+-#define MACvGetCurrSyncDescAddr(iobase, pdwCurrDescAddr)	\
+-	VNSvInPortD(iobase + MAC_REG_SYNCDMAPTR,		\
+-		    (unsigned long *)pdwCurrDescAddr)
+-
+-#define MACvGetCurrATIMDescAddr(iobase, pdwCurrDescAddr)	\
+-	VNSvInPortD(iobase + MAC_REG_ATIMDMAPTR,		\
+-		    (unsigned long *)pdwCurrDescAddr)
+-
+ /* set the chip with current BCN tx descriptor address */
+ #define MACvSetCurrBCNTxDescAddr(iobase, dwCurrDescAddr)	\
+ 	VNSvOutPortD(iobase + MAC_REG_BCNDMAPTR,		\
+@@ -636,9 +612,6 @@ do {								\
  	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 0);		\
  } while (0)
  
--#define MACvWriteEtherAddress(iobase, pbyEtherAddr)		\
--do {								\
--	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 1);		\
--	VNSvOutPortB(iobase + MAC_REG_PAR0,			\
--		     *pbyEtherAddr);				\
--	VNSvOutPortB(iobase + MAC_REG_PAR0 + 1,		\
--		     *(pbyEtherAddr + 1));			\
--	VNSvOutPortB(iobase + MAC_REG_PAR0 + 2,		\
--		     *(pbyEtherAddr + 2));			\
--	VNSvOutPortB(iobase + MAC_REG_PAR0 + 3,		\
--		     *(pbyEtherAddr + 3));			\
--	VNSvOutPortB(iobase + MAC_REG_PAR0 + 4,		\
--		     *(pbyEtherAddr + 4));			\
--	VNSvOutPortB(iobase + MAC_REG_PAR0 + 5,		\
--		     *(pbyEtherAddr + 5));			\
--	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 0);		\
--} while (0)
+-#define MACvClearISR(iobase)						\
+-	VNSvOutPortD(iobase + MAC_REG_ISR, IMR_MASK_VALUE)
 -
- #define MACvClearISR(iobase)						\
- 	VNSvOutPortD(iobase + MAC_REG_ISR, IMR_MASK_VALUE)
+ #define MACvStart(iobase)						\
+ 	VNSvOutPortB(iobase + MAC_REG_HOSTCR,				\
+ 		     (HOSTCR_MACEN | HOSTCR_RXON | HOSTCR_TXON))
+@@ -646,18 +619,9 @@ do {								\
+ #define MACvRx0PerPktMode(iobase)					\
+ 	VNSvOutPortD(iobase + MAC_REG_RXDMACTL0, RX_PERPKT)
  
-@@ -759,26 +701,6 @@ do {									\
- 		VNSvOutPortD(iobase + MAC_REG_AC0DMACTL, DMACTL_RUN); \
+-#define MACvRx0BufferFillMode(iobase)					\
+-	VNSvOutPortD(iobase + MAC_REG_RXDMACTL0, RX_PERPKTCLR)
+-
+ #define MACvRx1PerPktMode(iobase)					\
+ 	VNSvOutPortD(iobase + MAC_REG_RXDMACTL1, RX_PERPKT)
+ 
+-#define MACvRx1BufferFillMode(iobase)					\
+-	VNSvOutPortD(iobase + MAC_REG_RXDMACTL1, RX_PERPKTCLR)
+-
+-#define MACvRxOn(iobase)						\
+-	MACvRegBitsOn(iobase, MAC_REG_HOSTCR, HOSTCR_RXON)
+-
+ #define MACvReceive0(iobase)						\
+ do {									\
+ 	unsigned long dwData;						\
+@@ -678,9 +642,6 @@ do {									\
+ 		VNSvOutPortD(iobase + MAC_REG_RXDMACTL1, DMACTL_RUN); \
  } while (0)
  
--#define MACvTransmitSYNC(iobase)					\
--do {									\
--	unsigned long dwData;						\
--	VNSvInPortD(iobase + MAC_REG_SYNCDMACTL, &dwData);		\
--	if (dwData & DMACTL_RUN)					\
--		VNSvOutPortD(iobase + MAC_REG_SYNCDMACTL, DMACTL_WAKE); \
--	else								\
--		VNSvOutPortD(iobase + MAC_REG_SYNCDMACTL, DMACTL_RUN); \
--} while (0)
+-#define MACvTxOn(iobase)						\
+-	MACvRegBitsOn(iobase, MAC_REG_HOSTCR, HOSTCR_TXON)
 -
--#define MACvTransmitATIM(iobase)					\
--do {									\
--	unsigned long dwData;						\
--	VNSvInPortD(iobase + MAC_REG_ATIMDMACTL, &dwData);		\
--	if (dwData & DMACTL_RUN)					\
--		VNSvOutPortD(iobase + MAC_REG_ATIMDMACTL, DMACTL_WAKE); \
--	else								\
--		VNSvOutPortD(iobase + MAC_REG_ATIMDMACTL, DMACTL_RUN); \
--} while (0)
+ #define MACvTransmit0(iobase)						\
+ do {									\
+ 	unsigned long dwData;						\
+@@ -733,9 +694,6 @@ do {									\
+ #define MACvReadMIBCounter(iobase, pdwCounter)			\
+ 	VNSvInPortD(iobase + MAC_REG_MIBCNTR, pdwCounter)
+ 
+-#define MACvPwrEvntDisable(iobase)					\
+-	VNSvOutPortW(iobase + MAC_REG_WAKEUPEN0, 0x0000)
 -
- #define MACvTransmitBCN(iobase)					\
- 	VNSvOutPortB(iobase + MAC_REG_BCNDMACTL, BEACON_READY)
+ #define MACvEnableProtectMD(iobase)					\
+ do {									\
+ 	unsigned long dwOrgValue;					\
+@@ -777,12 +735,6 @@ do {									\
+ 	VNSvOutPortD(iobase + MAC_REG_ENCFG, dwOrgValue);		\
+ } while (0)
  
-@@ -861,13 +783,6 @@ do {									\
- #define MACvWriteATIMW(iobase, wCounter)				\
- 	VNSvOutPortW(iobase + MAC_REG_AIDATIM, wCounter)
- 
--#define MACvWriteCRC16_128(iobase, byRegOfs, wCRC)		\
--do {								\
--	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 1);		\
--	VNSvOutPortW(iobase + byRegOfs, wCRC);		\
--	VNSvOutPortB(iobase + MAC_REG_PAGE1SEL, 0);		\
--} while (0)
+-#define MACvReadATIMW(iobase, pwCounter)				\
+-	VNSvInPortW(iobase + MAC_REG_AIDATIM, pwCounter)
+-
+-#define MACvWriteATIMW(iobase, wCounter)				\
+-	VNSvOutPortW(iobase + MAC_REG_AIDATIM, wCounter)
 -
  #define MACvGPIOIn(iobase, pbyValue)					\
  	VNSvInPortB(iobase + MAC_REG_GPIOCTL1, pbyValue)

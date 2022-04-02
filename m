@@ -2,108 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507DB4F0213
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 15:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1894F0216
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 15:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345532AbiDBNYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 09:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S243044AbiDBNeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 09:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242932AbiDBNYU (ORCPT
+        with ESMTP id S230522AbiDBNeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 09:24:20 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A90173F4D
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 06:22:28 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id u3so7880896wrg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 06:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bM1qv869mLVj0L15vUr24+B+GszxmRptC2PdqnBJ5K4=;
-        b=SlUPIUKCXurYXUIrs3NwfGg0Q69oEQSC4nOx9sE0oKSjX80eII/DdEotFI3Bsbtvtu
-         l3jr+SAkdZKyZMX49mQuH0CLAd9dv8kunEEmIrXttd113lXE7z5xMzayFiJ0fHkWqOAb
-         TUP8L74xzEv2V1T43r0FZtVnZ3NLmx5MDGJDpKHf/9VQ9gU677ca+83lObYF6iyLdksJ
-         d1WoSgAvcktQuGOqpMOZWuFeZZ/56PcyVAAJ7kY4ejRYSbd9WcmJlU4wpnViOyC38fa9
-         hKW+fbSCyf7eyAvikq8Ane9Fd0m9j9NFJe1p5IQxW+CNWF+WGGsIFkVWN2n7GzsUw6AL
-         jYxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bM1qv869mLVj0L15vUr24+B+GszxmRptC2PdqnBJ5K4=;
-        b=KUWsWewBVxi2xgxPxx/8LULZOVWqVXFkc2bwQrMf+8oJogyMzMayuD1zyP+ekanvz/
-         lyUYJe5R3uwk3hXLIyWOABjKzFE3gx6gA7Ac4ueBcWdWSk8fojrAYOXoQfvYLL3+L9UH
-         El7cXZHXnWLofuonCGQ0IlB8Eea85cN1g4YNzugT7iwVC50LFKPCpfuqK6ldSjlOSCrU
-         ZEwsTIIDE3d0I+rqAvEib2oGmnWucMuRbnKyfFslaJ7yK+vIkoD0kyuZbLKrd8SjsCMQ
-         Cwjs8By2IEZQ9+UJYS7mFnrxZXOGynFhhrGkK7tf4r4RiN1HTHAFu/59TNRr9GkRAItd
-         dyEw==
-X-Gm-Message-State: AOAM5325rDTS4UobWFxTqdyFQOWPJjb9FGa+HMhhFl/28uFo1aInOUeS
-        oFxe/UiZtpyodcM5K5QA6Pc=
-X-Google-Smtp-Source: ABdhPJxm8EUnxXG3nVLRw1XHSCkv+pnaG7kBoIk60raQSsyVXx7drDSOToewaHuiVxNmCbBNEkL6aw==
-X-Received: by 2002:a05:6000:1e16:b0:206:40c:872d with SMTP id bj22-20020a0560001e1600b00206040c872dmr2204783wrb.535.1648905746951;
-        Sat, 02 Apr 2022 06:22:26 -0700 (PDT)
-Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05600015cf00b00203e324347bsm5530402wry.102.2022.04.02.06.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 06:22:25 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: r8188eu: Remove goto to no-op exit label
-Date:   Sat, 02 Apr 2022 15:22:23 +0200
-Message-ID: <2108195.Mh6RI2rZIc@leap>
-In-Reply-To: <Ykg3Xfb4vjjGSyKc@martin-debian-2.paytec.ch>
-References: <20220401183513.26222-1-fmdefrancesco@gmail.com> <1724388.VLH7GnMWUR@leap> <Ykg3Xfb4vjjGSyKc@martin-debian-2.paytec.ch>
+        Sat, 2 Apr 2022 09:34:10 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C527100E24
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 06:32:18 -0700 (PDT)
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 232DVpoE026970
+        for <linux-kernel@vger.kernel.org>; Sat, 2 Apr 2022 22:31:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 232DVpoE026970
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648906312;
+        bh=xOOUq32hUTZwQ6PgJmve8CWFa41o5uzRkpcTqar04RU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vCXu70nRSHY2Lv6Bw5iUYKQi4NgIBNGXSOv3tNAM7uIraCCo4LTa/ywLh+ye+shXb
+         nyeay6O+48FKit5/DNX5BWey6iI40BfoR2CRvJ9EJ5+1MXt/oOmH7AiGeFkXQ0CPLj
+         overa1Km8ueTLcpp80BLIQS5+ythR9TwB7nORO0unED0bJyMNbIeDnSvXjmiPGLNNy
+         rtWiVaxJCRfc+6O8PQvVYCjXyi9cVfCo2OyOiU1mPuDeADIf6nNevP14XZ80czHeJc
+         j3n6MCL+YEvGPHblicFd6wB/EgXap3UVRfAnQwGa7ymZI7mzsiAUubppy7IoR+dbuJ
+         oanKvBFDQVSfg==
+X-Nifty-SrcIP: [209.85.210.175]
+Received: by mail-pf1-f175.google.com with SMTP id f3so4990636pfe.2
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 06:31:51 -0700 (PDT)
+X-Gm-Message-State: AOAM530zon4+2wc6e300ATrmBfUIDxkOiz8xt4ZVCWK6XEDYQPXImffd
+        tYmXXEBiIg+KqaxaqrgxX6f/xh0RV4Lhi5Plsso=
+X-Google-Smtp-Source: ABdhPJx4YYmusrB0Z5GeyAsnegUTZrEgkZTlTfMYeabO5lynAPEH3l4SbNCZnBVbE/nGUhMGQfWBqXQSL4kqhRfqwvQ=
+X-Received: by 2002:a63:ec47:0:b0:382:692a:dc04 with SMTP id
+ r7-20020a63ec47000000b00382692adc04mr18906915pgj.352.1648906311008; Sat, 02
+ Apr 2022 06:31:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220401201916.1487500-1-samitolvanen@google.com> <20220401201916.1487500-2-samitolvanen@google.com>
+In-Reply-To: <20220401201916.1487500-2-samitolvanen@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 2 Apr 2022 22:31:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
+Message-ID: <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kbuild: Change CFI_CLANG to depend on __builtin_function_start
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sabato 2 aprile 2022 13:45:33 CEST Martin Kaiser wrote:
-> Thus wrote Fabio M. De Francesco (fmdefrancesco@gmail.com):
-> 
-> > > >  	pnpi = netdev_priv(netdev);
-> 
-> > > >  	if (!pnpi->priv)
-> > > > -		goto RETURN;
-> > > > +		return;
-> 
-> > I cannot see how pnpi->priv might ever be NULL.
-> 
-> Even if pnpi->priv was NULL, we wouldn't need the check. It's ok to call
-> vfree(NULL).
-> 
-> > After the two removals I've talked about above, the code will always call 
-> > vfree(pnpi->priv) and then free_netdev(netdev).
-> 
-> That makes sense.
-> 
-> Best regards,
-> Martin
-> 
-Hi Martin,
+On Sat, Apr 2, 2022 at 5:19 AM Sami Tolvanen <samitolvanen@google.com> wrot=
+e:
+>
+> Clang 14 added support for the __builtin_function_start()
+> built-in function, which allows us to implement function_nocfi()
+> without architecture-specific inline assembly. This patch changes
+> CONFIG_CFI_CLANG to depend on the built-in and effectively upgrades
+> the minimum supported compiler version for CFI to Clang 14.
 
-Thanks for reminding to me that a vfree() on a NULL pointer is a no-op.
-I'm going to submit a new patch with the purpose to re-work rtw_free_netdev().
+From this description, I think the straight-forward change would be:
 
-Thanks again,
+    depends on CLANG_VERSION >=3D 120000
+-->
+    depends on CLANG_VERSION >=3D 140000
 
-Fabio
+Any reason to avoid this?
 
 
+>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  arch/Kconfig | 5 +----
+>  init/Kconfig | 3 +++
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 29b0167c088b..eecfc2809781 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -723,10 +723,7 @@ config ARCH_SUPPORTS_CFI_CLANG
+>  config CFI_CLANG
+>         bool "Use Clang's Control Flow Integrity (CFI)"
+>         depends on LTO_CLANG && ARCH_SUPPORTS_CFI_CLANG
+> -       # Clang >=3D 12:
+> -       # - https://bugs.llvm.org/show_bug.cgi?id=3D46258
+> -       # - https://bugs.llvm.org/show_bug.cgi?id=3D47479
+> -       depends on CLANG_VERSION >=3D 120000
+> +       depends on CC_HAS_BUILTIN_FUNCTION_START
+>         select KALLSYMS
+>         help
+>           This option enables Clang=E2=80=99s forward-edge Control Flow I=
+ntegrity
+> diff --git a/init/Kconfig b/init/Kconfig
+> index ddcbefe535e9..f024fd353373 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -86,6 +86,9 @@ config CC_HAS_ASM_INLINE
+>  config CC_HAS_NO_PROFILE_FN_ATTR
+>         def_bool $(success,echo '__attribute__((no_profile_instrument_fun=
+ction)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
+>
+> +config CC_HAS_BUILTIN_FUNCTION_START
+> +       def_bool $(success,echo 'void f(void) {}; void *p =3D __builtin_f=
+unction_start(f);' | $(CC) -x c - -c -o /dev/null)
+> +
+>  config PAHOLE_VERSION
+>         int
+>         default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
+> --
+> 2.35.0
+>
 
+
+--
+Best Regards
+Masahiro Yamada

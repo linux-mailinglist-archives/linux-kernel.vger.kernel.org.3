@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8234EFFCB
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C82E4EFFD7
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353885AbiDBIw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 04:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S1343885AbiDBJBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiDBIw1 (ORCPT
+        with ESMTP id S229984AbiDBJBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 04:52:27 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA3D403C3;
-        Sat,  2 Apr 2022 01:50:32 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:47232.458224640
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.43 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 190901001DC;
-        Sat,  2 Apr 2022 16:50:21 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 7c40bd6158ac417ba079583c19fc5d74 for ast@kernel.org;
-        Sat, 02 Apr 2022 16:50:31 CST
-X-Transaction-ID: 7c40bd6158ac417ba079583c19fc5d74
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v2] sample: bpf: syscall_tp_user: print result of verify_map
-Date:   Sat,  2 Apr 2022 16:57:08 +0800
-Message-Id: <1648889828-12417-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 2 Apr 2022 05:01:01 -0400
+Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C6D26117;
+        Sat,  2 Apr 2022 01:59:06 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru EDE7220C4770
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] ata: pata_mpc52xx: Prepare cleanup of powerpc's
+ asm/prom.h
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>
+References: <cefae2882f3b07917da18ac1d644d7307f06fe31.1648833422.git.christophe.leroy@csgroup.eu>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <ad4af771-9a90-9230-92ae-f5e41182bad9@omp.ru>
+Date:   Sat, 2 Apr 2022 11:59:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <cefae2882f3b07917da18ac1d644d7307f06fe31.1648833422.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the end of the test, we already print out
-    prog <prog number>: map ids <...> <...>
-Value is the number read from kernel through bpf map, further print out
-    verify map:<map id> val:<...>
-will help users to understand the program runs successfully.
+On 4/1/22 8:18 PM, Christophe Leroy wrote:
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
----
- samples/bpf/syscall_tp_user.c | 3 +++
- 1 file changed, 3 insertions(+)
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+> 
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-diff --git a/samples/bpf/syscall_tp_user.c b/samples/bpf/syscall_tp_user.c
-index a0ebf1833ed3..c55383068384 100644
---- a/samples/bpf/syscall_tp_user.c
-+++ b/samples/bpf/syscall_tp_user.c
-@@ -36,6 +36,9 @@ static void verify_map(int map_id)
- 		fprintf(stderr, "failed: map #%d returns value 0\n", map_id);
- 		return;
- 	}
-+
-+	printf("verify map:%d val: %d\n", map_id, val);
-+
- 	val = 0;
- 	if (bpf_map_update_elem(map_id, &key, &val, BPF_ANY) != 0) {
- 		fprintf(stderr, "map_update failed: %s\n", strerror(errno));
--- 
-2.25.1
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
+[...]
+
+MBR, Sergey

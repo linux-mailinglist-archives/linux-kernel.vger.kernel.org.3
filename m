@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5E34EFF6B
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F544EFF5C
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 09:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353573AbiDBHem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 03:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S1344390AbiDBHdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 03:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348987AbiDBHeh (ORCPT
+        with ESMTP id S243030AbiDBHds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 03:34:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51304174EA8
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 00:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648884766; x=1680420766;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UHUuiLANLlCn54nkSZ4+ujgIsYKlEPvIrG2HeqCnNoM=;
-  b=k6lT4u4+8Ty/hyM4JJqw2p7Io/1i2ms19UtMqGqq4AGr8ZDbB/wpHArj
-   gASRZlJ0b585Y3sg6b68Il+RVzNag8ejZX2MYkaG/BWQP07RL+h5M0Jfk
-   Uo2+BlNQMkjdiCuAGJvg/p1X2OGOzsk85LnNs39LlaK3x/PTooXUwBcGJ
-   0XFqm2KIYvoMf8ocpBk2vVm4upPROB3Xid3BuPXL3jzG22VdpcviFvjUW
-   7ItBFqjlB4WeHFXVBvjBvaPju5YadHMpt7jCwFBfYCO01FNS81Tdhxl3X
-   jxX03DdYB3pRXwKSTQv0V83Xs6cSFnWDV48xu6DNfM/mH7MwSqhTQsHai
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="259113219"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="259113219"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 00:32:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="521898682"
-Received: from lkp-server02.sh.intel.com (HELO 3231c491b0e2) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Apr 2022 00:32:44 -0700
-Received: from kbuild by 3231c491b0e2 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1naYFX-00021a-Qq;
-        Sat, 02 Apr 2022 07:32:43 +0000
-Date:   Sat, 2 Apr 2022 15:31:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [broonie-ci:tmp 1/1] init/main.c:1641:2: error: TEST
-Message-ID: <202204021556.nxlZnplP-lkp@intel.com>
+        Sat, 2 Apr 2022 03:33:48 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34814174E95;
+        Sat,  2 Apr 2022 00:31:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V8ygWDd_1648884713;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V8ygWDd_1648884713)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 02 Apr 2022 15:31:53 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     dhowells@redhat.com
+Cc:     dwmw2@infradead.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] certs: Fix some kernel-doc comments
+Date:   Sat,  2 Apr 2022 15:31:51 +0800
+Message-Id: <20220402073151.58423-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git tmp
-head:   43b72ebc853c105427885ca515416f58459c0a5d
-commit: 43b72ebc853c105427885ca515416f58459c0a5d [1/1] Test build failures
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220402/202204021556.nxlZnplP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=43b72ebc853c105427885ca515416f58459c0a5d
-        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
-        git fetch --no-tags broonie-ci tmp
-        git checkout 43b72ebc853c105427885ca515416f58459c0a5d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Remove some warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+certs/system_keyring.c:46: warning: expecting prototype for
+restrict_link_to_builtin_trusted(). Prototype was for
+restrict_link_by_builtin_trusted() instead
+certs/system_keyring.c:80: warning: This comment starts with '/**', but
+isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
 
-All errors (new ones prefixed by >>):
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
 
-   init/main.c:781:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:781:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
->> init/main.c:1641:2: error: TEST
-   #error TEST
-    ^
-   1 warning and 1 error generated.
+--Changes in v2:
+  turn the "/**" into "/*".
 
+ certs/system_keyring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-vim +1641 init/main.c
-
-  1640	
-> 1641	#error TEST
-
+diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+index 05b66ce9d1c9..62d37dc0ca81 100644
+--- a/certs/system_keyring.c
++++ b/certs/system_keyring.c
+@@ -34,7 +34,7 @@ extern __initconst const unsigned long system_certificate_list_size;
+ extern __initconst const unsigned long module_cert_size;
+ 
+ /**
+- * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
++ * restrict_link_by_builtin_trusted - Restrict keyring addition by built in CA
+  *
+  * Restrict the addition of keys into a keyring based on the key-to-be-added
+  * being vouched for by a key in the built in system keyring.
+@@ -76,7 +76,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
+ 					  secondary_trusted_keys);
+ }
+ 
+-/**
++/*
+  * Allocate a struct key_restriction for the "builtin and secondary trust"
+  * keyring. Only for use in system_trusted_keyring_init().
+  */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1.7.g153144c
+

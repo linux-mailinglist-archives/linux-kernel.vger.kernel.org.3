@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72FE4F058A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C483C4F0590
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 20:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355340AbiDBSmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 14:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S1358775AbiDBSml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 14:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345550AbiDBSmR (ORCPT
+        with ESMTP id S1354970AbiDBSme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 14:42:17 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D14990E
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:40:22 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id w21so8642671wra.2
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:40:22 -0700 (PDT)
+        Sat, 2 Apr 2022 14:42:34 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1745E4DF53
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 11:40:24 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id l9-20020a05600c4f0900b0038ccd1b8642so4747044wmq.0
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 11:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oehOK4VAqzTxqC5buHxSssXxgO+RDZMIgj7zOteyqjI=;
-        b=QX+XZ2MJAuoGxznp0+bDOYTTk/lB8ghvn8FRCX/2INb7hsJ5n48AAKa45seArdlTf7
-         o1qARoYK4z3NyBGCvEm9yCxy1mnAqOTqgwnPnPkzI+7AQmkAv9UVWA0hLhlkU12WkYMw
-         FrrupzS5OOI1ifO0ltTZbPpqs0UmR61wH0oYpiP9Sg5FtIpCK3kNrlvexMQHaKAWo+ob
-         U0yS3y8K2gLKj7Js6VfcKp0/3wv+R7Vdua0iknQbe5Xg1ImjEOrI5ZVyA+3Jkkf6EaiN
-         soMxonm/AsIh1FbrifW3ASou6SmzlrwghvHu5YoU8Zt7cCGfifkNNbx5UlKKf9pc/Ceq
-         0e8w==
+        bh=0FPva/xF5QWD9GuBZmkDF4zJMJFtPU9JUPVfss7wEgA=;
+        b=ym9CBYRNlyZUQNjyGH6kpXABn67E0eal9leUt0QBhtZJdtqSMbgGeiV/CddHZXUdC0
+         ID54p5tpITSPgdAblO4RlC59G3ujo3NQ0rGx5ajrOD5yJBVSa6CFTw7QFkhQWtu9hore
+         4JzBqhTFPf1ER5ByfUq1LHOo8rYtIDP3e7yx9hiYbDGZSFApvo2ldzAdrBtKv/OBSobR
+         5kqQuxxzDL7zPwcPVecA7KnpkrF85KdoH01R6RKK/lxZjm/dwB6Zzxqyk4v1G5uZ+YJz
+         DTv3AgnB4EgDFkZQB/BjXLkZF8JuYhEScdwx1k/nNcU9S6hfvZO9P0BGTlJPmGKMwlyR
+         uMpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oehOK4VAqzTxqC5buHxSssXxgO+RDZMIgj7zOteyqjI=;
-        b=M0J1auuR1HS33lMdQvjDHICqap6NO0Tsn/HB+jTYB6YiiBKu3bGCAAWJbk92/nItTh
-         EJd+bze7InQCRdbFRD9ZysnSEHiTTfNck2Bavwgf5QDa197IEOeIhtognlHGPJ3/QfNt
-         ozrXJzSwziLa+PF+y5tD+siseNKYWj0t56AuPtQmP09G+jGhJIa7ct6t3l919eH5fjSE
-         2fQ/6fgA8eoVeevlKwsgPa3cr6BeH7d9dK/Yk/2PdhHOHh7no+7hUhLPE+mfJWeyKlRY
-         Wgtdkm621QegVPOrpbTTTvNOaU8lCMoSPRg5UWXliQrlKEI4Bp+F6HFd9leivT9Uq6e0
-         DnbQ==
-X-Gm-Message-State: AOAM530l8EQtKbv7L186C4o995g9/50GBpT8gEYNfu8w6vPBwo+cYfpA
-        br72Zp+20EA7iNtjspcylWD4og==
-X-Google-Smtp-Source: ABdhPJxrUeFwqSX+rD03NAs4YoRrPMJ6QWY4w7aYjRhLNc0vbueAXFtS7rXOX2O7syQlX9O178aItg==
-X-Received: by 2002:adf:eed0:0:b0:203:f2e2:197b with SMTP id a16-20020adfeed0000000b00203f2e2197bmr12528432wrp.604.1648924821158;
-        Sat, 02 Apr 2022 11:40:21 -0700 (PDT)
+        bh=0FPva/xF5QWD9GuBZmkDF4zJMJFtPU9JUPVfss7wEgA=;
+        b=mKgOOfmSShVL6epdWvVgm00jcGn46OIN6adE8+PNdxdXchll70JodzqHNTBYgf2KUA
+         vHYEiClmvbfKuyLJuNo1iHR9tBzwdhgsjLor6Y9JZYUi5lD73Dkt2PCB8a4N6qfCqiF5
+         slsosWSrJIP/d5Vuisf3iZTwuBPWNEcmQBE002iCj+dcIuJZ4Sqdnmc7S6M0r0hns7Vo
+         b2SPOsrLTPj+lXZJ2lEATsoG/Zs5OaSSV23tUcHpLgaj/UvrGhsfr3n0P6NcDUywAwyO
+         41T0hnA4JKYATnzPttRt2tHbRnCPG2CZduCKffguBt6NHfGawjRP27rP785qC04Wr9qP
+         QCHQ==
+X-Gm-Message-State: AOAM531XxFy9Bnp+fmfPYsj41oJob3U2tfDnv3u/bSXxnfEZUFK3y1N7
+        17h1Y1TxAoODOFl/q7v1w3Uz5A==
+X-Google-Smtp-Source: ABdhPJx+KbBUbfRJ/ITpnVRFc2VmBD3YtSvxiiWpGf1VKRS5lRLH2IYG/4eg9+kE+v7xzJ1zuIayKg==
+X-Received: by 2002:a05:600c:2244:b0:38c:a3ff:ef67 with SMTP id a4-20020a05600c224400b0038ca3ffef67mr12853149wmm.122.1648924822405;
+        Sat, 02 Apr 2022 11:40:22 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m20-20020a05600c4f5400b0038b5162260csm6760502wmq.23.2022.04.02.11.40.20
+        by smtp.gmail.com with ESMTPSA id m20-20020a05600c4f5400b0038b5162260csm6760502wmq.23.2022.04.02.11.40.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 11:40:20 -0700 (PDT)
+        Sat, 02 Apr 2022 11:40:21 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-spi@vger.kernel.org
 Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 4/9] ARM: dts: qcom: ipq4019: align clocks in I2C with DT schema
-Date:   Sat,  2 Apr 2022 20:40:06 +0200
-Message-Id: <20220402184011.132465-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 5/9] ARM: dts: qcom: msm8660: disable GSBI8
+Date:   Sat,  2 Apr 2022 20:40:07 +0200
+Message-Id: <20220402184011.132465-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
 References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
@@ -70,7 +70,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,43 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT schema expects clocks core-iface order.  No functional change.
+The GSBI8 child node (I2C controller) is disabled, so as parent GSBI
+node should be the same.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/qcom-msm8660.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index 1f6c4ab7f37e..897442157f5f 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -276,9 +276,9 @@ blsp1_i2c3: i2c@78b7000 { /* BLSP1 QUP3 */
- 			compatible = "qcom,i2c-qup-v2.2.1";
- 			reg = <0x78b7000 0x600>;
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
--				 <&gcc GCC_BLSP1_QUP1_I2C_APPS_CLK>;
--			clock-names = "iface", "core";
-+			clocks = <&gcc GCC_BLSP1_QUP1_I2C_APPS_CLK>,
-+				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			clock-names = "core", "iface";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			dmas = <&blsp_dma 8>, <&blsp_dma 9>;
-@@ -290,9 +290,9 @@ blsp1_i2c4: i2c@78b8000 { /* BLSP1 QUP4 */
- 			compatible = "qcom,i2c-qup-v2.2.1";
- 			reg = <0x78b8000 0x600>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&gcc GCC_BLSP1_AHB_CLK>,
--				 <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>;
--			clock-names = "iface", "core";
-+			clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>,
-+				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			clock-names = "core", "iface";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			dmas = <&blsp_dma 10>, <&blsp_dma 11>;
+diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
+index a258abb23a64..47b97daecef1 100644
+--- a/arch/arm/boot/dts/qcom-msm8660.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
+@@ -212,6 +212,7 @@ gsbi8: gsbi@19800000 {
+ 			ranges;
+ 
+ 			syscon-tcsr = <&tcsr>;
++			status = "disabled";
+ 
+ 			gsbi8_i2c: i2c@19880000 {
+ 				compatible = "qcom,i2c-qup-v1.1.1";
 -- 
 2.32.0
 

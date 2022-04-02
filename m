@@ -2,80 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880F24EFF26
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 08:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9254EFF2B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 08:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbiDBGXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 02:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S238149AbiDBG1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 02:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiDBGXj (ORCPT
+        with ESMTP id S229714AbiDBG1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 02:23:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317FA176640
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 23:21:47 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KVn434fgqzdZSx;
-        Sat,  2 Apr 2022 14:21:23 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 2 Apr
- 2022 14:21:44 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <willy@infradead.org>, <dhowells@redhat.com>,
-        <william.kucharski@oracle.com>, <vbabka@suse.cz>,
-        <kirill.shutemov@linux.intel.com>, <hannes@cmpxchg.org>,
-        <agruenba@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH] filemap: remove obsolete comment in lock_page
-Date:   Sat, 2 Apr 2022 14:22:18 +0800
-Message-ID: <20220402062218.30709-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Sat, 2 Apr 2022 02:27:05 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694E01A61E2;
+        Fri,  1 Apr 2022 23:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=3/eAlUSKNeuyto+OqATxwA7fPEqfTlSEsY0k898No9g=; b=kYdgkgSXPhG28/+ZJKZiRlpPm6
+        74MbM/JrXRMX4bl0Brhe4U6rTRydE7bUNMhDyi8nEW360vr85ClBGt6HnWhjOS1kegy7NB4i5fbph
+        yeqVt78azp21+RlhWSUAHq46Ldg/P8+53PnrTAdWeXDE8huPQC9VJMWlQQOpitVyXOjyId5DDhfT/
+        c8B9Kj9/FPWebTZgWs3OHgXoLkX3KKn1wDePSv4vM62qdTXJaXUbZfWnyXvSII05SIeGXREFkRwy/
+        Nrr1lSaBGHx7UPiutfjW8mOjTN571OTae4XgB01D4+IRvYW2lBk6GnzyCP7KCAEdzTSfpu9OR2tG9
+        7G9mH1gw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1naXC4-000m9U-6B; Sat, 02 Apr 2022 06:25:05 +0000
+Message-ID: <87010ada-86a2-4fb4-7ffd-8db1b656598d@infradead.org>
+Date:   Fri, 1 Apr 2022 23:24:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] Documentation: kunit: eliminate code-block warnings
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Harinder Singh <sharinder@google.com>,
+        Tim Bird <tim.bird@sony.com>
+References: <20220401024707.10550-1-rdunlap@infradead.org>
+ <CABVgOSk-8O9jLZncbJvsZdTaA9VjBKbByktnwhPCNJHWME2Nug@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CABVgOSk-8O9jLZncbJvsZdTaA9VjBKbByktnwhPCNJHWME2Nug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lock_page needs the caller to have a reference on the page->mapping inode
-due to sync_page. Also lock_page_nosync is introduced which does not do a
-sync_page via commit db37648cd6ce ("[PATCH] mm: non syncing lock_page()").
-But commit 7eaceaccab5f ("block: remove per-queue plugging") kills off the
-old plugging along with aops->sync_page() and lock_page_nosync. So there
-is no need to have a reference on the page->mapping inode when calling
-lock_page anymore. Remove this obsolete and confusing comment.
+Hi David,
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- include/linux/pagemap.h | 3 ---
- 1 file changed, 3 deletions(-)
+On 3/31/22 23:26, David Gow wrote:
+> On Fri, Apr 1, 2022 at 10:47 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> Fix Sphinx complaints about code-block directive missing an argument.
+>> For start.rst, add "none" since that is already heavily used in that
+>> file. For run_wrapper.rst, use the simpler "::" literal block instead.
+>>
+>> dev-tools/kunit/start.rst:83: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>>
+>> dev-tools/kunit/run_wrapper.rst:17: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:23: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:31: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:51: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:57: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:78: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:85: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:109: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:116: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:124: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:139: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>> dev-tools/kunit/run_wrapper.rst:162: WARNING: Error in "code-block" directive:
+>> 1 argument(s) required, 0 supplied.
+>>
+>> Fixes: c48b9ef1f794 ("Documentation: KUnit: Rewrite getting started")
+>> Fixes: 46201d47d6c4 ("Documentation: kunit: Reorganize documentation related to running tests")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Brendan Higgins <brendanhiggins@google.com>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: kunit-dev@googlegroups.com
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: linux-doc@vger.kernel.org
+>> Cc: Harinder Singh <sharinder@google.com>
+>> Cc: Tim Bird <tim.bird@sony.com>
+>> ---
+> 
+> Thanks for fixing these.
+> 
+> Out of curiosity, is there a particular config option or version you
+> need to set in sphinx to get these warnings? My setup (with Sphinx
+> 4.3.2) doesn't warn on this.
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 993994cd943a..8dfe8e49c427 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -908,9 +908,6 @@ static inline void folio_lock(struct folio *folio)
- 		__folio_lock(folio);
- }
- 
--/*
-- * lock_page may only be called if we have the page's inode pinned.
-- */
- static inline void lock_page(struct page *page)
- {
- 	struct folio *folio;
+No options. I expect that it's just an older version of Sphinx that
+is causing this. I have v1.8.5 installed (comes with OpenSUSE Leap 15.3).
+
+> Nevertheless, I'll keep a closer eye on code-block directives in future.
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
+
+thanks.
 -- 
-2.23.0
-
+~Randy

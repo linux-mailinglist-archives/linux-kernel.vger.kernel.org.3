@@ -2,163 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E4A4F04EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9D74F04ED
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 18:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358118AbiDBQdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 12:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S1358156AbiDBQec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 12:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358418AbiDBQds (ORCPT
+        with ESMTP id S1351019AbiDBQe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 12:33:48 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37D9DF07;
-        Sat,  2 Apr 2022 09:31:55 -0700 (PDT)
-Received: from integral2.. (unknown [182.2.36.61])
-        by gnuweeb.org (Postfix) with ESMTPSA id 496827E312;
-        Sat,  2 Apr 2022 16:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648917115;
-        bh=eBD0US2XIxp4F/ffI9gYxv6zA7XVqWq2OlUPNGB/UPo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eADNGdZi2euUZuamRSiTQ5O5Q7kME4KHnDQvK+4eOWOe8A3LI9bkDFakQZhA+x+6e
-         WpzdC3empnQs4JBvECdztpW5N5Nc2Xf/z+mPJ4iH5L4v4qCAPEAPMDI5WX2L+wI7u7
-         fyq56i5rOHxLR6J9NYjVdHy2Ru9etS+01p8KN8z5M2ZO5ZiB373DuXdvCx2e9maEIg
-         oC7R7gAfCYqzAqBPljh+NLVONCfjP2svRk+9beCDtmqx4EYFJiBZgtLnFHWZBgYY5w
-         0DMN/D7AcHefmYtXShnQO1h7iVdHFIrQYpvBLIuZJlVq3X07ztQoMgCspouD4Ir6lF
-         g1fps/OKkoYHQ==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH linux-5.4.y] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
-Date:   Sat,  2 Apr 2022 23:31:38 +0700
-Message-Id: <20220402163138.11632-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220402163026.11299-1-ammarfaizi2@gnuweeb.org>
-References: 
+        Sat, 2 Apr 2022 12:34:28 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B729511A26
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:32:36 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2eafabbc80aso60662467b3.11
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 09:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RycFDybbAA2lGRPGL77Hw+gaFXA7KQ8Z4NlWY/ZaLqU=;
+        b=e0fvxUrtWorXB316w2seE6WEGlFCf2JCbJeyz/spu1hzO0VtjNzhV6+uTXoEoOb1lZ
+         YFtQ2i+ST4vXDCipkfuIC9ANHsPnkX1xbXWO9QoqGVAbIfQ0vWX+QhmlZrNoYo/gs66t
+         uWR+HqwzTzBz1rCnISVakAcR2WZJt55ttftaqcYRXg1KAYMzxr6vJXlm++CSA/t7PB5s
+         2qru8MFfcgdCV/ZOm208a7+J5qLEXE4PwafBEpK+K+4YXOJmjSTo12EACxiFci+4rC5K
+         QH71YhU2q5EvpiY/dn0xdhwkp6xxd8xpoTwC1bRsq/KntLmRs0cMLPJgQrhGGx0fSIlb
+         ah+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RycFDybbAA2lGRPGL77Hw+gaFXA7KQ8Z4NlWY/ZaLqU=;
+        b=a+tEQ1qTdM4AS8kDowVDrkFPjhS+zf8pXX58MrOU351CfWClXyzg16F9uj8oeiZA6o
+         VVkMSHilbiUD14kBMgy6wzusdMdp3V43aG5NATcGUCwctBXH0Ck/otqVu+y/DiWjhD0U
+         M3GLVuvoPBa363xUTTpIYoeqXsEMInfNcUy1HSSNwJfO5Uc62W/jO7vtgbz7LtGgeaWW
+         A7NPgUdcg4jf9qLLBalIdh/aOlXaOo7nn8ikXi5VDb8K5i9J9byjRYzL1cBbLbJItVil
+         2YxQCSy5Qex951gBTpQrd2pEHwLBvSeAIcAvsBMAEZm0BABWnv8LuiSSrUV3XUb4Wfli
+         cALQ==
+X-Gm-Message-State: AOAM533opxo3o9nr/Nd3EbV/VIg00lF03n5pQEVacNgNiP2xTrC0hK9y
+        eUzoHdAAE9EGCA35XhOtYEF4nn5d2mIXIi8sE2X/eQ==
+X-Google-Smtp-Source: ABdhPJzVK3H4+N3yCcwH2LUKu/QytnrcK6XhYuJMbkf7NZGlgDx3F1rg2eQgir87qDzs97sfYOs/j8vCCiWgT4LbFfw=
+X-Received: by 2002:a81:4f87:0:b0:2e5:dc8f:b4e with SMTP id
+ d129-20020a814f87000000b002e5dc8f0b4emr14964219ywb.467.1648917155729; Sat, 02
+ Apr 2022 09:32:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <E1nZMdl-0006nG-0J@plastiekpoot> <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
+ <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za> <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
+ <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za> <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
+ <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za> <CANn89i+Dqtrm-7oW+D6EY+nVPhRH07GXzDXt93WgzxZ1y9_tJA@mail.gmail.com>
+ <CADVnQyn=VfcqGgWXO_9h6QTkMn5ZxPbNRTnMFAxwQzKpMRvH3A@mail.gmail.com>
+ <5f1bbeb2-efe4-0b10-bc76-37eff30ea905@uls.co.za> <CADVnQymPoyY+AX_P7k+NcRWabJZrb7UCJdDZ=FOkvWguiTPVyQ@mail.gmail.com>
+ <CADVnQy=GX0J_QbMJXogGzPwD=f0diKDDxLiHV0gzrb4bo=4FjA@mail.gmail.com>
+ <429dd56b-8a6c-518f-ccb4-fa5beae30953@uls.co.za> <CADVnQynGT7pGBT4PJ=vYg-bj9gnHTsKYHMU_6W0RFZb2FOoxiw@mail.gmail.com>
+In-Reply-To: <CADVnQynGT7pGBT4PJ=vYg-bj9gnHTsKYHMU_6W0RFZb2FOoxiw@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sat, 2 Apr 2022 09:32:24 -0700
+Message-ID: <CANn89iJqKmjvJGtRHVumfP0T_SSa1uioFLgUvW+MF2ov2Ec2vQ@mail.gmail.com>
+Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP connections
+To:     Neal Cardwell <ncardwell@google.com>
+Cc:     Jaco Kroon <jaco@uls.co.za>, Florian Westphal <fw@strlen.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>, Wei Wang <weiwan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b7fb0ae09009d076964afe4c1a2bde1ee2bd88a9 upstream.
+On Sat, Apr 2, 2022 at 9:29 AM Neal Cardwell <ncardwell@google.com> wrote:
+>
+> FWIW those log entries indicate netfilter on the mail client machine
+> dropping consecutive outbound skbs with 2*MSS of payload. So that
+> explains the large consecutive losses of client data packets to the
+> e-mail server. That seems to confirm my earlier hunch that those drops
+> of consecutive client data packets "do not look like normal congestive
+> packet loss".
 
-Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
--ENOMEM because it leads to a NULL pointer dereference bug.
 
-The dmesg says:
+This also explains why we have all these tiny 2-MSS packets in the pcap.
 
-  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
-  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
-  [ T1387] #PF: supervisor read access in kernel mode
-  [ T1387] #PF: error_code(0x0000) - not-present page
-  [ T1387] PGD 0 P4D 0
-  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
-  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3
-  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
-  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
-  [ T1387] Code: [... snip ...]
-  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
-  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
-  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
-  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
-  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
-  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
-  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
-  [ T1387] PKRU: 55555554
-  [ T1387] Call Trace:
-  [ T1387]  <TASK>
-  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
-  [... snip ...]
-  [ T1387]  </TASK>
-
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Keyon Jie <yang.jie@linux.intel.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Rander Wang <rander.wang@intel.com>
-Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: sound-open-firmware@alsa-project.org
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.2+
-Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
-Link: https://lore.kernel.org/lkml/20220224145124.15985-1-ammarfaizi2@gnuweeb.org/ # v1
-Link: https://lore.kernel.org/lkml/20220224180850.34592-1-ammarfaizi2@gnuweeb.org/ # v2
-Link: https://lore.kernel.org/lkml/20220224182818.40301-1-ammarfaizi2@gnuweeb.org/ # v3
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Link: https://lore.kernel.org/r/20220224185836.44907-1-ammarfaizi2@gnuweeb.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-[ammarfaizi2: Backport to Linux 5.4 LTS]
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- sound/soc/sof/intel/hda-loader.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
-index 356bb134ae93..7573f3f9f0f2 100644
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -50,7 +50,7 @@ static int cl_stream_prepare(struct snd_sof_dev *sdev, unsigned int format,
- 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
- 	if (ret < 0) {
- 		dev_err(sdev->dev, "error: memory alloc failed: %x\n", ret);
--		goto error;
-+		goto out_put;
- 	}
- 
- 	hstream->period_bytes = 0;/* initialize period_bytes */
-@@ -60,16 +60,17 @@ static int cl_stream_prepare(struct snd_sof_dev *sdev, unsigned int format,
- 	ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 	if (ret < 0) {
- 		dev_err(sdev->dev, "error: hdac prepare failed: %x\n", ret);
--		goto error;
-+		goto out_free;
- 	}
- 
- 	hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
- 
- 	return hstream->stream_tag;
- 
--error:
--	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
-+out_free:
- 	snd_dma_free_pages(dmab);
-+out_put:
-+	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
- 	return ret;
- }
- 
-
-base-commit: 2845ff3fd34499603249676495c524a35e795b45
--- 
-2.32.0
-
+Under normal conditions, autocorking should kick in, allowing TCP to
+build bigger TSO packets.

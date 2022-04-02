@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE5A4EFFCE
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EB94EFFC6
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 10:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353914AbiDBIxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 04:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S1353953AbiDBIxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 04:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353915AbiDBIxB (ORCPT
+        with ESMTP id S1353934AbiDBIxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 04:53:01 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D048014966C
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:51:10 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id j83so5069947oih.6
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 01:51:10 -0700 (PDT)
+        Sat, 2 Apr 2022 04:53:06 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9351314FFD1
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 01:51:14 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id w127so5045634oig.10
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 01:51:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9I03BMhkhj8iUIyy6XKaip4rxh8dASQlWGBFPFtcJdU=;
-        b=FTQnQB4RlP3zZc8B3BA+1eM/3K0wyc2lKQ8spNFzXfOuhkw+LPAo3EenZqAm3VsLNG
-         O6MYIFrLuWy/9kEp8Fx5FPl4IJyWLlWRnaRJIR4xYrBPv21tH9G8DR6tIYqxLf5ohudb
-         4VOxLKrfGtiCogxWe5huTcVVtFWVLWJ9gWyxAbPm0Hvb6Cc1JA2BzYyv1GDxzTgN6cR5
-         snTCDBmZN1gTH9c9pkUFjpWEJNg6Qj0R2FK8XjwXQN7wb4l1gES6PkoQhqWpJq92rSK8
-         eWJdudwWL3Bvpsx33/QU0sW6fLMdy+3SUGV8C0jJGZ1ROd/nYZiLdBCHHu+FhkdZdg3R
-         pm8w==
+        bh=MnmEBkloSHxQt/4YP7PohGytgpfueUHdKvsK8QotGQ0=;
+        b=bSUF+T6m6TZymW/6Wb3e8wkKFvcZMEkZvwlXT+EzejOuvoApmEaDlLRib5EjIP5xBp
+         LHZjSri2RAUbsK0VbAujyS5fmXDRCCSxqgs2FzLzkVXnsKMHpeg6pdGdOIFlGEgmI4Ju
+         /OihV5mpOOlvMAPKev2s7vQTIOAakWpFrk40DXNLPrT6H2HSREZ4orVymdr/n4zjXxth
+         IQgRWyzFBVFrHZjAt2AsaSnbEJuLjCidXcEFk8JTWvlIxyeP6xAEVqe1/p0HmnP30U/B
+         1yy+NbCsSXOX9MWaX+fpUzhlnkvMInsRpeDg8WWeqnnaVdRoQewnQFG1rehzWpbljkKj
+         8M2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9I03BMhkhj8iUIyy6XKaip4rxh8dASQlWGBFPFtcJdU=;
-        b=e8CZ8x+IYJQBSWv/6B1gCq5GTv4yzz1vUrqjFKacUiBLhAIRwQWgsPY0Mb5QOpgV0L
-         QebzI6mVlEDTyIMGtn7ZXCvZ9hJ8wQYCn3eb7cbhbuZf5ycDCjAp4hP8TUEXjvufpC7n
-         AssKiQN3lcDECeZoQPGGK4Al8ckV4z7TCJPu/CXKX/ela48fTVS4b0ktGiL5evAnsvjR
-         R+6ljUYDXLv9Y1BrjAl5i0uKHgoYzsfDZkP/dux7+CEVMQ+f7YaBLdtD1JhbsBmLUf63
-         4IGfdYbJpsqcUpc/BEbKuicYG4vNOh6LxgrHqoN4ThU+3wed+8c15Itqj7sdAjpQSg2E
-         z1uQ==
-X-Gm-Message-State: AOAM533tDBqaOLf8BLijVnFF8Xy7IczvrvY1VPL9Qts8KPQ38EH6bdVS
-        nH8FNxeroKsWzIDeU6ITaY15vYxfUe3OTA==
-X-Google-Smtp-Source: ABdhPJxcoDXIsrCQCP2NXq0IjEK+agNI7HeBDOb9L7IomsnximUZErN4osvarEdwaze5cYmP7ka5bw==
-X-Received: by 2002:a05:6808:9ae:b0:2d9:a01a:4bf4 with SMTP id e14-20020a05680809ae00b002d9a01a4bf4mr6201939oig.283.1648889470205;
-        Sat, 02 Apr 2022 01:51:10 -0700 (PDT)
+        bh=MnmEBkloSHxQt/4YP7PohGytgpfueUHdKvsK8QotGQ0=;
+        b=NE9+SaKS0roNJ0CX6SSOZZaXmKLBtkd16KUvLiTdafu9XcNwC1PG9y4g+K5H1kviAW
+         hONSBJ6eYGLGpgDDdHxRrjg2oQkQlaFId8rW5/NIeJ4NeYiWGnB6P2HmHDSoGmcP++nz
+         swy/XYDQ8nKgjETJMZTVXGe9otCg9F7GYAXRpwfeXgJ545OMaHnKDx6fSCr/NlmYhyD7
+         ZeMznpLDafu0CvCvTGgBEJMQF1ne5cIg7sdKJu5G3TIDS1xpQ65gYZvtPRhHJYUH/gfC
+         DkgPZWlXZgbwwEl56UFK6VjWYlcDe3NT2JoUeggfXTKjcjIOfmeCk/7umGXB6A3uF5y0
+         fZTA==
+X-Gm-Message-State: AOAM5311Hh+73RK3CN31jKa3LCXqKgOd4ZQXeHg3tjzn1/BG/NxnQ2mZ
+        Tu0ys3ni/YbR9g5pxzuAH/A=
+X-Google-Smtp-Source: ABdhPJx9yj1rO/Fdh8dSjci4ZXIejhpZSiiX374O4S5O1esXJBrQRrMtoB1jCwL7nKArO6F3UoeXHg==
+X-Received: by 2002:a05:6808:ec3:b0:2ef:895e:752a with SMTP id q3-20020a0568080ec300b002ef895e752amr6373419oiv.12.1648889473986;
+        Sat, 02 Apr 2022 01:51:13 -0700 (PDT)
 Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id o18-20020a9d7652000000b005cbf6f5d7c5sm2146637otl.21.2022.04.02.01.51.09
+        by smtp.gmail.com with ESMTPSA id x18-20020a056830245200b005ce01c28c77sm2108550otr.1.2022.04.02.01.51.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 01:51:09 -0700 (PDT)
+        Sat, 02 Apr 2022 01:51:13 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     outreachy@lists.linux.dev
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -55,9 +55,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH 1/6] staging: r8188eu: place constants on the right side of tests
-Date:   Sat,  2 Apr 2022 03:50:43 -0500
-Message-Id: <0f3db3586b3668d6d784e075bc52ffd88b0920d2.1648888461.git.remckee0@gmail.com>
+Subject: [PATCH 2/6] staging: r8188eu: remove else after return
+Date:   Sat,  2 Apr 2022 03:50:44 -0500
+Message-Id: <84db0348481b54f58cb0b6200fa9ae471ee06b3b.1648888461.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1648888461.git.remckee0@gmail.com>
 References: <cover.1648888461.git.remckee0@gmail.com>
@@ -77,44 +77,30 @@ Conform to Linux kernel coding style.
 
 Reported by checkpatch:
 
-WARNING: Comparisons should place the constant on the right side of the test
+WARNING: else is not generally useful after a break or return
 
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/r8188eu/core/rtw_cmd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 4fda2fe07ecc..3b282c387282 100644
+index 3b282c387282..09fde5b23ce2 100644
 --- a/drivers/staging/r8188eu/core/rtw_cmd.c
 +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -189,7 +189,7 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
- 	cmd_obj->padapter = padapter;
+@@ -1427,8 +1427,10 @@ void rtw_disassoc_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
+ 		spin_unlock_bh(&pmlmepriv->lock);
  
- 	res = rtw_cmd_filter(pcmdpriv, cmd_obj);
--	if (_FAIL == res) {
-+	if (res == _FAIL) {
- 		rtw_free_cmd_obj(cmd_obj);
- 		goto exit;
- 	}
-@@ -260,7 +260,7 @@ int rtw_cmd_thread(void *context)
- 		if (!pcmd)
- 			continue;
+ 		return;
+-	} else /* clear bridge database */
+-		nat25_db_cleanup(padapter);
++	}
++
++	/* clear bridge database */
++	nat25_db_cleanup(padapter);
  
--		if (_FAIL == rtw_cmd_filter(pcmdpriv, pcmd)) {
-+		if (rtw_cmd_filter(pcmdpriv, pcmd) == _FAIL) {
- 			pcmd->res = H2C_DROPPED;
- 			goto post_process;
- 		}
-@@ -613,7 +613,7 @@ u8 rtw_disassoc_cmd(struct adapter *padapter, u32 deauth_timeout_ms, bool enqueu
- 		res = rtw_enqueue_cmd(cmdpriv, cmdobj);
- 	} else {
- 		/* no need to enqueue, do the cmd hdl directly and free cmd parameter */
--		if (H2C_SUCCESS != disconnect_hdl(padapter, (u8 *)param))
-+		if (disconnect_hdl(padapter, (u8 *)param) != H2C_SUCCESS)
- 			res = _FAIL;
- 		kfree(param);
- 	}
+ 	/*  free cmd */
+ 	rtw_free_cmd_obj(pcmd);
 -- 
 2.32.0
 

@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341494EFEB0
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 06:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA764EFEAF
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 06:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239501AbiDBEhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 00:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S1347940AbiDBEhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 00:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbiDBEhi (ORCPT
+        with ESMTP id S239350AbiDBEhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 00:37:38 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4964647D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 21:35:46 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id ml1-20020a17090b360100b001ca140b56ffso2610269pjb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 21:35:46 -0700 (PDT)
+        Sat, 2 Apr 2022 00:37:42 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256A2DEAB
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 21:35:51 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id t24-20020a632258000000b003988eed18b2so2492083pgm.22
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Apr 2022 21:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=zyrVWi3eHGXqwO/PAUfW0hT/y7AsGTlfR6Cmc9pUvak=;
-        b=q3Kjbu44DZyXkKCF1mY3KZ2OalLQjz4MK5N6yHZRgSAoh1jUVv6YVTYE1lmVnWpOna
-         IGgwnh6lMzb/l0T5/aVuQcShrGv0h2JQ6wxuSGxp5RAWx0krKRspKjBOowTIG/Sg+jqA
-         BAGh6kFIm9JmcE745XEc5GvIDmonb9rNLjLe1J9pXuu/RmrVhJunSiph7UTSyKOCeTal
-         J1MREfxm4Rzkx63/NEcUgoz4Pw58+2u5HpacnXZVNOUvgYjdCWuMBiSAPq0HIUNPaa51
-         Ciet5yDZm01TWyQQoVRSnGzVmH/Q3i7XLsHcXhMJL9ix7yQ5ukH1v5WvJUS4OC+1Vm35
-         mfVg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=cZc0GmrzkAfI+cudbavM/icDpyA+Hphtk/mRobHHbxA=;
+        b=eJ1+d5OwPj70RjCWQfMFoPQzg7fN44o1GQGVW0qt7KbxVqUVHPBcWXEBNa7aUtWbpz
+         1zqTtF19zQcTPpzG31w7ZSz7qVpEZeD5insNCJZRDAGk/jT2Vue3rHkNoeH/OK4JhUaF
+         3P3B4Of1iRJU5WQETD8QmUFfy6ZKqpGwVLXw0EetMpjz5Fd34hKtM5DqrgtCbE/bSFKe
+         l0R/CYxT+8GaHVuQoUlk+ku8NakR8GcKfKvr0tKyBexAVWYBZwg9qri+bAVkCHqWuF7f
+         DAdaAkCQ8e/JEZ+V5MEO0AUd+ochdbfefGVDgCzfEBD/MDfv1SsaTfNQqKeFpRpEE3rF
+         W/mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=zyrVWi3eHGXqwO/PAUfW0hT/y7AsGTlfR6Cmc9pUvak=;
-        b=cy5Ef5LRVsRn+EnkKR6iecBmUxQe3MFY9J28+mArZ1WJnqKX38vhws9FmuQN5czny/
-         2Zr2M47SEjgIukxqMIoXUZwqngt67c3hvJ+BlnjShA9BwDaPG1PU8U6WLW/5tzq0rzIl
-         K79y9/wcL1hKYTU4Kou/hkTOoeEck3fBAzmxgbaxAIr76B3A2MLH+WWZWSB0bGRC2Hvi
-         N0HMHfEu04zwzp5h65Dk+lvkiNfyIUPQiTn4iTQ3E2nJoCk+a3OgdoFHWjJ0dcPBxG9v
-         hn3Asn0deXPCwRJTuQToAbZy21pPTS/oPlvm5hdr5fFNmDiYUepCEpppcOi5jF8QDJYc
-         78cA==
-X-Gm-Message-State: AOAM5334hKq5+EaZYX0cccuzG9YQ91eSYR5maIYV396LmAkbdmrH0zAa
-        xwGH39eqx+06K4hTi8coweheo3y/s0LjOA==
-X-Google-Smtp-Source: ABdhPJyvq3IT8PQCrPzDGfmGfW7P0YXSEoo254Y9El8NUclS+I0IGtOVKeJztQKUnFxjvHPAZE2Q2z9SOQG2Rw==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=cZc0GmrzkAfI+cudbavM/icDpyA+Hphtk/mRobHHbxA=;
+        b=nBM/1eZA4eGX/kzjV2dyzrKjXN6cq/Y4MKgKakoAJhkEz+W1KrziBQzMv6AaRci6VF
+         am9N7aUrnhxUJxjE0gbADW0wrFsjgRnX8BXSgBD5Q6S/f3k0xKQmyIh1SdEx7Yvm97ZQ
+         YlWPwzfpsVhQcTChUBvM0Y5lssd6wENBVNXnSluyW6Xg/zYarN6M0+xS9EnKirgvgded
+         dcxRtmNXjdcWUpqwet/cRyzDO7so5WJ3sEw+iLRAK+vuGkbG7A4+0CHjNdIVHRAPJIoA
+         1pc6AcT09oPWIRL7nitJFuYG6ChjQINUxaWvvHfha21NWi9Vq9xeGirSWNGYf2cuclr5
+         +qBg==
+X-Gm-Message-State: AOAM530WE6c/dVFJqSndGGn1NiHjKxmYdrsKvAXitGs3mSawEzSTyqiP
+        45idkH7lDXbXkCYymEgOQ4c/bpnpaK+54A==
+X-Google-Smtp-Source: ABdhPJz6iESWWVvm1oRA6TdmJPuC8W/ScIm4Q/CLBmg0aJ699mQVFgJCdEZecSJv1G8R8/JM3GljcfL3jWSi6w==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90b:3b44:b0:1c7:9ca8:a19e with SMTP
- id ot4-20020a17090b3b4400b001c79ca8a19emr15183745pjb.245.1648874146285; Fri,
- 01 Apr 2022 21:35:46 -0700 (PDT)
-Date:   Sat,  2 Apr 2022 12:35:29 +0800
-Message-Id: <20220402043530.923747-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a17:90b:e81:b0:1c6:5a9c:5afa with SMTP id
+ fv1-20020a17090b0e8100b001c65a9c5afamr751637pjb.1.1648874150361; Fri, 01 Apr
+ 2022 21:35:50 -0700 (PDT)
+Date:   Sat,  2 Apr 2022 12:35:30 +0800
+In-Reply-To: <20220402043530.923747-1-davidgow@google.com>
+Message-Id: <20220402043530.923747-2-davidgow@google.com>
 Mime-Version: 1.0
+References: <20220402043530.923747-1-davidgow@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v2 1/2] kunit: Make kunit_remove_resource() idempotent
+Subject: [PATCH v2 2/2] kunit: Rework kunit_resource allocation policy
 From:   David Gow <davidgow@google.com>
 To:     Daniel Latypov <dlatypov@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -66,115 +70,345 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kunit_remove_resource() function is used to unlink a resource from
-the list of resources in the test, making it no longer show up in
-kunit_find_resource().
+KUnit's test-managed resources can be created in two ways:
+- Using the kunit_add_resource() family of functions, which accept a
+  struct kunit_resource pointer, typically allocated statically or on
+  the stack during the test.
+- Using the kunit_alloc_resource() family of functions, which allocate a
+  struct kunit_resource using kzalloc() behind the scenes.
 
-However, this could lead to a race condition if two threads called
-kunit_remove_resource() on the same resource at the same time: the
-resource would be removed from the list twice (causing a crash at the
-second list_del()), and the refcount for the resource would be
-decremented twice (instead of once, for the reference held by the
-resource list).
+Both of these families of functions accept a 'free' function to be
+called when the resource is finally disposed of.
 
-Fix both problems, the first by using list_del_init(), and the second by
-checking if the resource has already been removed using list_empty(),
-and only decrementing its refcount if it has not.
+At present, KUnit will kfree() the resource if this 'free' function is
+specified, and will not if it is NULL. However, this can lead
+kunit_alloc_resource() to leak memory (if no 'free' function is passed
+in), or kunit_add_resource() to incorrectly kfree() memory which was
+allocated by some other means (on the stack, as part of a larger
+allocation, etc), if a 'free' function is provided.
 
-Also add a KUnit test for the kunit_remove_resource() function which
-tests this behaviour.
+Instead, always kfree() if the resource was allocated with
+kunit_alloc_resource(), and never kfree() if it was passed into
+kunit_add_resource() by the user. (If the user of kunit_add_resource()
+wishes the resource be kfree()ed, they can call kfree() on the resource
+from within the 'free' function.
 
-Reported-by: Daniel Latypov <dlatypov@google.com>
+This is implemented by adding a 'should_free' member to
+struct kunit_resource and setting it appropriately. To facilitate this,
+the various resource add/alloc functions have been refactored somewhat,
+making them all call a __kunit_add_resource() helper after setting the
+'should_free' member appropriately. In the process, all other functions
+have been made static inline functions.
+
 Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Daniel Latypov <dlatypov@google.com>
 ---
 
 Changes since v1:
-https://lore.kernel.org/linux-kselftest/20220318064959.3298768-1-davidgow@google.com/
+https://lore.kernel.org/linux-kselftest/20220319055600.3471875-1-davidgow@google.com/
 - Rebased on top of Daniel's split of the resource system into
   resource.{c,h}
   - https://lore.kernel.org/linux-kselftest/20220328174143.857262-1-dlatypov@google.com/
   - https://lore.kernel.org/linux-kselftest/20220328174143.857262-2-dlatypov@google.com/
+- Renamed should_free to should_kfree
+- Fixed an issue where should_kfree was overwritten.
+- Tidied up some comments slightly.
 
- lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++++++++++++++
- lib/kunit/resource.c   |  8 ++++++--
- 2 files changed, 41 insertions(+), 2 deletions(-)
+ include/kunit/resource.h | 142 +++++++++++++++++++++++++++++++--------
+ lib/kunit/resource.c     |  64 ++----------------
+ 2 files changed, 122 insertions(+), 84 deletions(-)
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 555601d17f79..9005034558aa 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -190,6 +190,40 @@ static void kunit_resource_test_destroy_resource(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+index 7ab1fd83972b..09c2b34d1c61 100644
+--- a/include/kunit/resource.h
++++ b/include/kunit/resource.h
+@@ -25,11 +25,13 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+  * struct kunit_resource - represents a *test managed resource*
+  * @data: for the user to store arbitrary data.
+  * @name: optional name
+- * @free: a user supplied function to free the resource. Populated by
+- * kunit_resource_alloc().
++ * @free: a user supplied function to free the resource.
+  *
+  * Represents a *test managed resource*, a resource which will automatically be
+- * cleaned up at the end of a test case.
++ * cleaned up at the end of a test case. This cleanup is performed by the 'free'
++ * function. The struct kunit_resource itself is freed automatically with
++ * kfree() if it was allocated by KUnit (e.g., by kunit_alloc_resource()), but
++ * must be freed by the user otherwise.
+  *
+  * Resources are reference counted so if a resource is retrieved via
+  * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
+@@ -86,18 +88,9 @@ struct kunit_resource {
+ 	/* private: internal use only. */
+ 	struct kref refcount;
+ 	struct list_head node;
++	bool should_kfree;
+ };
+ 
+-/*
+- * Like kunit_alloc_resource() below, but returns the struct kunit_resource
+- * object that contains the allocation. This is mostly for testing purposes.
+- */
+-struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+-						    kunit_resource_init_t init,
+-						    kunit_resource_free_t free,
+-						    gfp_t internal_gfp,
+-						    void *context);
+-
+ /**
+  * kunit_get_resource() - Hold resource for use.  Should not need to be used
+  *			  by most users as we automatically get resources
+@@ -118,11 +111,14 @@ static inline void kunit_release_resource(struct kref *kref)
+ 	struct kunit_resource *res = container_of(kref, struct kunit_resource,
+ 						  refcount);
+ 
+-	/* If free function is defined, resource was dynamically allocated. */
+-	if (res->free) {
++	if (res->free)
+ 		res->free(res);
++
++	/* 'res' is valid here, as if should_kfree is set, res->free may not free
++	 * 'res' itself, just res->data
++	 */
++	if (res->should_kfree)
+ 		kfree(res);
+-	}
  }
  
-+static void kunit_resource_test_remove_resource(struct kunit *test)
+ /**
+@@ -142,6 +138,24 @@ static inline void kunit_put_resource(struct kunit_resource *res)
+ 	kref_put(&res->refcount, kunit_release_resource);
+ }
+ 
++/**
++ * __kunit_add_resource() - Internal helper to add a resource.
++ *
++ * res->should_kfree is not initialised.
++ * @test: The test context object.
++ * @init: a user-supplied function to initialize the result (if needed).  If
++ *        none is supplied, the resource data value is simply set to @data.
++ *	  If an init function is supplied, @data is passed to it instead.
++ * @free: a user-supplied function to free the resource (if needed).
++ * @res: The resource.
++ * @data: value to pass to init function or set in resource data field.
++ */
++int __kunit_add_resource(struct kunit *test,
++			 kunit_resource_init_t init,
++			 kunit_resource_free_t free,
++			 struct kunit_resource *res,
++			 void *data);
++
+ /**
+  * kunit_add_resource() - Add a *test managed resource*.
+  * @test: The test context object.
+@@ -152,11 +166,18 @@ static inline void kunit_put_resource(struct kunit_resource *res)
+  * @res: The resource.
+  * @data: value to pass to init function or set in resource data field.
+  */
+-int kunit_add_resource(struct kunit *test,
+-		       kunit_resource_init_t init,
+-		       kunit_resource_free_t free,
+-		       struct kunit_resource *res,
+-		       void *data);
++static inline int kunit_add_resource(struct kunit *test,
++				     kunit_resource_init_t init,
++				     kunit_resource_free_t free,
++				     struct kunit_resource *res,
++				     void *data)
 +{
-+	struct kunit_test_resource_context *ctx = test->priv;
-+	struct kunit_resource *res = kunit_alloc_and_get_resource(
-+			&ctx->test,
-+			fake_resource_init,
-+			fake_resource_free,
-+			GFP_KERNEL,
-+			ctx);
-+
-+	/* The resource is in the list */
-+	KUNIT_EXPECT_FALSE(test, list_empty(&ctx->test.resources));
-+
-+	/* Remove the resource. The pointer is still valid, but it can't be
-+	 * found.
-+	 */
-+	kunit_remove_resource(test, res);
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+	/* We haven't been freed yet. */
-+	KUNIT_EXPECT_TRUE(test, ctx->is_resource_initialized);
-+
-+	/* Removing the resource multiple times is valid. */
-+	kunit_remove_resource(test, res);
-+	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-+	/* Despite having been removed twice (from only one reference), the
-+	 * resource still has not been freed.
-+	 */
-+	KUNIT_EXPECT_TRUE(test, ctx->is_resource_initialized);
-+
-+	/* Free the resource. */
-+	kunit_put_resource(res);
-+	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
++	res->should_kfree = false;
++	return __kunit_add_resource(test, init, free, res, data);
 +}
 +
- static void kunit_resource_test_cleanup_resources(struct kunit *test)
- {
- 	int i;
-@@ -387,6 +421,7 @@ static struct kunit_case kunit_resource_test_cases[] = {
- 	KUNIT_CASE(kunit_resource_test_init_resources),
- 	KUNIT_CASE(kunit_resource_test_alloc_resource),
- 	KUNIT_CASE(kunit_resource_test_destroy_resource),
-+	KUNIT_CASE(kunit_resource_test_remove_resource),
- 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
- 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
- 	KUNIT_CASE(kunit_resource_test_static),
++static inline struct kunit_resource *
++kunit_find_named_resource(struct kunit *test, const char *name);
+ 
+ /**
+  * kunit_add_named_resource() - Add a named *test managed resource*.
+@@ -167,18 +188,84 @@ int kunit_add_resource(struct kunit *test,
+  * @name: name to be set for resource.
+  * @data: value to pass to init function or set in resource data field.
+  */
+-int kunit_add_named_resource(struct kunit *test,
++static inline int kunit_add_named_resource(struct kunit *test,
++					   kunit_resource_init_t init,
++					   kunit_resource_free_t free,
++					   struct kunit_resource *res,
++					   const char *name,
++					   void *data)
++{
++	struct kunit_resource *existing;
++
++	if (!name)
++		return -EINVAL;
++
++	existing = kunit_find_named_resource(test, name);
++	if (existing) {
++		kunit_put_resource(existing);
++		return -EEXIST;
++	}
++
++	res->name = name;
++	res->should_kfree = false;
++
++	return __kunit_add_resource(test, init, free, res, data);
++}
++
++/**
++ * kunit_alloc_and_get_resource() - Allocates and returns a *test managed resource*.
++ * @test: The test context object.
++ * @init: a user supplied function to initialize the resource.
++ * @free: a user supplied function to free the resource (if needed).
++ * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
++ * @context: for the user to pass in arbitrary data to the init function.
++ *
++ * Allocates a *test managed resource*, a resource which will automatically be
++ * cleaned up at the end of a test case. See &struct kunit_resource for an
++ * example.
++ *
++ * This is effectively identical to kunit_alloc_resource, but returns the
++ * struct kunit_resource pointer, not just the 'data' pointer. It therefore
++ * also increments the resource's refcount, so kunit_put_resource() should be
++ * called when you've finished with it.
++ *
++ * Note: KUnit needs to allocate memory for a kunit_resource object. You must
++ * specify an @internal_gfp that is compatible with the use context of your
++ * resource.
++ */
++static inline struct kunit_resource *
++kunit_alloc_and_get_resource(struct kunit *test,
+ 			     kunit_resource_init_t init,
+ 			     kunit_resource_free_t free,
+-			     struct kunit_resource *res,
+-			     const char *name,
+-			     void *data);
++			     gfp_t internal_gfp,
++			     void *context)
++{
++	struct kunit_resource *res;
++	int ret;
++
++	res = kzalloc(sizeof(*res), internal_gfp);
++	if (!res)
++		return NULL;
++
++	res->should_kfree = true;
++
++	ret = __kunit_add_resource(test, init, free, res, context);
++	if (!ret) {
++		/*
++		 * bump refcount for get; kunit_resource_put() should be called
++		 * when done.
++		 */
++		kunit_get_resource(res);
++		return res;
++	}
++	return NULL;
++}
+ 
+ /**
+  * kunit_alloc_resource() - Allocates a *test managed resource*.
+  * @test: The test context object.
+  * @init: a user supplied function to initialize the resource.
+- * @free: a user supplied function to free the resource.
++ * @free: a user supplied function to free the resource (if needed).
+  * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+  * @context: for the user to pass in arbitrary data to the init function.
+  *
+@@ -202,7 +289,8 @@ static inline void *kunit_alloc_resource(struct kunit *test,
+ 	if (!res)
+ 		return NULL;
+ 
+-	if (!kunit_add_resource(test, init, free, res, context))
++	res->should_kfree = true;
++	if (!__kunit_add_resource(test, init, free, res, context))
+ 		return res->data;
+ 
+ 	return NULL;
 diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
-index b8bced246217..09ec392d2323 100644
+index 09ec392d2323..9acef295d519 100644
 --- a/lib/kunit/resource.c
 +++ b/lib/kunit/resource.c
-@@ -98,11 +98,15 @@ EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
+@@ -14,13 +14,13 @@
+  * Used for static resources and when a kunit_resource * has been created by
+  * kunit_alloc_resource().  When an init function is supplied, @data is passed
+  * into the init function; otherwise, we simply set the resource data field to
+- * the data value passed in.
++ * the data value passed in. Doesn't initialize res->should_kfree.
+  */
+-int kunit_add_resource(struct kunit *test,
+-		       kunit_resource_init_t init,
+-		       kunit_resource_free_t free,
+-		       struct kunit_resource *res,
+-		       void *data)
++int __kunit_add_resource(struct kunit *test,
++			 kunit_resource_init_t init,
++			 kunit_resource_free_t free,
++			 struct kunit_resource *res,
++			 void *data)
+ {
+ 	int ret = 0;
+ 	unsigned long flags;
+@@ -43,57 +43,7 @@ int kunit_add_resource(struct kunit *test,
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(kunit_add_resource);
+-
+-int kunit_add_named_resource(struct kunit *test,
+-			     kunit_resource_init_t init,
+-			     kunit_resource_free_t free,
+-			     struct kunit_resource *res,
+-			     const char *name,
+-			     void *data)
+-{
+-	struct kunit_resource *existing;
+-
+-	if (!name)
+-		return -EINVAL;
+-
+-	existing = kunit_find_named_resource(test, name);
+-	if (existing) {
+-		kunit_put_resource(existing);
+-		return -EEXIST;
+-	}
+-
+-	res->name = name;
+-
+-	return kunit_add_resource(test, init, free, res, data);
+-}
+-EXPORT_SYMBOL_GPL(kunit_add_named_resource);
+-
+-struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+-						    kunit_resource_init_t init,
+-						    kunit_resource_free_t free,
+-						    gfp_t internal_gfp,
+-						    void *data)
+-{
+-	struct kunit_resource *res;
+-	int ret;
+-
+-	res = kzalloc(sizeof(*res), internal_gfp);
+-	if (!res)
+-		return NULL;
+-
+-	ret = kunit_add_resource(test, init, free, res, data);
+-	if (!ret) {
+-		/*
+-		 * bump refcount for get; kunit_resource_put() should be called
+-		 * when done.
+-		 */
+-		kunit_get_resource(res);
+-		return res;
+-	}
+-	return NULL;
+-}
+-EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
++EXPORT_SYMBOL_GPL(__kunit_add_resource);
+ 
  void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
  {
- 	unsigned long flags;
-+	bool was_linked;
- 
- 	spin_lock_irqsave(&test->lock, flags);
--	list_del(&res->node);
-+	was_linked = !list_empty(&res->node);
-+	list_del_init(&res->node);
- 	spin_unlock_irqrestore(&test->lock, flags);
--	kunit_put_resource(res);
-+
-+	if (was_linked)
-+		kunit_put_resource(res);
- }
- EXPORT_SYMBOL_GPL(kunit_remove_resource);
- 
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 

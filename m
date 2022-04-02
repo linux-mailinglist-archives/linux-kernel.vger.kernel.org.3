@@ -2,188 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7E4F0154
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 14:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B597F4F015B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 14:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241598AbiDBMFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 08:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S241996AbiDBMJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 08:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241537AbiDBMFm (ORCPT
+        with ESMTP id S242021AbiDBMJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 08:05:42 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED091E49
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 05:03:49 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id 12so5309674oix.12
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 05:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MUMGXPrqhpvIg0z7EbjNFhlD2pXd3vJXCzo/3QPQm0U=;
-        b=slPzghhizm6vOrspQTwF79a4wz9zjj1ZH4K8G7OATmi+KyjLTur1IHmXK8yG200QTg
-         WcfNxzSC3ZpkCivqbqjidMFbuOwb7ZBuDDLS4BOJQPxDR9xdKgJDpS99cA4J0Awvfozw
-         oec1zWyrL14gIOo6XcDUrNCZiApNVVixg9UCe5OzDIhl1Bca0hsZIreOZdDvYg/U6Oct
-         Kcc/EE4S6pE9jPYz+64zk1AZyfJRrHJP4bW5zBffvnRJTiyF59xmwsMZVo35+brRfeJq
-         jClmkNFUGKTL1wXGtcIkfwe71TI6OjJOFLCpMSaak87MFqpsLkFHYFd6Yk23S6L7T6lr
-         oo0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MUMGXPrqhpvIg0z7EbjNFhlD2pXd3vJXCzo/3QPQm0U=;
-        b=d9LEbR4X7uTvr+OY84bAyL0I8NWC0E/QI/dAQgw2xIPo980RYsBsiEBUKgyhPVc43O
-         t95++em+omnEeG34a6qlOsd1MRjEtgGhQe3A7fX5sjbbBlkAyc5ZkesGZh/U0d6eGyQA
-         5DY8xcyTMZcAfWgVofNoajYFOzJ3rCocZ5cnFWozx+lmWtruzMfvNkEOhOTmT7vwSjTb
-         K39k28HT7nnk8QlNSzV8YJi9UYgLhjM5X4Dih8Cd5tDqFnCdSNDWdXynmlJxJQyXO1pq
-         Z+QZsDuVh1/il3VAjLcG94NOy0/PELUW7Y2Sb4MVnHKl48lw6kHfPB2dhgfapn9L6Oxm
-         AWnA==
-X-Gm-Message-State: AOAM532w3TwLvjXkfarVcbRb/YK0QeVkOey4u88znb9WcFUFevjy4Iyr
-        JlJ7JV66zekabmOaqvvOweuBvA==
-X-Google-Smtp-Source: ABdhPJyVm3SEe6m69LmK1R0CuNduK1Owo1bZ9uOPeNTUVOBr/U7jLy0gVAnDVQbwrRzI5OjhF5gZqA==
-X-Received: by 2002:a05:6808:1809:b0:2da:3311:3290 with SMTP id bh9-20020a056808180900b002da33113290mr6709699oib.295.1648901029264;
-        Sat, 02 Apr 2022 05:03:49 -0700 (PDT)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm2082881oos.22.2022.04.02.05.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 05:03:48 -0700 (PDT)
-Date:   Sat, 2 Apr 2022 09:03:43 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2 06/23] media: h264: Increase reference lists size to 32
-Message-ID: <Ykg7n2QM/TjH7Vro@eze-laptop>
-References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
- <20220331193726.289559-7-nicolas.dufresne@collabora.com>
+        Sat, 2 Apr 2022 08:09:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFC116F046;
+        Sat,  2 Apr 2022 05:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648901270; x=1680437270;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bJbkV0yP0o7Uzyp7JV7V0B8dWDAEl1KQjkKRLWU0B4M=;
+  b=gNxam4lSe0s9ZKGhaU+5qibx3VHfiiwo+6Yd7LPjLdFnlPmNjQOTdU/Z
+   pVJY5o52rcxbLR159msvb9yGzfSropBxRY9/ZEnbnnqnnk3t2We5Rg5Vl
+   xasH+Xn4rjXmoO9BgOM+ek6kVFEl64LSA/SVZLBXM35DR/YzqhRwwrvT5
+   RzRA2pBoAFlvVY51cEU3QmFhEOaLWSS5deb4o3UHM2V+BwWisNtRLyyuI
+   HeabIapZ1vyuHogVNum51ejpXWFLYpn+ko56P/3C+OUJWuhYh47G4mbma
+   Zfs9KTgB3CnGCy1OWQHbMGWm4Q/QUqI5XvBtYVchevTQxjHGyPM+M7a5f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="259125935"
+X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
+   d="scan'208";a="259125935"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 05:07:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
+   d="scan'208";a="656375369"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 02 Apr 2022 05:07:48 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nacXj-00007N-Re;
+        Sat, 02 Apr 2022 12:07:47 +0000
+Date:   Sat, 2 Apr 2022 20:07:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: undefined reference to `v4l2_device_unregister_subdev'
+Message-ID: <202204021912.687fL7yR-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331193726.289559-7-nicolas.dufresne@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 03:37:08PM -0400, Nicolas Dufresne wrote:
-> This is to accommodate support for field decoding, which splits the top
-> and the bottom references into the reference list.
-> 
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   88e6c0207623874922712e162e25d9dafd39661e
+commit: 63fe3d27b226fe01746bace4d1f1f2164406140d media: platform/*/Kconfig: make manufacturer menus more uniform
+date:   2 weeks ago
+config: nios2-randconfig-r033-20220401 (https://download.01.org/0day-ci/archive/20220402/202204021912.687fL7yR-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63fe3d27b226fe01746bace4d1f1f2164406140d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 63fe3d27b226fe01746bace4d1f1f2164406140d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  drivers/media/v4l2-core/v4l2-h264.c        | 6 +++---
->  drivers/staging/media/hantro/hantro_hw.h   | 6 +++---
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 6 +++---
->  include/media/v4l2-h264.h                  | 8 ++++----
->  4 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-> index afbfcf78efe4..4b46b36526c0 100644
-> --- a/drivers/media/v4l2-core/v4l2-h264.c
-> +++ b/drivers/media/v4l2-core/v4l2-h264.c
-> @@ -212,7 +212,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
->   * v4l2_h264_build_p_ref_list() - Build the P reference list
->   *
->   * @builder: reference list builder context
-> - * @reflist: 16 sized array used to store the P reference list. Each entry
-> + * @reflist: 32 sized array used to store the P reference list. Each entry
->   *	     is a v4l2_h264_reference structure
->   *
->   * This functions builds the P reference lists. This procedure is describe in
-> @@ -235,9 +235,9 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
->   * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
->   *
->   * @builder: reference list builder context
-> - * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-> + * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
->   *		is a v4l2_h264_reference structure
-> - * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-> + * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
->   *		is a v4l2_h264_reference structure
->   *
->   * This functions builds the B0/B1 reference lists. This procedure is described
-> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-> index 2bc6b8f088f5..292aaaabaf24 100644
-> --- a/drivers/staging/media/hantro/hantro_hw.h
-> +++ b/drivers/staging/media/hantro/hantro_hw.h
-> @@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
->   * @b1:		B1 reflist
->   */
->  struct hantro_h264_dec_reflists {
-> -	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
-> -	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
-> -	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
-> +	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
-> +	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
-> +	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
->  };
->  
->  /**
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> index 3c7f3d87fab4..dff89732ddd0 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
->  #define RKVDEC_H264_DPB_SIZE 16
->  
->  struct rkvdec_h264_reflists {
-> -	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
-> -	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
-> -	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
-> +	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
-> +	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
-> +	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
->  	u8 num_valid;
->  };
->  
-> diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-> index ef9a894e3c32..e282fb16ac58 100644
-> --- a/include/media/v4l2-h264.h
-> +++ b/include/media/v4l2-h264.h
-> @@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
->  		u16 longterm : 1;
->  	} refs[V4L2_H264_NUM_DPB_ENTRIES];
->  	s32 cur_pic_order_count;
-> -	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
-> +	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
->  	u8 num_valid;
->  };
->  
-> @@ -51,9 +51,9 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
->   * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
->   *
->   * @builder: reference list builder context
-> - * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-> + * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
->   *		is a v4l2_h264_reference structure
-> - * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-> + * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
->   *		is a v4l2_h264_reference structure
->   *
->   * This functions builds the B0/B1 reference lists. This procedure is described
-> @@ -70,7 +70,7 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
->   * v4l2_h264_build_p_ref_list() - Build the P reference list
->   *
->   * @builder: reference list builder context
-> - * @reflist: 16 sized array used to store the P reference list. Each entry
-> + * @reflist: 32 sized array used to store the P reference list. Each entry
->   *	     is a v4l2_h264_reference structure
->   *
->   * This functions builds the P reference lists. This procedure is describe in
-> -- 
-> 2.34.1
-> 
+All errors (new ones prefixed by >>):
+
+   nios2-linux-ld: drivers/media/v4l2-core/v4l2-async.o: in function `match_i2c':
+   v4l2-async.c:(.text+0x2c0): undefined reference to `i2c_verify_client'
+   v4l2-async.c:(.text+0x2c0): relocation truncated to fit: R_NIOS2_CALL26 against `i2c_verify_client'
+   nios2-linux-ld: drivers/media/v4l2-core/v4l2-async.o: in function `v4l2_async_nf_unbind_all_subdevs':
+   v4l2-async.c:(.text+0xc00): undefined reference to `v4l2_device_unregister_subdev'
+   v4l2-async.c:(.text+0xc00): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_device_unregister_subdev'
+   nios2-linux-ld: drivers/media/v4l2-core/v4l2-async.o: in function `v4l2_async_match_notify':
+   v4l2-async.c:(.text+0xdb4): undefined reference to `v4l2_device_register_subdev'
+   v4l2-async.c:(.text+0xdb4): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_device_register_subdev'
+   nios2-linux-ld: v4l2-async.c:(.text+0xee8): undefined reference to `v4l2_device_unregister_subdev'
+   v4l2-async.c:(.text+0xee8): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_device_unregister_subdev'
+   nios2-linux-ld: drivers/media/v4l2-core/v4l2-async.o: in function `v4l2_async_register_subdev':
+>> (.text+0x1160): undefined reference to `v4l2_device_unregister_subdev'
+   (.text+0x1160): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_device_unregister_subdev'
+   nios2-linux-ld: drivers/media/v4l2-core/v4l2-async.o: in function `v4l2_async_unregister_subdev':
+   (.text+0x1570): undefined reference to `v4l2_device_unregister_subdev'
+   (.text+0x1570): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_device_unregister_subdev'
+   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_notify_bound':
+   imx-mipi-csis.c:(.text+0x374): undefined reference to `v4l2_create_fwnode_links_to_pad'
+   imx-mipi-csis.c:(.text+0x374): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_create_fwnode_links_to_pad'
+   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_s_stream':
+   imx-mipi-csis.c:(.text+0x56c): undefined reference to `v4l2_subdev_call_wrappers'
+>> nios2-linux-ld: imx-mipi-csis.c:(.text+0x570): undefined reference to `v4l2_subdev_call_wrappers'
+   nios2-linux-ld: imx-mipi-csis.c:(.text+0x5a4): undefined reference to `v4l2_subdev_call_wrappers'
+   nios2-linux-ld: imx-mipi-csis.c:(.text+0x5a8): undefined reference to `v4l2_subdev_call_wrappers'
+>> nios2-linux-ld: imx-mipi-csis.c:(.text+0x60c): undefined reference to `v4l2_get_link_freq'
+   imx-mipi-csis.c:(.text+0x60c): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_get_link_freq'
+   nios2-linux-ld: imx-mipi-csis.c:(.text+0x6e4): undefined reference to `v4l2_subdev_call_wrappers'
+   nios2-linux-ld: imx-mipi-csis.c:(.text+0x6e8): undefined reference to `v4l2_subdev_call_wrappers'
+   nios2-linux-ld: imx-mipi-csis.c:(.text+0x788): undefined reference to `v4l2_subdev_call_wrappers'
+   nios2-linux-ld: imx-mipi-csis.c:(.text+0x78c): undefined reference to `v4l2_subdev_call_wrappers'
+   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_probe':
+   imx-mipi-csis.c:(.text+0xcc0): undefined reference to `v4l2_subdev_init'
+   imx-mipi-csis.c:(.text+0xcc0): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_subdev_init'
+   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_set_fmt':
+   imx-mipi-csis.c:(.text+0x146c): undefined reference to `v4l_bound_align_image'
+   imx-mipi-csis.c:(.text+0x146c): relocation truncated to fit: R_NIOS2_CALL26 against `v4l_bound_align_image'
+>> nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:(.rodata+0x348): undefined reference to `v4l2_subdev_get_fwnode_pad_1_to_1'
+>> nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:(.rodata+0x350): undefined reference to `v4l2_subdev_link_validate'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C814F0482
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BEF4F0483
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357319AbiDBPns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 11:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S1357335AbiDBPoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 11:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236710AbiDBPnq (ORCPT
+        with ESMTP id S238638AbiDBPn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:43:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800EB14DFDF;
-        Sat,  2 Apr 2022 08:41:54 -0700 (PDT)
+        Sat, 2 Apr 2022 11:43:57 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E2814DFDF
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 08:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648914114; x=1680450114;
+  t=1648914124; x=1680450124;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XQmDJiTlLNfhWiTkfL125Khdv5hFj6Xq/8G/UCpojLw=;
-  b=lcN7vQh1h3zAOLOA3+oh+PjlJavR8QU98xbOrWSttS3jdLp/ZVVRkfKn
-   dGPpQ7A/MHTU6Mh9OFOP95AAXvNYfiDuhU+z4yBo1YXcKqL44aSzHs+Vr
-   uGrAhlQ6BH4W1jYpbNEtilJTPozcnDs5+9sK6ZWCFsM8RSPm1uZd6/Es+
-   7ppf8I3r1ik9Nf3B7sLGI3D138plmDORI9u/5wXU3rF6wBPCrgYGimDEK
-   HWcz3Qp67CPQU5BAwptEJU32r8y+rrLNHWTLytceSrFLDieFs2L+hMiHC
-   cWk+5KZjpR0pCffEW0oWcZSDHkTW/fvbJII3TIpzEuekjI11z/2lWh15c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="240896378"
+  bh=1Wsz+D54yp4BwDBu7Q/jGQy7u5LqFnpxgvzX+sZzUlE=;
+  b=B93tiNRdGU5urxoJYPnlNrV+d8RO7Eki3QlJOChkh+97XVNRupVxx9iF
+   WXGhL0qCESs5yim3lnS4zS1eiLsAAA9xHBpHqWTOTEb2iUagBlhzRM9Ix
+   IjvzRAy3L0ZyOR5Yb5/FwaCfTzHoP3f0JGwuhFmVszA8DQ1Vga49Xwrc1
+   WVs6u2tR+Wqf12SQWoWS5WeJ1kJOL4cdZq7bPa0u79kxx5MJb8rhGwBC1
+   jNhon8r2TsksYFCmYEQrH6HM67AlO76v7rCyvMxGxUnC9JEzg0fpBWBuE
+   wKxk5v86Oc0wyXaPVxvF9imvsSzR5y3KRCsdT/8Eyxe0hyZokVwswLQ+q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="240246878"
 X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
-   d="scan'208";a="240896378"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 08:41:54 -0700
+   d="scan'208";a="240246878"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 08:41:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,230,1643702400"; 
-   d="scan'208";a="656476882"
+   d="scan'208";a="523102955"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 02 Apr 2022 08:41:52 -0700
+  by orsmga006.jf.intel.com with ESMTP; 02 Apr 2022 08:41:52 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nafst-0000ED-8n;
+        id 1nafst-0000EG-As;
         Sat, 02 Apr 2022 15:41:51 +0000
-Date:   Sat, 2 Apr 2022 23:41:34 +0800
+Date:   Sat, 2 Apr 2022 23:41:37 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: nios2-linux-ld: imx-mipi-csis.c:undefined reference to
- `v4l2_async_nf_cleanup'
-Message-ID: <202204022330.h5GGZlNk-lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse: sparse:
+ incorrect type in argument 1 (different address spaces)
+Message-ID: <202204022352.aG6BUBRa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,67 +64,205 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   88e6c0207623874922712e162e25d9dafd39661e
-commit: 9958d30f38b96fb763a10d44d18ddad39127d5f4 media: Kconfig: cleanup VIDEO_DEV dependencies
-date:   2 weeks ago
-config: nios2-randconfig-r033-20220401 (https://download.01.org/0day-ci/archive/20220402/202204022330.h5GGZlNk-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
+commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
+date:   7 weeks ago
+config: powerpc64-randconfig-s032-20220402 (https://download.01.org/0day-ci/archive/20220402/202204022352.aG6BUBRa-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9958d30f38b96fb763a10d44d18ddad39127d5f4
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 9958d30f38b96fb763a10d44d18ddad39127d5f4
+        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/ps3/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
 
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_notify_bound':
-   imx-mipi-csis.c:(.text+0x374): undefined reference to `v4l2_create_fwnode_links_to_pad'
-   imx-mipi-csis.c:(.text+0x374): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_create_fwnode_links_to_pad'
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_s_stream':
-   imx-mipi-csis.c:(.text+0x56c): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x570): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x5a4): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x5a8): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x60c): undefined reference to `v4l2_get_link_freq'
-   imx-mipi-csis.c:(.text+0x60c): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_get_link_freq'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x6e4): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x6e8): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x788): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0x78c): undefined reference to `v4l2_subdev_call_wrappers'
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_remove':
-   imx-mipi-csis.c:(.text+0x874): undefined reference to `v4l2_async_nf_unregister'
-   imx-mipi-csis.c:(.text+0x874): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_async_nf_unregister'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0x87c): undefined reference to `v4l2_async_nf_cleanup'
-   imx-mipi-csis.c:(.text+0x87c): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_async_nf_cleanup'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0x884): undefined reference to `v4l2_async_unregister_subdev'
-   imx-mipi-csis.c:(.text+0x884): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_async_unregister_subdev'
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_probe':
-   imx-mipi-csis.c:(.text+0xcc0): undefined reference to `v4l2_subdev_init'
-   imx-mipi-csis.c:(.text+0xcc0): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_subdev_init'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0xd9c): undefined reference to `v4l2_async_nf_init'
-   imx-mipi-csis.c:(.text+0xd9c): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_async_nf_init'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0xdd0): undefined reference to `v4l2_fwnode_endpoint_parse'
-   imx-mipi-csis.c:(.text+0xdd0): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_fwnode_endpoint_parse'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0xe40): undefined reference to `__v4l2_async_nf_add_fwnode_remote'
-   imx-mipi-csis.c:(.text+0xe40): relocation truncated to fit: R_NIOS2_CALL26 against `__v4l2_async_nf_add_fwnode_remote'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0xe70): undefined reference to `v4l2_async_subdev_nf_register'
-   imx-mipi-csis.c:(.text+0xe70): relocation truncated to fit: R_NIOS2_CALL26 against `v4l2_async_subdev_nf_register'
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0xe80): undefined reference to `v4l2_async_register_subdev'
-   imx-mipi-csis.c:(.text+0xe80): additional relocation overflows omitted from the output
->> nios2-linux-ld: imx-mipi-csis.c:(.text+0xf94): undefined reference to `v4l2_async_nf_unregister'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0xf9c): undefined reference to `v4l2_async_nf_cleanup'
-   nios2-linux-ld: imx-mipi-csis.c:(.text+0xfa4): undefined reference to `v4l2_async_unregister_subdev'
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_set_fmt':
-   imx-mipi-csis.c:(.text+0x146c): undefined reference to `v4l_bound_align_image'
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:(.rodata+0x348): undefined reference to `v4l2_subdev_get_fwnode_pad_1_to_1'
-   nios2-linux-ld: drivers/media/platform/nxp/imx-mipi-csis.o:(.rodata+0x350): undefined reference to `v4l2_subdev_link_validate'
+sparse warnings: (new ones prefixed by >>)
+   arch/powerpc/platforms/ps3/gelic_udbg.c:127:53: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void *start @@     got struct debug_block [noderef] __iomem * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:127:53: sparse:     expected void *start
+   arch/powerpc/platforms/ps3/gelic_udbg.c:127:53: sparse:     got struct debug_block [noderef] __iomem *
+>> arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got struct debug_block [noderef] __iomem * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse:     expected void const *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse:     got struct debug_block [noderef] __iomem *
+>> arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got struct debug_block [noderef] __iomem * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse:     expected void const *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse:     got struct debug_block [noderef] __iomem *
+>> arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got struct debug_block [noderef] __iomem * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse:     expected void *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:130:9: sparse:     got struct debug_block [noderef] __iomem *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:132:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 static [addressable] [noderef] [toplevel] [usertype] __iomem buf_addr @@     got unsigned long long @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:132:28: sparse:     expected restricted __be32 static [addressable] [noderef] [toplevel] [usertype] __iomem buf_addr
+   arch/powerpc/platforms/ps3/gelic_udbg.c:132:28: sparse:     got unsigned long long
+   arch/powerpc/platforms/ps3/gelic_udbg.c:144:18: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:144:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct ethhdr [noderef] __iomem *static [toplevel] h_eth @@     got struct ethhdr * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:144:15: sparse:     expected struct ethhdr [noderef] __iomem *static [toplevel] h_eth
+   arch/powerpc/platforms/ps3/gelic_udbg.c:144:15: sparse:     got struct ethhdr *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:146:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected unsigned char [usertype] *addr @@     got unsigned char [noderef] __iomem * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:146:28: sparse:     expected unsigned char [usertype] *addr
+   arch/powerpc/platforms/ps3/gelic_udbg.c:146:28: sparse:     got unsigned char [noderef] __iomem *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] __iomem ( * )[6] @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse:     expected void const *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse:     got unsigned char [noderef] __iomem ( * )[6]
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] __iomem ( * )[6] @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse:     expected void const *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse:     got unsigned char [noderef] __iomem ( * )[6]
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got unsigned char [noderef] __iomem ( * )[6] @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse:     expected void *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:147:9: sparse:     got unsigned char [noderef] __iomem ( * )[6]
+   arch/powerpc/platforms/ps3/gelic_udbg.c:156:31: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem h_proto @@     got int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:156:31: sparse:     expected restricted __be16 [noderef] [usertype] __iomem h_proto
+   arch/powerpc/platforms/ps3/gelic_udbg.c:156:31: sparse:     got int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:159:27: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:159:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct vlan_hdr [noderef] __iomem *static [toplevel] h_vlan @@     got struct vlan_hdr * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:159:24: sparse:     expected struct vlan_hdr [noderef] __iomem *static [toplevel] h_vlan
+   arch/powerpc/platforms/ps3/gelic_udbg.c:159:24: sparse:     got struct vlan_hdr *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:160:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem h_vlan_TCI @@     got unsigned long long [addressable] [usertype] vlan_id @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:160:36: sparse:     expected restricted __be16 [noderef] [usertype] __iomem h_vlan_TCI
+   arch/powerpc/platforms/ps3/gelic_udbg.c:160:36: sparse:     got unsigned long long [addressable] [usertype] vlan_id
+   arch/powerpc/platforms/ps3/gelic_udbg.c:161:51: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem h_vlan_encapsulated_proto @@     got int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:161:51: sparse:     expected restricted __be16 [noderef] [usertype] __iomem h_vlan_encapsulated_proto
+   arch/powerpc/platforms/ps3/gelic_udbg.c:161:51: sparse:     got int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:162:25: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:162:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct iphdr [noderef] __iomem *static [toplevel] h_ip @@     got struct iphdr * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:162:22: sparse:     expected struct iphdr [noderef] __iomem *static [toplevel] h_ip
+   arch/powerpc/platforms/ps3/gelic_udbg.c:162:22: sparse:     got struct iphdr *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:164:31: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem h_proto @@     got int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:164:31: sparse:     expected restricted __be16 [noderef] [usertype] __iomem h_proto
+   arch/powerpc/platforms/ps3/gelic_udbg.c:164:31: sparse:     got int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:165:25: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:165:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct iphdr [noderef] __iomem *static [toplevel] h_ip @@     got struct iphdr * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:165:22: sparse:     expected struct iphdr [noderef] __iomem *static [toplevel] h_ip
+   arch/powerpc/platforms/ps3/gelic_udbg.c:165:22: sparse:     got struct iphdr *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:174:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 [noderef] [usertype] __iomem daddr @@     got unsigned int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:174:21: sparse:     expected restricted __be32 [noderef] [usertype] __iomem daddr
+   arch/powerpc/platforms/ps3/gelic_udbg.c:174:21: sparse:     got unsigned int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:177:18: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:177:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct udphdr [noderef] __iomem *static [toplevel] h_udp @@     got struct udphdr * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:177:15: sparse:     expected struct udphdr [noderef] __iomem *static [toplevel] h_udp
+   arch/powerpc/platforms/ps3/gelic_udbg.c:177:15: sparse:     got struct udphdr *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:178:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem source @@     got int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:178:23: sparse:     expected restricted __be16 [noderef] [usertype] __iomem source
+   arch/powerpc/platforms/ps3/gelic_udbg.c:178:23: sparse:     got int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:179:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem dest @@     got int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:179:21: sparse:     expected restricted __be16 [noderef] [usertype] __iomem dest
+   arch/powerpc/platforms/ps3/gelic_udbg.c:179:21: sparse:     got int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:181:25: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:181:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char [noderef] __iomem *static [toplevel] pmsg @@     got char * @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:181:22: sparse:     expected char [noderef] __iomem *static [toplevel] pmsg
+   arch/powerpc/platforms/ps3/gelic_udbg.c:181:22: sparse:     got char *
+   arch/powerpc/platforms/ps3/gelic_udbg.c:198:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 static [addressable] [noderef] [toplevel] [usertype] __iomem buf_size @@     got int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:198:28: sparse:     expected restricted __be32 static [addressable] [noderef] [toplevel] [usertype] __iomem buf_size
+   arch/powerpc/platforms/ps3/gelic_udbg.c:198:28: sparse:     got int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:199:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem tot_len @@     got unsigned long @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:199:23: sparse:     expected restricted __be16 [noderef] [usertype] __iomem tot_len
+   arch/powerpc/platforms/ps3/gelic_udbg.c:199:23: sparse:     got unsigned long
+   arch/powerpc/platforms/ps3/gelic_udbg.c:201:20: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [noderef] [usertype] __iomem len @@     got unsigned long @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:201:20: sparse:     expected restricted __be16 [noderef] [usertype] __iomem len
+   arch/powerpc/platforms/ps3/gelic_udbg.c:201:20: sparse:     got unsigned long
+   arch/powerpc/platforms/ps3/gelic_udbg.c:205:14: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:208:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __sum16 [noderef] [usertype] __iomem check @@     got unsigned int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:208:21: sparse:     expected restricted __sum16 [noderef] [usertype] __iomem check
+   arch/powerpc/platforms/ps3/gelic_udbg.c:208:21: sparse:     got unsigned int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:210:35: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 static [addressable] [noderef] [toplevel] [usertype] __iomem dmac_cmd_status @@     got unsigned int @@
+   arch/powerpc/platforms/ps3/gelic_udbg.c:210:35: sparse:     expected restricted __be32 static [addressable] [noderef] [toplevel] [usertype] __iomem dmac_cmd_status
+   arch/powerpc/platforms/ps3/gelic_udbg.c:210:35: sparse:     got unsigned int
+   arch/powerpc/platforms/ps3/gelic_udbg.c:219:26: sparse: sparse: restricted __be32 degrades to integer
+   arch/powerpc/platforms/ps3/gelic_udbg.c:169:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:170:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:171:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:172:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:173:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:203:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:212:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:213:9: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:219:17: sparse: sparse: dereference of noderef expression
+   arch/powerpc/platforms/ps3/gelic_udbg.c:226:15: sparse: sparse: dereference of noderef expression
+
+vim +130 arch/powerpc/platforms/ps3/gelic_udbg.c
+
+c26afe9e8591f3 Hector Martin  2011-08-31  115  
+f1ba9b9474a9e3 Nick Child     2021-12-16  116  static void __init gelic_debug_init(void)
+c26afe9e8591f3 Hector Martin  2011-08-31  117  {
+c26afe9e8591f3 Hector Martin  2011-08-31  118  	s64 result;
+c26afe9e8591f3 Hector Martin  2011-08-31  119  	u64 v2;
+c26afe9e8591f3 Hector Martin  2011-08-31  120  	u64 mac;
+c26afe9e8591f3 Hector Martin  2011-08-31  121  	u64 vlan_id;
+c26afe9e8591f3 Hector Martin  2011-08-31  122  
+c26afe9e8591f3 Hector Martin  2011-08-31  123  	result = lv1_open_device(GELIC_BUS_ID, GELIC_DEVICE_ID, 0);
+c26afe9e8591f3 Hector Martin  2011-08-31  124  	if (result)
+c26afe9e8591f3 Hector Martin  2011-08-31  125  		lv1_panic(0);
+c26afe9e8591f3 Hector Martin  2011-08-31  126  
+c26afe9e8591f3 Hector Martin  2011-08-31  127  	map_dma_mem(GELIC_BUS_ID, GELIC_DEVICE_ID, &dbg, sizeof(dbg),
+c26afe9e8591f3 Hector Martin  2011-08-31  128  		    &bus_addr);
+c26afe9e8591f3 Hector Martin  2011-08-31  129  
+c26afe9e8591f3 Hector Martin  2011-08-31 @130  	memset(&dbg, 0, sizeof(dbg));
+c26afe9e8591f3 Hector Martin  2011-08-31  131  
+c26afe9e8591f3 Hector Martin  2011-08-31  132  	dbg.descr.buf_addr = bus_addr + offsetof(struct debug_block, pkt);
+c26afe9e8591f3 Hector Martin  2011-08-31  133  
+c26afe9e8591f3 Hector Martin  2011-08-31  134  	wmb();
+c26afe9e8591f3 Hector Martin  2011-08-31  135  
+c26afe9e8591f3 Hector Martin  2011-08-31  136  	result = lv1_net_control(GELIC_BUS_ID, GELIC_DEVICE_ID,
+c26afe9e8591f3 Hector Martin  2011-08-31  137  				 GELIC_LV1_GET_MAC_ADDRESS, 0, 0, 0,
+c26afe9e8591f3 Hector Martin  2011-08-31  138  				 &mac, &v2);
+c26afe9e8591f3 Hector Martin  2011-08-31  139  	if (result)
+c26afe9e8591f3 Hector Martin  2011-08-31  140  		lv1_panic(0);
+c26afe9e8591f3 Hector Martin  2011-08-31  141  
+c26afe9e8591f3 Hector Martin  2011-08-31  142  	mac <<= 16;
+c26afe9e8591f3 Hector Martin  2011-08-31  143  
+c26afe9e8591f3 Hector Martin  2011-08-31  144  	h_eth = (struct ethhdr *)dbg.pkt;
+c26afe9e8591f3 Hector Martin  2011-08-31  145  
+497abcf6afe2d8 Luis Henriques 2016-02-08  146  	eth_broadcast_addr(h_eth->h_dest);
+497abcf6afe2d8 Luis Henriques 2016-02-08  147  	memcpy(&h_eth->h_source, &mac, ETH_ALEN);
+c26afe9e8591f3 Hector Martin  2011-08-31  148  
+c26afe9e8591f3 Hector Martin  2011-08-31  149  	header_size = sizeof(struct ethhdr);
+c26afe9e8591f3 Hector Martin  2011-08-31  150  
+c26afe9e8591f3 Hector Martin  2011-08-31  151  	result = lv1_net_control(GELIC_BUS_ID, GELIC_DEVICE_ID,
+c26afe9e8591f3 Hector Martin  2011-08-31  152  				 GELIC_LV1_GET_VLAN_ID,
+c26afe9e8591f3 Hector Martin  2011-08-31  153  				 GELIC_LV1_VLAN_TX_ETHERNET_0, 0, 0,
+c26afe9e8591f3 Hector Martin  2011-08-31  154  				 &vlan_id, &v2);
+c26afe9e8591f3 Hector Martin  2011-08-31  155  	if (!result) {
+497abcf6afe2d8 Luis Henriques 2016-02-08  156  		h_eth->h_proto= ETH_P_8021Q;
+c26afe9e8591f3 Hector Martin  2011-08-31  157  
+e9aaa6d1abcffc Luis Henriques 2016-02-08  158  		header_size += sizeof(struct vlan_hdr);
+e9aaa6d1abcffc Luis Henriques 2016-02-08  159  		h_vlan = (struct vlan_hdr *)(h_eth + 1);
+e9aaa6d1abcffc Luis Henriques 2016-02-08  160  		h_vlan->h_vlan_TCI = vlan_id;
+e9aaa6d1abcffc Luis Henriques 2016-02-08  161  		h_vlan->h_vlan_encapsulated_proto = ETH_P_IP;
+c26afe9e8591f3 Hector Martin  2011-08-31  162  		h_ip = (struct iphdr *)(h_vlan + 1);
+c26afe9e8591f3 Hector Martin  2011-08-31  163  	} else {
+497abcf6afe2d8 Luis Henriques 2016-02-08  164  		h_eth->h_proto= 0x0800;
+c26afe9e8591f3 Hector Martin  2011-08-31  165  		h_ip = (struct iphdr *)(h_eth + 1);
+c26afe9e8591f3 Hector Martin  2011-08-31  166  	}
+c26afe9e8591f3 Hector Martin  2011-08-31  167  
+c26afe9e8591f3 Hector Martin  2011-08-31  168  	header_size += sizeof(struct iphdr);
+0336c8cd4d6123 Luis Henriques 2016-02-08  169  	h_ip->version = 4;
+0336c8cd4d6123 Luis Henriques 2016-02-08  170  	h_ip->ihl = 5;
+c26afe9e8591f3 Hector Martin  2011-08-31  171  	h_ip->ttl = 10;
+0336c8cd4d6123 Luis Henriques 2016-02-08  172  	h_ip->protocol = 0x11;
+0336c8cd4d6123 Luis Henriques 2016-02-08  173  	h_ip->saddr = 0x00000000;
+0336c8cd4d6123 Luis Henriques 2016-02-08  174  	h_ip->daddr = 0xffffffff;
+c26afe9e8591f3 Hector Martin  2011-08-31  175  
+c26afe9e8591f3 Hector Martin  2011-08-31  176  	header_size += sizeof(struct udphdr);
+c26afe9e8591f3 Hector Martin  2011-08-31  177  	h_udp = (struct udphdr *)(h_ip + 1);
+95442c64de7a6d Luis Henriques 2016-02-08  178  	h_udp->source = GELIC_DEBUG_PORT;
+c26afe9e8591f3 Hector Martin  2011-08-31  179  	h_udp->dest = GELIC_DEBUG_PORT;
+c26afe9e8591f3 Hector Martin  2011-08-31  180  
+c26afe9e8591f3 Hector Martin  2011-08-31  181  	pmsgc = pmsg = (char *)(h_udp + 1);
+c26afe9e8591f3 Hector Martin  2011-08-31  182  }
+c26afe9e8591f3 Hector Martin  2011-08-31  183  
+
+:::::: The code at line 130 was first introduced by commit
+:::::: c26afe9e8591f306d79aab8071f1d34e4f60b700 powerpc/ps3: Add gelic udbg driver
+
+:::::: TO: Hector Martin <hector@marcansoft.com>
+:::::: CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 
 -- 
 0-DAY CI Kernel Test Service

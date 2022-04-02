@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C249B4F0042
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D8E4F0043
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354217AbiDBJ6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S1354223AbiDBJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiDBJ5x (ORCPT
+        with ESMTP id S230086AbiDBJ7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:57:53 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EAA1A61CD
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:56:01 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n35so3045207wms.5
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 02:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cgXEkA1NsSLqZo2p9htj8GcgXUNKhGzyClMqMaWIvDI=;
-        b=QUxAVBIGjxzUGhga2bGVCacVjSav4X+BIyqne/0zdL/4ikLPyuC4Mjo9T5inO7Kfxd
-         A9mBSL+/8fh5y8c027vJHrlNiIBlYi1N1/6zLsHYkpl5ApP/7ZLL1C0sVCCQw2nd1aNv
-         gndE6vmrp777SW893dYvMN0B6M71FQJ20kdc3KLxeqj8hvQuS8HCfyqA/PksE3ruxMTz
-         szpncBtYVQ2rTkKKlzKbMfZJeHAKl5xtnc7GWgWmRuR8BbciBg/b02QYjY4wRE8EVGzZ
-         iFbhbM5HW7RbEQ2H25yQ4U/yxlvntt09ODrON3n7UN4WcYSCXmbBJORg6p+Bbfl7fe84
-         91tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cgXEkA1NsSLqZo2p9htj8GcgXUNKhGzyClMqMaWIvDI=;
-        b=vlyhvNBHjm3WdLgUJeT+6hYfILvSrhDjpQXIiKR7UxoS+5s/6z5cGHeU5tiqocJq9p
-         yreXLmZ51+D40FVsJe3FXMAviNWEMUwe99XupF+Q7y4Dws0GbMo6IRSP63RflUbP2KsF
-         Ht2hm9agsbBH0UifiWUq2xa1E4Jf8wEGG7p3/br3zbyFBczyHIRIbfWc34CPqkkG3xRU
-         jUx0b5WsT53zLGAa0Qf09LVrXgECiAwN8/XhtCC/jPPJgvvh/ByJ/meNI59ZwCX2iJ8T
-         N4UHLqeIY3vnHeCnT3SZLinrOx3b/u5zQbRn3wgdWkDQT/V6WvvK1nlUGN40SgbNJ2nQ
-         pQBg==
-X-Gm-Message-State: AOAM531mfJD2ZinKobjkhOeolmLY6tWxMMTsXMWn0lpiP4x6y219jm5g
-        hFQvN7+wQEiEVJbD1M1DwksKbA==
-X-Google-Smtp-Source: ABdhPJyO5nRYykQjZ5CMS3S/+vibAHXkJMz2nRlIfC5YDxd6cIz2T4VjeRMkWl0YnnwiCnUamYDmeg==
-X-Received: by 2002:a7b:c14d:0:b0:38c:801a:a8b3 with SMTP id z13-20020a7bc14d000000b0038c801aa8b3mr11732685wmi.40.1648893359903;
-        Sat, 02 Apr 2022 02:55:59 -0700 (PDT)
-Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id i19-20020a05600c355300b0038e1d69af52sm4436420wmq.7.2022.04.02.02.55.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 02:55:59 -0700 (PDT)
-Message-ID: <e7b2d7d3-b0a8-3937-1947-acb65090dc87@linaro.org>
-Date:   Sat, 2 Apr 2022 11:55:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Jacky Huang <ychuang3@nuvoton.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
-        olof@lixom.net, soc@kernel.org, cfli0@nuvoton.com
-References: <20220331024256.14762-1-ychuang3@nuvoton.com>
- <20220331024256.14762-4-ychuang3@nuvoton.com>
- <0c182962-0da0-c3b3-097a-090bf8d871e7@linaro.org>
- <20220401233422.58670C2BBE4@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401233422.58670C2BBE4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Sat, 2 Apr 2022 05:59:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D916D1A61CD
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:57:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7528360B25
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 09:57:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6647C3410F;
+        Sat,  2 Apr 2022 09:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648893430;
+        bh=tNEYj6qWpjR4LDDLwHTWok2cg8Gv7S8PvGfWvnVsaxM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fbiLjiITInNNlqq2fBa7KVuP1L7N0hiCEj0fKipdAcfXwx1Hvccs6hCLbzuXRESKv
+         1QvR8gwO5zp/iMzAoFlM/OOLWZoSAoGHfzxuOn/drv0/elXmSumawdYc1ZuTDrJJw2
+         51SO51Y9FHCUqrc7vlOt3DTEMF8Etq6ZdPrhI/ComT6m6iOVFzuYadroDZos2tNooR
+         0yKdVEqpy/gKuuOZplJb8sMpdweoR5vXBKk1DPRY4GA/wRdTLRjFi02zrSIpGTd/e5
+         S42i5FHsOFpL3beKIuoX2P9NQlivPhfFsj4rg6Z0OR9NCo+wBZCThzfBect2KaDJKX
+         8k1/DSYV3Oa2Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1naaVI-0010mT-J1; Sat, 02 Apr 2022 10:57:08 +0100
+Date:   Sat, 02 Apr 2022 10:57:08 +0100
+Message-ID: <87pmlzbyff.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Will Deacon <willdeacon@google.com>
+Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-03 199/9999] arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters'
+In-Reply-To: <9fa2454e-aef5-c879-eb0d-2eb23e603b55@gnuweeb.org>
+References: <202204021112.ErKMELRr-lkp@intel.com>
+        <87r16fbzaq.wl-maz@kernel.org>
+        <9fa2454e-aef5-c879-eb0d-2eb23e603b55@gnuweeb.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ammarfaizi2@gnuweeb.org, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, gwml@vger.gnuweeb.org, linux-kernel@vger.kernel.org, qperret@google.com, alexandru.elisei@arm.com, willdeacon@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,46 +71,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/04/2022 01:34, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2022-03-30 23:32:04)
->> On 31/03/2022 04:42, Jacky Huang wrote:
->>> diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
->>> new file mode 100644
->>> index 000000000000..e1e0c466bf5e
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/nuvoton/Makefile
->>> @@ -0,0 +1,2 @@
->>> +# SPDX-License-Identifier: GPL-2.0
->>> +dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
->>
->> NAK
->>
->> This is actually some resend, but you did not version it, did not
->> provide changelog.
->>
->> What is more - you ignored previously received comments.
->>
->> We do not work like this. If you do not agree with a comment, please
->> keep discussion, not resend ignoring it.
->>
+Hi Ammar,
+
+On Sat, 02 Apr 2022 10:52:39 +0100,
+Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
 > 
-> Please be kind to newcomers. Not everyone has been working on the kernel
-> for 10+ years.
-
-Sorry for being harsh.
-
+> Hi Marc,
 > 
-> Please read Documentation/process/submitting-patches.rst. We should
-> probably add some more details to that document about including
-> changelogs comparing previous rounds, links to previous rounds for ease
-> of discovery, cover letters for multi-patch series, etc.
+> On 4/2/22 4:38 PM, Marc Zyngier wrote:
+> > Hi Robot,
+> > 
+> > On Sat, 02 Apr 2022 04:47:04 +0100,
+> > kernel test robot <lkp@intel.com> wrote:
+> >> 
+> >> Hi Marc,
+> >> 
+> >> FYI, the error/warning still remains.
+> >> 
+> >> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-03
+> > 
+> > Oh look, a random Android tree based on ... 5.10.
+> > 
+> >> head:   64099431c232d4a95f621411747a3972cc1c8061
+> >> commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [199/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
+> >> config: arm64-randconfig-r024-20220331 (https://download.01.org/0day-ci/archive/20220402/202204021112.ErKMELRr-lkp@intel.com/config)
+> >> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
+> >> reproduce (this is a W=1 build):
+> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          # install arm64 cross compiling tool for clang build
+> >>          # apt-get install binutils-aarch64-linux-gnu
+> >>          # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+> >>          git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> >>          git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-03
+> >>          git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
+> >>          # save the config file to linux build tree
+> >>          mkdir build_dir
+> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+> >> 
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >> 
+> >> All errors (new ones prefixed by >>):
+> >> 
+> >>>> arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters' [-Werror,-Wimplicit-function-declaration]
+> >>             if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
+> >>                                               ^
+> >>     1 error generated.
+> > 
+> > $ ls -l arch/arm64/kvm/perf.c
+> > ls: cannot access 'arch/arm64/kvm/perf.c': No such file or directory
+> > 
+> > What is the point of testing trees that have no resemblance with
+> > upstream?
+> 
+> It's my tree. Didn't realize it yields many irrelevant errors like this.
+> I will stop pushing Android stuff to this tree.
+> 
+> Sorry for bothering you.
 
-This is in general explained in:
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L311
-Just no one really reads it...
+It doesn't bother me at all, and you shouldn't stop pushing stuff that
+is useful to you. My objection is to the testing of random trees and
+spamming of random people, specially when it is pretty obvious that
+the tree isn't targeting upstream Linux.
 
-I'll extend that section slightly.
+You really shouldn't change anything in your workflow on my account.
 
+Thanks,
 
-Best regards,
-Krzysztof
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

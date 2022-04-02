@@ -2,79 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5869F4F05FC
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE3D4F0600
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241114AbiDBT7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 15:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S1349940AbiDBUDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 16:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235168AbiDBT7r (ORCPT
+        with ESMTP id S1350192AbiDBUCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 15:59:47 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E430FFFB72
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 12:57:53 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id o10so12447815ejd.1
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 12:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CTS+Ip4BTGEFZUlSMz44QvTyeeBYV9kdeaNljtycro8=;
-        b=YWgHiPOBHJ6swM4FsJenjmz2o24qpjOZKscmp3Zk1ZwZ4lJsH+ADdisZOewKJpPsMd
-         GFlXINxMCaAPEGpW1G5chekViYD8CyGGA25i6dmBy6Yngtdsmc5uE518+IdEhV2KbzKx
-         1e8d8dR1PGPgrey3CCjakXigighu/SQqpmxLHryw+IcOHdgvGWDumUBZtLfaHstYQ45s
-         ktbH0oHsN2g4iSASoX9gk0Nl4JcJqXyF1mowX/9iCbsjxpv8ZlbvKl7moZJMRgbPr/Oo
-         QUki0FD/YdSWcHcJv9ao1LxLNCbvJn0eyF/fkqC/pUF2ywQ7OYyLQnI0Yw1gUMW2AZzY
-         fBMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CTS+Ip4BTGEFZUlSMz44QvTyeeBYV9kdeaNljtycro8=;
-        b=WKVOFbxd4nEoOsDLsSkZg0kkat2H0nbHJstAy8ib3ncHPRVBCsytXThjyDPHcD2xcW
-         trE6d4K64lOg9QTBOqJuGJ7VtvglFT7N1qQbUjlDsJ+uwVKw9BpkeNWlCwvPpp4tpoKX
-         fpx0Pk/PLFWOdawOAT1vD1NuTCfkkGmWGKYusAHR6MXvTzVWq6StHjb9SaebW0GRGDn/
-         c2HvdPnITFMF6z41ycE/vxDl1t+cV9rVxZdOLmUdCUe3DBmu9dNK0uxotIqeX2O9Rh1U
-         OI/MyHBubXPUqieaCvWuaFksEBLPN3bpcpumqy7P7aI22iCGiI8mSRIcT9LoiCl/85Nr
-         5I/g==
-X-Gm-Message-State: AOAM530Q1xOL0pJgIDJVnroAl0PrfHK3OH6DutZvNQQ+ORQDDRWPpTg1
-        /ensVkjWBkL3MM7RPVLqvQKjVA==
-X-Google-Smtp-Source: ABdhPJxfx3xopyMVaLrIzERU4TjCwEaY/+buz+oZUEOJcank761ouAdg/mVhW2nFrc8qBWKStXWNsg==
-X-Received: by 2002:a17:907:3e0d:b0:6e0:daaa:63e0 with SMTP id hp13-20020a1709073e0d00b006e0daaa63e0mr4786049ejc.657.1648929472243;
-        Sat, 02 Apr 2022 12:57:52 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t19-20020a056402525300b0041952a1a764sm2834201edd.33.2022.04.02.12.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 12:57:51 -0700 (PDT)
-Message-ID: <a25961c9-3e37-46d7-844d-01b0c8a1eaba@linaro.org>
-Date:   Sat, 2 Apr 2022 21:57:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add Qualcomm Geni based QUP i2c
- bindings
-Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
- <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
- <b27db209-d146-e104-6f0c-b0d860e9cc8c@linaro.org>
- <20220402194453.GE35664@9a2d8922b8f1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220402194453.GE35664@9a2d8922b8f1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Sat, 2 Apr 2022 16:02:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797BEFD17;
+        Sat,  2 Apr 2022 13:01:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22A96B80B66;
+        Sat,  2 Apr 2022 20:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF052C34111;
+        Sat,  2 Apr 2022 20:00:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648929657;
+        bh=EhcFGnLPGaRO4VDZmQNQRZOQhCQe9B9NKZgU475x4MI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=F4U8hkXAANNSab180b/ZOauUExd5kotyEzE6wSjXx3vJxy4mgeT5IcGdXK/poVqYg
+         Eqa9Iwn5h0msVSyOO9fbKWNSm3VfF6O3+cgw3NTywhH0b9Qd1vrXDaL6nCkV0IY0B6
+         ESo14nu8SNfAzXiAN2SiTLpu/x4n+tGN9lD7eh0T2iDMX82+oPOvEDmNpOD/8uhCmm
+         mtNmSTOqOoLIQ2CJIrxXVBkZjLQmfB3/y6YnoDQbYgchQbvwyS72w23Uqpnyjumjzg
+         hwwK9cFqULKN4IoHlEnswN7RT9h8UI6hY1wHlfIlnklFyjWXDAGFCdBCfaOwj6iXRk
+         3797ZmCQBh0yg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BBA29E6BBCA;
+        Sat,  2 Apr 2022 20:00:57 +0000 (UTC)
+Subject: Re: [GIT PULL] Kbuild fixes for v5.18-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK7LNASN9Q40P6dUGSidT5=y0FA4pd+U93L17r8sH0j3VPum4A@mail.gmail.com>
+References: <CAK7LNASN9Q40P6dUGSidT5=y0FA4pd+U93L17r8sH0j3VPum4A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK7LNASN9Q40P6dUGSidT5=y0FA4pd+U93L17r8sH0j3VPum4A@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-fixes-v5.18
+X-PR-Tracked-Commit-Id: bf5c0c2231bcab677e5cdfb7f73e6c79f6d8c2d4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d897b680418db98f01a0bff038f1b03770a33722
+Message-Id: <164892965776.29522.8021146833842117164.pr-tracker-bot@kernel.org>
+Date:   Sat, 02 Apr 2022 20:00:57 +0000
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,37 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/04/2022 21:44, Kuldeep Singh wrote:
-> On Sat, Apr 02, 2022 at 02:29:59PM +0200, Krzysztof Kozlowski wrote:
->> On 02/04/2022 07:12, Kuldeep Singh wrote:
->>> GENI(generic interface) based Qualcomm Universal Peripheral controller
->>> can support multiple serial interfaces like spi,uart and i2c.
->>>
-	
->>> +
->>> +  power-domains:
->>> +    maxItems: 1
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  required-opps:
->>> +    maxItems: 1
->>
->> I have doubts this is correct property. Usually it is part of the
->> opp-table. I see sc7180 needs this, but I think it is a mistake. Do you
->> know how it is supposed to work?
-> 
-> Not sure how exactly it works. I took reference from
-> Documentation/devicetree/bindings/clock/qcom,videocc.yaml on how to add
-> required-opps.
->
+The pull request you sent on Sun, 3 Apr 2022 03:28:19 +0900:
 
-I see now that power domains consumer bindings also mention it:
-Documentation/devicetree/bindings/power/power_domain.txt
-and it might be actually used via __genpd_dev_pm_attach().
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-fixes-v5.18
 
-Let's keep it then.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d897b680418db98f01a0bff038f1b03770a33722
 
-Best regards,
-Krzysztof
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157614F046A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30B04F0478
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 17:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345304AbiDBPbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 11:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
+        id S237518AbiDBPj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 11:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiDBPbh (ORCPT
+        with ESMTP id S233255AbiDBPjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:31:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B3212342E;
-        Sat,  2 Apr 2022 08:29:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBF0BB80990;
-        Sat,  2 Apr 2022 15:29:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C983EC340EC;
-        Sat,  2 Apr 2022 15:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648913382;
-        bh=Ef9VlYwPAyUnvztGaMgffvzv4Ib7J175ViIcW3rXYpw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c1zDfDzzrSDB2gkDsugjNMvLx2Vl3oS4zbI8A9Dnrh0mbCNvL/fsnK9WFQwjargvV
-         S9LJJw7Ho4ezy2Q8E8bwfAcmOqvE5uUySEGaePlW2FReEfZdUM0ZKa/dBz80KYchuF
-         wiBhGlUZ0S78IYoc4SZRQOBazdWnau25x4CHk7Pf09ZSWwdjTC8G4PfJ2tpFG/4nr5
-         fE+0iOVwyDe2S4+loWEouYUqfh0SwR3YotDcEAPY7BHWjc5AmfMFQzN353XgCQXqHz
-         1ltA5xvzCSkv7LUzTl7zbujWud7xiEMcYtiwqnAtU/sRjaZKABSc7isemeU6WhQqWK
-         aX4oqKM9JS9wA==
-Date:   Sat, 2 Apr 2022 16:37:23 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH 1/3] iio: buffer: remove usage of list iterator variable
- for list_for_each_entry_continue_reverse()
-Message-ID: <20220402163645.17e911fd@jic23-huawei>
-In-Reply-To: <20220331230632.957634-1-jakobkoschel@gmail.com>
-References: <20220331230632.957634-1-jakobkoschel@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 2 Apr 2022 11:39:54 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE00147AC4
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 08:37:59 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a6so663891ejk.0
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 08:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Om7g1lbZHptt45F5/8EMxdm2FJFfgH0D0EuLInj36vU=;
+        b=JVpQL/v5kWGf/e2/0JHBaEUGGw/gj3Ojbu7L/yyxICvL6KyitRYisyaCKKvLuhnzRR
+         bAfAQP9PDU2bjs9AqA2JVHTfBGMh8fmWIugeGXrIAu6aDnRrJW7zkBjzeIA3lxhPcJak
+         SZkNWnlrUSlK3Rd3vLkZqXMrEcEVjAlK+O5bwuXqMDa1vGIOlmnhvuK68upNgJyomv7G
+         sc3KNTc4y9T5EXLE/guXbGP0nyME9ORiSoViSq/PG2SA573R80+wm5VdUkKA1OWYXX0R
+         pTnm9LSwLzLb/WXEzClRvpw2rsunxAiftvC1xqcKI18olKG7ZZnq5RGSNnw/MlN5LwvF
+         6Qug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Om7g1lbZHptt45F5/8EMxdm2FJFfgH0D0EuLInj36vU=;
+        b=ZMP/e1LsRIEsPkp8bTP3DHnuqSOci1Q7W40fnJWrW0dg4ZSWroG5dFTlFNlS8WOa35
+         f77gIHKpni3MI6cKfKkdJeb/xXbmy2YGGR8ulNEogt7KSo1E1+n+/7cdDD5C5s2ljxVL
+         KXeDPGg+4Q1zuDOr59hYQ/Z45s0yhx3hOGKSjZmxkV7aXmIwnosjaefhIhLcEHI4qVHB
+         wYuWE7ZPIKRjBoB4g9aed10wPgAYw5bPF1YLcRMA2+qqd04iiIveSQ5ys+uQL+nj5qlZ
+         dzbcwo0z/hvyZPLHiDx2otDPLJYUQcQSeyj+IZhryCR22OpcrmoeZ8xVSdZcHAAHr2k3
+         kOoQ==
+X-Gm-Message-State: AOAM533AiMvuqPtWFp/k830J0nzVofqWbzLPaziA5AQXbKcDHR7bs84K
+        wYybbU2r9SXRgJxUUAF6JmyLEA==
+X-Google-Smtp-Source: ABdhPJyxFZOKe4x3u3oQufe6RweNYX1YclatcvzBUnGqI5aWiZseTdOA+bMUDSEEh3I460buuu9lLA==
+X-Received: by 2002:a17:907:7f0c:b0:6e1:42ee:3e71 with SMTP id qf12-20020a1709077f0c00b006e142ee3e71mr4248325ejc.127.1648913878505;
+        Sat, 02 Apr 2022 08:37:58 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id i14-20020a50cfce000000b0041cbaba8743sm434843edk.56.2022.04.02.08.37.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 08:37:58 -0700 (PDT)
+Message-ID: <523c6f46-54eb-22f0-221c-981879b8311e@linaro.org>
+Date:   Sat, 2 Apr 2022 17:37:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/5] dt-bindings: serial: Update Qualcomm geni based QUP
+ uart bindings
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+ <20220402051206.6115-4-singh.kuldeep87k@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220402051206.6115-4-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,76 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  1 Apr 2022 01:06:30 +0200
-Jakob Koschel <jakobkoschel@gmail.com> wrote:
+On 02/04/2022 07:12, Kuldeep Singh wrote:
+> Similar to i2c controller, move geni based QUP uart controller bindings
 
-> In preparation to limit the scope of the list iterator variable to the
-> list traversal loop, use a dedicated pointer to iterate through the
-> list [1].
-> 
-> Since that variable should not be used past the loop iteration, a
-> separate variable is used to 'remember the current location within the
-> loop'.
-> 
-> To either continue iterating from that position or start a new
-> iteration (if the previous iteration was complete) list_prepare_entry()
-> is used.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+s/i2c/I2C/
+s/uart/UART/
 
-Hi Jakob,
+> out from parent schema to an individual binding and let parent refer to
+> child schema later on. Uart bindings also stand incomplete right now
 
-Series applied to the togreg branch of iio.git and pushed out as testing to let
-0-day take a poke at it. Note I'll be rebasing that branch on rc1 once available
-before pushing it out for linux-next to pick up.
+s/Uart/UART/
 
-Note I'm happy to add additional tags if anyone else takes a look at it.
+> similar to i2c, complete it along this process.
 
-Thanks
+s/i2c/I2C/
 
-Jonathan
 
-> ---
->  drivers/iio/industrialio-buffer.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-> index 208b5193c621..151a77c2affd 100644
-> --- a/drivers/iio/industrialio-buffer.c
-> +++ b/drivers/iio/industrialio-buffer.c
-> @@ -1059,7 +1059,7 @@ static int iio_enable_buffers(struct iio_dev *indio_dev,
->  	struct iio_device_config *config)
->  {
->  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
-> -	struct iio_buffer *buffer;
-> +	struct iio_buffer *buffer, *tmp = NULL;
->  	int ret;
-> 
->  	indio_dev->active_scan_mask = config->scan_mask;
-> @@ -1097,8 +1097,10 @@ static int iio_enable_buffers(struct iio_dev *indio_dev,
-> 
->  	list_for_each_entry(buffer, &iio_dev_opaque->buffer_list, buffer_list) {
->  		ret = iio_buffer_enable(buffer, indio_dev);
-> -		if (ret)
-> +		if (ret) {
-> +			tmp = buffer;
->  			goto err_disable_buffers;
-> +		}
->  	}
-> 
->  	if (indio_dev->currentmode == INDIO_BUFFER_TRIGGERED) {
-> @@ -1125,6 +1127,7 @@ static int iio_enable_buffers(struct iio_dev *indio_dev,
->  					     indio_dev->pollfunc);
->  	}
->  err_disable_buffers:
-> +	buffer = list_prepare_entry(tmp, &iio_dev_opaque->buffer_list, buffer_list);
->  	list_for_each_entry_continue_reverse(buffer, &iio_dev_opaque->buffer_list,
->  					     buffer_list)
->  		iio_buffer_disable(buffer, indio_dev);
-> 
-> base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
-> --
-> 2.25.1
-> 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

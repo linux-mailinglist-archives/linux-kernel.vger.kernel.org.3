@@ -2,133 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F354EFEDA
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343774EFEE2
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 07:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353779AbiDBFOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 01:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S1353785AbiDBFR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 01:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353750AbiDBFO2 (ORCPT
+        with ESMTP id S233094AbiDBFRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 01:14:28 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04A51905A6;
-        Fri,  1 Apr 2022 22:12:31 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id b15so4383831pfm.5;
-        Fri, 01 Apr 2022 22:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Cmh3zBP9GsKXvL2pssHcTFPMISefgaLSJBLP3U0JXlQ=;
-        b=AoGYQZWG6wsdCVOGtMdF4xUeIPkQaO857bhsv+DdFDv8TAsgBuHcDnvGew1xll6gK5
-         klJwu4dxZcGZ7eQSROPJwcC+8p/a0sqnuL/fSoeZlIV8du8NOll29oVviZ5FmzNj9tAG
-         8WQ/UvBMM1sCbftS2oaY69leQOfS16+Svvf5SnXI+UXw/gghgbTjmpkAYV0jUWJnL3cR
-         cOzZC7kV2VXbDsMP7i7iv5CkTEPVIiRXxHFIkX9Gy1EA+q2eZo/Go6JdkMG6AkcjH7iv
-         Ap54wA3Gg4lQLaA/6whUmOcBY0gyIpB33Mv6MdA2MFXdGUp4/TnrSEdnZWeBPHHa/SzD
-         A3NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Cmh3zBP9GsKXvL2pssHcTFPMISefgaLSJBLP3U0JXlQ=;
-        b=JgqX5ULQJobdNwWgNvi06wiEJKvE3psANHdb94SnEONiudUqyeUl9EBdHXC1iVRegl
-         WC0y9S99DduH+yWFASVbi6ghqdCEkLpqX3eGzM40QLrId5DZEcBNRTvxIs5pJ0l87UzF
-         KeydrTuISVIpStJgMRHPRElm/jgfQa4aByw99t9AeHyKu82fYJeDhB+JUepYYyctgOrJ
-         USGJ3+ub0v20xHUhRJ3G268udT88zfCwlzzymSX+fJrWr0+qSYXAIxbiCQ7dGF2AAVXV
-         cynJ7Wl7kUCYJrrND2yWVHfpWf4P+Rw10OXLEPa2yoQRRdJMMSWoTYJVl10Bw7yPJ1Yv
-         BXaA==
-X-Gm-Message-State: AOAM530sDHZObovdvO8gfJB0QogCmCca22UblahJv8vfnkJZddTW7MyS
-        QGMulKoPkSrzuFsuSomGaVY=
-X-Google-Smtp-Source: ABdhPJzMIkQ8AIMYzYpn8QBnw3j8ONlhGOQgm+9wuTzXUlfUzp8VRj+3yZ9t8Ii9kLYIji7gvaHrPA==
-X-Received: by 2002:a63:1758:0:b0:381:effc:b48f with SMTP id 24-20020a631758000000b00381effcb48fmr17861363pgx.124.1648876351130;
-        Fri, 01 Apr 2022 22:12:31 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm3834721pgo.6.2022.04.01.22.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 22:12:30 -0700 (PDT)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 5/5] dt-bindings: qcom: geni-se: Remove common controller properties
-Date:   Sat,  2 Apr 2022 10:42:06 +0530
-Message-Id: <20220402051206.6115-6-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
-References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+        Sat, 2 Apr 2022 01:17:23 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E21AC72A;
+        Fri,  1 Apr 2022 22:15:30 -0700 (PDT)
+Received: from [192.168.165.80] (unknown [182.2.36.61])
+        by gnuweeb.org (Postfix) with ESMTPSA id 0A80C7E356;
+        Sat,  2 Apr 2022 05:15:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648876529;
+        bh=Y01PgXHrUoAQRiCbzvaK0s1BZI4Z5mxJMR1GYxrrdVg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QOoNnEQVweFm7+5mdZPgNSNXRlwjrnkQlF3HXxICZaF+d7QVxXjySgkRNpDOHs24B
+         3LrIT/ouZF2ofwpm3Zc4Sz66mA6tC1jSBXgY28in5Wysjqr63ie6CPBc1UBAs59c4C
+         aO9bcjughMrLMQJCWyy+QJslnTVqGNUQBMyG6Jn/w5Dx9h9Ip2PJo9b3lQr7cQg8eF
+         q1ZYz+q+8ttgx90jxD3aWX6kngJyMIPorANmJKJDzMffWBXLWDh0ti4pUgWc63YQVC
+         DFFRSOHyBZ09q6JLlnsG+fTva9Rn+b3oLkbn/dC02ipbZY8hTPnxe+ZeMju6KcRn+/
+         6/rdXb9khCOxA==
+Message-ID: <c768b141-e463-5b4b-daba-794a02da3f1f@gnuweeb.org>
+Date:   Sat, 2 Apr 2022 12:15:18 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable Kernel <stable@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jiri Hladky <hladky.jiri@googlemail.com>
+References: <20220329104705.65256-1-ammarfaizi2@gnuweeb.org>
+ <20220329104705.65256-2-ammarfaizi2@gnuweeb.org>
+ <13463eca-03a2-da0d-c274-fb576a8a051f@intel.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <13463eca-03a2-da0d-c274-fb576a8a051f@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that Geni serial engine controllers(spi, i2c and uart) have their
-own individual bindings, it's time to remove all common properties of
-the controllers from parent schema.
+On 4/2/22 12:42 AM, Dave Hansen wrote:
+> Was this found by inspection or was it causing real-world problems?
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
- .../bindings/soc/qcom/qcom,geni-se.yaml       | 33 -------------------
- 1 file changed, 33 deletions(-)
+It was found by inspection, no real-world problems found so far.
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-index 9f72c676b22c..c8e1a4a87ba8 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-@@ -64,39 +64,6 @@ required:
-   - ranges
- 
- patternProperties:
--  "^.*@[0-9a-f]+$":
--    type: object
--    description: Common properties for GENI Serial Engine based I2C, SPI and
--                 UART controller.
--
--    properties:
--      reg:
--        description: GENI Serial Engine register address and length.
--        maxItems: 1
--
--      clock-names:
--        const: se
--
--      clocks:
--        description: Serial engine core clock needed by the device.
--        maxItems: 1
--
--      interconnects:
--        minItems: 2
--        maxItems: 3
--
--      interconnect-names:
--        minItems: 2
--        items:
--          - const: qup-core
--          - const: qup-config
--          - const: qup-memory
--
--    required:
--      - reg
--      - clock-names
--      - clocks
--
-   "spi@[0-9a-f]+$":
-     type: object
-     description: GENI serial engine based SPI controller. SPI in master mode
 -- 
-2.25.1
-
+Ammar Faizi

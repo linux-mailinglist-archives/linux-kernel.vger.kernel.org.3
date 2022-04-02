@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F634EFDFF
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 04:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A574EFE02
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 04:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237530AbiDBCma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 22:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S237576AbiDBCqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 22:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiDBCm2 (ORCPT
+        with ESMTP id S229790AbiDBCqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 22:42:28 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BB81A1280;
-        Fri,  1 Apr 2022 19:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648867238; x=1680403238;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bj4rfjg830Wz124zyu46gMY5uDkjqoPuQpgNrHl2G3U=;
-  b=Wm1ws09myZ6uHiGSS0vhUo6Exp0xBZMfG5s0eraGqXImVhmZNfDEqLxY
-   fM5uPEmACgCbS8sF/yOgNZpGwoumM7wlRRwLhdtM7mguRY3wTK8S95i0z
-   cOYG04KnIsmx0IA1Zq5X844LczdEgECNJQzFEbCpLwx3tUZvdhhFK3TeN
-   OKu8KNfer921lnuWc+GMU7sUVkWg377cPzeFOl2BUnrS/i3/8cGwQZvKt
-   6YdI4nRHSA6y5UTHB90zz1ElNkmlZkk7C5JI0myp1WeFcIbeLdU7dsxFE
-   8tylG490Yl5Kp3Htq3jHx5SL61YFQs5fVS4NaAL88UWEwArfI93YMStIw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257850134"
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="257850134"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 19:40:38 -0700
-X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
-   d="scan'208";a="548030893"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.31.112]) ([10.255.31.112])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 19:40:35 -0700
-Message-ID: <bd18fe0e-6e74-f89c-a754-15da2aa2eb96@intel.com>
-Date:   Sat, 2 Apr 2022 10:40:32 +0800
+        Fri, 1 Apr 2022 22:46:34 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BE8C3EB85
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 19:44:19 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(1159:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Sat, 02 Apr 2022 10:42:24 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Sat, 2 Apr 2022 10:43:23 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.018; Sat, 2 Apr 2022 10:43:22 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski@canonical.com" 
+        <krzysztof.kozlowski@canonical.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>
+Subject: RE: [PATCH v12 6/9] dt-bindings: interrupt-controller: Add bindings
+ for SP7021 interrupt controller
+Thread-Topic: [PATCH v12 6/9] dt-bindings: interrupt-controller: Add bindings
+ for SP7021 interrupt controller
+Thread-Index: AQHYRNqIBkj2YEKP8ka+VOn6WZsX66zZcIoAgADkMACAAH4sAIABGb5A
+Date:   Sat, 2 Apr 2022 02:43:22 +0000
+Message-ID: <2b5ed89d562543ac84351d8c1aee1635@cqplus1.com>
+References: <cover.1648714851.git.qinjian@cqplus1.com>
+ <ff5bfd5611ab0defe0c98f98edbbf655e33cd16d.1648714851.git.qinjian@cqplus1.com>
+ <YkYSyHVGsXkGs0uf@robh.at.kernel.org>
+ <3373b11528214394baae71198df3adff@cqplus1.com>
+ <Ykc8Cv/TbYlr9GxV@robh.at.kernel.org>
+In-Reply-To: <Ykc8Cv/TbYlr9GxV@robh.at.kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize TDX
- module
-Content-Language: en-US
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
- <36aac3cb7c7447db6454ee396e25eea3bad378e6.camel@intel.com>
- <20220331194144.GA2084469@ls.amr.corp.intel.com>
- <d63042a2-91d8-5555-1bac-4d908e03da2b@intel.com>
- <20220401201806.GA2862421@ls.amr.corp.intel.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20220401201806.GA2862421@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/2022 4:18 AM, Isaku Yamahata wrote:
-> On Fri, Apr 01, 2022 at 02:56:40PM +0800,
-> Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> 
->> On 4/1/2022 3:41 AM, Isaku Yamahata wrote:
->>> On Thu, Mar 31, 2022 at 04:31:10PM +1300,
->>> Kai Huang <kai.huang@intel.com> wrote:
->>>
->>>> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
->>>>> From: Isaku Yamahata <isaku.yamahata@intel.com>
->>>
->>>>> Add a wrapper function to initialize the TDX module and get system-wide
->>>>> parameters via those APIs.  Because TDX requires VMX enabled, It will be
->>>>> called on-demand when the first guest TD is created via x86 KVM init_vm
->>>>> callback.
->>>>
->>>> Why not just merge this patch with the change where you implement the init_vm
->>>> callback?  Then you can just declare this patch as "detect and initialize TDX
->>>> module when first VM is created", or something like that..
->>>
->>> Ok. Anyway in the next respoin, tdx module initialization will be done when
->>> loading kvm_intel.ko.  So the whole part will be changed and will be a part
->>> of module loading.
->>
->> Will we change the GET_TDX_CAPABILITIES ioctl back to KVM scope?
-> 
-> No because it system scoped KVM_TDX_CAPABILITIES requires one more callback for
-> it.  We can reduce the change.
-> 
-> Or do you have any use case for system scoped KVM_TDX_CAPABILITIES?
-
-No. Just to confirm.
-
-on the other hand, vm-scope IOCTL seems more flexible if different 
-capabilities are reported per VM in the future.
+PiANCj4gT24gRnJpLCBBcHIgMDEsIDIwMjIgYXQgMDI6Mjk6NThBTSArMDAwMCwgcWluamlhblvo
+poPlgaVdIHdyb3RlOg0KPiA+ID4NCj4gPiA+IE9uIFRodSwgMzEgTWFyIDIwMjIgMTY6Mjk6NTMg
+KzA4MDAsIFFpbiBKaWFuIHdyb3RlOg0KPiA+ID4gPiBBZGQgZG9jdW1lbnRhdGlvbiB0byBkZXNj
+cmliZSBTdW5wbHVzIFNQNzAyMSBpbnRlcnJ1cHQgY29udHJvbGxlciBiaW5kaW5ncy4NCj4gPiA+
+ID4NCj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogUWluIEppYW4gPHFpbmppYW5AY3FwbHVzMS5jb20+
+DQo+ID4gPiA+IC0tLQ0KPiA+ID4gPiBNb3ZlICdyZWcnIGFmdGVyICdjb21wYXRpYmxlJw0KPiA+
+ID4gPiAtLS0NCj4gPiA+ID4gIC4uLi9zdW5wbHVzLHNwNzAyMS1pbnRjLnlhbWwgICAgICAgICAg
+ICAgICAgICB8IDYyICsrKysrKysrKysrKysrKysrKysNCj4gPiA+ID4gIE1BSU5UQUlORVJTICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsNCj4gPiA+ID4gIDIgZmlsZXMg
+Y2hhbmdlZCwgNjMgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pbnRlcnJ1cHQtY29udHJvbGxlci9zdW5w
+bHVzLHNwNzAyMS1pbnRjLnlhbWwNCj4gPiA+ID4NCj4gPiA+DQo+ID4gPg0KPiA+ID4gUGxlYXNl
+IGFkZCBBY2tlZC1ieS9SZXZpZXdlZC1ieSB0YWdzIHdoZW4gcG9zdGluZyBuZXcgdmVyc2lvbnMu
+IEhvd2V2ZXIsDQo+ID4gPiB0aGVyZSdzIG5vIG5lZWQgdG8gcmVwb3N0IHBhdGNoZXMgKm9ubHkq
+IHRvIGFkZCB0aGUgdGFncy4gVGhlIHVwc3RyZWFtDQo+ID4gPiBtYWludGFpbmVyIHdpbGwgZG8g
+dGhhdCBmb3IgYWNrcyByZWNlaXZlZCBvbiB0aGUgdmVyc2lvbiB0aGV5IGFwcGx5Lg0KPiA+ID4N
+Cj4gPiA+IElmIGEgdGFnIHdhcyBub3QgYWRkZWQgb24gcHVycG9zZSwgcGxlYXNlIHN0YXRlIHdo
+eSBhbmQgd2hhdCBjaGFuZ2VkLg0KPiA+DQo+ID4gQ2hhbmdlczogTW92ZSAncmVnJyBhZnRlciAn
+Y29tcGF0aWJsZScNCj4gPiBJIGRpZCBhIG1vZGlmaWNhdGlvbiBiYXNlZCBvbiBjb21tZW50cyBm
+cm9tIGtyenlzenRvZi5rb3psb3dza2lAY2Fub25pY2FsLmNvbSBbMV0NCj4gPg0KPiA+IFsxXSBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvNmRiZWRhMTgtYTExYy02MDlkLTdhOGYtYmYyZTZm
+MjdhZWE3QGtlcm5lbC5vcmcvDQo+IA0KPiBBIHRyaXZpYWwgY2hhbmdlIGxpa2UgdGhhdCBjYW4g
+a2VlcCBhIHRhZyBlc3BlY2lhbGx5IGlmIGl0IGNhbWUgYWZ0ZXINCj4gdGhlIGNvbW1lbnQgKG5v
+dCBzdXJlIGhlcmUpLg0KPiANCj4gUm9iDQoNCkknbGwgYWRkIGJhY2sgdGhlIHRhZyBuZXh0IHZl
+cnNpb24sIHRoYW5rcy4NCg==

@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0DF4F0670
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C49F4F0671
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 23:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244465AbiDBVbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 17:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S239170AbiDBVes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 17:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243844AbiDBVbX (ORCPT
+        with ESMTP id S229932AbiDBVeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 17:31:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364571DA44;
-        Sat,  2 Apr 2022 14:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648934951;
-        bh=7yYtWMHnK6AVMZOBHrVxK81UGFtO3CpC0uUtw1WFFkw=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=hrVLRcJMX46o3hSrAMCOqLtAUECGQfibzskxQteSecownJnqZWbxJvKexs2G3kvU1
-         0cD4uBQebnO8p0OYkZtwtxpEUPAjpVnQfYLnduQfjaywZA2oLjFI4a95vOz9gkKYo5
-         PDOmXsHSZF7ND6lXvJnqFS+7J9RLwvuTAR5CNX5g=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.149.42]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M4s51-1nch722iE3-001xuL; Sat, 02
- Apr 2022 23:29:11 +0200
-Message-ID: <ba21a1d3-26bb-cc80-57b5-6bd416de5e93@gmx.de>
-Date:   Sat, 2 Apr 2022 23:29:08 +0200
+        Sat, 2 Apr 2022 17:34:46 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8D54927C
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 14:32:53 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id b17-20020a0568301df100b005ce0456a9efso4587402otj.9
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 14:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OuxBTZEviYeN1sMz66IprCGLA9hb5Nx6rXTjFA3rNN4=;
+        b=UUdp0QnvOdDZpMvTZD2fAUtdk89HiNaA/Yp846JGS9ftpyaiv+KyFxkWN3p7YHobY4
+         pqMhGC74Y2XBx5CKTjugeHhTgTmUdhFNfWyEVO6sw9H+n44jRaj2Rp8b7/c98lgsH6DJ
+         zVPH5/hyAibGvwg3+C1ALNT6Kidqo2bUAHjTk0UWXCul/Y7zK/58w0s7O3VriASM6AzQ
+         /7UDPNc4vQVxnU54ZLvBgh93Mhr+qcyE8SMcID83HmwxTgAqedCzQLQr3psnOiqp/hFQ
+         OuS977nP0gfGHjGtVs9FAm/A6BhgeWLXxLtRVyEvBAaG+Dj4KtU7UNI/nzN6jR4GvY8O
+         MFDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OuxBTZEviYeN1sMz66IprCGLA9hb5Nx6rXTjFA3rNN4=;
+        b=R415fpfK3gpqkU6wjxh4TUiAt40eDRtHndEIBVdiGOz5ZT1bZlaxpC287B8PWjY7r5
+         miuQh+cW0h7AmEVMPIw3LVDfa4tYSYUxo/Ho49ODzBkfvLaLonLjGTkTbK8Lz4XhUWUa
+         dMffUn/sLpaxHzQmCF187q2S3V0MKmJAgNrx7UUZ5To4bbaoJ/cwGw6uKbdh6ZvTTq1R
+         BMfO4UMAU/S+hDRoLluKac+TV/rUn9/tEBlN9RfoX/TvLtWDsDqmLZEzHMc4fzXmyuLg
+         rP4HOKw7eL9xYh+1HLS0ZMPJp9IjoiO68/g3KU8TzPWNp8vuUXbwsLYMKVNm/CL3KcOJ
+         GTKA==
+X-Gm-Message-State: AOAM53137jRoGkrN3VlvHxo+3ZBhPvA80LUdQuVX2Sa2k9EDZwAi+WQK
+        I/IDWuKdVZe+gp0llGF7z4g=
+X-Google-Smtp-Source: ABdhPJx+JbqluJ9nIsvXP1fqha9EZvzEFi/2FGjrQlYIN7fB7NULUTOKPgOSoyZ8PaSoP/dTstmeTA==
+X-Received: by 2002:a05:6830:1484:b0:5cb:4a65:c91b with SMTP id s4-20020a056830148400b005cb4a65c91bmr9769156otq.121.1648935173030;
+        Sat, 02 Apr 2022 14:32:53 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::1004? (2603-8090-2005-39b3-0000-0000-0000-1004.res6.spectrum.com. [2603:8090:2005:39b3::1004])
+        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm2443817oou.10.2022.04.02.14.32.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 14:32:52 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <d9c7a2ba-288a-d81a-cd59-5b002489d821@lwfinger.net>
+Date:   Sat, 2 Apr 2022 16:32:50 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] parisc: Switch from GENERIC_CPU_DEVICES to
- GENERIC_ARCH_TOPOLOGY
+Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     James.Bottomley@hansenpartnership.com,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220401154137.GA3745625@roeck-us.net>
- <57e79014-25e6-62d3-27de-64797e43992b@gmx.de>
- <927a54f9-b413-0c71-461d-28ed9d5ece96@roeck-us.net> <YkdiDJZ/XHODymRk@p100>
- <6353bc69-901e-32e7-e736-00dd6a09a1ea@roeck-us.net>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <6353bc69-901e-32e7-e736-00dd6a09a1ea@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qzehXp0poiCdBkIlbE8WwHR4L7EsVNc/e7hthJeT5hHoT3XUu1l
- ep6AM+jlkPXd8gy2ONlcRwf2bGuWAcBGjLZPe0b7HPJ2vN+ADYSoVzMLPQtdsOOoBJpFvuX
- s2kec7+BK95oe0Q+2Cx+h0gzfEwaAmtGk5DzF3bkpHG2Liv4OZgcsMtqiU3hKpCT+cgnDx5
- KAq6nTLyfCcnEh0htZ3TA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Y2azOLBicSg=:U2aYiByJG1xJC3T/7WN0Ps
- mfgNpTAQWigMirN7EqtWTItQklPIcRNNQrggCfGZkaU6mNWnxqh5/BhdjfC6K2Ds19Bpp0Pbf
- G3aKNCvuuzzv8qFmqpujeJDy46vxNYbOFOKsrpVi+MDAc4KtLVma5uExdA/LvxRk62dAE8Ba9
- p6M3quuuHnF1ku58Bm7J0qsMyZsdupBhj9Hnj14V3AqEWo10c1FqPFw5/tR9GiFbvFny3tDea
- TIUaGyOc9STNr7c93A4mTlsqqZ9ua0iq33cujijEBf7yfdA59SMciHlqMch4q5dve2lDNY4Iy
- 922vMLtWHetWHKQKquSGANPYh87CjOtDeUeMyI0+/yjRng/uUvtrWIjYlsLkaLXDFA0VpqpqV
- uOjs4qVWHCWDUgq3r7iPR3y1hcV4zTVbdAsP+l8+2kq+/zQnoKMzOoQdsDxcruxRl93h/pNUT
- mn4lk8Eb2EBpXbvqeF+ku7w2J+WMpBc1JlKBpQRYUWDfS/mJdxKp1s1crMavXH6RqMcZJOf/I
- wpJGDV8sHdPXAOlHbwZ2u6BRrxqraH+FX4ZNyV+3e16zlma9NZuG0Lx0o6vf2N5ZQ9W7BNFPv
- fwiz4j3jYdfR/yRcjcCoaKIqHzofeY/ueYcWWdN6uth4x9M4p941oSNuBOY+j2Zkoznxa0ecN
- v1kTW9PSD6PejXfbMg0YfDji7gT+Tiktpol5k5dSKWNHrD+w7dZLtOoZfvR1I4lh/3frik2FY
- zCCwAOMy+wOygbJYkQjpnJo7rP9G+HpvK5AHDCXDr4F9Jz9SOzza6kDBLUiimsarls68/dl8Y
- fHNTH/21OH0PfvlCS+YRPuxLfj8bfXDnTNqpw5BkLW+KG7Jpg9TEEu1bxbNFTKPTdHdofssmW
- vJPaeiriyjcyz9t+rKo70q1QBUdrevpAwcHkahjJo2Ui6psQtYHvidgo21/eB7jQoBLhzDcDZ
- KkZoWFrsqBfhg984+5dZu9VEw68+Q9vGEcf/5lQ7Y60rW++gfc1XsMp99X8iuXUEBxG+Sa1Vu
- qwG4FUGlZp1dACYi383JySzOR5QIxicTyH8OL54KjkJoe1XRGuPkciq8hquiKsM5p7++qrIsP
- zATu6ovfvBvZu4=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Michael Straube <straube.linux@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Phillip Potter <phil@philpotter.co.uk>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/22 23:27, Guenter Roeck wrote:
-> On 4/1/22 13:35, Helge Deller wrote:
->> Hi G=C3=BCnter,
->>
->> * Guenter Roeck <linux@roeck-us.net>:
->>> On 4/1/22 09:47, Helge Deller wrote:
->>>> Hi G=C3=BCnter,
->>>>
->>>> On 4/1/22 17:41, Guenter Roeck wrote:
->>>>> On Thu, Mar 24, 2022 at 07:46:50PM +0100, Helge Deller wrote:
->>>>>> Switch away from the own cpu topology code to common code which is =
-used
->>>>>> by ARM64 and RISCV. That will allow us to enable CPU hotplug later =
-on.
->>>>>>
->>>>>> Signed-off-by: Helge Deller <deller@gmx.de>
->>>>>
->>>>> This patch results in the following traceback when
->>>>> booting generic-32bit_defconfig - SMP in qemu.
->>>>
->>>> That's strange, because I just built this generic-32bit_defconfig mys=
-elf and
->>>> it boots up nicely in qemu for me. The only thing missing is CONFIG_C=
-GROUPS=3Dy so that
->>>> systemd can start.
->>>>
->>>
->>> Did you disable SMP (that is what - SMP was supposed to mean) ?
->>> Also, note that the system does boot fine, it just spits out the warni=
-ng.
->>
->> The patch below fixes the warning for me.
->> Could you try?
->>
->
-> I did, and it fixes the problem. I just sent a Tested-by: in response to
-> your patch.
+On 4/2/22 15:47, Michael Straube wrote:
+> Hi all,
+> 
+> smatch reported a sleeping in atomic context.
+> 
+> rtw_set_802_11_disassociate() <- disables preempt
+> -> _rtw_pwr_wakeup()
+>     -> ips_leave()
+> 
+> rtw_set_802_11_disassociate() takes a spinlock and ips_leave() uses a
+> mutex.
+> 
+> I'm fairly new to the locking stuff, but as far as I know this is not a
+> false positive since mutex can sleep, but that's not allowed under a
+> spinlock.
+> 
+> What is the best way to handle this?
+> I'm not sure if converting the mutex to a spinlock (including all the
+> other places where the mutex is used) is the right thing to do?
 
-Thanks for testing !!
-Helge
+In drivers/net/wireless/realtek/rtlwifi, we had a similar problem. There it was 
+handled by putting the lps_enter() and lps_leave() operations in a separate 
+workqueue. In this case, the routines were rtl_lps_enter() and rtl_lps_leave(). 
+Each of them sets a variable to indicate whether enter_ps is true or false, and 
+schedules the workqueue. In the workqueue's callback routine, the routines to 
+start/stop ps mode are called. The code is in 
+drivers/net/wireless/realtek/rtlwifi/ps.c.
 
+This solution is only one of many, and there may be a better one.
 
->
-> Guenter
->
->> Helge
->>
->>
->> From: Helge Deller <deller@gmx.de>
->> Subject: [PATCH] parisc: Re-enable GENERIC_CPU_DEVICES for !SMP
->>
->> In commit 62773112acc5 ("parisc: Switch from GENERIC_CPU_DEVICES to
->> GENERIC_ARCH_TOPOLOGY") GENERIC_CPU_DEVICES was unconditionally turned
->> off, but this triggers a warning in topology_add_dev(). Turning it back
->> on for the !SMP case avoids this warning.
->>
->> Reported-by: Guenter Roeck <linux@roeck-us.net>
->> Fixes: 62773112acc5 ("parisc: Switch from GENERIC_CPU_DEVICES to GENERI=
-C_ARCH_TOPOLOGY")
->> Signed-off-by: Helge Deller <deller@gmx.de>
->>
->> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
->> index 52e550b45692..bd22578859d0 100644
->> --- a/arch/parisc/Kconfig
->> +++ b/arch/parisc/Kconfig
->> @@ -38,6 +38,7 @@ config PARISC
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select ARCH_HAVE_NMI_SAFE_CMPXCHG
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select GENERIC_SMP_IDLE_THREAD
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select GENERIC_ARCH_TOPOLOGY if SMP
->> +=C2=A0=C2=A0=C2=A0 select GENERIC_CPU_DEVICES if !SMP
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select GENERIC_LIB_DEVMEM_IS_ALLOWED
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select SYSCTL_ARCH_UNALIGN_ALLOW
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select SYSCTL_EXCEPTION_TRACE
->
+Larry
 

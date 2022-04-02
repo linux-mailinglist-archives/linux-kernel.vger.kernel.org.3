@@ -2,133 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB8A4F062D
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF154F062F
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 22:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346142AbiDBUbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 16:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S1344476AbiDBUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 16:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236741AbiDBUbS (ORCPT
+        with ESMTP id S229558AbiDBUjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 16:31:18 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493DA19298;
-        Sat,  2 Apr 2022 13:29:25 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso5469440pjb.5;
-        Sat, 02 Apr 2022 13:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0ZZWZbWVcWALwCo5lpRKmJjxkwFkNhYPr/C5DWHbhT0=;
-        b=QfGkIx0JPjRc5n7t5Yfx71SDzVU5CTuyo+MlvZTRTPYWe9cis64OBUNVTdPgo03kiV
-         8gU+pbcPDEdDrvyp3huVYl/fCr0aMX1l6X48I/2XkwnbhRMEtMmP4dZ1hA/96ORjg3hq
-         ELx+obSg+l0u3y0AAdtIjAJ5RWBeHrub3prefWFCh6g3x8Si9BiglXUvThMlpw1niL7d
-         42ORuM1Ld5c7XQk/0Ef7EGMjDnMT1nw2ugE7AnbSiSlPRioVu2xG7wKWSgqM1ZLQpZzN
-         uYuBPZYgvTA5gnIc4moXip5nxOFnmnpexl69PlDNwuttYxWrIDXj6QJiUwyspxztOahP
-         c4/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0ZZWZbWVcWALwCo5lpRKmJjxkwFkNhYPr/C5DWHbhT0=;
-        b=5WgJcG+emLvcQjui6Zdn/Gg6F1i2Zdh5MU2SNyzOTC7/K/pbuDVb4iBjq4suqDm/pC
-         ajoygtm6xXIs3hkvxJjmcKMneSCehj/R6ej0TuceJqWRTxAgQ1/hpyuhueMciz3W4mY4
-         Gk0QmwqaQol1I7qd/161MCSLHmOTLy8CW717w/vALlyETKzGX+VPdSqVjT988wJfNDUM
-         6LIFvZFXfb57WKb37Lu76j+Xhx0JL2iPeqg/+PHMno/aWHT+1NWYe3U2jV4gnaCfVKOg
-         ap0pTt7pfr5jNKbqiQ6gS72g7Gw5/73rJS2cCq3R7Na3s03r8qwUIxA7rfLdZZwEDtXH
-         yjgw==
-X-Gm-Message-State: AOAM532vB87x9SxUQ4V7AVuCExHcKEfXadRCpqioiMRh49gOw4/BWOhT
-        Gf/WV3inUTnoldJMZU82b0Y=
-X-Google-Smtp-Source: ABdhPJzg147N+TLrxT1k5Kesry9LS4W5ZxqaatIs3zKUWUcmXitOzexhEfjdZHWAe8+m/a+dTAR2Yg==
-X-Received: by 2002:a17:90b:4ad2:b0:1c7:cee:b126 with SMTP id mh18-20020a17090b4ad200b001c70ceeb126mr18207889pjb.219.1648931364799;
-        Sat, 02 Apr 2022 13:29:24 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b001c7ea7f487asm5848735pjh.39.2022.04.02.13.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 13:29:24 -0700 (PDT)
-Date:   Sun, 3 Apr 2022 01:59:17 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] dt-bindings: qcom: qcom,gsbi: convert to dtschema
-Message-ID: <20220402202917.GA36054@9a2d8922b8f1>
-References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
- <20220402184011.132465-10-krzysztof.kozlowski@linaro.org>
+        Sat, 2 Apr 2022 16:39:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF87D3526F
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 13:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648931840; x=1680467840;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SS66tXmszrn5GQlHV5AFatP2xe96x6vwLBrF2wwfrdA=;
+  b=cGy49/c5PgCg/AcWlfyaVLO/2ZY22CfWnBcyzWAvlFldQuh6PfVmNWbi
+   64pZTuFKqhQFMo5bXuIzRh+3BOaCBR9JMkd4qF1crYo1W4mQr4dtcVE8R
+   Tqr5VbtgpRpiC9cxQFC44DnKJx4Xf37fd6o6a+q+ssWMLtmglepex1V13
+   MYlToFrS4cel81niMRQdTc/Sr9HWfIWA+vZotUnzB5BYbZArzcbiRkHd0
+   PfIeQJn/FRCW/I2ez8wllnvDpI0tfO8i+hHOSCYFo1d8cEw7gV2124ZG6
+   2IQtCDnaHa2Sqrgxxkdk/6G51jDwbju+KS2UBR9ZDWwJf43f434gp69ji
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="247845353"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="247845353"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 13:37:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="548205182"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 02 Apr 2022 13:37:04 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nakUZ-0000Ot-GV;
+        Sat, 02 Apr 2022 20:37:03 +0000
+Date:   Sun, 3 Apr 2022 04:36:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies
+ type 'long' but the argument has type 'int'
+Message-ID: <202204030457.TMq8L80S-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220402184011.132465-10-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 08:40:11PM +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm General Serial Bus Interface (GSBI) to DT
-> Schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
->  .../bindings/soc/qcom/qcom,gsbi.yaml          | 133 ++++++++++++++++++
->  2 files changed, 133 insertions(+), 87 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6f34f8c3d6178527d4c02aa3a53c370cc70cb91e
+commit: 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b cpuidle: Add RISC-V SBI CPU idle driver
+date:   3 weeks ago
+config: riscv-randconfig-c006-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030457.TMq8L80S-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/
 
-Great initiative to convert everything in one go!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[...]
+All warnings (new ones prefixed by >>):
 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-> new file mode 100644
-> index 000000000000..b97e359f3f90
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-> @@ -0,0 +1,133 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/qcom/qcom,gsbi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm General Serial Bus Interface (GSBI)
-> +
-> +maintainers:
-> +  - Andy Gross <agross@kernel.org>
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +
-> +description:
-> +  The GSBI controller is modeled as a node with zero or more child nodes, each
-> +  representing a serial sub-node device that is mux'd as part of the GSBI
-> +  configuration settings.  The mode setting will govern the input/output mode
-> +  of the 4 GSBI IOs.
-> +
-> +  A GSBI controller node can contain 0 or more child nodes representing serial
-> +  devices.  These serial devices can be a QCOM UART, I2C controller, spi
-> +  controller, or some combination of aforementioned devices.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,gsbi-v1.0.0
+   drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
+                            cpuid_to_hartid_map(cpu));
+                            ^
+>> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                            cpuid_to_hartid_map(cpu));
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:570:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                            ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
+                          cpuid_to_hartid_map(cpu));
+                          ^
+   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                          cpuid_to_hartid_map(cpu));
+                          ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
+                                    cpuid_to_hartid_map(cpu));
+                                    ^
+   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                                    cpuid_to_hartid_map(cpu));
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:570:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                            ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                     ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   3 warnings and 3 errors generated.
 
-Only 1 entry? const.
 
--Kuldeep
+vim +350 drivers/cpuidle/cpuidle-riscv-sbi.c
+
+   317	
+   318	static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
+   319	{
+   320		struct cpuidle_driver *drv;
+   321		unsigned int state_count = 0;
+   322		int ret = 0;
+   323	
+   324		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+   325		if (!drv)
+   326			return -ENOMEM;
+   327	
+   328		drv->name = "sbi_cpuidle";
+   329		drv->owner = THIS_MODULE;
+   330		drv->cpumask = (struct cpumask *)cpumask_of(cpu);
+   331	
+   332		/* RISC-V architectural WFI to be represented as state index 0. */
+   333		drv->states[0].enter = sbi_cpuidle_enter_state;
+   334		drv->states[0].exit_latency = 1;
+   335		drv->states[0].target_residency = 1;
+   336		drv->states[0].power_usage = UINT_MAX;
+   337		strcpy(drv->states[0].name, "WFI");
+   338		strcpy(drv->states[0].desc, "RISC-V WFI");
+   339	
+   340		/*
+   341		 * If no DT idle states are detected (ret == 0) let the driver
+   342		 * initialization fail accordingly since there is no reason to
+   343		 * initialize the idle driver if only wfi is supported, the
+   344		 * default archictectural back-end already executes wfi
+   345		 * on idle entry.
+   346		 */
+   347		ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
+   348		if (ret <= 0) {
+   349			pr_debug("HART%ld: failed to parse DT idle states\n",
+ > 350				 cpuid_to_hartid_map(cpu));
+   351			return ret ? : -ENODEV;
+   352		}
+   353		state_count = ret + 1; /* Include WFI state as well */
+   354	
+   355		/* Initialize idle states from DT. */
+   356		ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
+   357		if (ret) {
+   358			pr_err("HART%ld: failed to init idle states\n",
+   359			       cpuid_to_hartid_map(cpu));
+   360			return ret;
+   361		}
+   362	
+   363		ret = cpuidle_register(drv, NULL);
+   364		if (ret)
+   365			goto deinit;
+   366	
+   367		cpuidle_cooling_register(drv);
+   368	
+   369		return 0;
+   370	deinit:
+   371		sbi_cpuidle_deinit_cpu(cpu);
+   372		return ret;
+   373	}
+   374	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

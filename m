@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE044F003C
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CC94F003F
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354208AbiDBJyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S1354207AbiDBJ4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239999AbiDBJyl (ORCPT
+        with ESMTP id S234011AbiDBJ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:54:41 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D6D198EDF
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:52:50 -0700 (PDT)
-Received: from [192.168.165.80] (unknown [182.2.36.61])
-        by gnuweeb.org (Postfix) with ESMTPSA id 232C57E2EE;
-        Sat,  2 Apr 2022 09:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648893169;
-        bh=8tCRa13ZZsZGboLXAqosF0lcTrImP1d0N9Iedzf/FKM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=sQ/Eg7Ugag8rSe2h0j6rD7H6xRrxmuMYqGA+P5VU5LnWLGIvYyu5YU25eup1lGa68
-         lsFMi2+8ae4Q+T+2FA6hp5hxjG6MmBU1z4HrBr92gMdO4x2/Zz1AkggLW+m2teO41F
-         LLjzaKQ+2lkX4C2BEB/cQe+uY9DNIHfnqVRoYaQLBBo6Ae36+Nm8TMAlZjCMHd4LJt
-         pQuN8SUHj80w/hMX4Kwg01EYD6UXmybs0M9yh+A1nwK9Gv46v8FzVu9tOWr/cWwXt8
-         ThShw+EgvEB/wTagd+LFSvgDObSdrQ+9qASDX4FxKqDTYqRs8Hn2tvTegNVpyrfsRT
-         nxFi5Lz8EmEMA==
-Message-ID: <9fa2454e-aef5-c879-eb0d-2eb23e603b55@gnuweeb.org>
-Date:   Sat, 2 Apr 2022 16:52:39 +0700
+        Sat, 2 Apr 2022 05:56:29 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7E340A07;
+        Sat,  2 Apr 2022 02:54:37 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KVsp42Bfwz9sSQ;
+        Sat,  2 Apr 2022 11:54:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id J1kWWnxAR9xr; Sat,  2 Apr 2022 11:54:36 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVsp41JX8z9sSK;
+        Sat,  2 Apr 2022 11:54:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 124A58B76D;
+        Sat,  2 Apr 2022 11:54:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id NMfIRjo3li5L; Sat,  2 Apr 2022 11:54:36 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D11938B768;
+        Sat,  2 Apr 2022 11:54:35 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2329sPms683831
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 2 Apr 2022 11:54:25 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2329sPsu683830;
+        Sat, 2 Apr 2022 11:54:25 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: bestcomm: Prepare cleanup of powerpc's asm/prom.h
+Date:   Sat,  2 Apr 2022 11:54:25 +0200
+Message-Id: <f98acba303489bdf003e7256460696225b00702e.1648833428.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>, kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Will Deacon <willdeacon@google.com>
-References: <202204021112.ErKMELRr-lkp@intel.com>
- <87r16fbzaq.wl-maz@kernel.org>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re:
- [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-03
- 199/9999] arch/arm64/kvm/perf.c:58:36: error: implicit declaration of
- function 'perf_num_counters'
-In-Reply-To: <87r16fbzaq.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648893263; l=775; s=20211009; h=from:subject:message-id; bh=EHC7XtdpuXzk9fw6SFZ1JBqiHftTjbWPW7+mZd21a2Y=; b=m9bCiPyxk4aVv8FPemO7/1yq520mjKfA8Xfnt7B5v6Cx5YfJSchYSQ7/EkaNIxP1iE1PocKgfrXd iiH3a1IZBFUtv8+Ec6vZxEQ7rbLl8/SdbMHEf+c7VBTXvAse0Gto
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,59 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-On 4/2/22 4:38 PM, Marc Zyngier wrote:
-> Hi Robot,
-> 
-> On Sat, 02 Apr 2022 04:47:04 +0100,
-> kernel test robot <lkp@intel.com> wrote:
->>
->> Hi Marc,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-03
-> 
-> Oh look, a random Android tree based on ... 5.10.
-> 
->> head:   64099431c232d4a95f621411747a3972cc1c8061
->> commit: 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf [199/9999] FROMGIT: KVM: arm64: Turn kvm_arm_support_pmu_v3() into a static key
->> config: arm64-randconfig-r024-20220331 (https://download.01.org/0day-ci/archive/20220402/202204021112.ErKMELRr-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project cc2e2b80a1f36a28fa7c96c38c2674b10868f09f)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm64 cross compiling tool for clang build
->>          # apt-get install binutils-aarch64-linux-gnu
->>          # https://github.com/ammarfaizi2/linux-block/commit/13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
->>          git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->>          git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-03
->>          git checkout 13dbdc0759fd4b89417f64d399ffa6a86fdc7caf
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> arch/arm64/kvm/perf.c:58:36: error: implicit declaration of function 'perf_num_counters' [-Werror,-Wimplicit-function-declaration]
->>             if (IS_ENABLED(CONFIG_ARM_PMU) && perf_num_counters() > 0)
->>                                               ^
->>     1 error generated.
-> 
-> $ ls -l arch/arm64/kvm/perf.c
-> ls: cannot access 'arch/arm64/kvm/perf.c': No such file or directory
-> 
-> What is the point of testing trees that have no resemblance with
-> upstream?
+In order to clean it up, first add missing headers in
+users of asm/prom.h
 
-It's my tree. Didn't realize it yields many irrelevant errors like this.
-I will stop pushing Android stuff to this tree.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/dma/bestcomm/bestcomm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sorry for bothering you.
-
+diff --git a/drivers/dma/bestcomm/bestcomm.c b/drivers/dma/bestcomm/bestcomm.c
+index 8c42e5ca00a9..1822a7034630 100644
+--- a/drivers/dma/bestcomm/bestcomm.c
++++ b/drivers/dma/bestcomm/bestcomm.c
+@@ -17,7 +17,9 @@
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
++#include <linux/of_address.h>
+ #include <linux/of_device.h>
++#include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+ #include <asm/io.h>
+ #include <asm/irq.h>
 -- 
-Ammar Faizi
+2.35.1
+

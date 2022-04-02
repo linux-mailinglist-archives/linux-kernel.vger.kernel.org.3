@@ -2,164 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6E54EFDFB
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 04:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F634EFDFF
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 04:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbiDBCku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Apr 2022 22:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S237530AbiDBCma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Apr 2022 22:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiDBCkr (ORCPT
+        with ESMTP id S229807AbiDBCm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Apr 2022 22:40:47 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14186189A27;
-        Fri,  1 Apr 2022 19:38:51 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:42730.2126972100
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id C2B7B1002B0;
-        Sat,  2 Apr 2022 10:38:41 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-749df8664c-nmrf6 with ESMTP id d99a69e77d364b26a9abcb0ecc6ee1f3 for yhs@fb.com;
-        Sat, 02 Apr 2022 10:38:50 CST
-X-Transaction-ID: d99a69e77d364b26a9abcb0ecc6ee1f3
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-Message-ID: <1952745a-40bc-1f42-350b-ed8437e252ce@189.cn>
-Date:   Sat, 2 Apr 2022 10:38:39 +0800
+        Fri, 1 Apr 2022 22:42:28 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BB81A1280;
+        Fri,  1 Apr 2022 19:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648867238; x=1680403238;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bj4rfjg830Wz124zyu46gMY5uDkjqoPuQpgNrHl2G3U=;
+  b=Wm1ws09myZ6uHiGSS0vhUo6Exp0xBZMfG5s0eraGqXImVhmZNfDEqLxY
+   fM5uPEmACgCbS8sF/yOgNZpGwoumM7wlRRwLhdtM7mguRY3wTK8S95i0z
+   cOYG04KnIsmx0IA1Zq5X844LczdEgECNJQzFEbCpLwx3tUZvdhhFK3TeN
+   OKu8KNfer921lnuWc+GMU7sUVkWg377cPzeFOl2BUnrS/i3/8cGwQZvKt
+   6YdI4nRHSA6y5UTHB90zz1ElNkmlZkk7C5JI0myp1WeFcIbeLdU7dsxFE
+   8tylG490Yl5Kp3Htq3jHx5SL61YFQs5fVS4NaAL88UWEwArfI93YMStIw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="257850134"
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="257850134"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 19:40:38 -0700
+X-IronPort-AV: E=Sophos;i="5.90,229,1643702400"; 
+   d="scan'208";a="548030893"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.31.112]) ([10.255.31.112])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 19:40:35 -0700
+Message-ID: <bd18fe0e-6e74-f89c-a754-15da2aa2eb96@intel.com>
+Date:   Sat, 2 Apr 2022 10:40:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] sample: bpf: syscall_tp_user: print result of verify_map
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [RFC PATCH v5 008/104] KVM: TDX: Add a function to initialize TDX
+ module
 Content-Language: en-US
-To:     Yonghong Song <yhs@fb.com>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1648777272-21473-1-git-send-email-chensong_2000@189.cn>
- <882349c0-123d-3deb-88e8-d400ec702d1f@fb.com>
- <306ab457-9f3d-4d90-bb31-e6fb08b6a5ad@189.cn>
- <b0b8be03-04e7-eb87-474d-b1584ebe2060@fb.com>
-From:   Song Chen <chensong_2000@189.cn>
-In-Reply-To: <b0b8be03-04e7-eb87-474d-b1584ebe2060@fb.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <b92217283fa96b85e9a683ca3fcf1b368cf8d1c4.1646422845.git.isaku.yamahata@intel.com>
+ <36aac3cb7c7447db6454ee396e25eea3bad378e6.camel@intel.com>
+ <20220331194144.GA2084469@ls.amr.corp.intel.com>
+ <d63042a2-91d8-5555-1bac-4d908e03da2b@intel.com>
+ <20220401201806.GA2862421@ls.amr.corp.intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20220401201806.GA2862421@ls.amr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2022/4/2 00:28, Yonghong Song 写道:
+On 4/2/2022 4:18 AM, Isaku Yamahata wrote:
+> On Fri, Apr 01, 2022 at 02:56:40PM +0800,
+> Xiaoyao Li <xiaoyao.li@intel.com> wrote:
 > 
-> 
-> On 3/31/22 8:37 PM, Song Chen wrote:
->>
->>
->> 在 2022/4/1 11:01, Yonghong Song 写道:
+>> On 4/1/2022 3:41 AM, Isaku Yamahata wrote:
+>>> On Thu, Mar 31, 2022 at 04:31:10PM +1300,
+>>> Kai Huang <kai.huang@intel.com> wrote:
 >>>
+>>>> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+>>>>> From: Isaku Yamahata <isaku.yamahata@intel.com>
 >>>
->>> On 3/31/22 6:41 PM, Song Chen wrote:
->>>> syscall_tp only prints the map id and messages when something goes 
->>>> wrong,
->>>> but it doesn't print the value passed from bpf map. I think it's better
->>>> to show that value to users.
+>>>>> Add a wrapper function to initialize the TDX module and get system-wide
+>>>>> parameters via those APIs.  Because TDX requires VMX enabled, It will be
+>>>>> called on-demand when the first guest TD is created via x86 KVM init_vm
+>>>>> callback.
 >>>>
->>>> What's more, i also added a 2-second sleep before calling verify_map,
->>>> to make the value more obvious.
->>>>
->>>> Signed-off-by: Song Chen <chensong_2000@189.cn>
->>>> ---
->>>>   samples/bpf/syscall_tp_user.c | 4 ++++
->>>>   1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/samples/bpf/syscall_tp_user.c 
->>>> b/samples/bpf/syscall_tp_user.c
->>>> index a0ebf1833ed3..1faa7f08054e 100644
->>>> --- a/samples/bpf/syscall_tp_user.c
->>>> +++ b/samples/bpf/syscall_tp_user.c
->>>> @@ -36,6 +36,9 @@ static void verify_map(int map_id)
->>>>           fprintf(stderr, "failed: map #%d returns value 0\n", map_id);
->>>>           return;
->>>>       }
->>>> +
->>>> +    printf("verify map:%d val: %d\n", map_id, val);
+>>>> Why not just merge this patch with the change where you implement the init_vm
+>>>> callback?  Then you can just declare this patch as "detect and initialize TDX
+>>>> module when first VM is created", or something like that..
 >>>
->>> I am not sure how useful it is or anybody really cares.
->>> This is just a sample to demonstrate how bpf tracepoint works.
->>> The error path has error print out already.
+>>> Ok. Anyway in the next respoin, tdx module initialization will be done when
+>>> loading kvm_intel.ko.  So the whole part will be changed and will be a part
+>>> of module loading.
+>>
+>> Will we change the GET_TDX_CAPABILITIES ioctl back to KVM scope?
 > 
-> Considering we already have
->     printf("prog #%d: map ids %d %d\n", i, map0_fds[i], map1_fds[i]);
-> I think your proposed additional printout
->     printf("verify map:%d val: %d\n", map_id, val);
-> might be okay. The commit message should be rewritten
-> to justify this change something like:
->     we already print out
->       prog <some number>: map ids <..> <...>
->     further print out
->        verify map: ...
->     will help user to understand the program runs successfully.
+> No because it system scoped KVM_TDX_CAPABILITIES requires one more callback for
+> it.  We can reduce the change.
 > 
-> I think sleep(2) is unnecessary.
+> Or do you have any use case for system scoped KVM_TDX_CAPABILITIES?
 
-will do, many thanks.
+No. Just to confirm.
 
-BR
-
-Song
-
-> 
->>>
->>>> +
->>>>       val = 0;
->>>>       if (bpf_map_update_elem(map_id, &key, &val, BPF_ANY) != 0) {
->>>>           fprintf(stderr, "map_update failed: %s\n", strerror(errno));
->>>> @@ -98,6 +101,7 @@ static int test(char *filename, int num_progs)
->>>>       }
->>>>       close(fd);
->>>> +    sleep(2);
->>>
->>> The commit message mentioned this sleep(2) is
->>> to make the value more obvious. I don't know what does this mean.
->>> sleep(2) can be added only if it fixed a bug.
->>
->> The value in bpf map means how many times trace_enter_open_at are 
->> triggered with tracepoint,sys_enter_openat. Sleep(2) is to enlarge the 
->> result, tell the user how many files are opened in the last 2 seconds.
->>
->> It shows like this:
->>
->> sudo ./samples/bpf/syscall_tp
->> prog #0: map ids 4 5
->> verify map:4 val: 253
->> verify map:5 val: 252
->>
->> If we work harder, we can also print those files' name and opened by 
->> which process.
->>
->> It's just an improvement instead of a bug fix, i will drop it if 
->> reviewers think it's unnecessary.
->>
->> Thanks.
->>
->> BR
->>
->> chensong
->>>
->>>>       /* verify the map */
->>>>       for (i = 0; i < num_progs; i++) {
->>>>           verify_map(map0_fds[i]);
->>>
-> 
+on the other hand, vm-scope IOCTL seems more flexible if different 
+capabilities are reported per VM in the future.

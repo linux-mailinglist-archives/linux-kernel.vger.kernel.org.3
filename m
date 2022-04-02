@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED92B4EFEB8
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 06:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D024EFEBD
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 06:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353733AbiDBEqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 00:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S238060AbiDBE5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 00:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236134AbiDBEqs (ORCPT
+        with ESMTP id S231346AbiDBE5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 00:46:48 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC98A103BA8;
-        Fri,  1 Apr 2022 21:44:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lr4so9660725ejb.11;
-        Fri, 01 Apr 2022 21:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=huB97C9JBbD4NTragcMdF5Fe+et3P5wIBlAUz2Cnm5I=;
-        b=pkItxN8skI+/hoTjotTO11YLRC79aIEmK9zrlQYQGwHFPTYzrmxMYRdEyohxMNAaqH
-         VdDrr/d4JSaUHhWA6GeFPQVUEMAT6PUMOnoIgntfbqZYlg7y53a8JHLc3LiZ3NgQJ+Q6
-         mDK3FS3+yXP4gwKgxdioMVmQn71Ldm2RRIsypCLBVVMI14nAYI7rPc02LnWR0ZfMWg9s
-         FGsCRKtMeY+dyJFREY8NAbkulli4VBrcu/hKk8TQ9HDMgbvynToOjg4rhsBAqYYfgAc6
-         MInrRIYSk6hFKDUdND7aLHJwzPlUi8I70WTXkUH30jPIq9KHvg74wR0tspRfGcwhkxhE
-         7MGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=huB97C9JBbD4NTragcMdF5Fe+et3P5wIBlAUz2Cnm5I=;
-        b=euaHCe2jQ6rvJ+5eWS5KdCDfCuiN4KbNCiWgILl/tVapuEykRnwzrY5IHXZ5ZggeHb
-         rXu73QF35IXvlJxWUyfr1cKFsUQ4N8tbX27aGBznWNJQxMtNlBpQ5yL3bwN5/qa/bX2F
-         UrnxvBqQ8nmnGDFcr19+EBX8kTgmhyj6g4mpGnF3ivryXK86OLRbe4Yy6TUTfJj0LbX2
-         haJ41a+RzyFyLTT3RrfT/qUADWQqIaD/kg+rnYWH/S+P5Lrcp1sZq2hVqhe+mK/8w0L5
-         rVO0RFCRxwjH3LCF3891V+GUMPP6tyUkzSK5pDQkPHj+sYV5VN4RbtgOi/iTng6QNbTw
-         EjxA==
-X-Gm-Message-State: AOAM531AfbtXh2TJ5VznTpfIJgyC8L14ltSCba380rfVHegR2gJ7iKVS
-        h+yLjdpTYdEmknGsy8ze6PjRG2ReBA+EueQyvXY=
-X-Google-Smtp-Source: ABdhPJxGUbe2S/w0yEZATeM3Hg+1QWKhd1I/yFnFNIB5iULEMsTrThhTL9l10t/icmfRuf01nhoUGdG88OHyKDLm3v4=
-X-Received: by 2002:a17:907:7e96:b0:6da:f7ee:4a25 with SMTP id
- qb22-20020a1709077e9600b006daf7ee4a25mr2509602ejc.436.1648874695341; Fri, 01
- Apr 2022 21:44:55 -0700 (PDT)
+        Sat, 2 Apr 2022 00:57:37 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C6E12E155
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Apr 2022 21:55:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V8y5wgT_1648875340;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V8y5wgT_1648875340)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 02 Apr 2022 12:55:42 +0800
+Date:   Sat, 2 Apr 2022 12:55:39 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nick Terrell <terrelln@fb.com>, Guo Xuenan <guoxuenan@huawei.com>,
+        Chengyang Fan <cy.fan@huawei.com>, Yann Collet <cyan@fb.com>,
+        "fangwei1@huawei.com" <fangwei1@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com" 
+        <syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com>,
+        "wangli74@huawei.com" <wangli74@huawei.com>
+Subject: Re: [PATCH v3] lz4: fix LZ4_decompress_safe_partial read out of bound
+Message-ID: <YkfXSzePVEhlajCU@B-P7TQMD6M-0146.local>
+References: <20211111085058.1940591-1-guoxuenan@huawei.com>
+ <20211111105048.2006070-1-guoxuenan@huawei.com>
+ <CCE83845-DC40-4E14-9105-6319C048FACB@fb.com>
 MIME-Version: 1.0
-References: <20220331150706.124075-1-Jason@zx2c4.com> <20220331152641.169301-1-Jason@zx2c4.com>
-In-Reply-To: <20220331152641.169301-1-Jason@zx2c4.com>
-From:   Sandy Harris <sandyinchina@gmail.com>
-Date:   Sat, 2 Apr 2022 12:44:42 +0800
-Message-ID: <CACXcFm=vw6XCnO8peYH4V+sPR076O-Gav46r83+CZJ8oXM8iHA@mail.gmail.com>
-Subject: Re: [PATCH v2] random: mix build-time latent entropy into pool at init
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CCE83845-DC40-4E14-9105-6319C048FACB@fb.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 11:16 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Fri, Nov 19, 2021 at 06:23:24PM +0000, Nick Terrell wrote:
+> 
+> 
+> > On Nov 11, 2021, at 2:50 AM, Guo Xuenan <guoxuenan@huawei.com> wrote:
+> > 
+> > When partialDecoding, it is EOF if we've either, filled the output
+> > buffer or can't proceed with reading an offset for following match.
+> > 
+> > In some extreme corner cases when compressed data is crusted corrupted,
+> > UAF will occur. As reported by KASAN [1], LZ4_decompress_safe_partial
+> > may lead to read out of bound problem during decoding. lz4 upstream has
+> > fixed it [2] and this issue has been disscussed here [3] before.
+> > 
+> > current decompression routine was ported from lz4 v1.8.3, bumping lib/lz4
+> > to v1.9.+ is certainly a huge work to be done later, so, we'd better fix
+> > it first.
+> > 
+> > [1] https://lore.kernel.org/all/000000000000830d1205cf7f0477@google.com/
+> > [2] https://github.com/lz4/lz4/commit/c5d6f8a8be3927c0bec91bcc58667a6cfad244ad#
+> > [3] https://lore.kernel.org/all/CC666AE8-4CA4-4951-B6FB-A2EFDE3AC03B@fb.com/
+> > 
+> > Reported-by: syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com
+> > Cc: hsiangkao@linux.alibaba.com
+> > Cc: terrelln@fb.com
+> > Cc: cyan@fb.com
+> > Cc: cy.fan@huawei.com
+> > Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
+> 
+> Sorry I’m a bit late to the party, but this looks good to me!
+> 
+> Reviewed-by: Nick Terrell <terrelln@fb.com>
 
-> Prior, the "input_pool_data" array needed no real initialization, and so
-> it was easy to mark it with __latent_entropy to populate it during
-> compile-time.
+Acked-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-As I see it, that was the correct approach.
+Hi Andrew,
 
-> In switching to using a hash function, this required us to
-> specifically initialize it to some specific state,
+This patch has already been pending for 2 release cycles.. Would you
+mind submitting it upstream? Or are there other concerns about this?
 
-Hash functions do not require that. Any such function must
-work correctly with a new input block and a more-or-less
-random state from hashing previous blocks.
-
-In general, except perhaps at boot time, I do not think
-any of the hopefully-random data structures -- input
-pool, hash context or chacha context -- should ever be
-set to any specific state. Update them only with += or
-^= and preferably not with constants.
-
-What requires a fixed initialisation is your decision to
-eliminate the input pool & just collect entropy in a hash
-context. In effect you are reducing the driver to a
-Yarrow-like design, which I think is an error.
-
-Yarrow is a good design, but it has limitations; in particular
-the Yarrow paper says the cryptographic strength is limited
-to the size of the hash context, 160 bits for their SHA-1 &
-512 for our Blake.
-
-512 bits is more than enough for nearly all use cases, but
-we may have some where it is not. How many random bits
-are needed to generate a 4k-bit PGP key?
-
-Will some users try to generate one-time pads from /dev/random?
-The OTP security proof requires truly random data as long as the
-message; with anything short of that the proof fails & you get
-a stream cipher.
-
-Patches will follow, but likely not soon; I'm busy with
-other things.
+Many thanks!
+Gao Xiang

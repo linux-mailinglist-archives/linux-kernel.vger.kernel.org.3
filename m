@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35464F00C4
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241084F00C6
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 12:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354466AbiDBKtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 06:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S1354472AbiDBKtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 06:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349166AbiDBKt3 (ORCPT
+        with ESMTP id S1354470AbiDBKtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:49:29 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95221123BF5
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 03:47:35 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-df22f50e0cso5368037fac.3
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 03:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1OivuGzWm0VESEPEgfxYY6nVc0C7XuNwx+ZMYkOHfp4=;
-        b=Ks+F9QvgBiTaMsa7oYbUpV+XS5AE5/s0mjYmEGJuukdNcJTIECnJ/Ja2RBrh/fSfBi
-         6iTLRj5nFKxs11cqWPSyDPxDrovxO0/fY+3tcQGxzQeclqcXb8SoMlu3Tm9ERo5JhsvZ
-         5X6Y8imZwiftFEF7BVOhiXoQMRsi5xG17oYBJ774rnr1vbHgnsntcRkMc0o5fFEZ0OMl
-         s2W+iPDb6HVxEiyh3Q4/157nLW0NniVVEOPJ7zfOmKYUUEc9fZL0naSPPWj1EYpBcIrL
-         Impt1IQ4YYhHApn3xazb3XoW2gJgBZrNaWA1sp9pKBusExzd/Cq+ZdsBA8GBBaw8aVzF
-         vf2g==
+        Sat, 2 Apr 2022 06:49:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 757EB124C0D
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 03:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648896467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G63buSfDCPc5qndai6dQxFulpyAndQa2gEdrpbrlGnA=;
+        b=Davj8w5YhH8A6T6WE0pCFo4HdOS8C7u1YwTBtynZBj8tQAugCIg8BzQF4fxUHCn9wnbVCi
+        GtHcQghjPxe3yyjEv5RyNYwtDcZ56psOd4Tuz44ORWhCdvjwftpmq8uB7NkhcednbeHbnZ
+        v16o8ecPnMcKmXpjggfxWMxQ/conb3w=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-316-D6-0_Y5_MV2us5llFNHEHw-1; Sat, 02 Apr 2022 06:47:46 -0400
+X-MC-Unique: D6-0_Y5_MV2us5llFNHEHw-1
+Received: by mail-ej1-f69.google.com with SMTP id de52-20020a1709069bf400b006dffb966922so2714452ejc.2
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 03:47:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1OivuGzWm0VESEPEgfxYY6nVc0C7XuNwx+ZMYkOHfp4=;
-        b=2okalq8HPF8xov5JHNg3EJsfDZZmGKdIYv/spiBGkRH5IlRe74tjc1TCyEsyZu6b86
-         +kxEHFbsNs+lw6+8/5CL4SioOuMzVVoaLMTMfgJ7zySB23D/AJre5XopavPWJ9CrYZWA
-         33TgmnXd9Bmr0r5TYYZyKwxcNs6EHnqXzgJIXeNuPsVYONH6FgAMl277Qi6dpJFLAGlA
-         mmcaN1lEWSyjbg0tRitVo8VNS0zeibKGhyOOw1qPg50OLT3kZj08sba0yKBF9uwyA+3G
-         j2i7jz7d9WbQlkT/pDuWN/847Pk7GMxGzMPlvU90b4ohQHT6PWW45x/waFrR+N5gQsip
-         4MbA==
-X-Gm-Message-State: AOAM531n08Zyv1RtoNCFHmcBSSnt2XlGT5NRhebMlQjOKXI2PTpN9QG2
-        /9OXFFiLHvdn8sHmiQiSur4OwQ==
-X-Google-Smtp-Source: ABdhPJwLQ2SUunXzeJJIacHtmRCxg69qWVmJdv2qhkzrMF4sbi/h5nVWFS+qSBOBSw4xwJxaV8lZJQ==
-X-Received: by 2002:a05:6870:c189:b0:da:b3f:2b5d with SMTP id h9-20020a056870c18900b000da0b3f2b5dmr6909870oad.252.1648896454971;
-        Sat, 02 Apr 2022 03:47:34 -0700 (PDT)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id 67-20020aca0546000000b002d46e151b9bsm2023410oif.18.2022.04.02.03.47.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 03:47:34 -0700 (PDT)
-Date:   Sat, 2 Apr 2022 07:47:29 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/23] media: v4l2-mem2mem: Trace on implicit un-hold
-Message-ID: <YkgpwSJFkOH9+tuA@eze-laptop>
-References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
- <20220331193726.289559-3-nicolas.dufresne@collabora.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=G63buSfDCPc5qndai6dQxFulpyAndQa2gEdrpbrlGnA=;
+        b=Icr8DtU6EIZtuBz1rtcH4PDWrB/AwQqaF7u63mV1td369266kwO77Lh/1wkvP1cWfy
+         H/03ZQtuaeAMzcAfzVMWZaMqMweTQr7oS+tKVu3WfLK/omRF3E4zEsAd1wXaHyV1ZVw6
+         O5Oc6p1u0iKvbL/bpGpS7yRYo8E4jiYiFogrn86SRoDRCPbnZsLxn3Y00C33D2Eaa/V9
+         SUK0wZR6Y9tj0sOs5qg3NnwSoUQ0oLUUdT1z86peeW22er2e8ovbyOkzVDwkFhfa9+J9
+         RI5LMLWeV3idQwab4vj4/MjoW5xvEPxygdtDK2CV4XoTmLPkfEAgqh2B6H9+uevtP534
+         +vVQ==
+X-Gm-Message-State: AOAM532vKU8wNRMAVpyzeJP6mbvz9gzMgZmZ42pgz25UhaHmMvXS2+U6
+        W7Rv0iYOR9MT4aJTaCu3SpPpJYdnez0/J54RE7u7P0Wnc/9gG3xZK/HdU71qSsSQoUoPeId3vKJ
+        LuBWlkTP2ytaNpgjma4USufC2
+X-Received: by 2002:a17:907:971c:b0:6e0:d0ef:393e with SMTP id jg28-20020a170907971c00b006e0d0ef393emr3349743ejc.562.1648896465101;
+        Sat, 02 Apr 2022 03:47:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzrP2K/IEgYHF4LgPlaIoXpl60puqxMAxjpSVRK7WgDbLyj1jOc6xFdNlRwY96jfmdVm1C3IQ==
+X-Received: by 2002:a17:907:971c:b0:6e0:d0ef:393e with SMTP id jg28-20020a170907971c00b006e0d0ef393emr3349734ejc.562.1648896464862;
+        Sat, 02 Apr 2022 03:47:44 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id qk32-20020a1709077fa000b006df6bb30b28sm1966976ejc.171.2022.04.02.03.47.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 03:47:44 -0700 (PDT)
+Message-ID: <8a430ab7-024f-51a9-d785-07e03f163261@redhat.com>
+Date:   Sat, 2 Apr 2022 12:47:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331193726.289559-3-nicolas.dufresne@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5] input/i8042: Rework quirk tables
+Content-Language: en-US
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        dmitry.torokhov@gmail.com, tiwai@suse.de, mpdesouza@suse.com,
+        arnd@arndb.de, samuel@cavoj.net, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220329143622.31394-1-wse@tuxedocomputers.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220329143622.31394-1-wse@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 03:37:04PM -0400, Nicolas Dufresne wrote:
-> If the timestamp of the src buffer differs from the timestamp of a held
-> dst buffer, the held buffer is implicitly removed and marked as done.
-> Add a trace to help debugging if someone hits that case.
+Hi,
+
+On 3/29/22 16:36, Werner Sembach wrote:
+> Revision 5 with some fixes based on feedback by Hans de Goede.
 > 
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> ---
->  drivers/media/v4l2-core/v4l2-mem2mem.c | 1 +
->  1 file changed, 1 insertion(+)
+> The 1st patch is minor housekeeping.
 > 
-> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> index 675e22895ebe..fbcd79763e8f 100644
-> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> @@ -336,6 +336,7 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
->  	if (src && dst && dst->is_held &&
->  	    dst->vb2_buf.copied_timestamp &&
->  	    dst->vb2_buf.timestamp != src->vb2_buf.timestamp) {
-> +		dprintk("src and dst timestamp mismatch, removing held capture buffer.\n");
-
-Nitpick: I would try to make this log consistent with the other logs,
-avoid refering to "src" and "dst" and start with a capital letter.
-
-How about "Timestamp mismatch, returning held capture buffer".
-
-Either way, thanks for improving this.
-
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
->  		dst->is_held = false;
->  		v4l2_m2m_dst_buf_remove(m2m_ctx);
->  		v4l2_m2m_buf_done(dst, VB2_BUF_STATE_DONE);
-> -- 
-> 2.34.1
+> The 2nd patch merges the tables together. Minor fixes in 5th revision and
+> no more duplication of ASUS devices
 > 
+> The 3rd patch add optional debug output to see which quirks get applied. In
+> 5th revision this no longer breaks compilation on non x86 platforms.
+> 
+> The 4th patch adds a list of Clevo devices that need multiple quirks.
+> With the reworked table they don't need to be inserted multiple times now,
+> which was required in v1 and v2 of this patch.
+> 
+> I also included the extra quirk for the Clevo NS7xMU, which was a separate
+> patch before.
+> 
+> The added Clevo devices are now only identified by their board name as this
+> is the only somewhat reliable string that might not be changed by resellers.
+
+Thanks, the entire series looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+for the series.
+
+Regards,
+
+Hans
+
+
+
+p.s.
+
+In the future if you get a Reviewed-by to a previous version of a patch
+and the patch does not change (or does not change much, e.g. only
+small code-style / comment typo tweaks) you can keep that Reviewed-by
+for next versions of the patch, just copy it over to your commit
+msg and put it directly above your own S-o-b line.
+
+

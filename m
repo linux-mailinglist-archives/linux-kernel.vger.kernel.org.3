@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AE04F0132
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012684F0138
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 13:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241362AbiDBLlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 07:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S241770AbiDBLn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 07:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241322AbiDBLlx (ORCPT
+        with ESMTP id S236262AbiDBLn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 07:41:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567768CDAD
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:39:58 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id n35so3133653wms.5
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:39:58 -0700 (PDT)
+        Sat, 2 Apr 2022 07:43:27 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06864BD6
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 04:41:35 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id w4so7584719wrg.12
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 04:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
-        b=OCcipaDDf9yd6e+SAB1jG2Pu61JoysxDu7Xh5IkBfEfV05Id7giu2MWVGfJbIVxAS1
-         Th2jEi6XkBu2cMKGD4NsXCEKll//buTp90ViuTWQz2PwHFxNXRnDs/fbiZRJx8H2El1a
-         bnI/bcRXXX+qnUIpXHuQkuqHi4a92Afi1tt5Q4NaWcdG8fPkjWX9+tMImm4tOgk9rEfJ
-         1PPmJDDVxDUCB4m++M4Wjqdk3FmQNoDIwG+hBcjX5HwMwm8bqdDMVFbKBqXN1wDxhAco
-         zrl7Ye1RcfFnVg1LYOosi4oSQK536Tzr6AwePFy50YA0V10RNJ2lsGlU0TzaTGDPdh4M
-         kAVw==
+        bh=AvR1umnn7W1R+x4WzthY5v4HXESOD96tHh9j731yuyI=;
+        b=Gb6gnH4BnPj01KZH7A4kXWQ8hmeq0ZH581OTlA9kouF5HlC/q7ghy/f13YADvbS+Jo
+         hYeV0Lhen1057rY1ps9eXglxGWRJ+9oRLY9DfDek3HIVk4IYUe2lnyyslvpf2g1JYS7t
+         I4dI75ExLKdFIlfv/0VN0wWhqI5a6PD4KNZzo2syvpF2dSYiOlo/0DCazPjtPcQdhRpT
+         efWFjuBh+6qwnv9V7aXGZTJ+KvtHs3Oh6OMeLBrDsxPMfrOHqeuZr1GZda1mEBn8rk1D
+         v97fMdC6ZSOKulNYUi/cNy4CqgI9CqL6iEE+owkBtFoodtinaSJk5F/iI8hsr4SePWhE
+         jLHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
-        b=pOPGztai3xky6Dr2q7IcxE0sBUtoIcSSx+4rDmcf9A+IfopD9NJn3HB8fU9Z4ptYta
-         c3vMcQ2LA8Z8hOu0674RpoWqGvxicNYoxcE1qBVEyylSOHnh1s9vFe3mqSoqWEGQPzFr
-         9d0a7MKTZGCy8NMp8lPEOmDvR+qBcI53TaOi12NtHMSXRs2ASdNLVDAlnlM34Q8YnWld
-         e3EtL6XIgNc/4RJer76DwX0m+M6zGScJsTzPHz0SsMh4nyxHJMERC33GbaVlMas2Im3s
-         t95CXY1O2QydlKjqgHx4vOZb3Qi9z90EfE57VQhhuwJ8M2zXSfqEAhobpnLqi4n8Kh0S
-         aj9Q==
-X-Gm-Message-State: AOAM533h3NLip/snRcLfhRBP3t8wajAjtoiKh8SUiPvqXQxdvo7r/h8s
-        oBu4yJgQ9L/ej6LLI9vWZZzS4A==
-X-Google-Smtp-Source: ABdhPJxgPwxQ3TFzbEw3GEzSFdVxepamnd3EAiTRzIuDXOYZeDHeEn98CWlqmTuyc43WWvkuoedIEw==
-X-Received: by 2002:a7b:cd01:0:b0:38c:9142:2006 with SMTP id f1-20020a7bcd01000000b0038c91422006mr12362990wmj.4.1648899596890;
-        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
+        bh=AvR1umnn7W1R+x4WzthY5v4HXESOD96tHh9j731yuyI=;
+        b=bNuw5g6IWgRA0uWg3HxnnJV2FZwA2zuwpAOClY7OFpaDhkVQd4lA9mXIR9tVn/YKAy
+         RVGlAWKopF5nsmT6QD/La9D67kX1cqHyRSrhtEx8BqRs+iyfibGLGC7TYOW6TSFFqJXy
+         va0fqyopC9CpC7Ez2T1fqUaf6+ERYm4GZnxmQTMLjOk1XAbk7tujK5YbTo5u4b3k2bsY
+         MjrbbioSar+UxyXV7cxTfEmFdo9w7nzJ3lhPgs64uPOpLxmsOH02LtODJg9Ggh76Qihp
+         B7IZqX9imBRj5bvnz1US0EEE2OAJwL1AM/5oFidMMiIUmItKmtZ6Jqx/dabsndoBHmfX
+         WSnA==
+X-Gm-Message-State: AOAM533o18aP/Fzb16OK1Es1CPQrEIn4/99ItdP9olXAX9h1mWRhxvta
+        +ji5mp+SRJs4A4gdWc9olyBVhA==
+X-Google-Smtp-Source: ABdhPJyW+SkwDs4JCR2UYWWgiflNxMZWrZjRmhyqzN/fVy0Es0dbeHwx6imdXZmBlennZaTR9okHog==
+X-Received: by 2002:adf:f881:0:b0:203:f9b1:a6ab with SMTP id u1-20020adff881000000b00203f9b1a6abmr10755817wrp.410.1648899693983;
+        Sat, 02 Apr 2022 04:41:33 -0700 (PDT)
 Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o9-20020a1c4d09000000b0038ca75056e2sm16692104wmh.45.2022.04.02.04.39.55
+        by smtp.gmail.com with ESMTPSA id m63-20020a1c2642000000b0038e5fa06b50sm1932105wmm.31.2022.04.02.04.41.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
-Message-ID: <6d1353c4-7ecc-c65f-73c0-5f856b72d25e@linaro.org>
-Date:   Sat, 2 Apr 2022 13:39:55 +0200
+        Sat, 02 Apr 2022 04:41:32 -0700 (PDT)
+Message-ID: <c212c994-fc5d-6ad0-3cd6-88dc2c719e38@linaro.org>
+Date:   Sat, 2 Apr 2022 13:41:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
+Subject: Re: [PATCH v3 1/2] dt-bindings: clock: convert
+ rockchip,rk3188-cru.txt to YAML
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        - <patches@opensource.cirrus.com>, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220401141247.2993925-1-robh@kernel.org>
+To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>, zhangqing@rock-chips.com,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220329111323.3569-1-jbx6244@gmail.com>
+ <20220331225134.7A0A9C340ED@smtp.kernel.org> <3107512.vfdyTQepKt@diego>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
+In-Reply-To: <3107512.vfdyTQepKt@diego>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -86,42 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/2022 16:12, Rob Herring wrote:
-> There's no reason to list the same value twice in an 'enum'. Fix all the
-> occurrences in the tree. A meta-schema change will catch future ones.
+On 01/04/2022 09:55, Heiko Stübner wrote:
+> Hi Stephen,
 > 
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: - <patches@opensource.cirrus.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> There's also one other occurrence in snps,dwmac.yaml I didn't fix as 
-> there's a patch[1] for it which prompted this patch.
+> Am Freitag, 1. April 2022, 00:51:32 CEST schrieb Stephen Boyd:
+>> Quoting Johan Jonker (2022-03-29 04:13:22)
+>>> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+>>> new file mode 100644
+>>> index 000000000..ddd7e46af
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+>>> @@ -0,0 +1,78 @@
+>>> +# SPDX-License-Identifier: GPL-2.0
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
+>>> +
+>>> +maintainers:
+>>> +  - Elaine Zhang <zhangqing@rock-chips.com>
+>>> +  - Heiko Stuebner <heiko@sntech.de>
+>>> +
+>>> +description: |
+>>> +  The RK3188/RK3066 clock controller generates and supplies clocks to various
+>>> +  controllers within the SoC and also implements a reset controller for SoC
+>>> +  peripherals.
+>>> +  Each clock is assigned an identifier and client nodes can use this identifier
+>>> +  to specify the clock which they consume. All available clocks are defined as
+>>> +  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
+>>> +  dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
+>>> +  Similar macros exist for the reset sources in these files.
+>>> +  There are several clocks that are generated outside the SoC. It is expected
+>>> +  that they are defined using standard clock bindings with following
+>>> +  clock-output-names:
+>>> +    - "xin24m"    - crystal input                 - required
+>>> +    - "xin32k"    - RTC clock                     - optional
+>>> +    - "xin27m"    - 27mhz crystal input on RK3066 - optional
+>>> +    - "ext_hsadc" - external HSADC clock          - optional
+>>> +    - "ext_cif0"  - external camera clock         - optional
+>>> +    - "ext_rmii"  - external RMII clock           - optional
+>>> +    - "ext_jtag"  - external JTAG clock           - optional
+>>
+>> I'd expect all these clks here to be inputs to this node.
 > 
-> Rob
+> The optional clocks are all part of a circular dependency.
 > 
-> [1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
-> 
->  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
->  Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
->  .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
->  .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
->  .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
->  5 files changed, 5 insertions(+), 10 deletions(-)
-> 
+> So for example xin32k normally is generated by the pmic and fed
+> back into the system, so to get xin32k, we need the pmic to probe,
+> which needs i2c, which in turn already needs the clock controller.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Are you sure that xin32k (RTC) clock should be input to the clock
+controller? I would expect it is the input to the SoC RTC block, so
+there is no circular dependency.
 
 
 Best regards,

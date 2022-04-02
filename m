@@ -2,124 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D52A4F05E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF894F05F3
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 21:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241176AbiDBTmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 15:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S237817AbiDBTq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 15:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346869AbiDBTlt (ORCPT
+        with ESMTP id S230064AbiDBTqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 15:41:49 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C075BD03;
-        Sat,  2 Apr 2022 12:39:57 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id r11so4201001ila.1;
-        Sat, 02 Apr 2022 12:39:57 -0700 (PDT)
+        Sat, 2 Apr 2022 15:46:52 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B680D21809;
+        Sat,  2 Apr 2022 12:45:00 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id i10-20020a17090a2aca00b001ca56c9ab16so1464023pjg.1;
+        Sat, 02 Apr 2022 12:45:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WinkjzPa9wNFBdfy3cxVUCM43zQXmo5BiQJvI8WCurc=;
-        b=ASj9IEj8cG/7QQLiAkmWuFhJL9OADrLLXAirU/FwNlgk4qxOvQSyAXFP9bbGzv4u66
-         8NgyjVZkcDheQ1H98yr54cxU+ipQ/S2TmKXypASk1SsFJ2DoUoX2pLwWHkbVPPPuAFFe
-         wmmTqUWmx2K3eTkhH1d6+Y7QBR878pVUvx6iyE4tnHMbAr1jtEum2U3cZ72+KQjAApzC
-         T/27MuFH20Ztrk6eXO5a0TmadOKckTj7zae3bRMkmLGjgdvS7hwSmxhvLz1LdiqFcwqt
-         uaTNhKoiRHF/Fk85+6TQ5H373UeSCuFshnQeqZeGo0+pxSP/Gt+WRBvyCoVojS7/A+qY
-         qE0Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+si7rb/80RTkZ0HPi34L84T3FsNep37xaj1A3ObJQzc=;
+        b=M7l1aKwNiO8SUVPZnpeX+NpPOb/LnEa8X6Vjc/opgP1CVAyscOWzpxH64PZpjSWl4d
+         ckAjnViy5ZOFtr2HRn/7OVVALyt8NSx/Q+FzwSn6rsgipR5R70B0cylPCOW2cE82AHoQ
+         EK1jmxHN0kGEFwVCF7MN45c75+jmIgifu7v069T45xorJ5E2hIVE0TCdfDkJrL5XjHO3
+         enORZIgQCR0ha8DHyypbPI3CAdCR6yf+Ojyryg0SNHaiPgoujdI4XiQYEb1eXs81l/GP
+         VAVPJVEG4zdDOR+fMi3q6/M0uFpxfjkH5ANYjqCpf15vQKaw08Wv9Ks0M/8spv4N2Y/C
+         eomw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WinkjzPa9wNFBdfy3cxVUCM43zQXmo5BiQJvI8WCurc=;
-        b=wX2GEi0m8eTgRCnCpkOe7S/r+uVQH6pWgS+YcUyBqscY7zImLB0GaSFWn26RK5X4Ds
-         8ZrjntCm9PN7V/W8egYcudh+9EjbyZFSOZCzyPZiRBRRNYSM3QD07eHn+go/gO/EKX+M
-         NHbsUdTWbhAWUsUkvkq3Jt6GqwlQATmkJNo7MTSacfvuYXNfxJ1XowR2wBtgcDmPiIlQ
-         ssC3x9ewIDGN1x4+fFYllPAbtMbDhToiHFFBroVZ6i53AQodbtz7PHfZG6qTXLkVmdZJ
-         Ip3Jl3J5BVvd5LSjyeHwaQ/5M3+hSfWLLcNN7a8b9yc7vEiMRb6X/oNIA9zZnSQS3Mqd
-         ysbA==
-X-Gm-Message-State: AOAM531rbVRKekzIF8jiIctitx0m4t3jdx4tWb47b/XoBe8qyDqZ/ssq
-        nDTbnUexJa8H5v2a2MCzamm4CFVTli1ZmA==
-X-Google-Smtp-Source: ABdhPJwQphokNGlMTGeK1MygO57M1D4ndFS+PkiMH7OKaVbdkJR1seQDISbuD/XZnllVbdeqZ5IuAg==
-X-Received: by 2002:a05:6e02:1a2c:b0:2ca:2f11:c60b with SMTP id g12-20020a056e021a2c00b002ca2f11c60bmr762906ile.75.1648928396410;
-        Sat, 02 Apr 2022 12:39:56 -0700 (PDT)
-Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:6ab1:a455:ad1b:e8da])
-        by smtp.gmail.com with ESMTPSA id a14-20020a056e020e0e00b002c9e2f0fd76sm3261756ilk.13.2022.04.02.12.39.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+si7rb/80RTkZ0HPi34L84T3FsNep37xaj1A3ObJQzc=;
+        b=G6yEHAtwgQ5Pe6xjg38Jsnpw5C6v2VkupUZHy10y2Wvp0olAgWJdtXdmnVxVL34Y7H
+         v6pzIS+EwhIw89mGG/9n2Gn5yZ6/FJzonXqKiB2tx+zebhSWHtdbwMIbPHcgJqcp+1gi
+         m6akXQoHP2fbhHSebr5xLusUISe6hNLhe9siJ2VXiGSxlpJnHW0uq0kAfzV2pREhLkq4
+         pbfg7lINsjOvVsrFLnuoHmlz114EvVQykd6j5ZTeRKlZuKdRChrd+DZ43/hHvGpvGH7p
+         wbJobeZBfUZsQcFD7nt4xu1uH/Wd3SMwiOncYCJ+2Yt4rlC1Jkt306lRCLeMIHmL7N2t
+         VJlw==
+X-Gm-Message-State: AOAM532Iwt9TeL4WeVO8VAmykCDWm1MPR43B4u/kEx+QvYrYIOUWPMEK
+        WiDOiVRBDrvK8Fr+zEIARVU=
+X-Google-Smtp-Source: ABdhPJzgzoX1P++nnwDl+lNt08h/t4t5jMy0+K7GQg442Hp5oAc/0s9ii5BYjwrktJp0JYwOWxp0eg==
+X-Received: by 2002:a17:902:f543:b0:156:5f55:a75d with SMTP id h3-20020a170902f54300b001565f55a75dmr11547320plf.72.1648928700147;
+        Sat, 02 Apr 2022 12:45:00 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm7395700pfl.135.2022.04.02.12.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 12:39:55 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-mmc@vger.kernel.org
-Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
-        Adam Ford <aford173@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Sat, 02 Apr 2022 12:44:59 -0700 (PDT)
+Date:   Sun, 3 Apr 2022 01:14:53 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 3/3] arm64: dts: imx8mp: Enable HS400-ES
-Date:   Sat,  2 Apr 2022 14:39:41 -0500
-Message-Id: <20220402193942.744737-4-aford173@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220402193942.744737-1-aford173@gmail.com>
-References: <20220402193942.744737-1-aford173@gmail.com>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add Qualcomm Geni based QUP i2c
+ bindings
+Message-ID: <20220402194453.GE35664@9a2d8922b8f1>
+References: <20220402051206.6115-1-singh.kuldeep87k@gmail.com>
+ <20220402051206.6115-2-singh.kuldeep87k@gmail.com>
+ <b27db209-d146-e104-6f0c-b0d860e9cc8c@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b27db209-d146-e104-6f0c-b0d860e9cc8c@linaro.org>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SDHC controller in the imx8mp has the same controller
-as the imx8mm which supports HS400-ES. Change the compatible
-fallback to imx8mm to enable it, but keep the imx7d-usdhc
-to prevent breaking backwards compatibility.
+On Sat, Apr 02, 2022 at 02:29:59PM +0200, Krzysztof Kozlowski wrote:
+> On 02/04/2022 07:12, Kuldeep Singh wrote:
+> > GENI(generic interface) based Qualcomm Universal Peripheral controller
+> > can support multiple serial interfaces like spi,uart and i2c.
+> > 
+> > Unlike other i2c controllers, QUP i2c bindings are present in parent
+> > schema. Move it out from parent to an individual binding and let parent
+> > refer to child schema later on.
+> > 
+> > Please note, current schema isn't complete as it misses out few
+> > properties and thus, add these missing properties along the process.
+> > 
+> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> > ---
+> >  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 110 ++++++++++++++++++
+> >  1 file changed, 110 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> > new file mode 100644
+> > index 000000000000..01a02e680ea3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> > @@ -0,0 +1,110 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > +
+> > +title: Qualcomm Geni based QUP I2C Controller
+> > +
+> > +maintainers:
+> > +  - Andy Gross <agross@kernel.org>
+> > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - qcom,geni-i2c
+> 
+> Just const, no enum. There are no other flavors of this (unless you
+> think there are?).
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
----
-V3:  Keep the fsl,imx7d-usdhc to keep backwards compatiblity and prevent breaking something.
+There are no other users. Will change it to const.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 794d75173cf5..8578ff1062e6 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -769,7 +769,7 @@ i2c6: i2c@30ae0000 {
- 			};
- 
- 			usdhc1: mmc@30b40000 {
--				compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
-+				compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
- 				reg = <0x30b40000 0x10000>;
- 				interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&clk IMX8MP_CLK_DUMMY>,
-@@ -783,7 +783,7 @@ usdhc1: mmc@30b40000 {
- 			};
- 
- 			usdhc2: mmc@30b50000 {
--				compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
-+				compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
- 				reg = <0x30b50000 0x10000>;
- 				interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&clk IMX8MP_CLK_DUMMY>,
-@@ -797,7 +797,7 @@ usdhc2: mmc@30b50000 {
- 			};
- 
- 			usdhc3: mmc@30b60000 {
--				compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
-+				compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
- 				reg = <0x30b60000 0x10000>;
- 				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&clk IMX8MP_CLK_DUMMY>,
--- 
-2.34.1
+> 
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    const: se
+> > +
+> > +  clock-frequency:
+> > +    description: Desired I2C bus clock frequency in Hz
+> > +    default: 100000
+> > +
+> > +  interconnects:
+> > +    maxItems: 3
+> > +
+> > +  interconnect-names:
+> > +    items:
+> > +      - const: qup-core
+> > +      - const: qup-config
+> > +      - const: qup-memory
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  required-opps:
+> > +    maxItems: 1
+> 
+> I have doubts this is correct property. Usually it is part of the
+> opp-table. I see sc7180 needs this, but I think it is a mistake. Do you
+> know how it is supposed to work?
 
+Not sure how exactly it works. I took reference from
+Documentation/devicetree/bindings/clock/qcom,videocc.yaml on how to add
+required-opps.
+
+-Kuldeep

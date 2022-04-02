@@ -2,134 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8394F003A
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68494F003B
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Apr 2022 11:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239953AbiDBJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 05:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S1354200AbiDBJym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 05:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239868AbiDBJyY (ORCPT
+        with ESMTP id S239868AbiDBJyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 05:54:24 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBE4198974;
-        Sat,  2 Apr 2022 02:52:32 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id t7so4046290qta.10;
-        Sat, 02 Apr 2022 02:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rf+Z8BCmAsoqSh2imF0kTHHsFmoLp9md0M8PNzOORW0=;
-        b=FpjP+yDw+rd8QIuPn3pAflciBU8szYdoU9YGdbrT3mDllMK2WthyTvaRMVJyXhWwf+
-         NZwiHHwVcxGhm9/fc3iVPMB8CtrcqxkWDayKmli159Hi2vbE5Sp+iUAa56LzExqyFzZF
-         fqQxgW51lj//KnlluAqJ4+b4rXSU8yW2d8H5Zm7U31dW435C8NQCmKGkDMHDlwsUUV3Y
-         C5+qo4qACTYkiJXZ9BiJ4CeT9LkvkfD3isd1pc5xt1bbzjyUWFlpFOWMZsxxgkFmFCzZ
-         Ny2uM5CDI3opmvKuHc+JCX88TYNEZnPHxYsdxQuGCC0bGaD/1ZFT/qzxmlKKzmH5yuHZ
-         njnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rf+Z8BCmAsoqSh2imF0kTHHsFmoLp9md0M8PNzOORW0=;
-        b=bUbQ/wggRrYIAt0F+B8LXwzQVNgf/nJieRfF6Rm+1cUkOQe/pFhTacsHDX3unTdDHv
-         EyedNLZjJlM/0qU/D7xNxMZy9DAmHwerurtG0j2YpbC2xGAyBFxU+hRdN7kBg+iVYo33
-         jZJKT4wdevJ3/oQNaO3olfB4kngwGp51Xh/X0f60GEJCgYjZbnCjH+INXv9klT4sD+Op
-         LapunoLK0aAKXCCV+J++nTkZyUFUDzOhDjK6lnNlSn1hdtVT/WSaxft0Pmzoe1wkUJT2
-         Hr4ck2NziWKtK56T0cpOveb8H9Sl+8cOU4XmjBSUdP9hgm+MY29N4S8cKmStCsAo1+9R
-         cLmg==
-X-Gm-Message-State: AOAM531BAaz9pcG7g2cXfYu+XdgRbbAqFm76HErXCd3l9hv0xbism4qq
-        rSLHsoBLBrpi0h5GgTHSgRek5Bakf1OqaU2AsRX++eC2Fkk=
-X-Google-Smtp-Source: ABdhPJzM3PO5vJI14orWCHqDgZL3GwaLuRPCeqgqlwej3gH0Wk3KtPQmkf0ZAisVJGYGwj4tfQH5Nz4ETHT/H2ITgIo=
-X-Received: by 2002:a05:622a:4cd:b0:2e1:ec2f:8c22 with SMTP id
- q13-20020a05622a04cd00b002e1ec2f8c22mr11532022qtx.494.1648893152007; Sat, 02
- Apr 2022 02:52:32 -0700 (PDT)
+        Sat, 2 Apr 2022 05:54:40 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F95A198ED0
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 02:52:49 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KVsm00KlLz9sSQ;
+        Sat,  2 Apr 2022 11:52:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id g02phkaJeBc3; Sat,  2 Apr 2022 11:52:47 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVslz6V7Lz9sSK;
+        Sat,  2 Apr 2022 11:52:47 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C3E398B76D;
+        Sat,  2 Apr 2022 11:52:47 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id t_CC7L77K-UG; Sat,  2 Apr 2022 11:52:47 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7B09C8B768;
+        Sat,  2 Apr 2022 11:52:47 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2329qaFY683766
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 2 Apr 2022 11:52:36 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2329qZDJ683765;
+        Sat, 2 Apr 2022 11:52:35 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] cxl/ocxl: Prepare cleanup of powerpc's asm/prom.h
+Date:   Sat,  2 Apr 2022 11:52:33 +0200
+Message-Id: <a2bae89b280e7a7cb87889635d9911d6a245e780.1648833388.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220401093554.360211-1-robimarko@gmail.com> <87ilrsuab4.fsf@kernel.org>
-In-Reply-To: <87ilrsuab4.fsf@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Sat, 2 Apr 2022 11:52:21 +0200
-Message-ID: <CAOX2RU4pCn8C-HhhuOzyikjk2Ax3VDcjMKh7N6X5HeMN4xLMEg@mail.gmail.com>
-Subject: Re: [PATCH] ath11k: select QRTR for AHB as well
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648893152; l=4194; s=20211009; h=from:subject:message-id; bh=JxY+648cdfYGL5WtJJa465Q8CbmxwNjfK3pRYSd0Oz4=; b=C6PIkmpA1NSRSpcqV35OX6kl8KM54LwdtDbGac1ZsGECLPxcboQ/wjFTP0VkBI0Df0xD1F8x5+Ar 23DVGOGjD5tphQQvmFz3ljb5P7RE4sa7sqMxHSeOqnl/iIysqcjC
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 at 16:51, Kalle Valo <kvalo@kernel.org> wrote:
->
-> Robert Marko <robimarko@gmail.com> writes:
->
-> > Currently, ath11k only selects QRTR if ath11k PCI is selected, however
-> > AHB support requires QRTR, more precisely QRTR_SMD because it is using
-> > QMI as well which in turn uses QRTR.
-> >
-> > Without QRTR_SMD AHB does not work, so select QRTR in ATH11K and then
-> > select QRTR_SMD for ATH11K_AHB and QRTR_MHI for ATH11K_PCI.
-> >
-> > Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  drivers/net/wireless/ath/ath11k/Kconfig | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/wireless/ath/ath11k/Kconfig b/drivers/net/wireless/ath/ath11k/Kconfig
-> > index ad5cc6cac05b..b45baad184f6 100644
-> > --- a/drivers/net/wireless/ath/ath11k/Kconfig
-> > +++ b/drivers/net/wireless/ath/ath11k/Kconfig
-> > @@ -5,6 +5,7 @@ config ATH11K
-> >       depends on CRYPTO_MICHAEL_MIC
-> >       select ATH_COMMON
-> >       select QCOM_QMI_HELPERS
-> > +     select QRTR
-> >       help
-> >         This module adds support for Qualcomm Technologies 802.11ax family of
-> >         chipsets.
-> > @@ -15,6 +16,7 @@ config ATH11K_AHB
-> >       tristate "Atheros ath11k AHB support"
-> >       depends on ATH11K
-> >       depends on REMOTEPROC
-> > +     select QRTR_SMD
-> >       help
-> >         This module adds support for AHB bus
-> >
-> > @@ -22,7 +24,6 @@ config ATH11K_PCI
-> >       tristate "Atheros ath11k PCI support"
-> >       depends on ATH11K && PCI
-> >       select MHI_BUS
-> > -     select QRTR
-> >       select QRTR_MHI
-> >       help
-> >         This module adds support for PCIE bus
->
-> I now see a new warning:
->
-> WARNING: unmet direct dependencies detected for QRTR_SMD
->   Depends on [n]: NET [=y] && QRTR [=m] && (RPMSG [=n] || COMPILE_TEST [=n] && RPMSG [=n]=n)
->   Selected by [m]:
->   - ATH11K_AHB [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ATH [=y] && ATH11K [=m] && REMOTEPROC [=y]
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-Ahh yeah, since it's SMD then it requires RPMGS which in turn requires
-more stuff.
-What do you think about making it depend on QRTR_SMD instead, because
-without it AHB literally does not work?
+In order to clean it up, first add missing headers in
+users of asm/prom.h
 
-Regards,
-Robert
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/misc/cxl/api.c      | 1 +
+ drivers/misc/cxl/cxl.h      | 2 ++
+ drivers/misc/cxl/cxllib.c   | 1 +
+ drivers/misc/cxl/flash.c    | 1 +
+ drivers/misc/cxl/guest.c    | 2 ++
+ drivers/misc/cxl/irq.c      | 1 +
+ drivers/misc/cxl/main.c     | 1 +
+ drivers/misc/cxl/native.c   | 1 +
+ drivers/misc/ocxl/afu_irq.c | 1 +
+ drivers/misc/ocxl/link.c    | 1 +
+ 10 files changed, 12 insertions(+)
+
+diff --git a/drivers/misc/cxl/api.c b/drivers/misc/cxl/api.c
+index b493de962153..d85c56530863 100644
+--- a/drivers/misc/cxl/api.c
++++ b/drivers/misc/cxl/api.c
+@@ -12,6 +12,7 @@
+ #include <linux/pseudo_fs.h>
+ #include <linux/sched/mm.h>
+ #include <linux/mmu_context.h>
++#include <linux/irqdomain.h>
+ 
+ #include "cxl.h"
+ 
+diff --git a/drivers/misc/cxl/cxl.h b/drivers/misc/cxl/cxl.h
+index 5dc0f6093f9d..7a6dd91987fd 100644
+--- a/drivers/misc/cxl/cxl.h
++++ b/drivers/misc/cxl/cxl.h
+@@ -25,6 +25,8 @@
+ 
+ extern uint cxl_verbose;
+ 
++struct property;
++
+ #define CXL_TIMEOUT 5
+ 
+ /*
+diff --git a/drivers/misc/cxl/cxllib.c b/drivers/misc/cxl/cxllib.c
+index 53b919856426..e5fe0a171472 100644
+--- a/drivers/misc/cxl/cxllib.c
++++ b/drivers/misc/cxl/cxllib.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/hugetlb.h>
+ #include <linux/sched/mm.h>
++#include <asm/opal-api.h>
+ #include <asm/pnv-pci.h>
+ #include <misc/cxllib.h>
+ 
+diff --git a/drivers/misc/cxl/flash.c b/drivers/misc/cxl/flash.c
+index 5b93ff51d82a..eee9decc121e 100644
+--- a/drivers/misc/cxl/flash.c
++++ b/drivers/misc/cxl/flash.c
+@@ -4,6 +4,7 @@
+ #include <linux/semaphore.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
++#include <linux/of.h>
+ #include <asm/rtas.h>
+ 
+ #include "cxl.h"
+diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
+index 9d485c9e3fff..3321c014913c 100644
+--- a/drivers/misc/cxl/guest.c
++++ b/drivers/misc/cxl/guest.c
+@@ -6,6 +6,8 @@
+ #include <linux/spinlock.h>
+ #include <linux/uaccess.h>
+ #include <linux/delay.h>
++#include <linux/irqdomain.h>
++#include <linux/platform_device.h>
+ 
+ #include "cxl.h"
+ #include "hcalls.h"
+diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
+index 4cb829d5d873..5f0e2dcebb34 100644
+--- a/drivers/misc/cxl/irq.c
++++ b/drivers/misc/cxl/irq.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/interrupt.h>
++#include <linux/irqdomain.h>
+ #include <linux/workqueue.h>
+ #include <linux/sched.h>
+ #include <linux/wait.h>
+diff --git a/drivers/misc/cxl/main.c b/drivers/misc/cxl/main.c
+index 43b312d06e3e..c1fbf6f588f7 100644
+--- a/drivers/misc/cxl/main.c
++++ b/drivers/misc/cxl/main.c
+@@ -15,6 +15,7 @@
+ #include <linux/slab.h>
+ #include <linux/idr.h>
+ #include <linux/pci.h>
++#include <linux/platform_device.h>
+ #include <linux/sched/task.h>
+ 
+ #include <asm/cputable.h>
+diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
+index 1a7f22836041..50b0c44bb8d7 100644
+--- a/drivers/misc/cxl/native.c
++++ b/drivers/misc/cxl/native.c
+@@ -11,6 +11,7 @@
+ #include <linux/mm.h>
+ #include <linux/uaccess.h>
+ #include <linux/delay.h>
++#include <linux/irqdomain.h>
+ #include <asm/synch.h>
+ #include <asm/switch_to.h>
+ #include <misc/cxl-base.h>
+diff --git a/drivers/misc/ocxl/afu_irq.c b/drivers/misc/ocxl/afu_irq.c
+index ecdcfae025b7..a06920b7e049 100644
+--- a/drivers/misc/ocxl/afu_irq.c
++++ b/drivers/misc/ocxl/afu_irq.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ // Copyright 2017 IBM Corp.
+ #include <linux/interrupt.h>
++#include <linux/irqdomain.h>
+ #include <asm/pnv-ocxl.h>
+ #include <asm/xive.h>
+ #include "ocxl_internal.h"
+diff --git a/drivers/misc/ocxl/link.c b/drivers/misc/ocxl/link.c
+index 9670d02c927f..4cf4c55a5f00 100644
+--- a/drivers/misc/ocxl/link.c
++++ b/drivers/misc/ocxl/link.c
+@@ -6,6 +6,7 @@
+ #include <linux/mm_types.h>
+ #include <linux/mmu_context.h>
+ #include <linux/mmu_notifier.h>
++#include <linux/irqdomain.h>
+ #include <asm/copro.h>
+ #include <asm/pnv-ocxl.h>
+ #include <asm/xive.h>
+-- 
+2.35.1
+

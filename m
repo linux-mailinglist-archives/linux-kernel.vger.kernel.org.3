@@ -2,183 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D9B4F0B09
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473F84F0B06
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359322AbiDCQCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 12:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359307AbiDCQCc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1359306AbiDCQCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 3 Apr 2022 12:02:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A4F3980E;
-        Sun,  3 Apr 2022 09:00:38 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236415AbiDCQC3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 3 Apr 2022 12:02:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADBD340FA
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649001638; x=1680537638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qvHYdvxr81dj6BSTtdc044toQ4oANBTAS7xvEFGuayI=;
-  b=lgX3zuPsEyQ2cveb8kTh0NN+IR9or3qvf8xtw1YERTPWDrY7zaIvVuwp
-   wfZxaDWRVY8AhrST2o2Y/RhXm+0Bi2hIIW3S/F1p9ftMSq2tpC2t878hv
-   JC9/fXFMba13awo+JwrZ6CR1Hxl9O/1cME+kMoKgM3PLWtOZfYshCRSz5
-   MZQ9YfDCg/prYshujp4TjIcSJ6xE9c4yqfBJpVMmxDkWvLILfsAX++P0/
-   00OBhz1gZ2V75QuyI7IwPbC2LZyEzlFQmoHvdO2AZ+J6fWkoQP2Fw6cbM
-   Uwq0xVx3s8kVFYop/dz+H12RXjpz69rzU3UrTed+ZQaJPZUeDdU9VhlHX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="260381423"
+  t=1649001635; x=1680537635;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+/ypF/YPTV/X3Gzog/+9OJoarfhftw4HnrnQQkEePBQ=;
+  b=JBHBkwOEQFDTdquqSG1ivZdMlXAKJbCELMdMk/gHUn4puwnweM2r81mX
+   IvrIjxIUY9AO2uDPX2ez/r7bS0MVDcqERIFpKvPYfJNj9VTUv9GGIp8Hr
+   9ilr0QWDTN7N+OO1/94SKLU39IOg4SgZUtEpECo86vlh8S6w5VxfcLvku
+   fjLcJw8TCVunuWNkbnxvkbs5F8CFNtIrXicUE+r3NUgwTcTCNUpNUbHUL
+   TIE3mDwv4SiRr6Q/icfpMn5k1yd+TY/bO5ybBA7S+2USRDIYYcJiW297N
+   dovLxHENZpjRfOq1l422jAmTu0756kqXF+KfMlUD9wyKYfVK4RCs1MKnH
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="259223781"
 X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="260381423"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 09:00:37 -0700
+   d="scan'208";a="259223781"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 09:00:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="607767948"
+   d="scan'208";a="548384835"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Apr 2022 09:00:33 -0700
+  by orsmga007.jf.intel.com with ESMTP; 03 Apr 2022 09:00:33 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nb2eW-00014e-Ru;
+        id 1nb2eW-00014b-Ov;
         Sun, 03 Apr 2022 16:00:32 +0000
-Date:   Sun, 3 Apr 2022 23:59:39 +0800
+Date:   Sun, 3 Apr 2022 23:59:48 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Bui Quang Minh <minhquangbui99@gmail.com>, cgroups@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Bui Quang Minh <minhquangbui99@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] cgroup: Kill the parent controller when its last child
- is killed
-Message-ID: <202204032330.l2wsF3mf-lkp@intel.com>
-References: <20220403135717.8294-1-minhquangbui99@gmail.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [asahilinux:nvme-v2 5/6] drivers/soc/apple/rtkit.c:575:21: warning:
+ no previous prototype for function 'apple_rtkit_init'
+Message-ID: <202204032336.1xnXEpJ7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220403135717.8294-1-minhquangbui99@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bui,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tj-cgroup/for-next]
-[also build test ERROR on v5.17 next-20220401]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bui-Quang-Minh/cgroup-Kill-the-parent-controller-when-its-last-child-is-killed/20220403-215911
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220403/202204032330.l2wsF3mf-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+tree:   https://github.com/AsahiLinux/linux nvme-v2
+head:   1c4210208a7dffa2a6697b0be5fa1da9f2bc448c
+commit: 49f954ccdfe134d00b9e17b9ff5186a47725c6bf [5/6] soc: apple: Add RTKit IPC library
+config: arm64-randconfig-r015-20220403 (https://download.01.org/0day-ci/archive/20220403/202204032336.1xnXEpJ7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/2bc22feae8a913c7f371bc79ef9967122d8d326c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bui-Quang-Minh/cgroup-Kill-the-parent-controller-when-its-last-child-is-killed/20220403-215911
-        git checkout 2bc22feae8a913c7f371bc79ef9967122d8d326c
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/49f954ccdfe134d00b9e17b9ff5186a47725c6bf
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux nvme-v2
+        git checkout 49f954ccdfe134d00b9e17b9ff5186a47725c6bf
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/apple/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   kernel/cgroup/cgroup.c: In function 'css_release_work_fn':
->> kernel/cgroup/cgroup.c:5169:52: error: 'struct cgroup_bpf' has no member named 'refcnt'
-    5169 |                 if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
-         |                                                    ^
+>> drivers/soc/apple/rtkit.c:575:21: warning: no previous prototype for function 'apple_rtkit_init' [-Wmissing-prototypes]
+   struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+                       ^
+   drivers/soc/apple/rtkit.c:575:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+   ^
+   static 
+>> drivers/soc/apple/rtkit.c:789:6: warning: no previous prototype for function 'apple_rtkit_free' [-Wmissing-prototypes]
+   void apple_rtkit_free(struct apple_rtkit *rtk)
+        ^
+   drivers/soc/apple/rtkit.c:789:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void apple_rtkit_free(struct apple_rtkit *rtk)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +5169 kernel/cgroup/cgroup.c
+vim +/apple_rtkit_init +575 drivers/soc/apple/rtkit.c
 
-  5148	
-  5149	static void css_release_work_fn(struct work_struct *work)
-  5150	{
-  5151		struct cgroup_subsys_state *css =
-  5152			container_of(work, struct cgroup_subsys_state, destroy_work);
-  5153		struct cgroup_subsys *ss = css->ss;
-  5154		struct cgroup *cgrp = css->cgroup;
-  5155		struct cgroup *parent = cgroup_parent(cgrp);
-  5156	
-  5157		mutex_lock(&cgroup_mutex);
-  5158	
-  5159		css->flags |= CSS_RELEASED;
-  5160		list_del_rcu(&css->sibling);
-  5161	
-  5162		/*
-  5163		 * If parent doesn't have any children, start killing it.
-  5164		 * And don't kill the default root.
-  5165		 */
-  5166		if (parent && list_empty(&parent->self.children) &&
-  5167		    parent != &cgrp_dfl_root.cgrp &&
-  5168		    !percpu_ref_is_dying(&parent->self.refcnt)) {
-> 5169			if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
-  5170				cgroup_bpf_offline(parent);
-  5171			percpu_ref_kill(&parent->self.refcnt);
-  5172		}
-  5173	
-  5174		if (ss) {
-  5175			/* css release path */
-  5176			if (!list_empty(&css->rstat_css_node)) {
-  5177				cgroup_rstat_flush(cgrp);
-  5178				list_del_rcu(&css->rstat_css_node);
-  5179			}
-  5180	
-  5181			cgroup_idr_replace(&ss->css_idr, NULL, css->id);
-  5182			if (ss->css_released)
-  5183				ss->css_released(css);
-  5184		} else {
-  5185			struct cgroup *tcgrp;
-  5186	
-  5187			/* cgroup release path */
-  5188			TRACE_CGROUP_PATH(release, cgrp);
-  5189	
-  5190			cgroup_rstat_flush(cgrp);
-  5191	
-  5192			spin_lock_irq(&css_set_lock);
-  5193			for (tcgrp = cgroup_parent(cgrp); tcgrp;
-  5194			     tcgrp = cgroup_parent(tcgrp))
-  5195				tcgrp->nr_dying_descendants--;
-  5196			spin_unlock_irq(&css_set_lock);
-  5197	
-  5198			/*
-  5199			 * There are two control paths which try to determine
-  5200			 * cgroup from dentry without going through kernfs -
-  5201			 * cgroupstats_build() and css_tryget_online_from_dir().
-  5202			 * Those are supported by RCU protecting clearing of
-  5203			 * cgrp->kn->priv backpointer.
-  5204			 */
-  5205			if (cgrp->kn)
-  5206				RCU_INIT_POINTER(*(void __rcu __force **)&cgrp->kn->priv,
-  5207						 NULL);
-  5208		}
-  5209	
-  5210		mutex_unlock(&cgroup_mutex);
-  5211	
-  5212		INIT_RCU_WORK(&css->destroy_rwork, css_free_rwork_fn);
-  5213		queue_rcu_work(cgroup_destroy_wq, &css->destroy_rwork);
-  5214	}
-  5215	
+   574	
+ > 575	struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+   576					     const char *mbox_name, int mbox_idx,
+   577					     const struct apple_rtkit_ops *ops)
+   578	{
+   579		struct apple_rtkit *rtk;
+   580		int ret;
+   581	
+   582		if (!ops)
+   583			return ERR_PTR(-EINVAL);
+   584	
+   585		rtk = kzalloc(sizeof(*rtk), GFP_KERNEL);
+   586		if (!rtk)
+   587			return ERR_PTR(-ENOMEM);
+   588	
+   589		rtk->dev = dev;
+   590		rtk->cookie = cookie;
+   591		rtk->ops = ops;
+   592	
+   593		init_completion(&rtk->epmap_completion);
+   594		init_completion(&rtk->reinit_completion);
+   595		init_completion(&rtk->iop_pwr_ack_completion);
+   596		init_completion(&rtk->ap_pwr_ack_completion);
+   597	
+   598		bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
+   599		set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
+   600	
+   601		rtk->mbox_name = mbox_name;
+   602		rtk->mbox_idx = mbox_idx;
+   603		rtk->mbox_cl.dev = dev;
+   604		rtk->mbox_cl.tx_block = true;
+   605		rtk->mbox_cl.knows_txdone = false;
+   606		rtk->mbox_cl.rx_callback = &apple_rtkit_rx_callback;
+   607	
+   608		ret = apple_rtkit_request_mbox_chan(rtk);
+   609		if (ret)
+   610			return (struct apple_rtkit *)ERR_PTR(ret);
+   611	
+   612		return rtk;
+   613	}
+   614	
 
 -- 
 0-DAY CI Kernel Test Service

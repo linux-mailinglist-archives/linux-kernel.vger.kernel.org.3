@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8204F0B67
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B17F4F0B61
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359561AbiDCQ5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 12:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S1359538AbiDCQ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 12:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359603AbiDCQ5K (ORCPT
+        with ESMTP id S235645AbiDCQ4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:57:10 -0400
+        Sun, 3 Apr 2022 12:56:48 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB57F393F4
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:55:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E98B39172
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:54:54 -0700 (PDT)
 Received: from dslb-094-219-033-178.094.219.pools.vodafone-ip.de ([94.219.33.178] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nb3V2-0008D7-Q1; Sun, 03 Apr 2022 18:54:48 +0200
+        id 1nb3V3-0008D7-Jp; Sun, 03 Apr 2022 18:54:49 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 03/11] staging: r8188eu: use ieee80211 helper for retry bit
-Date:   Sun,  3 Apr 2022 18:54:30 +0200
-Message-Id: <20220403165438.357728-4-martin@kaiser.cx>
+Subject: [PATCH 04/11] staging: r8188eu: simplify error handling
+Date:   Sun,  3 Apr 2022 18:54:31 +0200
+Message-Id: <20220403165438.357728-5-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220403165438.357728-1-martin@kaiser.cx>
 References: <20220403165438.357728-1-martin@kaiser.cx>
@@ -44,27 +44,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the ieee80211 helper to check if the retry bit is set in the incoming
-data frame.
+Simplify the error handling in validate_recv_data_frame. The function does
+not have to do any cleanup for errors, we can return immediately.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_recv.c | 33 +++++++++----------------
+ 1 file changed, 11 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 89b6e30915ce..c75b0592a63d 100644
+index c75b0592a63d..200d8c6c6e11 100644
 --- a/drivers/staging/r8188eu/core/rtw_recv.c
 +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -945,7 +945,7 @@ static int validate_recv_data_frame(struct adapter *adapter,
+@@ -943,17 +943,15 @@ static int validate_recv_data_frame(struct adapter *adapter,
+ 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)precv_frame->rx_data;
+ 	struct rx_pkt_attrib	*pattrib = &precv_frame->attrib;
  	struct security_priv	*psecuritypriv = &adapter->securitypriv;
- 	int ret = _SUCCESS;
+-	int ret = _SUCCESS;
++	int ret;
  
--	bretry = GetRetry(ptr);
-+	bretry = ieee80211_has_retry(hdr->frame_control);
+ 	bretry = ieee80211_has_retry(hdr->frame_control);
  	pda = ieee80211_get_DA(hdr);
  	psa = ieee80211_get_SA(hdr);
- 	pbssid = get_hdr_bssid(ptr);
+-	pbssid = get_hdr_bssid(ptr);
+ 
+-	if (!pbssid) {
+-		ret = _FAIL;
+-		goto exit;
+-	}
++	pbssid = get_hdr_bssid(ptr);
++	if (!pbssid)
++		return _FAIL;
+ 
+ 	memcpy(pattrib->dst, pda, ETH_ALEN);
+ 	memcpy(pattrib->src, psa, ETH_ALEN);
+@@ -986,16 +984,11 @@ static int validate_recv_data_frame(struct adapter *adapter,
+ 		break;
+ 	}
+ 
+-	if (ret == _FAIL) {
+-		goto exit;
+-	} else if (ret == RTW_RX_HANDLED) {
+-		goto exit;
+-	}
++	if (ret == _FAIL || ret == RTW_RX_HANDLED)
++		return ret;
+ 
+-	if (!psta) {
+-		ret = _FAIL;
+-		goto exit;
+-	}
++	if (!psta)
++		return _FAIL;
+ 
+ 	/* psta->rssi = prxcmd->rssi; */
+ 	/* psta->signal_quality = prxcmd->sq; */
+@@ -1023,10 +1016,8 @@ static int validate_recv_data_frame(struct adapter *adapter,
+ 	precv_frame->preorder_ctrl = &psta->recvreorder_ctrl[pattrib->priority];
+ 
+ 	/*  decache, drop duplicate recv packets */
+-	if (recv_decache(precv_frame, bretry, &psta->sta_recvpriv.rxcache) == _FAIL) {
+-		ret = _FAIL;
+-		goto exit;
+-	}
++	if (recv_decache(precv_frame, bretry, &psta->sta_recvpriv.rxcache) == _FAIL)
++		return _FAIL;
+ 
+ 	if (pattrib->privacy) {
+ 		GET_ENCRY_ALGO(psecuritypriv, psta, pattrib->encrypt, is_multicast_ether_addr(pattrib->ra));
+@@ -1038,9 +1029,7 @@ static int validate_recv_data_frame(struct adapter *adapter,
+ 		pattrib->icv_len = 0;
+ 	}
+ 
+-exit:
+-
+-	return ret;
++	return _SUCCESS;
+ }
+ 
+ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv_frame)
 -- 
 2.30.2
 

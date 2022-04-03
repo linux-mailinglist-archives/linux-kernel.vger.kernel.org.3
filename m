@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8ED4F07FC
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0722B4F07FF
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346578AbiDCGAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 02:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S1346396AbiDCGDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 02:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiDCGAN (ORCPT
+        with ESMTP id S230501AbiDCGDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:00:13 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EAE287;
-        Sat,  2 Apr 2022 22:58:20 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id t4so5718416pgc.1;
-        Sat, 02 Apr 2022 22:58:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YXwQ+k39kV8MTJdL0uwWm6r+cjDkWPDQbE11claVeoE=;
-        b=OoRx6DVEbSCME9Spbp+EEF3z8Cq8UkNCpcTD5zx4/gAyUIdZLI4PGHtrakwMR6a1NP
-         0pjGuFAVjS40+x1EkolRh9s18J/SWxSvEQw2VJg/4zPdVLU1Mvd+rGDDaZTI6mw5dhYw
-         DBhx7/JVFpxdK8ovNYAue3R2/E6jvlAQVqr5TtsfuJ6D/jhJ0U94t/LKrZat+UQHM5em
-         JKEyovUPV7BuxoO12dj10h6B1pLFnxUFB9SIo8q4msuGFHmjmifOI2mpznjUJKoU4EIk
-         xqqwZPxdYyPT0BuAShn8gnTacyFtYy3wu7HAAR7/tX2hdbV7Y+ni1TogOuPZ5yXe/rdL
-         Uqdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YXwQ+k39kV8MTJdL0uwWm6r+cjDkWPDQbE11claVeoE=;
-        b=FTqvod6CcMe9glpwp9UWwjUdpd0XC1dyZwbgYtuLvGd1Im/+do1aAqVJyR/4AZzoFS
-         vNiW9eqrHyL2IbeHeqRcP+k+VLi859JNrAt6jp9hPd0QgMcSxHAiPZtw+9Ve7P61/ELh
-         KqRderedbFxPFROxMrLvXNnY9M2aPR7ZgTpwzlbcoNhXyh7FBVElK2/9lAh3eNC3Jdq6
-         mX2D2AfbB+5veSK61sgcCQvTCSSLEHPQmTGfYyeOqlTlg7lfjI0gD0jx1W74Ejurr5l3
-         DnG/oD0vEuxXercXxKp9t6EyNHbsUxZ2LcyRl2EodX4DoWyZmcAHNqwyZdc6SMJ9gC36
-         K5mQ==
-X-Gm-Message-State: AOAM5316wgSY6wA8cBCJqWwPQnJ+N2LzN8bVdSHAvyxOQ5p7o1rqkbsT
-        894MlTQ+vu2zVgp4Lk2aVP4=
-X-Google-Smtp-Source: ABdhPJwHmDnHJZLVAAjdOzUFr0Lf8D2K3vLpnvrmujIr7Enj1O9SPTwX+R/SIwB1tk+Y4WvvVkvyUw==
-X-Received: by 2002:a63:5ce:0:b0:382:1f05:c8b1 with SMTP id 197-20020a6305ce000000b003821f05c8b1mr21131901pgf.19.1648965499591;
-        Sat, 02 Apr 2022 22:58:19 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a005000b001c7511dc31esm6610845pjb.41.2022.04.02.22.58.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 22:58:19 -0700 (PDT)
-Message-ID: <c3ea5966-cfc3-8e36-3f0d-dbaf1b1665b9@gmail.com>
-Date:   Sun, 3 Apr 2022 12:58:15 +0700
+        Sun, 3 Apr 2022 02:03:39 -0400
+X-Greylist: delayed 1223 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 23:01:46 PDT
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8630F2A257
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:01:46 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 01DC0988F
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 00:41:23 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id aszKnEVlhRnrraszKnJNLA; Sun, 03 Apr 2022 00:41:23 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=B8Vpt4j0VXhi1wOCizFRse/0RAuRJNIB4Y5M9/3tKP0=; b=mYp6TGq8N59uC1v2h6Vf7jj7D+
+        M7FdSC6XFvbA79UA4yr2Qtaq6P9zBM2v/0MW/DlR8EWROyUKNOl0V8Z1G8xV96As7/C7yxoQTRjQv
+        GseHfzQgw1uJL9fReeiyvq5hvaEmlGMf92Z0JDxk3Td/Qadktbgh1kjlBIfGov8IsP8bHmzsKhj/i
+        6a/aB1TnmEIPHF5b5LNnVhqfheEzvGyB/b2pyrg4Q1IH2y5gjM609sClhSTPufzLoZ50wWULkV/KW
+        DLIyepDWAPkKr13c/+8GHgwTmgZa4m/EFXeWpL8N89kTg5jUxAL+m/Ko4AGdoZR9nJ8qAy5QHYsts
+        Wh6YZk2Q==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54670)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1naszK-001qPy-D2; Sun, 03 Apr 2022 05:41:22 +0000
+Message-ID: <1009cf3a-587b-307a-d1c9-efe71cd0a104@roeck-us.net>
+Date:   Sat, 2 Apr 2022 22:41:20 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] Documentation/process: mention patch changelog in review
- process
+Subject: Re: [PATCH] watchdog: sp805: disable watchdog on remove
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stephen Boyd <sboyd@kernel.org>
-References: <20220402100706.57507-1-krzysztof.kozlowski@linaro.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220402100706.57507-1-krzysztof.kozlowski@linaro.org>
+To:     Eliav Farber <farbere@amazon.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ronenk@amazon.com, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, dwmw@amazon.co.uk
+References: <20220403052249.48784-1-farbere@amazon.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220403052249.48784-1-farbere@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1naszK-001qPy-D2
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54670
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 9
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/04/22 17.07, Krzysztof Kozlowski wrote:
-> Extend the "Respond to review comments" section of "Submitting patches"
-> with reference to patch changelogs.
+On 4/2/22 22:22, Eliav Farber wrote:
+> Disable the watchdog if it is active while removing the module.
+> It is necessary in order to prevent a reset in case watchdog
+> hw was running before the removal.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
->   Documentation/process/submitting-patches.rst | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+>   drivers/watchdog/sp805_wdt.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-> index fb496b2ebfd3..9bb4e8c0f635 100644
-> --- a/Documentation/process/submitting-patches.rst
-> +++ b/Documentation/process/submitting-patches.rst
-> @@ -318,7 +318,10 @@ understands what is going on.
->   Be sure to tell the reviewers what changes you are making and to thank them
->   for their time.  Code review is a tiring and time-consuming process, and
->   reviewers sometimes get grumpy.  Even in that case, though, respond
-> -politely and address the problems they have pointed out.
-> +politely and address the problems they have pointed out.  When sending a next
-> +version, add a ``patch changelog`` to the cover letter or to individual patches
-> +explaining difference aganst previous submission (see
-> +:ref:`the_canonical_patch_format`).
+> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
+> index d8876fba686d..d7dc0f3f16ec 100644
+> --- a/drivers/watchdog/sp805_wdt.c
+> +++ b/drivers/watchdog/sp805_wdt.c
+> @@ -311,6 +311,9 @@ static int sp805_wdt_remove(struct amba_device *adev)
+>   {
+>   	struct sp805_wdt *wdt = amba_get_drvdata(adev);
 >   
->   See Documentation/process/email-clients.rst for recommendations on email
->   clients and mailing list etiquette.
+> +	if (watchdog_active(&wdt->wdd))
+> +		wdt_disable(&wdt->wdd);
+> +
 
-What about range-diffs?
+Why not use watchdog_stop_on_unregister() ?
 
--- 
-An old man doll... just what I always wanted! - Clara
+Guenter
+
+>   	watchdog_unregister_device(&wdt->wdd);
+>   	watchdog_set_drvdata(&wdt->wdd, NULL);
+>   
+

@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E284F0821
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369D94F0829
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbiDCGpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 02:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S235038AbiDCGsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 02:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349469AbiDCGpc (ORCPT
+        with ESMTP id S237957AbiDCGse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:45:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7B11142
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:43:35 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dr20so13851070ejc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 23:43:35 -0700 (PDT)
+        Sun, 3 Apr 2022 02:48:34 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFB237BC2
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:46:41 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id e13so978613ils.8
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 23:46:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
-        b=i9rDzybQOX37P+qV8TaQQg/OWkO8nhv8kgK42pzWL139Z8Xu9iSCKQwDblvXomhQdz
-         erv8P/h9REJoC4eMGW651lYjvDDBy3NA7QOPQL8DfMmtPpvkbCZ6n7//UrRniEAi29yw
-         4tSlQ1bvLmKZJeBSJwKQV45geF/xfvB/Lm3lHTu/WbIlhhLZQ8DqrR+FpcUJpM2zaJZm
-         LRVQ0cFP1rJPYw3si2S3se7+ZTQmjcFLpmEc4dDx+6seXPz/iiZziII8dEb84JGicwcN
-         IuS8ILoduby5VIzBgGJF+E7viQ/8AwAUImqesCBKIfbnxqlXVNc4drxfJZAMlQi7wTS2
-         SACQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t6+k/4Om7VsqLidja8hb8+QMIWaL5Tmj1wC2cL00ays=;
+        b=nOlAijP5ZZ9vsdwJxJUZqAvchhR2fSeQGoSus10DZCtVRxLYXfh3CaMWft73tMME1m
+         t8EEPpLhVAmbmIitm4y9QYf8gD29WnqYP9IPk0DbsJRQ306l1QfJlfZBvwV0n6/apy1q
+         kE/dBq22AAuWR+VBcGZKlXr/FEVoU2mgB22M1LxnKoR+KLx+gi822+ieZ9bQV5DPkPDX
+         rv0cbX0UhZ/st6FHWyCx4nSEY24sHkWVOJgCK96qcxkxAp+J+AvawMuPwG3FbWM+qvsh
+         z1YzQW9HvQJnNjv85bt720LiaBD3IDsndMwp3VULMTwSwWfSyKEqFX+sUpd6E8sAOFuU
+         nD8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
-        b=kdCCalhM2m+6mbBwRlC3gv9WculdPC4hVoDezrLl2tMPbPJO50LQ5eLWokWSkagmCl
-         iN226t3p+XnEXcCiC2HPOegQWGtiLFHC5ZVoQ9nxFIrmlZpS4ODGci7HvzmBmY4ap1nO
-         wAo+xbLUXJL7f2rqw+//+JHgiUxNppL5yGPlWniRlwNm4OIzM6Bz8w8VI2TOZtOAZ4fx
-         lUxYOE7IzYRtS9AV6TTWdee+IARE/OMPEUDXx8LS0Cp6A66dc+nFTpZtix5NOsmfPKku
-         WSXoi+7dB7lA96C0kMn+1n7UtnoShjkuwmercQvrcoG5FSAhxqOKRbshThA88Ia7SLcR
-         5chg==
-X-Gm-Message-State: AOAM531Hb8Lhh9818khGR33adsg2GE8vgUsLtzoWy9S9wSzeWZF6pb89
-        mgQf0qlVPC+RXTmDwyQo/iCqe0M6S+pUZOgEagc=
-X-Google-Smtp-Source: ABdhPJx/3YPNiIHFwcdTaaNlKfTfaMhjgdlgvxJs/3tX27AB4qh3X5TrQZv3Z73xqSyo00fOZ3JUVsT4gKwvPn2U1js=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr6451508ejc.540.1648968213486; Sat, 02
- Apr 2022 23:43:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t6+k/4Om7VsqLidja8hb8+QMIWaL5Tmj1wC2cL00ays=;
+        b=kBGWs3PTXok2hx0G01TUJ9q9yvkRJvf2dJB/akPeLMK+asohtkI76ktWo1l5r017IY
+         ylkV5svoK8lVO3JMyNOtGxHtl4NyL4limJTimVOKqlLgRvm1xW1CsOKNXxYJCypwuBP9
+         jjaUVbjIbWpuh45sJx/MjD7EtRhtuIGGzUCgUjnxTyKE86upq+Z2I5nrzVW74OWEaJxi
+         I0G+4Pflz6QRGpHRGg/whBGlxux9B+iQhd/IQqBACWG0d6z4Vx6QXsfqC9FV1BkeN8w2
+         Sa5ur61XbfL4NyzcHZVk7kDAdhPqjLb1HYGv7/9uOz0HTo/vn+etkUWySZL/BD0RlfSN
+         JnMA==
+X-Gm-Message-State: AOAM533QJLyuCy81klYMtxh74D7msme9eF/YvyTZ6RtI6aPnjVad0RZp
+        7XoBSq7sLP9GJ8xPmFEtrXbzyCWBQQP06QQphEsqlX/SbkQ=
+X-Google-Smtp-Source: ABdhPJzFIevVMEisQ9Pwvrh3Lhxnl9EwRG1TSPfzOF/+7Ua2Imr8RieK1XhYkaSWk0BECbaP9FsQ3vwbj4/V5Fwy9OA=
+X-Received: by 2002:a92:d94d:0:b0:2c8:45a5:926b with SMTP id
+ l13-20020a92d94d000000b002c845a5926bmr3208155ilq.310.1648968400437; Sat, 02
+ Apr 2022 23:46:40 -0700 (PDT)
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 3 Apr 2022 07:43:37 +0100
-Message-ID: <CAHpNFcNqkhWQ3xpSw1+MowYrVWii8FMjVOzv_DViCPSBMAHz0g@mail.gmail.com>
-Subject: VecSR Compression (HDMI & DP) & X-OR DSC1.2C & Along with our
- brilliant security features in NTP Folder (Security bat & WebHSM) & Default
- JS VESA_BT sure to please all on their servers
-To:     torvalds@linux-foundation.org
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <YkcEMdsi9G5y8mX4@dhcp22.suse.cz> <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
+ <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Sat, 2 Apr 2022 23:46:29 -0700
+Message-ID: <CAAPL-u_zLTs6cMSN8sOtktCHKncfSWo+qWxXU7_iL3hhwhL8QA@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,165 +81,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VecSR Compression (HDMI  & DP) & X-OR DSC1.2C & Along with our
-brilliant security features in NTP Folder (Security bat & WebHSM) &
-Default JS https://bit.ly/VESA_BT sure to please all on their servers
-
-is QFT a Zero compression or low level compression version of DSC
-1.2b? Maybe X-OR X=3D1 New Data & X=3D0 being not sent ? Therefore Masking
-The Frame Buffer!
-
-If not i dually submit it for inclusion in the standard along with
-Vector Compression VESA Standard Display protocol 3
-https://lkml.org/lkml/2022/4/2/328
-https://lkml.org/lkml/2022/4/2/295
-
-Include vector today *important* RS
-https://vesa.org/vesa-display-compression-codecs/
-
-"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
-latency=E2=80=9D, which is the amount of time between a frame being ready f=
-or
-transport in the GPU and that frame being completely displayed. This
-latency is the sum of the transport time through the source=E2=80=99s outpu=
-t
-circuits, the transport time across the interface, the processing of
-the video data in the display, and the painting of the screen with the
-new data. This overall latency affects the responsiveness of games:
-how long it appears between a button is pressed to the time at which
-the resultant action is observed on the screen.
-
-While there are a lot of variables in this equation, not many are
-adjustable from an HDMI specification perspective. QFT operates on the
-transport portion of this equation by reducing the time it takes to
-send only the active video across the cable. This results in reduced
-display latency and increased responsiveness."
-
-*****
-
-VecSR - Vector Standard Render
-
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
-
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
-
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
-
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-(c)Rupert S
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
-ml
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential=
-.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-*
-
-VecSR is really good for secondary loading of sprites & text; In these
-terms very good for pre loading on for example the X86, RISC, AMIGA &
-Famicon type devices,
-With appropriate loading into Sprite buffers or Emulated Secondaries
-(Special Animations) or Font Buffers.
-
-Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
-with Integer & Emulated Float (Library); Traditional BitMap fonts work
-well in a Set Size & can resize well if cached!
-
-The full process leads upto the terminal & how to optimise CON,
-We can & will need to exceed capacities of any system & To improve them!
-
-presenting: Dev-Con-VectorE=C2=B2
-Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
-Class VESA Console +
-
-With Console in VecSR you can 3DText & Audio,
-
-VecSR Firmware update 2022 For immediate implementation in all
-operating systems & ROM's
-
-Potential is fast & useful.
-
-*
-
-https://science.n-helix.com/2022/04/vecsr.html
+On Sat, Apr 2, 2022 at 1:13 AM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Wei Xu <weixugc@google.com> writes:
+>
+> > On Fri, Apr 1, 2022 at 6:54 AM Michal Hocko <mhocko@suse.com> wrote:
+> >>
+> >> On Thu 31-03-22 08:41:51, Yosry Ahmed wrote:
+> >> > From: Shakeel Butt <shakeelb@google.com>
+> >> >
+>
+> [snip]
+>
+> >> > Possible Extensions:
+> >> > --------------------
+> >> >
+> >> > - This interface can be extended with an additional parameter or flags
+> >> >   to allow specifying one or more types of memory to reclaim from (e.g.
+> >> >   file, anon, ..).
+> >> >
+> >> > - The interface can also be extended with a node mask to reclaim from
+> >> >   specific nodes. This has use cases for reclaim-based demotion in memory
+> >> >   tiering systens.
+> >> >
+> >> > - A similar per-node interface can also be added to support proactive
+> >> >   reclaim and reclaim-based demotion in systems without memcg.
+> >> >
+> >> > For now, let's keep things simple by adding the basic functionality.
+> >>
+> >> Yes, I am for the simplicity and this really looks like a bare minumum
+> >> interface. But it is not really clear who do you want to add flags on
+> >> top of it?
+> >>
+> >> I am not really sure we really need a node aware interface for memcg.
+> >> The global reclaim interface will likely need a different node because
+> >> we do not want to make this CONFIG_MEMCG constrained.
+> >
+> > A nodemask argument for memory.reclaim can be useful for memory
+> > tiering between NUMA nodes with different performance.  Similar to
+> > proactive reclaim, it can allow a userspace daemon to drive
+> > memcg-based proactive demotion via the reclaim-based demotion
+> > mechanism in the kernel.
+>
+> I am not sure whether nodemask is a good way for demoting pages between
+> different types of memory.  For example, for a system with DRAM and
+> PMEM, if specifying DRAM node in nodemask means demoting to PMEM, what
+> is the meaning of specifying PMEM node? reclaiming to disk?
+>
+> In general, I have no objection to the idea in general.  But we should
+> have a clear and consistent interface.  Per my understanding the default
+> memcg interface is for memory, regardless of memory types.  The memory
+> reclaiming means reduce the memory usage, regardless of memory types.
+> We need to either extending the semantics of memory reclaiming (to
+> include memory demoting too), or add another interface for memory
+> demoting.

@@ -2,79 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BA54F0CCB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 00:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A71D4F0CCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 00:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376568AbiDCW3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 18:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S1376579AbiDCWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 18:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356307AbiDCW3v (ORCPT
+        with ESMTP id S235976AbiDCWif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 18:29:51 -0400
-Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 297B339832
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 15:27:50 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
- s=smtp; t=1649024875; h=Content-Transfer-Encoding: MIME-Version:
- Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To: From: From:
- Sender: Sender; bh=y5ltD1YbS8stWfMw6OYDAa9OeNCMcSjpNZgM56D6GYk=; b=cluZAkN45jbekEjJJyOa2ggjeaCcx4RjlXjAWENfcB7O9HfnxQJ+sg54NEwa4jL3CctHax8+
- PNJWk8VsAD2uq0mohzlJjAEV/qMgN7/uyQUi7j51HMAwKjlRMFn3tL6AJ22i5Sy29oW83Ec1
- A/l8t2qRBHQtJxv1Ot/SFBt/fivD7bigjLCmNwsdP13FmZcQwFU+oVe4IhmoNo2EWv/IwPZV
- Inn8leZAv7jJEypQ3YyPnajcfaaLaZmMTiBogN2fFZktEgd0eATD8H460h41FBc0xtIhF6QL
- j9lle7jDxQ8v7VnBQQ+VPxOUa/s4RR7K4gX9bJb8mSNiMSq4Uy1qOg==
-X-Mailgun-Sending-Ip: 159.135.228.13
-X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
-Received: from localhost.localdomain (177.75.142.174.mhnet.com.br
- [177.75.142.174]) by smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 624a1f5ccb3e04acafb2af83 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Sun, 03 Apr 2022 22:27:40 GMT
-Sender: codeagain@codeagain.dev
-From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
-To:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev
-Cc:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
-Subject: [PATCH] staging: vme_user: Fixed typo in the MODULE_AUTHOR
-Date:   Sun,  3 Apr 2022 19:27:28 -0300
-Message-Id: <20220403222728.276111-1-codeagain@codeagain.dev>
-X-Mailer: git-send-email 2.35.1
-Reply-To: Bruno's Patch Box <patch-reply@codeagain.dev>
+        Sun, 3 Apr 2022 18:38:35 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B05338A9;
+        Sun,  3 Apr 2022 15:36:39 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F42A1EC0391;
+        Mon,  4 Apr 2022 00:36:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649025394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=eMvdZnfzb84eh5dWY4TzFYh9Frtp7zqamDf5CXupNkM=;
+        b=qLYRjOZFCK73aydb1ooMD6X4B+P98cVazZIfNLdnYyD7gZFRuAbpHOpLeeAM9FEC823+Fh
+        5jZdiwZChRI+Kq3SqLnpSFMdOa9MydIt6EBGltDndX67UbC9WN48YxzmySIKGht2KnZXaR
+        iOJvH6NqgbcHyTTjT+kWS3n+QUTvJ9k=
+Date:   Mon, 4 Apr 2022 00:36:30 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v11 00/45] Add AMD Secure Nested Paging (SEV-SNP) Guest
+ Support
+Message-ID: <YkohbveUq3lItqpl@zn.tnic>
+References: <20220224165625.2175020-1-brijesh.singh@amd.com>
+ <Yh99pBI/RwZY1yf7@nazgul.tnic>
+ <519f5e8e-18d1-43ac-ef90-0320d21c3a55@redhat.com>
+ <Yh+YAWu3K4xBillV@nazgul.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yh+YAWu3K4xBillV@nazgul.tnic>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MODULE_AUTHOR line missed the '>' character in the end of the
-author's e-mail address. Just added it.
+On Wed, Mar 02, 2022 at 05:14:57PM +0100, Borislav Petkov wrote:
+> On Wed, Mar 02, 2022 at 05:09:34PM +0100, Paolo Bonzini wrote:
+> > Sure: https://git.kernel.org/pub/scm/virt/kvm/kvm.git, branch svm-for-snp.
+> > 
+> > $ git log -4 --oneline --reverse
+> > 3c95d3fab229 KVM: SVM: Define sev_features and vmpl field in the VMSA
+> > 0c86f9cf27f7 KVM: SVM: Create a separate mapping for the SEV-ES save area
+> > c5e0ec4c742d KVM: SVM: Create a separate mapping for the GHCB save area
+> > 88c955d1fc93 (HEAD -> kvm/svm-for-snp) KVM: SVM: Update the SEV-ES save area mapping
+> 
+> Thanks!
 
-Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
----
- drivers/staging/vme/devices/vme_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Err, wasn't this supposed to go to Linus this merge window?
 
-diff --git a/drivers/staging/vme/devices/vme_user.c b/drivers/staging/vme/devices/vme_user.c
-index e3fa38bd7f12..859af797630c 100644
---- a/drivers/staging/vme/devices/vme_user.c
-+++ b/drivers/staging/vme/devices/vme_user.c
-@@ -773,7 +773,7 @@ MODULE_PARM_DESC(bus, "Enumeration of VMEbus to which the driver is connected");
- module_param_array(bus, int, &bus_num, 0000);
- 
- MODULE_DESCRIPTION("VME User Space Access Driver");
--MODULE_AUTHOR("Martyn Welch <martyn.welch@ge.com");
-+MODULE_AUTHOR("Martyn Welch <martyn.welch@ge.com>");
- MODULE_LICENSE("GPL");
- 
- module_init(vme_user_init);
+I don't see it...
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

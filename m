@@ -2,89 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730AA4F0809
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FE14F080D
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349554AbiDCGQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 02:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S1351372AbiDCGTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 02:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiDCGQG (ORCPT
+        with ESMTP id S1350390AbiDCGTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:16:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8BBC03;
-        Sat,  2 Apr 2022 23:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648966453; x=1680502453;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HiyotpaX2vP6TLwEpXSXpxsDN8hTJfCPw9+FmUKPPTc=;
-  b=Cx+EzT3rVk+j0Ayf3/XZZXwsF1WZq1lPCej3xm7zVg5gD5oBQ2lDPSB9
-   ZAA0VoMBkzaM3VIeyoKf+NYpPfhvt0CirQ16Cr2D3y65wFmVqUG3Ybc2d
-   +QSa09Oue4siq7AlRpkB8/HlaxEtTogfWtFasuVey8CEKCdn0bRhE+pl8
-   4Kot2gFuaXoFnR5wPNwCk/bTh1pc61cXOI/BwiA+05YjBPSsodbrw44XO
-   +x5EkkgXU7XFCjTw/IN3WPmJtmgktuVT/TctTVFhXLT+ttuLbKzz1MGVw
-   sb6Lau48S8O5c5MJo0MnEpScwQvZRKdbxx7WS5Hp3d7pt9Gy2/Z1hzWXo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="242499780"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="242499780"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 23:14:12 -0700
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="568744391"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 23:14:11 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw on PREEMPT_RT kernel
-Date:   Sun,  3 Apr 2022 14:14:40 +0800
-Message-Id: <20220403061440.2762522-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 3 Apr 2022 02:19:17 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56F2BF51
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:17:23 -0700 (PDT)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id atY9noVWvN7CcatY9nMrxT; Sun, 03 Apr 2022 08:17:22 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 03 Apr 2022 08:17:22 +0200
+X-ME-IP: 90.126.236.122
+Message-ID: <7dc70fe2-a418-9842-c9ad-e78216ec1d13@wanadoo.fr>
+Date:   Sun, 3 Apr 2022 08:17:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ASoC: codecs: Fix an error handling path in
+ va_macro_probe()
+Content-Language: fr
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        alsa-devel@alsa-project.org
+References: <6d08311472e272fdc1a184f019ec98ade6e9dc46.1648966195.git.christophe.jaillet@wanadoo.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <6d08311472e272fdc1a184f019ec98ade6e9dc46.1648966195.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On non-PREEMPT_RT kernel, the init_irq_work() make the defer_qs_iw irq-work
-execute in interrupt context. however, on PREEMPT_RT kernel, the
-init_irq_work() make defer_qs_iq irq-work execute in rt-fifo irq_work
-kthreads. when system booting, and the CONFIG_RCU_STRICT_GRACE_PERIOD
-is enabled, there are a lot of defer_qs_iw irq-work to be processed
-in rt-fifo irq_work kthreads, it occupies boot CPU for long time and
-cause other kthread cannot get the boot CPU, the boot process occurs
-hang. use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw irq-work, can
-ensure the defer_qs_iw irq-work always execute in interrupt context,
-whether PREEMPT_RT or non PREEMPT_RT kernel.
+Le 03/04/2022 à 08:10, Christophe JAILLET a écrit :
+> After a successful lpass_macro_pds_init() call, lpass_macro_pds_exit() must
+> be called.
+> 
+> Add the missing call in the error handling path of the probe function and
+> use it.
+> 
+> Fixes: 9e3d83c52844 ("ASoC: codecs: Add power domains support in digital macro codecs")
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_plugin.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'll send a V2. The same issue is also in lpass-tx-macro.c and 
+lpass-rx-macro.c.
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 3037c2536e1f..cf7bd28af8ef 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
- 			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
- 				// Get scheduler to re-evaluate and call hooks.
- 				// If !IRQ_WORK, FQS scan will eventually IPI.
--				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
-+				rdp->defer_qs_iw = IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
- 				rdp->defer_qs_iw_pending = true;
- 				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
- 			}
--- 
-2.25.1
+CJ
+
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   sound/soc/codecs/lpass-va-macro.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
+> index f3cb596058e0..d18b56e60433 100644
+> --- a/sound/soc/codecs/lpass-va-macro.c
+> +++ b/sound/soc/codecs/lpass-va-macro.c
+> @@ -1434,8 +1434,10 @@ static int va_macro_probe(struct platform_device *pdev)
+>   		va->dmic_clk_div = VA_MACRO_CLK_DIV_2;
+>   	} else {
+>   		ret = va_macro_validate_dmic_sample_rate(sample_rate, va);
+> -		if (!ret)
+> -			return -EINVAL;
+> +		if (!ret) {
+> +			ret = -EINVAL;
+> +			goto err;
+> +		}
+>   	}
+>   
+>   	base = devm_platform_ioremap_resource(pdev, 0);
+> @@ -1492,6 +1494,8 @@ static int va_macro_probe(struct platform_device *pdev)
+>   err_dcodec:
+>   	clk_disable_unprepare(va->macro);
+>   err:
+> +	lpass_macro_pds_exit(va->pds);
+> +
+>   	return ret;
+>   }
+>   
 

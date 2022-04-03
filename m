@@ -2,173 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540924F0A41
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1447B4F0A5E
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359051AbiDCOoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 10:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S1359063AbiDCOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 10:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358313AbiDCOoC (ORCPT
+        with ESMTP id S244926AbiDCOwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 10:44:02 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1802396B3
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:42:07 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so6753849pjo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 07:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p5umN/eT2yUlngm37Zc5I2AOTVEAYdcyPGsqi0WLgoI=;
-        b=Zx7R9Rp7/72eElz3mkRm7acwcHI7aWjNETem+EFTweD0U19lywnqYJWuuJnRSXV/eV
-         kz2t5mBpUW7d+u0q5QYs4VYKlrChrUGuAP5QdLGcLSug3Ywsi5gdOGaX9Brh0/ulpCn/
-         7gOHxhjAl4BYnxRm/QR6BN8glSQfz6I8tJTI/RSf5eIe1DLQqzttczmr4Msq/GHTN8gc
-         RoCkLFNAcMkxhGclXdJOFHC7gAGvC13nj64l30h8VrduEVJvURlNMZjvfySn/RIYgkEm
-         jh9Tx5vM3ajyT52cPSPRf52yZc9EQyfUgM4YB+KPEuE9jMBgyHVVk6T1v21nHwBInga5
-         w3lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p5umN/eT2yUlngm37Zc5I2AOTVEAYdcyPGsqi0WLgoI=;
-        b=iZhEXKwpn9MNG7V9c3vAuE9EqsHIen2hpsDvQO2doc6kLA6cM2qO8oW8b+6XpuzVdT
-         g8AVYnuqaMDZ1f0mGUI0MaUwriuOKP/NMzO21D5z2BOlQYSSz7iRCjbKHd5FJh8x3vtZ
-         icbN1IkQ290tDTRJ3DMaJnfSkJzEYRp1j4eB5OHs+VfTPH2TXuSKWhj1Oq4kXC0WlJ7P
-         2yIDo8tC6xpK0J+Iaxa/uVA601SvFmIFIDlEyxw4koBaevG4d4DqTOL2NiDzFOQJx2wr
-         k+YkT4tFU7p+Y14t7/tx5bVkPM24uRHP0+VsGmDBG8a+goVziWb3EWsMOSqabH3KYHsh
-         V9vQ==
-X-Gm-Message-State: AOAM532oN/yd5Mxep+vl7KHZ2m/Cd/8MP6qJ2re9f88/vc6NehgEGy3V
-        lNKcdVpU1CbUiQ3P1Wd3Tw/coMNWS02Fvw==
-X-Google-Smtp-Source: ABdhPJxiK259Rsez5AEKNCgwwGWfLwLJqqjZFy2P7C56o2s85y+ZZXJ+QGvNqQVOLEeIfTFmZVG1lg==
-X-Received: by 2002:a17:902:f242:b0:156:8e7c:e21e with SMTP id j2-20020a170902f24200b001568e7ce21emr4568719plc.86.1648996927127;
-        Sun, 03 Apr 2022 07:42:07 -0700 (PDT)
-Received: from localhost.localdomain ([223.233.64.251])
-        by smtp.gmail.com with ESMTPSA id 124-20020a621682000000b004f6a2e59a4dsm8815075pfw.121.2022.04.03.07.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 07:42:06 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH 2/2] arm64: dts: qcom: sa8155p-adp: Add support for uSD card
-Date:   Sun,  3 Apr 2022 20:11:51 +0530
-Message-Id: <20220403144151.92572-3-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220403144151.92572-1-bhupesh.sharma@linaro.org>
-References: <20220403144151.92572-1-bhupesh.sharma@linaro.org>
+        Sun, 3 Apr 2022 10:52:02 -0400
+X-Greylist: delayed 339 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 03 Apr 2022 07:50:06 PDT
+Received: from glittertind.blackshift.org (glittertind.blackshift.org [IPv6:2a01:4f8:1c1c:29e9::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D5E396B6;
+        Sun,  3 Apr 2022 07:50:06 -0700 (PDT)
+Received: from bjornoya.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:dea6:32ff:feb1:177a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "bjornoya.blackshift.org", Issuer "R3" (verified OK))
+        by glittertind.blackshift.org (Postfix) with ESMTPS id ED0AE4E1439;
+        Sun,  3 Apr 2022 14:44:25 +0000 (UTC)
+Received: from pengutronix.de (2a03-f580-87bc-d400-2568-5610-be2e-0839.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:2568:5610:be2e:839])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3A11B5932E;
+        Sun,  3 Apr 2022 14:44:25 +0000 (UTC)
+Date:   Sun, 3 Apr 2022 16:44:24 +0200
+From:   Marc Kleine-Budde <mkl@blackshift.org>
+To:     linux-sh@vger.kernel.org
+Cc:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sh: make iounmap() a static inline again
+Message-ID: <20220403144424.f5akrad75xtkncgz@pengutronix.de>
+References: <20220105085746.1116726-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y5qda4tomsttcgy4"
+Content-Disposition: inline
+In-Reply-To: <20220105085746.1116726-1-mkl@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for uSD card on SA8155p-ADP board using the SDHC2
-interface.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 68 ++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+--y5qda4tomsttcgy4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-index 8756c2b25c7e..b561a8139cb9 100644
---- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-@@ -317,6 +317,20 @@ &remoteproc_cdsp {
- 	firmware-name = "qcom/sa8155p/cdsp.mdt";
- };
- 
-+&sdhc_2 {
-+	status = "okay";
-+
-+	cd-gpios = <&tlmm 4 GPIO_ACTIVE_LOW>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc2_on>;
-+	pinctrl-1 = <&sdc2_off>;
-+	vqmmc-supply = <&vreg_l13c_2p96>; /* IO line power */
-+	vmmc-supply = <&vreg_l17a_2p96>;  /* Card power line */
-+	bus-width = <4>;
-+	no-sdio;
-+	no-emmc;
-+};
-+
- &uart2 {
- 	status = "okay";
- };
-@@ -390,6 +404,60 @@ &usb_2_qmpphy {
- &tlmm {
- 	gpio-reserved-ranges = <0 4>;
- 
-+	sdc2_on: sdc2_on {
-+		clk {
-+			pins = "sdc2_clk";
-+			bias-disable;		/* No pull */
-+			drive-strength = <16>;	/* 16 MA */
-+		};
-+
-+		cmd {
-+			pins = "sdc2_cmd";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <16>;	/* 16 MA */
-+		};
-+
-+		data {
-+			pins = "sdc2_data";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <16>;	/* 16 MA */
-+		};
-+
-+		sd-cd {
-+			pins = "gpio96";
-+			function = "gpio";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+	};
-+
-+	sdc2_off: sdc2_off {
-+		clk {
-+			pins = "sdc2_clk";
-+			bias-disable;		/* No pull */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+
-+		cmd {
-+			pins = "sdc2_cmd";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+
-+		data {
-+			pins = "sdc2_data";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+
-+		sd-cd {
-+			pins = "gpio96";
-+			function = "gpio";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+	};
-+
- 	usb2phy_ac_en1_default: usb2phy_ac_en1_default {
- 		mux {
- 			pins = "gpio113";
--- 
-2.35.1
+On 05.01.2022 09:57:47, Marc Kleine-Budde wrote:
+> The patch
+>=20
+> | 98c90e5ea34e sh: remove __iounmap
+>=20
+> removed the __iounmap macro for the NOMMU case, but also converted the
+> static inline no-op iounmap() to a macro, resulting in lots of unused
+> variable warnings.
+>=20
+> This patch coverts the macro into a static inline function, similar to
+> previous patches in the sh arch:
+>=20
+> | 4580ba4ad2e6 sh: Convert iounmap() macros to inline functions
+> | 733f0025f0fb sh: prevent warnings when using iounmap
 
+The problem still exists in linus/master, can someone take this patch?
+
+regards,
+Marc
+
+> Fixes: 98c90e5ea34e ("sh: remove __iounmap")
+> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  arch/sh/include/asm/io.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
+> index cf9a3ec32406..4960b8ff1ad4 100644
+> --- a/arch/sh/include/asm/io.h
+> +++ b/arch/sh/include/asm/io.h
+> @@ -271,7 +271,9 @@ static inline void __iomem *ioremap_prot(phys_addr_t =
+offset, unsigned long size,
+>  #endif /* CONFIG_HAVE_IOREMAP_PROT */
+> =20
+>  #else /* CONFIG_MMU */
+> -#define iounmap(addr)		do { } while (0)
+> +static inline void iounmap(void __iomem *addr)
+> +{
+> +}
+>  #define ioremap(offset, size)	((void __iomem *)(unsigned long)(offset))
+>  #endif /* CONFIG_MMU */
+> =20
+> --=20
+> 2.34.1
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--y5qda4tomsttcgy4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJJssQACgkQrX5LkNig
+011irQf9HZnQq5ATktTlhzEDcsWEtrTO/zuIuVRQjCjJkoXxx/AXnmr1Bxdhpqpl
+XrJRgk8pqsrkK1RBHLJNKS19NU6ujciVKnOSbJ1hQkQhiXC9CLZI8O0X+PkyrbbZ
+de5pUts2RqImI3s+ejZVCAeGnmaEmp0VAKYmehxbAhwGnRmdxkpYa6Yi/iC3Mhxs
+p0eM6hdbm2wYbMI/jTLUAkZ+vTmK3uG7vHg7Z2m3HWMwQ2024GGiSS97LDKblpEa
+hfCUQ5gfM9Y4BG1S/QOYkB5bl43ZUkLUOk7Gn2Yqvwz4vGugzZ0js53B9YtI+ZKl
+4M/1OI/zd2SHm+ONDwjy4uHfbuj7pQ==
+=O1BU
+-----END PGP SIGNATURE-----
+
+--y5qda4tomsttcgy4--

@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072F64F0A0A
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623AF4F0A0C
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358678AbiDCNy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 09:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S1358961AbiDCN6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 09:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234624AbiDCNyy (ORCPT
+        with ESMTP id S233681AbiDCN6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 09:54:54 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCE731DCA;
-        Sun,  3 Apr 2022 06:52:59 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id k14so6271479pga.0;
-        Sun, 03 Apr 2022 06:52:59 -0700 (PDT)
+        Sun, 3 Apr 2022 09:58:42 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E520F366BC
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 06:56:47 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q14so9725378ljc.12
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 06:56:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lb9cPlyZwbStjJwtyos1H7UNpKKI/uQ50C7n0HV1cmg=;
-        b=ol6dX4/RtXYE+ytChjwpGHAuwCbbdB+IDdiEcpvJWXpiVphTPkjv1IExQ1ToaZBRPu
-         OirK0Fh3acKTV0wMXIyYsW0gAGxwd93cHemJXGVi343rUkb3CofTeBtD/IbwmvqRgcp6
-         mm8cjNF6iwZ5xNK0MChgKrW5uZaYk+CFZiDnY6euVi4lsAYZPrDaopFbn8/K7v2Jwcun
-         joCAlYFgRC/pgwILgk78kJAO57R8XW1CroNlNEDl+TvzTcfppFATaSdB75brzaPQARAI
-         /estsAqNQZhFh7XxreulgNXdAD661VIYq7Wr8bkTpPmmLyhb+Ukr9CCo3EFhqIgeKbgG
-         X8qA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MBAKoPZjAakKIlnbHjpDhWtb6RRB2eJBPWizvPJ/+Bo=;
+        b=kxCaDGXxYCqlWxgTZ8NaC4fIlRxhfpSHmhglknxVXDn2uJsqpKV1hNHXNv+EzjNzcY
+         8a57l3jhR/F+P/leMZqat+jfXXsuALPXS6aSTEiM0tLx+1IeVMUgiFS9bZa8bSuwUnaI
+         FHMHDmOGjFSZOBRx1ZLm+sFgSYT68mNCnfy7AdMlreAibFBXE7jtyAXY0mMS9BT7B1QY
+         AgenZik0fPiXsf5fkRRoPQ720iF2yCY69ZHgNZtGCs/UgubcDffCJVre7p8jKgBY1gC4
+         eirSRSPLIwcJkiI/qqFNNp4vfj/2ROiVt16jHOIdqeR8pNfUE3td+cBXjM608V3Ge1kS
+         1gVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lb9cPlyZwbStjJwtyos1H7UNpKKI/uQ50C7n0HV1cmg=;
-        b=Du9vzMVJsficRpVysV1Tvciyj0eACq/lTSjP6sHrDb0adw3sKp7VbPYWlR3BktTEvu
-         /zKvMspVxim7msV95cPl9HXlrmerCxHYB9nil6eTw/1QI2k81hIwbzVTsLnbhJofTUW/
-         /+72CzX1LJShvvcxzN/YhVXixfgn/h3dbEC8gDBNg1TLPYTlDc4zuALa6HWkM9wFlWaf
-         i8EmeNX4pedcJAHONknYg0o2jhue4NTHotiBtmExQXbMrpPozB54a5CAoB5B+OI3eQks
-         aVKP4WuCTuCFCIG7ljkIQR5D/9HmbIF0aGuH17SGEOMYw6qLNdrhFfUh46TNHx1SXXgf
-         txwA==
-X-Gm-Message-State: AOAM5327vKHVoStncxX0hbGsA01vcytnS5L5gGs+eSFr7dCFGONmEgOr
-        NkQxTSDZnwYuz+JJ0CAi2Yw=
-X-Google-Smtp-Source: ABdhPJwiZvhSxAJo5R0Aey3Vtd57SMUkDnTvtPt3vFc3D9SvrciCNUo3WSE9GJBrMxz2huPRfTrHUA==
-X-Received: by 2002:a63:2b05:0:b0:398:677b:f460 with SMTP id r5-20020a632b05000000b00398677bf460mr22523433pgr.592.1648993978755;
-        Sun, 03 Apr 2022 06:52:58 -0700 (PDT)
-Received: from localhost.localdomain ([223.74.191.143])
-        by smtp.gmail.com with ESMTPSA id k20-20020aa788d4000000b004fb07f819c1sm8933299pff.50.2022.04.03.06.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 06:52:58 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix cd_flavor_subdir() of test_progs
-Date:   Sun,  3 Apr 2022 21:52:45 +0800
-Message-Id: <20220403135245.1713283-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MBAKoPZjAakKIlnbHjpDhWtb6RRB2eJBPWizvPJ/+Bo=;
+        b=EQUrmQFHg/iXZbxbxu7LyMD6x2XzhW/6RTHyyBJdi5UEfg92+0ny1UjlbarHqs9sdz
+         7fCPoAP6VelFM4IefyJMmlOCY+IaiXE6CHIZC/zadPx3rvJJ5c+oeaujfFVKJY17mwiR
+         ZIHoUpxkF2iVTchb7LQ9LIgbD6uzVtk8lz6KSOIRXazDszbr4/Sdkwa2pZbKyBnpFzLQ
+         kMy+jOlnlL4KHXrHre/McDlhX5F2opi7iHpck04UwFdGiZKlpfCw6GEQydJLFgdjsyJz
+         ut94EjRUDe3buFF/0vQ0PA27diEHZHI7JHF7KW5Qdp/Gxr3KOJJeiHqqMuH5kpr40yPi
+         VzSA==
+X-Gm-Message-State: AOAM533IRbpwGfMvZHYMWLju/cMo10GCoxs/G4/x8KTvB13OggsowPXL
+        ikyuY5n2XPhqj0Ou0NzemeN68ECbWi4KhdiVtshsUHGqiGoa3w==
+X-Google-Smtp-Source: ABdhPJwe28P8jbpyadFYcDVA6XJYC6/J4hbwEooG1Q0BtqW8YxfETVA26DQ2GtfYpLopx1meR6bpJIODP05PEn/2ah4=
+X-Received: by 2002:a2e:8941:0:b0:24b:156c:70ec with SMTP id
+ b1-20020a2e8941000000b0024b156c70ecmr1519337ljk.38.1648994206059; Sun, 03 Apr
+ 2022 06:56:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1648840991.git.sevinj.aghayeva@gmail.com>
+ <1a9f181f7f30f71c03e6e88df9fb8c17a298a192.1648840991.git.sevinj.aghayeva@gmail.com>
+ <Ykl/4mIsSzaPRr+y@kroah.com>
+In-Reply-To: <Ykl/4mIsSzaPRr+y@kroah.com>
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Date:   Sun, 3 Apr 2022 09:56:34 -0400
+Message-ID: <CAMWRUK4BpTFf8fGoANjjOEZ2dxCws=QPLPJ166JPgnsdsy+pmg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] staging: rtl8723bs: remove redundant braces in if statements
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,37 +68,286 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, when we run test_progs with just executable file name, for
-example 'PATH=. test_progs-no_alu32', cd_flavor_subdir() will not check
-if test_progs is running as a flavored test runner and switch into
-corresponding sub-directory.
+On Sun, Apr 3, 2022 at 7:07 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Apr 01, 2022 at 03:28:36PM -0400, Sevinj Aghayeva wrote:
+> > Adhere to Linux kernel coding style.
+> >
+> > Reported by checkpatch:
+> >
+> > WARNING: braces {} are not necessary for single statement blocks
+> >
+> > Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+> > ---
+> >  drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 76 +++++++------------
+> >  1 file changed, 26 insertions(+), 50 deletions(-)
+> >
+> > diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+> > index 49a3f45cb771..9f328e9a81ff 100644
+> > --- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+> > +++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+> > @@ -271,12 +271,9 @@ static int has_channel(struct rt_channel_info *channel_set,
+> >  {
+> >       int i;
+> >
+> > -     for (i = 0; i < chanset_size; i++) {
+> > -             if (channel_set[i].ChannelNum == chan) {
+> > +     for (i = 0; i < chanset_size; i++)
+> > +             if (channel_set[i].ChannelNum == chan)
+> >                       return 1;
+> > -             }
+> > -     }
+> > -
+> >       return 0;
+> >  }
+> >
+> > @@ -649,9 +646,8 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
+> >                       if (psta) {
+> >                               /* update WMM, ERP in the beacon */
+> >                               /* todo: the timer is used instead of the number of the beacon received */
+> > -                             if ((sta_rx_pkts(psta) & 0xf) == 0) {
+> > +                             if ((sta_rx_pkts(psta) & 0xf) == 0)
+> >                                       update_beacon_info(padapter, pframe, len, psta);
+> > -                             }
+> >                       } else {
+> >                               /* allocate a new CAM entry for IBSS station */
+> >                               cam_idx = allocate_fw_sta_entry(padapter);
+> > @@ -916,11 +912,10 @@ unsigned int OnAuthClient(struct adapter *padapter, union recv_frame *precv_fram
+> >                       go2asoc = 1;
+> >               }
+> >       } else if (seq == 4) {
+> > -             if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared) {
+> > +             if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
+> >                       go2asoc = 1;
+> > -             } else {
+> > +             else
+> >                       goto authclnt_fail;
+> > -             }
+> >       } else {
+> >               /*  this is also illegal */
+> >               goto authclnt_fail;
+> > @@ -1455,11 +1450,10 @@ unsigned int OnAssocRsp(struct adapter *padapter, union recv_frame *precv_frame)
+> >       UpdateBrateTbl(padapter, pmlmeinfo->network.supported_rates);
+> >
+> >  report_assoc_result:
+> > -     if (res > 0) {
+> > +     if (res > 0)
+> >               rtw_buf_update(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len, pframe, pkt_len);
+> > -     } else {
+> > +     else
+> >               rtw_buf_free(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len);
+> > -     }
+> >
+> >       report_join_res(padapter, res);
+> >
+> > @@ -1531,9 +1525,8 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
+> >                          reason, GetAddr3Ptr(pframe),
+> >                          ignore_received_deauth);
+> >
+> > -             if (0 == ignore_received_deauth) {
+> > +             if (0 == ignore_received_deauth)
+> >                       receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
+> > -             }
+> >       }
+> >       pmlmepriv->LinkDetectInfo.bBusyTraffic = false;
+> >       return _SUCCESS;
+> > @@ -1674,11 +1667,10 @@ unsigned int OnAction_back(struct adapter *padapter, union recv_frame *precv_fra
+> >                       /* process_addba_req(padapter, (u8 *)&(pmlmeinfo->ADDBA_req), GetAddr3Ptr(pframe)); */
+> >                       process_addba_req(padapter, (u8 *)&(pmlmeinfo->ADDBA_req), addr);
+> >
+> > -                     if (pmlmeinfo->accept_addba_req) {
+> > +                     if (pmlmeinfo->accept_addba_req)
+> >                               issue_action_BA(padapter, addr, WLAN_ACTION_ADDBA_RESP, 0);
+> > -                     } else {
+> > +                     else
+> >                               issue_action_BA(padapter, addr, WLAN_ACTION_ADDBA_RESP, 37);/* reject ADDBA Req */
+> > -                     }
+> >
+> >                       break;
+> >
+> > @@ -1774,9 +1766,8 @@ static unsigned int on_action_public_vendor(union recv_frame *precv_frame)
+> >       u8 *pframe = precv_frame->u.hdr.rx_data;
+> >       u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
+> >
+> > -     if (!memcmp(frame_body + 2, P2P_OUI, 4)) {
+> > +     if (!memcmp(frame_body + 2, P2P_OUI, 4))
+> >               ret = on_action_public_p2p(precv_frame);
+> > -     }
+> >
+> >       return ret;
+> >  }
+> > @@ -2187,9 +2178,8 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
+> >
+> >                       wps_ie = rtw_get_wps_ie(pmgntframe->buf_addr+TXDESC_OFFSET+sizeof(struct ieee80211_hdr_3addr)+_BEACON_IE_OFFSET_,
+> >                               pattrib->pktlen-sizeof(struct ieee80211_hdr_3addr)-_BEACON_IE_OFFSET_, NULL, &wps_ielen);
+> > -                     if (wps_ie && wps_ielen > 0) {
+> > +                     if (wps_ie && wps_ielen > 0)
+> >                               rtw_get_wps_attr_content(wps_ie,  wps_ielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
+> > -                     }
+> >                       if (sr != 0)
+> >                               set_fwstate(pmlmepriv, WIFI_UNDER_WPS);
+> >                       else
+> > @@ -2245,9 +2235,8 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
+> >
+> >
+> >       /*  EXTERNDED SUPPORTED RATE */
+> > -     if (rate_len > 8) {
+> > +     if (rate_len > 8)
+> >               pframe = rtw_set_ie(pframe, WLAN_EID_EXT_SUPP_RATES, (rate_len - 8), (cur_network->supported_rates + 8), &pattrib->pktlen);
+> > -     }
+> >
+> >
+> >       /* todo:HT for adhoc */
+> > @@ -2447,9 +2436,8 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
+> >
+> >
+> >               /*  EXTERNDED SUPPORTED RATE */
+> > -             if (rate_len > 8) {
+> > +             if (rate_len > 8)
+> >                       pframe = rtw_set_ie(pframe, WLAN_EID_EXT_SUPP_RATES, (rate_len - 8), (cur_network->supported_rates + 8), &pattrib->pktlen);
+> > -             }
+> >
+> >
+> >               /* todo:HT for adhoc */
+> > @@ -2674,9 +2662,8 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short
+> >
+> >               /*  setting auth algo number */
+> >               val16 = (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared) ? 1 : 0;/*  0:OPEN System, 1:Shared key */
+> > -             if (val16) {
+> > +             if (val16)
+> >                       use_shared_key = 1;
+> > -             }
+> >               le_tmp = cpu_to_le16(val16);
+> >
+> >               /* setting IV for auth seq #3 */
+> > @@ -2831,16 +2818,14 @@ void issue_asocrsp(struct adapter *padapter, unsigned short status, struct sta_i
+> >                               break;
+> >                       }
+> >
+> > -                     if (!pbuf || ie_len == 0) {
+> > +                     if (!pbuf || ie_len == 0)
+> >                               break;
+> > -                     }
+> >               }
+> >
+> >       }
+> >
+> > -     if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK) {
+> > +     if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK)
+> >               pframe = rtw_set_ie(pframe, WLAN_EID_VENDOR_SPECIFIC, 6, REALTEK_96B_IE, &(pattrib->pktlen));
+> > -     }
+> >
+> >       /* add WPS IE ie for wps 2.0 */
+> >       if (pmlmepriv->wps_assoc_resp_ie && pmlmepriv->wps_assoc_resp_ie_len > 0) {
+> > @@ -3301,9 +3286,8 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da,
+> >       __le16 le_tmp;
+> >
+> >       pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+> > -     if (!pmgntframe) {
+> > +     if (!pmgntframe)
+> >               goto exit;
+> > -     }
+> >
+> >       /* update attribute */
+> >       pattrib = &pmgntframe->attrib;
+> > @@ -3627,9 +3611,8 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
+> >       action = ACT_PUBLIC_BSSCOEXIST;
+> >
+> >       pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+> > -     if (!pmgntframe) {
+> > +     if (!pmgntframe)
+> >               return;
+> > -     }
+> >
+> >       /* update attribute */
+> >       pattrib = &pmgntframe->attrib;
+> > @@ -3802,9 +3785,8 @@ unsigned int send_beacon(struct adapter *padapter)
+> >
+> >       } while (false == bxmitok && issue < 100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+> >
+> > -     if (padapter->bSurpriseRemoved || padapter->bDriverStopped) {
+> > +     if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
+> >               return _FAIL;
+> > -     }
+> >
+> >
+> >       if (!bxmitok)
+> > @@ -4388,9 +4370,8 @@ static void process_80211d(struct adapter *padapter, struct wlan_bssid_ex *bssid
+> >                       }
+> >
+> >                       /*  skip AP 2.4G channel plan */
+> > -                     while ((j < chplan_ap.Len) && (chplan_ap.Channel[j] <= 14)) {
+> > +                     while ((j < chplan_ap.Len) && (chplan_ap.Channel[j] <= 14))
+> >                               j++;
+> > -                     }
+> >               }
+> >
+> >               pmlmeext->update_channel_plan_by_ap_done = 1;
+> > @@ -4402,9 +4383,8 @@ static void process_80211d(struct adapter *padapter, struct wlan_bssid_ex *bssid
+> >       i = 0;
+> >       while ((i < MAX_CHANNEL_NUM) && (chplan_new[i].ChannelNum != 0)) {
+> >               if (chplan_new[i].ChannelNum == channel) {
+> > -                     if (chplan_new[i].ScanType == SCAN_PASSIVE) {
+> > +                     if (chplan_new[i].ScanType == SCAN_PASSIVE)
+> >                               chplan_new[i].ScanType = SCAN_ACTIVE;
+> > -                     }
+> >                       break;
+> >               }
+> >               i++;
+> > @@ -4629,9 +4609,8 @@ void report_del_sta_event(struct adapter *padapter, unsigned char *MacAddr, unsi
+> >       struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
+> >
+> >       pcmd_obj = rtw_zmalloc(sizeof(struct cmd_obj));
+> > -     if (!pcmd_obj) {
+> > +     if (!pcmd_obj)
+> >               return;
+> > -     }
+> >
+> >       cmdsz = (sizeof(struct stadel_event) + sizeof(struct C2HEvent_Header));
+> >       pevtcmd = rtw_zmalloc(cmdsz);
+> > @@ -5124,9 +5103,8 @@ void survey_timer_hdl(struct timer_list *t)
+> >
+> >       /* issue rtw_sitesurvey_cmd */
+> >       if (pmlmeext->sitesurvey_res.state > SCAN_START) {
+> > -             if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS) {
+> > +             if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS)
+> >                       pmlmeext->sitesurvey_res.channel_idx++;
+> > -             }
+> >
+> >               if (pmlmeext->scan_abort) {
+> >                       pmlmeext->sitesurvey_res.channel_idx = pmlmeext->sitesurvey_res.ch_num;
+> > @@ -5135,9 +5113,8 @@ void survey_timer_hdl(struct timer_list *t)
+> >               }
+> >
+> >               ph2c = rtw_zmalloc(sizeof(struct cmd_obj));
+> > -             if (!ph2c) {
+> > +             if (!ph2c)
+> >                       goto exit_survey_timer_hdl;
+> > -             }
+> >
+> >               psurveyPara = rtw_zmalloc(sizeof(struct sitesurvey_parm));
+> >               if (!psurveyPara) {
+> > @@ -5348,9 +5325,8 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
+> >
+> >       /* check already connecting to AP or not */
+> >       if (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) {
+> > -             if (pmlmeinfo->state & WIFI_FW_STATION_STATE) {
+> > +             if (pmlmeinfo->state & WIFI_FW_STATION_STATE)
+> >                       issue_deauth_ex(padapter, pnetwork->mac_address, WLAN_REASON_DEAUTH_LEAVING, 1, 100);
+> > -             }
+> >               pmlmeinfo->state = WIFI_FW_NULL_STATE;
+> >
+> >               /* clear CAM */
+> > --
+> > 2.25.1
+> >
+> >
+>
+> Still does not apply to my tree :(
 
-This will cause test_progs-no_alu32 executed by the
-'PATH=. test_progs-no_alu32' command to run in the wrong directory and
-load the wrong BPF objects.
+ Sorry about that! Will sync my tree and train again.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/testing/selftests/bpf/test_progs.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 2ecb73a65206..0a4b45d7b515 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -761,8 +761,10 @@ int cd_flavor_subdir(const char *exec_name)
- 	const char *flavor = strrchr(exec_name, '/');
- 
- 	if (!flavor)
--		return 0;
--	flavor++;
-+		flavor = exec_name;
-+	else
-+		flavor++;
-+
- 	flavor = strrchr(flavor, '-');
- 	if (!flavor)
- 		return 0;
 -- 
-2.35.1
 
+Sevinj.Aghayeva

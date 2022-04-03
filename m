@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A954F094E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 14:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A987D4F094F
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 14:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357598AbiDCMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S1357638AbiDCMVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 08:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbiDCMUA (ORCPT
+        with ESMTP id S236111AbiDCMVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 08:20:00 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E829233A01
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 05:18:06 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id qh7so4670417ejb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 05:18:06 -0700 (PDT)
+        Sun, 3 Apr 2022 08:21:21 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76E03467E
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 05:19:27 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id j8so6041547pll.11
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 05:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QvjIgpbYP0AE6cl4O3RydzzNsUQwz26DYQCH/eouy64=;
-        b=f5frQnxK7uaM8FUwx5q4Iy5wVI1d1DwBKl/6tkrg4H5H91G0kNf/df1m8SOx2VZ11/
-         aK41kEj+C25hMNdpbZa32MIkgj01ymwWZnxAcK4m6+P7GAXe6eu4c6qw3dMgJfuqH/MT
-         sRh10Qgt+yw8IBYAkvlRUGHtHC7YkS5yZ7TanH+UF61YQGjR9R8ILky0XcPcrZsMg5A6
-         jykHXC4mP3nJZTvcDE2z6lu/ClJ3c6Hg/vxTF+OBPebrKheIIZ/R/Q/Z0solK+jHlYn7
-         fbfiHuofFucD0SkkcpjITJnB8l/x87F0KvRtX7+vZ05OeF377AjxoE+3CG3qJbCu1zYV
-         wgEA==
+        h=from:to:cc:subject:date:message-id;
+        bh=RShXJBNVQcxmpPDml0HJbk+LkoGJyZhOEELj1lVtbec=;
+        b=ASJ/uTPqb3VVSeNcAbp/2MzxUbyvy50wiLrqZDmqGEYwccN7mrIFuq2OD45vQ6Cqd0
+         5/SUkAf4QGZVRDwJhnFc6AR4Akd8JgP1Ri6SOd3GBHlqUzmn2nf0Wlm5E89DqxKOj7nn
+         xKQdTmz/c/hKXtQ5BBsbm6DFU3CrpLDR9JfyWF4TOZonwBgKWNJUBVIFudEUScJgqto9
+         1XFMuZhYlgHUvGg9TJne/FGV94UscJRufy3/bxlHDtcmRqnQ9vAPsdVlBR7aA694Ih57
+         xqYbPEwz8xW0aoOWmbIF3In4VdnwmUsK03Tkj6Tk9AhUZny1MpIRAukpUqhxDp9kxkWO
+         dw9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QvjIgpbYP0AE6cl4O3RydzzNsUQwz26DYQCH/eouy64=;
-        b=IW6BbXhCJu5PqSVvziyo1FWbh1GGLWpGJ8aNyEPTb/kLl7/0KPcwWpzvUVz0wDMEED
-         8CPN4Ud8UCG6MmJX4mh65dnGGZINNpEz2ZoZ01hkpfNFoWDsOuVAuYc30Mqc3yvZBdvK
-         DYpRwBAYI0beN6zzOMpMNmFD8g1iRfitrbxZdmYkF6DiozAXHAmZ6qby6xs9TY4853oa
-         Meilytva94uuSGlRJSKyENcaVfWaMSSei+y0CzlP5epQmJaRDxOF3spcPJBfiugN77lc
-         /XZHoHY5h/4OrjZPNfGvzF97ab5aFFw3s19Of1Cbz3+RiR/kLVEAUY5wzdxRWC/BlMkO
-         UEQA==
-X-Gm-Message-State: AOAM530Jj8kvPT/Pf0Jt3PTaz6ZKH4drKf/DhLHsWpNFRJpSvJjuRpWW
-        CnzCOs/kkDgt2O6F+BWSYhNKqxt1Cyw=
-X-Google-Smtp-Source: ABdhPJyZk64Gf+4esdRzmYupZUsrBhSqUtT5RydmSA5vuqCCLk3J87Isu/YnNmpJTDuxMTzu25z6Hg==
-X-Received: by 2002:a17:907:1b1e:b0:6d7:31b0:e821 with SMTP id mp30-20020a1709071b1e00b006d731b0e821mr7064454ejc.334.1648988285519;
-        Sun, 03 Apr 2022 05:18:05 -0700 (PDT)
-Received: from [192.168.0.253] (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b006e4b67514a1sm3230167ejb.179.2022.04.03.05.18.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 05:18:04 -0700 (PDT)
-Message-ID: <617af7b6-eeac-372a-7bbb-828db11a2aa9@gmail.com>
-Date:   Sun, 3 Apr 2022 14:18:04 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
-Content-Language: en-US
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
- <bf1137fa-5051-a834-0c1f-042c5a8074a3@gmail.com> <1858641.taCxCBeP46@leap>
- <2366209.jE0xQCEvom@leap>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <2366209.jE0xQCEvom@leap>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RShXJBNVQcxmpPDml0HJbk+LkoGJyZhOEELj1lVtbec=;
+        b=TizSPTQr9xfuJqNzvH0MbHHvyGVmzfLJTHeL5LAVcjHpq/pnoSmWBiuZf3cVXzdqOl
+         ZsFGo7e24pfFL04XCKtjbRHda6d3li48m8mPHSCYCJrVK1UIWVQM3F5ShXMXXw/6AK8b
+         VefC+g82TjsOYH2v/i7e8818OxJTYM8cC38NsVTnhiW5j5hnu2jw2PuRO+a5DF9UDMwh
+         zIwhbdfJEUglPAB4Oa/fiTaB3CnzPMD7yf+K4E9/AM3QGnr5FCMWfnC1h35NfFRQeA7d
+         XU3o8eaktYxeyi1GBdJSQimqdG66bqaq3OqJ0tjcV6K1eqAST21zuZYpd/UdP7qw0BtU
+         tYuQ==
+X-Gm-Message-State: AOAM5332k6A4z9WnIgR+MFNS5ajvdoPvtj+kteQipiunxyxg7wboR2BQ
+        Py8Ajnfd1eNvKit9vBZKVc9JWlbu+83I1FENTnE=
+X-Google-Smtp-Source: ABdhPJzJ180xuZCo6a/vyAI5wNXF0oUceznq7n1YZj4xX5GZFmrnqYFXuyvtiBLWAo0hSxO/XJ2jTg==
+X-Received: by 2002:a17:90a:7403:b0:1ca:7de0:8cf9 with SMTP id a3-20020a17090a740300b001ca7de08cf9mr3869047pjg.74.1648988367280;
+        Sun, 03 Apr 2022 05:19:27 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id o14-20020a056a0015ce00b004fab49cd65csm8604019pfu.205.2022.04.03.05.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 05:19:26 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shlomi Gridish <gridish@freescale.com>,
+        Kim Phillips <kim.phillips@freescale.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] soc: fsl: qe: Fix refcount leak in par_io_of_config
+Date:   Sun,  3 Apr 2022 12:19:20 +0000
+Message-Id: <20220403121920.4788-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/22 14:10, Fabio M. De Francesco wrote:
-> For a list of all the paths to a given function you may use Smatch:
-> 
-> ./smatch/smatch_data/db/smdb.py ips_leave
-> 
-> or
-> 
-> ./smatch/smatch_data/db/smdb.py call_tree ips_leave
-> 
-> But perhaps you already know how to do it.
+The device_node pointer is returned by of_parse_phandle() with
+refcount incremented. We should use of_node_put() on it when done.
+This function only calls of_node_put() in the regular path.
+And it will cause refcount leak in error path.
 
-Yes, but thank you anyway. :)
+Fixes: 986585385131 ("[POWERPC] Add QUICC Engine (QE) infrastructure")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/soc/fsl/qe/qe_io.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Michael
+diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
+index a5e2d0e5ab51..9f5f746bea88 100644
+--- a/drivers/soc/fsl/qe/qe_io.c
++++ b/drivers/soc/fsl/qe/qe_io.c
+@@ -159,12 +159,12 @@ int par_io_of_config(struct device_node *np)
+ 	pio_map = of_get_property(pio, "pio-map", &pio_map_len);
+ 	if (pio_map == NULL) {
+ 		printk(KERN_ERR "pio-map is not set!\n");
+-		return -1;
++		goto err_node_put;
+ 	}
+ 	pio_map_len /= sizeof(unsigned int);
+ 	if ((pio_map_len % 6) != 0) {
+ 		printk(KERN_ERR "pio-map format wrong!\n");
+-		return -1;
++		goto err_node_put;
+ 	}
+ 
+ 	while (pio_map_len > 0) {
+@@ -182,5 +182,9 @@ int par_io_of_config(struct device_node *np)
+ 	}
+ 	of_node_put(pio);
+ 	return 0;
++
++err_node_put:
++	of_node_put(pio);
++	return -1;
+ }
+ EXPORT_SYMBOL(par_io_of_config);
+-- 
+2.17.1
 

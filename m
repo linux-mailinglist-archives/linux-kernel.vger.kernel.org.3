@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309124F0900
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 967224F0903
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356962AbiDCL2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 07:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S237983AbiDCLg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 07:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiDCL2m (ORCPT
+        with ESMTP id S231165AbiDCLgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 07:28:42 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEC8369EC;
-        Sun,  3 Apr 2022 04:26:48 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id j8so5988070pll.11;
-        Sun, 03 Apr 2022 04:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=w946qE0oQH/JSOUDxHYnc0efzfxX52cZ8EHkHFTQNtk=;
-        b=M+a73MH+LPWMXhGw+dLIXhDOdtcORrqMDDQPd/bgKLa3zoaQY8AoxSPatxzTmmm15e
-         N7O9NMKfdZ4pAI2XjbFxp9OpLwJ7YZP2nexhFufuKuEeOlcpYLFArW0J/tptzYnNePKC
-         Gk2pwmjOee7INC7mIYeWPJnx1nKwjpelehAoZ0GTPIyksIw9/On1/vT8W4nPXFtAHM6d
-         UkaCdarpCl5/fAdEJrzXdLyTJNFDp1LnSBprO/OKwQwtue5Um09zUX82h8zaOOTPzkCF
-         zSTr1SY5L3pEMjsqTVmRfDObWpOFc9KU2TIvPeXENp2Y8mij/8mbQiMBeZwnVJxc+upf
-         IpCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=w946qE0oQH/JSOUDxHYnc0efzfxX52cZ8EHkHFTQNtk=;
-        b=W7WPsOhScu5A3BZy0LQbSPyEmkB3pVd8SMMzodXwUGE6m3o831VBaHySVgKTLE+Uxt
-         QgOW9VnNLYunHlbvpD8jEnPKTnGRtSEUV8SckgaRDpt/AFdzcvgS4kNk9femsKgyGDtt
-         KNw2DXI6TAh/0kOkaU/zVsteBqizYfnGVIxULP1LEZuJ1LyM+s4vvgOm0/5gKwYsXXdU
-         eUcri0C/IPzOgSLqhRJepDbqmUvRWL2/K1cszYNaesQdH2Q1CBnve9zaU4k2oL3KAWqt
-         DhjgZZQiFTaE+uCYe89kzcn08sDw9wcjdu6p9pnziPAmltkWNk6dEiBZ08rXhANhEPZG
-         iLOQ==
-X-Gm-Message-State: AOAM533eGBkPXm/UtSTgwigoRjAM2eRiunWvplOYZyzraFdtABADdKOW
-        JtmLqj8Laa7n96riGFiNCcBhfYCjC/Y/pB4IYA==
-X-Google-Smtp-Source: ABdhPJyKhMnUsGGr2FVgnJfzn4AH4IfTZsV9IODqKnEoD5mnKikZE4A2rLCVLWl+QON/FOZ3lm39ocRw5F1TIm0DU/A=
-X-Received: by 2002:a17:90b:1803:b0:1c7:24c4:ab52 with SMTP id
- lw3-20020a17090b180300b001c724c4ab52mr20657309pjb.240.1648985208390; Sun, 03
- Apr 2022 04:26:48 -0700 (PDT)
+        Sun, 3 Apr 2022 07:36:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E402737005
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648985671; x=1680521671;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w3+dJSG41YiOYCe9pq5tbHjd700xrUaUy6TiG5GC9sw=;
+  b=g3tMmrAnI4ta7BD+bmAX0xRXs737odcDmHbF1BkdZWZzGxXM9CoN+tqM
+   5GruWfqZkt4267PM3tCPqg9s4oJGlGXqUVIyNKp3c72Y/7TqdNOL9lFte
+   nTxjJBt91x3mTs9oOe0beOcG554OoAyOAJ/sMC2zgqjS/pVJTI4IZ98CC
+   c0gjzw/CYxtPUjKKSziX7j5hYAYydCc2ruum5ix7pnhuWsC4sLdXDxU7t
+   oLERc85a2YqJONpJif73u6+5GUyXr7K/sNQqLpGstVfyFCWp8NniqRmWD
+   KFkbFz8nkxzdjcTPDu+GlPow3AGdTYeUamFduT5ICIL/mwZOnkCaBhCKL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="242519817"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="242519817"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 04:34:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="523282238"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 03 Apr 2022 04:34:28 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nayV1-0000v7-G1;
+        Sun, 03 Apr 2022 11:34:27 +0000
+Date:   Sun, 3 Apr 2022 19:33:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [linux-stable-rc:queue/5.10 3948/9999]
+ arch/powerpc/platforms/4xx/pci.c:47:19: error: unused function
+ 'ppc440spe_revA'
+Message-ID: <202204031917.yHHLo75R-lkp@intel.com>
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sun, 3 Apr 2022 19:26:36 +0800
-Message-ID: <CAMhUBjmFhqTLBscHHVZ1VTSqrJBT1VEevA+KkjY+y9_ZtdRkMg@mail.gmail.com>
-Subject: =?UTF-8?B?W0JVR10gZmJkZXY6IGk3NDBmYjogRGl2aWRlIGVycm9yIHdoZW4g4oCYdmFyLT5waXhjbA==?=
-        =?UTF-8?B?b2Nr4oCZIGlzIHplcm8=?=
-To:     Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Nathan,
 
-I found a bug in the function i740fb_set_par().
+FYI, the error/warning still remains.
 
-When the user calls the ioctl system call without setting the value to
-'var->pixclock', the driver will throw a divide error.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   852e92a491fd83515d5683537bfdb2d90d483344
+commit: a024e88f8ab79a7b7e15337096d4f5f77edc6a49 [3948/9999] powerpc/barrier: Avoid collision with clang's __lwsync macro
+config: powerpc-randconfig-c003-20220403 (https://download.01.org/0day-ci/archive/20220403/202204031917.yHHLo75R-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a024e88f8ab79a7b7e15337096d4f5f77edc6a49
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout a024e88f8ab79a7b7e15337096d4f5f77edc6a49
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
-This bug occurs because the driver uses the value of 'var->pixclock'
-without checking it, as the following code snippet show:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-if ((1000000 / var->pixclock) > DACSPEED8) {
-     dev_err(info->device, "requested pixclock %i MHz out of range
-(max. %i MHz at 8bpp)\n",
-         1000000 / var->pixclock, DACSPEED8);
-    return -EINVAL;x
-}
+All errors (new ones prefixed by >>):
 
-We can fix this by checking the value of 'var->pixclock' in the
-function i740fb_check_var() similar to commit
-b36b242d4b8ea178f7fd038965e3cac7f30c3f09, or we should set the lowest
-supported value when this field is zero.
-I have no idea about which solution is better.
+>> arch/powerpc/platforms/4xx/pci.c:47:19: error: unused function 'ppc440spe_revA' [-Werror,-Wunused-function]
+   static inline int ppc440spe_revA(void)
+                     ^
+   1 error generated.
 
-The following log reveals it:
 
-divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:444 [inline]
-RIP: 0010:i740fb_set_par+0x272f/0x3bb0 drivers/video/fbdev/i740fb.c:739
-Call Trace:
- <TASK>
- fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1036
- do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1112
- fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1191
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
+vim +/ppc440spe_revA +47 arch/powerpc/platforms/4xx/pci.c
 
-Regards,
-Zheyu Ma
+a2d2e1ec07a809 arch/powerpc/sysdev/ppc4xx_pci.c Benjamin Herrenschmidt 2007-12-21  41  
+8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  42  #define RES_TO_U32_LOW(val)	\
+8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  43  	((sizeof(resource_size_t) > sizeof(u32)) ? U64_TO_U32_LOW(val) : (val))
+8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  44  #define RES_TO_U32_HIGH(val)	\
+8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  45  	((sizeof(resource_size_t) > sizeof(u32)) ? U64_TO_U32_HIGH(val) : (0))
+a2d2e1ec07a809 arch/powerpc/sysdev/ppc4xx_pci.c Benjamin Herrenschmidt 2007-12-21  46  
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21 @47  static inline int ppc440spe_revA(void)
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  48  {
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  49  	/* Catch both 440SPe variants, with and without RAID6 support */
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  50          if ((mfspr(SPRN_PVR) & 0xffefffff) == 0x53421890)
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  51                  return 1;
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  52          else
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  53                  return 0;
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  54  }
+accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  55  
+
+:::::: The code at line 47 was first introduced by commit
+:::::: accf5ef254b9dd4d3b53040dd73d80875c2cd39b [POWERPC] 4xx: Add 440SPe revA runtime detection to PCIe
+
+:::::: TO: Stefan Roese <sr@denx.de>
+:::::: CC: Josh Boyer <jwboyer@linux.vnet.ibm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CD24F0808
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730AA4F0809
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348387AbiDCGPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 02:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S1349554AbiDCGQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 02:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiDCGPE (ORCPT
+        with ESMTP id S232663AbiDCGQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:15:04 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AAD32ED5;
-        Sat,  2 Apr 2022 23:13:10 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id s8so6104398pfk.12;
-        Sat, 02 Apr 2022 23:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iqcYjJqeAGHOxk9rC6rzT/4cJTQjLiPEBtPtNallgoU=;
-        b=Ai6HzXtHc0uKlmt9INXqJSUeKr9EH33Q2j4WBafh/MJdcKXtU0DsIuf5qXLmcGjIr+
-         J/x/VNKPKCXAhvRydsIj90akhWtP1MHD0J7XBlSOtYsl6q2uceHO0ylFipwZn1ZjngDk
-         Mm/wuon+Aa+5OxEfI0iWet/706W/9GsH5T4CXKCASsAd/D39tnslez+5IiuZMNcPKt6k
-         kbSqOuEhUZ+57C8ZP7eOyaVYaRXZ4Cmqa0pbeMrcfURj0WDwEOZiUAnDFBV5dNiIPDA2
-         nr7zN6ZoAmkxiOoYgBIBgN3hDVDknq92mwhWLwh3kzcU0lhiyITzQWqwIaSCS2cUoF1K
-         ORYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iqcYjJqeAGHOxk9rC6rzT/4cJTQjLiPEBtPtNallgoU=;
-        b=nOoJH+JcFfGfvASEwIt+UZMBT2zVZcDtDMVhVmatwYgYLtBHhnnHusGctxVsOwjeVK
-         cvWK6vhF5CpC+lnEoaH/bc3ZgFI8xOjcVNJes4exuUjLy8PUqK/Zdyqr7VGLxieH6Chm
-         LlpYwX1waBnfcx0nlqjl8VZmeGdlIdQ+wvh8kfiH1ERQx+yIeBBfixTc/biCsm9f+RCX
-         YyxvlHHko41s2xMOdnfXWZjB5VvcEkKOLm1mtRl1YoDT3skPKvr6NkaI83yJuwu+WJud
-         k87XQZEQ4AtPpcjJ7z6yoPxoz0IW3UFuetHzms4djBHqHLe1AiHYJphqkauiO/2peyOS
-         zePw==
-X-Gm-Message-State: AOAM531FWAatauy9FcdAJBuYM5zU2wQmbd9zWQBBdZ/7AsHgyRvPfQDz
-        5uiglf+uuCIYP8L0V1ApICI=
-X-Google-Smtp-Source: ABdhPJyRIpXteTf1cloPvJlVcVw9JuXei83O10GMNROZ3VtoU9KoPyHLol5rNJHhPhQscANAd70X3A==
-X-Received: by 2002:a05:6a00:1581:b0:4fa:e6d4:c3e6 with SMTP id u1-20020a056a00158100b004fae6d4c3e6mr18173399pfk.84.1648966390229;
-        Sat, 02 Apr 2022 23:13:10 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id c63-20020a624e42000000b004fa9ee41b7bsm7720108pfb.217.2022.04.02.23.13.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 23:13:09 -0700 (PDT)
-Message-ID: <f4377408-ace7-a041-084f-5863bcfb7184@gmail.com>
-Date:   Sun, 3 Apr 2022 13:13:02 +0700
+        Sun, 3 Apr 2022 02:16:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8BBC03;
+        Sat,  2 Apr 2022 23:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648966453; x=1680502453;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HiyotpaX2vP6TLwEpXSXpxsDN8hTJfCPw9+FmUKPPTc=;
+  b=Cx+EzT3rVk+j0Ayf3/XZZXwsF1WZq1lPCej3xm7zVg5gD5oBQ2lDPSB9
+   ZAA0VoMBkzaM3VIeyoKf+NYpPfhvt0CirQ16Cr2D3y65wFmVqUG3Ybc2d
+   +QSa09Oue4siq7AlRpkB8/HlaxEtTogfWtFasuVey8CEKCdn0bRhE+pl8
+   4Kot2gFuaXoFnR5wPNwCk/bTh1pc61cXOI/BwiA+05YjBPSsodbrw44XO
+   +x5EkkgXU7XFCjTw/IN3WPmJtmgktuVT/TctTVFhXLT+ttuLbKzz1MGVw
+   sb6Lau48S8O5c5MJo0MnEpScwQvZRKdbxx7WS5Hp3d7pt9Gy2/Z1hzWXo
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="242499780"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="242499780"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 23:14:12 -0700
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="568744391"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 23:14:11 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu: Use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw on PREEMPT_RT kernel
+Date:   Sun,  3 Apr 2022 14:14:40 +0800
+Message-Id: <20220403061440.2762522-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] usb: gadget: uvc: allow changing interface name via
- configfs
-Content-Language: en-US
-To:     Dan Vacura <w36195@motorola.com>, linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Carlos Bilbao <bilbao@vt.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220401160447.5919-1-w36195@motorola.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220401160447.5919-1-w36195@motorola.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/22 23.04, Dan Vacura wrote:
-> Add a configfs entry, "function_name", to change the iInterface field
-> for VideoControl. This name is used on host devices for user selection,
-> useful when multiple cameras are present. The default will remain "UVC
-> Camera".
-> 
-> Signed-off-by: Dan Vacura <w36195@motorola.com>
-> ---
-> Changes in v2:
-> - remove stable cc
-> 
->   .../ABI/testing/configfs-usb-gadget-uvc       |  1 +
->   Documentation/usb/gadget-testing.rst          |  1 +
->   drivers/usb/gadget/function/f_uvc.c           |  4 +-
->   drivers/usb/gadget/function/u_uvc.h           |  1 +
->   drivers/usb/gadget/function/uvc_configfs.c    | 41 +++++++++++++++++++
->   5 files changed, 47 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> index 889ed45be4ca..611b23e6488d 100644
-> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> @@ -7,6 +7,7 @@ Description:	UVC function directory
->   		streaming_maxburst	0..15 (ss only)
->   		streaming_maxpacket	1..1023 (fs), 1..3072 (hs/ss)
->   		streaming_interval	1..16
-> +		function_name		string [32]
->   		===================	=============================
+On non-PREEMPT_RT kernel, the init_irq_work() make the defer_qs_iw irq-work
+execute in interrupt context. however, on PREEMPT_RT kernel, the
+init_irq_work() make defer_qs_iq irq-work execute in rt-fifo irq_work
+kthreads. when system booting, and the CONFIG_RCU_STRICT_GRACE_PERIOD
+is enabled, there are a lot of defer_qs_iw irq-work to be processed
+in rt-fifo irq_work kthreads, it occupies boot CPU for long time and
+cause other kthread cannot get the boot CPU, the boot process occurs
+hang. use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw irq-work, can
+ensure the defer_qs_iw irq-work always execute in interrupt context,
+whether PREEMPT_RT or non PREEMPT_RT kernel.
 
-Since you mention that default function_name is "UVC Camera", why don't you
-mention it in the documentation?
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree_plugin.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 3037c2536e1f..cf7bd28af8ef 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
+ 			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
+ 				// Get scheduler to re-evaluate and call hooks.
+ 				// If !IRQ_WORK, FQS scan will eventually IPI.
+-				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
++				rdp->defer_qs_iw = IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
+ 				rdp->defer_qs_iw_pending = true;
+ 				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
+ 			}
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
+

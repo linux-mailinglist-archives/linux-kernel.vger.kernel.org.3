@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2769E4F0A36
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775684F0A39
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240538AbiDCOli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 10:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S238341AbiDCOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 10:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiDCOla (ORCPT
+        with ESMTP id S229916AbiDCOny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 10:41:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19363205E1;
-        Sun,  3 Apr 2022 07:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6109611C9;
-        Sun,  3 Apr 2022 14:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934EBC340ED;
-        Sun,  3 Apr 2022 14:39:34 +0000 (UTC)
-Date:   Sun, 3 Apr 2022 10:39:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v2] tracing: Set user_events to BROKEN
-Message-ID: <20220403103933.787cc4de@rorschach.local.home>
-In-Reply-To: <20220330155835.5e1f6669@gandalf.local.home>
-References: <20220330155835.5e1f6669@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 3 Apr 2022 10:43:54 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4378E3388D
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:42:00 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id b15so6686521pfm.5
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 07:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tkvBSNdf7My025nMcKnN4etCU1BhOu93YJmuDsicIFM=;
+        b=SyqDK4W702UJJAlEE/vx9AijKqHfxHOscsok1uY3ueHFULCQZfrmwRgxaYxyogJFlN
+         OThftY4lBr/XouZG8eIPDYGYFGpfgU7KCh6bLfeFJVYHuRD2HAAPzP4f5eBqOMeTGapq
+         WVJTuo06CrR4pn9pSUNAZcZLGDxum17M/GoIHofb2KX/y5jXFtYTL8EXcoDepkqtEYCK
+         hEpPEtRl7Tg9V5Pu+o6vrXGZlPsHKCDcK/vgk9+U0i6lQ3h7nU6BgmQRHpY3IRYBQ9HD
+         9TZW4G4j+ccyZRsqJhfIL2+o7R6jIGROaE3nyyZAlTlIlm1CjHf+lz7XpGUYPyBqU+ck
+         ZbTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tkvBSNdf7My025nMcKnN4etCU1BhOu93YJmuDsicIFM=;
+        b=hQJGq0WeLWr/qzhMheKH2q5qmND4lvdModyu54Jul3BAYo1lL+8Vzs0f5PpMZGfkQA
+         E/vZSL0LseVHKc+voUdSaHA1dz6W1Js9H8MEbA3fRUWnpQfYDarf5MmudNwHSbFLWYyH
+         12whwxU4utTjngEJKSPZM0mGVaxiIxkli/VKZu7DzG8qHa5Xn3cWsr3jtls6JPShwtWX
+         L24vW+Q2vGXmnbgWtKbGcCJ30j/AKS+mjqYBXtGYY1zHNGUYX4hc5i3SG1FT8rXcyTvV
+         0xHGSB6wyacfiy934qxDS/zPkMNJiL9Ag6NM/xGM7XUXhhyU/jxuyBstSLYjVBOvCUqI
+         EdFQ==
+X-Gm-Message-State: AOAM532uM+2v7mrPDftDdTvLOM4jKeTRC5sxOTZxXsD0WOEEzSIr3+3S
+        wBwK1tRWbRC0XPapcZUUtlxjiA==
+X-Google-Smtp-Source: ABdhPJxNMfuupGwALAgxR2LKiPYavOcIXVFas8arm8Ne4+K8xJjFvasuFjt0i43U1J/eYE+fVU+vUQ==
+X-Received: by 2002:a05:6a00:1acb:b0:4fa:de8e:da9d with SMTP id f11-20020a056a001acb00b004fade8eda9dmr19799954pfv.42.1648996919660;
+        Sun, 03 Apr 2022 07:41:59 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.64.251])
+        by smtp.gmail.com with ESMTPSA id 124-20020a621682000000b004f6a2e59a4dsm8815075pfw.121.2022.04.03.07.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 07:41:59 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH 0/2] arm64: dts/qcom: Enable uSD card support for SA8155p-ADP board
+Date:   Sun,  3 Apr 2022 20:11:49 +0530
+Message-Id: <20220403144151.92572-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 15:58:35 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+This patchset enables the microSD card support for SA8155p-ADP board
+via the SDHC2 controller found on the SoC.
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> After being merged, user_events become more visible to a wider audience
-> that have concerns with the current API. It is too late to fix this for
-> this release, but instead of a full revert, just mark it as BROKEN (which
-> prevents it from being selected in make config). Then we can work finding
-> a better API. If that fails, then it will need to be completely reverted.
-> 
-> Link: https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>
 
-Linus,
 
-I noticed that you pulled in this patch (slightly updated subject). I
-had it part of my queue that was going thought my tests, which have
-just finished. I was going to send you a pull request today.
+Bhupesh Sharma (2):
+  arm64: dts: qcom: sm8150: Add support for SDC2
+  arm64: dts: qcom: sa8155p-adp: Add support for uSD card
 
-Is it OK that I keep that patch? Otherwise, I need to pull it out and
-rerun my tests without it.
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 68 ++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi     | 45 ++++++++++++++++
+ 2 files changed, 113 insertions(+)
 
-I would have had this to you earlier but because of the merge
-conflicts of my last pull request that this queue depended on, I based
-all my new changes off of the merge commit you had made with my
-previous pull request, and that contained bugs that would prevent my
-tests from passing (as you saw with the one memory mapping issue).
+-- 
+2.35.1
 
-I'll go ahead and send you the pull request that I have that contains
-this patch as well, but feel free to reject it if you want me to redo
-my queue without it.
-
--- Steve

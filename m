@@ -2,116 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390CE4F0CE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1C24F0CE6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376638AbiDCXM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 19:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S1355391AbiDCXMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 19:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357532AbiDCXMY (ORCPT
+        with ESMTP id S1356986AbiDCXMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 19:12:24 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAB32BB36;
-        Sun,  3 Apr 2022 16:10:30 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id x9so5703989ilc.3;
-        Sun, 03 Apr 2022 16:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a3HAUNAOGJbuMUJGWk34muWFcGqX/DzMj8VavXq90tI=;
-        b=L0nJ6s2BVwW8B84xCcYvOJ2ZJSnAjg214/lRxP7iEMPY6jzsGy4TEwH4F6a5nbPoCx
-         ldZRFFBKJ/QxS0bsNI3VGsT47JNE+azq/SXHjTWhE0SYF0FGD4XywW4HLW2nBHFpEVOw
-         l7zvZ0Q+bGKKcyCUE1Dki8jzzPfmdQ2IErLH1weOl+tF/LTgjZMsdyx5Cfw3UiP+SFkX
-         CRlfrTF+rxkYiqf+5DxY2b+eCd7i6TZwHADu/mfuO0ZxOGZfE8lr0RKXjCnvGZ4zVVuw
-         Usd3L8Uuo9WfhZvA9K7O/aFQb0ziOyU8293JEbtUJwddmhv0mU1ud9KCQN3o/c79xjc7
-         yTog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a3HAUNAOGJbuMUJGWk34muWFcGqX/DzMj8VavXq90tI=;
-        b=0rNhpdgkHDcukDTf5m7co6BgqRvDtzOn4rUSmRtyc0CnfWZeVo+LUx36EicG4uvLUZ
-         d2urF4X7HByd4KbhaU/Tu7F5zY12yY086uD+V0TIYcF27kZiS40hcyLSfIiDkc3wvvtn
-         dlCkQGkttwSn7BYmPX3SfGqJmL9GDDmEtmjHWoExRfR5VnLJeKlxYQT7om0fkQK7iWVu
-         qinPAusYCAsDfrXkRfodgPMp2SMpLL1G9oUlNOxWLeJ4fKFc5DX1enjkbdDoXq8eWHDj
-         AJhUQ5ohpmuwEl+9CtgIjrC4fflCd5gxmZvdl4ABr8L5tmANL9y08xRfq0icQBbJvuXV
-         JuBQ==
-X-Gm-Message-State: AOAM532uuxNtE9qrOoHQ/Bk+fvFjAadZH8mD4gc3jjIjsEbQxmc2ZJd9
-        tN3oCqeoAiR15nfXxyEA089BTRhaJc9cHx/JpsU=
-X-Google-Smtp-Source: ABdhPJz6B8WlpD0f2DGBAzviio1COIm1zm0S0G60bpAExDemXJIZjcSUZct2ThnbAajYcoajZmXkS024TUYnnIPZaak=
-X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
- y6-20020a926406000000b002bbf1dee13emr4162168ilb.305.1649027429127; Sun, 03
- Apr 2022 16:10:29 -0700 (PDT)
+        Sun, 3 Apr 2022 19:12:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABED138DB9
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 16:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=6kZxA/ryHkaU9h/eQxcRuN9OQKG8Wz6rQOnBsqvvAIM=; b=b8yQ+shycBrAuZ1bphbkYe/UY0
+        w9RLUEg4rEzzdMw1tTMWh8L1mXzVEWZ2eXJhiSURz+lopWPE5LhVrQUZIAW3rOAk847f5nkDXvkrR
+        6ApanfC8plvYpFWZfkK5jSg+3nyE+5czoL9JpjJvx50n4f7ahVgxbAUjkzoW8jKxqtirFcX2tEwyM
+        RMxKdhTAPGb3m+DkpWZ0fNJIHceRUrSlxdzUAK+CRjwP3H5koSP/SYA75iY9v5gDy0qEhnc4Avenh
+        kKH5NCSlJz2+Y41VToxQ2C3BpXH0eqLRxACCtZzeCQ07GQ9p5/OJwA1VN+AvscVyPf8Npy94QjfM8
+        lROKVdZg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nb9Mn-00CVxK-F4; Sun, 03 Apr 2022 23:10:41 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Simon Ser <contact@emersion.fr>
+Subject: [PATCH v2] drm: drm/drm_file.h: fix a kernel-doc typo
+Date:   Sun,  3 Apr 2022 16:10:40 -0700
+Message-Id: <20220403231040.18540-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAEf4BzbzqvQM63-mO96tbNaPXsKSbff4h-mX6UBfbU9zZG67OQ@mail.gmail.com>
- <20220316145213.868746-1-ytcoode@gmail.com>
-In-Reply-To: <20220316145213.868746-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sun, 3 Apr 2022 16:10:18 -0700
-Message-ID: <CAEf4Bzbi1E_-yojgJQevM1rdhXF4EzU4dgPsGDT7F5uuDPOE7Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] libbpf: Don't return -EINVAL if hdr_len < offsetofend(core_relo_len)
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        john fastabend <john.fastabend@gmail.com>,
-        Martin Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 7:52 AM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> Since core relos is an optional part of the .BTF.ext ELF section, we should
-> skip parsing it instead of returning -EINVAL if header size is less than
-> offsetofend(struct btf_ext_header, core_relo_len).
->
-> Fixes: e9fc3ce99b34 ("libbpf: Streamline error reporting for high-level APIs")
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
-> v1 -> v2: skip core relos if hdr_len < offsetofend(core_relo_len)
->
+Fix a build warning from 'make htmldocs' by correcting the lock name
+in the kernel-doc comment.
 
-Seems like this never made it to Patchworks. Can you please trim down
-the CC list and resubmit?
+include/drm/drm_file.h:369: warning: Function parameter or member 'master_lookup_lock' not described in 'drm_file'
 
->  tools/lib/bpf/btf.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 1383e26c5d1f..9b7196b21498 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -2826,10 +2826,8 @@ struct btf_ext *btf_ext__new(const __u8 *data, __u32 size)
->         if (err)
->                 goto done;
->
-> -       if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len)) {
-> -               err = -EINVAL;
-> -               goto done;
-> -       }
-> +       if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
-> +               goto done; // skip core relos parsing
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Reviewed-by: Simon Ser <contact@emersion.fr>
+---
+v2: rebase/resend
 
-don't use C++-style comments, only /* */
+ include/drm/drm_file.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->         err = btf_ext_setup_core_relos(btf_ext);
->         if (err)
-> --
-> 2.35.1
->
+--- linux-next-20220401.orig/include/drm/drm_file.h
++++ linux-next-20220401/include/drm/drm_file.h
+@@ -248,7 +248,7 @@ struct drm_file {
+ 	 */
+ 	struct drm_master *master;
+ 
+-	/** @master_lock: Serializes @master. */
++	/** @master_lookup_lock: Serializes @master. */
+ 	spinlock_t master_lookup_lock;
+ 
+ 	/** @pid: Process that opened this file. */

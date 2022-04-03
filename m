@@ -2,141 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F924F0B95
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 19:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583014F0B99
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 19:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359679AbiDCRbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 13:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S1359685AbiDCRky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 13:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239535AbiDCRbh (ORCPT
+        with ESMTP id S240214AbiDCRku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 13:31:37 -0400
-Received: from mail.tintel.eu (mail.tintel.eu [IPv6:2001:41d0:a:6e77:0:ff:fe5c:6a54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B754711154
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 10:29:40 -0700 (PDT)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id F28974474A42;
-        Sun,  3 Apr 2022 19:29:38 +0200 (CEST)
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id lh6pndhPstgi; Sun,  3 Apr 2022 19:29:38 +0200 (CEST)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 7788D4442F9F;
-        Sun,  3 Apr 2022 19:29:38 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu 7788D4442F9F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
-        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1649006978;
-        bh=L832C14ssjhs8rlPPlAfnqCqDP4Gl4E61dMbF6zxnoQ=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=IWRtsxqye2sZffRU70kaaehVzenzI/Xb81zCLwRRRiTUC/jzFVsr03qF/9GoRyo1w
-         I3Zxs7uZtJZCysB/PrJJitzCtCqMFOjm/a/Bv3D9GuSEcNgY6FXSGDp1uCap44vlY7
-         WgeZS2/XRR4m7KTFD1iWnf0+oOkS9HtrxfdWjoXQ=
-X-Virus-Scanned: amavisd-new at mail.tintel.eu
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id KgQ1xBlyp6cl; Sun,  3 Apr 2022 19:29:38 +0200 (CEST)
-Received: from taz.sof.bg.adlevio.net (unknown [IPv6:2001:67c:21bc:20::10])
-        by mail.tintel.eu (Postfix) with ESMTPS id 3503B443B963;
-        Sun,  3 Apr 2022 19:29:38 +0200 (CEST)
-From:   Stijn Tintel <stijn@linux-ipv6.be>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, pali@kernel.org, kabel@kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch
-Subject: [PATCH] net: phy: marvell: add 88E1543 support
-Date:   Sun,  3 Apr 2022 20:29:36 +0300
-Message-Id: <20220403172936.3213998-1-stijn@linux-ipv6.be>
-X-Mailer: git-send-email 2.35.1
+        Sun, 3 Apr 2022 13:40:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1358DBF5C
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 10:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649007536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WfEGj5ceG/p9FhPNlbBqjh31Kc/B9BLJj4tt8CIkko4=;
+        b=GYBOiHFfptZc4EqQAm+TBUw/VIpfiy3cxMZsV5KW62j6VOuX4tLjJWhnu/nR/meNyyVeeY
+        4DYvdD/vXq0uFZW4AOPsnqmMzC1GC0lX0RNLv6Nw60Es6az6l0McBsJz+WxJaiejKkNQqy
+        2IPCQmY794aFNEZzAVGxYxwnQnoVEpE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-2NLJVWj6NIWamtIelkQ4ag-1; Sun, 03 Apr 2022 13:38:53 -0400
+X-MC-Unique: 2NLJVWj6NIWamtIelkQ4ag-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 991B7811E75;
+        Sun,  3 Apr 2022 17:38:52 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 827ED202E4A0;
+        Sun,  3 Apr 2022 17:38:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] afs: Enable multipage folio support
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        kafs-testing@auristor.com, Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 03 Apr 2022 18:38:50 +0100
+Message-ID: <164900753080.506134.4043293668627017602.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-X-Rspamd-Pre-Result: action=no action;
-        module=multimap;
-        Matched map: IP_WHITELIST
-X-Rspamd-Queue-Id: 3503B443B963
-X-Rspamd-Pre-Result: action=no action;
-        module=multimap;
-        Matched map: IP_WHITELIST
-X-Spamd-Result: default: False [0.00 / 15.00];
-        IP_WHITELIST(0.00)[2001:67c:21bc:20::10];
-        ASN(0.00)[asn:200533, ipnet:2001:67c:21bc::/48, country:BG]
-X-Rspamd-Server: skulls
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Marvell Alaska 88E1543 PHY used in the WatchGuard
-Firebox M200 and M300.
+Enable multipage folio support for the afs filesystem.  This makes use of
+Matthew Wilcox's latest folio changes.
 
-Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Acked-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Tested-by: kafs-testing@auristor.com
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/lkml/2274528.1645833226@warthog.procyon.org.uk/
 ---
- drivers/net/phy/marvell.c   | 27 +++++++++++++++++++++++++++
- include/linux/marvell_phy.h |  1 +
- 2 files changed, 28 insertions(+)
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index 2702faf7b0f6..c510eda23069 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -3166,6 +3166,32 @@ static struct phy_driver marvell_drivers[] =3D {
- 		.cable_test_tdr_start =3D marvell_vct5_cable_test_tdr_start,
- 		.cable_test_get_status =3D marvell_vct7_cable_test_get_status,
- 	},
-+	{
-+		.phy_id =3D MARVELL_PHY_ID_88E1543,
-+		.phy_id_mask =3D MARVELL_PHY_ID_MASK,
-+		.name =3D "Marvell 88E1543",
-+		.probe =3D m88e1510_probe,
-+		/* PHY_GBIT_FEATURES */
-+		.flags =3D PHY_POLL_CABLE_TEST,
-+		.config_init =3D marvell_config_init,
-+		.config_aneg =3D m88e1510_config_aneg,
-+		.read_status =3D marvell_read_status,
-+		.ack_interrupt =3D marvell_ack_interrupt,
-+		.config_intr =3D marvell_config_intr,
-+		.did_interrupt =3D m88e1121_did_interrupt,
-+		.resume =3D genphy_resume,
-+		.suspend =3D genphy_suspend,
-+		.read_page =3D marvell_read_page,
-+		.write_page =3D marvell_write_page,
-+		.get_sset_count =3D marvell_get_sset_count,
-+		.get_strings =3D marvell_get_strings,
-+		.get_stats =3D marvell_get_stats,
-+		.get_tunable =3D m88e1540_get_tunable,
-+		.set_tunable =3D m88e1540_set_tunable,
-+		.cable_test_start =3D marvell_vct7_cable_test_start,
-+		.cable_test_tdr_start =3D marvell_vct5_cable_test_tdr_start,
-+		.cable_test_get_status =3D marvell_vct7_cable_test_get_status,
-+	},
- 	{
- 		.phy_id =3D MARVELL_PHY_ID_88E1545,
- 		.phy_id_mask =3D MARVELL_PHY_ID_MASK,
-@@ -3351,6 +3377,7 @@ static struct mdio_device_id __maybe_unused marvell=
-_tbl[] =3D {
- 	{ MARVELL_PHY_ID_88E1116R, MARVELL_PHY_ID_MASK },
- 	{ MARVELL_PHY_ID_88E1510, MARVELL_PHY_ID_MASK },
- 	{ MARVELL_PHY_ID_88E1540, MARVELL_PHY_ID_MASK },
-+	{ MARVELL_PHY_ID_88E1543, MARVELL_PHY_ID_MASK },
- 	{ MARVELL_PHY_ID_88E1545, MARVELL_PHY_ID_MASK },
- 	{ MARVELL_PHY_ID_88E3016, MARVELL_PHY_ID_MASK },
- 	{ MARVELL_PHY_ID_88E6341_FAMILY, MARVELL_PHY_ID_MASK },
-diff --git a/include/linux/marvell_phy.h b/include/linux/marvell_phy.h
-index 0f06c2287b52..26a77a5b62fc 100644
---- a/include/linux/marvell_phy.h
-+++ b/include/linux/marvell_phy.h
-@@ -19,6 +19,7 @@
- #define MARVELL_PHY_ID_88E1116R		0x01410e40
- #define MARVELL_PHY_ID_88E1510		0x01410dd0
- #define MARVELL_PHY_ID_88E1540		0x01410eb0
-+#define MARVELL_PHY_ID_88E1543		0x01410ea2
- #define MARVELL_PHY_ID_88E1545		0x01410ea0
- #define MARVELL_PHY_ID_88E1548P		0x01410ec0
- #define MARVELL_PHY_ID_88E3016		0x01410e60
---=20
-2.35.1
+ fs/afs/inode.c |    2 ++
+ fs/afs/write.c |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/fs/afs/inode.c b/fs/afs/inode.c
+index 2fe402483ad5..c899977493b4 100644
+--- a/fs/afs/inode.c
++++ b/fs/afs/inode.c
+@@ -104,12 +104,14 @@ static int afs_inode_init_from_status(struct afs_operation *op,
+ 		inode->i_op	= &afs_file_inode_operations;
+ 		inode->i_fop	= &afs_file_operations;
+ 		inode->i_mapping->a_ops	= &afs_file_aops;
++		mapping_set_large_folios(inode->i_mapping);
+ 		break;
+ 	case AFS_FTYPE_DIR:
+ 		inode->i_mode	= S_IFDIR |  (status->mode & S_IALLUGO);
+ 		inode->i_op	= &afs_dir_inode_operations;
+ 		inode->i_fop	= &afs_dir_file_operations;
+ 		inode->i_mapping->a_ops	= &afs_dir_aops;
++		mapping_set_large_folios(inode->i_mapping);
+ 		break;
+ 	case AFS_FTYPE_SYMLINK:
+ 		/* Symlinks with a mode of 0644 are actually mountpoints. */
+diff --git a/fs/afs/write.c b/fs/afs/write.c
+index 6bcf1475511b..445a79db0192 100644
+--- a/fs/afs/write.c
++++ b/fs/afs/write.c
+@@ -91,7 +91,7 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
+ 			goto flush_conflicting_write;
+ 	}
+ 
+-	*_page = &folio->page;
++	*_page = folio_file_page(folio, pos / PAGE_SIZE);
+ 	_leave(" = 0");
+ 	return 0;
+ 
+
 

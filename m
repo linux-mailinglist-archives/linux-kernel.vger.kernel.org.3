@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F3D4F0A6F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC8D4F0A6D
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359102AbiDCOza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 10:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S1359101AbiDCOzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 10:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236786AbiDCOz0 (ORCPT
+        with ESMTP id S1359106AbiDCOze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 10:55:26 -0400
+        Sun, 3 Apr 2022 10:55:34 -0400
 Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB89FF4;
-        Sun,  3 Apr 2022 07:53:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F77120B7;
+        Sun,  3 Apr 2022 07:53:38 -0700 (PDT)
 Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
         (authenticated bits=0)
         (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 233ErMCs020996
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 233ErMd0020997
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Sun, 3 Apr 2022 10:53:22 -0400
 Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 1FBF915C003E; Sun,  3 Apr 2022 10:53:22 -0400 (EDT)
+        id 22D9615C3E9E; Sun,  3 Apr 2022 10:53:22 -0400 (EDT)
 From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+To:     adilger.kernel@dilger.ca, Ye Bin <yebin10@huawei.com>,
         linux-ext4@vger.kernel.org
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Ritesh Harjani <riteshh@linux.ibm.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
-Date:   Sun,  3 Apr 2022 10:53:17 -0400
-Message-Id: <164899700423.964485.7890254685030914129.b4-ty@mit.edu>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, lczerner@redhat.com,
+        linux-kernel@vger.kernel.org, jack@suse.cz
+Subject: Re: [PATCH -next v2] ext4: fix use-after-free in ext4_search_dir
+Date:   Sun,  3 Apr 2022 10:53:19 -0400
+Message-Id: <164899700423.964485.9819897021180386715.b4-ty@mit.edu>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220331200515.153214-1-tadeusz.struk@linaro.org>
-References: <20220331200515.153214-1-tadeusz.struk@linaro.org>
+In-Reply-To: <20220324064816.1209985-1-yebin10@huawei.com>
+References: <20220324064816.1209985-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,23 +46,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 13:05:15 -0700, Tadeusz Struk wrote:
-> Syzbot found an issue [1] in ext4_fallocate().
-> The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-> and offset 0x1000000ul, which, when added together exceed the
-> bitmap_maxbytes for the inode. This triggers a BUG in
-> ext4_ind_remove_space(). According to the comments in this function
-> the 'end' parameter needs to be one block after the last block to be
-> removed. In the case when the BUG is triggered it points to the last
-> block. Modify the ext4_punch_hole() function and add constraint that
-> caps the length to satisfy the one before laster block requirement.
+On Thu, 24 Mar 2022 14:48:16 +0800, Ye Bin wrote:
+> We got issue as follows:
+> EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
+> BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
+> BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+> Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
-      commit: dfc99c5e84e46c610a7bf81dc4a3a126253be459
+[1/1] ext4: fix use-after-free in ext4_search_dir
+      commit: 44c0286d878598b59225b95596e8a19b3516fafc
 
 Best regards,
 -- 

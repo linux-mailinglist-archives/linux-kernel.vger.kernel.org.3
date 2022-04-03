@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340D54F0C6C
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 21:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F51E4F0C76
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 22:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376411AbiDCUAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 16:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S1376424AbiDCUJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 16:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239271AbiDCUAE (ORCPT
+        with ESMTP id S239271AbiDCUJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 16:00:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B5919C26;
-        Sun,  3 Apr 2022 12:58:09 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649015888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=av8yvivek0sS1bVVJeA7riLf6nNCr09H3YfL5nGaxqw=;
-        b=UDL//1yyhruhR2hAWZVZIq9/BhCV9Au3rqmaIdCofA/7gYFNBox7q/SI1HpP6bzhNJkppo
-        r8jB3QYS7Y9Hdl7kLRYrmRDfFZBFE0mWKYiCBauIvd+SdeV0m1bFLGmj0quQvfIu78RZcy
-        UyQfzxDnYZDditswed3XmVHwwXmoTvGIMERXMtu68n/rW/LjulLzjkrILrMCbj+9b6kkb6
-        26j/nOAZdmOBdSVSQ7ZVcHcpZwPHwfEBaEnIRkaQ089Q/R1K4DgWSwKk7rQc3aqNlkkhVr
-        KcLBYElMDmJs80FHVyUFPc3+5N765UnYxHBpFbD8fnJTl+XZODoegqQnU9lORA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649015888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=av8yvivek0sS1bVVJeA7riLf6nNCr09H3YfL5nGaxqw=;
-        b=MQCkBJToyoEqrvoG6+pa+DB9M8iWiY5vkL5SA+xDa6FDpDLHRwFBW+b1EL90XWVcXeFkBd
-        Y2S4n+lsocKVsoAw==
-To:     Borislav Petkov <bp@alien8.de>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4 2/3] x86/mce: Define function to extract ErrorAddr
- from MCA_ADDR
-In-Reply-To: <Yknsbp+zMh8Uev8+@zn.tnic>
-References: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
- <YkWrlTIK/ZxsQekX@zn.tnic> <YkmeJFXXbu3aLzzw@zn.tnic>
- <Yknsbp+zMh8Uev8+@zn.tnic>
-Date:   Sun, 03 Apr 2022 21:58:07 +0200
-Message-ID: <87mth2kkhc.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 3 Apr 2022 16:09:53 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7811E3A1A6;
+        Sun,  3 Apr 2022 13:07:56 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f10so6560812plr.6;
+        Sun, 03 Apr 2022 13:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=4UTb8E/mCbW8t6j2F7bYq2PlhXqC62wTANJk5So/Xmw=;
+        b=Fjxaw3RVHJARRhuzeY42JaYkPhY3VWv+ygeM3oQL1dCXroyCtrq7o2hjHDv8BdWPzV
+         lVtd4b2gWh01Lleg48yP4i79hmVkj0PqakcGOHSj6NKmeyAVFQOEsQRmwFjgakjf8Mc3
+         w2jilr6xAunXiWAJ/N0QzfXCeozO/xo+0127oecNMqzGpzUyW2LMhPni7PQr1CLMn4s5
+         0NvZUOQCvVgCiW8t004FkRTSQwAvDoUVvhzBe/3vxvvuuprrXIpiHJSc+ZfY5EaOcX5c
+         LAQWK1gB3jOWtFesp1H/L7dI2uBQuDLdeeGUhEhrIB6SeR7lrHBdl7RMiOxXEncqZTht
+         pvZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4UTb8E/mCbW8t6j2F7bYq2PlhXqC62wTANJk5So/Xmw=;
+        b=swnds0WYEimZ2AKa+GUNyOZkoSdCGSSe2eEVE/QV+WfPF5ifZP+6GRsWxwZ150cFPM
+         WV2KRzCU7FRIE2zJcrVHzjwDSswxgXH6nA0t8BH4S/8IVji031m0VqIJhXkybev1M1vU
+         52zAsZ71b1e+gHyRicrX6EscE/IBfF7kMAjHme8O6J9Z4EyF95/vFLRDm5k9+l5+Hxr9
+         gsWeC1j5043wiGOlSZNQFIBVSq+kV93H+V30pJCSKRtrjtbPjxOYRjQa63Zi1M8Pbjm2
+         UE9RlReqkmqEJHMk81i45He2jGNLESbGYJ2j7CJLU+tr7HEpuP9kpQwMVjFAmhxgv6kq
+         SUmg==
+X-Gm-Message-State: AOAM532K/cM679BOyhzoHffcJobw/4xbIXjnb37nwM6BgJH7wFkiyinY
+        FpfXtcbXKCGM6tCqkwxzcMY=
+X-Google-Smtp-Source: ABdhPJz6Rwxmab/rZl6Sao5quil0+Foh8WAqeWdLWXBPbjAe2exO0b6TGF6IDqZuEY4um7OYsv08NQ==
+X-Received: by 2002:a17:90a:5409:b0:1ca:8a21:323b with SMTP id z9-20020a17090a540900b001ca8a21323bmr3936698pjh.135.1649016475622;
+        Sun, 03 Apr 2022 13:07:55 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id p10-20020a637f4a000000b00373a2760775sm8154660pgn.2.2022.04.03.13.07.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 03 Apr 2022 13:07:55 -0700 (PDT)
+From:   Wells Lu <wellslutw@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        pabeni@redhat.com, krzk+dt@kernel.org, roopa@nvidia.com,
+        andrew@lunn.ch, edumazet@google.com
+Cc:     wells.lu@sunplus.com, Wells Lu <wellslutw@gmail.com>
+Subject: [PATCH net-next v6 0/2] This is a patch series for Ethernet driver of Sunplus SP7021 SoC.
+Date:   Mon,  4 Apr 2022 04:07:37 +0800
+Message-Id: <1649016459-23989-1-git-send-email-wellslutw@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03 2022 at 20:50, Borislav Petkov wrote:
-> On Sun, Apr 03, 2022 at 03:16:20PM +0200, Borislav Petkov wrote:
->> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
->> index 9ccc2ea0ea00..4acc7959be6e 100644
->> --- a/arch/x86/kernel/cpu/mce/amd.c
->> +++ b/arch/x86/kernel/cpu/mce/amd.c
->> @@ -723,7 +723,7 @@ bool amd_mce_is_memory_error(struct mce *m)
->>  }
->>  
->>  /* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
->> -void smca_extract_err_addr(struct mce *m)
->> +void __always_inline smca_extract_err_addr(struct mce *m)
->
-> Ok, flip those - the pedantic bot is not happy:
->
->>> arch/x86/kernel/cpu/mce/amd.c:726:1: warning: 'inline' is not at beginning of declaration [-Wold-style-declaration]
->      726 | void __always_inline smca_extract_err_addr(struct mce *m)
->          | ^~~~
->
-> Needs to be
->
-> __always_inline void
->
-> whateva...
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control
+applications.
 
-How is __always_inline supposed to work across compilation units w/o
-LTO? The callsite is in core.c ...
+Refer to:
+https://sunplus.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Thanks,
+Wells Lu (2):
+  devicetree: bindings: net: Add bindings doc for Sunplus SP7021.
+  net: ethernet: Add driver for Sunplus SP7021
 
-        tglx
+ .../bindings/net/sunplus,sp7021-emac.yaml          | 140 +++++
+ MAINTAINERS                                        |   8 +
+ drivers/net/ethernet/Kconfig                       |   1 +
+ drivers/net/ethernet/Makefile                      |   1 +
+ drivers/net/ethernet/sunplus/Kconfig               |  36 ++
+ drivers/net/ethernet/sunplus/Makefile              |   6 +
+ drivers/net/ethernet/sunplus/spl2sw_define.h       | 271 +++++++++
+ drivers/net/ethernet/sunplus/spl2sw_desc.c         | 226 ++++++++
+ drivers/net/ethernet/sunplus/spl2sw_desc.h         |  19 +
+ drivers/net/ethernet/sunplus/spl2sw_driver.c       | 603 +++++++++++++++++++++
+ drivers/net/ethernet/sunplus/spl2sw_driver.h       |  12 +
+ drivers/net/ethernet/sunplus/spl2sw_int.c          | 253 +++++++++
+ drivers/net/ethernet/sunplus/spl2sw_int.h          |  13 +
+ drivers/net/ethernet/sunplus/spl2sw_mac.c          | 346 ++++++++++++
+ drivers/net/ethernet/sunplus/spl2sw_mac.h          |  19 +
+ drivers/net/ethernet/sunplus/spl2sw_mdio.c         | 126 +++++
+ drivers/net/ethernet/sunplus/spl2sw_mdio.h         |  12 +
+ drivers/net/ethernet/sunplus/spl2sw_phy.c          |  92 ++++
+ drivers/net/ethernet/sunplus/spl2sw_phy.h          |  12 +
+ drivers/net/ethernet/sunplus/spl2sw_register.h     |  86 +++
+ 20 files changed, 2282 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/sunplus,sp7021-emac.yaml
+ create mode 100644 drivers/net/ethernet/sunplus/Kconfig
+ create mode 100644 drivers/net/ethernet/sunplus/Makefile
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_define.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_desc.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_desc.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_driver.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_driver.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_int.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_int.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mac.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mac.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mdio.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mdio.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_phy.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_phy.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_register.h
+
+-- 
+2.7.4
+

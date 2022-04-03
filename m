@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C944F0851
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 09:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106104F0852
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 09:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355432AbiDCHtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 03:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
+        id S1355454AbiDCHuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 03:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355404AbiDCHtW (ORCPT
+        with ESMTP id S239368AbiDCHtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 03:49:22 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652E536151
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 00:47:29 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bq8so13972832ejb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 00:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GvEskk/jcFfdPgnj5+oAPUcqZMlMyOlYENCxSeZGj6Y=;
-        b=rzHiUiDaJUoD6+l9WKV3gPvtiOf8MK9qRru6WhD4es4aAL04tQhPT99W5GCiC0p9yu
-         e8Hmiur5SShzMicWAFPczjfvPTV0K0V/trCLiZyFxZpxZmCUIsbSIc97AvkTmWJ5bdGP
-         HNWa/B5bKwD30fUyU6UHV6JozZtY0VWVufZc1AI6t8yFpmAD2nC6YmbwdrBD2VNNrQk8
-         N6Pk1RWrQSuFXCJjxu/NpbI2zTu1mruzw0lSW1xlCbzTSI+1CYdvMtP5g+WQwoLMOPsy
-         ZSZYcoO5dbhcSGAb93UDyIGLeyNowEmRV2bIOHRouqZiSnLdzTXSn/0SIvemeCPqjXrZ
-         dfXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GvEskk/jcFfdPgnj5+oAPUcqZMlMyOlYENCxSeZGj6Y=;
-        b=7SkWEY+ZWFZ7psUXmQR5Kf7tR7EeGY5dSFD6w7+QbLkBmIYQ/Vq4zWDZxNbScoYPgf
-         YMBGkvqAEXJ0GP4eVdwV5wnArLYsMeLYnWxXL6g2Pr+JSkuk8ZaJqmikPWrvU7WBAJfz
-         RA8S2C74zLaICWs4+bKs1KoJ2wVdnLwVqtLaH8t8MrdK77dxDO2HkZoiTLHQclP0QsGz
-         m6ze8gUNb9ykpv1jjclKBKYSgutTJ1oxkqbm04Hu7QCgkGzv2AVnsJD6LBwtL3mmF0hM
-         s3hhhVkx1ZGcyOYGw58AUwODl7MuvYUXFH3CteuQ0SPiCg5rH9NE62Nq9vr/VqqaSZXM
-         +g6w==
-X-Gm-Message-State: AOAM530hi2BDtdwNdK7g7rhTed3YwSRqZk7FMAvFlxefwezryFUcTZyo
-        piduWa1fKPZDb27dCc1/Zp2Vqw==
-X-Google-Smtp-Source: ABdhPJzlXrY3xRevI4ad0Zmz1UB26BYq2l/c2aldwLrSIH8K44mLl/k8ZHF0I/zMrZND8R/D+uQL8w==
-X-Received: by 2002:a17:907:6284:b0:6e0:f895:15a with SMTP id nd4-20020a170907628400b006e0f895015amr6379638ejc.713.1648972047581;
-        Sun, 03 Apr 2022 00:47:27 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id dn4-20020a17090794c400b006dbec4f4acbsm2950582ejc.6.2022.04.03.00.47.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 00:47:27 -0700 (PDT)
-Message-ID: <3eddb954-3d90-8fa8-31e5-4e6c356a7421@linaro.org>
-Date:   Sun, 3 Apr 2022 09:47:26 +0200
+        Sun, 3 Apr 2022 03:49:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3827E326DE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 00:48:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A2C3B80CC8
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:48:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385FFC340F3
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:47:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648972079;
+        bh=gv488O7AdKCxaTjXuETp7e6E7ScOgsUjyOHozGyfsvY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p3nzTIuPj77POs4/oZkeh9aijPWSA+KbC7C7E3cdQwOZFEJkPQ+Ul2MVY29MGwrO0
+         SZfHz+zdlIPHpNMhvqa+aozOug3yQF7PYl3a48av9sP9xwmC9kTgLNYZTQbSaXn8Eq
+         9jTIkEqrhWrgeP2Xqyywof/gaMp0Grs5nDu6YLuKAmeDerGGqEYcAQSCSqgYztZcjV
+         Rqu9yQxvpvSRIdYNDOlD/QE15m6X2Fv2vqABSQosAfJ8XJ31+m5m5lcj0LJFnuPDks
+         xlbK5bYzyMTGZ/GjxLUgyuZfeB0D6N6sp/rTVdDSwFA8jwyfE4YjvtZZZBfkXWcraq
+         /aJxO0m0XjHYQ==
+Received: by mail-oi1-f172.google.com with SMTP id q189so7048450oia.9
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 00:47:59 -0700 (PDT)
+X-Gm-Message-State: AOAM533zSr4SKZbzaUQ6axkHTeUk78PWCr80t4ySACLSmtT5ME3d9lbk
+        IszKqnWmUHPY7a0tBn9xv5RrjtjdkUrT/Kf5+yE=
+X-Google-Smtp-Source: ABdhPJyecZ3ijnvGiqUCHQjydomXLCsvma78HXMGdjlkTjD3k6+gHbI8dMCqtBZHRy/1SdcaopVSu5rl0D5goCx77ug=
+X-Received: by 2002:a05:6808:1596:b0:2f7:5d89:eec7 with SMTP id
+ t22-20020a056808159600b002f75d89eec7mr8022807oiw.228.1648972078416; Sun, 03
+ Apr 2022 00:47:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Documentation/process: mention patch changelog in review
- process
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stephen Boyd <sboyd@kernel.org>
-References: <20220402100706.57507-1-krzysztof.kozlowski@linaro.org>
- <c3ea5966-cfc3-8e36-3f0d-dbaf1b1665b9@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c3ea5966-cfc3-8e36-3f0d-dbaf1b1665b9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220401164406.61583-1-jeremy.linton@arm.com> <Ykc0xrLv391/jdJj@FVFF77S0Q05N>
+ <CA+=Sn1k23tzMKbMWKW7c3EBoXidJCT-k_k_oF_sKTsGLJTKTnw@mail.gmail.com> <CAMj1kXHMK8PNpXGayfO6qxkA1VdkXmkJdLh29fwSJyOG0ZnSGA@mail.gmail.com>
+In-Reply-To: <CAMj1kXHMK8PNpXGayfO6qxkA1VdkXmkJdLh29fwSJyOG0ZnSGA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sun, 3 Apr 2022 09:47:47 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGpWNJSQ6My5EM1ctHgH3WDjTqLwVocxjmiNzK7hBYhBQ@mail.gmail.com>
+Message-ID: <CAMj1kXGpWNJSQ6My5EM1ctHgH3WDjTqLwVocxjmiNzK7hBYhBQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64/io: Remind compiler that there is a memory side effect
+To:     Andrew Pinski <pinskia@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        GCC Mailing List <gcc@gcc.gnu.org>, f.fainelli@gmail.com,
+        maz@kernel.org, marcan@marcan.st,
+        LKML <linux-kernel@vger.kernel.org>, opendmb@gmail.com,
+        Catalin Marinas <catalin.marinas@arm.com>, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,37 +68,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2022 07:58, Bagas Sanjaya wrote:
-> On 02/04/22 17.07, Krzysztof Kozlowski wrote:
->> Extend the "Respond to review comments" section of "Submitting patches"
->> with reference to patch changelogs.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   Documentation/process/submitting-patches.rst | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
->> index fb496b2ebfd3..9bb4e8c0f635 100644
->> --- a/Documentation/process/submitting-patches.rst
->> +++ b/Documentation/process/submitting-patches.rst
->> @@ -318,7 +318,10 @@ understands what is going on.
->>   Be sure to tell the reviewers what changes you are making and to thank them
->>   for their time.  Code review is a tiring and time-consuming process, and
->>   reviewers sometimes get grumpy.  Even in that case, though, respond
->> -politely and address the problems they have pointed out.
->> +politely and address the problems they have pointed out.  When sending a next
->> +version, add a ``patch changelog`` to the cover letter or to individual patches
->> +explaining difference aganst previous submission (see
->> +:ref:`the_canonical_patch_format`).
->>   
->>   See Documentation/process/email-clients.rst for recommendations on email
->>   clients and mailing list etiquette.
-> 
-> What about range-diffs?
+On Sun, 3 Apr 2022 at 09:47, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Sun, 3 Apr 2022 at 09:38, Andrew Pinski <pinskia@gmail.com> wrote:
+> >
+> > On Fri, Apr 1, 2022 at 10:24 AM Mark Rutland via Gcc <gcc@gcc.gnu.org> wrote:
+> > >
+> > > Hi Jeremy,
+> > >
+> > > Thanks for raising this.
+> > >
+> > > On Fri, Apr 01, 2022 at 11:44:06AM -0500, Jeremy Linton wrote:
+> > > > The relaxed variants of read/write macros are only declared
+> > > > as `asm volatile()` which forces the compiler to generate the
+> > > > instruction in the code path as intended. The only problem
+> > > > is that it doesn't also tell the compiler that there may
+> > > > be memory side effects. Meaning that if a function is comprised
+> > > > entirely of relaxed io operations, the compiler may think that
+> > > > it only has register side effects and doesn't need to be called.
+> > >
+> > > As I mentioned on a private mail, I don't think that reasoning above is
+> > > correct, and I think this is a miscompilation (i.e. a compiler bug).
+> > >
+> > > The important thing is that any `asm volatile` may have a side effects
+> > > generally outside of memory or GPRs, and whether the assembly contains a memory
+> > > load/store is immaterial. We should not need to add a memory clobber in order
+> > > to retain the volatile semantic.
+> > >
+> > > See:
+> > >
+> > >   https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
+> > >
+> > > ... and consider the x86 example that reads rdtsc, or an arm64 sequence like:
+> > >
+> > > | void do_sysreg_thing(void)
+> > > | {
+> > > |       unsigned long tmp;
+> > > |
+> > > |       tmp = read_sysreg(some_reg);
+> > > |       tmp |= SOME_BIT;
+> > > |       write_sysreg(some_reg);
+> > > | }
+> > >
+> > > ... where there's no memory that we should need to hazard against.
+> > >
+> > > This patch might workaround the issue, but I don't believe it is a correct fix.
+> >
+> > It might not be the most restricted fix but it is a fix.
+> > The best fix is to tell that you are writing to that location of memory.
+> > volatile asm does not do what you think it does.
+> > You didn't read further down about memory clobbers:
+> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Clobbers-and-Scratch-Registers
+> > Specifically this part:
+> > The "memory" clobber tells the compiler that the assembly code
+> > performs memory reads or writes to items other than those listed in
+> > the input and output operands
+> >
+>
+> So should we be using "m"(*addr) instead of "r"(addr) here?
+>
+> (along with the appropriately sized casts)
 
-What about it? I extend here the versioning of patches, which does not
-come with range-diffs.
-
-Best regards,
-Krzysztof
+I mean "=m" not "m"

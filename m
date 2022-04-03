@@ -2,41 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F8F4F0B66
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7654D4F0B6E
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359582AbiDCQ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 12:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S1349691AbiDCQ7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 12:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359574AbiDCQ5C (ORCPT
+        with ESMTP id S236624AbiDCQ7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:57:02 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5460B393D8
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:55:04 -0700 (PDT)
-Received: from dslb-094-219-033-178.094.219.pools.vodafone-ip.de ([94.219.33.178] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nb3V9-0008D7-AI; Sun, 03 Apr 2022 18:54:55 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 11/11] staging: r8188eu: remove the bretry variable
-Date:   Sun,  3 Apr 2022 18:54:38 +0200
-Message-Id: <20220403165438.357728-12-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220403165438.357728-1-martin@kaiser.cx>
-References: <20220403165438.357728-1-martin@kaiser.cx>
+        Sun, 3 Apr 2022 12:59:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AB0326D9;
+        Sun,  3 Apr 2022 09:57:42 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649005061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tfXrkBnVhjzrSwPZ0Laq9qOonGjVgWvsNc2Gv3Ncd+c=;
+        b=dvO3fnMR8Rqjh/M8WmNPijFfQ7EVMUklhEGzbPDD3IlHlBiI58R0d5aM32WjMV5AqmSXbu
+        jmtex8GkM13wX6Db/DejMcADu9QhrRZdauTKyjclSUKdExs+BkxUXcaQC9xvAYQGg05xXR
+        uzF+d1BUltlSSqr9Py8FTY5YXLgXf+c0a4b35Z6Z9UngSSCjOyZSh1hRBzcq9o2f/edgGv
+        3/aFpTMQ+J0Hpm6roDPTuY5F+drRLhHZFyfaRRDIgpuF9VFo9heJEX+AQijjLLLmPJUUVC
+        Jpd6QwKE50NKnkOW89E6BMBdXY4DDIEmVp/FreSp4PUOLaTx5XvYXaVaSkCvCQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649005061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tfXrkBnVhjzrSwPZ0Laq9qOonGjVgWvsNc2Gv3Ncd+c=;
+        b=PNYRgzlU5vnuF03DCEere9Ai1yJR65djGR9xY/V4o8Hw6YV0C8ksumiS9+y2t6Z4dxYOMG
+        M5MKdjILbTSCrzDw==
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable Kernel <stable@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jiri Hladky <hladky.jiri@googlemail.com>
+Subject: Re: [PATCH v6 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
+In-Reply-To: <20220329104705.65256-2-ammarfaizi2@gnuweeb.org>
+References: <20220329104705.65256-1-ammarfaizi2@gnuweeb.org>
+ <20220329104705.65256-2-ammarfaizi2@gnuweeb.org>
+Date:   Sun, 03 Apr 2022 18:57:40 +0200
+Message-ID: <87zgl2ksu3.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,45 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the bretry variable. It's set and used only once. Call the
-ieee80211 helper directly.
+On Tue, Mar 29 2022 at 17:47, Ammar Faizi wrote:
+> The asm constraint does not reflect that the asm statement can modify
+> the value of @loops. But the asm statement in delay_loop() does modify
+> the @loops.
+>
+> Specifiying the wrong constraint may lead to undefined behavior, it may
+> clobber random stuff (e.g. local variable, important temporary value in
+> regs, etc.). This is especially dangerous when the compiler decides to
+> inline the function and since it doesn't know that the value gets
+> modified, it might decide to use it from a register directly without
+> reloading it.
+>
+> Fix this by changing the constraint from "a" (as an input) to "+a" (as
+> an input and output).
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_recv.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+This analysis is plain wrong. The assembly code operates on a register
+and not on memory:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index e9209785b1c9..91a6e0f035f4 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -936,7 +936,6 @@ static void validate_recv_mgnt_frame(struct adapter *padapter,
- static int validate_recv_data_frame(struct adapter *adapter,
- 				    struct recv_frame *precv_frame)
- {
--	u8 bretry;
- 	struct sta_info *psta = NULL;
- 	u8 *ptr = precv_frame->rx_data;
- 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)precv_frame->rx_data;
-@@ -944,8 +943,6 @@ static int validate_recv_data_frame(struct adapter *adapter,
- 	struct security_priv	*psecuritypriv = &adapter->securitypriv;
- 	int ret;
- 
--	bretry = ieee80211_has_retry(hdr->frame_control);
--
- 	memcpy(pattrib->dst, ieee80211_get_DA(hdr), ETH_ALEN);
- 	memcpy(pattrib->src, ieee80211_get_SA(hdr), ETH_ALEN);
- 
-@@ -999,7 +996,8 @@ static int validate_recv_data_frame(struct adapter *adapter,
- 	precv_frame->preorder_ctrl = &psta->recvreorder_ctrl[pattrib->priority];
- 
- 	/*  decache, drop duplicate recv packets */
--	if (recv_decache(precv_frame, bretry, &psta->sta_recvpriv.rxcache) == _FAIL)
-+	if (recv_decache(precv_frame, ieee80211_has_retry(hdr->frame_control),
-+			 &psta->sta_recvpriv.rxcache) == _FAIL)
- 		return _FAIL;
- 
- 	if (pattrib->privacy) {
--- 
-2.30.2
+	asm volatile(
+		"	test %0,%0	\n"
+		"	jz 3f		\n"
+		"	jmp 1f		\n"
 
+		".align 16		\n"
+		"1:	jmp 2f		\n"
+
+		".align 16		\n"
+		"2:	dec %0		\n"
+		"	jnz 2b		\n"
+		"3:	dec %0		\n"
+
+		: /* we don't need output */
+---->		:"a" (loops)
+
+This tells the compiler to use [RE]AX and initialize it from the
+variable 'loops'. It's never written back because all '%0' in the above
+assembly are substituted with [RE]AX. This also tells the compiler that
+the inline assembly clobbers [RE]AX and that's all it needs to know.
+
+Nothing to fix here, whether the code is inlined or not.
+
+Thanks,
+
+        tglx

@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DF54F0C4E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 21:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC674F0C56
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 21:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376341AbiDCThe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 15:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        id S1376364AbiDCTmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 15:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbiDCThd (ORCPT
+        with ESMTP id S1376353AbiDCTmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 15:37:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1148813D70;
-        Sun,  3 Apr 2022 12:35:39 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id p15so13607727lfk.8;
-        Sun, 03 Apr 2022 12:35:38 -0700 (PDT)
+        Sun, 3 Apr 2022 15:42:19 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8398727B35
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 12:40:23 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id v12so10431329ljd.3
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 12:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t8Pl8fQJAqqHWL8r7us0/7exv1W99GG2mi8uIF4DTLk=;
-        b=oltd4lRXHltEO/SVMPlYiF9iOVp97IALEEDHJ754PCavoAfpfIZpXV7KKlHt2w5gPs
-         WQOwMoisZ6DDB56FVI/I2C0nLdu5Xf/jyXLOubfjSgWBTWFlvtZHssRV7nQox3gf+Nvi
-         UqxGcJTKwe4V9WmIWI+88ZVXFNhIicHXmFhV+8/SPevWQNBDzprDjMteeLrgWiJeZFhV
-         CIytmcTryYUZxthfI50RjEAOkG4HiXG1LLxsDwLUfYNHnmCly83ZIm/RaeejtvQbJSKs
-         thfu17/LXXEBoNK5eX9s1dU0AIJQ0U0gDee2UUevm80P7G1zKCaakhIqGW82SC34Wc+h
-         OSeg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HtO1Op4EULGuNh03X4DV2PvRHFpqexefkL4qM7EQ8hs=;
+        b=Vva63TToIflctX178TlzjoBSwvG9ymyH8fkUFzsJbWemLSthhs3fmUiyct2jJXfuul
+         cBWrmGUChH7mrrtvKlbT+UvTMA1kr4EGroRz89d9ZgRjBKqjhw8b6Pjx9Drm+2KP3ffr
+         qCaQcnpudkB1x6f/TsesEIgup+s8tupM0OkNckNeY94nH0LSyoG4CwZboW/Hdt25PAcJ
+         sQFqduKzh+wRrNkQBH2bKey2AY958WP2O9dI5/Wdtz/wZ0MDwOZqcOy8Lz7GFJgKEqMC
+         KQo46IBKc9PhJAb+EVBtnQVsPyqsfla9tpQgL26rsToQlejCjGBroM2zOCQ3JxObDDsq
+         /ggw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=t8Pl8fQJAqqHWL8r7us0/7exv1W99GG2mi8uIF4DTLk=;
-        b=ZZ/dU66Rt95jCWqOBo0uBz1dZ3ZqGUoh+LKzz4Y4KilTBH3TbhBjAUrvOHMpkd321T
-         qxUA9oLEZvRnt29f0oypGejb8VaoqERDx0sIGRf3GoFgHghI4F/YSHdfld+dTValwN+7
-         3v3MU3q9ofbA5ZGWIpy1DfalH+G/hwxIpAdj4KiTBTjjCL5iIntOh72K9GCHmWBlvU0Q
-         T+kfD6GphnxEuTR1ugAoB02PTBGUHRfzhxwMk2BmnVE0wGrF+sH0b36JWsE8VBAshGKC
-         Uf4UUIREQhgy3qZvXeVZ3cfVvz3LWU/Wp+kHPpG8QHt87c5EWXYZZ6aDFm19EvkzHkq/
-         GGZQ==
-X-Gm-Message-State: AOAM533Bp3Dli6CnJWXtxwUfmTAk6B/4u+7YWF0OefKsXEHmkfwPp9/o
-        umFcuU5Rr17mSjFUeHFiHfE=
-X-Google-Smtp-Source: ABdhPJzqms4wPEjogwWW7uy9LOgZMZcwthXQYf7Mykloph8Qi4f5Mbt447Rmy9fttBzsey4VNL3riw==
-X-Received: by 2002:a05:6512:ad5:b0:44a:614e:9d61 with SMTP id n21-20020a0565120ad500b0044a614e9d61mr20713431lfu.677.1649014537059;
-        Sun, 03 Apr 2022 12:35:37 -0700 (PDT)
-Received: from localhost.localdomain ([178.136.134.212])
-        by smtp.googlemail.com with ESMTPSA id e11-20020a2e984b000000b00249b8b68f61sm875353ljj.74.2022.04.03.12.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 12:35:36 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
-        Ed Brindley <kernel@maidavale.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
-Date:   Sun,  3 Apr 2022 22:34:54 +0300
-Message-Id: <20220403193455.1363-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=HtO1Op4EULGuNh03X4DV2PvRHFpqexefkL4qM7EQ8hs=;
+        b=b0bzm9CAQ6BMsWvkq4lxu8+C2jAav6Mo8WTbyqA/6ap26d3EG0iDR3EYMbghyYd188
+         O+cfHNNMD6Hd+QZovIAlRB48amY3r77Meo+HbZvrTSkUwrqjHD3fFYHvOgvhc39E1/yP
+         x8PO4nbei1fLbX+pwosFF2B5Ug8jXu8434EctJIv1p/O7x8uMl9mXChvKFnfbAawstjg
+         E1UFhkmia0UkZETwVA4rY10NSaHwj79hSgft8xGx/8MzHCpiXpdPcmDiVf23xXz5QQEG
+         nq0fpzeGeTRBwk66ZQGBoAT0oghpWYZNAEhhmjbBoJi67TYQuFYUA3+QhqU6tvpcTEZX
+         Su9w==
+X-Gm-Message-State: AOAM533cZ55pbMk3EzXXBqIvaveEeQWGsbYdQ8+5KS9C8bhVdYJd4cCz
+        gVg8gdIQZ7q/GAa2YcMNSZcmKA==
+X-Google-Smtp-Source: ABdhPJw7jctSDj8NStIfPObweDUKTSouSVeuWxido0zNdu27djMaTmXtm8LsIEAvN6zkHp/iSjViQA==
+X-Received: by 2002:a2e:3615:0:b0:24a:fc28:f0b3 with SMTP id d21-20020a2e3615000000b0024afc28f0b3mr10332615lja.4.1649014821787;
+        Sun, 03 Apr 2022 12:40:21 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id z16-20020a2e9650000000b0024af767c536sm860592ljh.19.2022.04.03.12.40.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Apr 2022 12:40:21 -0700 (PDT)
+Message-ID: <19015645-86ce-5a7e-e2a7-d4af01417b74@linaro.org>
+Date:   Sun, 3 Apr 2022 22:40:20 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/5] arm64: dts: qcom: msm8996: Revamp reserved memory
+Content-Language: en-GB
+To:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210926190555.278589-1-y.oudjana@protonmail.com>
+ <20210926190555.278589-2-y.oudjana@protonmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20210926190555.278589-2-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CROSSHAIR VI HERO motherboard is incorrectly named as
-ROG CROSSHAIR VI HERO. Issue is found by github user in [1].
+On 26/09/2021 22:06, Yassine Oudjana wrote:
+> Fix a total overlap between zap_shader_region and slpi_region, and rename
+> all regions to match the naming convention in other Qualcomm SoC device trees.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-[1]: https://github.com/electrified/asus-wmi-sensors/pull/79
+Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> #db820c
 
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-
----
-Changes in v2:
-- fix base commit.
----
- drivers/hwmon/asus_wmi_sensors.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
-index c80eee874b6c..49784a6ea23a 100644
---- a/drivers/hwmon/asus_wmi_sensors.c
-+++ b/drivers/hwmon/asus_wmi_sensors.c
-@@ -71,7 +71,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
--	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("CROSSHAIR VI HERO"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
-
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 
-2.35.1
-
+With best wishes
+Dmitry

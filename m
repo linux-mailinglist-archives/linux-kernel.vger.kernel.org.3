@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F944F06C7
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 04:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934314F06C9
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 04:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiDCC0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 22:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S230464AbiDCCaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 22:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiDCC0W (ORCPT
+        with ESMTP id S229565AbiDCCaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 22:26:22 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6288726130
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 19:24:29 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id t13so5449054pgn.8
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 19:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=32/rbrX1Jd5lpKPdnWYfmBzydcxb30MqQ50iH3f+I4U=;
-        b=d/7nC43zvSnX6PspIKqsonwi1G+Eds3AVdvU93lNNnVB5RfCmas0/INW0mC1gN/B5x
-         YJQv/v6IgyBRKXwboGOZ47xk0uIsnzXCLPkvUZt7EsMcDQU36ssCGrZUAAg64iXrUNYe
-         EUDqf8Ew7xz2aNUz1aqmlwKldJT5dR7qjLCzw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=32/rbrX1Jd5lpKPdnWYfmBzydcxb30MqQ50iH3f+I4U=;
-        b=6yhaYADcLKCF57ecprJmvRycf/qZsftyu6T4PAI9NHjXSpiZ0McXgAoTeTCAkwd/tt
-         nKWEUuHgWpBiS7g+vwYSXlVi7GRybucEbB3kWQHpp8o+q8+2bA15Ggxvq0cDoYbOjtmx
-         J3tTFF/h5ZIIBAOoAcvUJM0M9ECZrvGTkTec9ghDsUJ4tGdLKWRGHKaSmkPOzQJ+GBmg
-         PrDHoDrScMm15AmBtW9UD14rfjhwsg8whDlbgF601+2AMsCLEaWvLz0naiSWMP2UZklF
-         4kQI+1TzV9AzEXuZ2RWGCyqlwIBluKBvl+y/AI54StEmnzyZ+INEcW7Avt7kFFdGDCE2
-         SodQ==
-X-Gm-Message-State: AOAM5333VgGrC0LfkesAcmJ9DTne5frkOJ0scHpbYHK5yNYTVDQrGjDp
-        +VGSGAMToYU0D7vt4wkclhm3QrEiZUKgFw==
-X-Google-Smtp-Source: ABdhPJx01i5fBwwCDsmvxhlgEmO38vEUkV+i3kHPux9hNPt9A5ZlVsrgNMY5fxNRWnnk7FLS2XxyfQ==
-X-Received: by 2002:a63:3819:0:b0:398:1338:1118 with SMTP id f25-20020a633819000000b0039813381118mr20371977pga.33.1648952668880;
-        Sat, 02 Apr 2022 19:24:28 -0700 (PDT)
-Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v22-20020a056a00149600b004fb34a7b500sm7629562pfu.203.2022.04.02.19.24.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 19:24:28 -0700 (PDT)
-Date:   Sat, 02 Apr 2022 19:24:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        James Jones <linux@theinnocuous.com>
-CC:     bp@alien8.de, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86: Remove a.out support
-User-Agent: K-9 Mail for Android
-In-Reply-To: <alpine.DEB.2.21.2204022255430.47162@angie.orcam.me.uk>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com> <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com> <202203151150.1CDB1D8DA@keescook> <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com> <alpine.DEB.2.21.2204022255430.47162@angie.orcam.me.uk>
-Message-ID: <67CF27C5-5013-4EF4-B24C-8D9EB52536FB@chromium.org>
+        Sat, 2 Apr 2022 22:30:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42B8C05;
+        Sat,  2 Apr 2022 19:28:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21F4860E9D;
+        Sun,  3 Apr 2022 02:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D548C340EE;
+        Sun,  3 Apr 2022 02:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648952899;
+        bh=nnm23szrmLAxXkfUdshG+TguQlKGlYZQUc5dMRlfJqs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qygqY/f6QiWvkb96YSDbAeI9UTf1WveoFoPN+knzJDXIfA1TPM2hNWr4n0tTzheu+
+         jyb3eOm8qHpubt/ar6jd0AqEV1EQsaZ3wspBMxYMuZlWW5yVLyDE4SEGXjwEWLAL25
+         SVZbLZZuNMFEs4ff7hI82Op+Tp+xusAK/j94YtP2/ywYZgiCiaw5FxxlYa+BQ4Orhr
+         nVefTpSmFxHlyWlpnjPEis8YtIzPaYJ1KDVrC7vjzudaC59yMXT6pNCSynfQv6awcT
+         fVbAKq+gjgUy9F94z3BQOuhiAM0DoR+nUDa3WqVlXKQiwdy7I0oPzkfq9Ywxkhd38w
+         +xM7D4AR5JQ1Q==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH] Revert "clk: Drop the rate range on clk_put()"
+Date:   Sat,  2 Apr 2022 19:28:18 -0700
+Message-Id: <20220403022818.39572-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,35 +57,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit 7dabfa2bc4803eed83d6f22bd6f045495f40636b. There are
+multiple reports that this breaks boot on various systems. The common
+theme is that orphan clks are having rates set on them when that isn't
+expected. Let's revert it out for now so that -rc1 boots.
 
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reported-by: Tony Lindgren <tony@atomide.com>
+Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Link: https://lore.kernel.org/r/366a0232-bb4a-c357-6aa8-636e398e05eb@samsung.com
+Cc: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/clk.c      |  42 ++++++----------
+ drivers/clk/clk_test.c | 108 -----------------------------------------
+ 2 files changed, 14 insertions(+), 136 deletions(-)
 
-On April 2, 2022 3:14:43 PM PDT, "Maciej W=2E Rozycki" <macro@orcam=2Eme=
-=2Euk> wrote:
->On Wed, 16 Mar 2022, James Jones wrote:
->
->> Probably getting a bit off topic, but I did spend a few hours searching
->> around for any existing tools to convert a binary from a=2Eout->ELF, an=
-d
->> trying to come up with something myself by extracting the sections with
->> objdump and re-combining them into an ELF using a linker script placing
->> the sections at the same locations=2E I couldn't get it working in an
->> evening or two messing with it so I moved on, but I agree something lik=
-e
->> this seems possible in theory=2E
->
-> Chiming in late as I'm scanning outstanding mailing list traffic: if thi=
-s=20
->is as you say all statically linked stuff, then converting from a=2Eout t=
-o=20
->ELF might be as easy as:
->
->$ objcopy -I a=2Eout-i386-linux -O elf32-i386 a=2Eout-binary elf-binary
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 07a27b65b773..ed119182aa1b 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -2332,15 +2332,19 @@ int clk_set_rate_exclusive(struct clk *clk, unsigned long rate)
+ }
+ EXPORT_SYMBOL_GPL(clk_set_rate_exclusive);
+ 
+-static int clk_set_rate_range_nolock(struct clk *clk,
+-				     unsigned long min,
+-				     unsigned long max)
++/**
++ * clk_set_rate_range - set a rate range for a clock source
++ * @clk: clock source
++ * @min: desired minimum clock rate in Hz, inclusive
++ * @max: desired maximum clock rate in Hz, inclusive
++ *
++ * Returns success (0) or negative errno.
++ */
++int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
+ {
+ 	int ret = 0;
+ 	unsigned long old_min, old_max, rate;
+ 
+-	lockdep_assert_held(&prepare_lock);
+-
+ 	if (!clk)
+ 		return 0;
+ 
+@@ -2353,6 +2357,8 @@ static int clk_set_rate_range_nolock(struct clk *clk,
+ 		return -EINVAL;
+ 	}
+ 
++	clk_prepare_lock();
++
+ 	if (clk->exclusive_count)
+ 		clk_core_rate_unprotect(clk->core);
+ 
+@@ -2396,28 +2402,6 @@ static int clk_set_rate_range_nolock(struct clk *clk,
+ 	if (clk->exclusive_count)
+ 		clk_core_rate_protect(clk->core);
+ 
+-	return ret;
+-}
+-
+-/**
+- * clk_set_rate_range - set a rate range for a clock source
+- * @clk: clock source
+- * @min: desired minimum clock rate in Hz, inclusive
+- * @max: desired maximum clock rate in Hz, inclusive
+- *
+- * Return: 0 for success or negative errno on failure.
+- */
+-int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
+-{
+-	int ret;
+-
+-	if (!clk)
+-		return 0;
+-
+-	clk_prepare_lock();
+-
+-	ret = clk_set_rate_range_nolock(clk, min, max);
+-
+ 	clk_prepare_unlock();
+ 
+ 	return ret;
+@@ -4419,7 +4403,9 @@ void __clk_put(struct clk *clk)
+ 	}
+ 
+ 	hlist_del(&clk->clks_node);
+-	clk_set_rate_range_nolock(clk, 0, ULONG_MAX);
++	if (clk->min_rate > clk->core->req_rate ||
++	    clk->max_rate < clk->core->req_rate)
++		clk_core_set_rate_nolock(clk->core, clk->core->req_rate);
+ 
+ 	owner = clk->core->owner;
+ 	kref_put(&clk->core->ref, __clk_release);
+diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
+index fd2339cc5898..6731a822f4e3 100644
+--- a/drivers/clk/clk_test.c
++++ b/drivers/clk/clk_test.c
+@@ -760,65 +760,9 @@ static void clk_range_test_multiple_set_range_rate_maximized(struct kunit *test)
+ 	clk_put(user1);
+ }
+ 
+-/*
+- * Test that if we have several subsequent calls to
+- * clk_set_rate_range(), across multiple users, the core will reevaluate
+- * whether a new rate is needed, including when a user drop its clock.
+- *
+- * With clk_dummy_maximize_rate_ops, this means that the rate will
+- * trail along the maximum as it evolves.
+- */
+-static void clk_range_test_multiple_set_range_rate_put_maximized(struct kunit *test)
+-{
+-	struct clk_dummy_context *ctx = test->priv;
+-	struct clk_hw *hw = &ctx->hw;
+-	struct clk *clk = hw->clk;
+-	struct clk *user1, *user2;
+-	unsigned long rate;
+-
+-	user1 = clk_hw_get_clk(hw, NULL);
+-	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, user1);
+-
+-	user2 = clk_hw_get_clk(hw, NULL);
+-	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, user2);
+-
+-	KUNIT_ASSERT_EQ(test,
+-			clk_set_rate(clk, DUMMY_CLOCK_RATE_2 + 1000),
+-			0);
+-
+-	KUNIT_ASSERT_EQ(test,
+-			clk_set_rate_range(user1,
+-					   0,
+-					   DUMMY_CLOCK_RATE_2),
+-			0);
+-
+-	rate = clk_get_rate(clk);
+-	KUNIT_ASSERT_GT(test, rate, 0);
+-	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_2);
+-
+-	KUNIT_ASSERT_EQ(test,
+-			clk_set_rate_range(user2,
+-					   0,
+-					   DUMMY_CLOCK_RATE_1),
+-			0);
+-
+-	rate = clk_get_rate(clk);
+-	KUNIT_ASSERT_GT(test, rate, 0);
+-	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_1);
+-
+-	clk_put(user2);
+-
+-	rate = clk_get_rate(clk);
+-	KUNIT_ASSERT_GT(test, rate, 0);
+-	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_2);
+-
+-	clk_put(user1);
+-}
+-
+ static struct kunit_case clk_range_maximize_test_cases[] = {
+ 	KUNIT_CASE(clk_range_test_set_range_rate_maximized),
+ 	KUNIT_CASE(clk_range_test_multiple_set_range_rate_maximized),
+-	KUNIT_CASE(clk_range_test_multiple_set_range_rate_put_maximized),
+ 	{}
+ };
+ 
+@@ -933,61 +877,9 @@ static void clk_range_test_multiple_set_range_rate_minimized(struct kunit *test)
+ 	clk_put(user1);
+ }
+ 
+-/*
+- * Test that if we have several subsequent calls to
+- * clk_set_rate_range(), across multiple users, the core will reevaluate
+- * whether a new rate is needed, including when a user drop its clock.
+- *
+- * With clk_dummy_minimize_rate_ops, this means that the rate will
+- * trail along the minimum as it evolves.
+- */
+-static void clk_range_test_multiple_set_range_rate_put_minimized(struct kunit *test)
+-{
+-	struct clk_dummy_context *ctx = test->priv;
+-	struct clk_hw *hw = &ctx->hw;
+-	struct clk *clk = hw->clk;
+-	struct clk *user1, *user2;
+-	unsigned long rate;
+-
+-	user1 = clk_hw_get_clk(hw, NULL);
+-	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, user1);
+-
+-	user2 = clk_hw_get_clk(hw, NULL);
+-	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, user2);
+-
+-	KUNIT_ASSERT_EQ(test,
+-			clk_set_rate_range(user1,
+-					   DUMMY_CLOCK_RATE_1,
+-					   ULONG_MAX),
+-			0);
+-
+-	rate = clk_get_rate(clk);
+-	KUNIT_ASSERT_GT(test, rate, 0);
+-	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_1);
+-
+-	KUNIT_ASSERT_EQ(test,
+-			clk_set_rate_range(user2,
+-					   DUMMY_CLOCK_RATE_2,
+-					   ULONG_MAX),
+-			0);
+-
+-	rate = clk_get_rate(clk);
+-	KUNIT_ASSERT_GT(test, rate, 0);
+-	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_2);
+-
+-	clk_put(user2);
+-
+-	rate = clk_get_rate(clk);
+-	KUNIT_ASSERT_GT(test, rate, 0);
+-	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_1);
+-
+-	clk_put(user1);
+-}
+-
+ static struct kunit_case clk_range_minimize_test_cases[] = {
+ 	KUNIT_CASE(clk_range_test_set_range_rate_minimized),
+ 	KUNIT_CASE(clk_range_test_multiple_set_range_rate_minimized),
+-	KUNIT_CASE(clk_range_test_multiple_set_range_rate_put_minimized),
+ 	{}
+ };
+ 
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 
-Based on my research (and the wrapper I ended up writing), I don't think t=
-his is sufficient because entry point handling is different between ELF and=
- a=2Eout (specifically the stack layout and initial sp register value)=2E
-
--Kees
-
---=20
-Kees Cook

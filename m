@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BC34F0CD4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 00:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8FB4F0CDA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376605AbiDCWzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 18:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S1376608AbiDCXJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 19:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237761AbiDCWzx (ORCPT
+        with ESMTP id S237266AbiDCXI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 18:55:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B41D140D2;
-        Sun,  3 Apr 2022 15:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=zDRYhWu2tTNgKAXBhJFHtn2OfOGGinXlPakc33ZktO4=; b=V/+VTiTVN8UP17TN0I/0PwqKZD
-        LhFwmhDwbX+TSPuMoJdpy/7tbyHWltAQ3zxvdCTWwbkwDtm/r2yV54lsSEHi1G7rlrAPsndWN7dbu
-        lSj+Rj7rzq4O3XSifGUGKwXVcQg6m76wSb6Lkmh//RE9gjIi6vJx5FmG8VSmAz0dsVfOP79/Ipiy4
-        t3sEH/gAkUL9n363wpwIo74TAev32eazYOxn5pwmSwyU3g5OZcY++FCi/EKN/F6TOwLS/JNq1fmh7
-        5i3MwLjbfAUnjsyzNqZERd1MEGeaxkO+PVZUHjIURfTwW7t8HzZaZo60nYz2SjIzRmmlYpqYymBNe
-        SNTqCRCw==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nb96Z-00CVFY-5V; Sun, 03 Apr 2022 22:53:55 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Thierry Reding <treding@nvidia.com>,
-        linux-tegra@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] gpu: host1x: fix a kernel-doc warning
-Date:   Sun,  3 Apr 2022 15:53:54 -0700
-Message-Id: <20220403225354.2492-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 3 Apr 2022 19:08:57 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACD835DF7;
+        Sun,  3 Apr 2022 16:07:02 -0700 (PDT)
+Received: from [192.168.148.80] (unknown [182.2.36.220])
+        by gnuweeb.org (Postfix) with ESMTPSA id EF8A17E2F8;
+        Sun,  3 Apr 2022 23:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1649027222;
+        bh=AgxCk/JVw9/hkc4+DKBbYPNAgm4m8EN1bmKcRraOkOI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Sdw+Y33/dXPrCEFe/gQkpoD3FRialbIxVxV7IFGzGWV7U40WVX/fl4p99DxkWoKzF
+         tftnE5xtKvgsygWN0XWNTLcdbT5jOF1pVwzRJCw9SuOfL1lEPvcKjYZQb5ns3xmyI6
+         +3WKDEohjga9SBJCamSfht4pEc0LIcSY6kK1mWKWj8bl8dZZLhWw8AG8Yb2Mw79896
+         wWCwH31H4Tt3hbaO0j77pEFIyDp7JW9in4qDUo7obMyZlFyTnAoRHTGe5Bvrf3t1El
+         m73gEDGzgL7dRkJDNKfP0SlA7e9KfswKSCWqE6DXV0I78mYZyqse8p8J+mCIxiXQT0
+         GiTcfuYcR7RgA==
+Message-ID: <29e7cfd7-47fb-a435-1862-1ff96dfd35df@gnuweeb.org>
+Date:   Mon, 4 Apr 2022 06:06:51 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low
+Content-Language: en-US
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>
+References: <322c0884-38fe-a295-0aff-caee1308833d@gnuweeb.org>
+ <PH0PR04MB7416A2426687A7A4803628729B1D9@PH0PR04MB7416.namprd04.prod.outlook.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <PH0PR04MB7416A2426687A7A4803628729B1D9@PH0PR04MB7416.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,28 +56,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add @cache description to eliminate a kernel-doc warning.
+On 3/28/22 3:10 PM, Johannes Thumshirn wrote:
+> On 27/03/2022 03:31, Ammar Faizi wrote:
+>>
+>> Hello btrfs maintainers,
+>>
+>> I got the following bug in Linux 5.17.0 stable. I don't have the
+>> reproducer for this. I will send any update if I find something
+>> relevant. If anyone has any suggestion on how to debug this further,
+>> or wants me to test a patch after it gets a reliable reproducer,
+>> or something, please let me know. I will try it on my machine.
+>>
+>> If you need me to send something to investigate this, please let
+>> me know.
+>>
+> 
+> This can be solved by increasing CONFIG_LOCKDEP_CHAINS_BITS.
 
-include/linux/host1x.h:104: warning: Function parameter or member 'cache' not described in 'host1x_client'
+TIL, got it, thanks.
 
-Fixes: 1f39b1dfa53c ("drm/tegra: Implement buffer object cache")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thierry Reding <treding@nvidia.com>
-Cc: linux-tegra@vger.kernel.org
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
----
- include/linux/host1x.h |    1 +
- 1 file changed, 1 insertion(+)
-
---- lnx-518-rc1.orig/include/linux/host1x.h
-+++ lnx-518-rc1/include/linux/host1x.h
-@@ -81,6 +81,7 @@ struct host1x_client_ops {
-  * @parent: pointer to parent structure
-  * @usecount: reference count for this structure
-  * @lock: mutex for mutually exclusive concurrency
-+ * @cache: host1x buffer object cache
-  */
- struct host1x_client {
- 	struct list_head list;
+-- 
+Ammar Faizi

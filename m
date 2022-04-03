@@ -2,139 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9CF4F08B2
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 12:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5BD4F08B4
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 12:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356396AbiDCKWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 06:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
+        id S1356297AbiDCKXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 06:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356297AbiDCKWK (ORCPT
+        with ESMTP id S234981AbiDCKXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 06:22:10 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6242A3057C;
-        Sun,  3 Apr 2022 03:20:16 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h4so10246739wrc.13;
-        Sun, 03 Apr 2022 03:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=DjmQ/60oEsUOVlbM/+sAzXrdxlHPtL6WOZl1FVBOfSw=;
-        b=NzTuwFGAvevnkfF2CZiC+nsjkjYF26Bz9yF89nT6ur11+Kc5dEcSs/miXSJdcez6mt
-         e/NU2JcPoxFu5OKQVbJcyfaFYpPYv3/YgERmuC+r5VLBfQr1GEHE1LG0Zezz4QBqLTdy
-         cdt0OWA8rAkX1dHefmBN/bm5zEeE5Icncp4JU7OTjmtJFpkXfmmFd2s73FaWX0+6/U1S
-         wMzbTgO0SG4Ya0jBsyU1nXCU6xfHkl/bmVtSZMW9mBr59Qh0TVS3/M9E4UYjbnAELkqL
-         pjGLSLyLBDhvWp/gh+iEgWd2edNi3v+V5liO8/iue8vQzQe1ppc5Ao+jYI6pevJ1T04b
-         ohxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=DjmQ/60oEsUOVlbM/+sAzXrdxlHPtL6WOZl1FVBOfSw=;
-        b=Q6eGyTPQHkDYSgtFeuzW4XqRMSUA58fnef+ECcTKRpYjS7Gi6/lpyfYbsScv59hdEP
-         dGGkf3hg4PZf3nRNWS03Igx05LNfX5ekIssrxyi/5GbsPMasDNB6CzMWiZ/4w7KJZbVQ
-         A/zpkkhhPQQ1KqyUWIv78kuu6Y4RGOXBaZUyiGzfiRZHQ6M6mql+kMzqCDe3tnjmWJf3
-         sKQU0xJi0otHo4lHouoIJ7oXT5hDNV200dIPApixvYr0ZyM1QnOO+hdpIV93Q3CUo+vS
-         XaERK8fMS3mu/Fu39GxEr30l5Z1yROfEr9jPNwio9J4/lbpxzhOssJXWKI8qVFwctEdH
-         oPMw==
-X-Gm-Message-State: AOAM5314ZUxNXGrojO/Ds3MFj+9IJPRZcJkLfuo+jTIpoKTrvpp9FDj6
-        BklIm3mUwwwi3d7FLJsFMNef19GV55I=
-X-Google-Smtp-Source: ABdhPJz7mE4GGrW3/bwr8E8GW8yq21yEERHVFUERh/7i46ZYkcHXf68fEiCSygq2DWPEm4LMV1krjQ==
-X-Received: by 2002:adf:d1e7:0:b0:205:8909:a67f with SMTP id g7-20020adfd1e7000000b002058909a67fmr13419004wrd.66.1648981214536;
-        Sun, 03 Apr 2022 03:20:14 -0700 (PDT)
-Received: from Dev-shlomop.pliops.ent (bzq-219-32-62.isdn.bezeqint.net. [62.219.32.62])
-        by smtp.googlemail.com with ESMTPSA id k23-20020a7bc417000000b0038ccada7566sm13639895wmi.11.2022.04.03.03.20.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 03:20:14 -0700 (PDT)
-From:   Shlomo Pongratz <shlomopongratz@gmail.com>
-X-Google-Original-From: Shlomo Pongratz <shlomop@pliops.com>
-To:     linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, andrew.maier@eideticom.com,
-        logang@deltatee.com, bhelgaas@google.com, jgg@nvidia.com,
-        helgaas@kernel.org, Shlomo Pongratz <shlomop@pliops.com>
-Subject: [PATCH V6 1/1] Intel Sky Lake-E host root ports check.
-Date:   Sun,  3 Apr 2022 13:20:08 +0300
-Message-Id: <20220403102008.7122-2-shlomop@pliops.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220403102008.7122-1-shlomop@pliops.com>
-References: <20220403102008.7122-1-shlomop@pliops.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 3 Apr 2022 06:23:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3843193D;
+        Sun,  3 Apr 2022 03:21:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A834D61006;
+        Sun,  3 Apr 2022 10:21:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DECC340ED;
+        Sun,  3 Apr 2022 10:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648981315;
+        bh=va2wdSIDhigU9l6racetCvNOSAZt+vprXlIct+i0T0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rutRab4n813Pxfl1QOm3oCQU5Xw0G5pZcmivt9D8npqu4IeZ4XLNRwF6dQRZdruRS
+         dQsrnuWExDhYQBC0BY4fFx2WUvuUjn+/gNQyEufnl5Thr194LQyTDkIpvzdPXzVfe2
+         Gv7YrSRhK2bJdYj8xSlipwAdkRUOFgih9P1B3sErpDmLLPVUZDBQ89UgGaDF3RV1RQ
+         P772i3/NCOcdOFRMNPBpTmgXdzJeQfB0ykaj1GaNDLLhOlo5sNA9xIIMQJakuFFdAR
+         fw6wsZpyDuioEbDdlPYXoUIcScjf+fI0xwqZYGjenu5uz91SR5iFuK/NlWI580+F20
+         FUdDBek5lAsJw==
+Date:   Sun, 3 Apr 2022 13:23:05 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-integrity@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] char: tpm: Prepare cleanup of powerpc's asm/prom.h
+Message-ID: <Ykl1ibvVxJUBrhfK@kernel.org>
+References: <7a522d9029737d7a1fb513529659321ed62d50d9.1648895070.git.christophe.leroy@csgroup.eu>
+ <cfd3a718e147b39620dfa7c779a7ae1af2f6b575.1648895074.git.christophe.leroy@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cfd3a718e147b39620dfa7c779a7ae1af2f6b575.1648895074.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C,
- D to the whitelist")
-Andrew Maier added the Sky Lake-E additional devices
-2031, 2032 and 2033 root ports to the already existing 2030 device.
+On Sat, Apr 02, 2022 at 12:29:19PM +0200, Christophe Leroy wrote:
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+> 
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-The Intel devices 2030, 2031, 2032 and 2033 which are root ports A, B, C
-and D, respectively and if all exist they will occupy slots 0 till 3 in
-that order.
+I don't understand this. It changes nothing as far as kernel is concerned.
 
-The original code handled only the case where the devices in the whitelist
-are host bridges and assumed that they will be found on slot 0.
+> ---
+>  drivers/char/tpm/tpm_atmel.h   | 2 --
+>  drivers/char/tpm/tpm_ibmvtpm.c | 1 -
+>  2 files changed, 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_atmel.h b/drivers/char/tpm/tpm_atmel.h
+> index ba37e77e8af3..959f7cce8301 100644
+> --- a/drivers/char/tpm/tpm_atmel.h
+> +++ b/drivers/char/tpm/tpm_atmel.h
+> @@ -26,8 +26,6 @@ struct tpm_atmel_priv {
+>  
+>  #ifdef CONFIG_PPC64
+>  
+> -#include <asm/prom.h>
+> -
+>  #define atmel_getb(priv, offset) readb(priv->iobase + offset)
+>  #define atmel_putb(val, priv, offset) writeb(val, priv->iobase + offset)
+>  #define atmel_request_region request_mem_region
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+> index 3af4c07a9342..1180cce7067a 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.c
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
+> @@ -20,7 +20,6 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/wait.h>
+> -#include <asm/prom.h>
+>  
+>  #include "tpm.h"
+>  #include "tpm_ibmvtpm.h"
+> -- 
+> 2.35.1
+> 
 
-Since this assumption doesn't hold for root ports, add a test to cover this
-case.
-
-Signed-off-by: Shlomo Pongratz <shlomop@pliops.com>
----
- drivers/pci/p2pdma.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-index 30b1df3c9d2f..c281bf5b304a 100644
---- a/drivers/pci/p2pdma.c
-+++ b/drivers/pci/p2pdma.c
-@@ -327,15 +327,19 @@ static const struct pci_p2pdma_whitelist_entry {
- 
- /*
-  * This lookup function tries to find the PCI device corresponding to a given
-- * host bridge.
-+ * host bridge or a root port.
-  *
-  * It assumes the host bridge device is the first PCI device in the
-- * bus->devices list and that the devfn is 00.0. These assumptions should hold
-- * for all the devices in the whitelist above.
-+ * bus->devices list and that the devfn is 00.0. The first assumption should
-+ * hold for all the devices in the whitelist above, however the second
-+ * assumption doesn't always hold for root ports.
-+ * For example for Intel Skylake devices 2030, 2031, 2032 and 2033,
-+ * which are root ports (A, B, C and D respectively).
-+ * So the function checks explicitly that the device is a root port.
-  *
-- * This function is equivalent to pci_get_slot(host->bus, 0), however it does
-- * not take the pci_bus_sem lock seeing __host_bridge_whitelist() must not
-- * sleep.
-+ * This function is equivalent to pci_get_slot(host->bus, 0) (except for
-+ * the root port test), however it does not take the pci_bus_sem lock seeing
-+ * __host_bridge_whitelist() must not sleep.
-  *
-  * For this to be safe, the caller should hold a reference to a device on the
-  * bridge, which should ensure the host_bridge device will not be freed
-@@ -350,7 +354,14 @@ static struct pci_dev *pci_host_bridge_dev(struct pci_host_bridge *host)
- 
- 	if (!root)
- 		return NULL;
--	if (root->devfn != PCI_DEVFN(0, 0))
-+
-+	/* Verify that the device is a host bridge or a root port
-+	 * It is assumed that host bridges have a 0 devfn, (common practice)
-+	 * but some of the entries in the whitelist are root ports that can
-+	 * have any devfn
-+	 */
-+	if (root->devfn != PCI_DEVFN(0, 0) &&
-+	    pci_pcie_type(root) != PCI_EXP_TYPE_ROOT_PORT)
- 		return NULL;
- 
- 	return root;
--- 
-2.17.1
-
+BR, Jarkko

@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3BE4F0A27
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8344F0A29
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358994AbiDCOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 10:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S1356204AbiDCOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 10:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236161AbiDCOWd (ORCPT
+        with ESMTP id S236161AbiDCOXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 10:22:33 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF93396A1;
-        Sun,  3 Apr 2022 07:20:38 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so5577360otj.1;
-        Sun, 03 Apr 2022 07:20:38 -0700 (PDT)
+        Sun, 3 Apr 2022 10:23:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1199396A5
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648995708;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2NzOUXV5geNPV1jFPan7KnjsKEym0Ss9ltF3bQDMSJk=;
+        b=UxS4IW4HPgjtWRwM9boaNYf5ScTzXbTB60MzTGVDRa/b01s7lrMv15UTu3t6VRq+nMlmH2
+        cQk7tB711qOSHDosaxN45yuQ4i6NnZolp/luWfcsZzvpupsw0PJ3QoWuB4T0ERHlBum7CX
+        zNJr7SrWBi1HwHBSDJLiYHvUhsaj/do=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-443-LZSLYwDtMmqakd-ceuJ0fw-1; Sun, 03 Apr 2022 10:21:47 -0400
+X-MC-Unique: LZSLYwDtMmqakd-ceuJ0fw-1
+Received: by mail-qk1-f199.google.com with SMTP id 207-20020a3706d8000000b0067b322bef9eso4837920qkg.3
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 07:21:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=IhdvutP6+1VN96Sw+l5rljGDZzsDxpR3h7q1f/N7UZo=;
-        b=ifeO/0nr8m0s/2shOX7IKX9aVXd9LriBiEeK8vAvxvajBL2YfxBGMPaGG9TnLH++Lh
-         a3eSo1M+FpOfH52OT5Xhg4Hq5TK/De3JoUwl2UVFClqwSae3y7twKwFwy7BQ9uTJLFPq
-         PeS7RvKArYT6euY3wovGMLfXtXMP+DjxDXZ3ukIo2iIuCInJnYSMDUzs4UXEXe9/lTky
-         ZIqsUL3n36OB/qAqNLGnCKFLJes0+w8bubK32p28pHCWdoAfmPC/jWy4KK7aO7LPNLOP
-         K+dwfR3ExaMVLQ63JWw5pnMtM2MvLzmyLflRuXqfr38aO8fk9MPvv5URaVpX2aVDIzVD
-         k1FA==
-X-Gm-Message-State: AOAM531sLtIZHVpY1R9J+C1hVPBL8XvfYVwBUBSMLWMVxOCY+EAOLdZu
-        VTns3u/sgGr9nRotFVhZ/w==
-X-Google-Smtp-Source: ABdhPJwL6nKTkad4e13KB87xfRjBKcTmMkYqLyj+VlysWvRbdX14GGrw5+09grM+gkgg3WSF68Touw==
-X-Received: by 2002:a05:6830:34a1:b0:5c4:3dca:b666 with SMTP id c33-20020a05683034a100b005c43dcab666mr10640719otu.328.1648995637852;
-        Sun, 03 Apr 2022 07:20:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm3032383oob.7.2022.04.03.07.20.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2NzOUXV5geNPV1jFPan7KnjsKEym0Ss9ltF3bQDMSJk=;
+        b=rh9qAhXDZdDmRGoabhuN/GWdlvWpa0mdO9WNxjfXfeZ9lGDPMyrLa5tPtIBSr/TkxP
+         ZQEbx2KdbyC2Re/mpITjvlPVAHW1ukIJGIFPnkhvKKBiGVdQNKhJ7cXMmUIZqo929ybl
+         Dvgxg/xHFaRlMlfAkYAvtUWyB4c9wnTrSwnZUV64A3b65GCw/K5kiaezhjeY8d2n7z6j
+         KiCHj3bDCi4TzBfYdMbVr6SXFoWYXlzg5Jsa4ntKlrf9a53U9jAarLtbXZWuikkEfn2u
+         n4A6CdJM9AhzfPryTo72IzBP03m0hueXtSrLEMFytmZeNHZ6K9OpZLMdmS8Pdh3pUFxl
+         2FAA==
+X-Gm-Message-State: AOAM530gIfvVZKc4LGODA5hineaJgH92h0MWXeh612QaFskTONrP6phF
+        En6HiYy78Odh47Rzww9lg0jMoF9FpmQHnM/jvvbEeMyicPvhzwglShA9Vh3q62Y79D5y4Dop1hm
+        PRE+TM6wuxMlqaBJ3O5unc8jd
+X-Received: by 2002:a05:6214:da9:b0:441:2d37:1fdf with SMTP id h9-20020a0562140da900b004412d371fdfmr14150777qvh.14.1648995707220;
+        Sun, 03 Apr 2022 07:21:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzvPjZwizmTlC5AqPbCRYoH/kd4u1WRNzlEq/em0QPB+9sK5Zmh1lXeSdZpIFrdpTz7Zx+Gqg==
+X-Received: by 2002:a05:6214:da9:b0:441:2d37:1fdf with SMTP id h9-20020a0562140da900b004412d371fdfmr14150757qvh.14.1648995707058;
+        Sun, 03 Apr 2022 07:21:47 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac85e06000000b002e1e8a98abbsm6194271qtx.41.2022.04.03.07.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 07:20:37 -0700 (PDT)
-Received: (nullmailer pid 3013370 invoked by uid 1000);
-        Sun, 03 Apr 2022 14:20:36 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20220402184011.132465-8-krzysztof.kozlowski@linaro.org>
-References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org> <20220402184011.132465-8-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 7/9] dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
-Date:   Sun, 03 Apr 2022 09:20:36 -0500
-Message-Id: <1648995636.595500.3013369.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 03 Apr 2022 07:21:46 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, wenjing.liu@amd.com, waynelin@amd.com,
+        Anson.Jacob@amd.com, Yu-ting.Shen@amd.com, keescook@chromium.org,
+        nicholas.kazlauskas@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: cleanup extern usage in function definition
+Date:   Sun,  3 Apr 2022 10:21:37 -0400
+Message-Id: <20220403142137.2234322-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 02 Apr 2022 20:40:09 +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm MSM Serial UARTDM bindings to DT Schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/serial/qcom,msm-uartdm.txt       |  81 -------------
->  .../bindings/serial/qcom,msm-uartdm.yaml      | 112 ++++++++++++++++++
->  2 files changed, 112 insertions(+), 81 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
->  create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
-> 
+Smatch reports this issue
+hdcp1_execution.c:500:29: warning: function
+  'mod_hdcp_hdcp1_dp_execution' with external linkage
+  has definition
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The storage-class-specifier extern is not needed in a
+definition, so remove it.
 
-yamllint warnings/errors:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.example.dt.yaml: serial@f991e000: dma-names:0: 'tx' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.example.dt.yaml: serial@f991e000: dma-names:1: 'rx' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
-
-doc reference errors (make refcheckdocs):
-Warning: Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt references a file that doesn't exist: Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
-Warning: Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt references a file that doesn't exist: Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
-Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt: Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
-Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt: Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c b/drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c
+index 6ec918af3bff..1ddb4f5eac8e 100644
+--- a/drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c
++++ b/drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c
+@@ -497,9 +497,9 @@ enum mod_hdcp_status mod_hdcp_hdcp1_execution(struct mod_hdcp *hdcp,
+ 	return status;
+ }
+ 
+-extern enum mod_hdcp_status mod_hdcp_hdcp1_dp_execution(struct mod_hdcp *hdcp,
+-		struct mod_hdcp_event_context *event_ctx,
+-		struct mod_hdcp_transition_input_hdcp1 *input)
++enum mod_hdcp_status mod_hdcp_hdcp1_dp_execution(struct mod_hdcp *hdcp,
++						 struct mod_hdcp_event_context *event_ctx,
++						 struct mod_hdcp_transition_input_hdcp1 *input)
+ {
+ 	enum mod_hdcp_status status = MOD_HDCP_STATUS_SUCCESS;
+ 
+-- 
+2.27.0
 

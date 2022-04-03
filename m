@@ -2,88 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3868F4F09D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932484F09DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358211AbiDCNSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 09:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S1358850AbiDCNSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 09:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358848AbiDCNRy (ORCPT
+        with ESMTP id S1358945AbiDCNSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 09:17:54 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF002655;
-        Sun,  3 Apr 2022 06:16:00 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id z128so6189365pgz.2;
-        Sun, 03 Apr 2022 06:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PfNnbuCnnrrI2HGCtTaPf9X8eo27J8q+BtzO2NSDh9k=;
-        b=W3nkE02niUtCrxE60qZnIXFqTLuGGvXDYFbmnRBXtm/ZI/VAaXcw5Xqus7HTQbkvdf
-         KcTVM2bCrQvDizRqNs1kkHCoCJPAFWRVua/OlPfzEv3KPcxO7/5QbM/9q7tzL4fgz1fU
-         QMhjc7VCxFA0/uoNb81LtTr1T7dEuey8rdOs2vRA8HrrwjpRyIDLFN7eSi1zhku9usof
-         YTqs4werHRBOJCiInOUh9+WTLSSKsDMLf6wqqwaSz4jFavLDz1CAX8FhNygGWLzjNVPL
-         4mUBwf4QV0foNL6m3R+QPVRfvtelSWp8AkxV+NiybpiRY7EULKXGctBBK4DhcaH+VY31
-         Aa3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PfNnbuCnnrrI2HGCtTaPf9X8eo27J8q+BtzO2NSDh9k=;
-        b=umBBUy+NviWWRpYUH/bCJLxiufXVhIlRoXHOEURuo7r9NDXQpGtTt3BwGviQUF9C8J
-         RyrmvAVN63qEIzjCdPn7hO+N8ymtt2YsgvKsGoNSBg4tGX5s1jBvphDJ6VPVAAde6bOu
-         e3fT9vQteHJTKyMN3PvIsgbRnixQf1JAsdFCaUYHAy3PG2cDg38hN+Jf7W5JcH/FpUz8
-         NOMikGuuk0AX0BFq8DyiNV0Uf+A/M3SPN9wpHPV0BEFbWWGlcx3eENNOoNn7zkdiHxsk
-         HYKTRrBwJc8HTOrJ4OFjt6FTH9n55NlT9FnH9Gqwx8dIb56zTU8hNsoEVZJzadT+439y
-         8rNw==
-X-Gm-Message-State: AOAM532ycXNjEfCxIU4vLpXBYpoocJI4OlYIH+buvxJGS/Yj8Aqm7J/r
-        mbbWnPrUXkNmTXpvrV3fYNYXzC6jR+ek0WPhdaU=
-X-Google-Smtp-Source: ABdhPJx/jqW9K6zA3FxhpAum6lnTJzCHjiUWOeOnYjnncDZjy24UF+xT1PnUpPoXV4vMBSuGDYAStw==
-X-Received: by 2002:a05:6a00:124f:b0:4fb:2608:78de with SMTP id u15-20020a056a00124f00b004fb260878demr19139111pfi.27.1648991760243;
-        Sun, 03 Apr 2022 06:16:00 -0700 (PDT)
-Received: from guoguo-omen.lan ([2001:250:3000:7000:7978:d40d:86ff:591d])
-        by smtp.gmail.com with ESMTPSA id w19-20020a056a0014d300b004fae5e3970csm9272416pfu.35.2022.04.03.06.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 06:16:00 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list),
-        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
-Subject: [PATCH resend 4/4] arm64: dts: mediatek: add dt node for MTK SNFI
-Date:   Sun,  3 Apr 2022 21:14:53 +0800
-Message-Id: <20220403131453.1269229-5-gch981213@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220403131453.1269229-1-gch981213@gmail.com>
-References: <20220403131453.1269229-1-gch981213@gmail.com>
+        Sun, 3 Apr 2022 09:18:23 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3EDE54;
+        Sun,  3 Apr 2022 06:16:29 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D7DB91EC01B5;
+        Sun,  3 Apr 2022 15:16:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648991783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=31OJMjqHClIj9JrX8Y21C+6EHoiVM7Hu/S7vtVGm6hA=;
+        b=UuFnoL7FgLyFDuh3Aqtle2b9A9Um6/ORZ1ABQn+mDiLS4P8/+8g6hlaPVItuI8nwV2+Tgu
+        M0yUwVFjQP4iK+hZtcOeRsbOG+V3sh8Pv1NSXQ5WHIZGU2Ha3L6UAL0jlKChuu4C7Ndx10
+        7Ht9IvWC+snnauTjR6fgKyFsIlnfAZs=
+Date:   Sun, 3 Apr 2022 15:16:20 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v4 2/3] x86/mce: Define function to extract ErrorAddr
+ from MCA_ADDR
+Message-ID: <YkmeJFXXbu3aLzzw@zn.tnic>
+References: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
+ <YkWrlTIK/ZxsQekX@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YkWrlTIK/ZxsQekX@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,36 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a device-tree node for the MTK SPI-NAND Flash Interface.
+On Thu, Mar 31, 2022 at 03:24:37PM +0200, Borislav Petkov wrote:
+> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> index 1940d305db1c..a1a4a5dc53e8 100644
+> --- a/arch/x86/kernel/cpu/mce/amd.c
+> +++ b/arch/x86/kernel/cpu/mce/amd.c
+> @@ -722,6 +722,19 @@ bool amd_mce_is_memory_error(struct mce *m)
+>  	return m->bank == 4 && xec == 0x8;
+>  }
+>  
+> +/* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
+> +void smca_extract_err_addr(struct mce *m)
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
- arch/arm64/boot/dts/mediatek/mt7622.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+In addition:
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-index 6f8cb3ad1e84..40112fdca67e 100644
---- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-@@ -545,6 +545,18 @@ nandc: nfi@1100d000 {
- 		status = "disabled";
- 	};
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 9ccc2ea0ea00..4acc7959be6e 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -723,7 +723,7 @@ bool amd_mce_is_memory_error(struct mce *m)
+ }
  
-+	snfi: spi@1100d000 {
-+		compatible = "mediatek,mt7622-snand";
-+		reg = <0 0x1100d000 0 0x1000>;
-+		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&pericfg CLK_PERI_NFI_PD>, <&pericfg CLK_PERI_SNFI_PD>;
-+		clock-names = "nfi_clk", "pad_clk";
-+		ecc-engine = <&bch>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		status = "disabled";
-+	};
-+
- 	bch: ecc@1100e000 {
- 		compatible = "mediatek,mt7622-ecc";
- 		reg = <0 0x1100e000 0 0x1000>;
--- 
-2.35.1
+ /* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
+-void smca_extract_err_addr(struct mce *m)
++void __always_inline smca_extract_err_addr(struct mce *m)
+ {
+ 	u8 lsb;
+ 
 
+because some compilers cause:
+
+vmlinux.o: warning: objtool: mce_read_aux()+0x82: call to smca_extract_err_addr() leaves .noinstr.text section
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

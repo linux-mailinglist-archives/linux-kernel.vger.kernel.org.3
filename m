@@ -2,77 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24E54F0AAB
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66E34F0AAE
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355481AbiDCPiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 11:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S1359180AbiDCPjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 11:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiDCPiE (ORCPT
+        with ESMTP id S232259AbiDCPjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 11:38:04 -0400
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.46.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AB927163
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:36:09 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id C94DFCF73
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 10:36:08 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id b2Gunbu3j22u3b2GunkLeS; Sun, 03 Apr 2022 10:36:08 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=S9kyq3prUNE5HlsvNUnZDxnM3YNPjxnZKzbpLeHWtg4=; b=c4M3VL07wbRVvrKjSmkp3QOqSm
-        adMlo6Kg9Lb2yNZPZmvLcKrDA80lw6W8IB3lcd3ZKvvVsDULx/j5jplAbY1fGHzIx1mdUt9gDNv/l
-        DkfYW97FxsYWpgOi3BvWbWznBqOd8sZYr92Cnk3E31b7R4mXu9C+P5Ry32/pPRgjndrGoqiVcwNci
-        FWCIlY0obiz+wrK9jriGBEv8KCeeLK1hC5g7RveJhCuwee7vpws0ZbSsepsVBgQEa11dhLKQVOsFa
-        5b6sqe/WGpbfGac+nFqETCb8y5TPdwIcXM7V6Y1DzbCt0gmprSJ9dkb9H5HwDNmdSJWo/8Una13nj
-        1L9MH6kQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57822 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nb2Gu-0041Pb-Cx; Sun, 03 Apr 2022 15:36:08 +0000
-Date:   Sun, 3 Apr 2022 08:36:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] tty: serial: mpc52xx_uart: make rx/tx hooks return
- unsigned
-Message-ID: <20220403153607.GA3644508@roeck-us.net>
-References: <20220224111028.20917-1-jslaby@suse.cz>
- <20220224111028.20917-2-jslaby@suse.cz>
+        Sun, 3 Apr 2022 11:39:35 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE1B33E18
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:37:41 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id h4so10886748wrc.13
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 08:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eDFMs7EElGjgVXSi1G28DbTYKExJESQOSQxzUR+xKqM=;
+        b=lnbGEtlamweYbPt09LLUZZmY1OEhSHyThX/GrCcNl6El493Cx8SaCgtQqMkE17prcX
+         J4LfZqyU7meN7ZKBqPiiaqhEz48OQnHqLhAsz6amdsKGeWKgN2kgs5yDi1GqwrBu1PqX
+         Gbm4GlMU9jc9lgq2KPbfHuzHqtBonIWl+PqeIdB1b5Cpz4H5t624nAEKk4q2tOus8EbX
+         ze51geAwftRiFo4VVmbrccFnbRQ7WwQvc/jJ302DDtrGiVE1dmAAG1WFhfGrfBVVPuXt
+         MzsCJc8qaT8+5p98TbBnT842jG/MYim7LYqY2m7SIu/Lrq4rx6om8VKeS5BRzJaTTgMA
+         j12g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eDFMs7EElGjgVXSi1G28DbTYKExJESQOSQxzUR+xKqM=;
+        b=N2GtSbEIAEc9TgtmtcY87SMRuidfJ+d9RPrzpKE5QCOs9G8Q7tmGqSpC6CvP4pD8dL
+         Qq1Rd618EZUqUwIBw35Lnb2p+bH7i68mdz0Dx/Zx8fb5ZXiShmiwikIphD4QobeCF6zf
+         KPIWuKYM/0zfVLFeVZOXTVj0Bo/ZKLAoJzhDBQd69wOuVFm5RrAZpXdQQyP3bNwnwXwy
+         b767ZJlCiLmo2kDevMXWtRnUP+RJ88wJj7u0AxpJe08TNGjhskEV2Gmzzod2puozC0di
+         jLgWILccGCN7jvbN8Cu6dFHI8KF3sJumpdGHYoS3vxiAW2rPDpZCm/cUJ0S2HNFWGf5E
+         A31A==
+X-Gm-Message-State: AOAM530fU0gKgmVGPvGeioMekolPtI/rdFNkjjUObdgDGblqltg96PZ8
+        gXvVpWl+1txVxGQ1on5LzR1VcQ==
+X-Google-Smtp-Source: ABdhPJzno6MvWVjCp8ZyExCrnTXODZzrLF1ozU8hgn7hmy1XaDLiOBxe1FQc2Cu1D2oZQReX5TZNZw==
+X-Received: by 2002:a5d:47c3:0:b0:204:5b8:225c with SMTP id o3-20020a5d47c3000000b0020405b8225cmr14059127wrc.474.1649000259960;
+        Sun, 03 Apr 2022 08:37:39 -0700 (PDT)
+Received: from [192.168.0.172] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id m63-20020a1c2642000000b0038e5fa06b50sm4607976wmm.31.2022.04.03.08.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Apr 2022 08:37:39 -0700 (PDT)
+Message-ID: <817dda10-39db-adfc-376d-a3d5e037937e@linaro.org>
+Date:   Sun, 3 Apr 2022 17:37:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224111028.20917-2-jslaby@suse.cz>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nb2Gu-0041Pb-Cx
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57822
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/4] dt-bindings: spi: add binding doc for spi-mtk-snfi
+Content-Language: en-US
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+References: <20220403131154.1267887-1-gch981213@gmail.com>
+ <20220403131154.1267887-4-gch981213@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220403131154.1267887-4-gch981213@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,98 +96,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 12:10:24PM +0100, Jiri Slaby wrote:
-> All these return bitmasks, so it makes more sense to return unsigned --
-> this is what a reader and also all the callers expect.
+On 03/04/2022 15:11, Chuanhong Guo wrote:
+> Add device-tree binding documentation for Mediatek SPI-NAND Flash
+> Interface.
+
+Thank you for your patch. There is something to discuss/improve.
+
 > 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-
-With this patch in place:
-
-drivers/tty/serial/mpc52xx_uart.c:static unsigned int mpc52xx_psc_raw_tx_rdy(struct uart_port *port)
-drivers/tty/serial/mpc52xx_uart.c:static int mpc512x_psc_raw_tx_rdy(struct uart_port *port)
-                                         ^^^
-drivers/tty/serial/mpc52xx_uart.c:static int mpc5125_psc_raw_tx_rdy(struct uart_port *port)
-                                         ^^^
-
-Same for other functions. This results in lots of compile errors.
-
-Guenter
-
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 > ---
->  drivers/tty/serial/mpc52xx_uart.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
+>  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 87 +++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
 > 
-> diff --git a/drivers/tty/serial/mpc52xx_uart.c b/drivers/tty/serial/mpc52xx_uart.c
-> index 2704dc988e4a..8a6958377764 100644
-> --- a/drivers/tty/serial/mpc52xx_uart.c
-> +++ b/drivers/tty/serial/mpc52xx_uart.c
-> @@ -83,11 +83,11 @@ static irqreturn_t mpc5xxx_uart_process_int(struct uart_port *port);
->  
->  struct psc_ops {
->  	void		(*fifo_init)(struct uart_port *port);
-> -	int		(*raw_rx_rdy)(struct uart_port *port);
-> -	int		(*raw_tx_rdy)(struct uart_port *port);
-> -	int		(*rx_rdy)(struct uart_port *port);
-> -	int		(*tx_rdy)(struct uart_port *port);
-> -	int		(*tx_empty)(struct uart_port *port);
-> +	unsigned int	(*raw_rx_rdy)(struct uart_port *port);
-> +	unsigned int	(*raw_tx_rdy)(struct uart_port *port);
-> +	unsigned int	(*rx_rdy)(struct uart_port *port);
-> +	unsigned int	(*tx_rdy)(struct uart_port *port);
-> +	unsigned int	(*tx_empty)(struct uart_port *port);
->  	void		(*stop_rx)(struct uart_port *port);
->  	void		(*start_tx)(struct uart_port *port);
->  	void		(*stop_tx)(struct uart_port *port);
-> @@ -203,34 +203,34 @@ static void mpc52xx_psc_fifo_init(struct uart_port *port)
->  	out_be16(&psc->mpc52xx_psc_imr, port->read_status_mask);
->  }
->  
-> -static int mpc52xx_psc_raw_rx_rdy(struct uart_port *port)
-> +static unsigned int mpc52xx_psc_raw_rx_rdy(struct uart_port *port)
->  {
->  	return in_be16(&PSC(port)->mpc52xx_psc_status)
->  	    & MPC52xx_PSC_SR_RXRDY;
->  }
->  
-> -static int mpc52xx_psc_raw_tx_rdy(struct uart_port *port)
-> +static unsigned int mpc52xx_psc_raw_tx_rdy(struct uart_port *port)
->  {
->  	return in_be16(&PSC(port)->mpc52xx_psc_status)
->  	    & MPC52xx_PSC_SR_TXRDY;
->  }
->  
->  
-> -static int mpc52xx_psc_rx_rdy(struct uart_port *port)
-> +static unsigned int mpc52xx_psc_rx_rdy(struct uart_port *port)
->  {
->  	return in_be16(&PSC(port)->mpc52xx_psc_isr)
->  	    & port->read_status_mask
->  	    & MPC52xx_PSC_IMR_RXRDY;
->  }
->  
-> -static int mpc52xx_psc_tx_rdy(struct uart_port *port)
-> +static unsigned int mpc52xx_psc_tx_rdy(struct uart_port *port)
->  {
->  	return in_be16(&PSC(port)->mpc52xx_psc_isr)
->  	    & port->read_status_mask
->  	    & MPC52xx_PSC_IMR_TXRDY;
->  }
->  
-> -static int mpc52xx_psc_tx_empty(struct uart_port *port)
-> +static unsigned int mpc52xx_psc_tx_empty(struct uart_port *port)
->  {
->  	u16 sts = in_be16(&PSC(port)->mpc52xx_psc_status);
->  
-> @@ -1365,7 +1365,7 @@ static const struct uart_ops mpc52xx_uart_ops = {
->  /* Interrupt handling                                                       */
->  /* ======================================================================== */
->  
-> -static inline int
-> +static inline unsigned int
->  mpc52xx_uart_int_rx_chars(struct uart_port *port)
->  {
->  	struct tty_port *tport = &port->state->port;
-> -- 
-> 2.35.1
-> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> new file mode 100644
+> index 000000000000..166c6b50b9d1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> @@ -0,0 +1,87 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-snfi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SPI-NAND flash controller for MediaTek ARM SoCs
+> +
+> +maintainers:
+> +  - Chuanhong Guo <gch981213@gmail.com>
+> +
+> +description: |
+> +  The Mediatek SPI-NAND flash controller is an extended version of
+> +  the Mediatek NAND flash controller. It can perform standard SPI
+> +  instructions with one continuous write and one read for up-to 0xa0
+> +  bytes. It also supports typical SPI-NAND page cache operations
+> +  in single, dual or quad IO mode with piplined ECC encoding/decoding
+> +  using the accompanying ECC engine. There should be only one spi
+> +  slave device following generic spi bindings.
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt7622-snand
+> +      - mediatek,mt7629-snand
+
+One blank line, please.
+
+> +  reg:
+> +    items:
+> +      - description: core registers
+> +
+> +  interrupts:
+> +    items:
+> +      - description: NFI interrupt
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the controller
+> +      - description: clock used for the SPI bus
+> +
+> +  clock-names:
+> +    items:
+> +      - const: nfi_clk
+> +      - const: pad_clk
+> +
+> +  ecc-engine:
+
+The nand-chip.yaml defines a nand-ecc-engine, so how about using that
+one? I know mtk-nand.txt uses ecc-engine, but for new schema better to
+use properties from existing YAML.
+
+> +    description: device-tree node of the accompanying ECC engine.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+
+Rest looks good, thank you!
+
+
+Best regards,
+Krzysztof

@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DAC4F0AE4
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20CE4F0AE5
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352651AbiDCPsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 11:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
+        id S1356345AbiDCPsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 11:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359297AbiDCPsE (ORCPT
+        with ESMTP id S1359367AbiDCPsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 11:48:04 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D73326FA
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:46:07 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id p15so15214619ejc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 08:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LYx9vbaJPUNdfXIS3EFqUowucY1MMBbJcAD7xxWwqJE=;
-        b=GuOF2PiN5v6qm6pExziHFvW4NdmAjiny9z/M6GcZpXDZKd0K/Sheld7Y/npC8kwQzn
-         WTOhn0orR6bhXrTXHHvrOFtFBKOa7ayOBrjz9wO+twHhfLGQOgUPH3jOw9A/rNCmEd7g
-         qfHF2iCJuXZiBTohCS2oxZ0wlBDUC4x67B7v4U77st5XXJ6/g1AUTOJ7+Pp52Bxi1yo8
-         VB6gCnpDBYIHonW7N1RoAv4ycf31c1orsDEs8VcmuouO8oUheOr7ewScqKfvQWavpWYP
-         wy/bZ7kF9Mf4qLrKk7V4+ZY3zYh4vmKOCFduwJbWfF7ZOiXAuTaFfxymZbCCgfpUhtrE
-         eeyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LYx9vbaJPUNdfXIS3EFqUowucY1MMBbJcAD7xxWwqJE=;
-        b=hVdaIS69NlbU+gQfGfiyoL7+afAY77pYJbue2LuAYDHG9+R1E4f4OWc1ON9WqgvXLk
-         gNni6R6IQp3t1oR1jIl8VwbdRZCVF4zQdANPha8THhfb16ERwFcdnQ2QmffcOQFf3uU2
-         rRBKr3Tzi0AOXZvFnaRYef/RdO38Kf/QC5a3h4+i0CCi/O4b9tV3t9hc7+e7OjqIh2G/
-         ZYVARtaIUuYStgNgVH6Z956/Xqm+veXHu1D1X4xVaYOVOpclH7Hyb1mLbSghauUs90Mc
-         Pi+Wqgwx8QMSLEm3tRwLklYm0l91beLEo83RYZRl0HRzL1b17sdRFtFEJXQiX+QG/79p
-         aAiQ==
-X-Gm-Message-State: AOAM531milA0I0ugT7eq3qkTbv+mJwnk8uPtFD0sw6M+ZdLsmEM8Y4gg
-        agt428KuB/2Kj/EF2LzwEbXolLD5DdZjiszm
-X-Google-Smtp-Source: ABdhPJzSrJadXrXyXG9O97k4Y19sD2+YhsQWeyluUAWQqPHBO7iuX4dgBHMyyAkRWvy9+4Ox+RRtEA==
-X-Received: by 2002:a17:907:3f07:b0:6e0:2fa0:2482 with SMTP id hq7-20020a1709073f0700b006e02fa02482mr7423607ejc.766.1649000766507;
-        Sun, 03 Apr 2022 08:46:06 -0700 (PDT)
-Received: from [192.168.0.172] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id cr19-20020a170906d55300b006df6b316e29sm3325521ejc.208.2022.04.03.08.46.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 08:46:06 -0700 (PDT)
-Message-ID: <50934ae0-0863-ee8a-0e7b-295be2286445@linaro.org>
-Date:   Sun, 3 Apr 2022 17:46:05 +0200
+        Sun, 3 Apr 2022 11:48:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D61326FA;
+        Sun,  3 Apr 2022 08:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B923B80D59;
+        Sun,  3 Apr 2022 15:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D6EC340ED;
+        Sun,  3 Apr 2022 15:46:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649000787;
+        bh=AjbUxfWQZJ9LYtaZniXFzkk6R9dJGhR3P9jE0QaU830=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=CS+s8AcA46FV07MxUpkF1gm4zEp8aFD09GumCLkzkZZbsCM7faRoRPXNulXM9F1dB
+         rJSj62/xWhZbDVZ9RxK5UsSQrQUTQla7JRatMCJnJA+TTJSiaY8XxxtfJ6pSufhY1Q
+         iNO1niut5f2NPYoEdhZF61FsMY0drUJwDz0ExNRGsr3g7E1bj44lpM0njvsSrczIPY
+         /ogzxg9Gt7SycUxE5/jQoAIKpDOkkBz5gN6w+8gc7avNf8dHM74yWWgVj/8JpneTRb
+         idC1OnfcNHyUONGAjbIWweQ0v0+NOnY7MKxiNanIyEtmhtQWezbGH7zXWS0TTrIraB
+         hlyTsP6G8lzUg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 805B25C0555; Sun,  3 Apr 2022 08:46:26 -0700 (PDT)
+Date:   Sun, 3 Apr 2022 08:46:26 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw
+ on PREEMPT_RT kernel
+Message-ID: <20220403154626.GO4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220403061440.2762522-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] regulator: dt-bindings: maxim,max8997: correct array
- of voltages
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220331211653.175200-1-krzysztof.kozlowski@linaro.org>
- <Ykm5IG2EUUSSotUF@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Ykm5IG2EUUSSotUF@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220403061440.2762522-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,40 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2022 17:11, Rob Herring wrote:
-> On Thu, Mar 31, 2022 at 11:16:52PM +0200, Krzysztof Kozlowski wrote:
->> uint32-array with voltages should be within one bracket pair <>, not
->> each number in its own <>.  Also the number of elements in the array
->> should be defined within "items:".
-> 
-> Which encoding an array uses has been a source of pain.
-> 
->>
->> This fixes DT schema warnings like:
->>
->>   maxim,max8997.example.dtb: pmic@66: max8997,pmic-buck1-dvs-voltage:
->>     [[1350000, 1300000, 1250000, 1200000, 1150000, 1100000, 1000000, 950000]] is too short
-> 
-> These exist due to the move from validating yaml files to DTBs and I 
-> haven't come up with how to fix the warning. The schema was correct as 
-> it was. The change leaks the encoding (everything is a matrix) into the 
-> schema which we don't want to do.
-> 
-> The issue is in the if/then schema, the tools don't know if the type is 
-> an array or matrix. It gets it wrong (or different from the top-level) 
-> and thus the warning. I think the fix will be using the extracted type 
-> information to do the right transformation. The code for all this is 
-> pretty horrible and I've lost count of how many times I've re-written 
-> it. I think a lot of it can be removed when/if support for yaml encoded 
-> DT is removed which I think can happen in a kernel cycle or 2.
-> 
-> Perhaps in the short term the example can just be removed or commented 
-> out though that doesn't help on dts files.
+On Sun, Apr 03, 2022 at 02:14:40PM +0800, Zqiang wrote:
+> On non-PREEMPT_RT kernel, the init_irq_work() make the defer_qs_iw irq-work
+> execute in interrupt context. however, on PREEMPT_RT kernel, the
+> init_irq_work() make defer_qs_iq irq-work execute in rt-fifo irq_work
+> kthreads. when system booting, and the CONFIG_RCU_STRICT_GRACE_PERIOD
+> is enabled, there are a lot of defer_qs_iw irq-work to be processed
+> in rt-fifo irq_work kthreads, it occupies boot CPU for long time and
+> cause other kthread cannot get the boot CPU, the boot process occurs
+> hang. use IRQ_WORK_INIT_HARD() to initialize defer_qs_iw irq-work, can
+> ensure the defer_qs_iw irq-work always execute in interrupt context,
+> whether PREEMPT_RT or non PREEMPT_RT kernel.
 
-I think I already might be adding the same pattern to other bindings I
-convert, so maybe I should add at least comments to such cases so we can
-fix it later.
+This is a much better justification of the need for a change, thank you!
 
+But it looks like I need to clarify a sentence in my previous email.
 
-Best regards,
-Krzysztof
+Please note that you were using the debugging RCU_STRICT_GRACE_PERIOD
+Kconfig option, so this is a potential problem as opposed to an immediate
+bug.  Yes, we must fix bugs, but it is also very important to avoid
+harming other workloads, which are after all the vast majority of the
+uses of the Linux kernel.
+
+And a major purpose of things like RCU_STRICT_GRACE_PERIOD is to give
+us advanced warning of bugs so that we can fix them properly, without
+hurting other workloads.
+
+So, does this patch guarantee exactly the same performance and scalability
+as before for !PREEMPT_RT systems?  If so, please add an explanation to
+the commit log.
+
+Otherwise, please adjust the code to provide this guarantee.
+
+							Thanx, Paul
+
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tree_plugin.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index 3037c2536e1f..cf7bd28af8ef 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
+>  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
+>  				// Get scheduler to re-evaluate and call hooks.
+>  				// If !IRQ_WORK, FQS scan will eventually IPI.
+> -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
+> +				rdp->defer_qs_iw = IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
+>  				rdp->defer_qs_iw_pending = true;
+>  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
+>  			}
+> -- 
+> 2.25.1
+> 

@@ -2,115 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBE64F088A
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 11:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AA04F0894
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 11:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356115AbiDCJO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 05:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S1356231AbiDCJYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 05:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiDCJO5 (ORCPT
+        with ESMTP id S234343AbiDCJYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 05:14:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292B832EF4
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 02:13:03 -0700 (PDT)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id awI7nFC7WRGzQawI7nw1jb; Sun, 03 Apr 2022 11:13:01 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 03 Apr 2022 11:13:01 +0200
-X-ME-IP: 90.126.236.122
-Message-ID: <6dd4ac07-397c-1e02-2ac5-2a8f243bfefe@wanadoo.fr>
-Date:   Sun, 3 Apr 2022 11:12:59 +0200
+        Sun, 3 Apr 2022 05:24:00 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34E139B99
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 02:22:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id o10so14260453ejd.1
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 02:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=OTuQUiog2XmLT6Jm2LnAcZJ4IxYwjdtxF6IgEfkS7Y8=;
+        b=fZq61mlWlHyc1Y6wGvfGvXgqo6pPeCmp3tFD8va5puX7gSlcNNGG/plOoHxhkQ3kor
+         UCxhAaOd3Zqe5ZTl8MjkNgpv/DWlZOzEjEChMyi5G1nrNRKWLrsNTxRr40aFw4AQaMm2
+         iV5GaHQgPeT+ZKs/ihqft+Lm4HXvHaJ7686pgWBX2GDRzzQqUsF0/mj7+7dJUGFYdJqQ
+         iDS5NzjX/VgRitmDZaasKFMWrNdo2lvckAhPrah27Gf2b2aDkqGl4eYkHfBUD6reUCI3
+         jTDSQ363rRgK5d+3td+q58jda0Vm6zYiyz0yL1iu/Bts+TjzEl9BUYt+OJEaKAWXCM99
+         eVRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=OTuQUiog2XmLT6Jm2LnAcZJ4IxYwjdtxF6IgEfkS7Y8=;
+        b=VthUZVeuDyjApCac9D8Vi/C4eCkIDLn068LK78+NSRLufTRIGtrOulWUbTn5F+qtEU
+         IMBn7MOCHs6vzjR5BFZgwoMBXK0cooe/iF49cyh2HY+5m+z8jayfvKXfMzaHwMsZ7vda
+         /yH8ut8ay47cAzlq5BNJEdMuMjzFnVBDzlMoLqEiDzfo0d8f4mnh3CnA3zJYWcF6Ci+/
+         0g/V6laUbhj/m5/ntWhsAUhX0k+GhRwbmFZoIRgvuPgKAmMMSr0JEi7v4PVnV0bHHRJw
+         0BliqSKT7+yZaR2pZgsGulQfFbYKAccXPmxq6eudRRCWqBApYvA6FtH0RIw3k4sGLK6V
+         ys/A==
+X-Gm-Message-State: AOAM53097LxRh+ElsxyoOxqJGfXkictB+bKf9A3VWCxgVXRHSFsaYGvp
+        Ad0kXVH0SaXeuZsJygcDI+TG4ToLteoVXEAfsDo=
+X-Google-Smtp-Source: ABdhPJzLg0+erREsH0LkqvZRw0B9apCBelXQz2EGRKuZhrBT/KPSramJjcoWDVpB39OeZGvWHR/AjvJ8iSqNFn5BJys=
+X-Received: by 2002:a17:907:6d1b:b0:6e6:2583:cea5 with SMTP id
+ sa27-20020a1709076d1b00b006e62583cea5mr5495591ejc.188.1648977725289; Sun, 03
+ Apr 2022 02:22:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] ASoC: msm8916-wcd-digital: Fix missing
- clk_disable_unprepare() in msm8916_wcd_digital_probe
-Content-Language: en-US
-To:     =?UTF-8?B?5p6X5aaZ5YCp?= <linmq006@gmail.com>
-Cc:     alsa-devel@alsa-project.org,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20220307084523.28687-1-linmq006@gmail.com>
- <93751991-30ce-93a0-0f33-105f99b8dfe3@wanadoo.fr>
- <CAH-r-ZGw+toVfasD-45p4Z4Rryn2advNOZbgJd0g4SGw_Kd6FQ@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAH-r-ZGw+toVfasD-45p4Z4Rryn2advNOZbgJd0g4SGw_Kd6FQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:b1d4:0:0:0:0 with HTTP; Sun, 3 Apr 2022 02:22:04
+ -0700 (PDT)
+From:   Ikuku Ajunwa <ikukuajunwa@gmail.com>
+Date:   Sun, 3 Apr 2022 02:22:04 -0700
+Message-ID: <CABueqtC5yqZjA2-Nahh+2UZbiKPEH6hLa+sSvwcE85Wa-A-PYg@mail.gmail.com>
+Subject: waiting transfer
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 03/04/2022 à 09:15, 林妙倩 a écrit :
-> Hi,
-> 
-> Yes, I agree with you. We should check the error code of
-> devm_snd_soc_register_component() and do corresponding
-> handling.
-
-You already fixed the first issue, do you mind sending a patch for this 
-one as well?
-
-CJ
-> 
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr> 于2022年4月3日周日 13:51写道：
-> 
->> Le 07/03/2022 à 09:45, Miaoqian Lin a écrit :
->>> Fix the missing clk_disable_unprepare() before return
->>> from msm8916_wcd_digital_probe in the error handling case.
->>>
->>> Fixes: 150db8c5afa1 ("ASoC: codecs: Add msm8916-wcd digital codec")
->>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->>> ---
->>>    sound/soc/codecs/msm8916-wcd-digital.c | 5 ++++-
->>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/sound/soc/codecs/msm8916-wcd-digital.c
->> b/sound/soc/codecs/msm8916-wcd-digital.c
->>> index fcc10c8bc625..9ad7fc0baf07 100644
->>> --- a/sound/soc/codecs/msm8916-wcd-digital.c
->>> +++ b/sound/soc/codecs/msm8916-wcd-digital.c
->>> @@ -1201,7 +1201,7 @@ static int msm8916_wcd_digital_probe(struct
->> platform_device *pdev)
->>>        ret = clk_prepare_enable(priv->mclk);
->>>        if (ret < 0) {
->>>                dev_err(dev, "failed to enable mclk %d\n", ret);
->>> -             return ret;
->>> +             goto err_clk;
->>>        }
->>>
->>>        dev_set_drvdata(dev, priv);
->>> @@ -1209,6 +1209,9 @@ static int msm8916_wcd_digital_probe(struct
->> platform_device *pdev)
->>>        return devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
->>>                                      msm8916_wcd_digital_dai,
->>>                                      ARRAY_SIZE(msm8916_wcd_digital_dai));
->>> +err_clk:
->>> +     clk_disable_unprepare(priv->ahbclk);
->>> +     return ret;
->>>    }
->>>
->>>    static int msm8916_wcd_digital_remove(struct platform_device *pdev)
->>
->> Hi,
->> I think that the same should be done for 'priv->mclk' if
->> devm_snd_soc_register_component() returns an error.
->>
->> Can you give it a look?
->>
->> CJ
->>
-> 
-
+Valued Attention Sir!
+Our recent record   indicates that you are eligible to receive an
+optional repayment of cash fund!! $750.000.00 which has been found in
+the security vault registered in your favor under your email account
+waiting to be dispatch without claims.
+the account is set up under your email address  can only be obtained
+by you (receiver),all  you have to do is to provide
+Your full Name.....................
+Direct Telephone: ..............
+And delivery address........... For immediate shipment
+Thanks and anticipating your urgent respond
+finaccial@citromail.hu
+Yours faithfully,
+ikuku
+Section assistance and   Verification committee
+USAfro-Euro   Debit Reconciliation Office
+ID 4475 UK London.

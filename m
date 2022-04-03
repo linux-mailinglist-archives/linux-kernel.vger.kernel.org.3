@@ -2,128 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967224F0903
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E274F0918
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237983AbiDCLg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 07:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S1357013AbiDCLmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 07:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiDCLgZ (ORCPT
+        with ESMTP id S238157AbiDCLmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 07:36:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E402737005
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648985671; x=1680521671;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w3+dJSG41YiOYCe9pq5tbHjd700xrUaUy6TiG5GC9sw=;
-  b=g3tMmrAnI4ta7BD+bmAX0xRXs737odcDmHbF1BkdZWZzGxXM9CoN+tqM
-   5GruWfqZkt4267PM3tCPqg9s4oJGlGXqUVIyNKp3c72Y/7TqdNOL9lFte
-   nTxjJBt91x3mTs9oOe0beOcG554OoAyOAJ/sMC2zgqjS/pVJTI4IZ98CC
-   c0gjzw/CYxtPUjKKSziX7j5hYAYydCc2ruum5ix7pnhuWsC4sLdXDxU7t
-   oLERc85a2YqJONpJif73u6+5GUyXr7K/sNQqLpGstVfyFCWp8NniqRmWD
-   KFkbFz8nkxzdjcTPDu+GlPow3AGdTYeUamFduT5ICIL/mwZOnkCaBhCKL
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="242519817"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="242519817"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 04:34:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="523282238"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 03 Apr 2022 04:34:28 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nayV1-0000v7-G1;
-        Sun, 03 Apr 2022 11:34:27 +0000
-Date:   Sun, 3 Apr 2022 19:33:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [linux-stable-rc:queue/5.10 3948/9999]
- arch/powerpc/platforms/4xx/pci.c:47:19: error: unused function
- 'ppc440spe_revA'
-Message-ID: <202204031917.yHHLo75R-lkp@intel.com>
+        Sun, 3 Apr 2022 07:42:32 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6C43968F
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:40:37 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id d5so12393807lfj.9
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 04:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=1nrGQ86+KEfI8lMZHBguNMUxlHPTUJKQmanBNJ/nGq4=;
+        b=nrd5SfiyZHt+2ltkwlDZXu2oumrGC+NMBOQ/IBLNU+gIu6YJu8jA19ISD3U+v3LA1S
+         9IACzs8SvEQ1WW14Jbta4JwBp/UjPB8fLc1d0zznwG/1w2ddswHs9P0ojyqANVTnTe2z
+         Vskxb2BeDp5Cwa/53oGVW8hlucug/+jrM0GzpGJQqt2kuUVP9wNHGH45RUa+39QPNWdD
+         WkgniIt7vt+zWelIxTZ9TIOZr6AnG+u3b9SyY0WT8Qf/oiKpXgJZRQgQnDlM/9M78E06
+         BWBo6KJXES3KlnqYZKk2IOebIxGYYuSOn1hi5AXuhzCOdD9tvw7k3BM7v1ShjOI4cxxX
+         5mgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1nrGQ86+KEfI8lMZHBguNMUxlHPTUJKQmanBNJ/nGq4=;
+        b=OWkUQOA4ilvrcb0mgA/pVbp6NRPnVdPzpircj7VdV75+0OVdIDpEb3me6v09zNiDMn
+         NVU15X2J5sRK9kua6t+lY49HAjz/qzJQIEmioP8zobSpjr5POrqMCsRo9F+SHPBD+Kv7
+         8mWnpmu7QlznoMWHwSDdGdQRzzjy3Q/Wjb/+CswZbg6FZ70tM4ye+aR0KpetG8XtfQsw
+         5eZuG33mf0AyQ3ztsQhNc/RPWVFHrAT4w+/y/u5REWOHaQJBSN1Wvv2/e8smgiOU3dLM
+         WRGfI/O3ynXABZ2Wv9JMsZEklMHeI34+RTd7nLhNLScrUgQUSziH1I+74e75l0Oi7IVc
+         7LfQ==
+X-Gm-Message-State: AOAM533QgJRR6woTSVSlmWHZnkUsM6b1gR7uBR+UGMRAzLyP23Z8O/3l
+        4EaOfBBP8I3G8hKHTsYyXd8=
+X-Google-Smtp-Source: ABdhPJwk8/p4WUYEA2KWURqU/C11tiVOeYaTBCJOPUuJRAD9MHy7EXAvT660DPGpD84+WTu8EoQRsQ==
+X-Received: by 2002:a05:6512:b83:b0:44a:9fb7:784b with SMTP id b3-20020a0565120b8300b0044a9fb7784bmr19016074lfv.547.1648986035922;
+        Sun, 03 Apr 2022 04:40:35 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.247])
+        by smtp.gmail.com with ESMTPSA id f11-20020a0565123b0b00b0044a2809c621sm803729lfv.29.2022.04.03.04.40.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Apr 2022 04:40:35 -0700 (PDT)
+Message-ID: <0107f709-49ad-a0c3-916d-0f7b32991a0d@gmail.com>
+Date:   Sun, 3 Apr 2022 14:40:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/7] staging: vt6655: Remove unused macros with CamelCase
+ in mac.h
+Content-Language: en-US
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1648882847.git.philipp.g.hortmann@gmail.com>
+ <646acd285c1239f301692456bd9f46eda449d02b.1648882847.git.philipp.g.hortmann@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <646acd285c1239f301692456bd9f46eda449d02b.1648882847.git.philipp.g.hortmann@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+Hi Philipp,
 
-FYI, the error/warning still remains.
+On 4/2/22 10:29, Philipp Hortmann wrote:
+> Remove unused macros with CamelCase variables in mac.h as
+> they are not accepted by checkpatch.pl
+> 
+> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> ---
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   852e92a491fd83515d5683537bfdb2d90d483344
-commit: a024e88f8ab79a7b7e15337096d4f5f77edc6a49 [3948/9999] powerpc/barrier: Avoid collision with clang's __lwsync macro
-config: powerpc-randconfig-c003-20220403 (https://download.01.org/0day-ci/archive/20220403/202204031917.yHHLo75R-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a024e88f8ab79a7b7e15337096d4f5f77edc6a49
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout a024e88f8ab79a7b7e15337096d4f5f77edc6a49
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/platforms/4xx/pci.c:47:19: error: unused function 'ppc440spe_revA' [-Werror,-Wunused-function]
-   static inline int ppc440spe_revA(void)
-                     ^
-   1 error generated.
+You can merge 1/7 and 2/7, since you are just removing unused macros in 
+same file.
 
 
-vim +/ppc440spe_revA +47 arch/powerpc/platforms/4xx/pci.c
 
-a2d2e1ec07a809 arch/powerpc/sysdev/ppc4xx_pci.c Benjamin Herrenschmidt 2007-12-21  41  
-8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  42  #define RES_TO_U32_LOW(val)	\
-8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  43  	((sizeof(resource_size_t) > sizeof(u32)) ? U64_TO_U32_LOW(val) : (val))
-8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  44  #define RES_TO_U32_HIGH(val)	\
-8308c54d7e312f arch/powerpc/sysdev/ppc4xx_pci.c Jeremy Fitzhardinge    2008-09-11  45  	((sizeof(resource_size_t) > sizeof(u32)) ? U64_TO_U32_HIGH(val) : (0))
-a2d2e1ec07a809 arch/powerpc/sysdev/ppc4xx_pci.c Benjamin Herrenschmidt 2007-12-21  46  
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21 @47  static inline int ppc440spe_revA(void)
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  48  {
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  49  	/* Catch both 440SPe variants, with and without RAID6 support */
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  50          if ((mfspr(SPRN_PVR) & 0xffefffff) == 0x53421890)
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  51                  return 1;
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  52          else
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  53                  return 0;
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  54  }
-accf5ef254b9dd arch/powerpc/sysdev/ppc4xx_pci.c Stefan Roese           2007-12-21  55  
 
-:::::: The code at line 47 was first introduced by commit
-:::::: accf5ef254b9dd4d3b53040dd73d80875c2cd39b [POWERPC] 4xx: Add 440SPe revA runtime detection to PCIe
 
-:::::: TO: Stefan Roese <sr@denx.de>
-:::::: CC: Josh Boyer <jwboyer@linux.vnet.ibm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With regards,
+Pavel Skripkin

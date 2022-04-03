@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F634F0CE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC194F0CE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376632AbiDCXL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 19:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S1376636AbiDCXLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 19:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376617AbiDCXLW (ORCPT
+        with ESMTP id S1376623AbiDCXLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 19:11:22 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B50424F0A
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 16:09:27 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso1519567pjb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 16:09:27 -0700 (PDT)
+        Sun, 3 Apr 2022 19:11:24 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4E924F07
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 16:09:29 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id x14so3894677pjf.2
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 16:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AazmYMEVI4+t31GypNH0a3+SYY9YIPzgFZxmTSXBvXI=;
-        b=Px0NTwECYIoBDNYTVGoEzcgAC+SdXnZp3o/MviptdOXe9dOHQ6fNYQEvzMErHVNCfv
-         Vys45j98dxnlAPTY9dONtEfe7XaDkW5owc8MYJDxAHIIMsVUg5xOTK15o1V01hz3hIc1
-         PJImyEe+MNYF1qRLzWpPEeOkvqqlTKvWo5hJN5UOgVDfKvqLm+mbHfUj0bdFQ/hgS7ks
-         c6TxMyCR9pZz72+jcHjlY8viS/oGETUInzAcABr1NuN9a66VRSP1YEx5q7XmCBF65AHz
-         GOPhFrVWVicjCDeRcVXmn0T7itglTVIY7LjfqNqBv25wV+mHOOls0SreUXrlcSUFUU0n
-         Edjg==
+        bh=MnWAMe9I06uRHHkAV77SrUCEzn8s1KKpVwsFGsGBqTc=;
+        b=OENDJJLMrKrgibNyXZIHPx034c5IwHJkxSipgUCS4XAyLvLx/fovUcBWIE6F3zmtIf
+         vDZjQnBPDv5CO5lTKwJaP/7wVTd062woHDn+Bf8pMO09NWRnvAwoqdEOcEcEs4evomTV
+         kD36uvehsggyi6+7qV4HMy9Bq0CG9/GLwE3POkdZfRtz5A+fS5SNAuRVskV5/i/HjkCd
+         yPMLqNCqFxPTFGG6G+6HPU+q4EBFdKmtNTaqj4FL487B3xXEI/Bxi+MLjbrPtbP6EBej
+         mRT9OMAEa0Eb1lmJ90A65LobaBDRLs96hC1JZb0Cof7Y6aCdrTmtD88YMwK3AjoM9wBR
+         wgrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AazmYMEVI4+t31GypNH0a3+SYY9YIPzgFZxmTSXBvXI=;
-        b=H5waElaZAVxszMW8zKU3dnBk/LlrUyQGY/0VEJ0Y4mW3LttfLt4gwdwk1qjuheajbs
-         e5GxDVOxCjEQitfIFSWDi8LBt33PXVRyZaJCa1wViw577TJ8g48ad1KV6emVX0w3igE6
-         RYnsFHHEc/NOtqREbOlyFIQ3irTHC2BoqsI/LHi0JcN2TwtQq7eUewAt66/UGX+bzaQa
-         lZ3fwxCg0VBtdRzUOYE5mezdRO1HlIxIzb2a9zrmdrCrwI4bk+0FJCdPCM35DJprE6KH
-         wsXg/mtOjmFeT0pNPSgi+BHeMIIXddCVG4m42GgWcw2JPh0elBry39e72t+/ZEXkeEbN
-         sFwQ==
-X-Gm-Message-State: AOAM532Ws0H7Nx5rOz9WSAvGR2OGuvbEGV4t7TOVbreLdSV83xSt2PnV
-        +qboMwZ2WAnGzSQnWqD+ZpudeaOsusq8LQ==
-X-Google-Smtp-Source: ABdhPJwu10LyWXjJNNLHbDslwYfk/gSPp782weeIVdS7z0wMaRI32tXvOrkUPNVqTNLzSiQqYKgj4w==
-X-Received: by 2002:a17:90b:4d0e:b0:1c6:3ea9:7b5f with SMTP id mw14-20020a17090b4d0e00b001c63ea97b5fmr23278861pjb.166.1649027366608;
-        Sun, 03 Apr 2022 16:09:26 -0700 (PDT)
+        bh=MnWAMe9I06uRHHkAV77SrUCEzn8s1KKpVwsFGsGBqTc=;
+        b=UJVbGSek/rgGBnNmpvYeL3at1bzGVGOYfbMS8o0gOHrYP53DXRarl6PU/RfsDFNvQE
+         LpYipj22PBzb1v9U7A8wT5yBOHTzkzVf7u7H7fHPJLBh7yNtS7rN9QGCX9IqXaNFi2RD
+         opQN0Vbg9xw3LUGQoqwj0saOMAa6nALN4UaFR9J7RXSV/pMfsrd0iPxChegJkonQFcYG
+         S0YBlTfXW51+xfHOeJEWVIISNK7y2fvlPbv/nA48S7osZyx2CAgoBowssqUe99aL53DJ
+         KVct9PM0OU4W8HXsBUXyscQ9pGeHduoJj8Con4LFBGR6ywzxNDOsq1rmRrXSvuoBoF1h
+         VbEw==
+X-Gm-Message-State: AOAM533MU8irzM1p9CkjNsoIvaZkr+wX2pbCtTUviVjp4oHHV70Qlpoz
+        e6HzKD2vCdY5z2o9PxYliJUKjOZIiq9Ylw==
+X-Google-Smtp-Source: ABdhPJyFp6sii1V9wLJ0I1w9QggEHc1o8nxpSQpDlwHpac0uZwpjQaSzFqIKY2Q2ACWyPFSZNgBIAQ==
+X-Received: by 2002:a17:903:110c:b0:14d:8859:5c8 with SMTP id n12-20020a170903110c00b0014d885905c8mr56137469plh.156.1649027369110;
+        Sun, 03 Apr 2022 16:09:29 -0700 (PDT)
 Received: from yusufkhan-MS-7B17.lan ([24.17.200.29])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004faed463907sm10164503pfo.0.2022.04.03.16.09.25
+        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004faed463907sm10164503pfo.0.2022.04.03.16.09.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 16:09:26 -0700 (PDT)
+        Sun, 03 Apr 2022 16:09:28 -0700 (PDT)
 From:   Yusuf Khan <yusisamerican@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     jasowang@redhat.com, mikelley@microsoft.com, mst@redhat.com,
@@ -55,13 +55,14 @@ Cc:     jasowang@redhat.com, mikelley@microsoft.com, mst@redhat.com,
         will@kernel.org, axboe@kernel.dk,
         Yusuf Khan <yusisamerican@gmail.com>,
         Christoph Grenz <christophg+lkml@grenz-bonn.de>
-Subject: [PATCH v10 2/3] drivers: ddcci: add drivers for DDCCI
-Date:   Sun,  3 Apr 2022 16:08:50 -0700
-Message-Id: <20220403230850.2986-3-yusisamerican@gmail.com>
+Subject: [PATCH v10 3/3] drivers: ddcci: add drivers for DDCCI
+Date:   Sun,  3 Apr 2022 16:08:51 -0700
+Message-Id: <20220403230850.2986-4-yusisamerican@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220403230850.2986-1-yusisamerican@gmail.com>
 References: <20220403230850.2986-1-yusisamerican@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -73,466 +74,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the backlight driver that utilizes the DDCCI
-driver from patch one to add a backlight driver.
+This patch adds Documentation for the DDCCI drivers.
 
 Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
 Signed-off-by: Christoph Grenz <christophg+lkml@grenz-bonn.de>
 ---
- drivers/video/backlight/Kconfig           |  11 +
- drivers/video/backlight/Makefile          |   1 +
- drivers/video/backlight/ddcci-backlight.c | 411 ++++++++++++++++++++++
- 3 files changed, 423 insertions(+)
- create mode 100644 drivers/video/backlight/ddcci-backlight.c
+ Documentation/ABI/testing/sysfs-driver-ddcci |  57 +++++++++
+ Documentation/driver-api/ddcci.rst           | 122 +++++++++++++++++++
+ 2 files changed, 179 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-ddcci
+ create mode 100644 Documentation/driver-api/ddcci.rst
 
-diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-index e32694c13da5..7a26088c3c3f 100644
---- a/drivers/video/backlight/Kconfig
-+++ b/drivers/video/backlight/Kconfig
-@@ -289,6 +289,17 @@ config BACKLIGHT_QCOM_WLED
- 	  If you have the Qualcomm PMIC, say Y to enable a driver for the
- 	  WLED block. Currently it supports PM8941 and PMI8998.
- 
-+config BACKLIGHT_DDCCI
-+	tristate "DDCCI Backlight Driver"
-+	depends on DDCCI
-+	help
-+	  If you have a DDC/CI supporing monitor, say Y to enable a driver
-+	  to control its backlight using DDC/CI. This could be useful if
-+	  your monitor does not include a backlight driver. For this to be
-+	  useful you need to enable DDCCI support which can be found in
-+	  Device Drivers -> Character devices and that further depends on
-+	  I2C.
-+
- config BACKLIGHT_RT4831
- 	tristate "Richtek RT4831 Backlight Driver"
- 	depends on MFD_RT4831
-diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-index cae2c83422ae..7bfb6e506b35 100644
---- a/drivers/video/backlight/Makefile
-+++ b/drivers/video/backlight/Makefile
-@@ -58,3 +58,4 @@ obj-$(CONFIG_BACKLIGHT_WM831X)		+= wm831x_bl.o
- obj-$(CONFIG_BACKLIGHT_ARCXCNN) 	+= arcxcnn_bl.o
- obj-$(CONFIG_BACKLIGHT_RAVE_SP)		+= rave-sp-backlight.o
- obj-$(CONFIG_BACKLIGHT_LED)		+= led_bl.o
-+obj-$(CONFIG_BACKLIGHT_DDCCI)		+= ddcci-backlight.o
-diff --git a/drivers/video/backlight/ddcci-backlight.c b/drivers/video/backlight/ddcci-backlight.c
+diff --git a/Documentation/ABI/testing/sysfs-driver-ddcci b/Documentation/ABI/testing/sysfs-driver-ddcci
 new file mode 100644
-index 000000000000..d37eb142311d
+index 000000000000..19f77ccf3ed0
 --- /dev/null
-+++ b/drivers/video/backlight/ddcci-backlight.c
-@@ -0,0 +1,411 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  DDC/CI monitor backlight driver
-+ *
-+ *  Copyright (c) 2015 Christoph Grenz
-+ */
-+
-+/*
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms of the GNU General Public License as published by the Free
-+ * Software Foundation; either version 2 of the License, or (at your option)
-+ * any later version.
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+#include <linux/backlight.h>
-+#include <linux/module.h>
-+#include <linux/fb.h>
-+#include <linux/sysfs.h>
-+
-+#include <linux/ddcci.h>
-+
-+
-+#define DDCCI_COMMAND_READ	0x01	/* read ctrl value */
-+#define DDCCI_REPLY_READ	0x02	/* read ctrl value reply */
-+#define DDCCI_COMMAND_WRITE	0x03	/* write ctrl value */
-+#define DDCCI_COMMAND_SAVE	0x0c	/* save current settings */
-+
-+#define DDCCI_MONITOR_LUMINANCE	0x10
-+#define DDCCI_MONITOR_BACKLIGHT	0x13
-+#define DDCCI_MONITOR_BL_WHITE		0x6B
-+
-+static bool convenience_symlink = true;
-+
-+struct ddcci_monitor_drv_data {
-+	struct ddcci_device *device;
-+	struct backlight_device *bl_dev;
-+	struct device *fb_dev;
-+	unsigned char used_vcp;
-+};
-+
-+static int ddcci_monitor_writectrl(struct ddcci_device *device,
-+				   unsigned char ctrl, unsigned short value)
-+{
-+	unsigned char buf[4];
-+	int ret;
-+
-+	buf[0] = DDCCI_COMMAND_WRITE;
-+	buf[1] = ctrl;
-+	buf[2] = (value >> 8);
-+	buf[3] = (value & 255);
-+
-+	ret = ddcci_device_write(device, true, buf, sizeof(buf));
-+
-+	return ret;
-+}
-+
-+static int ddcci_monitor_readctrl(struct ddcci_device *device,
-+				  unsigned char ctrl, unsigned short *value,
-+				  unsigned short *maximum)
-+{
-+	int ret;
-+	unsigned char buf[10];
-+
-+	buf[0] = DDCCI_COMMAND_READ;
-+	buf[1] = ctrl;
-+
-+	ret = ddcci_device_writeread(device, true, buf, 2, sizeof(buf));
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret == 0)
-+		return -ENOTSUPP;
-+
-+	if (ret == 8 && buf[0] == DDCCI_REPLY_READ && buf[2] == ctrl) {
-+		if (value)
-+			*value = buf[6] * 256 + buf[7];
-+
-+		if (maximum)
-+			*maximum = buf[4] * 256 + buf[5];
-+
-+		if (buf[1] == 1)
-+			return -ENOTSUPP;
-+		if (buf[1] != 0)
-+			return -EIO;
-+		return 0;
-+	}
-+
-+	return -EIO;
-+}
-+
-+static int ddcci_backlight_check_fb(struct backlight_device *bl,
-+				   struct fb_info *info)
-+{
-+	struct ddcci_monitor_drv_data *drv_data = bl_get_data(bl);
-+
-+	return drv_data->fb_dev == NULL || drv_data->fb_dev == info->dev;
-+}
-+
-+static int ddcci_backlight_update_status(struct backlight_device *bl)
-+{
-+	struct ddcci_monitor_drv_data *drv_data = bl_get_data(bl);
-+	int brightness = bl->props.brightness;
-+	int ret;
-+
-+	if (bl->props.power != FB_BLANK_UNBLANK ||
-+	    bl->props.state & BL_CORE_FBBLANK)
-+		brightness = 0;
-+
-+	ret = ddcci_monitor_writectrl(drv_data->device, drv_data->used_vcp,
-+				      brightness);
-+	if (ret > 0)
-+		ret = 0;
-+	return ret;
-+}
-+
-+static int ddcci_backlight_get_brightness(struct backlight_device *bl)
-+{
-+	unsigned short value = 0, maxval = 0;
-+	int ret;
-+	struct ddcci_monitor_drv_data *drv_data = bl_get_data(bl);
-+
-+	ret = ddcci_monitor_readctrl(drv_data->device, drv_data->used_vcp,
-+				     &value, &maxval);
-+	if (ret < 0)
-+		return ret;
-+
-+	bl->props.brightness = value;
-+	bl->props.max_brightness = maxval;
-+	ret = value;
-+
-+	return ret;
-+}
-+
-+static const struct backlight_ops ddcci_backlight_ops = {
-+	.options	= 0,
-+	.update_status	= ddcci_backlight_update_status,
-+	.get_brightness = ddcci_backlight_get_brightness,
-+	.check_fb	= ddcci_backlight_check_fb,
-+};
-+
-+static const char *ddcci_monitor_vcp_name(unsigned char vcp)
-+{
-+	switch (vcp) {
-+	case DDCCI_MONITOR_BL_WHITE:
-+		return "backlight";
-+	case DDCCI_MONITOR_LUMINANCE:
-+		return "luminance";
-+	default:
-+		return "???";
-+	}
-+}
-+
-+static const char *ddcci_monitor_next_vcp_item(const char *ptr)
-+{
-+	int depth = 0;
-+
-+	/* Sanity check */
-+	if (ptr == NULL || ptr[0] == '\0')
-+		return NULL;
-+
-+	/* Find next white space outside of parentheses */
-+	while ((ptr = strpbrk(ptr, " ()"))) {
-+		if (!ptr || depth == INT_MAX)
-+			return NULL;
-+		else if (*ptr == '(')
-+			depth++;
-+		else if (depth > 0) {
-+			if (*ptr == ')')
-+				depth--;
-+		} else
-+			break;
-+		++ptr;
-+	}
-+
-+	/* Skip over whitespace */
-+	ptr = skip_spaces(ptr);
-+
-+	/* Check if we're now at the end of the list */
-+	if (*ptr == '\0' || *ptr == ')')
-+		return NULL;
-+
-+	return ptr;
-+}
-+
-+static bool ddcci_monitor_find_vcp(unsigned char vcp, const char *s)
-+{
-+	const char *ptr = s;
-+	char vcp_hex[3];
-+
-+	/* Sanity check */
-+	if (s == NULL || s[0] == '\0')
-+		return false;
-+
-+	/* Create hex representation of VCP */
-+	if (snprintf(vcp_hex, 3, "%02hhX", vcp) != 2) {
-+		pr_err("snprintf failed to convert to hex. This should not happen.\n");
-+		return false;
-+	}
-+
-+	/* Search for it */
-+	do {
-+		if (strncasecmp(vcp_hex, ptr, 2) == 0) {
-+			if (ptr[2] == ' ' || ptr[2] == '(' || ptr[2] == ')')
-+				return true;
-+		}
-+	} while ((ptr = ddcci_monitor_next_vcp_item(ptr)));
-+
-+	return false;
-+}
-+
-+static int ddcci_backlight_create_symlink(struct ddcci_device *ddcci_dev)
-+{
-+	int i, result;
-+	struct device *dev = &ddcci_dev->dev;
-+	struct kernfs_node *dirent;
-+
-+	for (i = 0; i < 3; ++i) {
-+		dev = dev->parent;
-+		if (!dev) {
-+			dev_dbg(&ddcci_dev->dev, "failed to create convenience symlink: ancestor device not found\n");
-+			return -ENOENT;
-+		}
-+	}
-+	dirent = sysfs_get_dirent(dev->kobj.sd, "ddcci_backlight");
-+	if (dirent) {
-+		sysfs_put(dirent);
-+		dev_dbg(&ddcci_dev->dev, "failed to create convenience symlink: %s/ddcci_backlight already exists\n", dev_name(dev));
-+		return -EEXIST;
-+	}
-+
-+	result = sysfs_create_link(&dev->kobj, &ddcci_dev->dev.kobj, "ddcci_backlight");
-+	if (result == 0)
-+		dev_dbg(&ddcci_dev->dev, "created symlink %s/ddcci_backlight\n", dev_name(dev));
-+	else
-+		dev_info(&ddcci_dev->dev, "failed to create convenience symlink: %d\n", result);
-+	return result;
-+}
-+
-+static int ddcci_backlight_remove_symlink(struct ddcci_device *ddcci_dev)
-+{
-+	int i;
-+	struct device *dev = &ddcci_dev->dev;
-+	struct kernfs_node *dirent;
-+
-+	for (i = 0; i < 3; ++i) {
-+		dev = dev->parent;
-+		if (!dev)
-+			return -ENOENT;
-+	}
-+	dirent = sysfs_get_dirent(dev->kobj.sd, "ddcci_backlight");
-+	if (!dirent)
-+		return -ENOENT;
-+
-+	if ((dirent->flags & KERNFS_LINK) == 0) {
-+		sysfs_put(dirent);
-+		dev_dbg(&ddcci_dev->dev, "won't remove %s/ddcci_backlight: not a symlink\n", dev_name(dev));
-+		return -EINVAL;
-+	}
-+
-+	if (dirent->symlink.target_kn != ddcci_dev->dev.kobj.sd) {
-+		sysfs_put(dirent);
-+		dev_dbg(&ddcci_dev->dev, "won't remove %s/ddcci_backlight: we are not the link target\n", dev_name(dev));
-+		return -EINVAL;
-+	}
-+
-+	sysfs_put(dirent);
-+
-+	sysfs_remove_link(&dev->kobj, "ddcci_backlight");
-+	dev_dbg(&ddcci_dev->dev, "removed symlink %s/ddcci_backlight\n", dev_name(dev));
-+	return 0;
-+}
-+
-+static int ddcci_monitor_probe(struct ddcci_device *dev,
-+			       const struct ddcci_device_id *id)
-+{
-+	struct ddcci_monitor_drv_data *drv_data;
-+	struct backlight_properties props;
-+	struct backlight_device *bl = NULL;
-+	int ret = 0;
-+	bool support_luminance, support_bl_white;
-+	unsigned short brightness = 0, max_brightness = 0;
-+	const char *vcps;
-+
-+	dev_dbg(&dev->dev, "probing monitor backlight device\n");
-+
-+	/* Get VCP list */
-+	vcps = ddcci_find_capstr_item(dev->capabilities, "vcp", NULL);
-+	if (IS_ERR(vcps)) {
-+		dev_info(&dev->dev,
-+			 "monitor doesn't provide a list of supported controls.\n");
-+		support_bl_white = support_luminance = true;
-+	} else {
-+		/* Check VCP list for supported VCPs */
-+		support_bl_white = ddcci_monitor_find_vcp(DDCCI_MONITOR_BL_WHITE, vcps);
-+		support_luminance = ddcci_monitor_find_vcp(DDCCI_MONITOR_LUMINANCE, vcps);
-+		/* Fallback to trying if no support is found */
-+		if (!support_bl_white && !support_luminance) {
-+			dev_info(&dev->dev,
-+				 "monitor doesn't announce support for backlight or luminance controls.\n");
-+			support_bl_white = support_luminance = true;
-+		}
-+	}
-+
-+	/* Initialize driver data structure */
-+	drv_data = devm_kzalloc(&dev->dev, sizeof(struct ddcci_monitor_drv_data),
-+				GFP_KERNEL);
-+	if (!drv_data)
-+		return -ENOMEM;
-+	drv_data->device = dev;
-+
-+	if (support_bl_white) {
-+		/* Try getting backlight level */
-+		dev_dbg(&dev->dev,
-+			"trying to access \"backlight level white\" control\n");
-+		ret = ddcci_monitor_readctrl(drv_data->device, DDCCI_MONITOR_BL_WHITE,
-+						&brightness, &max_brightness);
-+		if (ret < 0) {
-+			if (ret == -ENOTSUPP)
-+				dev_info(&dev->dev,
-+					"monitor does not support reading backlight level\n");
-+			else
-+				goto err_free;
-+		} else {
-+			drv_data->used_vcp = DDCCI_MONITOR_BL_WHITE;
-+		}
-+	}
-+
-+	if (support_luminance && !drv_data->used_vcp) {
-+		/* Try getting luminance */
-+		dev_dbg(&dev->dev,
-+			"trying to access \"luminance\" control\n");
-+		ret = ddcci_monitor_readctrl(drv_data->device, DDCCI_MONITOR_LUMINANCE,
-+					     &brightness, &max_brightness);
-+		if (ret < 0) {
-+			if (ret == -ENOTSUPP)
-+				dev_info(&dev->dev,
-+					"monitor does not support reading luminance\n");
-+			else
-+				goto err_free;
-+		} else {
-+			drv_data->used_vcp = DDCCI_MONITOR_LUMINANCE;
-+		}
-+		drv_data->used_vcp = DDCCI_MONITOR_LUMINANCE;
-+	}
-+
-+	if (!drv_data->used_vcp)
-+		goto err_free;
-+
-+	/* Create brightness device */
-+	memset(&props, 0, sizeof(props));
-+	props.type = BACKLIGHT_RAW;
-+	props.max_brightness = max_brightness;
-+	props.brightness = brightness;
-+	bl = devm_backlight_device_register(&dev->dev, dev_name(&dev->dev),
-+					    &dev->dev, drv_data,
-+					    &ddcci_backlight_ops, &props);
-+	drv_data->bl_dev = bl;
-+	if (IS_ERR(bl)) {
-+		dev_err(&dev->dev, "failed to register backlight\n");
-+		return PTR_ERR(bl);
-+	}
-+	dev_info(&dev->dev, "registered %s as backlight device %s\n",
-+		 ddcci_monitor_vcp_name(drv_data->used_vcp),
-+		 dev_name(&dev->dev));
-+
-+	if (convenience_symlink)
-+		ddcci_backlight_create_symlink(dev);
-+
-+	goto end;
-+err_free:
-+	devm_kfree(&dev->dev, drv_data);
-+end:
-+	return ret;
-+}
-+
-+static int ddcci_monitor_remove(struct ddcci_device *dev)
-+{
-+	dev_dbg(&dev->dev, "removing device\n");
-+	ddcci_backlight_remove_symlink(dev);
-+	return 0;
-+}
-+
-+static struct ddcci_device_id ddcci_monitor_idtable[] = {
-+	{ "monitor", DDCCI_ANY_ID, DDCCI_ANY_ID, DDCCI_ANY_ID, DDCCI_ANY_ID, 0 },
-+	{}
-+};
-+
-+static struct ddcci_driver ddcci_backlight_driver = {
-+	.driver = {
-+		.name	= "ddcci-backlight",
-+		.owner	= THIS_MODULE,
-+	},
-+
-+	.id_table	= ddcci_monitor_idtable,
-+	.probe		= ddcci_monitor_probe,
-+	.remove		= ddcci_monitor_remove,
-+};
-+
-+module_ddcci_driver(ddcci_backlight_driver);
-+
-+/* Module parameter description */
-+module_param(convenience_symlink, bool, 0644);
-+MODULE_PARM_DESC(convenience_symlink, "add convenience symlink \"ddcci_backlight\" to ancestor device in sysfs (default true)");
-+
-+MODULE_AUTHOR("Christoph Grenz <christophg+lkml@grenz-bonn.de>");
-+MODULE_DESCRIPTION("DDC/CI generic monitor backlight driver");
-+MODULE_VERSION("0.4.2");
-+MODULE_LICENSE("GPL");
-+
-+MODULE_ALIAS("ddcci:monitor-*-*-*-*");
++++ b/Documentation/ABI/testing/sysfs-driver-ddcci
+@@ -0,0 +1,57 @@
++What:		/sys/bus/ddcci/ddcci<I²C bus number>i<hex address>
++Date:		March 2022
++KernelVersion:	5.18
++Contact:	Christoph Grenz <christophg+lkml@grenz-bonn.de>
++Description:	This file is a user interface for an internal
++		dependent device on the I2C bus, it exports the same
++		information as the master device(/sys/bus/ddcci/
++		ddcci<I²C bus number>) that is referenced in this
++		document.
++
++What:		/sys/bus/ddcci/ddcci<I²C bus number>e<hex address>
++Date:		March 2022
++KernelVersion:	5.18
++Contact:	Christoph Grenz <christophg+lkml@grenz-bonn.de>
++Description:	This file is a user interface for an external
++		dependent device on the I2C bus, it exports the same
++		information as the master device(/sys/bus/ddcci/
++		ddcci<I²C bus number>) that is referenced in this
++		document.
++
++What:		/sys/bus/ddcci/ddcci<I²C bus number>
++Date:		March 2022
++KernelVersion:	5.18
++Contact:	Christoph Grenz <christophg+lkml@grenz-bonn.de>
++Description:	This file provides the user interface for the
++		master device on the I2C bus. It exports the following
++		peices of information:
++		- idProt
++		ACCESS.bus protocol supported by the device. Usually
++		"monitor".
++
++		- idType
++		ACCESS.bus device subtype. Usually "LCD" or "CRT".
++
++		- idModel
++		ACCESS.bus device model identifier. Usually a
++		shortened form of the device model name.
++
++		- idVendor
++		ACCESS.bus device vendor identifier. Empty if the
++		Identification command is not supported.
++
++		- idModule
++		ACCESS.bus device module identifier. Empty if the
++		Identification command is not supported.
++
++		- idSerial
++		32 bit device number. A fixed serial number if it's
++		positive, a temporary serial number if negative and zero
++		if the Identification command is not supported.
++
++		- modalias
++		A combined identifier for driver selection. It has the form:
++		ddcci:<idProt>-<idType>-<idModel>-<idVendor>-<idModule>.
++		All non-alphanumeric characters (including whitespace)
++		in the model, vendor or module parts are replaced by
++		underscores to prevent issues with software like systemd-udevd.
+diff --git a/Documentation/driver-api/ddcci.rst b/Documentation/driver-api/ddcci.rst
+new file mode 100644
+index 000000000000..2b7de1ac2656
+--- /dev/null
++++ b/Documentation/driver-api/ddcci.rst
+@@ -0,0 +1,122 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++==============
++DDC/CI
++==============
++
++1. Introduction
++===============
++DDC/CI is a control protocol for monitor settings supported by most
++monitors since about 2005. It is based on ACCESS.bus (an early USB predecessor).
++This could be used to create drivers that communicate with the DDCCI component,
++see ddcci-backlight for an example.
++
++2. sysfs interface
++==================
++Each detected DDC/CI device gets a directory in /sys/bus/ddcci/devices.
++The main device on a bus is named ddcci[I²C bus number].
++Internal dependent devices are named ddcci[I²C bus number]i[hex address]
++External dependent devices are named ddcci[I²C bus number]e[hex address]
++There the following files export information about the device:
++
++capabilities
++The full ACCESS.bus capabilities string. It contains the protocol,
++type and model of the device, a list of all supported command
++codes, etc. See the ACCESS.bus spec for more information.
++
++- idProt
++ACCESS.bus protocol supported by the device. Usually "monitor".
++
++- idType
++ACCESS.bus device subtype. Usually "LCD" or "CRT".
++
++- idModel
++ACCESS.bus device model identifier. Usually a shortened form of the
++device model name.
++
++- idVendor
++ACCESS.bus device vendor identifier. Empty if the Identification command
++is not supported.
++
++- idModule
++ACCESS.bus device module identifier. Empty if the Identification command
++is not supported.
++
++- idSerial
++32 bit device number. A fixed serial number if it's positive, a temporary
++serial number if negative and zero if the
++Identification command is not supported.
++
++- modalias
++A combined identifier for driver selection. It has the form:
++ddcci:<idProt>-<idType>-<idModel>-<idVendor>-<idModule>.
++All non-alphanumeric characters (including whitespace) in the model,
++vendor or module parts are replaced by underscores to prevent issues
++with software like systemd-udevd.
++
++3. Character device interface
++=============================
++For each DDC/CI device a character device in
++/dev/bus/ddcci/[I²C bus number]/ is created,
++127 devices are assigned in total.
++
++The main device on the bus is named display.
++
++Internal dependent devices are named i[hex address]
++
++External dependent devices are named e[hex address]
++
++These character devices can be used to issue commands to a DDC/CI device
++more easily than over i2c-dev devices. They should be opened unbuffered.
++To send a command just write the command byte and the arguments with a
++single write() operation. The length byte and checksum are automatically
++calculated.
++
++To read a response use read() with a buffer big enough for the expected answer.
++
++NOTE: The maximum length of a DDC/CI message is 32 bytes.
++
++4. ddcci-backlight (monitor backlight driver)
++=============================================
++[This is not specific to the DDC/CI backlight driver, if you already dealt with
++backlight drivers, skip over this.]
++
++For each monitor that supports accessing the Backlight Level White
++or the Luminance property, a backlight device of type "raw" named like the
++corresponding ddcci device is created. You can find them in /sys/class/backlight/.
++For convenience a symlink "ddcci_backlight" on the device associated with the
++display connector in /sys/class/drm/ to the backlight device is created, as
++long as the graphics driver allows to make this association.
++
++5. Limitations
++==============
++
++-Dependent devices (sub devices using DDC/CI directly wired to the monitor,
++like  Calibration devices, IR remotes, etc.) aren't automatically detected.
++You can force detection of external dependent devices by writing
++"ddcci-dependent [address]" into /sys/bus/i2c/i2c-?/new_device.
++
++There is no direct synchronization if you manually change the luminance
++with the buttons on your monitor, as this can only be realized through polling
++and some monitors close their OSD every time a DDC/CI command is received.
++
++Monitor hotplugging is not detected. You need to detach/reattach the I²C driver
++or reload the module.
++
++6. Debugging
++============
++Both drivers use the dynamic debugging feature of the Linux kernel.
++To get detailed debugging messages, set the dyndbg module parameter.
++If you want to enable debugging permanently across reboots, create a file
++/etc/modprobe.d/ddcci.conf containing lines like the following before loading the modules:
++
++options ddcci dyndbg
++options ddcci-backlight dyndbg
++
++7. Origin
++============
++This driver originally came from Christoph Grenz in DKMS form here:
++https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux
++with multiple backups available on the wayback machine. It also
++inlcudes a example program for the usage of this driver in
++userland.
 -- 
 2.25.1
 

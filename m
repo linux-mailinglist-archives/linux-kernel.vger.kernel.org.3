@@ -2,189 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A353B4F0B91
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 19:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB6C4F0B94
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 19:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359676AbiDCRYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 13:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S1359654AbiDCR14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 13:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359654AbiDCRYg (ORCPT
+        with ESMTP id S233911AbiDCR1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 13:24:36 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FA939836;
-        Sun,  3 Apr 2022 10:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649006562; x=1680542562;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kg3nT9zXXv061+GqAw9adWjDJuUK/w2Dr4majqksh4k=;
-  b=Z0eZ59Fp7LPrRDbZMeKQdugdoFWL1UzSdHs0uI3Kl0mInG5l6+65iFog
-   jnAYMbh0fypUYxk2KXOGTRh8R1V3vgeQA9qN8APWaajePoooBtLjQgUZK
-   ELGwXWuZfl12h4nN2g+zvtXkq/g11P4q5njB6uHfuOUR4aZM8g7U2ZMsK
-   lhUynb5EofZQvPqz8IRYFF82BAQoxPM4G8UbcbEtPIW7wHEblBwaGWB9X
-   ZJGOQ/bN1Sd92gLPfI7zPiujOEu5V4lMjZzSVLTbcOvn0U3cvUIydEEG7
-   99E+GoYgYcIDdV4RrbNiEqvUqDcwukT2KskkIMfqw8QGYE3jY6ssCb+GV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="257980051"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="257980051"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 10:22:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="651261140"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Apr 2022 10:22:37 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nb3vx-00018E-AT;
-        Sun, 03 Apr 2022 17:22:37 +0000
-Date:   Mon, 4 Apr 2022 01:22:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bui Quang Minh <minhquangbui99@gmail.com>, cgroups@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Bui Quang Minh <minhquangbui99@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] cgroup: Kill the parent controller when its last child
- is killed
-Message-ID: <202204040103.yTRTggqu-lkp@intel.com>
-References: <20220403135717.8294-1-minhquangbui99@gmail.com>
+        Sun, 3 Apr 2022 13:27:55 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32200393D8;
+        Sun,  3 Apr 2022 10:26:01 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id h7so13331957lfl.2;
+        Sun, 03 Apr 2022 10:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r3scStYqZ3wk1G1xDmtw2Vpu4MDgRB2HE25Bs83q2zE=;
+        b=PVBZAamv/D8qgzwVXyP5SU2fYfkNqZpTXUksNOgIJ0sFKm9wpoIJIm4B07NeX7VtP3
+         6Tzt/gXrpXmb+YZjHEfL74es7ioP2HyjWfT85lyactqSfYOYQBurv94T6c8tWgeSbDIk
+         Pa+b+t8Su2l3xFMEsRxleS7Gw7R6L5xetHuO4qfz/zdQmiPU45Rly6oI2h+PGKPMpeDf
+         r5Qgw+DO3vSD1u9J1MulM9rjA2cA4vwD3CeKIS5BxUzrE/rLH8OeekEeghN/2GZMg0H+
+         I5XwoZ91sn4+gkAaJK3ncS1lU2gkRzouaY//XZ+UOyLo833Q9QLMtENDzi5dUfCKvVHl
+         comQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r3scStYqZ3wk1G1xDmtw2Vpu4MDgRB2HE25Bs83q2zE=;
+        b=GrkV/sZ8tOFn+EK/DMw30mF+fWX7l4LaHBJtdzQ8TFZG+ATfaHM9BDuXSFogFbWSUl
+         ZenI4gYpG/pOBuJzD3FVPZcd7/S3BNhaP7+hlsGgC56pL9MpC0yFCc6kGGYBq2yugI3X
+         WWKI1j+8uTmwE2BbvkmKxUCmFT31an5cGOJqCVsDmHqIgYCjEEbROifnQzTtCSk/kdZD
+         0TBtg2zFvddiRb0gDs3aSOuM7bpctcz85FPHseKhWux1Wt3VzcF3C6xk1umMooFjAVw/
+         FP2UF8LSyGe7zCGL5tmLmt8MV/H4qsDw2HHhNYgNq+mm4l3nE+bC5sBknMgDTkBjxHmK
+         4dIg==
+X-Gm-Message-State: AOAM532Ik9jVTXpN6i2ZfA/3hgiATgHW69X4oMhLEaZqutFtxpmU/Evv
+        mv6swJ6YRrhMKjl5+hOf8Dw=
+X-Google-Smtp-Source: ABdhPJzbykuiQjUQeiT6oYYmsJzhiJsqIHtUWSPGGkPtSKeBxTsh/4T1amdJn25mhYruTAXuiB1yxQ==
+X-Received: by 2002:a05:6512:b8d:b0:44b:111:1643 with SMTP id b13-20020a0565120b8d00b0044b01111643mr1556982lfv.68.1649006758226;
+        Sun, 03 Apr 2022 10:25:58 -0700 (PDT)
+Received: from localhost.localdomain ([178.136.134.212])
+        by smtp.googlemail.com with ESMTPSA id t4-20020a2e9c44000000b0024ac62a66d9sm806682ljj.60.2022.04.03.10.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 10:25:56 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
+        Ed Brindley <kernel@maidavale.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
+Date:   Sun,  3 Apr 2022 20:25:42 +0300
+Message-Id: <20220403172546.953-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220403135717.8294-1-minhquangbui99@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bui,
+CROSSHAIR VI HERO motherboard is incorrectly named as
+ROG CROSSHAIR VI HERO. Issue is found by github user in [1].
 
-Thank you for the patch! Yet something to improve:
+[1]: https://github.com/electrified/asus-wmi-sensors/pull/79
 
-[auto build test ERROR on tj-cgroup/for-next]
-[also build test ERROR on v5.17 next-20220401]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+---
+ drivers/hwmon/asus_wmi_sensors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bui-Quang-Minh/cgroup-Kill-the-parent-controller-when-its-last-child-is-killed/20220403-215911
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-config: arm-mxs_defconfig (https://download.01.org/0day-ci/archive/20220404/202204040103.yTRTggqu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/2bc22feae8a913c7f371bc79ef9967122d8d326c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bui-Quang-Minh/cgroup-Kill-the-parent-controller-when-its-last-child-is-killed/20220403-215911
-        git checkout 2bc22feae8a913c7f371bc79ef9967122d8d326c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+index 8fdcb62ae52d..9e935e34c998 100644
+--- a/drivers/hwmon/asus_wmi_sensors.c
++++ b/drivers/hwmon/asus_wmi_sensors.c
+@@ -71,7 +71,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
+-	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("CROSSHAIR VI HERO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> kernel/cgroup/cgroup.c:5169:39: error: no member named 'refcnt' in 'struct cgroup_bpf'
-                   if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
-                                             ~~~~~~~~~ ^
-   1 error generated.
-
-
-vim +5169 kernel/cgroup/cgroup.c
-
-  5148	
-  5149	static void css_release_work_fn(struct work_struct *work)
-  5150	{
-  5151		struct cgroup_subsys_state *css =
-  5152			container_of(work, struct cgroup_subsys_state, destroy_work);
-  5153		struct cgroup_subsys *ss = css->ss;
-  5154		struct cgroup *cgrp = css->cgroup;
-  5155		struct cgroup *parent = cgroup_parent(cgrp);
-  5156	
-  5157		mutex_lock(&cgroup_mutex);
-  5158	
-  5159		css->flags |= CSS_RELEASED;
-  5160		list_del_rcu(&css->sibling);
-  5161	
-  5162		/*
-  5163		 * If parent doesn't have any children, start killing it.
-  5164		 * And don't kill the default root.
-  5165		 */
-  5166		if (parent && list_empty(&parent->self.children) &&
-  5167		    parent != &cgrp_dfl_root.cgrp &&
-  5168		    !percpu_ref_is_dying(&parent->self.refcnt)) {
-> 5169			if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
-  5170				cgroup_bpf_offline(parent);
-  5171			percpu_ref_kill(&parent->self.refcnt);
-  5172		}
-  5173	
-  5174		if (ss) {
-  5175			/* css release path */
-  5176			if (!list_empty(&css->rstat_css_node)) {
-  5177				cgroup_rstat_flush(cgrp);
-  5178				list_del_rcu(&css->rstat_css_node);
-  5179			}
-  5180	
-  5181			cgroup_idr_replace(&ss->css_idr, NULL, css->id);
-  5182			if (ss->css_released)
-  5183				ss->css_released(css);
-  5184		} else {
-  5185			struct cgroup *tcgrp;
-  5186	
-  5187			/* cgroup release path */
-  5188			TRACE_CGROUP_PATH(release, cgrp);
-  5189	
-  5190			cgroup_rstat_flush(cgrp);
-  5191	
-  5192			spin_lock_irq(&css_set_lock);
-  5193			for (tcgrp = cgroup_parent(cgrp); tcgrp;
-  5194			     tcgrp = cgroup_parent(tcgrp))
-  5195				tcgrp->nr_dying_descendants--;
-  5196			spin_unlock_irq(&css_set_lock);
-  5197	
-  5198			/*
-  5199			 * There are two control paths which try to determine
-  5200			 * cgroup from dentry without going through kernfs -
-  5201			 * cgroupstats_build() and css_tryget_online_from_dir().
-  5202			 * Those are supported by RCU protecting clearing of
-  5203			 * cgrp->kn->priv backpointer.
-  5204			 */
-  5205			if (cgrp->kn)
-  5206				RCU_INIT_POINTER(*(void __rcu __force **)&cgrp->kn->priv,
-  5207						 NULL);
-  5208		}
-  5209	
-  5210		mutex_unlock(&cgroup_mutex);
-  5211	
-  5212		INIT_RCU_WORK(&css->destroy_rwork, css_free_rwork_fn);
-  5213		queue_rcu_work(cgroup_destroy_wq, &css->destroy_rwork);
-  5214	}
-  5215	
-
+base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+prerequisite-patch-id: 3e3c2f102857578c8e0ca204b552fefb2a57ddf3
+prerequisite-patch-id: 94ca5a5c7ebefa5fff0e287d0cc9d571ff2bc415
+prerequisite-patch-id: 61c8e1af178282b3da7ab8e57f141be3e1ad2281
+prerequisite-patch-id: 24a90db10ac4f7445c065ca703bf295bb60f60e1
+prerequisite-patch-id: bc8bd3988720bce1923f266b9029e8b4577032b6
+prerequisite-patch-id: 5a150577643ec4cd7fbee8db3d9c1562bf0669bd
+prerequisite-patch-id: 6991b9920fe16c0da7fd13e1dc52bf1e29e68d6a
+prerequisite-patch-id: 49ec7bda24e420231d812dc83bb0383fdfa04256
+prerequisite-patch-id: b70ec1d44a1f313bd60ecb84115b6db54eda3273
+prerequisite-patch-id: d500e4a21722432152a4988480af1d67407de206
+prerequisite-patch-id: 2459efcb493cfd5b2e425cf390ff86c71e4d54a0
+prerequisite-patch-id: 74cd3e2498edfc9980fa159bf800240ad59f43a1
+prerequisite-patch-id: ab6f755b65d101e05f41a8a184dd720047738474
+prerequisite-patch-id: 4ab262658b83a93ecd910bf7b904fb75fcdb0f1a
+prerequisite-patch-id: e686f0332ac2efde1b6577efe1a573cbfcd4ced2
+prerequisite-patch-id: a1a635a5327b2d041523bb09ba3d395b01210768
+prerequisite-patch-id: 7ad265c16dc64e612383fd2e97b569ffdade4cee
+prerequisite-patch-id: 6d682cfafbc79e66d4163a30866d926aad8c5833
+prerequisite-patch-id: f159482a5ac26a863ba85da010005dae14c7108e
+prerequisite-patch-id: a429026f0e759896817ba97cd705ba2b10bb1469
+prerequisite-patch-id: 11751c70f9ca541565943ac5bf71361821bd8944
+prerequisite-patch-id: ef0d0dbc51f433c0d090f463e51dea13a9363039
+prerequisite-patch-id: 424fabfc5b896c7fbdfef1f6077d88c000d67846
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

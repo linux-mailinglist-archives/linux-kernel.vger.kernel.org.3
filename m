@@ -2,89 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5764E4F0D0F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123FF4F0D14
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376731AbiDCXwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 19:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S1376738AbiDCXxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 19:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355215AbiDCXwI (ORCPT
+        with ESMTP id S242803AbiDCXxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 19:52:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0046127CD5;
-        Sun,  3 Apr 2022 16:50:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DF7860FCE;
-        Sun,  3 Apr 2022 23:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E34FAC340F3;
-        Sun,  3 Apr 2022 23:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649029812;
-        bh=qfZV7Dhd5nr5eNuhCIcYPdfMBnCJLTwYyEedtJhWN2o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=L4HBaEIQFfvLJXN/ZxkXK2Rf8zxDebS9RNWIhuN4+HFiag1tO+zWkJKBMPvnhhDCq
-         fCwInqkEyPE9zYkffONY/sQ7GuknNb+VDMHif+DlWn5jbAMZGMoD+fQ4AQpO97k44R
-         voesww62SbeYKArTKvEGf7LfPo1swnvROPsQ4y3c7OfGr3rVA+Z3oyHHGjpUIRL5Uq
-         N2QrtBq5XO6jG4v+JXwGaS8mdgXx7tcotuvwcObPiz/hDVwOs2PaNWHyta9f+BO0oq
-         PEbXDQPUnkWUCxGuoxCsj6HMTz6Prdh0npBP4LWrplrPgUUN+ihfxIQL28eN33dbBq
-         6bL07M+WLKwuw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3DD6E85BCB;
-        Sun,  3 Apr 2022 23:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 3 Apr 2022 19:53:15 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2533A190;
+        Sun,  3 Apr 2022 16:51:20 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id g21so9366531iom.13;
+        Sun, 03 Apr 2022 16:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZQegRDWXuFQvAnn9quvvw72t2AEEj0/+XbF0zPO9DH0=;
+        b=l8XricTgShuuNHcB+kBCjEJ94MIdLEwD+IvlBXVFTvj8WfauFzIX+dxks3UdnX3lYW
+         i8sXj1zVrVsye7TGcP+kMLlg5K4b7WjWPzXE9VIIYmp5zOgQK23sdLstbn/UA/8Xqu0t
+         nNSBwcGc1QQyRG5YygxaO/hYx5eQbTGYpQYKy1nuznUglkNuSRFnwfmBhNn0kf0TdGpb
+         qA5BH3KK1nSIblRKWIy2lL7bYiM6+A8eNGOrLMq4CWNJgxa9JCWfhCd5ROWYTOmWCuqm
+         m4GC7cnPrvIAinOBzZlWBocKyxO26RaEpjJ7xh3jBttpbQIBikZXAbe3LILkRjiSqI1G
+         N2fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZQegRDWXuFQvAnn9quvvw72t2AEEj0/+XbF0zPO9DH0=;
+        b=dCZt2Q+sLKcYOmZGGgwUuhpGZfv7hYy+j/eOII2XNKiXijB/x6lmnP1ZVXhk0AN6Cw
+         YE3n9nR8O58cTRJSJXqr/q8I38OmqqRCbmzVh6mMEcsvjpsCfDBfkJsPppPyv2aUuu1z
+         jxvn7T6GR/mS1EJb9sr7hRMH8hP+B6oBDB3YU4WwY1NbV56Ds1rqvtEn3hfar44kMxU1
+         4NCGQwiMojunFCG7s5SD2YvM0ccoGbXMqQaNNwE76f9uO5OMmbaGJR+I/izFn6XPExj9
+         jXK3bJWqy07CAAOD+m8pyGl55IA46btxeZ3aZSlAbWkxk3OyBPhXsHNzf+C8gh2/YkoC
+         u+Wg==
+X-Gm-Message-State: AOAM531RiJZ7ufoWhoPTRfqwl1EMVqrJxUSdOjk5Kz1iMWj13imnxQVv
+        v7uYqJZor52nsLM2+dzOZp4Bs/htv8lG5T3jPUY=
+X-Google-Smtp-Source: ABdhPJxyWRaqrmgOvW/g9S/6eZuPeqvJMOwJtFFVNrqwch0EDAeQToTiTmLqgBnTZwkiHL22cQNBqt+7csz6wTz1CW0=
+X-Received: by 2002:a05:6638:2105:b0:323:68db:2e4e with SMTP id
+ n5-20020a056638210500b0032368db2e4emr10956837jaj.234.1649029879461; Sun, 03
+ Apr 2022 16:51:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
- functions
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164902981179.6975.18361732639754204431.git-patchwork-notify@kernel.org>
-Date:   Sun, 03 Apr 2022 23:50:11 +0000
-References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220331154555.422506-1-milan@mdaverde.com> <20220331154555.422506-4-milan@mdaverde.com>
+ <8457bd5f-0541-e128-b033-05131381c590@isovalent.com> <CAEf4BzaqqZ+bFamrTXSzjgXgAEkBpCTmCffNR-xb8SwN6TNaOw@mail.gmail.com>
+ <CACdoK4JbhtOpQeGo+NUh5t3nQG8No8Di6ce-9gwgNw3az2Fu=A@mail.gmail.com>
+In-Reply-To: <CACdoK4JbhtOpQeGo+NUh5t3nQG8No8Di6ce-9gwgNw3az2Fu=A@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sun, 3 Apr 2022 16:51:08 -0700
+Message-ID: <CAEf4BzbBdsZzdH9hTTSnuaXq8bhEORFhpaoaT47WA54P4Gr3MQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf/bpftool: handle libbpf_probe_prog_type errors
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Milan Landaverde <milan@mdaverde.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Apr 1, 2022 at 2:33 PM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> On Fri, 1 Apr 2022 at 19:42, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Fri, Apr 1, 2022 at 9:05 AM Quentin Monnet <quentin@isovalent.com> wrote:
+> > >
+> > > 2022-03-31 11:45 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
+> > > > Previously [1], we were using bpf_probe_prog_type which returned a
+> > > > bool, but the new libbpf_probe_bpf_prog_type can return a negative
+> > > > error code on failure. This change decides for bpftool to declare
+> > > > a program type is not available on probe failure.
+> > > >
+> > > > [1] https://lore.kernel.org/bpf/20220202225916.3313522-3-andrii@kernel.org/
+> > > >
+> > > > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
+> > > > ---
+> > > >  tools/bpf/bpftool/feature.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+> > > > index c2f43a5d38e0..b2fbaa7a6b15 100644
+> > > > --- a/tools/bpf/bpftool/feature.c
+> > > > +++ b/tools/bpf/bpftool/feature.c
+> > > > @@ -564,7 +564,7 @@ probe_prog_type(enum bpf_prog_type prog_type, bool *supported_types,
+> > > >
+> > > >               res = probe_prog_type_ifindex(prog_type, ifindex);
+> > > >       } else {
+> > > > -             res = libbpf_probe_bpf_prog_type(prog_type, NULL);
+> > > > +             res = libbpf_probe_bpf_prog_type(prog_type, NULL) > 0;
+> > > >       }
+> > > >
+> > > >  #ifdef USE_LIBCAP
+> > >
+> >
+> > A completely unrelated question to you, Quentin. How hard is bpftool's
+> > dependency on libcap? We've recently removed libcap from selftests, I
+> > wonder if it would be possible to do that for bpftool as well to
+> > reduce amount of shared libraries bpftool depends on.
+>
+> There's not a super-strong dependency on it. It's used in feature
+> probing, for two things.
+>
+> First one is to be accurate when we check that the user has the right
+> capabilities for probing efficiently the system. A workaround consists
+> in checking that we run with uid=0 (root), although it's less
+> accurate.
+>
+> Second thing is probing as an unprivileged user: if bpftool is run to
+> probe as root but with the "unprivileged" keyword, libcap is used to
+> drop the CAP_SYS_ADMIN and run the probes without it. I don't know if
+> there's an easy alternative to libcap for that. Also I don't know how
+> many people use this feature, but I remember that this was added
+> because there was some demand at the time, so presumably there are
+> users relying on this.
+>
+> This being said, libcap is optional for compiling bpftool, so you
+> should be able to have it work just as well if the library is not
+> available on the system? Basically you'd just lose the ability to
+> probe as an unprivileged user. Do you need to remove the optional
+> dependency completely?
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Well, see recent patches from Martin:
 
-On Fri, 1 Apr 2022 10:15:54 +0800 you wrote:
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
-> 
-> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> 
-> [...]
+82cb2b30773e bpf: selftests: Remove libcap usage from test_progs
+b1c2768a82b9 bpf: selftests: Remove libcap usage from test_verifier
+663af70aabb7 bpf: selftests: Add helpers to directly use the capget
+and capset syscall
 
-Here is the summary with links:
-  - selftests/bpf: Return true/false (not 1/0) from bool functions
-    https://git.kernel.org/bpf/bpf-next/c/f6d60facd9b6
+We completely got rid of libcap dependency and ended up with more
+straightforward code. So I was wondering if this is possible for
+bpftool. The less unnecessary library dependencies - the better. The
+less feature detection -- the better. That's my only line of thought
+here :)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+> Quentin
+>
+> PS: Not directly related but since we're talking of libcap, we
+> recently discovered that the lib is apparently changing errno when it
+> maybe shouldn't and plays badly with batch mode:
+> https://stackoverflow.com/questions/71608181/bpf-xdp-bpftool-batch-file-returns-error-reading-batch-file-failed-opera
 
-
+just another argument in favor of getting rid of extra layers of dependencies

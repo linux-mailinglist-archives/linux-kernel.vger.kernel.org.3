@@ -2,181 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E574F0A80
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F391E4F0A88
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359117AbiDCPGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 11:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
+        id S1359127AbiDCPHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 11:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353718AbiDCPGg (ORCPT
+        with ESMTP id S234584AbiDCPHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 11:06:36 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3403630B
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:04:41 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id d138so4986379ybc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 08:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o1a2JVSeIsg2n4ZPERcRwhBo2C98JOFbdzvDc4k4uyY=;
-        b=lPiPbC/t1ZONedq5p4jRaLJSgnXNlu8ckGlSdays2/JRFNJ8SQ22JXehsnSCOBhtRE
-         oQBxdjUsuCd7ZmU+nVc7oWCZNnoynu9fz9eSmY/Duz2fHGiCsVlmHmeJzqIKQh999KLv
-         k4d1agL0ZunXTrAdcC7/I3mWf+udbWmRvNfgdN0IUCDpKwo0j7Aqk4TD3hKC4vwmY6V/
-         ijxSemBS8EgzN0y9OReOorBobYABLcxH6k1uHuH2f/z6zoO3CO89P+yOqWpnEM8XP2Mo
-         rbpFshHNFodJb+MFXRq6CoFAazWBBDm3vxKlIyvFCnZxDl1mdI1fPhj4yiWNQ7WjczKI
-         QgFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o1a2JVSeIsg2n4ZPERcRwhBo2C98JOFbdzvDc4k4uyY=;
-        b=L/4T7YI8uYxKOX861Q7c1asAL2n2UaX4gjrDwfVCgXv57ZmL7cwXp6vBlchCOgvoGa
-         hcPo1eIdV/xbJJ01OEzzJCa8UW0fdv5dn6MKXtisJZaHHTKO9WgcOkaaGU9ha9R35tjK
-         DwY+iJeu4thLQ2ZSO7fXYJJEtf+PboCu3ySpA8VF2xrirLilzBj7AdljqbRaNY93Occ/
-         bo+AqqVD3OCTxfR5VXD2m78lSqB/FHgG4lHns4iuC9zgPttFNtlMmT5/CY+X7jwWEW6J
-         gO0dTWnEDLAIaq/n8pwNV9FVIyVzCbvZ70WYP2IorvmmMs2JERGhxG8T5iOhVxBEEGkA
-         iRTw==
-X-Gm-Message-State: AOAM532TzulXBN7SKB0dDyBEzxBh9+d+dToD6oGb6DxoCwH4glhuZTlK
-        lKcJgYWj0cwetyCrwMSn0+ky8NcySD5kq9KQAg3oW0OVkgkKbQ==
-X-Google-Smtp-Source: ABdhPJx6EzmSEWE8rVRtD7a3gHc2p3QZhet3QHh22eUylFDpjS2S+FoLE1X153mpIx+V6iPztColsYQlOCd/kjsa5rk=
-X-Received: by 2002:a25:3852:0:b0:63d:bdb4:d882 with SMTP id
- f79-20020a253852000000b0063dbdb4d882mr1876485yba.426.1648998280430; Sun, 03
- Apr 2022 08:04:40 -0700 (PDT)
+        Sun, 3 Apr 2022 11:07:35 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2078.outbound.protection.outlook.com [40.107.100.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935033669B;
+        Sun,  3 Apr 2022 08:05:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AIBZwDzka8AZr3m/7chkV3JZYblsfTHzTnexFgWeJDOGRMmjKZCaLMociYcix6IlPiff0a4XLmPwVaHue13uoyiZbXVd6wE8tU85Gyf9HHOu0/PRAVXJdnvrxAxmDmO5aCE+rQet0iLgVdLcFmm5sERNgF7Yk3NJFZBJ4jbM7bgGi38bzH5VYkEv8Ix/nL3uEOOLG1iAR6Ba7NbG6S9mzFqJO2nhwdp4BYRZC5AIffSLr2TBIRe2iJip4Niu3RsOnCegBsYDAIC8zTZsR0xjfCMDdXKRsrNJpOqhQGdCMlHTGyMByJTglQpxBevzL8GaWVXFmAxzg4l/IxwAiecuFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7/VMvSeij9hYWiiADNTHr19YYUqZEdL5d052zq9hS0Q=;
+ b=B8pGCy0rnZAy/BuWDZKkcnXAqcb5ayDIShwMjyoJG2lJtBvtxjzQkVfcmCDqMl2kxbhkI0Fy43aEiX1Pv2gWBtqjZJ708VJ2sNaXCBNg2aS07L4HGxcBEmsw8o6EBrSsn8narH6NhhfgHFvclznTuWE+1Uw+CIo5zz4ICMaJg3JvHStgYCzYpmQxoD7SsQo09YW162sWjDAX0e4WZ7n5nh+NKNFFg8i4fZ+ijhE3YOz7/DhIseXcKN4FHl0MC8ykJ26qGGTUWaqnxnfX2xpsU3tCcK2wLiYkjwyoTGkmHkJPABGk9nEjwCLKAmRWU5iSQSeP3AamgdUTY/zf95RMOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7/VMvSeij9hYWiiADNTHr19YYUqZEdL5d052zq9hS0Q=;
+ b=OWVzaUWEDSBk2umTXt56UsBRGEFY2a1gbs6iNrHuaZj8MbGPqDK1UgGlSLaDYmK6xBEXGgk646bcpwcYdlhX57s6d/fVDd3pJtzSXE0hJ8v/Q6pZTxv5vbtHCeo3a62VuyZU2Ao8dgkrLxe2GvNKge+Z1oYdIONp7/lD3tePrpE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM5PR12MB1340.namprd12.prod.outlook.com (2603:10b6:3:76::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Sun, 3 Apr
+ 2022 15:05:39 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5123.031; Sun, 3 Apr 2022
+ 15:05:36 +0000
+Message-ID: <4ca00dee-86b2-56b0-423a-76ef28260385@amd.com>
+Date:   Sun, 3 Apr 2022 17:05:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH next v2] dma-buf/sync-file: do not allow zero size
+ allocation
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, sumit.semwal@linaro.org,
+        gustavo@padovan.org, daniel.vetter@ffwll.ch
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <2d1f9ba9-ea2a-e41c-eae6-0ba348cdf202@gmail.com>
+ <20220401213114.11956-1-paskripkin@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220401213114.11956-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR0301CA0011.eurprd03.prod.outlook.com
+ (2603:10a6:20b:468::32) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
- <YkbjNYMY8VjHoSHR@dhcp22.suse.cz> <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
-In-Reply-To: <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sun, 3 Apr 2022 08:04:29 -0700
-Message-ID: <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 197eb604-0bb2-4712-50d7-08da158367c7
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1340:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB134088964BD6B6253F6267DD83E29@DM5PR12MB1340.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gN3sQo+AOO+lTEoLmIdvH/QZj+wHT0F3lLfWrJBOB5pyGE83V/SaRK5A68xY7KQFFNsVSNsVgRSg87f8rWl3kV4CYzehWb0dbeB/iR5D62EJS0eo8Ku4dfTKA4+wdOkOemMUtbtrbn+Gy55PJjlULLm0z+Os/kFoDmJDOgtJuZ+0Z5vqGrYWRCPUbhEyOJg/9GUZ/1UYle2Pjcj+U0XyCHO65ZzpFE+gGCY+C7skfath/nk22b60hAo7mQ5cGZVt13ZGjwSWaOnnGeY42YESQk5IstrJHErWUGubvYyiUB4nyQc0eGWZltGtdgF1uXxqxsB93FbBkwr90f6q90gqTbWVlwD1HoNYq1KGc/1+BZSZoe74hgtn6h7MbQMHlTc12GiYZiFW7sYD2eiN4pxLBZraAe7xip8qvkMSvE9+4bEO0II+IityMdepsE2YOzgZJHU9HUS8Vhrw5S2gw5biMz6pPo/K9vAVCQpBqqwsPUzpGDl3xSVgw2/Uz5unMWd0Jn49b6M8QKUvcJZzO7exCfTH0YVJ2aNYU16JtlFyp5ey563espP8Vfq9ETTqT0iONjxc40p66Y6l8gXuW9I9HooHNmw+tvVg964VqX8jPgRSywIefur5fVyNEYdxi+CSm9IetFYof/zTlwx3aOaF6DPKk5RHdkCsAM1+N3kN5dnhSHyoX9qXAkRg/JAq0UyJABkQ7G9uZLNd+p42hgA+AZ+d7LQQ+3Ngr0u2T2bpby8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6506007)(6666004)(31696002)(8936002)(6512007)(2906002)(38100700002)(508600001)(86362001)(316002)(83380400001)(31686004)(186003)(66946007)(4326008)(8676002)(6486002)(36756003)(66476007)(66556008)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1Bzcm1RQ0luTmYrcU5mNDNhbnZkRXRlRmdDS044NWNIVnRWVGNnRzJhcHJq?=
+ =?utf-8?B?UDhBaUFVZDhicXI4ak5HVDRIMk9wd3NpUStqTlppblJKTVBlL1Qya1RDTmtq?=
+ =?utf-8?B?TmVaaitJOHFZNlZXN1RZUUlkVnZXc1BwcHlLR1dmVlhCY0RzbHgzRnQwNXVS?=
+ =?utf-8?B?aXNmdjRrakZQRndzYVFvbEFGRGdDYnVxRmdVWXBuUytEZkxvbDlTMmsrWVpq?=
+ =?utf-8?B?ZWN3K0FpZE1CSEplNGpHK2V4QVBvSHg4QzRHTjFxWGRpMXpMNFNqUXFUbzRj?=
+ =?utf-8?B?M1RnamlmMWdhK0FtMk0zd3dCUndNVkFOQlFrRXVUOGJrcUlrbDFJN29YTkFR?=
+ =?utf-8?B?Q0dzUy9NMzVLT091RXg5RjNxd0IyTWgyMU1ucjdDazdXSEFVTU85dndMdm1i?=
+ =?utf-8?B?bGkxTW9xa3VNRHRJN2hNTWdzZDA4TGtJQm5nSW94VzdmNytLS3BzMWhFdVlu?=
+ =?utf-8?B?NkVQOGZhOTNvbFNmcU5IdTVxK1FhTTByL0NBYzJBZkQveDREZUpIY3hackMw?=
+ =?utf-8?B?ZGRMV0tZOWNibFpoUG55Z1Z0TVUzM1JBYm45aEw4WWNod1pSc1B3REpXRHpC?=
+ =?utf-8?B?NTBrU1NzUjlkWjQ0Unc2RDFoTUNsY1M5bWswTFgxdDdTdENSMzZGelJ2MUEv?=
+ =?utf-8?B?QjhNclI3c2tMaldrY3NNU3NwbmNlZ1A5QVMwYWhJSEJlY0lNbmtmTXg3bndy?=
+ =?utf-8?B?cU92M0VwcFVrVklqV3ZGcHlwZFdSOWx1cDI4R1ZZWFlubW5BWkNTTTFxdUtr?=
+ =?utf-8?B?S3ozSHBLb0JwNEJOZEMvMmxVRHc3SER4enpwSzdVTEFHRURoUGtvVFJHeEps?=
+ =?utf-8?B?djZUajdJU3ZZOUdtN2p1STZzUHdHZENrY0dwTWlqYm1tcEpjVjlhTUpRYXNu?=
+ =?utf-8?B?UUpXSVdSWHVtRHkraE5GY3VsdmhGMkZIZVF3SHJ2NTBBUG1IT2JmRWwzTVox?=
+ =?utf-8?B?SC9uT2hJakd1c2JpeEI3dzZBQ0QvVFNSekxCSWNhMDA0WTZjaHdBb0w5STNv?=
+ =?utf-8?B?QytqdVEwYjZ5NHdaUHZSRjgrZWQrdU4xV093YVVJZjRhOW1SakVqcUtsRFhD?=
+ =?utf-8?B?QXdjVU1nRlc4NFNkRExaY2lRVTJvaW5wY0llWU9ZTGVoU1g5ZEV4YVN0Uk5V?=
+ =?utf-8?B?Rk42UTg4TEtKM0hVeUNzUFpBYmZMUC9BdlVtMVVxazFOQzhsZnBGdHdXa3pm?=
+ =?utf-8?B?cmpyd01XcXpIeTNhSGxROXZnMkFxQVozOGF1bFEzQTNFczFNWGhQQ1pxQjAw?=
+ =?utf-8?B?dEFzSGdxWURQR0VHOVJ0eHhtVXh0dlF4L1AvY1k2RWN4YmpuRURXYndNNldl?=
+ =?utf-8?B?RUliNXNCRUk0VHJLQ1BHcDZoYmFlSVdRMks2RGNXaFVpRTFLSnFkNjA1bmlz?=
+ =?utf-8?B?Qk4xNkxYWDQvSHpDRk9ubE9zSWw4T3p5dG9yZEl5aDlwMVdMM3N5REk4TnQw?=
+ =?utf-8?B?RU8wVnAvU3NSTUVCU3VxNjhOL0dCZ2JJTFc3REltK1hqbkdRanFDLy9OVXdh?=
+ =?utf-8?B?VTl3Q2k2Rm0reEpiVzM3T0ZFSmYzMzJGK1ZvU0FrajFPU0QxVDZ3TWdzdXF4?=
+ =?utf-8?B?UGw5M0ZIUllpOHFrbkhWTWRvVStSZCtqaWFONThEOTNxeVlaQUpEb2NRMDl4?=
+ =?utf-8?B?bjJRYlNwMk02N3JPOUJYK1VlbElTVG5ZRGtvaWUyWVFDSVN1NmVYN0cyKzBY?=
+ =?utf-8?B?TXFkUjRWazJnMmZod2pML2VhbFJFekc1WnNnUUNzZG4wNThSL0ZGUllnZUpT?=
+ =?utf-8?B?dFVncXozUEZ1MERoZGxJVis1b0Z2aWZ5WkVzQ1h6YzRwbDR4QTZNVkMxRWl1?=
+ =?utf-8?B?dXVWMXRBVXJLWS9XN1RnaE50NUM4QlVHQjFyQXl4YkRSZlZLVGtLdWhVa3Ax?=
+ =?utf-8?B?R2N5QXlXVHIzYmg5UWpDRnEvMUlLbnJJb3hHN3M1cHduZWEvYUZJL2FxN3gv?=
+ =?utf-8?B?dnBUVVZsV0hBNFJ2MVcrTXdBaEh3djNPYitucTRKdW5NdE9yV25MUW5pWjNM?=
+ =?utf-8?B?aWNSSVVwVWo2TFp0V2JGQU84YkdwV2JobzFDLzdScVgvSGJRVmRsSWZtMjBZ?=
+ =?utf-8?B?YkxZS1hCMUE2VXpxRGFNSmp0T0NwVE81UitIeSt2b1U3QnJXM0ZLcGEzS0JB?=
+ =?utf-8?B?MUJOZVBFdm83ajNSWEtaMGZDWlhJS0dndDJhZEpkc0JLUHdPbXZHQTF1Z1Zk?=
+ =?utf-8?B?NEk4L2VOMkpicHU3Sms2US81NmVJWmpXWDBYN0pTdXJCNHpWcVUvV3phMjNO?=
+ =?utf-8?B?SVpQVkVMSGtKVHpBN2V3blViNDhZWm13WnpVSENFeVV2dGhqMnpMbWdwT3RY?=
+ =?utf-8?B?VHVhaEEvRWVaNklTb2lGOHc3eTdUTGRQWWo2Z3p0bEFzZDRsNzJWNjN1Qkd2?=
+ =?utf-8?Q?FqSFabkKn1uDfffonHVn99RT3Y7M2yyCTVw2jSOLkxbiG?=
+X-MS-Exchange-AntiSpam-MessageData-1: kgXcSlhZPHI0LQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 197eb604-0bb2-4712-50d7-08da158367c7
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2022 15:05:35.6267
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3QkQKY2nyWvG2OI03JCKRAKTsaSopBUWkUPA0F3wFEEW8nXoJ2+7g4Q3W5hwmr8B
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1340
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 10:18 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+Am 01.04.22 um 23:31 schrieb Pavel Skripkin:
+> num_fences is user-controlled value and it can be equal to 0. Code
+> should not pass 0 to kcalloc(), since it will cause kcalloc() to return
+> ZERO_PTR. ZERO_PTR will pass `!fences` check and kernel will panic
+> because of dereferencing ZERO_PTR in add_fence()
 >
-> On Fri, Apr 1, 2022 at 7:34 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Fri 01-04-22 09:34:02, Zhaoyang Huang wrote:
-> > > On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> > > > > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > >
-> > > > > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > >
-> > > > > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > > > > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > > > > > by loading an special algorithm into its virtual address space and make it hard
-> > > > > > > to protect the expanded usage without userspace's interaction.
-> > > > > >
-> > > > > > Do I get it correctly that the concern you have is that you do not know
-> > > > > > how much memory your workload will need because that depends on some
-> > > > > > parameters?
-> > > > > right. such as a camera APP will expand the usage from 50MB to 500MB
-> > > > > because of launching a special function(face beauty etc need special
-> > > > > algorithm)
-> > > > > >
-> > > > > > > Furthermore, fixed
-> > > > > > > memory.low is a little bit against its role of soft protection as it will response
-> > > > > > > any system's memory pressure in same way.
-> > > > > >
-> > > > > > Could you be more specific about this as well?
-> > > > > As the camera case above, if we set memory.low as 200MB to keep the
-> > > > > APP run smoothly, the system will experience high memory pressure when
-> > > > > another high load APP launched simultaneously. I would like to have
-> > > > > camera be reclaimed under this scenario.
-> > > >
-> > > > OK, so you effectivelly want to keep the memory protection when there is
-> > > > a "normal" memory pressure but want to relax the protection on other
-> > > > high memory utilization situations?
-> > > >
-> > > > How do you exactly tell a difference between a steady memory pressure
-> > > > (say stream IO on the page cache) from "high load APP launched"? Should
-> > > > you reduce the protection on the stram IO situation as well?
-> > > We can take either system's io_wait or PSI_IO into consideration for these.
-> >
-> > I do not follow. Let's say you have a stream IO workload which is mostly
-> > RO. Reclaiming those pages means effectivelly to drop them from the
-> > cache so there is no IO involved during the reclaim. This will generate
-> > a constant flow of reclaim that shouldn't normally affect other
-> > workloads (as long as kswapd keeps up with the IO pace). How does your
-> > scheme cope with this scenario? My understanding is that it will simply
-> > relax the protection.
-> You are right. This scheme treats the system's memory pressure
-> equally, no matter if it comes from in-kernel page allocation with
-> high order or cache drop by IO like things. The decay_factor composed
-> of PSI_SOME and PSI_FULL which represent the system is tight on
-> memory, every entity has the obligation to donate to solve this issue.
-> >
-> > > > [...]
-> > > > > > One very important thing that I am missing here is the overall objective of this
-> > > > > > tuning. From the above it seems that you want to (ab)use memory->low to
-> > > > > > protect some portion of the charged memory and that the protection
-> > > > > > shrinks over time depending on the the global PSI metrict and time.
-> > > > > > But why this is a good thing?
-> > > > > 'Good' means it meets my original goal of keeping the usage during a
-> > > > > period of time and responding to the system's memory pressure. For an
-> > > > > android like system, memory is almost forever being in a tight status
-> > > > > no matter how many RAM it has. What we need from memcg is more than
-> > > > > control and grouping, we need it to be more responsive to the system's
-> > > > > load and could  sacrifice its usage  under certain criteria.
-> > > >
-> > > > Why existing tools/APIs are insufficient for that? You can watch for
-> > > > both global and memcg memory pressure including PSI metrics and update
-> > > > limits dynamically. Why is it necessary to put such a logic into the
-> > > > kernel?
-> > > Poll and then React method in userspace requires a polling interval
-> > > and response time. Take PSI as an example, it polls ten times during
-> > > POLLING_INTERVAL while just report once, which introduce latency in
-> > > some extend.
-> >
-> > Do workload transitions happen so often in your situation that the
-> > interval really matters? As Suren already pointed out starting a new
-> > application is usually an explicit event which can pro-activelly update
-> > limits.
-> Yes. As my reply to Suren's comment, even a positive monitor service
-> which could be aware of the activity starting(APP launching etc) at
-> the very first time, has to 1. read PSI and memcg->watermark/usage 2.
-> make a decision. 3. write memcg->memory.low to adjust memory
-> allowance. Furthermore, monitors could not supervise the APP for whole
-> life time, while the reclaiming could arise at any time.
+> Fix it by validating num_fences and bail out early if it is equal to 0
 
-Ok, sounds like you want this dynamic limit to be active all the time,
-not only at specific points in the process's life cycle.
-One thing that I don't understand in this approach is: why memory.low
-should depend on the system's memory pressure. It seems you want to
-allow a process to allocate more when memory pressure is high. That is
-very counter-intuitive to me. Could you please explain the underlying
-logic of why this is the right thing to do, without going into
-technical details?
+Well there are multiple issues with this patch. First of all as I wrote 
+before it shouldn't be possible that num_fences is zero.
+
+We could still just add this as a precaution, but then bailing out is 
+the wrong thing to do here. Instead we should then make sure to allocate 
+at least one slot for a fence in the array.
+
+But I think the cleanest would just be to not add a fence into the array 
+in the first place when num_fences is zero.
+
+Regards,
+Christian.
 
 >
-> > --
-> > Michal Hocko
-> > SUSE Labs
+> Fixes: 519f490db07e ("dma-buf/sync-file: fix warning about fence containers")
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>
+> Changes since v1:
+> 	- Dropped already merged part
+> 	- Removed syzkaller's tag
+>
+> ---
+>   drivers/dma-buf/sync_file.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> index b8dea4ec123b..024f22193e0c 100644
+> --- a/drivers/dma-buf/sync_file.c
+> +++ b/drivers/dma-buf/sync_file.c
+> @@ -212,7 +212,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
+>   	dma_fence_unwrap_for_each(b_fence, &b_iter, b->fence)
+>   		++num_fences;
+>   
+> -	if (num_fences > INT_MAX)
+> +	if (num_fences > INT_MAX || !num_fences)
+>   		goto err_free_sync_file;
+>   
+>   	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
+

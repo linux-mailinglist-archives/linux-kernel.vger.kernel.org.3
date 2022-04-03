@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525BC4F09BE
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC274F09C4
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358773AbiDCNPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 09:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S1358793AbiDCNPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 09:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358776AbiDCNPG (ORCPT
+        with ESMTP id S1354943AbiDCNPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 09:15:06 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E34E17AAB;
-        Sun,  3 Apr 2022 06:13:02 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id f3so6584201pfe.2;
-        Sun, 03 Apr 2022 06:13:02 -0700 (PDT)
+        Sun, 3 Apr 2022 09:15:14 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD0227FD6;
+        Sun,  3 Apr 2022 06:13:08 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id s11so6525980pfu.13;
+        Sun, 03 Apr 2022 06:13:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/KKxa3qfvCVRnTRZ4freu2hqQtZPY0z6h6IaQVcQg/k=;
-        b=dugHyQtseLH9JljgoEtCYnigEgJBPF1GzRq77Blwr5VwydDlIgm7zgdfv5mhL8QBQW
-         ErRlsVna50fxWxVAuT6fQ2oOoPzBymTcbRjit0dPvjwPM47NxwNikGe3qaZ2oBrR2q7W
-         llftZ1RmN33+8o2OqaGjaO4S6DbXKiT0rSIXxO3RL2fcIvD71cYUtvc9gT5IzpVHs+Mh
-         W1sYPEKQt4T6OW0oLKDsqs2H2gjOnByViZ2+IT/7xymv0uy5v2bFheahUIVDUfvPmRks
-         GGqQ93oWuLkmj4N7yOKWsqFEg7XA1NOvRf2ytvKFgXS+wxsvt4HI4xhxDyp2oiEiyVxl
-         p9Lw==
+        bh=PfNnbuCnnrrI2HGCtTaPf9X8eo27J8q+BtzO2NSDh9k=;
+        b=msjpSnH9mfT0MJbyKbKAYAlGPiFywj7VssRS8LKVrTvPfv+yQaL/arBrXDkwvBTeHS
+         Pl5PmEW4ph8HkbRCw72d3PWEmtyP8UdG7U8XiS7J1ubj7LH2VFH7FArVlJO0wldZ+zvC
+         FK0LyqcNErZqb5Gkf73ELnLEgBkPx5fb8f3XA1Kx2DrR4flHRAu4IVqmrTXlAn59J4xX
+         bipMmU6wRFSFHAAFubY4RPRHneI8ZDr2vEfoRh9XDHBoOFiBttDnOGjfb/TEoBPHiu/p
+         juZuSSz6hetC6q9XawP7aTrzwwA5ku2pqH9YZKNZ5dCYG0xTUaVnSwNyDrty9gx1/Aoe
+         nmig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/KKxa3qfvCVRnTRZ4freu2hqQtZPY0z6h6IaQVcQg/k=;
-        b=OfXjxqcky47mjFb8CzYCPKilVjkRY5BOq+deMOqALwQXz/ZBUZspTEvWB23TOOzM4u
-         Em9Xda2xmvTabwbGpWXCv59aNygeEzigL90XhHa8H81kPQ1LtfE38nn17eph5qzSR33C
-         M5hMRFQyPwvLPudbWEr2GXCGDkiX5wSCpxbq+iF/dqdsAijMkacDDqA6SVg289rRBgG2
-         AV5wypcJUQu5Usc7e/+y62I697km4yPQn2DHTXMJodab9dZEQXVP5ewJvYhDwPGYdhZ2
-         yRd6EWLNpKaYoiQCQZbgzT3+AdiyDrBkddfZFxJmmu61pwjD8TTOjMWMdoyIX3qSeVGi
-         29UQ==
-X-Gm-Message-State: AOAM532VAgTGacEWXyhNBoU1kdZ/Lea5/JwK65nzreBKqBAMsTxs3n0I
-        YJcL0bUsGZFG3PIeZ9aGZqc=
-X-Google-Smtp-Source: ABdhPJwhx9fr9yzvmrdeEe1YToKKzbD6LhENwF6p9LuKBg7aFviHBI1YFdOHrSc6eBYZBZwDH1K5sA==
-X-Received: by 2002:a63:c45:0:b0:399:2629:7743 with SMTP id 5-20020a630c45000000b0039926297743mr645219pgm.24.1648991581722;
-        Sun, 03 Apr 2022 06:13:01 -0700 (PDT)
+        bh=PfNnbuCnnrrI2HGCtTaPf9X8eo27J8q+BtzO2NSDh9k=;
+        b=dUp+48mDlnqddYtr1EP8MLAeBjggJ6LgUVB7+dFzazqGNvs25AjzyWtx35rNhajKKS
+         4e+RuDeh9Ad7Wk6ij4wm/IKGdG0Xl6kGAG49e5X7ly5ShWaAnI6Cdr2f8d+ZRRLlTSfC
+         P4a23gCypgcTPN/68q5pXKOGwfxBnAmuPvPIK6areOxGw4V7oKarVJnjzNjnRCzjfseY
+         njtgDB9d839PNnjxRldKA5sZqo7GMBcigN4qXZ7Rw90gAgk4X21JTFBQJY+i20cHzfhN
+         CcgqYR24h6suNwVpqux5dqreFGvq3eXmMRqzvjASjg03fmqhqZ2qzrMfb4BMlhdr/+XP
+         /CWw==
+X-Gm-Message-State: AOAM533pTFE2J77+BP4J4juza832poH7B58YZkU/bdZHhQ9kLUW7pppU
+        RuhsOlQEGuog/W2UdZJjKLU=
+X-Google-Smtp-Source: ABdhPJyD4ZZ2tlGGZ3t5FpYPJIvAflp1wJMYBe0MzHuZy5qsKEI1F+UUXO5xd+Uz5hCUa1uyU0Kjmg==
+X-Received: by 2002:a63:7f1c:0:b0:382:1fb5:58b8 with SMTP id a28-20020a637f1c000000b003821fb558b8mr21882197pgd.507.1648991587689;
+        Sun, 03 Apr 2022 06:13:07 -0700 (PDT)
 Received: from guoguo-omen.lan ([222.201.153.219])
-        by smtp.gmail.com with ESMTPSA id x123-20020a623181000000b004fdf99d25f6sm1554857pfx.80.2022.04.03.06.12.56
+        by smtp.gmail.com with ESMTPSA id x123-20020a623181000000b004fdf99d25f6sm1554857pfx.80.2022.04.03.06.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 06:13:01 -0700 (PDT)
+        Sun, 03 Apr 2022 06:13:07 -0700 (PDT)
 From:   Chuanhong Guo <gch981213@gmail.com>
 To:     linux-spi@lists.infradead.org
 Cc:     Chuanhong Guo <gch981213@gmail.com>,
@@ -74,9 +74,9 @@ Cc:     Chuanhong Guo <gch981213@gmail.com>,
         linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
         support), linux-kernel@vger.kernel.org (open list),
         linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
-Subject: [PATCH 3/4] dt-bindings: spi: add binding doc for spi-mtk-snfi
-Date:   Sun,  3 Apr 2022 21:11:53 +0800
-Message-Id: <20220403131154.1267887-4-gch981213@gmail.com>
+Subject: [PATCH 4/4] arm64: dts: mediatek: add dt node for MTK SNFI
+Date:   Sun,  3 Apr 2022 21:11:54 +0800
+Message-Id: <20220403131154.1267887-5-gch981213@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220403131154.1267887-1-gch981213@gmail.com>
 References: <20220403131154.1267887-1-gch981213@gmail.com>
@@ -92,108 +92,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device-tree binding documentation for Mediatek SPI-NAND Flash
-Interface.
+This patch adds a device-tree node for the MTK SPI-NAND Flash Interface.
 
 Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 ---
- .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-new file mode 100644
-index 000000000000..166c6b50b9d1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-@@ -0,0 +1,87 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-snfi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+index 6f8cb3ad1e84..40112fdca67e 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+@@ -545,6 +545,18 @@ nandc: nfi@1100d000 {
+ 		status = "disabled";
+ 	};
+ 
++	snfi: spi@1100d000 {
++		compatible = "mediatek,mt7622-snand";
++		reg = <0 0x1100d000 0 0x1000>;
++		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_LOW>;
++		clocks = <&pericfg CLK_PERI_NFI_PD>, <&pericfg CLK_PERI_SNFI_PD>;
++		clock-names = "nfi_clk", "pad_clk";
++		ecc-engine = <&bch>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++	};
 +
-+title: SPI-NAND flash controller for MediaTek ARM SoCs
-+
-+maintainers:
-+  - Chuanhong Guo <gch981213@gmail.com>
-+
-+description: |
-+  The Mediatek SPI-NAND flash controller is an extended version of
-+  the Mediatek NAND flash controller. It can perform standard SPI
-+  instructions with one continuous write and one read for up-to 0xa0
-+  bytes. It also supports typical SPI-NAND page cache operations
-+  in single, dual or quad IO mode with piplined ECC encoding/decoding
-+  using the accompanying ECC engine. There should be only one spi
-+  slave device following generic spi bindings.
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt7622-snand
-+      - mediatek,mt7629-snand
-+  reg:
-+    items:
-+      - description: core registers
-+
-+  interrupts:
-+    items:
-+      - description: NFI interrupt
-+
-+  clocks:
-+    items:
-+      - description: clock used for the controller
-+      - description: clock used for the SPI bus
-+
-+  clock-names:
-+    items:
-+      - const: nfi_clk
-+      - const: pad_clk
-+
-+  ecc-engine:
-+    description: device-tree node of the accompanying ECC engine.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - ecc-engine
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/mt7622-clk.h>
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+      snfi: spi@1100d000 {
-+        compatible = "mediatek,mt7622-snand";
-+        reg = <0 0x1100d000 0 0x1000>;
-+        interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_LOW>;
-+        clocks = <&pericfg CLK_PERI_NFI_PD>, <&pericfg CLK_PERI_SNFI_PD>;
-+        clock-names = "nfi_clk", "pad_clk";
-+        ecc-engine = <&bch>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        flash@0 {
-+          compatible = "spi-nand";
-+          reg = <0>;
-+          spi-tx-bus-width = <4>;
-+          spi-rx-bus-width = <4>;
-+          nand-ecc-engine = <&snfi>;
-+        };
-+      };
-+    };
+ 	bch: ecc@1100e000 {
+ 		compatible = "mediatek,mt7622-ecc";
+ 		reg = <0 0x1100e000 0 0x1000>;
 -- 
 2.35.1
 

@@ -2,139 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAA24F0A76
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963404F0A7D
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359104AbiDCPAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 11:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S1359111AbiDCPEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 11:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353718AbiDCPAa (ORCPT
+        with ESMTP id S1353718AbiDCPEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 11:00:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC86462F8
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648997915; x=1680533915;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ql2CBIN/ch+fTCgmEZ+hEzF4RvLJPE/sdLa1hIHKZYE=;
-  b=jReEhjmZusO4a6u/hHFWEel16jp6bBM7XKTZv+dRHMQpXMaFvwcy+LJF
-   aXuuaqKAncN1GEA+8rzg7QbmUxsxq+xLn3UgOVVZA25E1SsLdR1eOLJ8B
-   I6xTgRu8ATcqAR+Bdt6++SslaLzPfIERhqMtKBePoJd6cc+Fcg63z963W
-   9BOrRoeVGJYzXj8r03ROrCSNKV+hFai7E9v/4PeiPTdcXeHVC6wXC9hb1
-   CJHjPqqxSjnCv7bMAZEDzb5IIXrA2XWFjF3cVrObc6Cp2o0PBPzE/PYne
-   HGmKx787SnMx0rewab8+snfcHivVJIM87vKyhBNkyJrcwADbo48DoEbkq
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="240977577"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="240977577"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 07:58:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="548373463"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Apr 2022 07:58:32 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nb1gV-00012f-SI;
-        Sun, 03 Apr 2022 14:58:31 +0000
-Date:   Sun, 3 Apr 2022 22:57:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:nvme-v2 5/6] drivers/soc/apple/rtkit.c:575:21: warning:
- no previous prototype for 'apple_rtkit_init'
-Message-ID: <202204032241.T4QW8bQo-lkp@intel.com>
+        Sun, 3 Apr 2022 11:04:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A410F31372;
+        Sun,  3 Apr 2022 08:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648998166;
+        bh=s2lkJV8WXAYqWmTFWBasf7fC1P0GpzV1yzhgieOmpbM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=O9dy7d62jI2IvHEo9Nx9j6I0rMjy/fCkAlzQd8kILIXoCETG39tne74SFTj2o2w1X
+         HAHdKahOSU+9nKCEJKGbPB5VgrMrOOXNBgWCKVcUqmqk763DuE8M2W0D1ASM59FPqE
+         b3oX1emUAO15YlieK//1rRzqN3TRznTxEw35/At4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.160.29]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MORAa-1nNKeG22gw-00Py2A; Sun, 03
+ Apr 2022 17:02:46 +0200
+Message-ID: <631f03bd-0fdf-9cc8-bf37-89235fb84162@gmx.de>
+Date:   Sun, 3 Apr 2022 17:02:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: =?UTF-8?Q?Re=3a_=5bBUG=5d_fbdev=3a_i740fb=3a_Divide_error_when_?=
+ =?UTF-8?B?4oCYdmFyLT5waXhjbG9ja+KAmSBpcyB6ZXJv?=
+Content-Language: en-US
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAMhUBjmFhqTLBscHHVZ1VTSqrJBT1VEevA+KkjY+y9_ZtdRkMg@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAMhUBjmFhqTLBscHHVZ1VTSqrJBT1VEevA+KkjY+y9_ZtdRkMg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qIbpfxfG/C0O1El0nor0IfxhzuMt4NOT1DCsIVjKXPWTNEXPFU5
+ 7UoWCkjcFpqBy5QdJEpXcOnp4o23vRUwMtp0DLwXqvc4ybLjSNkJoMPOdBT19+o7RPZ3w+y
+ QhMU3SqDp1z4A5seJqyM/JqXSjvLrkxGCaUHg4IOnEDdNOoRi642eLQzc26rs24JxANi+Ju
+ zzBSHQIjfrGy72Hj+Fukw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:O87AKjWL0ng=:hE+Jm2qY6s7eJkx5fO0+y1
+ 8eC2HtbWiuZJPJ4ijFLUeKLdHH788QI0ETO/dLshaKtX87HCz/0mns7j2ldgI324h/X4Y7FZG
+ CJS8hpLq3XuEK32QH/GFv/Dx3OFG3WB2wNBrsXajbxiHiEwCXduz0kLL+548+JvGaP1VUO1GP
+ tWUsauT7SnsbH7NObCLIZ+G2fPI2zY+Y5gVHbZMI4QD2f+ERC+g3kJppsERw+9q8kdD8jFpkw
+ GwNwFSe+9Jx/lmMdbYfqvnE0kzRWGV16ts09cklN+sG0Y0sxGLamMcVRfD1j4YRDuQ0Tiw5C4
+ JjPenLfEWVQpCnqfhVJnVccyvNqFfLtQm60pKsZmfY0De0+YIay9yuCIMQrOA2P6J+NErb+Iu
+ ZzlreO0YqDT7f3ORPf3JZZOnzOoy+CvZ+Ie6V1SQLyDtaX1Vqi5lkjswn0Jef/quA9ETspEBC
+ 46SfG1Zh+JxBncImP7p45X+8KxVJyEacLdGXHuIlxdVF3H35XosYY/yHRBb5P94rLwXIm8iWO
+ Y+186lf1aG5e/u6g16kET7tquqlHezL6SL+gFdMB/I2BgZo8jyMGDxE4QdR3Uafs5PZzl1Q34
+ LJVcnkc7QS96WvKP3JJVVT7+5M8oUyaoOXA3dpwlS4U3Lce7mbXfc87IyLqtNEk3iEeShmEEF
+ WO6yy1qV8746wSVboCvvKq8SzLDMicr2xn2EuXEKXWsTCFu09abfO30CXc1xWTfnJSlIUlQTF
+ ON3+/HhlOOD7bbKsMwBUHYzQ01NxLLxpNfNOG90sq4LBKS0KrhPlNJo8yasntSLI7LlU2d06r
+ brHgmB9lGb8V1kPPoXWYNgAmsnlOL3JgXBi1KJCc7qWPau6zbRZ610gSTphGO0uMaUE7bdM37
+ GtJLiunWYCMJdzE1XMFODSVb/yXtlRaYPL5bEgjk8i0FsgDVZoy10qcUQUgL6lOmjygYCx/lE
+ YwFLoTIcaTAuuCzseSouWmmYAFpd8ZjX7VckMK9D8PoAjl3/qiSvHIJXmAQlugiRiD4dhyEW4
+ 3mxJt0KyerXH4dUUNqZ1+e1KC84audpXQq1vSMOuOlY/5cCmekDN5XtGTZ8oNf8stUhP7VysK
+ Ju0yC5U8SIPym0=
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux nvme-v2
-head:   1c4210208a7dffa2a6697b0be5fa1da9f2bc448c
-commit: 49f954ccdfe134d00b9e17b9ff5186a47725c6bf [5/6] soc: apple: Add RTKit IPC library
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220403/202204032241.T4QW8bQo-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/49f954ccdfe134d00b9e17b9ff5186a47725c6bf
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux nvme-v2
-        git checkout 49f954ccdfe134d00b9e17b9ff5186a47725c6bf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/soc/apple/
+On 4/3/22 13:26, Zheyu Ma wrote:
+> Hi,
+>
+> I found a bug in the function i740fb_set_par().
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Nice catch!
 
-All warnings (new ones prefixed by >>):
+> When the user calls the ioctl system call without setting the value to
+> 'var->pixclock', the driver will throw a divide error.
+>
+> This bug occurs because the driver uses the value of 'var->pixclock'
+> without checking it, as the following code snippet show:
+>
+> if ((1000000 / var->pixclock) > DACSPEED8) {
+>      dev_err(info->device, "requested pixclock %i MHz out of range
+> (max. %i MHz at 8bpp)\n",
+>          1000000 / var->pixclock, DACSPEED8);
+>     return -EINVAL;x
+> }
+>
+> We can fix this by checking the value of 'var->pixclock' in the
+> function i740fb_check_var() similar to commit
+> b36b242d4b8ea178f7fd038965e3cac7f30c3f09, or we should set the lowest
+> supported value when this field is zero.
+> I have no idea about which solution is better.
 
->> drivers/soc/apple/rtkit.c:575:21: warning: no previous prototype for 'apple_rtkit_init' [-Wmissing-prototypes]
-     575 | struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
-         |                     ^~~~~~~~~~~~~~~~
->> drivers/soc/apple/rtkit.c:789:6: warning: no previous prototype for 'apple_rtkit_free' [-Wmissing-prototypes]
-     789 | void apple_rtkit_free(struct apple_rtkit *rtk)
-         |      ^~~~~~~~~~~~~~~~
+Me neither.
+I think a solution like commit b36b242d4b8ea178f7fd038965e3cac7f30c3f09
+is sufficient.
+
+Note that i740fb_set_par() is called in i740fb_resume() as well.
+Since this doesn't comes form userspace I think adding a check for
+the return value there isn't necessary.
+
+Would you mind sending a patch like b36b242d4b8ea178f7fd038965e3cac7f30c3f=
+09 ?
+
+Helge
 
 
-vim +/apple_rtkit_init +575 drivers/soc/apple/rtkit.c
+> The following log reveals it:
+>
+> divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+> RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:444 [inline]
+> RIP: 0010:i740fb_set_par+0x272f/0x3bb0 drivers/video/fbdev/i740fb.c:739
+> Call Trace:
+>  <TASK>
+>  fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1036
+>  do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1112
+>  fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1191
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:874 [inline]
+>
+> Regards,
+> Zheyu Ma
 
-   574	
- > 575	struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
-   576					     const char *mbox_name, int mbox_idx,
-   577					     const struct apple_rtkit_ops *ops)
-   578	{
-   579		struct apple_rtkit *rtk;
-   580		int ret;
-   581	
-   582		if (!ops)
-   583			return ERR_PTR(-EINVAL);
-   584	
-   585		rtk = kzalloc(sizeof(*rtk), GFP_KERNEL);
-   586		if (!rtk)
-   587			return ERR_PTR(-ENOMEM);
-   588	
-   589		rtk->dev = dev;
-   590		rtk->cookie = cookie;
-   591		rtk->ops = ops;
-   592	
-   593		init_completion(&rtk->epmap_completion);
-   594		init_completion(&rtk->reinit_completion);
-   595		init_completion(&rtk->iop_pwr_ack_completion);
-   596		init_completion(&rtk->ap_pwr_ack_completion);
-   597	
-   598		bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
-   599		set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
-   600	
-   601		rtk->mbox_name = mbox_name;
-   602		rtk->mbox_idx = mbox_idx;
-   603		rtk->mbox_cl.dev = dev;
-   604		rtk->mbox_cl.tx_block = true;
-   605		rtk->mbox_cl.knows_txdone = false;
-   606		rtk->mbox_cl.rx_callback = &apple_rtkit_rx_callback;
-   607	
-   608		ret = apple_rtkit_request_mbox_chan(rtk);
-   609		if (ret)
-   610			return (struct apple_rtkit *)ERR_PTR(ret);
-   611	
-   612		return rtk;
-   613	}
-   614	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

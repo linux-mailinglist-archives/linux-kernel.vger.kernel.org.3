@@ -2,143 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66C94F06B9
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 03:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2044F06BC
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 03:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiDCBQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 21:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S229617AbiDCB12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 21:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiDCBQH (ORCPT
+        with ESMTP id S229573AbiDCB1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 21:16:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE40F5F9A
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 18:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648948454; x=1680484454;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vi4lWGBphbiq3mXQmN5cdScjROFXvEE9SMLUR5oGi20=;
-  b=K84pbTFvx7TjpQAF7lUIVU+xiag7C6oBQgVG2cPOB96uzpfH6AwBi9iE
-   MSmgAwFFXPhlbQU2UfQbrbbOzXVOQ/rkkJ+2PIS+asTFnIbO/2mnC0k/P
-   LTfvnk74D5lKNs+ZTcUYZjOgYvxgcv/UzdAkQ03cSdXiGCKLCUOtdD6qD
-   S+lVunWBfb6+Rv4Jvr3qIjIUP7Rom+0ilyrlS6L8Lof0MexQFPUAGI9kZ
-   +7tSVGWsOf3PURqe8C0MKj3FTqAN92b7YtfNnPi0pMxzsv/SRNIsn1x9T
-   lZyxM98JkAPg0NI30TC44ppgd86FuorOzwHny52T2kzQfuWlTB+CwNQ03
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="260334067"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="260334067"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 18:14:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="522328655"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Apr 2022 18:14:12 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1naoom-0000bk-2n;
-        Sun, 03 Apr 2022 01:14:12 +0000
-Date:   Sun, 3 Apr 2022 09:14:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [lunn:v5.17-rc8-mdio-c45 2/12] drivers/net/phy/phylink.c:2371:50:
- warning: variable 'prtad' is uninitialized when used here
-Message-ID: <202204030904.n5cYsrRU-lkp@intel.com>
+        Sat, 2 Apr 2022 21:27:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97B552FA
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 18:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648949131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GkShY0RQCVDzpld9Dx78CpGoYVHJSOJe2lJeCKAVfbs=;
+        b=YD0Yvy3z/FtFmpfLdU2GVwlz1Ep7u2zLN1yeMevxhfAqpO8bwVrSHwppUaicnGq+Gbgh4i
+        /sGfRbQUw6ORwbEkAdhyncQhUIY5NQZ8YZF93criMM2MzXyKVG98ymFrXX4ZpsfzjI8wFH
+        mD1ZPFusUxzg99mji4vDZ9S+nWLZpk8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-Ow0vpX3IOd-srYzu03thdQ-1; Sat, 02 Apr 2022 21:25:28 -0400
+X-MC-Unique: Ow0vpX3IOd-srYzu03thdQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3DEA811E75;
+        Sun,  3 Apr 2022 01:25:27 +0000 (UTC)
+Received: from localhost (ovpn-12-45.pek2.redhat.com [10.72.12.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 033DF10EC2;
+        Sun,  3 Apr 2022 01:25:25 +0000 (UTC)
+Date:   Sun, 3 Apr 2022 09:25:22 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org, yangtiezhu@loongson.cn,
+        amit.kachhap@arm.com, hch@lst.de, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v5 1/3] vmcore: Convert copy_oldmem_page() to take an
+ iov_iter
+Message-ID: <Ykj3gsRD7il4KCLW@MiWiFi-R3L-srv>
+References: <20220402043008.458679-1-bhe@redhat.com>
+ <20220402043008.458679-2-bhe@redhat.com>
+ <YkffO7QHuR2vq3gI@MiWiFi-R3L-srv>
+ <Ykh3FVUFQH0x11Zw@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Ykh3FVUFQH0x11Zw@casper.infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/lunn/linux.git v5.17-rc8-mdio-c45
-head:   21ffc4381ec731f5e9521dec8925c0089b14920b
-commit: 3e1cf3cbc07f3be863192a3cbdfe2b5f8cb14cd5 [2/12] net: phylink: Convert to mdiobus_c45_{read|write}
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220403/202204030904.n5cYsrRU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/3e1cf3cbc07f3be863192a3cbdfe2b5f8cb14cd5
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.17-rc8-mdio-c45
-        git checkout 3e1cf3cbc07f3be863192a3cbdfe2b5f8cb14cd5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+On 04/02/22 at 05:17pm, Matthew Wilcox wrote:
+> On Sat, Apr 02, 2022 at 01:29:31PM +0800, Baoquan He wrote:
+> > On 04/02/22 at 12:30pm, Baoquan He wrote:
+> > 
+> > It's odd. I cann't see the content of patches in this series from my
+> > mailbox and mail client, but I can see them in lore.kernel.org.
+> 
+> Yes, Red Hat have screwed up their email server again.  David Hildenbrand
+> already filed a ticket, but you should too so they don't think it's
+> just him.
+> 
+> https://lore.kernel.org/linux-mm/6696fb21-090c-37c6-77a7-79423cc9c703@redhat.com/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I see. It could be the same issue. I just filed an internal ticket to
+request a fix, thx.
 
-All warnings (new ones prefixed by >>):
+> 
+> > https://lore.kernel.org/all/20220402043008.458679-1-bhe@redhat.com/T/#u
+> > 
+> 
 
->> drivers/net/phy/phylink.c:2371:50: warning: variable 'prtad' is uninitialized when used here [-Wuninitialized]
-                   return mdiobus_c45_write(pl->phydev->mdio.bus, prtad, devad,
-                                                                  ^~~~~
-   drivers/net/phy/phylink.c:2341:11: note: initialize the variable 'prtad' to silence this warning
-           int prtad, devad;
-                    ^
-                     = 0
-   1 warning generated.
-
-
-vim +/prtad +2371 drivers/net/phy/phylink.c
-
-  2336	
-  2337	static int phylink_phy_write(struct phylink *pl, unsigned int phy_id,
-  2338				     unsigned int reg, unsigned int val)
-  2339	{
-  2340		struct phy_device *phydev = pl->phydev;
-  2341		int prtad, devad;
-  2342	
-  2343		if (mdio_phy_id_is_c45(phy_id)) {
-  2344			prtad = mdio_phy_id_prtad(phy_id);
-  2345			devad = mdio_phy_id_devad(phy_id);
-  2346			return mdiobus_c45_write(pl->phydev->mdio.bus, prtad, devad,
-  2347						 reg, val);
-  2348		}
-  2349	
-  2350		if (phydev->is_c45) {
-  2351			switch (reg) {
-  2352			case MII_BMCR:
-  2353			case MII_BMSR:
-  2354			case MII_PHYSID1:
-  2355			case MII_PHYSID2:
-  2356				devad = __ffs(phydev->c45_ids.mmds_present);
-  2357				break;
-  2358			case MII_ADVERTISE:
-  2359			case MII_LPA:
-  2360				if (!(phydev->c45_ids.mmds_present & MDIO_DEVS_AN))
-  2361					return -EINVAL;
-  2362				devad = MDIO_MMD_AN;
-  2363				if (reg == MII_ADVERTISE)
-  2364					reg = MDIO_AN_ADVERTISE;
-  2365				else
-  2366					reg = MDIO_AN_LPA;
-  2367				break;
-  2368			default:
-  2369				return -EINVAL;
-  2370			}
-> 2371			return mdiobus_c45_write(pl->phydev->mdio.bus, prtad, devad,
-  2372						 reg, val);
-  2373		}
-  2374	
-  2375		return mdiobus_write(phydev->mdio.bus, phy_id, reg, val);
-  2376	}
-  2377	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

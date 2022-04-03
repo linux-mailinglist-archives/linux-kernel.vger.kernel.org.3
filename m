@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EBD4F0992
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C774F09AC
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358359AbiDCNIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 09:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
+        id S229983AbiDCNMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 09:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiDCNIP (ORCPT
+        with ESMTP id S1358771AbiDCNMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 09:08:15 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9661C12C
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 06:06:21 -0700 (PDT)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id azvonDip2OAnaazvon4plZ; Sun, 03 Apr 2022 15:06:18 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 03 Apr 2022 15:06:18 +0200
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-phy@lists.infradead.org
-Subject: [PATCH] phy: ti: tusb1210: Fix an error handling path in tusb1210_probe()
-Date:   Sun,  3 Apr 2022 15:06:08 +0200
-Message-Id: <07c4926c42243cedb3b6067a241bb486fdda01b5.1648991162.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 3 Apr 2022 09:12:25 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C8327156;
+        Sun,  3 Apr 2022 06:10:25 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9ECA95C0106;
+        Sun,  3 Apr 2022 09:10:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 03 Apr 2022 09:10:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=kadWgdFtb3iFqgErd
+        EE2kwIfxrpPk39Vr1ia0EhlfyE=; b=di/51BW7wfwefxfnGxoW7BuOOJPWFu7zm
+        UKs5/cSw4MJ1LsZssOZKqmHyiK+H+sxMqcMpN6Hs/+/DtgVj6Pxwc3X1vODjDnzV
+        ScI7SxMJk6leN6sZZV7uczNoBd5WXhzZ2mspcqbleD//wkeqUsE/6754SFmqt1tY
+        D67GiSXhRwQwTKE0la/V3ysE+EZnAJRpXeSLB8tsEgMxLkpPbPXJUZLjc68upKQ1
+        CyX/nWhwft3n/xCb8e/uujSZ/Lxtf5limVKse450ZKWuefeyZeb1IWsyhjqW2HlW
+        C6kbq94Og9X2UuenxBODCbsTysVdkNe7s2YQZOSktzm3uHWDiCKOw==
+X-ME-Sender: <xms:vpxJYvGdywpLI6TlYgn564YeUYnMIkFPiGkt73uRB2vIWHj1sqgkKw>
+    <xme:vpxJYsXhumh2-8d0gtasJs-Me0XWHT9TS8zg-qBerK2b9rsxlDirGBZ2lgpZ-dkJr
+    FF9EBKRds5pPdM>
+X-ME-Received: <xmr:vpxJYhJ3ZW1rIiG8QVY-wcf4vXPrInW-0dxwK7a75NkzNN7f33-CmuxeBSNx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejtddgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:vpxJYtFKqWI9pfoRXaOGzQevdurpMiTdm9_KzNxLbSggkvxf5o8l2w>
+    <xmx:vpxJYlVlPI4HwQVVqYomxRuFGmNiSR5A5zC_U42mPBBAdGn7ZDl6ug>
+    <xmx:vpxJYoMfBHRVphQNuflxl3qiSzDVLrtyP29soNe3sqnLwK9lJ3nphQ>
+    <xmx:vpxJYjeTgH54DRtEfAfbcGmWqFMzL5aGLDseC3LAw41QkM9hq3DIwg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 3 Apr 2022 09:10:21 -0400 (EDT)
+Date:   Sun, 3 Apr 2022 16:10:19 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     idosch@nvidia.com, petrm@nvidia.com, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mlxsw: spectrum_router: simplify list unwinding
+Message-ID: <Ykmcu5y4Tx8pqhtQ@shredder>
+References: <20220402121516.2750284-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220402121516.2750284-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tusb1210_probe_charger_detect() must be undone by a corresponding
-tusb1210_remove_charger_detect() in the error handling path, as already
-done in the remove function.
+On Sat, Apr 02, 2022 at 08:15:16AM -0400, Tom Rix wrote:
+> The setting of i here
+> err_nexthop6_group_get:
+> 	i = nrt6;
+> Is redundant, i is already nrt6.  So remove
+> this statement.
+> 
+> The for loop for the unwinding
+> err_rt6_create:
+> 	for (i--; i >= 0; i--) {
+> Is equivelent to
+> 	for (; i > 0; i--) {
+> 
+> Two consecutive labels can be reduced to one.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Fixes: 48969a5623ed ("phy: ti: tusb1210: Add charger detection")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/phy/ti/phy-tusb1210.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+For net-next:
 
-diff --git a/drivers/phy/ti/phy-tusb1210.c b/drivers/phy/ti/phy-tusb1210.c
-index a0cdbcadf09e..008d80977fc5 100644
---- a/drivers/phy/ti/phy-tusb1210.c
-+++ b/drivers/phy/ti/phy-tusb1210.c
-@@ -537,12 +537,18 @@ static int tusb1210_probe(struct ulpi *ulpi)
- 	tusb1210_probe_charger_detect(tusb);
- 
- 	tusb->phy = ulpi_phy_create(ulpi, &phy_ops);
--	if (IS_ERR(tusb->phy))
--		return PTR_ERR(tusb->phy);
-+	if (IS_ERR(tusb->phy)) {
-+		ret = PTR_ERR(tusb->phy);
-+		goto err_remove_charger;
-+	}
- 
- 	phy_set_drvdata(tusb->phy, tusb);
- 	ulpi_set_drvdata(ulpi, tusb);
- 	return 0;
-+
-+err_remove_charger:
-+	tusb1210_remove_charger_detect(tusb);
-+	return ret;
- }
- 
- static void tusb1210_remove(struct ulpi *ulpi)
--- 
-2.32.0
-
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>

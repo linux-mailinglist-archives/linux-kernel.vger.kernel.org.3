@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64AD4F0882
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B116A4F0887
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 11:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355438AbiDCJBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 05:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S242959AbiDCJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 05:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237499AbiDCJBZ (ORCPT
+        with ESMTP id S234343AbiDCJMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 05:01:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AD636326
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 01:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4C0C60FED
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 261E9C36AE3;
-        Sun,  3 Apr 2022 08:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648976371;
-        bh=8NKDu5zCu7H/G9k0E5Bk0gLf0mwDJcqOkFVjnVIzf/U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q6A3008EXzY+Ctoi7fg8HJhZuPlPKPT2rgVwf8xPIOZMkgp8xjpVi2obAI8fhwlls
-         yHH77Jqfvejwt7sr0biqLKkhCQ6ydg5xIVDhjLtSBvJZ1uI4wldA7IxvI8SsL3/bk7
-         Ii2RLcaES4zIBYuGQJM2TCFeDxAfjz2JQxtoizGj9i6osZSrR747yRPzPbizvJ+f2p
-         1ScWo9XJPtV7hfANnNN7RujQB0XcyH6iES/92qVxCMM404Mfb+nX902OofKEYAKi6M
-         GHkU6qEpl5JfixJsOC/sZYhzO5QFI/vONNbFD7+YJCGJQRHMc4LLF49Si6q2YLdfqJ
-         SmuYiCMrUeftw==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1naw52-00D6f8-N1; Sun, 03 Apr 2022 10:59:28 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH RFC 2/2] ASoC: Intel: sof_es8336: Huawei Matebook D15 uses a headphone gpio
-Date:   Sun,  3 Apr 2022 10:59:25 +0200
-Message-Id: <67d97e8a367511bc593395f33edcf2391f8066ef.1648975926.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1648975926.git.mchehab@kernel.org>
-References: <cover.1648975926.git.mchehab@kernel.org>
-MIME-Version: 1.0
+        Sun, 3 Apr 2022 05:12:42 -0400
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB7632EEC
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 02:10:48 -0700 (PDT)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
+        id 1nawFy-00091i-GC
+        for linux-kernel@vger.kernel.org; Sun, 03 Apr 2022 11:10:46 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-kernel@vger.kernel.org
+From:   Akemi Yagi <toracat@elrepo.org>
+Subject: Re: [PATCH] Makefile: fix config cc version check
+Date:   Sun, 3 Apr 2022 09:10:38 -0000 (UTC)
+Message-ID: <t2boae$9u9$1@ciao.gmane.io>
+References: <20220307223231.608498-1-mst@redhat.com>
+        <CAK7LNAR=fs+VJUZJj7YyprdA6xjx=4bttPRL6e4bvNkEeX9eng@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Pan/0.149 (Bellevue; 4c157ba git@gitlab.gnome.org:GNOME/pan.git)
+Cc:     linux-kbuild@vger.kernel.org
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On Tue, 08 Mar 2022 11:23:31 +0900, Masahiro Yamada wrote:
 
-Based on experimental tests, Huawei Matebook D15 actually uses
-both gpio0 and gpio1: the first one controls the speaker, while
-the other one controls the headphone.
+> On Tue, Mar 8, 2022 at 7:32 AM Michael S. Tsirkin <mst@redhat.com>
+> wrote:
+>>
+>> .config is of the form:
+>> CONFIG_CC_VERSION_TEXT="gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9)"
+> 
+> 
+> No. This was changed.
+> 
+> See this:
+> 
+> $ git show 129ab0d2d9f -- Makefile
+> 
+> 
+> 
+>> while CC_VERSION_TEXT is of the form: gcc (GCC) 11.2.1 20220127 (Red
+>> Hat 11.2.1-7)
+>>
+>> thus when comparing these, CONFIG_CC_VERSION_TEXT should not be put in
+>> "", otherwise we get () outside "" which shell then tries to evaluate.
+>>
+>> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>> ---
+>>  Makefile | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile index daeb5c88b50b..d5c03c827825
+>> 100644 --- a/Makefile +++ b/Makefile @@ -1714,9 +1714,9 @@ PHONY +=
+>> prepare
+>>  # now expand this into a simple variable to reduce the cost of shell
+>>  evaluations prepare: CC_VERSION_TEXT := $(CC_VERSION_TEXT)
+>>  prepare:
+>> -       @if [ "$(CC_VERSION_TEXT)" != "$(CONFIG_CC_VERSION_TEXT)" ];
+>> then \
+>> +       @if [ "$(CC_VERSION_TEXT)" != $(CONFIG_CC_VERSION_TEXT) ]; then
+>> \
+>>                 echo >&2 "warning: the compiler differs from the one
+>>                 used to build the kernel"; \
+>> -               echo >&2 "  The kernel was built by:
+>> $(CONFIG_CC_VERSION_TEXT)"; \ +               echo >&2 "  The kernel
+>> was built by: "$(CONFIG_CC_VERSION_TEXT)";" \
+>>                 echo >&2 "  You are using:          
+>>                 $(CC_VERSION_TEXT)"; \
+>>         fi
+>>
+>> --
+>> MST
 
-Add a quirk for that.
+I believe the patch proposed by Michael indeed fixes an issue 
+introduced by 129ab0d2d9f (Makefile).
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+Please see the following bug reports:
 
-See [PATCH RFC 0/2] at: https://lore.kernel.org/all/cover.1648975926.git.mchehab@kernel.org/
+https://elrepo.org/bugs/view.php?id=1215
+https://elrepo.org/bugs/view.php?id=1214
 
- sound/soc/intel/boards/sof_es8336.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+and this forum post:
 
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index 96920d3eed8a..fd47aba1bd5d 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -290,6 +290,14 @@ static const struct dmi_system_id sof_es8336_quirk_table[] = {
- 		},
- 		.driver_data = (void *)(SOF_ES8336_TGL_GPIO_QUIRK)
- 	},
-+	{
-+		.callback = sof_es8336_quirk_cb,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HUAWEI"),
-+			DMI_MATCH(DMI_BOARD_NAME, "BOHB-WAX9-PCB-B2"),
-+		},
-+		.driver_data = (void *)(SOF_ES8336_HEADPHONE_GPIO)
-+	},
- 	{}
- };
- 
--- 
-2.35.1
+https://www.phoronix.com/forums/forum/software/general-linux-open-source/
+1303986-linux-5-17-rc1-released-a-little-bit-early-but-with-shiny-new-
+features#post1304036
+
+Akemi
 

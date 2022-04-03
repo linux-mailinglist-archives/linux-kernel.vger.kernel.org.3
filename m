@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AB74F09F5
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6FB4F09F7
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358866AbiDCN21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 09:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S1358870AbiDCNdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 09:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232486AbiDCN20 (ORCPT
+        with ESMTP id S232486AbiDCNdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 09:28:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD07332993
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 06:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648992392; x=1680528392;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Eei9aFHh/CWNLCqQn+gub5rLTJC0z38fwyyhiqEphu4=;
-  b=JZFisvoqM/MvuHrc8o6oCLF3y24DJANL5nWHSDpKyRG6Hn6WnI1rsfvq
-   g2uzZe1fmr7j3bISKGlmpNvZaHmRxlXG0er51fuP8hrgeb9Wxg/N52pt/
-   FE7ySlH44v4HIECBlGdtoYkYO4UryELLMBBq6Hpm5viUClGpbcwEkqUnp
-   Hp0yUQodFUYxNZQlkIy1m49mTGrzYNBStqsI57hOX4yvHFlyuY9giRPEu
-   1r9/GbYkaW+xDc1Kbk0/N2OiuKc+MwfHxgj7v91XZRLTqibgUCGr8JNq6
-   3wACgMrKl5cLIhDbV8nL8FgegkRjsS4AFNSZfGygSxIJjqJMbKh/C8Fcb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="240323019"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="240323019"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 06:26:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="607738922"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Apr 2022 06:26:31 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nb0FS-0000zi-Fd;
-        Sun, 03 Apr 2022 13:26:30 +0000
-Date:   Sun, 3 Apr 2022 21:26:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Kees Cook <keescook@chromium.org>
-Subject: ERROR: modpost: "dmasound_deinit"
- [sound/oss/dmasound/dmasound_atari.ko] undefined!
-Message-ID: <202204032138.EFT9qGEd-lkp@intel.com>
+        Sun, 3 Apr 2022 09:33:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D85D33E30
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 06:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648992673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VDYAftsuMOi1oo0i/R8Jb9mhdL4m91TdJTqR4mm4wiA=;
+        b=KjT8RixPJEY70GgY8Zt/nLJOIzU69Ga/21fKILIAd3luQ9TCjteqJkMlSutrOC2EI4teox
+        RdNX8FF3/Cf7WBFuRR5JGtbYIcaavfqoN7bLllTTMXXH01Kp7GumqH10DsngUw50/5HHCB
+        wOiDez1OZiNOU236u/u5CbFZuYQDT60=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-ctiNfAhZO1Kt_i-pmdnYww-1; Sun, 03 Apr 2022 09:31:12 -0400
+X-MC-Unique: ctiNfAhZO1Kt_i-pmdnYww-1
+Received: by mail-qt1-f200.google.com with SMTP id p6-20020a05622a00c600b002e1cb9508e8so4795614qtw.20
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 06:31:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VDYAftsuMOi1oo0i/R8Jb9mhdL4m91TdJTqR4mm4wiA=;
+        b=KkD9Ew5r8Z27mZK8Od2ongtIAHfgdDiaC3dv4/4fN2rBAaFRMEfgPhJyEV/eRn6ykK
+         6btkCB7XQV90q8oMCV5Hw6KvWe5PKnJtx2/izaf6Yu0UGPvQsnXglaLBdDxZCpdq7fT3
+         N/4YMOcOAJ+yDUq3WEPSZhbahSuJRaRi01SFEITJGNPkqPLcEqV1E7pEV1d1YDyKvFZP
+         ZBvc4imwMPG15Y6fcXxFVdfHj+7B7myWRYAnn3U8IsneltcNNDdGNeMsQg1IIaAsaeMt
+         92Nb1MFE0cZjH1ijQjYEEoTq2zCirG0/IltWZ0+HgdQbjwpJcOjS0STztqxowGr2CP6/
+         oaAA==
+X-Gm-Message-State: AOAM530DJKDE0kI3AX1eoFLo89SKjhgvqBkzcdeoKVebm89aMYx0/dLp
+        OZH70QHiUM3lm471mP1du1Fad5pnP1hhHRUfYemdf6pNbtKwkD65Vy5R5Sx/nB5kV1OYaisc6Sg
+        TWSZzs3hVtBTxXCHifp+4wDZL
+X-Received: by 2002:ac8:57ca:0:b0:2e2:131b:6f0e with SMTP id w10-20020ac857ca000000b002e2131b6f0emr14428087qta.664.1648992672234;
+        Sun, 03 Apr 2022 06:31:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy6Iqoonrf1l2NpFOddPCh9YWDHIgeM0/FaT+c8ZCrvRKqTogSOEz6yRGSG2RNsYUniKGNOTw==
+X-Received: by 2002:ac8:57ca:0:b0:2e2:131b:6f0e with SMTP id w10-20020ac857ca000000b002e2131b6f0emr14428070qta.664.1648992671981;
+        Sun, 03 Apr 2022 06:31:11 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id az17-20020a05620a171100b00680af0db559sm4810834qkb.127.2022.04.03.06.31.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 06:31:11 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     dan.j.williams@intel.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jarkko@kernel.org
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] raid6test: change dataoffs from global to static
+Date:   Sun,  3 Apr 2022 09:30:51 -0400
+Message-Id: <20220403133051.3751572-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Smatch reports this issue
+raid6test.c:21:14: warning: symbol 'dataoffs'
+  was not declared. Should it be static?
 
-First bad commit (maybe != root cause):
+dataoffs is only used in raid6test.c.  File
+scope variables used only in one file should
+be static. Change dataoffs' storage-class-specifier
+from global to static.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
-commit: 606b102876e3741851dfb09d53f3ee57f650a52c drm: fb_helper: fix CONFIG_FB dependency
-date:   6 months ago
-config: m68k-randconfig-r032-20220403 (https://download.01.org/0day-ci/archive/20220403/202204032138.EFT9qGEd-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=606b102876e3741851dfb09d53f3ee57f650a52c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 606b102876e3741851dfb09d53f3ee57f650a52c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ crypto/async_tx/raid6test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "dmasound_deinit" [sound/oss/dmasound/dmasound_atari.ko] undefined!
-
+diff --git a/crypto/async_tx/raid6test.c b/crypto/async_tx/raid6test.c
+index c9d218e53bcb..d2d5fb154cda 100644
+--- a/crypto/async_tx/raid6test.c
++++ b/crypto/async_tx/raid6test.c
+@@ -18,7 +18,7 @@
+ #define NDISKS 64 /* Including P and Q */
+ 
+ static struct page *dataptrs[NDISKS];
+-unsigned int dataoffs[NDISKS];
++static unsigned int dataoffs[NDISKS];
+ static addr_conv_t addr_conv[NDISKS];
+ static struct page *data[NDISKS+3];
+ static struct page *spare;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

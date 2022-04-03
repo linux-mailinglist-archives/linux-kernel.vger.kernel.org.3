@@ -2,352 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623AF4F0A0C
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164824F0A10
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 15:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358961AbiDCN6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 09:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S237664AbiDCOAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 10:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiDCN6m (ORCPT
+        with ESMTP id S233681AbiDCOAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 09:58:42 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E520F366BC
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 06:56:47 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q14so9725378ljc.12
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 06:56:47 -0700 (PDT)
+        Sun, 3 Apr 2022 10:00:00 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC50366BB;
+        Sun,  3 Apr 2022 06:58:07 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id x14so3160784pjf.2;
+        Sun, 03 Apr 2022 06:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MBAKoPZjAakKIlnbHjpDhWtb6RRB2eJBPWizvPJ/+Bo=;
-        b=kxCaDGXxYCqlWxgTZ8NaC4fIlRxhfpSHmhglknxVXDn2uJsqpKV1hNHXNv+EzjNzcY
-         8a57l3jhR/F+P/leMZqat+jfXXsuALPXS6aSTEiM0tLx+1IeVMUgiFS9bZa8bSuwUnaI
-         FHMHDmOGjFSZOBRx1ZLm+sFgSYT68mNCnfy7AdMlreAibFBXE7jtyAXY0mMS9BT7B1QY
-         AgenZik0fPiXsf5fkRRoPQ720iF2yCY69ZHgNZtGCs/UgubcDffCJVre7p8jKgBY1gC4
-         eirSRSPLIwcJkiI/qqFNNp4vfj/2ROiVt16jHOIdqeR8pNfUE3td+cBXjM608V3Ge1kS
-         1gVw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J5mbcZTsiDy3mrNkZULEao/0esdA8VeRyfo3ZqOjIFQ=;
+        b=GVcAdkoyMokXfTR2LLDHuHD1vCyTv/CL4Mr0zcmD71hYcQLNx4trRtToCqpmglZ6p2
+         PfyrVY4bjMJXXryJlFSZQ/inrpyn7w0puiD1GGEY/XC92cwwNU1SxUYrW9IZcp7i+jIG
+         rr5TENhHGiX+LNgYDXHa6AVCI/VsyUXghylGxj7jMkpLT2FqRqavlgYBDmPuRHB89kl8
+         LftNF2g36cg6yha8KtSQVaDjIdftf5xi+Cxgar9wFbNJrCDeMY8KnnM9bq3P4Ey3m9Nh
+         /DgblGo29ZvOgCxzDuGnjFXgYqF5WmFRf1nyTgxTlrFEjhoJR6cvszzuclZGerOi/1Vw
+         FlQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MBAKoPZjAakKIlnbHjpDhWtb6RRB2eJBPWizvPJ/+Bo=;
-        b=EQUrmQFHg/iXZbxbxu7LyMD6x2XzhW/6RTHyyBJdi5UEfg92+0ny1UjlbarHqs9sdz
-         7fCPoAP6VelFM4IefyJMmlOCY+IaiXE6CHIZC/zadPx3rvJJ5c+oeaujfFVKJY17mwiR
-         ZIHoUpxkF2iVTchb7LQ9LIgbD6uzVtk8lz6KSOIRXazDszbr4/Sdkwa2pZbKyBnpFzLQ
-         kMy+jOlnlL4KHXrHre/McDlhX5F2opi7iHpck04UwFdGiZKlpfCw6GEQydJLFgdjsyJz
-         ut94EjRUDe3buFF/0vQ0PA27diEHZHI7JHF7KW5Qdp/Gxr3KOJJeiHqqMuH5kpr40yPi
-         VzSA==
-X-Gm-Message-State: AOAM533IRbpwGfMvZHYMWLju/cMo10GCoxs/G4/x8KTvB13OggsowPXL
-        ikyuY5n2XPhqj0Ou0NzemeN68ECbWi4KhdiVtshsUHGqiGoa3w==
-X-Google-Smtp-Source: ABdhPJwe28P8jbpyadFYcDVA6XJYC6/J4hbwEooG1Q0BtqW8YxfETVA26DQ2GtfYpLopx1meR6bpJIODP05PEn/2ah4=
-X-Received: by 2002:a2e:8941:0:b0:24b:156c:70ec with SMTP id
- b1-20020a2e8941000000b0024b156c70ecmr1519337ljk.38.1648994206059; Sun, 03 Apr
- 2022 06:56:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J5mbcZTsiDy3mrNkZULEao/0esdA8VeRyfo3ZqOjIFQ=;
+        b=0IkI+0ar28nCn5CxBcm/ptSk5yQnF9T60D2D/kXQ4uHXa75hDnC5u3ZlPTIiVQkK9D
+         pVyTFQkeiqw9npq84sTty+1FAE7SeOSGj5qDU0nuKyZ49Lh68JLeFqZd5xQWcQ6m+okN
+         cAROWkGtEiT0iMt93o2ybq8C2Y3NXfsUAD+rXLzJJzPihH9bjyPICELLwjp4xszd4Eck
+         E9eG4WcDmZ63pBp3ExXtWfT3dQHxTvx7bvqvBfH8gLlj65R5D/yDFQ5y7GzdFKKH1bsN
+         tEFD9e8ctoG7E8lJ6F3jR6cX9wyZrVnKM4qefONMVUPA/lGVh5JKwxXgHVgnqGYnQtKs
+         +48A==
+X-Gm-Message-State: AOAM532PM5xX8J/cu1frS74CE/xDxCYduwDcm8IgAfOBN7/H0ACXylBc
+        xdTvfZTW2V8qhCE5tDJrQ2DoAU7IOyi0VA==
+X-Google-Smtp-Source: ABdhPJxsYMJ1kd5jIPYZmDRQk0lc+8cUe2U8iJtJpbX8SKgWG1rYaUEfmU/2/0CM6VmLyS0ME+dgHQ==
+X-Received: by 2002:a17:902:ce0a:b0:156:72e2:f191 with SMTP id k10-20020a170902ce0a00b0015672e2f191mr7726674plg.76.1648994286114;
+        Sun, 03 Apr 2022 06:58:06 -0700 (PDT)
+Received: from localhost.localdomain ([113.173.105.8])
+        by smtp.googlemail.com with ESMTPSA id v13-20020a17090a088d00b001c64d30fa8bsm17110441pjc.1.2022.04.03.06.58.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 06:58:05 -0700 (PDT)
+From:   Bui Quang Minh <minhquangbui99@gmail.com>
+To:     cgroups@vger.kernel.org
+Cc:     Bui Quang Minh <minhquangbui99@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] cgroup: Kill the parent controller when its last child is killed
+Date:   Sun,  3 Apr 2022 20:57:17 +0700
+Message-Id: <20220403135717.8294-1-minhquangbui99@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1648840991.git.sevinj.aghayeva@gmail.com>
- <1a9f181f7f30f71c03e6e88df9fb8c17a298a192.1648840991.git.sevinj.aghayeva@gmail.com>
- <Ykl/4mIsSzaPRr+y@kroah.com>
-In-Reply-To: <Ykl/4mIsSzaPRr+y@kroah.com>
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Date:   Sun, 3 Apr 2022 09:56:34 -0400
-Message-ID: <CAMWRUK4BpTFf8fGoANjjOEZ2dxCws=QPLPJ166JPgnsdsy+pmg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] staging: rtl8723bs: remove redundant braces in if statements
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 7:07 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Apr 01, 2022 at 03:28:36PM -0400, Sevinj Aghayeva wrote:
-> > Adhere to Linux kernel coding style.
-> >
-> > Reported by checkpatch:
-> >
-> > WARNING: braces {} are not necessary for single statement blocks
-> >
-> > Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-> > ---
-> >  drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 76 +++++++------------
-> >  1 file changed, 26 insertions(+), 50 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-> > index 49a3f45cb771..9f328e9a81ff 100644
-> > --- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-> > +++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-> > @@ -271,12 +271,9 @@ static int has_channel(struct rt_channel_info *channel_set,
-> >  {
-> >       int i;
-> >
-> > -     for (i = 0; i < chanset_size; i++) {
-> > -             if (channel_set[i].ChannelNum == chan) {
-> > +     for (i = 0; i < chanset_size; i++)
-> > +             if (channel_set[i].ChannelNum == chan)
-> >                       return 1;
-> > -             }
-> > -     }
-> > -
-> >       return 0;
-> >  }
-> >
-> > @@ -649,9 +646,8 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
-> >                       if (psta) {
-> >                               /* update WMM, ERP in the beacon */
-> >                               /* todo: the timer is used instead of the number of the beacon received */
-> > -                             if ((sta_rx_pkts(psta) & 0xf) == 0) {
-> > +                             if ((sta_rx_pkts(psta) & 0xf) == 0)
-> >                                       update_beacon_info(padapter, pframe, len, psta);
-> > -                             }
-> >                       } else {
-> >                               /* allocate a new CAM entry for IBSS station */
-> >                               cam_idx = allocate_fw_sta_entry(padapter);
-> > @@ -916,11 +912,10 @@ unsigned int OnAuthClient(struct adapter *padapter, union recv_frame *precv_fram
-> >                       go2asoc = 1;
-> >               }
-> >       } else if (seq == 4) {
-> > -             if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared) {
-> > +             if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
-> >                       go2asoc = 1;
-> > -             } else {
-> > +             else
-> >                       goto authclnt_fail;
-> > -             }
-> >       } else {
-> >               /*  this is also illegal */
-> >               goto authclnt_fail;
-> > @@ -1455,11 +1450,10 @@ unsigned int OnAssocRsp(struct adapter *padapter, union recv_frame *precv_frame)
-> >       UpdateBrateTbl(padapter, pmlmeinfo->network.supported_rates);
-> >
-> >  report_assoc_result:
-> > -     if (res > 0) {
-> > +     if (res > 0)
-> >               rtw_buf_update(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len, pframe, pkt_len);
-> > -     } else {
-> > +     else
-> >               rtw_buf_free(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len);
-> > -     }
-> >
-> >       report_join_res(padapter, res);
-> >
-> > @@ -1531,9 +1525,8 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
-> >                          reason, GetAddr3Ptr(pframe),
-> >                          ignore_received_deauth);
-> >
-> > -             if (0 == ignore_received_deauth) {
-> > +             if (0 == ignore_received_deauth)
-> >                       receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
-> > -             }
-> >       }
-> >       pmlmepriv->LinkDetectInfo.bBusyTraffic = false;
-> >       return _SUCCESS;
-> > @@ -1674,11 +1667,10 @@ unsigned int OnAction_back(struct adapter *padapter, union recv_frame *precv_fra
-> >                       /* process_addba_req(padapter, (u8 *)&(pmlmeinfo->ADDBA_req), GetAddr3Ptr(pframe)); */
-> >                       process_addba_req(padapter, (u8 *)&(pmlmeinfo->ADDBA_req), addr);
-> >
-> > -                     if (pmlmeinfo->accept_addba_req) {
-> > +                     if (pmlmeinfo->accept_addba_req)
-> >                               issue_action_BA(padapter, addr, WLAN_ACTION_ADDBA_RESP, 0);
-> > -                     } else {
-> > +                     else
-> >                               issue_action_BA(padapter, addr, WLAN_ACTION_ADDBA_RESP, 37);/* reject ADDBA Req */
-> > -                     }
-> >
-> >                       break;
-> >
-> > @@ -1774,9 +1766,8 @@ static unsigned int on_action_public_vendor(union recv_frame *precv_frame)
-> >       u8 *pframe = precv_frame->u.hdr.rx_data;
-> >       u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
-> >
-> > -     if (!memcmp(frame_body + 2, P2P_OUI, 4)) {
-> > +     if (!memcmp(frame_body + 2, P2P_OUI, 4))
-> >               ret = on_action_public_p2p(precv_frame);
-> > -     }
-> >
-> >       return ret;
-> >  }
-> > @@ -2187,9 +2178,8 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
-> >
-> >                       wps_ie = rtw_get_wps_ie(pmgntframe->buf_addr+TXDESC_OFFSET+sizeof(struct ieee80211_hdr_3addr)+_BEACON_IE_OFFSET_,
-> >                               pattrib->pktlen-sizeof(struct ieee80211_hdr_3addr)-_BEACON_IE_OFFSET_, NULL, &wps_ielen);
-> > -                     if (wps_ie && wps_ielen > 0) {
-> > +                     if (wps_ie && wps_ielen > 0)
-> >                               rtw_get_wps_attr_content(wps_ie,  wps_ielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
-> > -                     }
-> >                       if (sr != 0)
-> >                               set_fwstate(pmlmepriv, WIFI_UNDER_WPS);
-> >                       else
-> > @@ -2245,9 +2235,8 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
-> >
-> >
-> >       /*  EXTERNDED SUPPORTED RATE */
-> > -     if (rate_len > 8) {
-> > +     if (rate_len > 8)
-> >               pframe = rtw_set_ie(pframe, WLAN_EID_EXT_SUPP_RATES, (rate_len - 8), (cur_network->supported_rates + 8), &pattrib->pktlen);
-> > -     }
-> >
-> >
-> >       /* todo:HT for adhoc */
-> > @@ -2447,9 +2436,8 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
-> >
-> >
-> >               /*  EXTERNDED SUPPORTED RATE */
-> > -             if (rate_len > 8) {
-> > +             if (rate_len > 8)
-> >                       pframe = rtw_set_ie(pframe, WLAN_EID_EXT_SUPP_RATES, (rate_len - 8), (cur_network->supported_rates + 8), &pattrib->pktlen);
-> > -             }
-> >
-> >
-> >               /* todo:HT for adhoc */
-> > @@ -2674,9 +2662,8 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short
-> >
-> >               /*  setting auth algo number */
-> >               val16 = (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared) ? 1 : 0;/*  0:OPEN System, 1:Shared key */
-> > -             if (val16) {
-> > +             if (val16)
-> >                       use_shared_key = 1;
-> > -             }
-> >               le_tmp = cpu_to_le16(val16);
-> >
-> >               /* setting IV for auth seq #3 */
-> > @@ -2831,16 +2818,14 @@ void issue_asocrsp(struct adapter *padapter, unsigned short status, struct sta_i
-> >                               break;
-> >                       }
-> >
-> > -                     if (!pbuf || ie_len == 0) {
-> > +                     if (!pbuf || ie_len == 0)
-> >                               break;
-> > -                     }
-> >               }
-> >
-> >       }
-> >
-> > -     if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK) {
-> > +     if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK)
-> >               pframe = rtw_set_ie(pframe, WLAN_EID_VENDOR_SPECIFIC, 6, REALTEK_96B_IE, &(pattrib->pktlen));
-> > -     }
-> >
-> >       /* add WPS IE ie for wps 2.0 */
-> >       if (pmlmepriv->wps_assoc_resp_ie && pmlmepriv->wps_assoc_resp_ie_len > 0) {
-> > @@ -3301,9 +3286,8 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da,
-> >       __le16 le_tmp;
-> >
-> >       pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-> > -     if (!pmgntframe) {
-> > +     if (!pmgntframe)
-> >               goto exit;
-> > -     }
-> >
-> >       /* update attribute */
-> >       pattrib = &pmgntframe->attrib;
-> > @@ -3627,9 +3611,8 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
-> >       action = ACT_PUBLIC_BSSCOEXIST;
-> >
-> >       pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-> > -     if (!pmgntframe) {
-> > +     if (!pmgntframe)
-> >               return;
-> > -     }
-> >
-> >       /* update attribute */
-> >       pattrib = &pmgntframe->attrib;
-> > @@ -3802,9 +3785,8 @@ unsigned int send_beacon(struct adapter *padapter)
-> >
-> >       } while (false == bxmitok && issue < 100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
-> >
-> > -     if (padapter->bSurpriseRemoved || padapter->bDriverStopped) {
-> > +     if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
-> >               return _FAIL;
-> > -     }
-> >
-> >
-> >       if (!bxmitok)
-> > @@ -4388,9 +4370,8 @@ static void process_80211d(struct adapter *padapter, struct wlan_bssid_ex *bssid
-> >                       }
-> >
-> >                       /*  skip AP 2.4G channel plan */
-> > -                     while ((j < chplan_ap.Len) && (chplan_ap.Channel[j] <= 14)) {
-> > +                     while ((j < chplan_ap.Len) && (chplan_ap.Channel[j] <= 14))
-> >                               j++;
-> > -                     }
-> >               }
-> >
-> >               pmlmeext->update_channel_plan_by_ap_done = 1;
-> > @@ -4402,9 +4383,8 @@ static void process_80211d(struct adapter *padapter, struct wlan_bssid_ex *bssid
-> >       i = 0;
-> >       while ((i < MAX_CHANNEL_NUM) && (chplan_new[i].ChannelNum != 0)) {
-> >               if (chplan_new[i].ChannelNum == channel) {
-> > -                     if (chplan_new[i].ScanType == SCAN_PASSIVE) {
-> > +                     if (chplan_new[i].ScanType == SCAN_PASSIVE)
-> >                               chplan_new[i].ScanType = SCAN_ACTIVE;
-> > -                     }
-> >                       break;
-> >               }
-> >               i++;
-> > @@ -4629,9 +4609,8 @@ void report_del_sta_event(struct adapter *padapter, unsigned char *MacAddr, unsi
-> >       struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
-> >
-> >       pcmd_obj = rtw_zmalloc(sizeof(struct cmd_obj));
-> > -     if (!pcmd_obj) {
-> > +     if (!pcmd_obj)
-> >               return;
-> > -     }
-> >
-> >       cmdsz = (sizeof(struct stadel_event) + sizeof(struct C2HEvent_Header));
-> >       pevtcmd = rtw_zmalloc(cmdsz);
-> > @@ -5124,9 +5103,8 @@ void survey_timer_hdl(struct timer_list *t)
-> >
-> >       /* issue rtw_sitesurvey_cmd */
-> >       if (pmlmeext->sitesurvey_res.state > SCAN_START) {
-> > -             if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS) {
-> > +             if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS)
-> >                       pmlmeext->sitesurvey_res.channel_idx++;
-> > -             }
-> >
-> >               if (pmlmeext->scan_abort) {
-> >                       pmlmeext->sitesurvey_res.channel_idx = pmlmeext->sitesurvey_res.ch_num;
-> > @@ -5135,9 +5113,8 @@ void survey_timer_hdl(struct timer_list *t)
-> >               }
-> >
-> >               ph2c = rtw_zmalloc(sizeof(struct cmd_obj));
-> > -             if (!ph2c) {
-> > +             if (!ph2c)
-> >                       goto exit_survey_timer_hdl;
-> > -             }
-> >
-> >               psurveyPara = rtw_zmalloc(sizeof(struct sitesurvey_parm));
-> >               if (!psurveyPara) {
-> > @@ -5348,9 +5325,8 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
-> >
-> >       /* check already connecting to AP or not */
-> >       if (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) {
-> > -             if (pmlmeinfo->state & WIFI_FW_STATION_STATE) {
-> > +             if (pmlmeinfo->state & WIFI_FW_STATION_STATE)
-> >                       issue_deauth_ex(padapter, pnetwork->mac_address, WLAN_REASON_DEAUTH_LEAVING, 1, 100);
-> > -             }
-> >               pmlmeinfo->state = WIFI_FW_NULL_STATE;
-> >
-> >               /* clear CAM */
-> > --
-> > 2.25.1
-> >
-> >
->
-> Still does not apply to my tree :(
+When umounting a cgroup controller, in case the controller has no children,
+the initial ref will be dropped in cgroup_kill_sb. In cgroup_rmdir path,
+the controller is deleted from the parent's children list in
+css_release_work_fn, which is run on a kernel worker.
 
- Sorry about that! Will sync my tree and train again.
+With this simple script
 
+	#!/bin/sh
+
+	mount -t cgroup -o none,name=test test ./tmp
+	mkdir -p ./tmp/abc
+
+	rmdir ./tmp/abc
+	umount ./tmp
+
+	sleep 5
+	cat /proc/self/cgroup
+
+The rmdir will remove the last child and umount is expected to kill the
+parent controller. However, when running the above script, we may get
+
+	1:name=test:/
+
+This shows that the parent controller has not been killed. The reason is
+after rmdir is completed, it is not guaranteed that the parent's children
+list is empty as css_release_work_fn is deferred to run on a worker. In
+case cgroup_kill_sb is run before that work, it does not drop the initial
+ref. Later in the worker, it just removes the child from the list without
+checking the list is empty to kill the parent controller. As a result, the
+parent controller still has the initial ref but without any logical refs
+(children ref, mount ref).
+
+This commit adds a free parent controller path into the worker function to
+free up the parent controller when the last child is killed.
+
+Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
+---
+ kernel/cgroup/cgroup.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index a557eea7166f..220eb1742961 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5157,12 +5157,25 @@ static void css_release_work_fn(struct work_struct *work)
+ 		container_of(work, struct cgroup_subsys_state, destroy_work);
+ 	struct cgroup_subsys *ss = css->ss;
+ 	struct cgroup *cgrp = css->cgroup;
++	struct cgroup *parent = cgroup_parent(cgrp);
+ 
+ 	mutex_lock(&cgroup_mutex);
+ 
+ 	css->flags |= CSS_RELEASED;
+ 	list_del_rcu(&css->sibling);
+ 
++	/*
++	 * If parent doesn't have any children, start killing it.
++	 * And don't kill the default root.
++	 */
++	if (parent && list_empty(&parent->self.children) &&
++	    parent != &cgrp_dfl_root.cgrp &&
++	    !percpu_ref_is_dying(&parent->self.refcnt)) {
++		if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
++			cgroup_bpf_offline(parent);
++		percpu_ref_kill(&parent->self.refcnt);
++	}
++
+ 	if (ss) {
+ 		/* css release path */
+ 		if (!list_empty(&css->rstat_css_node)) {
 -- 
+2.25.1
 
-Sevinj.Aghayeva

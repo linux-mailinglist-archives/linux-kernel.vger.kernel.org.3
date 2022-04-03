@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37EE4F07AC
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4509E4F07B6
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235548AbiDCFEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 01:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S235810AbiDCFPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 01:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiDCFEs (ORCPT
+        with ESMTP id S229566AbiDCFP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 01:04:48 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FAC33EB8
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 22:02:54 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id D1E793200D30;
-        Sun,  3 Apr 2022 01:02:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 03 Apr 2022 01:02:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=WeeRCkZhxmtARzf06YltnRLpzhoYn2
-        mfqbh7gF1oO98=; b=BZA6oC2Pcq0YOqfC+nC+driizm60Q3zn1Rw/v/NjET+Kp0
-        /rGHjKINSU22NqTZoDouOEw4iJfmO5GCVUY+tVhgHAZBsHMZlUeGc7yAqSEiWwMv
-        WulEJuKr9rApl/bjko17VLvPvXvWY3ZhcPT4i7o2xB2Il3TNbGmwUd1ldmtTtDc4
-        aV/99s9FRiz4R8Kl59Ugk0cI29motgnNiORb/EB0aaYIDuZCWYamvEPGeIM5xpwb
-        DmfLWyqCKUH/ltrzvurFyY0sRxKPwPN8s63S+fdR9dx8NKUXIKNTMxM9PLqiObVZ
-        1Yi/KhPoiJ9nuDSBa6euAjyKl7RHxAapi/1Fxtwg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=WeeRCkZhxmtARzf06
-        YltnRLpzhoYn2mfqbh7gF1oO98=; b=bX0JCIe9dSbss8GwNo95tUCB3aLr5Nt0z
-        moHkSrwhHPrLFwXssMbkSXNuJemBlFWqpUwVGmA5cno6S6WwkLciwmMCKLZPo3SF
-        ESY4izFB0yyMGzXZJQA8Vdfp4wcjBRXoWMwh50C3phpP0uvbq/cgPi3RMS7IzqZc
-        JZmEsm3xfwufC6Tcnwq1kBssGHZcN3kKjI93WFhz3sZ4tYIs0K/6m0vDbyptONm5
-        /ABnQqwMKTtOpjT9AhVWiA6dMomLkiHg3AQytn9C4+gLi6oxrkjqekJxEDDfTZdt
-        WOSNdZXl5iOB4RGf3Yahv+PUr1srI5ix7TQPJHTDf3hkkH/G6KidQ==
-X-ME-Sender: <xms:eipJYohqhsUtqtfPKg1sDrKZS3oky1xwRh2D4v7Q9S66dCowPgNufA>
-    <xme:eipJYhCoR0scliF3ten5UVVVyJI7U18RX3xQuMUoniHnl6DSE66z0n4Z3hHNJ4mcD
-    xoeOpb4ZaLb7C_2g94>
-X-ME-Received: <xmr:eipJYgFHoTS45-XDtLMgl6rHDIEz0sZ8wGIi5YFECqWW7e6EOeS4UrSCmhpGHAwZkAd90OU-ytSuwNBlJQ4nh4JajmN1JoiM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiledgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
-    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
-    hpqeenucggtffrrghtthgvrhhnpeejgeeifeeuveeufeeigeegjeelvdfgjeegffejgfdv
-    keelhefgtdefteejleekjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhh
-    ihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:eypJYpSNReaLdacj38Bh7MeXLPSYhR4smNqfigJXlUj00HUD3T1hwQ>
-    <xmx:eypJYlwEhKEwSD4iDCxsc9fl2ugDo_666pAuug2iDwuL5miw_Ss7Dg>
-    <xmx:eypJYn4f165a2FQorFf1p2agPntxEXg1QmpFJVN4r5ZWVqk0R2xPNg>
-    <xmx:eypJYsmBAyVyslg2qkhmkld_MI3CqBf0Kf9TInPOIM2eE8uyY8RGZg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 3 Apr 2022 01:02:49 -0400 (EDT)
-Date:   Sun, 3 Apr 2022 14:02:47 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux-kernel@vger.kernel.org, "Bos, H.J." <h.j.bos@vu.nl>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        linux1394-devel@lists.sourceforge.net,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH] firewire: remove check of list iterator against head
- past the loop body
-Message-ID: <YkkqdybZovAITy6k@workstation>
-Mail-Followup-To: Jakob Koschel <jakobkoschel@gmail.com>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux-kernel@vger.kernel.org, "Bos, H.J." <h.j.bos@vu.nl>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        linux1394-devel@lists.sourceforge.net,
-        Mike Rapoport <rppt@kernel.org>
-References: <20220331223601.902329-1-jakobkoschel@gmail.com>
+        Sun, 3 Apr 2022 01:15:29 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7633419289;
+        Sat,  2 Apr 2022 22:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=PEgc8Ga0cnyRYRy3sepXDsniqZif9JIr9jjDkoUEBdQ=; b=arcia5dACXcwl6PBm4kdLKQ00e
+        o+b4po6tKbqKMZVRftRs0MOz/ARBR1SL4zRpNCD088wyaw+l/rX4n8jLRgiv+JD5oX5Jp2DVRCVtM
+        TEpqzQHaa93aHawO0Ees1yGVSLxDdD/+P/isouLSUUjwEjSPtVzDSBZNImmvM9XKRBRLWhziBXNr5
+        mP98OBnzolebyVuK2ufK30MfdrfD8oSeVDJRvV2q09RFzGveyNPj/XeszSH8AyXfNUgDm9VmOqO1L
+        /WcMrQk0UamQ52KlJnfk8mJt52OK8dtFYjxSXMVgqC1T0gyqF4+h20AbE6NaGk4uQaUx+54DaPUed
+        vK3iw9mA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nasYK-004fIF-Ft; Sun, 03 Apr 2022 05:13:28 +0000
+Message-ID: <53133d81-e52c-8887-c879-615b585e3351@infradead.org>
+Date:   Sat, 2 Apr 2022 22:13:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331223601.902329-1-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3 v2] Docs: admin/kernel-parameters: edit a few boot
+ options
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ia64@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <lenb@kernel.org>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20220401030927.12023-1-rdunlap@infradead.org>
+ <20220401030927.12023-2-rdunlap@infradead.org>
+ <20220401120305.00076d14@gandalf.local.home>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220401120305.00076d14@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, Apr 01, 2022 at 12:36:01AM +0200, Jakob Koschel wrote:
-> When list_for_each_entry() completes the iteration over the whole list
-> without breaking the loop, the iterator value will be a bogus pointer
-> computed based on the head element.
+
+On 4/1/22 09:03, Steven Rostedt wrote:
+> On Thu, 31 Mar 2022 20:09:25 -0700
+> Randy Dunlap <rdunlap@infradead.org> wrote:
 > 
-> While it is safe to use the pointer to determine if it was computed
-> based on the head element, either with list_entry_is_head() or
-> &pos->member == head, using the iterator variable after the loop should
-> be avoided.
+>> @@ -5908,6 +5910,8 @@
+>>  	trace_buf_size=nn[KMG]
+>>  			[FTRACE] will set tracing buffer size on each cpu.
+>>  
+>> +	trace_clock=	[FTRACE] See Documentation/trace/ftrace.rst
 > 
-> In preparation to limit the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer to point to the found element [1].
+> 	trace_clock=	[FTRACE] Set the clock used for tracing events
+> 			at boot up.
+> 			local - Use the per CPU time stamp counter
+> 				(converted into nanoseconds). Fast, but
+> 				depending on the architecture, may not be
+> 				in sync between CPUs.
+> 			global - Event time stamps are synchronize across
+> 				CPUs. May be slower than the local clock,
+> 				but better for some race conditions.
+> 			counter - Simple counting of events (1, 2, ..)
+> 				note, some counts may be skipped due to the
+> 				infrastructure grabbing the clock more than
+> 				once per event.
+> 			uptime - Use jiffies as the time stamp.
+> 			perf - Use the same clock that perf uses.
+> 			mono - Use ktime_get_mono_fast_ns() for time stamps.
+> 			mono_raw - Use ktime_get_raw_fast_ns() for time
+> 				stamps.
+> 			boot - Use ktime_get_boot_fast_ns() for time stamps.
+> 			Architectures may add more clocks. See
+> 			Documentation/trace/ftrace.rst for more details.
 > 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/firewire/core-transaction.c | 30 +++++++++++++++--------------
->  drivers/firewire/sbp2.c             | 13 +++++++------
->  2 files changed, 23 insertions(+), 20 deletions(-)
 
-I think it is a good catch.
+Will do. Thanks.
 
-Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> 
+> 
+>> +
+>>  	trace_event=[event-list]
+>>  			[FTRACE] Set and start specified trace events in order
+>>  			to facilitate early boot debugging. The event-list is a
 
-For the changes in firewire-core module:
-Tested-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-
-Unfortunately the activity for maintenance in Linux FireWire subsystem
-is quite low. No actions in past half a year. If the patch blocks
-further work to improve list implementation, I think it better to look
-for the other path to merge.
-
-
-Regards
-
-Takashi Sakamoto
+-- 
+~Randy

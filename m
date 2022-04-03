@@ -2,108 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B116A4F0887
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 11:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319EE4F0889
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 11:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242959AbiDCJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 05:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S1356032AbiDCJNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 05:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiDCJMm (ORCPT
+        with ESMTP id S234343AbiDCJNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 05:12:42 -0400
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB7632EEC
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 02:10:48 -0700 (PDT)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
-        id 1nawFy-00091i-GC
-        for linux-kernel@vger.kernel.org; Sun, 03 Apr 2022 11:10:46 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-kernel@vger.kernel.org
-From:   Akemi Yagi <toracat@elrepo.org>
-Subject: Re: [PATCH] Makefile: fix config cc version check
-Date:   Sun, 3 Apr 2022 09:10:38 -0000 (UTC)
-Message-ID: <t2boae$9u9$1@ciao.gmane.io>
-References: <20220307223231.608498-1-mst@redhat.com>
-        <CAK7LNAR=fs+VJUZJj7YyprdA6xjx=4bttPRL6e4bvNkEeX9eng@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Sun, 3 Apr 2022 05:13:13 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4BF32EFA
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 02:11:18 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id awGRnFBSyRGzQawGRnw1Y8; Sun, 03 Apr 2022 11:11:17 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 03 Apr 2022 11:11:17 +0200
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH] virtio: pci: Fix an error handling path in vp_modern_probe()
+Date:   Sun,  3 Apr 2022 11:11:14 +0200
+Message-Id: <237109725aad2c3c03d14549f777b1927c84b045.1648977064.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-User-Agent: Pan/0.149 (Bellevue; 4c157ba git@gitlab.gnome.org:GNOME/pan.git)
-Cc:     linux-kbuild@vger.kernel.org
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Mar 2022 11:23:31 +0900, Masahiro Yamada wrote:
+If an error occurs after a successful pci_request_selected_regions() call,
+it should be undone by a corresponding pci_release_selected_regions() call,
+as already done in vp_modern_remove().
 
-> On Tue, Mar 8, 2022 at 7:32 AM Michael S. Tsirkin <mst@redhat.com>
-> wrote:
->>
->> .config is of the form:
->> CONFIG_CC_VERSION_TEXT="gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9)"
-> 
-> 
-> No. This was changed.
-> 
-> See this:
-> 
-> $ git show 129ab0d2d9f -- Makefile
-> 
-> 
-> 
->> while CC_VERSION_TEXT is of the form: gcc (GCC) 11.2.1 20220127 (Red
->> Hat 11.2.1-7)
->>
->> thus when comparing these, CONFIG_CC_VERSION_TEXT should not be put in
->> "", otherwise we get () outside "" which shell then tries to evaluate.
->>
->> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
->> ---
->>  Makefile | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/Makefile b/Makefile index daeb5c88b50b..d5c03c827825
->> 100644 --- a/Makefile +++ b/Makefile @@ -1714,9 +1714,9 @@ PHONY +=
->> prepare
->>  # now expand this into a simple variable to reduce the cost of shell
->>  evaluations prepare: CC_VERSION_TEXT := $(CC_VERSION_TEXT)
->>  prepare:
->> -       @if [ "$(CC_VERSION_TEXT)" != "$(CONFIG_CC_VERSION_TEXT)" ];
->> then \
->> +       @if [ "$(CC_VERSION_TEXT)" != $(CONFIG_CC_VERSION_TEXT) ]; then
->> \
->>                 echo >&2 "warning: the compiler differs from the one
->>                 used to build the kernel"; \
->> -               echo >&2 "  The kernel was built by:
->> $(CONFIG_CC_VERSION_TEXT)"; \ +               echo >&2 "  The kernel
->> was built by: "$(CONFIG_CC_VERSION_TEXT)";" \
->>                 echo >&2 "  You are using:          
->>                 $(CC_VERSION_TEXT)"; \
->>         fi
->>
->> --
->> MST
+Fixes: fd502729fbbf ("virtio-pci: introduce modern device module")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/virtio/virtio_pci_modern_dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I believe the patch proposed by Michael indeed fixes an issue 
-introduced by 129ab0d2d9f (Makefile).
-
-Please see the following bug reports:
-
-https://elrepo.org/bugs/view.php?id=1215
-https://elrepo.org/bugs/view.php?id=1214
-
-and this forum post:
-
-https://www.phoronix.com/forums/forum/software/general-linux-open-source/
-1303986-linux-5-17-rc1-released-a-little-bit-early-but-with-shiny-new-
-features#post1304036
-
-Akemi
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index 591738ad3d56..4093f9cca7a6 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -347,6 +347,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
+ err_map_isr:
+ 	pci_iounmap(pci_dev, mdev->common);
+ err_map_common:
++	pci_release_selected_regions(pci_dev, mdev->modern_bars);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(vp_modern_probe);
+-- 
+2.32.0
 

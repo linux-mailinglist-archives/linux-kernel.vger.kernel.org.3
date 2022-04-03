@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEC74F0B47
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C2E4F0B49
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359458AbiDCQkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 12:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S1359456AbiDCQov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 12:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358708AbiDCQkj (ORCPT
+        with ESMTP id S1351233AbiDCQou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:40:39 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698F2DEED
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:38:44 -0700 (PDT)
-Received: from dslb-094-219-033-178.094.219.pools.vodafone-ip.de ([94.219.33.178] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nb3FC-00080j-6Z; Sun, 03 Apr 2022 18:38:26 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
+        Sun, 3 Apr 2022 12:44:50 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203E638BFE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:42:56 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id p25so5908090qkj.10
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 09:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=NPyz/GS6BUUZMWinhofGh44+tVYJrswBvXwRBf0PcHY=;
+        b=n0hujqeD0wIIwIJ4aK2UIyzjyZxztpDNUJsQSuj9MrnlIogzVJE6lKQqlJddunj5Fu
+         Xzreby4FKejC7g/RUlUvJvdJXLv6rA4F/xrmZ9fW5IBdjOrH+Amnv8lzehx9+sOj6OZI
+         Qh7bUuXsWNcbgGu3HCVe0kQQs7rBveZ69tdh1PljjSPiA7YPi/9bs0Xy8//oq/BFQ6DN
+         mGGcGrndXi2VnzrXoAgdULXv5dwm57RF7nlOS5aplqHc3qZZdXVQ/D2GZWJ2o552iLGt
+         pY8+fbt4d9uYJdK0vF+D96gjbRYJar+6w/s8uC2QEOPvFbBkDT5fmJRXQqV16iiWrGL5
+         u+ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=NPyz/GS6BUUZMWinhofGh44+tVYJrswBvXwRBf0PcHY=;
+        b=zSZvOjVPVUepq0YyHUQfewjgBaI2dCsq5nB8UDXItH6TYNfu2hbbsd3GrnASYrRrg8
+         +WBrN8emRBAjfHMJMJ5F/iwyR0WDcUcB8UFMz9M4lnTCyrpX9qAaWpJ/FoPjo1c3kUd/
+         T8hBDhSdoxVsfG8RDW109U1snV2Ls82js2OKLU0XIFVUFETNoAeZfNP/1DPbKFuJIDhA
+         TubMtZfLpxWKjT8vhPm8Fgt4exf8Q87n7ej54HqXl6YjK4xMZvUurvAJMnVJ5/0rTFKR
+         b3j0hUqUo9jC4Iz4xj2Guv7kIuAy9nXS/slpXd/jTM+rcjJ2CxCohy4I+0TtsBPuCpqG
+         QPWA==
+X-Gm-Message-State: AOAM532OqVHah7x2qJ+2KLavtSwSpkUKqgcc/NSRXdXk1YXV291zpSrE
+        ZPFsO6et808DWlHNGOYoGDk=
+X-Google-Smtp-Source: ABdhPJzGsl945keh7APWt4ihJUAwUlkXHl0gVPQx3EpyNDxHoM/RBIlpA7n/WlAsz36Ag7YfEGhqCw==
+X-Received: by 2002:a05:620a:2993:b0:67d:7119:9f19 with SMTP id r19-20020a05620a299300b0067d71199f19mr11670688qkp.494.1649004174988;
+        Sun, 03 Apr 2022 09:42:54 -0700 (PDT)
+Received: from euclid ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id br35-20020a05620a462300b0067e890073cbsm5489538qkb.6.2022.04.03.09.42.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 09:42:54 -0700 (PDT)
+Date:   Sun, 3 Apr 2022 12:42:50 -0400
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 2/2] staging: r8188eu: use ieee80211 helpers in validate_recv_mgnt_frame
-Date:   Sun,  3 Apr 2022 18:38:18 +0200
-Message-Id: <20220403163818.357173-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220403163818.357173-1-martin@kaiser.cx>
-References: <20220403163818.357173-1-martin@kaiser.cx>
+        outreachy@lists.linux.dev
+Subject: [PATCH v2] staging: r8188eu: simplify control flow
+Message-ID: <20220403164250.GA371601@euclid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the ieee80211 helpers to detect the frame subtype in
-and to parse mac addresses in validate_recv_mgnt_frame.
+The function iterates an index from 0 to NUM_PMKID_CACHE and returns
+the first index for which the condition is true. If no such index is
+found, the function returns -1. Current code has a complex control
+flow that obfuscates this simple task. Replace it with a loop.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+Also, given the shortened function body, replace the long variable
+name psecuritypriv with a short variable name p.
+
+Reported by checkpatch:
+
+WARNING: else is not generally useful after a break or return
+
+Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 8fa07d37d07b..1a79c3f46bbf 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -915,24 +915,24 @@ static void validate_recv_mgnt_frame(struct adapter *padapter,
- 				     struct recv_frame *precv_frame)
+v1 -> v2: Put the conditional in a single line to avoid checkpatch
+complaint.
+
+ drivers/staging/r8188eu/core/rtw_mlme.c | 25 ++++++-------------------
+ 1 file changed, 6 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index f94b1536a177..cddd8ab80236 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -1637,26 +1637,13 @@ int rtw_restruct_wmm_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie, uint in_
+ 
+ static int SecIsInPMKIDList(struct adapter *Adapter, u8 *bssid)
  {
- 	struct sta_info *psta;
-+	struct ieee80211_hdr *hdr;
+-	struct security_priv *psecuritypriv = &Adapter->securitypriv;
+-	int i = 0;
+-
+-	do {
+-		if ((psecuritypriv->PMKIDList[i].bUsed) &&
+-		    (!memcmp(psecuritypriv->PMKIDList[i].Bssid, bssid, ETH_ALEN))) {
+-			break;
+-		} else {
+-			i++;
+-			/* continue; */
+-		}
+-
+-	} while (i < NUM_PMKID_CACHE);
++	struct security_priv *p = &Adapter->securitypriv;
++	int i;
  
- 	precv_frame = recvframe_chk_defrag(padapter, precv_frame);
- 	if (!precv_frame)
- 		return;
+-	if (i == NUM_PMKID_CACHE) {
+-		i = -1;/*  Could not find. */
+-	} else {
+-		/*  There is one Pre-Authentication Key for the specific BSSID. */
+-	}
+-	return i;
++	for (i = 0; i < NUM_PMKID_CACHE; i++)
++		if (p->PMKIDList[i].bUsed && !memcmp(p->PMKIDList[i].Bssid, bssid, ETH_ALEN))
++			return i;
++	return -1;
+ }
  
--	/* for rx pkt statistics */
--	psta = rtw_get_stainfo(&padapter->stapriv, GetAddr2Ptr(precv_frame->rx_data));
-+	hdr = (struct ieee80211_hdr *)precv_frame->rx_data;
-+	psta = rtw_get_stainfo(&padapter->stapriv, hdr->addr2);
- 	if (psta) {
- 		psta->sta_stats.rx_mgnt_pkts++;
--		if (GetFrameSubType(precv_frame->rx_data) == WIFI_BEACON) {
-+		if (ieee80211_is_beacon(hdr->frame_control))
- 			psta->sta_stats.rx_beacon_pkts++;
--		} else if (GetFrameSubType(precv_frame->rx_data) == WIFI_PROBEREQ) {
-+		else if (ieee80211_is_probe_req(hdr->frame_control))
- 			psta->sta_stats.rx_probereq_pkts++;
--		} else if (GetFrameSubType(precv_frame->rx_data) == WIFI_PROBERSP) {
--			if (!memcmp(padapter->eeprompriv.mac_addr, GetAddr1Ptr(precv_frame->rx_data), ETH_ALEN))
-+		else if (ieee80211_is_probe_resp(hdr->frame_control)) {
-+			if (!memcmp(padapter->eeprompriv.mac_addr, hdr->addr1, ETH_ALEN))
- 				psta->sta_stats.rx_probersp_pkts++;
--			else if (is_broadcast_mac_addr(GetAddr1Ptr(precv_frame->rx_data)) ||
--				 is_multicast_mac_addr(GetAddr1Ptr(precv_frame->rx_data)))
-+			else if (is_broadcast_mac_addr(hdr->addr1) || is_multicast_mac_addr(hdr->addr1))
- 				psta->sta_stats.rx_probersp_bm_pkts++;
- 			else
- 				psta->sta_stats.rx_probersp_uo_pkts++;
+ /*  */
 -- 
-2.30.2
+2.25.1
 

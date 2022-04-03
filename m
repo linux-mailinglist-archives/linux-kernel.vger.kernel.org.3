@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5077A4F07F4
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2A74F07F2
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244341AbiDCFua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 01:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S241070AbiDCFuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 01:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239121AbiDCFuV (ORCPT
+        with ESMTP id S238071AbiDCFuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 3 Apr 2022 01:50:21 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F83B65;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19852B58;
         Sat,  2 Apr 2022 22:48:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=9HLdp8vpH46LVqV+icUSHesGjS9xNPYX1VipQXkhpYc=; b=AYmT+NKyWkgOxp7pocjzoyB2b9
-        OduSdVVwnfhY3ac32a03OWFfJwMg7vMeEJdvmR42eMdV75+tuTO1xWv9URQB2KmY/dSP/HRlmmt96
-        JGQ7A3IuiidM6OH81pGRxceTI/nbwscwCLsAbQ6Eu8accp/burNJV+oZi9a57DfPVRjnhJ6GMBnMI
-        x+uVgkOElUgFxjbFCFjAq0hWrTzC1y5xKduvepq4p6aOhIBksirknQI6oex2v4Kbnd1TFfNXVJU1T
-        qPGruGSbrgVISExBTqHBqV5iuZMrQOfbr9ITQBQL3qQkz5ehuKxWxbzMQ9/CXClI+FVro+Q/BOmTh
-        TFPZFG3A==;
+        bh=K9yVPdpUXWREtqQ2nffFw8NXKPoyQWoWTJdYizlYGvU=; b=WytcC4XK1D1kXTp+VkhHCD3vt/
+        ePXohUdFJxkBS5DN7ExZgnOeTVJwJo2Bc4oCXJhrWTQCWG7xVEagzwPaHvPfh9E0lUc6vtPlkiStI
+        bxPqzQbzu81SzliE2Od0d/PKyq3gi+9YwFaP/Z3PBtXtWhFQubtb8XtXebxv4Uv//zQoeg6EMTDxM
+        fGuqy7Jf9hGoNgmrIXY7zGeGLbILqG91Db8I2HqfHgSdVxaXDKGnWPBXDBMHuSbs7QFGv4nluc95U
+        A+JlQCcwxw3eu2b4JERwC1MkiajR7XiKMhXAfUzMk40SICTs0896magacvibhmFN7I8ySqGQ9uCSj
+        /97iv3Og==;
 Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nat69-00Amnh-36; Sun, 03 Apr 2022 05:48:25 +0000
+        id 1nat69-00Amnh-CU; Sun, 03 Apr 2022 05:48:25 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH 2/3 v3] Docs/admin: alphabetize some kernel-parameters (part 1)
-Date:   Sat,  2 Apr 2022 22:48:21 -0700
-Message-Id: <20220403054822.16868-3-rdunlap@infradead.org>
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH 3/3 v3] docs/admin: alphabetize parts of kernel-parameters.txt (part 2)
+Date:   Sat,  2 Apr 2022 22:48:22 -0700
+Message-Id: <20220403054822.16868-4-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220403054822.16868-1-rdunlap@infradead.org>
 References: <20220403054822.16868-1-rdunlap@infradead.org>
@@ -52,298 +50,296 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move some out-of-place kernel parameters into their correct
-locations.
-
-Move one out-of-order keyword/legend in kernel-parameters.rst.
-
-Add some missing keyword legends in kernel-parameters.rst:
-  HIBERNATION HYPER_V
-and drop some obsolete/removed keyword legends:
- EIDE IOSCHED OSS TS XT
-
-Correct the location of the setup.h file.
+Alphabetize several of the kernel boot parameters in
+kernel-parameters.txt.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
 ---
-Rafael, Pavel: should SWSUSP and HIBERNATION be combined ... ?
+v3: rebase/resend
+v2: new patch for this series.
 
-v3: use tabs for indentation on the moved "hardened_usercopy" text
-v2: rebase/resend
-
- Documentation/admin-guide/kernel-parameters.rst |   11 -
- Documentation/admin-guide/kernel-parameters.txt |  113 +++++++-------
- 2 files changed, 61 insertions(+), 63 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |  166 +++++++-------
+ 1 file changed, 83 insertions(+), 83 deletions(-)
 
 --- linux-next-20220331.orig/Documentation/admin-guide/kernel-parameters.txt
 +++ linux-next-20220331/Documentation/admin-guide/kernel-parameters.txt
-@@ -563,6 +563,20 @@
+@@ -461,6 +461,12 @@
+ 			Format: <io>,<irq>,<mode>
+ 			See header of drivers/net/hamradio/baycom_ser_hdx.c.
  
- 	cio_ignore=	[S390]
- 			See Documentation/s390/common_io.rst for details.
++	bert_disable	[ACPI]
++			Disable BERT OS support on buggy BIOSes.
 +
-+	clearcpuid=BITNUM[,BITNUM...] [X86]
-+			Disable CPUID feature X for the kernel. See
-+			arch/x86/include/asm/cpufeatures.h for the valid bit
-+			numbers. Note the Linux specific bits are not necessarily
-+			stable over kernel options, but the vendor specific
-+			ones should be.
-+			Also note that user programs calling CPUID directly
-+			or using the feature without checking anything
-+			will still see it. This just prevents it from
-+			being used by the kernel or shown in /proc/cpuinfo.
-+			Also note the kernel might malfunction if you disable
-+			some critical bits.
++	bgrt_disable	[ACPI][X86]
++			Disable BGRT to avoid flickering OEM logo.
 +
- 	clk_ignore_unused
- 			[CLK]
- 			Prevents the clock framework from automatically gating
-@@ -631,19 +645,6 @@
- 			Defaults to zero when built as a module and to
- 			10 seconds when built into the kernel.
+ 	blkdevparts=	Manual partition parsing of block device(s) for
+ 			embedded devices based on command line input.
+ 			See Documentation/block/cmdline-partition.rst
+@@ -476,12 +482,6 @@
  
--	clearcpuid=BITNUM[,BITNUM...] [X86]
--			Disable CPUID feature X for the kernel. See
--			arch/x86/include/asm/cpufeatures.h for the valid bit
--			numbers. Note the Linux specific bits are not necessarily
--			stable over kernel options, but the vendor specific
--			ones should be.
--			Also note that user programs calling CPUID directly
--			or using the feature without checking anything
--			will still see it. This just prevents it from
--			being used by the kernel or shown in /proc/cpuinfo.
--			Also note the kernel might malfunction if you disable
--			some critical bits.
+ 			See Documentation/admin-guide/bootconfig.rst
+ 
+-	bert_disable	[ACPI]
+-			Disable BERT OS support on buggy BIOSes.
 -
- 	cma=nn[MG]@[start[MG][-end[MG]]]
- 			[KNL,CMA]
- 			Sets the size of kernel global memory area for
-@@ -950,6 +951,8 @@
- 			dump out devices still on the deferred probe list after
- 			retrying.
- 
-+	delayacct	[KNL] Enable per-task delay accounting
-+
- 	dell_smm_hwmon.ignore_dmi=
- 			[HW] Continue probing hardware even if DMI data
- 			indicates that the driver is running on unsupported
-@@ -1003,17 +1006,6 @@
- 	disable=	[IPV6]
- 			See Documentation/networking/ipv6.rst.
- 
--	hardened_usercopy=
--                        [KNL] Under CONFIG_HARDENED_USERCOPY, whether
--                        hardening is enabled for this boot. Hardened
--                        usercopy checking is used to protect the kernel
--                        from reading or writing beyond known memory
--                        allocation boundaries as a proactive defense
--                        against bounds-checking flaws in the kernel's
--                        copy_to_user()/copy_from_user() interface.
--                on      Perform hardened usercopy checks (default).
--                off     Disable hardened usercopy checks.
+-	bgrt_disable	[ACPI][X86]
+-			Disable BGRT to avoid flickering OEM logo.
 -
- 	disable_radix	[PPC]
- 			Disable RADIX MMU mode on POWER9
+ 	bttv.card=	[HW,V4L] bttv (bt848 + bt878 based grabber cards)
+ 	bttv.radio=	Most important insmod options are available as
+ 			kernel args too.
+@@ -766,6 +766,24 @@
+ 			0: default value, disable debugging
+ 			1: enable debugging at boot time
  
-@@ -1316,17 +1308,6 @@
- 			force: enforce the use of EDAC to report H/W event.
- 			default: on.
- 
--	ekgdboc=	[X86,KGDB] Allow early kernel console debugging
--			ekgdboc=kbd
--
--			This is designed to be used in conjunction with
--			the boot argument: earlyprintk=vga
--
--			This parameter works in place of the kgdboc parameter
--			but can only be used if the backing tty is available
--			very early in the boot process. For early debugging
--			via a serial port see kgdboc_earlycon instead.
--
- 	edd=		[EDD]
- 			Format: {"off" | "on" | "skip[mbr]"}
- 
-@@ -1388,6 +1369,17 @@
- 	eisa_irq_edge=	[PARISC,HW]
- 			See header of drivers/parisc/eisa.c.
- 
-+	ekgdboc=	[X86,KGDB] Allow early kernel console debugging
-+			Format: ekgdboc=kbd
++	cpcihp_generic=	[HW,PCI] Generic port I/O CompactPCI driver
++			Format:
++			<first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
 +
-+			This is designed to be used in conjunction with
-+			the boot argument: earlyprintk=vga
++	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
++			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
++			Some features depend on CPU0. Known dependencies are:
++			1. Resume from suspend/hibernate depends on CPU0.
++			Suspend/hibernate will fail if CPU0 is offline and you
++			need to online CPU0 before suspend/hibernate.
++			2. PIC interrupts also depend on CPU0. CPU0 can't be
++			removed if a PIC interrupt is detected.
++			It's said poweroff/reboot may depend on CPU0 on some
++			machines although I haven't seen such issues so far
++			after CPU0 is offline on a few tested machines.
++			If the dependencies are under your control, you can
++			turn on cpu0_hotplug.
 +
-+			This parameter works in place of the kgdboc parameter
-+			but can only be used if the backing tty is available
-+			very early in the boot process. For early debugging
-+			via a serial port see kgdboc_earlycon instead.
-+
- 	elanfreq=	[X86-32]
- 			See comment before function elanfreq_setup() in
- 			arch/x86/kernel/cpu/cpufreq/elanfreq.c.
-@@ -1586,6 +1578,17 @@
- 			Format: <unsigned int> such that (rxsize & ~0x1fffc0) == 0.
- 			Default: 1024
+ 	cpuidle.off=1	[CPU_IDLE]
+ 			disable the cpuidle sub-system
  
-+	hardened_usercopy=
-+			[KNL] Under CONFIG_HARDENED_USERCOPY, whether
-+			hardening is enabled for this boot. Hardened
-+			usercopy checking is used to protect the kernel
-+			from reading or writing beyond known memory
-+			allocation boundaries as a proactive defense
-+			against bounds-checking flaws in the kernel's
-+			copy_to_user()/copy_from_user() interface.
-+		on	Perform hardened usercopy checks (default).
-+		off	Disable hardened usercopy checks.
-+
- 	hardlockup_all_cpu_backtrace=
- 			[KNL] Should the hard-lockup detector generate
- 			backtraces on all cpus.
-@@ -1606,6 +1609,15 @@
- 			corresponding firmware-first mode error processing
- 			logic will be disabled.
+@@ -786,9 +804,13 @@
+ 			on every CPU online, such as boot, and resume from suspend.
+ 			Default: 10000
  
-+	hibernate=	[HIBERNATION]
-+		noresume	Don't check if there's a hibernation image
-+				present during boot.
-+		nocompress	Don't compress/decompress hibernation images.
-+		no		Disable hibernation and resume.
-+		protect_image	Turn on image protection during restoration
-+				(that will set all pages holding image data
-+				during restoration read-only).
-+
- 	highmem=nn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
- 			size of <nn>. This works even on boxes that have no
- 			highmem otherwise. This also works to reduce highmem
-@@ -3185,16 +3197,6 @@
- 			firmware feature for updating multiple TCE entries
- 			at a time.
+-	cpcihp_generic=	[HW,PCI] Generic port I/O CompactPCI driver
+-			Format:
+-			<first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
++	crash_kexec_post_notifiers
++			Run kdump after running panic-notifiers and dumping
++			kmsg. This only for the users who doubt kdump always
++			succeeds in any situation.
++			Note that this also increases risks of kdump failure,
++			because some panic notifiers can make the crashed
++			kernel more unstable.
  
--	onenand.bdry=	[HW,MTD] Flex-OneNAND Boundary Configuration
+ 	crashkernel=size[KMG][@offset[KMG]]
+ 			[KNL] Using kexec, Linux can switch to a 'crash kernel'
+@@ -1640,16 +1662,6 @@
+ 	hpet_mmap=	[X86, HPET_MMAP] Allow userspace to mmap HPET
+ 			registers.  Default set by CONFIG_HPET_MMAP_DEFAULT.
+ 
+-	hugetlb_cma=	[HW,CMA] The size of a CMA area used for allocation
+-			of gigantic hugepages. Or using node format, the size
+-			of a CMA area per node can be specified.
+-			Format: nn[KMGTPE] or (node format)
+-				<node>:nn[KMGTPE][,<node>:nn[KMGTPE]]
 -
--			Format: [die0_boundary][,die0_lock][,die1_boundary][,die1_lock]
+-			Reserve a CMA area of given size and allocate gigantic
+-			hugepages using the CMA allocator. If enabled, the
+-			boot-time allocation of gigantic hugepages is skipped.
 -
--			boundary - index of last SLC block on Flex-OneNAND.
--				   The remaining blocks are configured as MLC blocks.
--			lock	 - Configure if Flex-OneNAND boundary should be locked.
--				   Once locked, the boundary cannot be changed.
--				   1 indicates lock status, 0 indicates unlock status.
+ 	hugepages=	[HW] Number of HugeTLB pages to allocate at boot.
+ 			If this follows hugepagesz (below), it specifies
+ 			the number of pages of hugepagesz to be allocated.
+@@ -1671,6 +1683,16 @@
+ 			Documentation/admin-guide/mm/hugetlbpage.rst.
+ 			Format: size[KMG]
+ 
++	hugetlb_cma=	[HW,CMA] The size of a CMA area used for allocation
++			of gigantic hugepages. Or using node format, the size
++			of a CMA area per node can be specified.
++			Format: nn[KMGTPE] or (node format)
++				<node>:nn[KMGTPE][,<node>:nn[KMGTPE]]
++
++			Reserve a CMA area of given size and allocate gigantic
++			hugepages using the CMA allocator. If enabled, the
++			boot-time allocation of gigantic hugepages is skipped.
++
+ 	hugetlb_free_vmemmap=
+ 			[KNL] Reguires CONFIG_HUGETLB_PAGE_FREE_VMEMMAP
+ 			enabled.
+@@ -2683,8 +2705,6 @@
+ 			If there are multiple matching configurations changing
+ 			the same attribute, the last one is used.
+ 
+-	memblock=debug	[KNL] Enable memblock debug messages.
+-
+ 	load_ramdisk=	[RAM] [Deprecated]
+ 
+ 	lockd.nlm_grace_period=P  [NFS] Assign grace period.
+@@ -2926,6 +2946,8 @@
+ 	mem=nopentium	[BUGS=X86-32] Disable usage of 4MB pages for kernel
+ 			memory.
+ 
++	memblock=debug	[KNL] Enable memblock debug messages.
++
+ 	memchunk=nn[KMG]
+ 			[KNL,SH] Allow user to override the default size for
+ 			per-device physically contiguous DMA buffers.
+@@ -3193,10 +3215,6 @@
+ 	mtdparts=	[MTD]
+ 			See drivers/mtd/parsers/cmdlinepart.c
+ 
+-	multitce=off	[PPC]  This parameter disables the use of the pSeries
+-			firmware feature for updating multiple TCE entries
+-			at a time.
 -
  	mtdset=		[ARM]
  			ARM/S3C2412 JIVE boot control
  
-@@ -3441,8 +3443,6 @@
+@@ -3223,6 +3241,10 @@
+ 			Used for mtrr cleanup. It is spare mtrr entries number.
+ 			Set to 2 or more if your graphical card needs more.
  
- 	noclflush	[BUGS=X86] Don't use the CLFLUSH instruction
++	multitce=off	[PPC]  This parameter disables the use of the pSeries
++			firmware feature for updating multiple TCE entries
++			at a time.
++
+ 	n2=		[NET] SDL Inc. RISCom/N2 synchronous serial card
  
--	delayacct	[KNL] Enable per-task delay accounting
+ 	netdev=		[NET] Network devices parameters
+@@ -3232,6 +3254,11 @@
+ 			This usage is only documented in each driver source
+ 			file if at all.
+ 
++	netpoll.carrier_timeout=
++			[NET] Specifies amount of time (in seconds) that
++			netpoll should wait for a carrier. By default netpoll
++			waits 4 seconds.
++
+ 	nf_conntrack.acct=
+ 			[NETFILTER] Enable connection tracking flow accounting
+ 			0 to disable accounting
+@@ -3382,11 +3409,6 @@
+ 			These settings can be accessed at runtime via
+ 			the nmi_watchdog and hardlockup_panic sysctls.
+ 
+-	netpoll.carrier_timeout=
+-			[NET] Specifies amount of time (in seconds) that
+-			netpoll should wait for a carrier. By default netpoll
+-			waits 4 seconds.
 -
- 	nodsp		[SH] Disable hardware DSP at boot time.
+ 	no387		[BUGS=X86-32] Tells the kernel to use the 387 maths
+ 			emulation library even if a 387 maths coprocessor
+ 			is present.
+@@ -3678,20 +3700,6 @@
  
- 	noefi		Disable EFI runtime services support.
-@@ -3744,6 +3744,16 @@
- 			For example, to override I2C bus2:
- 			omap_mux=i2c2_scl.i2c2_scl=0x100,i2c2_sda.i2c2_sda=0x100
+ 	nox2apic	[X86-64,APIC] Do not enable x2APIC mode.
  
-+	onenand.bdry=	[HW,MTD] Flex-OneNAND Boundary Configuration
-+
-+			Format: [die0_boundary][,die0_lock][,die1_boundary][,die1_lock]
-+
-+			boundary - index of last SLC block on Flex-OneNAND.
-+				   The remaining blocks are configured as MLC blocks.
-+			lock	 - Configure if Flex-OneNAND boundary should be locked.
-+				   Once locked, the boundary cannot be changed.
-+				   1 indicates lock status, 0 indicates unlock status.
-+
- 	oops=panic	Always panic on oopses. Default is to just kill the
- 			process, but there is a small probability of
- 			deadlocking the machine.
-@@ -5077,15 +5087,6 @@
- 			Useful for devices that are detected asynchronously
- 			(e.g. USB and MMC devices).
- 
--	hibernate=	[HIBERNATION]
--		noresume	Don't check if there's a hibernation image
--				present during boot.
--		nocompress	Don't compress/decompress hibernation images.
--		no		Disable hibernation and resume.
--		protect_image	Turn on image protection during restoration
--				(that will set all pages holding image data
--				during restoration read-only).
+-	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
+-			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
+-			Some features depend on CPU0. Known dependencies are:
+-			1. Resume from suspend/hibernate depends on CPU0.
+-			Suspend/hibernate will fail if CPU0 is offline and you
+-			need to online CPU0 before suspend/hibernate.
+-			2. PIC interrupts also depend on CPU0. CPU0 can't be
+-			removed if a PIC interrupt is detected.
+-			It's said poweroff/reboot may depend on CPU0 on some
+-			machines although I haven't seen such issues so far
+-			after CPU0 is offline on a few tested machines.
+-			If the dependencies are under your control, you can
+-			turn on cpu0_hotplug.
 -
- 	retain_initrd	[RAM] Keep initrd memory after extraction
+ 	nps_mtm_hs_ctr=	[KNL,ARC]
+ 			This parameter sets the maximum duration, in
+ 			cycles, each HW thread of the CTOP can run
+@@ -3824,14 +3832,6 @@
+ 	panic_on_warn	panic() instead of WARN().  Useful to cause kdump
+ 			on a WARN().
  
- 	rfkill.default_state=
---- linux-next-20220331.orig/Documentation/admin-guide/kernel-parameters.rst
-+++ linux-next-20220331/Documentation/admin-guide/kernel-parameters.rst
-@@ -99,6 +99,7 @@ parameter is applicable::
- 	ALSA	ALSA sound support is enabled.
- 	APIC	APIC support is enabled.
- 	APM	Advanced Power Management support is enabled.
-+	APPARMOR AppArmor support is enabled.
- 	ARM	ARM architecture is enabled.
- 	ARM64	ARM64 architecture is enabled.
- 	AX25	Appropriate AX.25 support is enabled.
-@@ -108,15 +109,15 @@ parameter is applicable::
- 	DYNAMIC_DEBUG Build in debug messages and enable them at runtime
- 	EDD	BIOS Enhanced Disk Drive Services (EDD) is enabled
- 	EFI	EFI Partitioning (GPT) is enabled
--	EIDE	EIDE/ATAPI support is enabled.
- 	EVM	Extended Verification Module
- 	FB	The frame buffer device is enabled.
- 	FTRACE	Function tracing enabled.
- 	GCOV	GCOV profiling is enabled.
-+	HIBERNATION HIBERNATION is enabled.
- 	HW	Appropriate hardware is enabled.
-+	HYPER_V HYPERV support is enabled.
- 	IA-64	IA-64 architecture is enabled.
- 	IMA     Integrity measurement architecture is enabled.
--	IOSCHED	More than one I/O scheduler is enabled.
- 	IP_PNP	IP DHCP, BOOTP, or RARP is enabled.
- 	IPV6	IPv6 support is enabled.
- 	ISAPNP	ISA PnP code is enabled.
-@@ -140,7 +141,6 @@ parameter is applicable::
- 	NUMA	NUMA support is enabled.
- 	NFS	Appropriate NFS support is enabled.
- 	OF	Devicetree is enabled.
--	OSS	OSS sound support is enabled.
- 	PV_OPS	A paravirtualized kernel is enabled.
- 	PARIDE	The ParIDE (parallel port IDE) subsystem is enabled.
- 	PARISC	The PA-RISC architecture is enabled.
-@@ -160,7 +160,6 @@ parameter is applicable::
- 			the Documentation/scsi/ sub-directory.
- 	SECURITY Different security models are enabled.
- 	SELINUX SELinux support is enabled.
--	APPARMOR AppArmor support is enabled.
- 	SERIAL	Serial support is enabled.
- 	SH	SuperH architecture is enabled.
- 	SMP	The kernel is an SMP kernel.
-@@ -168,7 +167,6 @@ parameter is applicable::
- 	SWSUSP	Software suspend (hibernation) is enabled.
- 	SUSPEND	System suspend states are enabled.
- 	TPM	TPM drivers are enabled.
--	TS	Appropriate touchscreen support is enabled.
- 	UMS	USB Mass Storage support is enabled.
- 	USB	USB support is enabled.
- 	USBHID	USB Human Interface Device support is enabled.
-@@ -177,7 +175,6 @@ parameter is applicable::
- 	VGA	The VGA console has been enabled.
- 	VT	Virtual terminal support is enabled.
- 	WDT	Watchdog support is enabled.
--	XT	IBM PC/XT MFM hard disk support is enabled.
- 	X86-32	X86-32, aka i386 architecture is enabled.
- 	X86-64	X86-64 architecture is enabled.
- 			More X86-64 boot options can be found in
-@@ -211,7 +208,7 @@ The number of kernel parameters is not l
- complete command line (parameters including spaces etc.) is limited to
- a fixed number of characters. This limit depends on the architecture
- and is between 256 and 4096 characters. It is defined in the file
--./include/asm/setup.h as COMMAND_LINE_SIZE.
-+./include/uapi/asm-generic/setup.h as COMMAND_LINE_SIZE.
+-	crash_kexec_post_notifiers
+-			Run kdump after running panic-notifiers and dumping
+-			kmsg. This only for the users who doubt kdump always
+-			succeeds in any situation.
+-			Note that this also increases risks of kdump failure,
+-			because some panic notifiers can make the crashed
+-			kernel more unstable.
+-
+ 	parkbd.port=	[HW] Parallel port number the keyboard adapter is
+ 			connected to, default is 0.
+ 			Format: <parport#>
+@@ -5908,6 +5908,37 @@
+ 			This will guarantee that all the other pcrs
+ 			are saved.
  
- Finally, the [KMG] suffix is commonly described after a number of kernel
- parameter values. These 'K', 'M', and 'G' letters represent the _binary_
++	tp_printk	[FTRACE]
++			Have the tracepoints sent to printk as well as the
++			tracing ring buffer. This is useful for early boot up
++			where the system hangs or reboots and does not give the
++			option for reading the tracing buffer or performing a
++			ftrace_dump_on_oops.
++
++			To turn off having tracepoints sent to printk,
++			 echo 0 > /proc/sys/kernel/tracepoint_printk
++			Note, echoing 1 into this file without the
++			tracepoint_printk kernel cmdline option has no effect.
++
++			The tp_printk_stop_on_boot (see below) can also be used
++			to stop the printing of events to console at
++			late_initcall_sync.
++
++			** CAUTION **
++
++			Having tracepoints sent to printk() and activating high
++			frequency tracepoints such as irq or sched, can cause
++			the system to live lock.
++
++	tp_printk_stop_on_boot [FTRACE]
++			When tp_printk (above) is set, it can cause a lot of noise
++			on the console. It may be useful to only include the
++			printing of events during boot up, as user space may
++			make the system inoperable.
++
++			This command line option will stop the printing of events
++			to console at the late_initcall_sync() time frame.
++
+ 	trace_buf_size=nn[KMG]
+ 			[FTRACE] will set tracing buffer size on each cpu.
+ 
+@@ -5955,37 +5986,6 @@
+ 			See also Documentation/trace/ftrace.rst "trace options"
+ 			section.
+ 
+-	tp_printk	[FTRACE]
+-			Have the tracepoints sent to printk as well as the
+-			tracing ring buffer. This is useful for early boot up
+-			where the system hangs or reboots and does not give the
+-			option for reading the tracing buffer or performing a
+-			ftrace_dump_on_oops.
+-
+-			To turn off having tracepoints sent to printk,
+-			 echo 0 > /proc/sys/kernel/tracepoint_printk
+-			Note, echoing 1 into this file without the
+-			tracepoint_printk kernel cmdline option has no effect.
+-
+-			The tp_printk_stop_on_boot (see below) can also be used
+-			to stop the printing of events to console at
+-			late_initcall_sync.
+-
+-			** CAUTION **
+-
+-			Having tracepoints sent to printk() and activating high
+-			frequency tracepoints such as irq or sched, can cause
+-			the system to live lock.
+-
+-	tp_printk_stop_on_boot [FTRACE]
+-			When tp_printk (above) is set, it can cause a lot of noise
+-			on the console. It may be useful to only include the
+-			printing of events during boot up, as user space may
+-			make the system inoperable.
+-
+-			This command line option will stop the printing of events
+-			to console at the late_initcall_sync() time frame.
+-
+ 	traceoff_on_warning
+ 			[FTRACE] enable this option to disable tracing when a
+ 			warning is hit. This turns off "tracing_on". Tracing can

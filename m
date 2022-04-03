@@ -2,113 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E957C4F0871
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405D54F0873
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbiDCIle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 04:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S234540AbiDCIqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 04:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbiDCIlc (ORCPT
+        with ESMTP id S233140AbiDCIqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 04:41:32 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2049.outbound.protection.outlook.com [40.92.98.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6F31EEC4;
-        Sun,  3 Apr 2022 01:39:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QKXk1+Gr+OlX2J2u5I70SXsrPyoarkwO1xH6oyXeTE/vetE0TVtKqURUnAUxSa91SVIl07xPBz9MW7yMc4ssyQY0PV4TzEA9xEoXBtJ49xUq/15z7q3fZgZfv7NhZN6lldQXVOMrTzlKINB56da9NUolROUFo/9vuxmfLzz4hv7PSwXhyAKopOTOp554zBcl9Rw260LqC/2dhndqA6qzqiNoJ/6ZDdL5OJXjhsqtnBaZ+PVpYIchkyutyqf4PJkXDNT0+mkno59MRiC/ONZhPHaPFwbAGBTGGAMxxbgkwFFygfdweJhPqyHxXW40oX0On4r4Fx7E1LbBIX+87jMlkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YDzGQQoVO5uPxphhwP5gUoiVPzfgyt49EQyPv/e8LBk=;
- b=k6RQ91Mp4n4ZdZ5ObtRlP0bkcU7SzIq0k32dPfCsleAo/bDLcsz2gavGdYC4CbfvP6F4bG5wrksEqFF/DeSutMnyUKcdJ4nIqjBIEM6wnDudmdD76CNCoJiTVWM1vlHE4z4nV9dfMs8sgREKC6S69FB2joLnvQF1arnUcT4ZZwYMVSzzkfLtLn3Tx9gpvrF7zZ9g7jFTMX3J4ILG6yQPccPx4kqoErY6mfkqnNLviG4ayfSSOV675wsLDwUMBWSSOJWbT5Swo3cV85IV4w+gFO/oTHpwlpV9P0zzAtXgZ+tleWfmB6B9cfE9KsV46joM2uZd29SCsXVLNtjcfWDHwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YDzGQQoVO5uPxphhwP5gUoiVPzfgyt49EQyPv/e8LBk=;
- b=ivI/ir9/cpzDwZjSzm+1NOu18pjY3L3/Jj9w/lTLNUBdSCPkvTufv4EjmLAhD9z3C5bN2lkliTbMMKa/2rXXGkJwCsuK82hd47znoWGADAY/HX00Iv6nYaHJjRjRidGr6rvy31KuLExUKhtzCgZb0NvoHpQ7xoIN4HoVdX8Na8aF+DkyRpLJSjc6nWpwqa9KsnK5rKnp6DyoHChEYC5Cq/x0xCkIwJCXZxbpGb7r7uHwW9hEuaB2iTQ9seXkUauL3wPLOBeocNYrYPt0Ujt4s6m1ebjfZNjTYVEHyzESQYGE8TapkCFx3sw3+ChFFlPX0aR/EECFV8Ca39ixEtANkA==
-Received: from OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:16f::10)
- by TYWP286MB2763.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:24f::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Sun, 3 Apr
- 2022 08:39:36 +0000
-Received: from OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM
- ([fe80::6c4e:9cbe:7dbd:b301]) by OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM
- ([fe80::6c4e:9cbe:7dbd:b301%5]) with mapi id 15.20.5123.031; Sun, 3 Apr 2022
- 08:39:36 +0000
-From:   Cui Alan <AlanCui4080@outlook.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-CC:     "konstantin@linuxfoundation.org" <konstantin@linuxfoundation.org>,
-        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: How can I post my patch to others
-Thread-Topic: How can I post my patch to others
-Thread-Index: AdhHNV/JYqqy1AV9TyeYDDdYtzkthA==
-Date:   Sun, 3 Apr 2022 08:39:36 +0000
-Message-ID: <OSZP286MB207841D32B0578BC786B927EADE29@OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-tmn:  [vmuBNNWvZKb7E+GUoIzV7rv8qIXnTMGeozR1+70wPvo4Bw/u/67JCyTbhjLIxp1id1JDuRBr6oI=]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: db50a8f4-4fb9-421b-9354-08da154d7c07
-x-ms-traffictypediagnostic: TYWP286MB2763:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SoCKvZLwM5OyL6XG7D/Md5fmWxscQXhXY+Zal2bNZVXjjsnCn/GvdDAXs4VG2Fkpv3CAVbPkJ4Csp6wfKLvHwHt9+ngcn7UDYAEvtARx7RIxZmoiMHJv+LffwX4Mg9IIhJYf12wopStv1vBG7eBzwpje+DtOTEWKAXmOucx/EJk1/YKiMRZAXYfgtKMi0A9GRaytB/JZ82m6LJ8y9gJxxalBIDzdkyHnwxVwIr3CFQKhU34x2cdXlaZwyIK2XEpxi2Hw3Fe8Ah+zaC84JMNdt8BmoA9/Gd1EgAVFIXNqgrK60hkVDIMb6iTJd/Jicszbu9rRwJIZ+vCds0n0JzmzJ2Scm8ncSKqi67vPxO+sKaLBmdDyn36xgPlooEdf/rf3/vgElDNT/xzrEFKiJPDobzrJdl0v2Ga0kWsZ6GksfVR9Nn6wiACp6HzYIOi8q5iyXBPN3irdt6bdEAo96HUjtdR3c3E0QqkZSB4zWWimaEWTJe1biWW/vhKhE6hVciDu6Ao0apG3Tq+0gEtJkNx1lXovgWNtetauXcUR1wrajYZAXf3/dT80Sy/Em62nKhKWqF4oyRYZdwIN/+rkchP0HA==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4DWZbhTRpxjeDX96efd2ed7ai9EF4K2mkgmJPQsz08BWoUy/Fk2ilWwn+exe?=
- =?us-ascii?Q?a3D6AdzYSclDLsw3wyINthPD3iJS4R3NqImvroRqdlA5wqjwGs7hp0VpyGfJ?=
- =?us-ascii?Q?LFEdVfKvrY6tthK7BZ9Wqmidy/cH4ing7ka8P+KNjsSvbLpYdMijVffIgLtO?=
- =?us-ascii?Q?HWiKZ4OI6j0rUzRJk/k2HAqTby3dOEe1E/5zX4hQhSNSF77SLbjntCAXSILz?=
- =?us-ascii?Q?8Yn7aCQSl+ZXPAMN+wx/DMFPcrzsuimGHicxFjgq4BFo7/AaoZdRFnd6kROl?=
- =?us-ascii?Q?79dZWz6uSr6QfjQ9k5zpSTWMiRmMItuhEpBm+iWjfsAy0bM+/fCN3zDE6sva?=
- =?us-ascii?Q?CU3vkSf9Bez5ulPTWsgp40GDyd4BLT5yIviIQkCtMJUNcAGNeFAJ9peProCP?=
- =?us-ascii?Q?j06BRvE1jyHfbwA3cpX6dKGIT3x7+dPRNCKWxIpgIqj8CpvWMTyRhKOQbvwV?=
- =?us-ascii?Q?fO76302HpgH53fUQjPKM4tbtdUGDfBlIQPJx7G4UIdD+fCnqo10313f9H28i?=
- =?us-ascii?Q?193WZ2Ldf0zFv2dmYlaiG7CoaoHjjRFLs1fPAluQtvJXhtZoFoTVQVfPyNro?=
- =?us-ascii?Q?TLZeHRjV/m0QcBqtBfrrMGThXten+qjz1RPZIynvR/+8gA08UDxQ85Jr/i5K?=
- =?us-ascii?Q?5kJ6zEPiNSpww4Nfj3WW6TWJCW2IiogMfd2Vsgj7O0qfVCiBUUZOKUcSw40K?=
- =?us-ascii?Q?LVNULyv45Y+OaJyDD6rLl4Qkomw5hmoWqC9bScaoVeTEJwuVqflzDtBWz82V?=
- =?us-ascii?Q?35OjuMusV0g7rKMimRORGYEsEVNA54L8ALOo9tczfx7Ql7nIsG0Pafpgowiy?=
- =?us-ascii?Q?RGM5M5puaIWjVdt3CEiU3w+zl5HVqk0jhdpwn+vkNfZjyPkc6ItgTxenN2Y2?=
- =?us-ascii?Q?YQp595rJBC1aaMTwycEERus3TE8OUJ/u9RPYADNmt7KgRlBwwL1+xtJvpSHE?=
- =?us-ascii?Q?9sUosK/jFTjjfUSry62kcY9Dv0rstEfhh0Iw8Yx3x34Ekube1CsDQ60AIzq0?=
- =?us-ascii?Q?ShcUILiRTgXVyx+VPcOAk2LenOs1cddVdvttZ28wpJk70BnQg/EE5ZktY+uR?=
- =?us-ascii?Q?BVA5Clo3rwS5j5NpMDwYsXJ7a7Ozdi6YIaWfoStco3KzsNXIj7R1+7bwbu1F?=
- =?us-ascii?Q?G7lj9FNXNn9R4ajTowv0MIFh0VDtLr0Hy5orxfoaJCTZRiC7ZYQ2u9HEoLE3?=
- =?us-ascii?Q?NFBCePNoVmLvP2iIxWqcyu1DeIukLB6q1zz+EJIO5A2WUmD1z8FtxJBJkBZm?=
- =?us-ascii?Q?0W9ucunQ9Gjs0LJC87q7D1/2MYSOJgQwREXGuRokR0EJes1t5F60OpyMCa7Q?=
- =?us-ascii?Q?HimHbmCltmbaMtc3KCFnZgADJV76pq2fcMUkoq4kX/BPtg9+KNEvX8V87/BY?=
- =?us-ascii?Q?AeUYpxMWlMz7M7jDl5pmgC7y02OpW4rKXJGGrIBQPnfh5Rsf0D2Ino5y+egI?=
- =?us-ascii?Q?X6PGItjERTd80G8qUHBJJA8K1pf0a7kiypXtWXcBBHSEmdcK3RBSQIeFmyMD?=
- =?us-ascii?Q?eVi1XieMfaIPjpc=3D?=
-Content-Type: text/plain; charset="us-ascii"
+        Sun, 3 Apr 2022 04:46:13 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D260B35DCB
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 01:44:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648975453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BoH3D6x4fdB+6PJEpYbI/PLunjUWPVq6vfqIeo9ZBnA=;
+        b=k3GevJcebIGpuFmhUxKyS99VywNuKFtp+QuFG3kmZfK/BBVAMEF58XhQUHafSFLYzyZ9OC
+        OgV4ziEizWWWPniSZPvMIRub34g8hjicp+bOySRgDFetN81wBSLkc+EstqzQvyWa5s7Ayy
+        ewihKfa4vHZEidY3TcEIjJljAq9JqCxiSJjh8aXdE9ckc+MjG/2DsKKj995ENcle2w3DPp
+        ehB9RMJDzCmbjW81cjlTJUyibYSYzLDDeIiHgzsGu51GQyofXdyhaDK1HUDHGf0fvX8tn0
+        /p7syDs+iZeepT/JabI6TOqKYtudif2i4vgSePy8SLL6h6/0gVT1EUtP7OUq7w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648975453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BoH3D6x4fdB+6PJEpYbI/PLunjUWPVq6vfqIeo9ZBnA=;
+        b=xgbSOu/+8wQi1MSzXVCZ1s43OVI0gkU1GrTLlKptDDrLj1d7i7ggzZa4JWM9hNuwu6CpaR
+        EgxsY6X+aRhpN/Bw==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [GIT pull] core/urgent for v5.18-rc1
+Message-ID: <164897466883.360450.8070511660014503126.tglx@xen13>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: db50a8f4-4fb9-421b-9354-08da154d7c07
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2022 08:39:36.3101
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB2763
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun,  3 Apr 2022 10:44:12 +0200 (CEST)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-	Thank all of you.I''d rather not receive more.
-Alan.
+Linus,
+
+please pull the latest core/urgent branch from:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core-urgent-2022=
+-04-03
+
+up to:  7dd5ad2d3e82: Revert "signal, x86: Delay calling signals in atomic on=
+ RT enabled kernels"
+
+
+Revert the RT related signal changes. They need to be reworked and
+generalized.
+
+Thanks,
+
+	tglx
+
+------------------>
+Thomas Gleixner (1):
+      Revert "signal, x86: Delay calling signals in atomic on RT enabled kern=
+els"
+
+
+ arch/x86/Kconfig       |  1 -
+ include/linux/sched.h  |  3 ---
+ kernel/Kconfig.preempt | 12 +-----------
+ kernel/entry/common.c  | 14 --------------
+ kernel/signal.c        | 40 ----------------------------------------
+ 5 files changed, 1 insertion(+), 69 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 7340d9f01b62..442a426e8a68 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -122,7 +122,6 @@ config X86
+ 	select ARCH_WANT_GENERAL_HUGETLB
+ 	select ARCH_WANT_HUGE_PMD_SHARE
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+-	select ARCH_WANTS_RT_DELAYED_SIGNALS
+ 	select ARCH_WANTS_THP_SWAP		if X86_64
+ 	select ARCH_HAS_PARANOID_L1D_FLUSH
+ 	select BUILDTIME_TABLE_SORT
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 4a6fdd2a679f..d5e3c00b74e1 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1090,9 +1090,6 @@ struct task_struct {
+ 	/* Restored if set_restore_sigmask() was used: */
+ 	sigset_t			saved_sigmask;
+ 	struct sigpending		pending;
+-#ifdef CONFIG_RT_DELAYED_SIGNALS
+-	struct kernel_siginfo		forced_info;
+-#endif
+ 	unsigned long			sas_ss_sp;
+ 	size_t				sas_ss_size;
+ 	unsigned int			sas_ss_flags;
+diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+index 8c6de5a9ecc4..c2f1fd95a821 100644
+--- a/kernel/Kconfig.preempt
++++ b/kernel/Kconfig.preempt
+@@ -133,14 +133,4 @@ config SCHED_CORE
+ 	  which is the likely usage by Linux distributions, there should
+ 	  be no measurable impact on performance.
+=20
+-config ARCH_WANTS_RT_DELAYED_SIGNALS
+-	bool
+-	help
+-	  This option is selected by architectures where raising signals
+-	  can happen in atomic contexts on PREEMPT_RT enabled kernels. This
+-	  option delays raising the signal until the return to user space
+-	  loop where it is also delivered. X86 requires this to deliver
+-	  signals from trap handlers which run on IST stacks.
+-
+-config RT_DELAYED_SIGNALS
+-	def_bool PREEMPT_RT && ARCH_WANTS_RT_DELAYED_SIGNALS
++
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index ef8d94a98b7e..e57a224d6b79 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -142,18 +142,6 @@ void noinstr exit_to_user_mode(void)
+ /* Workaround to allow gradual conversion of architecture code */
+ void __weak arch_do_signal_or_restart(struct pt_regs *regs) { }
+=20
+-#ifdef CONFIG_RT_DELAYED_SIGNALS
+-static inline void raise_delayed_signal(void)
+-{
+-	if (unlikely(current->forced_info.si_signo)) {
+-		force_sig_info(&current->forced_info);
+-		current->forced_info.si_signo =3D 0;
+-	}
+-}
+-#else
+-static inline void raise_delayed_signal(void) { }
+-#endif
+-
+ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+ 					    unsigned long ti_work)
+ {
+@@ -168,8 +156,6 @@ static unsigned long exit_to_user_mode_loop(struct pt_reg=
+s *regs,
+ 		if (ti_work & _TIF_NEED_RESCHED)
+ 			schedule();
+=20
+-		raise_delayed_signal();
+-
+ 		if (ti_work & _TIF_UPROBE)
+ 			uprobe_notify_resume(regs);
+=20
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 368a34c25bbf..30cd1ca43bcd 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1307,43 +1307,6 @@ enum sig_handler {
+ 	HANDLER_EXIT,	 /* Only visible as the process exit code */
+ };
+=20
+-/*
+- * On some archictectures, PREEMPT_RT has to delay sending a signal from a
+- * trap since it cannot enable preemption, and the signal code's
+- * spin_locks turn into mutexes. Instead, it must set TIF_NOTIFY_RESUME
+- * which will send the signal on exit of the trap.
+- */
+-#ifdef CONFIG_RT_DELAYED_SIGNALS
+-static inline bool force_sig_delayed(struct kernel_siginfo *info,
+-				     struct task_struct *t)
+-{
+-	if (!in_atomic())
+-		return false;
+-
+-	if (WARN_ON_ONCE(t->forced_info.si_signo))
+-		return true;
+-
+-	if (is_si_special(info)) {
+-		WARN_ON_ONCE(info !=3D SEND_SIG_PRIV);
+-		t->forced_info.si_signo =3D info->si_signo;
+-		t->forced_info.si_errno =3D 0;
+-		t->forced_info.si_code =3D SI_KERNEL;
+-		t->forced_info.si_pid =3D 0;
+-		t->forced_info.si_uid =3D 0;
+-	} else {
+-		t->forced_info =3D *info;
+-	}
+-	set_tsk_thread_flag(t, TIF_NOTIFY_RESUME);
+-	return true;
+-}
+-#else
+-static inline bool force_sig_delayed(struct kernel_siginfo *info,
+-				     struct task_struct *t)
+-{
+-	return false;
+-}
+-#endif
+-
+ /*
+  * Force a signal that the process can't ignore: if necessary
+  * we unblock the signal and change any SIG_IGN to SIG_DFL.
+@@ -1364,9 +1327,6 @@ force_sig_info_to_task(struct kernel_siginfo *info, str=
+uct task_struct *t,
+ 	struct k_sigaction *action;
+ 	int sig =3D info->si_signo;
+=20
+-	if (force_sig_delayed(info, t))
+-		return 0;
+-
+ 	spin_lock_irqsave(&t->sighand->siglock, flags);
+ 	action =3D &t->sighand->action[sig-1];
+ 	ignored =3D action->sa.sa_handler =3D=3D SIG_IGN;
+

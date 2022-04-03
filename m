@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB524F0B5A
+	by mail.lfdr.de (Postfix) with ESMTP id C76574F0B5C
 	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359500AbiDCQzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 12:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S1359515AbiDCQzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 12:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355784AbiDCQy6 (ORCPT
+        with ESMTP id S232213AbiDCQy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:54:58 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DFF3915D
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:53:04 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id g20so8420896edw.6
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 09:53:04 -0700 (PDT)
+        Sun, 3 Apr 2022 12:54:59 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D293915C
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:53:05 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id bq8so15381749ejb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 09:53:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6ppqJI6bbXknNDSSsJIou3kIlI0a1zrBWncxQPeAqXw=;
-        b=eO4A/B8Rbvg6+KTk8Q4V11CE6ik1HKgFFfLiNJga4J4Y4h6nPl1JaYnGi2k0gYTueI
-         B+n8t33+dDXRX4z2QEJAmhrvXLBbv1BDalzX4ARwNWrzt6vcsiAQO5Fm2ZuuKoy7PsG9
-         v2Xe0Kzq9lGRl2rOj6Z7H43sUSua4fSmupcpgRKmVZBHEDsaGtd7/wPd/r3VVe9t2pbd
-         S3uDgFsEAqULZXa1BYFnJF7KwmSWLKtrOXpmpYIgm2J2FkvgvdCaAVHGLwwUZlPSQ5WA
-         KLyHYzZLCtuQpOm0IxyOX4yk06bBv4aeUp739l24Nh2aiZt5cZkNSwftn87MkdA2uzWu
-         01qg==
+        bh=4eX3bcVXRctAIJWE0PzZknmJGr6Nu+7MDG6sRwBC8R4=;
+        b=epsyyxWpxYd+pf8i8+w4cH0N6Kma/d1PJ2WVLDRIedX8TYhSdOz4NrhugWDDKuVrFP
+         PfOnrxfPPquXd+VPi6LktGYXsoCDjgqGvgUSWiJAYggH1Ix636PAArSKZCw4En2Ul69m
+         gPC1pHWSaJyMroWdh/cdzI5/k9/dUQ9mLdyVXYPL8S1xsT7U3Wl+JmgrXkQXVH6/c2v0
+         RNXsfEoDFbw29CQSLf+fqGLR8QZkmYg5dm+gbp8ezYQJITBHbhLfQmQvOLsKDa68nsgC
+         7l+8dXZn64/pggf+yvqf4URkkAynYGkwA18lX9a0Y4YwjI+A4L5EiETABHAQ2Vv8a2OW
+         4Jjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6ppqJI6bbXknNDSSsJIou3kIlI0a1zrBWncxQPeAqXw=;
-        b=EavUce00QJ9TM5eQhTMOufH5vBGpWguTDF7CbHTAeXRFSUEJpqBALVA5SVKXLFIsQT
-         PGD2GvAh2X3+DM6hXNEqE21QN+Thplw00bJprMtjomjQlchM5G2s9DUDUVPWPOSMcD/V
-         6Iw8ws+63U18Kr6YMMBCObTiOMpx4LachV4O6mgzeQjtAydSt/pS3KBvMbppuaY4pjrw
-         9ksf3ek1wK3dRvitEntKi1MabtSTJNn/ZiNI6TYgwo9jyNcPC+V/Vpbm1pPvzGfVnsuG
-         P3KIUKOe+90PyaYnWqGEdGz1yuVw38w59hfYAIIjsMiQbMGdsu8roq1ATvjM+ji5XZyQ
-         gwwQ==
-X-Gm-Message-State: AOAM531ZnaOgto0XOA7lypNanT/W82zejr8ni+SgwMNrr++H9SypM4YJ
-        C4LjgFPNtF6jC5/Hj09Tnog=
-X-Google-Smtp-Source: ABdhPJz7iGMzQylnp6xiZ8+xjEBOJvO9t+6oZBhF04quwPsb32ENmk3xPMKMy8SE7IACgTCKfCrk9g==
-X-Received: by 2002:a05:6402:1148:b0:416:a4fb:3c2e with SMTP id g8-20020a056402114800b00416a4fb3c2emr29423188edw.182.1649004783078;
-        Sun, 03 Apr 2022 09:53:03 -0700 (PDT)
+        bh=4eX3bcVXRctAIJWE0PzZknmJGr6Nu+7MDG6sRwBC8R4=;
+        b=KP+fYWrBY0zWRgaohAGo22H5A4Eduiwr7RwKV/FarCNUfC+aLlTXwoQ8H7t3yqrX+Z
+         mvCokYrvOX+UYf03OhqkYIbkT/Zzcr+MIqozmdbYLK09L/bxVs9iXFYMG13ucfMtqE7W
+         tCe5HmJQqKIrITzMZ4Vu8n9f7S5r8dVyzA8hDBDDkynRTv8Ie+D29dAw4bSqOY74RYPY
+         FnFrZIVYQTCVphe9+CW4G4bp/EhCWBojbx4t9keJ41SP/X9ylaxqbw9w8JWbpN29NHGz
+         v4qVHQQioEQBBbOIZm66BthOVz3/Mv6voE0BeiWrF9lgpNhQR/EsM6cxdEmEuDZlUtGf
+         MXZQ==
+X-Gm-Message-State: AOAM530jxHd80MQwJWZ63HIb/minvsNCqHsD5rnJpxdBMtX78iG5FIup
+        QNr5tfiW1bhgOcNO7SHlaGc=
+X-Google-Smtp-Source: ABdhPJyC75SVETDy5ohVbpOLgMyEY4yCaWXXexkaReT/gQ0Hu9tqBVZJT4YDpdmpMjr39j7mhJeZrQ==
+X-Received: by 2002:a17:907:dab:b0:6df:e51a:b990 with SMTP id go43-20020a1709070dab00b006dfe51ab990mr7370885ejc.573.1649004784173;
+        Sun, 03 Apr 2022 09:53:04 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id d4-20020a056402000400b00412d60fee38sm4018138edu.11.2022.04.03.09.53.02
+        by smtp.gmail.com with ESMTPSA id d4-20020a056402000400b00412d60fee38sm4018138edu.11.2022.04.03.09.53.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 09:53:02 -0700 (PDT)
+        Sun, 03 Apr 2022 09:53:03 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 1/5] staging: r8188eu: remove HAL_DEF_IS_SUPPORT_ANT_DIV
-Date:   Sun,  3 Apr 2022 18:52:51 +0200
-Message-Id: <20220403165255.6900-2-straube.linux@gmail.com>
+Subject: [PATCH 2/5] staging: r8188eu: use support_ant_div()
+Date:   Sun,  3 Apr 2022 18:52:52 +0200
+Message-Id: <20220403165255.6900-3-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220403165255.6900-1-straube.linux@gmail.com>
 References: <20220403165255.6900-1-straube.linux@gmail.com>
@@ -71,107 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to get rid of the function GetHalDefVar8188EUsb(), remove
-the HAL_DEF_IS_SUPPORT_ANT_DIV case from it and move the functionality
-into a new function. This is part of the ongoing effort to get rid of
-the unwanted hal layer.
+Use support_ant_div() instead of checking haldata->AntDivCfg directly.
+This improves readability and makes future cleanups, e.g. removing the
+hal_data_8188e structure, easier.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c     |  4 +---
- drivers/staging/r8188eu/core/rtw_mlme.c    |  4 +---
- drivers/staging/r8188eu/hal/usb_halinit.c  | 10 +++++++---
- drivers/staging/r8188eu/include/hal_intf.h |  3 ++-
- 4 files changed, 11 insertions(+), 10 deletions(-)
+ drivers/staging/r8188eu/hal/rtl8188e_dm.c | 8 +++-----
+ drivers/staging/r8188eu/hal/usb_halinit.c | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 8b24330e97c1..c286485e6a40 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -1099,11 +1099,9 @@ u8 rtw_antenna_select_cmd(struct adapter *padapter, u8 antenna, u8 enqueue)
- 	struct cmd_obj		*ph2c;
- 	struct drvextra_cmd_parm	*pdrvextra_cmd_parm;
- 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
--	u8	support_ant_div;
- 	u8	res = _SUCCESS;
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_dm.c b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
+index 6d28e3dc0d26..d69327f361aa 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_dm.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
+@@ -33,7 +33,7 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
+ 	int i;
  
--	GetHalDefVar8188EUsb(padapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &support_ant_div);
--	if (!support_ant_div)
-+	if (!support_ant_div(padapter))
- 		return res;
+ 	pdmpriv->InitODMFlag = ODM_BB_RSSI_MONITOR;
+-	if (hal_data->AntDivCfg)
++	if (support_ant_div(Adapter))
+ 		pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
  
- 	if (enqueue) {
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index f94b1536a177..b6ed5fb5b281 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1458,7 +1458,6 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
- 	struct __queue *queue	= &pmlmepriv->scanned_queue;
- 	struct	wlan_network	*pnetwork = NULL;
- 	struct	wlan_network	*candidate = NULL;
--	u8	supp_ant_div = false;
+ 	dm_odm->SupportAbility = pdmpriv->InitODMFlag;
+@@ -102,9 +102,7 @@ void rtl8188e_init_dm_priv(struct adapter *Adapter)
+ /*  Compare RSSI for deciding antenna */
+ void AntDivCompare8188E(struct adapter *Adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src)
+ {
+-	struct hal_data_8188e *hal_data = &Adapter->haldata;
+-
+-	if (0 != hal_data->AntDivCfg) {
++	if (support_ant_div(Adapter)) {
+ 		/* select optimum_antenna for before linked =>For antenna diversity */
+ 		if (dst->Rssi >=  src->Rssi) {/* keep org parameter */
+ 			src->Rssi = dst->Rssi;
+@@ -122,7 +120,7 @@ u8 AntDivBeforeLink8188E(struct adapter *Adapter)
+ 	struct mlme_priv *pmlmepriv = &Adapter->mlmepriv;
  
- 	spin_lock_bh(&pmlmepriv->scanned_queue.lock);
- 	phead = get_list_head(queue);
-@@ -1485,8 +1484,7 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
- 		rtw_free_assoc_resources(adapter, 0);
- 	}
+ 	/*  Condition that does not need to use antenna diversity. */
+-	if (hal_data->AntDivCfg == 0)
++	if (!support_ant_div(Adapter))
+ 		return false;
  
--	GetHalDefVar8188EUsb(adapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &supp_ant_div);
--	if (supp_ant_div) {
-+	if (support_ant_div(adapter)) {
- 		u8 cur_ant;
- 		GetHalDefVar8188EUsb(adapter, HAL_DEF_CURRENT_ANTENNA, &cur_ant);
- 	}
+ 	if (check_fwstate(pmlmepriv, _FW_LINKED))
 diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 4bc6b08fb282..31ec88b7a400 100644
+index 31ec88b7a400..e5b352671ea4 100644
 --- a/drivers/staging/r8188eu/hal/usb_halinit.c
 +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -481,6 +481,13 @@ static void _BBTurnOnBlock(struct adapter *Adapter)
- 	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
- }
- 
-+bool support_ant_div(struct adapter *adapter)
-+{
-+	struct hal_data_8188e *haldata = &adapter->haldata;
-+
-+	return haldata->AntDivCfg != 0;
-+}
-+
- static void _InitAntenna_Selection(struct adapter *Adapter)
+@@ -492,7 +492,7 @@ static void _InitAntenna_Selection(struct adapter *Adapter)
  {
  	struct hal_data_8188e *haldata = &Adapter->haldata;
-@@ -1204,9 +1211,6 @@ void GetHalDefVar8188EUsb(struct adapter *Adapter, enum hal_def_variable eVariab
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
  
- 	switch (eVariable) {
--	case HAL_DEF_IS_SUPPORT_ANT_DIV:
--		*((u8 *)pValue) = (haldata->AntDivCfg == 0) ? false : true;
--		break;
- 	case HAL_DEF_CURRENT_ANTENNA:
- 		*((u8 *)pValue) = haldata->CurAntenna;
- 		break;
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index e222ab89bfc5..2a82bc392b87 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -28,7 +28,6 @@ enum hw_variables {
- };
+-	if (haldata->AntDivCfg == 0)
++	if (!support_ant_div(Adapter))
+ 		return;
  
- enum hal_def_variable {
--	HAL_DEF_IS_SUPPORT_ANT_DIV,
- 	HAL_DEF_CURRENT_ANTENNA,
- 	HAL_DEF_DBG_DM_FUNC,/* for dbg */
- };
-@@ -64,6 +63,8 @@ uint rtw_hal_init(struct adapter *padapter);
- uint rtw_hal_deinit(struct adapter *padapter);
- void rtw_hal_stop(struct adapter *padapter);
- 
-+bool support_ant_div(struct adapter *adapter);
-+
- u32 rtl8188eu_hal_init(struct adapter *Adapter);
- u32 rtl8188eu_hal_deinit(struct adapter *Adapter);
- 
+ 	rtw_write32(Adapter, REG_LEDCFG0, rtw_read32(Adapter, REG_LEDCFG0) | BIT(23));
 -- 
 2.35.1
 

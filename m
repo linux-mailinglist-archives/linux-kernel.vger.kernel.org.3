@@ -2,217 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213E04F0CEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBE54F0CEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 01:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376645AbiDCXSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 19:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S1376652AbiDCXZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 19:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiDCXSU (ORCPT
+        with ESMTP id S239505AbiDCXY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 19:18:20 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2C636179;
-        Sun,  3 Apr 2022 16:16:25 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c42so1634907edf.3;
-        Sun, 03 Apr 2022 16:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NhhW2Eyu1xu1QDZrrHqw8LVLz1fDQ3LIeut0tE9Tbvw=;
-        b=loyfmZqxTivg6+bxWj4cW0YYrqXhD1JBH3Ikj0x9drhE/NRGkp41JNcKxfLeQQKTpZ
-         9PIcrAq/ct6KMv+OnnKQXlR/9pID0HGU7aW3ssJBx/LW5rNQHqbt/xXx6RQ/J7JBD8xi
-         GVOGY1eMK5KLNQDuCJFAvN3xtWcmJyNBjya4rUNjVRkUe2Kt9j3t/D0175E1KNMWO1Z3
-         zras9ZpRrHdWEfaq7xVbGn9SfT5L/bsNWchSyoP8CCSyeu0HeGyxWssKi3yjeSaXSJ2d
-         c+cdpz3HLWIJToLaXcVn9FcF2BfS74Q02JWOsANaeUdUxluL5eEUX38DHBMFn6b75fNw
-         IAfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NhhW2Eyu1xu1QDZrrHqw8LVLz1fDQ3LIeut0tE9Tbvw=;
-        b=4tQQtiqtzdYPEXeE4tAWNH69rVrgB3DVahp7ayjFtMuebM5iwKWYtyB8BowgvoiQ1K
-         Is+TXtRK5cUe/oJCDnwjyJlh8b1C002cn8hiqLkJFvF7tRTZR7LGo2T1xaZ5pwvZ8Rwz
-         /ZRCNTg1v3Cb/8v8kVdy1j3lmioRJ0pXG+J34mPw9HtMTeVhtyF2l2uLbp/TSyV9GX/v
-         AcjNS3sk03f8Hg/4krkb/i2NFh8EJm0Q2WzEH0jhG6CBmh8HWMnll9Pgl6+TCBGsr2Mg
-         N6lXvavchdGJj9C+YruAytW4722vSCsbhAZ7kcvl3uLflTnmeCx3cYvvrf94h56YY9Iz
-         lnCw==
-X-Gm-Message-State: AOAM533l7lhYt2foK0Z/7xC5baJiZj/+Sij32lPT8eP8jtMZCVTQnu6o
-        v9sC+8nxO7uEiJkitULnbHTsB9agWHQ=
-X-Google-Smtp-Source: ABdhPJw8NDaI15GPUjURdL3JQ7v/765I3hRLmEC+Bw3j7Dl+xmX4T2zDKj6cv/NhueOQiUQNm5zZHQ==
-X-Received: by 2002:a05:6402:3496:b0:419:82d5:f1d9 with SMTP id v22-20020a056402349600b0041982d5f1d9mr30695304edc.36.1649027783382;
-        Sun, 03 Apr 2022 16:16:23 -0700 (PDT)
-Received: from nlaptop.localdomain (ptr-dtfv0poj8u7zblqwbt6.18120a2.ip6.access.telenet.be. [2a02:1811:cc83:eef0:f2b6:6987:9238:41ca])
-        by smtp.gmail.com with ESMTPSA id o5-20020a170906974500b006dfc781498dsm3687004ejy.37.2022.04.03.16.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 16:16:22 -0700 (PDT)
-From:   Niels Dossche <dossche.niels@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Niels Dossche <dossche.niels@gmail.com>
-Subject: [PATCH net-next v2] ipv6: fix locking issues with loops over idev->addr_list
-Date:   Mon,  4 Apr 2022 01:15:24 +0200
-Message-Id: <20220403231523.45843-1-dossche.niels@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 3 Apr 2022 19:24:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D7537AB9
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 16:23:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649028182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jFT29KGwTL9/a9j1ulmt1kYHc8JakC8y8u/vUFmDr+A=;
+        b=oKcXZxVmrLomnV5AsXRBhGhqXA9vCgY/eiH1njhtDtvi31fogEVobD4FgD9XyK2RIkMWP8
+        E5cd88uv2yVBUzPDIktA81HSnnmfo5RmUXiqYynkX0wYtmqqOK3kKbkb9riKdjzokCHmud
+        V7fRLQu88KQTytC4eE5z+Qhggynauv0UjVevnMiuSp3S0H+KCtvd5T8TUOtBPkElc92n06
+        UKhzEgwEQMkGfDcIU9xJp1fJdB+S3Iw4YOyQ7BbJaTntPzvagGupPbqJxqTNUBUf7+J/Yf
+        +SEG33ixkXIg2KkGy9RmlsziEJHD/Th7FuBgi7hWuWsVWK+Bdm9tcQiC2YbBvQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649028182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jFT29KGwTL9/a9j1ulmt1kYHc8JakC8y8u/vUFmDr+A=;
+        b=YGB7Rj0dmCvxLzhM3h/vBXfAJufjTpO37DI71rK1x3yIr7HpdcrqmAT1PAv/W707+emBYR
+        OB6q16rUGDhK5VCA==
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: UML time-travel warning from __run_timers
+In-Reply-To: <43785c9c6ee74a995963144946c67893ebbf8852.camel@sipsolutions.net>
+References: <20220330110156.GA9250@axis.com>
+ <84f9d627092660c38400b607198c3b83f795be7f.camel@sipsolutions.net>
+ <877d86m978.ffs@tglx>
+ <32423b7c0e3a490093ceaca750e8669ac67902c6.camel@sipsolutions.net>
+ <43785c9c6ee74a995963144946c67893ebbf8852.camel@sipsolutions.net>
+Date:   Mon, 04 Apr 2022 01:23:01 +0200
+Message-ID: <87h779lpka.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-idev->addr_list needs to be protected by idev->lock. However, it is not
-always possible to do so while iterating and performing actions on
-inet6_ifaddr instances. For example, multiple functions (like
-addrconf_{join,leave}_anycast) eventually call down to other functions
-that acquire the idev->lock. The current code temporarily unlocked the
-idev->lock during the loops, which can cause race conditions. Moving the
-locks up is also not an appropriate solution as the ordering of lock
-acquisition will be inconsistent with for example mc_lock.
+Johannes,
 
-This solution adds an additional field to inet6_ifaddr that is used
-to temporarily add the instances to a temporary list while holding
-idev->lock. The temporary list can then be traversed without holding
-idev->lock. This change was done in two places. In addrconf_ifdown, the
-list_for_each_entry_safe variant of the list loop is also no longer
-necessary as there is no deletion within that specific loop.
+On Sun, Apr 03 2022 at 19:19, Johannes Berg wrote:
+> Actually, in a sense, this *is* the case of (just) recalculating
+> next_expiry, no? We just never set next_expiry_recalc since there was
+> never any timer on this?
 
-Suggested-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
----
+why are you insisting on fishing in the dark? 
 
-Changes in v2:
- - Applied the code style suggestions
- - Made sure the lines don't exceed 80 chars such that checkpatch
-   becomes happy
+> So actually this also makes the warning go away:
+>
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1729,6 +1733,7 @@ static inline void __run_timers(struct timer_base *base)
+>  		WARN_ON_ONCE(!levels && !base->next_expiry_recalc);
+>  		base->clk++;
+>  		base->next_expiry = __next_timer_interrupt(base);
+> +		base->next_expiry_recalc = !levels;
 
- include/net/if_inet6.h |  8 ++++++++
- net/ipv6/addrconf.c    | 30 ++++++++++++++++++++++++------
- 2 files changed, 32 insertions(+), 6 deletions(-)
+You are papering over the problem. That makes the warnign go away, but
+does not explain anyhting about the root cause. Can you please provide
+the information which was asked for?
 
-diff --git a/include/net/if_inet6.h b/include/net/if_inet6.h
-index 4cfdef6ca4f6..c8490729b4ae 100644
---- a/include/net/if_inet6.h
-+++ b/include/net/if_inet6.h
-@@ -64,6 +64,14 @@ struct inet6_ifaddr {
- 
- 	struct hlist_node	addr_lst;
- 	struct list_head	if_list;
-+	/*
-+	 * Used to safely traverse idev->addr_list in process context
-+	 * if the idev->lock needed to protect idev->addr_list cannot be held.
-+	 * In that case, add the items to this list temporarily and iterate
-+	 * without holding idev->lock.
-+	 * See addrconf_ifdown and dev_forward_change.
-+	 */
-+	struct list_head	if_list_aux;
- 
- 	struct list_head	tmp_list;
- 	struct inet6_ifaddr	*ifpub;
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index b22504176588..1afc4c024981 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -797,6 +797,7 @@ static void dev_forward_change(struct inet6_dev *idev)
- {
- 	struct net_device *dev;
- 	struct inet6_ifaddr *ifa;
-+	LIST_HEAD(tmp_addr_list);
- 
- 	if (!idev)
- 		return;
-@@ -815,14 +816,24 @@ static void dev_forward_change(struct inet6_dev *idev)
- 		}
- 	}
- 
-+	read_lock_bh(&idev->lock);
- 	list_for_each_entry(ifa, &idev->addr_list, if_list) {
- 		if (ifa->flags&IFA_F_TENTATIVE)
- 			continue;
-+		list_add_tail(&ifa->if_list_aux, &tmp_addr_list);
-+	}
-+	read_unlock_bh(&idev->lock);
-+
-+	while (!list_empty(&tmp_addr_list)) {
-+		ifa = list_first_entry(&tmp_addr_list,
-+				       struct inet6_ifaddr, if_list_aux);
-+		list_del(&ifa->if_list_aux);
- 		if (idev->cnf.forwarding)
- 			addrconf_join_anycast(ifa);
- 		else
- 			addrconf_leave_anycast(ifa);
- 	}
-+
- 	inet6_netconf_notify_devconf(dev_net(dev), RTM_NEWNETCONF,
- 				     NETCONFA_FORWARDING,
- 				     dev->ifindex, &idev->cnf);
-@@ -3728,7 +3739,8 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
- 	unsigned long event = unregister ? NETDEV_UNREGISTER : NETDEV_DOWN;
- 	struct net *net = dev_net(dev);
- 	struct inet6_dev *idev;
--	struct inet6_ifaddr *ifa, *tmp;
-+	struct inet6_ifaddr *ifa;
-+	LIST_HEAD(tmp_addr_list);
- 	bool keep_addr = false;
- 	bool was_ready;
- 	int state, i;
-@@ -3820,16 +3832,23 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
- 		write_lock_bh(&idev->lock);
- 	}
- 
--	list_for_each_entry_safe(ifa, tmp, &idev->addr_list, if_list) {
-+	list_for_each_entry(ifa, &idev->addr_list, if_list)
-+		list_add_tail(&ifa->if_list_aux, &tmp_addr_list);
-+	write_unlock_bh(&idev->lock);
-+
-+	while (!list_empty(&tmp_addr_list)) {
- 		struct fib6_info *rt = NULL;
- 		bool keep;
- 
-+		ifa = list_first_entry(&tmp_addr_list,
-+				       struct inet6_ifaddr, if_list_aux);
-+		list_del(&ifa->if_list_aux);
-+
- 		addrconf_del_dad_work(ifa);
- 
- 		keep = keep_addr && (ifa->flags & IFA_F_PERMANENT) &&
- 			!addr_is_local(&ifa->addr);
- 
--		write_unlock_bh(&idev->lock);
- 		spin_lock_bh(&ifa->lock);
- 
- 		if (keep) {
-@@ -3860,15 +3879,14 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
- 			addrconf_leave_solict(ifa->idev, &ifa->addr);
- 		}
- 
--		write_lock_bh(&idev->lock);
- 		if (!keep) {
-+			write_lock_bh(&idev->lock);
- 			list_del_rcu(&ifa->if_list);
-+			write_unlock_bh(&idev->lock);
- 			in6_ifa_put(ifa);
- 		}
- 	}
- 
--	write_unlock_bh(&idev->lock);
--
- 	/* Step 5: Discard anycast and multicast list */
- 	if (unregister) {
- 		ipv6_ac_destroy_dev(idev);
--- 
-2.35.1
+>  		while (levels--)
+>  			expire_timers(base, heads + levels);
+> @@ -2005,6 +2010,7 @@ static void __init init_timer_cpu(int cpu)
+>  		raw_spin_lock_init(&base->lock);
+>  		base->clk = jiffies;
+>  		base->next_expiry = base->clk + NEXT_TIMER_MAX_DELTA;
+> +		base->next_expiry_recalc = true;
 
+This is complete nonsense because at the point where the CPU base is
+initialized next_expiry _IS_ correct at the outer max. Why would it be
+required to be recalculated? The only reason why it needs to be
+recalculated is when a timer is canceled before expiry, but there is
+_NO_ timer which can be canceled at this point.
+
+So what are you trying to solve here?
+
+Thanks,
+
+        tglx

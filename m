@@ -2,147 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE334F07BE
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934FC4F07C8
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239308AbiDCFTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 01:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S232302AbiDCFY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 01:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238022AbiDCFTQ (ORCPT
+        with ESMTP id S229566AbiDCFY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 01:19:16 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2E837027
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 22:17:23 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id s11so6049088pfu.13
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 22:17:23 -0700 (PDT)
+        Sun, 3 Apr 2022 01:24:56 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF3B7DC;
+        Sat,  2 Apr 2022 22:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=uZOv2/2KAQ0z7EgFkhznivo9kV6ZnMeD1XPwFhqWHQE=;
-        b=E5ZI58OdcnFKpaAcoI2jGMDAaoo3a/RNUk9X/CzXq8iYqKHaMxh8XYYzp00U5T35FN
-         byk5ErK68h5wyVkmGg/7cs/9K2OGlSxww5yq8hKyn5qhDwRUkRa/ET6No+qeFC52v8dP
-         ZFetFrl8OIej5w2zhGPeedydxV0rPCLvi0j11GGO2u2R28e3yKkb1Ws2eTu6m73G1mHp
-         sRmpEGd+6SL+Fm8rWjrevGlydw9Sckt4NFVBWSt3osE3cBEiyz0AzLq+HFRXyZg6P35k
-         Ebh18iZKlKyBie7omMZ5/+wrU2qRAxOUiHrVjBm2SypRI1K+vjcdkWrDIaizuKLEu7eK
-         97Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=uZOv2/2KAQ0z7EgFkhznivo9kV6ZnMeD1XPwFhqWHQE=;
-        b=MCxmgBPXuhBDocbUFsHxY3mtsS3zZ7AZMETK+JNVAGUJ0D07fj9SjP86iOFQx7XGdc
-         du4DoAHljT4lge1TbhN1DGqLJltd80bAw12uveGn37nkb2xKGwALY1qcYksq6Q3DxmBD
-         ul9gVHFRct+VzphWpsSBOROuulho3wJjKBxI7MAyUuKWi67NIKYMcphN+q8z+fBldgHv
-         296Cg5vD1NBV2sFgI1k7FQSZ8pZeE3p5Z97ITdUy8xTojYqUH70JWJ/XkIdS4Ol3nEa7
-         vBLZ25ynrz0Ra93T0oU0/ynCHpKqSdTRfZyCMu02jZkt7ytfWXXwmnC+GBYhXkgjPhie
-         JfnQ==
-X-Gm-Message-State: AOAM530NPIPKZoN+O4UEi1YsbtyXT5SErlDdsn4MNp/xjWIMF8aWBegC
-        D6hudktTE55IqSsP0/c3OUqv4VrbSBo1oo4kV/c=
-X-Google-Smtp-Source: ABdhPJwvmn74zIo24v1AGLNhDXxcRrTz1Yeo5dVp3dWboHc4Bfnn9l+D0DwlmDlKIDlbkMVN/HErMw==
-X-Received: by 2002:a63:3e01:0:b0:386:3916:182f with SMTP id l1-20020a633e01000000b003863916182fmr21089749pga.435.1648963043267;
-        Sat, 02 Apr 2022 22:17:23 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id c21-20020a637255000000b003822e80f132sm6467263pgn.12.2022.04.02.22.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 22:17:23 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Lyude Paul <lyude@redhat.com>, Inki Dae <inki.dae@samsung.com>,
-        Yakir Yang <kuankuan.y@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/bridge: Fix error handling in analogix_dp_probe
-Date:   Sun,  3 Apr 2022 05:17:11 +0000
-Message-Id: <20220403051714.21212-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1648963383; x=1680499383;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rAtvMqa3UEA1I/gQzlxH67hrGaELitMbpfXhAAOLSoU=;
+  b=L46yBIMVBoGlrFN9T4cWb6VLINHQi8MR+aEI07Im+WPAUz/OUS3JtOn2
+   8u4Ne0X8W4H+iWxPMRjCbu6UrZaGFp0MWDmMwUwlVXm5wX7z/25vbAT1N
+   t8unrJcMMhiOyCYFmuJ6Y4lbja0L2tiNcx3jdqSgI8Or0ChTNkBvQsIae
+   A=;
+X-IronPort-AV: E=Sophos;i="5.90,231,1643673600"; 
+   d="scan'208";a="189965259"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 03 Apr 2022 05:22:53 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com (Postfix) with ESMTPS id 97AA4C0291;
+        Sun,  3 Apr 2022 05:22:52 +0000 (UTC)
+Received: from EX13D13UWB003.ant.amazon.com (10.43.161.233) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Sun, 3 Apr 2022 05:22:50 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D13UWB003.ant.amazon.com (10.43.161.233) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Sun, 3 Apr 2022 05:22:50 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Sun, 3 Apr 2022 05:22:50 +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 168431687; Sun,  3 Apr 2022 05:22:49 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <ronenk@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <farbere@amazon.com>,
+        <dwmw@amazon.co.uk>
+Subject: [PATCH] watchdog: sp805: disable watchdog on remove
+Date:   Sun, 3 Apr 2022 05:22:49 +0000
+Message-ID: <20220403052249.48784-1-farbere@amazon.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the error handling path, the clk_prepare_enable() function
-call should be balanced by a corresponding 'clk_disable_unprepare()'
-call , as already done in the remove function.
+Disable the watchdog if it is active while removing the module.
+It is necessary in order to prevent a reset in case watchdog
+hw was running before the removal.
 
-Fixes: 3424e3a4f844 ("drm: bridge: analogix/dp: split exynos dp driver to bridge directory")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- .../gpu/drm/bridge/analogix/analogix_dp_core.c  | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/watchdog/sp805_wdt.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-index eb590fb8e8d0..2c0f582b4d32 100644
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-@@ -1698,7 +1698,10 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
+index d8876fba686d..d7dc0f3f16ec 100644
+--- a/drivers/watchdog/sp805_wdt.c
++++ b/drivers/watchdog/sp805_wdt.c
+@@ -311,6 +311,9 @@ static int sp805_wdt_remove(struct amba_device *adev)
+ {
+ 	struct sp805_wdt *wdt = amba_get_drvdata(adev);
  
- 	dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(dp->reg_base))
-+	if (IS_ERR(dp->reg_base)) {
-+		ret = PTR_ERR(dp->reg_base);
-+		goto err_disable_clk;
-+	}
- 		return ERR_CAST(dp->reg_base);
- 
- 	dp->force_hpd = of_property_read_bool(dev->of_node, "force-hpd");
-@@ -1711,7 +1714,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
- 	if (IS_ERR(dp->hpd_gpiod)) {
- 		dev_err(dev, "error getting HDP GPIO: %ld\n",
- 			PTR_ERR(dp->hpd_gpiod));
--		return ERR_CAST(dp->hpd_gpiod);
-+		ret = PTR_ERR(dp->hpd_gpiod);
-+		goto err_disable_clk;
- 	}
- 
- 	if (dp->hpd_gpiod) {
-@@ -1731,7 +1735,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
- 
- 	if (dp->irq == -ENXIO) {
- 		dev_err(&pdev->dev, "failed to get irq\n");
--		return ERR_PTR(-ENODEV);
-+		ret = -ENODEV;
-+		goto err_disable_clk;
- 	}
- 
- 	ret = devm_request_threaded_irq(&pdev->dev, dp->irq,
-@@ -1740,11 +1745,15 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
- 					irq_flags, "analogix-dp", dp);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to request irq\n");
--		return ERR_PTR(ret);
-+		goto err_disable_clk;
- 	}
- 	disable_irq(dp->irq);
- 
- 	return dp;
++	if (watchdog_active(&wdt->wdd))
++		wdt_disable(&wdt->wdd);
 +
-+err_disable_clk:
-+	clk_disable_unprepare(dp->clock);
-+	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(analogix_dp_probe);
+ 	watchdog_unregister_device(&wdt->wdd);
+ 	watchdog_set_drvdata(&wdt->wdd, NULL);
  
 -- 
-2.17.1
+2.32.0
 

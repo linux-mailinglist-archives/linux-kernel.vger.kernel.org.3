@@ -2,82 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138B54F0952
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 14:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBF14F0954
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 14:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357674AbiDCMYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 08:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
+        id S1357705AbiDCM12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 08:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbiDCMYo (ORCPT
+        with ESMTP id S236111AbiDCM10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 08:24:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FC034B83
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 05:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=4wMs/Nqcp6JMJCOeAiciegLddg5+RH3CPGP7YX3Zovw=; b=t6VkHZfztk9JHbAjpDWnjswvr+
-        DQlqofEaMbXC8+ef1pzLpiR2Kr9HLG34IUMXMqL4bet3X/B2Tp/SaT5m0masgDsl7+gOAEa6jvFlz
-        vqp2lPMVvCl8akXqtYRUGbtpzQ4ewqKmQpPmRzekBODslOZPZye0SudGYy/rBLdBKM35YEb1VLSAS
-        tEvmBK/8lbDrFum4vF6lNnrxcq5KKCkzcp1HjGW9S66Pe77ZTqOgnLRtJQcBOC6cKtSD4B5byyQu9
-        BOQiN1b6wwt/JBU+1rGzed0KZbu+1nTNcpsnImor+RflbwQAgg8QXSNiiyTTwYpWJwzUEOFI09Kj+
-        YuvjAM7g==;
-Received: from [2001:4bb8:184:7553:31f9:976f:c3b1:7920] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nazFq-00BLsM-1L; Sun, 03 Apr 2022 12:22:50 +0000
-Date:   Sun, 3 Apr 2022 14:22:47 +0200
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: [GIT PULL] second round of dma-mapping updates for Linux 5.18
-Message-ID: <YkmRl8McdwST4cII@infradead.org>
+        Sun, 3 Apr 2022 08:27:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9BA2F032
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 05:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648988731; x=1680524731;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OUe9ITGXWm2HkX5Q2fscoToIQd8fw6TDokYeG8tAnx4=;
+  b=N1U5oFYOiCZ8vpqDmE6SK/fxeVqzZfFvapxcH0vreZhqtDkVQYItO//b
+   8Hhw5eMWvz//yOpCAn79uF3pD4qIZqLX7ZZ96+7HxD6ykw7JL/yoZ4u/b
+   zWofCIfuHtWOA8p5L/xVfNIJ7ghPI2xgPXZ48Ffy8HbMzxHy0zYxWY/xD
+   yx+QpDbH/vjOIJ3DHMyHavzaE6L5tY60/p16b1h6JFNclFnIR0vtctX9E
+   q6aehO6Mj2+angmB6QPpXAsJJ4RqQDSDgV830CHaMUM7y6o1iz7oJmssE
+   wyuoTDmBaK7dvRqwBS/LbLOOR63pkh0FKqzzlB0Y6NW57+lt33MlGbuZ1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="323556576"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="323556576"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 05:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="721369392"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 03 Apr 2022 05:25:29 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nazIP-0000xN-7q;
+        Sun, 03 Apr 2022 12:25:29 +0000
+Date:   Sun, 3 Apr 2022 20:24:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: drivers/firmware/arm_scmi/optee.c:428:20: sparse: sparse: incorrect
+ type in return expression (different address spaces)
+Message-ID: <202204032039.TEInlRXP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
+commit: 5f90f189a052f6fc46048f6ce29a37b709548b81 firmware: arm_scmi: Add optee transport
+date:   5 months ago
+config: arm64-randconfig-s031-20220403 (https://download.01.org/0day-ci/archive/20220403/202204032039.TEInlRXP-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5f90f189a052f6fc46048f6ce29a37b709548b81
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5f90f189a052f6fc46048f6ce29a37b709548b81
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bus/ drivers/firmware/arm_scmi/ drivers/firmware/meson/
 
-  Merge tag 'devicetree-fixes-for-5.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux (2022-03-29 08:55:16 -0700)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-are available in the Git repository at:
 
-  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.18-1
+sparse warnings: (new ones prefixed by >>)
+   drivers/firmware/arm_scmi/optee.c:295:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct scmi_shared_mem [noderef] __iomem *shmem @@     got void * @@
+   drivers/firmware/arm_scmi/optee.c:295:24: sparse:     expected struct scmi_shared_mem [noderef] __iomem *shmem
+   drivers/firmware/arm_scmi/optee.c:295:24: sparse:     got void *
+   drivers/firmware/arm_scmi/optee.c:296:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got struct scmi_shared_mem [noderef] __iomem *shmem @@
+   drivers/firmware/arm_scmi/optee.c:296:23: sparse:     expected void *p
+   drivers/firmware/arm_scmi/optee.c:296:23: sparse:     got struct scmi_shared_mem [noderef] __iomem *shmem
+>> drivers/firmware/arm_scmi/optee.c:428:20: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected struct scmi_shared_mem * @@     got struct scmi_shared_mem [noderef] __iomem *shmem @@
+   drivers/firmware/arm_scmi/optee.c:428:20: sparse:     expected struct scmi_shared_mem *
+   drivers/firmware/arm_scmi/optee.c:428:20: sparse:     got struct scmi_shared_mem [noderef] __iomem *shmem
+>> drivers/firmware/arm_scmi/optee.c:440:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct scmi_shared_mem [noderef] __iomem *shmem @@     got struct scmi_shared_mem *shmem @@
+   drivers/firmware/arm_scmi/optee.c:440:26: sparse:     expected struct scmi_shared_mem [noderef] __iomem *shmem
+   drivers/firmware/arm_scmi/optee.c:440:26: sparse:     got struct scmi_shared_mem *shmem
+   drivers/firmware/arm_scmi/optee.c:444:51: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct scmi_shared_mem [noderef] __iomem *shmem @@     got struct scmi_shared_mem *shmem @@
+   drivers/firmware/arm_scmi/optee.c:444:51: sparse:     expected struct scmi_shared_mem [noderef] __iomem *shmem
+   drivers/firmware/arm_scmi/optee.c:444:51: sparse:     got struct scmi_shared_mem *shmem
+   drivers/firmware/arm_scmi/optee.c:456:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct scmi_shared_mem [noderef] __iomem *shmem @@     got struct scmi_shared_mem *shmem @@
+   drivers/firmware/arm_scmi/optee.c:456:30: sparse:     expected struct scmi_shared_mem [noderef] __iomem *shmem
+   drivers/firmware/arm_scmi/optee.c:456:30: sparse:     got struct scmi_shared_mem *shmem
+   drivers/firmware/arm_scmi/optee.c:465:32: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct scmi_shared_mem [noderef] __iomem *shmem @@     got struct scmi_shared_mem *shmem @@
+   drivers/firmware/arm_scmi/optee.c:465:32: sparse:     expected struct scmi_shared_mem [noderef] __iomem *shmem
+   drivers/firmware/arm_scmi/optee.c:465:32: sparse:     got struct scmi_shared_mem *shmem
 
-for you to fetch changes up to 4fe87e818ea492ade079cc01a31d088e445f8539:
+vim +428 drivers/firmware/arm_scmi/optee.c
 
-  dma-mapping: move pgprot_decrypted out of dma_pgprot (2022-04-01 06:46:51 +0200)
+   421	
+   422	static struct scmi_shared_mem *get_channel_shm(struct scmi_optee_channel *chan,
+   423						       struct scmi_xfer *xfer)
+   424	{
+   425		if (!chan)
+   426			return NULL;
+   427	
+ > 428		return chan->shmem;
+   429	}
+   430	
+   431	
+   432	static int scmi_optee_send_message(struct scmi_chan_info *cinfo,
+   433					   struct scmi_xfer *xfer)
+   434	{
+   435		struct scmi_optee_channel *channel = cinfo->transport_info;
+   436		struct scmi_shared_mem *shmem = get_channel_shm(channel, xfer);
+   437		int ret;
+   438	
+   439		mutex_lock(&channel->mu);
+ > 440		shmem_tx_prepare(shmem, xfer);
+   441	
+   442		ret = invoke_process_smt_channel(channel);
+   443	
+   444		scmi_rx_callback(cinfo, shmem_read_header(shmem), NULL);
+   445		mutex_unlock(&channel->mu);
+   446	
+   447		return ret;
+   448	}
+   449	
 
-----------------------------------------------------------------
-second round of dma-mapping updates for 5.18
-
- - fix a regression in dma remap handling vs AMD memory encryption (me)
- - finally kill off the legacy PCI DMA API (Christophe JAILLET)
-
-----------------------------------------------------------------
-Christoph Hellwig (2):
-      PCI/doc: cleanup references to the legacy PCI DMA API
-      dma-mapping: move pgprot_decrypted out of dma_pgprot
-
-Christophe JAILLET (1):
-      PCI: Remove the deprecated "pci-dma-compat.h" API
-
- Documentation/PCI/pci.rst      |  14 ++---
- include/linux/pci-dma-compat.h | 129 -----------------------------------------
- include/linux/pci.h            |   3 +-
- kernel/dma/direct.c            |  10 +++-
- kernel/dma/mapping.c           |   2 -
- 5 files changed, 16 insertions(+), 142 deletions(-)
- delete mode 100644 include/linux/pci-dma-compat.h
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

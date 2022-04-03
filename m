@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0722B4F07FF
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160624F0802
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346396AbiDCGDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 02:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S235851AbiDCGMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 02:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiDCGDj (ORCPT
+        with ESMTP id S232663AbiDCGMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:03:39 -0400
-X-Greylist: delayed 1223 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 23:01:46 PDT
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8630F2A257
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:01:46 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 01DC0988F
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 00:41:23 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id aszKnEVlhRnrraszKnJNLA; Sun, 03 Apr 2022 00:41:23 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B8Vpt4j0VXhi1wOCizFRse/0RAuRJNIB4Y5M9/3tKP0=; b=mYp6TGq8N59uC1v2h6Vf7jj7D+
-        M7FdSC6XFvbA79UA4yr2Qtaq6P9zBM2v/0MW/DlR8EWROyUKNOl0V8Z1G8xV96As7/C7yxoQTRjQv
-        GseHfzQgw1uJL9fReeiyvq5hvaEmlGMf92Z0JDxk3Td/Qadktbgh1kjlBIfGov8IsP8bHmzsKhj/i
-        6a/aB1TnmEIPHF5b5LNnVhqfheEzvGyB/b2pyrg4Q1IH2y5gjM609sClhSTPufzLoZ50wWULkV/KW
-        DLIyepDWAPkKr13c/+8GHgwTmgZa4m/EFXeWpL8N89kTg5jUxAL+m/Ko4AGdoZR9nJ8qAy5QHYsts
-        Wh6YZk2Q==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54670)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1naszK-001qPy-D2; Sun, 03 Apr 2022 05:41:22 +0000
-Message-ID: <1009cf3a-587b-307a-d1c9-efe71cd0a104@roeck-us.net>
-Date:   Sat, 2 Apr 2022 22:41:20 -0700
+        Sun, 3 Apr 2022 02:12:22 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C690832ED5
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:10:28 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id atRRnoSgJN7CcatRSnMr9N; Sun, 03 Apr 2022 08:10:27 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 03 Apr 2022 08:10:27 +0200
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH] ASoC: codecs: Fix an error handling path in va_macro_probe()
+Date:   Sun,  3 Apr 2022 08:10:24 +0200
+Message-Id: <6d08311472e272fdc1a184f019ec98ade6e9dc46.1648966195.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] watchdog: sp805: disable watchdog on remove
-Content-Language: en-US
-To:     Eliav Farber <farbere@amazon.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ronenk@amazon.com, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, dwmw@amazon.co.uk
-References: <20220403052249.48784-1-farbere@amazon.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220403052249.48784-1-farbere@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1naszK-001qPy-D2
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54670
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 9
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/22 22:22, Eliav Farber wrote:
-> Disable the watchdog if it is active while removing the module.
-> It is necessary in order to prevent a reset in case watchdog
-> hw was running before the removal.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->   drivers/watchdog/sp805_wdt.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index d8876fba686d..d7dc0f3f16ec 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -311,6 +311,9 @@ static int sp805_wdt_remove(struct amba_device *adev)
->   {
->   	struct sp805_wdt *wdt = amba_get_drvdata(adev);
->   
-> +	if (watchdog_active(&wdt->wdd))
-> +		wdt_disable(&wdt->wdd);
-> +
+After a successful lpass_macro_pds_init() call, lpass_macro_pds_exit() must
+be called.
 
-Why not use watchdog_stop_on_unregister() ?
+Add the missing call in the error handling path of the probe function and
+use it.
 
-Guenter
+Fixes: 9e3d83c52844 ("ASoC: codecs: Add power domains support in digital macro codecs")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ sound/soc/codecs/lpass-va-macro.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
->   	watchdog_unregister_device(&wdt->wdd);
->   	watchdog_set_drvdata(&wdt->wdd, NULL);
->   
+diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
+index f3cb596058e0..d18b56e60433 100644
+--- a/sound/soc/codecs/lpass-va-macro.c
++++ b/sound/soc/codecs/lpass-va-macro.c
+@@ -1434,8 +1434,10 @@ static int va_macro_probe(struct platform_device *pdev)
+ 		va->dmic_clk_div = VA_MACRO_CLK_DIV_2;
+ 	} else {
+ 		ret = va_macro_validate_dmic_sample_rate(sample_rate, va);
+-		if (!ret)
+-			return -EINVAL;
++		if (!ret) {
++			ret = -EINVAL;
++			goto err;
++		}
+ 	}
+ 
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+@@ -1492,6 +1494,8 @@ static int va_macro_probe(struct platform_device *pdev)
+ err_dcodec:
+ 	clk_disable_unprepare(va->macro);
+ err:
++	lpass_macro_pds_exit(va->pds);
++
+ 	return ret;
+ }
+ 
+-- 
+2.32.0
 

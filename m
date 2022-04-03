@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779474F087C
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518404F087F
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355820AbiDCIwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 04:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S234181AbiDCI7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 04:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiDCIwn (ORCPT
+        with ESMTP id S229807AbiDCI7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 04:52:43 -0400
-Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CDDB7C2;
-        Sun,  3 Apr 2022 01:50:47 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru B6B542093D12
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] usb: Prepare cleanup of powerpc's asm/prom.h
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <d9193539d7d079d70fc3480afb1b413f4694ddd1.1648833420.git.christophe.leroy@csgroup.eu>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <86bf7aa0-cfcd-33f3-30c5-a944883325b3@omp.ru>
-Date:   Sun, 3 Apr 2022 11:50:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 3 Apr 2022 04:59:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E127B3137A
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 01:57:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D55D8B80C6A
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2994CC340ED;
+        Sun,  3 Apr 2022 08:57:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648976256;
+        bh=1mCqVCGJhKXscLciRMEdJ4sz7mlkpG1XFYW0ZKNoZOo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eSLWoII9l3SD8kDLAdJ4Z716719mB9u/n5ufg73vlRYCSSmdcsZXAtaJRMS/YfAy4
+         46BMjzQOlfOwLhBbJ/FIOZB2KhwcBg5wRpNm5ERre2OV1IlNvJNZtH7Ed3vNSO78+6
+         DSgmm27lAg0hNoagcNSV+j8cdoEAOlzXhr1c9o+Q=
+Date:   Sun, 3 Apr 2022 10:57:33 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        florian.c.schilhabel@googlemail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] staging: rtl8712: Fix Lines shouldn't end with '('
+Message-ID: <YklhfWv8DQlBdM0w@kroah.com>
+References: <8c88829f625f9847a1db18fe467399594dacb064.1648902188.git.eng.alaamohamedsoliman.am@gmail.com>
+ <9bb14ea276fd3274900f7aec455174c53ed3a3e9.1648902188.git.eng.alaamohamedsoliman.am@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <d9193539d7d079d70fc3480afb1b413f4694ddd1.1648833420.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9bb14ea276fd3274900f7aec455174c53ed3a3e9.1648902188.git.eng.alaamohamedsoliman.am@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 4/2/22 1:21 PM, Christophe Leroy wrote:
-
-> powerpc's asm/prom.h brings some headers that it doesn't
-> need itself.
+On Sat, Apr 02, 2022 at 02:28:17PM +0200, Alaa Mohamed wrote:
+> Fix " CHECK: Lines should not end with a '(' "
+> Reported by checkpatch
 > 
-> In order to clean it up, first add missing headers in
-> users of asm/prom.h
-
-   I'm not seeing any headers added in this patch?
-
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
 > ---
->  drivers/usb/core/hcd-pci.c     | 1 -
->  drivers/usb/host/ohci-ppc-of.c | 3 ---
->  2 files changed, 4 deletions(-)
+>  drivers/staging/rtl8712/rtl8712_xmit.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> index 8176bc81a635..f192925f74f7 100644
-> --- a/drivers/usb/core/hcd-pci.c
-> +++ b/drivers/usb/core/hcd-pci.c
-> @@ -15,7 +15,6 @@
->  #ifdef CONFIG_PPC_PMAC
->  #include <asm/machdep.h>
->  #include <asm/pmac_feature.h>
-> -#include <asm/prom.h>
->  #endif
+> diff --git a/drivers/staging/rtl8712/rtl8712_xmit.c b/drivers/staging/rtl8712/rtl8712_xmit.c
+> index 05ba0ca7d627..d43c097f30c3 100644
+> --- a/drivers/staging/rtl8712/rtl8712_xmit.c
+> +++ b/drivers/staging/rtl8712/rtl8712_xmit.c
+> @@ -638,16 +638,12 @@ int r8712_xmitframe_complete(struct _adapter *padapter,
+>  		if (p2ndxmitframe) {
+>  			u16 total_length;
 >  
->  #include "usb.h"
-> diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
-> index 45f7cceb6df3..1960b8dfdba5 100644
-> --- a/drivers/usb/host/ohci-ppc-of.c
-> +++ b/drivers/usb/host/ohci-ppc-of.c
-> @@ -19,9 +19,6 @@
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
->  
-> -#include <asm/prom.h>
-> -
-> -
->  static int
->  ohci_ppc_of_start(struct usb_hcd *hcd)
->  {
+> -			total_length = r8712_xmitframe_aggr_next(
+> -				pxmitbuf, p2ndxmitframe);
+> +			total_length = r8712_xmitframe_aggr_next(pxmitbuf, p2ndxmitframe);
+>  			do {
+> -				p2ndxmitframe = dequeue_xframe_ex(
+> -					pxmitpriv, phwxmits, hwentry);
+> +				p2ndxmitframe = dequeue_xframe_ex(pxmitpriv, phwxmits, hwentry);
+>  				if (p2ndxmitframe)
+>  					total_length =
+> -						r8712_xmitframe_aggr_next(
+> -							pxmitbuf,
+> -							p2ndxmitframe);
+> +						r8712_xmitframe_aggr_next(pxmitbuf, p2ndxmitframe);
 
-MBR, Sergey
+And now you went over 80 columns :(
+
+You can do this better so that you still wrap lines, but do not trail
+with a '(' character.
+
+thanks,
+
+greg k-h

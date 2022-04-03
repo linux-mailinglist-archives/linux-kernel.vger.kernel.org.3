@@ -2,115 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB53F4F0925
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CA34F0926
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357175AbiDCLuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 07:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
+        id S236056AbiDCLyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 07:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238327AbiDCLua (ORCPT
+        with ESMTP id S233471AbiDCLyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 07:50:30 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3768F2B0
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:48:35 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d5so12412582lfj.9
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 04:48:35 -0700 (PDT)
+        Sun, 3 Apr 2022 07:54:39 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C563C2717D
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:52:45 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y10so6475623pfa.7
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 04:52:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oOTGeK/fBBSylHFUjJjIrij7LyMZ635R4iqHI9V3GZY=;
-        b=J7RUYuRuK3gLqIL3lh93xMbkwaevjEZCFPh6ZVQKhFkbS40MZZZ7DhyVXYQvRe4QF8
-         awH8zLfUYrbRhS3brpLGDloe6rXsr9oQcniBE2HEib4md7GR5OsIqqqS1CH2OnvRxkJ5
-         F/BOGASxXEe2QMwzKx1zRDlUojaMiqXeGkIp58F6Fti68zsaj5Q6x6oZoFveBnwDQ0Li
-         FOm011adxpyaK+qvC+aGqxc6WQkTRdA6ZYEQmEpr7XRvL2++R6VOO3RqZ85JxDJd97nt
-         YjGpIYcv57m3au5DE47p05yfhJTyNzLoEiYz9lEGOyyEtHVbVXWIDTTlrZUeT9DMk6zA
-         fE6g==
+        h=from:to:cc:subject:date:message-id;
+        bh=sR5C+V0BrLQBvN4cusDa5moM4/Z0FLGEO0DiyFna108=;
+        b=Ee9rnOJhOBjbwfUSmVUZIZfOs5YVvsbxIvZdyUKIdR3l3FHoadRLpLaEPPQikn9aGS
+         QAVB3GDAeU4bYDihcUQh3U619pl56DdpqOWgDKWnxJU5BOpBIq0Hn9NZH25OEpJ+kEIA
+         jjbpr/qAV+Vhxb3Uy/IdWyuLyevXlGQsMkRGYeBtsu8lHcVvjN2gEX/iFunRkImPZ7xq
+         GVB6Eng8EqQ1jI2R0JG9S3JZVhj09A8EXXVQKTNaCtDMfPvzThbv9syAWoQhO7/FtgHt
+         BS3WKNZQRTt5hmf1tjc2Pipfx90evF7PZbrW9dIvxCizxDTkM2SBB1tomOQ+j88E7w6G
+         Jn9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oOTGeK/fBBSylHFUjJjIrij7LyMZ635R4iqHI9V3GZY=;
-        b=DnF3MmQchImtntXgrNRrSZndhLxyJ01bx2S+9XjRj+vuv1VSE4QPpLlZ8zCuG8MBrd
-         hQEtG/Jmd+ySrRqnbqSqtfyItZy6s5zmHLkRT9NwYochcin+pYMhKZHw5+kBBlrUzvF1
-         J3TsN1W+A/BNPIp96lmwAPi2QoTmcj38VVrKs/v29cVf2S4uxZGhZyreA4mIDBfG8/pH
-         v2rZVwSr1IodkzwvlXfhbZqQybzqI6nTTwJ1QljrE+jgYUf04rhozL0qdi7ThK/xaR9x
-         df7HVLIk/QYlu29/4vn5PdJEeLG7V3UckVHwuznM+db2TapxWKyjU74XcL8d2Md5y7v3
-         stUA==
-X-Gm-Message-State: AOAM5310FJS9680pzaluurciXIyvnYb3XmXwqahIcfhDeS4cCjOBEJF6
-        iAl063VIgP+n4fNk0gSPnwk=
-X-Google-Smtp-Source: ABdhPJyNdDN6cJki6ehM3psvSt8BFf2cT0dipYkWjWJ45k7HSVuu2g4N8PpbG+NTdOXnrrOLTPyIQA==
-X-Received: by 2002:a05:6512:3b81:b0:44a:d39c:6c7f with SMTP id g1-20020a0565123b8100b0044ad39c6c7fmr9929114lfv.129.1648986513458;
-        Sun, 03 Apr 2022 04:48:33 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.247])
-        by smtp.gmail.com with ESMTPSA id 11-20020a2e154b000000b0024967cd674esm757347ljv.35.2022.04.03.04.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 04:48:32 -0700 (PDT)
-Message-ID: <3fb13fee-a605-7f2e-81ad-45148082a733@gmail.com>
-Date:   Sun, 3 Apr 2022 14:48:31 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
- <1813843.tdWV9SEqCh@leap> <942bbcb6-725d-9b47-5dfe-f105d30ea6b7@gmail.com>
- <7365301.EvYhyI6sBW@leap> <bf1137fa-5051-a834-0c1f-042c5a8074a3@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <bf1137fa-5051-a834-0c1f-042c5a8074a3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sR5C+V0BrLQBvN4cusDa5moM4/Z0FLGEO0DiyFna108=;
+        b=hmUW33PhFS0FtMIi2SFG4tLcaq3DmJVMlIA41OybB0njVuyh6dNOIm8XGBHKnz195f
+         yR010rx35Qsc8RRYc6I7FyPDF1krzhRk9z1qy4pjDm87zBD3FqkijuGa5vOjbYQzitPE
+         oC4iS+EzZPTyuaZ5dfkaZzz9bNBiRDxET6ucwjiHkV9GdrIhiR1rluxzLFdlFAriMCzE
+         uB8w6W/KxrmNTlaJ8iMsYCCMj7PuRMHmBARbfkQhcqa1eVt2Kpb7Mh3QA0U/ezrdIZ7P
+         +iMa73PCM/ZJTNKwJ9/idzQfD4a7DGouIwBsZ3NcdbAzStyGrkvh5x9ec66tOxnMbj/P
+         uSog==
+X-Gm-Message-State: AOAM533Omv6Qnsxg1FMYdB/OaafM2k8KIvcss30ZtZ2oswUEgWiugb9W
+        F1AfDAT2txshFwp3ch++Mqo=
+X-Google-Smtp-Source: ABdhPJxJpvKl7ZEMtIJIZuVzN0aHjDDFf0Pkq8k5nYH6/FmT/Hogjjvq7L3y8TNkvFQMZ69xqIWeAw==
+X-Received: by 2002:a62:cd83:0:b0:4fa:7410:6d86 with SMTP id o125-20020a62cd83000000b004fa74106d86mr53480921pfg.52.1648986765232;
+        Sun, 03 Apr 2022 04:52:45 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id u18-20020a056a00125200b004fb112ee9b7sm8031095pfi.75.2022.04.03.04.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 04:52:44 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ASoC: msm8916-wcd-digital: Check failure for devm_snd_soc_register_component
+Date:   Sun,  3 Apr 2022 11:52:39 +0000
+Message-Id: <20220403115239.30140-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+devm_snd_soc_register_component() may fails, we should check the error
+and do the corresponding error handling.
 
-On 4/3/22 14:41, Michael Straube wrote:
-> 
-> Hi Fabio,
-> 
-> wait..
-> 
-> rtw_set_802_11_disassociate() calls rtw_pwr_wakeup() only if
-> check_fwstate(pmlmepriv, _FW_LINKED) is true.
-> 
-> 
-> 	if (check_fwstate(pmlmepriv, _FW_LINKED)) {
-> 		rtw_disassoc_cmd(padapter, 0, true);
-> 		rtw_indicate_disconnect(padapter);
-> 		rtw_free_assoc_resources(padapter, 1);
-> 		rtw_pwr_wakeup(padapter);
-> 	}
-> 
+Fixes: 150db8c5afa1 ("ASoC: codecs: Add msm8916-wcd digital codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/codecs/msm8916-wcd-digital.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-msleep() cannot be called in atomic context:
+diff --git a/sound/soc/codecs/msm8916-wcd-digital.c b/sound/soc/codecs/msm8916-wcd-digital.c
+index 9ad7fc0baf07..20a07c92b2fc 100644
+--- a/sound/soc/codecs/msm8916-wcd-digital.c
++++ b/sound/soc/codecs/msm8916-wcd-digital.c
+@@ -1206,9 +1206,16 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
+ 
+ 	dev_set_drvdata(dev, priv);
+ 
+-	return devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
++	ret = devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
+ 				      msm8916_wcd_digital_dai,
+ 				      ARRAY_SIZE(msm8916_wcd_digital_dai));
++	if (ret)
++		goto err_mclk;
++
++	return 0;
++
++err_mclk:
++	clk_disable_unprepare(priv->mclk);
+ err_clk:
+ 	clk_disable_unprepare(priv->ahbclk);
+ 	return ret;
+-- 
+2.17.1
 
-drivers/staging/r8188eu/core/rtw_pwrctrl.c:379
-
-  	if (pwrpriv->ps_processing) {
-  		while (pwrpriv->ps_processing && rtw_get_passing_time_ms(start) <= 3000)
-  			msleep(10);
-  	}
-
-
-
-
-With regards,
-Pavel Skripkin

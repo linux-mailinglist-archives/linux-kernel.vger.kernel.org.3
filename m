@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670D64F06D2
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 04:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D1E4F0711
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 05:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbiDCCvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 2 Apr 2022 22:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S234495AbiDCDJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 2 Apr 2022 23:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiDCCvk (ORCPT
+        with ESMTP id S234482AbiDCDI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 2 Apr 2022 22:51:40 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD76324942
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 19:49:46 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id t4so5515733pgc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 19:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0edowekvp+uuabuvCBvmZKu7k9xu44C+w2QWuBKwXVg=;
-        b=3dMnBV4kTdo2WSciKxJYmAvpw7AXg+p1T7qReeNIsAg9ObVb5KAqh/PpPL3m0fgd4Y
-         oGduNrh4X484v+yN6pxoeKd7cankKPiivDqNTmf5+0a252b+RNt6r2rhIigXJcbAT8p7
-         WS7vsgnpJelzKwddJVQ3rnU7FyRQYaiOoLM5kLYgQkzm1OqLjkLDdyuedGTu8YzaXsNc
-         ayZABioTmxF68JUvHh82NrI1seLWO5w4/bFU+0LrhB3p0iHP/n/C0lgKdH2BmU11Hcij
-         ukj0Slag8wF6GzQVngme9rPCzCCVjvo7eDHN5bVtbUPY+m5boGvo06SVCzz0XWzOhEjB
-         PtWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0edowekvp+uuabuvCBvmZKu7k9xu44C+w2QWuBKwXVg=;
-        b=QPUJ2J4qPNRJfuJ6v8dAsvlTOkCAM5VDjN2i7JByS9EI8rHs4gbSkeycVgNORzI4yW
-         sxai7sGph2jT44gE2fc8zIKfDqdXA7gZAPWBzl3JYi9TALgOk4nLqbQ0DSnHVOrIgEYe
-         eTGTyMPwOJ3h4Gk19TNH1Wlfhd57miIcjFL8T4OY9ZAghWMlmOr37T9rXN26TBugUIrT
-         VVmdaKv9Jia3Ue+DJOodVpyI5dvwtN2SWpwG3nRC+Ghqr8b+l1RyhENvMfR+iHtA2uKR
-         wLefiG+lQOh340gzoYLDCPuimjpmLJfn5O7cm4jVBNiG7Iz8jNVgQ2zv7Z7C44+TqEno
-         0M+A==
-X-Gm-Message-State: AOAM533U3HpXja5ReX+zHKfQu9IMjKGiUPdoZRBsHmy8vyLtV83UP1LH
-        MKidl+9r6ui07sTFOEUOKixOyQKvQvO91Q==
-X-Google-Smtp-Source: ABdhPJyDRXDH8Tz4dAGJv60lUuLMHE7z7aPaZZDJTkLlzwE4WSvWneTIZD0ZfdfJklDfoH1bNBhFsA==
-X-Received: by 2002:a63:a555:0:b0:382:3ec:ee4f with SMTP id r21-20020a63a555000000b0038203ecee4fmr20547497pgu.79.1648954186335;
-        Sat, 02 Apr 2022 19:49:46 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id d9-20020a056a00198900b004fafdb88076sm7600992pfl.117.2022.04.02.19.49.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 19:49:45 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     catalin.marinas@arm.com, will@kernel.org,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        aneesh.kumar@linux.ibm.com, steven.price@arm.com,
-        lengxujun2007@126.com, arnd@arndb.de
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        smuchun@gmail.com, duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Subject: [PATCH] arm64: mm: fix pmd_leaf()
-Date:   Sun,  3 Apr 2022 10:49:28 +0800
-Message-Id: <20220403024928.4125-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Sat, 2 Apr 2022 23:08:56 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 20:06:50 PDT
+Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB97E38DAF;
+        Sat,  2 Apr 2022 20:06:50 -0700 (PDT)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 93436443B963;
+        Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id CuXfQFQux2ea; Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 1A5EC4407628;
+        Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu 1A5EC4407628
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
+        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1648954792;
+        bh=NB63kV2iVRK0aO2l931FJgETcLzKN2fr5wWYFpZPrSc=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=kROjGDT/7E7FhZEkku8DfmNfFhQvb4rAgv50wdx5dEAuxonn8MOytFygXbZ9Io2nL
+         cPzXN3MJ0CcaDQBqMaMLPgN6hjkNPbFoRcIo92Be1rQV13aPXAfAvWgx1GgqHIJMvN
+         9197vEj+dUIha/mZH1cX0PZOouqxQQRlBTAXqoiQ=
+X-Virus-Scanned: amavisd-new at mail.tintel.eu
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id YkEFaBaNcsiX; Sun,  3 Apr 2022 04:59:52 +0200 (CEST)
+Received: from taz.sof.bg.adlevio.net (unknown [IPv6:2001:67c:21bc:20::10])
+        by mail.tintel.eu (Postfix) with ESMTPS id BF5E0443A8BC;
+        Sun,  3 Apr 2022 04:59:51 +0200 (CEST)
+From:   Stijn Tintel <stijn@linux-ipv6.be>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, rdunlap@infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] MIPS: Octeon: fix CN6640 hang on XAUI init
+Date:   Sun,  3 Apr 2022 05:59:49 +0300
+Message-Id: <20220403025950.837085-1-stijn@linux-ipv6.be>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: IP_WHITELIST
+X-Rspamd-Queue-Id: BF5E0443A8BC
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: IP_WHITELIST
+X-Spamd-Result: default: False [0.00 / 15.00];
+        IP_WHITELIST(0.00)[2001:67c:21bc:20::10];
+        ASN(0.00)[asn:200533, ipnet:2001:67c:21bc::/48, country:BG]
+X-Rspamd-Server: skulls
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
-the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
-caused by this was reported by Qian Cai.
+Some CN66XX series Octeon II chips seem to hang if a reset is issued on
+XAUI initialization. Avoid the hang by disabling the reset.
 
-Link: https://patchwork.kernel.org/comment/24798260/ [1]
-Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
-Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Tested on SNIC10E.
+
+Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
 ---
- arch/arm64/include/asm/pgtable.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 94e147e5456c..09eaae46a19b 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -535,7 +535,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 				 PMD_TYPE_TABLE)
- #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
- 				 PMD_TYPE_SECT)
--#define pmd_leaf(pmd)		pmd_sect(pmd)
-+#define pmd_leaf(pmd)		(pmd_present(pmd) && !(pmd_val(pmd) & PMD_TABLE_BIT))
- #define pmd_bad(pmd)		(!pmd_table(pmd))
- 
- #define pmd_leaf_size(pmd)	(pmd_cont(pmd) ? CONT_PMD_SIZE : PMD_SIZE)
--- 
-2.11.0
+diff --git a/arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c b/arch/=
+mips/cavium-octeon/executive/cvmx-helper-xaui.c
+index fea71a85bb29..a92632223497 100644
+--- a/arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c
++++ b/arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c
+@@ -156,8 +156,9 @@ int __cvmx_helper_xaui_enable(int interface)
+ 	xauiCtl.u64 =3D cvmx_read_csr(CVMX_PCSXX_CONTROL1_REG(interface));
+ 	xauiCtl.s.lo_pwr =3D 0;
+=20
+-	/* Issuing a reset here seems to hang some CN68XX chips. */
+-	if (!OCTEON_IS_MODEL(OCTEON_CN68XX_PASS1_X) &&
++	/* Issuing a reset here seems to hang some CN66XX/CN68XX chips. */
++	if (!OCTEON_IS_MODEL(OCTEON_CN66XX) &&
++	    !OCTEON_IS_MODEL(OCTEON_CN68XX_PASS1_X) &&
+ 	    !OCTEON_IS_MODEL(OCTEON_CN68XX_PASS2_X))
+ 		xauiCtl.s.reset =3D 1;
+=20
+--=20
+2.35.1
 

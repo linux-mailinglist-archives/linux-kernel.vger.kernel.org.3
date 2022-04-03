@@ -2,137 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA114F0B6F
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 19:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998FD4F0B76
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 19:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359583AbiDCRCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 13:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S1359592AbiDCRF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 13:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbiDCRCK (ORCPT
+        with ESMTP id S234629AbiDCRFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 13:02:10 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41EE33A0E
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 10:00:13 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id g24so10096120lja.7
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 10:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y9ueE08O4hgLJ/etsVdj1Kl8Il5FNA2+FWPSFvQRrPk=;
-        b=U+HajK7vqk1UVA1fsIaKeJKFZd7cfzVEcwM4KyUoZ2V0Ugn+cZGoZLPMP0MtdaBWRS
-         alyBTpxOK/kPBbB5H+BZ2edC9isgxq9HwRKLHFEe9+wHKvRCBd8A7EIafe5zLl6VBgX2
-         5GpqjuD2PLXR72sXVIlqxmMGocx+ENmc+txeLLXT+WZlzKBAyjzuIo8YHi7KkfMBGPGt
-         qmhnXv8IOnuyxamhdlB+PENbk9pErGvYi7b/v7sJ+hZpePT1DkGvMIqoV2gVXkQaQtL4
-         u52lNn2EHzCx5x6Bj/vAvxqHRSYdUVp7PhscZGCHsSakft2rgstcYHKmdGc7fwFIzHb7
-         75Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y9ueE08O4hgLJ/etsVdj1Kl8Il5FNA2+FWPSFvQRrPk=;
-        b=Q8LxBn7KCkb/UFCAXYl2F+3qzthwuhy0wXM1YYmnkNdHaVeKC9zjxgPFBihi5vLBww
-         3S72CeAQxbvrQs4u8yOx4IvGpQ3HwYwhCaApa7fu4hGBCz1xwLuWEGEs1GhlUbaw/E01
-         9mVJPv+X0eiAuK1pLUVri1uoeu89+FMXdlnji5AM6zyM4LgE02CBXpY3rXxtVTseaj5I
-         81jWPB1ev5icR72xAKfqId7fkd/AZIVzmasBIY4snpz/4TXerBX+xRxqypN6U16JRfE0
-         aOKHMOksHWKmhc+Nu8rIl7QyHiOFl7BDUzUrW1VX2f/ZilknZ0obDmYG+sa6iYv/Rnwj
-         sayw==
-X-Gm-Message-State: AOAM533FIVfDSYTCuSjWXMDIitvNgM9/d7sXahgFFInfPtCorW6nqVOQ
-        f3bfr+w8z6DGiqGCRHe70iirhWcJGYEd1aBON9QzTdfRtZjpowzC
-X-Google-Smtp-Source: ABdhPJzVZRAjSxF9zMVc8S+plYKgl7R00N+fdaod9HHbDZuUOJH2tuCfsHYzy+OmwFUTKicp8o9YIqILgdGyfi5wRvM=
-X-Received: by 2002:a05:651c:1507:b0:249:83b4:9a27 with SMTP id
- e7-20020a05651c150700b0024983b49a27mr20023362ljf.24.1649005203378; Sun, 03
- Apr 2022 10:00:03 -0700 (PDT)
+        Sun, 3 Apr 2022 13:05:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802B3167CB;
+        Sun,  3 Apr 2022 10:04:00 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649005439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0FYO/QymqAO+y1Q05iYfClrPZn9DYCQj8o18qRL5/l0=;
+        b=igMsj+7iOclnRmjo3ROBNua2ZGLjOf6Pjbn5hKLYQ58wUynP3GlxuqyweBgD3LUEIz2OhZ
+        9Eos4AEHYZ90RIFx35yojdQ1FI6uJgLAKTGV+dmRf1SaELxBvFxBtS5byFookMR0vkOgYy
+        +qRkq/bVh5DEBl6iU6lEprV29BmafFjlXbwEPsGz6huZHSi7SACfj1nL6dwiSoy6En9umR
+        bN0BHSUA/EBrFRb4/YeQJncg/WMV4NWCp3yp6kGv60ejsnZBmKLaPegILWobi6nVhbSIYl
+        goyRb3pJFB1HL86fswDLBjiTXrU8o1upq9RGA8AWM+eHnm6WDheIbzsQ7yUhlA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649005439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0FYO/QymqAO+y1Q05iYfClrPZn9DYCQj8o18qRL5/l0=;
+        b=F6Pm90niQA6fSu2wZ0hj2XwU90qnDpNGMPk+Aql+I7+r1KkstPG46logbBEtyxHDDMp8jd
+        gEIgJit+1EJrFwBA==
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable Kernel <stable@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+Subject: Re: [PATCH v6 2/2] x86/MCE/AMD: Fix memory leak when
+ `threshold_create_bank()` fails
+In-Reply-To: <20220329104705.65256-3-ammarfaizi2@gnuweeb.org>
+References: <20220329104705.65256-1-ammarfaizi2@gnuweeb.org>
+ <20220329104705.65256-3-ammarfaizi2@gnuweeb.org>
+Date:   Sun, 03 Apr 2022 19:03:58 +0200
+Message-ID: <87wng6ksjl.ffs@tglx>
 MIME-Version: 1.0
-References: <20220403155111.GA333187@euclid> <ed0e9f7b-9ba9-b0c8-8261-397bf793b9b9@gmail.com>
- <CAMWRUK6K77KpRkCkruL=RQcmA1opbvapyPJOA-EFpYdXxY8ujQ@mail.gmail.com>
- <4ccc9ac3-c542-cd32-0cbb-7cdabbf0dbf9@gmail.com> <CAMWRUK7g7BqUL1NziBfbc6Epx7G8Xos47sKAtcimDZYmG-hVgA@mail.gmail.com>
- <3e1dfdde-d9f3-9e16-82a6-7b5497981bdd@gmail.com>
-In-Reply-To: <3e1dfdde-d9f3-9e16-82a6-7b5497981bdd@gmail.com>
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Date:   Sun, 3 Apr 2022 12:59:51 -0400
-Message-ID: <CAMWRUK5Ws=QvKvOAQ=iHtTNK8c3zvWJeOWoTEu2CUjrPCFuBEA@mail.gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: simplify control flow
-To:     Michael Straube <straube.linux@gmail.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 12:43 PM Michael Straube <straube.linux@gmail.com> wrote:
+On Tue, Mar 29 2022 at 17:47, Ammar Faizi wrote:
+
+> In mce_threshold_create_device(), if threshold_create_bank() fails, the
+> @bp will be leaked, because the call to mce_threshold_remove_device()
+> will not free the @bp. mce_threshold_remove_device() frees
+> @threshold_banks. At that point, the @bp has not been written to
+> @threshold_banks, @threshold_banks is NULL, so the call is just a nop.
 >
-> On 4/3/22 18:29, Sevinj Aghayeva wrote:
-> > Ah, I see. You run it on an email file that contains the patch. I
-> > could reproduce what you saw when I ran checkpatch without any options
-> > on an email file. But my usual workflow is to modify a file, e.g.
-> > rtw_mlme.c and then run "checkpatch.pl -f rtw_mlme.c", in which case I
-> > cannot see the "Alignment should match" error. So it looks like if you
-> > do not specify -f then checkpatch.pl enables --strict option.
-> >
->
-> Hi Sevinj,
->
-> I'm also not a checkpatch expert, but on my system this works without
-> --strict too. I applied your patch to my local tree and get:
->
-> /scripts/checkpatch.pl -f drivers/staging/r8188eu/core/rtw_mlme.c
+> Fix this by extracting the cleanup part into a new static function
+> __threshold_remove_device(), then call it from create/remove device
+> functions.
 
-Hi Michael,
+The way simpler fix is to move 
 
-That's odd. I don't get any CHECK messages if I run exactly the same
-command as above:
+>  	}
+>  	this_cpu_write(threshold_banks, bp);
 
-$ pwd
-/home/sevinj/k/staging/drivers/staging/r8188eu/core
-$ ~/k/staging/scripts/checkpatch.pl -f rtw_mlme.c | grep 'CHECK:' | wc -l
-0
+before the loop. That's safe because the banks cannot yet be reached via
+an MCE as the vector is not yet enabled:
+  
+>  	if (thresholding_irq_en)
+>  		mce_threshold_vector = amd_threshold_interrupt;
 
-I have to specify --strict to get CHECK messages:
+Thanks,
 
-$ ~/k/staging/scripts/checkpatch.pl --strict -f rtw_mlme.c | grep
-'CHECK:' | wc -l
-167
-
-I don't know why that is. I'm on Ubuntu 20.04 and it looks like I'm
-running checkpatch version 0.32:
-
-$ ~/k/staging/scripts/checkpatch.pl -h
-Usage: /home/sevinj/k/staging/scripts/checkpatch.pl [OPTION]... [FILE]...
-Version: 0.32
-
-<snip>
-
->
-> [snip]
->
-> CHECK: Alignment should match open parenthesis
-> #1638: FILE: drivers/staging/r8188eu/core/rtw_mlme.c:1638:
-> +               if ((p->PMKIDList[i].bUsed) &&
-> +                               (!memcmp(p->PMKIDList[i].Bssid, bssid,
-> ETH_ALEN)))
->
-> [snip]
->
-> You can also run checkpatch on the patch files (without -f).
-> Then it's easier to see if you introduced new issues.
->
-> regards,
-> Michael
-
-
-
--- 
-
-Sevinj.Aghayeva
+        tglx

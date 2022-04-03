@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAAF4F08E8
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0504F08ED
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356799AbiDCLHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 07:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S1356820AbiDCLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 07:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiDCLHm (ORCPT
+        with ESMTP id S1356239AbiDCLJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 07:07:42 -0400
+        Sun, 3 Apr 2022 07:09:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE3D33A13
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:05:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8BC33A17
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:07:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA246B80CC6
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 11:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64351C340F0;
-        Sun,  3 Apr 2022 11:05:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C53EB80CCC
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 11:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FB3C340F0;
+        Sun,  3 Apr 2022 11:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648983946;
-        bh=tNVwT/q3PJXvzpsVpXOF5IQfYuQeNb4rj36DibYNmlk=;
+        s=korg; t=1648984037;
+        bh=Qb1UQDHoSp8efOCvoV2WqfgewIbsjlmYXr/z24eAz/8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DbFkpC0c1ShrEEJpJMHS7tg9b//XrfGBo5CNZrB77oNn/QMboH7avLl4xFP56zZhq
-         30oUpVqRNcX93FPWXTzeoZ1YhFP04nDppjvXEHCCF9owUe8PpuRs7I/ZqkhcVQqUIe
-         P5bgLLPL3U22wHX7ZYsmhCUkYFt7/kCID0vpFJos=
-Date:   Sun, 3 Apr 2022 13:05:44 +0200
+        b=oL7p2G9LNgr81jHAy0USEicUDZD+gQaCtJFx2IdZ+hZjlW0y0xMNrTSp7H08fAzpO
+         WWppB20X23TaxNHbjxE20DDZDke3ORWMakscGYJ6DwzFxl7hV0uQP4jsSPLTcfJbh2
+         TWGCu+0DXsGQ0TQjKUMZTOEeR18iV6ugRDixYBeI=
+Date:   Sun, 3 Apr 2022 13:07:14 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bruno <codeagain@codeagain.dev>
-Cc:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: vme: Adjusted VME_USER in Kconfig
-Message-ID: <Ykl/iBR+pDaaLImA@kroah.com>
-References: <20220401050045.3686663-1-codeagain@codeagain.dev>
- <YkaW0ThT8Ah3z0wW@kroah.com>
- <YkaXRpIElW1BwKGb@kroah.com>
- <37e5203d1efd310ea82cf91c18c6a07eea743ac7.camel@codeagain.dev>
+Subject: Re: [PATCH v3 1/3] staging: rtl8723bs: remove redundant braces in if
+ statements
+Message-ID: <Ykl/4mIsSzaPRr+y@kroah.com>
+References: <cover.1648840991.git.sevinj.aghayeva@gmail.com>
+ <1a9f181f7f30f71c03e6e88df9fb8c17a298a192.1648840991.git.sevinj.aghayeva@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <37e5203d1efd310ea82cf91c18c6a07eea743ac7.camel@codeagain.dev>
+In-Reply-To: <1a9f181f7f30f71c03e6e88df9fb8c17a298a192.1648840991.git.sevinj.aghayeva@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,51 +53,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You sent this twice?
-
-Anyway...
-
-On Fri, Apr 01, 2022 at 03:21:50PM -0300, Bruno wrote:
-> With my tests in my, I have found two other things that I think are
-> remarkable to mention. First one is a missing `depends on` line for
-> `VME_BRIDGE` in drivers/staging/vme/devices/Kconfig, not visible
-> because they were in the same tree, but now unveiled. I'm fixing it,
-> do you think it's best to add it in the same patch?
-
-Make that a second patch, and resend it as part of a patch series since
-your first patch here is gone from my queue.
-
-> Finally, not directly related with the patch, yet remarkable, I
-> happened to notice something. When probing the vme_user module
-> (compiled with CONFIG_VME_USER=m), I naturally get the following
-> messages on my log and command output for `modprobe vme_user`:
-> | [177666.590400] vme_user: module is from the staging directory, the
-> quality is unknown, you have been warned.
-
-That is expected.
-
-> While this is completely expected, the message about the code from
-> staging directory does not appear when compiled with
-> CONFIG_VME_USER=y, as shows a `grep -i vme` on the console log:
-
-That is because you built the driver into the tree, so there is nothing
-to cause the taint code to run as there is no module loader involved.
-
-It's expected and works the same for all staging drivers.  Try it
-yourself with a different one to verify this.
-
-> | [0.000000] Linux version 5.17.0lsa-t-vme_user=y-13483-gfeb94431c35c-
-> dirty (bruno@AN5Bruno) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38)
-> #7 SMP PREEMPT_DYNAMIC Fri Apr 1 14:33:16 -03 2022
-> | [1.974450] vme_user: VME User Space Access Driver
-> | [ 1.975405] vme_user: No cards, skipping registration
+On Fri, Apr 01, 2022 at 03:28:36PM -0400, Sevinj Aghayeva wrote:
+> Adhere to Linux kernel coding style.
 > 
-> Do you think it would be interesting for a future patch to provide
-> some output when drivers from the staging tree are present in the
-> running kernel image?
+> Reported by checkpatch:
+> 
+> WARNING: braces {} are not necessary for single statement blocks
+> 
+> Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+> ---
+>  drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 76 +++++++------------
+>  1 file changed, 26 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+> index 49a3f45cb771..9f328e9a81ff 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+> @@ -271,12 +271,9 @@ static int has_channel(struct rt_channel_info *channel_set,
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < chanset_size; i++) {
+> -		if (channel_set[i].ChannelNum == chan) {
+> +	for (i = 0; i < chanset_size; i++)
+> +		if (channel_set[i].ChannelNum == chan)
+>  			return 1;
+> -		}
+> -	}
+> -
+>  	return 0;
+>  }
+>  
+> @@ -649,9 +646,8 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
+>  			if (psta) {
+>  				/* update WMM, ERP in the beacon */
+>  				/* todo: the timer is used instead of the number of the beacon received */
+> -				if ((sta_rx_pkts(psta) & 0xf) == 0) {
+> +				if ((sta_rx_pkts(psta) & 0xf) == 0)
+>  					update_beacon_info(padapter, pframe, len, psta);
+> -				}
+>  			} else {
+>  				/* allocate a new CAM entry for IBSS station */
+>  				cam_idx = allocate_fw_sta_entry(padapter);
+> @@ -916,11 +912,10 @@ unsigned int OnAuthClient(struct adapter *padapter, union recv_frame *precv_fram
+>  			go2asoc = 1;
+>  		}
+>  	} else if (seq == 4) {
+> -		if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared) {
+> +		if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
+>  			go2asoc = 1;
+> -		} else {
+> +		else
+>  			goto authclnt_fail;
+> -		}
+>  	} else {
+>  		/*  this is also illegal */
+>  		goto authclnt_fail;
+> @@ -1455,11 +1450,10 @@ unsigned int OnAssocRsp(struct adapter *padapter, union recv_frame *precv_frame)
+>  	UpdateBrateTbl(padapter, pmlmeinfo->network.supported_rates);
+>  
+>  report_assoc_result:
+> -	if (res > 0) {
+> +	if (res > 0)
+>  		rtw_buf_update(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len, pframe, pkt_len);
+> -	} else {
+> +	else
+>  		rtw_buf_free(&pmlmepriv->assoc_rsp, &pmlmepriv->assoc_rsp_len);
+> -	}
+>  
+>  	report_join_res(padapter, res);
+>  
+> @@ -1531,9 +1525,8 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
+>  			   reason, GetAddr3Ptr(pframe),
+>  			   ignore_received_deauth);
+>  
+> -		if (0 == ignore_received_deauth) {
+> +		if (0 == ignore_received_deauth)
+>  			receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
+> -		}
+>  	}
+>  	pmlmepriv->LinkDetectInfo.bBusyTraffic = false;
+>  	return _SUCCESS;
+> @@ -1674,11 +1667,10 @@ unsigned int OnAction_back(struct adapter *padapter, union recv_frame *precv_fra
+>  			/* process_addba_req(padapter, (u8 *)&(pmlmeinfo->ADDBA_req), GetAddr3Ptr(pframe)); */
+>  			process_addba_req(padapter, (u8 *)&(pmlmeinfo->ADDBA_req), addr);
+>  
+> -			if (pmlmeinfo->accept_addba_req) {
+> +			if (pmlmeinfo->accept_addba_req)
+>  				issue_action_BA(padapter, addr, WLAN_ACTION_ADDBA_RESP, 0);
+> -			} else {
+> +			else
+>  				issue_action_BA(padapter, addr, WLAN_ACTION_ADDBA_RESP, 37);/* reject ADDBA Req */
+> -			}
+>  
+>  			break;
+>  
+> @@ -1774,9 +1766,8 @@ static unsigned int on_action_public_vendor(union recv_frame *precv_frame)
+>  	u8 *pframe = precv_frame->u.hdr.rx_data;
+>  	u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
+>  
+> -	if (!memcmp(frame_body + 2, P2P_OUI, 4)) {
+> +	if (!memcmp(frame_body + 2, P2P_OUI, 4))
+>  		ret = on_action_public_p2p(precv_frame);
+> -	}
+>  
+>  	return ret;
+>  }
+> @@ -2187,9 +2178,8 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
+>  
+>  			wps_ie = rtw_get_wps_ie(pmgntframe->buf_addr+TXDESC_OFFSET+sizeof(struct ieee80211_hdr_3addr)+_BEACON_IE_OFFSET_,
+>  				pattrib->pktlen-sizeof(struct ieee80211_hdr_3addr)-_BEACON_IE_OFFSET_, NULL, &wps_ielen);
+> -			if (wps_ie && wps_ielen > 0) {
+> +			if (wps_ie && wps_ielen > 0)
+>  				rtw_get_wps_attr_content(wps_ie,  wps_ielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
+> -			}
+>  			if (sr != 0)
+>  				set_fwstate(pmlmepriv, WIFI_UNDER_WPS);
+>  			else
+> @@ -2245,9 +2235,8 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
+>  
+>  
+>  	/*  EXTERNDED SUPPORTED RATE */
+> -	if (rate_len > 8) {
+> +	if (rate_len > 8)
+>  		pframe = rtw_set_ie(pframe, WLAN_EID_EXT_SUPP_RATES, (rate_len - 8), (cur_network->supported_rates + 8), &pattrib->pktlen);
+> -	}
+>  
+>  
+>  	/* todo:HT for adhoc */
+> @@ -2447,9 +2436,8 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
+>  
+>  
+>  		/*  EXTERNDED SUPPORTED RATE */
+> -		if (rate_len > 8) {
+> +		if (rate_len > 8)
+>  			pframe = rtw_set_ie(pframe, WLAN_EID_EXT_SUPP_RATES, (rate_len - 8), (cur_network->supported_rates + 8), &pattrib->pktlen);
+> -		}
+>  
+>  
+>  		/* todo:HT for adhoc */
+> @@ -2674,9 +2662,8 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short
+>  
+>  		/*  setting auth algo number */
+>  		val16 = (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared) ? 1 : 0;/*  0:OPEN System, 1:Shared key */
+> -		if (val16) {
+> +		if (val16)
+>  			use_shared_key = 1;
+> -		}
+>  		le_tmp = cpu_to_le16(val16);
+>  
+>  		/* setting IV for auth seq #3 */
+> @@ -2831,16 +2818,14 @@ void issue_asocrsp(struct adapter *padapter, unsigned short status, struct sta_i
+>  				break;
+>  			}
+>  
+> -			if (!pbuf || ie_len == 0) {
+> +			if (!pbuf || ie_len == 0)
+>  				break;
+> -			}
+>  		}
+>  
+>  	}
+>  
+> -	if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK) {
+> +	if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK)
+>  		pframe = rtw_set_ie(pframe, WLAN_EID_VENDOR_SPECIFIC, 6, REALTEK_96B_IE, &(pattrib->pktlen));
+> -	}
+>  
+>  	/* add WPS IE ie for wps 2.0 */
+>  	if (pmlmepriv->wps_assoc_resp_ie && pmlmepriv->wps_assoc_resp_ie_len > 0) {
+> @@ -3301,9 +3286,8 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da,
+>  	__le16 le_tmp;
+>  
+>  	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+> -	if (!pmgntframe) {
+> +	if (!pmgntframe)
+>  		goto exit;
+> -	}
+>  
+>  	/* update attribute */
+>  	pattrib = &pmgntframe->attrib;
+> @@ -3627,9 +3611,8 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
+>  	action = ACT_PUBLIC_BSSCOEXIST;
+>  
+>  	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+> -	if (!pmgntframe) {
+> +	if (!pmgntframe)
+>  		return;
+> -	}
+>  
+>  	/* update attribute */
+>  	pattrib = &pmgntframe->attrib;
+> @@ -3802,9 +3785,8 @@ unsigned int send_beacon(struct adapter *padapter)
+>  
+>  	} while (false == bxmitok && issue < 100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+>  
+> -	if (padapter->bSurpriseRemoved || padapter->bDriverStopped) {
+> +	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
+>  		return _FAIL;
+> -	}
+>  
+>  
+>  	if (!bxmitok)
+> @@ -4388,9 +4370,8 @@ static void process_80211d(struct adapter *padapter, struct wlan_bssid_ex *bssid
+>  			}
+>  
+>  			/*  skip AP 2.4G channel plan */
+> -			while ((j < chplan_ap.Len) && (chplan_ap.Channel[j] <= 14)) {
+> +			while ((j < chplan_ap.Len) && (chplan_ap.Channel[j] <= 14))
+>  				j++;
+> -			}
+>  		}
+>  
+>  		pmlmeext->update_channel_plan_by_ap_done = 1;
+> @@ -4402,9 +4383,8 @@ static void process_80211d(struct adapter *padapter, struct wlan_bssid_ex *bssid
+>  	i = 0;
+>  	while ((i < MAX_CHANNEL_NUM) && (chplan_new[i].ChannelNum != 0)) {
+>  		if (chplan_new[i].ChannelNum == channel) {
+> -			if (chplan_new[i].ScanType == SCAN_PASSIVE) {
+> +			if (chplan_new[i].ScanType == SCAN_PASSIVE)
+>  				chplan_new[i].ScanType = SCAN_ACTIVE;
+> -			}
+>  			break;
+>  		}
+>  		i++;
+> @@ -4629,9 +4609,8 @@ void report_del_sta_event(struct adapter *padapter, unsigned char *MacAddr, unsi
+>  	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
+>  
+>  	pcmd_obj = rtw_zmalloc(sizeof(struct cmd_obj));
+> -	if (!pcmd_obj) {
+> +	if (!pcmd_obj)
+>  		return;
+> -	}
+>  
+>  	cmdsz = (sizeof(struct stadel_event) + sizeof(struct C2HEvent_Header));
+>  	pevtcmd = rtw_zmalloc(cmdsz);
+> @@ -5124,9 +5103,8 @@ void survey_timer_hdl(struct timer_list *t)
+>  
+>  	/* issue rtw_sitesurvey_cmd */
+>  	if (pmlmeext->sitesurvey_res.state > SCAN_START) {
+> -		if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS) {
+> +		if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS)
+>  			pmlmeext->sitesurvey_res.channel_idx++;
+> -		}
+>  
+>  		if (pmlmeext->scan_abort) {
+>  			pmlmeext->sitesurvey_res.channel_idx = pmlmeext->sitesurvey_res.ch_num;
+> @@ -5135,9 +5113,8 @@ void survey_timer_hdl(struct timer_list *t)
+>  		}
+>  
+>  		ph2c = rtw_zmalloc(sizeof(struct cmd_obj));
+> -		if (!ph2c) {
+> +		if (!ph2c)
+>  			goto exit_survey_timer_hdl;
+> -		}
+>  
+>  		psurveyPara = rtw_zmalloc(sizeof(struct sitesurvey_parm));
+>  		if (!psurveyPara) {
+> @@ -5348,9 +5325,8 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
+>  
+>  	/* check already connecting to AP or not */
+>  	if (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) {
+> -		if (pmlmeinfo->state & WIFI_FW_STATION_STATE) {
+> +		if (pmlmeinfo->state & WIFI_FW_STATION_STATE)
+>  			issue_deauth_ex(padapter, pnetwork->mac_address, WLAN_REASON_DEAUTH_LEAVING, 1, 100);
+> -		}
+>  		pmlmeinfo->state = WIFI_FW_NULL_STATE;
+>  
+>  		/* clear CAM */
+> -- 
+> 2.25.1
+> 
+> 
 
-If you can figure out how to do so, that would be interesting to see.
-
-thanks,
-
-greg k-h
+Still does not apply to my tree :(

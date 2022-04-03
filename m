@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7174F0863
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9126E4F0868
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355499AbiDCIHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 04:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S1355515AbiDCIUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 04:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235720AbiDCIHh (ORCPT
+        with ESMTP id S233657AbiDCIUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 04:07:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1700637AB5;
-        Sun,  3 Apr 2022 01:05:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3636B80AC3;
-        Sun,  3 Apr 2022 08:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D52C340F3;
-        Sun,  3 Apr 2022 08:05:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648973141;
-        bh=opLcU29acddtyzVufVbpjteyPfDjI2D8KSG2MV5cu5E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=itvPRJ+VsbzbyFqRiaYrWg4A/np9jYWjHGsUZkd7IZ1bFsDvbIaqgV/6ZYJh09DHr
-         RKIIdttb6Zs3cS9BHYUy2REpwnJlaOxpK+QtNLTA7zgivUGx3B+tqpoBJHhyFBR/Bs
-         7AeWRX4HyXdLXoKhupHVFPTC+hwE0dX5ZSkslS2cMcgNjGhEdLBkFeEE98JxkNItIl
-         K/nDVyxJgiHVXljkdpOIvNi4OMcEbNiDOANdRcSRJmyzox/OKLDI+qHYvlDevKIaMc
-         PBU7FhdbZU6j7cONoag7C9SHZxjzY5A2G1bcvjSRTGanHnQsCFQtEoeSwtijirtzWK
-         ni6ogFRjzI0og==
-Date:   Sun, 3 Apr 2022 11:06:51 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Michal Orzel <michalorzel.eng@gmail.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/5] keys: Remove redundant assignments
-Message-ID: <YklVm5HRM789++rp@kernel.org>
-References: <20220331173358.40939-1-michalorzel.eng@gmail.com>
- <20220331173358.40939-3-michalorzel.eng@gmail.com>
+        Sun, 3 Apr 2022 04:20:49 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B6513CCD
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 01:18:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so7605021edw.6
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 01:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aVdE1T1dEZD7+sLQEHxxXp/voC607490GFsl2AtLabg=;
+        b=hyXhY6k329Nl/PViwduqVY57b9feTjjD+LB2X6SmITUPdg26R5F9OdUbcGDlH6ftqy
+         0pOO5mwt1BL9v55eXjX1YvuZGgi3HtoDXTA/+k9ZDE8GubQUSnxddd+v/YED5cvTASnS
+         cCa2BvPbrBx/jJuvjkggTRv6eySm2+YR/rmb+T22SkK5+//wBL5ZxNUsNvK51PulX6GF
+         /3HxZFdJ2c18i8MBtbBIysjN1J4x+3BUNibV/RNEU/JHAWvnZ8lQGI1mX4/Sss11vXEt
+         XalF65KxXJ6V6dHZFWLxdGxaNv+vvabrvHUjpU3JabDANDBmAke0WE2TwOU00FhEgO27
+         sSzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aVdE1T1dEZD7+sLQEHxxXp/voC607490GFsl2AtLabg=;
+        b=SYhlNYkstPK0zFZYk945C1dX9fG3nFqPUuurc79orR8PHvgcj55lFS8yznBZOJlY7q
+         vPTkUjJ4ZjvYkQVf93kRlzn+pXfMau9OtF0H/N6Juq1hnclSjiJ1PJv5vzY63/xSZES0
+         38TuulCUf6SfXY6A00YMHK1jM1vBYRmGj7SxXjgAzZ3Uw4tJ/A7+Vl2+Q8bIPN4SAhsS
+         KN49CIygLic9NW0qJ88h9n0JljEKVoZcd6LBNdmzEg/xZoR/m2spjvExa4iME3IdB3nZ
+         xWTYJKnOCjWtqNuW5iKDcV2v3DoXmQbrLxHxRZ6HSvcCGpcbMGBEDYAHkJp5KMNKZYk1
+         jyAA==
+X-Gm-Message-State: AOAM530TwFEsqRW7+HYgHuSQJOGrWedpYyOQda/Rv0hnp6Fx4DJxCoCQ
+        JofhoIyTIM/MsA+pElgzVOBRfNzdh7LTgP81
+X-Google-Smtp-Source: ABdhPJye6QN3inePdO3Kw+NS6rWVXTH8+gMeNFVDOkRAHbmCusD5nXKKJxrIPn+K1wNZ41qBAb/Vdg==
+X-Received: by 2002:a05:6402:42c6:b0:419:276a:dded with SMTP id i6-20020a05640242c600b00419276addedmr28242895edc.2.1648973932759;
+        Sun, 03 Apr 2022 01:18:52 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id h7-20020a1709066d8700b006d4b4d137fbsm2989105ejt.50.2022.04.03.01.18.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 01:18:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] docs: dt: writing-bindings: describe typical cases
+Date:   Sun,  3 Apr 2022 10:18:48 +0200
+Message-Id: <20220403081849.8051-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331173358.40939-3-michalorzel.eng@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,61 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 07:33:56PM +0200, Michal Orzel wrote:
-> Get rid of redundant assignments which end up in values not being
-> read either because they are overwritten or the function ends.
-> 
-> Reported by clang-tidy [deadcode.DeadStores]
-> 
-> Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
-> ---
->  security/keys/process_keys.c | 1 -
->  security/keys/request_key.c  | 6 ++----
->  2 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/security/keys/process_keys.c b/security/keys/process_keys.c
-> index b5d5333ab330..8bdd6410f79a 100644
-> --- a/security/keys/process_keys.c
-> +++ b/security/keys/process_keys.c
-> @@ -92,7 +92,6 @@ int look_up_user_keyrings(struct key **_user_keyring,
->  		return PTR_ERR(reg_keyring);
->  
->  	down_write(&user_ns->keyring_sem);
-> -	ret = 0;
->  
->  	/* Get the user keyring.  Note that there may be one in existence
->  	 * already as it may have been pinned by a session, but the user_struct
-> diff --git a/security/keys/request_key.c b/security/keys/request_key.c
-> index 2da4404276f0..ad29023c9518 100644
-> --- a/security/keys/request_key.c
-> +++ b/security/keys/request_key.c
-> @@ -116,7 +116,7 @@ static int call_sbin_request_key(struct key *authkey, void *aux)
->  {
->  	static char const request_key[] = "/sbin/request-key";
->  	struct request_key_auth *rka = get_request_key_auth(authkey);
-> -	const struct cred *cred = current_cred();
-> +	const struct cred *cred;
->  	key_serial_t prkey, sskey;
->  	struct key *key = rka->target_key, *keyring, *session, *user_session;
->  	char *argv[9], *envp[3], uid_str[12], gid_str[12];
-> @@ -506,9 +506,7 @@ static struct key *construct_key_and_link(struct keyring_search_context *ctx,
->  			kdebug("cons failed");
->  			goto construction_failed;
->  		}
-> -	} else if (ret == -EINPROGRESS) {
-> -		ret = 0;
-> -	} else {
-> +	} else if (ret != -EINPROGRESS) {
->  		goto error_put_dest_keyring;
->  	}
->  
-> -- 
-> 2.25.1
-> 
+Add a chapter for caveats or typical mistakes.  Source: Rob Herring's
+(Devicetree bindings maintainer) comments on LKML.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/writing-bindings.rst  | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+diff --git a/Documentation/devicetree/bindings/writing-bindings.rst b/Documentation/devicetree/bindings/writing-bindings.rst
+index 18d9e0689d49..5465eced2af1 100644
+--- a/Documentation/devicetree/bindings/writing-bindings.rst
++++ b/Documentation/devicetree/bindings/writing-bindings.rst
+@@ -58,6 +58,31 @@ Properties
+ - DO define properties in terms of constraints. How many entries? What are
+   possible values? What is the order?
+ 
++Typical cases and caveats
++=========================
++
++- Phandle entries, like clocks/dmas/interrupts/resets, should always be
++  explicitly ordered. Include the {clock,dma,interrupt,reset}-names if there is
++  more than one phandle. When used, both of these fields need the same
++  constraints (e.g.  list of items).
++
++- For names used in {clock,dma,interrupt,reset}-names, do not add any suffix,
++  e.g.: "tx" instead of "txirq" (for interrupt).
++
++- Properties without schema types (e.g. without standard suffix or not defined
++  by schema) need the type, even if this is an enum.
++
++- If schema includes other schema (e.g. /schemas/i2c/i2c-controller.yaml) use
++  "unevaluatedProperties:false". In other cases, usually use
++  "additionalProperties:false".
++
++- For sub-blocks/components of bigger device (e.g. SoC blocks) use rather
++  device-based compatible (e.g. SoC-based compatible), instead of custom
++  versioning of that component.
++  For example use "vendor,soc1234-i2c" instead of "vendor,i2c-v2".
++
++- "syscon" is not a generic property. Use vendor and type, e.g.
++  "vendor,power-manager-syscon".
+ 
+ Board/SoC .dts Files
+ ====================
+-- 
+2.32.0
 
-David: can you pick this?
-
-BR, Jarkko

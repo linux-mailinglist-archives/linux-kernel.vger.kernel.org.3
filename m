@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31374F0891
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 11:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7664F0876
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 10:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356195AbiDCJVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 05:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
+        id S1355651AbiDCIqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 04:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiDCJVu (ORCPT
+        with ESMTP id S233847AbiDCIqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 05:21:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030CF2C678;
-        Sun,  3 Apr 2022 02:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648977597; x=1680513597;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UDCT08fSuAljQ3KsmV7M1mW+faCqhwtEgpoRXMbZEmE=;
-  b=n84i/7irvDou4gyAPeEgJk4rAx/1dM9XsW4b3tDiEuR1wFUkBgBgoHgO
-   GNvxtdx0kbQBgHpt1so7rPQdmAac4xXgfnfCEoVVCpEEy9gZUi/T0qFS7
-   8BASXmWxKYf1g+U0Xln9y8R4VKXBmc3w0czH3Ad9uWfodi0frH9y0tstF
-   9nyLSulTAbLmXq8/DG9WjQUMWPiQ3BL7RU150OeLc/h2LdhJnaNqNJyuj
-   9efOCeV97z9XMXKndO/DTBfePvT36aDe0CKH5LSktEs58wXfs1dkvvMZb
-   fv9pWs+B6Nc3+Qy7glF6yp7H9tzyhXSF2l4zjHevIFkH65fz4+fpdU/tQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="259200727"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="259200727"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 02:19:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="568846449"
-Received: from npg-dpdk-haiyue-2.sh.intel.com ([10.67.111.4])
-  by orsmga008.jf.intel.com with ESMTP; 03 Apr 2022 02:19:52 -0700
-From:   Haiyue Wang <haiyue.wang@intel.com>
-To:     bpf@vger.kernel.org
-Cc:     Haiyue Wang <haiyue.wang@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1] bpf: correct the comment for BTF kind bitfield
-Date:   Sun,  3 Apr 2022 16:44:33 +0800
-Message-Id: <20220403084433.200701-1-haiyue.wang@intel.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 3 Apr 2022 04:46:43 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA44935DCB
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 01:44:49 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k2so410533edj.9
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 01:44:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xfVP9oZn0/BE7WrrGSxvCysoPKHtw6VApFuE82wzSUY=;
+        b=fuyvg/Rki7ORmk6z35agkDIa3JB+Kcq0XudQdz+cdYkCdy6eMJpqcjCm0M4h6Yu3qk
+         0lWRGUxd5stxr52H+cb2cs1PLw/z5UBU0V2kvESeBRaffBXsi3MCTkp1Txl8n9wdHggi
+         YtGiTGcvKvNDeTe/xKmfozTqZK/y6rFXHhl9RC7WB7NRkTD822NsfDLNTg5glmnkBFX5
+         MnmyMQzTsv808Aywg0tcE9QOquqimyB/sKIMqTGqcrL2CyLUctTkKDn5/9uRnQ2AvYr6
+         pWe6MmfPe0FK8fD3IL3+UfTJyl8/VejC/OHhhK3tMYy3FlzKT+iNgyyVSq4immMGJzU5
+         ++1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xfVP9oZn0/BE7WrrGSxvCysoPKHtw6VApFuE82wzSUY=;
+        b=tGYIp/ZZpFiMiLAylR6NdVLzPF3eMgf6Q44nrByN0BwWB/an4aeYwbe6v+1dU3JL8r
+         cpt+sRGScx7kC2S62boJvBy93f6T19fz/fy786HQ9B7oCBr+GWCAI5nza1RzWHTKhdp6
+         agTrjD/OxfRCrh1Io+lB+YCxfk0iOVIK0gRhwO8mWu8DGLFGDnXhASdelSeGXqYh5ZFU
+         fxOrgndXZzYe7s9AzV+mdNPihTvfLNITzfWKrClOrxUcnZQ255GgltsGDVkfUdHPhrYL
+         TctdFm7uU7HWwocOa4+ieTHvH4QEeGjuHb56oU9LsmaTfWaf8UemVMpWZ6wGs+atPHfd
+         gB3Q==
+X-Gm-Message-State: AOAM533BRPgWYeAeBLO/fRinB8q3J2rW9nsJHljIZHK4I4AMIXntzF87
+        OS3UtSo3g82GRqLUXmB6Rks81ejDsyQ=
+X-Google-Smtp-Source: ABdhPJzjC+z6DqdTw+gOo/2sJOoWVqhf1eSPznjPBrvXeqqUPef50/kVxo8PaF7nhyKgtQmCLwGWaA==
+X-Received: by 2002:a50:954b:0:b0:41a:c9cb:8778 with SMTP id v11-20020a50954b000000b0041ac9cb8778mr28075200eda.165.1648975488355;
+        Sun, 03 Apr 2022 01:44:48 -0700 (PDT)
+Received: from [192.168.0.253] (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id h14-20020a056402280e00b0041957289726sm3775622ede.79.2022.04.03.01.44.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Apr 2022 01:44:47 -0700 (PDT)
+Message-ID: <6a1d7485-d405-d9a6-fefd-5a10d038d493@gmail.com>
+Date:   Sun, 3 Apr 2022 10:44:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
+Content-Language: en-US
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Phillip Potter <phil@philpotter.co.uk>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+ <d9c7a2ba-288a-d81a-cd59-5b002489d821@lwfinger.net>
+From:   Michael Straube <straube.linux@gmail.com>
+In-Reply-To: <d9c7a2ba-288a-d81a-cd59-5b002489d821@lwfinger.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 8fd886911a6a ("bpf: Add BTF_KIND_FLOAT to uapi") has extended
-the BTF kind bitfield from 4 to 5 bits, correct the comment.
+On 4/2/22 23:32, Larry Finger wrote:
+> In drivers/net/wireless/realtek/rtlwifi, we had a similar problem. There 
+> it was handled by putting the lps_enter() and lps_leave() operations in 
+> a separate workqueue. In this case, the routines were rtl_lps_enter() 
+> and rtl_lps_leave(). Each of them sets a variable to indicate whether 
+> enter_ps is true or false, and schedules the workqueue. In the 
+> workqueue's callback routine, the routines to start/stop ps mode are 
+> called. The code is in drivers/net/wireless/realtek/rtlwifi/ps.c.
+> 
+> This solution is only one of many, and there may be a better one.
+> 
+> Larry
+> 
 
-Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
----
- include/uapi/linux/btf.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you for the explanation Larry.
 
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index b0d8fea1951d..a9162a6c0284 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -33,8 +33,8 @@ struct btf_type {
- 	/* "info" bits arrangement
- 	 * bits  0-15: vlen (e.g. # of struct's members)
- 	 * bits 16-23: unused
--	 * bits 24-27: kind (e.g. int, ptr, array...etc)
--	 * bits 28-30: unused
-+	 * bits 24-28: kind (e.g. int, ptr, array...etc)
-+	 * bits 29-30: unused
- 	 * bit     31: kind_flag, currently used by
- 	 *             struct, union and fwd
- 	 */
--- 
-2.35.1
-
+Michael

@@ -2,145 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA114F0AA8
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24E54F0AAB
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 17:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357324AbiDCPgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 11:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S1355481AbiDCPiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 11:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiDCPf7 (ORCPT
+        with ESMTP id S232259AbiDCPiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 11:35:59 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3F024F1D
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:34:04 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id b21so2484146lfb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 08:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mIC6+nPyLNVJaE3S1OhJgHqXEDSVnYfTyjeRKg1mrs4=;
-        b=GeYFG9nTDUXSnCsLuryw0kNRtPQSYiO5g35lKNgE14JldKA6j75lNmRDchCCdAgpUv
-         cmD35zgE2pewBFV9E9dchYEWjvM8ONvkxcbhH6wZMyN1tLGGLXrAKY0d8Q26OiVtT3jI
-         tN+2na86ZvTOipKrQLA4qV5dP2z4Nmvzy9i1dmoQBgyZHmzo94K9cfDGCkZt0yt1FnkE
-         mmBaDqWdBI1U+DWtKKCgmH/2CKjVA00/AOnI/eyhbvLECA1XIhFBw0u9KBGrMwzwHvc/
-         Q6XgJjkqLa6IcPRTZZUOTlKJXBi6GxwvsOtX0uf1tKg2wyEk8FfaO/incESquyAXeqtm
-         VHpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mIC6+nPyLNVJaE3S1OhJgHqXEDSVnYfTyjeRKg1mrs4=;
-        b=S8ce3Pco56s9VLtWHa9TBgMb7CioVaASVJVWxL50Ka4jz/6W8diZUxvM2cYOz6ZniJ
-         RaDySN0oEURctPhKqs0h22dBJEMYbA36qRTYmRhK65FndkkhP+lvpIeoTm1Y6u4dKkyd
-         eptbhCp7uItKosIrvM+G34xUJ05WM4cBsG5MSOUMKmh9YDMy59TXkNGMlT6ww6VuNRTX
-         oc/K68nxM4kQ5r8R1QN81JsSz9GLMhKuqkGnEBl/e27PmJk6YGIT064Op3Ja4JrtHGjH
-         UR11EBEV8BRPn6RC7A0fzp7mdFBiLsam2SCfp4COsRIngg0dV3SVQkD1yEQWJHT1hDGv
-         FgDg==
-X-Gm-Message-State: AOAM531c6U9IkLiva85MMjzTNGYWmb2pwY/1W6MeyISGlLc8ZjKbcoLS
-        W8+h77MWvL6FpFcq7ktwcRNATCjjFUgPHNApC44r7QY37kw=
-X-Google-Smtp-Source: ABdhPJz/nL7zr6+3VO14htVnHlFLPjNAmBSr7VkYGC+fRtykkcRSWiIqb+qKA0SfyySBsesv0QEbHeKCnKq1A9izojw=
-X-Received: by 2002:a05:6512:b91:b0:44a:d2be:7ad3 with SMTP id
- b17-20020a0565120b9100b0044ad2be7ad3mr10510438lfv.538.1649000042918; Sun, 03
- Apr 2022 08:34:02 -0700 (PDT)
+        Sun, 3 Apr 2022 11:38:04 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.46.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AB927163
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 08:36:09 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id C94DFCF73
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 10:36:08 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id b2Gunbu3j22u3b2GunkLeS; Sun, 03 Apr 2022 10:36:08 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=S9kyq3prUNE5HlsvNUnZDxnM3YNPjxnZKzbpLeHWtg4=; b=c4M3VL07wbRVvrKjSmkp3QOqSm
+        adMlo6Kg9Lb2yNZPZmvLcKrDA80lw6W8IB3lcd3ZKvvVsDULx/j5jplAbY1fGHzIx1mdUt9gDNv/l
+        DkfYW97FxsYWpgOi3BvWbWznBqOd8sZYr92Cnk3E31b7R4mXu9C+P5Ry32/pPRgjndrGoqiVcwNci
+        FWCIlY0obiz+wrK9jriGBEv8KCeeLK1hC5g7RveJhCuwee7vpws0ZbSsepsVBgQEa11dhLKQVOsFa
+        5b6sqe/WGpbfGac+nFqETCb8y5TPdwIcXM7V6Y1DzbCt0gmprSJ9dkb9H5HwDNmdSJWo/8Una13nj
+        1L9MH6kQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57822 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nb2Gu-0041Pb-Cx; Sun, 03 Apr 2022 15:36:08 +0000
+Date:   Sun, 3 Apr 2022 08:36:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] tty: serial: mpc52xx_uart: make rx/tx hooks return
+ unsigned
+Message-ID: <20220403153607.GA3644508@roeck-us.net>
+References: <20220224111028.20917-1-jslaby@suse.cz>
+ <20220224111028.20917-2-jslaby@suse.cz>
 MIME-Version: 1.0
-References: <cover.1648817213.git.sevinj.aghayeva@gmail.com>
- <8d745122cd10f5db59393b1bff09e6a73e88640b.1648817213.git.sevinj.aghayeva@gmail.com>
- <Ykl+5reEIg31WHyy@kroah.com>
-In-Reply-To: <Ykl+5reEIg31WHyy@kroah.com>
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Date:   Sun, 3 Apr 2022 11:33:51 -0400
-Message-ID: <CAMWRUK6iuyRguC67J2ErzBp6p86OzaqxNDxhKUU=Gpw6crj3TA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] staging: rtl8723bs: remove redundant else branches
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224111028.20917-2-jslaby@suse.cz>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nb2Gu-0041Pb-Cx
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57822
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 7:03 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Apr 01, 2022 at 09:02:47AM -0400, Sevinj Aghayeva wrote:
-> > Adhere to Linux kernel coding style.
-> >
-> > Reported by checkpatch:
-> >
-> > WARNING: else is not generally useful after a break or return
-> >
-> > Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-> > ---
-> >  drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 63 +++++++++----------
-> >  1 file changed, 30 insertions(+), 33 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-> > index 81e4b1bf68f6..b80d9061f5a5 100644
-> > --- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-> > +++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-> > @@ -907,10 +907,9 @@ unsigned int OnAuthClient(struct adapter *padapter, union recv_frame *precv_fram
-> >                       set_link_timer(pmlmeext, REAUTH_TO);
-> >
-> >                       return _SUCCESS;
-> > -             } else {
-> > -                     /*  open system */
-> > -                     go2asoc = 1;
-> >               }
-> > +             /*  open system */
-> > +             go2asoc = 1;
-> >       } else if (seq == 4) {
-> >               if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
-> >                       go2asoc = 1;
-> > @@ -1502,32 +1501,32 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
-> >
-> >
-> >               return _SUCCESS;
-> > -     } else {
-> > -             int     ignore_received_deauth = 0;
-> > -
-> > -             /*      Commented by Albert 20130604 */
-> > -             /*      Before sending the auth frame to start the STA/GC mode connection with AP/GO, */
-> > -             /*      we will send the deauth first. */
-> > -             /*      However, the Win8.1 with BRCM Wi-Fi will send the deauth with reason code 6 to us after receieving our deauth. */
-> > -             /*      Added the following code to avoid this case. */
-> > -             if ((pmlmeinfo->state & WIFI_FW_AUTH_STATE) ||
-> > -                     (pmlmeinfo->state & WIFI_FW_ASSOC_STATE)) {
-> > -                     if (reason == WLAN_REASON_CLASS2_FRAME_FROM_NONAUTH_STA) {
-> > -                             ignore_received_deauth = 1;
-> > -                     } else if (reason == WLAN_REASON_PREV_AUTH_NOT_VALID) {
-> > -                             /*  TODO: 802.11r */
-> > -                             ignore_received_deauth = 1;
-> > -                     }
-> > +     }
-> > +     int     ignore_received_deauth = 0;
-> > +
-> > +     /*      Commented by Albert 20130604 */
-> > +     /*      Before sending the auth frame to start the STA/GC mode connection with AP/GO, */
-> > +     /*      we will send the deauth first. */
-> > +     /*      However, the Win8.1 with BRCM Wi-Fi will send the deauth with reason code 6 to us after receieving our deauth. */
-> > +     /*      Added the following code to avoid this case. */
-> > +     if ((pmlmeinfo->state & WIFI_FW_AUTH_STATE) ||
-> > +             (pmlmeinfo->state & WIFI_FW_ASSOC_STATE)) {
->
-> Very odd indentation :(
->
+On Thu, Feb 24, 2022 at 12:10:24PM +0100, Jiri Slaby wrote:
+> All these return bitmasks, so it makes more sense to return unsigned --
+> this is what a reader and also all the callers expect.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-Just to make sure, are you not happy about the existing code or the
-comments being indented? Because I've preserved the code structure and
-have only removed the else branch. If you could clarify, I would know
-what to fix.
+With this patch in place:
 
-Thanks!
+drivers/tty/serial/mpc52xx_uart.c:static unsigned int mpc52xx_psc_raw_tx_rdy(struct uart_port *port)
+drivers/tty/serial/mpc52xx_uart.c:static int mpc512x_psc_raw_tx_rdy(struct uart_port *port)
+                                         ^^^
+drivers/tty/serial/mpc52xx_uart.c:static int mpc5125_psc_raw_tx_rdy(struct uart_port *port)
+                                         ^^^
 
--- 
+Same for other functions. This results in lots of compile errors.
 
-Sevinj.Aghayeva
+Guenter
+
+> ---
+>  drivers/tty/serial/mpc52xx_uart.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/mpc52xx_uart.c b/drivers/tty/serial/mpc52xx_uart.c
+> index 2704dc988e4a..8a6958377764 100644
+> --- a/drivers/tty/serial/mpc52xx_uart.c
+> +++ b/drivers/tty/serial/mpc52xx_uart.c
+> @@ -83,11 +83,11 @@ static irqreturn_t mpc5xxx_uart_process_int(struct uart_port *port);
+>  
+>  struct psc_ops {
+>  	void		(*fifo_init)(struct uart_port *port);
+> -	int		(*raw_rx_rdy)(struct uart_port *port);
+> -	int		(*raw_tx_rdy)(struct uart_port *port);
+> -	int		(*rx_rdy)(struct uart_port *port);
+> -	int		(*tx_rdy)(struct uart_port *port);
+> -	int		(*tx_empty)(struct uart_port *port);
+> +	unsigned int	(*raw_rx_rdy)(struct uart_port *port);
+> +	unsigned int	(*raw_tx_rdy)(struct uart_port *port);
+> +	unsigned int	(*rx_rdy)(struct uart_port *port);
+> +	unsigned int	(*tx_rdy)(struct uart_port *port);
+> +	unsigned int	(*tx_empty)(struct uart_port *port);
+>  	void		(*stop_rx)(struct uart_port *port);
+>  	void		(*start_tx)(struct uart_port *port);
+>  	void		(*stop_tx)(struct uart_port *port);
+> @@ -203,34 +203,34 @@ static void mpc52xx_psc_fifo_init(struct uart_port *port)
+>  	out_be16(&psc->mpc52xx_psc_imr, port->read_status_mask);
+>  }
+>  
+> -static int mpc52xx_psc_raw_rx_rdy(struct uart_port *port)
+> +static unsigned int mpc52xx_psc_raw_rx_rdy(struct uart_port *port)
+>  {
+>  	return in_be16(&PSC(port)->mpc52xx_psc_status)
+>  	    & MPC52xx_PSC_SR_RXRDY;
+>  }
+>  
+> -static int mpc52xx_psc_raw_tx_rdy(struct uart_port *port)
+> +static unsigned int mpc52xx_psc_raw_tx_rdy(struct uart_port *port)
+>  {
+>  	return in_be16(&PSC(port)->mpc52xx_psc_status)
+>  	    & MPC52xx_PSC_SR_TXRDY;
+>  }
+>  
+>  
+> -static int mpc52xx_psc_rx_rdy(struct uart_port *port)
+> +static unsigned int mpc52xx_psc_rx_rdy(struct uart_port *port)
+>  {
+>  	return in_be16(&PSC(port)->mpc52xx_psc_isr)
+>  	    & port->read_status_mask
+>  	    & MPC52xx_PSC_IMR_RXRDY;
+>  }
+>  
+> -static int mpc52xx_psc_tx_rdy(struct uart_port *port)
+> +static unsigned int mpc52xx_psc_tx_rdy(struct uart_port *port)
+>  {
+>  	return in_be16(&PSC(port)->mpc52xx_psc_isr)
+>  	    & port->read_status_mask
+>  	    & MPC52xx_PSC_IMR_TXRDY;
+>  }
+>  
+> -static int mpc52xx_psc_tx_empty(struct uart_port *port)
+> +static unsigned int mpc52xx_psc_tx_empty(struct uart_port *port)
+>  {
+>  	u16 sts = in_be16(&PSC(port)->mpc52xx_psc_status);
+>  
+> @@ -1365,7 +1365,7 @@ static const struct uart_ops mpc52xx_uart_ops = {
+>  /* Interrupt handling                                                       */
+>  /* ======================================================================== */
+>  
+> -static inline int
+> +static inline unsigned int
+>  mpc52xx_uart_int_rx_chars(struct uart_port *port)
+>  {
+>  	struct tty_port *tport = &port->state->port;
+> -- 
+> 2.35.1
+> 

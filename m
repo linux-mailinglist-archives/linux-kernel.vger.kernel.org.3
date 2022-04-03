@@ -2,177 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5074F0C83
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 22:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B864F0C84
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 22:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345835AbiDCUfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 16:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S1354189AbiDCUhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 16:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiDCUfg (ORCPT
+        with ESMTP id S235169AbiDCUhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 16:35:36 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D213BE04;
-        Sun,  3 Apr 2022 13:33:41 -0700 (PDT)
+        Sun, 3 Apr 2022 16:37:03 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060.outbound.protection.outlook.com [40.107.93.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AD53389B
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 13:35:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Md37h7j1dCGUwh5j5MkUO58oogR4eciAJ1H5QW+fXy1bX0mbApZRqVuytMhNDaGHQ3GFCpFVWs8JInQ+Nkv1DBhk0YResqmLfOTAM3ZfC1tMVUC+ZcA/NxhfgSfYvOfZhe0Qxry83JIYtdE3CWD7XnDVsSkY32FG4gTFDzH9rFm23aflqmsQ+KUr9gMyU3Th8nK9rQQhJ1KBk8iLsIenj5WWA2/OZj4NDl4xAgNOmjY14GIb/BvIQwasEmN7kwyUr1cIFyRBMcqJ/LL26Su46iRsKBN5GITVRr2Y20Wvq4xiLC4QwCGY6rPJ3HV1jdL/P228jsL3AlVSet4lZceMdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Je+b8pHhcwHx1B9YGKszzL6k/p+2BLsUWw20UV8586c=;
+ b=CGkrHCmIknqaZHEnekmGHeHoImtyPaSYzeXfGLy9d2fR5/4EaQQSgBlh2wW/mjGeNL0SFSs0xIbFvmh7eatd9qLiktR5eQJXFQmZNxCMm3brfvDFJ+p1sZbh2oMC6Wu1bf10z5ujk9FJ/leQiLmftqW4CHojThLK5B24ED25y8XzfhUnKZd94on81tVLos8bl2l24fazrpTG2LaaxLGiewQ2HLcGhdNzIFw20x7GUzY7jD/VnsCOEZUWKbBfbz5vBC1Bmp6BXi4rkgvmHK+bfQlgy5kctrMiLGLiMOOAri74hmTBGnaxEgWyPt3ny2U9cq9dExwo0g5rSk5HudqbVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1649018021; x=1680554021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yry5sisjHSjsPl/LZLim4oE1RCo3IseEsv7pRzQuJcM=;
-  b=MtE+KqcODv2hDnvsy2caboegfQ3jUF7LCW43ZPjvUAZOiE5Jlor8Zq+f
-   TM7HfUUG/Cba1tpiJALLn6dmFib8Rz6DpTMK8Q03Vd7NwHT6wjprdDdoZ
-   G/TYST3+6uvSFv/e3rG9YI+UEcAMk7agcxtBIG1fC3v/rzKAM2zW/Ltqj
-   k=;
-X-IronPort-AV: E=Sophos;i="5.90,231,1643673600"; 
-   d="scan'208";a="1004483214"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-72dc3927.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 03 Apr 2022 20:33:40 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-72dc3927.us-west-2.amazon.com (Postfix) with ESMTPS id 42E444163F;
-        Sun,  3 Apr 2022 20:33:40 +0000 (UTC)
-Received: from EX13D02UWB004.ant.amazon.com (10.43.161.11) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Sun, 3 Apr 2022 20:33:39 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D02UWB004.ant.amazon.com (10.43.161.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Sun, 3 Apr 2022 20:33:39 +0000
-Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
- (172.19.181.128) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.32 via Frontend Transport; Sun, 3 Apr 2022 20:33:38 +0000
-Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id 038A81760; Sun,  3 Apr 2022 20:33:38 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <leo.yan@linaro.org>
-CC:     <Nick.Forrington@arm.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
-        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
-        <german.gomez@arm.com>, <james.clark@arm.com>,
-        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
-        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>
-Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse cores
-Date:   Sun, 3 Apr 2022 20:33:37 +0000
-Message-ID: <20220403203337.18927-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220331124425.GB1704284@leoy-ThinkPad-X240s>
-References: <20220331124425.GB1704284@leoy-ThinkPad-X240s>
+ d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Je+b8pHhcwHx1B9YGKszzL6k/p+2BLsUWw20UV8586c=;
+ b=NdAksDfzrRMSR6zLlHANrP6eS1utobCuYOBjwy/PSC6MbXxSj7yYNbQijUoJ9fl9BwHypZYOWmto0JTopIdN6E47SpiwFgsqzK0cUzbGHYqQCUgZPZrHBfiCRXckJOAd/qAN0ppSwePbakoegt4Nu5H/XtpB9k2Gy+Njg2zbkhw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=silabs.com;
+Received: from PH0PR11MB5657.namprd11.prod.outlook.com (2603:10b6:510:ee::19)
+ by SN6PR11MB2798.namprd11.prod.outlook.com (2603:10b6:805:58::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Sun, 3 Apr
+ 2022 20:35:05 +0000
+Received: from PH0PR11MB5657.namprd11.prod.outlook.com
+ ([fe80::90dd:b347:32a3:bea4]) by PH0PR11MB5657.namprd11.prod.outlook.com
+ ([fe80::90dd:b347:32a3:bea4%7]) with mapi id 15.20.5123.031; Sun, 3 Apr 2022
+ 20:35:05 +0000
+From:   =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jerome.pouiller@silabs.com>
+To:     Jaehee Park <jhpark1013@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: wfx: change variable name to be consistent
+Date:   Sun, 03 Apr 2022 22:34:59 +0200
+Message-ID: <2021471.8hb0ThOEGa@pc-42>
+Organization: Silicon Labs
+In-Reply-To: <Ykl+ngCtuMIeF+Fw@kroah.com>
+References: <20220401145350.GA45053@jaehee-ThinkPad-X1-Extreme> <Ykl+ngCtuMIeF+Fw@kroah.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-ClientProxiedBy: SA0PR13CA0028.namprd13.prod.outlook.com
+ (2603:10b6:806:130::33) To PH0PR11MB5657.namprd11.prod.outlook.com
+ (2603:10b6:510:ee::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-12.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02fee1ba-db35-434e-060a-08da15b16f29
+X-MS-TrafficTypeDiagnostic: SN6PR11MB2798:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR11MB279815832571F27815DC1DDE93E29@SN6PR11MB2798.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aZyFbxKaS93kCWz2EZWh/y93/9iP5Rn2DfYox7BdUhK/Wk6c+TwUkvkA39narbdI7Vo/JAeyegqeCkK4NMjzB/9LyxBLajd94d7EWDQScPEtc4PgdeWH7FZAjMDpLm6gaffkkoWh6HxfSxxs4Npwx70JY5EurAHCVG+PnCOkxkisCnHxAwIOFPMIkErOWbn2S9ZbNbQoQHzDtBJlmE4cdA0iLatXDprklGB/O7lBPG47CQQrUMM7pIeFygNLm5yNdWrr4p3ewYGXkmo8lOpgwxXoeD7VjQ5iOYZ2hba/XHEgIzTVg/tfXOcopp3rJJFs+mRCG8YjxjO3kwkCGmxhRNwK4SvkoFSEw3Itex9/nS+nJ5kYCx0N2mMZZzzr9oiOkFg/d6H+ScRP44kVQ2CRyS1UXRpEFANKZsPliDaXM1RpvqNWuEsYgOahYGq88LQ5MYUkBQDLhpnSWsUTW8Qi/NK9q0EMkLNm5lHpyu/1hv+L0fFPzgK6lgQiXaszvJYcNOP8o16lzyPjMVbHpfJrkG26O2Bwpvv+X9q2CcjHQttN+Bvd9/y9K3hh0YrYiON1aSjDNxhFRk4Pb1kGtVJXJ1alYym7pPpUnZa6lfebgwL+nxxwEaXyiVDj6VFV5Hx49PQ5Bker4frAJ6xzlcGDxp6lFAjsjtawvkaJRvYdV8pGFP2/FauReF3+kl/bpUiz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66574015)(186003)(8676002)(66946007)(66476007)(508600001)(4326008)(66556008)(316002)(110136005)(6486002)(8936002)(38100700002)(2906002)(9686003)(6512007)(6506007)(52116002)(83380400001)(86362001)(6666004)(5660300002)(36916002)(33716001)(39026012);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?8tLCYU09zAAl3JxNFh0G3H9HmqbGFgV562b7MEji6wgLlxPMubyBcMW0jT?=
+ =?iso-8859-1?Q?ZH9VF1xfWnWkj/Nc6WaSe5v7x2fD0WM6szbu0wRsR5rrolZqQHipoTvf3u?=
+ =?iso-8859-1?Q?HG20fAP0G7NXBwXMJdxZe3EamOkDDmBLOv6zmvUaxjDMABhERSEaoyOq+P?=
+ =?iso-8859-1?Q?mYeDITbQvTCO/CeVJFol1pWQbvbTEy31Ky5RDlwPeCBzKYoGt0Wy3GejTj?=
+ =?iso-8859-1?Q?oHoG8zEV1NLOwUtSTGUwQmpbAgzxZlDiZDQ34jlcUKOt6/pZxDStMZcwIV?=
+ =?iso-8859-1?Q?84VR3hd4GjhGmRMOV7jrAdHSENfzRkhFyf0z4T0YeOxr5z3SMAv38BCZv/?=
+ =?iso-8859-1?Q?TqHsYNHEBP3fuM+Sw83TF/cZIFyPEyu3geXMv1UZNmCFH1SCntm38RJO2/?=
+ =?iso-8859-1?Q?L/D3/61Wp7QFfwb1NOlRdxRxITApg9IgAX+5VBgaJ16O1hDRwpe72NGdpu?=
+ =?iso-8859-1?Q?ISngeYfkI9g/qlaWtXOTrOV2eQICp/bvWRsHJlFKCnBhGqbzisRzx2hy7U?=
+ =?iso-8859-1?Q?zEvdFggJ1jbF7ABmNXPE5DGaS5b/oSmYN3KQgbOKVmfNLtNPwGx5xmv1ly?=
+ =?iso-8859-1?Q?9sQ2jLnLpUy9POhfmoF3JNWQegh4BAJio/Hyf8BZsPWDIhq7GzjV+A7nYB?=
+ =?iso-8859-1?Q?qQQZFU+XSrzUcR7CSVvEbn90Lm4Nu6sAbDxM9JgUr2T/V95QN8nLaNYZ9Z?=
+ =?iso-8859-1?Q?F7+z+AuahGmgLUt+t3Igcab4FiDCrCkMyR6OztcKsMgZpNRvpYDHgLc4Gj?=
+ =?iso-8859-1?Q?KelfN+sPNcvI0MECyiJaxoo7+RYJgnIrjZDySAUxJDjGep86/UKrgbFfV+?=
+ =?iso-8859-1?Q?42GnUOnktsdzx1RxizO7ftbAUCIPoqz86q6y2SvCs5oi4p9lOojRlgfE5B?=
+ =?iso-8859-1?Q?NgzOle36IfSbRzXY1swv7U2LjwD/zEzuUVBf1KkrAd7OrgITJttgfLXjJ0?=
+ =?iso-8859-1?Q?atHPLkHISKcSON5aUIcamlqTQFp3xGdG2wufVG17ITsn8fB11hhqKETZ7u?=
+ =?iso-8859-1?Q?M9ncnfOiTc+o4P4k4zbm9kxkes2Gap2YUSj8eQzgHNfBJj/2AJS7C+AXTy?=
+ =?iso-8859-1?Q?SV3tA0tfH6kdcM1SYh7RxZkRDFeuL2vOZ7O2jskw3GQ+2gCnpv+ydGWWZp?=
+ =?iso-8859-1?Q?DH2+u8DxBv//5ATaFbcA5AE2cAGVlE2Gou7mJWD39YAfvl4Dsrka1eUK4v?=
+ =?iso-8859-1?Q?uEqc8pCHJl6S56fkfppQYRYA3NpsWC3h0cqdAkUTBjrwp2bxxjIYFiH1k5?=
+ =?iso-8859-1?Q?9AKfmvpAxTGNpkgxbtBCMsHoO9qDxeinbnj11mzSIqOqk3ZURnXdOaR4RX?=
+ =?iso-8859-1?Q?qAdVlmvctC/A2BZJzUXmzAjPXRqzmIOjIRdm2miceAU98bJLR8n2eC0/1T?=
+ =?iso-8859-1?Q?QURPPy+lCWuC2kFOLd9tnEvsp6gwoHhYFVlNw3f2cY1gFyMm+cP5C8vWMA?=
+ =?iso-8859-1?Q?In7+V3r34AMUKCrJKNfwhVRdg49B9OVQBsksa/UTyuLQ8f6CEoYgtdj8EV?=
+ =?iso-8859-1?Q?Q/r1IuMaeZKduu56yg3ZejfJujy7gJ2RzsQl2X//34KUj8NtbzwW2Dv7TM?=
+ =?iso-8859-1?Q?Lg2gdSnwQaYeD9FVSXWVw09tuZjIc3GE+sC9c8VZBD9m7bcDYMhE1FamKS?=
+ =?iso-8859-1?Q?kBo56E0eswmpcRjVcVMncV7AwMDDrpL9TMxU3Mo2ZoVX4iNAh8O4xheKKe?=
+ =?iso-8859-1?Q?5tqqgOlDkWmreMVMyFKo2Q0cVb+1bHP/mUnFG25SSEKOnSi0+4Sg5B28sz?=
+ =?iso-8859-1?Q?82NrMGwnHYks56JXXq0UEzbfm8XRmcFTMaPZxhROQw0q9KyLHgPdm5xnnL?=
+ =?iso-8859-1?Q?nQGxKQUliZxyaVL381HaOqLr/aC6DOFpo0nbf4iJw4JH+qrJJRO9dN0WrP?=
+ =?iso-8859-1?Q?Rs?=
+X-MS-Exchange-AntiSpam-MessageData-1: 5A66FCpHAbz1uA==
+X-OriginatorOrg: silabs.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02fee1ba-db35-434e-060a-08da15b16f29
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5657.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2022 20:35:04.6731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 54dbd822-5231-4b20-944d-6f4abcd541fb
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DlgWzgW5WDP9SNWwo4P0vCMIJiuMGrt49K58KMczecqGn2n9WIGW+K2tSu8iIDTGGF6ZtczLi5h91whGnMid3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2798
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sunday 3 April 2022 13:01:50 CEST Greg Kroah-Hartman wrote:
+> On Fri, Apr 01, 2022 at 10:53:50AM -0400, Jaehee Park wrote:
+> > Change variable name to be consistent with the naming conventions.
+> > ssidlen was changed to ssid_len and ssidie was changed to ssid_ie to be
+> > consistent. This makes the variables more readable. The other ssid
+> > names in the code are separated by an underscore. For example,
+> > bssid_filter and num_of_ssids have the ssid separated from the rest of
+> > the words with an underscore.
+> >
+> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> > ---
+> >  drivers/staging/wfx/hif_tx.c | 10 +++++-----
+> >  drivers/staging/wfx/sta.c    | 20 ++++++++++----------
+> >  2 files changed, 15 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/staging/wfx/hif_tx.c b/drivers/staging/wfx/hif_tx.=
+c
+> > index ae3cc5919dcd..9c653d0e9034 100644
+> > --- a/drivers/staging/wfx/hif_tx.c
+> > +++ b/drivers/staging/wfx/hif_tx.c
+> > @@ -280,7 +280,7 @@ int wfx_hif_stop_scan(struct wfx_vif *wvif)
+> >  }
+> >
+> >  int wfx_hif_join(struct wfx_vif *wvif, const struct ieee80211_bss_conf=
+ *conf,
+> > -              struct ieee80211_channel *channel, const u8 *ssid, int s=
+sidlen)
+> > +              struct ieee80211_channel *channel, const u8 *ssid, int s=
+sid_len)
+>=20
+> This is not really a "coding style" cleanup, it is up to the driver
+> author how they wish to name these variables.  It is not a requirement
+> to change them as the orginal names are just fine.
 
+I have no real opinion. Let's say you can apply it:
 
-On Thu, 31 Mar 2022 12:44:3 +0000, Leo Yan wrote:
-> 
-> On Thu, Mar 31, 2022 at 01:28:58PM +0100, German Gomez wrote:
-> > Hi all,
-> > 
-> > It seems I gave the Review tags a bit too early this time. Apologies for
-> > the inconvenience. Indeed there was more interesting discussions to be
-> > had :)
-> > 
-> > (Probably best to remove by tags for the next re-spin)
-> 
-> Now worries, German.  Your review and testing are very helpful :)
-> 
-> > On 29/03/2022 15:32, Ali Saidi wrote:
-> > > [...]
-> > >
-> > >> I still think we should consider to extend the memory levels to
-> > >> demonstrate clear momory hierarchy on Arm archs, I personally like the
-> > >> definitions for "PEER_CORE", "LCL_CLSTR", "PEER_CLSTR" and "SYS_CACHE",
-> > >> though these cache levels are not precise like L1/L2/L3 levels, they can
-> > >> help us to map very well for the cache topology on Arm archs and without
-> > >> any confusion.  We could take this as an enhancement if you don't want
-> > >> to bother the current patch set's upstreaming.
-> > > I'd like to do this in a separate patch, but I have one other proposal. The
-> > > Neoverse cores L2 is strictly inclusive of the L1, so even if it's in the L1,
-> > > it's also in the L2. Given that the Graviton systems and afaik the Ampere
-> > > systems don't have any cache between the L2 and the SLC, thus anything from
-> > > PEER_CORE, LCL_CLSTR, or PEER_CLSTR would hit in the L2, perhaps we
-> > > should just set L2 for these cases? German, are you good with this for now? 
-> > 
-> > Sorry for the delay. I'd like to also check this with someone. I'll try
-> > to get back asap. In the meantime, if this approach is also OK with Leo,
-> > I think it would be fine by me.
-> 
-> Thanks for the checking internally.  Let me just bring up my another
-> thinking (sorry that my suggestion is float): another choice is we set
-> ANY_CACHE as cache level if we are not certain the cache level, and
-> extend snoop field to indicate the snooping logics, like:
-> 
->   PERF_MEM_SNOOP_PEER_CORE
->   PERF_MEM_SNOOP_LCL_CLSTR
->   PERF_MEM_SNOOP_PEER_CLSTR
-> 
-> Seems to me, we doing this is not only for cache level, it's more
-> important for users to know the variant cost for involving different
-> snooping logics.
+Signed-off-by: J=E9r=F4me Pouiller <jerome.pouiller@silabs.com>
 
-I think we've come full circle :). Going back to what do we want to indicate to
-a user about the source of the cache line, I believe there are three things with
-an eye toward helping a user of the data improve the performance of their
-application:
-
-1. The level below them in the hierarchy it it (L1, L2, LLC, local DRAM).
-Depending on the level this directly indicates the expense of the operation. 
-
-2. If it came from a peer of theirs on the same socket. I'm really of the
-opinion still that exactly which peer, doesn't matter much as it's a 2nd or 3rd
-order concern compared to, it it couldn't be sourced from a cache level below
-the originating core, had to come from a local peer and the request went to
-that lower levels and was eventually sourced from a peer.  Why it was sourced
-from the peer is still almost irrelevant to me. If it was truly modified or the
-core it was sourced from only had permission to modify it the snoop filter
-doesn't necessarily need to know the difference and the outcome is the same. 
-
-3. For multi-socket systems that it came from a different socket and there it is
-probably most interesting if it came from DRAM on the remote socket or a cache.
-
-I'm putting 3 aside for now since we've really been focusing on 1 and 2 in this
-discussion and I think the biggest hangup has been the definition of HIT vs
-HITM. If someone has a precise definition, that would be great, but AFAIK it
-goes back to the P6 bus where HIT was asserted by another core if it had a line
-(in any state) and HITM was additionally asserted if a core needed to inhibit
-another device (e.g. DDR controller) from providing that line to the requestor. 
-
-The latter logic is why I think it's perfectly acceptable to use HITM to
-indicate a peer cache-to-cache transfer, however since others don't feel that way
-let me propose a single additional snooping type PERF_MEM_SNOOP_PEER that
-indicates some peer of the hierarchy below the originating core sourced the
-data.  This clears up the definition that line came from from a peer and may or
-may not have been modified, but it doesn't add a lot of implementation dependant
-functionality into the SNOOP API. 
-
-We could use the mem-level to indicate the level of the cache hierarchy we had
-to get to before the snoop traveled upward, which seems like what x86 is doing
-here.
-
-PEER_CORE -> MEM_SNOOP_PEER + L2
-PEER_CLSTR -> MEM_SNOOP_PEER + L3
-PEER_LCL_CLSTR -> MEM_SNOOP_PEER + L3 (since newer neoverse cores don't support
-the clusters and the existing commercial implementations don't have them).
-
-Thanks,
-Ali
-
-
-
-
+--=20
+J=E9r=F4me Pouiller
 
 

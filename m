@@ -2,124 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9D14F0979
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 14:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26204F097D
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 14:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358038AbiDCMka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 08:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S1353851AbiDCMpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 08:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237151AbiDCMk1 (ORCPT
+        with ESMTP id S232620AbiDCMpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 08:40:27 -0400
-Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.146.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A512BC91
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 05:38:32 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id 01304AA0F
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 07:38:32 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id azT5nKsvhRnrrazT5nPSj5; Sun, 03 Apr 2022 07:36:31 -0500
-X-Authority-Reason: nr=8
+        Sun, 3 Apr 2022 08:45:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8221E3E3;
+        Sun,  3 Apr 2022 05:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CYOWZgHjZ+R9GBciJmXVJ6KuHCf+mXuaB0YT+N2ma3o=; b=IY4EDNfee5a4+olnuCoiU/tDYn
-        ckCHxny/SYfc/Z53UlZLknsrnrNdVNEuj3wQ7Kf0RRWdVhnrsvzyGf0Z3lQ4WOtwjkN8QkbiO2lOz
-        /IUu33ELx5GRSj4T0JggjxBjXHP64DJx/JQiIsSsOQjLsHlfFOA41Cxr5PeRgRgeH8i58g47ZMrO/
-        9Y7O8V2PrPdgpJL8HvX4fZUZDSxMx2+C3RzbQgWpcAyd5G4js7PRc1E484bGJ6Cx+7ulGqvzNFsU4
-        H7oaAHClu6iBzPs1+bmNxrRPC7zJbb/2RW4OZ+3Hoxy5ssXCJS63Qy86+hCvunxtWr8btTNDGB5He
-        L/H3UPfg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57820 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nazT4-001y5E-TV; Sun, 03 Apr 2022 12:36:31 +0000
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2] staging: r8188eu: Fix PPPoE tag insertion on big endian systems
-Date:   Sun,  3 Apr 2022 05:36:28 -0700
-Message-Id: <20220403123628.3113382-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j3momSurDvEWtOQHXCIGt/ufqwRjPTKzPyz3hbCrGFc=; b=aCY4goj4uDrke10AUZQQkJ83YV
+        339X9CKTTJsiHeswk2noi0yAvOyY2c5JXvgKwc/eabXqN1qEjR3KJhW9uJCOJJf2rDhe9QdiDKwXH
+        qEfSR7BpM2fgkN4vfoVuqt4kOVYLEty5oXDqgy/HvKp8WGVdF/O/pNlqKMzqXGxHF6f6+l8z+UzOB
+        LZGRwZT5KVFaxIt9vjDbVKHAdi+B3xKkFGGTslUdYDaVdm+6tLsv3dqTq4cEc7o6sOmoUfnV8NYYZ
+        ZukQzSMZ0FNAUvI2ERiQgZf62M7SYeldKOMuHiLarcc/MI1hXVE94MKChDvSGpTdhzYJYJyu4yy4d
+        jN+qnM0Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nazaB-00BNy7-Iv; Sun, 03 Apr 2022 12:43:51 +0000
+Date:   Sun, 3 Apr 2022 05:43:51 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>
+Subject: Re: [RFC PULL] remove arch/h8300
+Message-ID: <YkmWh2tss8nXKqc5@infradead.org>
+References: <Yib9F5SqKda/nH9c@infradead.org>
+ <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nazT4-001y5E-TV
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57820
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __nat25_add_pppoe_tag(), the tag length is read from the tag data
-structure. The value is kept in network format, but read as raw value.
-With -Warray-bounds, this results in the following gcc error/warning
-when building the driver on a big endian system such as alpha.
+On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
+> If there are no other objections, I'll just queue this up for 5.18 in
+> the asm-generic
+> tree along with the nds32 removal.
 
-In function '__nat25_add_pppoe_tag',
-    inlined from 'nat25_db_handle' at
-	drivers/staging/r8188eu/core/rtw_br_ext.c:479:11:
-arch/alpha/include/asm/string.h:22:16: error:
-	'__builtin_memcpy' forming offset [40, 2051] is out of the bounds
-	[0, 40] of object 'tag_buf' with type 'unsigned char[40]'
-
-Add the missing be16_to_cpu() to fix the compile error. It should be
-noted, however, that this fix means that the code did probably not work
-on little endian systems and/or that the driver has other endiannes related
-issues. A build with C=1 suggests that this is indeed the case. This patch
-does not attempt to fix any of those issues.
-
-Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
-Cc: Phillip Potter <phil@philpotter.co.uk>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: Use be16_to_cpu().
-    Add comment to patch description suggesting that the driver may have
-    other endianness related problems.
-
- drivers/staging/r8188eu/core/rtw_br_ext.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index d68611ef22f8..f056204c0fdb 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -70,7 +70,7 @@ static int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
- 	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
- 	int data_len;
- 
--	data_len = tag->tag_len + TAG_HDR_LEN;
-+	data_len = be16_to_cpu(tag->tag_len) + TAG_HDR_LEN;
- 	if (skb_tailroom(skb) < data_len)
- 		return -1;
- 
--- 
-2.35.1
-
+So it is the last day of te merge window and arch/h8300 is till there.
+And checking nw the removal has also not made it to linux-next.  Looks
+like it is so stale that even the removal gets ignored :(

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C417F4F07D1
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89BB4F07DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 07:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238575AbiDCFnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 01:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S238790AbiDCFn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 01:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237986AbiDCFnL (ORCPT
+        with ESMTP id S238730AbiDCFnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 01:43:11 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DAA33EAD
-        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 22:41:18 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id s8so6075729pfk.12
-        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 22:41:18 -0700 (PDT)
+        Sun, 3 Apr 2022 01:43:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0D2381B3
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 22:41:25 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so6121171pjf.1
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 22:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Xp6qCxwTnE0C1FxChih956SdBv3W6L+dQXT7C0J3Dts=;
-        b=2ABETFqdsMhesFHDHhEUmJyVsW7RZ5Js5waMUtu7AgAnw7NQJE9KF6VPHqmSdvMej+
-         2OJl2yUuMkKlsJntBOzaVw6h3FbkNTEtAUb7NgwTf/4KS8Unjkp0AkIDihqOM4AQy0E9
-         b0D1cmPFHN/ZT3IC0qJD0E+WI024G3g/JHnvtyGmSNaBRaaNOf62Cjctp4an9NRZ9b6z
-         vPzjHQqLtX8FSAzX5BdZbUx0QSmSsl5esFSgUJJfPkwZ9OBGd+Ki5S02q7b/3idXLY9Q
-         v3WBGcPbhY5PtafSU0qiWng1lLj8uoWDT3H3wd0bwa2IQYzXzlExfT+r6ROb2/HljUOo
-         gBaw==
+        bh=qCp2b48ULThIjDs7kZ69Cjh0BLYiJwB01qLpS62xP+w=;
+        b=lwrBARs+/7DTDJPCPDkO87hzSIKPt6GQ3BJuVqyr1LMMRf0ELecQkoLiSNJjbiZdpd
+         OOw8+jdaEjkrKEkQOCmLvwQJzHLz27JTlGJ5zE2dn5Jip53qlttwM0FkCYZueUeb7zeF
+         RVGdSY44kEkFd3NNdpkbB9EPEooKpn6V9VAwbVH27fUkD5jUhTGJPGtIrzGx+IUgXU/O
+         uu1GRfpRmgRGEwvWhRZtaM7CW/f27In9HxOfBsluDtGcV56/sxLL1FJ//gEuOidep45r
+         /RAHUxBOsm5BUtauhEFj88JE1ydBVybi1r2rzExNbwhHo6EWG1darzCFI36vXEKt9WKC
+         z0qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xp6qCxwTnE0C1FxChih956SdBv3W6L+dQXT7C0J3Dts=;
-        b=TRMdatTvOc3Dwzl6J/yEf+OC9IbPSPdC6ttwQWMcfySxwoGRyFNjTE6iOVuLhVgdvr
-         zIPRX2YJcB6g5BvsRsHQzpEFhiO6jJWMS6ctQTkbQbW2MvsFIlNNX2uS1woSRlpP+ZhI
-         9WHR6zA2H/k1ilpUpeFY1TO8wL1KlnDVU4YU4pysVA30zfre9RIKhokfBxBq+mGOeryc
-         PBZ2SsdKDe2hGH7ALpekYOi7l+15+2DEEfEpArntgVzsxvLWiNgYmvpqFjQXTHEaOZk0
-         ehNtPXCk6XHLjdIUWtYxotUQYL2JSwub8sxyT3BhkjV7+pePDBjmjobRY4gAG/DXjj6h
-         pikg==
-X-Gm-Message-State: AOAM5300+cXVHK7thM1yAe57sKzSuJV6CJHMlUFejYdK43R60fq/hAf4
-        i5XfQcbMi57O2undyvnNg1MZ6Q==
-X-Google-Smtp-Source: ABdhPJyZBSv2yEKXE7ELYRPowq8GlcSVl+mBvyh+Dr/+2j3dfmhbMmgifEOf+lzxBO7utJytI2ZQWA==
-X-Received: by 2002:a05:6a00:b95:b0:4fa:ec15:7eb7 with SMTP id g21-20020a056a000b9500b004faec157eb7mr18416062pfj.74.1648964477478;
-        Sat, 02 Apr 2022 22:41:17 -0700 (PDT)
+        bh=qCp2b48ULThIjDs7kZ69Cjh0BLYiJwB01qLpS62xP+w=;
+        b=3pMrNldeshdUBlTVQPUSHs85TjCCI9MOYe4Vwn0CrFVQ942jhu26Rq8+FI/jtT7u5c
+         h+T1OjdwC/ceiqNpMxNdi2/Mo8zJ6QZ2ncTNrTiQyrXetPNv2V7Ld5bQk+im2WzlEMF3
+         i0lkpBpMqLEXbo/4o8HxUMzDbKSqGMbD+neeKx1Ram8qb2EMkhfMVssxtvtR6p0iugsc
+         BNWFVDZqdnsLNcBsF+nLzSQK8Rr83IXMhm243Wo55x3tkQU7GhWdRNTyXi9BXQ+u8QSO
+         2R7ITkyQg+T77dNsBVtMDxx6D6sNR5+eeyKygvETeZKtA7q6Uwexkbbe2hJKH9KsF5Aq
+         B1YQ==
+X-Gm-Message-State: AOAM533ucUoEUtKyabsuUF1Ocq9xUxrPhINrmn8mbbR0flgyDM0cg37w
+        k0SozByWjJu7cWA/U39xELxcFQ==
+X-Google-Smtp-Source: ABdhPJwPE+R5M1c944zWgzZX/rK39iXrxGm2KhaVKut5BUEWAAHDPdGQ5lQJXH1Kcs/14QSL7BveZw==
+X-Received: by 2002:a17:90b:4b42:b0:1c7:3f6a:5d97 with SMTP id mi2-20020a17090b4b4200b001c73f6a5d97mr19591035pjb.27.1648964484666;
+        Sat, 02 Apr 2022 22:41:24 -0700 (PDT)
 Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm8262479pfx.34.2022.04.02.22.41.10
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm8262479pfx.34.2022.04.02.22.41.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 22:41:17 -0700 (PDT)
+        Sat, 02 Apr 2022 22:41:24 -0700 (PDT)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
         viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
@@ -60,9 +60,9 @@ Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
         duanxiongchun@bytedance.com, smuchun@gmail.com,
         Muchun Song <songmuchun@bytedance.com>,
         Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v7 1/6] mm: rmap: fix cache flush on THP pages
-Date:   Sun,  3 Apr 2022 13:39:52 +0800
-Message-Id: <20220403053957.10770-2-songmuchun@bytedance.com>
+Subject: [PATCH v7 2/6] dax: fix cache flush on PMD-mapped pages
+Date:   Sun,  3 Apr 2022 13:39:53 +0800
+Message-Id: <20220403053957.10770-3-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 In-Reply-To: <20220403053957.10770-1-songmuchun@bytedance.com>
 References: <20220403053957.10770-1-songmuchun@bytedance.com>
@@ -70,8 +70,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,33 +79,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
 However, it does not cover the full pages in a THP except a head page.
-Replace it with flush_cache_range() to fix this issue. At least, no
-problems were found due to this. Maybe because the architectures that
-have virtual indexed caches is less.
+Replace it with flush_cache_range() to fix this issue.  This is just a
+documentation issue with the respect to properly documenting the expected
+usage of cache flushing before modifying the pmd.  However, in practice
+this is not a problem due to the fact that DAX is not available on
+architectures with virtually indexed caches per:
 
-Fixes: f27176cfc363 ("mm: convert page_mkclean_one() to use page_vma_mapped_walk()")
+  commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
+
+Fixes: f729c8c9b24f ("dax: wrprotect pmd_t in dax_mapping_entry_mkclean")
 Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Yang Shi <shy828301@gmail.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- mm/rmap.c | 3 ++-
+ fs/dax.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index fc46a3d7b704..723682ddb9e8 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -970,7 +970,8 @@ static bool page_mkclean_one(struct folio *folio, struct vm_area_struct *vma,
- 			if (!pmd_dirty(*pmd) && !pmd_write(*pmd))
- 				continue;
+diff --git a/fs/dax.c b/fs/dax.c
+index 67a08a32fccb..a372304c9695 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -845,7 +845,8 @@ static void dax_entry_mkclean(struct address_space *mapping, pgoff_t index,
+ 			if (!pmd_dirty(*pmdp) && !pmd_write(*pmdp))
+ 				goto unlock_pmd;
  
--			flush_cache_page(vma, address, folio_pfn(folio));
+-			flush_cache_page(vma, address, pfn);
 +			flush_cache_range(vma, address,
 +					  address + HPAGE_PMD_SIZE);
- 			entry = pmdp_invalidate(vma, address, pmd);
- 			entry = pmd_wrprotect(entry);
- 			entry = pmd_mkclean(entry);
+ 			pmd = pmdp_invalidate(vma, address, pmdp);
+ 			pmd = pmd_wrprotect(pmd);
+ 			pmd = pmd_mkclean(pmd);
 -- 
 2.11.0
 
